@@ -26,7 +26,7 @@ require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 
 class ExtAppManager {
 
-    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp");    
+    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp", "BBBApp", "AutojudgeApp");
     private static $APPS = null;
 
     /**
@@ -51,14 +51,36 @@ class ExtAppManager {
      */
     public static function getApp($appname) {
         $apps = ExtAppManager::getApps();
-        return $apps[$appname];
+        return array_key_exists($appname, $apps) ? $apps[$appname] : null;
     }
 
 }
 
 abstract class ExtApp {
 
+    private static $ENABLED = 'enabled';
     private $params = array();
+
+    public function __construct() {
+        $this->registerParam(new GenericParam($this->getName(), "Ενεργό", ExtApp::$ENABLED, "0", ExtParam::TYPE_BOOLEAN));
+    }
+
+    public function isEnabled() {
+        $enabled = $this->getParam(ExtApp::$ENABLED);
+        return $enabled && strcmp($enabled->value(), "1") == 0;
+    }
+
+    /**
+     * 
+     * @param boolean $status
+     */
+    function setEnabled($status) {
+        $param = $this->getParam(ExtApp::$ENABLED);
+        if ($param) {
+            $param->setValue($status ? 1 : 0);
+            $param->persistValue();
+        }
+    }
 
     /**
      * @param ExtParam $param
@@ -74,8 +96,13 @@ abstract class ExtApp {
         return $this->params;
     }
 
+    /**
+     * 
+     * @param string $paramName
+     * @return ExtParam
+     */
     public function getParam($paramName) {
-        return $this->params[$paramName];
+        return array_key_exists($paramName, $this->params) ? $this->params[$paramName] : null;
     }
 
     /**
@@ -84,6 +111,28 @@ abstract class ExtApp {
      */
     public function getName() {
         return strtolower(str_replace(' ', '', $this->getDisplayName()));
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getConfigUrl() {
+        return 'modules/admin/extapp.php?edit=' . $this->getName();
+    }
+
+    /**
+     * Return true if the external app is configured (all params are set)
+     * 
+     * @return boolean true if the app is configured, else false
+     */
+    public function isConfigured() {
+        foreach ($this->getParams() as $para) {
+            if ($para->isRequired() && $para->value() === '') {
+                return false;
+            }
+        }
+        return true;
     }
 
     public function storeParams() {
@@ -115,55 +164,9 @@ abstract class ExtApp {
 
     public abstract function getDisplayName();
 
-    public function getShortDescription() {
-        
-        global $langGoogleDriveShortDescription, $langOneDriveShortDescription,
-                $langDropBoxShortDescription, $langOwnCloudShortDescription,
-                $langWebDAVShortDescription, $langFtpShortDescription;
-        
-        $desc = '';
-        switch ($this->getDisplayName()) {
-            
-            case "GoogleDrive": $desc = $langGoogleDriveShortDescription;
-                        break;
-            case "OneDrive": $desc = $langOneDriveShortDescription;
-                        break;
-            case "DropBox": $desc = $langDropBoxShortDescription;
-                        break;
-            case "OwnCloud": $desc = $langOwnCloudShortDescription;
-                        break;
-            case "WebDAV": $desc = $langWebDAVShortDescription;
-                        break;
-            case "FTP": $desc = $langFtpShortDescription;
-                        break;            
-        }
-        return $desc;
-    }
+    public abstract function getShortDescription();
 
-    public function getLongDescription() {
-        
-        global $langGoogleDriveLongDescription, $langOneDriveLongDescription,
-                $langDropBoxLongDescription, $langOwnCloudLongDescription,
-                $langWebDAVLongDescription, $langFtpLongDescription;
-        
-        $desc = '';
-        switch ($this->getDisplayName()) {
-            
-            case "GoogleDrive": $desc = $langGoogleDriveLongDescription;
-                        break;
-            case "OneDrive": $desc = $langOneDriveLongDescription;
-                        break;
-            case "DropBox": $desc = $langDropBoxLongDescription;
-                        break;
-            case "OwnCloud": $desc = $langOwnCloudLongDescription;
-                        break;
-            case "WebDAV": $desc = $langWebDAVLongDescription;
-                        break;
-            case "FTP": $desc = $langFtpLongDescription;
-                        break;            
-        }
-        return $desc;       
-    }
+    public abstract function getLongDescription();
 
     public function getAppIcon() {
         return $this->getBaseURL() . "template/icons/" . $this->getName() . ".png";
@@ -178,15 +181,17 @@ abstract class ExtParam {
     private $name;
     private $value;
     private $defaultValue;
+    private $type;
 
     const TYPE_STRING = 0;
     const TYPE_BOOLEAN = 1;
 
-    function __construct($display, $name, $defaultValue = "") {
+    function __construct($display, $name, $defaultValue = "", $type = ExtParam::TYPE_STRING) {
         $this->display = $display;
         $this->name = $name;
         $this->value = ExtParam::$UNSET;
         $this->defaultValue = $defaultValue;
+        $this->type = $type;
     }
 
     function display() {
@@ -211,6 +216,14 @@ abstract class ExtParam {
 
     public function validateParam() {
         return null;
+    }
+
+    function getType() {
+        return $this->type;
+    }
+
+    function isRequired() {
+        return false;
     }
 
     abstract protected function retrieveValue();

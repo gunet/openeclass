@@ -23,6 +23,9 @@
 // From: address is always the platform administrator, and the
 // $from_address specified appears in the Reply-To: header
 function send_mail($from, $from_address, $to, $to_address, $subject, $body, $charset, $extra_headers = '') {
+    if ((is_array($to_address) and !count($to_address)) or empty($to_address)) {
+        return true;
+    }
     if (count($to_address) > 1) {
         $to_header = '(undisclosed-recipients)';
         $bcc = 'Bcc: ' . join(', ', $to_address) . PHP_EOL;
@@ -52,6 +55,10 @@ function send_mail($from, $from_address, $to, $to_address, $subject, $body, $cha
 // From: address is always the platform administrator, and the
 // $from_address specified appears in the Reply-To: header
 function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $body_plain, $body_html, $charset) {
+
+    if ((is_array($to_address) and !count($to_address)) or empty($to_address)) {
+        return true;
+    }
     
     $emailAnnounce = get_config('email_announce');
     $body_html = add_host_to_urls($body_html);
@@ -104,8 +111,34 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
 		"Content-Transfer-Encoding: 8bit" . PHP_EOL . PHP_EOL .
         "<html><head><meta http-equiv='Content-Type' " .
         "content='text/html; charset=\"$charset\"'>" .
-        "<title>message</title></head><body>\n" .
-		"$body_html\n</body></html>" . PHP_EOL .
+        "<title>message</title>".
+        "<style type='text/css'>
+            /* General Styles */
+            body{ padding: 0px; margin: 0px; color: #555; background-color: #f7f7f7; font-family: 'Helvetica', sans-serif; font-size: 1em; }
+            #container{ margin: 20px; padding: 10px; background-color: #fefefe; }
+            #mail-header, #mail-body, #mail-footer{ padding:  0 15px 15px; }
+            hr{ margin: 0px; }
+
+            /* Header Styles */
+            #mail-header{ padding-top: 10px; border-bottom: 1px solid #ddd; color: #666; }
+            #header-title{ background-color: #f5f5f5; margin-left: -15px; margin-right: -15px; padding: 12px 15px; font-weight: bold; }
+            #forum-category{ list-style: none; padding-left: 0px; }
+            #forum-category li{ padding-bottom: 1px; }
+            #forum-category li span:first-child{ width: 150px; }
+            #forum-category li span:last-child{ padding-left: 10px; }
+            #forum-category{ margin-bottom: 0px; }
+
+            /* Body Styles */
+            #mail-body-inner{ padding-left: 30px; padding-right: 30px; }
+
+            /* Footer Styles */
+            #mail-footer{ padding-bottom: 25px; border-top: 1px solid #ddd; color: #888; position: relative; }
+            #mail-footer-left{ float: left; width: 8%; width: 80px; }
+            #mail-footer-right{ float: left; width: 90%; }
+            b.notice{ color: #555; }
+        </style>\n".
+        "</head><body><div id='container'>\n" .
+		"$body_html\n</div></body></html>" . PHP_EOL .
 		"--$separator--" . PHP_EOL;
 	return @mail($to_header, qencode($subject, $charset),
                $body, $headers);

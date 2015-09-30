@@ -334,7 +334,9 @@ function get_mime_type($filename) {
         'mp4' => 'video/mp4',
         'flv' => 'video/x-flv',
         'webm' => 'video/webm',
-        'ogv' => 'video/ogg');
+        'ogv' => 'video/ogg',
+        'jar' => 'application/java-archive',
+        'jnlp' => 'application/x-java-jnlp-file');
     $ext = get_file_extension($filename);
     if (isset($f[$ext])) {
         return $f[$ext];
@@ -398,13 +400,3 @@ function not_found($path) {
     exit;
 }
 
-function error($message) {
-    global $urlServer;
-    
-    Session::Messages($message, 'alert-danger');
-    session_write_close();
-
-    header("Location: $urlServer");
-
-    exit;
-}

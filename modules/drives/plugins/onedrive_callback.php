@@ -22,5 +22,7 @@
 
 require_once '../clouddrive.php';
 $drive = new OneDrive();
-header('Location: ../popup.php?' . $drive->getDriveDefaultParameter() . "&code=" . $_GET['code']);
+if (strpbrk($_GET['code'], "\r\n"))
+	die();
+header('Location: ../popup.php?' . $drive->getDriveDefaultParameter() . "&code=" . urlencode($_GET['code']));
 die();

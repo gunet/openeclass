@@ -25,9 +25,9 @@ $parentDir = substr(urldecode($_POST['dir']), 0, -1);
 echo "<ul class=\"jqueryFileTree\" style=\"display: none;\">";
 foreach ($drive->getFiles($parentDir) as $file) {
     if ($file->isFolder()) {
-        echo "<li class=\"directory collapsed\"><a href=\"#\" rel=\"" . htmlentities($file->id()) . "/\">" . $file->name() . "</a></li>";
+        echo "<li class=\"directory collapsed\"><a href=\"#\" rel=\"" . q($file->id()) . "/\">" . q($file->name()) . "</a></li>";
     } else {
-        echo "<li class=\"file\"><a href=\"#\" rel=\"" . htmlentities($file->toJSON()) . "\">" . $file->name() . "</a></li>";
+        echo "<li class=\"file\"><a href=\"#\" rel=\"" . q($file->toJSON()) . "\">" . q($file->name()) . "</a></li>";
     }
 }
 //ext_$ext

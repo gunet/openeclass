@@ -63,12 +63,12 @@ $noteNumber = Notes::count_user_notes();
 $displayForm = true;
 /* up and down commands */
 if (isset($_GET['down'])) {
-    $thisNoteId = intval($_GET['down']);
+    $thisNoteId = intval(getDirectReference($_GET['down']));
     Notes::movedown_note($thisNoteId);
     redirect_to_home_page('main/notes/index.php');  
 }
 if (isset($_GET['up'])) {
-    $thisNoteId = intval($_GET['up']);
+    $thisNoteId = intval(getDirectReference($_GET['up']));
     Notes::moveup_note($thisNoteId);
     redirect_to_home_page('main/notes/index.php');  
 }
@@ -85,7 +85,7 @@ if (isset($_POST['submitNote'])) {
         $newContent = $_POST['newContent'];
         $refobjid = ($_POST['refobjid'] == "0") ? $_POST['refcourse'] : $_POST['refobjid'];
         if (!empty($_POST['id'])) { //existing note
-            $id = intval($_POST['id']);
+            $id = intval(getDirectReference($_POST['id']));
             Notes::update_note($id, $newTitle, $newContent, $refobjid);
             Session::Messages($langNoteModify, 'alert-success');
             redirect_to_home_page('main/notes/index.php');        
@@ -107,7 +107,7 @@ if (isset($_POST['submitNote'])) {
 
 /* delete */
 if (isset($_GET['delete'])) {
-    $thisNoteId = intval($_GET['delete']);
+    $thisNoteId = intval(getDirectReference($_GET['delete']));
     Notes::delete_note($thisNoteId);
     Session::Messages($langNoteDel, 'alert-success');
     redirect_to_home_page('main/notes/index.php');
@@ -120,7 +120,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $navigation[] = array('url' => "index.php", 'name' => $langNotes);
     if (isset($_GET['modify'])) {
         $langAdd = $pageName = $langModifNote;
-        $modify = intval($_GET['modify']);
+        $modify = intval(getDirectReference($_GET['modify']));
         $note = Notes::get_note($modify);      
     } else {
         $pageName = $langAddNote;
@@ -147,7 +147,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")."'>
         <label for='newTitle' class='col-sm-2 control-label'>$langNoteTitle:</label>
         <div class='col-sm-10'>
-            <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . q($titleToModify) . "' placeholder='$langNoteTitle'>
+            <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langNoteTitle'>
             <span class='help-block'>".Session::getError('newTitle')."</span>
         </div>
     </div>
@@ -168,9 +168,11 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
         <input class='btn btn-primary' type='submit' name='submitNote' value='$langAdd'> 
         <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]'>$langCancel</a>
       </div>
-    </div>      
-    <input type='hidden' name='id' value='$noteToModify' />
-    </fieldset>
+    </div>";
+    if($noteToModify!=""){
+        $tool_content .="<input type='hidden' name='id' value='" . getIndirectReference($noteToModify)."' />";
+    }
+    $tool_content .="</fieldset>
     </form></div>";
     
 } elseif (isset($_GET['nid'])) {
@@ -183,7 +185,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
         )
     ));
     
-    $note = Notes::get_note(intval($_GET['nid']));
+    $note = Notes::get_note(intval(getDirectReference($_GET['nid'])));
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langNotes);
     $pageName = q($note->title);    
     $tool_content .= "
@@ -192,16 +194,16 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <div class='pull-right'>".
                     action_button(array(
                         array('title' => $langEditChange,
-                            'url' => "$_SERVER[SCRIPT_NAME]?modify=$note->id",
+                            'url' => "$_SERVER[SCRIPT_NAME]?modify=".getIndirectReference($note->id),
                             'icon' => 'fa-edit'),
                         array('title' => $langDelete,
-                            'url' => "$_SERVER[SCRIPT_NAME]?delete=$note->id",
+                            'url' => "$_SERVER[SCRIPT_NAME]?delete=".getIndirectReference($note->id),
                             'confirm' => $langSureToDelNote,
                             'class' => 'delete',
                             'icon' => 'fa-times')
                     ))
                ."</div>
-                <h3 class='panel-title'>$note->title</h3>
+                <h3 class='panel-title'>".q($note->title)."</h3>
             </div>
             <div class='panel-body'>
                 <div class='label label-success'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</div><br><br>
@@ -238,8 +240,9 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             <div class='table-responsive'>
                 <table class='table-default'>";
     if ($noteNumber > 0) {
-        $tool_content .= "<tr>";
-        $tool_content .= "<th colspan='2' class='text-right'>".icon('fa-gears')."</th>";
+        $tool_content .= "<tr class='list-header'>";
+        $tool_content .= "<th class='text-left'>$langCategoryNotes</th>";
+        $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr>";
     }
 
@@ -250,33 +253,33 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
         if (empty($note->title)) {
             $tool_content .= $langNoteNoTitle;
         } else {
-            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?nid=$note->id'>" . q($note->title) . "</a>";
+            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?nid=" . getIndirectReference($note->id)."'>" . q($note->title) . "</a>";
         }
         $tool_content .= "</b><br><small>" . nice_format($note->date_time) . "</small>";
         if (!is_null($note->reference_obj_type)) {
             $tool_content .= "<br><small>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</small>";
         }
 
-        $tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?nid=$note->id'> <span class='smaller'>[$langMore]</span></a></strong>"));
+        $tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?nid=" . getIndirectReference($note->id)."'> <span class='smaller'>[$langMore]</span></a></strong>"));
         $tool_content .= "</td>";
 
         $tool_content .= "<td class='option-btn-cell'>" .
                 action_button(array(
                     array('title' => $langEditChange,
-                        'url' => "$_SERVER[SCRIPT_NAME]?modify=$note->id",
+                        'url' => "$_SERVER[SCRIPT_NAME]?modify=" . getIndirectReference($note->id),
                         'icon' => 'fa-edit'),
                     array('title' => $langDelete,
-                        'url' => "$_SERVER[SCRIPT_NAME]?delete=$note->id",
+                        'url' => "$_SERVER[SCRIPT_NAME]?delete=" . getIndirectReference($note->id),
                         'confirm' => $langSureToDelNote,
                         'class' => 'delete',
                         'icon' => 'fa-times'),
                     array('title' => $langMove . " " . $langUp,
-                        'url' => "$_SERVER[SCRIPT_NAME]?up=$note->id",
+                        'url' => "$_SERVER[SCRIPT_NAME]?up=" . getIndirectReference($note->id),
                         'level' => 'primary',
                         'disabled' => $iterator == 1,
                         'icon' => 'fa-arrow-up'),
                     array('title' => $langMove . " " . $langDown,
-                        'url' => "$_SERVER[SCRIPT_NAME]?down=" . $note->id,
+                        'url' => "$_SERVER[SCRIPT_NAME]?down=" . getIndirectReference($note->id),
                         'level' => 'primary',
                         'disabled' => $iterator >= $bottomNote,
                         'icon' => 'fa-arrow-down')

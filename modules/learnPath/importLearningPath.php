@@ -572,7 +572,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
             $realFileSize = 0;
 
             foreach ($zipContentArray as $thisContent) {
-                if (preg_match('/.(php[[:digit:]]?|phtml)$/i', $thisContent['filename'])) {
+                if (preg_match('/.(php[[:digit:]]?|phtml|pht)$/i', $thisContent['filename'])) {
                     $errorFound = true;
                     array_push($errorMsgs, $langZipNoPhp);
                     $is_allowedToUnzip = false;
@@ -1128,9 +1128,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <div class='col-sm-offset-2 col-sm-10'>
-                                <input class='btn btn-primary' type='submit' value='$langImport' >
-                            </div>
+                            <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
+                                    array(
+                                        'text' => $langSave,
+                                        'value'=> $langImport
+                                    ),
+                                    array(
+                                        'href' => "index.php?course=$course_code",
+                                    )
+                                ))."</div>
                         </div>
                     </form>
                 </div>
@@ -1166,7 +1172,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     $tool_content .= "\n<div class=\"col-xs-12\">";
     $tool_content .= "\n<form class='form-wrapper' action='importFromDocument.php?course=$course_code' method='post'>";
     $tool_content .= "\n  <h4 class='form-heading'>$langLearningPathImportFromDocuments</h4>";
-    $tool_content .= "\n  <table width=\"100%\" class=\"tbl_alt_bordless\">";
+    $tool_content .= "\n  <table class=\"table-default\">";
     $tool_content .= "\n  <tbody>";
 
     if (count($documents) <= 0) {
@@ -1243,7 +1249,15 @@ EOF;
         
         $tool_content .= "\n  <tr class='nobrd'>";
         $tool_content .= "\n    <td colspan='2'></td>";
-        $tool_content .= "\n    <td colspan='3' class='right'><input class='btn btn-primary' type='submit' value='" . $langImport . "'></td>";
+        $tool_content .= "\n    <td colspan='3' class='right'>".form_buttons(array(
+                            array(
+                                'text' => $langSave,
+                                'value'=> $langImport
+                            ),
+                            array(
+                                'href' => "index.php?course=$course_code",
+                            )
+                        ))."</td>";
         $tool_content .= "\n  </tr>";
     }
 
@@ -1255,9 +1269,11 @@ EOF;
 
     $tool_content .= "
             <div class='row'>
-                <div class='col-xs-12 notice add-gutter'>
-                    <p class='notice-header'>$langNote:</p>
-                    <p class='notice-body text-muted'>$langScormIntroTextForDummies</p>
+                <div class='col-xs-12'>
+                    <div class='alert alert-info'>
+                        <p>$langNote:</p>
+                        <p>$langScormIntroTextForDummies</p>
+                    </div>
                 </div>
             </div>
             ";

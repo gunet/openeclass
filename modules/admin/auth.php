@@ -59,31 +59,32 @@ if (isset($_GET['auth'])) {
         } else {
             Database::get()->query("UPDATE auth SET auth_default = 1 WHERE auth_id = ?d", $auth);
             Session::Messages($langSecondaryAuthTypeChanged, 'alert-success');
-            redirect_to_home_page('modules/admin/auth.php');
         }
+        redirect_to_home_page('modules/admin/auth.php');
     }
 } else {
-    $tool_content .= "<div class='alert alert-info'><label>$langMethods</label>";
-    if ($activeMethods = get_auth_active_methods()) {
-        $tool_content .= "<ul>";
-        foreach ($activeMethods as $k => $v) {
-            $c = count_auth_users($v);
-            if ($c != 0) {
-                $lc = "<a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type=$v&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=0'>$c</a>";
-                if ($v != 1) {
-                    $l = " - <a href='auth_change.php?auth=$v'>$langAuthChangeUser</a>";
-                } else {
-                    $l = "";
-                }
+    $auth_active_ids = get_auth_active_methods();
+    $tool_content .= "<div class='alert alert-info'><label>$langMethods</label><ul>";
+    foreach ($auth_ids as $auth_id => $auth_name) {
+        $auth_count = count_auth_users($auth_id);
+        $auth_active = in_array($auth_id, $auth_active_ids);
+        if ($auth_count > 0 or $auth_active) {
+            $auth_search_link = ($auth_count == 0)? '0':
+                "<a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type=$auth_id&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=0'>$auth_count</a>";
+            if ($auth_id != 1 and $auth_count > 0) {
+                $auth_change_link = " - <a href='auth_change.php?auth=$auth_id'>$langAuthChangeUser</a>";
             } else {
-                $lc = 0;
-                $l = "";
+                $auth_change_link = '';
             }
-            $tool_content .= "<li>" . get_auth_info($v) . " ($langNbUsers: $lc$l)</li>";
+            if (!$auth_active) {
+                $auth_warn = "<br><span class='label label-warning'>$langAuthWarnInactive</span>";
+            } else {
+                $auth_warn = '';
+            }
+            $tool_content .= "<li>" . get_auth_info($auth_id) . " ($langNbUsers: $auth_search_link$auth_change_link)$auth_warn</li>";
         }
-        $tool_content .= "</ul>";
     }
-    $tool_content .= "</div>";
+    $tool_content .= "</ul></div>";
 
     $authMethods = Database::get()->queryArray("SELECT * FROM auth ORDER BY auth_default DESC, auth_id");
     $tool_content .= "<div class='table-responsive'><table class='table-default'>";

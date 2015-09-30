@@ -157,18 +157,19 @@
 
     <xs:complexType name="t_instructor">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="firstName"       type="t_langString"/>
-            <xs:element name="middleName"      type="t_langString"/>
-            <xs:element name="lastName"        type="t_langString"/>
-            <xs:element name="fullName"        type="t_langString"/>
-            <xs:element name="email"           type="t_string"/>
-            <xs:element name="phone"           type="t_string"/>
-            <xs:element name="institution"     type="t_string"/>
-            <xs:element name="department"      type="t_string"/>
-            <xs:element name="language"        type="t_string"/>
-            <xs:element name="moreInformation" type="t_langString"/>
-            <xs:element name="cv"              type="t_string"/>
-            <xs:element name="photo"           type="t_image"/>
+            <xs:element name="firstName"        type="t_langString"/>
+            <xs:element name="middleName"       type="t_langString"/>
+            <xs:element name="lastName"         type="t_langString"/>
+            <xs:element name="fullName"         type="t_langString"/>
+            <xs:element name="email"            type="t_string"/>
+            <xs:element name="phone"            type="t_string"/>
+            <xs:element name="institution"      type="t_string"/>
+            <xs:element name="department"       type="t_string"/>
+            <xs:element name="language"         type="t_string"/>
+            <xs:element name="moreInformation"  type="t_langString"/>
+            <xs:element name="cv"               type="t_string"/>
+            <xs:element name="photo"            type="t_image"/>
+            <xs:element name="registrationCode" type="t_string"/>
         </xs:choice>
     </xs:complexType>
 
@@ -238,6 +239,8 @@
             <xs:element name="confirmCurriculum"               type="t_boolean"/>
             <xs:element name="confirmVideolectures"            type="t_boolean"/>
             <xs:element name="videolectures"                   type="t_integer"/>
+            <xs:element name="visits"                          type="t_integer"/>
+            <xs:element name="hits"                            type="t_integer"/>
             <xs:element name="confirmAMinusLevel"              type="t_boolean"/>
             <xs:element name="confirmALevel"                   type="t_boolean"/>
             <xs:element name="confirmAPlusLevel"               type="t_boolean"/>

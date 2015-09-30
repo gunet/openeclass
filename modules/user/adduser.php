@@ -37,25 +37,50 @@ $pageName = $langAddUser;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langUsers);
 
 if (isset($_GET['add'])) {
-    $uid_to_add = intval($_GET['add']);
-    $result = Database::get()->query("INSERT IGNORE INTO course_user (user_id, course_id, status, reg_date)
-                                    VALUES (?d, ?d, " . USER_STUDENT . ", CURDATE())", $uid_to_add, $course_id);
+    $uid_to_add = intval(getDirectReference($_GET['add']));
+    $result = Database::get()->query("INSERT IGNORE INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
+                                    VALUES (?d, ?d, " . USER_STUDENT . ", " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")", $uid_to_add, $course_id);
 
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
                                                                'right' => '+5'));
     if ($result) {
-        $tool_content .= "<div class='alert alert-success'>$langTheU $langAdded</div>";
+        Session::Messages( $langTheU . $langAdded, "alert alert-success");
+        //$tool_content .= "<div class='alert alert-success'>$langTheU $langAdded</div>";
         // notify user via email
         $email = uid_to_email($uid_to_add);
         if (!empty($email) and email_seems_valid($email)) {
             $emailsubject = "$langYourReg " . course_id_to_title($course_id);
             $emailbody = "$langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2 $langFormula \n$gunet";
-            send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+
+            $header_html_topic_notify = "<!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$langYourReg " . course_id_to_title($course_id)."</div>
+                </div>
+            </div>";
+
+            $body_html_topic_notify = "<!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div id='mail-body-inner'>
+                    $langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2
+                    <br><br>$langFormula<br>$gunet
+                </div>
+            </div>";
+
+            $emailbody = $header_html_topic_notify.$body_html_topic_notify;
+
+            $plainemailbody = html2text($emailbody);
+
+            send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody, $charset);
         }
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langAddError</div>";
+        Session::Messages( $langAddError, "alert alert-warning");
+        //$tool_content .= "<div class='alert alert-warning'>$langAddError</div>";
     }
-    $tool_content .= "<br /><p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAddBack</a></p><br />\n";
+    redirect_to_home_page("modules/user/index.php?course=$course_code");
+    //$tool_content .= "<br /><p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAddBack</a></p><br />\n";
 } else {    
     register_posted_variables(array('search_surname' => true,
                                     'search_givenname' => true,
@@ -93,9 +118,11 @@ if (isset($_GET['add'])) {
                 <div class='col-sm-10'>
                     <input class='form-control' id='am' type='text' name='search_am' value='" . q($search_am) . "' placeholder='$langAm'></div>
                 </div>
+                <div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='search' value='$langSearch'>
                     <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+                </div>
                 </div>
                 </fieldset>
                 </form>
@@ -132,7 +159,7 @@ if (isset($_GET['add'])) {
                 $tool_content .= "<td class='text-right'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
                         q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
                         q($myrow->am) . "</td><td class='text-center'>" .
-                        icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow->id"). "</td></tr>";
+                        icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id)). "</td></tr>";
                 $i++;
             }
             $tool_content .= "</table>";

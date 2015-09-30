@@ -25,12 +25,12 @@
  *        It is included in every file via baseTheme.php
  */
 
-if (function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
-    date_default_timezone_set("Europe/Athens");
-}
+// set default time zone
+date_default_timezone_set("Europe/Athens");
 
 $webDir = dirname(dirname(__FILE__));
 chdir($webDir);
+require 'vendor/autoload.php';
 require_once 'include/main_lib.php';
 
 // If session isn't started, start it
@@ -63,7 +63,6 @@ try {
 } catch (Exception $ex) {
     require_once 'include/not_installed.php';
 }
-
 if (isset($language)) {
     // Old-style config.php, redirect to upgrade
     $language = langname_to_code($language);
@@ -85,12 +84,11 @@ if (isset($language)) {
     $urlServer = get_config('base_url');
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;
+    $language = $session->language;    
 }
 //Initializing Valitron (form validation library)
-require_once 'include/Valitron/Validator.php';
 use Valitron\Validator as V;
-V::langDir(__DIR__.'/Valitron/lang'); // always set langDir before lang.
+V::langDir($webDir.'/vendor/vlucas/valitron/lang'); // always set langDir before lang.
 V::lang($language);
 
 // Managing Session Flash Data
@@ -157,6 +155,12 @@ if ($extra_messages) {
     include $extra_messages;
 }
 
+
+
+if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = generate_csrf_token();
+}
+
 if (($upgrade_begin = get_config('upgrade_begin'))) {
     if (!defined('UPGRADE')) {
         Session::Messages(sprintf($langUpgradeInProgress, format_time_duration(time() - $upgrade_begin)), 'alert-warning');
@@ -202,48 +206,42 @@ if (file_exists("template/$theme/settings.php")) {
 
 if (isset($require_login) and $require_login and ! $uid) {
     $toolContent_ErrorExists = $langSessionIsLost;
-    $errorMessagePath = "../../";
 }
 
 if (isset($require_admin) && $require_admin) {
     if (!($is_admin)) {
         $toolContent_ErrorExists = $langCheckAdmin;
-        $errorMessagePath = "../../";
     }
 }
 
 if (isset($require_power_user) && $require_power_user) {
     if (!($is_admin or $is_power_user)) {
         $toolContent_ErrorExists = $langCheckPowerUser;
-        $errorMessagePath = "../../";
     }
 }
 
 if (isset($require_usermanage_user) && $require_usermanage_user) {
     if (!($is_admin or $is_power_user or $is_usermanage_user)) {
         $toolContent_ErrorExists = $langCheckUserManageUser;
-        $errorMessagePath = "../../";
     }
 }
 
 if (isset($require_departmentmanage_user) && $require_departmentmanage_user) {
     if (!($is_admin or $is_departmentmanage_user)) {
         $toolContent_ErrorExists = $langCheckDepartmentManageUser;
-        $errorMessagePath = "../../";
     }
 }
 
 if (!isset($guest_allowed) || $guest_allowed != true) {
     if (check_guest()) {
         $toolContent_ErrorExists = $langCheckGuest;
-        $errorMessagePath = "../../";
     }
 }
 
 if (isset($_SESSION['mail_verification_required']) && !isset($mail_ver_excluded)) {
     // don't redirect to mail verification on logout
     if (!isset($_GET['logout'])) {
-        header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
+        redirect_to_home_page('modules/auth/mail_verify_change.php');
     }
 }
 
@@ -270,9 +268,8 @@ register_shutdown_function('restore_dbname_override');
 if (isset($require_current_course) and $require_current_course) {
     if (!isset($_SESSION['dbname'])) {
         $toolContent_ErrorExists = $langSessionIsLost;
-        $errorMessagePath = "../../";
     } else {
-        $currentCourse = $dbname = $_SESSION['dbname'];
+        $dbname = $_SESSION['dbname'];
         Database::get()->queryFunc("SELECT course.id as cid, course.code as code, course.public_code as public_code,
                 course.title as title, course.prof_names as prof_names, course.lang as lang,
                 course.visible as visible, hierarchy.name AS faculte
@@ -306,7 +303,6 @@ if (isset($require_current_course) and $require_current_course) {
 
         if (!isset($course_code) or empty($course_code)) {
             $toolContent_ErrorExists = $langLessonDoesNotExist;
-            $errorMessagePath = "../../";
         }
 
         $fac_lower = strtolower($fac);
@@ -324,7 +320,7 @@ if (isset($require_current_course) and $require_current_course) {
                 $status = $stat->status;
             } else {
                 // the department manager has rights to the courses of his department(s)
-                if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($currentCourse)) {
+                if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($course_code)) {
                     require_once 'include/lib/hierarchy.class.php';
                     require_once 'include/lib/course.class.php';
                     require_once 'include/lib/user.class.php';
@@ -346,7 +342,7 @@ if (isset($require_current_course) and $require_current_course) {
                     if ($atleastone) {
                         $status = 1;
                         $is_course_admin = true;
-                        $_SESSION['courses'][$currentCourse] = USER_DEPARTMENTMANAGER;
+                        $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
                     }
                 }
             }
@@ -356,13 +352,10 @@ if (isset($require_current_course) and $require_current_course) {
         if ($visible != COURSE_OPEN) {
             if (!$uid) {
                 $toolContent_ErrorExists = $langNoAdminAccess;
-                $errorMessagePath = "../../";
             } elseif ($status == 0 and ( $visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
                 $toolContent_ErrorExists = $langLoginRequired;
-                $errorMessagePath = "../../";
             } elseif ($status == 5 and $visible == COURSE_INACTIVE) {
                 $toolContent_ErrorExists = $langCheckProf;
-                $errorMessagePath = "../../";
             }
         }
         $_SESSION['courses'][$course_code] = $courses[$course_code] = $status;
@@ -428,6 +421,7 @@ $admin_modules = array(
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'users'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'usage'),
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'tooladmin'),
+    MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'abuse'),
 );
 
 // modules which can't be enabled or disabled
@@ -442,13 +436,14 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
     'comments' => MODULE_ID_COMMENTS,
     'rating' => MODULE_ID_RATING,
     'sharing' => MODULE_ID_SHARING,
+    'abuse_report' => MODULE_ID_ABUSE_REPORT,            
     'notes' => MODULE_ID_NOTES);
 
 // the system admin and power users have rights to all courses
 if ($is_admin or $is_power_user) {
     $is_course_admin = true;
-    if (isset($currentCourse)) {
-        $_SESSION['courses'][$currentCourse] = USER_TEACHER;
+    if (isset($course_code)) {
+        $_SESSION['courses'][$course_code] = USER_TEACHER;
     }
 } else {
     $is_course_admin = false;
@@ -456,11 +451,11 @@ if ($is_admin or $is_power_user) {
 
 $is_editor = false;
 if (isset($_SESSION['courses'])) {
-    if (isset($currentCourse)) {
+    if (isset($course_code)) {
         if (check_editor()) { // check if user is editor of course
             $is_editor = true;
         }
-        if (@$_SESSION['courses'][$currentCourse] == USER_TEACHER or $_SESSION['courses'][$currentCourse] == USER_DEPARTMENTMANAGER) {
+        if (@$_SESSION['courses'][$course_code] == USER_TEACHER or @$_SESSION['courses'][$course_code] == USER_DEPARTMENTMANAGER) {
             $is_course_admin = true;
             $is_editor = true;
         }
@@ -481,21 +476,19 @@ if (isset($_SESSION['student_view'])) {
 }
 
 $is_opencourses_reviewer = FALSE;
-if (get_config('opencourses_enable') && isset($currentCourse) && check_opencourses_reviewer()) {
+if (get_config('opencourses_enable') && isset($course_code) && check_opencourses_reviewer()) {
     $is_opencourses_reviewer = TRUE;
 }
 
 if (isset($require_course_admin) and $require_course_admin) {
     if (!$is_course_admin) {
         $toolContent_ErrorExists = $langCheckCourseAdmin;
-        $errorMessagePath = "../../";
     }
 }
 
 if (isset($require_editor) and $require_editor) {
     if (!$is_editor) {
         $toolContent_ErrorExists = $langCheckProf;
-        $errorMessagePath = "../../";
     }
 }
 
@@ -515,7 +508,6 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                                                 " . MODULE_ID_QUESTIONNAIRE . ",
                                                 " . MODULE_ID_FORUM . ",
                                                 " . MODULE_ID_GROUPS . ",
-                                                " . MODULE_ID_WIKI . ",
                                                 " . MODULE_ID_GRADEBOOK . ",
                                                 " . MODULE_ID_ATTENDANCE . ",
                                                 " . MODULE_ID_LP . ")", $course_id);
@@ -536,7 +528,6 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
 
     if (!in_array($module_id, $publicModules)) {
         $toolContent_ErrorExists = $langCheckPublicTools;
-        $errorMessagePath = "../../";
     }
 }
 

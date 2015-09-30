@@ -56,16 +56,17 @@ $head_content .= "
 <script type='text/javascript'>
 $(function() {
 $('#start_session').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left',
         language: '".$language."',
         autoclose: true
     });
 });
 </script>";
 load_js('select2');
+
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
-        $('#select-groups').select2();       
+        $('#select-groups').select2();
         $('#selectAll').click(function(e) {
             e.preventDefault();
             var stringVal = [];
@@ -78,34 +79,29 @@ $head_content .= "<script type='text/javascript'>
             e.preventDefault();
             var stringVal = [];
             $('#select-groups').val(stringVal).trigger('change');
-        });         
+        });
     });
 
-    </script>
-";
-        
-$head_content .= "
-<script type='text/javascript'>
-		function onAddTag(tag) {
-			alert('Added a tag: ' + tag);
-		}
-		function onRemoveTag(tag) {
-			alert('Removed a tag: ' + tag);
-		}
-		
-		function onChangeTag(input,tag) {
-			alert('Changed a tag: ' + tag);
-		}
-		
-		$(function() {
-			$('#tags_1').select2({tags:[], formatNoMatches: ''});
-		});
+    function onAddTag(tag) {
+        alert('Added a tag: ' + tag);
+    }
+    function onRemoveTag(tag) {
+        alert('Removed a tag: ' + tag);
+    }
+
+    function onChangeTag(input,tag) {
+        alert('Changed a tag: ' + tag);
+    }
+
+    $(function() {
+        $('#tags_1').select2({tags:[], formatNoMatches: ''});
+    });
 </script>
 ";
 
 if ($is_editor) {
     if (isset($_GET['add']) or isset($_GET['choice'])) {
-        if (isset($_GET['add'])) {  
+        if (isset($_GET['add'])) {
             $pageName = $langNewBBBSession;
         } elseif ((isset($_GET['choice'])) and $_GET['choice'] == 'edit') {
             $pageName = $langModify;
@@ -131,18 +127,20 @@ if ($is_editor) {
                       'level' => 'primary-label',
                       'show' => get_total_bbb_servers())));
         }
-    }    
+    }
 }
 
-if (isset($_GET['add'])) {        
+if (isset($_GET['add'])) {
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);
     new_bbb_session();
 }
 elseif(isset($_POST['update_bbb_session']))
 {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
-    $start = $startDate_obj->format('Y-m-d H:i:s');   
-    update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $start, $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'],$_POST['record'],$_POST['sessionUsers']);
+    $start = $startDate_obj->format('Y-m-d H:i:s');
+    //update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $start, $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'],$_POST['record'],$_POST['sessionUsers']);
+    update_bbb_session(getDirectReference($_GET['id']),$_POST['title'], $_POST['desc'], $start, '0' ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'],$_POST['record'],$_POST['sessionUsers']);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }
@@ -152,16 +150,16 @@ elseif(isset($_GET['choice']))
     switch($_GET['choice'])
     {
         case 'edit':
-            edit_bbb_session($_GET['id']);
+            edit_bbb_session(getDirectReference($_GET['id']));
             break;
         case 'do_delete':
-            delete_bbb_session($_GET['id']);
+            delete_bbb_session(getDirectReference($_GET['id']));
             break;
         case 'do_disable':
-            disable_bbb_session($_GET['id']);
+            disable_bbb_session(getDirectReference($_GET['id']));
             break;
         case 'do_enable':
-            enable_bbb_session($_GET['id']);
+            enable_bbb_session(getDirectReference($_GET['id']));
             break;
         case 'do_join':
             #check if there is any record-capable bbb server. Otherwise notify users
@@ -189,25 +187,27 @@ elseif(isset($_GET['choice']))
                 {
                     $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
                     break;
-                }                
+                }
                 else {
                     header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
                 }
             }
             break;
         case 'import_video':
-            publish_video_recordings($course_code,$_GET['id']);
+            publish_video_recordings($course_code,getDirectReference($_GET['id']));
             break;
-    } 
-   
+    }
+
 } elseif(isset($_POST['new_bbb_session'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
-    $start = $startDate_obj->format('Y-m-d H:i:s');    
-    add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $start, $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
-    Session::Messages($langBBBAddSuccessful, 'alert-success'); 
+    $start = $startDate_obj->format('Y-m-d H:i:s');
+    //add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $start, $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
+    add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $start, '0' ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
+    Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/bbb/index.php?course=$course_code");
 }
-else {    
+else {
     bbb_session_details();
 }
 

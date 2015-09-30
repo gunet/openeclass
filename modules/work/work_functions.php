@@ -182,7 +182,8 @@ function was_graded($uid, $id, $ret_val = FALSE) {
 
 // Show details of a submission
 function show_submission_details($id) {
-    global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code;
+    global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code,
+           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
     if (!$sub) {
         die("Error: submission $id doesn't exist.");
@@ -246,6 +247,17 @@ function show_submission_details($id) {
                     <div class='col-sm-9'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a>
                     </div>
                 </div>";
+                if(AutojudgeApp::getAutojudge()->isEnabled()) {
+                $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
+                $tool_content .= "
+                <div class='row margin-bottom-fat'>
+                    <div class='col-sm-3'>
+                        <strong>" . $langAutoJudgeEnable . ":</strong>
+                    </div>
+                    <div class='col-sm-9'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
+                    </div>
+                </div>";
+                }
             table_row($m['comments'], $sub->comments, true);
 $tool_content .= "
             </div>
@@ -266,7 +278,7 @@ function was_submitted($uid, $gid, $id) {
             return 'user';
         } else {
             return 'group';
-        }        
+        }
     } else {
         return false;
     }

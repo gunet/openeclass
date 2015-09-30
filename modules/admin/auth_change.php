@@ -58,6 +58,7 @@ $auth_change = isset($_REQUEST['auth_change']) ? intval($_REQUEST['auth_change']
 register_posted_variables(array('submit' => true));
 
 if ($submit && $auth && $auth_change) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (Database::get()->query("UPDATE user SET password=?s WHERE password=?s AND id != 1", $auth_ids[$auth_change], $auth_ids[$auth])->affectedRows >= 1) {
         $tool_content .= "<div class='alert alert-success'>$langAuthChangeYes</div";                        
         draw($tool_content, 3);
@@ -85,7 +86,7 @@ if (isset($auth_methods_active) == 0) {
     $tool_content .= "</div></div>";
     $tool_content .= "<input type='hidden' name='auth' value='" . intval($auth) . "'>";    
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></div>";
-    $tool_content .= "</fieldset></form></div>";
+    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."    </form></div>";
 }
 
 draw($tool_content, 3);

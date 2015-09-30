@@ -36,8 +36,6 @@
  *
  * - <b>$SQL</b>: Settings for database and queries from database
  *
- * - <b>$DSN</b>: DSN for connecting your database. Reference PDO for details.
- *
  * The rest of settings will not normally need to be adjusted. Read source code for details.
  */
 require_once '../../include/init.php';
@@ -211,29 +209,6 @@ define('XMLSCHEMA', 'http://www.w3.org/2001/XMLSchema-instance');
 // 
 // DATABASE SETUP
 //
-// change according to your local DB setup.
-$DB_HOST = 'localhost';
-$DB_USER = $mysqlUser;
-$DB_PASSWD = $mysqlPassword;
-$DB_NAME = $mysqlMainDb;
-$DB_OPTION = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
-
-// Data Source Name: This is the universal connection string
-// if you use something other than mysql edit accordingly.
-// Example for MySQL
-// $DSN = "mysql://$DB_USER:$DB_PASSWD@$DB_HOST/$DB_NAME";
-// Example for Oracle
-// $DSN = "oci8://$DB_USER:$DB_PASSWD@$DB_NAME";
-$DSN = "mysql:host=$DB_HOST;dbname=$DB_NAME";
-
-// the charset you store your metadata in your database
-// currently only utf-8 and iso8859-1 are supported
-$charset = "utf-8";
-
-// if entities such as < > ' " in your metadata has already been escaped 
-// then set this to true (e.g. you store < as &lt; in your DB)
-$xmlescaped = false;
-
 // We store multiple entries for one element in a single row 
 // in the database. SQL['split'] lists the delimiter for these entries.
 // If you do not do this, do not define $SQL['split']

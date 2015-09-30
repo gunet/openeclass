@@ -19,6 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use Hautelook\Phpass\PasswordHash;
+
 // ----------------------------------------------------------------
 // Functions used for upgrade
 // ----------------------------------------------------------------
@@ -147,6 +149,16 @@ function add_index($index, $table, $column) {
     return $retString;
 }
 
+// Check MySQL for InnoDB storage engine support
+function check_engine() {
+    foreach (Database::get()->queryArray('SHOW ENGINES') as $item) {
+        if ($item->Engine == 'InnoDB') {
+            return $item->Support == 'YES' or $item->Support == 'DEFAULT';
+        }
+    }
+    return false;
+}
+
 // Removes initial part of path from assignment_submit.file_path
 function update_assignment_submit() {
     global $langTable;
@@ -167,8 +179,9 @@ function update_assignment_submit() {
 
 // checks if admin user
 function is_admin($username, $password) {
-    global $mysqlMainDb;
-
+    
+    global $mysqlMainDb, $session;
+        
     if (DBHelper::fieldExists('user', 'user_id')) {
         $user = Database::get()->querySingle("SELECT * FROM user, admin
 				WHERE admin.idUser = user.user_id AND
@@ -184,7 +197,6 @@ function is_admin($username, $password) {
     if (!$user) {
         return false;
     } else {
-
         if (isset($user->privilege) and $user->privilege !== '0')
             return false;
 
@@ -210,6 +222,7 @@ function is_admin($username, $password) {
         $_SESSION['email'] = $user->email;
         $_SESSION['uname'] = $username;
         $_SESSION['is_admin'] = true;
+        $session->setLoginTimestamp();
 
         return true;
     }
@@ -912,6 +925,10 @@ function upgrade_course_3_0($code, $course_id) {
     // move agenda to central db and drop table
     if (DBHelper::tableExists('agenda', $code)) {
 
+        if (!DBHelper::fieldExists('agenda', 'visibility', $code)) {
+            Database::get()->query("ALTER TABLE `$code`.agenda ADD `visibility` char(1) NOT NULL DEFAULT 'v'");
+        }
+
         // ----- agenda DB Table ----- //
         Database::get()->query("UPDATE `$code`.agenda SET visibility = '1' WHERE visibility = 'v'");
         Database::get()->query("UPDATE `$code`.agenda SET visibility = '0' WHERE visibility = 'i'");
@@ -1189,7 +1206,7 @@ function upgrade_course_2_9($code, $lang) {
 
     Database::get()->query("USE `$code`");
     
-    if (!DBHelper::fieldExists('dropbox_file', 'real_filename')) {
+    if (!DBHelper::fieldExists('dropbox_file', 'real_filename', $code)) {
         Database::get()->query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
         Database::get()->query("UPDATE dropbox_file SET real_filename = filename");
     }
@@ -1210,17 +1227,17 @@ function upgrade_course_2_8($code, $lang) {
 
     Database::get()->query("USE `$code`");
     
-    DBHelper::fieldExists('exercices', 'public') or
+    DBHelper::fieldExists('exercices', 'public', $code) or
             Database::get()->query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
-    DBHelper::fieldExists('video', 'visible') or
+    DBHelper::fieldExists('video', 'visible', $code) or
             Database::get()->query("ALTER TABLE `video` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
-    DBHelper::fieldExists('video', 'public') or
+    DBHelper::fieldExists('video', 'public', $code) or
             Database::get()->query("ALTER TABLE `video` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
-    DBHelper::fieldExists('videolinks', 'visible') or
+    DBHelper::fieldExists('videolinks', 'visible', $code) or
             Database::get()->query("ALTER TABLE `videolinks` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
-    DBHelper::fieldExists('videolinks', 'public') or
+    DBHelper::fieldExists('videolinks', 'public', $code) or
             Database::get()->query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
-    if (DBHelper::indexExists('dropbox_file', 'UN_filename')) {
+    if (DBHelper::indexExists('dropbox_file', 'UN_filename', $code)) {
         Database::get()->query("ALTER TABLE dropbox_file DROP index UN_filename");
     }
     Database::get()->query("ALTER TABLE dropbox_file CHANGE description description VARCHAR(500)");
@@ -1661,6 +1678,7 @@ function load_global_messages() {
         $global_messages['langGlossary'][$code] = $langGlossary;
         $global_messages['langEBook'][$code] = $langEBook;
         $global_messages['langVideo'][$code] = $langVideo;
+        $global_messages['langDropBox'][$code] = $langDropBox;
     }
 }
 
@@ -1692,18 +1710,17 @@ function fix_multiple_usernames()  {
         $tool_content .= "<p>&nbsp;</p>";
 
         foreach ($q1 as $u) {
-            $q2 = Database::get()->queryArray("SELECT user_id, username FROM user WHERE BINARY username = '$u->username'");
+            $q2 = Database::get()->queryArray("SELECT user_id, username FROM user
+                WHERE BINARY username = ?s ORDER BY user_id DESC", $u->username);
             $i = 0;
             foreach ($q2 as $uid) {
                 while (++$i) {
+                    $new_username = $uid->username . $i;
                     // check if new username exists 
-                    $q3 = Database::get()->querySingle("SELECT user_id FROM user WHERE BINARY username = CONCAT('$uid->username', '$i')");
-                    if (!$q3) {
-                            Database::get()->query("UPDATE user SET username = CONCAT('$uid->username', '$i') WHERE user_id = $uid->user_id");
-                            $newusername = $uid->username . "$i";
-                            $tool_content .= sprintf($langUpgradeChangeUsername, $uid->username, $newusername);
-                            $tool_content .= "<br />";
-                            break;
+                    if (!Database::get()->querySingle("SELECT user_id FROM user WHERE BINARY username = ?s", $new_username)) {
+                        Database::get()->query("UPDATE user SET username = ?s WHERE user_id = ?d", $new_username, $uid->user_id);
+                        $tool_content .= sprintf($langUpgradeChangeUsername, $uid->username, $new_username) . "<br>";
+                        break;
                     }
                 }
             }
@@ -1712,42 +1729,48 @@ function fix_multiple_usernames()  {
     }
 }
 
-/**
- * @brief default theme options
- */
-$theme_options = array(
-  array('name' => 'Open Courses Atoms','styles' => 'a:11:{s:11:"imageUpload";s:25:"eclass-new-logo_atoms.png";s:7:"bgImage";s:36:"bcgr_lines_petrol_les saturation.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:18:"rgba(76,173,178,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:37:"OpenCourses_banner_Color_theme1-1.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(35,44,58,0.64)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.71)";s:22:"leftMenuHoverFontColor";s:18:"rgba(64,121,146,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(67,142,158,1)";}'),
-  array('name' => 'Open Courses Sketchy','styles' => 'a:12:{s:11:"imageUpload";s:27:"eclass-new-logo_sketchy.png";s:7:"bgImage";s:24:"Light_sketch_bcgr2-1.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:19:"rgba(155,128,106,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:27:"banner_Sketch_empty-1-2.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(37,37,37,0.91)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.83)";s:22:"leftMenuHoverFontColor";s:18:"rgba(146,100,64,1)";s:25:"leftMenuSelectedFontColor";s:18:"rgba(228,164,77,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(158,135,67,1)";}'),
-  array('name' => 'Open eClass Classic','styles' => 'a:13:{s:11:"imageUpload";s:27:"eclass-new-logo_classic.png";s:7:"bgColor";s:19:"rgba(223,223,223,1)";s:9:"linkColor";s:19:"rgba(152,143,138,1)";s:14:"linkHoverColor";s:17:"rgba(152,57,47,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:23:"eclass_classic2-1-1.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(130,124,120,1)";s:17:"leftMenuFontColor";s:19:"rgba(221,218,218,1)";s:22:"leftMenuHoverFontColor";s:19:"rgba(251,198,145,1)";s:25:"leftMenuSelectedFontColor";s:19:"rgba(223,223,223,1)";s:20:"leftSubMenuFontColor";s:19:"rgba(213,209,209,1)";s:23:"leftSubMenuHoverBgColor";s:17:"rgba(155,69,69,1)";}'),
-  array('name' => 'Open eClass City Lights','styles' => 'a:4:{s:7:"bgImage";s:21:"Open-eClass-4-1-1.jpg";s:6:"bgType";s:3:"fix";s:27:"loginJumbotronRadialBgColor";s:0:"";s:14:"leftNavBgColor";s:19:"rgba(35,44,58,0.58)";}'),
-  array('name' => 'Open eClass Classic Ice','styles' => 'a:13:{s:11:"imageUpload";s:23:"eclass-new-logo_ice.png";s:7:"bgColor";s:19:"rgba(208,219,229,1)";s:7:"bgImage";s:7:"ice.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:17:"rgba(35,82,124,1)";s:14:"linkHoverColor";s:19:"rgba(140,195,239,1)";s:8:"loginImg";s:14:"eclass_ice.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:20:"rgba(57,78,113,0.71)";s:17:"leftMenuFontColor";s:22:"rgba(220,215,215,0.89)";s:22:"leftMenuHoverFontColor";s:19:"rgba(149,173,192,1)";s:25:"leftMenuSelectedFontColor";s:19:"rgba(153,199,236,1)";s:20:"leftSubMenuFontColor";s:19:"rgba(217,208,208,1)";}')
-);
-
-/**
- * @brief Copy theme images to theme_data directory
- * @global string $webDir
- * @global string $_SESSION[theme]
- */
-function copyThemeImages() {
+function importThemes($themes = null) {
     global $webDir;
-
-    $imgDir = "$webDir/template/$_SESSION[theme]/img";
-    $images = array('bgImage', 'imageUpload', 'imageUploadSmall', 'loginImg');
-    $themes = Database::get()->queryArray("SELECT * FROM theme_options");
-    foreach ($themes as $t) {
-        $themeDir = "$webDir/courses/theme_data/" . $t->id;
-        if (!file_exists($themeDir)) {
-            mkdir($themeDir, 0755, true);
-        }
-        $styles = unserialize($t->styles);
-        foreach ($images as $img) {
-            if (isset($styles[$img]) and file_exists("$imgDir/{$styles[$img]}") and !file_exists("$themeDir/{$styles[$img]}")) {
-                copy("$imgDir/{$styles[$img]}", "$themeDir/{$styles[$img]}");
+    if (!isset($themes) || isset($themes) && !empty($themes)) {
+        require_once "$webDir/include/pclzip/pclzip.lib.php";
+        $themesDir = "$webDir/template/$_SESSION[theme]/themes";
+        if(!is_dir("$webDir/courses/theme_data")) mkdir("$webDir/courses/theme_data", 0755, true);
+        if (is_dir($themesDir) && $handle = opendir($themesDir)) {
+            if (!isset($themes)) {
+                while (false !== ($file_name = readdir($handle))) {
+                    if ($file_name != "." && $file_name != "..") {
+                        installTheme($themesDir, $file_name);
+                    }                 
+                }                
+            } else {
+                while (false !== ($file_name = readdir($handle))) {
+                    if ($file_name != "." && $file_name != ".." && in_array($file_name, $themes)) {
+                        installTheme($themesDir, $file_name);
+                    }                 
+                }
             }
+            closedir($handle);
         }
     }
 }
-
+function installTheme($themesDir, $file_name) {
+    global $webDir;
+    if (copy("$themesDir/$file_name", "$webDir/courses/theme_data/$file_name")) {                   
+        $archive = new PclZip("$webDir/courses/theme_data/$file_name");
+        if (!$archive->extract(PCLZIP_OPT_PATH, "$webDir/courses/theme_data/temp")) {
+            die("Error : ".$archive->errorInfo(true));
+        } else {
+            unlink("$webDir/courses/theme_data/$file_name");
+            $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");
+            unlink("$webDir/courses/theme_data/temp/theme_options.txt");
+            $theme_options = unserialize(base64_decode($base64_str));                
+            $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
+            @rename("$webDir/courses/theme_data/temp/$theme_options->id", "$webDir/courses/theme_data/$new_theme_id");
+            recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
+            removeDir("$webDir/courses/theme_data/temp");
+        }
+    }    
+}
 function setGlobalContactInfo() {
     global $Institution, $postaddress, $telephone, $fax;
 
@@ -1763,4 +1786,163 @@ function setGlobalContactInfo() {
     if (!isset($fax)) {
         $fax = get_config('fax');
     }
+}
+
+function refreshHierarchyProcedures() {
+    Database::get()->query("DROP VIEW IF EXISTS `hierarchy_depth`");
+
+    Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
+    Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT, IN parentlft INT(11),
+                                IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
+                                IN p_order_priority INT(11))
+                            LANGUAGE SQL
+                            BEGIN
+                                DECLARE lft, rgt INT(11);
+
+                                SET lft = parentlft + 1;
+                                SET rgt = parentlft + 2;
+
+                                CALL shift_right(parentlft, 2, 0);
+
+                                INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
+                            END");
+
+    Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
+    Database::get()->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT, IN parentlft INT(11),
+                                IN p_code VARCHAR(20), IN p_number INT(11), IN p_generator INT(11),
+                                IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+                            LANGUAGE SQL
+                            BEGIN
+                                DECLARE lft, rgt INT(11);
+
+                                SET lft = parentlft + 1;
+                                SET rgt = parentlft + 2;
+
+                                CALL shift_right(parentlft, 2, 0);
+
+                                INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
+                            END");
+
+    Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
+    Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT,
+                                IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
+                                IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+                            LANGUAGE SQL
+                            BEGIN
+                                UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
+                                    code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
+                                    order_priority = p_order_priority WHERE id = p_id;
+
+                                IF nodelft <> parentlft THEN
+                                    CALL move_nodes(nodelft, p_lft, p_rgt);
+                                END IF;
+                            END");
+
+    Database::get()->query("DROP PROCEDURE IF EXISTS `delete_node`");
+    Database::get()->query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
+                            LANGUAGE SQL
+                            BEGIN
+                                DECLARE p_lft, p_rgt INT(11);
+
+                                SELECT lft, rgt INTO p_lft, p_rgt FROM `hierarchy` WHERE id = p_id;
+                                DELETE FROM `hierarchy` WHERE id = p_id;
+
+                                CALL delete_nodes(p_lft, p_rgt);
+                            END");
+
+    Database::get()->query("DROP PROCEDURE IF EXISTS `shift_right`");
+    Database::get()->query("CREATE PROCEDURE `shift_right` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+                            LANGUAGE SQL
+                            BEGIN
+                                IF maxrgt > 0 THEN
+                                    UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node AND rgt <= maxrgt;
+                                ELSE
+                                    UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node;
+                                END IF;
+
+                                IF maxrgt > 0 THEN
+                                    UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node AND lft <= maxrgt;
+                                ELSE
+                                    UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node;
+                                END IF;
+                            END");
+
+    Database::get()->query("DROP PROCEDURE IF EXISTS `shift_left`");
+    Database::get()->query("CREATE PROCEDURE `shift_left` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+                            LANGUAGE SQL
+                            BEGIN
+                                IF maxrgt > 0 THEN
+                                    UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node AND rgt <= maxrgt;
+                                ELSE
+                                    UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node;
+                                END IF;
+
+                                IF maxrgt > 0 THEN
+                                    UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node AND lft <= maxrgt;
+                                ELSE
+                                    UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node;
+                                END IF;
+                            END");
+
+    Database::get()->query("DROP PROCEDURE IF EXISTS `shift_end`");
+    Database::get()->query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
+                            LANGUAGE SQL
+                            BEGIN
+                                UPDATE `hierarchy`
+                                SET lft = (lft - (p_lft - 1)) + maxrgt,
+                                    rgt = (rgt - (p_lft - 1)) + maxrgt WHERE lft BETWEEN p_lft AND p_rgt;
+                            END");
+
+    Database::get()->query("DROP PROCEDURE IF EXISTS `get_maxrgt`");
+    Database::get()->query("CREATE PROCEDURE `get_maxrgt` (OUT maxrgt INT(11))
+                            LANGUAGE SQL
+                            BEGIN
+                                SELECT rgt INTO maxrgt FROM `hierarchy` ORDER BY rgt DESC LIMIT 1;
+                            END");
+
+    Database::get()->query("DROP PROCEDURE IF EXISTS `get_parent`");
+    Database::get()->query("CREATE PROCEDURE `get_parent` (IN p_lft INT(11), IN p_rgt INT(11))
+                            LANGUAGE SQL
+                            BEGIN
+                                SELECT * FROM `hierarchy` WHERE lft < p_lft AND rgt > p_rgt ORDER BY lft DESC LIMIT 1;
+                            END");
+
+    Database::get()->query("DROP PROCEDURE IF EXISTS `delete_nodes`");
+    Database::get()->query("CREATE PROCEDURE `delete_nodes` (IN p_lft INT(11), IN p_rgt INT(11))
+                            LANGUAGE SQL
+                            BEGIN
+                                DECLARE node_width INT(11);
+                                SET node_width = p_rgt - p_lft + 1;
+
+                                DELETE FROM `hierarchy` WHERE lft BETWEEN p_lft AND p_rgt;
+                                UPDATE `hierarchy` SET rgt = rgt - node_width WHERE rgt > p_rgt;
+                                UPDATE `hierarchy` SET lft = lft - node_width WHERE lft > p_lft;
+                            END");
+
+    Database::get()->query("DROP PROCEDURE IF EXISTS `move_nodes`");
+    Database::get()->query("CREATE PROCEDURE `move_nodes` (INOUT nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11))
+                            LANGUAGE SQL
+                            BEGIN
+                                DECLARE node_width, maxrgt INT(11);
+
+                                SET node_width = p_rgt - p_lft + 1;
+                                CALL get_maxrgt(maxrgt);
+
+                                CALL shift_end(p_lft, p_rgt, maxrgt);
+
+                                IF nodelft = 0 THEN
+                                    CALL shift_left(p_rgt, node_width, 0);
+                                ELSE
+                                    CALL shift_left(p_rgt, node_width, maxrgt);
+
+                                    IF p_lft < nodelft THEN
+                                        SET nodelft = nodelft - node_width;
+                                    END IF;
+
+                                    CALL shift_right(nodelft, node_width, maxrgt);
+
+                                    UPDATE `hierarchy` SET rgt = (rgt - maxrgt) + nodelft WHERE rgt > maxrgt;
+                                    UPDATE `hierarchy` SET lft = (lft - maxrgt) + nodelft WHERE lft > maxrgt;
+                                END IF;
+                            END");
 }

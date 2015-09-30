@@ -100,7 +100,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
-                '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>',
+                '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
                 '1' => date('d-m-Y', strtotime($myrow->date)),
                 '2' => action_button(array(
                     array('title' => $langEditChange,
@@ -130,11 +130,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     } else {
         foreach ($result as $myrow) {
             $data['aaData'][] = array(
-                '0' => date('d-m-Y', strtotime($myrow->date)),
-                '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>');
+                '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>',
+                '1' => date('d-m-Y', strtotime($myrow->date))
+                );
         }
     }
-    echo json_encode($data);
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit();
 }
 load_js('tools.js');
@@ -268,7 +269,6 @@ if (isset($_GET['an_id'])) {
 }
 if ($is_editor) {
   $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' . $langEmptyAnTitle . '";</script>';
-  $displayForm = true;
   /* up and down commands */
   if (isset($_GET['down'])) {
     $thisAnnouncementId = $_GET['down'];
@@ -325,6 +325,7 @@ if ($is_editor) {
     /* submit */
     if (isset($_POST['submitAnnouncement'])) {
         // modify announcement
+        $datetime = date('l jS \of F Y h:i:s A');
         $antitle = $_POST['antitle'];
         $newContent = purify($_POST['newContent']);
         $send_mail = isset($_POST['recipients']) && (count($_POST['recipients'])>0);
@@ -380,25 +381,65 @@ if ($is_editor) {
                                                                      'content' => $txt_content));
 
         // send email
-        if ($send_mail) {
+        if ($send_mail) {            
             $title = course_id_to_title($course_id);
             $recipients_emaillist = "";
-            foreach($_POST['recipients'] as $re){
-                $recipients_emaillist .= (empty($recipients_emaillist))? "'$re'":",'$re'";
-            }            
-            $emailContent = "$professorMessage: " . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "<br>\n<br>\n" .
-                    q($_POST['antitle']) .
-                    "<br>\n<br>\n" .
-                    $_POST['newContent'];
+            if ($_POST['recipients'][0] == -1) { // all users
+                $cu = Database::get()->queryArray("SELECT cu.user_id FROM course_user cu 
+                                                        JOIN user u ON cu.user_id=u.id 
+                                                    WHERE cu.course_id = ?d 
+                                                    AND u.email <> '' 
+                                                    AND u.email IS NOT NULL", $course_id);                
+                foreach($cu as $re) {
+                    $recipients_emaillist .= (empty($recipients_emaillist))? "'$re->user_id'":",'$re->user_id'";
+                }
+            } else { // selected users
+                foreach($_POST['recipients'] as $re) {
+                    $recipients_emaillist .= (empty($recipients_emaillist))? "'$re'":",'$re'";
+                }
+            }
+
+            $emailHeaderContent = "
+                <!-- Header Section -->
+                <div id='mail-header'>
+                    <br>
+                    <div>
+                        <div id='header-title'>Έχει δημοσιευθεί ανακοίνωση στο μάθημα <a href='{$urlServer}courses/$course_code'>" . q($title) . "</a>.</div>
+                        <ul id='forum-category'>
+                            <li><span><b>$langSender:</b></span> <span class='left-space'>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "</span></li>
+                            <li><span><b>$langdate:</b></span> <span class='left-space'>$datetime</span></li>
+                        </ul>
+                    </div>
+                </div>";
+
+            $emailBodyContent = "
+                <!-- Body Section -->
+                <div id='mail-body'>
+                    <br>
+                    <div><b>$langSubject:</b> <span class='left-space'>".q($_POST['antitle'])."</span></div><br>
+                    <div><b>$langMailBody</b></div>
+                    <div id='mail-body-inner'>".
+                        $_POST['newContent']
+                    ."</div>
+                </div>";
+
+            $emailFooterContent = "
+                <!-- Footer Section -->
+                <div id='mail-footer'>
+                    <br>
+                    <div>
+                        <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                    </div>
+                </div>";
+
+            $emailContent = $emailHeaderContent.$emailBodyContent.$emailFooterContent;
+
             $emailSubject = "$professorMessage ($public_code - " . q($title) . " - $langAnnouncement)";
             // select students email list
             $countEmail = 0;
             $invalid = 0;
             $recipients = array();
             $emailBody = html2text($emailContent);
-            $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-            $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
-            $emailContent .= $unsubscribe . $linkhere;
             $general_to = 'Members of course ' . $course_code;            
             Database::get()->queryFunc("SELECT course_user.user_id as id, user.email as email
                                                    FROM course_user, user
@@ -416,30 +457,25 @@ if ($is_editor) {
                     array_push($recipients, $emailTo);
                 }
                 // send mail message per 50 recipients
-                if (count($recipients) >= 50) {                    
+                if (count($recipients) >= 50) {                   
                     send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
                     $recipients = array();
                 }
             }, $course_id);
-            if (count($recipients) > 0) {
+            if (count($recipients) > 0) {                
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
             }
             $messageInvalid = " $langOn $countEmail $langRegUser, $invalid $langInvalidMail";
-            $message = "<div class='alert alert-success'>$langAnnAdd $langEmailSent<br />$messageInvalid</div>";
-        } // if $emailOption==1
-        else {
-            $message = "<div class='alert alert-success'>$langAnnAdd</div>";
+            Session::Messages("$langAnnAdd $langEmailSent<br>$messageInvalid", 'alert-success');
         }
+        else {
+            Session::Messages($langAnnAdd, 'alert-success');
+        }
+        redirect_to_home_page("modules/announcements/index.php?course=$course_code");
     } // end of if $submit
 
-
-    // teacher display
-    if (isset($message) && $message) {
-        $tool_content .= $message . "<br/>";
-        $displayForm = false; //do not show form
-    }
     /* display form */
-    if ($displayForm && (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
+    if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
         
         if (isset($_GET['modify'])) {
             $langAdd = $pageName = $langModifAnn;
@@ -492,10 +528,17 @@ if ($is_editor) {
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
                 <select class='form-control' name='recipients[]' multiple class='form-control' id='select-recipients'>";
-                $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id = ?d AND u.email<>'' AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
-                foreach($course_users as $cu){
+                $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email 
+                                                    FROM course_user cu 
+                                                        JOIN user u ON cu.user_id=u.id 
+                                                    WHERE cu.course_id = ?d 
+                                                    AND u.email<>'' 
+                                                    AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
+                
+                $tool_content .= "<option value='-1' selected><h2>$langAllUsers</h2></option>";
+                foreach($course_users as $cu) {
                    $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->email) . ")</option>"; 
-                } 
+                }
                 $tool_content .= "</select>
                 <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
@@ -512,10 +555,16 @@ if ($is_editor) {
             <div class='col-sm-10'><input class='form-control' type='text' name='enddate' id='enddate' value='$showUntil'></div>
         </div>
         <div class='form-group'>
-        <div class='col-sm-offset-2 col-sm-10'>
-            <input class='btn btn-primary' type='submit' name='submitAnnouncement' value='".q($langAdd)."' />
-            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
-        </div>
+        <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
+                array(
+                    'text' => $langSubmit,
+                    'name' => 'submitAnnouncement',
+                    'value'=> $langAdd
+                ),
+                array(
+                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                )
+            ))."</div>
         <input type='hidden' name='id' value='$AnnouncementToModify'>
         </div>
         </fieldset>
@@ -524,6 +573,10 @@ if ($is_editor) {
     }
 } // end: teacher only
 
+if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
+    $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
+        (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+}
 if (isset($_GET['an_id'])) {
     $pageName = $row->title;
     $tool_content .= action_bar(array(
@@ -539,9 +592,8 @@ if (isset($_GET['an_id'])) {
         array('title' => $langDelete,
               'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
               'icon' => 'fa-times',
-              'level' => 'primary',
               'confirm' => $langSureToDelAnnounce,
-              'show' => $is_editor),));
+              'show' => $is_editor)));
     } elseif (!isset($_GET['modify']) && !isset($_GET['addAnnounce'])) {
         $tool_content .= action_bar(array(
             array('title' => $langAddAnn,
@@ -556,18 +608,21 @@ if (isset($_GET['an_id'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
         $tool_content .= "<div class='panel'>";
         $tool_content .= "<div class='panel-body'>";
-        $tool_content .= "<p class='not_visible'>$langDate: $row->date</p>";
+        $tool_content .= "<div class='not_visible margin-bottom-thin'>$langDate: $row->date</div>";
         $tool_content .= $row->content;
         
         $moduleTag = new ModuleElement($row->id);
-        $tool_content .= $langTags.": ";
-        $tool_content .= $moduleTag->showTags();
-        $tool_content .= "</div></div>";
+        $tags_list = $moduleTag->showTags();
+        if ($tags_list) $tool_content .= "<div>$langTags: $tags_list</div>";
+        $tool_content .= "
+                    </div>
+                </div>";
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {        
         $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table-default'>";
         $tool_content .= "<thead>";
         $tool_content .= "<tr><th>$langAnnouncement</th><th>$langDate</th>";
+
         if ($is_editor) {
             $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         }
@@ -597,4 +652,3 @@ $head_content .= "<script type='text/javascript'>
     </script>";
 
 draw($tool_content, 2, null, $head_content);
-

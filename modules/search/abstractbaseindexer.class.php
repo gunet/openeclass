@@ -185,28 +185,17 @@ abstract class AbstractBaseIndexer {
      * @param  Zend_Search_Lucene_Exception $e
      */
     protected function handleWriteErrors($e) {
+        global $tool_content, $pageName, $errorMessage;
         if (preg_match("/too many open files/i", $e->getMessage())) {
-            global $urlAppend;
-            echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-                <html xmlns=\"http://www.w3.org/1999/xhtml\">
-                  <head>
-                    <title>Asynchronous eLearning Platform Open eClass</title>
-                    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-                    <link href='${urlAppend}/install/install.css' rel='stylesheet' type='text/css' />
-                  </head>
-                  <body>
-                  <div class='install_container'>
-                  <p align='center'><img src='${urlAppend}/template/classic/img/logo_openeclass.png' alt='logo' /></p>
-                  <div class='alert' align='center'>
-                  <p>The asynchronous eLearning Platform Open eClass is not operational.</p>
-                  <p>This is caused by a possible maximum open files (ulimit) problem for the search engine indexing directory (courses/idx/).</p>
-                  <p>Please inform the platform administrator.</p>
-                  </div>
-                  </div>
-                  </body>
-                </html>";
+            $pageName = 'Open eClass Asynchronous eLearning Platform';
+            $tool_content .= "
+              <p>The Open eClass asynchronous eLearning platform is not operational.</p>
+              <p>This is caused by a possible maximum open files (ulimit) problem for the search engine indexing directory (courses/idx/).</p>
+              <p>Please inform the platform administrator.</p>";
+            draw_popup();
             exit();
         } else {
+            $errorMessage = $e->getMessage();
             require_once 'fatal_error.php';
         }
     }

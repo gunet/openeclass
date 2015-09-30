@@ -48,23 +48,23 @@ function get_assignment_details($id) {
 // Show to professor details of a student's submission and allow editing of fields
 // $assign contains an array with the assignment's details
 function show_edit_form($id, $sid, $assign) {
-    global $m, $langGradeOk, $tool_content, $course_code, $langCancel, 
-           $langBack, $assign, $langWorkOnlineText;
+    global $m, $langGradeOk, $tool_content, $course_code, $langCancel,
+           $langBack, $assign, $langWorkOnlineText, $course_id;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
     if (count($sub)>0) {
         $uid_2_name = display_user($sub->uid);
         if (!empty($sub->group_id)) {
-            $group_submission = "($m[groupsubmit] " .
-                    "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
-                    "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)";
+            $group_submission = "($m[groupsubmit] $m[ofgroup] " .
+                    "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>"
+                     . gid_to_name($sub->group_id) . "</a>)";
         } else {
             $group_submission = '';
         }
-        
+
         $grade = Session::has('grade') ? Session::get('grade') : $sub->grade;
         $comments = Session::has('comments') ? Session::get('comments') : q($sub->grade_comments);
         $email_status = !Session::has('email') ?: " checked";
-        
+
         $pageName = $m['addgradecomments'];
         if($assign->submission_type){
             $submission = "
@@ -73,7 +73,7 @@ function show_edit_form($id, $sid, $assign) {
                         <div class='col-sm-9'>
                             $sub->submission_text
                         </div>
-                    </div>";      
+                    </div>";
         } else {
             $submission = "
                     <div class='form-group'>
@@ -81,8 +81,26 @@ function show_edit_form($id, $sid, $assign) {
                         <div class='col-sm-9'>
                             <a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a>
                         </div>
-                    </div>";                
-        }        
+                    </div>";
+        }
+        if ($assign->grading_scale_id) {
+            $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
+            $scales = unserialize($serialized_scale_data);
+            $scale_options = "<option value> - </option>";
+            $scale_values = array_value_recursive('scale_item_value', $scales);
+            if (!in_array($sub->grade, $scale_values) && !is_null($sub->grade)) {
+                $sub->grade = closest($sub->grade, $scale_values)['value'];
+            }
+            foreach ($scales as $scale) {
+                $scale_options .= "<option value='$scale[scale_item_value]'".($sub->grade == $scale['scale_item_value'] ? " selected" : "").">$scale[scale_item_name]</option>";
+            }
+            $grade_field = "
+                    <select name='grade' class='form-control' id='scales'>
+                        $scale_options
+                    </select>";
+        } else {
+            $grade_field = "<input class='form-control' type='text' name='grade' maxlength='4' size='3' value='$sub->grade'> ($m[max_grade]: $assign->max_grade)";
+        }
         $tool_content .= action_bar(array(
                 array(
                     'title' => $langBack,
@@ -99,7 +117,7 @@ function show_edit_form($id, $sid, $assign) {
                     <div class='form-group'>
                         <label class='col-sm-3 control-label'>$m[username]:</label>
                         <div class='col-sm-9'>
-                        $uid_2_name ".q($group_submission)."
+                        $uid_2_name $group_submission
                         </div>
                     </div>
                     <div class='form-group'>
@@ -112,8 +130,8 @@ function show_edit_form($id, $sid, $assign) {
                     <div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
                         <label for='grade' class='col-sm-3 control-label'>$m[grade]:</label>
                         <div class='col-sm-4'>
-                            <input class='form-control' type='text' name='grade' id='grade' maxlength='3' value='$grade'>
-                            <span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>    
+                            $grade_field
+                            <span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
                         </div>
                     </div>
                     <div class='form-group'>

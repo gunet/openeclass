@@ -53,29 +53,20 @@ $_SESSION['courses'] = $courses;
 $_user['persoLastLogin'] = last_login($uid);
 $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
 
-$user_assignments = $user_announcements = $user_documents = $user_agenda = $user_forumPosts = '';
+$user_announcements = '';
 
 //  Get user's course info
 $user_lesson_info = getUserLessonInfo($uid);
 //if user is registered to at least one lesson
-if (count($lesson_ids) > 0) {
-    // get user assignments    
-    $user_assignments = getUserAssignments($lesson_ids);
+if (count($lesson_ids) > 0) {    
     // get user announcements    
-    $user_announcements = getUserAnnouncements($lesson_ids);
-    // get user documents
-    $user_documents = getUserDocuments($lesson_ids);
-    // get user agenda    
-    $user_agenda = getUserAgenda($lesson_ids);
-    // get user forum posts    
-    $user_forumPosts = getUserForumPosts($lesson_ids);
+    $user_announcements = getUserAnnouncements($lesson_ids);        
 }
 
 // get user latest personal messages
 $user_messages = getUserMessages();
 
 // create array with content
-//BEGIN - Get user personal calendar
 $today = getdate();
 $day = $today['mday'];
 $month = $today['mon'];
@@ -83,15 +74,9 @@ $year = $today['year'];
 Calendar_Events::get_calendar_settings();
 $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
 
-//END - Get personal calendar
-// ==  BEGIN create array with personalised content
-
+// create array with personalised content
 $perso_tool_content = array(
-    'lessons_content' => $user_lesson_info,
-    'assigns_content' => $user_assignments,
-    'docs_content' => $user_documents,
-    'agenda_content' => $user_agenda,
-    'forum_content' => $user_forumPosts,
+    'lessons_content' => $user_lesson_info,    
     'personal_calendar_content' => $user_personal_calendar
 );
 

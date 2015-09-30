@@ -69,7 +69,7 @@ class Log {
                                 details = ?s,
                                 action_type = ?d,
                                 ts = " . DBHelper::timeAfter() . ",
-                                ip = ?s", $userid, $course_id, $module_id, serialize($details), $action_type, $_SERVER['SERVER_ADDR']);
+                                ip = ?s", $userid, $course_id, $module_id, serialize($details), $action_type, $_SERVER['REMOTE_ADDR']);
         return;
     }
 
@@ -89,7 +89,8 @@ class Log {
 
         global $tool_content, $modules;
         global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
-            $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo;
+            $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo, 
+            $langModifyInfo, $langAbuseReport;
 
         $q1 = $q2 = $q3 = $q4 = '';
 
@@ -134,14 +135,16 @@ class Log {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAdminUsers . "</div>";
                 } elseif ($module_id == MODULE_ID_TOOLADMIN) {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $langExternalLinks . "</div>";
+                } elseif ($module_id == MODULE_ID_ABUSE_REPORT) {
+                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAbuseReport . "</div>";
                 } else {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
                 }
             }            
-            $tool_content .= "<table id = 'log_results_table' class='tbl'>";
+            $tool_content .= "<table id = 'log_results_table' class='table-default'>";
             $tool_content .= "<thead>";
             // log header
-            $tool_content .= "<tr><th>$langDate</th><th>$langUser</th>";
+            $tool_content .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
             if ($course_id == -1) {
                 $tool_content .= "<th>$langCourse</th>";
             }
@@ -172,14 +175,18 @@ class Log {
                         $tool_content .= "<td>" . $langExternalLinks . "</td>";
                     } elseif ($mid == MODULE_ID_SETTINGS) {
                         $tool_content .= "<td>" . $langCourseInfo . "</td>";
-                    } else {                        
+                    } elseif ($mid == MODULE_ID_ABUSE_REPORT) {
+                        $tool_content .= "<td>" . $langAbuseReport . "</td>";
+                    } elseif ($mid == MODULE_ID_COURSEINFO) {
+                        $tool_content .= "<td>" . $langModifyInfo . "</td>";                         
+                    } else {
                         $tool_content .= "<td>" . $modules[$mid]['title'] . "</td>";
                     }
                 }
                 $tool_content .= "<td>" . $this->get_action_names($r->action_type) . "</td>";
                 if ($course_id == 0 or $module_id == 0) { // system logging
                     $tool_content .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
-                } else { // course logging
+                } else { // course logging                    
                     $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
                 }
                 $tool_content .= "</tr>";
@@ -266,6 +273,12 @@ class Log {
                 break;
             case MODULE_ID_TOOLADMIN: $content = $this->external_link_action_details($details);
                 break;
+            case MODULE_ID_ABUSE_REPORT: $content = $this->abuse_report_action_details($details);
+                break;
+            case MODULE_ID_COURSEINFO: $content = $this->modify_course_action_details($details);            
+                break;            
+            case MODULE_ID_SETTINGS: $content = $this->modify_course_action_details($details); // <-- for backward compatibility only !!!
+                break;
             default: $content = $langUnknownModule;
                 break;
         }
@@ -288,9 +301,7 @@ class Log {
             case LOG_CREATE_COURSE: $content = $this->create_course_action_details($details);
                 break;
             case LOG_DELETE_COURSE: $content = $this->delete_course_action_details($details);
-                break;
-            case LOG_MODIFY_COURSE: $content = $this->modify_course_action_details($details);
-                break;
+                break;            
             case LOG_PROFILE: $content = $this->profile_action_details($details);
                 break;
             case LOG_LOGIN_FAILURE: $content = $this->login_failure_action_details($details);
@@ -339,15 +350,94 @@ class Log {
         return $content;
     }
 
+    /**
+     * @brief display action details while modifying course info
+     * @global type $langCourseStatusChange
+     * @global type $langIn
+     * @global type $langClosedCourse
+     * @global type $langRegCourse
+     * @global type $langOpenCourse
+     * @global type $langInactiveCourse
+     * @global type $langActivate
+     * @global type $langDeactivate
+     * @global type $langBlogComment
+     * @global type $langBlogRating
+     * @global type $langsCourseSharing
+     * @global type $langBlogSharing
+     * @global type $langsCourseSharing
+     * @global type $langCourseComment
+     * @global type $langCourseAnonymousRating
+     * @global type $langsCoursesRating
+     * @global type $langForumRating
+     * @global type $langCourseSocialBookmarks
+     * @global type $langCourseAbuseReport
+     * @param type $details
+     * @return string
+     */
     private function modify_course_action_details($details) {
 
-        global $langTitle;
-
+        global $langCourseStatusChange, $langIn, $langClosedCourse, 
+               $langRegCourse, $langOpenCourse, $langInactiveCourse,
+               $langActivate, $langDeactivate, $langBlogComment, $langBlogRating,
+               $langsCourseSharing, $langBlogSharing, $langCourseSharing,
+               $langCourseComment, $langsCourseAnonymousRating, $langsCourseRating, 
+               $langForumRating, $langCourseSocialBookmarks, $langCourseAbuseReport;
+               
         $details = unserialize($details);
-
-        $content = "$langTitle &laquo;" . q($details['title']) . "&raquo;";
-        $content .= "&nbsp;(" . q($details['public_code']) . ")";
-
+        
+        if (isset($details['visible'])) {
+            switch ($details['visible']) {
+                case COURSE_CLOSED: $mes = "".q($langIn). "&nbsp;&laquo;". q($langClosedCourse) . "&raquo;";
+                    break;
+                case COURSE_REGISTRATION: $mes = "".q($langIn). "&nbsp;&laquo;". q($langRegCourse) . "&raquo;";
+                    break;
+                case COURSE_OPEN: $mes = "".q($langIn). "&nbsp;&laquo;". q($langOpenCourse) . "&raquo;";
+                    break;
+                case COURSE_INACTIVE: $mes = "".q($langIn). "&nbsp;&laquo;". q($langInactiveCourse) . "&raquo;";
+                    break;
+                default: $mes = '';
+                    break;
+            }
+            $content = "$langCourseStatusChange $mes";
+            $content .= "&nbsp;(" . q($details['public_code']) . ")";
+        } else {
+            $lm = '';
+            switch ($details['id']) {
+                case SETTING_BLOG_COMMENT_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langBlogComment";
+                    break;
+                case SETTING_BLOG_RATING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langBlogRating";
+                    break;
+                case SETTING_BLOG_SHARING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langBlogSharing";
+                    break;
+                case SETTING_COURSE_SHARING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langsCourseSharing";
+                    break;
+                case SETTING_COURSE_RATING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langsCourseRating";
+                    break;
+                case SETTING_COURSE_COMMENT_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langCourseComment";
+                    break;
+                case SETTING_COURSE_ANONYMOUS_RATING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langsCourseAnonymousRating";
+                    break;
+                case SETTING_FORUM_RATING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langForumRating";
+                    break;
+                case SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langCourseSocialBookmarks";
+                    break;
+                case SETTING_COURSE_ABUSE_REPORT_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langCourseAbuseReport";
+                    break;
+                default: $mes = '';
+                    break;
+            }            
+            $content = "$mes";
+        }
         return $content;
     }
 
@@ -776,6 +866,58 @@ class Log {
 
         return $content;
     }
+    
+    /**
+     * display action details in abuse reports
+     * @global type $langcreator
+     * @global type $langAbuseReportCat
+     * @global type $langSpam
+     * @global type $langRudeness
+     * @global type $langOther
+     * @global type $langMessage
+     * @global type $langComment
+     * @global type $langForumPost
+     * @global type $langAbuseResourceType
+     * @global type $langContent
+     * @global type $langAbuseReportStatus
+     * @global type $langAbuseReportOpen
+     * @global type $langAbuseReportClosed
+     * @param type $details
+     * @return string
+     */
+    private function abuse_report_action_details($details) {
+    
+        global $langcreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
+               $langComment, $langForumPost, $langAbuseResourceType, $langContent, $langAbuseReportStatus,
+               $langAbuseReportOpen, $langAbuseReportClosed, $langLinks; 
+        
+        $reports_cats = array('rudeness' => $langRudeness,
+                              'spam' => $langSpam,
+                              'other' => $langOther);
+        
+        $resource_types = array('comment' => $langComment,
+                                'forum_post' => $langForumPost,
+                                'link' => $langLinks);
+                    
+        $details = unserialize($details);
+    
+        $content = "$langcreator: ". display_user($details['user_id'], false, false)."<br/>";
+        $content .= "$langAbuseReportCat: &laquo".$reports_cats[$details['reason']]."&raquo<br/>";
+        $content .= "$langMessage: &laquo".q($details['message'])."&raquo<br/>";
+        $content .= "$langAbuseResourceType: &laquo".$resource_types[$details['rtype']]."&raquo<br/>";
+        if ($details['rtype'] == 'comment') {
+            $content .= "$langContent: &laquo".q($details['rcontent'])."&raquo<br/>";
+        } elseif ($details['rtype'] == 'forum_post') {
+            $content .= "$langContent: &laquo".mathfilter($details['rcontent'], 12, "../courses/mathimg/")."&raquo<br/>";
+        }
+        if ($details['status'] == 1) {
+            $content.= "$langAbuseReportStatus: &laquo".$langAbuseReportOpen."&raquo";
+        } elseif ($details['status'] == 0) {
+            $content.= "$langAbuseReportStatus: &laquo".$langAbuseReportClosed."&raquo";
+        }
+        
+        return $content;
+    }
 
     /**
      * @global type $langInsert
@@ -791,7 +933,7 @@ class Log {
     private function get_action_names($action_type) {
 
         global $langInsert, $langModify, $langDelete, $langModProfile, $langLoginFailures,
-        $langFinalize, $langCourseDel, $langCourseInfoEdit, $langUnregUsers, $langUnknownAction;
+        $langFinalize, $langCourseDel, $langModifyInfo, $langUnregUsers, $langUnknownAction;
 
         switch ($action_type) {
             case LOG_INSERT: return $langInsert;
@@ -800,7 +942,7 @@ class Log {
             case LOG_PROFILE: return $langModProfile;
             case LOG_CREATE_COURSE: return $langFinalize;
             case LOG_DELETE_COURSE: return $langCourseDel;
-            case LOG_MODIFY_COURSE: return $langCourseInfoEdit;
+            case LOG_MODIFY_COURSE: return $langModifyInfo;
             case LOG_LOGIN_FAILURE: return $langLoginFailures;
             case LOG_DELETE_USER: return $langUnregUsers;
             default: return $langUnknownAction;

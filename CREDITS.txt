@@ -48,7 +48,7 @@ Developers and Contributors
  Security Team
 ************************************************************************/
  Ioannis Stais <istais@di.uoa.gr>
- George Arygoros <argyros.george@gmail.com>
+ George Argyros <argyros.george@gmail.com>
 
 ************************************************************************/
 Documentation and Testing Team
@@ -200,7 +200,7 @@ jQuery MultiSelect UI Widget 1.9, Copyright (c) 2011 Eric Hynds
   Dual licensed under the MIT and GPL licenses.
   http://www.erichynds.com/jquery/jquery-ui-multiselect-widget/
 
-Flowplayer Flash 3.2.18 & Flowplayer HTML5 5.5.2
+Flowplayer Flash 3.2.18 & Flowplayer HTML5 6.0.1
 Copyright 2008-2015 Flowplayer Oy
 The Flowplayer Free version is released under the
 GNU GENERAL PUBLIC LICENSE Version 3 (GPL).
@@ -231,3 +231,7 @@ SecureImage - Copyright 2009 Drew Phillips
 Class HtmlCutString - Based on code provided by Prajwala  <m.prajwala@gmail.com>
   Licenced under GPL
   http://code.google.com/p/cut-html-string/
+
+trunk8 v1.3.3 - Copyright 2012 Rick Viscomi
+  Released under the MIT License.
+  https://github.com/rviscomi/trunk8

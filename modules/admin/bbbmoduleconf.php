@@ -28,6 +28,7 @@ require_once 'modules/bbb/functions.php';
 
 $toolName = $langBBBConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
 load_js('tools.js');
 load_js('validation.js');
@@ -38,6 +39,8 @@ $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
 if (isset($_GET['add_server'])) {
     $pageName = $langAddBBBServer;
+    $toolName = $langBBBConf;
+    $navigation[] = array('url' => 'bbbmoduleconf.php', 'name' => $langBBBConf);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "bbbmoduleconf.php",
@@ -85,8 +88,17 @@ if (isset($_GET['add_server'])) {
     $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
             <div class='col-sm-9'><input class='form-control' type='text' name='weight'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
-    $tool_content .= "</fieldset></form></div>";
+    $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'>";
+    $tool_content .=    form_buttons(array(
+                            array(
+                                'text' => $langSave,
+                                'name' => 'submit'
+                            ),
+                            array(
+                                'href' => 'bbbmoduleconf.php'
+                            )
+                        ));
+    $tool_content .= "</div></div></fieldset></form></div>";
 
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
@@ -108,14 +120,11 @@ if (isset($_GET['add_server'])) {
     $id = $_GET['delete_server'];
     Database::get()->querySingle("DELETE FROM bbb_servers WHERE id=?d", $id);
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";    
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "bbbmoduleconf.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+    Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    redirect_to_home_page('modules/admin/bbbmoduleconf.php');   
 }
-// Save new config.php
+
+// Save new config
 else if (isset($_POST['submit'])) {
     $hostname = $_POST['hostname_form'];
     $ip = $_POST['ip_form'];
@@ -147,7 +156,8 @@ else if (isset($_POST['submit'])) {
         (?s,?s,?s,?s,?s,?s,?s,?s,?d)", $hostname, $ip, $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight);
     }    
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
+    Session::Messages($langFileUpdatedSuccess,"alert-success");
+    redirect_to_home_page("modules/admin/bbbmoduleconf.php");
     // Display link to go back to index.php
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -155,7 +165,7 @@ else if (isset($_POST['submit'])) {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
 } // end of if($submit)
-// Display config.php edit form
+// Display config edit form
 else {    
     if (isset($_GET['edit_server'])) {
         $pageName = $langEdit;
@@ -198,11 +208,11 @@ else {
         if ($server->enable_recordings == "false") {
             $checkedfalse = " checked='true' ";
         } else $checkedfalse = '';
-        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' value='false' $checkedfalse>$langNo:</label></div>";
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' value='false' $checkedfalse>$langNo</label></div>";
         if ($server->enable_recordings == "true") {
             $checkedtrue = " checked='true' ";
         } else $checkedtrue = '';
-        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true' $checkedtrue>$langYes:</label></div>";
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true' $checkedtrue>$langYes</label></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
 
@@ -268,29 +278,29 @@ else {
                     <th class = 'text-center'>".icon('fa-gears')."</th></tr>
                 </thead>";
             foreach ($q as $srv) {
-                $enabled_bbb_server = ($srv->enabled)? $langYes : $langNo;
+                $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
                 $connected_users = get_connected_users($srv->server_key, $srv->api_url, $srv->ip) . '/' . $srv->max_rooms;
-                $tool_content .= "<tr>";
-                $tool_content .= "<td>$srv->hostname</td>";
-                $tool_content .= "<td>$srv->ip</td>";
-                $tool_content .= "<td>$enabled_bbb_server</td>";
-                $tool_content .= "<td>$connected_users</td>";
-                $tool_content .= "<td>$srv->weight</td>";
-                $tool_content .= "<td class='option-btn-cell'>".action_button(array(
-                                                    array('title' => $langEditChange,
-                                                          'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
-                                                          'icon' => 'fa-edit'),
-                                                    array('title' => $langDelete,
-                                                          'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$srv->id",
-                                                          'icon' => 'fa-times',
-                                                          'class' => 'delete',
-                                                          'confirm' => $langConfirmDelete)
-                                                    ))."</td>";
-                $tool_content .= "</tr>";
+                $tool_content .= "<tr>" .
+                    "<td>$srv->hostname</td>" .
+                    "<td>$srv->ip</td>" .
+                    "<td>$enabled_bbb_server</td>" .
+                    "<td>$connected_users</td>" .
+                    "<td>$srv->weight</td>" .
+                    "<td class='option-btn-cell'>" .
+                    action_button(array(
+                        array('title' => $langEditChange,
+                              'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
+                              'icon' => 'fa-edit'),
+                        array('title' => $langDelete,
+                              'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$srv->id",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langConfirmDelete))) . "</td>" .
+                    "</tr>";
             }            	
             $tool_content .= "</table></div>";
         } else {
-             $tool_content .= "<div class='alert alert-warning'>Δεν υπάρχουν διαθέσιμοι εξυπηρετητές.</div>";
+             $tool_content .= "<div class='alert alert-warning'>$langNoAvailableBBBServers</div>";
         }
     }
 }

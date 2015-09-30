@@ -36,7 +36,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 if ($is_admin and $require_current_course) {
     $require_course_admin = true; // hide role switcher
 }
-
+$toolName = $langDropBox;
 $personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
 
 if (!isset($course_id)) {
@@ -67,10 +67,30 @@ $head_content = '<script type="text/javascript">
                     }
                 </script>';
 
-$toolName = $langDropBox;
+if ($course_id != 0) {
+    if ($status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
+            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+    }
+} else {
+    if (!get_mail_ver_status($uid)) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
+            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+    }
+}
 
+$courseParam = ($course_id === 0) ? '' : '?course=' . $course_code;
+    if (isset($_GET['mid'])) {
+        if ($courseParam != '') {
+            $msg_id_param = '&amp;mid='.intval($_GET['mid']);
+        } else {
+            $msg_id_param = '?mid='.intval($_GET['mid']);
+        }
+    } else {
+        $msg_id_param = '';
+    }
 // action bar 
-if (!isset($_GET['showQuota'])) {    
+if (!isset($_GET['showQuota'])) {   
     if (isset($_GET['upload'])) {
         $navigation[] = array('url' => "index.php", 'name' => $langDropBox);
         if (isset($_GET['type'])) {
@@ -87,27 +107,27 @@ if (!isset($_GET['showQuota'])) {
     } else {
         if ($course_id != 0) {            
             $tool_content .= action_bar(array(
-                                array('title' => $langNewCourseMessage,
-                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm",
-                                      'icon' => 'fa-pencil-square-o',
-                                      'level' => 'primary-label',
+                                array('title'   => $langNewCourseMessage,
+                                      'url'     => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm",
+                                      'icon'    => 'fa-pencil',
+                                      'level'   => 'primary-label',
                                       'button-class' => 'btn-success'),
-                                array('title' => $langQuotaBar,
-                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE",
-                                      'icon' => 'fa-pie-chart'),
-                                array('title' => $langDropboxMassDelete,
-                                      'url' => 'javascript:void(0)',
-                                      'class' => 'delete_all_in',
-                                      'icon' => 'fa-times')
+                                array('title'   => $langQuotaBar,
+                                      'url'     => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE",
+                                      'icon'    => 'fa-pie-chart'),
+                                array('title'   => $langDropboxMassDelete,
+                                      'url'     => 'javascript:void(0)',
+                                      'class'   => 'delete_all_in',
+                                      'icon'    => 'fa-times')
                             ));
         } else {
             $tool_content .= action_bar(array(
-                                array('title' => $langNewCourseMessage,
-                                      'url' => "$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm",
-                                      'icon' => 'fa-pencil-square-o',
-                                      'level' => 'primary-label',
+                                array('title'   => $langNewCourseMessage,
+                                      'url'     => "$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm",
+                                      'icon'    => 'fa-pencil-square-o',
+                                      'level'   => 'primary-label',
                                       'button-class' => 'btn-success'),
-                                array('title' => $langNewPersoMessage,
+                                array('title'   => $langNewPersoMessage,
                                       'url' => "$_SERVER[SCRIPT_NAME]?upload=1",
                                       'icon' => 'fa-pencil-square-o',
                                       'level' => 'primary-label',
@@ -153,7 +173,8 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] 
         }
     }
     
-    $tool_content .= showquota($diskQuotaDropbox, $diskUsed-$space_released);
+    $backPath = "$_SERVER[SCRIPT_NAME]" . (($course_id != 0)? "?course=$course_code" : "");
+    $tool_content .= showquota($diskQuotaDropbox, $diskUsed-$space_released, $backPath);
     
     draw($tool_content, 2);
     exit;
@@ -190,13 +211,16 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 </div>
             </div>";
     if ($type == 'cm' && $course_id == 0) {//course message from central interface
-        //find user's courses        
+        //find user's courses with dropbox module activated       
         $sql = "SELECT course.code code, course.title title
-                FROM course, course_user
+                FROM course, course_user, course_module
                 WHERE course.id = course_user.course_id
+                AND course.id = course_module.course_id
+                AND course_module.module_id = ?d
+                AND course_module.visible = ?d
                 AND course_user.user_id = ?d
                 ORDER BY title";
-        $res = Database::get()->queryArray($sql, $uid);
+        $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, $uid);
         
         $head_content .= "<script type='text/javascript'>
                             $(document).on('change','#courseselect',function(){
@@ -235,31 +259,6 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         $tool_content .="    </select>
                            </div>
                          </div>";
-    }
-    $tool_content .= "
-        <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-            <div class='col-sm-10'>
-                <input type='text' class='form-control' name='message_title'>
-            </div>
-        </div>
-        <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langMessage:</label>
-            <div class='col-sm-10'>
-                ".rich_text_editor('body', 4, 20, '')."
-                <span class='help-block'>$langMaxMessageSize</span>
-            </div>
-        </div>";        
-    if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
-        enableCheckFileSize();
-        $tool_content .= "
-        <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langFileName:</label>
-            <div class='col-sm-10'>" .
-                fileSizeHidenInput() . "
-                <input type='file' name='file'>
-            </div>
-        </div>";
     }
     
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
@@ -411,6 +410,32 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         }
     }
     
+    $tool_content .= "
+        <div class='form-group'>
+            <label for='title' class='col-sm-2 control-label'>$langSubject:</label>
+            <div class='col-sm-10'>
+                <input type='text' class='form-control' name='message_title'>
+            </div>
+        </div>";
+    
+    $tool_content .= "<div class='form-group'>
+            <label for='title' class='col-sm-2 control-label'>$langMessage:</label>
+            <div class='col-sm-10'>
+                ".rich_text_editor('body', 4, 20, '')."
+            </div>
+        </div>";        
+    if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
+        enableCheckFileSize();
+        $tool_content .= "
+        <div class='form-group'>
+            <label for='title' class='col-sm-2 control-label'>$langAttachedFile:</label>
+            <div class='col-sm-10'>" .
+                fileSizeHidenInput() . "
+                <input type='file' name='file'><span class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></span>
+            </div>
+        </div>";
+    }
+    
 	$tool_content .= "
         <div class='form-group'>
             <div class='col-xs-10 col-xs-offset-2'>             
@@ -422,10 +447,20 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 </div>
             </div>
         </div>
-        <div class='col-sm-offset-2 col-sm-10'>
-            <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
-            <a href='$_SERVER[SCRIPT_NAME]".(($course_id != 0)? "?course=$course_code" : "")."' class='btn btn-default'>$langCancel</a>
-            <span class='help-block'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>  
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>".
+                form_buttons(array(
+                        array(
+                            'text'  => $langSend,
+                            'name'  => 'submit',
+                            'value' => $langSend
+                        ),
+                        array(
+                            'href'  => "$_SERVER[SCRIPT_NAME]".(($course_id != 0)? "?course=$course_code" : "")
+                        )
+                ))
+                ."
+            </div>
         </div>
         </fieldset>	
         </form></div>";
@@ -486,20 +521,11 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                             $('#dropboxTabs a:first').tab('show');
                         });
                     </script>";
-    $courseParam = ($course_id === 0) ? '' : '?course=' . $course_code;
-    if (isset($_GET['mid'])) {
-        if ($courseParam != '') {
-            $msg_id_param = '&amp;mid='.intval($_GET['mid']);
-        } else {
-            $msg_id_param = '?mid='.intval($_GET['mid']);
-        }
-    } else {
-        $msg_id_param = '';
-    }
+    
     $tool_content .= "<div id='dropboxTabs'>
                         <ul class='nav nav-tabs' role='tablist'>
-                            <li role='presentation'><a data-target='#inbox' role='tab' data-toggle='tab' href= 'inbox.php" . $courseParam . $msg_id_param . "'>Inbox</a></li>
-                            <li role='presentation'><a data-target='#outbox' role='tab' data-toggle='tab' href='outbox.php" . $courseParam . "'>Outbox</a></li>
+                            <li role='presentation'><a data-target='#inbox' role='tab' data-toggle='tab' href= 'inbox.php" . $courseParam . $msg_id_param . "'><strong>$langDropBoxInbox</strong></a></li>
+                            <li role='presentation'><a data-target='#outbox' role='tab' data-toggle='tab' href='outbox.php" . $courseParam . "'><strong>$langDropBoxOutbox</strong></a></li>
                         </ul>
                         <div class='tab-content'>
                             <div role='tabpanel' class='tab-pane fade in active' id='inbox'></div>

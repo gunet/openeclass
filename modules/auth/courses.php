@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
                 $restrictedCourses[] = $course_info->public_code;
             } else {
                 Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
-                                        VALUES (?d, ?d, ?d, CURDATE())", $cid, intval($uid), USER_STUDENT);
+                                        VALUES (?d, ?d, ?d, NOW())", $cid, intval($uid), USER_STUDENT);
             }
         }
     }
@@ -99,19 +99,18 @@ if (isset($_POST['submit'])) {
     $tool_content .= "<div><a href='../../index.php'>$langHome</a></div>";
 } else {
     $fac = getfacfromfc($fc);
+    list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
     if (!$fac) { // if user does not belong to department
         $tool_content .= $langAddHereSomeCourses;
 
-        $roots = $tree->buildRootsArray();
-
-        if (count($roots) <= 0)
+        if (count($roots) <= 0) {
             die("ERROR: no root nodes");
-        else if (count($roots) == 1) {
-            header("Location:" . $urlServer . "modules/auth/courses.php?fc=" . intval($roots[0]));
+        } else if (count($roots) == 1) {
+            header("Location:" . $urlServer . "modules/auth/courses.php?fc=" . intval($roots[0]->id));
             exit();
         } else {
             $tool_content .= '<ul>' .
-                $tree->buildNodesNavigationHtml($tree->buildRootsArray(), 'opencourses') .
+                $tree->buildNodesNavigationHtml($roots, 'courses', null, true, $rootSubtrees) .
                 '</ul>';
         }
     } else {
@@ -124,7 +123,7 @@ if (isset($_POST['submit'])) {
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-        if (count($tree->buildRootsArray()) > 1) {
+        if (count($roots) > 1) {
             $tool_content .= $tree->buildRootsSelectForm($fc);
         }
         $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";

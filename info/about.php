@@ -35,7 +35,8 @@ $tool_content .= action_bar(array(
                                       'button-class' => 'btn-default')
                             ),false);
 $tool_content .= "<div class='row'><div class='col-sm-12'><div class='panel'><div class='panel-body'>
-<div><label>$langCampusName:&nbsp;</label>$siteName&nbsp;(<a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a>)</div>
+<div><label>$langInstituteShortName:&nbsp;</label><a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a></div>
+<div><label>$langCampusName:&nbsp;</label>$siteName&nbsp;</div>
 <div><label>$langVersion:&nbsp;</label><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>Open eClass " . ECLASS_VERSION . "&raquo;</a></div>
 <div><label>$langSupportUser&nbsp;</label>" . q(get_config('admin_name')) . "</div>
 </div></div></div>";
@@ -52,19 +53,20 @@ $tool_content .= "<ul class='list-group'>
   </ul>";
 $tool_content .= "</div>";
 
-$e = Database::get()->querySingle("SELECT COUNT(*) as count FROM user")->count;
-$b = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d', USER_TEACHER)->count;
-$c = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d', USER_STUDENT)->count;
-$d = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d', USER_GUEST)->count;
+$total = 0;
+$userCounts = Database::get()->queryArray("SELECT status, COUNT(*) as count FROM user WHERE expires_at > NOW() GROUP BY status");
+foreach ($userCounts as $item) {
+    $total += $count[$item->status] = $item->count;
+}
 
-$tool_content .= "<div class='col-sm-6'>";
-$tool_content .= "<ul class='list-group'>
-          <li class='list-group-item'><label>$langUsers</label><span class='badge'>$e</span></li>
-          <li class='list-group-item'>$langTeachers<span class='badge'>$b</span></li>
-          <li class='list-group-item'>$langStudents<span class='badge'>$c</span></li>
-          <li class='list-group-item'>$langGuest<span class='badge'>$d</span> </li>
-      </ul>";
-$tool_content .= "</div></div>";
+$tool_content .= "<div class='col-sm-6'>
+      <ul class='list-group'>
+          <li class='list-group-item'><label>$langUsers</label><span class='badge'>$total</span></li>
+          <li class='list-group-item'>$langTeachers<span class='badge'>{$count[USER_TEACHER]}</span></li>
+          <li class='list-group-item'>$langStudents<span class='badge'>{$count[USER_STUDENT]}</span></li>
+          <li class='list-group-item'>$langGuest<span class='badge'>{$count[USER_GUEST]}</span> </li>
+      </ul>
+    </div></div>";
 
 if (isset($uid) and $uid) {
     draw($tool_content, 1);

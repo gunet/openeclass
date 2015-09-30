@@ -41,7 +41,7 @@ require_once 'include/lib/hierarchy.class.php';
 $tree = new Hierarchy();
 $userObj = new User();
 
-load_js('jstree');
+load_js('jstree3');
 
 $auth = isset($_REQUEST['auth']) ? intval($_REQUEST['auth']) : '';
 
@@ -103,6 +103,7 @@ if ($submit) {
 
     $last_id = $sql->lastInsertID;
     $userObj->refresh($last_id, array(intval($department)));
+    user_hook($last_id);
     
     $telephone = get_config('phone');
     $administratorName = get_config('admin_name');
@@ -213,7 +214,7 @@ if ($submit) {
         $tool_content .= "<div class='form-group'>
         <label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";           
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</div></div>";

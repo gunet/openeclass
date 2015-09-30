@@ -43,10 +43,10 @@ if (!getUserAnnouncements($lesson_ids)) {
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'><div class='panel_content'>
+    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel panel-default'><div class='panel-body'>
                     <ul class='tablelist'>"
                 .getUserAnnouncements($lesson_ids, 'more').
-                "</ul></div></div></div></div></div>";
+                "</ul></div></div></div></div>";
 }
 
 draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);

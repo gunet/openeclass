@@ -92,6 +92,7 @@ if (isset($_POST['import'])) {
     validateUploadedFile($_FILES['themeFile']['name'], 2);
     if (get_file_extension($_FILES['themeFile']['name']) == 'zip') {
         $file_name = $_FILES['themeFile']['name'];
+        $file_name = php2phps($file_name);
         if(!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
         if (move_uploaded_file($_FILES['themeFile']['tmp_name'], "courses/theme_data/$file_name")) {
             require_once 'include/pclzip/pclzip.lib.php';
@@ -104,8 +105,8 @@ if (isset($_POST['import'])) {
                 unlink("$webDir/courses/theme_data/temp/theme_options.txt");
                 $theme_options = unserialize(base64_decode($base64_str));                
                 $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
-                @rename("$webDir/courses/theme_data/temp/$theme_options->id", "$webDir/courses/theme_data/$new_theme_id");
-                recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
+                @rename("$webDir/courses/theme_data/temp/".intval($theme_options->id), "$webDir/courses/theme_data/temp/$new_theme_id");
+                recurse_php2phps_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
                 removeDir("$webDir/courses/theme_data/temp");
                 Session::Messages($langThemeInstalled);
             }
@@ -122,7 +123,7 @@ if (isset($_POST['optionsSave'])) {
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_id);
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_GET['delThemeId'])) {
-    $theme_id = $_GET['delThemeId'];
+    $theme_id = intval($_GET['delThemeId']);
     $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
     $theme_options_styles = unserialize($theme_options->styles);
     @removeDir("$webDir/courses/theme_data/$theme_id");
@@ -135,11 +136,11 @@ if (isset($_POST['optionsSave'])) {
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['themeOptionsName'])) {
     $theme_options_name = $_POST['themeOptionsName'];
-    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name) VALUES(?s)", $theme_options_name)->lastInsertID;
+    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, '')", $theme_options_name)->lastInsertID;
     clear_default_settings();
-    
-    clone_images(); //clone images
-    upload_images(); //upload new images
+
+    clone_images($new_theme_id); //clone images
+    upload_images($new_theme_id); //upload new images
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $new_theme_id);
     $_SESSION['theme_options_id'] = $new_theme_id;
@@ -220,6 +221,19 @@ if (isset($_POST['optionsSave'])) {
                     }
                 });
             });
+            var optionsSaveCallback = function (d) {
+                var themeOptionsName = $('#themeOptionsName').val();
+                if (themeOptionsName) {
+                    var input = $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'themeOptionsName').val(themeOptionsName);
+                    $('#theme_options_form').append($(input)).submit();
+                } else {
+                    $('#themeOptionsName').closest('.form-group').addClass('has-error');
+                    $('#themeOptionsName').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
+                    return false;
+                }
+            };
             $('#optionsSaveAs').click(function (e)
             {
                 e.preventDefault();
@@ -240,19 +254,7 @@ if (isset($_POST['optionsSave'])) {
                         success: {
                             label: '$langSave',
                             className: 'btn-success',
-                            callback: function (d) {
-                                var themeOptionsName = $('#themeOptionsName').val();
-                                if(themeOptionsName) {
-                                    var input = $('<input>')
-                                                   .attr('type', 'hidden')
-                                                   .attr('name', 'themeOptionsName').val(themeOptionsName);
-                                    $('#theme_options_form').append($(input)).submit();
-                                } else {
-                                    $('#themeOptionsName').closest('.form-group').addClass('has-error');
-                                    $('#themeOptionsName').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
-                                    return false;
-                                }
-                            }
+                            callback: optionsSaveCallback,
                         },
                         cancel: {
                             label: '$langCancel',
@@ -260,7 +262,13 @@ if (isset($_POST['optionsSave'])) {
                         }                        
                     }
                 });
-            })
+                $('#themeOptionsName').keypress(function (e) {
+                    if (e.which == 13) {
+                        e.preventDefault();
+                        optionsSaveCallback();
+                    }
+                });
+            });
             $('select#theme_selection').change(function ()
             {
                 var cur_val = $(this).val();
@@ -371,7 +379,7 @@ if (isset($_POST['optionsSave'])) {
             'class' => 'uploadTheme',
             'level' => 'primary-label'),        
         array('title' => $langBack,
-            'url' => "$urlAppend/modules/admin/index.php",
+            'url' => "{$urlAppend}modules/admin/index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
         ),false);
@@ -649,8 +657,8 @@ function initialize_settings() {
         }
     }    
 }
-function clone_images() {
-    global $webDir, $theme, $new_theme_id, $theme_id;
+function clone_images($new_theme_id = null) {
+    global $webDir, $theme, $theme_id;
     if(!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         mkdir("$webDir/courses/theme_data/$new_theme_id", 0755);
     }     
@@ -658,17 +666,18 @@ function clone_images() {
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
-            if(copy("$webDir/courses/theme_data/$theme_id/$image_name", "$webDir/courses/theme_data/$new_theme_id/$image_name")){
+            if(copy("$webDir/courses/theme_data/".intval($theme_id)."/$image_name", "$webDir/courses/theme_data/$new_theme_id/$image_name")){
                 $_POST[$image] = $image_name;
             }                
         }
     }
 }
-function upload_images() {
+function upload_images($new_theme_id = null) {
     global $webDir, $theme, $theme_id;
+    if (isset($new_theme_id)) $theme_id = $new_theme_id;
     if(!is_dir("$webDir/courses/theme_data/$theme_id")) {
         mkdir("$webDir/courses/theme_data/$theme_id", 0755);
-    } 
+    }
     $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
@@ -681,6 +690,7 @@ function upload_images() {
                 $ext =  get_file_extension($file_name);
                 $file_name = "$name-$i.$ext";
             }
+            $file_name = php2phps($file_name);
             move_uploaded_file($_FILES[$image]['tmp_name'], "$webDir/courses/theme_data/$theme_id/$file_name");
             $_POST[$image] = $file_name;
         }

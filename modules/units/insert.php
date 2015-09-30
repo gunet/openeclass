@@ -48,12 +48,16 @@ if ($id != -1) {
         draw('', 2, null, $head_content);
         exit;
     }    
-    $navigation[] = array("url" => "index.php?course=$course_code&amp;id=$id", "name" => htmlspecialchars($q->title));
+    $navigation[] = array('url' => "index.php?course=$course_code&amp;id=$id", "name" => $q->title);
+    $backURL = "index.php?course=$course_code&amp;id=$id";
+} else {
+    // id=-1 means we came from common documents insert button
+    $backURL = $urlAppend . "modules/document/index.php?course=$course_code&amp;openDir=" . $_GET['dir'];
 }
 
 $tool_content .= action_bar(array(
                 array('title' => $langBack,
-                      'url' => "index.php?course=$course_code&amp;id=$id",
+                      'url' => $backURL,
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
 

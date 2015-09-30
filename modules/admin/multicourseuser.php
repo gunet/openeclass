@@ -143,8 +143,8 @@ function adduser($userid, $cid) {
     if ($result) {
             return false;
     } else {
-        $result = Database::get()->query("INSERT INTO course_user (user_id, course_id, status, reg_date)
-                                            VALUES (?d, ?d, ".USER_STUDENT.",  " . DBHelper::timeAfter() . ")", $userid, $cid);
+        $result = Database::get()->query("INSERT INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
+                                            VALUES (?d, ?d, ".USER_STUDENT.",  " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")", $userid, $cid);
         return true;
     }	
 }

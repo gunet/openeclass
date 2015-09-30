@@ -228,7 +228,7 @@ function course_list_handler() {
             if (result === 'registered') {
                 td.append(' <img id="res' + cid + '" src="' + themeimg + '/tick.png" alt="">');
                 title_span.html($('<a>', {
-                    href: urlAppend + '/courses/' + courses[cid][0] + '/',
+                    href: urlAppend + 'courses/' + courses[cid][0] + '/',
                     text: title_span.text() }));
 
             } else {
@@ -342,18 +342,19 @@ function secondsToHms(d) {
     var s = Math.floor(d % 3600 % 60);
     return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
 }
+
 // Questionnaire / Poll
 function poll_init() {
     delete_init();
     $('input[type=submit][value="+"]').on('click', function (e) {
         e.preventDefault();
         var last_form_group = $(this).closest('div.form-group').siblings('.form-group:last');
-        last_form_group.before("<div class='form-group answer-group'><div class='col-xs-11'><input class='form-control' type='text' name='answers[]' value=''></div><div class='col-xs-1'><a href='#' style='cursor: pointer;' id='del_btn'><i class='fa fa-times'></i></a></div></div>").next().find('input').removeAttr('value');
+        last_form_group.before("<div class='form-group answer-group'><div class='col-xs-11'><input class='form-control' type='text' name='answers[]' value=''></div><div class='col-xs-1 form-control-static'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa fa-times'></i></a></div></div>").next().find('input').removeAttr('value');
         delete_init();
     });
 }
 function delete_init(){
-    $('.form-group a#del_btn').css('cursor', 'pointer').on('click', function (e) {
+    $('.form-group a.del_btn').css('cursor', 'pointer').on('click', function (e) {
         e.preventDefault();
         $(this).closest('.form-group').remove();
     });

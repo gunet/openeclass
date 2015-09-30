@@ -30,8 +30,8 @@ if (isset($_GET['course'])) { //course blog
 $require_help = TRUE;
 $helpTopic = 'Blog';
 require_once '../../include/baseTheme.php';
-require_once 'modules/comments/class.comment.php';
 require_once 'modules/comments/class.commenting.php';
+require_once 'modules/comments/class.comment.php';
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/blog/class.blog.php';
 require_once 'modules/blog/class.blogpost.php';
@@ -123,14 +123,22 @@ $num_popular = 5;//number of popular blog posts to show in sidebar
 $num_chars_teaser_break = 500;//chars before teaser break
 
 if ($blog_type == 'course_blog' && $is_editor) {
+    if ($action == "settings") {
+        $pageName = $langGeneralSettings;
+    } elseif ($action == "createPost") {
+        $pageName = $langBlogAddPost;
+    } elseif ($action == "editPost") {
+        $pageName = $langEditChange;
+    }
     $tool_content .= action_bar(array(
                          array('title' => $langBack,
                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog",
                                'icon' => 'fa-reply',
                                'level' => 'primary-label',
                                'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
-    ),false);
+    ));
     if ($action == "settings") {
+        
         if (isset($_POST['submitSettings'])) {
             setting_set(SETTING_BLOG_STUDENT_POST, $_POST['1_radio'], $course_id);
             setting_set(SETTING_BLOG_COMMENT_ENABLE, $_POST['2_radio'], $course_id);
@@ -138,7 +146,8 @@ if ($blog_type == 'course_blog' && $is_editor) {
 		    if (isset($_POST['4_radio'])) {
                 setting_set(SETTING_BLOG_SHARING_ENABLE, $_POST['4_radio'], $course_id);
 		    }
-            $message = "<div class='alert alert-success'>$langRegDone</div>";
+            Session::Messages($langRegDone, 'alert-success');
+            redirect_to_home_page('modules/blog/index.php?course='.$course_code);
         }
         
         if (isset($message) && $message) {
@@ -263,10 +272,18 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                 </div>
                             </fieldset>
                             <div class='form-group'>
-                                <div class='col-sm-9 col-sm-offset-3'>
-                                  <input type='submit' class='btn btn-primary' name='submitSettings' value='$langSubmit'>
-                                  <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
-                                </div>
+                                <div class='col-sm-9 col-sm-offset-3'>".
+                                    form_buttons(array(
+                                        array(
+                                            'text'  =>  $langSave,
+                                            'name'  =>  'submitSettings',
+                                            'value' =>  $langSubmit
+                                        ),
+                                        array(
+                                            'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog"
+                                        )
+                                    ))
+                                    ."</div>
                             </div>
                         </form>
                     </div>
@@ -357,10 +374,18 @@ if ($action == "createPost") {
                 </div>
                 $commenting_setting
                 <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>
-                        <input class='btn btn-primary' type='submit' name='submitBlogPost' value='$langAdd'>
-                        <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
-                    </div>
+                    <div class='col-sm-10 col-sm-offset-2'>".
+                        form_buttons(array(
+                            array(
+                                'text'  =>  $langSave,
+                                'name'  =>  'submitBlogPost',
+                                'value' =>  $langAdd
+                            ),
+                            array(
+                                'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
+                            )
+                        ))
+                        ."</div>
                 </div>          
                 <input type='hidden' name='action' value='savePost' />
             </fieldset>
@@ -425,10 +450,18 @@ if ($action == "editPost") {
                 </div>
                 $commenting_setting
                 <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>
-                        <input class='btn btn-primary' type='submit' name='submitBlogPost' value='$langModifBlogPost'>
-                        <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
-                    </div>
+                    <div class='col-sm-10 col-sm-offset-2'>".
+                        form_buttons(array(
+                            array(
+                                'text'  =>  $langSave,
+                                'name'  =>  'submitBlogPost',
+                                'value' =>  $langModifBlogPost
+                            ),
+                            array(
+                                'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
+                            )
+                        ))
+                        ."</div>
                 </div>              
                 <input type='hidden' name='action' value='savePost'>
                 <input type='hidden' name='pId' value='".$post->getId()."'>

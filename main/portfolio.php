@@ -32,8 +32,13 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/graphics/plotter.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
 
-ModalBoxHelper::loadModalBox();
+$tree = new Hierarchy();
+$user = new User();
+
+//ModalBoxHelper::loadModalBox();
 
 if(!empty($langLanguageCode)){
     load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
@@ -55,6 +60,7 @@ jQuery(document).ready(function() {
         class : 'form-control input-sm',
         placeholder : '$langSearch...'
       });
+      $('#portfolio_lessons_filter label').prepend('<span class=\"sr-only\">$langSearch</span>')
     },
     'dom': '<\"all_courses\">frtip',
     'oLanguage': {
@@ -75,8 +81,6 @@ jQuery(document).ready(function() {
        }    
   });
   $('div.all_courses').html('<a class=\"btn btn-xs btn-default\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses</a>');  
-  jQuery('.panel_content').hide();
-   jQuery('.panel_content_open').show();
   jQuery('.panel_title').click(function()
   {
     var mypanel = $(this).next();
@@ -139,7 +143,7 @@ $tool_content .= "
         <div id='my-courses' class='col-md-7'>
             <div class='row'>
                 <div class='col-md-12'>
-                    <h3 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h3>
+                    <h2 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h2>
                     <div class='panel'>
                         <div class='panel-body'>
                             {%LESSON_CONTENT%}                        
@@ -149,7 +153,7 @@ $tool_content .= "
             </div>
             <div class='row'>
             <div class='col-md-12 my-announcement-list'>
-                <h3 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h3>
+                <h2 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h2>
                 <div class='panel'>
                     <div class='panel-body'>
                         <ul class='tablelist'>";
@@ -160,8 +164,8 @@ $tool_content .= "
                             }
                             $tool_content.="</ul>
                     </div>
-                    <div class='panel-footer'>
-                        <p class='link-to-more'><a href='../modules/announcements/myannouncements.php'>$langMore&hellip;</a></p>
+                    <div class='panel-footer clearfix'>
+                        <div class='pull-right'><a href='../modules/announcements/myannouncements.php'><small>$langMore&hellip;</small></a></div>
                     </div>
                 </div>
             </div>
@@ -170,7 +174,7 @@ $tool_content .= "
     <div class='col-md-5'>
         <div class='row'>
             <div class='col-md-12'>
-                <h3 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h3>
+                <h2 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h2>
                 <div class='panel'>
                     <div class='panel-body'>
                         {%PERSONAL_CALENDAR_CONTENT%}
@@ -200,7 +204,7 @@ $tool_content .= "
         </div>
         <div class='row'>
                 <div class='col-md-12 my-messages-list'>
-                    <h3 class='content-title'>$langMyPersoMessages</h3>
+                    <h2 class='content-title'>$langMyPersoMessages</h2>
                     <div class='panel'>
                         <div class='panel-body'>
                             <ul class='tablelist'>";
@@ -211,8 +215,8 @@ $tool_content .= "
                             }
                             $tool_content.="</ul>
                         </div>
-                        <div class='panel-footer'>
-                            <p class='link-to-more'><a href='{$urlAppend}modules/dropbox/'>$langMore&hellip;</a></p>
+                        <div class='panel-footer clearfix'>
+                            <div class='pull-right'><a href='{$urlAppend}modules/dropbox/'><small>$langMore&hellip;</small></a></div>
                         </div>
                     </div>
                 </div>
@@ -227,25 +231,38 @@ $userdata = Database::get()->querySingle("SELECT surname, givenname, username, e
 $numUsersRegistered = Database::get()->querySingle("SELECT COUNT(*) AS numUsers
         FROM course_user cu1, course_user cu2
         WHERE cu1.course_id = cu2.course_id AND cu1.user_id = ?d AND cu1.status = ?d AND cu2.status <> ?d;", $uid, USER_TEACHER, USER_TEACHER)->numUsers;
-$lastVisit = Database::get()->queryArray("SELECT * FROM loginout
-                        WHERE id_user = ?d ORDER by idLog DESC LIMIT 2", $uid);
+$lastVisit = Database::get()->querySingle("SELECT * FROM loginout
+                        WHERE id_user = ?d ORDER by idLog DESC LIMIT 1", $uid);
+if ($lastVisit) {
+    $lastVisitLabel = "<br><span class='tag'>$langProfileLastVisit : </span><span class='tag-value text-muted'>" .
+        claro_format_locale_date($dateFormatLong, strtotime($lastVisit->when)) . "</span>";
+} else {
+    $lastVisitLabel = '';
+}
+
 $tool_content .= "
 </div>
 <div id='profile_box' class='row'>
     <div class='col-md-12'>
-        <h3 class='content-title'>$langCompactProfile</h3>
+        <h2 class='content-title'>$langCompactProfile</h2>
         <div class='panel'>
             <div class='panel-body'>
                 <div class='row'>
                     <div class='col-xs-4 col-sm-2'>
-                        <img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:80px;' class='img-circle center-block img-responsive' alt='Avatar Image'><br>
-                        <h5 class='not_visible text-center' style='margin:0px;'>".q($_SESSION['uname'])."</h5>
+                        <img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:80px;' class='img-circle center-block img-responsive' alt='$langProfileImage'><br>
+                        <div class='not_visible text-center' style='margin:0px;'>".q($_SESSION['uname'])."</div>
                     </div>
                     <div class='col-xs-8 col-sm-5'>
-                        <h4>".q("$_SESSION[givenname] $_SESSION[surname]")."</h4>
-                        <span class='tag'>$langProfileMemberSince : </span><span class='tag-value text-muted'>". claro_format_locale_date($dateFormatLong, strtotime($userdata->registered_at))."</span><br>
-                        <span class='tag'>$langProfileLastVisit : </span><span class='tag-value text-muted'>". claro_format_locale_date($dateFormatLong, strtotime($lastVisit[0]->when))."</span>
-                    </div>
+                    <h3 style='font-size: 18px; margin: 10px 0 10px 0;'><a href='".$urlServer."main/profile/display_profile.php'>".q("$_SESSION[givenname] $_SESSION[surname]")."</a></h3>
+                    <div><h5><span class='tag'>$langHierarchyNode :</span></h5><span class='tag-value text-muted'>";
+                    $departments = $user->getDepartmentIds($uid);
+                        $i = 1;
+                        foreach ($departments as $dep) {
+                            $br = ($i < count($departments)) ? '<br>' : '';
+                            $tool_content .= $tree->getFullPath($dep) . $br;
+                            $i++;
+                        }
+                    $tool_content .= "</span></div>$lastVisitLabel</div>
                     <div class='col-xs-12 col-sm-5'>
                         <ul class='list-group'>
                             <li class='list-group-item'>
@@ -257,7 +274,7 @@ $tool_content .= "
                               <span class='text-muted'>$langSumCoursesSupport</span>
                             </li>
                         </ul>
-                        <div class='quick-change-pwd'><a href='".$urlServer."main/profile/password.php'>$langProfileQuickPassword</a></div>
+                        <div class='pull-right'><a href='".$urlServer."main/profile/password.php'><small>$langProfileQuickPassword</small></a></div>
                     </div>
                 </div>
             </div>

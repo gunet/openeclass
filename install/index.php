@@ -30,9 +30,10 @@ header('Content-Type: text/html; charset=UTF-8');
  * @abstract This is the installation wizard of eclass.
  *
  */
-
+require_once '../vendor/autoload.php';
 require_once '../include/main_lib.php';
 require_once '../include/lib/pwgen.inc.php';
+require_once '../modules/db/database.php';
 require_once '../upgrade/functions.php';
 require_once 'functions.php';
 
@@ -162,13 +163,13 @@ function checkbox_input($name) {
 
 function text_input($name, $size) {
     $GLOBALS['input_fields'][$name] = true;
-    return "<input class='form-control' type='text' class='FormData_InputText' size='$size' name='$name' value='" .
+    return "<input class='form-control' type='text' size='$size' name='$name' value='" .
             q($GLOBALS[$name]) . "' />";
 }
 
 function textarea_input($name, $rows, $cols) {
     $GLOBALS['input_fields'][$name] = true;
-    return "<textarea class='form-control' rows='$rows' cols='$cols' class='FormData_InputText' name='$name'>" .
+    return "<textarea class='form-control' rows='$rows' cols='$cols' name='$name'>" .
             q($GLOBALS[$name]) . "</textarea>";
 }
 
@@ -181,6 +182,38 @@ $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
     'dbPassForm', 'urlForm', 'nameForm', 'emailForm', 'loginForm', 'lang',
     'passForm', 'campusForm', 'helpdeskForm', 'helpdeskmail', 'eclass_stud_reg', 'eclass_prof_reg',
     'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm');
+
+// Check for db connection after settings submission
+$GLOBALS['mysqlServer'] = $dbHostForm;
+$GLOBALS['mysqlUser'] = $dbUsernameForm;
+$GLOBALS['mysqlPassword'] = $dbPassForm;
+if (isset($_POST['install4'])) {
+    try {
+        Debug::setLevel(Debug::ALWAYS);
+        Database::core();
+        if (!check_engine()) {
+            $tool_content .= "<div class='alert alert-warning'>$langInnoDBMissing</div>";
+            unset($_POST['install4']);
+            $_POST['install3'] = true;
+        } else {
+            $GLOBALS['mysqlMainDb'] = $dbNameForm;
+            try {
+                Database::get();
+                $tool_content .= "<div class='alert alert-info'>" .
+                    sprintf($langDatabaseExists, '<b>' . q($dbNameForm) . '</b>') .
+                    "</div>";
+            } catch (Exception $e) {
+                // no problem, database doesn't exist
+            }
+        }
+    } catch (Exception $e) {
+        $tool_content .= "<div class='alert alert-danger'><p>" . 
+            $langErrorConnectDatabase . '</p><p><i>' .
+            q($e->getMessage()) . "</i></p><p>$langCheckDatabaseSettings</p></div>";
+        unset($_POST['install4']);
+        $_POST['install3'] = true;
+    }
+}
 
 // step 2 license
 if (isset($_POST['install2'])) {
@@ -357,10 +390,6 @@ elseif (isset($_POST['install6'])) {
     $langStepTitle = $langInstallEnd;
     $langStep = $langStep6;
     $_SESSION['step'] = 6;
-    $GLOBALS['mysqlServer'] = $dbHostForm;
-    $GLOBALS['mysqlUser'] = $dbUsernameForm;
-    $GLOBALS['mysqlPassword'] = $dbPassForm;
-    $GLOBALS['mysqlMainDb'] = $dbNameForm;
     if (mysql_errno() > 0) { // problem with server
         $no = mysql_errno();
         $msg = mysql_error();
@@ -373,7 +402,7 @@ elseif (isset($_POST['install6'])) {
 		</ul>
 		<p>$langBackStep3_2</p><br />
 		<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-		<input class='btn btn-primary' type='submit' name='install3' value='&lt; $langBackStep3' />"
+		<input class='btn btn-primary' type='submit' name='install3' value='&lt; $langBackStep3'>"
                 . hidden_vars($all_vars) .
                 "</form>";
         draw($tool_content);
@@ -416,6 +445,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 	<br /><br />
 	<form action='../'><input class='btn btn-primary' type='submit' value='$langEnterFirstTime' /></form>";
     }
+    $_SESSION['langswitch'] = $lang;
     draw($tool_content);
 }
 
@@ -450,9 +480,17 @@ elseif (isset($_POST['install1'])) {
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
 	<h3>$langCheckReq</h3>
 	<ul class='list-unstyled'>
-        <li>" . icon('fa-check') . " <b>Webserver</b> ($langFoundIt <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em>)
-        $langWithPHP ($langFoundIt <em>PHP " . phpversion() . "</em>).";
-    $tool_content .= "</li></ul>";
+        <li>" . icon('fa-check') . " <b>Webserver</b> $langFoundIt <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em></li>";
+    if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+        $info_icon = icon('fa-check');
+        $info_text = '';
+    } else {
+        $info_icon = icon('fa-ban');
+        $info_text = "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
+    }
+    $tool_content .= "<li>$info_icon <b>$langPHPVersion</b> $langFoundIt <em>" . PHP_VERSION . "</em></li>";
+    $tool_content .= "</ul>";
+    $tool_content .= $info_text;
     $tool_content .= "<h3>$langRequiredPHP</h3>";
     $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('standard');

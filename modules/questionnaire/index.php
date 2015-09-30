@@ -29,7 +29,7 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 require_once '../../include/baseTheme.php';
-
+require_once 'modules/group/group_functions.php';
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
@@ -65,6 +65,7 @@ if ($is_editor) {
         if (isset($_GET['delete']) and $_GET['delete'] == 'yes') {
             Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
                         (SELECT pqid FROM poll_question WHERE pid = ?d)", $pid);
+            Database::get()->query("DELETE FROM `poll_to_specific` WHERE poll_id = ?d", $pid);
             Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
             Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
             Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
@@ -86,7 +87,7 @@ if ($is_editor) {
                     continue;
                 }
             }
-            if ($ok) {
+            if ($ok || $is_course_admin) {
                 $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
                 $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
 
@@ -100,7 +101,8 @@ if ($is_editor) {
                     $poll->end_date, 
                     $poll->description, 
                     $poll->end_message, 
-                    $poll->anonymized
+                    $poll->anonymized,
+                    $poll->assign_to_specific
                 );
                 $new_pid = Database::get()->query("INSERT INTO poll
                                     SET creator_id = ?d,
@@ -111,14 +113,19 @@ if ($is_editor) {
                                         end_date = ?t,
                                         description = ?s,
                                         end_message = ?s,
-                                        anonymized = ?d,    
+                                        anonymized = ?d,
+                                        assign_to_specific = ?d,
                                         active = 1", $poll_data)->lastInsertID;
-
+                if ($poll->assign_to_specific) {
+                    Database::get()->query("INSERT INTO `poll_to_specific` (user_id, group_id, poll_id) 
+                                            SELECT user_id, group_id, ?d FROM `poll_to_specific`
+                                            WHERE poll_id = ?d", $new_pid, $pid)->lastInsertID;                       
+                }
                 foreach ($questions as $question) {
                     $new_pqid = Database::get()->query("INSERT INTO poll_question
                                                SET pid = ?d,
                                                    question_text = ?s,
-                                                   qtype = ?d", $new_pid, $question->question_text, $question->qtype)->lastInsertID;
+                                                   qtype = ?d, q_position = ?d, q_scale = ?d", $new_pid, $question->question_text, $question->qtype, $question->q_position, $question->q_scale)->lastInsertID;
                     $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d ORDER BY pqaid", $question->pqid);
                     foreach ($answers as $answer) {
                         Database::get()->query("INSERT INTO poll_question_answer
@@ -152,15 +159,15 @@ draw($tool_content, 2, null, $head_content);
  * ************************************************************************************************** */
 
 function printPolls() {
-    global $tool_content, $course_id, $course_code, $langCreatePoll,
-    $langPollsActive, $langTitle, $langPollCreator, $langPollCreation, $langCancel,
+    global $tool_content, $course_id, $course_code,
+    $langTitle, $langCancel,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
-    $themeimg, $langEditChange, $langDelete, $langActions, $langSurveyNotStarted,
-    $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate,
-    $langParticipate, $langVisible, $user_id, $langHasParticipated, $langSee,
+    $langEditChange, $langDelete, $langSurveyNotStarted,
+    $langDeactivate, $langPollHasEnded, $langActivate,
+    $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
-    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langViewHide, $langViewShow;
+    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langNoAccessPrivilages;
     
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
@@ -201,7 +208,25 @@ function printPolls() {
     ";
     
     $poll_check = 0;
-    $result = Database::get()->queryArray("SELECT * FROM poll WHERE course_id = ?d", $course_id);
+    $query = "SELECT * FROM poll WHERE course_id = ?d";
+    $query_params[] = $course_id;
+    //Bring only those assigned to the student
+    if (!$is_editor) {
+        $gids = user_group_info($uid, $course_id);
+        if (!empty($gids)) {
+            $gids_sql_ready = implode(',',array_keys($gids));
+        } else {
+            $gids_sql_ready = "''";
+        }        
+        $query .= " AND
+                    (assign_to_specific = '0' OR assign_to_specific != '0' AND pid IN
+                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d UNION SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
+                    )";
+        $query_params[] = $uid;
+    }
+    
+    $result = Database::get()->queryArray($query, $query_params);
+        
     $num_rows = count($result);
     if ($num_rows > 0)
         ++$poll_check;
@@ -212,17 +237,17 @@ function printPolls() {
         $tool_content .= "
                     <div class='table-repsonsive'>
 		      <table class='table-default'>
-		      <tr>
+		      <tr class='list-header'>
 			<th><div align='left'>&nbsp;$langTitle</div></th>
 			<th class='text-center'>$langPollStart</th>
 			<th class='text-center'>$langPollEnd</th>";
 
         if ($is_editor) {
-            $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>"
-                           . "<th class='text-center'>".icon('fa-cogs')."</th>";
+            $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>";
         } else {
             $tool_content .= "<th class='text-center'>$langParticipate</th>";
         }
+        $tool_content .= "<th class='text-center'>".icon('fa-cogs')."</th>";
         $tool_content .= "</tr>";
         $index_aa = 1;
         $k = 0;
@@ -298,15 +323,8 @@ function printPolls() {
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"
                             ),
                             array(
-                                'title' => $langPurgeExercises,
-                                'icon' => 'fa-eraser',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
-                                'confirm' => $langConfirmPurgeExercises,
-                                'show' => $total_participants > 0
-                            ),
-                            array(
-                                'title' => $langParticipate,
-                                'icon' => 'fa-pie-chart',
+                                'title' => $langUsage,
+                                'icon' => 'fa-line-chart',
                                 'url' => "pollresults.php?course=$course_code&pid=$pid",
                                 'show' => $total_participants > 0
                             ),
@@ -322,6 +340,13 @@ function printPolls() {
                                 'icon-extra' => "data-pid='$pid'",
                                 'url' => "#"
                             ),
+                            array(
+                                'title' => $langPurgeExercises,
+                                'icon' => 'fa-eraser',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
+                                'confirm' => $langConfirmPurgeExercises,
+                                'show' => $total_participants > 0
+                            ),                                        
                             array(
                                 'title' => $langDelete,
                                 'icon' => 'fa-times',
@@ -344,7 +369,18 @@ function printPolls() {
                             $tool_content .= $langHasParticipated;
                         }
                     }
-                    $tool_content .= "</td></tr>";
+                    $tool_content .= "</td>";
+                    $line_chart_link = ($has_participated && $thepoll->show_results)? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "<span class='fa fa-line-chart' data-toggle='tooltip' title='$langNoAccessPrivilages'></span>" ;
+                    $tool_content .= "<td class='text-center option-btn-cell'><div style='padding-top:7px;padding-bottom:7px;'>$line_chart_link</div></td></tr>";
+//                    $tool_content .= "
+//                        <td class='text-center option-btn-cell'>" .action_button(array(
+//                            array(
+//                                'title' => $langUsage,
+//                                'icon' => 'fa-line-chart',
+//                                'url' => "pollresults.php?course=$course_code&pid=$pid",
+//                                'show' => $has_participated
+//                            )         
+//                        ))."</td></tr>";
                 }
             }
             $index_aa ++;

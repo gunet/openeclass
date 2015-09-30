@@ -42,15 +42,21 @@ $require_current_course = TRUE;
 require_once '../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'modules/gradebook/functions.php';
 // The following is added for statistics purposes
 require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_LP);
 /* * *********************************** */
 
-//  set redirection link
-$returl = "navigation/viewModule.php?course=$course_code&amp;go=" .
+if (isset($_GET['unit'])) {
+    $unitParam = "&amp;unit=$_GET[unit]";
+    $returl = $urlAppend . "modules/units/?course=$course_code&amp;id=$_GET[unit]";
+} else {
+    $unitParam = '';
+    $returl = "navigation/viewModule.php?course=$course_code&amp;go=" .
         ($is_editor ? 'learningPathAdmin' : 'learningPath');
+}
 
 if ($uid) {
     $uidCheckString = "AND UMP.`user_id` = $uid";
@@ -161,12 +167,12 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . '" target="scoFrame"><i class="fa fa-arrow-circle-left fa-lg"></i> </a></li>';
+        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><i class="fa fa-arrow-circle-left fa-lg"></i> </a></li>';
     } else {
         $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><i class='fa fa-arrow-circle-left'></i></a></li>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . '" target="scoFrame"><i class="fa fa-arrow-circle-right fa-lg"></i></a></li>';
+        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><i class="fa fa-arrow-circle-right fa-lg"></i></a></li>';
     } else {
         $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><i class='fa fa-arrow-circle-right'></i></a></li>";
     }
@@ -194,9 +200,6 @@ echo "<!DOCTYPE HTML>
 
     <!-- Latest compiled and minified CSS -->
     <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>
-
-    <!-- Optional theme -->
-    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-theme.min.css'>
 
     <!-- Font Awesome - A font of icons -->
     <link href='{$urlAppend}template/default/CSS/font-awesome-4.2.0/css/font-awesome.css' rel='stylesheet'>
@@ -313,12 +316,14 @@ echo "<!DOCTYPE HTML>
                 <div class='navbar-header col-xs-10 pull-right'>
                     <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
                         $prevNextString
-                        <li id='close-btn'><a href='$returl'><i class='fa fa-times fa-lg'>&nbsp;<span class='hidden-xs'>$langLogout</span></i></a></li>
+                        <li id='close-btn'><a href='$returl' target='_top'><i class='fa fa-times fa-lg'>&nbsp;<span class='hidden-xs'>$langLogout</span></i></a></li>
                     </ul>
                     <div class='pull-right progressbar-plr'>";
 
                          if ($uid) {
-                            $lpProgress = get_learnPath_progress((int) $_SESSION['path_id'], $uid);
+                            $path_id = (int) $_SESSION['path_id'];
+                            $lpProgress = get_learnPath_progress($path_id, $uid);
+                            update_gradebook_book($uid, $path_id, $lpProgress/100, GRADEBOOK_ACTIVITY_LP);
                             echo disp_progress_bar($lpProgress, 1);
                         }
 echo "</div>

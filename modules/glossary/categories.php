@@ -91,6 +91,7 @@ if ($is_editor) {
     }
 
     if (isset($_POST['submit_category'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('name'));
         $v->labels(array(
@@ -98,7 +99,7 @@ if ($is_editor) {
         ));        
         if($v->validate()) {
             if (isset($_POST['category_id'])) {
-                $category_id = intval($_POST['category_id']);
+                $category_id = intval(getDirectReference($_POST['category_id']));
                 $q = Database::get()->query("UPDATE glossary_category
                                                   SET name = ?s,
                                                       description = ?s
@@ -122,7 +123,7 @@ if ($is_editor) {
             }
             redirect_to_home_page("modules/glossary/categories.php?course=$course_code");
         } else {
-            $new_or_modify = isset($_POST['category_id']) ? "&edit=$_POST[category_id]" : "&add=1";
+            $new_or_modify = isset($_POST['category_id']) ? "&edit=" . q($_POST[category_id]) : "&add=1";
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/glossary/categories.php?course=$course_code$new_or_modify");
         }
@@ -130,7 +131,7 @@ if ($is_editor) {
 
     // Delete category, turn terms in it to uncategorized
     if (isset($_GET['delete'])) {
-        $cat_id = $_GET['delete'];
+        $cat_id = getDirectReference($_GET['delete']);
         $q = Database::get()->query("DELETE FROM glossary_category
                                       WHERE id = ?d AND course_id = ?d", $cat_id, $course_id);
         if ($q and $q->affectedRows) {
@@ -151,11 +152,11 @@ if ($is_editor) {
             $submit_value = $langSubmit;
         } else {
             $pageName = $langCategoryMod;
-            $cat_id = intval($_GET['edit']);
+            $cat_id = intval(getDirectReference($_GET['edit']));
             $data = Database::get()->querySingle("SELECT name, description
                                               FROM glossary_category WHERE id = ?d", $cat_id);
             if ($data) {
-                $html_id = "<input type = 'hidden' name='category_id' value='$cat_id'>";
+                $html_id = "<input type = 'hidden' name='category_id' value='" . getIndirectReference($cat_id) . "'>";
             }
             $submit_value = $langModify;
         }
@@ -177,11 +178,19 @@ if ($is_editor) {
                          </div>
                     </div>
                    <div class='form-group'>    
-                        <div class='col-sm-10 col-sm-offset-2'>
-                             <input class='btn btn-primary' type='submit' name='submit_category' value='$submit_value'>
-                             <a href='$cat_url' class='btn btn-default'>$langCancel</a>
-                        </div>
-                    </div>                            
+                        <div class='col-sm-10 col-sm-offset-2'>".
+                                    form_buttons(array(
+                                    array(
+                                        'text' => $langSave,
+                                        'value'=> $submit_value,
+                                        'name' => 'submit_category'
+                                    ),
+                                    array(
+                                        'href' => $cat_url
+                                    )
+                                ))."</div>
+                    </div>
+                ". generate_csrf_token_form_field() ."                              
                 </form>
             </div>";                       
     }
@@ -206,15 +215,15 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
             } else {
                 $desc = '';
             }        
-            $tool_content .= "<tr><td class='space-left'><a href='$base_url&amp;cat=$cat->id'><strong>" . q($cat->name) . "</strong></a><small><span class='text-muted'>$desc</span></small></td>";                       
+            $tool_content .= "<tr><td class='space-left'><a href='$base_url&amp;cat=" . getIndirectReference($cat->id) . "'><strong>" . q($cat->name) . "</strong></a><small><span class='text-muted'>$desc</span></small></td>";                       
             if ($is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
                         array('title' => $langCategoryMod,
-                              'url' => "$cat_url&amp;edit=$cat->id",
+                              'url' => "$cat_url&amp;edit=" . getIndirectReference($cat->id),
                               'icon' => 'fa-edit'),
                         array('title' => $langCategoryDel,
-                              'url' => "$cat_url&amp;delete=$cat->id",
+                              'url' => "$cat_url&amp;delete=" . getIndirectReference($cat->id),
                               'icon' => 'fa-times',
                               'class' => 'delete',
                               'confirm' => $langConfirmDelete))

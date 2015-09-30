@@ -24,15 +24,19 @@ require_once 'class.rating.php';
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
 
+$is_link = false;
+
 if ($_GET['rtype'] == 'blogpost') {
 	$setting_id = SETTING_BLOG_RATING_ENABLE;
 } elseif ($_GET['rtype'] == 'course') {
     $setting_id = SETTING_COURSE_RATING_ENABLE;
 } elseif ($_GET['rtype'] == 'forum_post') {
     $setting_id = SETTING_FORUM_RATING_ENABLE;
+} elseif ($_GET['rtype'] == 'link') {
+    $is_link = true; //there is no rating setting for social bookmarks, rating is always enabled
 }
 
-if (setting_get($setting_id, $course_id) == 1) {
+if ($is_link || setting_get($setting_id, $course_id) == 1) {
     if (Rating::permRate($is_editor, $uid, $course_id, $_GET['rtype'])) {
         $widget = $_GET['widget'];
         $rtype = $_GET['rtype'];
@@ -94,16 +98,16 @@ if (setting_get($setting_id, $course_id) == 1) {
             
             if ($num_ratings['fivestar'] != 0) {
                 $avg = $rating->getFivestarRating();
-                $response[0] .= $langRatingAverage.$avg.', ';
+                $response[0] .= '<small class="text-muted">&nbsp;('.$avg.')</small>';
                 $response[1] = $avg;
             } else {
                 $response[1] = 0;
             }
             
             if ($num_ratings['fivestar'] == 1) {
-                $response[0] .= $num_ratings['fivestar'].$langRatingVote;
+                $response[0] .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVote.'&nbsp;&nbsp;|&nbsp;&nbsp;</small>';
             } else {
-                $response[0] .= $num_ratings['fivestar'].$langRatingVotes;
+                $response[0] .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVotes.'&nbsp;&nbsp;|&nbsp;&nbsp;</small>';
             }
             
         }

@@ -135,7 +135,7 @@ if ($is_editor) {
         switch ($_REQUEST['cmd']) {
             // DELETE COMMAND
             case "delete" :
-                if (is_dir($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id'])) {
+                if (is_dir($webDir . "/courses/" . $course_code . "/scormPackages/path_" . intval($_GET['del_path_id']))) {
                     $findsql = "SELECT M.`module_id`
 						FROM  `lp_rel_learnPath_module` AS LPM, `lp_module` AS M
 						WHERE LPM.`learnPath_id` = ?d
@@ -160,7 +160,7 @@ if ($is_editor) {
                     Database::get()->query($delModuleSql, CTSCORM_, CTSCORMASSET_, CTLABEL_);
 
                     // DELETE the directory containing the package and all its content
-                    $real = realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id']);
+                    $real = realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . intval($_GET['del_path_id']));
                     claro_delete_file($real);
                 } else { // end of dealing with the case of a scorm learning path.
                     $findsql = "SELECT M.`module_id`
@@ -269,11 +269,18 @@ if ($is_editor) {
                         </div>
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
-                              <input type='hidden' name='cmd' value='create'>
-                              <input class='btn btn-primary' type='submit' value='$langCreate'>
-                                  <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
-                            </div>
-                        </div>                        
+                              <input type='hidden' name='cmd' value='create'>".
+                                    form_buttons(array(
+                                        array(
+                                            'text' => $langSave,
+                                            'value' => $langCreate
+                                        ),
+                                        array(
+                                            'href' => "index.php?course=$course_code",
+                                        )
+                                    ))
+                                    ."</div>
+                            </div>                        
                         </form></div>";
                     }
                 } else { // create form requested
@@ -301,10 +308,17 @@ if ($is_editor) {
                         </div>
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
-                              <input type='hidden' name='cmd' value='create'>
-                              <input class='btn btn-primary' type='submit' value='$langCreate'>
-                                  <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
-                            </div>
+                              <input type='hidden' name='cmd' value='create'>".
+                                    form_buttons(array(
+                                        array(
+                                            'text' => $langSave,
+                                            'value' => $langCreate
+                                        ),
+                                        array(
+                                            'href' => "index.php?course=$course_code",
+                                        )
+                                    ))
+                                    ."</div>
                         </div>                        
                         </form></div>";
                 }
@@ -454,32 +468,22 @@ $LPNumber = count($result);
 $iterator = 1;
 
 $is_blocked = false;
-$ind = 1;
-foreach ($result as $list) { // while ... learning path list
-    if ($ind % 2 == 0) {
-        $style = 'class="even"';
-    } else {
-        $style = 'class="odd"';
-    }
-
+$allow = false;
+$ind = 0;
+foreach ($result as $list) { // while ... learning path list    
     if ($list->visible == 0) {
         if ($is_editor) {
             $style = " class='not_visible'";
         } else {
             continue; // skip the display of this file
         }
-    } else {
-        if ($ind % 2 == 0) {
-            $style = 'class="even"';
-        } else {
-            $style = 'class="odd"';
-        }
+    } else {     
+        $style = '';
     }
 
-
-
-    $tool_content .= "    <tr " . $style . ">";
-
+    //$is_blocked = $list->lock == 'CLOSE'? true : false;
+    
+    $tool_content .= "<tr " . $style . ">";
     //Display current learning path name
     if (!$is_blocked) {
         // locate 1st module of current learning path
@@ -494,21 +498,42 @@ foreach ($result as $list) { // while ... learning path list
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
         
         $play_img = "<i class='fa fa-play-circle' style='font-size:20px;'></i>";
-
-        if (count($resultmodules) > 0) {
-            $firstmodule = $resultmodules[0];
-            $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $firstmodule->module_id . "'>$play_img</a>";
-        } else {
-            $play_button = $play_img;
+        
+        if(!$is_editor){ // If is student
+//            if ($list->lock == 'CLOSE'){ // If is student and LP is closed
+//                $play_url = "<a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>".intval($is_blocked);
+//                if (count($resultmodules) > 0) { // If there are modules
+//                    $play_button = "<i class='fa fa-minus-circle' style='font-size:20px';></i>";
+//                } else {
+//                    $play_button = $play_img;
+//                }
+//            } else { // If is student and LP is open
+                $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
+                if (count($resultmodules) > 0) { // If there are modules
+                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>$play_img</a>";
+                } else { // If there are no modules
+                    $play_button = $play_img;
+                }
+            //}
+        } else { // If is admin
+//            if ($list->lock == 'CLOSE'){ // If is admin and LP is closed
+//                $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
+//                if (count($resultmodules) > 0) { // If there are modules
+//                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'><i class='fa fa-minus-circle text-danger' style='font-size:20px';></i>&nbsp;&nbsp;$play_img</a>";
+//                } else {
+//                    $play_button = $play_img;
+//                }  
+//            } else { // If is admin and LP is open
+                $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
+                if (count($resultmodules) > 0) { // If there are modules
+                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>$play_img</a>";
+                } else {
+                    $play_button = $play_img;
+                }
+            //}
         }
-        if ($list->lock == 'CLOSE'){
-            $locked_signed = "<i class='fa fa-lock text-danger' style='font-size:20px';></i>&nbsp;&nbsp;";
-        } else {
-            $locked_signed = "";
-        }
 
-        $tool_content .= "
-      <td><a href='learningPath.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'>$locked_signed $play_button</span></td>\n";
+        $tool_content .= "<td>$play_url<span class='pull-right'>$play_button</span></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -536,36 +561,37 @@ foreach ($result as $list) { // while ... learning path list
         } else {
             $moduleNumber = 0;
         }
-
+        
         //2.1 no progression found in DB
-        if (($moduleNumber == 0) && ($list->lock == 'CLOSE')) {
-            //must block next path because last module of this path never tried!
-            if ($uid) {
-                if (!$is_editor) {
-                    $is_blocked = true;
-                } // never blocked if allowed to edit
-            } else { // anonymous : don't display the modules that are unreachable
-                $iterator++; // trick to avoid having the "no modules" msg to be displayed
-                break;
-            }
-        }
-
-        //2.2. deal with progression found in DB if at leats one module in this path
-        if ($moduleNumber != 0) {
-            $listblock2 = $resultblock2[0];
-            if (($listblock2->credit == "NO-CREDIT") && ($list->lock == 'CLOSE')) {
-                //must block next path because last module of this path not credited yet!
+            if (($moduleNumber == 0) && ( isset($result[$ind]) && ($result[$ind]->lock == 'CLOSE'))) {
+                //must block next path because last module of this path never tried!
                 if ($uid) {
-                    if (!$is_editor) {
-                        $is_blocked = true;
-                    } // never blocked if allowed to edit
+                    $is_blocked = true;
                 } else { // anonymous : don't display the modules that are unreachable
+                    $iterator++; // trick to avoid having the "no modules" msg to be displayed
                     break;
                 }
             }
-        }
+
+            //2.2. deal with progression found in DB if at leats one module in this path
+            if ($moduleNumber != 0) {
+                $listblock2 = $resultblock2[0];
+                if (($listblock2->credit == "NO-CREDIT") && (isset($result[$ind]) && $result[$ind]->lock == 'CLOSE')) {
+                    //must block next path because last module of this path not credited yet!
+                    if ($uid) {
+                        $is_blocked = true;
+                    } else { // anonymous : don't display the modules that are unreachable
+                        break;
+                    }
+                }
+            }
+        
     } else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
-        $tool_content .= "     <td>" . $list->name/* .$list['minRaw'] */ . "</td>\n";
+        if(!$is_editor){
+            $tool_content .= "<td><a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>"/* .$list['minRaw'] */ . "<span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i></span></td>\n";
+        } else { // if is editor he can access the learning path even if it is restricted
+            $tool_content .=  "<td><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i>&nbsp;&nbsp;$play_button</span></td>\n";
+        }
     }
 
     // DISPLAY ADMIN LINK-----------------------------------------------------------
@@ -573,10 +599,9 @@ foreach ($result as $list) { // while ... learning path list
         // 5 administration columns
         // LOCK link
 
-
         $is_real_dir = is_dir(realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $list->learnPath_id));
 
-        $tool_content .= "      <td class='option-btn-cell'>" .
+        $tool_content .= "<td class='option-btn-cell'>" .
                 action_button(array(
                     array('title' => $langEditChange,
                         'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
@@ -585,9 +610,10 @@ foreach ($result as $list) { // while ... learning path list
                     array('title' => !$list->visible == 0? $langViewHide : $langViewShow,
                         'url' => !$list->visible == 0? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;visibility_path_id=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;visibility_path_id=" . $list->learnPath_id,
                         'icon' => !$list->visible == 0? 'fa-eye-slash': 'fa-eye'),
-                    array('title' => $list->lock == 'OPEN'? $langResourceAccessLock : $langResourceAccessUnlock,
+                    array('title' => $list->lock == 'OPEN'? $langBlock : $langNoBlock,
                         'url' => $list->lock == 'OPEN'? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $list->learnPath_id,
-                        'icon' => $list->lock == 'OPEN'? 'fa-lock' : 'fa-unlock'),
+                        'icon' => $list->lock == 'OPEN'? 'fa-minus-circle' : 'fa-play-circle',
+                        'show' => !($ind == 1)),
                     array('title' => $langUp,
                         'level' => 'primary',
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;move_path_id=" . $list->learnPath_id,
@@ -625,8 +651,8 @@ foreach ($result as $list) { // while ... learning path list
         }
         if ($prog >= 0) {
             $globalprog += $prog;
-        }
-        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($prog, 1) . "</td>\n";
+        }        
+        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($prog, 1) . "</td>";
     }
     $tool_content .= "</tr>\n";
     $iterator++;
@@ -643,5 +669,17 @@ if (!$is_editor && $iterator != 1 && $uid) {
     </tr>\n";
 }
 $tool_content .= "\n     </table></div>\n";
+$tool_content .= "<div class='modal fade' id='restrictlp' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-body'>".
+        $langRestrictedLPath
+      ."</div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+      </div>
+    </div>
+  </div>
+</div>";
 
 draw($tool_content, 2, null, $head_content);

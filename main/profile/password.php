@@ -25,13 +25,13 @@
  * @abstract Password change component
  *
  */
+use Hautelook\Phpass\PasswordHash;
 $require_login = true;
 $helpTopic = 'Profile';
 $require_valid_uid = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
-require_once 'include/phpass/PasswordHash.php';
 require_once 'include/log.php';
 
 $toolName = $langMyProfile;
@@ -70,6 +70,7 @@ $passUrl = $urlServer . 'main/profile/password.php';
 $passLocation = 'Location: ' . $passUrl;
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('password_form', 'password_form1', 'old_pass'));
     $v->rule('equals', 'password_form', 'password_form1');
@@ -152,6 +153,7 @@ if (!isset($_POST['changePass'])) {
       </div>
     </div>
   </fieldset>
+  ". generate_csrf_token_form_field() ."  
 </form></div>";
 }
 

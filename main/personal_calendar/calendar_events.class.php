@@ -973,7 +973,7 @@ class Calendar_Events {
         //$dateNow = date("j-n-Y", time());
         $numLine = 0;
 
-        $calendar_content .= "<table width='100%' class='tbl_alt'>";
+        $calendar_content .= "<table class='table-default'>";
         //                <tr><th colspan='2' class='left'>$langEvents</th>";
         //$calendar_content .= "<th width='50'><b>$langActions</b></th>";
         //$calendar_content .= "</tr>";
@@ -1072,7 +1072,7 @@ class Calendar_Events {
         $calendar_content .= "</table>";
 
         $eventlist = Calendar_Events::get_calendar_events("day", "$year-$month-$day");
-        $calendar_content .= "<table width='100%' class='tbl_alt'>";
+        $calendar_content .= "<table class='table-default'>";
 
         $curhour = 0;
         $now = getdate();
@@ -1345,6 +1345,9 @@ class Calendar_Events {
        
        $events = array();
        foreach ($eventlist as $event) {
+           $event->title = q($event->title);
+           $event->content = q($event->content);
+           $event->course = q($event->course);
            $startdatetime = new DateTime($event->start);
            $event->start = $startdatetime->getTimestamp()*1000;
            $event->start_hour = $startdatetime->format("H:i");
@@ -1361,13 +1364,13 @@ class Calendar_Events {
    }
 
    public static function small_month_bootstrap_calendar() {
-       global $langNext, $langPrevious;
+       global $langNextMonth, $langPreviousMonth;
 
-       $calendar = '<div id="cal-header" class="btn-group btn-group-justified btn-group-sm">
-                            <div class="btn-group btn-group-sm" style="width:20%;"><button type="button" class="btn btn-default" data-calendar-nav="prev"><i class="fa fa-caret-left"></i></button></div>
-                            <div class="btn-group btn-group-sm" style="width:60%;"><button id="current-month" type="button" class="btn btn-default" disabled="disabled">&nbsp;</button></div>
-                            <div class="btn-group btn-group-sm" style="width:20%;"><button type="button" class="btn btn-default" data-calendar-nav="next"><i class="fa fa-caret-right"></i></button></div>
-                    </div>';
+       $calendar = "<div id='cal-header' class='btn-group btn-group-justified btn-group-sm'>
+                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='prev'><i class='fa fa-caret-left'></i><span class='sr-only'>$langPreviousMonth</span></button></div>
+                            <div class='btn-group btn-group-sm' style='width:60%;'><button id='current-month' type='button' class='btn btn-default' disabled='disabled'>&nbsp;</button></div>
+                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='next'><i class='fa fa-caret-right'></i><span class='sr-only'>$langNextMonth</span></button></div>
+                    </div>";
 
        $calendar .= '<div id="bootstrapcalendar"></div><div class="clearfix"></div>';
 

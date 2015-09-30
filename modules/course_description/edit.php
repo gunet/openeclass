@@ -34,7 +34,7 @@ $pageName = $langEditCourseProgram;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
 
 if (isset($_REQUEST['id'])) {
-    $editId = intval($_REQUEST['id']);
+    $editId = intval(getDirectReference($_REQUEST['id']));
     $q = Database::get()->querySingle("SELECT title, comments, type FROM course_description WHERE course_id = ?d AND id = ?d", $course_id, $editId);
     $cdtitle = Session::has('editTitle') ? Session::get('editTitle') : $q->title;
     $comments = Session::has('editComments') ? Session::get('editComments') : $q->comments;
@@ -75,7 +75,7 @@ $tool_content .= "
             <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>";
 if ($editId !== false) {
-    $tool_content .= "<input type='hidden' name='editId' value='$editId' />";
+    $tool_content .= "<input type='hidden' name='editId' value='" . getIndirectReference($editId) . "' />";
 }
 $tool_content .= "
                     <fieldset>
@@ -99,12 +99,22 @@ $tool_content .= "
                             </div>
                         </div>
                         <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <input class='btn btn-primary' type='submit' name='saveCourseDescription' value='" . q($langAdd) . "'>
-                            <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+                        <div class='col-sm-10 col-sm-offset-2'>".
+                                form_buttons(array(
+                                    array(
+                                        'text'  =>  $langSave,
+                                        'name'  =>  'saveCourseDescription',
+                                        'value' =>  $langAdd
+                                    ),
+                                    array(
+                                        'href'  =>  "index.php?course=$course_code"
+                                    )
+                                ))
+                            ."
                         </div>
                         </div>
                   </fieldset>
+                  ". generate_csrf_token_form_field() ."
                 </form>
             </div>
         </div>

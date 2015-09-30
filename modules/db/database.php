@@ -39,6 +39,9 @@ final class DBResult {
 
 final class Database {
 
+    const TRANSACTION_SUCCESS = 0;
+    const TRANSACTION_ERROR = 1;
+
     private static $REQ_LASTID = 1;
     private static $REQ_OBJECT = 2;
     private static $REQ_ARRAY = 3;
@@ -132,7 +135,7 @@ final class Database {
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
      * @param anytype $argument... A variable argument list of each binded argument
-     * @return int Last inserted ID
+     * @return DBResult Result of this query
      */
     public function query($statement) {
         return $this->queryI(func_get_args(), true);
@@ -399,29 +402,38 @@ final class Database {
      * method is called when we are already in a transaction, no new transaction
      * will be started.
      * @param callable $function The code inside this function will be called
-     *  when the database is in transactional state
+     *  when the database is in transactional state. If this method returns
+     * anything but 0, then the transaction is rollbacked.
+     * @return boolean true, if the transaction was successful
      * @throws Exception if an error occured while running; the transaction will
      *  be rolled back if required
      */
     public function transaction($function) {
+        $status = Database::TRANSACTION_ERROR;
         if (is_callable($function)) {
             $needsTransaction = !$this->dbh->inTransaction();
             if ($needsTransaction)
                 $this->dbh->beginTransaction();
             try {
-                $function();
+                $status = $function();
             } catch (Exception $ex) {
                 if ($needsTransaction)
                     $this->dbh->rollBack();
                 throw $ex;
             }
-            if ($needsTransaction)
-                $this->dbh->commit();
+            if ($needsTransaction) {
+                if ($status != Database::TRANSACTION_SUCCESS) {
+                    $this->dbh->rollBack();
+                } else {
+                    $this->dbh->commit();
+                }
+            }
         } else {
             $backtrace_entry = debug_backtrace();
             $backtrace_info = $backtrace_entry[1];
             Debug::message("Transaction needs a function as parameter", $backtrace_info['file'], $backtrace_info['line']);
         }
+        return $status == Database::TRANSACTION_SUCCESS;
     }
 
     /**

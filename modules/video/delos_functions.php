@@ -31,9 +31,14 @@ function getDelosURL() {
     return $opendelosapp->getParam(OpenDelosApp::URL)->value();
 }
 
+function getDelosExtEnabled() {
+    global $opendelosapp;
+    return $opendelosapp->isEnabled();
+}
+
 function isDelosEnabled() {
     global $opendelosapp;
-    if ($opendelosapp && getDelosURL()) {
+    if ($opendelosapp && getDelosExtEnabled() && getDelosURL()) {
         return true;
     }
     return false;
@@ -76,7 +81,7 @@ function requestDelosJSON() {
         $jsonbaseurl .= (stringEndsWith($jsonbaseurl, "/")) ? '' : '/';
         $jsonurl = $jsonbaseurl . $course_code;
         // request json from opendelos
-        $json = httpGetRequest($jsonurl);        
+        $json = httpGetRequest($jsonurl);
         $jsonObj = ($json) ? json_decode($json) : null;
     }
     return $jsonObj;
@@ -95,16 +100,16 @@ function httpGetRequest($url) {
     return $response;
 }
 
-function displayDelosForm($jsonObj) {
+function displayDelosForm($jsonObj, $currentVideoLinks) {
     global $course_id, $course_code, $langTitle, $langDescr, $langcreator, $langpublisher, $langDate,
-           $langSelect, $langAddModulesButton, $langOpenDelosReplaceInfo, $langCategory;
-    
+    $langSelect, $langAddModulesButton, $langOpenDelosReplaceInfo, $langCategory;
+
     if ($jsonObj === null) {
         return '';
     }
-    
+
     $html = '';
-    $html .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";                
+    $html .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
     $html .= <<<delosform
 <div class="table-responsive">
     <table class="table-default">
@@ -118,7 +123,7 @@ function displayDelosForm($jsonObj) {
                 <th>$langSelect</th>
             </tr>
 delosform;
-    
+
     $i = 1;
     foreach ($jsonObj->resources as $resource) {
         $trclass = (($i % 2) === 0 ) ? 'even' : 'odd';
@@ -128,9 +133,19 @@ delosform;
         $title = $vL->title;
         $description = $vL->description;
         $creator = $vL->rights->creator->name;
-        $publisher = $vL->rights->editor->name;
+        $publisher = $vL->organization->name;
         $date = $vL->date;
-                    
+        $dateTS = strtotime($date);
+        $alreadyAdded = '';
+        if (isset($currentVideoLinks[$url])) {
+            $alreadyAdded = '<span style="color:red">*';
+            $currentTS = strtotime($currentVideoLinks[$url]);
+            if ($dateTS > $currentTS) {
+                $alreadyAdded .= '*';
+            }
+            $alreadyAdded .= '</span>';
+        }
+
         $html .= <<<delosform
             <tr class="$trclass">
                 <td align="left"><a href="$url" class="fileURL" target="_blank" title="$title">$title</a></td>
@@ -139,13 +154,13 @@ delosform;
                 <td>$publisher</td>
                 <td>$date</td>
                 <td class="center" width="10">
-                    <input name="delosResources[]" value="$rid" type="checkbox">
+                    <input name="delosResources[]" value="$rid" type="checkbox"/> $alreadyAdded
                 </td>
             </tr>
 delosform;
         $i++;
     }
-    
+
     $html .= <<<delosform
             <tr>
                 <th colspan="4">
@@ -155,12 +170,12 @@ delosform;
                             <select class='form-control' name='selectcategory'>
                                 <option value='0'>--</option>
 delosform;
-                $resultcategories = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
-                foreach ($resultcategories as $myrow) {
-                    $html .=  "<option value='$myrow->id'";
-                    $html .= '>' . q($myrow->name) . "</option>";
-                }
-                $html .= <<<delosform
+    $resultcategories = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
+    foreach ($resultcategories as $myrow) {
+        $html .= "<option value='$myrow->id'";
+        $html .= '>' . q($myrow->name) . "</option>";
+    }
+    $html .= <<<delosform
                             </select>
                         </div>
                     </div>
@@ -176,7 +191,7 @@ delosform;
 </div></form>
 delosform;
     $html .= "<div class='alert alert-warning' role='alert'>$langOpenDelosReplaceInfo</div>";
-    
+
     return $html;
 }
 
@@ -184,21 +199,21 @@ function storeDelosResources($jsonObj) {
     global $course_id;
     $submittedResources = $_POST['delosResources'];
     $submittedCategory = $_POST['selectcategory'];
-    
+
     foreach ($submittedResources as $rid) {
         $stored = Database::get()->querySingle("SELECT id 
             FROM videolink 
             WHERE course_id = ?d 
             AND category = ?d 
             AND url LIKE '%rid=" . $rid . "'", $course_id, $submittedCategory);
-        foreach($jsonObj->resources as $resource) {
+        foreach ($jsonObj->resources as $resource) {
             if ($resource->resourceID === $rid) {
                 $vL = $resource->videoLecture;
                 $url = $jsonObj->playerBasePath . '?rid=' . $rid;
                 $title = $vL->title;
                 $description = $vL->description;
                 $creator = $vL->rights->creator->name;
-                $publisher = $vL->rights->editor->name;
+                $publisher = $vL->organization->name;
                 $date = $vL->date;
 
                 if ($stored) {
@@ -210,17 +225,25 @@ function storeDelosResources($jsonObj) {
                         AND id = ?d", canonicalize_url($url), $title, $description, $creator, $publisher, $date, $course_id, $submittedCategory, $id);
                 } else {
                     $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)
-                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)',
-                        $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
+                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
                     $id = $q->lastInsertID;
                 }
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
                 Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
-                                                                           'url' => canonicalize_url($url),
-                                                                           'title' => $title,
-                                                                           'description' => $txt_description));
+                    'url' => canonicalize_url($url),
+                    'title' => $title,
+                    'description' => $txt_description));
             }
         }
     }
+}
+
+function getCurrentVideoLinks() {
+    global $course_id;
+    $current = array();
+    Database::get()->queryFunc("SELECT url, date FROM videolink WHERE course_id = ?d", function($vl) use (&$current) {
+        $current[$vl->url] = $vl->date;
+    }, $course_id);
+    return $current;
 }

@@ -81,7 +81,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  <input type='hidden' name='meta_mimetype' value='" . get_mime_type($oldFilename) . "' />
 	  $group_hidden_input
 	  <legend>$langAddMetadata</legend>
-	  <table class='tbl' width='100%'>
+	  <table class='table-default'>
 	  <tr>
 	    <th>$langWorkFile:</th>
 	    <td>$oldFilename</td>
@@ -163,7 +163,7 @@ function metaFormRow($title, $cell, $help) {
  */
 
 function metaCheckBoxRow($title, $name, $values, $checkMap, $help, $twocols = false) {
-    $cell = "<table class='tbl'>";
+    $cell = "<table class='table-default'>";
     $i = 0;
 
     foreach ($values as $value) {

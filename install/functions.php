@@ -35,7 +35,7 @@ require_once '../template/template.inc.php';
  * @param type $toolContent
  */
 function draw($toolContent, $options=null) {
-	global $urlServer, $urlAppend, $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
+	global $urlServer, $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
 
     if (!$options) {
         $options = array();
@@ -183,6 +183,7 @@ function installerMenu(){
 function warnIfExtNotLoaded($extensionName) {
 
     global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
+    
     if (extension_loaded($extensionName)) {
         $tool_content .= '<li>' . icon('fa-check') . ' ' . $extensionName . '</li>';
     } else {
@@ -199,16 +200,10 @@ function warnIfExtNotLoaded($extensionName) {
  * @global type $errorContent
  * @global boolean $configErrorExists
  * @global type $langWarningInstall3
- * @global type $langWarnInstallNotice1
- * @global type $langWarnInstallNotice2
- * @global type $install_info_file
- * @global type $langHere
  * @param type $dirname
  */
 function mkdir_try($dirname) {
-    global $errorContent, $configErrorExists, $langWarningInstall3,
-        $langWarnInstallNotice1, $langWarnInstallNotice2,
-        $install_info_file, $langHere;
+    global $errorContent, $configErrorExists, $langWarningInstall3;
     
     if (!is_dir('../' . $dirname)) {
         if (!@mkdir('../' . $dirname, 0775)) {
@@ -222,19 +217,13 @@ function mkdir_try($dirname) {
  * @brief create files
  * @global type $errorContent
  * @global boolean $configErrorExists
- * @global type $langWarningInstall3
- * @global type $langWarnInstallNotice1
- * @global type $langWarnInstallNotice2
- * @global type $install_info_file
- * @global type $langHere
+ * @global type $langWarningInstall3 
  * @param type $filename
  */
 function touch_try($filename) {
-    global $errorContent, $configErrorExists, $langWarningInstall3,
-        $langWarnInstallNotice1, $langWarnInstallNotice2,
-        $install_info_file, $langHere;
+    global $errorContent, $configErrorExists, $langWarningInstall3;
     
-    if (@!touch('../' . $filename)) {
+    if (!@touch('../' . $filename)) {
         $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $filename);
         $configErrorExists = true;
     }

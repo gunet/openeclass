@@ -36,6 +36,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/action.php';
 require_once 'functions.php';
 require_once 'modules/document/doc_init.php';
+require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 
@@ -54,9 +55,20 @@ $lang_editor = $language;
 load_js('tools.js');
 ModalBoxHelper::loadModalBox(true);
 
-if (isset($_REQUEST['edit_submit'])) {
-    units_set_maxorder();
-    $tool_content .= handle_unit_info_edit();
+if (isset($_REQUEST['edit_submitW'])) { //update title and comments for week
+    $title = $_REQUEST['weektitle'];
+    $descr = $_REQUEST['weekdescr'];
+    $unit_id = $_REQUEST['week_id'];
+    // tags
+    if (isset($_POST['tags'])) {
+        $tagsArray = explode(',', $_POST['tags']);
+        $moduleTag = new ModuleElement($unit_id);
+        $moduleTag->syncTags($tagsArray);
+    }          
+    Database::get()->query("UPDATE course_weekly_view SET
+                                    title = ?s,
+                                    comments = ?s
+                                WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
 }
 
 $form = process_actions();
@@ -68,7 +80,7 @@ if ($is_editor) {
         <div class='col-md-12'>" .
         action_bar(array(
             array('title' => $langEditUnitSection,
-                  'url' => "info.php?course=$course_code&amp;edit=$id&amp;next=1",
+                  'url' => "info.php?course=$course_code&amp;edit=$id&amp;cnt=$cnt",
                   'icon' => 'fa fa-edit',
                   'level' => 'primary-label',
                   'button-class' => 'btn-success'),
@@ -151,19 +163,19 @@ foreach (array('previous', 'next') as $i) {
         $dir = 'DESC';
         $arrow1 = "<i class='fa fa-arrow-left space-after-icon'></i>";
         $arrow2 = '';        
-        $cnt--;
+        $link_count = $cnt - 1;
         $page_btn = 'pull-left';
     } else {
         $op = '>=';
         $dir = '';
         $arrow1 = '';
         $arrow2 = "<i class='fa fa-arrow-right space-before-icon'></i>";
-        $cnt += 2;
+        $link_count = $cnt + 1;
         $page_btn = 'pull-right';
     }
     
-    if (isset($_SESSION['uid']) and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
-            $access_check = "";
+    if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
+        $access_check = '';
     } else {
         $access_check = "AND public = 1";
     }
@@ -182,42 +194,48 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = $langFrom . " " . nice_format($q->start_week) . " $langUntil " .nice_format($q->finish_week);
-        $link[$i] = "<div class='$page_btn'><a class='btn-default-eclass place-at-toolbox' title='$q_title' data-toggle='tooltip' data-placement='top' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id&amp;cnt=$cnt'>$arrow1 $q_title $arrow2</a></div>";
+        $link[$i] = "<a class='btn btn-default $page_btn' title='$q_title' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id&amp;cnt=$link_count'>$arrow1 $q_title $arrow2</a>";
     } else {
         $link[$i] = '&nbsp;';
     }
 }
 
 if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
-    $tool_content .= "<div class='row'>
-        <div class='col-md-12'><div class='toolbox whole-row'>";
-        
     $tool_content .= "
-        ". $link['previous'] ."
-        ". $link['next'] ."";
-    
-    $tool_content .= "</div>
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        $link[previous]
+                        $link[next]
+                    </div>
+                </div>
+            </div>
+        </div>";
+}
+$moduleTag = new ModuleElement($id);
+$tags_list = $moduleTag->showTags();
+$tool_content .= "
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    <h3 class='panel-title'>$pageName</h3>
+                </div>
+                <div class='panel-body'>$comments";
+                    
+if (!empty($tags_list)) {                            
+    $tool_content .= "                            
+                    <div>
+                        $langTags: $tags_list
+                    </div>
+                ";
+}
+$tool_content .= "                            
+                </div>
+            </div>
         </div>
     </div>";
-}
-
-$tool_content .= "<div class='row margin-bottom'>
-      <div class='col-md-12'>
-        <h4 class='text-center'>$pageName</h4>
-      </div>
-    </div>";
-
-
-
-if (!empty($comments)) {
-    $tool_content .= "<div class='row'>
-      <div class='col-md-12'>
-        <div class='panel padding'>
-              $comments
-        </div>
-      </div>
-    </div>";
-}
 
 $tool_content .= "<div class='row'>
   <div class='col-md-12'>
@@ -228,22 +246,28 @@ $tool_content .= "
   </div>
 </div>";
 
-
-$tool_content .= "<div class='form-wrapper'>";
-$tool_content .= "<form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/weeks/' method='get'>
-              <div class='form-group'>
-              <label class='col-sm-4 control-label'>$langWeeks</label>
-              <div class='col-sm-8'>
-              <select name='id' class='form-control' onChange='document.unitselect.submit();'>";
-
-    $q = Database::get()->queryArray("SELECT id, start_week, finish_week, title FROM course_weekly_view
-                   WHERE course_id = ?d $visibility_check", $course_id);
-    foreach ($q as $info) {
-        $selected = ($info->id == $id) ? ' selected ' : '';
-        $tool_content .= "<option value='$info->id'$selected>" .
-                nice_format($info->start_week)." ... " . nice_format($info->finish_week) ."</option>";
-    }
-$tool_content .= "</select></div></div>
-      </form></div>";
+$q = Database::get()->queryArray("SELECT id, start_week, finish_week, title FROM course_weekly_view
+               WHERE course_id = ?d $visibility_check", $course_id);
+$course_weeks_options = "";
+foreach ($q as $info) {
+    $selected = ($info->id == $id) ? ' selected ' : '';
+    $course_weeks_options .= "<option value='$info->id'$selected>" .
+            nice_format($info->start_week)." ... " . nice_format($info->finish_week) ."</option>";
+}
+$tool_content .= "
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/weeks/' method='get'>
+                        <div class='form-group'>
+                            <label class='col-sm-8 control-label'>$langWeeks</label>
+                            <div class='col-sm-4'>
+                                <select name='id' class='form-control' onChange='document.unitselect.submit();'>
+                                    $course_weeks_options
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>";
 
 draw($tool_content, 2, null, $head_content);

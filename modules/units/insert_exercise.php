@@ -54,7 +54,7 @@ function list_exercises() {
                 "<tr class='list-header'>" .
                 "<th width='50%' class='text-left'>$langExercices</th>" .
                 "<th class='text-left'>$langDescr</th>" .
-                "<th class='checkbox_cell'>$langChoice</th>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
         foreach ($quizinfo as $entry) {
             if ($entry['visibility'] == '0') {

@@ -18,7 +18,7 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
+use Hautelook\Phpass\PasswordHash;
 
 $require_usermanage_user = TRUE;
 
@@ -26,20 +26,27 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
-require_once 'include/phpass/PasswordHash.php';
 require_once 'include/lib/pwgen.inc.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'hierarchy_validations.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $tree = new Hierarchy();
 $user = new User();
 
 if (isset($_POST['submit'])) {
-    $requiredFields = array('auth_form', 'email_form', 'surname_form',
-        'givenname_form', 'language_form', 'department', 'pstatus');
+    $requiredFields = array('auth_form', 'surname_form',
+        'givenname_form', 'language_form', 'department', 'pstatus');        
+    if (get_config('am_required') and @$_POST['pstatus'] == 5) {
+        $requiredFields[] = 'am_form';
+    }
+    if (get_config('email_required')) {
+        $requiredFields[] = 'email_form';
+    }
     if (isset($_POST['auth_form']) && $_POST['auth_form'] == 1) {
         $requiredFields[] = 'password';
     }
+    augment_registered_posted_variables_arr($requiredFields, true);
     $fieldLabels = array_combine($requiredFields, array_fill(0, count($requiredFields), $langTheField));
     $v = new Valitron\Validator($_POST);
     $v->labels($fieldLabels);
@@ -52,7 +59,9 @@ if (isset($_POST['submit'])) {
     $v->rule('in', 'language_form', $session->active_ui_languages);
     $v->rule('in', 'auth_form', get_auth_active_methods());
     $v->rule('email', 'email_form');
-
+    
+    cpf_validate_format_valitron($v);
+    
     if (!$v->validate()) {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
     } else {
@@ -86,7 +95,10 @@ if (isset($_POST['submit'])) {
                         DBHelper::timeAfter(get_config('account_duration')) . ", ?s, '', ?s, '')",
              $surname_form, $givenname_form, $uname_form, $password_encrypted, $email_form, $pstatus, $phone_form, $am_form, $language_form, $verified_mail)->lastInsertID;
         $user->refresh($uid, array(intval($depid)));
-
+        user_hook($uid);
+        //process custom profile fields values
+        process_profile_fields_data(array('uid' => $uid));
+        
         // close request if needed
         if (!empty($rid)) {
             $rid = intval($rid);
@@ -107,30 +119,56 @@ if (isset($_POST['submit'])) {
         // send email
         $telephone = get_config('phone');
         $emailsubject = "$langYourReg $siteName $type_message";
-        $emailbody = "
-$langDestination $givenname_form $surname_form
 
-$langYouAreReg $siteName $type_message, $langSettings $uname_form
-$langPass : $password
-$langAddress $siteName $langIs: $urlServer
-$langProblem
+        $emailheader = "
+            <!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$langYouAreReg $siteName $type_message $langWithSuccess</div>
+                </div>
+            </div>";
 
-" . get_config('admin_name') . "
-$langManager $siteName
-$langTel $telephone
-$langEmail : " . get_config('email_helpdesk') . "\n";
-        send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
+        $emailmain = "
+        <!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div>$langSettings</div>
+            <div id='mail-body-inner'>
+                <ul id='forum-category'>
+                    <li><span><b>$langUserCodename: </b></span> <span>$uname_form</span></li>
+                    <li><span><b>$langPass: </b></span> <span>$password</span></li>
+                    <li><span><b>$langAddress $siteName $langIs: </b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
+                </ul>
+            </div>
+            <div>
+            <br>
+                <p>$langProblem</p><br>" . get_config('admin_name') . "
+                <ul id='forum-category'>
+                    <li>$langManager: $siteName</li>
+                    <li>$langTel: $telephone</li>
+                    <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                </ul></p>
+            </div>
+        </div>";
+
+
+        $emailbody = $emailheader.$emailmain;
+
+        $emailbodyplain = html2text($emailbody);
+
+        send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody, $charset);
+
         Session::Messages(array($message,
             "$langTheU \"$givenname_form $surname_form\" $langAddedU" .
             ((isset($auth) and $auth == 1)? " $langAndP": '')), 'alert-success');
-    }
-    redirect_to_home_page('modules/admin/newuseradmin.php');
+    }    
 }
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // javascript
-load_js('jstree');
+load_js('jstree3');
 load_js('pwstrength.js');
 $head_content .= <<<hContent
 <script type="text/javascript">
@@ -225,23 +263,27 @@ if (isset($_GET['id'])) { // if we come from prof request
         if ($res->faculty_id) {
             validateNode($depid, isDepartmentAdmin());
         }
+        $cpf_context = array('origin' => 'teacher_register', 'pending' => true, 'user_request_id' => $id);
+    } else {
+        $cpf_context = array('origin' => 'teacher_register');
     }
+    $params = '';
 } elseif (@$_GET['type'] == 'user') {
     $pstatus = 5;
-} else {
-    $pstatus = 1;
-}
-
-if ($pstatus == 5) {
+    $cpf_context = array('origin' => 'student_register');
     $pageName = $langUserDetails;
     $title = $langInsertUserInfo;
+    $params = "?type=user";
 } else {
+    $pstatus = 1;
+    $cpf_context = array('origin' => 'teacher_register');
     $pageName = $langProfReg;
     $title = $langNewProf;
+    $params = "?type=";
 }
 
 $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]$params' method='post' onsubmit='return validateNodePickerForm();'>
         <fieldset>";
 formGroup('givenname_form', $langName,
     "<input class='form-control' id='givenname_form' type='text' name='givenname_form'" .
@@ -262,7 +304,6 @@ $nodePickerParams = array(
     'params' => 'name="department"',
     'defaults' => $depid,
     'tree' => null,
-    'useKey' => 'id',
     'where' => "AND node.allow_user = true",
     'multiple' => false);
 if (isDepartmentAdmin()) {
@@ -285,18 +326,32 @@ if ($eclass_method_unique) {
 formGroup('passsword_form', $langPass,
     "<input class='form-control' type='text' name='password'" .
         getValue('password', genPass()) . " id='password' autocomplete='off' placeholder='" . q($langPass) . "'><span id='result'></span>");
+if (get_config('email_required')) {
+    $email_message = "$langEmail $langCompulsory";
+} else {
+    $email_message = "$langEmail $langOptional";
+}
 formGroup('email_form', $langEmail,
     "<input class='form-control' id='email_form' type='text' name='email_form'" .
-    getValue('email_form', $pe) . " placeholder='" . q($langEmail) . "'>");
+    getValue('email_form', $pe) . " placeholder='" . q($email_message) . "'>");
 formGroup('verified_mail_form', $langEmailVerified,
     selection($verified_mail_data, "verified_mail_form", $pv, "class='form-control'"));
 formGroup('phone_form', $langPhone,
     "<input class='form-control' id='phone_form' type='text' name='phone_form'" .
     getValue('phone_form', $pphone) . " placeholder='" . q($langPhone) . "'>");
 formGroup('faculty', $langFaculty, $tree_html);
-formGroup('am_form', $langAm, 
-    "<input class='form-control' id='am_form' type='text' name='am_form'" .
-    q('am_form', $pam) . " placeholder='$langOptional'>");
+
+if ($pstatus == 5) { // only for students
+    if (get_config('am_required')) {
+        $am_message = $langCompulsory;
+    } else {
+        $am_message = $langOptional;
+    }
+    formGroup('am_form', $langAm, 
+        "<input class='form-control' id='am_form' type='text' name='am_form'" .
+        getValue('am_form', $pam) . " placeholder='" . q($am_message) . "'>");
+}
+
 formGroup('language_form', $langLanguage,
     lang_select_options('language_form', "class='form-control'",
         Session::has('language_form')? Session::get('language_form'): $language));
@@ -306,11 +361,17 @@ if (isset($_GET['id'])) {
     formGroup('date', $langDate, q($pdate));
     $tool_content .= "<input type='hidden' name='rid' value='$id'>";
 }
+if (isset($pstatus)) { 
+    $tool_content .= "<input type='hidden' name='pstatus' value='$pstatus'>";
+}
+
+//add custom profile fields input
+$tool_content .= render_profile_fields_form($cpf_context, true);
+
 $tool_content .= "
         <div class='col-sm-offset-2 col-sm-10'>
           <input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>
-        </div>
-        <input type='hidden' name='pstatus' value='$pstatus'>
+        </div>        
       </fieldset>
     </form>
   </div>";

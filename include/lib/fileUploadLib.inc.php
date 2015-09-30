@@ -61,8 +61,31 @@ function replace_dangerous_char($string) {
  */
 
 function php2phps($fileName) {
-    $fileName = preg_replace('/\.(php[0-9]?|phtml)$/', '.phps', $fileName);
+    $fileName = preg_replace('/\.(php[0-9]*|phtml|pht)$/', '.phps', $fileName);
     return $fileName;
+}
+
+/*
+ * Copy folder and change the file name extension from .php to .phps
+ *
+ * @param  - dirPath (string) of the source folder
+ * @param  - dirPath (string) of the destination folder
+ */
+
+function recurse_php2phps_copy($src,$dst) {
+    $dir = opendir($src);
+    @mkdir($dst);
+    while(false !== ( $file = readdir($dir)) ) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+            if ( is_dir($src . '/' . $file) ) {
+                recurse_php2phps_copy($src . '/' . $file,$dst . '/' . $file);
+            }
+            else {
+                copy($src . '/' . $file,$dst . '/' . php2phps($file));
+            }
+        }
+    }
+    closedir($dir);
 }
 
 /*
@@ -382,7 +405,7 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir) {
  * @param type $used
  * @return string
  */
-function showquota($quota, $used) {
+function showquota($quota, $used, $backPath=null) {
 
     global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, $langQuotaBar,
     $course_code, $subsystem, $group_id, $ebook_id, $pageName;
@@ -390,26 +413,31 @@ function showquota($quota, $used) {
     $retstring = '';
     
     // pososto xrhsimopoioumenou xorou se %
-    $diskUsedPercentage = round(($used / $quota) * 100) . "%";
+    if ($quota == 0) {
+        $diskUsedPercentage = ($used > 0)? '100%': '0%';
+    } else {
+        $diskUsedPercentage = round(($used / $quota) * 100) . '%';
+    }
     // morfopoihsh tou synolikou diathesimou megethous tou quota
     $quota = format_bytesize($quota / 1024);
     // morfopoihsh tou synolikou megethous pou xrhsimopoieitai
     $used = format_bytesize($used / 1024);
     // telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
     // ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-    if ($subsystem == GROUP) {
-        $link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id";
-    } elseif ($subsystem == EBOOK) {
-        $link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ebook_id=$ebook_id";
-    } else {
-        $link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
-    }
-    $pageName = $langQuotaBar;      
-    $retstring .= action_bar(array(
+    $pageName = $langQuotaBar;
+    if( !is_null($backPath) ){
+        $retstring .= action_bar(array(
                     array('title' => $langBack,
-                          'url' => $link,
+                          'url' => $backPath,
                           'icon' => 'fa-reply',
                           'level' => 'primary-label')));
+    } else {
+    $retstring .= action_bar(array(
+                    array('title' => $langBack,
+                          'url' => documentBackLink($backPath),
+                          'icon' => 'fa-reply',
+                          'level' => 'primary-label')));
+    }
     $retstring .= "
     <div class='row'><div class='col-sm-12'>
     <div class='form-wrapper'>
@@ -424,7 +452,7 @@ function showquota($quota, $used) {
         <label class='col-sm-3 control-label'>$langQuotaPercentage:</label>
         <div class='col-sm-9'>
             <div class='progress'>
-              <p class='progress-bar active from-control-static' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='width: $diskUsedPercentage;'>
+              <p class='progress-bar active from-control-static' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $diskUsedPercentage;'>
                 $diskUsedPercentage
               </p>
             </div>

@@ -18,6 +18,7 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
+use Hautelook\Phpass\PasswordHash;
 
 $require_current_course = true;
 $require_course_admin = true;
@@ -25,7 +26,10 @@ $require_help = TRUE;
 $helpTopic = 'Guest';
 
 require_once '../../include/baseTheme.php';
-require_once 'include/phpass/PasswordHash.php';
+
+if (get_config('course_guest') == 'off') {
+    redirect_to_home_page('modules/user/?course=' . $course_code);
+}
 
 $toolName = $langUsers;
 $pageName = $langAddGuest;
@@ -66,13 +70,22 @@ $tool_content .= action_bar(array(
                  )));
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $password = $_POST['guestpassword'];
     createguest($default_guest_username, $course_id, $password);
-    $tool_content .= "<div class='alert alert-success'>$langGuestSuccess</div>";            
+    Session::Messages($langGuestSuccess, 'alert-success');
+    if ($password === '') {
+        Session::Messages($langGuestWarnEmptyPassword, 'alert-warning');
+    }
+    redirect_to_home_page('modules/user/');
 } else {
     $guest_info = guestinfo($course_id);
     if ($guest_info) {
-        $tool_content .= "<div class='alert alert-danger'>$langGuestExist</div>";
+        if ($guest_info->password === '') {
+            $tool_content .= "<div class='alert alert-warning'>$langGuestWarnEmptyPassword</div>";
+        } else {
+            $tool_content .= "<div class='alert alert-info'>$langGuestExist</div>";
+        }
         $submit_label = $langModify;
     } else {
         $guest_info = new stdClass();
@@ -83,7 +96,7 @@ if (isset($_POST['submit'])) {
     }
     $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-        <fieldset>        
+        <fieldset>
         <div class='form-group'>
             <label class='col-sm-2 control-label'>$langName:</label>
             <div class='col-sm-10'>
@@ -92,7 +105,7 @@ if (isset($_POST['submit'])) {
         </div>
         <div class='form-group'>
             <label class='col-sm-2 control-label'>$langSurname:</label>
-            <div class='col-sm-10'>    
+            <div class='col-sm-10'>
                 <input class='form-control' value='".q($guest_info->surname)."' disabled>
             </div>
         </div>
@@ -114,6 +127,7 @@ if (isset($_POST['submit'])) {
           <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
         </div>
         </fieldset>
+        ". generate_csrf_token_form_field() ."  
         </form>
         </div>";
 }
@@ -132,15 +146,17 @@ function createguest($username, $course_id, $password) {
     global $langGuestName, $langGuestSurname, $langGuestFail;
 
     $hasher = new PasswordHash(8, false);
-    $password = $hasher->HashPassword($password);
-    
+    if ($password !== '') {
+        $password = $hasher->HashPassword($password);
+    }
+
     $q = Database::get()->querySingle("SELECT user_id from course_user WHERE status=" . USER_GUEST . " AND course_id = $course_id");
-    if ($q) {       
+    if ($q) {
         $guest_id = $q->user_id;
         Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password, $guest_id);
     } else {
         $q = Database::get()->query("INSERT INTO user (surname, givenname, username, password, status, registered_at, expires_at, whitelist, description)
-                                        VALUES (?s, ?s, ?s, ?s, " . USER_GUEST . ", ".DBHelper::timeAfter().", ".DBHelper::timeAfter(get_config('account_duration')).", '','')", 
+                                        VALUES (?s, ?s, ?s, ?s, " . USER_GUEST . ", ".DBHelper::timeAfter().", ".DBHelper::timeAfter(get_config('account_duration')).", '','')",
                                             $langGuestSurname, $langGuestName, $username, $password);
         $guest_id = $q->lastInsertID;
     }
@@ -156,7 +172,7 @@ function createguest($username, $course_id, $password) {
  */
 function guestinfo($course_id) {
 
-    $q = Database::get()->querySingle("SELECT surname, givenname, username FROM user, course_user
+    $q = Database::get()->querySingle("SELECT surname, givenname, username, password FROM user, course_user
                        WHERE user.id = course_user.user_id AND
                              course_user.status = " . USER_GUEST . " AND
                              course_user.course_id = ?d", $course_id);

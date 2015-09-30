@@ -210,8 +210,6 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w
  . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
  . "<link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet'>\n"
  . "<link href='{$urlAppend}template/$theme/CSS/bootstrap-custom.css' rel='stylesheet'>\n"
- . "<link href='{$urlAppend}template/$theme/CSS/bootstrap-theme.min.css' rel='stylesheet'>\n"
- . "<link href='{$urlAppend}template/$theme/CSS/inventory.css' rel='stylesheet'>\n"
  . '<title>' . $langExercice . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"

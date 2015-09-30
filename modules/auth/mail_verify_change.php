@@ -35,6 +35,11 @@ include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
 $toolName = $langMailVerify;
 
+if (isset($_GET['from_profile'])) {
+    $navigation[] = array('url' => $urlAppend . 'main/profile/display_profile.php',
+                          'name' => $langMyProfile);
+}
+
 $uid = (isset($_SESSION['uid']) && !empty($_SESSION['uid'])) ? $_SESSION['uid'] : NULL;
 
 if (empty($uid)) {
@@ -42,16 +47,14 @@ if (empty($uid)) {
     draw($tool_content, 0);
     exit;
 }
-// user might already verified mail account or verification is no more needed
+// email address may have already been verified or verification may no longer be needed
 if (!get_config('email_verification_required') or
-    get_mail_ver_status($uid) == EMAIL_VERIFIED or
-    isset($_SESSION['cas_email']) or
-    isset($_POST['enter'])) {
-    	if (isset($_SESSION['mail_verification_required'])) {
-        	unset($_SESSION['mail_verification_required']);
-    	}
-    	header("Location:" . $urlServer);
-    	exit;
+        get_mail_ver_status($uid) == EMAIL_VERIFIED or
+        (isset($_POST['enter']) and !get_config('email_required'))) {
+    if (isset($_SESSION['mail_verification_required'])) {
+        unset($_SESSION['mail_verification_required']);
+    }
+    redirect_to_home_page('main/portfolio.php');
 }
 
 if (!empty($_POST['submit'])) {
@@ -73,7 +76,14 @@ if (!empty($_POST['submit'])) {
             $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</div>");
             $tool_content .= $mail_ver_error;
         } else {
-            $tool_content .= "<div class='alert alert-success'>$langMailVerificationSuccess4</div> ";
+            $tool_content .= 
+                action_bar(array(
+                    array(
+                        'title' => $langBack,
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label',
+                        'url' => $urlAppend))) .
+                "<div class='alert alert-success'>$langMailVerificationSuccess4</div> ";
         }
     }
     // email wrong or empty
@@ -81,14 +91,17 @@ if (!empty($_POST['submit'])) {
         $tool_content .= "<div class='alert alert-danger'>$langMailVerificationWrong</div> ";
     }
 } else {
-	if (get_config('alt_auth_stud_reg') == 2) {
-			$tool_content .= "<div class='alert alert-info'>$langEmailInfo <br><br> $langEmailNotice</div>";
-	} else if (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_verification_required'] === 1)) {
-	    	$tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div>";
-	}
+    if (get_config('alt_auth_stud_reg') == 2) {
+        if (get_config('email_required')) {
+            $tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div>";
+        } else {
+            $tool_content .= "<div class='alert alert-info'>$langEmailInfo <br><br> $langEmailNotice</div>";
+        }
+    } else if (isset($_SESSION['mail_verification_required'])) {
+        $tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div>";
+    }
 }
 
-//var_dump($_SESSION);
 if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
     $tool_content .= "<div class='form-wrapper'>
     	<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]'>
@@ -101,8 +114,11 @@ if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
 			</div>
 			<div class='form-group'>
 				<div class='col-sm-offset-2 col-sm-10'>
-					<input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode'>
-					<input class='btn btn-primary' type='submit' name='enter' value='$langCancelAndEnter'>
+					<input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode'>" .
+                    (isset($_GET['from_profile']) || get_config('email_required')? '':
+                        " <input class='btn btn-primary' type='submit' name='enter' value='$langCancelAndEnter'>") .
+                    (isset($_GET['from_profile']) && !get_config('mail_verification_required')?
+                        " <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-default' type='button'>$langCancel</a>": '') . "
 				</div>
 			</div>
         </fieldset>
@@ -110,10 +126,6 @@ if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
     </div>";
 }
 
-if (isset($_GET['from_profile'])) {
-    draw($tool_content, 1);
-} else {
-    draw($tool_content, 0);
-}
+draw($tool_content, $uid? 1: 0);
 
 exit;

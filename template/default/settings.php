@@ -29,13 +29,14 @@ $theme_settings = array(
         'usage' => 'fa-area-chart',
         'attendance' => 'fa-check-square-o',
         'gradebook' => 'fa-sort-numeric-desc',
+        'abuse' => 'fa-flag',
     ),
 );
 
 function template_callback($template, $menuTypeID, $embed)
 {
     global $uid, $session, $native_language_names_init, $course_id, $professor,
-           $modules, $admin_modules, $theme_settings;
+           $modules, $admin_modules, $theme_settings, $langChooseLang;
 
     if ($uid and !defined('UPGRADE')) {
         if (!$embed) {
@@ -49,7 +50,7 @@ function template_callback($template, $menuTypeID, $embed)
             // FIXME: smarter selection of courses for sidebar
             Database::get()->queryFunc("SELECT id, code, title, prof_names, public_code
                 FROM course, course_user
-                WHERE course.id = course_id AND user_id = ?d
+                WHERE course.id = course_id AND course.visible != " . COURSE_INACTIVE . " AND user_id = ?d
                 ORDER BY reg_date DESC", function ($c) use ($template, $modules, $admin_modules, $theme_settings) {
                     global $urlAppend;
                     static $counter = 1;
@@ -80,7 +81,7 @@ function template_callback($template, $menuTypeID, $embed)
     if ($menuTypeID != 2) {
         $lang_select = "<li class='dropdown'>
           <a href='#' class='dropdown-toggle' role='button' id='dropdownMenuLang' data-toggle='dropdown'>
-              <i class='fa fa-globe'></i>
+              <span class='fa fa-globe'></span><span class='sr-only'>$langChooseLang</span>
           </a>
           <ul class='dropdown-menu' role='menu' aria-labelledby='dropdownMenuLang'>";
         foreach ($session->active_ui_languages as $code) {

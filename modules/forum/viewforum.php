@@ -24,6 +24,7 @@ $require_login = true;
 $require_help = true;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
+require_once 'include/log.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
 
@@ -84,7 +85,11 @@ $total_topics = Database::get()->querySingle("SELECT num_topics FROM forum
                 AND course_id = ?d", $forum_id, $course_id)->num_topics;
 
 if ($total_topics > $topics_per_page) {
-    $pages = intval($total_topics / $topics_per_page) + 1; // get total number of pages
+    if(($total_topics % $topics_per_page) == 0) {
+        $pages = intval($total_topics / $topics_per_page); // get total number of pages
+    } else {
+        $pages = intval($total_topics / $topics_per_page) + 1; // get total number of pages
+    }
 }
 
 if (isset($_GET['start'])) {
@@ -95,36 +100,58 @@ if (isset($_GET['start'])) {
 
 if ($total_topics > $topics_per_page) { // navigation
     $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=";
-    $tool_content .= "<div class='table-responsive'><table class='table-default'><tr>";
-    $tool_content .= "<td width='50%' class='text-left'><span class='row'><strong class='pagination'>
-		<span class='pagination'>$langPages:&nbsp;";
+    $paging = array();
+
     $current_page = $first_topic / $topics_per_page + 1; // current page
     for ($x = 1; $x <= $pages; $x++) { // display navigation numbers
         if ($current_page == $x) {
-            $tool_content .= "$x&nbsp;";
+            $paging[] = "<li class='active'><a href='#'>$x</a></li>";
         } else {
             $start = ($x - 1) * $topics_per_page;
-            $tool_content .= "<a href='$base_url&amp;start=$start'>$x&nbsp;</a>";
+            $paging[] = "<li><a href='$base_url&amp;start=$start'>$x</a></li>";
         }
     }
-    $tool_content .= "</span></strong></span></td>";
-    $tool_content .= "<td colspan='4' class='text-right'>";
 
     $next = $first_topic + $topics_per_page;
     $prev = $first_topic - $topics_per_page;
     if ($prev < 0) {
         $prev = 0;
     }
-
     if ($first_topic == 0) { // beginning
-        $tool_content .= "<a href='$base_url$next'>$langNextPage</a>";
+        $nexturlclass = "";
+        $privurlclass = "class='disabled'";
+        $nexturl = $base_url.$next;
+        $prevurl = "#";
     } elseif ($first_topic + $topics_per_page < $total_topics) {
-        $tool_content .= "<a href='$base_url$prev'>$langPreviousPage</a>&nbsp|&nbsp;
-		<a href='$base_url$next'>$langNextPage</a>";
+        $nexturlclass = "";
+        $privurlclass = "";
+        $prevurl = $base_url.$prev;
+        $nexturl = $base_url.$next;
     } elseif ($start - $topics_per_page < $total_topics) { // end
-        $tool_content .= "<a href='$base_url$prev'>$langPreviousPage</a>";
+        $nexturlclass = "class='disabled'";
+        $privurlclass = "";
+        $nexturl = "#";
+        $prevurl = $base_url.$prev;
     }
-    $tool_content .= "</td></tr></table></div>";
+
+    $tool_content .= "
+    <nav class='clearfix'>
+      <ul class='pagination pull-right'>
+        <li $privurlclass>
+            <a href='$prevurl' aria-label='Previous'>
+                <span aria-hidden='true'>&laquo;</span>
+            </a>
+        </li>
+        ".implode($paging)."
+        <li $nexturlclass>
+          <a href='$nexturl' aria-label='Next'>
+            <span aria-hidden='true'>&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    ";
+
 }
 
 // delete topic
@@ -133,10 +160,25 @@ if (($is_editor) and isset($_GET['topicdel'])) {
         $topic_id = intval($_GET['topic_id']);
     }
     $number_of_posts = get_total_posts($topic_id);
-    $sql = Database::get()->queryArray("SELECT id,poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
+    $sql = Database::get()->queryArray("SELECT id,poster_id,post_text FROM forum_post WHERE topic_id = ?d", $topic_id);
     $post_authors = array();
     foreach ($sql as $r) {
         $post_authors[] = $r->poster_id;
+        //delete abuse_reports for forum_posts and log actions
+        $result = Database::get()->queryArray("SELECT * FROM abuse_report WHERE `rid` = ?d AND `rtype` = ?s", $r->id, 'forum_post');
+        foreach ($result as $res) {
+            Log::record($res->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+                array('id' => $res->id,
+                     'user_id' => $res->user_id,
+                     'reason' => $res->reason,
+                     'message' => $res->message,
+                     'rtype' => 'forum_post',
+                     'rid' => $r->id,
+                     'rcontent' => $r->post_text,
+                     'status' => $res->status
+            ));
+        }
+        Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $r->id, 'forum_post');
         //delete forum posts rating first
         Database::get()->query("DELETE FROM rating WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);
         Database::get()->query("DELETE FROM rating_cache WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);

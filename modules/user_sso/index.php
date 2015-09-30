@@ -31,7 +31,7 @@ $session_id = $_GET['session'];
 session_id($session_id);
 session_start();
 require_once '../../include/init.php';
-require_once ('modules/auth/auth.inc.php');
+require_once 'modules/auth/auth.inc.php';
 
 // validate token timestamp
 if (!token_validate($username . $session_id, $token, 500)) {
@@ -72,6 +72,7 @@ if ($exists && intval($exists->exists) === 1) {
                                               VALUES (?d, ?s, NOW(), 'LOGIN')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
         session_regenerate_id();
         set_session_mvars();
+        $session->setLoginTimestamp();
         echo session_id();
     }
     

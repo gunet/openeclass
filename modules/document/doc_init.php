@@ -82,6 +82,30 @@ if (defined('GROUP_DOCUMENTS')) {
     }
     $course_id = -1;
     $course_code = '';
+} elseif (defined('MY_DOCUMENTS')) {
+    $subsystem = MYDOCS;
+    $subsystem_id = $uid;
+    $groupset = '';
+    $base_url = $_SERVER['SCRIPT_NAME'] . '?';
+    $upload_target_url = 'index.php';
+    $group_id = '';
+    $group_sql = "subsystem = $subsystem AND subsystem_id = $uid";
+    $group_hidden_input = '';
+    $basedir = $webDir . '/courses/mydocs/' . $uid;
+    if (!is_dir($basedir)) {
+        mkdir($basedir, 0775, true);
+    }
+    $pageName = $langMyDocs;
+    // Saved course code so that file picker menu doesn't lose
+    // the current course if we're in a course
+    if (isset($_GET['course']) and $_GET['course']) {
+        define('SAVED_COURSE_CODE', $_GET['course']);
+        define('SAVED_COURSE_ID', course_code_to_id(SAVED_COURSE_CODE));
+        $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . SAVED_COURSE_CODE . '&amp;';
+    }
+    $course_id = -1;
+    $course_code = '';
+    $can_upload = $session->user_id == $uid;
 } else {
     $subsystem = MAIN;
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;';

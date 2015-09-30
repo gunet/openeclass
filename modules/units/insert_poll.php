@@ -53,7 +53,7 @@ function list_polls() {
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langQuestionnaire</th>" .
-                "<th class='text-center checkbox_cell'>$langChoice</th>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
         foreach ($pollinfo as $entry) {            
             $tool_content .= "<tr>";

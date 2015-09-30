@@ -80,14 +80,14 @@ $head_content .= '<script type="text/javascript">
 if ($is_editor) {
     $tool_content .= action_bar(array(
         array('title' => $langSave,
-            'url' => "messageList.php?course=$course_code&amp;store=true",
+            'url' => "messageList.php?course=$course_code&amp;store=true&amp;".generate_csrf_token_link_parameter(),
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
             'button-class' => 'btn-success',
             'link-attrs' => "target='messageList'"
         ),
         array('title' => $langWash,
-            'url' => "messageList.php?course=$course_code&amp;reset=true",
+            'url' => "messageList.php?course=$course_code&amp;reset=true&amp;".generate_csrf_token_link_parameter(),
             'icon' => 'fa-trash',
             'level' => 'primary',
             'link-attrs' => "target='messageList'"
@@ -97,7 +97,7 @@ if ($is_editor) {
 
 $tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
     <div class='row'><div class='col-sm-12'><div class='form-wrapper'>
-   <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'><input type='hidden' name='course' value='$course_code'/>
+   <form name='chatForm' action='messageList.php' method='POST' target='messageList' onSubmit='return prepare_message();'><input type='hidden' name='course' value='$course_code'/>
    <fieldset>
     <div class='col-xs-12'>
         <div class='input-group'>
@@ -112,6 +112,7 @@ $tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
         </div>       
     </div>   
    </fieldset>
+   ". generate_csrf_token_form_field() ."
    </form></div></div></div>";
 
 add_units_navigation(TRUE);

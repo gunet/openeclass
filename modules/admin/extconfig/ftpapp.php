@@ -20,19 +20,20 @@
  * ======================================================================== 
  */
 
-require_once 'genericrequiredparam.php';
+require_once 'credentialdriveapp.php';
 
-class FTPApp extends ExtApp {
-
-    const URL = "url";
-
-    public function __construct() {
-        $drivename = $this->getName();
-        $this->registerParam(new GenericRequiredParam($drivename, "FTP URL", WebDAVApp::URL));
-    }
+class FTPApp extends CredentialDriveApp {
 
     public function getDisplayName() {
         return "FTP";
+    }
+
+    public function getShortDescription() {
+        return $GLOBALS['langFtpShortDescription'];
+    }
+
+    public function getLongDescription() {
+        return $GLOBALS['langFtpLongDescription'];
     }
 
 }

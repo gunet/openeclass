@@ -71,13 +71,9 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
     }
 
     $recipients = array();
-    $emailsubject = $langInfoAboutEclass;
-    $emailbody = "" . $_POST['body_mail'] . "
-
-$langManager $siteName
-" . get_config('admin_name') . "
-$langEmail: " . get_config('email_helpdesk') . "
-";
+    $emailsubject = "$langAdminMessage -  $_POST[email_title]";
+    $emailbody = "" . $_POST['body_mail'] . "<br>\n$langManager $siteName
+" . get_config('admin_name') . " ($langEmail: " . get_config('email_helpdesk') . ")<br>\n";
     // Send email to all addresses
     foreach ($sql as $m) {
         $emailTo = $m->email;
@@ -86,9 +82,41 @@ $langEmail: " . get_config('email_helpdesk') . "
         if (get_user_email_notification($user_id)) {
             array_push($recipients, $emailTo);
         }
-        $linkhere = "&nbsp;<a href='${urlServer}main/profile/profile.php'>$langHere</a>.";
-        $unsubscribe = "<br /><br />" . sprintf($langLinkUnsubscribeFromPlatform, $siteName);
-        $emailcontent = $emailbody . $unsubscribe . $linkhere;
+
+        $emailheader = "
+        <!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$langAdminMessage.</div>
+            </div>
+        </div>";
+
+        $emailmain = "
+        <!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div><b>$langSubject:</b> <span class='left-space'>$_POST[email_title]</span></div><br>
+            <div><b>$langMailBody:</b></div>
+            <div id='mail-body-inner'>
+                $_POST[body_mail]
+            </div>
+        </div>
+        ";
+
+        $emailfooter = "
+        <!-- Footer Section -->
+        <div id='mail-footer'>
+            <br>
+            <div>
+                <small>" . sprintf($langLinkUnsubscribeFromPlatform, $siteName) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+            </div>
+        </div>
+        ";
+
+        $emailcontent = $emailheader.$emailmain.$emailfooter;
+
+        $emailbody = html2text($emailcontent);
         if (count($recipients) >= 50) {
             send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset);
             $recipients = array();
@@ -100,14 +128,21 @@ $langEmail: " . get_config('email_helpdesk') . "
     // Display result and close table correctly
     $tool_content .= "<div class='alert alert-success'>$emailsuccess</div>";
 } else {
+    $body_mail = $email_title = '';
     // Display form to administrator
     $tool_content .= "<div class='form-wrapper'>
     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-    <fieldset>        	
+    <fieldset>
+        <div class='form-group'>
+            <label for='email_title' class='col-sm-2 control-label'>$langTitle</label>
+            <div class='col-sm-10'>
+                <input class='form-control' type='text' name='email_title' value='$email_title' size='50' />
+            </div>
+        </div>
 	<div class='form-group'>
 	  <label for='body_mail' class='col-sm-2 control-label'>$typeyourmessage</label>
               <div class='col-sm-10'>
-	      <textarea class='form-control' name='body_mail' id='body_mail' rows='10'></textarea>
+	      ".rich_text_editor('body_mail', 10, 20, $body_mail)."
               </div/>
 	</div>
 	<div class='form-group'>
@@ -127,4 +162,4 @@ $langEmail: " . get_config('email_helpdesk') . "
     </form>
     </div>";
 }
-draw($tool_content, 3);
+draw($tool_content, 3, null, $head_content);

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "vlucas/valitron": "1.2.*",
+        "hautelook/phpass": "0.3.*"
+    }  
+}

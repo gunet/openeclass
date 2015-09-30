@@ -115,14 +115,14 @@ class CourseXMLConfig {
     }
 
     /**
-     * Intected code for HTML Form labels.
+     * Injected code for HTML Form labels.
      * 
      * @param  string $key
      * @return string
      */
     public static function getInjectValue($key) {
         $valArr = array(
-            'course_instructor_photo' => "<div class='instructor_add_container'><div class='instructor_container'></div><div class='cmetarow'>" . $GLOBALS['langCMeta']['instructor_add'] . " <a class='instructor_add' href='#add'><img src='" . $GLOBALS['themeimg'] . "/add.png' alt='alt'/></a></div></div>"
+            'course_instructor_registrationCode' => "<div class='instructor_add_container'><div class='instructor_container'></div><div class='cmetarow'>" . $GLOBALS['langCMeta']['instructor_add'] . " <a class='instructor_add' href='#add'><img src='" . $GLOBALS['themeimg'] . "/add.png' alt='alt'/></a></div></div>"
         );
 
         if (isset($valArr[$key])) {
@@ -179,7 +179,8 @@ class CourseXMLConfig {
      */
     public static function getMultipleFieldName($field) {
         $valArr = array(
-            'course_instructor_photo' => 'photo'
+            'course_instructor_photo' => 'photo',
+            'course_instructor_registrationCode' => 'registrationCode'
         );
 
         if (isset($valArr[$field])) {
@@ -197,7 +198,8 @@ class CourseXMLConfig {
      */
     public static function getMultipleFieldParentXPath($field) {
         $valArr = array(
-            'course_instructor_photo' => '/n:course/n:instructor'
+            'course_instructor_photo' => '/n:course/n:instructor',
+            'course_instructor_registrationCode' => '/n:course/n:instructor'
         );
 
         if (isset($valArr[$field])) {
@@ -228,7 +230,8 @@ class CourseXMLConfig {
     public static $arrayFields = array(
         'course_instructor_firstName',
         'course_instructor_lastName',
-        'course_instructor_photo'
+        'course_instructor_photo',
+        'course_instructor_registrationCode'
     );
 
     /**
@@ -310,7 +313,8 @@ class CourseXMLConfig {
         'course_unit_material_digital_url', 'course_unit_material_digital_library',
         'course_confirmAMinusLevel', 'course_confirmALevel', 'course_confirmAPlusLevel',
         'course_lastLevelConfirmation', 'course_firstCreateDate', 'course_videolectures',
-        'course_instructor_fullName', 'course_instructor_moreInformation', 'course_instructor_cv'
+        'course_instructor_fullName', 'course_instructor_moreInformation', 'course_instructor_cv',
+        'course_hits', 'course_visits'
     );
 
     /**
@@ -326,7 +330,7 @@ class CourseXMLConfig {
      * @var array
      */
     public static $injectFields = array(
-        'course_instructor_photo'
+        'course_instructor_registrationCode'
     );
 
     /**

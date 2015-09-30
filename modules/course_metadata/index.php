@@ -60,10 +60,11 @@ $instrLast = $langCMeta['course_instructor_lastName'];
 $greek = $langCMeta['el'];
 $english = $langCMeta['en'];
 $instrPhoto = $langCMeta['course_instructor_photo'];
+$instrCode = $langCMeta['course_instructor_registrationCode'];
 
 load_js('select2');
 $head_content .= <<<EOF
-<link rel="stylesheet" type="text/css" href="course_metadata.css">
+<link rel="stylesheet" type="text/css" href="{$urlAppend}modules/course_metadata/course_metadata.css">
 <script type='text/javascript'>
 /* <![CDATA[ */
         
@@ -142,6 +143,10 @@ $head_content .= <<<EOF
                         '<input class="course_instructor_photo_hidden_mime" type="hidden" name="course_instructor_photo_mime[]">' +
                         '<input size="30" name="course_instructor_photo[]" type="file">' +
                     '</span>' +
+                '</div>' +
+                '<div class="cmetarow">' +
+                    '<span class="cmetalabel">{$instrCode}:</span>' +
+                    '<span class="cmetafield"><input size="55" name="course_instructor_registrationCode[]" type="text"></span>' +
                 '</div>'
                     );
         });

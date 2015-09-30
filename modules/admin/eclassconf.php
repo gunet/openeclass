@@ -32,13 +32,13 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */
-        
+
 function loginFailPanel(e) {
     duration = null;
     if (e) {
         duration = 400;
     }
-        
+
     if ($('#login_fail_check').is(":checked")) {
         $('#login_fail_threshold').show(duration);
         $('#login_fail_deny_interval').show(duration);
@@ -62,7 +62,7 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
     stickywidget.on('affix.bs.affix',function(){
         stickywidget.removeAttr('style');
         explicitlySetAffixPosition();
-    }); 
+    });
     stickywidget.on('affixed-bottom.bs.affix',function(){
         stickywidget.css('left', 'auto');
     });
@@ -90,13 +90,13 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
         }
         $('#hide_login_link_check').prop('disabled', !$('#hide_login_check').is(":checked"));
     });
-    
+
     // Login Fail Panel
     loginFailPanel();
     $('#login_fail_check').click(function(event) {
         loginFailPanel(true);
     });
-    
+
     // Open Courses checkboxes
     $('#opencourses_enable').click(function(event) {
         if ($('#opencourses_enable').is(":checked")) {
@@ -112,18 +112,27 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
             $('#course_metadata').prop('disabled', false);
         }
     });
-    
+
     if ($('#opencourses_enable').is(":checked")) {
         $('#course_metadata').prop('disabled', true);
     }
-    
+
+    // MyDocs checkboxes and inputs
+    function mydocsCheckboxQuota(checkbox, input) {
+        $(checkbox).change(function (event) {
+            $(input).prop('disabled', !$(this).is(':checked'));
+        }).change();
+    }
+    mydocsCheckboxQuota('#mydocs_teacher_enable_id', '#mydocs_teacher_quota_id');
+    mydocsCheckboxQuota('#mydocs_student_enable_id', '#mydocs_student_quota_id');
+
     // Search Engine checkboxes
     $('#confirmIndexDialog').modal({
         show: false,
         keyboard: false,
         backdrop: 'static'
     });
-        
+
     $("#confirmIndexCancel").click(function() {
         $('#index_enable')
             .prop('checked', false)
@@ -131,11 +140,11 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
         $('#search_enable').prop('checked', false);
         $("#confirmIndexDialog").modal("hide");
     });
-        
+
     $("#confirmIndexOk").click(function() {
         $("#confirmIndexDialog").modal("hide");
     });
-    
+
     $('#search_enable').change(function(event) {
         if ($('#search_enable').is(":checked")) {
             if ($('#index_enable').is(":checked")) {
@@ -150,17 +159,17 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
             $('#index_enable').prop('disabled', false);
         }
     });
-    
+
     if ($('#search_enable').is(":checked")) {
         $('#index_enable').prop('disabled', true);
     }
-    
+
     $('#index_enable').change(function(event) {
         if ($('#index_enable').is(":checked")) {
             $("#confirmIndexDialog").modal("show");
         }
     });
-    
+
     $('#social_sharing_links').change(function(event) {
         if ($('#social_sharing_links').is(":checked")) {
             if ($('#personal_blog_enable').is(":checked")) {
@@ -170,11 +179,11 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
             $('#personal_blog_sharing_enable').prop('disabled', true);
         }
     });
-        
+
     if (!$('#social_sharing_links').is(":checked")) {
         $('#personal_blog_sharing_enable').prop('disabled', true);
-    }   
-    
+    }
+
     $('#personal_blog_enable').change(function(event) {
         if ($('#personal_blog_enable').is(":checked")) {
             $('#personal_blog_commenting_enable').prop('disabled', false);
@@ -187,36 +196,36 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
             $('#personal_blog_rating_enable').prop('disabled', true);
             $('#personal_blog_sharing_enable').prop('disabled', true);
         }
-    });    
-    
+    });
+
     if (!$('#personal_blog_enable').is(":checked")) {
         $('#personal_blog_commenting_enable').prop('disabled', true);
         $('#personal_blog_rating_enable').prop('disabled', true);
         $('#personal_blog_sharing_enable').prop('disabled', true);
     }
-        
+
     $('input[name=submit]').click(function() {
         $('#personal_blog_commenting_enable').prop('disabled', false);
         $('#personal_blog_rating_enable').prop('disabled', false);
         $('#personal_blog_sharing_enable').prop('disabled', false);
     });
-        
-    // Mobile API Confirmations    
+
+    // Mobile API Confirmations
     $('#confirmMobileAPIDialog').modal({
         show: false,
         keyboard: false,
         backdrop: 'static'
     });
-        
+
     $("#confirmMobileAPICancel").click(function() {
         $('#mobileapi_enable').prop('checked', false);
         $("#confirmMobileAPIDialog").modal("hide");
     });
-        
+
     $("#confirmMobileAPIOk").click(function() {
         $("#confirmMobileAPIDialog").modal("hide");
     });
-        
+
     $('#mobileapi_enable').change(function(event) {
         if ($('#mobileapi_enable').is(":checked")) {
             $("#confirmMobileAPIDialog").modal("show");
@@ -234,7 +243,7 @@ define('MONTHS', 30 * 24 * 60 * 60);
 // schedule indexing if necessary
 if (Session::get('scheduleIndexing')) {
     $tool_content .= "<div class='alert alert-warning'>{$langIndexingNeeded} <a id='idxpbut' href='../search/idxpopup.php' onclick=\"return idxpopup('../search/idxpopup.php', 600, 500)\">{$langHere}.</a></div>";
-    
+
     $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -283,7 +292,7 @@ if (isset($_POST['submit'])) {
     }
     if (isset($_POST['default_language']) and
             isset($language_codes[$_POST['default_language']])) {
-        set_config('language', $_POST['default_language']);
+        set_config('default_language', $_POST['default_language']);
     }
 
     set_config('active_ui_languages', implode(' ', $active_lang_codes));
@@ -304,7 +313,7 @@ if (isset($_POST['submit'])) {
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
     set_config('email_announce', $_POST['email_announce']);
-    
+
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
         'dont_mail_unverified_mails' => true,
@@ -326,7 +335,7 @@ if (isset($_POST['submit'])) {
         'group_quota' => true,
         'video_quota' => true,
         'dropbox_quota' => true,
-        'max_glossary_terms' => true,        
+        'max_glossary_terms' => true,
         'case_insensitive_usernames' => true,
         'course_multidep' => true,
         'user_multidep' => true,
@@ -353,10 +362,25 @@ if (isset($_POST['submit'])) {
         'log_expire_interval' => true,
         'log_purge_interval' => true,
         'course_metadata' => true,
-        'opencourses_enable' => true);
+        'opencourses_enable' => true,
+        'mydocs_student_enable' => true,
+        'mydocs_teacher_enable' => true);
 
     register_posted_variables($config_vars, 'all', 'intval');
-    
+
+    if (isset($_POST['mydocs_student_quota'])) {
+        set_config('mydocs_student_quota', floatval($_POST['mydocs_student_quota']));
+    }
+    if (isset($_POST['mydocs_teacher_quota'])) {
+        set_config('mydocs_teacher_quota', floatval($_POST['mydocs_teacher_quota']));
+    }
+
+    if (!in_array($_POST['course_guest'], array('on', 'off', 'link'))) {
+        set_config('course_guest', 'off');
+    } else {
+        set_config('course_guest', $_POST['course_guest']);
+    }
+
     if ($GLOBALS['opencourses_enable'] == 1) {
         $GLOBALS['course_metadata'] = 1;
     }
@@ -412,7 +436,7 @@ else {
             'url' => "index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
-    
+
     if (function_exists('imagettfbbox')) {
         $cbox_display_captcha = get_config('display_captcha') ? 'checked' : '';
         $message_display_captcha = $disable_display_captcha = '';
@@ -434,37 +458,37 @@ else {
                         <div class='form-group'>
                            <label for='formurlServer' class='col-sm-2 control-label'>$langSiteUrl:</label>
                            <div class='col-sm-10'>
-                                <input class='FormData_InputText form-control' type='text' name='formurlServer' id='formurlServer' value='" . q($urlServer) . "'>
+                                <input class='form-control' type='text' name='formurlServer' id='formurlServer' value='" . q($urlServer) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formphpMyAdminURL' class='col-sm-2 control-label'>$langphpMyAdminURL:</label>
                            <div class='col-sm-10'>
-                                <input class='FormData_InputText form-control' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='" . q(get_config('phpMyAdminURL')) . "'>
+                                <input class='form-control' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='" . q(get_config('phpMyAdminURL')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formphpSysInfoURL' class='col-sm-2 control-label'>$langSystemInfoURL:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formphpSysInfoURL' id='formphpSysInfoURL' value='" . q(get_config('phpSysInfoURL')) . "'>
+                               <input class='form-control' type='text' name='formphpSysInfoURL' id='formphpSysInfoURL' value='" . q(get_config('phpSysInfoURL')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formemailAdministrator' class='col-sm-2 control-label'>$langAdminEmail:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formemailAdministrator' id='formemailAdministrator' value='" . q(get_config('email_sender')) . "'>
+                               <input class='form-control' type='text' name='formemailAdministrator' id='formemailAdministrator' value='" . q(get_config('email_sender')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formemailAdministrator' class='col-sm-2 control-label'>$langDefaultAdminName:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formadministratorName' id='formadministratorName' value='" . q(get_config('admin_name')) . "'>
+                               <input class='form-control' type='text' name='formadministratorName' id='formadministratorName' value='" . q(get_config('admin_name')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formsiteName' class='col-sm-2 control-label'>$langCampusName:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formsiteName' id='formsiteName' value='" . q(get_config('site_name')) . "'>
+                               <input class='form-control' type='text' name='formsiteName' id='formsiteName' value='" . q(get_config('site_name')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
@@ -476,34 +500,34 @@ else {
                         <div class='form-group'>
                            <label for='formtelephone' class='col-sm-2 control-label'>$langPhone:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formtelephone' id='formtelephone' value='" . q(get_config('phone')) . "'>
+                               <input class='form-control' type='text' name='formtelephone' id='formtelephone' value='" . q(get_config('phone')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formfax' class='col-sm-2 control-label'>$langFax</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formfax' id='formfax' value='" . q(get_config('fax')) . "'>
+                               <input class='form-control' type='text' name='formfax' id='formfax' value='" . q(get_config('fax')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formemailhelpdesk' class='col-sm-2 control-label'>$langHelpDeskEmail:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formemailhelpdesk' id='formemailhelpdesk' value='" . q(get_config('email_helpdesk')) . "'>
+                               <input class='form-control' type='text' name='formemailhelpdesk' id='formemailhelpdesk' value='" . q(get_config('email_helpdesk')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formInstitution' class='col-sm-2 control-label'>$langInstituteShortName:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formInstitution' id='formInstitution' value='" . $Institution . "'>
+                               <input class='form-control' type='text' name='formInstitution' id='formInstitution' value='" . $Institution . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formInstitutionUrl' class='col-sm-2 control-label'>$langInstituteName:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='" . $InstitutionUrl . "'>
+                               <input class='form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='" . $InstitutionUrl . "'>
                            </div>
                         </div>
-                    </fieldset>     
+                    </fieldset>
                 </div>
             </div>
             <div class='panel panel-default' id='two'>
@@ -529,16 +553,16 @@ else {
                            <div class='col-sm-9'>
                                 ". selection(array('0' => $langDisableEclassStudReg, '1' => $langReqRegUser, '2' => $langDisableEclassStudRegType), 'alt_auth_stud_reg', get_config('alt_auth_stud_reg'), "class='form-control' id='alt_auth_stud_reg'") ."
                            </div>
-                        </div> 
+                        </div>
                         <div class='form-group'>
                            <label for='eclass_prof_reg' class='col-sm-3 control-label'>$langProfAccount $langViaeClass:</label>
                            <div class='col-sm-9'>
                                 ". selection(
                                         array(
-                                            '0' => $langDisableEclassProfReg, 
+                                            '0' => $langDisableEclassProfReg,
                                             '1' => $langReqRegProf
-                                        ), 
-                                        'eclass_prof_reg', 
+                                        ),
+                                        'eclass_prof_reg',
                                         get_config('eclass_prof_reg'),
                                         "class='form-control' id='eclass_prof_reg'"
                                     ) ."
@@ -551,8 +575,8 @@ else {
                                         array(
                                                 '0' => $langDisableEclassProfReg,
                                                 '1' => $langReqRegProf
-                                            ), 
-                                        'alt_auth_prof_reg', 
+                                            ),
+                                        'alt_auth_prof_reg',
                                         get_config('alt_auth_prof_reg'),
                                         "class='form-control' id='alt_auth_prof_reg'"
                                     ) ."
@@ -563,7 +587,7 @@ else {
                            <div class='col-sm-9'>
                                 <input type='text' class='form-control' name='formdurationAccount' id='formdurationAccount' maxlength='3' value='" . intval(get_config('account_duration') / MONTHS) . "'>
                            </div>
-                        </div>                         
+                        </div>
                         <div class='form-group'>
                             <label class='col-sm-3 control-label'>$lang_display_captcha_label:</label>
                             <div class='checkbox col-sm-9'>
@@ -573,7 +597,18 @@ else {
                                 </label>$message_display_captcha
                             </div>
                         </div>
-                    </fieldset>    
+                        <div class='form-group'>
+                            <label class='col-sm-3 control-label'>$langGuestLoginLabel:</label>
+                            <div class='col-sm-9'>" .
+                                selection(array('off' => $m['deactivate'],
+                                                'on' => $m['activate'],
+                                                'link' => $langGuestLoginLinks),
+                                    'course_guest',
+                                    get_config('course_guest', 'on'),
+                                    "class='form-control'") . "
+                            </div>
+                        </div>
+                    </fieldset>
                 </div>
             </div>";
         $active_ui_languages = explode(' ', get_config('active_ui_languages'));
@@ -595,9 +630,9 @@ else {
                                 $loclangname
                             </label>
                         </div>";
-                            
+
             }
-        }   
+        }
 $tool_content .= "<div class='panel panel-default' id='three'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langEclassThemes</h2>
@@ -607,33 +642,33 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                         <div class='form-group'>
                            <label for='default_language' class='col-sm-3 control-label'>$langMainLang: </label>
                            <div class='col-sm-9'>" .
-                               selection($selectable_langs, 'default_language', get_config('language'),
+                               selection($selectable_langs, 'default_language', get_config('default_language'),
                                          "class='form-control' id='default_language'") .
                            "</div>
-                        </div> 
+                        </div>
                         <div class='form-group'>
                             <label class='col-sm-3 control-label'>$langSupportedLanguages:</label>
-                            <div class='col-sm-9'>            
+                            <div class='col-sm-9'>
                             " . implode(' ', $sel) . "
                             </div>
-                        </div>                        
+                        </div>
                         <div class='form-group'>
                            <label for='theme' class='col-sm-3 control-label'>$lang_login_form: </label>
                            <div class='col-sm-9'>
                                 <div class='checkbox'>
                                     <label>
-                                        <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form>    
+                                        <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form>
                                         $lang_dont_display_login_form
                                     </label>
-                                </div>                              
+                                </div>
                                 <div class='checkbox'>
                                     <label>
-                                        <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' $cbox_hide_login_link>    
+                                        <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' $cbox_hide_login_link>
                                         $lang_hide_login_link
                                     </label>
-                                </div>                              
+                                </div>
                            </div>
-                        </div>                        
+                        </div>
                     </fieldset>
                 </div>
             </div>";
@@ -651,7 +686,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                            <div class='col-sm-12'>
                                 <div class='checkbox'>
                                     <label>
-                                        <input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails>    
+                                        <input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails>
                                         $lang_dont_mail_unverified_mails
                                     </label>
                                 </div>
@@ -660,7 +695,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                         <input type='checkbox' name='email_from' value='1' $cbox_email_from>
                                         $lang_email_from
                                     </label>
-                                </div>                                
+                                </div>
                            </div>
                         </div>
                         <div class='form-group'>
@@ -722,7 +757,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                     </label>
                                 </div>
                            </div>
-                        </div>                        
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -751,7 +786,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                         <input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' $cbox_opencourses_enable>
                                         $lang_opencourses_enable
                                     </label>
-                                </div>                                  
+                                </div>
                             </div>
                         </div>
                     </fieldset>
@@ -774,6 +809,10 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $cbox_enable_indexing = get_config('enable_indexing') ? 'checked' : '';
     $cbox_enable_search = get_config('enable_search') ? 'checked' : '';
     $cbox_enable_common_docs = get_config('enable_common_docs') ? 'checked' : '';
+    $cbox_mydocs_student_enable = get_config('mydocs_student_enable') ? 'checked' : '';
+    $cbox_mydocs_teacher_enable = get_config('mydocs_teacher_enable') ? 'checked' : '';
+    $mydocs_student_quota = floatval(get_config('mydocs_student_quota'));
+    $mydocs_teacher_quota = floatval(get_config('mydocs_teacher_quota'));
     $cbox_enable_social_sharing_links = get_config('enable_social_sharing_links') ? 'checked' : '';
     $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
     $id_enable_mobileapi = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
@@ -804,7 +843,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                         <input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required>
                                         $lang_email_verification_required
                                     </label>
-                                </div>  
+                                </div>
                                 <div class='checkbox'>
                                     <label>
                                         <input type='checkbox' name='am_required' value='1' $cbox_am_required>
@@ -828,7 +867,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                         <input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student>
                                         $lang_dropbox_allow_student_to_student
                                     </label>
-                                </div>  
+                                </div>
                                 <div class='checkbox'>
                                     <label>
                                         <input type='checkbox' name='dropbox_allow_personal_messages' value='1' $cbox_dropbox_allow_personal_messages>
@@ -858,38 +897,32 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                         <input id='personal_blog_sharing_enable' type='checkbox' name='personal_blog_sharing' value='1' $cbox_personal_blog_sharing>
                                         $lang_personal_blog_sharing
                                     </label>
-                                </div>  
+                                </div>
                                 <div class='checkbox'>
                                     <label>
                                         <input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change>
                                         $lang_block_username_change
                                     </label>
-                                </div>                                  
+                                </div>
                                 <div class='checkbox'>
                                     <label>
                                         <input $id_enable_mobileapi type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi>
                                         $lang_enable_mobileapi
                                     </label>
-                                </div>      
-                                <div class='checkbox'>
-                                    <label>
-                                        <input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs>
-                                        $langEnableCommonDocs
-                                    </label>
-                                </div>      
+                                </div>
                                 <div class='checkbox'>
                                     <label>
                                         <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' $cbox_enable_social_sharing_links>
                                         $langEnableSocialSharingLiks
                                     </label>
-                                </div>                                      
-                           </div>                           
+                                </div>
+                           </div>
                         </div>
                         <hr><br>
                         <div class='form-group'>
                            <label for='min_password_len' class='col-sm-4 control-label'>$langMinPasswordLen: </label>
                            <div class='col-sm-8'>
-                                <input type='text' class='form-control' name='min_password_len' id='min_password_len' value='" . intval(get_config('min_password_len')) . "'>                            
+                                <input type='text' class='form-control' name='min_password_len' id='min_password_len' value='" . intval(get_config('min_password_len')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
@@ -903,44 +936,91 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                            <div class='col-sm-8'>
                                 <input type='text' class='form-control' name='actions_expire_interval' value='" . get_config('actions_expire_interval') . "'>
                            </div>
-                        </div>                         
+                        </div>
                     </fieldset>
                 </div>
             </div>
+
             <div class='panel panel-default' id='eight'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langDocumentSettings</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <label class='col-sm-4 control-label'>$langEnableMyDocs:</label>
+                           <div class='col-sm-8'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='mydocs_teacher_enable' id='mydocs_teacher_enable_id' value='1' $cbox_mydocs_teacher_enable>
+                                        $langTeachers
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='mydocs_student_enable' id='mydocs_student_enable_id' value='1' $cbox_mydocs_student_enable>
+                                        $langStudents
+                                    </label>
+                                </div>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label class='col-sm-4 control-label'>$langMyDocsQuota (MB):</label>
+                           <div class='col-sm-8'>
+                                <label>
+                                    <input type='text' name='mydocs_teacher_quota' id='mydocs_teacher_quota_id' value='$mydocs_teacher_quota'>
+                                    $langTeachers
+                                </label>
+                                <label>
+                                    <input type='text' name='mydocs_student_quota' id='mydocs_student_quota_id' value='$mydocs_student_quota'>
+                                    $langStudents
+                                </label>
+                           </div>
+                        </div>
+                        <div class='checkbox'>
+                            <label>
+                                <input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs>
+                                $langEnableCommonDocs
+                            </label>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class='panel panel-default' id='nine'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langDefaultQuota</h2>
                 </div>
                 <div class='panel-body'>
                     <fieldset>
                         <div class='form-group'>
-                           <label for='doc_quota' class='col-sm-4 control-label'>$langDocQuota (Mb):</label>
+                           <label for='doc_quota' class='col-sm-4 control-label'>$langDocQuota (MB):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='doc_quota' id='doc_quota' value='" . get_config('doc_quota') . "'>
+                                <input class='form-control' type='text' name='doc_quota' id='doc_quota' value='" . get_config('doc_quota') . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='video_quota' class='col-sm-4 control-label'>$langVideoQuota (Mb):</label>
+                           <label for='video_quota' class='col-sm-4 control-label'>$langVideoQuota (MB):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='video_quota' id='video_quota' value='" . get_config('video_quota') . "'>
+                                <input class='form-control' type='text' name='video_quota' id='video_quota' value='" . get_config('video_quota') . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='group_quota' class='col-sm-4 control-label'>$langGroupQuota (Mb):</label>
+                           <label for='group_quota' class='col-sm-4 control-label'>$langGroupQuota (MB):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='group_quota' id='group_quota' value='" . get_config('group_quota') . "'>
+                                <input class='form-control' type='text' name='group_quota' id='group_quota' value='" . get_config('group_quota') . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='dropbox_quota' class='col-sm-4 control-label'>$langDropboxQuota (Mb):</label>
+                           <label for='dropbox_quota' class='col-sm-4 control-label'>$langDropboxQuota (MB):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='dropbox_quota' id='dropbox_quota' value='" . get_config('dropbox_quota') . "'>
+                                <input class='form-control' type='text' name='dropbox_quota' id='dropbox_quota' value='" . get_config('dropbox_quota') . "'>
                            </div>
-                        </div>                         
+                        </div>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='nine'>
+            <div class='panel panel-default' id='ten'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langUploadWhitelist</h2>
                 </div>
@@ -957,7 +1037,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                            <div class='col-sm-8'>
                                 <textarea class='form-control' rows='6' name='teacher_upload_whitelist' id='teacher_upload_whitelist'>" . get_config('teacher_upload_whitelist') . "</textarea>
                            </div>
-                        </div>                         
+                        </div>
                     </fieldset>
                 </div>
             </div>";
@@ -965,9 +1045,9 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $cbox_disable_log_actions = get_config('disable_log_actions') ? 'checked' : '';
     $cbox_disable_log_course_actions = get_config('disable_log_course_actions') ? 'checked' : '';
     $cbox_disable_log_system_actions = get_config('disable_log_system_actions') ? 'checked' : '';
-    
-$tool_content .= "    
-            <div class='panel panel-default' id='ten'>
+
+$tool_content .= "
+            <div class='panel panel-default' id='eleven'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langLogActions</h2>
                 </div>
@@ -992,7 +1072,7 @@ $tool_content .= "
                                         <input type='checkbox' name='disable_log_system_actions' value='1' $cbox_disable_log_system_actions>
                                         $lang_disable_log_system_actions
                                     </label>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                         <hr><br>
@@ -1007,11 +1087,11 @@ $tool_content .= "
                            <div class='col-sm-8'>
                                 <input class='form-control' type='text' name='log_purge_interval' id='log_purge_interval' value='" . get_config('log_purge_interval') . "'>
                            </div>
-                        </div>                        
+                        </div>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='eleven'>
+            <div class='panel panel-default' id='twelve'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langLoginFailCheck</h2>
                 </div>
@@ -1030,26 +1110,26 @@ $tool_content .= "
                         <div class='form-group' id='login_fail_threshold'>
                            <label for='login_fail_threshold' class='col-sm-4 control-label'>$langLoginFailThreshold:</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='login_fail_threshold' id='login_fail_threshold' value='" . get_config('login_fail_threshold') . "'>
-                           </div>                          
+                                <input class='form-control' type='text' name='login_fail_threshold' id='login_fail_threshold' value='" . get_config('login_fail_threshold') . "'>
+                           </div>
                         </div>
                         <div class='form-group' id='login_fail_deny_interval'>
                            <label for='login_fail_deny_interval' class='col-sm-4 control-label'>$langLoginFailDenyInterval ($langMinute):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='login_fail_deny_interval' id='login_fail_deny_interval' value='" . get_config('login_fail_deny_interval') . "'>
-                           </div>                          
+                                <input class='form-control' type='text' name='login_fail_deny_interval' id='login_fail_deny_interval' value='" . get_config('login_fail_deny_interval') . "'>
+                           </div>
                         </div>
                         <div class='form-group' id='login_fail_forgive_interval'>
                            <label for='login_fail_forgive_interval' class='col-sm-4 control-label'>$langLoginFailForgiveInterval ($langHours):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='login_fail_forgive_interval' id='login_fail_forgive_interval' value='" . get_config('login_fail_forgive_interval') . "'>
-                           </div>                          
-                        </div>                         
+                                <input class='form-control' type='text' name='login_fail_forgive_interval' id='login_fail_forgive_interval' value='" . get_config('login_fail_forgive_interval') . "'>
+                           </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
             <div class='form-group'>
-                <div class='col-sm-12'>            
+                <div class='col-sm-12'>
                     <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
                     <a class='btn btn-default' href='index.php'>$langCancel</a>
                 </div>
@@ -1079,10 +1159,11 @@ $tool_content .= "
                 <li><a href='#five'>$langCourseSettings</a></li>
                 <li><a href='#six'>$langMetaCommentary</a></li>
                 <li><a href='#seven'>$langOtherOptions</a></li>
-                <li><a href='#eight'>$langDefaultQuota</a></li>
-                <li><a href='#nine'>$langUploadWhitelist</a></li>
-                <li><a href='#ten'>$langLogActions</a></li>
-                <li><a href='#eleven'>$langLoginFailCheck</a></li>     
+                <li><a href='#eight'>$langDocumentSettings</a></li>
+                <li><a href='#nine'>$langDefaultQuota</a></li>
+                <li><a href='#ten'>$langUploadWhitelist</a></li>
+                <li><a href='#eleven'>$langLogActions</a></li>
+                <li><a href='#twelve'>$langLoginFailCheck</a></li>
             </ul>
         </div>
     </div>";
@@ -1090,11 +1171,6 @@ $tool_content .= "
     $tool_content .= modalConfirmation('confirmIndexDialog', 'confirmIndexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmIndexCancel', 'confirmIndexOk');
     $tool_content .= modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', $langConfirmEnableMobileAPITitle, $langConfirmEnableMobileAPI, 'confirmMobileAPICancel', 'confirmMobileAPIOk');
 
-    // After restored values have been inserted into form then bring back
-    // values from original config.php, so the rest of the page can be displayed correctly
-    if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
-        @include('config/config.php');
-    }
 }
 
 draw($tool_content, 3, null, $head_content);

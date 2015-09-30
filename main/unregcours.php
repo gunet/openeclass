@@ -34,23 +34,29 @@ if (!isset($_GET['cid'])) {
     $cid = $_SESSION['cid_tmp'];
 }
 
-if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
+if (!isset($_POST['doit'])) {
     $tool_content .= "
-          <table width='100%'>
-          <tbody>
-          <tr>
-            <td class='alert alert-danger' height='60' colspan='2'>
-              <p>$langConfirmUnregCours:</p><p> <em>" . q(course_id_to_title($cid)) . "</em>;&nbsp;</p>
-              <ul class='listBullet'>
-              <li>$langYes:
-              <a href='$_SERVER[SCRIPT_NAME]?u=$_SESSION[uid]&amp;cid=$cid&amp;doit=yes' class=mainpage>$langUnregCourse</a>
-              </li>
-              <li>$langNo: <a href='../index.php' class=mainpage>$langBack</a>
-              </li></ul>
-            </td>
-          </tr>
-          </tbody>
-          </table>";
+      <div class='form-wrapper'>
+        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?u=$_SESSION[uid]&amp;cid=$cid'>
+          <div class='form-group'>
+            <div class='col-sm-12'>
+              $langConfirmUnregCours: <b>" . q(course_id_to_title($cid)) . "</b>
+            </div>
+          </div>
+          <div class='form-group'>
+            <label class='col-sm-2'>$langYes:</label>
+            <div class='col-sm-10'>
+              <button class='btn btn-danger' name='doit'><i class='fa fa-sign-out'></i> $langUnregCourse</button>
+            </div>
+          </div>
+          <div class='form-group'>
+            <label class='col-sm-2'>$langNo:</label>
+            <div class='col-sm-10'>
+              <a href='{$urlAppend}main/portfolio.php' class='btn btn-default'><i class='fa fa-reply'></i> $langCancel</a>
+            </div>
+          </div>
+        </form>
+      </div>";
 } else {
     if (isset($_SESSION['uid']) and $_GET['u'] == $_SESSION['uid']) {
         $q = Database::get()->query("DELETE from course_user
@@ -64,7 +70,8 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
             unset($_SESSION['dbname']);
             unset($_SESSION['cid_tmp']);
             unset($_SESSION['courses'][$code]);
-            $tool_content .= "<div class='alert alert-success'>$langCoursDelSuccess</div>";
+            Session::Messages($langCoursDelSuccess, 'alert-success');
+            redirect_to_home_page('main/portfolio.php');
         } else {
             $tool_content .= "<div class='alert alert-danger'>$langCoursError</div>";
         }

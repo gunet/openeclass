@@ -28,25 +28,25 @@ $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 
+$toolName = $langContactProf;
+
 if (isset($_REQUEST['course_id'])) {    
     $course_id = $_REQUEST['course_id'];
 }
-
-$title = course_id_to_title($course_id);
-$pageName = $langContactProf;
 
 $userdata = Database::get()->querySingle("SELECT givenname, surname, email FROM user WHERE id = ?d", $uid);
 
 if (empty($userdata->email)) {
     if ($uid) {
-        $tool_content .= sprintf('<p>' . $langEmailEmpty . '</p>', $urlServer . 'main/profile/profile.php');
+        $tool_content .= sprintf('<div class = "alert alert-warning">' . $langEmailEmpty . '</div>', $urlServer . 'main/profile/profile.php');
     } else {
         $tool_content .= sprintf('<p>' . $langNonUserContact . '</p>', $urlServer);
     }
 } elseif (isset($_POST['content'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $content = trim($_POST['content']);
     if (empty($content)) {
-        $tool_content .= "<p>$langEmptyMessage</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langEmptyMessage</div>";
         $tool_content .= form();
     } else {
         $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->email);
@@ -63,43 +63,38 @@ draw($tool_content, 1);
  * @global type $course_id
  * @global type $langInfoAboutRegistration
  * @global type $langContactMessage
- * @global type $langIntroMessage
+ * @global type $langMessage
  * @global type $langSendMessage
  * @global type $course_code
  * @return type
  */
 function form() {
-    global $course_id, $langInfoAboutRegistration, $langIntroMessage, $langSendMessage, $course_code;
-    
-    $message = $langInfoAboutRegistration;
-    $hidden = "<input type='hidden' name='course_id' value='$course_id'>";
-     
-    $ret = "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-	<fieldset>
-	<legend>$langIntroMessage</legend>
-	$hidden
-	<table class='tbl' width='100%'>
-	<tbody>
-	<tr>
-	  <td class='smaller'>$message</td>
-	</tr>
-	<tr>
-	  <td><textarea class=auth_input name='content' rows='10' cols='80'></textarea></td>
-	</tr>
-	<tr>
-	  <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langSendMessage' /></td>
-	</tr>
-	</tbody>
-	</table>
-	</fieldset>
-	</form>";
+    global $course_id, $langInfoAboutRegistration, $langMessage, $langSendMessage, $course_code;
+           
+    $ret = "<div class='alert alert-info'>$langInfoAboutRegistration</div>";
+    $ret .= "<div class='form-wrapper'>";
+    $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+	<fieldset>        
+        <div class='col-sm-12'><label>$langMessage</label></div>
+        <div class='form-group'>
+            <div class='col-sm-12'>
+              <textarea name='content' rows='10' cols='80'></textarea>
+            </div>
+	</div>
+        <div class='form-group'>
+            <div class='col-sm-offset-1 col-sm-11'>
+                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSendMessage) . "' />
+            </div>
+        </div>		
+        ". generate_csrf_token_form_field() ."
+        <input type='hidden' name='course_id' value='$course_id'>
+	</fieldset></form></div>";
 
     return $ret;
 }
 
 /**
- * @brief send emails to course prof
- * @global type $themeimg
+ * @brief send emails to course prof 
  * @global type $langSendingMessage
  * @global type $langHeaderMessage
  * @global type $langContactIntro
@@ -110,28 +105,56 @@ function form() {
  * @return type
  */
 function email_profs($course_id, $content, $from_name, $from_address) {
-    global $themeimg, $langSendingMessage, $langHeaderMessage, $langContactIntro;
+    global $langSendingMessage, $langHeaderMessage, $langContactIntro, $langNote, $langMessage, $langContactIntroFooter;
 
-    $q = Database::get()->querySingle("SELECT public_code FROM course WHERE id = ?d", $course_id);
-    $public_code = $q->public_code;
-
-    $ret = "<p>$langSendingMessage</p><br />";
-
+    $title = course_id_to_title($course_id);
+    $ret = "<div class='alert alert-info'>$langSendingMessage $title</div>";
+    $public_code = course_id_to_public_code($course_id);
     $profs = Database::get()->queryArray("SELECT user.id AS prof_uid, user.email AS email,
-                                  user.surname, user.givenname
-                               FROM course_user JOIN user ON user.id = course_user.user_id
-                               WHERE course_id = ?d AND course_user.status = " . USER_TEACHER . "", $course_id);
+                              user.surname, user.givenname
+                           FROM course_user JOIN user ON user.id = course_user.user_id
+                           WHERE course_id = ?d AND course_user.status = " . USER_TEACHER . "", $course_id);
 
-    $message = sprintf($langContactIntro, $from_name, $from_address, $content);
-    $subject = "$langHeaderMessage ($public_code - $GLOBALS[title])";    
+    $subject = "$langHeaderMessage ($public_code - $title)";
+
+
+    $mailHeader = "
+    <!-- Header Section -->
+	<div id='mail-header'>
+		<div>
+			<br>
+			<div id='header-title'>".q(sprintf($langContactIntro, $from_name, $from_address))."</div>
+		</div>
+	</div>";
+    
+    $mailMain = "
+    <!-- Body Section -->
+	<div id='mail-body'>
+		<br>
+		<div><b>$langMessage:</b></div>
+		<div id='mail-body-inner'>
+			$content
+        </div>
+	</div>";
+    
+    $mailFooter = "
+    <!-- Footer Section -->
+	<div id='mail-footer'>
+		<br>
+		<div id='alert'><small><b class='notice'>$langNote:</b> $langContactIntroFooter.</small></div>
+	</div>";
+
+    $message = $mailHeader.$mailMain.$mailFooter;
+    $plainMessage = html2text($message);
+
     foreach ($profs as $prof) {
         if (!get_user_email_notification_from_courses($prof->prof_uid) or (!get_user_email_notification($prof->prof_uid, $course_id))) {            
             continue;
         } else {
             $to_name = $prof->givenname . ' ' . $prof->surname;
-            $ret .= "<p><img src='$themeimg/teacher.png'> $to_name</p><br>\n";
-            if (!send_mail($from_name, $from_address, $to_name, $prof->email, $subject, $message, $GLOBALS['charset'])) {
-                $ret .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>\n";               
+            $ret .= "<div class='alert alert-success'>" . icon('fa-university') . "&nbsp;" . q($to_name) . "</div>";
+            if (!send_mail_multipart($from_name, $from_address, $to_name, $prof->email, $subject, $plainMessage, $message, $GLOBALS['charset'])) {
+                $ret .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>";
             }
         }
     }

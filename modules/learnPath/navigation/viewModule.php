@@ -58,12 +58,12 @@ $clarolineRepositoryWeb = $urlServer . "courses/" . $course_code;
 // lib of this tool
 require_once 'include/lib/learnPathLib.inc.php';
 
-$unit_parm = isset($_SESSION['unit']) ? ('&unit=' . $_SESSION['unit']) : '';
+$unitParam = isset($_GET['unit']) ? ('&unit=' . intval($_GET['unit'])) : '';
 
 if (isset($_GET['go']) and strlen($_GET['go']) > 0) {
-    $redirect = "../" . $_GET['go'] . ".php?course=$course_code" . $unit_parm;
+    $redirect = "../" . js_escape($_GET['go']) . ".php?course=$course_code" . $unitParam;
 } else {
-    $redirect = "startModule.php?course=$course_code&viewModule_id=" . $_GET['viewModule_id'];
+    $redirect = "startModule.php?course=$course_code&viewModule_id=" . $_GET['viewModule_id'] . $unitParam;
 }
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>

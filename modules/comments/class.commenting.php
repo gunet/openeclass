@@ -18,6 +18,9 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
+require_once 'include/log.php';
+require_once 'modules/abuse_report/abuse_report.php';
+
 /**
  * This class represents a commenting system
 */
@@ -80,18 +83,23 @@ Class Commenting {
         $commentsNum = $this->getCommentsNum();
 
         if (!$always_open) {
-            $comments_title = "<a id='comments_title' href='javascript:void(0)' onclick='showComments(\"$this->rid\")'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</a><br>";
-            $comments_display = "style='display:none'";
+            $comments_title = "<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#commentArea-$this->rid'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</button>";
+            $out = "$comments_title
+                    <div class='modal fade' id='commentArea-$this->rid' role='dialog'>
+                      <div class='modal-dialog modal-lg'>
+                        <div class='modal-content' style='padding:1%'>
+                          <div class='modal-header'>
+                            <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                              <h4 class='modal-title'>$langComments</h4>
+                          </div>
+                          <div class='modal-body' id='comments-$this->rid'>";
         } else {
             $comments_title = "<h3 id='comments_title'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h3><br>";
-            $comments_display = "";            
+            $out = "<div class='commenting'>
+                        $comments_title
+                    <div class='commentArea' id='commentArea-$this->rid'>
+                    <div id='comments-$this->rid'>";
         }
-        //the array is declared in commenting.js
-        $out = "<script type='text/javascript'>showCommentArea[$this->rid] = false;</script>
-                <div class='commenting'>
-                    $comments_title
-                <div class='commentArea' id='commentArea-$this->rid' $comments_display>
-                <div id='comments-$this->rid'>";
         
         if ($commentsNum != 0) {
             //retrieve comments
@@ -115,9 +123,20 @@ Class Commenting {
                         $post_actions .= icon('fa-edit', $langModify).'</a> ';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                         $post_actions .= icon('fa-times', $langDelete).'</a>';
+                
+                        if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
+                            $head_content .= abuse_report_add_js();
+                            $post_actions .= abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)); 
+                        }
+                
                         $post_actions .='</div>';
                     } else {
-                        $post_actions = '';
+                        if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
+                            $head_content .= abuse_report_add_js();
+                            $post_actions = '<div class="pull-right">'.abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)).'</div>';
+                        } else {
+                            $post_actions = '';
+                        }
                     }
                 }           
                 $out .= "<div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
@@ -155,6 +174,13 @@ Class Commenting {
             }
         }
         
+        if (!$always_open) {
+            $out .= '<div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                     </div>';
+            $out .= '</div>';
+        }
+        
         $out .= '</div>';
         $out .= '</div>';
         
@@ -190,6 +216,25 @@ Class Commenting {
      * @return boolean
      */
     public static function deleteComments($rtype, $rid) {
+        //delete abuse reports for these comments and log these actions before
+        $comms = Database::get()->queryArray("SELECT id, content FROM `comments` WHERE `rtype`=?s AND `rid`=?d", $rtype, $rid);
+        foreach ($comms as $c) {
+            $reps = Database::get()->queryArray("SELECT * FROM abuse_report WHERE rtype = ?s AND rid = ?d", 'comment', $c->id);
+            foreach ($reps as $r) {
+                Log::record($r->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+                    array('id' => $r->id,
+                          'user_id' => $r->user_id,
+                          'reason' => $r->reason,
+                          'message' => $r->message,
+                          'rtype' => 'comment',
+                          'rid' => $c->id,
+                          'rcontent' => $c->comment,
+                          'status' => $r->status
+                    ));
+            }
+            Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $c->id, 'comment');
+        }
+        
         Database::get()->query("DELETE FROM `comments` WHERE `rtype`=?s AND `rid`=?d", $rtype, $rid);
     }
     

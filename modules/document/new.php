@@ -23,17 +23,26 @@
  * @brief Create / edit HTML document
  */
 
-if (!defined('COMMON_DOCUMENTS')) {
-    $require_current_course = true;
-    $require_login = true;
-}
+$require_admin = defined('COMMON_DOCUMENTS');
+$require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
+$require_login = true;
 
 require_once "../../include/baseTheme.php";
 require_once "modules/document/doc_init.php";
 
+if (defined('COMMON_DOCUMENTS')) {
+    $menuTypeID = 3;
+    $toolName = $langCommonDocs;
+} elseif (defined('MY_DOCUMENTS')) {
+    $menuTypeID = 1;
+    $toolName = $langMyDocs;
+} else {
+    $menuTypeID = 2;
+    $toolName = $langDoc;
+}
+
 load_js('tools.js');
 
-$toolName = $langDoc;
 $pageName = $langCreateDoc;
 
 $uploadPath = $editPath = false;
@@ -41,7 +50,7 @@ if (isset($_GET['uploadPath'])) {
     $uploadPath = q($_GET['uploadPath']);
 } elseif (isset($_GET['editPath'])) {
     $editPath = q($_GET['editPath']);
-    $uploadPath = dirname($editPath);
+    $uploadPath = my_dirname($editPath);
 }
 
 if (defined('EBOOK_DOCUMENTS')) {
@@ -51,7 +60,7 @@ if (defined('EBOOK_DOCUMENTS')) {
 $backUrl = documentBackLink($uploadPath);
 
 if ($can_upload) {
-    $navigation[] = array('url' => $backUrl, 'name' => $pageName);
+    $navigation[] = array('url' => $backUrl, 'name' => $toolName);
     if ($editPath) {
         $pageName = $langEditDoc;
         $info = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $editPath);
@@ -72,7 +81,7 @@ if ($can_upload) {
         $fileContent = Session::has('file_content') ? Session::get('file_content') : '';
         $htmlPath = "<input type='hidden' name='uploadPath' value='$uploadPath'>";
     }
-    if(isset($_GET['ebook_id'])){
+    if (isset($_GET['ebook_id'])){
         $sections = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                            WHERE ebook_id = ?d
                            ORDER BY CONVERT(public_id, UNSIGNED), public_id", $_GET['ebook_id']);
@@ -109,7 +118,7 @@ if ($can_upload) {
     $action = defined('COMMON_DOCUMENTS')? 'commondocs': 'document';
     $tool_content .= action_bar(array(
                                 array('title' => $langBack,
-                                      'url' => '#',
+                                      'url' => $backUrl,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'class' => 'back_btn')
@@ -136,20 +145,24 @@ if ($can_upload) {
       </div>
 	
 	<div class='form-group'>
-        <div class='col-xs-offset-2 col-xs-10'>
-          <button type='submit' value='" . $langSubmit . "' class='btn btn-primary'>
-            $langSave
-          </button>
-        </div>
+        <div class='col-xs-offset-2 col-xs-10'>".
+            form_buttons(array(
+                array(
+                    'text' => $langSave,
+                    'value'=> $langSubmit
+                ),
+                array(
+                    'href' => $backUrl,
+                )
+            ))
+            ."</div>
       </div>
 </form></div>";
 } else {
 	$tool_content .= "<div class='alert alert-danger'>$langNotAllowed</div>";
 }
 
-draw($tool_content,
-    defined('COMMON_DOCUMENTS')? 3: 2,
-    null, $head_content);
+draw($tool_content, $menuTypeID, null, $head_content);
 
 
 function getHtmlBody($path) {

@@ -28,6 +28,14 @@ class OneDriveApp extends OAuthDriveApp {
         return "OneDrive";
     }
 
+    public function getShortDescription() {
+        return $GLOBALS['langOneDriveShortDescription'];
+    }
+
+    public function getLongDescription() {
+        return $GLOBALS['langOneDriveLongDescription'];
+    }
+
     protected function getURLDefaultValue() {
         return $this->getBaseURL() . "modules/drives/plugins/onedrive_callback.php";
     }

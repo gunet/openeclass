@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 
@@ -68,7 +68,7 @@ require_once 'include/lib/references.class.php';
         }
         return Database::get()->querySingle("SELECT count(*) events_number FROM agenda WHERE course_id = ?d", $cid);
     }
-    
+
     /**
      * Get calendar events for a given userincluding personal and course events
      * @param string $scope month|week|day the calendar selected view
@@ -109,14 +109,14 @@ require_once 'include/lib/references.class.php';
         if(!is_null($enddate)){
            $q_args_templ[] = $enddate;
         }
-        get_calendar_settings();       
-        
+        get_calendar_settings();
+
         //agenda
         if(!empty($q)){
             $q .= " UNION ";
         }
         $dc = str_replace('start','ag.start',$datecond);
-        $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + ag.duration, '%Y-%m-%d %H:%s') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
+        $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + ag.duration, '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
                 . "FROM agenda ag "
                 . "WHERE cg.course_id =?d "
                 . $dc;
@@ -128,7 +128,7 @@ require_once 'include/lib/references.class.php';
                 $q .= " UNION ";
             }
             $dc = str_replace('start','bbb.start_date',$datecond);
-            $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + '00:00', '%Y-%m-%d %H:%s') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
+            $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + '00:00', '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
                     . "FROM bbb_session bbb  "
                     . "WHERE bbb.course_id =?d "
                     . $dc;
@@ -138,7 +138,7 @@ require_once 'include/lib/references.class.php';
                 $q .= " UNION ";
             }
             $dc = str_replace('start','ass.deadline',$datecond);
-            $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+            $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + '00:00', '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                     . "FROM assignment ass  "
                     . "WHERE ass.course_id =?d "
                     . $dc;
@@ -149,7 +149,7 @@ require_once 'include/lib/references.class.php';
                 $q .= " UNION ";
             }
             $dc = str_replace('start','ex.end_date',$datecond);
-            $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
+            $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
                     . "FROM exercise ex "
                     . "WHERE ex.course_id =?d "
                     . $dc;
@@ -159,7 +159,7 @@ require_once 'include/lib/references.class.php';
         {
             return null;
         }
-        $q .= " ORDER BY start, event_type";        
+        $q .= " ORDER BY start, event_type";
         return Database::get()->queryArray($q, $q_args);
     }
 
@@ -194,10 +194,13 @@ require_once 'include/lib/references.class.php';
             $enddate = $recursion['end'];
             $d1 = DateTime::createFromFormat('d-m-Y', $enddate);
             if(!($d1 && $d1->format('d-m-Y') == $enddate)){
-               return array('success'=>false, 'message'=>$langNotValidInput); 
+               return array('success'=>false, 'message'=>$langNotValidInput);
             } else {
                 $enddate = $d1->format('Y-m-d H:i');
             }
+        }
+        if (!preg_match('/[0-9]+(:[0-9]+){0,2}/', $duration)) {
+            $duration = '0:00';
         }
         if($is_editor || $is_admin){
             $eventid = Database::get()->query("INSERT INTO agenda "
@@ -210,7 +213,7 @@ require_once 'include/lib/references.class.php';
                 $eventids[] = $eventid;
             }
             $txt_content = ellipsize(canonicalize_whitespace(strip_tags($content)), 50, '+');
-            
+
             /* Additional events generated by recursion */
             if(isset($eventid) && !is_null($eventid) && !empty($recursion)){
                 $sourceevent = $eventid;
@@ -264,23 +267,22 @@ require_once 'include/lib/references.class.php';
      */
     function update_event($eventid, $title, $start, $duration, $content, $recursion, $recursivelly = false){
         global $uid, $langNotValidInput, $course_id;
-        
-        if($recursivelly && !is_null($recursion)){
-            $oldrec = get_event_recursion($eventid, $course_id);
-            $p = "P".$recursion['repeat'].$recursion['unit'];
-            $e = DateTime::createFromFormat('d-m-Y', $recursion['end'])->format('Y-m-d');
-            if($oldrec->recursion_period != $p || $oldrec->recursion_end != $e){
-                delete_recursive_event($eventid);
-                return add_event($title, $content, $start, $duration, $recursion);
-            }
+
+        if (!preg_match('/[0-9]+(:[0-9]+){0,2}/', $duration)) {
+            $duration = '0:00';
         }
-        
+
+        if($recursivelly && !is_null($recursion)){
+            delete_recursive_event($eventid);
+            return add_event($title, $content, $start, $duration, $recursion);
+        }
+
         if(!is_null($recursion) && !is_recursive($eventid))
         {
             delete_event($eventid);
             return add_event($title, $content, $start, $duration, $recursion);
         }
-            
+
         $d1 = DateTime::createFromFormat('d-m-Y H:i', $start);
         $d2 = DateTime::createFromFormat('d-m-Y H:i:s', $start);
         $title = trim($title);
@@ -290,7 +292,7 @@ require_once 'include/lib/references.class.php';
         } else {
             $start = $d1->format('Y-m-d H:i');
         }
-        
+
         $where_clause = ($recursivelly)? "WHERE source_event_id = ?d AND course_id = ?d":"WHERE id = ?d AND course_id = ?d";
         $startdatetimeformatted = ($recursivelly)? $d1->format('H:i'):$d1->format('Y-m-d H:i');
         $start_date_update_clause = ($recursivelly)? "start = CONCAT(date_format(start, '%Y-%m-%d '),?t), ":"start = ?t, ";
@@ -300,7 +302,7 @@ require_once 'include/lib/references.class.php';
             . "duration = ?t, "
             . "content = ?s "
             . $where_clause,
-            $title, $startdatetimeformatted, $duration, purify($content), $eventid, $course_id);    
+            $title, $startdatetimeformatted, $duration, purify($content), $eventid, $course_id);
 
         Log::record($course_id, MODULE_ID_AGENDA, LOG_MODIFY, array('user_id' => $uid, 'id' => $eventid,
         'title' => $title,
@@ -308,7 +310,7 @@ require_once 'include/lib/references.class.php';
         'content' => ellipsize_html(canonicalize_whitespace(strip_tags($content)), 50, '+')));
         return array('success'=>true, 'message'=>'', 'event'=>$eventid);
     }
-    
+
     /**
      * Update existing event and logs the action
      * @param int $eventid id in table personal_calendar
@@ -325,7 +327,7 @@ require_once 'include/lib/references.class.php';
             return array('success'=>false, 'message'=>$langNotValidInput);
         }
     }
-   
+
     /**
      * Deletes an existing event and logs the action
      * @param int $noteid id in table note
@@ -338,7 +340,7 @@ require_once 'include/lib/references.class.php';
             $where_clause = ($recursivelly)? " WHERE source_event_id = ?d":" WHERE id = ?d";
             $d = Database::get()->query("DELETE FROM agenda ".$where_clause, $eventid);
             if($d){
-                Log::record($course_id, MODULE_ID_AGENDA, LOG_DELETE, array('user_id' => $uid, 
+                Log::record($course_id, MODULE_ID_AGENDA, LOG_DELETE, array('user_id' => $uid,
                     'id' => $eventid,
                     'title' => $rec_event->title,
                     'content' => $content,
@@ -349,9 +351,9 @@ require_once 'include/lib/references.class.php';
             return array('success'=>true,'message'=>$langNotAllowed);
         }
     }
-    
+
     function delete_recursive_event($eventid){
-        global $langNotValidInput;        
+        global $langNotValidInput;
         $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM agenda WHERE id=?d',$eventid);
         if($rec_eventid){
             return delete_event($rec_eventid, true);
@@ -371,14 +373,14 @@ require_once 'include/lib/references.class.php';
                 Log::record($course_id, MODULE_ID_AGENDA, LOG_DELETE, array('user_id' => $uid, 'course_id' => $course_id, 'id' => 'all'));
                 return array('success'=>true,'message'=>'');
             } else {
-               return array('success'=>false,'message'=>'Database error'); 
+               return array('success'=>false,'message'=>'Database error');
             }
         } else {
             return array('success'=>true,'message'=>$langNotAllowed);
         }
     }
 
-    
+
     /**************************************************************************/
     /*
      * Set of functions to be called from modules other than calendar
@@ -409,7 +411,7 @@ require_once 'include/lib/references.class.php';
         }
     }
 
-     
+
    /**
       * A function to generate event block in month calendar
       * @param object $event event to format
@@ -447,21 +449,27 @@ require_once 'include/lib/references.class.php';
        $ical .= "END:VCALENDAR".PHP_EOL;
        return $ical;
    }
-   
+
    function bootstrap_events($from, $to){
        global $urlServer, $uid, $langDay_of_weekNames, $langMonthNames, $langToday, $course_id;
-       
+
        $event_type_url = array(
             'assignment' => 'modules/work/index.php?id=thisid&course=thiscourse',
             'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
             'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
             'teleconference' => 'modules/bbb/?course=thiscourse');
-       
-       $fromdatetime = date("Y-m-d H:i:s",$from/1000);
-       $todatetime = date("Y-m-d H:i:s",$to/1000);
-       $eventlist = get_course_events("month", $fromdatetime, $todatetime);
+
+       $fromdatetime = date('Y-m-d H:i:s', $from / 1000);
+       $todatetime = date('Y-m-d H:i:s', $to / 1000);
+       $eventlist = get_course_events('month', $fromdatetime, $todatetime);
        $events = array();
        foreach($eventlist as $event){
+           if (!preg_match('/[0-9]+(:[0-9]+){0,2}/', $event->duration)) {
+               $event->duration = '0:00';
+           }
+           $event->title = q($event->title);
+           $event->content = q($event->content);
+           $event->course = q($event->course);
            $startdatetime = new DateTime($event->start);
            $event->start = $startdatetime->getTimestamp()*1000;
            $event->start_hour = $startdatetime->format("H:i");
@@ -476,44 +484,44 @@ require_once 'include/lib/references.class.php';
        }
        return json_encode(array('success'=>1, 'result'=>$events, 'cid'=>$course_id));
    }
-   
+
    function small_month_bootstrap_calendar()
    {
        global $langNext, $langPrevious;
-       
+
        $calendar = '<div id="cal-header" class="btn-group btn-group-justified btn-group-sm">
                             <div class="btn-group btn-group-sm"><button type="button" class="btn btn-default" data-calendar-nav="prev">&larr; '.$langPrevious.'</button></div>
                             <div class="btn-group btn-group-sm"><button id="current-month" type="button" class="btn btn-default" disabled="disabled">&nbsp;</button></div>
                             <div class="btn-group btn-group-sm"><button type="button" class="btn btn-default" data-calendar-nav="next">'.$langNext.' &rarr;</button></div>
                     </div>';
-       
+
        $calendar .= '<div id="bootstrapcalendar"></div><div class="clearfix"></div>';
 
         return $calendar;
    }
-   
-   
+
+
    function get_list_course_events($display = 'all', $sens = 'ASC') {
        global $is_editor, $course_id;
-       
+
        $extra_sql = '';
        if ($display != 'all') {
            $extra_sql = "AND id = $display";
-       } 
+       }
        $result = array();
        if ($is_editor) {
-            $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible, recursion_period, recursion_end 
+            $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible, recursion_period, recursion_end
                                     FROM agenda WHERE course_id = ?d $extra_sql
                                 ORDER BY start " . $sens, $course_id);
         } else {
-            $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible 
-                                    FROM agenda WHERE course_id = ?d $extra_sql 
+            $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible
+                                    FROM agenda WHERE course_id = ?d $extra_sql
                                 AND visible = 1 ORDER BY start " . $sens, $course_id);
         }
         return $result;
 
    }
-   
+
    /***
     * @brief call event_list for displaying events if exist
     * @global type $langNoEvents
@@ -523,7 +531,7 @@ require_once 'include/lib/references.class.php';
     */
     function event_list_view($display = 'all', $sens = 'ASC'){
         global $langNoEvents;
-        
+
         $events = get_list_course_events($display, $sens);
 
         if (count($events) > 0) {
@@ -532,7 +540,7 @@ require_once 'include/lib/references.class.php';
             return "<div class='alert alert-warning text-center'>$langNoEvents</div>";
         }
     }
-    
+
     /**
      * @brief display event list
      * @global type $course_code
@@ -556,11 +564,11 @@ require_once 'include/lib/references.class.php';
      * @return string
      */
     function event_list($events, $sens, $type = '') {
-        global $course_code, $is_editor, $langDateNow, $dateFormatLong, 
-                $langHour, $langHours, $langDuration, $langAgendaNoTitle, $langDelete, 
-                $langConfirmDeleteEvent, $langConfirmDeleteRecursive, $langConfirmDeleteRecursiveEvents, 
+        global $course_code, $is_editor, $langDateNow, $dateFormatLong,
+                $langHour, $langHours, $langDuration, $langAgendaNoTitle, $langDelete,
+                $langConfirmDeleteEvent, $langConfirmDeleteRecursive, $langConfirmDeleteRecursiveEvents,
                 $langEditChange, $langViewHide, $langViewShow, $id, $is_admin;
-        
+
         $dateNow = date("j-n-Y / H:i", time());
         $barMonth = '';
         $nowBarShowed = false;
@@ -587,13 +595,13 @@ require_once 'include/lib/references.class.php';
             if ($barMonth != date("m", $d)) {
                 $barMonth = date("m", $d);
                 // month LABEL
-                $eventlist .= "<tr>";            
-                $eventlist .= "<td colspan='2' class='monthLabel list-header'>";            
+                $eventlist .= "<tr>";
+                $eventlist .= "<td colspan='2' class='monthLabel list-header'>";
                 $eventlist .= "<div align='center'><b>" . ucfirst(claro_format_locale_date("%B %Y", $d)) . "</b></div></td>";
                 $eventlist .= "</tr>";
             }
 
-            $classvis = '';         
+            $classvis = '';
             if ($is_editor) {
                 if ($myrow->visible == 0) {
                     $classvis = 'class = "not_visible"';
@@ -605,8 +613,7 @@ require_once 'include/lib/references.class.php';
             } else {
                 $eventlist .= "<td style='padding:15px;' colspan='2'>";
             }
-
-            if ($myrow->duration != '') {
+            if (($myrow->duration != '0:00') and ($myrow->duration != '')) {
                 if ($myrow->duration == 1) {
                     $message = $langHour;
                 } else {
@@ -621,7 +628,7 @@ require_once 'include/lib/references.class.php';
             } else {
                 $eventlist .= "<strong><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$myrow->id'>".q($myrow->title)."</a></strong> &nbsp;&nbsp;$msg";
             }
-            
+
             $eventlist .= "<div><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div>";
             if (isset($id)) {
                 $eventlist .= "<br>";
@@ -639,7 +646,7 @@ require_once 'include/lib/references.class.php';
                                    'icon' => 'fa-times-circle-o',
                                    'class' => 'delete',
                                    'confirm' => $langConfirmDeleteRecursiveEvents,
-                                   'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),  
+                                   'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),
                         array('title' => $langDelete,
                               'url' => "?delete=$myrow->id&et=admin",
                               'icon' => 'fa-times',
@@ -669,7 +676,7 @@ require_once 'include/lib/references.class.php';
                              'confirm' => $langConfirmDeleteRecursiveEvents,
                              'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end)))
                    ));
-                    $eventlist .= "</td>";              
+                    $eventlist .= "</td>";
                 } elseif ($type == 'personal') { // personal or admin event
                     $eventlist .= "<td class='option-btn-cell'>";
                     $eventlist .= action_button(array(
@@ -680,13 +687,13 @@ require_once 'include/lib/references.class.php';
                                   'url' => "?delete=$myrow->id&et=$type",
                                   'icon' => 'fa-times',
                                   'class' => 'delete',
-                                  'confirm' => $langConfirmDeleteEvent),                       
+                                  'confirm' => $langConfirmDeleteEvent),
                             array('title' => $langConfirmDeleteRecursive,
                                   'url' => "?delete=$myrow->id&et=$type&amp;rep=yes",
                                   'icon' => 'fa-times-circle-o',
                                   'class' => 'delete',
                                   'confirm' => $langConfirmDeleteRecursiveEvents,
-                                  'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),                       
+                                  'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),
                         ));
                    $eventlist .= "</td>";
                 }
@@ -696,17 +703,17 @@ require_once 'include/lib/references.class.php';
        $eventlist .= "</table></div>";
        return $eventlist;
    }
-   
-   
+
+
    /**
-     * Get calendar events for a given course 
+     * Get calendar events for a given course
      * @param string $scope month|week|day the calendar selected view
      * @param string $startdate mysql friendly formatted string representing the start of the time frame for which events are seeked
      * @param string $enddate mysql friendly formatted string representing the end of the time frame for which events are seeked
      * @return array of user events with details
      */
     function get_course_events($scope = "month", $startdate = null, $enddate = null){
-        
+
         global $course_id;
         //form date range condition
         $dateconditions = array("month" => "date_format(?t".',"%Y-%m") = date_format(start,"%Y-%m")',
@@ -733,13 +740,13 @@ require_once 'include/lib/references.class.php';
         if(!is_null($enddate)){
            $q_args_templ[] = $enddate;
         }
-        
+
         //agenda
         if(!empty($q)){
             $q .= " UNION ";
         }
         $dc = str_replace('start','ag.start',$datecond);
-        $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + time(ag.duration), '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
+        $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(addtime(ag.start, if(ag.duration = '', '0:00', ag.duration)), '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
                 . "FROM agenda ag JOIN course c ON ag.course_id=c.id "
                 . "WHERE ag.course_id =?d "
                 . $dc;
@@ -757,7 +764,7 @@ require_once 'include/lib/references.class.php';
         $q_args = array_merge($q_args, $q_args_templ);
 
 
-        //assignements
+        //assignments
         if(!empty($q)){
             $q .= " UNION ";
         }
@@ -783,15 +790,17 @@ require_once 'include/lib/references.class.php';
         {
             return null;
         }
-        $q .= " ORDER BY start, event_type"; 
+        $q .= " ORDER BY start, event_type";
         return Database::get()->queryArray($q, $q_args);
-
-       
     }
+
+    /**
+     * @param type $eventid
+     * @param type $cid
+     * @return type
+     */
 
     function get_event_recursion($eventid, $cid)
     {
         return Database::get()->querySingle('SELECT recursion_period, recursion_end FROM agenda WHERE id=?d and course_id=?d',$eventid, $cid);
-    }    
-
- ?>
+    }

@@ -66,9 +66,9 @@ class MultimediaHelper {
             }
             $ahref = "<a href='$mediaPlay' class='$class fileURL' $extraParams title='".q($title)."'>" . $title . "</a>";
             if (self::isSupportedImage($filename)) {
-                $ahref = "<a href='$mediaDL' class='$class fileURL' title=''".q($title)."'>" . $title . "</a>";
+                $ahref = "<a href='$mediaDL' class='$class fileURL' title='".q($title)."'>" . $title . "</a>";
             }
-        } else if(self::isSupportedModalFile($filename)){
+        } else if(self::isSupportedModalFile($filename)){            
             $ahref = "<a href='$mediaDL' class='fileURL fileModal' target='_blank' title='".q($title)."'>" . $title . "</a>";
         }
 
@@ -214,11 +214,18 @@ class MultimediaHelper {
                 $mime = 'video/ogg';
                 $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
                 break;
-            case "mp4":
             case "ogv":
             case "webm":
                 $mime = get_mime_type("." . $extension);
                 $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
+                break;
+            case "mp4":
+                if (self::isUsingFirefox()) {
+                    $ret .= self::serveFlowplayerFlash($mediaPlay, $startdiv, $enddiv, $extension);
+                } else {
+                    $mime = get_mime_type("." . $extension);
+                    $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
+                }
                 break;
             case "f4v":
             case "m4v":
@@ -226,32 +233,13 @@ class MultimediaHelper {
             // case "mp3": // can be server with Flowplayer Flash
             // case "mp4": // can be served with Flowplayer Flash
                 $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/flowplayer-3.2.13.min.js'></script>";
-                $ret .= $startdiv;
                 if (self::isUsingIOS()) {
+                    $ret .= $startdiv;
                     $ret .= '<br/><br/><a href="' . $mediaDL . '">Download or Stream media</a>';
+                    $ret .= $enddiv;
                 } else {
-                    $ret .= '<div id="flowplayer" style="display: block; width: ' . self::getObjectWidth() . 'px; height: ' . self::getObjectHeight() . 'px;"></div>
-                             <script type="text/javascript">
-                                 flowplayer("flowplayer", {
-                                     src: "' . $urlAppend . 'js/flowplayer/flowplayer-3.2.18.swf",
-                                     wmode: "transparent"
-                                     }, {
-                                     clip: {
-                                         url: "' . $mediaPlay . '",';
-                    // flowplayer needs to see a pattern of name.mp3 in order to stream it
-                    if ($extension == 'mp3') {
-                        $ret .= '        type: "audio",';
-                    }
-                    $ret .= '            scaling: "fit"
-                                     },
-                                     canvas: {
-                                         backgroundColor: "#000000",
-                                         backgroundGradient: "none"
-                                     }
-                                 });
-                             </script>';
+                    $ret .= self::serveFlowplayerFlash($mediaPlay, $startdiv, $enddiv, $extension);
                 }
-                $ret .= $enddiv;
                 break;
             case "swf":
                 $ret .= $startdiv;
@@ -317,16 +305,55 @@ class MultimediaHelper {
     public static function serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv) {
         global $urlAppend;
         $ret = '';
-        $ret .= "<link rel='stylesheet' href='{$urlAppend}js/flowplayer/html5-5.5.2/skin/minimalist.css'>";
+        $ret .= "<link rel='stylesheet' href='{$urlAppend}js/flowplayer/html5/skin/minimalist.css'>";
         $ret .= "<script type='text/javascript' src='{$urlAppend}js/jquery-" . JQUERY_VERSION . ".min.js'></script>";
-        $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/html5-5.5.2/flowplayer.min.js'></script>";
+        $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/html5/flowplayer.min.js'></script>";
         $ret .= $startdiv;
         $ret .= '<div class="flowplayer"
-                      data-swf="' . $urlAppend . 'js/flowplayer/html5-5.5.2/flowplayer.swf" 
+                      data-swf="' . $urlAppend . 'js/flowplayer/html5/flowplayer.swf" 
                       data-fullscreen="true"
                       data-embed="false"
                       style="max-width: ' . (self::getObjectWidth() - 4) . 'px;">
                     <video autoplay><source type="' . $mime . '" src="' . $mediaPlay . '"></video></div>';
+        $ret .= $enddiv;
+        return $ret;
+    }
+    
+    /**
+     * Server Flowplayer Flash.
+     * 
+     * @global string $urlAppend
+     * @param  string $mediaPlay
+     * @param  string $startdiv
+     * @param  string $enddiv
+     * @param  string $extension
+     * @return string
+     */
+    public static function serveFlowplayerFlash($mediaPlay, $startdiv, $enddiv, $extension) {
+        global $urlAppend;
+        $ret = '';
+        $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/flowplayer-3.2.13.min.js'></script>";
+        $ret .= $startdiv;
+        $ret .= '<div id="flowplayer" style="display: block; width: ' . self::getObjectWidth() . 'px; height: ' . self::getObjectHeight() . 'px;"></div>
+                 <script type="text/javascript">
+                     flowplayer("flowplayer", {
+                         src: "' . $urlAppend . 'js/flowplayer/flowplayer-3.2.18.swf",
+                         wmode: "transparent"
+                         }, {
+                         clip: {
+                             url: "' . $mediaPlay . '",';
+        // flowplayer needs to see a pattern of name.mp3 in order to stream it
+        if ($extension == 'mp3') {
+            $ret .= '        type: "audio",';
+        }
+        $ret .= '            scaling: "fit"
+                         },
+                         canvas: {
+                             backgroundColor: "#000000",
+                             backgroundGradient: "none"
+                         }
+                     });
+                 </script>';
         $ret .= $enddiv;
         return $ret;
     }
@@ -392,8 +419,19 @@ class MultimediaHelper {
         $u_agent = $_SERVER['HTTP_USER_AGENT'];
         return (preg_match('/MSIE/i', $u_agent)) ? true : false;
     }
+    
+    /**
+     * Whether the client uses Firefox or not
+     * 
+     * @return boolean
+     */
+    public static function isUsingFirefox() {
+        $u_agent = $_SERVER['HTTP_USER_AGENT'];
+        return (preg_match('/Firefox/i', $u_agent)) ? true : false;
+    }
 
-    /** Whether the client uses an iOS device or not
+    /**
+     * Whether the client uses an iOS device or not
      * 
      * @return boolean
      */
@@ -475,14 +513,14 @@ class MultimediaHelper {
         foreach (self::getYoutubePatterns() as $pattern) {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
-                $medialink = 'http://www.youtube.com/embed/' . $sanitized . '?hl=en&fs=1&rel=0&autoplay=1&wmode=transparent';
+                $medialink = 'https://www.youtube.com/embed/' . $sanitized . '?hl=en&fs=1&rel=0&autoplay=1&wmode=transparent';
             }
         }
 
         foreach (self::getVimeoPatterns() as $pattern) {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
-                $medialink = 'http://player.vimeo.com/video/' . $sanitized . '?color=00ADEF&fullscreen=1&autoplay=1';
+                $medialink = 'https://player.vimeo.com/video/' . $sanitized . '?color=00ADEF&fullscreen=1&autoplay=1';
             }
         }
 
@@ -510,14 +548,14 @@ class MultimediaHelper {
         foreach (self::getDailymotionPatterns() as $pattern) {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
-                $medialink = 'http://www.dailymotion.com/embed/video/' . $sanitized . '?autoPlay=1';
+                $medialink = 'https://www.dailymotion.com/embed/video/' . $sanitized . '?autoPlay=1';
             }
         }
         
         foreach (self::getNineSlidesPatterns() as $pattern) {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
-                $medialink = 'http://www.9slides.com/embed/' . $sanitized;
+                $medialink = 'https://www.9slides.com/embed/' . $sanitized;
             }
         }
 

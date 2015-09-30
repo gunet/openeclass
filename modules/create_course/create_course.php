@@ -41,7 +41,7 @@ $user = new User();
 
 $toolName = $langCourseCreate;
 
-load_js('jstree');
+load_js('jstree3');
 load_js('pwstrength.js');
 
 //Datepicker
@@ -198,12 +198,29 @@ if (empty($prof_names)) {
     $prof_names = "$_SESSION[givenname] $_SESSION[surname]";
 }
 
+// departments and validation
+$allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin;
+$allowables = array();
+if ($allow_only_defaults) {
+    // Method: getDepartmentIdsAllowedForCourseCreation
+    // fetches only specific tree nodes, not their sub-children
+    //$user->getDepartmentIdsAllowedForCourseCreation($uid);
+    // the code below searches for the allow_course flag in the user's department subtrees
+    $userdeps = $user->getDepartmentIds($uid);
+    $subs = $tree->buildSubtreesFull($userdeps);
+    foreach ($subs as $node) {
+        if (intval($node->allow_course) === 1) {
+            $allowables[] = $node->id;
+        }
+    }
+}
 $departments = isset($_POST['department']) ? $_POST['department'] : array();
 $deps_valid = true;
 
 foreach ($departments as $dep) {
-    if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIdsAllowedForCourseCreation($uid))) {
+    if ($allow_only_defaults && !in_array($dep, $allowables)) {
         $deps_valid = false;
+        break;
     }
 }
 
@@ -218,14 +235,14 @@ if (!$deps_valid) {
 
 // display form
 if (!isset($_POST['create_course'])) {
-        $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $user->getDepartmentIdsAllowedForCourseCreation($uid), 'allow_only_defaults' => $allow_only_defaults));
+        // set skip_preloaded_defaults in order to not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
         $head_content .= $js;
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
                 $cc_license[$id] = $l_info['title'];
             }
-        }       
+        }
         $tool_content .= action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
@@ -361,7 +378,7 @@ if (!isset($_POST['create_course'])) {
                 <div class='form-group'>
                     <label for='coursepassword' class='col-sm-2 control-label'>$langOptPassword:</label>
                     <div class='col-sm-10'>
-                          <input class='form-control FormData_InputText' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
+                          <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
                     </div>
                 </div>
                 <div class='form-group'>
@@ -373,11 +390,13 @@ if (!isset($_POST['create_course'])) {
             </div>
             <div class='text-right'><small>$langFieldsOptionalNote</small></div>
         </fieldset>
+    ". generate_csrf_token_form_field() ."  
     </form>
 </div>";
 
 } else  { // create the course and the course database
     // validation in case it skipped JS validation
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
         Session::Messages($langEmptyAddNode);
@@ -441,12 +460,7 @@ if (!isset($_POST['create_course'])) {
     }
 
     if (ctype_alnum($_POST['view_type'])) {
-        $view_type = $_POST['view_type'];
-        if ($view_type == "weekly" && ($_POST['start_date'] != '' && $_POST['start_date'] != '0000-00-00')) {
-            $view_type == "weekly";
-        } else {
-            $view_type = "units";
-        }
+        $view_type = $_POST['view_type'];        
     }
     if (empty($_POST['start_date'])) {
         $_POST['start_date'] = '0000-00-00';
@@ -535,7 +549,7 @@ if (!isset($_POST['create_course'])) {
     //=======================================================
 
 
-    // create course  modules
+    // create course modules
     create_modules($new_course_id);
 
     Database::get()->query("INSERT INTO course_user SET
@@ -543,24 +557,16 @@ if (!isset($_POST['create_course'])) {
                                         user_id = ?d,
                                         status = 1,
                                         tutor = 1,
-                                        reg_date = CURDATE()", intval($new_course_id), intval($uid));
-
-    Database::get()->query("INSERT INTO group_properties SET
-                                        course_id = ?d,
-                                        self_registration = 1,
-                                        multiple_registration = 0,
-                                        forum = 1,
-                                        private_forum = 0,
-                                        documents = 1,
-                                        wiki = 0,
-                                        agenda = 0", intval($new_course_id));
+                                        reg_date = " . DBHelper::timeAfter() . ",
+                                        document_timestamp = " . DBHelper::timeAfter() . "",
+                           intval($new_course_id), intval($uid));
+    
     $course->refresh($new_course_id, $departments);
 
-
-    // creation of course index.php
+    // create courses/<CODE>/index.php
     course_index($code);
 
-    //add a default forum category
+    // add a default forum category
     Database::get()->query("INSERT INTO forum_category
                             SET cat_title = ?s,
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
@@ -570,11 +576,11 @@ if (!isset($_POST['create_course'])) {
     $tool_content .= "<div class='alert alert-success'><b>$langJustCreated:</b> " . q($title) . "<br>
                         <span class='smaller'>$langEnterMetadata</span></div>";
     $tool_content .= action_bar(array(
-                array('title' => $langEnter,
-                    'url' => "../../courses/$code/index.php",
-                    'icon' => 'fa-arrow-right',
-                    'level' => 'primary-label',
-                    'button-class' => 'btn-success')));
+        array('title' => $langEnter,
+              'url' => $urlAppend . "courses/$code/",
+              'icon' => 'fa-arrow-right',
+              'level' => 'primary-label',
+              'button-class' => 'btn-success')));
     
     // logging
     Log::record(0, 0, LOG_CREATE_COURSE, array('id' => $new_course_id,

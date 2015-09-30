@@ -23,21 +23,31 @@
  * @file upload.php
  * @brief upload form for subsystem documents
  */
-if (!defined('COMMON_DOCUMENTS')) {
-    $require_current_course = TRUE;
-    $require_login = true;
-}
-require_once '../../include/baseTheme.php';
-require_once 'modules/document/doc_init.php';
+
+$require_admin = defined('COMMON_DOCUMENTS');
+$require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
+$require_login = true;
+
+require_once "../../include/baseTheme.php";
+require_once "modules/document/doc_init.php";
 require_once 'modules/drives/clouddrive.php';
+
+if (defined('COMMON_DOCUMENTS')) {
+    $menuTypeID = 3;
+    $toolName = $langCommonDocs;
+} elseif (defined('MY_DOCUMENTS')) {
+    $menuTypeID = 1;
+    $toolName = $langMyDocs;
+} else {
+    $menuTypeID = 2;
+    $toolName = $langDoc;
+}
 
 enableCheckFileSize();
 
-$toolName = $langDoc;
-
 if (defined('EBOOK_DOCUMENTS')) {
     $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
-} 
+}
 
 if (isset($_GET['uploadPath'])) {
     $uploadPath = q($_GET['uploadPath']);
@@ -58,8 +68,8 @@ if ($can_upload) {
         <div class='form-group'>
           <label for='fileCloudName' class='col-sm-2 control-label'>$langCloudFile</label>
           <div class='col-sm-10'>
-            <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='$pendingCloudUpload'>
-            <input type='text' class='form-control' name='fileCloudName' value='" . CloudFile::fromJSON($pendingCloudUpload)->name() . "' readonly>
+            <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='".q($pendingCloudUpload)."'>
+            <input type='text' class='form-control' name='fileCloudName' value='" . q(CloudFile::fromJSON($pendingCloudUpload)->name()) . "' readonly>
           </div>
         </div>";
     } else if (isset($_GET['ext'])) {
@@ -186,11 +196,13 @@ if ($can_upload) {
     if (!isset($_GET['ext'])) {
         $tool_content .= "
         <div class='form-group'>
-          <div class='col-sm-offset-2 col-sm-10'>
-            <span class='checkbox-padding'>
-                <input type='checkbox' name='uncompress' value='1'>
-            </span>
-          <label for='inputFileCompression' class='control-label'>$langUncompress:</label>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <div class='checkbox'>
+                    <label>
+                        <input type='checkbox' name='uncompress' value='1'>
+                        <strong>$langUncompress</strong>
+                    </label>
+                </div>          
               </div>
         </div>";
     }
@@ -198,24 +210,31 @@ if ($can_upload) {
     $tool_content .= "
       <div class='form-group'>
         <div class='col-sm-offset-2 col-sm-10'>
-          <span class='checkbox-padding'>
-              <input type='checkbox' name='replace' value='1'>
-          </span>
-          <label for='inputFileReplaceSameName' class='control-label'>$langReplaceSameName:</label>
+            <div class='checkbox'>
+                <label>
+                    <input type='checkbox' name='replace' value='1'>
+                    <strong>$langReplaceSameName</strong>
+                </label>
+            </div>         
         </div>
       </div>      
 
     <div class='row'>
-        <div class='infotext-sm col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+        <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
     </div>";
-    
+
     $tool_content .= "
       <div class='form-group'>
-        <div class='col-xs-offset-2 col-xs-10'>
-          <button type='submit' class='btn btn-primary'>
-            $langUpload
-          </button>
-          <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+        <div class='col-xs-offset-2 col-xs-10'>".
+            form_buttons(array(
+                array(
+                    'text' => $langUpload
+                ),
+                array(
+                    'href' => "index.php?course=$course_code",
+                )
+            ))
+            ."
         </div>
       </div>
     </form>
@@ -225,6 +244,4 @@ if ($can_upload) {
     $tool_content .= "<div class='alert alert-warning'>$langNotAllowed</div>";
 }
 
-draw($tool_content,
-    defined('COMMON_DOCUMENTS')? 3: 2,
-    null, $head_content);
+draw($tool_content, $menuTypeID, null, $head_content);

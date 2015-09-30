@@ -245,8 +245,9 @@ elseif (isset($_GET['forumcatadd'])) {
 }
 
 // forum go add
-elseif (isset($_GET['forumgoadd'])) {        
+elseif (isset($_GET['forumgoadd'])) {
     $ctg = category_name($cat_id);
+    $title = course_id_to_title($course_id);
     $forid = Database::get()->query("INSERT INTO forum (name, `desc`, cat_id, course_id)
                                 VALUES (?s, ?s, ?d, ?d)"
             , $_POST['forum_name'], $_POST['forum_desc'], $cat_id, $course_id)->lastInsertID;
@@ -268,7 +269,37 @@ elseif (isset($_GET['forumgoadd'])) {
             $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
             $body_topic_notify .= $unsubscribe . $linkhere;
             $emailaddr = uid_to_email($r->user_id);
-            send_mail('', '', '', $emailaddr, $subject_notify, $body_topic_notify, $charset);
+
+            $header_html_topic_notify = "<!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$subject_notify</div>
+                </div>
+            </div>";
+
+            $body_html_topic_notify = "<!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div><b>$langMailBody</b></div>
+                <div id='mail-body-inner'>
+                    $langBodyCatNotify $langInCat '$ctg' $gunet.
+                </div>
+            </div>";
+
+            $footer_html_topic_notify = "<!-- Footer Section -->
+            <div id='mail-footer'>
+                <br>
+                <div>
+                    <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                </div>
+            </div>";
+
+            $html_topic_notify = $header_html_topic_notify.$body_html_topic_notify.$footer_html_topic_notify;
+
+            $plain_message = html2text($html_topic_notify);
+
+            send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_message, $html_topic_notify, $charset);
         }
     }
     // end of notification
@@ -290,6 +321,23 @@ elseif (isset($_GET['forumcatdel'])) {
                                     WHERE rating.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN forum_post on rating_cache.rid = forum_post.id
                                     WHERE rating_cache.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+            //delete abuse reports for forum posts belonging to this topic
+            $res = Database::get()->queryArray("SELECT abuse_report.*, forum_post.post_text FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
+                                    WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+            foreach ($res as $r) {
+                Log::record($r->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+                    array('id' => $r->id,
+                          'user_id' => $r->user_id,
+                          'reason' => $r->reason,
+                          'message' => $r->message,
+                          'rtype' => 'forum_post',
+                          'rid' => $r->rid,
+                          'rcontent' => $r->post_text,
+                          'status' => $r->status
+                ));
+            }
+            Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
+                                    WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
             
@@ -325,6 +373,23 @@ elseif (isset($_GET['forumgodel'])) {
         foreach ($result2 as $result_row2) {
             $topic_id = $result_row2->id;
             $post_authors = Database::get()->queryArray("SELECT DISTINCT poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
+            //delete abuse reports of posts belonging to the topic
+            $res = Database::get()->queryArray("SELECT abuse_report.*, forum_post.post_text FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
+                                    WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+            foreach ($res as $r) {
+                Log::record($r->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+                    array('id' => $r->id,
+                        'user_id' => $r->user_id,
+                        'reason' => $r->reason,
+                        'message' => $r->message,
+                        'rtype' => 'forum_post',
+                        'rid' => $r->rid,
+                        'rcontent' => $r->post_text,
+                        'status' => $r->status
+                ));
+            }
+            Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
+                                    WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             //delete forum posts ratings first
             Database::get()->query("DELETE rating FROM rating INNER JOIN forum_post on rating.rid = forum_post.id
                                     WHERE rating.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);

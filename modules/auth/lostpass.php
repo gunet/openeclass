@@ -29,11 +29,11 @@
  * his/hers  information through a challenge/response system.
  *
  */
+use Hautelook\Phpass\PasswordHash;
 
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 include 'include/sendMail.inc.php';
-require_once 'include/phpass/PasswordHash.php';
 $pageName = $lang_remind_pass;
 
 // javascript
@@ -129,7 +129,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                 <input type='hidden' name='h' value='" . q($_REQUEST['h']) . "'>
                 <fieldset>
                 <legend>$langPassword</legend>
-                <table class='tbl'>
+                <table class='table-default'>
                 <tr>
                    <th>$langNewPass1</th>
                    <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>

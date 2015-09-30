@@ -198,9 +198,9 @@ if (!empty($show) and $show == 'closed') {
         $sql = Database::get()->queryArray("SELECT id, givenname, surname, username, email,
                                         faculty_id, phone, am, date_open, date_closed, comment
                                         FROM user_request
-                                        WHERE (state = 3 AND status = $list_status $depqryadd) ORDER BY date_open DESC");        
+                                        WHERE (state = 3 AND status = $list_status $depqryadd) ORDER BY date_open DESC");
         $tool_content .= "<tbody>";
-        foreach ($sql as $req) {            
+        foreach ($sql as $req) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>" . q($req->givenname) . "&nbsp;" . q($req->surname) . "</td>";
             $tool_content .= "<td>" . q($req->username) . "&nbsp;</td>";
@@ -211,10 +211,10 @@ if (!empty($show) and $show == 'closed') {
 				<small>" . nice_format(date('Y-m-d', strtotime($req->date_closed))) . "</small></td>";
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
-                                array('title' => $langRestore, 
+                                array('title' => $langRestore,
                                       'url' => "$_SERVER[SCRIPT_NAME]?id=$req->id&amp;show=closed$reqtype",
                                       'icon' => 'fa-retweet')));
-            $tool_content .= "</td></tr>";            
+            $tool_content .= "</td></tr>";
         }
     }
     $tool_content .= "</tbody>";
@@ -253,17 +253,40 @@ if (!empty($show) and $show == 'closed') {
                             $administratorName = get_config('admin_name');
                             $emailhelpdesk = get_config('email_helpdesk');
                             $emailsubject = $langemailsubjectBlocked;
-                            $emailbody = "$langemailbodyBlocked
-$langComments:> $_POST[comment]
-$langManager $siteName
-$administratorName
-$langPhone: $telephone
-$langEmail: $emailhelpdesk";
-                            send_mail('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
+
+                            $emailHeader = "
+                                <!-- Header Section -->
+                                <div id='mail-header'>
+                                    <div>
+                                        <br>
+                                        <div id='header-title'>$langemailbodyBlocked</div>
+                                    </div>
+                                </div>";
+
+                            $emailMain = "
+                            <!-- Body Section -->
+                            <div id='mail-body'>
+                                <br>
+                                <div id='mail-body-inner'>
+                                    $_POST[comment]<br><br>
+                                    <ul id='forum-category'>
+                                        <li><span><b>$langManager $siteName:</b></span> <span class='left-space'>$administratorName</span></li>
+                                        <li><span><b>$langPhone:</b></span> <span class='left-space'>$telephone</span></li>
+                                        <li><span><b>$langEmail:</b></span> <span class='left-space'>$emailhelpdesk</span></li>
+                                    </ul>
+                                </div>
+                            </div>";
+
+                            $emailbody = $emailHeader.$emailMain;
+
+                            $emailPlainBody = html2text($emailbody);
+
+                            send_mail_multipart('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailPlainBody, $emailbody, $charset);
+
                         }
-                        $tool_content .= "<div class='alert alert-success'>" . ($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject;
+                        $tool_content .= "<div class='alert alert-success'>" . (($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject);
                         $tool_content .= " $langRequestMessageHasSent <b>$_POST[prof_email]</b></div>";
-                        $tool_content .= "<br><p><b>$langComments:</b><br />$_POST[comment]</p>\n";
+                        $tool_content .= "<br><p><b>$langComments:</b><br>$_POST[comment]</p>\n";
                     }
                 }
             } else {
@@ -272,7 +295,7 @@ $langEmail: $emailhelpdesk";
                 $warning = ($d->status == 5) ? $langWarnReject : $langGoingRejectRequest;
                 $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
 			<div class='alert alert-warning'>$warning</div>
-			<table width='100%' class='tbl_border'>
+			<table class='table-default'>
 			<tr><th class='left'>$langName</th>
 			<td>" . q($d->givenname) . "</td></tr>
 			<tr><th class='left'>$langSurname</th>
@@ -390,7 +413,7 @@ function table_header($addon = FALSE, $message = FALSE) {
         $rowspan = 2;
         $datestring = "<th colspan='2'>$langDate</th>
 		<th scope='col' rowspan='$rowspan'><div align='center'>$langActions</div></th>
-		</tr><tr>
+		</tr><tr class='list-header'>
 		<th>$langDateRequest_small</th>
 		<th>$message</th>";
     } else {
@@ -399,7 +422,7 @@ function table_header($addon = FALSE, $message = FALSE) {
 		<th scope='col'><div align='center'>$langActions</div></th>";
     }
 
-    $string .= "<tr>
+    $string .= "<tr class='list-header'>
 	<th scope='col' rowspan='$rowspan'><div align='left'>&nbsp;&nbsp;$langName $langSurname</div></th>
 	<th scope='col' rowspan='$rowspan'><div align='left'>$langUsername</div></th>
 	<th scope='col' rowspan='$rowspan'><div align='center'>$langFaculty</div></th>";

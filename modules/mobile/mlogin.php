@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 header('Content-Type: application/xml; charset=utf-8');
-
+use Hautelook\Phpass\PasswordHash;
 if (isset($_POST['token'])) {
     $require_mlogin = true;
     $require_noerrors = true;
@@ -72,7 +72,6 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     require_once ('minit.php');
     require_once ('include/CAS/CAS.php');
     require_once ('modules/auth/auth.inc.php');
-    require_once ('include/phpass/PasswordHash.php');
 
     $uname = canonicalize_whitespace($_POST['uname']);
     $pass = $_POST['pass'];
@@ -81,22 +80,35 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
         unset($_SESSION[$key]);
     }
 
-    $sqlLogin = (get_config('case_insensitive_usernames')) ? "= ?s" : "COLLATE utf8_bin = ?s";
+    $sqlLogin = (get_config('case_insensitive_usernames')) ? "COLLATE utf8_general_ci = ?s" : "COLLATE utf8_bin = ?s";
     $myrow = Database::get()->querySingle("SELECT * FROM user WHERE username $sqlLogin", $uname);
     
-    if (in_array($myrow->password, $auth_ids)) {
-        $ok = alt_login($myrow, $uname, $pass);
+    if (get_config('login_fail_check')) {
+        $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'
+                                    AND COUNT > " . intval(get_config('login_fail_threshold')) . "
+                                    AND DATE_SUB(CURRENT_TIMESTAMP, interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail");
+    }
+    if (get_config('login_fail_check') && $r) {
+        $ok = 8;
     } else {
-        $ok = login($myrow, $uname, $pass);
+        if (in_array($myrow->password, $auth_ids)) {
+            $ok = alt_login($myrow, $uname, $pass);
+        } else {
+            $ok = login($myrow, $uname, $pass);
+        }
     }
 
-    if (isset($_SESSION['uid']) && $ok == 1) {
+    if (isset($_SESSION['uid']) && $ok === 1) {
         Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                                               VALUES (?d, ?s, NOW(), 'LOGIN')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
+        resetLoginFailure();
         session_regenerate_id();
         set_session_mvars();
         echo session_id();
     } else {
+        if ($ok === 4) {
+            increaseLoginFailure();
+        }
         echo RESPONSE_FAILED;
     }
 

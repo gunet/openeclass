@@ -26,6 +26,7 @@ include '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $tree = new Hierarchy();
 $user = new User();
@@ -93,6 +94,22 @@ if ($userdata) {
                     ));
         }
     }
+
+    // hybridauth providers information. available only for the current user.
+    $providers = '';
+    if ($id == $uid) {
+        $providers_text = '';
+        $extAuthList = Database::get()->queryArray("SELECT auth.auth_id, auth_name FROM auth, user_ext_uid
+            WHERE auth.auth_id = user_ext_uid.auth_id AND user_ext_uid.user_id = ?d", $id);
+        foreach ($extAuthList as $item) {
+            $fullName = q($authFullName[$item->auth_id]);
+            $providers_text .= " <span class='tag-value'><img src='$themeimg/{$item->auth_name}.png' alt=''>&nbsp;$fullName</span>";
+        }
+        if (!empty($providers_text)) {
+            $providers .= "</div><span class='tag'>$langProviderConnectWith&nbsp;:&nbsp;</span>" . $providers_text . "</div>";
+        }
+    }
+    
     if (get_config('personal_blog')) {
         $perso_blog_html = "<div class='row'>
                                 <div class='col-xs-12'>
@@ -102,7 +119,7 @@ if ($userdata) {
                                 </div>
                             </div>";
     } else {
-        $perso_blog_html = "";
+        $perso_blog_html = '';
     }
     /*if (!empty($userdata->email) and allow_access($userdata->email_public)) { // E-mail
         $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langEmail :</span> <span class='tag-value'>" . mailto($userdata->email) . "</span></div>";}
@@ -164,8 +181,8 @@ if ($userdata) {
                 $tool_content .= "</div>
                                   <div class='profile-pers-info'><span class='tag'>$langStatus :</span>";
                 if (!empty($userdata->status)) { // Status
-                    $status = (q($userdata->status)==1)?$langTeacher:$langStudent;
-                    $tool_content .= " <span class='tag-value'>$status</span>";
+                    $message_status = (q($userdata->status)==1)?$langTeacher:$langStudent;
+                    $tool_content .= " <span class='tag-value'>$message_status</span>";
 
                 } else {
                     $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
@@ -181,6 +198,7 @@ if ($userdata) {
                     $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
 
                 }
+                $tool_content .= $providers;
                 $tool_content .= "</div>
                         </div> <!-- end of col-xs-6 -->
                     </div> <!-- end of row -->
@@ -194,9 +212,8 @@ if ($userdata) {
     }
         $tool_content .= "
     <div id='profile-departments' class='row'>
-        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
-            <h4>$langProfileStats</h4>
-            <div>";
+        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>            
+            <div><span class='tag'>$langHierarchyNode : </span>";
             $departments = $user->getDepartmentIds($id);
                 $i = 1;
                 foreach ($departments as $dep) {
@@ -210,6 +227,8 @@ if ($userdata) {
             </div>
         </div>
     </div>";
+//render custom profile fields content
+$tool_content .= render_profile_fields_content(array('user_id' => $id));
 $tool_content .= "</div>
         </div>
     </div>
@@ -217,12 +236,18 @@ $tool_content .= "</div>
 }
 draw($tool_content, 1);
 
-function allow_access($level) {
-    global $uid, $status;
+/**
+ * check access to user profiles
+ * @global type $status
+ * @param type $level
+ * @return boolean
+ */
 
-    if ($level == ACCESS_USERS and $uid > 0) {
+function allow_access($level) {
+        
+    if ($level == ACCESS_USERS) {        
         return true;
-    } elseif ($level == ACCESS_PROFS and $status = 1) {
+    } elseif ($level == ACCESS_PROFS and $_SESSION['status'] == USER_TEACHER) {        
         return true;
     } else {
         return false;

@@ -31,6 +31,8 @@
     <confirmCurriculum></confirmCurriculum>
     <confirmVideolectures></confirmVideolectures>
     <videolectures>0</videolectures>
+    <visits>0</visits>
+    <hits>0</hits>
     
     <code lang="el"></code>
     <keywords lang="el"></keywords>
@@ -65,6 +67,7 @@
         <moreInformation lang="en"></moreInformation>
         <cv></cv>
         <photo mime=""></photo>
+        <registrationCode></registrationCode>
     </instructor>
     
     <coTeaching></coTeaching>

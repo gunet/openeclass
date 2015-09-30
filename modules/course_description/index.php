@@ -53,15 +53,16 @@ if ($is_editor) {
     processActions();
 
     if (isset($_POST['saveCourseDescription'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('editTitle'));
-        $v->rule('numeric', array('editId'));
+        //$v->rule('numeric', array('editId'));
         $v->labels(array(
             'editTitle' => "$langTheField $langTitle"
         ));
         if($v->validate()) {
             if (isset($_POST['editId'])) {
-                updateCourseDescription($_POST['editId'], $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
+                updateCourseDescription(getDirectReference($_POST['editId']), $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
             } else {
                 updateCourseDescription(null, $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
             }
@@ -70,7 +71,7 @@ if ($is_editor) {
         } else {
             
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            $edit_id = isset($_POST['editId']) ? "&id=$_POST[editId]" : "";
+            $edit_id = isset($_POST['editId']) ? "&id=" . urlencode(getIndirectReference(getDirectReference($_POST['editId']))) : "";
             redirect_to_home_page("modules/course_description/edit.php?course=$course_code$edit_id");          
         }
     }
@@ -90,25 +91,25 @@ if ($q && count($q) > 0) {
                         array(
                             array(
                                 'title' => $langEditChange,
-                                'url' => "edit.php?course=$course_code&amp;id=$row->id",
+                                'url' => "edit.php?course=$course_code&amp;id=" . getIndirectReference($row->id),
                                 'icon' => 'fa-edit'
                             ),
                             array('title' => $row->visible ? $langRemoveFromCourseHome : $langAddToCourseHome,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$row->id",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=" . getIndirectReference($row->id),
                                 'icon' => $row->visible ? 'fa-eye-slash' : 'fa-eye'
                             ),
                             array('title' => q($langUp),
                                 'level' => 'primary',
                                 'icon' => 'fa-arrow-up',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$row->id",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=" . getIndirectReference($row->id),
                                 'disabled' => $i <= 0),
                             array('title' => q($langDown),
                                 'level' => 'primary',
                                 'icon' => 'fa-arrow-down',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$row->id",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=" . getIndirectReference($row->id),
                                 'disabled' => $i + 1 >= count($q)),
                             array('title' => q($langDelete),
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$row->id",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=" . getIndirectReference($row->id),
                                 'icon' => 'fa-times',
                                 'class' => 'delete',
                                 'confirm' => $langConfirmDelete)                            
@@ -116,7 +117,7 @@ if ($q && count($q) > 0) {
                 ) ."</div>";
         }
         $tool_content .= "  
-              <h3 class='panel-title'>$row->title ".($row->visible && $is_editor ? "&nbsp;<span data-original-title='$langSeenToCourseHome' data-toggle='tooltip' data-placement='bottom' class='label label-primary'><i class='fa fa-eye'></i></span>" : "")."</h3>      
+              <h3 class='panel-title'>".q($row->title)." ".($row->visible && $is_editor ? "&nbsp;<span data-original-title='$langSeenToCourseHome' data-toggle='tooltip' data-placement='bottom' class='label label-primary'><i class='fa fa-eye'></i></span>" : "")."</h3>      
               </div>
               <div class='panel-body'>"
                 .handleType($row->type)."<br><br>"
@@ -163,24 +164,24 @@ function processActions() {
     global $tool_content, $langResourceCourseUnitDeleted, $course_id, $course_code;
 
     if (isset($_REQUEST['del'])) { // delete resource from course unit
-        $res_id = intval($_REQUEST['del']);
+        $res_id = intval(getDirectReference($_REQUEST['del']));
         Database::get()->query("DELETE FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
         Session::Messages($langResourceCourseUnitDeleted, "alert-success");
         redirect_to_home_page("modules/course_description/index.php?course=$course_code");
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only 
-        $res_id = intval($_REQUEST['vis']);
+        $res_id = intval(getDirectReference($_REQUEST['vis']));
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_description WHERE id = ?d AND course_id = ?d", $res_id, $course_id);
         $newvis = (intval($vis->visible) === 1) ? 0 : 1;
         Database::get()->query("UPDATE course_description SET `visible` = ?d, update_dt = NOW() WHERE id = ?d AND course_id = ?d", $newvis, $res_id, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
         redirect_to_home_page("modules/course_description/index.php?course=$course_code");
     } elseif (isset($_REQUEST['down'])) { // change order down
-        $res_id = intval($_REQUEST['down']);
+        $res_id = intval(getDirectReference($_REQUEST['down']));
         move_order('course_description', 'id', $res_id, 'order', 'down', "course_id = $course_id");
         redirect_to_home_page("modules/course_description/index.php?course=$course_code");
     } elseif (isset($_REQUEST['up'])) { // change order up
-        $res_id = intval($_REQUEST['up']);
+        $res_id = intval(getDirectReference($_REQUEST['up']));
         move_order('course_description', 'id', $res_id, 'order', 'up', "course_id = $course_id");
         redirect_to_home_page("modules/course_description/index.php?course=$course_code");
     }

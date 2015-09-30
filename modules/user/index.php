@@ -31,7 +31,7 @@ require_once 'include/log.php';
 //Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
     if (isset($_POST['action']) && $_POST['action'] == 'delete') {
-        $unregister_gid = intval($_POST['value']);
+        $unregister_gid = intval(getDirectReference($_POST['value']));
         $unregister_ok = true;
         // Security: don't remove myself except if there is another prof
         if ($unregister_gid == $uid) {
@@ -85,9 +85,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         }
         
     }
-    $order_sql = 'ORDER BY ';
-    $order_sql .= ($_GET['iSortCol_0'] == 0) ? 'user.givenname ' : 'course_user.reg_date ';
-    $order_sql .= $_GET['sSortDir_0'];
+    $sortDir = ($_GET['sSortDir_0'] == 'desc')? 'DESC': '';
+    $order_sql = 'ORDER BY ' . 
+        (($_GET['iSortCol_0'] == 0) ? "user.surname $sortDir, user.givenname $sortDir" : "course_user.reg_date $sortDir");
 
     $limit_sql = ($limit > 0) ? "LIMIT $offset,$limit" : "";
 
@@ -100,7 +100,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $result = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email,
                            user.am, user.has_icon, course_user.status,
                            course_user.tutor, course_user.editor, course_user.reviewer, 
-                           course_user.reg_date
+                           DATE(course_user.reg_date) AS reg_date
                     FROM course_user, user
                     WHERE `user`.`id` = `course_user`.`user_id` 
                     AND `course_user`.`course_id` = ?d
@@ -125,9 +125,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         //create date field with unregister button
         $date_field = ($myrow->reg_date == '0000-00-00') ? $langUnknownDate : nice_format($myrow->reg_date);
 
-        //Create appropriate role control buttons
+        // Create appropriate role control buttons
         // Admin right
-        $user_role_controls ="";
+        $user_role_controls = '';
         if ($myrow->id != $_SESSION["uid"] && $myrow->reviewer == '1') {
             $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id'><img src='$themeimg/reviewer_remove.png' alt='$langRemoveRightReviewer' title='$langRemoveRightReviewer'></a>";
         } else {
@@ -151,23 +151,23 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             ),
             array(
                 'title' => $myrow->tutor == '0' ? $langGiveRightTutor : $langRemoveRightTutor,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->tutor == '0' ? "give" : "remove")."Tutor=$myrow->id",
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->tutor == '0' ? "give" : "remove")."Tutor=". getIndirectReference($myrow->id),
                 'icon' => $myrow->tutor == '0' ? "fa-square-o" : "fa-check-square-o"
             ),
             array(
                 'title' => $myrow->editor == '0' ? $langGiveRightEditor : $langRemoveRightEditor,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=$myrow->id",
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=". getIndirectReference($myrow->id),
                 'icon' => $myrow->editor == '0' ? "fa-square-o" : "fa-check-square-o"
             ),            
             array(
                 'title' => $myrow->status != '1' ? $langGiveRightAdmin : $langRemoveRightAdmin,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->status == '1' ? "remove" : "give")."Admin=$myrow->id",
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->status == '1' ? "remove" : "give")."Admin=". getIndirectReference($myrow->id),
                 'icon' => $myrow->status != '1' ? "fa-square-o" : "fa-check-square-o",
                 'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1')
             ),
             array(
                 'title' => $myrow->reviewer != '1' ? $langGiveRightReviewer : $langRemoveRightReviewer,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->reviewer == '1' ? "remove" : "give")."Reviewer=$myrow->id",
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->reviewer == '1' ? "remove" : "give")."Reviewer=". getIndirectReference($myrow->id),
                 'icon' => $myrow->reviewer != '1' ? "fa-square-o" : "fa-check-square-o",
                 'disabled' => $myrow->id == $_SESSION["uid"],
                 'show' => get_config('opencourses_enable') && 
@@ -185,7 +185,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($myrow->reviewer == '1') array_push($user_roles, $langOpenCoursesReviewer);
         //setting datables column data
         $data['aaData'][] = array(
-            'DT_RowId' => $myrow->id,
+            'DT_RowId' => getIndirectReference($myrow->id),
             'DT_RowClass' => 'smaller',
             '0' => display_user($myrow->id) . "&nbsp<span>(<a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>) $am_message</span>",
             '1' => "<small>".implode(', ', $user_roles)."</small>",
@@ -194,7 +194,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             '4' => $user_role_controls
         );
     }
-    echo json_encode($data);
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit();
 }
 
@@ -305,12 +305,12 @@ $head_content .= "
 $limit_sql = '';
 // Handle user removal / status change
 if (isset($_GET['giveAdmin'])) {
-    $new_admin_gid = intval($_GET['giveAdmin']);
+    $new_admin_gid = intval(getDirectReference($_GET['giveAdmin']));
     Database::get()->query("UPDATE course_user SET status = " . USER_TEACHER . "
                         WHERE user_id = ?d
                         AND course_id = ?d", $new_admin_gid, $course_id);
 } elseif (isset($_GET['giveTutor'])) {
-    $new_tutor_gid = intval($_GET['giveTutor']);
+    $new_tutor_gid = intval(getDirectReference($_GET['giveTutor']));
     Database::get()->query("UPDATE course_user SET tutor = 1
                         WHERE user_id = ?d
                         AND course_id = ?d", $new_tutor_gid, $course_id);
@@ -319,23 +319,23 @@ if (isset($_GET['giveAdmin'])) {
                               `group`.course_id = ?d AND
                               group_members.user_id = ?d", $course_id, $new_tutor_gid);
 } elseif (isset($_GET['giveEditor'])) {
-    $new_editor_gid = intval($_GET['giveEditor']);
+    $new_editor_gid = intval(getDirectReference($_GET['giveEditor']));
     Database::get()->query("UPDATE course_user SET editor = 1
                         WHERE user_id = ?d
                         AND course_id = ?d", $new_editor_gid, $course_id);
 } elseif (isset($_GET['removeAdmin'])) {
-    $removed_admin_gid = intval($_GET['removeAdmin']);
+    $removed_admin_gid = intval(getDirectReference($_GET['removeAdmin']));
     Database::get()->query("UPDATE course_user SET status = " . USER_STUDENT . "
                         WHERE user_id <> ?d AND
                               user_id = ?d AND
                               course_id = ?d", $uid, $removed_admin_gid, $course_id);
 } elseif (isset($_GET['removeTutor'])) {
-    $removed_tutor_gid = intval($_GET['removeTutor']);
+    $removed_tutor_gid = intval(getDirectReference($_GET['removeTutor']));
     Database::get()->query("UPDATE course_user SET tutor = 0
                         WHERE user_id = ?d 
                               AND course_id = ?d", $removed_tutor_gid, $course_id);
 } elseif (isset($_GET['removeEditor'])) {
-    $removed_editor_gid = intval($_GET['removeEditor']);
+    $removed_editor_gid = intval(getDirectReference($_GET['removeEditor']));
     Database::get()->query("UPDATE course_user SET editor = 0
                         WHERE user_id = ?d 
                         AND course_id = ?d", $removed_editor_gid, $course_id);
@@ -343,12 +343,12 @@ if (isset($_GET['giveAdmin'])) {
 
 if (get_config('opencourses_enable')) {
     if (isset($_GET['giveReviewer'])) {
-        $new_reviewr_gid = intval($_GET['giveReviewer']);
+        $new_reviewr_gid = intval(getDirectReference($_GET['giveReviewer']));
         Database::get()->query("UPDATE course_user SET status = " . USER_TEACHER . ", reviewer = 1
                         WHERE user_id = ?d 
                         AND course_id = ?d", $new_reviewr_gid, $course_id);
     } elseif (isset($_GET['removeReviewer'])) {
-        $removed_reviewer_gid = intval($_GET['removeReviewer']);
+        $removed_reviewer_gid = intval(getDirectReference($_GET['removeReviewer']));
         Database::get()->query("UPDATE course_user SET status = " . USER_STUDENT . ", reviewer = 0
                         WHERE user_id <> ?d AND
                               user_id = ?d AND
@@ -356,7 +356,6 @@ if (get_config('opencourses_enable')) {
     }
 }
 
-$eclass_stud_reg = get_config('eclass_stud_reg');
 // show help link and link to Add new user, search new user and management page of groups
 $tool_content .= 
         action_bar(array(
@@ -373,15 +372,15 @@ $tool_content .=
             array('title' => $langAddGUser,
                 'url' => "guestuser.php?course=$course_code",
                 'icon' => 'fa-plane',
-                'show' => $eclass_stud_reg != 0),
+                'show' => get_config('course_guest') != 'off'),
             array('title' => $langGroupUserManagement,
                 'url' => "../group/index.php?course=$course_code",
                 'icon' => 'fa-users'),
             array('title' => "$langDumpUser ( $langcsvenc1 )",
-                'url' => "dumpuser.php?course=$course_code",
+                'url' => "dumpuser.php?course=$course_code&amp;enc=1253",
                 'icon' => 'fa-file-archive-o'),
             array('title' => "$langDumpUser ( $langcsvenc2 )",
-                'url' => "dumpuser.php?course=$course_code&amp;enc=1253",
+                'url' => "dumpuser.php?course=$course_code",
                 'icon' => 'fa-file-archive-o'),
             array('title' => $langDelUsers,
                 'url' => "../course_info/refresh_course.php?course=$course_code&amp;from_user=true",

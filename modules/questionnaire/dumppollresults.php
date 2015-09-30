@@ -30,29 +30,24 @@ if (!isset($_GET['pid'])) {
     $pid = intval($_GET['pid']);
 }
 
-if (!$is_editor) {
-    Session::Messages($langPollResultsAccess);
-    redirect_to_home_page('modules/questionnaire/index.php?course=' . $course_code);
-}
-
 if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
     $charset = 'Windows-1253';
+    $sendSep = true;
 } else {
     $charset = 'UTF-8';
+    $sendSep = false;
 }
 $full = isset($_GET['full']) && $_GET['full'];
 $crlf = "\r\n";
 
-if (!isset($_GET['pid'])) {
-    redirect_to_home_page();
-} else {
-    $pid = intval($_GET['pid']);
-}
-
 header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=pollresults.csv");
 
-$p = Database::get()->querySingle("SELECT pid, anonymized FROM poll
+if ($sendSep) {
+    echo 'sep=;', $crlf;
+}
+
+$p = Database::get()->querySingle("SELECT pid, name, anonymized FROM poll
         WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
 if (!$p) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -60,6 +55,10 @@ if (!$p) {
 
 $anonymized = $p->anonymized;
 $qlist = array();
+$total_participants = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) AS total FROM poll_answer_record WHERE pid = ?d", $p->pid)->total;
+echo csv_escape($langInfoPoll), $crlf, $crlf;
+echo csv_escape($langTitle), ';', csv_escape($p->name), $crlf;
+echo csv_escape($langPollTotalAnswers), ';', csv_escape($total_participants), $crlf, $crlf, $crlf;
 if ($full) {
     $begin = true;
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
@@ -121,40 +120,39 @@ if ($full) {
     foreach ($questions as $q) {
         if ($q->qtype == QTYPE_LABEL) {
             echo csv_escape(strip_tags($q->question_text)), $crlf, $crlf;
-        } elseif ($q->qtype == QTYPE_SINGLE or $q->qtype == QTYPE_MULTIPLE) {
-            $answers = Database::get()->queryArray("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
-                                FROM poll_answer_record
-                                    LEFT JOIN poll_question_answer
-                                        ON poll_answer_record.aid = poll_question_answer.pqaid
-                                WHERE qid = ?d GROUP BY aid", $q->pqid);
+        } else {
+            echo csv_escape($q->question_text), $crlf;
+            if ($q->qtype == QTYPE_SINGLE or $q->qtype == QTYPE_MULTIPLE) {
+                $answers = Database::get()->queryArray("SELECT COUNT(aid) AS count, aid, poll_question_answer.answer_text AS answer
+                                    FROM poll_answer_record
+                                        LEFT JOIN poll_question_answer
+                                            ON poll_answer_record.aid = poll_question_answer.pqaid
+                                    WHERE qid = ?d GROUP BY aid", $q->pqid);
+            } else {
+                $answers = Database::get()->queryArray("SELECT COUNT(arid) AS count, answer_text, user_id FROM poll_answer_record
+                                                           WHERE qid = ?d GROUP BY answer_text", $q->pqid);                
+            }
             $answer_counts = array();
             $answer_text = array();
             $answer_total = 0;
             foreach ($answers as $a) {
                 $answer_counts[] = $a->count;
                 $answer_total += $a->count;
-                if ($a->aid < 0) {
-                    $answer_text[] = $langPollUnknown;
+                if ($q->qtype == QTYPE_SINGLE or $q->qtype == QTYPE_MULTIPLE) {
+                    if ($a->aid < 0) {
+                        $answer_text[] = $langPollUnknown;
+                    } else {
+                        $answer_text[] = $a->answer;
+                    }
                 } else {
-                    $answer_text[] = $a->answer;
+                    $answer_text[] = $a->answer_text;
                 }
             }
-            echo csv_escape($langAnswers), ';', csv_escape($langResults), ' (%)', $crlf;
+            echo csv_escape($langAnswers), ';', csv_escape($langResults), ';', csv_escape($langResults), ' (%)', $crlf;
             foreach ($answer_counts as $i => $count) {
                 $percentage = round(100 * ($count / $answer_total));
                 $label = $answer_text[$i];
                 echo csv_escape($label), ';', csv_escape($count), ';', csv_escape($percentage), $crlf;
-            }
-            echo $crlf;
-        } else { // free text questions
-            echo csv_escape($q->question_text), $crlf;
-            $answers = Database::get()->queryArray("SELECT answer_text, user_id FROM poll_answer_record
-                                                           WHERE qid = ?d", $q->pqid);
-            $k = 0;
-            foreach ($answers as $a) {
-                $k++;
-                $student_name = $anonymized? "$langStudent $k": uid_to_name($a->user_id);
-                echo csv_escape($student_name), ';', csv_escape($a->answer_text), $crlf;
             }
             echo $crlf;
         }

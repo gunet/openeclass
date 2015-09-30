@@ -31,11 +31,12 @@ $navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
 check_uid();
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['unsub'])) {
         Database::get()->query("UPDATE user SET receive_mail = 1 WHERE id = ?d", $uid);
     }
     if (isset($_POST['cid'])) {  // change email subscription for one course
-        $cid = intval($_POST['cid']);
+        $cid = intval(getDirectReference($_POST['cid']));
         if (isset($_POST['c_unsub'])) {
             Database::get()->query("UPDATE course_user SET receive_mail = 1
                                 WHERE user_id = ?d AND course_id = ?d", $uid, $cid);
@@ -64,13 +65,13 @@ $tool_content .= action_bar(array(
     array('title' => $langBack,
           'url' => 'display_profile.php',
           'icon' => 'fa-reply',
-          'level' => 'primary-label')));    
+          'level' => 'primary-label')));
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
-    if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
+    if (get_config('email_verification_required') or get_config('dont_mail_unverified_mails')) {
         $user_email_status = get_mail_ver_status($uid);
         if ($user_email_status == EMAIL_VERIFICATION_REQUIRED or
                 $user_email_status == EMAIL_UNVERIFIED) {
-            $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+            $link = "<a href = '{$urlAppend}modules/auth/mail_verify_change.php?from_profile=true'>$langHere</a>.";
             $tool_content .= "<div class='alert alert-warning'>$langMailNotVerified $link</div>";
         }
     }
@@ -81,12 +82,12 @@ $tool_content .= action_bar(array(
     }
     $tool_content .= "<div class='alert alert-info'>$langInfoUnsubscribe</div>
                           <div id='unsubscontrols'>";
-    if (isset($_POST['cid'])) { // one course only
-        $cid = intval($_POST['cid']);
+    if (isset($_REQUEST['cid'])) { // one course only
+        $cid = intval($_REQUEST['cid']);
         $course_title = course_id_to_title($cid);
         $selected = get_user_email_notification($uid, $cid) ? 'checked' : '';
         $tool_content .= "<input type='checkbox' name='c_unsub' value='1' $selected>&nbsp;" . q($course_title) . "<br />";
-        $tool_content .= "<input type='hidden' name='cid' value='$cid'>";
+        $tool_content .= "<input type='hidden' name='cid' value='" . getIndirectReference($cid) . "'>";
     } else { // displays all courses
         foreach ($_SESSION['courses'] as $code => $status) {
             $title = course_code_to_title($code);
@@ -99,7 +100,7 @@ $tool_content .= action_bar(array(
                     <br>
                         <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                         <a class='btn btn-default' href='display_profile.php'>$langCancel<a>";
-    $tool_content .= "</form>";
+    $tool_content .= generate_csrf_token_form_field() ."</form>";
 }
 
 draw($tool_content, 1, null, $head_content);

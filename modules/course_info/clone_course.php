@@ -39,33 +39,26 @@ $treeObj = new Hierarchy();
 $_POST['restoreThis'] = null; // satisfy course_details_form()
 
 if (isset($_POST['create_restored_course'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $currentCourseCode = $course_code;
-    $success = doArchive($course_id, $course_code);
-    
-    if ($success !== 0) {
-        $retArr = unpack_zip_inner($webDir . "/courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip");
-        $restoreEntry = null;
-        
-        foreach ($retArr as $entry) {
-            if ($entry['course'] === $course_code) {
-                $restoreEntry = $entry;
-            }
-        }
 
-        if ($restoreEntry !== null) {
-            $_POST['restoreThis'] = $restoreEntry['path']; // assign the real value to the variable, but no real essence here
-            register_posted_variables(array('restoreThis' => true,
-                'course_code' => true,
-                'course_lang' => true,
-                'course_title' => true,
-                'course_desc' => true,
-                'course_vis' => true,
-                'course_prof' => true), 'all', 'autounquote');
-            create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);
-            $tool_content .= "</p><br /><center><p><a href='index.php?course=$currentCourseCode'>$langBack</a></p></center>";
-            $course_code = $currentCourseCode; // revert course code to the correct value
-        }
-    }
+    $restoreThis = $webDir . '/courses/tmpUnzipping/' .
+        $uid . '/' . safe_filename();
+    mkdir($restoreThis, 0755, true);
+    archiveTables($course_id, $course_code, $restoreThis);
+    recurse_copy($webDir . '/courses/' . $course_code,
+        $restoreThis . '/html');
+
+    register_posted_variables(array(
+        'course_code' => true,
+        'course_lang' => true,
+        'course_title' => true,
+        'course_desc' => true,
+        'course_vis' => true,
+        'course_prof' => true), 'all');
+
+    create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);
+    $course_code = $currentCourseCode; // revert course code to the correct value
 } else {
     $desc = Database::get()->querySingle("SELECT description FROM course WHERE id = ?d", $course_id)->description;
     $old_deps = array();
@@ -77,7 +70,7 @@ if (isset($_POST['create_restored_course'])) {
     $tool_content = course_details_form($public_code, $currentCourseName, $titulaires, $currentCourseLanguage, null, $visible, $desc, $old_deps);
 }
 
-load_js('jstree');
+load_js('jstree3');
 list($js, $html) = $treeObj->buildCourseNodePicker();
 $head_content .= $js;
 draw($tool_content, 2, null, $head_content);

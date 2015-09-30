@@ -43,6 +43,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/weeks/functions.php';
 require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
+require_once 'modules/course_metadata/CourseXML.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -65,11 +66,7 @@ load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 ModalBoxHelper::loadModalBox();
 $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
 <script type='text/javascript'>
-    $(document).ready(function() {  
-    
-        
-
-            $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });"
+    $(document).ready(function() {  "
 //Calendar stuff
 .'var calendar = $("#bootstrapcalendar").calendar({
                     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
@@ -101,7 +98,28 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
     </script>";
 
 // For statistics: record login
-Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip = '$_SERVER[REMOTE_ADDR]', date_time = " . DBHelper::timeAfter() . "", $uid, $course_id);
+Database::get()->query("INSERT INTO logins
+    SET user_id = ?d, course_id = ?d, ip = ?s, date_time = " . DBHelper::timeAfter(),
+    $uid, $course_id, $_SERVER['REMOTE_ADDR']);
+
+// opencourses hits sumation
+$visitsopencourses = 0;
+$hitsopencourses = 0;
+if (get_config('opencourses_enable')) {
+    $cxml = CourseXMLElement::initFromFile($course_code);
+    $reslastupdate = Database::get()->querySingle("select datestamp from oai_record where course_id = ?d and deleted = ?d", $course_id, 0);
+    $lastupdate = null;
+    if ($reslastupdate) {
+        $lastupdate = strtotime($reslastupdate->datestamp);
+    }
+    if ($cxml && $lastupdate && (time() - $lastupdate > 24 * 60 * 60)) {
+        // need to refresh hits when no update occurred during the last 24 hours
+        CourseXMLElement::refreshCourse($course_id, $course_code);
+        $cxml = CourseXMLElement::initFromFile($course_code);
+    }
+    $visitsopencourses = ($cxml && $cxml->visits) ? intval((string) $cxml->visits) : 0;
+    $hitsopencourses = ($cxml && $cxml->hits) ? intval((string) $cxml->hits) : 0;
+}
 
 $action = new action();
 $action->record(MODULE_ID_UNITS);
@@ -124,16 +142,67 @@ $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type
                                     LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 
-$tool_content .= "<div style='display: none'>";
-
+$head_content .= "
+        <script>
+            $(function() {
+                $('body').keydown(function(e) {
+                    if(e.keyCode == 37 || e.keyCode == 39) {
+                        if ($('.modal.in').length) {
+                            var visible_modal_id = $('.modal.in').attr('id').match(/\d+/);
+                            if (e.keyCode == 37) {
+                                var new_modal_id = parseInt(visible_modal_id) - 1;
+                            } else {
+                                var new_modal_id = parseInt(visible_modal_id) + 1;
+                            }
+                            var new_modal = $('#hidden_'+new_modal_id);  
+                            if (new_modal.length) {
+                                hideVisibleModal();
+                                new_modal.modal('show');
+                            }
+                        }
+                    }                
+                });
+            });
+            function hideVisibleModal(){
+                var visible_modal = $('.modal.in');
+                if (visible_modal) { // modal is active
+                    visible_modal.modal('hide'); // close modal
+                }              
+            };
+        </script>";
 if(count($res)>0){
     $course_info_extra = "";
-    foreach ($res as $row) {
+    foreach ($res as $key => $row) {
         $desctype = intval($row->type) - 1;    
-        $hidden_id = "hidden_" . $row->id;
-        $tool_content .= "<div id='$hidden_id'><h1>" . q($row->title) . "</h1>" .
-                standard_text_escape($row->comments) . "</div>";    
-        $course_info_extra .= "<li><a class='md-trigger inline' data-modal='syllabus-prof' href='#$hidden_id'>".q($row->title) ."</a></li>";
+        $hidden_id = "hidden_" . $key;
+        $next_id = '';
+        $previous_id = '';
+        if ($key + 1 < count($res)) $next_id = "hidden_" . ($key + 1);
+        if ($key > 0) $previous_id = "hidden_" . ($key - 1);
+                
+        $tool_content .=    "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+                                <div class='modal-dialog'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <h4 class='modal-title' id='myModalLabel'>" . q($row->title) . "</h4>
+                                    </div>
+                                    <div class='modal-body'>".
+                                      standard_text_escape($row->comments)
+                                    ."</div>
+                                    <div class='modal-footer'>";
+                                        if ($previous_id) {
+                                            $tool_content .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><i class='fa fa-arrow-left'></i></a>";
+                                        } 
+                                        if ($next_id) {
+                                            $tool_content .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><i class='fa fa-arrow-right'></i></a>";
+                                        }                                                                              
+        $tool_content .=    "                                            
+                                    </div>                                        
+                                  </div>
+                                </div>
+                              </div>";
+        $course_info_extra .= "<li><a data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($row->title) ."</a></li>";
     }
     $course_info_btn = "
             <div class='btn-group' role='group'>
@@ -150,19 +219,10 @@ if(count($res)>0){
    $course_info_btn = ''; 
 }
 
-$tool_content .= "</div>";
-
-
-
 $main_content .= "<div class='course_info'>";
 if ($course_info->description) {
     $description = standard_text_escape($course_info->description);
-    $main_content .= "
-
-    <div id='descr_content'>
-        $description
-    </div>
-    ";
+    $main_content .= "<div id='descr_content'>$description</div>";
 } else {
     $main_content .= "<p class='not_visible'> - $langThisCourseDescriptionIsEmpty - </p>";
 }
@@ -215,20 +275,9 @@ units_set_maxorder();
 if ($is_editor) {
     // update index and refresh course metadata
     require_once 'modules/search/indexer.class.php';
-    require_once 'modules/course_metadata/CourseXML.php';
 
-    if (isset($_REQUEST['edit_submit'])) {
-        $main_content .= handle_unit_info_edit();
-    } elseif (isset($_REQUEST['edit_submitW'])){
-        $title = $_REQUEST['weektitle'];
-        $descr = $_REQUEST['weekdescr'];
-        if (isset($_REQUEST['week_id'])) { //edit week
-            $weekid = $_REQUEST['week_id'];
-            Database::get()->query("UPDATE course_weekly_view SET title = ?s, comments = ?s
-                                    WHERE id = ?d ", $title, $descr, $weekid);
-        }
-    } elseif (isset($_REQUEST['del'])) { // delete course unit
-        $id = intval($_REQUEST['del']);
+    if (isset($_REQUEST['del'])) { // delete course unit
+        $id = intval(getDirectReference($_REQUEST['del']));
         if ($course_info->view_type == 'units') {
             Database::get()->query('DELETE FROM course_units WHERE id = ?d', $id);
             Database::get()->query('DELETE FROM unit_resources WHERE unit_id = ?d', $id);
@@ -236,9 +285,10 @@ if ($is_editor) {
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYUNIT, Indexer::RESOURCE_UNITRESOURCE, $id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
-            $main_content .= "<div class='alert alert-success'>$langCourseUnitDeleted</div>";
+            Session::Messages($langCourseUnitDeleted, 'alert-success');
+            redirect_to_home_page("courses/$course_code/");
         } else {
-            $res_id = intval($_GET['del']);
+            $res_id = intval(getDirectReference($_GET['del']));
             if (($id = check_admin_unit_resource($res_id))) {
                 Database::get()->query("DELETE FROM course_weekly_view_activities WHERE id = ?d", $res_id);
                 Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
@@ -248,7 +298,7 @@ if ($is_editor) {
             }
         }
     } elseif (isset($_REQUEST['vis'])) { // modify visibility
-        $id = intval($_REQUEST['vis']);
+        $id = intval(getDirectReference($_REQUEST['vis']));
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_units WHERE id = ?d", $id)->visible;
         $newvis = ($vis == 1) ? 0 : 1;
         Database::get()->query("UPDATE course_units SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
@@ -257,32 +307,32 @@ if ($is_editor) {
         CourseXMLElement::refreshCourse($course_id, $course_code);
     } elseif (isset($_REQUEST['access'])) {
         if ($course_viewType == 'weekly') {
-            $id = intval($_REQUEST['access']);
+            $id = intval(getDirectReference($_REQUEST['access']));
             $access = Database::get()->querySingle("SELECT `public` FROM course_weekly_view WHERE id = ?d", $id);
             $newaccess = ($access->public == '1') ? '0' : '1';
             Database::get()->query("UPDATE course_weekly_view SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
         } else {
-            $id = intval($_REQUEST['access']);
+            $id = intval(getDirectReference($_REQUEST['access']));
             $access = Database::get()->querySingle("SELECT `public` FROM course_units WHERE id = ?d", $id);
             $newaccess = ($access->public == '1') ? '0' : '1';
             Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
         }
     } elseif (isset($_REQUEST['down'])) {
-        $id = intval($_REQUEST['down']); // change order down
+        $id = intval(getDirectReference($_REQUEST['down'])); // change order down
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
             move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
         } else {
-            $res_id = intval($_REQUEST['down']);
+            $res_id = intval(getDirectReference($_REQUEST['down']));
             if (($id = check_admin_unit_resource($res_id))) {
                 move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'down', "course_weekly_view_id=$id");
             }
         }
     } elseif (isset($_REQUEST['up'])) { // change order up
-        $id = intval($_REQUEST['up']);
+        $id = intval(getDirectReference($_REQUEST['up']));
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
             move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
         } else {
-            $res_id = intval($_REQUEST['up']);
+            $res_id = intval(getDirectReference($_REQUEST['up']));
             if (($id = check_admin_unit_resource($res_id))) {
                 move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'up', "course_weekly_view_id=$id");
             }
@@ -290,21 +340,13 @@ if ($is_editor) {
     }
 
     if (isset($_REQUEST['visW'])) { // modify visibility of the Week
-        $id = intval($_REQUEST['visW']);
+        $id = intval(getDirectReference($_REQUEST['visW']));
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_weekly_view WHERE id = ?d", $id)->visible;
         $newvis = ($vis == 1) ? 0 : 1;
         Database::get()->query("UPDATE course_weekly_view SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
     }
 
-    if (isset($_REQUEST['edit_submitW'])) { //update title and comments for week
-        $title = $_REQUEST['weektitle'];
-        $descr = $_REQUEST['weekdescr'];
-        $unit_id = $_REQUEST['week_id'];
-        Database::get()->query("UPDATE course_weekly_view SET
-                                        title = ?s,
-                                        comments = ?s
-                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
-    }
+
 }
 //style='color:#999999; font-size:13px;'
 $bar_content .= "<b>" . $langCode . ":</b> " . q($public_code) . "" .
@@ -345,9 +387,24 @@ $bar_content_2 = "<br><b>$langConfidentiality:</b> $lessonStatus";
 if ($is_course_admin) {
     $link = "<a href='{$urlAppend}modules/user/?course=$course_code'>$numUsers $langRegistered</a>";
 } else {
-    $link = "$numUsers $langRegistered";
+    $link = "<a href='{$urlAppend}modules/user/userslist.php?course=$course_code'>$numUsers $langRegistered</a>";
 }
 $bar_content_2 .= "<br><b>$langUsers:</b> $link";
+$citation_text = "$professor.&nbsp;<i>$currentCourseName.</i>&nbsp;$langAccessed" . claro_format_locale_date($dateFormatLong, strtotime('now')) . "&nbsp;$langFrom2 {$urlServer}courses/$course_code/";
+$tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+                    <div class='modal-dialog'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                <h4 class='modal-title' id='myModalLabel'>$langCitation</h4>
+                            </div>
+                            <div class='modal-body'>".
+                              standard_text_escape($citation_text)
+                            ."</div>                                
+                        </div>
+                    </div>
+                </div>";
+$bar_content_2 .= "<br><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'>$langCitation</a>";
 
 // display course license
 if ($course_license) {
@@ -357,12 +414,11 @@ if ($course_license) {
 }
 
 // display opencourses level in bar
-require_once 'modules/course_metadata/CourseXML.php';
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
     $head_content .= "
-<link rel='stylesheet' type='text/css' href='course_metadata.css'>
+<link rel='stylesheet' type='text/css' href='{$urlAppend}modules/course_metadata/course_metadata.css'>
 <style type='text/css'></style>
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -383,7 +439,7 @@ if (isset($level) && !empty($level)) {
     });
 
 /* ]]> */
-</script>";   
+</script>";
     $opencourses_level = "
     <div class='row'>
         <div class='col-md-4'>
@@ -394,31 +450,17 @@ if (isset($level) && !empty($level)) {
             <br />
             <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata " .
             icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");") . "</small>
+            <br />
+            <small>$langVisits: $visitsopencourses</small>
+            <br />
+            <small>$langHits: $hitsopencourses</small>
         </div>
     </div>
-
-
-    <table class='tbl_courseid' width='200' style='display: none;'>
-        <tr class='title1'>
-            <td class='title1'></td>
-            <td style='text-align: right; padding-right: 1.2em'><a href='$metadataUrl'>" .
-            icon('fa-tags', $langCourseMetadata, $metadataUrl) . "</td>
-        </tr>
-        <tr>
-            <td colspan='2'><div class='center'>".icon('open_courses_logo_small', $langOpenCourses)."</div>
-                <div class='center'><b>${langOpenCoursesLevel}: $level</b></div>
-            </td>
-        </tr>
-    </table>";
+";
 }
 
-$emailnotification = '';
-if ($uid and $status != USER_GUEST and ! get_user_email_notification($uid, $course_id)) {
-    $emailnotification = "<div class='alert alert-warning'>$langNoUserEmailNotification
-        (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
-}
 // display `contact teacher via email` link if teacher actually receives email from his course
-$receive_mail = FALSE;
+/*$receive_mail = FALSE;
 $rec_mail = array();
 $q = Database::get()->queryArray("SELECT user_id FROM course_user WHERE course_id = ?d
                                 AND status = ?d", $course_id, USER_TEACHER);
@@ -431,7 +473,7 @@ foreach ($q as $p) {
 if (!empty($rec_mail)) {
     $receive_mail = TRUE;
 }
-
+*/
 // Contentbox: Course main contentbox
 //Temp commit (waiting for Alex to fix course description issue) 
 if ($course_info->home_layout == 3) {
@@ -465,7 +507,7 @@ if ($course_info->home_layout == 3) {
    $left_column = "
             <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>";
    if ($course_info->home_layout == 1) {
-       $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/$course_info->course_image" : "$themeimg/ph1.jpg";
+       $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . urlencode($course_info->course_image) : "$themeimg/ph1.jpg";
        $left_column .= "
                 <div>
                     <img class='banner-image img-responsive' src='$course_image_url'/>
@@ -484,6 +526,7 @@ if ($course_info->home_layout == 3) {
 }
 $edit_link = "";
 if ($is_editor) {
+    warnCourseInvalidDepartment(true);
     $edit_link = "
     <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' data-toggle='tooltip' data-placement='top' title='$langCourseInformationText'><i class='pull-left fa fa-edit fa'></i></a>";
 } else {
@@ -561,20 +604,20 @@ if ($is_editor) {
             }
             $cunits_content .= "<div class='col-xs-12'><div class='panel clearfix'><div class='col-xs-12'>
                                     <div class='item-content'>
-                                        <div class='item-header'>
+                                        <div class='item-header clearfix'>
                                             <h4 class='item-title'>$href</h4>";
                                 if ($is_editor) {
                 if ($course_info->view_type == 'weekly') { // actions for course weekly format
                     $cunits_content .= "<div class='item-side'>" .
                     action_button(array(
                         array('title' => $langEditChange,
-                              'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$cu->id",
+                              'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$cu->id&amp;cnt=$count_index",
                               'icon' => 'fa-edit'),
                         array('title' => $vis == 1? $langViewHide : $langViewShow,
-                              'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?visW=". getIndirectReference($cu->id),
                               'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
-                              'url' => "$_SERVER[SCRIPT_NAME]?access=$cu->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?access=". getIndirectReference($cu->id),
                               'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
                               'show' => $visible == COURSE_OPEN),)) .
                     '</div>';                    
@@ -586,23 +629,23 @@ if ($is_editor) {
                               'icon' => 'fa-edit'),
                         array('title' => $langDown,
                               'level' => 'primary',
-                              'url' => "$_SERVER[SCRIPT_NAME]?down=$cu->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?down=". getIndirectReference($cu->id),
                               'icon' => 'fa-arrow-down',
                               'disabled' => $cu->id == $last_id),
                         array('title' => $langUp,
                               'level' => 'primary',
-                              'url' => "$_SERVER[SCRIPT_NAME]?up=$cu->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?up=". getIndirectReference($cu->id),
                               'icon' => 'fa-arrow-up',
                               'disabled' => $count_index == 1),
                         array('title' => $vis == 1? $langViewHide : $langViewShow,
-                              'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?vis=". getIndirectReference($cu->id),
                               'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
-                              'url' => "$_SERVER[SCRIPT_NAME]?access=$cu->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?access=". getIndirectReference($cu->id),
                               'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
                               'show' => $visible == COURSE_OPEN),
                         array('title' => $langDelete,
-                              'url' => "$_SERVER[SCRIPT_NAME]?del=$cu->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?del=". getIndirectReference($cu->id),
                               'icon' => 'fa-times',
                               'class' => 'delete',
                               'confirm' => $langCourseUnitDeleteConfirm))) .
@@ -610,10 +653,9 @@ if ($is_editor) {
                 }
             }
                         $cunits_content .= "</div>	
-                                        <div class='item-body'>
-                                            $cu->comments
-                                        </div>			
-                                    </div>";
+                                        <div class='item-body'>";
+                        $cunits_content .= ($cu->comments == ' ')?'':$cu->comments;
+                        $cunits_content .= "</div></div>";
             $cunits_content .= "</div></div></div>";            
         }
     } else {
@@ -717,8 +759,8 @@ $tool_content .="<div class='row'>";
                                         <ul class='tablelist'>" . course_announcements() . "
                                         </ul>
                                     </div>
-                                    <div class='panel-footer'>
-                                        <p class='link-to-more'><a href='{$urlAppend}modules/announcements/?course=$course_code'>$langMore&hellip;</a></p>
+                                    <div class='panel-footer clearfix'>
+                                        <div class='pull-right'><a href='{$urlAppend}modules/announcements/?course=$course_code'><small>$langMore&hellip;</small></a></div>
                                     </div>
                                 </div>
                             </div>

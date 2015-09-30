@@ -26,6 +26,34 @@ $helpTopic = 'Attendance';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'functions.php';
+
+$toolName = $langAttendance;
+
+// needed for updating users lists
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['assign_type'])) {
+        if ($_POST['assign_type'] == 2) {
+            $data = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d", $course_id);
+        } else {
+            $data = array();
+            // users who don't participate in attendance
+            $d1 = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                            FROM user, course_user
+                                                WHERE user.id = course_user.user_id 
+                                                AND course_user.course_id = ?d 
+                                                AND course_user.status = " . USER_STUDENT . "
+                                            AND user.id NOT IN (SELECT uid FROM attendance_users WHERE attendance_id = $_REQUEST[attendance_id])", $course_id);
+            $data[0] = $d1;
+            // users who already participate in attendance
+            $d2 = Database::get()->queryArray("SELECT uid AS id, givenname, surname FROM user, attendance_users 
+                                        WHERE attendance_users.uid = user.id AND attendance_id = $_REQUEST[attendance_id]");
+            $data[1] = $d2;
+        }
+    }
+    echo json_encode($data);    
+    exit;
+}
 
 //Datepicker
 load_js('tools.js');
@@ -34,25 +62,22 @@ load_js('bootstrap-datetimepicker');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 
-$head_content .= "
+@$head_content .= "
 <script type='text/javascript'>
 $(function() {
-    $('input[name=date]').datetimepicker({
-            format: 'yyyy-mm-dd hh:ii',
+    $('#startdatepicker, #enddatepicker').datetimepicker({    
+            format: 'dd-mm-yyyy', 
             pickerPosition: 'bottom-left', 
             language: '".$language."',
-            autoclose: true             
+            autoclose: true 
         });
     var oTable = $('#users_table{$course_id}').DataTable ({
-        'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-               ],'aLengthMenu': [
+                'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],
                'fnDrawCallback': function( oSettings ) {
-                            $('#users_table{$course_id} label input').attr({
+                            $('#users_table{$course_id}_wrapper label input').attr({
                               class : 'form-control input-sm',
                               placeholder : '$langSearch...'
                             });
@@ -76,1127 +101,486 @@ $(function() {
                        }
                    }
     });
+    $('#user_attendances_form').on('submit', function (e) {
+        oTable.rows().nodes().page.len(-1).draw();             
+    });    
+$('input[id=button_groups]').click(changeAssignLabel);
+    $('input[id=button_some_users]').click(changeAssignLabel);
+    $('input[id=button_some_users]').click(ajaxParticipants);   
+    $('input[id=button_all_users]').click(hideParticipants);
+    function hideParticipants()
+    {
+        $('#participants_tbl').addClass('hide');
+        $('#users_box').find('option').remove();
+        $('#all_users').show();
+    }        
+    function changeAssignLabel()
+    {
+        var assign_to_specific = $('input:radio[name=specific_attendance_users]:checked').val();
+        if(assign_to_specific>0){
+           ajaxParticipants();
+        }         
+        if (this.id=='button_groups') {
+           $('#users').text('$langGroups');
+        } 
+        if (this.id=='button_some_users') {
+           $('#users').text('$langUsers');    
+        }        
+    }        
+    function ajaxParticipants()
+    {
+        $('#all_users').hide();
+        $('#participants_tbl').removeClass('hide');
+        var type = $('input:radio[name=specific_attendance_users]:checked').val();        
+        $.post('$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$_REQUEST[attendance_id]&editUsers=1',
+        {
+          assign_type: type
+        },
+        function(data,status){
+            var index;
+            var parsed_data = JSON.parse(data);            
+            var select_content = '';
+            var select_content_2 = '';
+            if (type==2) {
+                for (index = 0; index < parsed_data.length; ++index) {
+                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                }
+            }
+            if (type==1) {
+                for (index = 0; index < parsed_data[0].length; ++index) {
+                    select_content += '<option value=\"' + parsed_data[0][index]['id'] + '\">' + parsed_data[0][index]['surname'] + ' ' + parsed_data[0][index]['givenname'] + '<\/option>';
+                }
+                for (index = 0; index < parsed_data[1].length; ++index) {
+                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname'] + '<\/option>';
+                }
+            }            
+            $('#users_box').find('option').remove().end().append(select_content);
+            $('#participants_box').find('option').remove().end().append(select_content_2);
+            
+        });
+    }
 });
 </script>";
-    
-$toolName = $langAttendance;
-
-//change the attendance
-if (isset($_POST['selectAttendance'])){
-    $attendance_id = intval($_POST['attendanceYear']);
-    $attendance = Database::get()->querySingle("SELECT id FROM attendance WHERE course_id = ?d AND id = ?d  ", $course_id, $attendance_id);
-    if ($attendance) {
-      //make the others inactive
-      Database::get()->querySingle("UPDATE attendance SET active = 0 WHERE course_id = ?d AND active = 1 ", $course_id);
-      //make the new active
-      Database::get()->querySingle("UPDATE attendance SET active = 1 WHERE id = ?d ", $attendance->id);
-    }
-    Session::Messages($langChangeAttendanceSuccess,'alert-success');
-    redirect_to_home_page("modules/attendance/index.php?course=$course_code&editAttendanceBooks=1");
-}    
-    
-//add a new attendance
-if (isset($_POST['newAttendance']) && strlen($_POST['title'])){
-    //make the others inactive
-    Database::get()->querySingle("UPDATE attendance SET active = 0 WHERE course_id = ?d AND active = 1 ", $course_id);
-    
-    $newTitle = $_POST['title'];
-    $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, active = 1, title = ?s", $course_id, $newTitle)->lastInsertID;   
-    //create attendance users (default the last six months)
-    $limitDate = date('Y-m-d', strtotime(' -6 month'));
-    Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
-                            SELECT $attendance_id, user_id FROM course_user
-                            WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
-                                    $course_id, $limitDate);
-        
-    $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
-                                        FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
-    Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
-    redirect_to_home_page("modules/attendance/index.php?course=$course_code");
+                            
+                            
+$display = TRUE;
+if (isset($_REQUEST['attendance_id'])) {
+    $attendance_id = $_REQUEST['attendance_id'];
+    $attendance = Database::get()->querySingle("SELECT * FROM attendance WHERE id = ?d", $attendance_id);
+    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
+    $pageName = $langEditChange;
 }
 
-//attendance_id for the course: check if there is an attendance module for the course. If not insert it and create list of users
-$attendance = Database::get()->querySingle("SELECT id,`limit`, `students_semester`, `title` FROM attendance WHERE course_id = ?d AND active = 1", $course_id);
-if ($attendance) {
-    $attendance_id = $attendance->id;
-    $attendance_title = $attendance->title;
-    $attendance_limit = $attendance->limit;
-    $showSemesterParticipants = $attendance->students_semester;  
-    $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) as count FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
-}else{
-    //new attendance
-    $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, active = 1 ", $course_id)->lastInsertID;    
-    //create attendance users (default the last six months)
-    $limitDate = date('Y-m-d', strtotime(' -6 month'));
-    Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
-                            SELECT $attendance_id, user_id FROM course_user
-                            WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
-                                    $course_id, $limitDate);
-    $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count
-                                        FROM attendance_users WHERE attendance_id = ?d ", $attendance_id)->count;
-}
 
-//===================
-//tutor view
-//===================
 if ($is_editor) {
-    
-    //delete users from attendance users table        
-    if (isset($_GET['deleteuser']) and isset($_GET['ruid'])) {
-        Database::get()->query("DELETE FROM attendance_users WHERE uid = ?d AND attendance_id = ?d", $_GET['ruid'], $_GET['ab']);
+    // change attendance visibility
+    if (isset($_GET['vis'])) {
+        Database::get()->query("UPDATE attendance SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $_GET['attendance_id'], $course_id);
+        Session::Messages($langGlossaryUpdated, 'alert-success');
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
-        
-    // action and navigation bar
+    if (isset($_GET['dup'])) {
+        clone_attendance($attendance_id);
+        Session::Messages($langCopySuccess, 'alert-success');
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code");
+    }
+    
+    //add a new attendance
+    if (isset($_POST['newAttendance'])) {
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('title', 'limit', 'start_date', 'end_date'));
+        $v->rule('numeric', array('limit'));
+        $v->rule('date', array('start_date', 'end_date'));
+        if (!empty($_POST['end_date'])) {
+            $v->rule('dateBefore', 'start_date', $_POST['end_date']);
+        }        
+        $v->labels(array(
+            'title' => "$langTheField $langTitle",
+            'start_date' => "$langTheField $langStart",
+            'end_date' => "$langTheField $langEnd",            
+            'limit' => "$langTheField $langAttendanceLimitNumber"
+        ));
+        if($v->validate()) {           
+            $newTitle = $_POST['title'];
+            $attendance_limit = intval($_POST['limit']);
+            $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
+            $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');            
+            $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $attendance_limit, $newTitle, $start_date, $end_date)->lastInsertID;   
+
+            Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code");
+        } else {
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&new=1");
+        }
+    }    
+    //delete user from attendance list
+    if (isset($_GET['deleteuser']) and isset($_GET['ruid'])) {
+        delete_attendance_user($_GET['at'], $_GET['ruid']);        
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$_GET[at]&attendanceBook=1");        
+    }
+    
+    //reset attendance users
+    if (isset($_POST['resetAttendanceUsers'])) {               
+        if ($_POST['specific_attendance_users'] == 2) { // specific users group
+            foreach ($_POST['specific'] as $g) {
+                $ug = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
+                foreach ($ug as $u) {
+                    $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
+                            SELECT $attendance_id, user_id FROM course_user
+                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
+                    update_user_attendance_activities($attendance_id, $u->user_id);
+                }
+            }
+        } elseif ($_POST['specific_attendance_users'] == 1) { // specific users            
+            $active_attendance_users = '';
+            $extra_sql_not_in = "";
+            $extra_sql_in = "";
+            if (isset($_POST['specific'])) {
+                foreach ($_POST['specific'] as $u) {
+                    $active_attendance_users .= $u . ",";
+                }
+            }
+            $active_attendance_users = substr($active_attendance_users, 0, -1);
+            if ($active_attendance_users) {
+                $extra_sql_not_in .= " NOT IN ($active_attendance_users)";
+                $extra_sql_in .= " IN ($active_attendance_users)";
+            }            
+            $gu = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d
+                                                AND uid$extra_sql_not_in", $attendance_id);            
+            foreach ($gu as $u) {
+                delete_attendance_user($attendance_id, $u);
+            }
+            $already_inserted_users = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d
+                                                AND uid$extra_sql_in", $attendance_id);
+            $already_inserted_ids = [];
+            foreach ($already_inserted_users as $already_inserted_user) {
+                array_push($already_inserted_ids, $already_inserted_user->uid);
+            }
+            if (isset($_POST['specific'])) {
+                foreach ($_POST['specific'] as $u) {
+                    if (!in_array($u, $already_inserted_ids)) {
+                        $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
+                                SELECT $attendance_id, user_id FROM course_user
+                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u); 
+                        update_user_attendance_activities($attendance_id, $u);
+                    }
+                }
+            }
+        } else { // if we want all users between dates            
+            $usersstart = new DateTime($_POST['UsersStart']);
+            $usersend = new DateTime($_POST['UsersEnd']);
+            // Delete all students not in the Date Range
+            $gu = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user "
+                    . "WHERE attendance_users.uid = course_user.user_id "
+                    . "AND attendance_users.attendance_id = ?d "
+                    . "AND course_user.status = " . USER_STUDENT . " "
+                    . "AND DATE(course_user.reg_date) NOT BETWEEN ?s AND ?s", $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+                    
+            foreach ($gu as $u) {
+                delete_attendance_user($attendance_id, $u);
+            }
+            //Add students that are not already registered to the gradebook
+            $already_inserted_users = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user "
+                    . "WHERE attendance_users.uid = course_user.user_id "
+                    . "AND attendance_users.attendance_id = ?d "
+                    . "AND course_user.status = " . USER_STUDENT . " "
+                    . "AND DATE(course_user.reg_date) BETWEEN ?s AND ?s", $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));                         
+            $already_inserted_ids = [];
+            foreach ($already_inserted_users as $already_inserted_user) {
+                array_push($already_inserted_ids, $already_inserted_user->uid);
+            }
+            $valid_users_for_insertion = Database::get()->queryArray("SELECT user_id 
+                        FROM course_user
+                        WHERE course_id = ?d 
+                        AND status = " . USER_STUDENT . " "
+                    . "AND DATE(reg_date) BETWEEN ?s AND ?s",$course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+
+            foreach ($valid_users_for_insertion as $u) {
+                if (!in_array($u->user_id, $already_inserted_ids)) {
+                    Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) VALUES (?d, ?d)", $attendance_id, $u->user_id);
+                    update_user_attendance_activities($attendance_id, $u->user_id);
+                }
+            }            
+        }
+        Session::Messages($langGradebookEdit,"alert-success");                    
+        redirect_to_home_page('modules/attendance/index.php?course=' . $course_code . '&attendance_id=' . $attendance_id . '&attendanceBook=1');
+    }
+
+    // Top menu
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
-    if(isset($_GET['editUsers'])){
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
+    
+    if (isset($_GET['editUsers']) or isset($_GET['Book'])) {
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $pageName = isset($_GET['editUsers']) ? $langRefreshList : $langAttendanceManagement;
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
+                  'icon' => 'fa fa-reply ',
+                  'level' => 'primary-label')
+            ));
+    } elseif(isset($_GET['editSettings'])) {
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langConfig;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
-    } elseif (isset($_GET['editAttendanceBooks'])) {
-        $pageName = $langAttendanceManagement;
+    } elseif (isset($_GET['attendanceBook'])) {                
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $pageName = $langAttendanceActiveUsers;
         $tool_content .= action_bar(array(
+            array('title' => $langRefreshList,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1",
+                  'icon' => 'fa-users',
+                  'level' => 'primary-label'),
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
-                  'level' => 'primary-label')
-            ));        
-    } elseif (isset($_GET['attendanceBook'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $pageName = $langUsers;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
-                  'level' => 'primary-label')
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
+                  'icon' => 'fa fa-reply',
+                  'level' => 'primary-label')            
             ));
     } elseif (isset($_GET['modify'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $pageName = $langModify;
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $pageName = $langEditChange;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['ins'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $actID = intval($_GET['ins']);
-        $result = Database::get()->querySingle("SELECT * FROM attendance_activities  WHERE id = ?d", $actID);
-        $pageName = $langAttendanceBook.' '.$result->title;
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
-    } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
+    } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         if (isset($_GET['addActivityAs'])) {
             $pageName = "$langAdd $langInsertWork";
         } elseif (isset($_GET['addActivityEx'])) {
             $pageName = "$langAdd $langInsertExercise";
+        } elseif (isset($_GET['addActivityLp'])) {
+            $pageName = "$langAdd $langLearningPath1";
         } else {
-            $pageName = $langAttendanceAddActivity;
+            $pageName = $langGradebookAddActivity;
         }
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
+                  'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['book'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $pageName = $langAttendanceBook;
-        $tool_content .= action_bar(array(
-            array('title' => $langUsers,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
-                  'icon' => 'fa fa-reply space-after-icon',
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
+        $pageName = $langGradebookBook;
+        $tool_content .= action_bar(array(            
+            array('title' => $langGradebookBook,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
+                  'icon' => 'fa fa-reply',
                   'level' => 'primary-label'),
             array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
+                  'icon' => 'fa fa-reply ',
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success')
+            ));
+        
+    } elseif (isset($_GET['new'])) {
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
+        $pageName = $langNewAttendance;
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',)
-            ));
-    } else {
-        $pageName = ($attendance && $attendance->title) ? $attendance->title : $langAttendanceNoTitle2;
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label')));
+    } elseif (isset($_GET['attendance_id']) && $is_editor) {        
+        $pageName = get_attendance_title($attendance_id);
+    }  elseif (!isset($_GET['attendance_id'])) {
         $tool_content .= action_bar(
-            array(         
-                array('title' => $langConfig,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
-                      'icon' => 'fa fa-cog space-after-icon',
-                      'level' => 'primary-label'),
-                array('title' => $langUsers,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
-                      'icon' => 'fa fa-users',
-                      'level' => 'primary-label'),
-                array('title' => $langAttendances,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editAttendanceBooks=1",
-                      'icon' => 'fa fa-list space-after-icon',
-                      'level' => 'primary-label'),               
-                array('title' => $langAttendanceAddActivity,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
-                      'icon' => 'fa fa-plus'),
-                array('title' => "$langInsertWork",
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
-                      'icon' => 'fa fa-flask'),
-                array('title' => "$langInsertExercise",
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
-                      'icon' => 'fa fa-edit')
-            ),
-            true,
             array(
-                'secondary_title' => $langAdd,
-                'secondary_icon' => 'fa-plus'
-            ));
-        
-    }       
-    
+                array('title' => $langNewAttendance,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;new=1",
+                      'icon' => 'fa-plus',
+                      'level' => 'primary-label',
+                      'button-class' => 'btn-success')));
+    }
     $tool_content .= "</div></div>";
-
-    //FLAG: flag to show the activities
-    $showAttendanceActivities = 1;       
     
-    //EDIT: edit title
-    if (isset($_POST['titleSubmit']) && strlen($_POST['title'])) {
-        $attendance_title = $_POST['title'];
-        Database::get()->querySingle("UPDATE attendance SET `title` = ?s WHERE id = ?d ", $attendance_title, $attendance_id);
-            Session::Messages($langAttendanceEdit,"alert-success");
-            redirect_to_home_page("modules/attendance/index.php");
+    // update attendance settings
+    if (isset($_POST['submitAttendanceBookSettings'])) {
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('title', 'limit', 'start_date', 'end_date'));
+        $v->rule('numeric', array('limit'));
+        $v->rule('date', array('start_date', 'end_date'));
+        if (!empty($_POST['end_date'])) {
+            $v->rule('dateBefore', 'start_date', $_POST['end_date']);
+        }        
+        $v->labels(array(
+            'title' => "$langTheField $langTitle",
+            'start_date' => "$langTheField $langStart",
+            'end_date' => "$langTheField $langEnd",            
+            'limit' => "$langTheField $langAttendanceLimitNumber"
+        ));
+        if($v->validate()) {           
+            $attendance_limit = $_POST['limit'];
+            $attendance_title = $_POST['title'];
+            $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
+            $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');             
+            Database::get()->querySingle("UPDATE attendance SET `title` = ?s, `limit` = ?d, `start_date` = ?t, `end_date` = ?t WHERE id = ?d ", $attendance_title, $attendance_limit, $start_date, $end_date, $attendance_id);
+            Session::Messages($langGradebookEdit,"alert-success");
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+        } else {
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&editSettings=1");           
+        }
     }
-    
-    //DISPLAY: new (or edit) activity form to attendance module
+    //FORM: create / edit new activity
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
-
-        
-        $tool_content .= "
-        <div class='row'>
-            <div class='col-sm-12'>
-                <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' >
-                        <fieldset>";                            
-                        if (isset($_GET['modify'])) { //edit an existed activity
-                            $id = intval($_GET['modify']);
-
-                            //all activity data (check if it is in this attendance)
-                            $mofifyActivity = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $id, $attendance_id);
-                            $titleToModify = $mofifyActivity->title;
-                            $contentToModify = $mofifyActivity->description;
-                            $attendanceActivityToModify = $id;
-                            $date = $mofifyActivity->date;
-                            $module_auto_id = $mofifyActivity->module_auto_id;
-                            $auto = $mofifyActivity->auto;
-
-                        } else { //new activity 
-                            $attendanceActivityToModify = "";
-                            $titleToModify = '';
-                            $contentToModify = '';
-                        }
-        $tool_content .= "<div class='form-group'>
-                                <label for='actTitle' class='col-sm-2 control-label'>$langTitle:</label>
-                                <div class='col-sm-10'>
-                                    <input class='form-control' type='text' name='actTitle' value='$titleToModify' />
-                                </div>
-                            </div>
-                            <div class='form-group'>
-                                <label for='date' class='col-sm-2 control-label'>$langAttendanceActivityDate:</label>
-                                <div class='col-sm-10'>
-                                    <input class='form-control' type='text' name='date' value='" . @datetime_remove_seconds($date) . "'>
-                                </div>
-                            </div>
-                            <div class='form-group'>
-                                <label for='actDesc' class='col-sm-2 control-label'>$langDescription:</label>
-                                <div class='col-sm-10'>
-                                    " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
-                                </div>
-                            </div>";
-                            if (isset($module_auto_id) and $module_auto_id) { //accept the auto booking mechanism            
-                                $tool_content .= "<div class='form-group'>
-                                <label for='actDesc' class='col-sm-2 control-label'>$langAttendanceAutoBook:</label>
-                                        <div class='col-sm-10'>
-                                        <input class='form-control' type='checkbox' value='1' name='auto' ";
-                                if ($auto) {
-                                    $tool_content .= " checked";
-                                }
-                                $tool_content .= " /></div></div>";
-                            }  
-                           $tool_content .= "
-                            <div class='form-group'>
-                                <div class='col-sm-offset-2 col-sm-10'>
-                                    <input class='btn btn-primary' type='submit' name='submitAttendanceActivity' value='$langAdd' />
-                                </div>
-                            </div>";
-                            if (isset($_GET['modify'])) { 
-                                $tool_content .= "
-                                                <input type='hidden' name='id' value='" . $attendanceActivityToModify . "' />";
-                            }
-                        $tool_content .= "</fieldset>
-                    </form>
-                </div>
-            </div>
-        </div>";
-        
-        //do not show the activities list
-        $showAttendanceActivities = 0;
+        add_attendance_other_activity($attendance_id);
+        $display = FALSE;
     }
-
-    //EDIT DB: add to the attendance module new activity from exersices or assignments
-    elseif(isset($_GET['addCourseActivity'])){
-        $id = intval($_GET['addCourseActivity']);
+    //UPDATE/INSERT DB: new activity from exersices, assignments, learning paths
+    elseif(isset($_GET['addCourseActivity'])) {
+        $id = $_GET['addCourseActivity'];
         $type = intval($_GET['type']);
-        
-        //check the type of the module (assignments)
-        if($type == 1) {
-            //checking if it is new or not
-            $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1 AND attendance_id = ?d) AND assignment.id = ?d",function ($errormsg) {
-                echo "An error has occured: " . $errormsg;
-            }, $course_id, $attendance_id, $id);
-        
-            if($checkForAss){
-                $module_auto_id = $checkForAss->id;
-                $module_auto_type = 1; 
-                $module_auto = 1;
-                $actTitle = $checkForAss->title;
-                $actDate = $checkForAss->deadline;
-                $actDesc = $checkForAss->description;
-
-                $sql = Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $attendance_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
-                
-                //check if there is assignment for any use
-                $checkForExerGradeUsers = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
-                if($checkForExerGradeUsers){
-                    foreach($checkForExerGradeUsers as $checkForExerGradeResultUser){
-                        $checkForAsAttend = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE uid = ?d AND assignment_id = ?d", $checkForExerGradeResultUser->uid, $module_auto_id);
-                        if($checkForAsAttend){                            
-                            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = ?d, uid = ?d, attend = 1, comments = ''", $sql->lastInsertID, $checkForExerGradeResultUser->uid);
-                        }
-                    }
-                }
-            }
-        }
-        //check the type of the module (exercises)
-        if($type == 2){
-            //checking if it is new or not
-            $checkForExer = Database::get()->querySingle("SELECT * FROM exercise WHERE exercise.course_id = ?d "
-                    . "AND exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2 AND attendance_id = ?d) "
-                    . "AND exercise.id = ?d", $course_id, $attendance_id, $id);        
-            if($checkForExer){
-                $module_auto_id = $checkForExer->id;
-                $module_auto_type = 2; 
-                $module_auto = 1;
-                $actTitle = $checkForExer->title;
-                $actDate = $checkForExer->end_date;
-                $actDesc = $checkForExer->description;
-
-                $lastInsertID = Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $attendance_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type)->lastInsertID;
-                
-                //check if there is exercise for any use
-                $checkForExerGradeUsers = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
-                if($checkForExerGradeUsers){
-                    foreach($checkForExerGradeUsers as $checkForExerGradeResultUser){
-                        $checkForExerAttend = Database::get()->querySingle("SELECT uid FROM exercise_user_record WHERE uid = ?d AND attempt_status = " . ATTEMPT_COMPLETED . " AND eid = ?d", $checkForExerGradeResultUser->uid, $module_auto_id);
-                        if($checkForExerAttend){
-                            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = ?d, uid = ?d, attend = 1, comments = ''", $lastInsertID, $checkForExerGradeResultUser->uid);
-                        }
-                    }
-                }
-            }
-        }
-        
-        Session::Messages($langAttendanceSucInsert,"alert-success");
-        redirect_to_home_page("modules/attendance/index.php");
-        $showAttendanceActivities = 1;
+        add_attendance_activity($attendance_id, $id, $type);
+        Session::Messages("$langGradebookSucInsert","alert-success");
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");        
+        $display = FALSE;
     }
-
-    //EDIT DB: add or edit activity to attendance module (edit concerns and course automatic activities)
-    elseif(isset($_POST['submitAttendanceActivity'])){
-
-        if (strlen($_POST['actTitle'])) {
-            $actTitle = $_POST['actTitle'];
+    
+    //UPDATE/INSERT DB: add or edit activity to attendance module (edit concerns and course activities like lps)
+    elseif(isset($_POST['submitAttendanceActivity'])) {   
+        $v = new Valitron\Validator($_POST);      
+        $v->rule('date', array('date'));
+        $v->labels(array(
+            'date' => "$langTheField $langGradebookActivityDate2"
+        ));
+        if($v->validate()) {
+            $actTitle = isset($_POST['actTitle']) ? trim($_POST['actTitle']) : "";
+            $actDesc = purify($_POST['actDesc']);
+            $auto = isset($_POST['auto']) ? $_POST['auto'] : "";
+            $actDate = !empty($_POST['date']) ? $_POST['date'] : null;
+            $visible = isset($_POST['visible']) ? 1 : 0;
+            if ($_POST['id']) {              
+                //update
+                $id = $_POST['id'];
+                Database::get()->query("UPDATE attendance_activities SET `title` = ?s, date = ?t, 
+                                                description = ?s, `auto` = ?d
+                                            WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);
+                Session::Messages("$langGradebookEdit", "alert-success");
+                redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+            } else {
+                //insert
+                $insertAct = Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, 
+                                                            `date` = ?t, description = ?s", 
+                                                    $attendance_id, $actTitle, $actDate, $actDesc);
+                Session::Messages("$langGradebookSucInsert","alert-success");
+                redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+            }            
         } else {
-            $actTitle = "";
-        }
-        $actDesc = purify($_POST['actDesc']);
-        $actDate = $_POST['date'];
-        if (isset($_POST['auto'])) {
-            $auto = intval($_POST['auto']);
-        } else {
-            $auto = ' ';
-        }
-        
-        
-        if (isset($_POST['id'])) {
-            //update
-            $id = intval($_POST['id']);
-            Database::get()->query("UPDATE attendance_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);            
-            
-            Session::Messages($langAttendanceEdit,"alert-success");
-            redirect_to_home_page("modules/attendance/index.php");
-        }
-        else{
-            //insert
-            $insertAct = Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s", $attendance_id, $actTitle, $actDate, $actDesc);            
-            
-            Session::Messages($langAttendanceSucInsert,"alert-success");
-            redirect_to_home_page("modules/attendance/index.php");
-        }
-        //show activities list
-        $showAttendanceActivities = 1;
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            $new_or_edit = $_POST['id'] ?  "&modify=".getIndirectReference($_POST['id']) : "&addActivity=1";
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=".$attendance_id.$new_or_edit);            
+        }        
     }
-
-    //EDIT DB: add or edit attendance limit
-    elseif(isset($_POST['submitAttendanceLimit'])){
-        $attendance_limit = intval($_POST['limit']);
-        
-        Database::get()->querySingle("UPDATE attendance SET `limit` = ?d WHERE id = ?d ", $attendance_limit, $attendance_id);
-        
-        Session::Messages($langAttendanceLimit,"alert-success");
-        redirect_to_home_page("modules/attendance/index.php");
-    }
-
-    //DELETE DB: delete activity form to attendance module
+    
     elseif (isset($_GET['delete'])) {
-            $delete = intval($_GET['delete']);
-            $delAct = Database::get()->query("DELETE FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $delete, $attendance_id)->affectedRows;
-            $delActBooks = Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $delete)->affectedRows;
-            $showAttendanceActivities = 1; //show list activities
-            
-            if($delAct){
-                Session::Messages($langAttendanceDel,"alert-success");
-                redirect_to_home_page("modules/attendance/index.php");
-            }else{
-                Session::Messages($langAttendanceDelFailure);
-                redirect_to_home_page("modules/attendance/index.php");
-            }
+        delete_attendance_activity($attendance_id, getDirectReference($_GET['delete']));
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+    
+    // delete attendance
+    } elseif (isset($_GET['delete_at'])) {        
+        delete_attendance($_GET['delete_at']);
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
-   
-    //DISPLAY: list of users for booking and form for each user
-    elseif(isset($_GET['attendanceBook']) || isset($_GET['book'])){
+    
+    //DISPLAY: list of users and form for each user
+    elseif(isset($_GET['attendanceBook']) or isset($_GET['book'])) {        
         if (isset($_GET['update']) and $_GET['update']) {
             $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
-        }        
+        }
         //record booking
-        if(isset($_POST['bookUser'])){                        
+        if(isset($_POST['bookUser'])) {
             $userID = intval($_POST['userID']); //user
-            //get all the activies
+            //get all the attendance activies --> for each attendance activity update or insert grade
             $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d", $attendance_id);
-            if ($result){                
-                foreach ($result as $announce) {
-                    $attend = intval(@$_POST[$announce->id]); //get the record from the teacher (input name is the activity id)    
+            if ($result) {
+                foreach ($result as $activity) {
+                    $attend = @ intval($_POST[$activity->id]); //get the record from the teacher (input name is the activity id)
                     //check if there is record for the user for this activity
-                    $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count, id FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $announce->id, $userID);
-                    
-                    if($checkForBook->count){                        
+                    $checkForBook = Database::get()->querySingle("SELECT id FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $activity->id, $userID);
+                    if($checkForBook){
                         //update
                         Database::get()->query("UPDATE attendance_book SET attend = ?d WHERE id = ?d ", $attend, $checkForBook->id);
-                    }else{                        
+                    } else {
                         //insert
-                        Database::get()->query("INSERT INTO attendance_book SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ?s", $userID, $announce->id, $attend, '');
+                        Database::get()->query("INSERT INTO attendance_book SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ?s", $userID, $activity->id, $attend, '');
                     }
                 }
-                
-                Session::Messages($langAttendanceEdit,"alert-success");
-                redirect_to_home_page("modules/attendance/index.php");
+                $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
             }
         }
-
-        //View activities for one user - (check for auto mechanism) 
+        // display user grades 
         if(isset($_GET['book'])) {
-            $limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : 0;            
-            $userID = intval($_GET['book']); //user
-            //check if there are booking records for the user, otherwise alert message for first input
-            $checkForRecords = Database::get()->querySingle("SELECT COUNT(attendance_book.id) as count FROM attendance_book, attendance_activities WHERE attendance_book.attendance_activity_id = attendance_activities.id AND uid = ?d AND attendance_activities.attendance_id = ?d", $userID, $attendance_id)->count;
-            if(!$checkForRecords){
-                $tool_content .="<div class='alert alert-info'>$langAttendanceNewBookRecord</div>";
-            }
-            
-            //get all the activities
-            $result = Database::get()->queryArray("SELECT * FROM attendance_activities  WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
-            $announcementNumber = count($result);
-
-            if ($announcementNumber > 0) {
-                $tool_content .= "<h4>". display_user($userID) ."</h4>";
-                $tool_content .= "<fieldset>";
-                $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                                    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=" . $userID . "'>
-                                  <table class='table-default sortable' id='t2'>";
-                $tool_content .= "<tr><th>" . $m['title'] . "</th>"
-                                . "<th>" . $langdate . "</th>"                                
-                                . "<th>$langType</th>";
-                $tool_content .= "<th width='60' class='center'>" . $langAttendanceBooking . "</th>";
-                $tool_content .= "</tr>";
-            } else {
-                $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</p>\n";
-            }
-            
-            //ui counter 
-            if ($result){                
-                foreach ($result as $activ) {                    
-                    //check if there is auto mechanism
-                    if($activ->auto == 1){                        
-                        //check for auto activities
-                        if ($activ->module_auto_type){
-                            $userAttend = attendForAutoActivities($userID, $activ->module_auto_id, $activ->module_auto_type);
-                            if ($userAttend == 0) {
-                                $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $activ->id, $userID);
-                                if ($q) {
-                                    $userAttend = $q->attend;
-                                }
-                            }
-                        }
-                    } else {
-                        $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $activ->id, $userID);
-                        if ($q) {
-                            $userAttend = $q->attend;
-                        }else{
-                            $userAttend = 0;
-                        }
-                    }
-
-                    $content = standard_text_escape($activ->description);
-                    $activ->date = claro_format_locale_date($dateFormatLong, strtotime($activ->date));
-
-                    $tool_content .= "<tr><td><b>";
-
-                    if (empty($activ->title)) {
-                        $tool_content .= $langAnnouncementNoTille;
-                    } else {
-                        $tool_content .= q($activ->title);
-                    }
-                    $tool_content .= "</b>";
-                    $tool_content .= "</td>"
-                            . "<td><div class='smaller'>" . nice_format($activ->date) . "</div></td>";
-
-                    if ($activ->module_auto_id) {
-                        $tool_content .= "<td class='smaller'>$langAttendanceActCour";
-                        if ($activ->auto) {
-                            $tool_content .= "<small class='help-block'>($langAttendanceInsAut)</small>";
-                        } else {
-                            $tool_content .= "<small class='help-block'>($langAttendanceInsMan)</small>";
-                        }
-                        $tool_content .= "</td>";
-                    } else {
-                        $tool_content .= "<td class='smaller'>$langAttendanceActAttend</td>";
-                    }
-
-                    $tool_content .= "<td class='center'>
-                    <input type='checkbox' value='1' name='" . $activ->id . "'";
-                    if(isset($userAttend) && $userAttend) {
-                        $tool_content .= " checked";
-                    }    
-                    $tool_content .= ">
-                    <input type='hidden' value='" . $userID . "' name='userID'>    
-                    </td></tr>";
-                } // end of while
-            }
-            $tool_content .= "</table><input type='submit' class='btn btn-default' name='bookUser' value='$langAttendanceBooking' /></form></fieldset>";
-        } elseif (isset($_GET['attendanceBook'])) {        
-            //======================
-            //show all the students
-            //======================
-            $resultUsers = Database::get()->queryArray("SELECT attendance_users.id as recID, attendance_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM attendance_users, user, course_user  WHERE attendance_id = ?d AND attendance_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
-
-            if ($resultUsers) {
-                //table to display the users
-                $tool_content .= "
-                <table id='users_table{$course_id}' class='table-default custom_list_order'>
-                    <thead>
-                        <tr>
-                          <th width='1'>$langID</th>
-                          <th><div align='left'>$langName $langSurname</div></th>
-                          <th class='center'>$langRegistrationDateShort</th>
-                          <th class='center'>$langAttendanceAbsences</th>
-                          <th class='text-center'><i class='fa fa-cogs'></i></th>
-                        </tr>
-                    </thead>
-                    <tbody>";
-
-                $cnt = 0;   
-                foreach ($resultUsers as $resultUser) {
-                    $cnt++;
-                    $tool_content .= "
-                        <tr>
-                            <td>$cnt</td>
-                            <td>" . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
-                            <td>" . nice_format($resultUser->reg_date) . "</td>
-                            <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>    
-                            <td class='option-btn-cell'>"
-                               . action_button(array(
-                                    array('title' => $langAttendanceBook,
-                                        'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=" . $resultUser->userID),
-                                   array('title' => $langAttendanceDelete,
-                                        'icon' => 'fa-times',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ab=$attendance_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
-                                        'confirm' => $langConfirmDelete,
-                                        'class' => 'delete')))."</td>
-                        </tr>";
-                }
-                $tool_content .= "</tbody></table>";
-            }
+            display_user_presences($attendance_id);             
+        } else {  // display all users
+            display_all_users_presences($attendance_id);            
         }
-		
-		//do not show activities list
-        $showAttendanceActivities = 0;
+        $display = FALSE;
     }
     
-    //EDIT DB: display all the attendance users (reset the list, remove users)
-    elseif(isset($_GET['editUsers'])){        
-        //query to reset users in attendance list
-        if (isset($_POST['resetAttendance'])) {
-            $usersLimit = intval($_POST['usersLimit']);            
-            if($usersLimit == 1){
-                $limitDate = date('Y-m-d', strtotime(' -6 month'));
-                $usersMessage = $langAttendance6Months;
-            }elseif($usersLimit == 2){
-                $limitDate = date('Y-m-d', strtotime(' -3 month'));
-                $usersMessage = $langAttendance3Months;
-            }elseif($usersLimit == 3){
-                $limitDate = "0000-00-00";
-                $usersMessage = $langAttendanceAllMonths;
-            }
-            
-            //update the main attendance table
-            Database::get()->querySingle("UPDATE attendance SET `students_semester` = ?d WHERE id = ?d ", $usersLimit, $attendance_id);
-            //clear attendance users table
-            Database::get()->querySingle("DELETE FROM attendance_users WHERE attendance_id = ?d", $attendance_id);            
-            // rearrange the table
-            $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
-                            SELECT $attendance_id, user_id FROM course_user
-                            WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
-                                    $course_id, $limitDate);
-            if($newUsersQuery) {
-                redirect_to_home_page('modules/attendance/index.php?course=' . $course_code . '&attendanceBook=1&update=true');
-            } else {
-                $tool_content .= "<div class='alert1'>$langNoStudents</div>";
-                
-            }            
-        }
-        
-        if($attendance_limit == 1){
-            $usersMessage = $langAttendance6Months;
-        }elseif($attendance_limit == 2){
-            $usersMessage = $langAttendance3Months;
-        }elseif($attendance_limit == 3){
-            $usersMessage = $langAttendanceAllMonths;
-        }
-        
-        //===================================================
-        //section to insert or edit the title of the gradebook
-        //===================================================
-        $tool_content .= "
-        <div class='row'>
-            <div class='col-sm-12'>
-                <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-                        <div class='form-group'>
-                            <label class='col-xs-12'>$langTitle</label></div>                            
-                                <div class='form-group'> 
-                                    <div class='col-xs-12'>
-                                        <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$attendance_title'/>
-                                    </div>
-                                </div>
-                                <div class='form-group'>
-                                    <div class='col-xs-12'>
-                                        <input class='btn btn-primary' type='submit' name='titleSubmit' value='".($attendance_title ? $langEdit : $langInsert)."' />
-                                    </div>
-                                </div>
-                    </form>
-                </div>
-            </div>
-        </div>";
-        
-        //==============================================
-        //section to reset the attendance users list
-        //==============================================
-        
-        $tool_content .= "
-        <div class='row'>
-            <div class='col-sm-12'>
-                <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-                        <div class='form-group'><label class='col-xs-12'>$langRefreshList<small class='help-block'>($langAttendanceInfoForUsers)</small></label></div>
-                        <div class='form-group'>
-                            <div class='col-sm-12'>
-                                <select name='usersLimit' class='form-control'>                
-                                    <option value='1'>$langAttendanceActiveUsers6</option>
-                                    <option value='2'>$langAttendanceActiveUsers3</option>
-                                    <option value='3'>$langAttendanceActiveUsersAll</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate' />
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>";
-                               
-        //=================
-        //attendance limit
-        //=================
-        
-         $tool_content .= "
-        <div class='row'>
-            <div class='col-sm-12'>
-                <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
-                        <fieldset>
-                        <div class='form-group'><label class='col-xs-12'>$langAttendanceLimitNumber:</label></div>
-                            <div class='form-group'>
-                                <div class='col-sm-12'>
-                                    <input class='form-control' type='text' name='limit' value='$attendance_limit'/>
-                                </div>
-                            </div>
-                            <div class='form-group'>
-                                <div class='col-sm-12'>
-                                    <input class='btn btn-primary' type='submit' name='submitAttendanceLimit' value='$langAttendanceUpdate' />
-                                </div>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-        </div>";
-                 
-        //do not show activities list 
-        $showAttendanceActivities = 0;
+ elseif (isset($_GET['new'])) {
+        new_attendance(); // create new attendance
+        $display = FALSE;
+    } elseif (isset($_GET['editUsers'])) { // edit attendance users
+        user_attendance_settings($attendance_id);
+        $display = FALSE;
+    } elseif (isset($_GET['editSettings'])) { // attendance settings
+        attendance_settings($attendance_id);
+        $display = FALSE;    
+    } elseif (isset($_GET['addActivityAs'])) { //display available assignments       
+        attendance_display_available_assignments($attendance_id);
+        $display = FALSE;
+    } elseif (isset($_GET['addActivityEx'])) { // display available exercises
+        attendance_display_available_exercises($attendance_id);
+        $display = FALSE;
     }
-    elseif(isset($_GET['editAttendanceBooks'])){        
-         
-        //===================================================
-        //section to insert new attendance and select another
-        //===================================================
-        
-        $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
+    //DISPLAY - EDIT DB: insert grades for each activity
+    elseif (isset($_GET['ins'])) {
+        $actID = intval(getDirectReference($_GET['ins']));
+        $error = false;
+        if (isset($_POST['bookUsersToAct'])) {
+            insert_presence($attendance_id, $actID);
+        }
+//        if (isset($_POST['updateUsersToAct'])) {            
+//            update_presence($attendance_id, $actID);
+//        }
+        register_user_presences($attendance_id, $actID);
+        $display = FALSE;
+    } 
+   
+}
 
-        $tool_content .= "
-        <div class='row'>
-            <div class='col-sm-12'>
-                <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-                        <div class='form-group'>
-                            <label class='col-xs-12'>$langChangeAttendance<small class='help-block'>$langChangeAttendance2</small></label>
-                            <div class='col-xs-12'>
-                                <select name='attendanceYear' class='form-control'>";
-                                
-                                if ($result){
-                                    foreach ($result as $year){
-                                        if($year->title == ""){
-                                            $title = "$langAttendanceNoTitle2";
-                                        }else{
-                                            $title = $year->title;
-                                        }
-                                        $tool_content .= "<option value='$year->id'";
-                                                    if ($attendance_id == $year->id) {
-                                                      $tool_content .= " selected";
-                                                    } 
-                                                    $tool_content .= ">$title</option>";
-                                    }
-                                }
-                                              
-        
-                 $tool_content .="
-                                </select>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <div class='col-xs-12'>
-                                <input class='btn btn-primary' type='submit' name='selectAttendance' value='".$langSelect."' />
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-                        <div class='form-group'> 
-                            <label class='col-xs-12'>$langNewAttendance<small class='help-block'>$langNewAttendance2</small></label>
-                            <div class='col-xs-12'>
-                                <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <div class='col-xs-12'>
-                                <input class='btn btn-primary' type='submit' name='newAttendance' value='".$langInsert."' />
-                            </div>
-                        </div>
-                    </form>
-                </div>                
-            </div>
-        </div>";
-         
-        //do not show activities list 
-        $showAttendanceActivities = 0;
-    }    
-    //DISPLAY: Add assignment
-    elseif (isset($_GET['addActivityAs'])) {
-        //Assignments
-        //Course activities available for the attendance
-        $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1 AND attendance_id = ?d)", $course_id, $attendance_id);
-
-        $checkForAssNumber = count($checkForAss);        
-        
-        if ($checkForAssNumber > 0) {            
-            $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
-            $tool_content .= "<table class='table-default'>";
-            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate2</th><th>$langDescription</th>";
-            $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-            $tool_content .= "</tr>";       
-            foreach ($checkForAss as $newAssToAttendance) {
-                $content = ellipsize_html($newAssToAttendance->description, 50);
-                $d = strtotime($newAssToAttendance->deadline);
-                
-                $tool_content .= "<tr>";
-                $tool_content .= "<td><b>";
-
-                if (empty($newAssToAttendance->title)) {
-                    $tool_content .= $langAnnouncementNoTille;
-                } else {
-                    $tool_content .= q($newAssToAttendance->title);
-                }
-                $tool_content .= "</b>";
-                $tool_content .= "</td>"
-                        . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
-                        . "<td>" . $content . "</td>";
-
-                $tool_content .= "<td class='option-btn-cell'>".action_button(array(
-                                    array('title' => $langAdd,
-                                        'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToAttendance->id . "&amp;type=1")));
-            }
-            $tool_content .= "</table></div></div></div>";
+if (isset($display) and $display == TRUE) {
+    // display attendance
+    if (isset($attendance_id)) {
+        if ($is_editor) {
+            display_attendance_activities($attendance_id);            
         } else {
-            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageAss4</div>";
+            $pageName = $attendance->title;
+            student_view_attendance($attendance_id); // student view
         }
-        
-        $showAttendanceActivities = 0;
+    } else { // display all attendances
+        display_attendances();
     }
-    
-    //DISPLAY: Add exercise
-    elseif (isset($_GET['addActivityEx'])){
-        //Exercises
-        //Course activities available for the attendance
-        $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d AND  exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2 AND attendance_id = ?d)", $course_id, $attendance_id);
-        $checkForExerNumber = count($checkForExer);
-        
-        if ($checkForExerNumber > 0) {
-            $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
-            $tool_content .= "<table class='table-default'>";
-            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
-            $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-            $tool_content .= "</tr>";      
-            foreach ($checkForExer as $newExerToAttendance) {
-                $content = ellipsize_html($newExerToAttendance->description, 50);
-                $d = strtotime($newExerToAttendance->end_date);
-
-                $tool_content .= "<tr><td><b>";
-
-                if (empty($newExerToAttendance->title)) {
-                    $tool_content .= $langAnnouncementNoTille;
-                } else {
-                    $tool_content .= q($newExerToAttendance->title);
-                }
-                $tool_content .= "</b>";
-                $tool_content .= "</td>"
-                        . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
-                        . "<td>" . $content . "</td>";
-
-                $tool_content .= "<td class='option-btn-cell'>".action_button(array(
-                                    array('title' => $langAdd,
-                                        'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToAttendance->id . "&amp;type=2")));                
-            } // end of while
-            $tool_content .= "</tr></table></div></div></div>";
-        } else {
-            Session::Messages($langAttendanceNoActMessageExe4);
-        }    
-        $showAttendanceActivities = 0;
-    }
-    
-    //DISPLAY - EDIT DB: insert attendances for each activity
-    elseif (isset($_GET['ins'])){
-
-        //record booking
-        if(isset($_POST['bookUsersToAct'])){                        
-
-            //get all the active users 
-            $activeUsers = Database::get()->queryArray("SELECT uid as userID FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
-
-            if ($activeUsers){                
-                foreach ($activeUsers as $result) {
-                    
-                    $userInp = intval(@$_POST[$result->userID]); //get the record from the teacher (input name is the user id)    
-                    
-                    // //check if there is record for the user for this activity
-                    $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count, id FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $result->userID);
-                    
-                    if($checkForBook->count){                        
-                        //update
-                        Database::get()->query("UPDATE attendance_book SET attend = ?d WHERE id = ?d ", $userInp, $checkForBook->id);
-                    }else{                        
-                        //insert
-                        Database::get()->query("INSERT INTO attendance_book SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ?s", $result->userID, $actID, $userInp, '');
-                    }
-                }
-                
-                Session::Messages($langAttendanceEdit,"alert-success");
-                redirect_to_home_page("modules/attendance/index.php");
-            }
-        }
-
-        //display the form and the list
-        
-
-        
-
-        //show all the students
-        $resultUsers = Database::get()->queryArray("SELECT attendance_users.id as recID, attendance_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM attendance_users, user, course_user  WHERE attendance_id = ?d AND attendance_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
-
-        if ($resultUsers) {
-            //table to display the users
-            $tool_content .= "
-            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&ins=" . $actID . "'>
-            <table id='users_table{$course_id}' class='table-default custom_list_order'>
-                <thead>
-                    <tr>
-                      <th width='1'>$langID</th>
-                      <th><div align='left' width='100'>$langName $langSurname</div></th>
-                      <th class='center' width='80'>$langRegistrationDateShort</th>
-                      <th class='center'>$langAttendanceAbsences</th>
-                    </tr>
-                </thead>
-                <tbody>";
-
-            $cnt = 0;   
-            foreach ($resultUsers as $resultUser) {
-                $cnt++;
-                $tool_content .= "
-                    <tr>
-                        <td>$cnt</td>
-                        <td> " . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
-                        <td>" . nice_format($resultUser->reg_date) . "</td>
-                        <td class='center'>
-                            <input type='checkbox' value='1' name='" . $resultUser->userID . "'";
-                            //check if the user has attendace for this activity already OR if it should be automatically inserted here
-
-                            $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
-                            if(isset($q->attend) && $q->attend == 1) {
-                                $tool_content .= " checked";
-                            }    
-                        $tool_content .= ">
-                            <input type='hidden' value='" . $actID . "' name='actID'>
-                        </td>";   
-                        $tool_content .= "
-                    </tr>";
-            }
-            $tool_content .= "</tbody></table> <input type='submit' class='btn btn-primary' name='bookUsersToAct' value='$langAttendanceBooking' /></form>";
-        }
-        $showAttendanceActivities = 0;
-    }
-    
-
-
-
-    //DISPLAY: list of attendance activities
-    if($showAttendanceActivities == 1){
-        //get all the available activities
-        $result = Database::get()->queryArray("SELECT * FROM attendance_activities  WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
-        $announcementNumber = count($result);
-        if ($announcementNumber > 0) {
-            $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
-                              <table class='table-default'>
-                              <tr><th class='text-center' colspan='5'>$langAttendanceActList</th></tr>
-                            <tr>                            
-                                <th>$langTitle</th>
-                                <th>$langAttendanceActivityDate</th>
-                                <th>$langType</th>
-                                <th>$langAttendanceAbsences</th>
-                                <th class='text-center'><i class='fa fa-cogs'></i></th>
-                            </tr>";
-            foreach ($result as $announce) {               
-                $content = ellipsize_html($announce->description, 50);
-                $d = strtotime($announce->date);
-                $tool_content .= "<tr><td>";
-                 if (empty($announce->title)) {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id'>$langAttendanceNoTitle</a>";
-                } else {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id'>".q($announce->title)."</a>";
-                }
-                $tool_content .= "</td>
-                        <td>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . " ($langHour: " . ucfirst(date('H:i', $d)) . ")</td>";
-                $tool_content .= "<td class='smaller'>";
-                if($announce->module_auto_id) {
-                    if($announce->module_auto_id == 1) {
-                            $tool_content .= $langExercise;
-                    }elseif($announce->module_auto_id == 2) {
-                            $tool_content .= $langAssignment;
-                    }
-                    if($announce->auto){
-                        $tool_content .= "<small class='help-block'>($langAttendanceInsAut)</small>";
-                    } else {
-                        $tool_content .= "<small class='help-block'>($langAttendanceInsMan)</small>";
-                    }                 
-                } else {
-                    $tool_content .= $langAttendanceActivity;
-                }
-                $tool_content .= "</td>";
-                $tool_content .= "<td>" . userAttendTotalActivityStats($announce->id, $participantsNumber, $attendance_id) . "</td>";
-                $tool_content .= "<td class='text-center option-btn-cell'>".                        
-                        action_button(array(
-                                    array('title' => $langEditChange,
-                                        'icon' => 'fa-edit',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"
-                                        ),                            
-                                    array('title' => $langDelete,
-                                        'icon' => 'fa-times',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
-                                        'confirm' => $langConfirmDelete,
-                                        'class' => 'delete'))).
-                        "</td></tr>";
-            } // end of while
-            $tool_content .= "</table></div></div></div>";
-        } else {
-            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</div>";
-        }
-        
-
-        
-    }    
-} else { //============Student View==================    
-    $pageName = $langAttendance;
-    $userID = $uid;        
-    $result = Database::get()->queryArray("SELECT * FROM attendance_activities  WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
-    $announcementNumber = count($result);
-
-    if ($announcementNumber > 0) {        
-        $tool_content .= "<div class='alert alert-info'>" . userAttendTotal($attendance_id, $userID) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </div>";
-        $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                            <div class='row'><div class='col-sm-12'><div class='table-responsive'>
-                            <table class='table-default sortable' id='t2'>";
-        $tool_content .= "<tr><th >$langTitle</th><th>$langAttendanceActivityDate2</th><th>$langDescription</th><th>$langAttendanceAbsencesYes</th></tr>";
-    
-        foreach ($result as $announce) {
-            $content = standard_text_escape($announce->description);
-            $d = strtotime($announce->date);
-
-            $tool_content .= "<tr><td><b>";
-
-            if (empty($announce->title)) {
-                $tool_content .= $langAnnouncementNoTille;
-            } else {
-                $tool_content .= q($announce->title);
-            }
-            $tool_content .= "</b>";
-            $tool_content .= "</td>"
-                    . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
-                    . "<td>" . $content . "</td>";
-
-            $tool_content .= "<td class='center'>";
-            //check if the user has attend for this activity
-            $userAttend = Database::get()->querySingle("SELECT attend FROM attendance_book
-                                                        WHERE attendance_activity_id = ?d AND uid = ?d", $announce->id, $userID);
-            if ($userAttend) {
-                $attend = $userAttend->attend;            
-                if ($attend) {
-                    $tool_content .= icon('fa-check-circle', $langAttendanceAbsencesYes);
-                } else {
-                    $auto_activity = Database::get()->querySingle("SELECT auto FROM attendance_activities WHERE id = ?d", $announce->id)->auto;
-                    if (!$auto_activity and ($announce->date > date("Y-m-d"))) {
-                        $tool_content .= icon('fa-question-circle', $langAttendanceStudentFailure);
-                    } else {
-                        $tool_content .= icon('fa-times-circle', $langAttendanceAbsencesNo);
-                    }
-                }
-            } else {
-                $tool_content .= icon('fa-question-circle', $langAttendanceStudentFailure);
-            }
-            $tool_content .= "</td></tr>";
-        } // end of while
-        $tool_content .= "</table></div></div></div>";
-    } else {
-        $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage5</div>";
-    }       
-}
-
-
-/**
- * @brief check for attend in auto activities
- * @param type $userID
- * @param type $exeID
- * @param type $exeType
- * @return int
- */
-function attendForAutoActivities($userID, $exeID, $exeType){
-    if($exeType == 1){ //asignments: valid submission!
-       $autoAttend = Database::get()->querySingle("SELECT COUNT(id) AS count FROM assignment_submit
-                                    WHERE uid = ?d AND assignment_id = ?d", $userID, $exeID)->count; 
-       if ($autoAttend) {
-           return 1;
-       } else {
-           return 0;
-       }
-    }
-    if($exeType == 2){ //exercises: valid submission!       
-       $autoAttend = Database::get()->querySingle("SELECT COUNT(eurid) AS count FROM exercise_user_record
-                                            WHERE uid = ?d AND eid = ?d 
-                                            AND total_score > 0 AND attempt_status != ".ATTEMPT_PAUSED."", $userID, $exeID)->count;
-        if ($autoAttend) {
-            return 1;
-        }else{
-            return 0;
-        }
-    }
-}
-
-/**
- * @brief Function to get the total attend number for a user in a course attendance
- * @param type $attendance_id
- * @param type $userID
- * @return int
- */
-function userAttendTotal ($attendance_id, $userID){
-
-    $userAttendTotal = Database::get()->querySingle("SELECT SUM(attend) as count FROM attendance_book, attendance_activities
-                                            WHERE attendance_book.uid = ?d 
-                                            AND attendance_book.attendance_activity_id = attendance_activities.id 
-                                            AND attendance_activities.attendance_id = ?d", $userID, $attendance_id)->count;
-
-    if($userAttendTotal){
-        return $userAttendTotal;
-    } else {
-        return 0;
-    }
-}
-
-/**
- * @brief Function to get the total attend number for a user in a course attendance
- * @param type $activityID
- * @param type $participantsNumber
- * @return string
- */
-function userAttendTotalActivityStats ($activityID, $participantsNumber, $attendance_id){
-        
-    $sumAtt = 0;
-    $userAttTotalActivity = Database::get()->queryArray("SELECT attend, attendance_book.uid FROM attendance_book, attendance_users WHERE attendance_activity_id = ?d AND attendance_users.uid=attendance_book.uid AND attendance_users.attendance_id=?d", $activityID, $attendance_id);
-    foreach ($userAttTotalActivity as $module) {
-        $sumAtt += $module->attend;
-    }
-
-    //check if participantsNumber is zero
-    if ($participantsNumber) {
-        $mean = round(100 * $sumAtt / $participantsNumber, 2);
-        return $sumAtt."/". $participantsNumber . " (" . $mean . "%)";
-    } else {
-        return "-";
-    }
-          
-}
+}  
 
 //Display content in template
 draw($tool_content, 2, null, $head_content);

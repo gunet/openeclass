@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_current_course = TRUE;
@@ -60,7 +60,7 @@ $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $s
 if( ($c->sessionUsers > 0) && ($c->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$_GET['meeting_id'],$sess->mod_pw)))
 {
     $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
-}                
+}
 else {
         header('Location: ' . bbb_join_user($_GET['meeting_id'],$att_pw,$_GET['username'],""));
 }

@@ -33,6 +33,8 @@ if (isset($_GET['course'])){
 require_once '../../include/init.php';
 require_once 'modules/agenda/course_calendar.inc.php';
 
+header('Content-Type: application/json; charset=UTF-8');
+
 if(isset($_GET['from']) && isset($_GET['to'])){
     echo bootstrap_events($_GET['from'], $_GET['to']);
 }

@@ -29,7 +29,7 @@ $require_login = true;
 include '../include/baseTheme.php';
 require_once 'perso_functions.php';
 
-$pageName = $langMyPersoLessons;
+$toolName = $langMyCourses;
 //  Get user's course info
     if ($session->status == USER_TEACHER) {
         $myCourses = Database::get()->queryArray("SELECT course.id course_id,
@@ -38,6 +38,7 @@ $pageName = $langMyPersoLessons;
                              course.title title,
                              course.prof_names professor,
                              course.lang,
+                             course.visible,
                              course_user.status status	                        
                        FROM course, course_user, user
                        WHERE course.id = course_user.course_id AND
@@ -51,6 +52,7 @@ $pageName = $langMyPersoLessons;
                              course.title title,
                              course.prof_names professor,
                              course.lang,
+                             course.visible,
                              course_user.status status                                
                        FROM course, course_user, user
                        WHERE course.id = course_user.course_id AND
@@ -66,8 +68,8 @@ $pageName = $langMyPersoLessons;
             'level' => 'primary-label',
             'url' => 'portfolio.php'
         )
-    ));
-    if($myCourses) {
+    ),false);
+    if ($myCourses) {
         $tool_content .= "
             <div class='table-responsive'>
                 <table class='table-default'>
@@ -77,14 +79,18 @@ $pageName = $langMyPersoLessons;
                         <th class='text-center'>".icon('fa-gears')."</th>
                     </thead>
                     <tbody>";
-        foreach($myCourses as $course) {
+        foreach ($myCourses as $course) {
             if ($course->status == USER_STUDENT) { 
-              $action_button = icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
+                $action_button = icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
             } elseif ($course->status == USER_TEACHER) {
                 $action_button = icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $course->code);
             }
+            $visclass = '';
+            if ($course->visible == COURSE_INACTIVE) {
+                $visclass = "not_visible";
+            }
             $tool_content .= "
-                    <tr>
+                    <tr class='$visclass'>
                         <td><strong><a href='{$urlServer}courses/$course->code'>".q($course->title)."</a></strong> (".q($course->public_code).")</td>
                         <td>".q($course->professor)."</td>
                         <td class='text-center'>

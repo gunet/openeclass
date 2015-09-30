@@ -3,7 +3,7 @@ versions, links and simple description of used jquery files
 
 jquery.js
 ---------
-VERSION  : 2.1.0
+VERSION  : 2.1.3
 URL      : http://jquery.com/
 DESC     : jQuery is a fast, concise, JavaScript Library that simplifies how you traverse HTML documents, handle
            events, perform animations, and add Ajax interactions to your web pages.
@@ -11,7 +11,7 @@ USED     : used for the entire userinterface
 
 jquery-1.js
 ---------
-VERSION  : 1.11.0
+VERSION  : 1.11.2
 URL      : http://jquery.com/
 DESC     : jQuery is a fast, concise, JavaScript Library that simplifies how you traverse HTML documents, handle
            events, perform animations, and add Ajax interactions to your web pages.
@@ -50,7 +50,7 @@ USED     : show alert and error message
 
 jquery.treeTable.js
 -------------------
-VERSION  : 2009-06-22
+VERSION  : 2009-06-22+statefix
 URL      : http://plugins.jquery.com/project/jQTreeTable; http://www.hanpau.com/index.php?page=jqtreetable
 DESC     : Take a plain html table, wrap the rows you want collapsing/expanding in a tbody tag with an id of treetable, map each row to it's parent row, set some options, and let jQTreeTable take it from there.
 USED     : Hardware, Memory, UPS blocks

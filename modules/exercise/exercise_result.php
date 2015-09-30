@@ -146,8 +146,18 @@ $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 $exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
 $displayResults = $objExercise->selectResults();
 $displayScore = $objExercise->selectScore();
+$exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
+$userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
+$cur_date = new DateTime("now");
+$end_date = new DateTime($objExercise->selectEndDate());
 
+$showResults = $displayResults == 1 
+               || $is_editor 
+               || $displayResults == 3 && $exerciseAttemptsAllowed == $userAttempts 
+               || $displayResults == 4 && $end_date < $cur_date;
+
+$showScore = $displayScore == 1 || $is_editor;
 $tool_content .= "<div class='panel panel-primary'>
   <div class='panel-heading'>
     <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
@@ -217,7 +227,7 @@ if (count($exercise_question_ids)>0){
         }
         $questionScore = 0;
 
-        if ($displayResults == 1 || $is_editor) {
+        if ($showResults) {
             if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                 $tool_content .= "
                             <tr class='even'>
@@ -299,7 +309,7 @@ if (count($exercise_question_ids)>0){
                             // if the word entered is the same as the one defined by the professor
                             $canonical_choice = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($choice[$j], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $choice[$j];
                             $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper(substr($temp, 0, $pos), 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : substr($temp, 0, $pos);   
-                            $right_answers = preg_split('/\s*,\s*/', $canonical_match);
+                            $right_answers = preg_split('/\s*\|\s*/', $canonical_match);
                             if (in_array($canonical_choice, $right_answers)) {
                                 // gives the related weighting to the student
                                 $questionScore+=$answerWeighting[$j-1];
@@ -343,7 +353,7 @@ if (count($exercise_question_ids)>0){
                         }
                         break;
                 } // end switch()
-                if ($displayResults == 1 || $is_editor) {
+                if ($showResults) {
                     if ($answerType != MATCHING || $answerCorrect) {
                         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                             $tool_content .= "
@@ -409,7 +419,7 @@ if (count($exercise_question_ids)>0){
                 }
             }
         }        
-        if ($displayScore == 1 || $is_editor) {
+        if ($showScore) {
             if (intval($questionScore) == $questionScore) {
                 $questionScore = intval($questionScore);
             }
@@ -436,12 +446,12 @@ if (count($exercise_question_ids)>0){
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
-if ($displayScore == 1 || $is_editor) {
+if ($showScore) {
     $tool_content .= "
     <br/>
-    <table width='100%' class='tbl_alt'>
-    <tr class='odd'>
-	<td class='right'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b>
+    <table class='table-default'>
+    <tr>
+	<td class='text-right'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b>
       </td>
     </tr>
     </table>";

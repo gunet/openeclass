@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 // form select about visibility
@@ -36,19 +36,25 @@ function visibility_select($current) {
     return $ret;
 }
 
+
 // Unzip backup file
-function unpack_zip_inner($zipfile) {
+function unpack_zip_inner($zipfile, $clone) {
     global $webDir, $uid;
+
     require_once 'include/lib/fileUploadLib.inc.php';
-    
+
     $zip = new pclZip($zipfile);
-    validateUploadedZipFile($zip->listContent(), 3);
+    if (!$clone) {
+        validateUploadedZipFile($zip->listContent(), 3);
+    }
 
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
-    mkpath($destdir);
+    if (!is_dir($destdir)) {
+        mkdir($destdir, 0755, true);
+    }
     chdir($destdir);
     $zip->extract();
-    
+
     $retArr = array();
     foreach (find_backup_folders($destdir) as $folder) {
         $retArr[] = array(
@@ -64,29 +70,31 @@ function unpack_zip_inner($zipfile) {
 
 function unpack_zip_show_files($zipfile) {
     global $langEndFileUnzip, $langLesFound, $langRestore, $langLesFiles;
-    
-    $retArr = unpack_zip_inner($zipfile);
+
+    $retArr = unpack_zip_inner($zipfile, FALSE);
     $retString = '';
-    
-    if (count($retArr) > 0) {    
+
+    if (count($retArr) > 0) {
         $retString .= "<br />$langEndFileUnzip<br /><br />$langLesFound
                            <form action='$_SERVER[SCRIPT_NAME]' method='post'>
                              <ol>";
         $checked = ' checked';
-        
+
         foreach ($retArr as $entry) {
-            $path = q($entry['path']);
+            $path = $entry['path'];
             $file = q($entry['file']);
             $course = q($entry['course']);
-            
-            $retString .= "<li>$langLesFiles <input type='radio' name='restoreThis' value='$path'$checked>
+
+            $retString .= "<li>$langLesFiles <input type='radio' name='restoreThis' value='" . q(getIndirectReference($path)) . "'$checked>
                             <b>$course</b> ($file)</li>\n";
             $checked = '';
         }
-        
-        $retString .= "</ol><br /><input class='btn btn-primary' type='submit' name='do_restore' value='$langRestore' /></form>";
+
+        $retString .= "</ol><br /><input class='btn btn-primary' type='submit' name='do_restore' value='$langRestore' />
+                      ".generate_csrf_token_form_field()."
+                      </form>";
     }
-    
+
     return $retString;
 }
 
@@ -113,9 +121,9 @@ function find_backup_folders($basedir) {
 
 function restore_table($basedir, $table, $options, $url_prefix_map, $backupData, $restoreHelper) {
     $set = get_option($options, 'set');
-    if (!file_exists($basedir . "/" . $restoreHelper->getFile($table)) 
-            && $restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X 
-            && isset($backupData) && is_array($backupData) 
+    if (!file_exists($basedir . "/" . $restoreHelper->getFile($table))
+            && $restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X
+            && isset($backupData) && is_array($backupData)
             && isset($backupData['query']) && is_array($backupData['query'])) {
         // look into backupData for our data
         $backup = get_tabledata_from_parsed($table, $backupData, $restoreHelper, $set);
@@ -266,28 +274,27 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     }
     if (is_array($faculty)) {
         foreach ($faculty as $entry) {
-            $old_faculty_names[] = q($entry['name']);
+            $old_faculty_names[] = q(Hierarchy::unserializeLangField($entry['name']));
         }
         $old_faculty = implode('<br>', $old_faculty_names);
     } else {
-        $old_faculty = q($faculty . $type_label);
+        $old_faculty = q(Hierarchy::unserializeLangField($faculty) . $type_label);
     }
     $formAction = $_SERVER['SCRIPT_NAME'];
     if (isset($GLOBALS['course_code'])) {
         $formAction .= '?course=' . $GLOBALS['course_code'];
     }
-    $action_btn = action_bar(array(
+    return action_bar(array(
         array('title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
-    return $action_btn."
-        <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>  
+              'url' => "index.php?course=$course_code",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label'))) . "
+        <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>
                 <div class='row'>
                 <div class='col-md-12'>
                 <div class='form-wrapper' >
                 <form class='form-horizontal' role='form' action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
-                
+
                     <div class='form-group'>
                         <label for='course_code' class='col-sm-3 control-label'>$langCourseCode:</label>
                         <div class='col-sm-9'>
@@ -306,7 +313,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                             <input class='form-control' type='text' id='course_title' name='course_title' value='" . q($title) . "' />
                         </div>
                     </div>
-                    
+
                     <div class='form-group'>
                         <label class='col-sm-3 control-label'>$langCourseDescription:</label>
                         <div class='col-sm-9'>
@@ -316,7 +323,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                     <div class='form-group'>
                         <label class='col-sm-3 control-label'>$langFaculty:</label>
                         <div class='col-sm-9'>
-                            " . $tree_html . "<br>$langOldValue: <i> " . hierarchy::unserializeLangField($old_faculty) . "</i>
+                            " . $tree_html . "<br>$langOldValue: <i>$old_faculty</i>
                         </div>
                     </div>
                     <div class='form-group'>
@@ -333,7 +340,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                     </div>
                     <div class='form-group'>
                     <label class='col-sm-3 control-label'>$langUsersWillAdd:</label>
-                        
+
                         <div class='col-sm-9'>
                             <input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
                            $langAll<br>
@@ -355,6 +362,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                       <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
                           </div>
                     </div>
+                " . generate_csrf_token_form_field() . "
                 </form>
                 </div>
                 </div>
@@ -363,13 +371,13 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
 }
 
 function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof) {
-    global $webDir, $urlServer, $urlAppend;
+    global $webDir, $urlServer, $urlAppend, $langEnter, $langBack, $currentCourseCode;
     require_once 'modules/create_course/functions.php';
     require_once 'modules/course_info/restorehelper.class.php';
     require_once 'include/lib/fileManageLib.inc.php';
     $new_course_code = null;
     $new_course_id = null;
-    
+
     Database::get()->transaction(function() use (&$new_course_code, &$new_course_id, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $webDir, &$tool_content, $urlServer, $urlAppend) {
         $departments = array();
         if (isset($_POST['department'])) {
@@ -391,6 +399,9 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             exit;
         }
 
+        if (!file_exists($restoreThis)) {
+            redirect_to_home_page('modules/course_info/restore_course.php');
+        }
         $config_data = unserialize(file_get_contents($restoreThis . '/config_vars'));
         // If old $urlAppend didn't end in /, add it
         if (substr($config_data['urlAppend'], -1) !== '/') {
@@ -412,13 +423,18 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $upd_course_sql = "UPDATE course SET keywords = ?s, doc_quota = ?f, video_quota = ?f, "
                             . " group_quota = ?f, dropbox_quota = ?f, glossary_expand = ?d ";
             $upd_course_args = array(
-                $course_data[$restoreHelper->getField('course', 'keywords')], 
-                floatval($course_data['doc_quota']), 
-                floatval($course_data['video_quota']), 
-                floatval($course_data['group_quota']), 
-                floatval($course_data['dropbox_quota']), 
+                $course_data[$restoreHelper->getField('course', 'keywords')],
+                floatval($course_data['doc_quota']),
+                floatval($course_data['video_quota']),
+                floatval($course_data['group_quota']),
+                floatval($course_data['dropbox_quota']),
                 intval($course_data[$restoreHelper->getField('course', 'glossary_expand')])
             );
+            if (isset($course_data['home_layout']) and isset($course_data['course_image'])) {
+                $upd_course_sql .= ', home_layout = ?d, course_image = ?s ';
+                $upd_course_args[] = $course_data['home_layout'];
+                $upd_course_args[] = $course_data['course_image'];
+            }
             // Set keywords to '' if NULL
             if (!isset($upd_course_args[0])) {
                 $upd_course_args[0] = '';
@@ -426,15 +442,15 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             // handle course weekly if exists
             if (isset($course_data['view_type']) && isset($course_data['start_date']) && isset($course_data['finish_date'])) {
                 $upd_course_sql .= " , view_type = ?s, start_date = ?t, finish_date = ?t ";
-                array_push($upd_course_args, 
-                    $course_data['view_type'], 
-                    $course_data['start_date'], 
+                array_push($upd_course_args,
+                    $course_data['view_type'],
+                    $course_data['start_date'],
                     $course_data['finish_date']
                 );
             }
             $upd_course_sql .= " WHERE id = ?d ";
             array_push($upd_course_args, intval($new_course_id));
-            
+
             Database::get()->query($upd_course_sql, $upd_course_args);
         }
 
@@ -455,7 +471,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             move_dir($restoreThis . '/video_files', $videodir);
         }
         course_index($new_course_code);
-        $tool_content .= "<p>" . $GLOBALS['langCopyFiles'] . " $coursedir</p>";
+        $tool_content .= "<div class='alert alert-info'>" . $GLOBALS['langCopyFiles'] . " $coursedir</div>";
 
         require_once 'upgrade/functions.php';
         load_global_messages();
@@ -513,8 +529,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'delete' => array('id')), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'forum_user_stats', array('set' => array('course_id' => $new_course_id),
         'map' => array('user_id' => $userid_map)), $url_prefix_map, $backupData, $restoreHelper);
-        if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X 
-                && isset($backupData) && is_array($backupData) 
+        if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X
+                && isset($backupData) && is_array($backupData)
                 && isset($backupData['query']) && is_array($backupData['query'])) {
             $postsText = get_tabledata_from_parsed('posts_text', $backupData, $restoreHelper);
             foreach ($postsText as $ptData) {
@@ -563,8 +579,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $link_category_map = restore_table($restoreThis, 'link_category', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         $link_category_map[0] = 0;
+        $link_category_map[-1] = -1;
+        $link_category_map[-2] = -2;
         $link_map = restore_table($restoreThis, 'link', array('set' => array('course_id' => $new_course_id),
-            'map' => array('category' => $link_category_map), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+            'map' => array('category' => $link_category_map, 'user_id' => $userid_map), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         $ebook_map = restore_table($restoreThis, 'ebook', array('set' => array('course_id' => $new_course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         foreach ($ebook_map as $old_id => $new_id) {
             // new and old id might overlap as the map contains multiple values!
@@ -653,37 +671,48 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         restore_table($restoreThis, 'wiki_pages_content', array('delete' => array('id'),
             'map' => array('pid' => $wiki_pages_map, 'editor_id' => $userid_map)), $url_prefix_map, $backupData, $restoreHelper);
 
-        //Blog
+        // Blog
         if (file_exists("$restoreThis/blog_post")) {
             $blog_map = restore_table($restoreThis, 'blog_post', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         }
 
-        //Comments
+        // Comments
         if (file_exists("$restoreThis/comments")) {
-            restore_table($restoreThis, 'comments', array('delete' => array('id'),
+            $comment_map = restore_table($restoreThis, 'comments', array('delete' => array('id'),
             'map' => array('user_id' => $userid_map),
             'map_function' => 'comments_map_function',
-            'map_function_data' => array($blog_map,
-            $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
+            'map_function_data' => array($blog_map, $new_course_id),
+            'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        }
+        
+        //Abuse Report
+        if (file_exists("$restoreThis/abuse_report")) {
+            restore_table($restoreThis, 'abuse_report', array('delete' => array('id'),
+            'set' => array('course_id' => $new_course_id),
+            'map' => array('user_id' => $userid_map),
+            'map_function' => 'abuse_report_map_function',
+            'map_function_data' => array($forum_post_map, 
+            $comment_map, $link_map)), $url_prefix_map, $backupData, $restoreHelper);
         }
 
-        //Rating
+        // Rating
         if (file_exists("$restoreThis/rating")) {
             restore_table($restoreThis, 'rating', array('delete' => array('rate_id'),
             'map' => array('user_id' => $userid_map),
             'map_function' => 'ratings_map_function',
-            'map_function_data' => array($blog_map, $forum_post_map,
+            'map_function_data' => array($blog_map, $forum_post_map, $link_map,
             $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
         if (file_exists("$restoreThis/rating_cache")) {
             restore_table($restoreThis, 'rating_cache', array('delete' => array('rate_cache_id'),
             'map_function' => 'ratings_map_function',
-            'map_function_data' => array($blog_map, $forum_post_map,
+            'map_function_data' => array($blog_map, $forum_post_map, $link_map,
             $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
+
         
-        //Course_settings
+        // Course_settings
         if (file_exists("$restoreThis/course_settings")) {
             restore_table($restoreThis, 'course_settings', array('set' => array('course_id' => $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
@@ -714,14 +743,14 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         // Agenda
         $agenda_map = restore_table($restoreThis, 'agenda', array(
-            'return_mapping' => 'id', 
+            'return_mapping' => 'id',
             'set' => array('course_id' => $new_course_id)
         ), $url_prefix_map, $backupData, $restoreHelper);
         $agenda_map[0] = 0;
 
         // Exercises
         $exercise_map = restore_table($restoreThis, 'exercise', array(
-            'set' => array('course_id' => $new_course_id), 
+            'set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'
             ), $url_prefix_map, $backupData, $restoreHelper);
         $exercise_map[0] = 0;
@@ -763,10 +792,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 Database::get()->query("UPDATE `lp_asset` SET path = ?s WHERE asset_id = ?d", $exercise_map[$row->path], intval($row->asset_id));
             }
         }
-        
+
         // Attendance
         $attendance_map = restore_table($restoreThis, 'attendance', array(
-            'set' => array('course_id' => $new_course_id), 
+            'set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'
         ), $url_prefix_map, $backupData, $restoreHelper);
         $attendance_activities_map = restore_table($restoreThis, 'attendance_activities', array(
@@ -779,20 +808,20 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'map' => array(
                 'attendance_activity_id' => $attendance_activities_map,
                 'uid' => $userid_map
-            ), 
+            ),
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'attendance_users', array(
             'map' => array(
                 'attendance_id' => $attendance_map,
                 'uid' => $userid_map
-            ), 
+            ),
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
-        
+
         // Gradebook
         $gradebook_map = restore_table($restoreThis, 'gradebook', array(
-            'set' => array('course_id' => $new_course_id), 
+            'set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'
         ), $url_prefix_map, $backupData, $restoreHelper);
         $gradebook_activities_map = restore_table($restoreThis, 'gradebook_activities', array(
@@ -805,23 +834,23 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'map' => array(
                 'gradebook_activity_id' => $gradebook_activities_map,
                 'uid' => $userid_map
-            ), 
+            ),
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'gradebook_users', array(
             'map' => array(
                 'gradebook_id' => $gradebook_map,
                 'uid' => $userid_map
-            ), 
+            ),
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
-        
+
         // Notes
         restore_table($restoreThis, 'note', array(
             'set' => array('reference_obj_course' => $new_course_id),
             'map' => array('user_id' => $userid_map),
             'map_function' => 'notes_map_function',
-            'map_function_data' => array($new_course_id, $agenda_map, $document_map, $link_map, 
+            'map_function_data' => array($new_course_id, $agenda_map, $document_map, $link_map,
                 $video_map, $videolink_map, $assignments_map, $exercise_map, $ebook_map,
                 $lp_learnPath_map),
             'delete' => array('id')
@@ -843,12 +872,14 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 $lp_learnPath_map,
                 $wiki_map,
                 $assignments_map,
-                $exercise_map)
+                $exercise_map,
+                $forum_map,
+                $forum_topic_map)
             ), $url_prefix_map, $backupData, $restoreHelper);
-        
+
         // Weekly
         $weekly_map = restore_table($restoreThis, 'course_weekly_view', array(
-            'set' => array('course_id' => $new_course_id), 
+            'set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'
             ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'course_weekly_view_activities', array(
@@ -866,7 +897,9 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 $lp_learnPath_map,
                 $wiki_map,
                 $assignments_map,
-                $exercise_map)
+                $exercise_map,
+                $forum_map,
+                $forum_topic_map)
             ), $url_prefix_map, $backupData, $restoreHelper);
 
         restore_table($restoreThis, 'course_description', array(
@@ -881,7 +914,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $new_course_id);
         Indexer::queueAsync(Indexer::REQUEST_STOREALLBYCOURSE, Indexer::RESOURCE_IDX, $new_course_id);
     });
-    
+
     // check/cleanup video files after restore transaction
     if ($new_course_code != null && $new_course_id != null) {
         $videodir = $webDir . "/video/" . $new_course_code;
@@ -890,20 +923,32 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             if (is_dir($videofile)) {
                 continue;
             }
-            
+
             $vlike = '/' . $videofile;
-            
+
             if (!isWhitelistAllowed($videofile)) {
                 unlink($videodir . "/" . $videofile);
                 Database::get()->query("DELETE FROM `video` WHERE course_id = ?d AND path LIKE ?s", $new_course_id, $vlike);
                 continue;
             }
-            
+
             $vcnt = Database::get()->querySingle("SELECT count(id) AS count FROM `video` WHERE course_id = ?d AND path LIKE ?s", $new_course_id, $vlike)->count;
             if ($vcnt <= 0) {
                 unlink($videodir . "/" . $videofile);
             }
         }
+        $backUrl = $urlAppend . (isset($currentCourseCode)? "courses/$currentCourseCode/": 'modules/admin/');
+        $tool_content .= action_bar(array(
+            array('title' => $langEnter,
+                  'url' => $urlAppend . "courses/$new_course_code/",
+                  'icon' => 'fa-arrow-right',
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success'),
+            array('title' => $langBack,
+                  'url' => $backUrl,
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label')), false);
+
     }
 }
 
@@ -932,6 +977,7 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
         $add_only_profs = false;
     }
 
+    require_once 'include/lib/user.class.php';
     foreach ($users as $data) {
         if ($add_only_profs and !$is_prof[$data[$restoreHelper->getField('user', 'id')]]) {
             continue;
@@ -939,32 +985,37 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
         $u = Database::get()->querySingle("SELECT * FROM user WHERE BINARY username = ?s", $data['username']);
         if ($u) {
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $u->id;
-            $tool_content .= "<p>" .
-                    sprintf($langRestoreUserExists, 
-                            '<b>' . q($data['username']) . '</b>', 
-                            '<i>' . q($u->givenname . " " . $u->surname) . '</i>', 
-                            '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] . " " . $data[$restoreHelper->getField('user', 'surname')]) . '</i>') .
-                    "</p>\n";
+            $tool_content .= "<div class='alert alert-info'>" .
+                sprintf($langRestoreUserExists,
+                    '<b>' . q($data['username']) . '</b>',
+                    '<i>' . q(trim($u->givenname . ' ' . $u->surname)) . '</i>',
+                    '<i>' . q(trim($data[$restoreHelper->getField('user', 'givenname')] .
+                        ' ' . $data[$restoreHelper->getField('user', 'surname')])) . '</i>') .
+                "</div>\n";
         } elseif (isset($_POST['create_users'])) {
+            $now = date('Y-m-d H:i:s', time());
             $user_id = Database::get()->query("INSERT INTO user SET surname = ?s, "
-                    . "givenname = ?s, username = ?s, password = ?s, email = ?s, status = ?d, phone = ?s, "
-                    . "registered_at = ?t, expires_at = ?t", 
-                    (isset($data[$restoreHelper->getField('user', 'surname')])) ? $data[$restoreHelper->getField('user', 'surname')] : '', 
-                    (isset($data[$restoreHelper->getField('user', 'givenname')])) ? $data[$restoreHelper->getField('user', 'givenname')] : '', 
-                    $data['username'], 
-                    (isset($data['password'])) ? $data['password'] : 'empty', 
-                    (isset($data['email'])) ? $data['email'] : '', 
-                    intval($data[$restoreHelper->getField('course_user', 'status')]), 
-                    (isset($data['phone'])) ? $data['phone'] : '', 
-                    date('Y-m-d H:i:s', time()), 
-                    date('Y-m-d H:i:s', time() + get_config('account_duration')))->lastInsertID;
+                . "givenname = ?s, username = ?s, password = ?s, email = ?s, status = ?d, phone = ?s, "
+                . "registered_at = ?t, expires_at = ?t",
+                (isset($data[$restoreHelper->getField('user', 'surname')])) ? $data[$restoreHelper->getField('user', 'surname')] : '',
+                (isset($data[$restoreHelper->getField('user', 'givenname')])) ? $data[$restoreHelper->getField('user', 'givenname')] : '',
+                $data['username'],
+                isset($data['password'])? $data['password']: 'empty',
+                isset($data['email'])? $data['email']: '',
+                intval($data[$restoreHelper->getField('course_user', 'status')]),
+                isset($data['phone'])? $data['phone']: '',
+                $now,
+                date('Y-m-d H:i:s', time() + get_config('account_duration')))->lastInsertID;
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $user_id;
-            require_once 'include/lib/user.class.php';
             $user = new User();
             $user->refresh($user_id, $departments);
-            $tool_content .= "<p>" .
-                    sprintf($langRestoreUserNew, '<b>' . q($data['username']) . '</b>', '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] . " " . $data[$restoreHelper->getField('user', 'surname')]) . '</i>') .
-                    "</p>\n";
+            user_hook($user_id);
+            $tool_content .= "<div class='alert alert-info'>" .
+                sprintf($langRestoreUserNew,
+                    '<b>' . q($data['username']) . '</b>',
+                    '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] .
+                        ' ' . $data[$restoreHelper->getField('user', 'surname')]) . '</i>') .
+                "</div>\n";
         }
     }
     return $userid_map;
@@ -986,21 +1037,23 @@ function register_users($course_id, $userid_map, $cours_user, $restoreHelper) {
             $reviewer[$old_id] = (isset($cudata['reviewer'])) ? $cudata['reviewer'] : 0;
             $reg_date[$old_id] = $cudata['reg_date'];
             $receive_mail[$old_id] = $cudata['receive_mail'];
+            $document_timestamp[$old_id] = isset($cudata['document_timestamp'])?
+                $cudata['document_timestamp']: date('Y-m-d H:i:s', time());
         }
     }
 
     foreach ($userid_map as $old_id => $new_id) {
         Database::get()->query("INSERT INTO course_user SET course_id = ?d, user_id = ?d, status = ?d, tutor = ?d, editor = ?d, "
-                . "reviewer = ?d, reg_date = ?t, receive_mail = ?d",
+                . "reviewer = ?d, reg_date = ?t, receive_mail = ?d, document_timestamp = ?t",
                 intval($course_id),
                 intval($new_id),
-                intval($status[$old_id]), 
-                intval($tutor[$old_id]), 
-                intval($editor[$old_id]), 
-                intval($reviewer[$old_id]), 
-                $reg_date[$old_id], 
-                intval($receive_mail[$old_id]));
-        $tool_content .= "<p>$langPrevId=$old_id, $langNewId=$new_id</p>\n";
+                intval($status[$old_id]),
+                intval($tutor[$old_id]),
+                intval($editor[$old_id]),
+                intval($reviewer[$old_id]),
+                $reg_date[$old_id],
+                intval($receive_mail[$old_id]),
+                $document_timestamp[$old_id]);
     }
 }
 
@@ -1039,10 +1092,9 @@ function parse_backup_php($file) {
                     $sql = $args[0];
                     if (preg_match('/^INSERT INTO `(\w+)` \(([^)]+)\) VALUES\s+(.*)$/si', $sql, $matches)) {
                         $table = $matches[1];
-                        // Skip tables not used any longer
-                        if ($table != 'stat_accueil' and $table != 'users') {
-                            $fields = parse_fields($matches[2]);
-                            $values = parse_values($matches[3]);
+                        // Skip 'stat_accueil' and 'users' (not used any longer) and
+                        // 'actions' and 'logins' which can grow very large
+                        if (!in_array($table, array('stat_accueil', 'users', 'actions', 'logins'))) {
                             $info['query'][] = array(
                                 'table' => $table,
                                 'fields' => parse_fields($matches[2]),
@@ -1189,51 +1241,55 @@ function unit_map_function(&$data, $maps) {
     // opoy yparxei if isset, isxyei h:
     // idia symbash/paradoxh me to attendance_gradebook_activities_map_function()
     // des to ekei comment gia ta spasmena FKs
-    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map) = $maps;
+    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map, $forum_map, $forum_topic_map) = $maps;
     if ($data['type'] == 'videolinks') {
         $data['type'] == 'videolink';
     }
     $type = $data['type'];
     if ($type == 'doc') {
-        $data['res_id'] = $document_map[$data['res_id']];
+        $data['res_id'] = @$document_map[$data['res_id']];
     } elseif ($type == 'linkcategory') {
-        $data['res_id'] = $link_category_map[$data['res_id']];
+        $data['res_id'] = @$link_category_map[$data['res_id']];
     } elseif ($type == 'link') {
-        $data['res_id'] = $link_map[$data['res_id']];
+        $data['res_id'] = @$link_map[$data['res_id']];
     } elseif ($type == 'ebook') {
-        $data['res_id'] = $ebook_map[$data['res_id']];
+        $data['res_id'] = @$ebook_map[$data['res_id']];
     } elseif ($type == 'section') {
-        $data['res_id'] = $section_map[$data['res_id']];
+        $data['res_id'] = @$section_map[$data['res_id']];
     } elseif ($type == 'subsection') {
-        $data['res_id'] = $subsection_map[$data['res_id']];
+        $data['res_id'] = @$subsection_map[$data['res_id']];
     } elseif ($type == 'description') {
         $data['res_id'] = intval($data['res_id']);
     } elseif ($type == 'video') {
-        $data['res_id'] = $video_map[$data['res_id']];
+        $data['res_id'] = @$video_map[$data['res_id']];
     } elseif ($type == 'videolink') {
-        $data['res_id'] = $videolink_map[$data['res_id']];
+        $data['res_id'] = @$videolink_map[$data['res_id']];
     } elseif ($type == 'lp') {
-        $data['res_id'] = $lp_learnPath_map[$data['res_id']];
+        $data['res_id'] = @$lp_learnPath_map[$data['res_id']];
     } elseif ($type == 'wiki') {
-        $data['res_id'] = $wiki_map[$data['res_id']];
+        $data['res_id'] = @$wiki_map[$data['res_id']];
     } elseif ($type == 'work') {
         if (isset($assignments_map[$data['res_id']])) {
-            $data['res_id'] = $assignments_map[$data['res_id']];
+            $data['res_id'] = @$assignments_map[$data['res_id']];
         } else {
             $data['res_id'] = $assignments_map[0];
         }
     } elseif ($type == 'exercise') {
         if (isset($exercise_map[$data['res_id']])) {
-            $data['res_id'] = $exercise_map[$data['res_id']];
+            $data['res_id'] = @$exercise_map[$data['res_id']];
         } else {
             $data['res_id'] = $exercise_map[0];
         }
+    } elseif ($type == 'forum') {
+        $data['res_id'] = @$forum_map[$data['res_id']];
+    } elseif ($type == 'topic') {
+        $data['res_id'] = @$forum_topic_map[$data['res_id']];
     }
     return true;
 }
 
 function ratings_map_function(&$data, $maps) {
-    list($blog_post_map, $forum_post_map, $course_id) = $maps;
+    list($blog_post_map, $forum_post_map, $link_map, $course_id) = $maps;
     $rtype = $data['rtype'];
     if ($rtype == 'blogpost') {
         $data['rid'] = $blog_post_map[$data['rid']];
@@ -1241,6 +1297,8 @@ function ratings_map_function(&$data, $maps) {
         $data['rid'] = $course_id;
     } elseif ($rtype == 'forum_post') {
         $data['rid'] = $forum_post_map[$data['rid']];
+    } elseif ($rtype == 'link') {
+        $data['rid'] = $link_map[$data['rid']];
     }
     return true;
 }
@@ -1256,17 +1314,30 @@ function comments_map_function(&$data, $maps) {
     return true;
 }
 
+function abuse_report_map_function(&$data, $maps) {
+    list($forum_post_map, $comment_map, $link_map) = $maps;
+    $rtype = $data['rtype'];
+    if ($rtype == 'comment') {
+        $data['rid'] = $comment_map[$data['rid']];
+    } elseif ($rtype == 'forum_post') {
+        $data['rid'] = $forum_post_map[$data['rid']];
+    } elseif ($rtype == 'link') {
+        $data['rid'] = $link_map[$data['rid']];
+    }
+    return true;
+}
+
 function attendance_gradebook_activities_map_function(&$data, $maps) {
     list($assignments_map, $exercise_map) = $maps;
     $type = intval($data['module_auto_type']);
-    
+
     // PROSOXH! edw kanoyme thn exhs symvash/paradoxh:
     // Yparxei pi8anothta ta attendance/gradebook activities na kanoun
     // reference se mh-yparkto record, logw ths apoysias pragmatikou FK klp.
     // H restore gia na mporesei na leitoyrghsei me th logikh: "prospa8w na anakthsw
-    // thn arxikh bash xwris data loss, akoma kai asyndeta/spasmena data", telikws 8a 
+    // thn arxikh bash xwris data loss, akoma kai asyndeta/spasmena data", telikws 8a
     // kanei assign se ayta to id mhden (0).
-    
+
     if ($type === 1) {
         if (isset($assignments_map[$data['module_auto_id']])) {
             $data['module_auto_id'] = $assignments_map[$data['module_auto_id']];
@@ -1287,8 +1358,8 @@ function notes_map_function(&$data, $maps) {
     // opoy yparxei if isset, isxyei h:
     // idia symbash/paradoxh me to attendance_gradebook_activities_map_function()
     // des to ekei comment gia ta spasmena FKs
-    list($course_id, $agenda_map, $document_map, $link_map, $video_map, 
-            $videolink_map, $assignments_map, $exercise_map, $ebook_map, 
+    list($course_id, $agenda_map, $document_map, $link_map, $video_map,
+            $videolink_map, $assignments_map, $exercise_map, $ebook_map,
             $lp_learnPath_map) = $maps;
     $type = $data['reference_obj_type'];
     switch ($type) {
@@ -1346,7 +1417,7 @@ function notes_map_function(&$data, $maps) {
 function get_tabledata_from_parsed($table, $backupData, $restoreHelper, $set = array()) {
     $backup = array();
     foreach ($backupData['query'] as $tableData) {
-        if (is_array($tableData) && isset($tableData['table']) 
+        if (is_array($tableData) && isset($tableData['table'])
                 && $tableData['table'] === $restoreHelper->getFile($table)
                 && is_array($tableData['fields']) && is_array($tableData['values'])) {
             $row = array();
@@ -1362,7 +1433,7 @@ function get_tabledata_from_parsed($table, $backupData, $restoreHelper, $set = a
                     }
                 }
                 $backup[] = $row;
-            }   
+            }
         }
     }
     return $backup;

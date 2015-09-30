@@ -1,6 +1,5 @@
-<!-- BEGIN mainBlock -->
-<!DOCTYPE HTML>
-<html>
+<!-- BEGIN mainBlock --><!DOCTYPE HTML>
+<html lang="{%LANG%}">
 <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -13,10 +12,10 @@
     <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="{%template_base%}/js/bootstrap.min.js"></script>
+    <script src="{%template_base%}/js/bootstrap.min.js?v={%ECLASS_VERSION%}"></script>
 
      <!-- BootBox -->
-    <script src="{%URL_PATH%}js/bootbox/bootbox.min.js"></script>
+    <script src="{%URL_PATH%}js/bootbox/bootbox.min.js?v={%ECLASS_VERSION%}"></script>
     
     <!-- SlimScroll -->
     <script src="{%URL_PATH%}js/jquery.slimscroll.min.js"></script>
@@ -27,21 +26,18 @@
     var sidebarConfig = { notesLink: '{%NOTES_LINK%}', messagesLink: '{%URL_PATH%}main/ajax_sidebar.php', courseCode: '{%COURSE_CODE%}', courseId: '{%COURSE_ID%}', note_fail_messge: '{%langFieldsRequ%}' };
     </script>
     <!-- Our javascript -->
-    <script type="text/javascript" src="{%template_base%}/js/main.js"></script>
+    <script type="text/javascript" src="{%template_base%}/js/main.js?v={%ECLASS_VERSION%}"></script>
 
+    <!-- Favicon for various devices -->
+    <link rel="shortcut icon" href="{%FAVICON_PATH%}" />
+    <link rel="apple-touch-icon-precomposed" href="{%ICON_PATH%}" />
+    <link rel="icon" type="image/png" href="{%ICON_PATH%}" />
+    
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="{%template_base%}/CSS/bootstrap-custom.css">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="{%template_base%}/CSS/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{%template_base%}/CSS/bootstrap-custom.css?v={%ECLASS_VERSION%}">
 
     <!-- Font Awesome - A font of icons -->
     <link href="{%template_base%}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
-
-    <!-- Our main styles -->
-    <link rel="stylesheet" type="text/css" href="{%template_base%}/CSS/global.css">
-    <link rel="stylesheet" type="text/css" href="{%template_base%}/CSS/structure.css">
-    <link rel="stylesheet" type="text/css" href="{%template_base%}/CSS/inventory.css">
     
     <!--[if lt IE 9]>
       <script type="text/javascript" src="{%template_base%}/js/html5shiv.min.js"></script>
@@ -55,8 +51,9 @@
 </head>
 
 <body>
-	<div class="{%container%}">
+	
         <!-- BEGIN headerBlock -->
+        <div class="{%container%} header_container">
             <div class="row" id="header_section">
                 <!-- BEGIN normalViewOpenDiv -->
                 <div id="bgr-cheat-header" class="hidden-xs hidden-sm col-md-2">
@@ -74,71 +71,79 @@
                     <nav id="header" class="navbar navbar-default" role="navigation">
                         <!-- BEGIN normalViewOpenDiv -->
                         <button class="navbar-toggle pull-left">
-                            <i class="fa fa-bars" style='color: #777;'></i>
+                            <span class="fa fa-bars" style='color: #777;'></span>
+                            <span class="sr-only">$langMenu</span>
                         </button>
                         <!-- END normalViewOpenDiv -->
                         <!-- BEGIN logoBlock -->
                         <a href='{%URL_PATH%}' class="navbar-brand small-logo">
-                            <img class="img-responsive hidden-md hidden-lg" src="{%logo_img_small%}" style="height: 36px;margin-top:8px;" alt=''>
+                            <img class="img-responsive hidden-md hidden-lg" src="{%logo_img_small%}" style="height: 36px;margin-top:8px;" alt='{%PAGE_TITLE%} logo'>
                             </a>
                         <!-- END logoBlock -->
                         <ul class="nav navbar-nav navbar-right">
                             <!-- BEGIN LoggedInBlock -->
-                            <li><a href="{%URL_PATH%}main/portfolio.php"><i class="fa fa-home"></i></a></li>
+                            <li><a href="{%URL_PATH%}main/portfolio.php"><span class="fa fa-home"></span><span class="sr-only">{%LANG_PORTFOLIO%}</span></a></li>
                             <li id="profile_menu_dropdown" class="dropdown">
                                <a class="dropdown-toggle clearfix" role="button" id="dropdownMenu1" data-toggle="dropdown">
-                                   <img alt="" class="img-circle user-icon" src="{%USER_ICON%}" style="display: block; float: left;"><div style="display: block; float: left;">{%USERNAME%}</div>
+                                   <img alt="{%LANG_USER_ICON%}" class="img-circle user-icon" src="{%USER_ICON%}" style="display: block; float: left;"><div style="display: block; float: left;">{%USERNAME%}</div>
                                 </a>
 
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%PROFILE_LINK%}"><i class="fa fa-user"></i>{%LANG_PROFILE%}</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%COURSES_LINK%}"><i class="fa fa-graduation-cap"></i>{%LANG_COURSES%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%COURSES_LINK%}"><span class="fa fa-graduation-cap fa-fw"></span>{%LANG_COURSES%}</a>
                                     </li>                                    
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%MESSAGES_LINK%}"><i class="fa fa-envelope-o"></i>{%LANG_MESSAGES%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%MESSAGES_LINK%}"><span class="fa fa-envelope-o fa-fw"></span>{%LANG_MESSAGES%}</a>
                                     </li>
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%ANNOUNCEMENTS_LINK%}"><i class="fa fa-bullhorn"></i>{%LANG_ANNOUNCEMENTS%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%ANNOUNCEMENTS_LINK%}"><span class="fa fa-bullhorn fa-fw"></span>{%LANG_ANNOUNCEMENTS%}</a>
                                     </li>
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%AGENDA_LINK%}"><i class="fa fa-calendar"></i>{%LANG_AGENDA%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%AGENDA_LINK%}"><span class="fa fa-calendar fa-fw"></span>{%LANG_AGENDA%}</a>
                                     </li>
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%NOTES_LINK%}"><i class="fa fa-edit"></i>{%LANG_NOTES%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%NOTES_LINK%}"><span class="fa fa-edit fa-fw"></span>{%LANG_NOTES%}</a>
                                     </li>
                                     <!-- BEGIN PersoBlogBlock -->
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%MYBLOG_LINK%}"><i class="fa fa-columns"></i>{%LANG_MYBLOG%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%MYBLOG_LINK%}"><span class="fa fa-columns fa-fw"></span>{%LANG_MYBLOG%}</a>
                                     </li>
                                     <!-- END PersoBlogBlock -->
+                                    <!-- BEGIN MyDocsBlock -->
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%STATS_LINK%}"><i class="fa fa-area-chart"></i>{%LANG_STATS%}</a>
-                                    </li>                                    
+                                        <a role="menuitem" tabindex="-1" href="{%MYDOCS_LINK%}"><span class="fa fa-folder-open-o fa-fw"></span>{%LANG_MYDOCS%}</a>
+                                    </li>
+                                    <!-- END MyDocsBlock -->
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%PROFILE_LINK%}"><span class="fa fa-user fa-fw"></span>{%LANG_PROFILE%}</a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%STATS_LINK%}"><span class="fa fa-area-chart fa-fw"></span>{%LANG_STATS%}</a>
+                                    </li>
                                     <li role="presentation" style="border-top: 1px solid #ddd">
-                                        <a role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><i class="fa fa-unlock"></i>{%LANG_LOGOUT%}</a>
-                                    </li>                                    
+                                        <a role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><span class="fa fa-unlock fa-fw"></span>{%LANG_LOGOUT%}</a>
+                                    </li>
                                 </ul>
                             </li>
 
-                            <li><a id="toggle-sidebar"><i class="fa fa-sliders"></i></a></li>
+                            <li><a id="toggle-sidebar"><span class="fa fa-sliders"></span></a></li>
                             <!-- END LoggedInBlock -->
                             <!-- BEGIN LoggedOutBlock -->
                             {%LANG_SELECT%}
                             <!-- BEGIN LoginIconBlock -->
-                            <li><a href="{%LOGOUT_LINK%}"><i class="fa fa-lock"></i></a></li>
+                            <li><a href="{%LOGOUT_LINK%}"><span class="fa fa-lock"></span><span class="sr-only">{%LANG_LOGOUT%}</span></a></li>
                             <!-- END LoginIconBlock -->
                             <!-- END LoggedOutBlock -->
                         </ul>
                     </nav>
                 </div>
             </div>
+        </div>
         <!-- END headerBlock -->
 
         <!-- LeftNav & Main Content Section -->
 
+        <div class="{%container%} body_container">
         <div class="row" id="Frame">
             <!-- BEGIN normalViewOpenDiv -->
             <div id="background-cheat-leftnav" class="hidden-xs hidden-sm col-md-2 pull-left"></div>
@@ -154,7 +159,7 @@
                     <div class="col-md-12 add-gutter">
                         <!-- BEGIN breadCrumbs -->
                         <div class="row">
-                            <div class="col-xs-12"> 
+                            <nav role="navigation" class="col-xs-12"> 
                                 <ol class="breadcrumb">
                                     <!-- BEGIN breadCrumbLinkBlock -->
                                     <li><a href='{%BREAD_HREF%}'>{%BREAD_TEXT%}</a></li>
@@ -163,7 +168,7 @@
                                     <li>{%BREAD_TEXT%}</li>
                                     <!-- END breadCrumbEntryBlock -->
                                 </ol>
-                            </div>
+                            </nav>
                         </div>
                         <!-- END breadCrumbs -->
 
@@ -173,16 +178,12 @@
                             <div class="col-xs-9">
 
                                 <!-- BEGIN pageTitleBlock -->
-                                <div class="row">
-                                    <div class="col-md-12">
 
                                         <h1 class='page-title'>{%SECTION_TITLE%}</h1>
                                         <!-- BEGIN professorBlock -->
                                         <h2 class='page-subtitle'>{%PROFESSOR%}</h2>
                                         <!-- END professorBlock -->
 
-                                    </div>
-                                </div>
                                 <!-- END pageTitleBlock -->
 
 
@@ -206,7 +207,7 @@
                                 <!-- BEGIN statusSwitchBlock -->
                                 <div class='pull-right'>
                                     <form method='post' action='{%STUDENT_VIEW_URL%}' id='student-view-form'>
-                                        <button class='btn-toggle place-at-toolbox {%STUDENT_VIEW_CLASS%}' data-toggle='tooltip' data-placement='top' title='{%STUDENT_VIEW_TITLE%}'>
+                                        <button class='btn-toggle {%STUDENT_VIEW_CLASS%}' data-toggle='tooltip' data-placement='top' title='{%STUDENT_VIEW_TITLE%}'>
                                             <span class='on'><i class='fa fa-users'></i></span>
                                             <span class='off'><i class='fa fa-graduation-cap'></i></span>
                                         </button>
@@ -230,26 +231,24 @@
                 <!-- BEGIN logoBlock -->
                     <div class="logo">
                         <a href='{%URL_PATH%}'>
-                        <img class="img-responsive hidden-xs hidden-sm" src="{%logo_img%}" alt=''>
+                        <img class="img-responsive hidden-xs hidden-sm" src="{%logo_img%}" alt='{%PAGE_TITLE%} logo'>
                         </a>
                     </div>
                     <!-- END logoBlock -->
                 
+                <!-- BEGIN searchBlock -->
                 <div id="quick-search-wrapper">
-                    <!-- BEGIN searchBlock -->
-                    <form action='{%URL_PATH%}modules/search/search.php' method='post' >
+                    <form action='{%URL_PATH%}modules/search/{%SEARCH_ACTION%}' method='post' >
                         <div class="input-group">
-                            <input type="text" class="form-control input-sm" name="search_terms" placeholder="{%SEARCH_TITLE%}...">
+                            <label class='sr-only' for='search_terms'>{%SEARCH_TITLE%}</label>
+                            <input type="text" class="form-control input-sm" id="search_terms" name="search_terms" placeholder="{%SEARCH_TITLE%}...">
                             <span class="input-group-btn">
-                                <button id="btn-search" class="btn btn-sm" type="submit" name="quickSearch"><i class="fa fa-search"></i></button>
+                                <button id="btn-search" class="btn btn-sm" type="submit" name="quickSearch"><span class="fa fa-search"></span><span class="sr-only">{%SEARCH_TITLE%}</span></button>
                             </span>
                         </div>
                     </form>
-<!--                    <div class="advanced-search">
-                    <a href="{%URL_PATH%}modules/search/search.php" >Σύνθετη Αναζήτηση</a>
-                    </div>-->
-                    <!-- END searchBlock -->
                 </div>
+                <!-- END searchBlock -->
                 
                 <div class="panel-group" id="sidebar-accordion">                   
                     <!-- BEGIN leftNavCategoryBlock -->
@@ -258,10 +257,10 @@
                         <!-- BEGIN leftNavCategoryTitleBlock -->
                         <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{%TOOL_GROUP_ID%}">
                             <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <i class="fa fa-chevron-right space-after-icon"></i>
-                                    <span class="">{%ACTIVE_TOOLS%}</span>
-                                </h4>
+                                <h3 class="panel-title">
+                                    <span class="fa fa-chevron-right"></span>
+                                    <span>{%ACTIVE_TOOLS%}</span>
+                                </h3>
                             </div>
                         </a>
                         <!-- END leftNavCategoryTitleBlock -->
@@ -269,8 +268,8 @@
                         <div id="collapse{%TOOL_GROUP_ID%}" class="panel-collapse list-group collapse {%GROUP_CLASS%}">
                             <!-- BEGIN leftNavLinkBlock -->
                             <a href="{%TOOL_LINK%}" class="list-group-item {%TOOL_CLASS%}" {%TOOL_EXTRA%}>
-                                <i class="fa {%IMG_CLASS%} "></i>
-                                <span class="">{%TOOL_TEXT%}</span>
+                                <span class="fa {%IMG_CLASS%} fa-fw"></span>
+                                <span>{%TOOL_TEXT%}</span>
                             </a>
                             <!-- END leftNavLinkBlock -->
                         </div>
@@ -355,6 +354,7 @@
                                     </div>
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <label class="sr-only" for="text-note">{%langEnterNoteLabel%}</label>
                                         <textarea id="text-note" class="form-control" rows="6" placeholder="{%langEnterNote%}..."></textarea>
                                     </div>
                                     <button id="save_note" data-label="Save" class="btn btn-default btn-xs">{%langSave%}</button>
@@ -379,7 +379,7 @@
             <div class="col-xs-12">
             <!-- END mobileViewOpenDiv -->
                 <div id="scrollToTop">
-                    <i class='fa fa-caret-square-o-up fa-2x'></i>
+                    <span class='fa fa-caret-square-o-up fa-2x'></span>
                 </div>
                 <footer class="footer">
                     <span>{%COPYRIGHT%} &mdash; <a href="{%TERMS_URL%}">{%LANG_TERMS%}</a></span>
@@ -389,6 +389,8 @@
         <!-- END footerBlock -->
 
     </div>
+<!-- BEGIN closingTagsBlock -->
 </body>
 </html>
+<!-- END closingTagsBlock -->
 <!-- END mainBlock -->

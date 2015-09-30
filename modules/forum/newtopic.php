@@ -115,40 +115,12 @@ if (isset($_POST['submit'])) {
 
     $topic = $topic_id;
     $total_forum = get_total_topics($forum_id);
-    $total_topic = get_total_posts($topic) - 1;
     // subtract 1 because we want the number of replies, not the number of posts.
-    // --------------------------------
-    // notify users
-    // --------------------------------
-    $subject_notify = "$logo - $langNewForumNotify";
-    $category_id = forum_category($forum_id);
-    $cat_name = category_name($category_id);
-    $c = course_code_to_title($course_code);
-    $name = uid_to_name($uid);
-    $title = course_id_to_title($course_id);
-    $forum_message = "-------- $langBodyMessage ($langSender: $name)\n$message--------";
-    $plain_forum_message = q(html2text($forum_message));
-    $body_topic_notify = "$langBodyForumNotify $langInForums '" . q($forum_name) . "' 
-                               $langInCat '" . q($cat_name) . "' $langTo $langCourseS '$c' <br /><br />" . q($forum_message) . "<br />
-                               <br />$gunet<br /><a href='{$urlServer}courses/$course_code'>{$urlServer}courses/$course_code</a>";
-    $plain_body_topic_notify = "$langBodyForumNotify $langInForums '" . q($forum_name) . "' $langInCat '" . q($cat_name) . "' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}courses/$course_code'>{$urlServer}courses/$course_code</a>";
-    $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-    $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
-    $plain_body_topic_notify .= $unsubscribe . $linkhere;
-    $body_topic_notify .= $unsubscribe . $linkhere;
+    $total_topic = get_total_posts($topic) - 1;
 
-    $sql = Database::get()->queryArray("SELECT DISTINCT user_id FROM forum_notify
-			WHERE (forum_id = ?d OR cat_id = ?d)
-			AND notify_sent = 1 AND course_id = ?d AND user_id != ?d", $forum_id, $category_id, $course_id, $uid);
-    foreach ($sql as $r) {
-        if (get_user_email_notification($r->user_id, $course_id)) {
-            $emailaddr = uid_to_email($r->user_id);
-            send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);
-        }
-    }
-    // end of notification
+    notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $time);
 
-    Session::Messages($langStored, 'alert-success');
+    Session::Messages($langTopicStored, 'alert-success');
     redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");
 } else {
     $tool_content .= "

@@ -91,8 +91,7 @@ $tool_content .= "
             $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, $showEmpty);
        $tool_content .= "</ul>
            </div>
-    </div>
-        ";
+    </div>";
 
 
 
@@ -149,11 +148,11 @@ if ($runQuery) {
                          WHERE course.id = course_department.course
                            $queryExtraJoinWhere
                            AND course_department.department = ?d
-                           AND course.visible != ?d
+                           AND course.visible != " . COURSE_INACTIVE . "
                            $queryCourseIds
                       ORDER BY course.title, course.prof_names", function ($course) use (&$courses) {
         $courses[] = $course;
-    }, $fc, COURSE_INACTIVE );
+    }, $fc);
 }
 
 if (count($courses) > 0) {
@@ -169,12 +168,38 @@ if (count($courses) > 0) {
     }
 
     $tool_content .= "</tr>";
-    
+
+    $displayGuestLoginLinks = $uid == 0 && get_config('course_guest') == 'link';    
     foreach ($courses as $mycours) {
         if ($mycours->visible == COURSE_OPEN) {
             $codelink = "<a href='../../courses/" . urlencode($mycours->k) . "/'>" . q($mycours->i) . "</a>&nbsp;<small>(" . q($mycours->c) . ")</small>";
         } else {
             $codelink = q($mycours->i) . "&nbsp;<small>(" . q($mycours->c) . ")</small>";
+        }
+
+        if ($displayGuestLoginLinks) {
+            $guestUser = Database::get()->querySingle('SELECT username, password FROM course_user, user
+                WHERE course_user.user_id = user.id AND user.status = ?d and course_id = ?d',
+                USER_GUEST, $mycours->id);
+            if ($guestUser) {
+                $codelink .= " <div class='pull-right'>";
+                if ($guestUser->password === '') {
+                    $codelink .= "
+                        <form method='post' action='$urlAppend'>
+                            <input type='hidden' name='uname' value='{$guestUser->username}'>
+                            <input type='hidden' name='pass' value=''>
+                            <input type='hidden' name='next' value='/courses/{$mycours->k}/'>
+                            <button class='btn btn-default' type='submit' title='" . q($langGuestLogin) .
+                                "' name='submit' data-toggle='tooltip'><span class='fa fa-plane'></span></button>
+                        </form>";
+                } else {
+                    $codelink .= "<a class='btn btn-default' role='button' href='" .
+                        "{$urlAppend}main/login_form.php?user=" . urlencode($guestUser->username) . "&amp;next=%2Fcourses%2F" .
+                            $mycours->k . "%2F' title='" . q($langGuestLogin) . "' data-toggle='tooltip'>
+                                <span class='fa fa-plane'></span></a>";
+                }
+                $codelink .= "</div>";
+            }
         }
                 
         $tool_content .= "<td>" . $codelink . "</td>";
@@ -202,7 +227,7 @@ if (count($courses) > 0) {
 
 if ($isInOpenCoursesMode) {
     $head_content .= <<<EOF
-<link rel="stylesheet" type="text/css" href="course_metadata.css">
+<link rel="stylesheet" type="text/css" href="{$urlAppend}modules/course_metadata/course_metadata.css">
 <style type="text/css"></style>
 <script type="text/javascript">
 /* <![CDATA[ */

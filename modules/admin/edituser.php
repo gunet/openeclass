@@ -30,6 +30,7 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $tree = new Hierarchy();
 $user = new User();
@@ -45,7 +46,7 @@ if (!isset($_REQUEST['u'])) {
 
 $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_mail']) : 2;
 
-load_js('jstree');
+load_js('jstree3');
 load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
@@ -95,9 +96,11 @@ if ($u) {
         $current_auth = 1;
         $auth_names[1] = get_auth_info(1);
         foreach (get_auth_active_methods() as $auth) {
-            $auth_names[$auth] = get_auth_info($auth);
-            if ($info->password == $auth_ids[$auth]) {
-                $current_auth = $auth;
+            if($auth < 8) {
+                $auth_names[$auth] = get_auth_info($auth);
+                if ($info->password == $auth_ids[$auth]) {
+                    $current_auth = $auth;
+                }
             }
         }
         $tool_content .= "<div class='form-wrapper'>
@@ -119,6 +122,7 @@ if ($u) {
     }
     if (!$u_submitted) { // if the form was not submitted
         // Display Actions Toolbar
+        $ind_u = getIndirectReference($u);
         $tool_content .= action_bar(array(
             array('title' => $langUserMerge,
                 'url' => "mergeuser.php?u=$u",
@@ -135,7 +139,7 @@ if ($u) {
                 'icon' => 'fa-key',
                 'level' => 'primary'),
             array('title' => $langDelUser,
-                'url' => "deluser.php?u=$u",
+                'url' => "deluser.php?u=$ind_u",
                 'icon' => 'fa-times',
                 'level' => 'primary',
                 'show' => $u > 1),
@@ -258,8 +262,12 @@ if ($u) {
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langUserWhitelist</label>
           <div class='col-sm-10'><textarea rows='6' cols='60' name='user_upload_whitelist'>" . q($info->whitelist) . "</textarea></div>
-        </div>
-        <input type='hidden' name='u' value='$u' />
+        </div>";
+        //show custom profile fields input
+        if ($info->status != USER_GUEST) {
+            $tool_content .= render_profile_fields_form(array('origin' => 'admin_edit_profile', 'user_id' => $u));
+        }
+        $tool_content .= "<input type='hidden' name='u' value='$u' />
         <input type='hidden' name='u_submitted' value='1' />
         <input type='hidden' name='registered_at' value='" . $info->registered_at . "' />
         <div class='col-sm-offset-2 col-sm-10'>
@@ -268,7 +276,7 @@ if ($u) {
         </fieldset>
         </form>
         </div>";
-        $sql = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, b.reg_date, b.status
+        $sql = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, DATE(b.reg_date) AS reg_date, b.status
                             FROM course AS a
                             JOIN course_department ON a.id = course_department.course
                             JOIN hierarchy ON course_department.department = hierarchy.id
@@ -318,16 +326,6 @@ if ($u) {
         }
     } else { // if the form was submitted then update user
 
-        $tool_content .= action_bar(array(
-                        array('title' => $langBack,
-                              'url' => "listusers.php",
-                              'icon' => 'fa-reply',
-                              'level' => 'primary-label'),
-                        array('title' => $langBackAdmin,
-                              'url' => "index.php",
-                              'icon' => 'fa-reply',
-                              'level' => 'primary-label')));
-
         // get the variables from the form and initialize them
         $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
         $lname = isset($_POST['lname']) ? $_POST['lname'] : '';
@@ -353,67 +351,75 @@ if ($u) {
                                                  username = ?s", $u, $username)) {
             $user_exist = TRUE;
         }
-
+        
+        //check for validation errors in custom profile fields
+        $cpf_check = cpf_validate_format();
+        
         // check if there are empty fields
-        if (empty($fname) or empty($lname) or empty($username)) {
-            $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing <br>
-                                  <a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></div>";
-            draw($tool_content, 3, null, $head_content);
-            exit();
+        if (empty($fname) or empty($lname) or empty($username) or cpf_validate_required_edituser() === false) {
+            Session::Messages($langFieldsMissing, 'alert-danger');
+            redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         } elseif (isset($user_exist) and $user_exist == true) {
-            $tool_content .= "<div class='alert alert-danger'>$langUserFree <br>
-                                  <a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></div";
+            Session::Messages($langUserFree, 'alert-danger');
+            redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
+        } elseif ($cpf_check[0] === false) {
+            $cpf_error_str = '';
+            unset($cpf_check[0]);
+            foreach ($cpf_check as $cpf_error) {
+                $cpf_error_str .= $cpf_error;
+            }
+            $tool_content .= "<div class='alert alert-danger'>$cpf_error_str <br>
+                                <a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></div";
             draw($tool_content, 3, null, $head_content);
             exit();
         }
 
         if ($registered_at > $user_expires_at) {
-            $tool_content .= "<div class='alert alert-warning'>$langExpireBeforeRegister<br>
-                    <a href='edituser.php?u=$u'>$langAgain</a></div>";
-        } else {
-            if ($u == 1) {
-                $departments = array();
-            }
+            Session::Messages($langExpireBeforeRegister, 'alert-warning');
+        }
 
-            // email cannot be verified if there is no mail saved
-            if (empty($email) and $verified_mail) {
-                $verified_mail = 2;
-            }
+        // email cannot be verified if there is no mail saved
+        if (empty($email) and $verified_mail) {
+            $verified_mail = 2;
+        }
 
-            // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
-            if (isDepartmentAdmin()) {
-                $olddeps = $user->getDepartmentIds(intval($u));
+        // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
+        if (isDepartmentAdmin()) {
+            $olddeps = $user->getDepartmentIds(intval($u));
 
-                foreach ($departments as $depId) {
-                    if (!in_array($depId, $olddeps)) {
-                        validateNode(intval($depId), true);
-                    }
-                }
-
-                foreach ($olddeps as $depId) {
-                    if (!in_array($depId, $departments)) {
-                        validateNode($depId, true);
-                    }
+            foreach ($departments as $depId) {
+                if (!in_array($depId, $olddeps)) {
+                    validateNode(intval($depId), true);
                 }
             }
-            $user->refresh(intval($u), $departments);
-            $qry = Database::get()->query("UPDATE user SET surname = ?s,
-                                    givenname = ?s,
-                                    username = ?s,
-                                    email = ?s,
-                                    status = ?d,
-                                    phone = ?s,
-                                    expires_at = ?t,
-                                    am = ?s,
-                                    verified_mail = ?d,
-                                    whitelist = ?s
-                          WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
-            if ($qry->affectedRows > 0) {
-                    $tool_content .= "<div class='alert alert-info'>$langSuccessfulUpdate</div>";
-            } else {
-                    $tool_content .= "<div class='alert alert-warning'>$langUpdateNoChange</div>";
+
+            foreach ($olddeps as $depId) {
+                if (!in_array($depId, $departments)) {
+                    validateNode($depId, true);
+                }
             }
         }
+        $user->refresh(intval($u), $departments);
+        user_hook($u);
+        $qry = Database::get()->query("UPDATE user SET surname = ?s,
+                                givenname = ?s,
+                                username = ?s,
+                                email = ?s,
+                                status = ?d,
+                                phone = ?s,
+                                expires_at = ?t,
+                                am = ?s,
+                                verified_mail = ?d,
+                                whitelist = ?s
+                      WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
+            //update custom profile fields
+            $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
+            if ($qry->affectedRows > 0 || $cpf_updated === true) {
+                Session::Messages($langSuccessfulUpdate, 'alert-info');
+        } else {
+            Session::Messages($langUpdateNoChange, 'alert-warning');
+        }
+        redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
     }
 } else {
     $tool_content .= "<div class='alert alert-danger'>$langError <a href='listcours.php'>$back</a></div>";

@@ -88,27 +88,22 @@ function course_index($code) {
 }
 
 /**
- * @brief create course directories
- * @global type $webDir
+ * @brief create course directories 
  * @param type $code
  * @return boolean
  */
 function create_course_dirs($code) {
-    global $webDir;
+    global $langDirectoryCreateError;
 
-    $base = $webDir . "/courses/$code";
+    $base = "courses/$code";
     umask(0);
-    if (!(mkpath("$base") and
-            mkpath("$base/image") and
-            mkpath("$base/document") and
-            mkpath("$base/dropbox") and
-            mkpath("$base/page") and
-            mkpath("$base/work") and
-            mkpath("$base/group") and
-            mkpath("$base/temp") and
-            mkpath("$base/scormPackages") and
-            mkpath($webDir . "/video/$code"))) {
-        return false;
+    foreach (array($base, "$base/image", "$base/document", "$base/dropbox",
+                   "$base/page", "$base/work", "$base/group", "$base/temp",
+                   "$base/scormPackages", "video/$code") as $dir) {
+       if (!(mkdir($dir))) {
+            Session::Messages(sprintf($langDirectoryCreateError, $dir));
+            return false;
+       } 
     }
     return true;
 }

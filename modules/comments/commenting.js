@@ -1,15 +1,3 @@
-var showCommentArea = new Array();
-
-function showComments(id) {
-	if(!showCommentArea[id]) {
-		document.getElementById('commentArea-'+id).style.display = 'inline';
-		showCommentArea[id] = true;
-	} else {
-		document.getElementById('commentArea-'+id).style.display = 'none';
-		showCommentArea[id] = false;
-	}
-}
-
 function xmlhttpPost(strURL, action, rid, rtype, confirmmsg, cid) {
 
 	if (action == 'delete') {

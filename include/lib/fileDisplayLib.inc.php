@@ -211,7 +211,7 @@ function public_file_path($disk_path, $filename = null) {
  * @return type
  */
 function file_url($path, $filename = null, $courseCode = null) {
-    global $course_code, $urlServer, $group_id, $ebook_id;
+    global $course_code, $urlServer, $group_id, $ebook_id, $uid;
     $courseCode = ($courseCode == null) ? $course_code : $courseCode;
 
     if (defined('EBOOK_DOCUMENTS')) {
@@ -219,9 +219,16 @@ function file_url($path, $filename = null, $courseCode = null) {
                 "modules/ebook/show.php/$courseCode/$ebook_id/_" .
                 public_file_path($path, $filename), ENT_QUOTES);
     } else {
-        $gid = defined('GROUP_DOCUMENTS') ? ",$group_id" : '';
         if (defined('COMMON_DOCUMENTS')) {
             $courseCode = 'common';
+            $gid = '';
+        } elseif (defined('MY_DOCUMENTS')) {
+            $courseCode = 'user';
+            $gid = ",$uid";
+        } elseif (defined('GROUP_DOCUMENTS')) {
+            $gid = ",$group_id";
+        } else {
+            $gid = '';
         }
         return htmlspecialchars($urlServer .
                 "modules/document/file.php/$courseCode$gid" .

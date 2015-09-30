@@ -1,14 +1,3 @@
-// Action Button function
-function animate_btn() {
-    $(".opt-btn-wrapper").hover(
-            function () {
-                tool_btn_offset = ((($(this).children(".opt-btn-more-wrapper").children(".opt-btn-more-tool").length) + 1) * 56) + "px";
-                $(this).children(".opt-btn-more-wrapper").animate({width: tool_btn_offset}, 150);
-            },
-            function () {
-                $(this).children(".opt-btn-more-wrapper").animate({width: "56px"}, 150);
-            });
-}
 function act_confirm() {
     $('.confirmAction').on('click', function (e) {
         var message = $(this).attr('data-message');
@@ -38,6 +27,7 @@ function act_confirm() {
 }
 
 function popover_init() {
+    $('.glossary').popover();
     var click_in_process = false;
     var hidePopover = function () {
         if (!click_in_process) {
@@ -46,6 +36,7 @@ function popover_init() {
     }
     , togglePopover = function () {
         $(this).popover('toggle');
+        $('#action_button_menu').parent().parent().addClass('menu-popover');
     };
     $('[data-toggle="popover"]').popover().on('click', togglePopover).on('blur', hidePopover);
     $('[data-toggle="popover"]').on('shown.bs.popover', function () {
@@ -61,7 +52,7 @@ function popover_init() {
 
 }
 function tooltip_init() {
-    $('[data-toggle=tooltip]').tooltip({container: 'body'});
+    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
 }
 function sidebar_reset() {
 
@@ -70,7 +61,6 @@ $(document).ready(function () {
 
     // Initialisations
     act_confirm();
-    animate_btn();
     tooltip_init();
     popover_init();
 
@@ -118,7 +108,6 @@ $(document).ready(function () {
             }
         }
     });
-
 
     $(".navbar-toggle").on("click", function (e) {
         if ($("#sidebar").hasClass("in")) {
@@ -169,15 +158,49 @@ $(document).ready(function () {
             'type': 'hidden'})).submit();
     });
 
+    // Module toggle button
+    $('#module_toggle').on('click', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        $(this).removeAttr('href').find('span')
+            .removeClass('fa-minus-square fa-check-square tiny-icon-red tiny-icon-green')
+            .addClass('fa-spinner fa-spin');
+        $.post(url,
+            { hide: $(this).data('state') },
+            function () { location.reload(); });
+    });
+    
+    // External Apps activate/deactivate button
+    $('.extapp-status').on('click', function () {
+        var url = window.location.href;
+        var button = $(this).children('i');
+        var state = button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
+        var appName = button.parent('button').attr('data-app');
+        
+        button.removeClass(state).addClass('fa-spinner fa-spin');
+        
+        $.post( url,
+                {state: state,
+                 appName: appName},
+                function (data) {
+                    var newState = (data === "0")? "fa-toggle-off":"fa-toggle-on";
+                    console.log(newState);
+                    button.removeClass('fa-spinner fa-spin').addClass(newState);
+                    btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
+                    newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                    button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
+                });
+    });
+
     // Leftnav - rotate Category Menu Item icon
     if ($(".collapse.in").length > 0) { //when page first loads the show.bs.collapse event is not triggered
-        $(".collapse.in").prev("a").find("i").addClass("fa-rotate-90");
+        $(".collapse.in").prev("a").find("span.fa").addClass("fa-rotate-90");
     }
     $('.panel-collapse').on('show.bs.collapse', function () {
-        $(this).prev("a").find("i").addClass("fa-rotate-90");
+        $(this).prev("a").find("span.fa").addClass("fa-rotate-90");
     });
     $('.panel-collapse').on('hide.bs.collapse', function () {
-        $(this).prev("a").find("i").removeClass("fa-rotate-90");
+        $(this).prev("a").find("span.fa").removeClass("fa-rotate-90");
     });
 
     // ScrollTop - When page is scrolled down and we click on menu item then the menu is collapsed
@@ -203,18 +226,13 @@ $(document).ready(function () {
         }
     });
 
-    $("#scrollToTop i").on('click', function () {
+    $("#scrollToTop span").on('click', function () {
         scrollToTop("html, body", 500);
     });
 
     $('.panel-collapse').on('shown.bs.collapse', function () {
         //scrollToTop($(this).prev('a'),500);  // Uncomment this if you want to make anchor the Parent Menu Item
         scrollToTop("html, body", 500);
-    });
-
-    // Action Bar - More Options Button
-    $(".expandable-btn").click(function () {
-        $(this).toggleClass("active").parents(".action-bar-wrapper").children(".expandable").toggleClass("secondary-active");
     });
 
 
@@ -273,7 +291,7 @@ $(document).ready(function () {
                             var id = $(this).data('id');
                             if (data.notifications[id]) {
                                 $(this).html(data.notifications[id]);
-                                $(this).closest('.panel').find('i.lesson-title-caret').removeClass('fa-caret-down').addClass('fa-bell alert-info').attr('rel', 'tooltip').attr('title', data.langNotificationsExist);
+                                $(this).closest('.panel').find('span.lesson-title-caret').removeClass('fa-caret-down').addClass('fa-bell alert-info').attr('rel', 'tooltip').attr('title', data.langNotificationsExist);
                             }
                         });
                         tooltip_init();

@@ -34,21 +34,27 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
-$auth = isset($_REQUEST['auth']) ? intval($_REQUEST['auth']) : false;
+if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
+    $auth = intval($_REQUEST['auth']); // $auth gets the integer value of the auth method if it is set
+} else {
+    $auth = false;
+}
+
 register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'ldaphost' => true, 'ldap_base' => true,
     'ldapbind_dn' => true, 'ldapbind_pw' => true,
     'ldap_login_attr' => true, 'ldap_login_attr2' => true,
+    'ldap_id_attr' => true,
     'dbhost' => true, 'dbtype' => true, 'dbname' => true,
     'dbuser' => true, 'dbpass' => true, 'dbtable' => true,
     'dbfielduser' => true, 'dbfieldpass' => true, 'dbpassencr' => true,
     'shibemail' => true, 'shibuname' => true,
     'shibcn' => true, 'checkseparator' => true,
     'submit' => true, 'auth_instructions' => true, 'auth_title' => true,
-    'test_username' => true), 'all', 'autounquote');
+	'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
+    'test_username' => true), 'all');
 
-// unescapeSimple() preserves whitespace in password
-$test_password = isset($_POST['test_password']) ? unescapeSimple($_POST['test_password']) : '';
+$test_password = isset($_POST['test_password']) ? $_POST['test_password'] : '';
 
 if ($auth == 7) {
     if ($submit) {
@@ -57,7 +63,7 @@ if ($auth == 7) {
         foreach (array('cas_host', 'cas_port', 'cas_context', 'cas_cachain',
                         'casusermailattr', 'casuserfirstattr', 'casuserlastattr',
                         'cas_altauth', 'cas_logout', 'cas_ssout', 'casuserstudentid', 
-                        'auth_instructions') as $var) {
+                        'auth_instructions', 'auth_title') as $var) {
             if (isset($_POST[$var])) {
                 $_SESSION[$var] = $_POST[$var];
             }
@@ -129,21 +135,22 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                 $auth = 7;
             }
             switch ($auth) {
-                case '2':
+                case 2:
                     $settings = array('pop3host' => $pop3host);
                     break;
-                case '3':
+                case 3:
                     $settings = array('imaphost' => $imaphost);
                     break;
-                case '4':
+                case 4:
                     $settings = array('ldaphost' => $ldaphost,
                         'ldap_base' => $ldap_base,
                         'ldapbind_dn' => $ldapbind_dn,
                         'ldapbind_pw' => $ldapbind_pw,
                         'ldap_login_attr' => $ldap_login_attr,
-                        'ldap_login_attr2' => $ldap_login_attr2);
+                        'ldap_login_attr2' => $ldap_login_attr2,
+                        'ldap_studentid' => $ldap_id_attr);
                     break;
-                case '5':
+                case 5:
                     $settings = array('dbhost' => $dbhost,
                         'dbname' => $dbname,
                         'dbuser' => $dbuser,
@@ -153,9 +160,9 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                         'dbfieldpass' => $dbfieldpass,
                         'dbpassencr' => $dbpassencr);
                     break;
-                case '6':
+                case 6:
                     if ($checkseparator) {
-                        $auth_settings = unescapeSimple($_POST['shibseparator']);
+                        $auth_settings = $_POST['shibseparator'];
                     } else {
                         $auth_settings = 'shibboleth';
                     }
@@ -163,7 +170,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                         'shibuname' => $shibuname,
                         'shibcn' => $shibcn);
                     break;
-                case '7':
+                case 7:
                     $settings = array('cas_host' => $_SESSION['cas_host'],
                         'cas_port' => $_SESSION['cas_port'],
                         'cas_context' => $_SESSION['cas_context'],
@@ -176,6 +183,20 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                         'cas_ssout' => $_SESSION['cas_ssout'],
                         'casuserstudentid' => $_SESSION['casuserstudentid']);
                     $auth_instructions = $_SESSION['auth_instructions'];
+	                break;
+                case 8:  // Facebook
+                case 10: // Google
+                case 11: // Live
+                    $settings = array('id' => $hybridauth_id_key,
+                                      'secret' => $hybridauth_secret);
+            	    $auth_instructions = $hybridauth_instructions;
+                    break;
+                case 9:  // Twitter
+                case 12: // Yahoo
+                case 13: // LinkedIn
+                    $settings = array('key' => $hybridauth_id_key,
+                                      'secret' => $hybridauth_secret);
+            	    $auth_instructions = $hybridauth_instructions;
                     break;
                 default:
                     break;
@@ -207,28 +228,30 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     $tool_content .= "</div>";
                     $auth_allow = 0;
                 }
-            } else {
+            } elseif ($auth < 8) { //display the wrong username/password message only if the auth method is NOT a hybridauth method
                 $tool_content .= "<div class='alert alert-danger'>$langWrongAuth</div>";
                 $auth_allow = 0;
+            } elseif ($auth >= 8) {
+                $auth_allow = 1; //hybridauth provider, so no username-password testing
             }
-        }
+        } 
 
         // update table `auth`
         if (!empty($auth_allow) and $auth_allow == 1) {
-            if ($auth != 6) {
+            if ($auth != 6 && $auth < 8) {
                 $auth_settings = pack_settings($settings);
+            } elseif ($auth >= 8) {
+                $auth_settings = serialize($settings);
             }
             $result = Database::get()->query("UPDATE auth
             			SET auth_settings = ?s,
-                                    auth_instructions = ?s,
-                                    auth_default = GREATEST(auth_default, 1),
-                                    auth_title = ?s,
-                                    auth_name = ?s
-                                WHERE
-                                    auth_id = ?d"
-                    , function ($error) use(&$tool_content, $langErrActiv) {
-                $tool_content .= "<div class='alert alert-warning'>$langErrActiv</div>";
-            }, $auth_settings, $auth_instructions, $auth_title, $auth_ids[$auth], $auth);
+                            auth_instructions = ?s,
+                            auth_default = GREATEST(auth_default, 1),
+                            auth_title = ?s
+                        WHERE auth_id = ?d",
+                function ($error) use(&$tool_content, $langErrActiv) {
+                    $tool_content .= "<div class='alert alert-warning'>$langErrActiv</div>";
+                }, $auth_settings, $auth_instructions, $auth_title, $auth);
             if ($result) {
                 if ($result->affectedRows == 1) {
                     $tool_content .= "<div class='alert alert-success'>$langHasActivate</div>";
@@ -277,8 +300,19 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             break;
         case 7: require_once 'modules/auth/methods/casform.php';
             break;
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+            require_once 'modules/auth/methods/hybridauthform.php'; //generic HybridAuth form for provider settings
+            hybridAuthForm($auth);
+            break;
+        default:
+            break;
     }
-    if ($auth != 6 && $auth != 7 && $auth != 1) {
+    if ($auth > 1 and $auth < 6) {
         $tool_content .= "
                 <div class='alert alert-info'>$langTestAccount</div>
                 <div class='form-group'>
@@ -346,6 +380,19 @@ function pack_settings($settings) {
     $items = array();
     foreach ($settings as $key => $value) {
         $items[] = "$key=$value";
+    }
+    return implode('|', $items);
+}
+
+/**
+ * @implode settings but only values
+ * @param type $settings
+ * @return string
+ */
+function pack_settings_alt($settings) {
+    $items = array();
+    foreach ($settings as $key => $value) {
+        $items[] = "$value";
     }
     return implode('|', $items);
 }

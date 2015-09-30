@@ -25,7 +25,7 @@ require_once '../../include/init.php';
 
 if ($is_editor) {
     $exerciseId = filter_input(INPUT_GET, 'exerciseId', FILTER_SANITIZE_NUMBER_INT);
-    header("Content-disposition: filename=" . $currentCourse . "_" . $exerciseId . "_" . date("Y-m-d") . ".xls");
+    header("Content-disposition: filename=" . $course_code . "_" . $exerciseId . "_" . date("Y-m-d") . ".xls");
     header("Content-type: text/csv; charset=UTF-16");
     header("Pragma: no-cache");
     header("Expires: 0");
@@ -33,7 +33,7 @@ if ($is_editor) {
     $bom = "\357\273\277";
 
     $crlf = "\r\n";
-    $output = "$bom$langSurname\t$langName\t$langAm\t$langExerciseStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
+    $output = "$bom$langSurname\t$langName\t$langAm\t$langStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
     $output .= "$crlf";
 
     $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ?d", $exerciseId);

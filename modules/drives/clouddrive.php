@@ -20,6 +20,7 @@
  * ======================================================================== */
 
 $path = realpath(dirname(__FILE__));
+require_once $path . '/../../include/baseTheme.php';
 require_once $path . '/../../config/config.php';
 require_once $path . '/../../modules/admin/debug.php';
 require_once $path . '/../db/database.php';
@@ -27,12 +28,15 @@ require_once $path . '/../admin/extconfig/externals.php';
 foreach (CloudDriveManager::$DRIVENAMES as $driveName)
     require_once 'plugins/' . strtolower($driveName) . '.php';
 
+load_js('filetree');
+
 final class CloudDriveManager {
 
-    public static $DRIVENAMES = array("GoogleDrive", "OneDrive", "Dropbox");
+    public static $DRIVENAMES = array("GoogleDrive", "OneDrive", "Dropbox", "OwnCloud", "WebDAV", "FTP");
 
     const DRIVE = "clouddrive";
     const FILEPENDING = "pendingcloud";
+    const CALLBACK = "callbackcloud";
 
     private static $DRIVES = null;
 
@@ -44,9 +48,8 @@ final class CloudDriveManager {
             $drives = array();
             foreach (CloudDriveManager::$DRIVENAMES as $driveName) {
                 $drive = new $driveName();
-                if ($drive->isPresent()) {
+                if ($drive->isPresent())
                     $drives[$drive->getName()] = $drive;
-                }
             }
             CloudDriveManager::$DRIVES = $drives;
         }
@@ -54,30 +57,48 @@ final class CloudDriveManager {
     }
 
     public static function renderAsButtons() {
-        $result = "\n<script src=\"../../js/colorbox/jquery.colorbox.min.js\"></script>
-<link rel=\"stylesheet\" href=\"../../js/colorbox/colorbox.css\"/>
+        global $langPathUploadFile;
+        $result = "
 <script>
     function authorizeDrive(driveType) {
-        win = window.open('../drives/popup.php?" . CloudDriveManager::DRIVE . "=' + driveType, 'Connecting... ' ,'height=600,width=400,scrollbars=yes');
+        win = window.open('../drives/popup.php?" . CloudDriveManager::CALLBACK . "=' + encodeURIComponent(window.location.href) + '&" . CloudDriveManager::DRIVE . "=' + driveType, 'Connecting... ' ,'height=600,width=400,scrollbars=yes');
         var timer = setInterval(function() {   
             if(win.closed) {  
                 clearInterval(timer);
                 window.location.reload();
             }
         }, 1000);
-    }
-    $(function ()
-    {
-        $(\".driveconn\").colorbox({iframe:true, innerWidth:424, innerHeight:330});    
-    })
+    }    
     function callback(file) {
         window.location.href = window.location.href + '&" . CloudDriveManager::FILEPENDING . "=' + encodeURIComponent(file);
     }
-</script>\n";
-
+    $(document).ready(function(){
+        $('#tree_container').on('show.bs.modal', function (event) {
+            var source = $(event.relatedTarget); 
+            $('#fileTreeDemo').fileTree({root: '/', script: '../drives/fileprovider.php?' + source.data('drive') , loadMessage: 'Please wait...'}, function (file) {
+                $('tree_container').modal('hide');
+                callback(file);
+            });
+        });
+    });
+</script>
+<div class='modal fade' id='tree_container' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+        <h4 class='modal-title' id='myModalLabel'>" . $langPathUploadFile . "</h4>
+      </div>
+      <div class='modal-body' style=' overflow:auto;'>
+        <div id='fileTreeDemo' class='browsearea' ></div>
+      </div>      
+    </div>
+  </div>
+</div>";
+        //href=\"../drives/filebrowser.php?" . $drive->getDriveDefaultParameter() . "\"
         foreach (CloudDriveManager::getValidDrives() as $drive) {
             if ($drive->isAuthorized()) {
-                $result .="<a class='btn btn-default driveconn' href=\"../drives/filebrowser.php?" . $drive->getDriveDefaultParameter() . "\"><i class='fa fa-file space-after-icon'/></i>" . $drive->getDisplayName() . "</a> \n";
+                $result .="<a class='btn btn-default vagelis' href='javascript:void(0);'  data-toggle=\"modal\" data-target=\"#tree_container\" data-drive=\"" . $drive->getDriveDefaultParameter() . "\"><i class='fa fa-file space-after-icon'/></i>" . $drive->getDisplayName() . "</a> \n";
             } else {
                 $result .="<a class='btn btn-default' href=\"javascript:void(0)\" onclick=\"authorizeDrive('" . $drive->getName() . "')\"><i class='fa fa-plug space-after-icon'></i>" . $drive->getDisplayName() . "</a> \n";
             }
@@ -125,13 +146,15 @@ abstract class CloudDrive {
         return $this->extapp;
     }
 
-    protected function downloadToFile($url, $filename, $post = null) {
+    protected function downloadToFile($url, $filename, $post = null, $credentials = null) {
         try {
             $fout = fopen($filename, "w+b");
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             if ($post)
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+            if ($credentials)
+                curl_setopt($ch, CURLOPT_USERPWD, $credentials);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($ch, CURLOPT_MAXREDIRS, 20);
@@ -160,7 +183,32 @@ abstract class CloudDrive {
         return $result;
     }
 
-    public abstract function isPresent();
+    public function isPresent() {
+        $extApp = $this->getExtApp();
+        return $extApp != null && $extApp->isEnabled();
+    }
+
+    public function getCallbackName() {
+        return "code";
+    }
+
+    public function getCallbackToken() {
+        $name = $this->getCallbackName();
+        return isset($_GET[$name]) ? $_GET[$name] : null;
+    }
+
+    protected function getAuthorizeName() {
+        return $this->getName() . "_session_authorize";
+    }
+
+    protected function setAuthorizeToken($code) {
+        $_SESSION[$this->getAuthorizeName()] = $code;
+    }
+
+    public function getAuthorizeToken() {
+        $name = $this->getAuthorizeName();
+        return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
+    }
 
     public abstract function store($cloudfile, $path);
 

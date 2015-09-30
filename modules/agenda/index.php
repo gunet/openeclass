@@ -119,6 +119,7 @@ $(document).ready(function(){
     
     $('#submitbtn').on('click', 
             function(e){
+                e.preventDefault();
                 checkrequired($('#agendaform'));
     });
 
@@ -250,7 +251,8 @@ if ($is_editor) {
                 }
             }
         } else {
-            $id = $content = $duration = '';
+            $id = $content = '';
+            $duration = "0:00";
             $startdate = date('d-m-Y H:i', strtotime('now'));
             $enddate = '';
         } 
@@ -327,8 +329,19 @@ if ($is_editor) {
                         <div class='col-sm-10'>" . rich_text_editor('content', 4, 20, $content) . "</div>
                       </div>            
                       <div class='form-group'>
-                        <div class='col-sm-offset-2 col-sm-10'>
-                            <input type='button' class='btn btn-primary' id='submitbtn' name='submitbtn' value='$langAddModify'>
+                        <div class='col-sm-offset-2 col-sm-10'>".
+                            form_buttons(array(
+                                array(
+                                    'text'  => $langSave,
+                                    'name'  => 'submitbtn',
+                                    'value' => $langAddModify,
+                                    'id' => 'submitbtn'
+                                ),
+                                array(
+                                    'href' => "index.php?course=$course_code",
+                                )
+                            ))
+                            ."
                         </div>
                       </div>                
             </form></div>";

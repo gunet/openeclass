@@ -18,14 +18,12 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-
+use Hautelook\Phpass\PasswordHash;
 define('SUFFIX_LEN', 4);
 
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
-require_once 'include/phpass/PasswordHash.php';
 require_once 'include/lib/pwgen.inc.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/user.class.php';
@@ -35,7 +33,7 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-load_js('jstree');
+load_js('jstree3');
 
 $toolName = $langMultiRegUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -262,8 +260,8 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     $langSettings, $langPass, $langAddress, $langIs, $urlServer,
     $langProblem, $langPassSameAuth,
     $langManager, $langTel, $langEmail,
-    $profsuccess, $usersuccess,
-    $user, $auth_ids, $auth_methods_form;
+    $profsuccess, $usersuccess, $langWithSuccess,
+    $user, $langUserCodename, $uname_form, $auth_ids, $auth_methods_form;
 
     if ($status == 1) {
         $message = $profsuccess;
@@ -300,25 +298,63 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                 VALUES (?s,?s,?s,?s,?s,?d," . DBHelper::timeAfter() . "," . DBHelper::timeAfter(get_config('account_duration')) . ",?s,?s,?s,?d,?d,?d,'',".EMAIL_VERIFIED.",'')"
                     , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
     $user->refresh($id, $departments);
+    user_hook($id);
     $telephone = get_config('phone');
     $administratorName = get_config('admin_name');
     $emailhelpdesk = get_config('email_helpdesk');
     $emailsubject = "$langYourReg $siteName $type_message"; 
     $emailbody = "
-$langDestination $givenname $surname
+    $langDestination $givenname $surname
 
-$langYouAreReg $siteName$type_message $langSettings $uname
-$langPass : $mail_message
-$langAddress $siteName $langIs: $urlServer
-$langProblem
+    $langYouAreReg $siteName$type_message $langSettings $uname
+    $langPass : $mail_message
+    $langAddress $siteName $langIs: $urlServer
+    $langProblem
 
-$administratorName
-$langManager: $siteName
-$langTel: $telephone
-$langEmail: $emailhelpdesk
-";    
+    $administratorName
+    $langManager: $siteName
+    $langTel: $telephone
+    $langEmail: $emailhelpdesk
+    ";
+
+    $emailHeader = "
+    <!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$langYouAreReg $siteName $type_message $langWithSuccess</div>
+                </div>
+            </div>";
+
+    $emailMain = "
+    <!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div>$langSettings</div>
+            <div id='mail-body-inner'>
+                <ul id='forum-category'>
+                    <li><span><b>$langUserCodename: </b></span> <span>$uname_form</span></li>
+                    <li><span><b>$langPass: </b></span> <span>$password</span></li>
+                    <li><span><b>$langAddress $siteName $langIs: </b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
+                </ul>
+            </div>
+            <div>
+            <br>
+                <p>$langProblem</p><br>" . get_config('admin_name') . "
+                <ul id='forum-category'>
+                    <li>$langManager: $siteName</li>
+                    <li>$langTel: $telephone</li>
+                    <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                </ul></p>
+            </div>
+        </div>";
+
+    $emailbody = $emailHeader.$emailMain;
+
+
+    $emailPlainBody = html2text($emailbody);
     if ($send_mail) {
-        send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+        send_mail_multipart('', '', '', $email, $emailsubject, $emailPlainBody, $emailbody, $charset);
     }
 
     return array($id, $surname, $givenname, $email, $phone, $am, $uname, $password);
@@ -362,7 +398,8 @@ function register($uid, $course_code) {
     if ($result) {
         Database::get()->query("INSERT INTO course_user
                                  SET course_id = ?d, user_id = ?d, status = "  . USER_STUDENT . ",
-                                     reg_date = " . DBHelper::timeAfter() . "", $result->id, $uid);
+                                     reg_date = " . DBHelper::timeAfter() . ", 
+                                     document_timestamp = " . DBHelper::timeAfter() . "", $result->id, $uid);
         return true;
     }
     return false;

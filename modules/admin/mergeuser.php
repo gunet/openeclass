@@ -145,7 +145,8 @@ function do_user_merge($source, $target) {
                               SELECT course_id, $target_id AS user_id,
                                      MIN(status) AS status, MAX(tutor) AS tutor,
                                      MAX(editor) AS editor, MAX(reviewer) AS reviewer, MIN(reg_date) AS reg_date,
-                                     MAX(receive_mail) AS receive_mail
+                                     MAX(receive_mail) AS receive_mail,
+                                     MAX(document_timestamp) AS document_timestamp
                                  FROM course_user
                                  WHERE user_id IN ($source_id, $target_id)
                                  GROUP BY course_id");
@@ -180,7 +181,7 @@ function do_user_merge($source, $target) {
         fix_table('personal_calendar_settings', 'user_id', $source_id, $target_id);
         fix_table('rating', 'user_id', $source_id, $target_id);
         fix_table('user_department', 'user', $source_id, $target_id);
-        
+        fix_table('custom_profile_fields_data', 'user_id', $source, $target);
 
         $tool_content = sprintf('<div class="alert alert-success">' . $langUserMergeSuccess . '</div>', '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>') .
                 "<p><a href='search_user.php'>$langBack</p>";

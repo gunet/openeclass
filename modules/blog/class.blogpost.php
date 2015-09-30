@@ -38,8 +38,16 @@ Class BlogPost {
      * @return boolean true on success, false on failure
      */
     public function loadFromDB($postId) {
-        $sql = 'SELECT * FROM `blog_post` WHERE `id` = ?d';
-        $result = Database::get()->querySingle($sql, $postId);
+        global $course_id;
+        if ($course_id == 0) {
+            global $user_id;
+            $sql = 'SELECT * FROM `blog_post` WHERE `id` = ?d AND course_id = ?d AND user_id = ?d';
+            $result = Database::get()->querySingle($sql, $postId, $course_id, $user_id);
+        } else {
+            $sql = 'SELECT * FROM `blog_post` WHERE `id` = ?d AND course_id = ?d';
+            $result = Database::get()->querySingle($sql, $postId, $course_id);
+        }
+        
         if (is_object($result)) {
             $this->authorId = $result->user_id;
             $this->content = $result->content;

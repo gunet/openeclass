@@ -22,5 +22,9 @@
 
 require_once '../clouddrive.php';
 $drive = new Dropbox();
-header('Location: ../popup.php?' . $drive->getDriveDefaultParameter() . "&code=" . $_GET['code'] . "&state=" . $_GET['state']);
+if (strpbrk($_GET['code'], "\r\n"))
+	die();
+if (strpbrk($_GET['state'], "\r\n"))
+	die();	 
+header('Location: ../popup.php?' . $drive->getDriveDefaultParameter() . "&code=" . urlencode($_GET['code']) . "&state=" . urlencode($_GET['state']));
 die();

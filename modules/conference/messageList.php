@@ -52,7 +52,8 @@ require_once 'include/lib/textLib.inc.php';
 
 // chat commands
 // reset command
-    if (isset($_GET['reset']) && $is_editor) {        
+    if (isset($_GET['reset']) && $is_editor) { 
+        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();       
         $fchat = fopen($fileChatName, 'w');
 
         if (flock($fchat, LOCK_EX)) {
@@ -69,6 +70,7 @@ require_once 'include/lib/textLib.inc.php';
 // store
     if (isset($_GET['store']) && $is_editor) {
         require_once 'modules/document/doc_init.php';
+        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();       
         $saveIn = "chat." . date("Y-m-j-his") . ".txt";
         $chat_filename = '/' . safe_filename('txt');
         
@@ -101,43 +103,40 @@ require_once 'include/lib/textLib.inc.php';
     }
   
 // add new line
-    if (isset($_GET['chatLine']) and trim($_GET['chatLine']) != '') {
-        $chatLine = purify($_GET['chatLine']);
+    if (isset($_POST['chatLine']) and trim($_POST['chatLine']) != '') {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        $chatLine = purify($_POST['chatLine']);
         $fchat = fopen($fileChatName, 'a');
         if ($is_editor) {
-            $nick = "<b>$nick</b>";
+            $nick = "<b>".q($nick)."</b>";
         }
         fwrite($fchat, $timeNow . ' - ' . $nick . ' : ' . stripslashes($chatLine) . " !@#$ $uid       \n");
         fclose($fchat);
         redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
     }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
+<html>
 <head>
     <base target="_parent">
     <meta http-equiv="refresh" content="30; url=<?php echo $_SERVER['SCRIPT_NAME']; ?>" />
     <title>Chat messages</title>
     <!-- jQuery -->
-    <script type="text/javascript" src="<?php echo $urlServer;?>/js/jquery-<?php echo JQUERY_VERSION; ?>.min.js"></script>
+    <script src="<?php echo $urlServer;?>js/jquery-<?php echo JQUERY_VERSION; ?>.min.js"></script>
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="<?php echo $urlServer;?>/template/default/js/bootstrap.min.js"></script>
+    <script src="<?php echo $urlServer;?>template/default/js/bootstrap.min.js"></script>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-custom.css">
-        
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-theme.min.css">
-    
-    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/inventory.css">
-        
+    <link rel="stylesheet" href="<?php echo $urlServer;?>template/default/CSS/bootstrap-custom.css">
+               
     <style type="text/css">
         span { color: #727266; font-size: 11px; }
         div { font-size: 12px; }
         body { font-family: Verdana, Arial, Helvetica, sans-serif; }
     </style>
 </head>
-<body>
+<body style='background: white;'>
 <?php
     // display message list
     $fileContent = file($fileChatName);
@@ -180,7 +179,7 @@ require_once 'include/lib/textLib.inc.php';
                 echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
                             <div class='col-xs-12'>
                                 <div class='media'>
-                                    <a class='media-left' href='{$urlServer}main/profile/display_profile.php?id=$user_id&token=$token'>
+                                    <a class='media-left' href='{$urlServer}main/profile/display_profile.php?id=$user_id&amp;token=$token'>
                                         ". profile_image($user_id, IMAGESIZE_SMALL) ."
                                     </a>
                                     <div class='media-body bubble'>

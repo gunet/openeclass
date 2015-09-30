@@ -23,6 +23,7 @@
  * @file password.php
  * @brief change user password
  */
+use Hautelook\Phpass\PasswordHash;
 
 $require_login = true;
 $require_admin = TRUE;
@@ -30,7 +31,6 @@ $helpTopic = 'Profile';
 $require_valid_uid = TRUE;
 
 include '../../include/baseTheme.php';
-require_once 'include/phpass/PasswordHash.php';
 
 $toolName = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -66,9 +66,9 @@ check_uid();
 $passurl = $urlServer . 'modules/admin/password.php';
 $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]?userid=$_REQUEST[userid]",
+                'url' => "{$urlServer}modules/admin/edituser.php?u=" . urlencode($_REQUEST['userid']),
                 'icon' => 'fa-reply',
-                'level' => 'primary')
+                'level' => 'primary-label')
                 ));
 
 if (!isset($_POST['changePass'])) {       
@@ -79,57 +79,46 @@ if (!isset($_POST['changePass'])) {
     $tool_content .= "<div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' action='$passurl'>
     <fieldset>      
-      <input type='hidden' name='userid' value='$_GET[userid]' />
+      <input type='hidden' name='userid' value='" . q($_GET['userid']) . "' />
       <div class='form-group'>
       <label class='col-sm-3 control-label'>$langNewPass1</label>
         <div class='col-sm-9'>
-            <input type='password' size='40' name='password_form' value='' id='password' autocomplete='off' />&nbsp;<span id='result'></span>
+            <input class='form-control' type='password' size='40' name='password_form' value='' id='password' autocomplete='off' />&nbsp;<span id='result'></span>
         </div>
       </div>
       <div class='form-group'>
         <label class='col-sm-3 control-label'>$langNewPass2</label>
         <div class='col-sm-9'>
-            <input type='password' size='40' name='password_form1' value='' autocomplete='off' />
+            <input class='form-control' type='password' size='40' name='password_form1' value='' autocomplete='off' />
         </div>
       </div>
       <div class='col-sm-offset-3 col-sm-9'>
-        <input class='btn btn-primary' type='submit' name='changePass' value='$langModify' />
+        <input class='btn btn-primary' type='submit' name='changePass' value='$langModify'>
+        <a class='btn btn-default' href='{$urlServer}modules/admin/edituser.php?u=" . urlencode($_REQUEST['userid']) . "'>$langCancel</a>
       </div>      
     </fieldset>
+    ". generate_csrf_token_form_field() ."    
     </form>
     </div>";
 } else {
     $userid = intval($_POST['userid']);
+
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    
     if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
-        $tool_content .= mes($langFieldsMissing, '', 'warning');
-        draw($tool_content, 3);
-        exit();
+        Session::Messages($langFieldsMissing);
+        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode($userid));
     }
     if ($_POST['password_form1'] !== $_POST['password_form']) {
-        $tool_content .= mes($langPassTwo, '', 'warning');
-        draw($tool_content, 3);
-        exit();
+        Session::Messages($langPassTwo);
+        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode($userid));        
     }
     // All checks ok. Change password!
     $hasher = new PasswordHash(8, false);
     $new_pass = $hasher->HashPassword($_POST['password_form']);
     Database::get()->query("UPDATE `user` SET `password` = ?s WHERE `id` = ?d", $new_pass, $userid);
-    $tool_content .= mes($langPassChanged, $langHome, 'info');
-    draw($tool_content, 3);
-    exit();
+    Session::Messages($langPassChanged);
+    redirect_to_home_page("modules/admin/edituser.php?u=" . urlencode($userid));    
 }
 
 draw($tool_content, 3, null, $head_content);
-
-
-/**
- * @brief display message
- * @param type $message
- * @param type $urlText
- * @param type $type
- * @return type
- */
-function mes($message, $urlText, $type) {    
-    $str = "<div class='alert alert-$type'>$message</div>";
-    return $str;
-}
