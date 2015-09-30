@@ -64,7 +64,7 @@ if (!$is_member and !$is_editor) {
 if (isset($_GET['group_as'])) {
     $group_id = $_GET['group_id'];
 
-    $result = Database::get()->queryArray("SELECT * FROM assignment as a LEFT JOIN assignment_to_specific as b ON a.id=b.assignment_id 
+    $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time FROM assignment as a LEFT JOIN assignment_to_specific as b ON a.id=b.assignment_id 
                                                         WHERE a.course_id = ?d AND a.group_submissions= ?d AND (b.group_id= ?d OR b.group_id is null) ORDER BY a.id", $course_id, 1, $group_id);
 					
     if (count($result)>0) {
