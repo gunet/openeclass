@@ -270,7 +270,7 @@ if ($is_editor) {
     } elseif (in_array($action, array('addcategory', 'editcategory'))) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
         $tool_content .= "<div class = 'form-wrapper'>";
-        $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview' onsubmit=\"return checkrequired(this, 'categoryname');\">";
+        $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview'>";
         if ($action == 'editcategory') {
             $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
             category_form_defaults($id);
@@ -280,10 +280,11 @@ if ($is_editor) {
             $form_legend = $langCategoryAdd;
         }
         $tool_content .= "<fieldset>
-                        <div class='form-group'>
+                         <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
                             <label for='CatName' class='col-sm-2 control-label'>$langCategoryName:</label>
                             <div class='col-sm-10'>
                                 <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName' $form_name>
+								<span class='help-block'>".Session::getError('categoryname')."</span>
                             </div>
                         </div>
                         <div class='form-group'>
