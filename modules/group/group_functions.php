@@ -202,45 +202,34 @@ function showgroupsofcategory($catid) {
         } else {
             if ($is_member) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) . "</a>";
-                $tool_content .= "<span style='color:#900; weight:bold;'>($langMyGroup)</span>";
+                $tool_content .= "&nbsp;<span style='color:#900; weight:bold;'>($langMyGroup)</span>";
             } else {
                 $tool_content .= q($group_name);
             }
         }
         if ($user_group_description) {
-            $tool_content .= "<br />" . q($user_group_description) . "&nbsp;&nbsp;" .
+            $tool_content .= "<br><span class='small'><i>" . q($user_group_description) . "</i></span>&nbsp;&nbsp;" .
                     icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
                     icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
         } elseif ($is_member) {
-            $tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
+            $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
         }
         $tool_content .= "</td>";
-        $tool_content .= "<td class='text-center'>";
+        $tool_content .= "<td class='text-center' width='250'>";
         foreach ($tutors as $t) {
             $tool_content .= display_user($t->user_id) . "<br>";
         }
         $tool_content .= "</td>";
-        
-        if (!$is_editor) {
-            $tool_content .= "<td class='text-center'>";
-            // If self-registration and multi registration allowed by admin and group is not full        
-            if ($uid and $self_reg and ( !$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
-                $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
-            } else {
-                $tool_content .= "-";
-            }
-            $tool_content .= "</td>";
-        }        
-
+               
         if ($catid == -2) {
             $rating = new Rating('thumbs_up', 'group', $group_id);
             $tool_content .= $rating->put($is_editor, $uid, $course_id);
         }
-        $tool_content .= "<td class='text-center'>$member_count</td><td class='text-center'>" .
+        $tool_content .= "<td class='text-center' width='50'>$member_count</td><td class='text-center' width='50'>" .
                 ($max_members ? $max_members : '-') . "</td>";
         $totalRegistered += $member_count;
 
-        if ($is_editor) {  
+        if ($is_editor) {
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
                 array('title' => $langEditChange,
@@ -253,7 +242,16 @@ function showgroupsofcategory($catid) {
                       'confirm' => $langGroupDelconfirm)
             ));
             $tool_content .= "</td>";
-        }        
+        } else {
+            $tool_content .= "<td class='text-center'>";
+            // If self-registration and multi registration allowed by admin and group is not full        
+            if ($uid and $self_reg and ( !$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
+                $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
+            } else {
+                $tool_content .= "-";
+            }
+            $tool_content .= "</td>";
+        }
         $tool_content .= "</tr>";
     }
 }

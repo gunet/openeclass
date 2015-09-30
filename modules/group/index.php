@@ -559,11 +559,11 @@ if ($is_editor) {
             $tool_content .= "<div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
-                  <th>$langGroupName</th>
+                  <th>$langGroups</th>
                   <th width='250'>$langGroupTutor</th>
-                  <th width='30'>$langGroupMembersNum</th>
-                  <th width='30'>$langMax</th>
-                  <th class='text-center'>".icon('fa-gears', $langActions)."</th>
+                  <th width='50'>$langGroupMembersNum</th>
+                  <th width='50'>$langMax</th>
+                  <th class='text-center' style='width:45px;'>".icon('fa-gears', $langActions)."</th>
                 </tr>";
         foreach ($groupSelect as $group) {
             initialize_group_info($group->id);
@@ -606,11 +606,12 @@ if ($is_editor) {
         $tool_content .= "<div class='table-responsive'>
             <table class='table-default'>
                 <tr class='list-header'>
-                  <th class='text-left'>$langGroupName</th>
-                  <th width='250'>$langGroupTutor</th>";
-        $tool_content .= "<th width='50'>$langRegistration</th>";
-
-        $tool_content .= "<th width='50'>$langGroupMembersNum</th><th width='50'>$langMax</th></tr>";
+                  <th class='text-left'>$langGroups</th>
+                  <th width='250'>$langGroupTutor</th>
+                  <th width='50'>$langGroupMembersNum</th>
+                  <th width='50'>$langMax</th>
+                  <th class='text-center' style='width:45px;'>".icon('fa-gears', $langActions)."</th>
+                </tr>";
         foreach ($q as $row) {
             $group_id = $row->id;
             initialize_group_info($group_id);
@@ -623,7 +624,7 @@ if ($is_editor) {
                 $tool_content .= q($group_name);
             }
             if ($user_group_description) {
-                $tool_content .= "<br />" . q($user_group_description) . "&nbsp;&nbsp;" .
+                $tool_content .= "<br><span class='small'><i>" . q($user_group_description) . "</i></span>&nbsp;&nbsp;" .
                         icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
                         icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
             } elseif ($is_member) {
@@ -634,8 +635,9 @@ if ($is_editor) {
             foreach ($tutors as $t) {
                 $tool_content .= display_user($t->user_id) . "<br>";
             }
-            $tool_content .= "</td>";
-
+            $tool_content .= "</td>";           
+            $tool_content .= "<td class='text-center'>$member_count</td><td class='text-center'>" .
+                    ($max_members ? $max_members : '-') . "</td>";
             // If self-registration and multi registration allowed by admin and group is not full
             $tool_content .= "<td class='text-center'>";
             if ($uid and $self_reg and ( !$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
@@ -643,9 +645,7 @@ if ($is_editor) {
             } else {
                 $tool_content .= "-";
             }
-            $tool_content .= "</td>";
-            $tool_content .= "<td class='text-center'>$member_count</td><td class='text-center'>" .
-                    ($max_members ? $max_members : '-') . "</td></tr>";
+            $tool_content .= "</td></tr>";
             $totalRegistered += $member_count;
         }
         $tool_content .= "</table></div>";
@@ -661,24 +661,21 @@ if ($is_editor) {
             <div class='table-responsive'>
             <table class='table-default category-links'>";
         if ($aantalcategories > 0) {
-            $tool_content .= "<tr class='list-header'><th colspan='5'>";
+            $tool_content .= "<tr class='list-header'><th colspan='4'>";
             $tool_content .= "$langCategorisedGroups&nbsp;";
             if (isset($urlview) and abs($urlview) == 0) {
                 $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
             } else {
                 $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-folder-open', $shownone)."</a>";
             }
-            $tool_content .= "</th>";
-            if ($is_editor) {
-                $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears') . "</th>";
-            }
+            $tool_content .= "</th>";            
+            $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears', $langActions) . "</th>";            
             $tool_content .= "</tr>";
         }
 	if ($urlview === '') {
             $urlview = str_repeat('0', $aantalcategories);
         }
-        $i = 0;
-        $catcounter = 0;
+        $i = 0;        
         foreach ($cat as $myrow) {
             if (empty($urlview)) {
                 // No $view set in the url, thus for each category link it should be all zeros except it's own
@@ -693,7 +690,7 @@ if ($is_editor) {
             if ((isset($urlview[$i]) and $urlview[$i] == '1')) {
                 $newurlview = $urlview;
                 $newurlview[$i] = '0';
-                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link' colspan='5'>".icon('fa-folder-open-o', $shownone)."&nbsp;
+                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link' colspan='4'>".icon('fa-folder-open-o', $shownone)."&nbsp;
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>" . q($myrow->name) . "</a>";
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span></th>";
@@ -705,10 +702,12 @@ if ($is_editor) {
                     $tool_content .= "<td class='option-btn-cell'>";
                     showgroupcategoryadmintools($myrow->id);
                     $tool_content .= "</td>";
+                } else {
+                    $tool_content .= "<td>&nbsp;</td>";
                 }
 
                 $tool_content .= "</tr>";
-
+                // display category groups
                 showgroupsofcategory($myrow->id);
                 
                 if ($groups_num == 1) {
@@ -717,7 +716,7 @@ if ($is_editor) {
                 }
 
             } else {
-                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link' colspan='5'>".icon('fa-folder-o', $showall)
+                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link' colspan='4'>".icon('fa-folder-o', $showall)
                     . "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
                 $tool_content .= is_array($view) ? implode('', $view) : $view;
                 $tool_content .= "' class='open-category'>" . q($myrow->name) . "</a>";
