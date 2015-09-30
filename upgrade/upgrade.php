@@ -225,6 +225,19 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         }
     }
 
+    $logdate = date("Y-m-d_G.i:s");
+    $logfile = "log-$logdate.html";
+    if (!($logfile_handle = @fopen("$webDir/courses/$logfile", 'w'))) {
+        $error = error_get_last();
+        Session::Messages($langLogFileWriteError .
+            '<br><i>' . q($error['message']) . '</i>');
+        draw($tool_content, 0);
+        exit;
+    }
+
+    fwrite($logfile_handle, "<!DOCTYPE html><html><head><meta charset='UTF-8'>
+      <title>Open eClass upgrade log of $logdate</title></head><body>\n");
+
     set_config('upgrade_begin', time());
 
     if (!$command_line) {
@@ -233,10 +246,11 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         draw($tool_content, 0);
     }
     updateInfo(0.01, $langUpgradeStart . " : " . $langUpgradeConfig);
-    Debug::setOutput(function ($message, $level) use (&$debug_output, &$debug_error) {
-        $debug_output .= $message;
-        if ($level > Debug::WARNING)
+    Debug::setOutput(function ($message, $level) use ($logfile_handle, &$debug_error) {
+        fwrite($logfile_handle, $message);
+        if ($level > Debug::WARNING) {
             $debug_error = true;
+        }
     });
     Debug::setLevel(Debug::WARNING);
 
@@ -2941,14 +2955,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     set_config('upgrade_begin', '');
     updateInfo(1, $langUpgradeSuccess);
-    $logdate = date("Y-m-d_G.i:s");
 
-    $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/log-$logdate.html\" target=\"_blank\">$langLogOutput</a></div><p/>";
+    $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/$logfile\" target=\"_blank\">$langLogOutput</a></div><p/>";
     if ($command_line) {
         if ($debug_error) {
             echo " * $langUpgSucNotice\n";
         }
-        echo $langUpgradeSuccess, "\n", $langLogOutput, ": courses/log-$logdate.html\n";
+        echo $langUpgradeSuccess, "\n", $langLogOutput, ": courses/$logfile\n";
     } else {
         if ($debug_error) {
             $output_result .= "<div class='alert alert-danger'>" . $langUpgSucNotice . "</div>";
@@ -2958,7 +2971,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         echo "</body></html>\n";
     }
 
-    $debug_output = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/><title>Open eClass upgrade log of $logdate</title></head><body>$debug_output</body></html>";
-    file_put_contents($webDir . "/courses/log-$logdate.html", $debug_output);
+    fwrite($logfile_handle, "\n</body>\n</html>\n");
+    fclose($logfile_handle);
 
 } // end of if not submit
