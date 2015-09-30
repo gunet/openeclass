@@ -41,11 +41,11 @@ function get_course_stats($start = null, $end = null, $interval, $cid, $user_id 
         $groupby = $g['groupby'];
         $date_components = $g['select'];
         if(is_numeric($user_id)){
-            $q = "SELECT $date_components, sum(hits) hits, sum(duration) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d $groupby";
+            $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end, $user_id);    
         }
         else{
-            $q = "SELECT $date_components, sum(hits) hits, sum(duration) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t $groupby";
+            $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end);
         }
         foreach($r as $record){
@@ -99,12 +99,12 @@ function get_course_registration_stats($start = null, $end = null, $interval, $c
 function get_course_registration_details($start = null, $end = null, $cid)
 {
     $formattedr = array();
-    $reg_t = "SELECT reg_date day, user_id, CONCAT(surname, ' ', givenname,' (',email,')') uname, 1 action FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id=?d AND cu.reg_date BETWEEN ?t AND ?t ORDER BY cu.reg_date";
-    $unreg_t = "SELECT ts day, user_id, CONCAT(surname, ' ', givenname,' (',email,')') uname, 0 action FROM log l JOIN user u ON l.user_id=u.id WHERE l.module_id=".MODULE_ID_USERS." AND l.action_type=".LOG_DELETE." AND l.course_id=?d AND l.ts BETWEEN ?t AND ?t ORDER BY ts";
-    $q = "SELECT DATE_FORMAT(x.day,'%d-%m-%Y') day, uname, action FROM (($reg_t) UNION ($unreg_t)) x  ORDER BY day";
+    $reg_t = "SELECT reg_date day, user_id, CONCAT(surname, ' ', givenname) uname, username, email, 1 action FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id=?d AND cu.reg_date BETWEEN ?t AND ?t ORDER BY cu.reg_date";
+    $unreg_t = "SELECT ts day, user_id, CONCAT(surname, ' ', givenname) uname, username, email, 0 action FROM log l JOIN user u ON l.user_id=u.id WHERE l.module_id=".MODULE_ID_USERS." AND l.action_type=".LOG_DELETE." AND l.course_id=?d AND l.ts BETWEEN ?t AND ?t ORDER BY ts";
+    $q = "SELECT DATE_FORMAT(x.day,'%d-%m-%Y') day, uname, username, email, action FROM (($reg_t) UNION ($unreg_t)) x  ORDER BY day";
     $r = Database::get()->queryArray($q, $cid, $start, $end, $cid, $start, $end);
     foreach($r as $record){
-       $formattedr[] = array($record->day, $record->uname, $record->action);
+       $formattedr[] = array($record->day, $record->uname, $record->action, $record->username, $record->email);
     }
     return $formattedr;
 }
@@ -124,11 +124,11 @@ function get_module_preference_stats($start = null, $end = null, $cid, $user_id 
     
     global $modules;
     if(is_numeric($user_id)){
-        $q = "SELECT module_id mdl, sum(hits) hits, sum(duration) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d GROUP BY module_id ORDER BY hits DESC";
+        $q = "SELECT module_id mdl, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d GROUP BY module_id ORDER BY hits DESC";
         $r = Database::get()->queryArray($q, $cid, $start, $end, $user_id);    
     }
     else{
-        $q = "SELECT module_id mdl, sum(hits) hits, sum(duration) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t GROUP BY module_id ORDER BY hits DESC";
+        $q = "SELECT module_id mdl, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t GROUP BY module_id ORDER BY hits DESC";
         $r = Database::get()->queryArray($q, $cid, $start, $end);
     }
     $formattedr = array();
@@ -162,11 +162,11 @@ function get_course_module_stats($start = null, $end = null, $interval, $cid, $m
     $groupby = $g['groupby'];
     $date_components = $g['select'];
     if(is_numeric($user_id)){
-        $q = "SELECT $date_components, sum(hits) hits, sum(duration) dur FROM actions_daily WHERE course_id=?d AND module_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d $groupby";
+        $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND module_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d $groupby";
         $r = Database::get()->queryArray($q, $cid, $mid, $start, $end, $user_id);    
     }
     else{
-        $q = "SELECT $date_components, sum(hits) hits, sum(duration) dur FROM actions_daily WHERE course_id=?d AND module_id=?d AND day BETWEEN ?t AND ?t $groupby";
+        $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND module_id=?d AND day BETWEEN ?t AND ?t $groupby";
         $r = Database::get()->queryArray($q, $cid, $mid, $start, $end);
     }
     $formattedr = array('time'=>array(),'hits'=>array(),'duration'=>array());
@@ -182,17 +182,17 @@ function get_course_details($start = null, $end = null, $interval, $cid, $user_i
 {
     global $modules;
     if(is_numeric($user_id)){
-        $q = "SELECT day, hits, duration, CONCAT(surname, ' ', givenname,' (',email,')') uname, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d ORDER BY day, module_id";
+        $q = "SELECT day, hits, duration, CONCAT(surname, ' ', givenname) uname, username, email, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d ORDER BY day, module_id";
         $r = Database::get()->queryArray($q, $cid, $start, $end, $user_id);    
     }
     else{
-        $q = "SELECT day, hits, duration, CONCAT(surname, ' ', givenname,' (',email,')') uname, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t ORDER BY day, module_id";
+        $q = "SELECT day, hits, duration, CONCAT(surname, ' ', givenname) uname, username, email, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t ORDER BY day, module_id";
         $r = Database::get()->queryArray($q, $cid, $start, $end);
     }
     $formattedr = array();
     foreach($r as $record){
        $mtitle = (isset($modules[$record->module_id]))? $modules[$record->module_id]['title']:'module '.$record->module_id;
-       $formattedr[] = array($record->day, $mtitle, $record->uname, $record->hits, $record->duration);
+       $formattedr[] = array($record->day, $mtitle, $record->uname, $record->hits, $record->duration, $record->username, $record->email);
     }
     return $formattedr;
 }
@@ -205,11 +205,11 @@ function get_user_stats($start = null, $end = null, $interval, $user, $course = 
     $groupby = $g['groupby'];
     $date_components = $g['select'];
     if(is_numeric($course)){
-        $q = "SELECT $date_components, sum(hits) hits, sum(duration) dur FROM actions_daily where user_id = ?d AND day BETWEEN ?t AND ?t AND course_id = ?d $groupby";
+        $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily where user_id = ?d AND day BETWEEN ?t AND ?t AND course_id = ?d $groupby";
         $r = Database::get()->queryArray($q, $user, $start, $end, $course);    
     }
     else{
-        $q = "SELECT $date_components, sum(hits) hits, sum(duration) dur FROM actions_daily where user_id = ?d AND day BETWEEN ?t AND ?t $groupby";
+        $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily where user_id = ?d AND day BETWEEN ?t AND ?t $groupby";
         $r = Database::get()->queryArray($q, $user, $start, $end);
     }
     $formattedr = array('time'=>array(),'hits'=>array(),'duration'=>array());
@@ -229,7 +229,7 @@ function get_course_preference_stats($start = null, $end = null, $user, $course 
         $formattedr = get_module_preference_stats($start, $end, $course, $user);
     }
     else{
-        $q = "SELECT c.id cid, c.title, s.hits, s.dur from (SELECT course_id cid, sum(hits) hits, sum(duration) dur FROM actions_daily WHERE user_id=?d AND day BETWEEN ?t AND ?t GROUP BY course_id) s JOIN course c on s.cid=c.id ORDER BY hits DESC";
+        $q = "SELECT c.id cid, c.title, s.hits, s.dur from (SELECT course_id cid, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE user_id=?d AND day BETWEEN ?t AND ?t GROUP BY course_id) s JOIN course c on s.cid=c.id ORDER BY hits DESC";
         $r = Database::get()->queryArray($q, $user, $start, $end);
         $formattedr = array();
         $courses = array();
@@ -388,7 +388,7 @@ function get_user_login_stats($start = null, $end = null, $interval, $user, $cou
 }
 
 function get_user_login_details($start = null, $end = null, $interval, $user, $course, $module){
-    $q = "SELECT l.date_time, concat(u.surname, ' ', u.givenname, ' (',u.email,')') user_name, c.title course_title, l.ip 
+    $q = "SELECT l.date_time, concat(u.surname, ' ', u.givenname) user_name, username, email, c.title course_title, l.ip 
             FROM logins l 
             JOIN user u ON l.user_id=u.id 
             JOIN course c ON l.course_id=c.id 
@@ -396,7 +396,7 @@ function get_user_login_details($start = null, $end = null, $interval, $user, $c
     $r = Database::get()->queryArray($q, $start, $end);
     $formattedr = array();
     foreach($r AS $record){
-        $formattedr[] = array($record->date_time, $record->user_name, $record->course_title, $record->ip);
+        $formattedr[] = array($record->date_time, $record->user_name, $record->course_title, $record->ip, $record->username, $record->email);
     }
     return $formattedr;
 }
@@ -479,6 +479,17 @@ function count_course_users($cid, $user_type = null){
     }
 }
 
+/**
+ * Count users of the system based on their type
+ * @param int cid a value among USER_TEACHER, USER_STUDENT
+ * @param int $user_type a value among USER_TEACHER, USER_STUDENT
+ * @return int the number of all the users or of specific type of the system 
+*/
+function count_course_groups($cid){
+    
+    return Database::get()->querySingle("SELECT COUNT(*) as count FROM `group` WHERE course_id = ?d", $cid)->count;
+}
+
 function course_visits($cid){
     $r = Database::get()->querySingle("SELECT sum(hits) hits, sum(duration) dur FROM actions_daily WHERE course_id=?d", $cid);
     return array('hits' => $r->hits, 'duration' => user_friendly_seconds($r->dur));
@@ -495,4 +506,55 @@ function user_friendly_seconds($seconds){
     $fd .= ':';
     $fd .= ($secs<10)? '0'.$secs:$secs;
     return $fd;
+}
+
+function plot_placeholder($plot_id, $title = null){
+    $p = "<ul class='list-group'>";
+    if(!is_null($title)){
+        $p .= "<li class='list-group-item'>"
+            . "<label id='".$plot_id."_title'>"
+            . $title
+            . "</label>"
+            . "</li>";
+    }
+    $p .= "<li class='list-group-item'>"
+            . "<div id='$plot_id'></div>"
+            . "</li></ul>";
+    return $p;
+}
+
+function table_placeholder_old($table_id, $table_class, $table_schema, $title = null){
+    $t = "<ul class='list-group'>";
+    if(!is_null($title)){
+        $t .= "<li class='list-group-item'>"
+            . "<label id='".$table_id."_title'>"
+            . $title
+            . "</label>"
+            ."<div class='pull-right' id='{$table_id}_buttons'></div>"
+            . "</li>";
+    }
+    $t .= "<li class='list-group-item'>"
+       . "<table id='$table_id' class='$table_class'>"
+       . "$table_schema"
+       . "</table>"
+       . "</li></ul>";
+    return $t;
+}
+
+function table_placeholder($table_id, $table_class, $table_schema, $title = null){
+    $t = "";
+    if(!is_null($title)){
+        $t .= "<div class='panel-heading'>"
+            . "<label id='".$table_id."_title'>"
+            . $title
+            . "</label>"
+            ."<div class='pull-right' id='{$table_id}_buttons'></div><div style='clear:both;'></div>"
+            . "</div>";
+    }
+    $t .= "<div class='panel-body'>"
+       . "<table id='$table_id' class='$table_class'>"
+       . "$table_schema"
+       . "</table>"
+       . "</div>";
+    return $t;
 }

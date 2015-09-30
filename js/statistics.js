@@ -42,14 +42,14 @@ var department_details = new Array();
 var tableOptions = {
     'a': {
         1:{sumCols:[3,4,5,6], colDefs:[], durCol:null}, 
-        2:{sumCols:[], colDefs:[], durCol:null}
+        2:{sumCols:[], colDefs:[{"visible": false, "targets": 4}, {"visible": false, "targets": 5}, {'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[5], row[4]);} }], durCol:null}
     }, 
     'u':{
         1:{sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;} }]}
     }, 
     'c':{
-        1:{sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;}}]},
-        2:{sumCols:[], durCol:null, colDefs:[]}
+        1:{sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;}}, {'targets':2, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[6], row[5]);} }, {"visible": false, "targets": 5}, {"visible": false, "targets": 6}]},
+        2:{sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[4], row[3]);} }, {"visible": false, "targets": 3}, {"visible": false, "targets": 4}]}
     }
 };
 charts = new Object();
@@ -184,9 +184,8 @@ $(document).ready(function(){
                         buttons: ['csvHtml5','excelHtml5', 'pdfHtml5']
                     }
             ],
-            dom: 'Bfrtip',
             columnDefs: colDefs,
-            'bAutoWidth': true,                
+            'autoWidth': true,                
             'footerCallback': footerCB(tableid, tableElId),
             'columnDefs': colDefs,
             'oLanguage': {
@@ -207,7 +206,7 @@ $(document).ready(function(){
             }
            }
         });
-        
+        detailsTables[tableElId].buttons().container().appendTo( '#'+tableElId+'_buttons');
     }
     /**************/
     /*************
@@ -318,7 +317,7 @@ function refresh_generic_course_plot(){
                     duration: langDuration
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label:'hours', min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#generic_stats'
         };
@@ -374,7 +373,7 @@ function refresh_course_module_plot(mdl){
                     duration: langDuration
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false, rotate:60}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false, rotate:60}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'hours', min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#module_stats'
         };
@@ -438,7 +437,7 @@ function refresh_generic_user_plot(){
                     duration: langDuration
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min: 0,padding:{top:0, bottom:0}}, y2: {show: true, label:langDuration+' (sec)', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min: 0,padding:{top:0, bottom:0}}, y2: {show: true, label:'hours', min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#generic_userstats'
         };
@@ -489,11 +488,11 @@ function refresh_course_pref_plot(){
 function refresh_user_course_plot(){
     $.getJSON('results.php',{t:'uc', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
         if(data.chartdata.chartdata == null){
-            $("#coursetitle").text(data.charttitle);
+            $("#course_stats_title").text(data.charttitle);
             chartdata = data.chartdata;
         }
         else{
-            $("#coursetitle").text(data.charttitle+': '+data.chartdata.charttitle);
+            $("#course_stats_title").text(data.charttitle+': '+data.chartdata.charttitle);
             chartdata = data.chartdata.chartdata;
         }
         var options = {
@@ -514,7 +513,7 @@ function refresh_user_course_plot(){
                     duration: langDuration
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false, rotate:60}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false, rotate:60}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'hours', min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#course_stats'
         };
@@ -736,6 +735,11 @@ function userFriendlyDuration(seconds){
     fd += ':';
     fd += (secs<10)? '0'+secs:secs;
     return fd;
+}
+
+function userEmailLink(user, email, username){
+    console.log(user+' '+email);
+    return "<a href='mailto:"+email+"' title='"+username+"'>"+user+"</a>";
 }
 
 

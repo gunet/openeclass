@@ -1996,6 +1996,7 @@ $langFirstLetterUser = "First letter of last name";
 $langFirstLetterCourse = "First letter of course name";
 $langUsageVisits = "Course Visits";
 $langFavourite = "Module Preferences";
+$langFavouriteCourse = "Course Preferences";
 $langFavouriteExpl = "One user or all users preference for modules in a certain time period.";
 $langOldStats = "Show Old Statistics";
 $langOldStatsExpl = "Monthly statistics older than eight months.";

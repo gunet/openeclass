@@ -108,4 +108,4 @@ $tool_content .= '<div class="pull-right">
     </div>
 </div>';
 
-$tool_content .= '</div></div>';
+$tool_content .= '</div><div style="clear:both;"></div></div>';

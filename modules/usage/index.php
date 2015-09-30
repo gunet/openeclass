@@ -49,8 +49,8 @@ $head_content .= "
 load_js('d3/d3.min.js');
 load_js('c3-0.4.10/c3.min.js');
 load_js('bootstrap-datepicker');
+    
 $head_content .= "
-
 <script type='text/javascript'>
     var lang = '$language'; 
     var langHits = '$langHits';
@@ -68,14 +68,10 @@ $head_content .= "
     var langDisplay ='$langDisplay';
     var langResults = '$langResults2';
     var langNoResult = '$langNoResult';
-    var langDisplayed = '$langDisplayed';   
-    var langTill = '$langTill';   
-    var langFrom = '$langFrom2';   
     var langTotalResults = '$langTotalResults';
     var langDisplayed= '$langDisplayed';   
     var langTill = '$langTill'; 
     var langFrom = '$langFrom2';
-    var langResults = '$langResults2';
     var langSearch = '$langSearch';
     var langActions = '$langActions';
     var langRegs = '$langRegisterActions';
@@ -99,10 +95,24 @@ load_js('vfs_fonts');
 load_js('datatables_buttons_html5');
 //load_js('datatables_buttons_colVis');
 //load_js('datatables_buttons_foundation');
-        
-
 load_js('bootstrap-datetimepicker');
 load_js('statistics.js');
+//Remove space between consecutive pagination buttons if datatables 
+$head_content .= "<style>
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding : 0px;
+    margin-left: 0px;
+    display: inline;
+    border: 0px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    border: 0px;
+}
+.mynowrap {
+    white-space: nowrap;
+}
+</style>";
+
 $pageName = $langUsage;
 
 ob_start();

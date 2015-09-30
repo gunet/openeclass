@@ -33,16 +33,18 @@ $head_content .=
 
 /**** Summary info    ****/
 $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel-body'>";
-$tool_content .="<table class='table-default'>"
-        . "<tr class='even'>"
-        . "<td><div class='row margin-bottom-thin'><div class='col-sm-4'><strong>$langCoursesHeader</strong></div><div class='col-sm-2'><span class='badge'>".count_courses()."</span></div></div>"
-        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langOpenCoursesShort</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_OPEN)."</span></div></div>"
-        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langOpenCourseWithRegistration</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_REGISTRATION)."</span></div></div>"
-        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langClosedCourses</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_CLOSED)."</span></div></div></td>"
-        . "<td><div class='row margin-bottom-thin'><div class='col-sm-4'><strong>$langUsers</strong></div><div class='col-sm-2'><span class='badge'>".count_users()."</span></div></div>"
-        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langTeachers</div><div class='col-sm-2'><span class='badge'>".count_users(USER_TEACHER)."</span></div></div>"
-        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langStudents</div><div class='col-sm-2'><span class='badge'>".count_users(USER_STUDENT)."</span></div></div>"
-        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langGuest</div><div class='col-sm-2'><span class='badge'>".count_users(USER_GUEST)."</span></div></div></td>"
+$tool_content .="<table class='table-default' style='border:0;'>"
+        . "<tr class='even' style='border:0;'>"
+        . "<td style='border:0;'>"
+        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'><strong>$langCoursesHeader</strong></div><div class='col-sm-2'><span class='badge'>".count_courses()."</span></div></div>"
+        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langOpenCoursesShort</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_OPEN)."</span></div></div>"
+        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langOpenCourseWithRegistration</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_REGISTRATION)."</span></div></div>"
+        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langClosedCourses</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_CLOSED)."</span></div></div></td>"
+        . "<td style='border:0;'>"
+        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'><strong>$langUsers</strong></div><div class='col-sm-2'><span class='badge'>".count_users()."</span></div></div>"
+        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langTeachers</div><div class='col-sm-2'><span class='badge'>".count_users(USER_TEACHER)."</span></div></div>"
+        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langStudents</div><div class='col-sm-2'><span class='badge'>".count_users(USER_STUDENT)."</span></div></div>"
+        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langGuest</div><div class='col-sm-2'><span class='badge'>".count_users(USER_GUEST)."</span></div></div></td>"
         . "</tr>"
         . "</table>";
 $tool_content .= "</div></div></div>";
@@ -52,42 +54,49 @@ $tool_content .= "</div></div></div>";
 require_once('form.php');
 
 /****   Plots   ****/
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
-$tool_content .= "<ul class='list-group'><li class='list-group-item'><label id='userlogins_title'>$langNbLogin</label></li><li class='list-group-item'><div id='userlogins_stats'></div></li></ul>";
-$tool_content .= "</div></div></div></div>";
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
-$tool_content .= "<div id='depuser' style='width:49%;float:left;margin-right:2%;'><ul class='list-group' style=''><li class='list-group-item'><label id='depuser_title'>$langUsers</label></li><li class='list-group-item'><div id='depuser_stats'></div></li></ul></div>";
-$tool_content .= "<div id='depcourse' style='width:49%;float:left;'><ul class='list-group'><li class='list-group-item'><label id='depcourse_title'>$langCoursesHeader</label></li><li class='list-group-item'><div id='depcourse_stats'></div></li></ul></div>";
-$tool_content .= "</div></div></div></div>";
+$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
+$tool_content .= plot_placeholder("userlogins_stats", $langNbLogin);
+$tool_content .= "</div></div>";
+
+$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
+$tool_content .= "<div id='modulepref_pie_container' style='width:49%;float:left;margin-right:2%;'>";
+$tool_content .= plot_placeholder("depuser_stats", $langUsers);
+$tool_content .= "</div>"
+              . "<div id='module_container' style='width:49%;float:left;'>";
+$tool_content .= plot_placeholder("depcourse_stats", $langCoursesHeader);
+$tool_content .= "</div>"
+              . "</div></div>";
 
 /****   Datatables   ****/
-$tool_content .= "<div class='row detailscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
-$tool_content .= "<table id='adetails1' class='table table-striped table-bordered'><caption class='well'>$langUsers $langAnd $langCourses</caption>"
-        . "<thead><tr>"
+
+$tool_content .= "<div class='panel panel-default detailscontainer'>";
+$tschema = "<thead><tr>"
         . "<th rowspan='2'>$langCategory</th>"
         . "<th colspan='2'>$langUsers</th>"
         . "<th colspan='4'>$langCoursesHeader</th>"
         . "</tr><tr>";
 foreach($langStatsUserStatus as $us){
-    $tool_content .= "<th>$us</th>";
+    $tschema .= "<th>$us</th>";
 }
 foreach($langCourseVisibility as $ct){
-    $tool_content .= "<th>$ct</th>";
+    $tschema .= "<th>$ct</th>";
 }
-$tool_content .= "</tr></thead>"
+$tschema .= "</tr></thead>"
         . "<tbody></tbody>"
-        . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>"       
-        . "</table>";
-$tool_content .= "</div></div></div></div>";
-$tool_content .= "<div class='row detailscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
-$tool_content .= "<table id='adetails2' class='table table-striped table-bordered'><caption class='well'>$langNbLogin</caption>"
-        . "<thead><tr>"
+        . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>";
+$tool_content .= table_placeholder("adetails1", "table table-striped table-bordered", $tschema, "$langUsers $langAnd $langCourses");
+$tool_content .= "</div>";
+
+$tool_content .= "<div class='panel panel-default detailscontainer'>";
+$tschema = "<thead><tr>"
         . "<th>$langDate $langAnd $langHour</th>"
         . "<th>$langUser</th>"
         . "<th>$langCourse</th>"
         . "<th>IP address</th>"
+        . "<th>$langUsername</th>"
+        . "<th>$langEmail</th>"
         . "</tr>"
         . "</thead>"
-        . "<tbody></tbody>"      
-        . "</table>";
-$tool_content .= "</div></div></div></div>";
+        . "<tbody></tbody>";
+$tool_content .= table_placeholder("adetails2", "table table-striped table-bordered", $tschema, $langNbLogin);
+$tool_content .= "</div>";
