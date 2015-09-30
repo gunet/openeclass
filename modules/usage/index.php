@@ -130,6 +130,9 @@ else{
 
 add_units_navigation(true);
 
+if($stats_type == 'admin'){
+    draw($tool_content, 3, null, $head_content);
+}
 if($stats_type == 'course'){
     draw($tool_content, 2, null, $head_content);
 }
