@@ -209,54 +209,62 @@ function showcategoryadmintools($categoryid) {
  */
 function submit_link() {
     global $course_id, $langLinkMod, $langLinkAdded, $course_code, $uid, $langSocialCategory,
-    $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state;
+    $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state,
+	$langFormErrors, $langTheFieldIsRequired;
 
     register_posted_variables(array('urllink' => true,
         'title' => true,
         'description' => true), 'all', 'trim');
     $urllink = canonicalize_url($urllink);
-	if (!is_url_accepted($urllink,"(https?|ftp)")){
-		$message = $langLinkNotPermitted;
-		if (isset($_POST['id'])) {
-			$id =  getDirectReference($_POST['id']);
-			redirect_to_home_page("modules/link/index.php?course=$course_code&action=editlink&id=" . getIndirectReference($id) . "&urlview=");
-		} else {
-			redirect_to_home_page("modules/link/index.php?course=$course_code&action=addlink&urlview=");
+	$v = new Valitron\Validator($_POST);
+    $v->rule('required', array('urllink'))->message($langTheFieldIsRequired)->label('');
+    if($v->validate()) {
+		if (!is_url_accepted($urllink,"(https?|ftp)")){
+			$message = $langLinkNotPermitted;
+			if (isset($_POST['id'])) {
+				$id =  getDirectReference($_POST['id']);
+				redirect_to_home_page("modules/link/index.php?course=$course_code&action=editlink&id=" . getIndirectReference($id) . "&urlview=");
+			} else {
+				redirect_to_home_page("modules/link/index.php?course=$course_code&action=addlink&urlview=");
+			}
 		}
-	}
-    $set_sql = "SET url = ?s, title = ?s, description = ?s, category = ?d";
-    $terms = array($urllink, $title, purify($description), intval(getDirectReference($_POST['selectcategory'])));
+		$set_sql = "SET url = ?s, title = ?s, description = ?s, category = ?d";
+		$terms = array($urllink, $title, purify($description), intval(getDirectReference($_POST['selectcategory'])));
 
-    if (isset($_POST['id'])) {
-        $id = intval(getDirectReference($_POST['id']));
-        Database::get()->query("UPDATE `link` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
+		if (isset($_POST['id'])) {
+			$id = intval(getDirectReference($_POST['id']));
+			Database::get()->query("UPDATE `link` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
 
-        $log_type = LOG_MODIFY;
+			$log_type = LOG_MODIFY;
+		} else {
+			$order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link`
+										WHERE course_id = ?d AND category = ?d", $course_id, getDirectReference($_POST['selectcategory']))->maxorder;
+			$order++;
+			$id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d, user_id = ?d", $terms, $course_id, $order, $uid)->lastInsertID;
+			$log_type = LOG_INSERT;
+		}
+		Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_LINK, $id);
+		// find category name
+		if ($selectcategory == -2) {
+			$category = $langSocialCategory;
+		} else {
+			$category_object = Database::get()->querySingle("SELECT link_category.name as name FROM link, link_category
+															WHERE link.category = link_category.id
+															AND link.course_id = ?s
+															AND link.id = ?d", $course_id, $id);
+			$category = $category_object ? $category_object->name : 0;
+		}
+		$txt_description = ellipsize_html(canonicalize_whitespace(strip_tags($description)), 50, '+');
+		Log::record($course_id, MODULE_ID_LINKS, $log_type, @array('id' => $id,
+			'url' => $urllink,
+			'title' => $title,
+			'description' => $txt_description,
+			'category' => $category));
+
     } else {
-        $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link`
-                                      WHERE course_id = ?d AND category = ?d", $course_id, getDirectReference($_POST['selectcategory']))->maxorder;
-        $order++;
-        $id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d, user_id = ?d", $terms, $course_id, $order, $uid)->lastInsertID;
-        $log_type = LOG_INSERT;
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("modules/link/index.php?course=$course_code&action=addlink&urlview=");
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_LINK, $id);
-    // find category name
-    if ($selectcategory == -2) {
-        $category = $langSocialCategory;
-    } else {
-        $category_object = Database::get()->querySingle("SELECT link_category.name as name FROM link, link_category
-                                                        WHERE link.category = link_category.id
-                                                        AND link.course_id = ?s
-                                                        AND link.id = ?d", $course_id, $id);
-        $category = $category_object ? $category_object->name : 0;
-    }
-    $txt_description = ellipsize_html(canonicalize_whitespace(strip_tags($description)), 50, '+');
-    Log::record($course_id, MODULE_ID_LINKS, $log_type, @array('id' => $id,
-        'url' => $urllink,
-        'title' => $title,
-        'description' => $txt_description,
-        'category' => $category));
-
 }
 
 /**
