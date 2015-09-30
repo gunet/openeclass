@@ -638,8 +638,7 @@ if ($is_editor) {
             $tool_content .= "<td class='text-center'>$member_count</td><td class='text-center'>" .
                     ($max_members ? $max_members : '-') . "</td>";
             // If self-registration and multi registration allowed by admin and group is not full
-            $tool_content .= "<td class='text-center'>";
-            echo $is_member;
+            $tool_content .= "<td class='text-center'>";            
             if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
                 $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
             } else {

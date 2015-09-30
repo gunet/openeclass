@@ -40,6 +40,12 @@ $toolName = $langGroups;
 $pageName = $group_name;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 
+if (!$is_member and !$is_editor) {
+    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
+    draw($tool_content, 2);
+    exit;
+}
+
 if (isset($_GET['selfReg'])) {
     if (!$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) {
         $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
@@ -56,11 +62,7 @@ if (isset($_GET['selfReg'])) {
         exit;
     }
 }
-if (!$is_member and !$is_editor) {
-    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
-    draw($tool_content, 2);
-    exit;
-}
+
 if (isset($_GET['group_as'])) {
     $group_id = $_GET['group_id'];
 
