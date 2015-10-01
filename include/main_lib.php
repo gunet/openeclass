@@ -448,7 +448,7 @@ function user_icon($uid, $size = null) {
             if ($user->has_icon) {
                 return "${urlAppend}courses/userimg/${uid}_$size.jpg";
             } else {
-                return "$themeimg/default_$size.jpg";
+                return "$themeimg/default_$size.png";
             }
         }
     }
@@ -2332,7 +2332,7 @@ function profile_image($uid, $size, $class=null) {
     if ($uid > 0 and file_exists("courses/userimg/${uid}_$size.jpg")) {
         return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' $class_attr title='$name' alt='$name'>";
     } else {
-        return "<img src='$themeimg/default_$size.jpg' $class_attr title='$name' alt='$name'>";
+        return "<img src='$themeimg/default_$size.png' $class_attr title='$name' alt='$name'>";
     }
 }
 
