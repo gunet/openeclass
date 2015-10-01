@@ -113,22 +113,19 @@ if (empty($search_terms)) {
     // Search Terms might come from GET, but we want to pass it alltogether with POST in ResourceIndexers
     $_POST['search_terms'] = $search_terms;
     $idx = new Indexer();
-
-    $tool_content .= "
-        <div id=\"operations_container\">
-      <ul id='opslist'>
-        <li><a href='" . $_SERVER['SCRIPT_NAME'] . "'>$langNewSearch</a></li>
-      </ul>
-    </div>
-        <p class='sub_title1'>$langResults</p>";
-
+$tool_content .= action_bar(array(
+                    array('title' => $langAdvancedSearch,
+                          'url' => $_SERVER['SCRIPT_NAME'],
+                          'icon' => 'fa-search',
+                          'level' => 'primary-label',
+                          'button-class' => 'btn-success',)));
     // search in announcements
     if ($announcements) {
         $announceHits = $idx->searchRaw(AnnouncementIndexer::buildQuery($_POST));
 
         if (count($announceHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-              <table class='table-default sortable' align='left'>
+              <table class='table-default'>
               <tr>
                 <th colspan='2'>$langAnnouncements:</th>
               </tr>";
@@ -140,7 +137,7 @@ if (empty($search_terms)) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $tool_content .= "<tr class='$class'>
                                   <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                                  <td><b><a href='" . $annHit->url . "'>" . q($announce->title) . "</a></b>&nbsp;&nbsp;
+                                  <td><a href='" . $annHit->url . "'>" . q($announce->title) . "</a>&nbsp;&nbsp;
                                   <small>(" . nice_format(claro_format_locale_date($dateFormatLong, strtotime($announce->date))) . ")
                                   </small><br />" . $announce->content . "</td></tr>";
                 $numLine++;
@@ -156,7 +153,7 @@ if (empty($search_terms)) {
 
         if (count($agendaHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                  <table width='99%' class='sortable' id='t2' align='left'>
+                  <table class='table-default'>
           <tr>
             <th colspan='2' class='left'>$langAgenda:</th>
                   </tr>";
@@ -178,7 +175,7 @@ if (empty($search_terms)) {
                         $message = $langHours;
                     }
                 }
-                $tool_content .= "<span class=day>" .
+                $tool_content .= "<span class='day'>" .
                         ucfirst(claro_format_locale_date($dateFormatLong, strtotime($agenda->start))) .
                         "</span> ($langHour: " . ucfirst(date("H:i", strtotime($agenda->start))) . ")<br />"
                         . q($agenda->title) . " (" . $langDuration . ": " . q($agenda->duration) . " $message) " . $agenda->content . "
@@ -197,7 +194,7 @@ if (empty($search_terms)) {
 
         if (count($documentHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                  <table class='table-default sortable'>
+                  <table class='table-default'>
                   <tr>
                     <th colspan='2' class='left'>$langDoc:</th>
                   </tr>";
@@ -224,10 +221,10 @@ if (empty($search_terms)) {
         $exerciseHits = $idx->searchRaw(ExerciseIndexer::buildQuery($_POST));
         if (count($exerciseHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='100%' class='sortable' id='t4' align='left'>
-        <tr>
-          <th colspan='2' class='left'>$langExercices:</th>
-                </tr>";
+                <table class='table-default'>
+                    <tr>
+                      <th colspan='2' class='left'>$langExercices:</th>
+                    </tr>";
 
             $numLine = 0;
             foreach ($exerciseHits as $exerciseHit) {
@@ -277,7 +274,7 @@ if (empty($search_terms)) {
 
         if (count($forumTopicHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='99%' class='sortable' id='t6' align='left'>
+                <table class='table-default'>
         <tr>
           <th colspan='2' class='left'>$langForum ($langSubjects - $langMessages):</th>
                 </tr>";
@@ -309,8 +306,8 @@ if (empty($search_terms)) {
         $linkHits = $idx->searchRaw(LinkIndexer::buildQuery($_POST));
         if (count($linkHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='100%' class='sortable' id='t7' align='left'>
-        <tr>
+                <table class='table-default'>
+                <tr>
                   <th colspan='2' class='left'>$langLinks:</th>
                 </tr>";
 
@@ -323,8 +320,7 @@ if (empty($search_terms)) {
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $desc_text = (empty($link->description)) ? "" : "<span class='smaller'>" . $link->description . "</span>";
-                $tool_content .= "<a href='" . $urlServer . "modules/link/go.php?course=" . course_id_to_code($linkHit->courseid) . "&amp;id=" . getIndirectReference($linkHit->pkid) . "&amp;url=" .
-                urlencode($linkHit->url) . "' target=_blank> " . q($link->title) . "</a> $desc_text </td></tr>";
+                $tool_content .= "<a href='" . $linkHit->url . "' target='_blank'> " . q($link->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
             $tool_content .= "</table>";
@@ -338,7 +334,7 @@ if (empty($search_terms)) {
         $vlinkHits = $idx->searchRaw(VideolinkIndexer::buildQuery($_POST));
         if (count($videoHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='99%' class='sortable'  id='t8' align='left'>
+                <table class='table-default'>
         <tr>
                   <th colspan='2' class='left'>$langVideo:</th>
                 </tr>";
@@ -389,7 +385,7 @@ if (empty($search_terms)) {
 
         if (count($unitHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table class='table-default sortable' align='left'>
+                <table class='table-default'>
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
                 </tr>";

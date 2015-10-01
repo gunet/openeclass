@@ -174,7 +174,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
     global $logo, $langNewForumNotify, $course_code, $course_code, $course_id, $langForumFrom,
         $uid, $langBodyForumNotify, $langInForums, $urlServer, $langdate, $langSender,
         $langCourse, $langCategory, $langForum, $langSubject, $langNote,
-        $langLinkUnsubscribe, $langHere, $charset, $langMailBody;
+        $langLinkUnsubscribe, $langHere, $charset, $langMailBody, $langMailSubject;
 
     $subject_notify = "$logo - $langNewForumNotify";
     $category_id = forum_category($forum_id);
