@@ -56,7 +56,35 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
         $emailsubject = $langAccountActivate;
         $emailbody = "$langAccountActivateMessage\n\n$firstname $lastname\ne-mail: $email\n" .
                 "{$urlServer}modules/admin/edituser.php?u=$userid\n\n$m[comments]: $body\n";
-        if (!send_mail('', '', '', $to, $emailsubject, $emailbody, $charset)) {
+        $header_html_topic_notify = "<!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$emailsubject</div>
+            </div>
+        </div>";
+
+        $body_html_topic_notify = "<!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div id='mail-body-inner'>
+            $langAccountActivateMessage
+                <ul id='forum-category'>
+                    <li><span><b>$langName:</b></span> <span>$firstname</span></li>
+                    <li><span><b>$langSurname:</b></span> <span>$lastname</span></li>
+                    <li><span><b>e-mail:</b></span> <span>$email</a></span></li>
+                    <li><span><b>$m[comments]:</b></span> <span>$body</span></li>
+                </ul>
+                <div>
+                    <p><a href='{$urlServer}modules/admin/edituser.php?u=$userid'>{$urlServer}modules/admin/edituser.php?u=$userid</a></p>
+                </div>
+            </div>
+        </div>";
+
+        $emailbody = $header_html_topic_notify.$body_html_topic_notify;
+
+        $plainEmailBody = html2text($emailbody);
+        if (!send_mail_multipart('', '', '', $to, $emailsubject, $plainEmailBody, $emailbody, $charset)) {
             $tool_content .= "<div class='alert alert-danger'>$langEmailNotSend " . q($to) . "!</div>";
         } else {
             $tool_content .= "<div class='alert alert-success'>$emailsuccess</div>";
@@ -83,6 +111,6 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
     }
 }
 
-$tool_content .= "<center><p><a href='$urlAppend'>$langBackHome</a></p></center>";
+$tool_content .= "<p><a href='$urlAppend'>$langBackHome</a></p>";
 
 draw($tool_content, 0);
