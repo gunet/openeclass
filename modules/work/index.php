@@ -2438,7 +2438,7 @@ function show_assignment($id, $display_graph_results = false) {
                 } else {
                     $subContentGroup = '';
                 }
-                $uid_2_name = display_user($row->uid);
+                $name = empty($row->group_id) ? display_user($row->uid) : display_group($row->group_id);
                 $stud_am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $row->uid)->am;
                 if ($assign->submission_type) {
                     $filelink = "<a href='#' class='onlineText btn btn-xs btn-default' data-id='$row->id'>$langQuestionView</a>";
@@ -2475,7 +2475,12 @@ function show_assignment($id, $display_graph_results = false) {
                 $tool_content .= "
                                 <tr>
                                 <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
-                                <td>${uid_2_name}</td>
+                                <td>$name";
+                if (trim($row->comments != '')) {
+                    $tool_content .= "<div style='margin-top: .5em;'><small>" .
+                            q($row->comments) . '</small></div>';
+                }                
+                $tool_content .= "</td>
                                 <td width='85'>" . q($stud_am) . "</td>
                                 <td class='text-center' width='180'>
                                         $filelink
@@ -2506,12 +2511,8 @@ function show_assignment($id, $display_graph_results = false) {
                                 </td>
                                 </tr>
                                 <tr>
-                                <td colspan='6'>
-                                <div>$subContentGroup</div>";
-                if (trim($row->comments != '')) {
-                    $tool_content .= "<div style='margin-top: .5em;'>" .
-                            q($row->comments) . '</div>';
-                }
+                                <td colspan='6'>";
+
                 //professor comments
                 if ($row->grade_comments || $row->grade != '') {
                     $comments = "<br><div class='label label-primary'>" .

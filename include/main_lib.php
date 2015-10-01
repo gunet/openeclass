@@ -430,6 +430,15 @@ function gid_to_name($gid) {
     }
 }
 
+function display_group($gid) {
+    global $course_code, $urlAppend;
+    $res = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $gid);
+    if ($res) {
+        return "<a href='{$urlAppend}modules/group/group_space.php?course=$course_code&amp;group_id=$gid'>$res->name</a>";
+    } else {
+        return false;
+    }
+}
 /**
  * @brief Return the URL for a user profile image
  * @param int $uid user id
