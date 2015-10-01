@@ -151,6 +151,14 @@ if (isset($_POST['submit'])) {
                 $filename_final = $dropbox_dir . '/' . $filename;
                 move_uploaded_file($filetmpname, $filename_final) or die($langUploadError);
                 @chmod($filename_final, 0644);
+                require_once 'modules/admin/extconfig/externals.php';
+                $connector = AntivirusApp::getAntivirus();
+                if($connector->isEnabled() == true ){
+                    $output=$connector->check($filename_final);
+                    if($output->status==$output::STATUS_INFECTED){
+                        AntivirusApp::block($output->output);
+                    }
+                }
 
                 $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
             }
