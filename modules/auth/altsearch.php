@@ -288,7 +288,7 @@ if ($is_valid) {
                 "$langYouAreReg $siteName $langSettings $uname\n" .
                 "$langPassSameAuth\n$langAddress $siteName: " .
                 "$urlServer\n" .
-                ($vmail ? "\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer" . "modules/auth/mail_verify.php?ver=" . $hmac . "&id=" . $last_id . "\n" : "") .
+                ($vmail ? "\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer" . "modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id . "\n" : "") .
                 "$langProblem\n$langFormula" .
                 "$administratorName\n" .
                 "$langManager $siteName \n$langTel $telephone \n" .
