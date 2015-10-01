@@ -253,12 +253,11 @@ function new_gradebook() {
 function clone_gradebook($gradebook_id) {
 
     global $course_id, $langCopyDuplicate;
-
-    $newTitle = get_gradebook_title($gradebook_id)." $langCopyDuplicate";
-    $newRange = get_gradebook_range($gradebook_id);
+    $gradebook = Database::get()->querySingle("SELECT * FROM gradebook WHERE id = ?d", $gradebook_id);
+    $newTitle = $gradebook->title." $langCopyDuplicate";
     $new_gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d,
                                                       students_semester = 1, `range` = ?d,
-                                                      active = 1, title = ?s", $course_id, $newRange, $newTitle)->lastInsertID;
+                                                      active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $gradebook->range, $newTitle, $gradebook->start_date, $gradebook->end_date)->lastInsertID;
     Database::get()->query("INSERT INTO gradebook_activities (gradebook_id, title, activity_type, date, description, weight, module_auto_id, module_auto_type, auto, visible)
                                 SELECT $new_gradebook_id, title, activity_type, " . DBHelper::timeAfter() . ", description, weight, module_auto_id, module_auto_type, auto, 1
                                  FROM gradebook_activities WHERE gradebook_id = ?d", $gradebook_id);
