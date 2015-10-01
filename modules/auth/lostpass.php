@@ -172,14 +172,38 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
 
     $found_editable_password = false;
     if ($res) {
-        $text = $langPassResetIntro . $emailhelpdesk;
-        $text .= $langHowToResetTitle;        
         if (password_is_editable($res->password)) {
             $found_editable_password = true;
             //prepare instruction for password reset
+            $text = $langPassResetIntro . $emailhelpdesk;
+            $text .= $langHowToResetTitle;
             $text .= $langPassResetGoHere;
             $text .= $urlServer . "modules/auth/lostpass.php?u=$res->id&h=" .
                     token_generate('password' . $res->id, true);
+
+            $header_html_topic_notify = "<!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$langPassResetIntro</div>
+                    <div>$langPassResetIntro2 $emailhelpdesk</div>
+                </div>
+            </div>";
+
+            $body_html_topic_notify = "<!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div><b>$langHowToResetTitle</b></div><br>
+                <div id='mail-body-inner'>
+                    $langPassResetGoHere<br><br><a href='$urlServer"."modules/auth/lostpass.php?u=$res->id&h=" .
+                token_generate('password' . $res->id, true)."'>$urlServer"."modules/auth/lostpass.php?u=$res->id&h=" .
+                    token_generate('password' . $res->id, true)."</a>
+                </div>
+            </div>";
+
+            $text = $header_html_topic_notify.$body_html_topic_notify;
+
+            $plainText = html2text($text);
             // store the timestamp of this action (password reminding and token generation)
             Database::get()->query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ?d" , $res->id);            
         } else { //other type of auth...
@@ -194,7 +218,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
         /*         * *** Account details found, now send e-mail **** */
         if ($found_editable_password) {
             $emailsubject = $lang_remind_pass;
-            if (!send_mail('', '', '', $email, $emailsubject, $text, $charset)) {
+            if (!send_mail_multipart('', '', '', $email, $emailsubject, $plainText, $text, $charset)) {
                 $tool_content = "<div class='alert alert-danger'>
                                 <p><strong>$langAccountEmailError1</strong></p>
                                 <p>$langAccountEmailError2 $email.</p>

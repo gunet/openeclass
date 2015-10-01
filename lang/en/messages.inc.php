@@ -1306,14 +1306,9 @@ and email.
 (<em>CAUTION: This email must much the one set in your user profile</em>).</p> <p>After submitting these data you will receive an email with instruction on how to reset your password.</p>';
 $lang_pass_submit = 'Send';
 $langPassResetIntro = "
-Someone has asked to reset your access password on the $siteName platform.
-If this was not yourself, ignore the instructions of this email and report this incident to the system administrator, at the address: ";
-$langHowToResetTitle = "
-
-===============================================================================
-			Password reset instructions
-===============================================================================
-";
+Someone has asked to reset your access password on the $siteName platform.";
+$langPassResetIntro2 = "If this was not yourself, ignore the instructions of this email and report this incident to the system administrator, at the address: ";
+$langHowToResetTitle = "Password reset instructions";
 $langPassResetGoHere = "To reset your password go to the following address through your web browser.
 If you cannot click on the address, copy & paste it on your browser's address bar.
 This address is valid for one (1) hour. Beyond this time limit, you will need

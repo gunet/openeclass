@@ -470,7 +470,7 @@ if (!isset($_POST['submit'])) {
                     <li><span><b>$langPass:</b></span> <span>$password</span></li>
                     <li><span><b>$langAddress $siteName:</b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
                 </ul>
-                <p>".($vmail ? "$langMailVerificationSuccess"."<br>"."$langMailVerificationClick "."<a href='"."$urlServer." . "modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id."'>"."$urlServer" . "modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id."</a>" : "") .
+                <p>".($vmail ? "$langMailVerificationSuccess"."<br>"."$langMailVerificationClick "."<a href='"."$urlServer" . "modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id."'>"."$urlServer" . "modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id."</a>" : "") .
                 "<br><br>"."$langProblem"."<br><br><br>"."$langFormula" .
                 "<br>"."$administratorName" ."<br><br>".
                 "$langTel: $telephone " ."<br>".
