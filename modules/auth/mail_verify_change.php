@@ -67,12 +67,33 @@ if (!empty($_POST['submit'])) {
         }
         //send new code
         $hmac = token_generate($_SESSION['uname'] . $email . $uid);
+        $activateLink = "<a href='".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&id=".$uid."'>".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&id=".$uid."</a>";
 
         $subject = $langMailChangeVerificationSubject;
-        $MailMessage = sprintf($mailbody1 . $langMailVerificationChangeBody, $urlServer . 'modules/auth/mail_verify.php?h=' . $hmac . '&id=' . $uid);
+
+        $header_html_topic_notify = "<!-- Header Section -->
+    <div id='mail-header'>
+        <br>
+        <div>
+            <div id='header-title'>$subject</div>
+        </div>
+    </div>";
+
+        $body_html_topic_notify = "<!-- Body Section -->
+    <div id='mail-body'>
+        <br>
+        <div id='mail-body-inner'>".
+            sprintf($langMailVerificationChangeBody, $activateLink)."
+        </div>
+    </div>";
+
+        $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
+
+        $plainMailMessage = html2text($MailMessage);
+
         $emailhelpdesk = get_config('email_helpdesk');
         $emailAdministrator = get_config('email_sender');
-        if (!send_mail($siteName, $emailAdministrator, '', $email, $subject, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
+        if (!send_mail_multipart($siteName, $emailAdministrator, '', $email, $subject, $plainMailMessage, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
             $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</div>");
             $tool_content .= $mail_ver_error;
         } else {
