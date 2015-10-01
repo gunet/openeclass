@@ -246,15 +246,37 @@ if ($all_set) {
         //----------------------------- Email Request Message --------------------------
         $dep_body = $tree->getFullPath($department);
         $subject = $prof ? $mailsubject : $mailsubject2;
-        $MailMessage = $mailbody1 . $mailbody2 . "$givenname $surname\n\n" .
-                $mailbody3 . $mailbody4 . $mailbody5 .
-                ($prof ? $mailbody6 : $mailbody8) .
-                "\n\n$langFaculty: $dep_body\n$langComments: $usercomment\n" .
-                "$langAm: $am\n" .
-                "$langProfUname: $username\n$langProfEmail : $usermail\n" .
-                "$contactphone: $userphone\n\n\n$logo\n\n";
+
+        $header_html_topic_notify = "<!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$mailbody1</div>
+            </div>
+        </div>";
+
+        $body_html_topic_notify = "<!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div id='mail-body-inner'>
+            $mailbody2 $givenname $surname $mailbody3 $mailbody4 $mailbody5 ".($prof ? $mailbody6 : $mailbody8)."
+                <ul id='forum-category'>
+                    <li><span><b>$langFaculty:</b></span> <span>$dep_body</span></li>
+                    <li><span><b>$langComments:</b></span> <span>$usercomment</a></span></li>
+                    <li><span><b>$langAm :</b></span> <span>$am</span></li>
+                    <li><span><b>$langProfUname:</b></span> <span> $username </span></li>
+                    <li><span><b>$langProfEmail:</b></span> <span> $usermail </span></li>
+                    <li><span><b>$contactphone:</b></span> <span> $userphone </span></li>
+                </ul><br><br>$logo
+            </div>
+        </div>";
+
+        $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
+
+        $plainMailMessage = html2text($MailMessage);
+
         $emailAdministrator = get_config('email_sender');
-        if (!send_mail($siteName, $emailAdministrator, '', $emailhelpdesk, $subject, $MailMessage, $charset, "Reply-To: $usermail")) {
+        if (!send_mail_multipart($siteName, $emailAdministrator, '', $emailhelpdesk, $subject, $plainMailMessage, $MailMessage, $charset, "Reply-To: $usermail")) {
             $tool_content .= "<div class='alert alert-warning'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>";
         }
 
@@ -268,10 +290,32 @@ if ($all_set) {
         $hmac = token_generate($username . $usermail . $request_id);
         //----------------------------- Email Verification -----------------------
         $subject = $langMailVerificationSubject;
-        $MailMessage = sprintf($mailbody1 . $langMailVerificationBody1, $urlServer . 'modules/auth/mail_verify.php?h=' . $hmac . '&rid=' . $request_id);
         $emailhelpdesk = get_config('email_helpdesk');
         $emailAdministrator = get_config('email_sender');
-        if (!send_mail($siteName, $emailAdministrator, '', $usermail, $subject, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
+
+        $activateLink = "<a href='".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&id=".$uid.$request_id."'>".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&id=".$uid.$request_id."</a>";;
+
+        $header_html_topic_notify = "<!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$mailbody1</div>
+            </div>
+        </div>";
+
+        $body_html_topic_notify = "<!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div id='mail-body-inner'>".
+                sprintf($langMailVerificationBody1, $activateLink)."
+            </div>
+        </div>";
+
+        $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
+
+        $plainMailMessage = html2text($MailMessage);
+
+        if (!send_mail_multipart($siteName, $emailAdministrator, '', $usermail, $subject, $plainMailMessage, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
             $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $usermail, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>");
             $tool_content .= $mail_ver_error;
             draw($tool_content, 0);

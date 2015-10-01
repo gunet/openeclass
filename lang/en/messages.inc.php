@@ -2577,7 +2577,7 @@ $langMailVerificationSubject = "Confirmation of request registration account $si
 $langMailChangeVerificationSubject = "Verification of email address $siteName";
 $langMailVerificationSuccess = "In order to complete your registration email address must be verified";
 $langMailVerificationSuccess2 = "Soon an email will be sent to you by $siteName with instructions for completing your registration";
-$langMailVerificationBody1 = "Thank you for your registration in $siteName.\n\n$langMailVerificationSuccess.\n\n$langMailVerificationClick\n%s";
+$langMailVerificationBody1 = "Thank you for your registration in $siteName.<br><br>$langMailVerificationSuccess<br>$langMailVerificationClick<br>%s";
 $langMailVerificationChangeBody = "In order to activate your account, email address must be verified.<br><br>$langMailVerificationClick<br>%s";
 $langMailVerificationError = "An error occured during sending email to address %s.<br/><br/>Please <a href='%s'>try again</a> or contact with administrator at: %s";
 $langMailVerificationError2 = "An error occured. Please contact with platform administrator.";
