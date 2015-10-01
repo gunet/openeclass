@@ -40,29 +40,36 @@ $toolName = $langGroups;
 $pageName = $group_name;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 
-if (isset($_GET['selfReg']) and ($self_reg == 1)) {  // if group self registration is enabled
-    if (!$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) {
-        $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
-        $group = gid_to_name($group_id);
-        Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array('id' => $id,
-                                                                    'uid' => $uid,
-                                                                    'name' => $group));
-
-        Session::Messages($langGroupNowMember, 'alert-success');
-        redirect_to_home_page("modules/group/group_space.php?course=$course_code&group_id=$group_id");
-    } else {
+if (!$is_editor) {
+    if ((!$is_member) and (!$self_reg)) { // check if we are group member
+        Session::Messages($langForbidden, 'alert-danger');
+        redirect_to_home_page("modules/group/index.php?course=$course_code");       
+    }
+    if (!$self_reg) { // if group self registration is enabled    
         Session::Messages($langForbidden, 'alert-danger');
         redirect_to_home_page("modules/group/index.php?course=$course_code");
-    }
-} else {
-    Session::Messages($langForbidden, 'alert-danger');
-    redirect_to_home_page("modules/group/index.php?course=$course_code");       
+    }    
+    if (isset($_GET['selfReg']) and $_GET['selfReg'] == 1) {
+        if (!$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) { // if registration is possible
+            $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
+            $group = gid_to_name($group_id);
+            Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array('id' => $id,
+                                                                        'uid' => $uid,
+                                                                        'name' => $group));
+
+            Session::Messages($langGroupNowMember, 'alert-success');
+            redirect_to_home_page("modules/group/group_space.php?course=$course_code&group_id=$group_id");
+        } else {
+            Session::Messages($langForbidden, 'alert-danger');
+            redirect_to_home_page("modules/group/index.php?course=$course_code");
+        }
+    } 
 }
 
 if (isset($_GET['group_as'])) {
     $group_id = $_GET['group_id'];
 
-    $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time FROM assignment as a LEFT JOIN assignment_to_specific as b ON a.id=b.assignment_id 
+    $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time FROM assignment AS a LEFT JOIN assignment_to_specific AS b ON a.id=b.assignment_id 
                                                         WHERE a.course_id = ?d AND a.group_submissions= ?d AND (b.group_id= ?d OR b.group_id is null) ORDER BY a.id", $course_id, 1, $group_id);
 					
     if (count($result)>0) {

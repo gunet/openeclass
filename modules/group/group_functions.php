@@ -184,8 +184,8 @@ function showgroupsofcategory($catid) {
     
     global $is_editor, $course_id, $tool_content, $langConfig,
     $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
-    $langModify, $is_member, $multi_reg, $langMyGroup,
-    $langEditChange, $groups_num, $uid, $totalRegistered, 
+    $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
+    $langEditChange, $groups_num, $uid, $totalRegistered,
     $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members;
 
     $q = Database::get()->queryArray("SELECT id FROM `group`

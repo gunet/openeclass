@@ -145,7 +145,7 @@ if ($is_editor) {
     foreach ($q as $row) {
         $selected = $row->is_tutor ? ' selected="selected"' : '';
         $tool_content_tutor .= "<option value='$row->user_id'$selected>" . q($row->surname) .
-                ' ' . q($row->givenname) . "</option>\n";
+                ' ' . q($row->givenname) . "</option>";
     }
     $tool_content_tutor .= '</select>';
 } else {
@@ -292,8 +292,8 @@ $tool_content .= "<div class='form-wrapper'>
         $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
         foreach ($resultcategories as $myrow) {
             $tool_content .= "<option value='$myrow->id'";
-			$category_id = $myrow->id;
-            if (isset($_GET['category']) and $_GET['category'] == $myrow->id) {
+            $category_id = $myrow->id;
+            if ((isset($_GET['category']) and $_GET['category'] == $myrow->id) or (isset($_GET['from']) and $_GET['from'])) {
                 $tool_content .= " selected='selected'";
             }
             $tool_content .= '>' . q($myrow->name) . "</option>";
