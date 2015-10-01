@@ -91,14 +91,14 @@ if (count($hits) <= 0) {
 
 //////// PRINT RESULTS ////////
 $tool_content .= action_bar(array(
-                    array('title' => $langNewSearch,
+                    array('title' => $langAdvancedSearch,
                           'url' => "search.php",
-                          'icon' => 'fa-plus-circle',
+                          'icon' => 'fa-search',
                           'level' => 'primary-label',
                           'button-class' => 'btn-success',)));
 
 $tool_content .= "
-    <div class='alert alert-info'>$langDoSearch:&nbsp;<label>" . count($hits) . " $langResults2</label></div>
+    <div class='alert alert-info'>$langDoSearch:&nbsp;<label> '$_POST[search_terms]'</label><br><small>" . count($hits) . " $langResults2</small></div>
     <table class='table-default'>
     <tr>      
       <th class='text-left'>" . $langCourse . " ($langCode)</th>
