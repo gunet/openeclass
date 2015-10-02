@@ -23,7 +23,7 @@ $require_current_course = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modules/wall/wall_functions.php';
 
-$posts_per_page = 5;
+$posts_per_page = 10;
 
 if (visible_module(MODULE_ID_WALL)) {
     if (isset($_GET['page'])) {
