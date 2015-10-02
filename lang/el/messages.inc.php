@@ -4762,6 +4762,20 @@ $langAutoJudgeInputNotSupported = 'Δεν υποστηρίζεται από υπ
 $langAutoJudgeConnector = "Επιθυμητή υπηρεσία μεταγλώττισης";
 $langAutoJudgeUpdated = "Οι ρυθμίσεις αυτόματου κριτή ενημερώθηκαν με επιτυχία";
 
+//antivirus.php
+$langAntivirus = "Ρυθμίσεις λογισμικού προστασίας έναντι ιών του $siteName";
+$langAntivirusUpdated = "Οι ρυθμίσεις του λογισμικού προστασίας έναντι ιών ενημερώθηκαν με επιτυχία";
+$langAntivirusConnector = "Εγκατεστημένο Λογισμικό";
+$langAntivirusPath = "Θέση Λογισμικού";
+$langAntivirusConfig = "Ρυθμίσεις Λογισμικού";
+$langAntivirusInfected = "Το αρχείο αυτό δεν έγινε αποδεκτό, καθώς φαίνεται να είναι μολυσμένο. Παρακαλώ επικοινωνήστε με το διαχειριστή.";
+
+//waf.php
+$langWaf = "Ρυθμίσεις τείχους προστασίας εφαρμογής ιστού του $siteName";
+$langWafConnector = "Τείχος προστασίας";
+$langWafUpdated = "Οι ρυθμίσεις του λογισμικού τείχους προστασίας εφαρμογής ιστού ενημερώθηκαν με επιτυχία";
+$langWafConfig = "Ρυθμίσεις Φίλτρου";
+
 // scenarios edit
 $langAutoJudgeEnable = 'Αυτόματος Κριτής';
 $langAutoJudgeInput = 'Είσοδος';
@@ -4838,3 +4852,6 @@ $langOwnCloudShortDescription = "Short Description about own cloud";
 $langOwnCloudLongDescription = "Long description about own cloud";
 $langWebDAVShortDescription = "Short Description about web dav";
 $langWebDAVLongDescription = "Long Description about web dav";
+$langAntivirusDescription = "<p>Σύνδεση με εγκατεστημένο λογισμικό προστασίας έναντι ιών</p>";
+$langWafDescription = "<p>Ενεργοποίηση τείχους προστασίας εφαρμογής ιστού</p>";
+
