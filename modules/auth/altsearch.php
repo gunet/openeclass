@@ -312,7 +312,7 @@ if ($is_valid) {
                     <li><span><b>$langPassword:</b></span> <span>$langPassSameAuth</span></li>
                     <li><span><b>$langAddress $siteName:</b></span> <span>$urlServer</span></li>
                     </ul>
-                    <p>".($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick<br><a href='modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id ."'>{$urlServer}/modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id . "</a>" : "")."</p>
+                    <p>".($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick<br><a href='/modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id ."'>{$urlServer}/modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id . "</a>" : "")."</p>
                     <p>$langProblem<br><br>$langFormula<br>$administratorName<br>$langManager $siteName<br>$langTel: $telephone<br>$langEmail: $emailhelpdesk</p>
 
             </div>
@@ -390,7 +390,34 @@ if ($is_valid) {
         \n$langComments: $usercomment\n"
                     . "$langProfUname : $uname\n$langProfEmail : $email\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
 
-            if (!send_mail($siteName, $emailAdministrator, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset, "Reply-To: $email")) {
+
+            $header_html_topic_notify = "<!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$mailbody2</div>
+                </div>
+            </div>";
+
+            $body_html_topic_notify = "<!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div id='mail-body-inner'>
+                    <p>$langSettings</p>
+                    <ul id='forum-category'>
+                        <li><span><b>$lang_username:</b></span> <span>$pu</span></li>
+                        <li><span><b>$langPassword:</b></span> <span>$langPassSameAuth</span></li>
+                        <li><span><b>$langAddress $siteName:</b></span> <span>$urlServer</span></li>
+                        </ul>
+                        <p>$langProblem<br><br>$langFormula<br>$administratorName<br>$langManager $siteName<br>$langTel: $telephone<br>$langEmail: $emailhelpdesk</p>
+
+                </div>
+            </div>";
+
+            $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
+            $plainemailbody = html2text($MailMessage);
+
+            if (!send_mail_multipart($siteName, $emailAdministrator, $gunet, $emailhelpdesk, $mailsubject, $plainemailbody, $MailMessage, $charset, "Reply-To: $email")) {
                 $tool_content .= "<div class='alert alert-warning'>$langMailErrorMessage &nbsp; <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a></div>";
                 draw($tool_content, 0);
                 exit();
@@ -404,8 +431,27 @@ if ($is_valid) {
             $emailhelpdesk = get_config('email_helpdesk');
             $emailAdministrator = get_config('email_sender');
             $subject = $langMailVerificationSubject;
-            $MailMessage = sprintf($mailbody1 . $langMailVerificationBody1, $urlServer . 'modules/auth/mail_verify.php?ver=' . $hmac . '&rid=' . $request_id);
-            if (!send_mail($siteName, $emailAdministrator, '', $email, $subject, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
+
+            $header_html_topic_notify = "<!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$mailbody1</div>
+                </div>
+            </div>";
+
+            $body_html_topic_notify = "<!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div id='mail-body-inner'>".
+                    sprintf($mailbody1 . $langMailVerificationBody1, "<a href='{$urlServer}modules/auth/mail_verify.php?ver=" . $hmac . "&rid=" . $request_id."'>{$urlServer}modules/auth/mail_verify.php?ver=" . $hmac . "&rid=" . $request_id ."</a>")."
+                </div>
+            </div>";
+
+            $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
+            $plainemailbody = html2text($MailMessage);
+
+            if (!send_mail_multipart($siteName, $emailAdministrator, '', $email, $subject, $plainemailbody, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
                 $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>");
                 $tool_content .= $mail_ver_error;
                 draw($tool_content, 0);
