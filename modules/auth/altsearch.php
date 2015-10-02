@@ -385,17 +385,14 @@ if ($is_valid) {
             $emailAdministrator = get_config('email_sender');
             $emailhelpdesk = get_config('email_helpdesk');
             // send email
-            $MailMessage = $mailbody1 . $mailbody2 . "$givenname_form $surname_form\n\n" . $mailbody3
-                    . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . $tree->getFullPath($depid) . "
-        \n$langComments: $usercomment\n"
-                    . "$langProfUname : $uname\n$langProfEmail : $email\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
+
 
 
             $header_html_topic_notify = "<!-- Header Section -->
             <div id='mail-header'>
                 <br>
                 <div>
-                    <div id='header-title'>$mailbody2</div>
+                    <div id='header-title'>$mailbody1</div>
                 </div>
             </div>";
 
@@ -403,14 +400,16 @@ if ($is_valid) {
             <div id='mail-body'>
                 <br>
                 <div id='mail-body-inner'>
-                    <p>$langSettings</p>
-                    <ul id='forum-category'>
-                        <li><span><b>$lang_username:</b></span> <span>$pu</span></li>
-                        <li><span><b>$langPassword:</b></span> <span>$langPassSameAuth</span></li>
-                        <li><span><b>$langAddress $siteName:</b></span> <span>$urlServer</span></li>
-                        </ul>
-                        <p>$langProblem<br><br>$langFormula<br>$administratorName<br>$langManager $siteName<br>$langTel: $telephone<br>$langEmail: $emailhelpdesk</p>
-
+                    <p>$mailbody2 $givenname_form $surname_form $mailbody3
+                     $mailbody4  $mailbody5 $mailbody6 </p>
+            <ul id='forum-category'>
+                <li><span><b>$langProfUname:</b></span> <span>$uname</span></li>
+                <li><span><b>$contactphone :</b></span> <span>$userphone</span></li>
+                <li><span><b>$langProfEmail :</b></span> <span>$email</span></li>
+                <li><span><b>$langFaculty:</b></span> <span>".$tree->getFullPath($depid)."</span></li>
+                <li><span><b>$langComments:</b></span> <span> $usercomment </span></li>
+            </ul>
+            <p>$logo</p>
                 </div>
             </div>";
 
