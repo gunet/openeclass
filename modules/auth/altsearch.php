@@ -294,8 +294,35 @@ if ($is_valid) {
                 "$langManager $siteName \n$langTel $telephone \n" .
                 "$langEmail: $emailhelpdesk";
 
+        $header_html_topic_notify = "<!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$langYouAreReg $siteName</div>
+            </div>
+        </div>";
+
+        $body_html_topic_notify = "<!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div id='mail-body-inner'>
+                <p>$langSettings</p>
+                <ul id='forum-category'>
+                    <li><span><b>$lang_username:</b></span> <span>$uname</span></li>
+                    <li><span><b>$langPassword:</b></span> <span>$langPassSameAuth</span></li>
+                    <li><span><b>$langAddress $siteName:</b></span> <span>$urlServer</span></li>
+                    </ul>
+                    <p>".($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick<br><a href='modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id ."'>{$urlServer}/modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id . "</a>" : "")."</p>
+                    <p>$langProblem<br><br>$langFormula<br>$administratorName<br>$langManager $siteName<br>$langTel: $telephone<br>$langEmail: $emailhelpdesk</p>
+
+            </div>
+        </div>";
+
+        $emailbody = $header_html_topic_notify.$body_html_topic_notify;
+        $plainemailbody = html2text($emailbody);
+
         if (!empty($email)) {
-            send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $emailbody, $charset, "Reply-To: $emailhelpdesk");
+            send_mail_multipart($siteName, $emailAdministrator, '', $email, $emailsubject, $plainemailbody, $emailbody, $charset, "Reply-To: $emailhelpdesk");
         }
 
         $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
