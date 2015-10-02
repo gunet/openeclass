@@ -2343,7 +2343,7 @@ function show_assignment($id, $display_graph_results = false) {
     $langDays, $langDaysLeft, $langGradeOk, $course_code, $webDir, $urlServer,
     $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
-    $langAutoJudgeShowWorkResultRpt;
+    $langAutoJudgeShowWorkResultRpt, $langGroupName;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
@@ -2421,7 +2421,7 @@ function show_assignment($id, $display_graph_results = false) {
                         <tbody>
                         <tr class='list-header'>
                       <th width='3'>&nbsp;</th>";
-            sort_link($m['username'], 'username');
+            sort_link($m['username'].' / '.$langGroupName, 'username');
             sort_link($m['am'], 'am');
             $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename');
             sort_link($m['sub_date'], 'date');

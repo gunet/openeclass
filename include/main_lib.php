@@ -431,10 +431,14 @@ function gid_to_name($gid) {
 }
 
 function display_group($gid) {
-    global $course_code, $urlAppend;
+    global $course_code, $urlAppend, $themeimg, $langGroup;
     $res = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $gid);
     if ($res) {
-        return "<a href='{$urlAppend}modules/group/group_space.php?course=$course_code&amp;group_id=$gid'>$res->name</a>";
+        return "<span title='$langGroup' class='fa-stack fa-lg'>
+                    <i style='color:#f3f3f3;' class='fa fa-circle fa-stack-2x'></i>
+                    <i style='color:#cdcdcd;' class='fa fa-users fa-stack-1x'></i>
+                </span>
+                <a href='{$urlAppend}modules/group/group_space.php?course=$course_code&amp;group_id=$gid'>$res->name</a>";
     } else {
         return false;
     }
@@ -2332,7 +2336,7 @@ function icon_old_style($name, $title = null, $link = null, $attrs = null, $form
  * @return type
  */
 function profile_image($uid, $size, $class=null) {
-    global $urlServer, $themeimg;
+    global $urlServer, $themeimg, $langStudent;
 
     // makes $class argument optional
     $class_attr = ($class == null)?'':"class='".q($class)."'";
