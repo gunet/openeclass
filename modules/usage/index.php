@@ -79,6 +79,8 @@ $head_content .= "
     var langCopy = '$langCopy';
     var langPrint = '$langPrint';
     var langExport = '$langSaveAs';
+    var langFavouriteModule = '$langFavourite';
+    var langFavouriteCourse = '$langFavouriteCourse';
 </script>";
 load_js('datatables');
 load_js('datatables_filtering_delay');

@@ -46,7 +46,8 @@ $tool_content .="<table class='table-default' style='border:0;'>"
         . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langDuration</div><div class='col-sm-2'><span class='badge'>".$visits['duration']."</span></div></div>"
         . "</td>"
         . "</tr>"
-        . "</table></div></div></div>";
+        . "</table>"
+        . "</div></div></div>";
 
 require_once('form.php');
 /****   Plots   ****/
@@ -95,3 +96,17 @@ $tschema = "<thead><tr>"
 $tool_content .= table_placeholder("cdetails2", "table table-striped table-bordered", $tschema, $langMonthlyCourseRegistrations);
 $tool_content .= "</div>";
 
+$tool_content .= "<div class='panel panel-default detailscontainer'>";
+$tschema = "<thead><tr>"
+        . "<th>$langDate - $langHour</th>"
+        . "<th>$langUser</th>"
+        . "<th>$langModule</th>"
+        . "<th>$langAction</th>"
+        . "<th>$langDetail</th>"
+        . "<th>$langIpAddress</th>"
+        . "<th>$langUsername</th>"
+        . "<th>$langEmail</th>"
+        . "</tr></thead>"
+        . "<tbody></tbody>";
+$tool_content .= table_placeholder("cdetails3", "table table-striped table-bordered", $tschema, $langUsersLog);
+$tool_content .= "</div>";   

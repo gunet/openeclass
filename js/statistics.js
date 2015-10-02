@@ -49,7 +49,8 @@ var tableOptions = {
     }, 
     'c':{
         1:{sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;}}, {'targets':2, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[6], row[5]);} }, {"visible": false, "targets": 5}, {"visible": false, "targets": 6}]},
-        2:{sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[4], row[3]);} }, {"visible": false, "targets": 3}, {"visible": false, "targets": 4}]}
+        2:{sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[4], row[3]);} }, {"visible": false, "targets": 3}, {"visible": false, "targets": 4}]},
+        3:{sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}, {"visible": false, "targets": 4}]}
     }
 };
 charts = new Object();
@@ -89,6 +90,9 @@ $(document).ready(function(){
             $(this).addClass("active");
             selectedview = 'plots';
             $('.plotscontainer').show();
+            for(var c in charts){
+                charts[c].resize();
+            }
             $('.detailscontainer').hide();
         }
     });
@@ -127,6 +131,11 @@ $(document).ready(function(){
             course = $('#course option:selected').val();
             if(course == 0){
                 module = null;
+                $('#coursepref_pie_title').text(langFavouriteCourse);
+            }
+            else{
+                $('#coursepref_pie_title').text(langFavouriteModule);
+            
             }
             refresh_plots();
         });
@@ -143,36 +152,14 @@ $(document).ready(function(){
     
     /*******************/
     
-    function footerCB(tabId,tabEl){
-        return function(){
-            tabApi = $('#'+tabEl).dataTable().api();
-            for(i=0;i<tableOptions[stats][tabId].sumCols.length;i++){
-                       c = tableOptions[stats][tabId].sumCols[i];
-                       if(c == tableOptions[stats][tabId].durCol){
-                           $( tabApi.columns( c ).footer() ).html( userFriendlyDuration(
-                               tabApi.column( c ).data().reduce( function ( a, b ) {
-                                   return parseInt(a) + parseInt(b);
-                               }, 0 )
-                           ));    
-                       }
-                       else{
-                           $( tabApi.columns( c ).footer() ).html(
-                               tabApi.column( c ).data().reduce( function ( a, b ) {
-                                   return parseInt(a) + parseInt(b);
-                               }, 0 )
-                           );
-                       }
-                       
-                    }
-        }
-    }
-    
     for(tableid in tableOptions[stats]){
         tableElId = stats+'details'+tableid;
         colDefs = tableOptions[stats][tableid].colDefs;
         detailsTables[tableElId] = $('#'+tableElId).DataTable({
            'sPaginationType': 'full_numbers',
-            'buttons': [{
+           'lengthMenu': [ 5, 10, 25, 50, 75, 100 ],
+           'pageLength': 5,
+           'buttons': [{
                         extend:'print',
                         text: langPrint},
                     {
@@ -208,74 +195,7 @@ $(document).ready(function(){
         });
         detailsTables[tableElId].buttons().container().appendTo( '#'+tableElId+'_buttons');
     }
-    /**************/
-    /*************
-    intColumns = [];
-    detailsTables[stats+'details1']= $('#'+stats+'details1').DataTable ({                                
-        'sPaginationType': 'full_numbers',
-        'bAutoWidth': true,                
-        'footerCallback': function() {
-               for(i=0;i<intColumns.length;i++){
-                   c = intColumns[i];
-                   console.log('sum col:'+c+' for table '+stats+'details1');
-                   console.log('το καλό: '+$(this.api().column( c ).header()).text()+' rows are '+this.api().column( c ).data().length);
-                   $( this.api().columns( c ).footer() ).html(
-                        this.api().column( c ).data().reduce( function ( a, b ) {
-                            console.log('reduce');
-                            return parseInt(a) + parseInt(b);
-                        }, 0 )
-                    );
-                }
-        },
-        'oLanguage': {
-        'sLengthMenu':   langDisplay +' _MENU_ '+ langResults,
-        'sZeroRecords':  langNoResult,
-        'sInfo':         langDisplayed+' _START_ '+langTill+' _END_ '+langFrom+' _TOTAL_ '+langTotalResults,
-        'sInfoEmpty':    langDisplayed+' 0 '+langTill+' 0 '+langFrom+' 0 '+langResults,
-        'sInfoFiltered': '',
-        'sInfoPostFix':  '',
-        'sSearch':       langSearch+' ',
-        'searchDelay' : 1000,
-        'sUrl':          '',
-        'oPaginate': {
-            'sFirst':    '&laquo;',
-            'sPrevious': '&lsaquo;',
-            'sNext':     '&rsaquo;',
-            'sLast':     '&raquo;'
-        }
-       }
-    });
-    tableTools[stats+'details1'] = new $.fn.dataTable.TableTools( detailsTables[stats+'details1'], {
-        "sSwfPath": "http://eclass.test.noc.ntua.gr/newui/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-    } );
-    //$( tableTools1.fnContainer() ).insertAfter('#toggle-view');
-    $( tableTools[stats+'details1'].fnContainer() ).insertBefore('#'+stats+'details1');
-    detailsTables[stats+'details2'] = $('#'+stats+'details2').DataTable ({                                
-        'sPaginationType': 'full_numbers',
-        'bAutoWidth': true,                
-        'oLanguage': {
-           'sLengthMenu':   langDisplay +' _MENU_ '+ langResults,
-           'sZeroRecords':  langNoResult,
-           'sInfo':         langDisplayed+' _START_ '+langTill+' _END_ '+langFrom+' _TOTAL_ '+langTotalResults,
-           'sInfoEmpty':    langDisplayed+' 0 '+langTill+' 0 '+langFrom+' 0 '+langResults,
-           'sInfoFiltered': '',
-           'sInfoPostFix':  '',
-           'sSearch':       langSearch+' ',
-           'searchDelay' : 1000,
-           'sUrl':          '',
-           'oPaginate': {
-               'sFirst':    '&laquo;',
-               'sPrevious': '&lsaquo;',
-               'sNext':     '&rsaquo;',
-               'sLast':     '&raquo;'
-           }
-       }
-    });
-    tableTools[stats+'details2'] = new $.fn.dataTable.TableTools( detailsTables[stats+'details2'], {
-        "sSwfPath": "http://eclass.test.noc.ntua.gr/newui/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-    } );
-    $( tableTools[stats+'details2'].fnContainer() ).insertBefore('#'+stats+'details2');
-    *************/
+    
     $('.detailscontainer').hide();
     refresh_plots();
     
@@ -334,8 +254,9 @@ function refresh_module_pref_plot(){
         var options = {
             data: {
                 json: data.chartdata,
+                names: data.modules,
                 type:'pie',
-                onclick: function (d,i){refresh_course_module_plot(data.modules[d.index]);}
+                onclick: function (d,i){ console.log(d.id);refresh_course_module_plot(d.id);}
                 },
             bindto: '#modulepref_pie',
             tooltip: {
@@ -377,10 +298,7 @@ function refresh_course_module_plot(mdl){
             bar:{width:{ratio:0.3}},
             bindto: '#module_stats'
         };
-        $("#moduletitle").text(data.charttitle);
-        /*if(typeof charts.cm !== "undefined"){
-             charts.cm.destroy();
-        }*/
+        $("#module_stats_title").text(data.charttitle);
         charts.cm = refreshChart("cm", options);
         refresh_course_reg_plot();
         $.getJSON('results.php',{t:'cd', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
@@ -412,6 +330,9 @@ function refresh_course_reg_plot(){
         
         $.getJSON('results.php',{t:'crd', s:startdate, e:enddate, c:course},function(data){
             refreshDataTable($('#cdetails2'), data);
+            $.getJSON('results.php',{t:'cad', s:startdate, e:enddate, u:user, c:course, m:module},function(data){
+                refreshDataTable($('#cdetails3'), data);
+            });
         });
     });
 
@@ -455,8 +376,9 @@ function refresh_course_pref_plot(){
             var options = {
                 data: {
                     json: data.chartdata,
+                    names: data.courses,
                     type:'pie',
-                    onclick: function (d,i){course = data.courses[d.index];refresh_user_course_plot();}
+                    onclick: function (d,i){course = d.id;refresh_user_course_plot();}
                     },
                 bindto: '#coursepref_pie',
                 tooltip: {
@@ -617,23 +539,6 @@ function refresh_department_course_plot(depid, leafdepartment){
     });
 }
 
-/*"sDom": 'lfrtip<"clear spacer">T',
-      "oTableTools": {
-            "aButtons": [
-                {
-                    "sExtends": "csv",
-                    "fnClick": function( nButton, oConfig, flash ) {
-                            var s = '';
-                            var a = TableTools.fnGetMasters();
-                            for ( var i=0, iLen=a.length ; i<iLen ; i++ ) {
-                                s += a[i].fnGetTableData( oConfig ) +"\n";
-                            }
-                            this.fnSetText(flash, s);  
-                    }
-                }      
-            ]
-        }
-       }*/
 function adjust_interval_options(){
     if($('#interval').length){
         dayMilliseconds = 24*60*60*1000;
@@ -724,6 +629,29 @@ function fillTableTotalUsers(){
         $(detailsTable1api.columns(2).footer()).html(data.chartdata[header][0]);
     });
 }
+
+function footerCB(tabId,tabEl){
+    return function(){
+        tabApi = $('#'+tabEl).dataTable().api();
+        for(i=0;i<tableOptions[stats][tabId].sumCols.length;i++){
+            c = tableOptions[stats][tabId].sumCols[i];
+            if(c == tableOptions[stats][tabId].durCol){
+                $( tabApi.columns( c ).footer() ).html( userFriendlyDuration(
+                    tabApi.column( c ).data().reduce( function ( a, b ) {
+                        return parseInt(a) + parseInt(b);
+                    }, 0 )
+                ));    
+            }
+            else{
+                $( tabApi.columns( c ).footer() ).html(
+                    tabApi.column( c ).data().reduce( function ( a, b ) {
+                        return parseInt(a) + parseInt(b);
+                    }, 0 )
+                );
+            }
+        }
+    }
+}
     
 function userFriendlyDuration(seconds){
     hours = Math.floor(seconds / 3600);
@@ -738,7 +666,6 @@ function userFriendlyDuration(seconds){
 }
 
 function userEmailLink(user, email, username){
-    console.log(user+' '+email);
     return "<a href='mailto:"+email+"' title='"+username+"'>"+user+"</a>";
 }
 

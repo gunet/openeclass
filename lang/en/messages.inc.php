@@ -3569,6 +3569,7 @@ $langUpgradeChangeUsername = "Username changed from %s to %s";
 $langNoStats = "No statistics available";
 $langDetails = "Details";
 $langPlots = "Plots";
+$langIpAddress = "IP address";
 
 $langCatVideoDirectory = "Multimedia file categories";
 $langCatVideoDirectoryCreated = "Category added";

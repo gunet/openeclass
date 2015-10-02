@@ -3517,6 +3517,7 @@ $langGroupUsage = 'Στατιστικά ομάδων χρηστών';
 $langNoStats = "Δεν υπάρχουν διαθέσιμα στατιστικά";
 $langDetails = "Αναλυτικά";
 $langPlots = "Γραφήματα";
+$langIpAddress = "Διεύθυνση IP";
 
 
 #for platform Statistics
