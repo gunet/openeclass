@@ -476,7 +476,7 @@ function user_info_form() {
         $amMessage = get_config('am_required')? $langCompulsory: $langOptional;
         $amClass = '';
         $amInput = '<input type="text" class="form-control" id="am_id" name="am" maxlength="20"' .
-            set('am') . ' placeholder="' . q($am_message) . '>';
+            set('am') . ' placeholder="' . q($amMessage) . '">';
     }
     $tool_content .= "<div class='form-wrapper'>
         <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='post'>
@@ -511,7 +511,7 @@ function user_info_form() {
     $tool_content .= "<div class='form-group'>
                 <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='userphone' size='20' maxlength='20'" . set('userphone') . "' placeholder = '$phone_message'>
+                    <input class='form-control' type='text' name='userphone' size='20' maxlength='20'" . set('userphone') . "' placeholder = '$phone_message'>
                 </div>
             </div>";
     if ($comment_required) {
@@ -532,8 +532,10 @@ function user_info_form() {
           <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
           <div class='col-sm-10'>" . lang_select_options('localize', "class='form-control'") . "</div>
         </div>
-        <div class='col-sm-offset-2 col-sm-10'>
-          <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "'>
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>
+              <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "'>
+            </div>
         </div>
         <input type='hidden' name='p' value='$prof'>";
 
