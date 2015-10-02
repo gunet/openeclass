@@ -216,7 +216,7 @@ if ($is_editor) {
                 data = $.parseJSON(data);
                 bootbox.alert({
                     size: 'large',
-                    message: data.submission_text,
+                    message: data.submission_text ? data.submission_text : '',
                 });
               },
               error: function(xhr, textStatus, error){
@@ -728,7 +728,7 @@ function submit_work($id, $on_behalf_of = null) {
            $works_url, $langOnBehalfOfUserComment, $workPath,
            $langUploadSuccess, $langUploadError, $course_code,
            $langAutoJudgeEmptyFile, $langAutoJudgeInvalidFileType,
-           $langAutoJudgeScenariosPassed;
+           $langAutoJudgeScenariosPassed, $is_editor;
     $connector = AutojudgeApp::getAutojudge();
     $langExt = $connector->getSupportedLanguages();
 
@@ -812,7 +812,7 @@ function submit_work($id, $on_behalf_of = null) {
                     @chmod("$workPath/$filename", 0644);
                 }
                 $success_msgs[] = $langUploadSuccess;
-            } else {
+            } elseif(!$is_editor) {
                 $error_msgs[] = $langUploadError;
                 Session::Messages($error_msgs, 'alert-danger');
                 redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
