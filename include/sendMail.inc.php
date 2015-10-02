@@ -121,7 +121,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
 
             /* Header Styles */
             #mail-header{ padding-top: 10px; border-bottom: 1px solid #ddd; color: #666; }
-            #header-title{ background-color: #f5f5f5; margin-left: -15px; margin-right: -15px; padding: 12px 15px; font-weight: bold; }
+            #header-title{ background-color: #f5f5f5; margin-left: -15px; margin-right: -15px; margin-bottom: 12px; padding: 12px 15px; font-weight: bold; }
             #forum-category{ list-style: none; padding-left: 0px; }
             #forum-category li{ padding-bottom: 1px; }
             #forum-category li span:first-child{ width: 150px; }
