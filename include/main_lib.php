@@ -3714,3 +3714,86 @@ function login_hook($options) {
         return $options;
     }
 }
+
+
+/**
+ * Show Second Factor Initialization Dialog in User Profile
+ *
+ * @return string
+ */
+
+function showSecondFactorUserProfile(){
+    global $langSFAConf;
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return "<div class='form-group'>
+                  <label class='col-sm-2 control-label'>" . $langSFAConf . "</label>
+                  <div class='col-sm-4'>". secondfaApp::showUserProfile($_SESSION['uid']) . "</div>
+                </div>";
+    } else {
+        return "";
+    }
+}
+
+/**
+ * Save Second Factor Initialization in User Profile
+ *
+ * @param  POST variables
+ * @return string
+ */
+
+
+function saveSecondFactorUserProfile(){
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return secondfaApp::saveUserProfile($_SESSION['uid']); 
+    } else {
+        return "";
+    }
+}
+
+
+/**
+ * Show Second Factor Challenge
+ *
+ * @return string
+ */
+
+function showSecondFactorChallenge(){
+    global $langSFAType;
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        $challenge = secondfaApp::showChallenge($_SESSION['uid']);
+        if ($challenge!=""){
+            return "<div class='form-group'>
+                    <label class='col-sm-2 control-label'>" . $langSFAType . "</label>
+                    <div class='col-sm-4'>". $challenge . "</div>
+                    </div>";
+        }else{
+            return "";
+        }
+    } else {
+        return "";
+    }
+}
+
+/**
+ * Verify Second Factor Challenge
+ *
+ * @param  POST variables
+ * @return string
+ */
+
+
+function checkSecondFactorChallenge(){
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return secondfaApp::checkChallenge($_SESSION['uid']); 
+    } else {
+        return "";
+    }
+}
+
+
+
+
