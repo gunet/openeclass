@@ -4167,3 +4167,4 @@ $langSFAkeep = 'Keep Second Factor Authentication';
 $langSFAadd = 'Add Second Factor Authentication';
 $langSFATypeWYS = 'Type the code that you see in the App:';
 $langSFAScan = 'Scan Image:';
+$langsecondfaUpdated = '2FA settings successfully updated';

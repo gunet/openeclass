@@ -4240,4 +4240,11 @@ $langSFAadd = 'Add Second Factor Authentication';
 $langSFATypeWYS = 'Type the code that you see in the App:';
 $langSFAScan = 'Scan Image:';
 $langSFAusage = 'To use the two factor authentication, your user will have to install a Google Authenticator compatible app, those are some of the currently available:';
-
+$langsecondfaDescription = 'Most users use only one level of security for their account, their password. With 2-Step Verification, you will protect your account with something you know (your password) and something you own (your phone or your security key)';
+$langSFAfail = 'Wrong Second Factor Authentication Response';
+$langSFAremove = 'Remove Second Factor Authentication';
+$langSFAkeep = 'Keep Second Factor Authentication';
+$langSFAadd = 'Add Second Factor Authentication';
+$langSFATypeWYS = 'Type the code that you see in the App:';
+$langSFAScan = 'Scan Image:';
+$langsecondfaUpdated = '2FA settings successfully updated';

@@ -4788,6 +4788,7 @@ $langSFAkeep = 'Διατήρησε 2FA';
 $langSFAadd = 'Ενεργοποίησε 2FA';
 $langSFATypeWYS = 'Πληκτρολογήστε τον κωδικό που εμφανίζει η εφαρμογή 2FA:';
 $langSFAScan = 'Σαρώστε την παρακάτω εικόνα με την εφαρμογή 2FA:';
+$langsecondfaUpdated = 'Οι ρυθμίσεις του λογισμικού 2FA ενημερώθηκαν με επιτυχία';
 
 // scenarios edit
 $langAutoJudgeEnable = 'Αυτόματος Κριτής';
