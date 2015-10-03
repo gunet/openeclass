@@ -51,7 +51,7 @@ class g2fa extends secondfaapp implements secondfaConnector {
     public function generateSecret($userid, $company, $email) {
         $twofa = new PragmaRX\Google2FA\Google2FA();
         $google2fa_secret = $twofa->generateSecretKey();
-        $google2fa_url = $twofa->getQRCodeGoogleUrl($company,$email,$google2fa_secret);
+        $google2fa_url = $twofa->getQRCodeInline($company,$email,$google2fa_secret,200);
         return array($google2fa_url, $google2fa_secret);
     }
 
