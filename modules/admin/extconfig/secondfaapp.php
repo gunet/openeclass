@@ -141,6 +141,7 @@ class secondfaApp extends ExtApp {
         } else {
             $user = Database::get()->querySingle("SELECT email FROM user WHERE id = ?s", $userid);
             $email = $user->email;
+            $company = get_config('institution');
             return self::getInitialize($userid,$company,$email);
         }
     }
