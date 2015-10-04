@@ -154,7 +154,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 //                )
 //            );
         $btn_class = ($mbox_type == 'inbox')? 'delete_in' : 'delete_out';
-        $td[$i++] = "<a href='javascript:void(0)' class='$btn_class'><span class='fa fa-times text-danger' style='padding-top:8px; font-size:1.2em;'></span></a>";
+        $td[$i++] = "<a href='javascript:void(0)' class='$btn_class' data-id='$msg->id'><span class='fa fa-times text-danger' style='padding-top:8px; font-size:1.2em;'></span></a>";
         
         if ($course_id == 0) {
             $data['aaData'][] = array(
