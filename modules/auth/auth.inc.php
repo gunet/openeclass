@@ -895,13 +895,17 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
         if (check_username_sensitivity($posted_uname, $user_info_object->username)) {
             if ($hasher->CheckPassword($pass, $user_info_object->password)) {
                 $pass_match = true;
-            } else if (strlen($user_info_object->password) < 60 && md5($pass) == $user_info_object->password) {
+            } elseif (strlen($user_info_object->password) < 60 and md5($pass) == $user_info_object->password) {
                 $pass_match = true;
                 // password is in old md5 format, update transparently
                 $password_encrypted = $hasher->HashPassword($pass);
                 $user_info_object->password = $password_encrypted;
                 Database::core()->query("SET sql_mode = TRADITIONAL");
                 Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $user_info_object->id);
+            } elseif (get_config('course_guest') != 'off' and $user_info_object->status = USER_GUEST and 
+                $pass === '' and $user_info_object->password === '') {
+                // special case for guest login with empty password
+                $pass_match = true;
             }
         }
     } else {
