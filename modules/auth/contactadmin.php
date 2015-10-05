@@ -51,7 +51,6 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
 
     if (isset($_POST['submit'])) {
         $body = isset($_POST['body']) ? $_POST['body'] : '';
-        $tool_content .= "<table width='99%'><tbody><tr><td>";
         $to = get_config('email_helpdesk');
         $emailsubject = $langAccountActivate;
         $emailbody = "$langAccountActivateMessage\n\n$firstname $lastname\ne-mail: $email\n" .
@@ -85,32 +84,64 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
 
         $plainEmailBody = html2text($emailbody);
         if (!send_mail_multipart('', '', '', $to, $emailsubject, $plainEmailBody, $emailbody, $charset)) {
-            $tool_content .= "<div class='alert alert-danger'>$langEmailNotSend " . q($to) . "!</div>";
+            $tool_content .= "<div class='alert alert-danger'>$langEmailNotSend " . q($to) . "!</div><br />";
         } else {
-            $tool_content .= "<div class='alert alert-success'>$emailsuccess</div>";
+            $tool_content .= "<div class='alert alert-success'>$emailsuccess</div><br />";
         }
-        $tool_content .= "</td></tr><tbody></table><br />";
     } else {
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => '$urlAppend',
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')
+        ),false);
         $tool_content .= "
-                 <form action='$_SERVER[SCRIPT_NAME]?userid=$userid&amp;h=$_GET[h]' method='post'>   
-                <fieldset>
-                  <legend>$langForm</legend>
-                  <table width='99%'>
-                    <tbody>
-                      <tr><td width='3%' nowrap valign='top'><b>$langName:</b></td><td>" . q($firstname) . "</td></tr>
-                      <tr><td width='3%' nowrap valign='top'><b>$langSurname:</b></td><td>" . q($lastname) . "</td></tr>
-                      <tr><td width='3%' nowrap valign='top'><b>Email:</b></td><td>" . q($email) . "</td></tr>
-                      <tr><td width='3%' nowrap valign='top'><b>$langComments:</b></td>
-                          <td><textarea rows='6' cols='40' name='body'>$langActivateAccount</textarea></td></tr>
-                      <tr><td width='3%' nowrap valign='top'>&nbsp;</td>
-                          <td><input class='btn btn-primary' type='submit' name='submit' value='$langSend'></td></tr>
-                    </tbody>
-                  </table>
+        <div class='form-wrapper'>
+            <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?userid=$userid&amp;h=$_GET[h]' method='post'>
+            <fieldset>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langName:</label>
+                    <div class='col-sm-10'>
+                        <input class='form-control' type='text' name='$langName' value='" . q($firstname) . "' disabled  />
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langSurname:</label>
+                    <div class='col-sm-10'>
+                        <input class='form-control' type='text' name='$langSurname' value='" . q($lastname) . "' disabled  />
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>Email:</label>
+                    <div class='col-sm-10'>
+                        <input class='form-control' type='text' name='email' value='" . q($email) . "' disabled  />
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label for='$langComments' class='col-sm-2 control-label'>$langComments:</label>
+                    <div class='col-sm-10'>
+                        <textarea class='form-control' rows='6' name='$langComments'>$langActivateAccount</textarea>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>".
+                        form_buttons(array(
+                            array(
+                                'text'  => $langSend,
+                                'name'  => 'submit',
+                                'value' => $langSend,
+                            ),
+                            array(
+                                'href' => $urlAppend
+                            )
+                        ))
+                    ."</div>
+                </div>
                 </fieldset>
-              </form>";
+            </form>
+        </div>";
+
     }
 }
-
-$tool_content .= "<p><a href='$urlAppend'>$langBackHome</a></p>";
 
 draw($tool_content, 0);
