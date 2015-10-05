@@ -1137,8 +1137,14 @@ if ($can_upload) {
                   'show' => !defined('MY_DOCUMENTS') && !defined('COMMON_DOCUMENTS') && get_config('enable_common_docs')),
             array('title' => $langQuotaBar,
                   'url' => "{$base_url}showQuota=true",
-                  'icon' => 'fa-pie-chart')
+                  'icon' => 'fa-pie-chart'),
+            array('title' => $langBack,
+                  'url' => "group_space.php?course=$course_code&group_id=$group_id",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label',        
+                  'show' => $subsystem == GROUP)                          
             ),false);
+                  
     }
     // Dialog Box
     if (!empty($dialogBox)) {
