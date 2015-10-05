@@ -153,12 +153,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langCPFFieldDescr</label>
                       <div class='col-sm-10'>".rich_text_editor('fielddescr', 8, 20, '')."</div>";
     $tool_content .= "</div>";
-    if ($datatype != CPF_MENU) {
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
-                          <div class='col-sm-10'>".selection($yes_no, 'required', 0, 'class="form-control"')."</div>";
-        $tool_content .= "</div>";
-    }
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
+                      <div class='col-sm-10'>".selection($yes_no, 'required', 0, 'class="form-control"')."</div>";
+    $tool_content .= "</div>";
     if ($datatype == CPF_MENU) {
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='options' class='col-sm-2 control-label'>$langCPFMenuOptions <small>($langCPFMenuOptionsExplan)</small></label>
@@ -203,7 +201,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $required = 0;
     }
     if ($datatype == CPF_MENU && isset($_POST['options'])) {
-        $data = explode("\r\n", $_POST['options']);
+        $data = explode(PHP_EOL, $_POST['options']);
         $data = serialize($data);
     } else {
         $data = '';
@@ -335,12 +333,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "<label for='datatype' class='col-sm-2 control-label'>$langCPFFieldDatatype</label>
                           <div class='col-sm-10'>".selection($field_types, 'datatype_disabled', $datatype, 'class="form-control" disabled')."</div>";
         $tool_content .= "</div>";
-        if ($datatype != CPF_MENU) {
-            $tool_content .= "<div class='form-group'>";
-            $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
-                              <div class='col-sm-10'>".selection($yes_no, 'required', $required, 'class="form-control"')."</div>";
-            $tool_content .= "</div>";
-        }
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
+                          <div class='col-sm-10'>".selection($yes_no, 'required', $required, 'class="form-control"')."</div>";
+        $tool_content .= "</div>";
         if ($datatype == CPF_MENU) {
             $tool_content .= "<div class='form-group'>";
             $tool_content .= "<label for='options' class='col-sm-2 control-label'>$langCPFMenuOptions <small>($langCPFMenuOptionsExplan - $langCPFMenuOptionsChangeExplan)</small></label>
