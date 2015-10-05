@@ -54,15 +54,23 @@ function popover_init() {
 function tooltip_init() {
     $('[data-toggle="tooltip"]').tooltip({container: 'body'});
 }
-function sidebar_reset() {
+function trunk8_init(){
+    $("#descr_content").trunk8({
+        lines: 12,
+        fill: '&hellip;&nbsp;<a id="read-moree" href="javascript: void(0)">read more</a>&nbsp;'
+    });
 
 }
+
 $(document).ready(function () {
 
     // Initialisations
     act_confirm();
     tooltip_init();
     popover_init();
+    if ($.trunk8) {
+        trunk8_init();
+    }
 
     // Login Box
     var width;
