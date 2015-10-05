@@ -58,6 +58,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
                             ON custom_profile_fields_data.field_id = custom_profile_fields.id INNER JOIN custom_profile_fields_category
                             ON custom_profile_fields.categoryid = custom_profile_fields_category.id 
                             WHERE custom_profile_fields_category.id = ?d", $catid);
+    Database::get()->query("DELETE custom_profile_fields_data_pending FROM custom_profile_fields_data_pending INNER JOIN custom_profile_fields
+                            ON custom_profile_fields_data_pending.field_id = custom_profile_fields.id INNER JOIN custom_profile_fields_category
+                            ON custom_profile_fields.categoryid = custom_profile_fields_category.id
+                            WHERE custom_profile_fields_category.id = ?d", $catid);
     //delete fields
     Database::get()->query("DELETE custom_profile_fields FROM custom_profile_fields INNER JOIN custom_profile_fields_category
                             ON custom_profile_fields.categoryid = custom_profile_fields_category.id 
@@ -269,6 +273,9 @@ if (isset($_GET['add_cat'])) { //add a new category form
     //delete fields profile data
     Database::get()->query("DELETE custom_profile_fields_data FROM custom_profile_fields_data INNER JOIN custom_profile_fields
                             ON custom_profile_fields_data.field_id = custom_profile_fields.id
+                            WHERE custom_profile_fields.id = ?d", $fieldid);
+    Database::get()->query("DELETE custom_profile_fields_data_pending FROM custom_profile_fields_data_pending INNER JOIN custom_profile_fields
+                            ON custom_profile_fields_data_pending.field_id = custom_profile_fields.id
                             WHERE custom_profile_fields.id = ?d", $fieldid);
     //delete field
     Database::get()->query("DELETE FROM custom_profile_fields WHERE id = ?d", $fieldid);
