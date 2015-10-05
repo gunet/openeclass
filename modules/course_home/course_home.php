@@ -266,7 +266,7 @@ if(isset($rating_content) || isset($social_content) || isset($comment_content)) 
         if(isset($comment_content)){
             $subcontent .= $comment_content;
         }
-        if(isset($social_content) || isset($comment_content)){
+        if(isset($social_content) && isset($comment_content)){
             $subcontent .= "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ";
         }
         if(isset($social_content)){

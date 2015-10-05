@@ -57,7 +57,19 @@ function tooltip_init() {
 function trunk8_init(){
     $("#descr_content").trunk8({
         lines: 12,
-        fill: '&hellip;&nbsp;<a id="read-moree" href="javascript: void(0)">read more</a>&nbsp;'
+        fill: '&hellip;&nbsp;<a id="read-more" href="#">read more</a>&nbsp;'
+    });
+
+    $('#read-more').live('click', function (event) {
+
+        alert('hello');
+
+    });
+
+    $('#read-less').live('click', function (event) {
+        $(this).parent().trunk8();
+
+        return false;
     });
 
 }
