@@ -154,6 +154,7 @@ function render_profile_fields_form($context, $valitron = false) {
                             $val = $_REQUEST['cpf_'.$f->shortname];
                         }
                         $return_string .= rich_text_editor('cpf_'.$f->shortname, 8, 20, $val);
+                        $req_label = $langCompulsory;
                         break;
                     case CPF_DATE:
                         if (isset($fdata) && $fdata != '') {
@@ -182,6 +183,7 @@ function render_profile_fields_form($context, $valitron = false) {
                         $options[0] = "";
                         ksort($options);
                         $return_string .= selection($options, 'cpf_'.$f->shortname, $def_selection);
+                        $req_label = $langCompulsory;
                         break;
                     case CPF_LINK:
                         if (isset($fdata) && $fdata != '') {
@@ -198,9 +200,16 @@ function render_profile_fields_form($context, $valitron = false) {
                         break;
                 }
                 if (!empty($f->description)) {
-                    $return_string .= '<small><em>'.standard_text_escape($f->description).'</em></small>';
+                    $return_string .= '<small><em>'.standard_text_escape($f->description);
+                    if (isset($req_label)) {
+                        $return_string .= $req_label;
+                    }
+                    $return_string .= '</em></small>';
+                } elseif (isset($req_label)) {
+                    $return_string .= '<small><em>'.$req_label.'</em></small>';
                 }
                 $return_string .= $help_block.'</div></div>';
+                unset($req_label);
             }
         }
     }
