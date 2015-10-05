@@ -67,7 +67,7 @@ if (!empty($_POST['submit'])) {
         }
         //send new code
         $hmac = token_generate($_SESSION['uname'] . $email . $uid);
-        $activateLink = "<a href='".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&id=".$uid."'>".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&id=".$uid."</a>";
+        $activateLink = "<a href='".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid."'>".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid."</a>";
 
         $subject = $langMailChangeVerificationSubject;
 
