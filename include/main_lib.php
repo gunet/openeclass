@@ -2806,6 +2806,35 @@ function add_framebusting_headers() {
     header('X-Frame-Options: SAMEORIGIN');
 }
 
+/**
+ * This header enables the Cross-site scripting (XSS) filter built into most 
+ * recent web browsers. It's usually enabled by default anyway, so the role of 
+ * this header is to re-enable the filter for this particular website if it 
+ * was disabled by the user.
+ */
+
+function add_xxsfilter_headers() {
+    header('X-XSS-Protection: 1; mode=block');
+}
+
+
+/**
+ * The nosniff header, prevents Internet Explorer and Google Chrome from 
+ * MIME-sniffing a response away from the declared content-type.
+ */
+
+function add_nosniff_headers() {
+    header('X-Content-Type-Options: nosniff');
+}
+
+/**
+ * HTTP Strict-Transport-Security (HSTS) enforces secure (HTTP over SSL/TLS) 
+ * connections to the server.
+ */
+
+function add_hsts_headers() {
+    header('Strict-Transport-Security: max-age=16070400');
+}
 
 /**
  * 
