@@ -428,7 +428,7 @@ function cpf_validate_format() {
 }
 
 function cpf_validate_format_valitron(&$valitron_object) {
-    global $langCPFLinkValidFail, $langCPFDateValidFail;
+    global $langCPFLinkValidFail, $langCPFDateValidFail, $langTheFieldIsRequired;
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
             $field_name = substr($key, 4);
@@ -439,6 +439,8 @@ function cpf_validate_format_valitron(&$valitron_object) {
                 $valitron_object->rule('url', $key)->message(sprintf($langCPFLinkValidFail, q($field_name)))->label($field_name);
             } elseif ($datatype == CPF_DATE) {
                 $valitron_object->rule('date', $key)->message(sprintf($langCPFDateValidFail, q($field_name)))->label($field_name);
+            } elseif ($datatype == CPF_MENU) {
+                $valitron_object->rule('notIn', $key, array(0))->message($langTheFieldIsRequired)->label($field_name);
             }
         }
     }
