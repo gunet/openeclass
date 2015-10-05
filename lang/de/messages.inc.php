@@ -2727,6 +2727,7 @@ $langFlashPlayerNotInstalled = "Flash Player is not installed or too old. To ins
 $langShockInstalled = "An adequate version of Shockwave Player is installed.";
 $langShockNotInstalled = "Shockwave Player is not installed or too old. To install the latest version click";
 $langCheckNotOk1 = "Installation Process";
+$langInstallMsg = "Please wait! Installation may take a few minutes.";
 $langCheckNotOk2 = "Use the diagnostics table to check which of the required software tools are not installed (they are displayed in red). Please follow the instructions given in the official software web pages to proceed with their installation.";
 $langCheckNotOk3 = "You have to install all required programs which don't have the correct version.";
 $langCheckNotOk4 = "After completing the installation of all required software tools, please check installation by clicking";
