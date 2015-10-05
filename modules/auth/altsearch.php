@@ -288,7 +288,7 @@ if ($is_valid) {
                 "$langYouAreReg $siteName $langSettings $uname\n" .
                 "$langPassSameAuth\n$langAddress $siteName: " .
                 "$urlServer\n" .
-                ($vmail ? "\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer" . "modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id . "\n" : "") .
+                ($vmail ? "\n$langMailVerificationSuccess.\n$langMailVerificationClick\n{$urlServer}modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id . "\n" : "") .
                 "$langProblem\n$langFormula" .
                 "$administratorName\n" .
                 "$langManager $siteName \n$langTel $telephone \n" .
@@ -312,7 +312,7 @@ if ($is_valid) {
                     <li><span><b>$langPassword:</b></span> <span>$langPassSameAuth</span></li>
                     <li><span><b>$langAddress $siteName:</b></span> <span>$urlServer</span></li>
                     </ul>
-                    <p>".($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick<br><a href='/modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id ."'>{$urlServer}/modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id . "</a>" : "")."</p>
+                    <p>".($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick<br><a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id</a>" : "")."</p>
                     <p>$langProblem<br><br>$langFormula<br>$administratorName<br>$langManager $siteName<br>$langTel: $telephone<br>$langEmail: $emailhelpdesk</p>
 
             </div>
@@ -443,7 +443,7 @@ if ($is_valid) {
             <div id='mail-body'>
                 <br>
                 <div id='mail-body-inner'>".
-                    sprintf($mailbody1 . $langMailVerificationBody1, "<a href='{$urlServer}modules/auth/mail_verify.php?ver=" . $hmac . "&rid=" . $request_id."'>{$urlServer}modules/auth/mail_verify.php?ver=" . $hmac . "&rid=" . $request_id ."</a>")."
+                    sprintf($mailbody1 . $langMailVerificationBody1, "<a href='{$urlServer}modules/auth/mail_verify.php?ver=" . $hmac . "&amp;rid=" . $request_id."'>{$urlServer}modules/auth/mail_verify.php?ver=" . $hmac . "&amp;rid=" . $request_id ."</a>")."
                 </div>
             </div>";
 

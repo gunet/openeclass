@@ -127,4 +127,5 @@ if (($auth != 7) and ($auth != 6)) {
 $tool_content .= "</div></div>";
 $tool_content .= "</fieldset></form></div>";
 
+unset($uid);
 draw($tool_content, 0);

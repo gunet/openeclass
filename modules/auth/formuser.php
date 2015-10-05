@@ -293,7 +293,7 @@ if ($all_set) {
         $emailhelpdesk = get_config('email_helpdesk');
         $emailAdministrator = get_config('email_sender');
 
-        $activateLink = "<a href='".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&id=".$uid.$request_id."'>".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&id=".$uid.$request_id."</a>";;
+        $activateLink = "<a href='".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid.$request_id."'>".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid.$request_id."</a>";;
 
         $header_html_topic_notify = "<!-- Header Section -->
         <div id='mail-header'>
