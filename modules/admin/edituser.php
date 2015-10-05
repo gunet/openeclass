@@ -155,20 +155,20 @@ if ($u) {
                     <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langSurname</label>
                       <div class='col-sm-10'>
-                        <input type='text' name='lname' size='50' value='" . q($info->surname) . "'>
+                        <input class='form-control' type='text' name='lname' size='50' value='" . q($info->surname) . "'>
                       </div>
                     </div>
                     <div class='form-group'>
                       <label class='col-sm-2 control-label'>$langName</label>
                        <div class='col-sm-10'>
-                        <input type='text' name='fname' size='50' value='" . q($info->givenname) . "'>
+                        <input  class='form-control' type='text' name='fname' size='50' value='" . q($info->givenname) . "'>
                         </div>
                    </div>";
             $tool_content .= "<div class='form-group'>
                      <label class='col-sm-2 control-label'>$langUsername</label>";
         if (!in_array($info->password, $auth_ids)) {
             $tool_content .= "<div class='col-sm-10'>
-                            <input type='text' name='username' size='50' value='" . q($info->username) . "'>
+                            <input  class='form-control' type='text' name='username' size='50' value='" . q($info->username) . "'>
                         </div>";
 
         } else {    // means that it is external auth method, so the user cannot change this password
@@ -190,13 +190,13 @@ if ($u) {
             }
             $auth_text = get_auth_info($auth);
             $tool_content .= "<div class='col-sm-10'>
-                                <label>" . q($info->username) . "</label> [" . $auth_text . "] <input type='hidden' name='username' value=" . q($info->username) . ">
+                                <label>" . q($info->username) . "</label> [" . $auth_text . "] <input  class='form-control' type='hidden' name='username' value=" . q($info->username) . ">
                             </div>";
         }
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>
           <label class='col-sm-2 control-label'>e-mail</label>
-          <div class='col-sm-10'><input type='text' name='email' size='50' value='" . q(mb_strtolower(trim($info->email))) . "' /></div>
+          <div class='col-sm-10'><input  class='form-control' type='text' name='email' size='50' value='" . q(mb_strtolower(trim($info->email))) . "' /></div>
         </div>";
 
         $tool_content .= "<div class='form-group'>
@@ -212,11 +212,11 @@ if ($u) {
 
         $tool_content .= "<div class='form-group'>
         <label class='col-sm-2 control-label'>$langAm: </label>
-          <div class='col-sm-10'><input type='text' name='am' size='50' value='" . q($info->am) . "' /></div>
+          <div class='col-sm-10'><input  class='form-control' type='text' name='am' size='50' value='" . q($info->am) . "' /></div>
         </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langTel: </label>
-          <div class='col-sm-10'><input type='text' name='phone' size='50' value='" . q($info->phone) . "' /></div>
+          <div class='col-sm-10'><input  class='form-control' type='text' name='phone' size='50' value='" . q($info->phone) . "' /></div>
         </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langFaculty:</label>

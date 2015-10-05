@@ -294,7 +294,7 @@ elseif (isset($_POST['install4'])) {
     $_SESSION['step'] = 4;
     if (empty($helpdeskmail)) {
         $helpdeskmail = '';
-    }    
+    }
     $tool_content .= "
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>" .
@@ -323,14 +323,13 @@ elseif (isset($_POST['install4'])) {
                       "$langProfAccount $langViaeClass") . "
            <div class='form-group'>
              <input type='submit' class='btn btn-default' name='install3' value='&laquo; $langPreviousStep'>
-		     <input type='submit' class='btn btn-primary' name='install5' value='$langNextStep &raquo;'>
+		     <input type='submit' class='btn btn-primary' name='install5' id='install5' value='$langNextStep &raquo;'>
            </div>
            <div class='form-group'>
              <div class='col-sm-12'>$langRequiredFields</div>
 	         <div class='col-sm-12'>(**) $langWarnHelpDesk</div></td>
            </div>
          </fieldset>" . hidden_vars($all_vars) . "</form>";
-
     draw($tool_content);
 }
 
@@ -353,7 +352,24 @@ elseif (isset($_POST['install5'])) {
     } else {
         $disable_eclass_prof_reg_info = $langDisableEclassProfRegNo;
     }
-    
+    $head_content = "
+    <script type='text/javascript'>
+        $(function() {
+            $('#install6').on( 'click', function() {
+                bootbox.dialog({
+                  closeButton: false,
+                  message:  '<div><p>$langInstallMsg</p></div>'+
+                            '<div class=\"progress\">'+
+                                '<div class=\"progress-bar progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"100\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width: 100%\">'+
+                                  '<span class=\"sr-only\">$langCheckNotOk1</span>'+
+                                '</div>'+
+                            '</div>',
+                  title: '$langCheckNotOk1'
+                });
+            });
+        });
+    </script>    
+    ";    
     $tool_content .= "
        <div class='alert alert-info'>$langReviewSettings</div>
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
@@ -377,11 +393,11 @@ elseif (isset($_POST['install5'])) {
            display_entry(q($disable_eclass_prof_reg_info), $langDisableEclassProfRegType) . "
            <div class='form-group'>
              <input type='submit' class='btn btn-default' name='install4' value='&laquo; $langPreviousStep'>
-		     <input type='submit' class='btn btn-primary' name='install6' value='$langInstall &raquo;'>
+		     <input type='submit' class='btn btn-primary' name='install6' id='install6' value='$langInstall &raquo;'>
            </div>
          </fieldset>" . hidden_vars($all_vars) . "</form>";
 
-    draw($tool_content);
+    draw($tool_content, null, $head_content);
 }
 
 // step 6 installation successful

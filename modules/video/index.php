@@ -338,6 +338,14 @@ hContent;
                     draw($tool_content, $menuTypeID, null, $head_content);
                     exit;
                 }
+                require_once 'modules/admin/extconfig/externals.php';
+                $connector = AntivirusApp::getAntivirus();
+                if($connector->isEnabled() == true ){
+                    $output=$connector->check("$updir/$safe_filename");
+                    if($output->status==$output::STATUS_INFECTED){
+                        AntivirusApp::block($output->output);
+                    }
+                }
                 
                 $path = '/' . $safe_filename;
                 $url = $file_name;

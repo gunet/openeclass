@@ -1519,12 +1519,11 @@ function delete_attendance_user($attendance_id, $userid) {
 function clone_attendance($attendance_id) {
         
     global $course_id, $langCopyDuplicate;
-    
-    $newTitle = get_attendance_title($attendance_id).$langCopyDuplicate;
-    $newLimit = get_attendance_limit($attendance_id);
+    $attendance = Database::get()->querySingle("SELECT * FROM attendance WHERE id = ?d", $attendance_id);
+    $newTitle = $attendance->title.' '.$langCopyDuplicate;
     $new_attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d,
                                                       students_semester = 1, `limit` = ?d,
-                                                      active = 1, title = ?s", $course_id, $newLimit, $newTitle)->lastInsertID;
+                                                      active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $attendance->limit, $newTitle, $attendance->start_date, $attendance->end_date)->lastInsertID;
     Database::get()->query("INSERT INTO attendance_activities (attendance_id, title, date, description, module_auto_id, module_auto_type, auto)
                                 SELECT $new_attendance_id, title, " . DBHelper::timeAfter() . ", description, module_auto_id, module_auto_type, auto 
                                  FROM attendance_activities WHERE attendance_id = ?d", $attendance_id);

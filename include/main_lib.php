@@ -430,6 +430,19 @@ function gid_to_name($gid) {
     }
 }
 
+function display_group($gid) {
+    global $course_code, $urlAppend, $themeimg, $langGroup;
+    $res = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $gid);
+    if ($res) {
+        return "<span title='$langGroup' class='fa-stack fa-lg'>
+                    <i style='color:#f3f3f3;' class='fa fa-circle fa-stack-2x'></i>
+                    <i style='color:#cdcdcd;' class='fa fa-users fa-stack-1x'></i>
+                </span>
+                <a href='{$urlAppend}modules/group/group_space.php?course=$course_code&amp;group_id=$gid'>$res->name</a>";
+    } else {
+        return false;
+    }
+}
 /**
  * @brief Return the URL for a user profile image
  * @param int $uid user id
@@ -448,7 +461,7 @@ function user_icon($uid, $size = null) {
             if ($user->has_icon) {
                 return "${urlAppend}courses/userimg/${uid}_$size.jpg";
             } else {
-                return "$themeimg/default_$size.jpg";
+                return "$themeimg/default_$size.png";
             }
         }
     }
@@ -2323,7 +2336,7 @@ function icon_old_style($name, $title = null, $link = null, $attrs = null, $form
  * @return type
  */
 function profile_image($uid, $size, $class=null) {
-    global $urlServer, $themeimg;
+    global $urlServer, $themeimg, $langStudent;
 
     // makes $class argument optional
     $class_attr = ($class == null)?'':"class='".q($class)."'";
@@ -2332,7 +2345,7 @@ function profile_image($uid, $size, $class=null) {
     if ($uid > 0 and file_exists("courses/userimg/${uid}_$size.jpg")) {
         return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' $class_attr title='$name' alt='$name'>";
     } else {
-        return "<img src='$themeimg/default_$size.jpg' $class_attr title='$name' alt='$name'>";
+        return "<img src='$themeimg/default_$size.png' $class_attr title='$name' alt='$name'>";
     }
 }
 
@@ -3701,3 +3714,86 @@ function login_hook($options) {
         return $options;
     }
 }
+
+
+/**
+ * Show Second Factor Initialization Dialog in User Profile
+ *
+ * @return string
+ */
+
+function showSecondFactorUserProfile(){
+    global $langSFAConf;
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return "<div class='form-group'>
+                  <label class='col-sm-2 control-label'>" . $langSFAConf . "</label>
+                  <div class='col-sm-4'>". secondfaApp::showUserProfile($_SESSION['uid']) . "</div>
+                </div>";
+    } else {
+        return "";
+    }
+}
+
+/**
+ * Save Second Factor Initialization in User Profile
+ *
+ * @param  POST variables
+ * @return string
+ */
+
+
+function saveSecondFactorUserProfile(){
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return secondfaApp::saveUserProfile($_SESSION['uid']); 
+    } else {
+        return "";
+    }
+}
+
+
+/**
+ * Show Second Factor Challenge
+ *
+ * @return string
+ */
+
+function showSecondFactorChallenge(){
+    global $langSFAType;
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        $challenge = secondfaApp::showChallenge($_SESSION['uid']);
+        if ($challenge!=""){
+            return "<div class='form-group'>
+                    <label class='col-sm-2 control-label'>" . $langSFAType . "</label>
+                    <div class='col-sm-4'>". $challenge . "</div>
+                    </div>";
+        }else{
+            return "";
+        }
+    } else {
+        return "";
+    }
+}
+
+/**
+ * Verify Second Factor Challenge
+ *
+ * @param  POST variables
+ * @return string
+ */
+
+
+function checkSecondFactorChallenge(){
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return secondfaApp::checkChallenge($_SESSION['uid']); 
+    } else {
+        return "";
+    }
+}
+
+
+
+

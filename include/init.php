@@ -63,6 +63,15 @@ try {
 } catch (Exception $ex) {
     require_once 'include/not_installed.php';
 }
+require_once 'modules/admin/extconfig/externals.php';
+$connector = WafApp::getWaf();
+if($connector->isEnabled() == true ){
+    $output=$connector->check();
+    if($output->status==$output::STATUS_BLOCKED){
+        WafApp::block($output->output);
+    }
+}
+
 if (isset($language)) {
     // Old-style config.php, redirect to upgrade
     $language = langname_to_code($language);

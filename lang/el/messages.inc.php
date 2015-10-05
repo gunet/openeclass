@@ -806,6 +806,7 @@ $langFlashPlayerNotInstalled = "Ο Flash Player δεν είναι εγκατεσ
 $langShockInstalled = "Ο Shockwave Player είναι εγκατεστημένος στην κατάλληλη έκδοση.";
 $langShockNotInstalled = "Ο Shockwave Player δεν είναι εγκατεστημένος ή είναι παλαιότερης έκδοσης. Για να εγκαταστήσετε την τελευταία έκδοση πατήστε";
 $langCheckNotOk1 = "Διαδικασία εγκατάστασης";
+$langInstallMsg = "Παρακαλώ περιμένετε! H εγκατάσταση μπορεί να διαρκέσει μερικά λεπτά.";
 $langCheckNotOk2 = "Ελέγξτε από το διαγνωστικό πινάκα ποια προαπαιτούμενα εργαλεία λογισμικού δεν είναι εγκατεστημένα (εμφανίζονται με κόκκινα γράμματα). Ακολουθήστε τις οδηγίες εγκατάστασης που σας δίνονται από τις επίσημες ιστοσελίδες των προγραμμάτων και προχωρήστε στην εγκατάστασή τους.";
 $langCheckNotOk3 = "Πρέπει να εγκαταστήσετε κάθε προαπαιτούμενο πρόγραμμα που δεν είναι εγκατεστημένο στη σωστή έκδοση.";
 $langCheckNotOk4 = "Όταν ολοκληρώσετε την εγκατάσταση όλων των προαπαιτούμενων εργαλείων λογισμικού, για να επαληθεύσετε εάν έχουν γίνει σωστά οι εγκαταστάσεις πατήστε";
@@ -3121,7 +3122,7 @@ $langMailVerificationSuccess = "Για να ολοκληρωθεί η διαδι
 $langMailVerificationSuccess2 = "Για το σκοπό αυτό, ελέγξτε το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης.
                                 <br />Κατόπιν, θα σας σταλεί ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName,
                         με τις οδηγίες για την ολοκλήρωση της εγγραφής σας. <br /><br /><small>(Σημ. Αν τυχόν δεν λάβετε email ελέγξτε τον φάκελο ανεπιθύμητης αλληλογραφίας)</small>.";
-$langMailVerificationBody1 = "Ευχαριστούμε για την εγγραφή σας στο $siteName.\n\n$langMailVerificationSuccess.\n\n$langMailVerificationClick\n%s";
+$langMailVerificationBody1 = "Ευχαριστούμε για την εγγραφή σας στο $siteName.<br><br>$langMailVerificationSuccess<br>$langMailVerificationClick<br>%s";
 $langMailVerificationChangeBody = "Για να ενεργοποιηθεί ο λογαριασμός σας θα πρέπει να επιβεβαιωθεί η e-mail διεύθυνση σας.<br><br>$langMailVerificationClick<br>%s";
 $langMailVerificationError = "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος προς τη διεύθυνση %s.<br/><br/>Παρακαλούμε <a href='%s'>δοκιμάστε ξανά</a> ή επικοινωνήστε με το διαχειριστή στη διεύθυνση: %s";
 $langMailVerificationError2 = "Παρουσιάστηκε σφάλμα. Παρακαλούμε επικοινωνήστε με το διαχειριστή της πλατφόρμας.";
@@ -4762,6 +4763,34 @@ $langAutoJudgeInputNotSupported = 'Δεν υποστηρίζεται από υπ
 $langAutoJudgeConnector = "Επιθυμητή υπηρεσία μεταγλώττισης";
 $langAutoJudgeUpdated = "Οι ρυθμίσεις αυτόματου κριτή ενημερώθηκαν με επιτυχία";
 
+//antivirus.php
+$langAntivirus = "Ρυθμίσεις λογισμικού προστασίας έναντι ιών του $siteName";
+$langAntivirusUpdated = "Οι ρυθμίσεις του λογισμικού προστασίας έναντι ιών ενημερώθηκαν με επιτυχία";
+$langAntivirusConnector = "Εγκατεστημένο Λογισμικό";
+$langAntivirusPath = "Θέση Λογισμικού";
+$langAntivirusConfig = "Ρυθμίσεις Λογισμικού";
+$langAntivirusInfected = "Το αρχείο αυτό δεν έγινε αποδεκτό, καθώς φαίνεται να είναι μολυσμένο. Παρακαλώ επικοινωνήστε με το διαχειριστή.";
+
+//waf.php
+$langWaf = "Ρυθμίσεις τείχους προστασίας εφαρμογής ιστού του $siteName";
+$langWafConnector = "Τείχος προστασίας";
+$langWafUpdated = "Οι ρυθμίσεις του λογισμικού τείχους προστασίας εφαρμογής ιστού ενημερώθηκαν με επιτυχία";
+$langWafConfig = "Ρυθμίσεις Φίλτρου";
+
+//SFA
+
+$langSFAConf = 'Ρύθμιση 2FA:';
+$langSFAType = 'Συνθηματικό 2FA:';
+$langSFAusage = 'Για να χρησιμοποιηθεί το Second Factor Authentication, ο χρήστης που το ενεργοποιεί απο το προφίλ του θα πρέπει να εγκαταστήσει ένα app τύπου Google Authenticator, απο αυτά που είναι διαθέσιμα:';
+$langsecondfaDescription = 'Οι περισσότεροι χρήστες χρησιμοποιούν μόνο ένα επίπεδο ασφάλειας για το λογαριασμό τους, τον κωδικό πρόσβασής τους. Με την επαλήθευση σε 2 βήματα, θα προστατεύσετε το λογαριασμό σας με κάτι που γνωρίζετε (τον κωδικό πρόσβασής σας) και κάτι που έχετε στην κατοχή σας (το τηλέφωνο ή το κλειδί ασφαλείας σας)';
+$langSFAfail = 'Λάθος Απάντηση 2FA';
+$langSFAremove = 'Απενεργοποίησε 2FA';
+$langSFAkeep = 'Διατήρησε 2FA';
+$langSFAadd = 'Ενεργοποίησε 2FA';
+$langSFATypeWYS = 'Πληκτρολογήστε τον κωδικό που εμφανίζει η εφαρμογή 2FA:';
+$langSFAScan = 'Σαρώστε την παρακάτω εικόνα με την εφαρμογή 2FA:';
+$langsecondfaUpdated = 'Οι ρυθμίσεις του λογισμικού 2FA ενημερώθηκαν με επιτυχία';
+
 // scenarios edit
 $langAutoJudgeEnable = 'Αυτόματος Κριτής';
 $langAutoJudgeInput = 'Είσοδος';
@@ -4838,3 +4867,6 @@ $langOwnCloudShortDescription = "Short Description about own cloud";
 $langOwnCloudLongDescription = "Long description about own cloud";
 $langWebDAVShortDescription = "Short Description about web dav";
 $langWebDAVLongDescription = "Long Description about web dav";
+$langAntivirusDescription = "<p>Σύνδεση με εγκατεστημένο λογισμικό προστασίας έναντι ιών</p>";
+$langWafDescription = "<p>Ενεργοποίηση τείχους προστασίας εφαρμογής ιστού</p>";
+

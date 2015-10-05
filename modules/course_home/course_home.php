@@ -205,7 +205,6 @@ if(count($res)>0){
         $course_info_extra .= "<li><a data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($row->title) ."</a></li>";
     }
     $course_info_btn = "
-            <div class='btn-group' role='group'>
               <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>
                 $langCourseDescription
                 <span class='caret'></span>
@@ -213,8 +212,7 @@ if(count($res)>0){
               </button>
               <ul class='dropdown-menu pull-right' role='menu'>
                 $course_info_extra
-              </ul>
-            </div>";    
+              </ul>";
 } else {
    $course_info_btn = ''; 
 }
@@ -226,9 +224,11 @@ if ($course_info->description) {
 } else {
     $main_content .= "<p class='not_visible'> - $langThisCourseDescriptionIsEmpty - </p>";
 }
+/* Disable keywords
 if (!empty($keywords)) {
     $main_content .= "<p id='keywords'><b>$langCourseKeywords</b> $keywords</p>";
 }
+*/
 $main_content .= "</div>";
 
 if (!empty($addon)) {
@@ -237,7 +237,7 @@ if (!empty($addon)) {
 if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
     commenting_add_js();
     $comm = new Commenting('course', $course_id);
-    $main_content .= $comm->put($course_code, $is_editor, $uid);
+    $comment_content = $comm->put($course_code, $is_editor, $uid);
 }
 if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
     $rating = new Rating('fivestar', 'course', $course_id);
@@ -249,7 +249,7 @@ if (is_sharing_allowed($course_id)) {
     }
 }
 $panel_footer = "";
-if(isset($rating_content) || isset($social_content)) {
+if(isset($rating_content) || isset($social_content) || isset($comment_content)) {
     $panel_footer .= "                
                 <div class='panel-footer'>
                     <div class='row'>";
@@ -262,7 +262,7 @@ if(isset($rating_content) || isset($social_content)) {
     if(isset($social_content)){
      $panel_footer .=
             "<div class='col-sm-6 ".(isset($rating_content) ? "text-right" : "")."'>
-                $social_content
+                $comment_content | $social_content
             </div>";         
     }
     $panel_footer .= "                
@@ -528,7 +528,7 @@ $edit_link = "";
 if ($is_editor) {
     warnCourseInvalidDepartment(true);
     $edit_link = "
-    <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' data-toggle='tooltip' data-placement='top' title='$langCourseInformationText'><i class='pull-left fa fa-edit fa'></i></a>";
+    <a class='btn btn-default btn-sm' href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' data-toggle='tooltip' data-placement='top' title='$langCourseInformationText'><i class='fa fa-edit'></i></a>";
 } else {
     $edit_link = " ";
 }
@@ -538,13 +538,16 @@ $tool_content .= "
             <div class='panel panel-default'>
                 
                 <div class='panel-body'>
+                    <div class='course-info-title clearfix'>
+                        <h4 class='pull-left'>$langCourseDescriptionShort</h4>
+                        <div class='btn-group pull-right' role='group'>
+                            $edit_link
+                            $course_info_btn
+                        </div>
+                    </div>
                             $left_column
                             <div class='col-xs-12 $main_content_cols'>
-                                <div class='course-info-title clearfix'>
-                                <h4 class='pull-left'>$langCourseDescriptionShort</h4><div class='pull-left edit-course-title'>$edit_link</div><div class='info-course-btn pull-right'>
-                      $course_info_btn
-                    </div>
-                            </div>
+
                                 <div class=''>$main_content</div>
                             </div>
                             $horizontal_info_row

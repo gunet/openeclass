@@ -96,6 +96,8 @@ if (isset($_POST['delimage'])) {
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     // First process language changes
+    checkSecondFactorChallenge();
+    saveSecondFactorUserProfile();
     if (!file_exists($webDir . '/courses/userimg/')) {
         mkdir($webDir . '/courses/userimg/', 0775);
         touch($webDir."courses/userimg/index.php");
@@ -563,8 +565,12 @@ if (count($allProviders)) {
         $tool_content .= "</div>";
     }
     $tool_content .= "</div>
-      </div>";
+      </div></div>";
 } //endif(count($allProviders)) - in case no providers are enabled, do not show anything
+
+$tool_content .= showSecondFactorUserProfile();
+
+$tool_content .= showSecondFactorChallenge();
 
 $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
           <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>

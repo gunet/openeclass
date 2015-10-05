@@ -30,7 +30,7 @@ function print_sharing_links ($url, $text) {
     
     $head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/sharing/style.css">';
     
-    $out = "<div class='sharingcontainer'>";
+    $out = "<span class='sharingcontainer'>";
     $out .= "<ul class='sharinglist'>";
 
     //facebook
@@ -50,7 +50,7 @@ function print_sharing_links ($url, $text) {
     $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa fa-envelope-square fa-2x'></i></a></li>";
     
     $out .= "</ul>";
-    $out .= "</div>";
+    $out .= "</span>";
 
     return $out;
 }

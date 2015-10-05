@@ -576,15 +576,15 @@ if (isset($_GET['modifyAnswers'])) {
         for ($j = 1; $j <= $nbrMatches; $i++, $j++) {
             $tool_content .= "
             <tr>
-              <td class=\"right\"><b>" . $j . "</b></td>
-              <td><input type=\"text\" name=\"match[" . $i . "]\" size=\"58\" value=\"";
+              <td class=\"text-right\"><b>" . $j . "</b></td>
+              <td><input class=\"form-control\" type=\"text\" name=\"match[" . $i . "]\" size=\"58\" value=\"";
             if (!isset($formSent) && !isset($match[$i]))
-                $tool_content .= $langDefaultMakeCorrespond . $j;
+                $tool_content .= ${'langDefaultMakeCorrespond' . $j};
             else
                 @$tool_content .= str_replace('{', '&#123;', htmlspecialchars($match[$i]));
 
             $tool_content .= "\" /></td>
-            <td><div align='right'><select name=\"sel[" . $i . "]\">";
+            <td><div class='text-right'><select class=\"form-control\" name=\"sel[" . $i . "]\">";
             foreach ($listeOptions as $key => $val) {
                 $tool_content .= "<option value=\"" . q($key) . "\" ";
                 if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key)
@@ -593,7 +593,7 @@ if (isset($_GET['modifyAnswers'])) {
             } // end foreach()
 
             $tool_content .= "</select></div></td>
-      <td><input type=\"text\" size=\"3\" " .
+      <td><input class=\"form-control\" type=\"text\" size=\"3\" " .
                     "name=\"weighting[" . $i . "]\" value=\"";
             if (!isset($submitAnswers) && !isset($weighting[$i])) {
                 $tool_content .= '5';
@@ -606,7 +606,7 @@ if (isset($_GET['modifyAnswers'])) {
 
         $tool_content .= "
         <tr>
-          <td class='right'>&nbsp;</td>
+          <td class='text-right'>&nbsp;</td>
           <td colspan='3'>&nbsp;</td>
         </tr>
         <tr>
@@ -620,8 +620,8 @@ if (isset($_GET['modifyAnswers'])) {
         foreach ($listeOptions as $key => $val) {
             $tool_content .= "
                     <tr>
-                      <td class=\"right\"><b>" . q($val) . "</b></td>
-                      <td><input type=\"text\" " .
+                      <td class=\"text-right\"><b>" . q($val) . "</b></td>
+                      <td><input class=\"form-control\" type=\"text\" " .
                     "name=\"option[" . $key . "]\" size=\"58\" value=\"";
             if (!isset($formSent) && !isset($option[$key]))
                 $tool_content .= ${"langDefaultMatchingOpt$val"};
