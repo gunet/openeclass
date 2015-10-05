@@ -147,10 +147,9 @@ if ($submit) {
     $plainemailbody = html2text($emailbody);
 
     if (!send_mail_multipart('', '', '', $pe, $mailsubject, $plainemailbody, $emailbody, $charset)) {
-        $tool_content .= "<table width='99%'><tbody><tr>
-	    <td class='alert alert-danger' height='60'>
-	    <p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
-	    </td></tr></tbody></table>";
+        $tool_content .= "
+	    <div class='alert alert-danger'>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></div>
+	    ";
         draw($tool_content, 3);
         exit();
     }
