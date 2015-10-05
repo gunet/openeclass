@@ -204,7 +204,7 @@ function get_auth_settings($auth) {
     $settings['auth_title'] = $result->auth_title;
     $settings['auth_instructions'] = $result->auth_instructions;
     $settings['auth_default'] = $result->auth_default;
-    $settings['auth_name'] = $result->auth_id;
+    $settings['auth_name'] = $result->auth_name;
 
     foreach (explode('|', $result->auth_settings) as $item) {
         if (preg_match('/(\w+)=(.*)/', $item, $matches)) {
