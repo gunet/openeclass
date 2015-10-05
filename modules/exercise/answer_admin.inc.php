@@ -579,7 +579,7 @@ if (isset($_GET['modifyAnswers'])) {
               <td class=\"right\"><b>" . $j . "</b></td>
               <td><input type=\"text\" name=\"match[" . $i . "]\" size=\"58\" value=\"";
             if (!isset($formSent) && !isset($match[$i]))
-                $tool_content .= $langDefaultMakeCorrespond . $j;
+                $tool_content .= ${'langDefaultMakeCorrespond' . $j};
             else
                 @$tool_content .= str_replace('{', '&#123;', htmlspecialchars($match[$i]));
 
