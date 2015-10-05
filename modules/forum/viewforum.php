@@ -70,7 +70,7 @@ if ($can_post) {
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'),
                 array('title' => $langBack,
-                    'url' => "index.php?course=$course_code",
+                    'url' => "javascript:history.go(-1)",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')                
                 ));
