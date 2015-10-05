@@ -2867,7 +2867,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         if (!DBHelper::fieldExists('attendance', 'start_date')) {
             Database::get()->query("ALTER TABLE `attendance` ADD `start_date` DATETIME NOT NULL");
-            Database::get()->query("UPDATE `attendance` SET `start_date` = " . DBHelper::timeAfter(-6*30*24*60*60) . ""); // 6 months after
+            Database::get()->query("UPDATE `attendance` SET `start_date` = " . DBHelper::timeAfter(-6*30*24*60*60) . ""); // 6 months before
         }
         if (!DBHelper::fieldExists('attendance', 'end_date')) {
             Database::get()->query("ALTER TABLE `attendance` ADD `end_date` DATETIME NOT NULL");

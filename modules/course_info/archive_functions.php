@@ -42,6 +42,7 @@ function archiveTables($course_id, $course_code, $archivedir) {
                                           WHERE course = $course_id)",
         'announcement' => $sql_course,
         'group_properties' => $sql_course,
+        'group_category' => $sql_course,
         'group' => $sql_course,
         'group_members' => "group_id IN (SELECT id FROM `group`
                                                     WHERE course_id = $course_id)",
