@@ -68,9 +68,10 @@ $(document).ready(function () {
     act_confirm();
     tooltip_init();
     popover_init();
-    if ($.trunk8) {
+
+
         trunk8_init();
-    }
+
 
     // Login Box
     var width;

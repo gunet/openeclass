@@ -216,7 +216,7 @@ if(count($res)>0){
 } else {
    $course_info_btn = ''; 
 }
-
+load_js('trunk8');
 $main_content .= "<div class='course_info'>";
 if ($course_info->description) {
     $description = standard_text_escape($course_info->description);
@@ -259,12 +259,25 @@ if(isset($rating_content) || isset($social_content) || isset($comment_content)) 
                 $rating_content
             </div>";       
     }
-    if(isset($social_content)){
-     $panel_footer .=
+    if(isset($social_content) || isset($comment_content)){
+
+        $subcontent = "";
+
+        if(isset($comment_content)){
+            $subcontent .= $comment_content;
+        }
+        if(isset($social_content) || isset($comment_content)){
+            $subcontent .= "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ";
+        }
+        if(isset($social_content)){
+            $subcontent .= $social_content;
+        }
+        $panel_footer .=
             "<div class='col-sm-6 ".(isset($rating_content) ? "text-right" : "")."'>
-                $comment_content | $social_content
-            </div>";         
+                $subcontent
+            </div>";
     }
+
     $panel_footer .= "                
                 </div>
             </div>";          
