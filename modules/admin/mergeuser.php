@@ -181,7 +181,7 @@ function do_user_merge($source, $target) {
         fix_table('personal_calendar_settings', 'user_id', $source_id, $target_id);
         fix_table('rating', 'user_id', $source_id, $target_id);
         fix_table('user_department', 'user', $source_id, $target_id);
-        fix_table('custom_profile_fields_data', 'user_id', $source, $target);
+        fix_table('custom_profile_fields_data', 'user_id', $source_id, $target_id);
 
         $tool_content = sprintf('<div class="alert alert-success">' . $langUserMergeSuccess . '</div>', '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>') .
                 "<p><a href='search_user.php'>$langBack</p>";
