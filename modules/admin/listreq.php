@@ -137,7 +137,7 @@ $tool_content .= "
                 'icon' => 'fa-ban',
                 'level' => 'primary'),            
             array('title' => $langBack,
-                'url' => '../admin/index.php',
+                'url' => "$basetoolurl",
                 'icon' => 'fa-reply',
                 'level' => 'primary')
                 )) .
@@ -147,12 +147,11 @@ $tool_content .= "
 // display closed requests
 // ----------------------------------
 if (!empty($show) and $show == 'closed') {
-    if (!empty($id) and $id > 0) {
+    if (!empty($id) and $id > 0) {        
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        $tool_content = "<div class='alert alert-success'>$langReintroductionApplication</div>";
+        $tool_content .= "<div class='alert alert-success'>$langReintroductionApplication</div>";     
     } else {
-
         $count_req = count(Database::get()->queryArray("SELECT * FROM user_request WHERE (state = 2 AND status = ?d)", $list_status));
 
         $q = "SELECT id, givenname, surname, username, email, faculty_id,
@@ -191,7 +190,7 @@ if (!empty($show) and $show == 'closed') {
     if (!empty($id) && ($id > 0)) {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        $tool_content = "<div class='alert alert-success'>$langReintroductionApplication</div>";
+        $tool_content .= "<div class='alert alert-success'>$langReintroductionApplication</div>";
     } else {
         $tool_content .= "<div class='table-responsive'><table id = 'requests_table' class='table-default'>";
         $tool_content .= table_header(1, $langDateReject_small);
@@ -286,7 +285,7 @@ if (!empty($show) and $show == 'closed') {
                         }
                         $tool_content .= "<div class='alert alert-success'>" . (($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject);
                         $tool_content .= " $langRequestMessageHasSent <b>$_POST[prof_email]</b></div>";
-                        $tool_content .= "<br><p><b>$langComments:</b><br>$_POST[comment]</p>\n";
+                        $tool_content .= "<br><p><b>$langComments:</b><br>$_POST[comment]</p>";
                     }
                 }
             } else {
