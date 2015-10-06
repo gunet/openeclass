@@ -120,30 +120,14 @@ if (isDepartmentAdmin()) {
 
 $log = new Log();
 // display logs
-if (isset($_GET['submit'])) {    
+if (isset($_GET['submit'])) {  // display course modules logging
+    $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);        
+} else {
     $log->display(0, $u, 0, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
-} else { // display course modules logging
-    $log->display($u_course_id, $u, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);    
 }
-
-//possible courses
-$letterlinks = '';
-Database::get()->queryFunc("SELECT LEFT(title, 1) AS first_letter FROM course
-                GROUP BY first_letter ORDER BY first_letter", function ($row) use(&$letterlinks) {
-    $first_letter = $row->first_letter;
-    $letterlinks .= "<a href='$_SERVER[SCRIPT_NAME]?first=" . urlencode($first_letter) . "'>" . q($first_letter) . '</a> ';
-});
 
 $terms = array();
-if (isset($_GET['first'])) {
-    $firstletter = $_GET['first'];
-    $qry = "SELECT id, title FROM course
-                WHERE LEFT(title,1) = ?s";
-    $terms = $firstletter;
-} else {
-    $qry = "SELECT id, title FROM course";
-}
-
+$qry = "SELECT id, title FROM course";
 $cours_opts[-1] = $langAllCourses;
 Database::get()->queryFunc($qry
         , function ($row) use(&$cours_opts) {
@@ -197,11 +181,7 @@ $tool_content .= "<div class='form-group'>
      <div class='col-sm-10'>" . selection($log_types, 'logtype', $logtype, "class='form-control'") . "</div>
   </div>";
         
-$tool_content .= '<div class="form-group">  
-    <label class="col-sm-2 control-label">' . $langFirstLetterUser . ':</label>
-    <div class="col-sm-10">' . $letterlinks . '</div>
-  </div>
-  <div class="form-group">
+$tool_content .= '<div class="form-group">
     <label class="col-sm-2 control-label">' . $langCourse . ':</label>
      <div class="col-sm-10">' . selection($cours_opts, 'u_course_id', $u_course_id, "class='form-control'") . '</div>
   </div>
