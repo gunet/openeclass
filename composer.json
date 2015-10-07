@@ -2,6 +2,7 @@
     "require": {
         "vlucas/valitron": "1.2.*",
         "hautelook/phpass": "0.3.*",
+        "jasig/phpcas": "1.3.*",
         "ezyang/htmlpurifier": "dev-master",
         "phpids/phpids": "dev-master",
         "pragmarx/google2fa":"dev-master"
