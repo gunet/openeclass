@@ -67,19 +67,21 @@ if (!$is_editor) {
 }
 
 if (isset($_GET['group_as'])) {
+    $pageName = $langGroupAssignments;
+    $navigation[] = array('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name' => $group_name);
     $group_id = $_GET['group_id'];
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time FROM assignment AS a LEFT JOIN assignment_to_specific AS b ON a.id=b.assignment_id 
                                                         WHERE a.course_id = ?d AND a.group_submissions= ?d AND (b.group_id= ?d OR b.group_id is null) ORDER BY a.id", $course_id, 1, $group_id);
-					
+    $tool_content .= action_bar(array(               
+                array('title' => "$langBack",
+                      'level' => "primary-label",
+                      'url' => "group_space.php?course=$course_code&amp;group_id=$group_id",
+                      'icon' => 'fa-reply')));					
     if (count($result)>0) {
             $tool_content .= "
-        <div class='row'><div class='col-sm-12'>
-                        <div class='panel-heading'>       
-                            <h3 class='panel-title'>
-                                $langGroupAssignments
-                            </h3>
-                        </div>
+        <div class='row'>
+            <div class='col-sm-12'>
                 <div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
@@ -118,142 +120,141 @@ if (isset($_GET['group_as'])) {
         }
         $tool_content .= '</table></div></div></div>';	
     }	     
-}
+} else {
+    $tool_content .= action_bar(array(
+                array('title' => $langModify,
+                      'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
+                      'level' => 'primary-label',
+                      'icon' => 'fa-edit',
+                      'button-class' => 'btn-success',
+                      'show' => $is_editor),            
+                array('title' => $langForums,
+                      'url' => "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id",
+                      'icon' => 'fa-comments',
+                      'level' => 'primary',
+                       'show' => $has_forum and $forum_id <> 0),
+                array('title' => $langGroupDocumentsLink,
+                      'url' => "document.php?course=$course_code&amp;group_id=$group_id",
+                      'icon' => 'fa-folder-open',
+                      'level' => 'primary',
+                      'show' => $documents),
+                array('title' => $langWiki,
+                      'url' => "../wiki/?course=$course_code&amp;gid=$group_id",
+                      'icon' => 'fa-wikipedia',
+                      'level' => 'primary',
+                      'show' => $wiki),
+                array('title' => $langGroupAssignments,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1",
+                      'icon' => 'fa-globe',
+                      'level' => 'primary'),
+                array('title' => $langBack,
+                      'url' => "index.php?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary'),
+                array('title' => $langEmailGroup,
+                      'url' => "group_email.php?course=$course_code&amp;group_id=$group_id",
+                      'icon' => 'fa-envelope',                  
+                      'show' => $is_editor or $is_tutor),
+                array('title' => "$langDumpUser ( $langcsvenc1 )",
+                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1&amp;enc=1253",
+                      'icon' => 'fa-file-archive-o',
+                      'show' => $is_editor),
+                array('title' => "$langDumpUser ( $langcsvenc2 )",
+                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1",
+                      'icon' => 'fa-file-archive-o',
+                      'show' => $is_editor)));
 
-$tool_content .= action_bar(array(
-            array('title' => $langModify,
-                  'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
-                  'level' => 'primary-label',
-                  'icon' => 'fa-edit',
-                  'button-class' => 'btn-success',
-                  'show' => $is_editor),            
-            array('title' => $langForums,
-                  'url' => "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id",
-                  'icon' => 'fa-comments',
-                  'level' => 'primary',
-                   'show' => $has_forum and $forum_id <> 0),
-            array('title' => $langGroupDocumentsLink,
-                  'url' => "document.php?course=$course_code&amp;group_id=$group_id",
-                  'icon' => 'fa-folder-open',
-                  'level' => 'primary',
-                  'show' => $documents),
-            array('title' => $langWiki,
-                  'url' => "../wiki/?course=$course_code&amp;gid=$group_id",
-                  'icon' => 'fa-wikipedia',
-                  'level' => 'primary',
-                  'show' => $wiki),
-            array('title' => $langGroupAssignments,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1",
-                  'icon' => 'fa-globe',
-                  'level' => 'primary'),
-            array('title' => $langBack,
-                  'url' => "index.php?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary'),
-            array('title' => $langEmailGroup,
-                  'url' => "group_email.php?course=$course_code&amp;group_id=$group_id",
-                  'icon' => 'fa-envelope',                  
-                  'show' => $is_editor or $is_tutor),
-            array('title' => "$langDumpUser ( $langcsvenc1 )",
-                  'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1&amp;enc=1253",
-                  'icon' => 'fa-file-archive-o',
-                  'show' => $is_editor),
-            array('title' => "$langDumpUser ( $langcsvenc2 )",
-                  'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1",
-                  'icon' => 'fa-file-archive-o',
-                  'show' => $is_editor)));
+    $tutors = array();
+    $members = array();
+    $q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.has_icon, group_members.is_tutor, 
+                          group_members.description
+                          FROM group_members, user
+                          WHERE group_members.group_id = ?d AND
+                                group_members.user_id = user.id
+                          ORDER BY user.surname, user.givenname", $group_id);
+    foreach ($q as $user) {
+        if ($user->is_tutor) {
+            $tutors[] = display_user($user->id, true, false);
+        } else {
+            $members[] = $user;
+        }
+    }
 
-$tutors = array();
-$members = array();
-$q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.has_icon, group_members.is_tutor, 
-		      group_members.description
-                      FROM group_members, user
-                      WHERE group_members.group_id = ?d AND
-                            group_members.user_id = user.id
-                      ORDER BY user.surname, user.givenname", $group_id);
-foreach ($q as $user) {
-    if ($user->is_tutor) {
-        $tutors[] = display_user($user->id, true, false);
+    if ($tutors) {
+        $tool_content_tutor = implode(', ', $tutors);
     } else {
-        $members[] = $user;
+        $tool_content_tutor = ' &nbsp;&nbsp;-&nbsp;&nbsp;  ';
+    }
+
+    $group_description = trim($group_description);
+    if (empty($group_description)) {
+        $tool_content_description = ' &nbsp;&nbsp;-&nbsp;&nbsp;  ';
+    } else {
+        $tool_content_description = q($group_description);
+    }
+
+    $tool_content .= "
+        <div class='panel panel-action-btn-primary'>
+            <div class='panel-heading'>
+                <h3 class='panel-title'>
+                $langGroupInfo
+                </h3>
+            </div>
+            <div class='panel-body'>
+                <div class='row'>
+                    <div class='col-sm-3'><strong>$langGroupName:</strong></div>
+                    <div class='col-sm-9'>" . q($group_name) . "</div>
+                </div>
+                <div class='row'>
+                    <div class='col-sm-3'><strong>$langGroupTutor:</strong></div>
+                    <div class='col-sm-9'>$tool_content_tutor</div>
+                </div>
+                <div class='row'>
+                    <div class='col-sm-3'><strong>$langDescription:</strong></div>
+                    <div class='col-sm-9'>$tool_content_description</div>
+                </div>
+            </div>
+        </div>";
+
+    // members
+    if (count($members) > 0) {
+        $tool_content .= "<div class='row'>
+                        <div class='col-xs-12'>
+                          <ul class='list-group'>
+                              <li class='list-group-item list-header'>                           
+                                  <div class='row'>
+                                      <div class='col-xs-4'>$langSurnameName</div>
+                                      <div class='col-xs-4'>$langAm</div>
+                                      <div class='col-xs-4'>$langEmail</div>
+                                  </div>
+                              </li>";
+
+        foreach ($members as $member) {
+            $user_group_description = $member->description;        
+            $tool_content .= "<li class='list-group-item'><div class='row'><div class='col-xs-4'>" . display_user($member->id, false, true);
+            if ($user_group_description) {
+                $tool_content .= "<br />" . q($user_group_description);
+            }
+            $tool_content .= "</div><div class='col-xs-4'>";
+            if (!empty($member->am)) {
+                $tool_content .= q($member->am);
+            } else {
+                $tool_content .= '-';
+            }
+            $tool_content .= "</div><div class='col-xs-4'>";
+            $email = q(trim($member->email));
+            if (!empty($email)) {
+                $tool_content .= "<a href='mailto:$email'>$email</a>";
+            } else {
+                $tool_content .= '-';
+            }
+            $tool_content .= "</div></div></li>";     
+        }
+        $tool_content .= "</ul>";
+        $tool_content .= "</div></div>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langGroupNoneMasc</div>";
     }
 }
-
-if ($tutors) {
-    $tool_content_tutor = implode(', ', $tutors);
-} else {
-    $tool_content_tutor = ' &nbsp;&nbsp;-&nbsp;&nbsp;  ';
-}
-
-$group_description = trim($group_description);
-if (empty($group_description)) {
-    $tool_content_description = ' &nbsp;&nbsp;-&nbsp;&nbsp;  ';
-} else {
-    $tool_content_description = q($group_description);
-}
-
-$tool_content .= "
-    <div class='panel panel-action-btn-primary'>
-        <div class='panel-heading'>
-            <h3 class='panel-title'>
-            $langGroupInfo
-            </h3>
-        </div>
-        <div class='panel-body'>
-            <div class='row'>
-                <div class='col-sm-3'><strong>$langGroupName:</strong></div>
-                <div class='col-sm-9'>" . q($group_name) . "</div>
-            </div>
-            <div class='row'>
-                <div class='col-sm-3'><strong>$langGroupTutor:</strong></div>
-                <div class='col-sm-9'>$tool_content_tutor</div>
-            </div>
-            <div class='row'>
-                <div class='col-sm-3'><strong>$langDescription:</strong></div>
-                <div class='col-sm-9'>$tool_content_description</div>
-            </div>
-        </div>
-    </div>";
-
-// members
-if (count($members) > 0) {
-    $tool_content .= "<div class='row'>
-                    <div class='col-xs-12'>
-                      <ul class='list-group'>
-                          <li class='list-group-item list-header'>                           
-                              <div class='row'>
-                                  <div class='col-xs-4'>$langSurnameName</div>
-                                  <div class='col-xs-4'>$langAm</div>
-                                  <div class='col-xs-4'>$langEmail</div>
-                              </div>
-                          </li>";
-   
-    foreach ($members as $member) {
-        $user_group_description = $member->description;        
-        $tool_content .= "<li class='list-group-item'><div class='row'><div class='col-xs-4'>" . display_user($member->id, false, true);
-        if ($user_group_description) {
-            $tool_content .= "<br />" . q($user_group_description);
-        }
-        $tool_content .= "</div><div class='col-xs-4'>";
-        if (!empty($member->am)) {
-            $tool_content .= q($member->am);
-        } else {
-            $tool_content .= '-';
-        }
-        $tool_content .= "</div><div class='col-xs-4'>";
-        $email = q(trim($member->email));
-        if (!empty($email)) {
-            $tool_content .= "<a href='mailto:$email'>$email</a>";
-        } else {
-            $tool_content .= '-';
-        }
-        $tool_content .= "</div></div></li>";     
-    }
-    $tool_content .= "</ul>";
-    $tool_content .= "</div></div>";
-} else {
-    $tool_content .= "<div class='alert alert-warning'>$langGroupNoneMasc</div>";
-}
-
 draw($tool_content, 2);
 
