@@ -32,7 +32,7 @@ $toolName = $langAuthSettings;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
-die(phpCAS::checkAuthentication());
+
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
     $auth = intval($_REQUEST['auth']); // $auth gets the integer value of the auth method if it is set
 } else {
