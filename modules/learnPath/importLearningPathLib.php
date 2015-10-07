@@ -564,9 +564,6 @@ function doImport($course_code, $webDir, $scoFileSize, $scoFileName, $displayExt
         claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
     }
 
-    // unzip package
-    require_once("include/pclzip/pclzip.lib.php");
-
     /*
      * Check the file size doesn't exceed
      * the maximum file size authorized in the directory

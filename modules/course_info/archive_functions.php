@@ -160,10 +160,6 @@ function archiveTables($course_id, $course_code, $archivedir) {
 function doArchive($course_id, $course_code) {
     global $webDir, $urlServer, $urlAppend, $siteName, $tool_content;
     
-    if (extension_loaded('zlib')) {
-        include 'include/pclzip/pclzip.lib.php';
-    }
-
     $basedir = "$webDir/courses/archive/$course_code";
     file_exists($basedir) or mkdir($basedir, 0755, true);
 

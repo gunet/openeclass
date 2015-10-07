@@ -60,7 +60,6 @@ if (isset($_GET['delete_image'])) {
 }
 if (isset($_GET['export'])) {
         if (!$theme_id) redirect_to_home_page('modules/admin/theme_options.php'); // if default theme
-        require_once 'include/pclzip/pclzip.lib.php';
         require_once 'include/lib/fileUploadLib.inc.php';
         if (!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);        
@@ -103,7 +102,6 @@ if (isset($_POST['import'])) {
                     AntivirusApp::block($output->output);
                 }
             }
-            require_once 'include/pclzip/pclzip.lib.php';
             $archive = new PclZip("$webDir/courses/theme_data/$file_name");
             if ($archive->extract(PCLZIP_OPT_PATH, 'courses/theme_data/temp') == 0) {
                 die("Error : ".$archive->errorInfo(true));
