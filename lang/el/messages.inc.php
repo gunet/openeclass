@@ -2000,7 +2000,6 @@ $langHierarchy = "Ιεραρχία Τμημάτων";
 $langAsynchronous = "Ομάδα Ασύγχρονης Τηλεκπαίδευσης";
 $langUserLogin = "Σύνδεση χρήστη";
 $langAdminLoginPage = "Σύνδεση διαχειριστή";
-$langAdminLoginDisable = "Απενεργοποίηση οθόνης σύνδεσης διαχειριστή";
 $langLoginSSO = "Σύνδεση μέσω SSO λογαριασμού";
 $langLoginSocialNetwork = "Σύνδεση μέσω κοινωνικών δικτύων";
 $langWelcomeToPortfolio = "Καλωσορίσατε στο προσωπικό σας χαρτοφυλάκιο";
