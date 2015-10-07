@@ -126,7 +126,6 @@ $uid = $session->user_id;
 // construct $urlAppend from $urlServer
 $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
 // HTML Purifier
-require_once 'include/htmlpurifier-4.3.0-standalone/HTMLPurifier.standalone.php';
 require_once 'include/HTMLPurifier_Filter_MyIframe.php';
 $purifier = new HTMLPurifier();
 $purifier->config->set('Cache.SerializerPath', $webDir . '/courses/temp');
