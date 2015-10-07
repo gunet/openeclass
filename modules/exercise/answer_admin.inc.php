@@ -596,7 +596,7 @@ if (isset($_GET['modifyAnswers'])) {
       <td><input class=\"form-control\" type=\"text\" size=\"3\" " .
                     "name=\"weighting[" . $i . "]\" value=\"";
             if (!isset($submitAnswers) && !isset($weighting[$i])) {
-                $tool_content .= '5';
+                $tool_content .= '1';
             } else {
                 $tool_content .= q($weighting[$i]);
             }
