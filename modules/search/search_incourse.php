@@ -176,12 +176,16 @@ $tool_content .= action_bar(array(
                           'icon' => 'fa-search',
                           'level' => 'primary-label',
                           'button-class' => 'btn-success',)));
+
+    $search_results = '';
+    $results_count = 0;
     // search in announcements
     if ($announcements) {
         $announceHits = $idx->searchRaw(AnnouncementIndexer::buildQuery($_POST));
-
-        if (count($announceHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+        $announceHitsCount = count($announceHits);
+        if ($announceHitsCount > 0) {
+            $results_count += $announceHitsCount;
+            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
               <table class='table-default'>
               <tr>
                 <th colspan='2'>$langAnnouncements:</th>
@@ -192,14 +196,14 @@ $tool_content .= action_bar(array(
                 $announce = Database::get()->querySingle("SELECT title, content, date FROM announcement WHERE id = ?d", $annHit->pkid);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                                   <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                                   <td><a href='" . $annHit->url . "'>" . q($announce->title) . "</a>&nbsp;&nbsp;
                                   <small>(" . nice_format(claro_format_locale_date($dateFormatLong, strtotime($announce->date))) . ")
                                   </small><br />" . $announce->content . "</td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
@@ -207,9 +211,10 @@ $tool_content .= action_bar(array(
     // search in agenda
     if ($agenda) {
         $agendaHits = $idx->searchRaw(AgendaIndexer::buildQuery($_POST));
-
-        if (count($agendaHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+        $agendaHitsCount = count($agendaHits);
+        if ($agendaHitsCount > 0) {
+        $results_count += $agendaHitsCount;
+            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                   <table class='table-default'>
           <tr>
             <th colspan='2' class='left'>$langAgenda:</th>
@@ -220,7 +225,7 @@ $tool_content .= action_bar(array(
                 $agenda = Database::get()->querySingle("SELECT title, content, start, duration FROM agenda WHERE id = ?d", $agHit->pkid);                
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "
+                $search_results .= "
                   <tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
@@ -232,7 +237,7 @@ $tool_content .= action_bar(array(
                         $message = $langHours;
                     }
                 }
-                $tool_content .= "<span class='day'>" .
+                $search_results .= "<span class='day'>" .
                         ucfirst(claro_format_locale_date($dateFormatLong, strtotime($agenda->start))) .
                         "</span> ($langHour: " . ucfirst(date("H:i", strtotime($agenda->start))) . ")<br />"
                         . q($agenda->title) . " (" . $langDuration . ": " . q($agenda->duration) . " $message) " . $agenda->content . "
@@ -240,7 +245,7 @@ $tool_content .= action_bar(array(
                   </tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
@@ -248,9 +253,10 @@ $tool_content .= action_bar(array(
     // search in documents
     if ($documents) {
         $documentHits = $idx->searchRaw(DocumentIndexer::buildQuery($_POST));
-
-        if (count($documentHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+        $documentHitsCount = count($documentHits);
+        if ($documentHitsCount > 0) {
+            $results_count += $documentHitsCount;
+            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                   <table class='table-default'>
                   <tr>
                     <th colspan='2' class='left'>$langDoc:</th>
@@ -261,14 +267,14 @@ $tool_content .= action_bar(array(
                 $document = Database::get()->querySingle("SELECT filename, path, comment FROM document WHERE id = ?d", $docHit->pkid);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $add_comment = (empty($document->comment)) ? "" : "<br /><span class='smaller'> (" . q($document->comment) . ")</span>";
-                $tool_content .= "<a href='" . $docHit->url . "'>" . q($document->filename) . "</a> $add_comment </td></tr>";
+                $search_results .= "<a href='" . $docHit->url . "'>" . q($document->filename) . "</a> $add_comment </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
@@ -276,8 +282,10 @@ $tool_content .= action_bar(array(
     // search in exercises
     if ($exercises) {
         $exerciseHits = $idx->searchRaw(ExerciseIndexer::buildQuery($_POST));
-        if (count($exerciseHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+        $exerciseHitsCount = count($exerciseHits);
+        if ($exerciseHitsCount > 0) {
+            $results_count += $exerciseHitsCount;
+            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table class='table-default'>
                     <tr>
                       <th colspan='2' class='left'>$langExercices:</th>
@@ -288,14 +296,14 @@ $tool_content .= action_bar(array(
                 $exercise = Database::get()->querySingle("SELECT title, description FROM exercise WHERE id = ?d",$exerciseHit->pkid);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $desc_text = (empty($exercise->description)) ? "" : "<br /> <span class='smaller'>" . $exercise->description . "</span>";
-                $tool_content .= "<a href='" . $exerciseHit->url . "'>" . q($exercise->title) . "</a>$desc_text </td></tr>";
+                $search_results .= "<a href='" . $exerciseHit->url . "'>" . q($exercise->title) . "</a>$desc_text </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
@@ -305,9 +313,10 @@ $tool_content .= action_bar(array(
         $forumHits = $idx->searchRaw(ForumIndexer::buildQuery($_POST));
         $forumTopicHits = $idx->searchRaw(ForumTopicIndexer::buildQuery($_POST));
         $forumPostHits = $idx->searchRaw(ForumPostIndexer::buildQuery($_POST));
-
-        if (count($forumHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+        $forumHitsCount = count($forumHits);
+        if ($forumHitsCount > 0) {
+            $results_count += $forumHitsCount;
+            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                         <table width='99%' class='sortable' id='t5' align='left'>
                         <tr>
                         <th colspan='2' class='left'>$langForum ($langCategories):</th>
@@ -318,19 +327,19 @@ $tool_content .= action_bar(array(
                 $forum = Database::get()->querySingle("SELECT name, `desc` FROM forum WHERE id = ?d",$forumHit->pkid);                
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $desc_text = (empty($forum->desc)) ? "" : "<br /><span class='smaller'>(" . q($forum->desc) . ")</span>";
-                $tool_content .= "<a href='" . $forumHit->url . "'>" . q($forum->name) . "</a> " . $desc_text . " </td></tr>";
+                $search_results .= "<a href='" . $forumHit->url . "'>" . q($forum->name) . "</a> " . $desc_text . " </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
 
         if (count($forumTopicHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table class='table-default'>
         <tr>
           <th colspan='2' class='left'>$langForum ($langSubjects - $langMessages):</th>
@@ -340,20 +349,20 @@ $tool_content .= action_bar(array(
             foreach ($forumTopicHits as $forumTopicHit) {
                 $ftopic = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $forumTopicHit->pkid);                
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-                $tool_content .= "<strong>$langSubject</strong>: <a href='" . $forumTopicHit->url . "'>" . q($ftopic->title) . "</a>";
+                $search_results .= "<strong>$langSubject</strong>: <a href='" . $forumTopicHit->url . "'>" . q($ftopic->title) . "</a>";
                 if (count($forumPostHits) > 0) {
                     foreach ($forumPostHits as $forumPostHit) {
                         $fpost = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $forumPostHit->pkid);                        
-                        $tool_content .= "<br /><strong>$langMessage</strong> <a href='" . $forumPostHit->url . "'>" . $fpost->post_text . "</a>";
+                        $search_results .= "<br /><strong>$langMessage</strong> <a href='" . $forumPostHit->url . "'>" . $fpost->post_text . "</a>";
                     }
                 }
-                $tool_content .= "</td></tr>";
+                $search_results .= "</td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
@@ -361,8 +370,10 @@ $tool_content .= action_bar(array(
     // search in links
     if ($links) {
         $linkHits = $idx->searchRaw(LinkIndexer::buildQuery($_POST));
-        if (count($linkHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+        $linkHitsCount = count($linkHits);
+        if ($linkHitsCount > 0) {
+            $results_count += $linkHitsCount;
+            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table class='table-default'>
                 <tr>
                   <th colspan='2' class='left'>$langLinks:</th>
@@ -373,14 +384,14 @@ $tool_content .= action_bar(array(
                 $link = Database::get()->querySingle("SELECT title, description FROM link WHERE id = ?d", $linkHit->pkid);                
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $desc_text = (empty($link->description)) ? "" : "<span class='smaller'>" . $link->description . "</span>";
-                $tool_content .= "<a href='" . $linkHit->url . "' target='_blank'> " . q($link->title) . "</a> $desc_text </td></tr>";
+                $search_results .= "<a href='" . $linkHit->url . "' target='_blank'> " . q($link->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
@@ -389,8 +400,10 @@ $tool_content .= action_bar(array(
     if ($video) {
         $videoHits = $idx->searchRaw(VideoIndexer::buildQuery($_POST));
         $vlinkHits = $idx->searchRaw(VideolinkIndexer::buildQuery($_POST));
-        if (count($videoHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+        $videoHitsCount = count($videoHits);
+        if ($videoHitsCount > 0) {
+            $results_count += $videoHitsCount;
+            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table class='table-default'>
         <tr>
                   <th colspan='2' class='left'>$langVideo:</th>
@@ -400,19 +413,20 @@ $tool_content .= action_bar(array(
                 $video = Database::get()->querySingle("SELECT title, description FROM video WHERE id = ?d", $videoHit->pkid);                
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $desc_text = (empty($video->description)) ? "" : "<span class='smaller'>(" . q($video->description) . ")</span>";
-                $tool_content .= "<a href='" . $videoHit->url . "' target=_blank>" . q($video->title) . "</a> $desc_text </td></tr>";
+                $search_results .= "<a href='" . $videoHit->url . "' target=_blank>" . q($video->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
-
-        if (count($vlinkHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+        $vlinkHitsCount = count($vlinkHits);
+        if ($vlinkHitsCount > 0) {
+            $results_count += $vlinkHitsCount;
+            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                         <table width='99%' class='sortable' id='t9' align='left'>
                         <tr>
                         <th colspan='2' class='left'>$langLinks:</th>
@@ -423,14 +437,14 @@ $tool_content .= action_bar(array(
                 $vlink = Database::get()->querySingle("SELECT title, description FROM videolink WHERE id = ?d", $vlinkHit->pkid);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $desc_text = (empty($vlink->description)) ? "" : "<span class='smaller'>(" . q($vlink->description) . ")</span>";
-                $tool_content .= "<a href='" . $vlinkHit->url . "' target=_blank>" . q($vlink->title) . "</a><br /> $desc_text </td></tr>";
+                $search_results .= "<a href='" . $vlinkHit->url . "' target=_blank>" . q($vlink->title) . "</a><br /> $desc_text </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
@@ -439,9 +453,10 @@ $tool_content .= action_bar(array(
     if ($course_units) {
         $unitHits = $idx->searchRaw(UnitIndexer::buildQuery($_POST));
         $uresHits = $idx->searchRaw(UnitResourceIndexer::buildQuery($_POST));
-
-        if (count($unitHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+        $unitHitsCount = count($unitHits);
+        if ($unitHitsCount > 0) {
+            $results_count += $unitHitsCount;
+            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table class='table-default'>
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
@@ -451,19 +466,20 @@ $tool_content .= action_bar(array(
             foreach ($unitHits as $unitHit) {
                 $unit = Database::get()->querySingle("SELECT title, comments FROM course_units WHERE id = ?d", $unitHit->pkid);
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $comments_text = (empty($unit->comments)) ? "" : " " . $unit->comments;
-                $tool_content .= "<a href='" . $unitHit->url . "'>" . q($unit->title) . "</a> $comments_text </td></tr>";
+                $search_results .= "<a href='" . $unitHit->url . "'>" . q($unit->title) . "</a> $comments_text </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
-
-        if (count($uresHits) > 0) {
-            $tool_content .= "
+        $uresHitsCount = count($uresHits);
+        if ($uresHitsCount > 0) {
+            $results_count += $uresHitsCount;
+            $search_results .= "
                 <script type='text/javascript' src='../auth/sorttable.js'></script>
                 <table class='table-default sortable' align='left'>
                 <tr>
@@ -475,17 +491,21 @@ $tool_content .= action_bar(array(
                 $ures = Database::get()->querySingle("SELECT title, comments FROM unit_resources WHERE id = ?d", $uresHit->pkid);
 
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $comments_text = (empty($ures->comments)) ? "" : "<span class='smaller'>" . $ures->comments . "</span>";
-                $tool_content .= q($ures->title) . " <a href='" . $uresHit->url . "'> $comments_text </a></td></tr>";
+                $search_results .= q($ures->title) . " <a href='" . $uresHit->url . "'> $comments_text </a></td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
+    $tool_content .= "
+        <div class='alert alert-info'>$langDoSearch:&nbsp;<label> '$search_terms'</label><br><small>$results_count $langResults2</small></div>
+    ";
+    $tool_content .= $search_results;
     // else ... no results found
     if ($found == false) {
         $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
