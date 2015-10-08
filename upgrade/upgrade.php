@@ -2906,13 +2906,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('group_properties', 'group_id')) {
             Database::get()->query("ALTER TABLE `group_properties` ADD `group_id` INT(11) NOT NULL DEFAULT 0");
             Database::get()->query("ALTER TABLE `group_properties` DROP PRIMARY KEY");
-            
-            delete_field('group_properties', 'multiple_registration');
-            
+
             $group_info = Database::get()->queryArray("SELECT * FROM group_properties");
             foreach ($group_info as $group) {
                 $cid = $group->course_id;
-                $self_reg = $group->self_registration;                
+                $self_reg = $group->self_registration;
+                $multi_reg = $group->multiple_registration;
                 $unreg = $group->allow_unregister;
                 $forum = $group->forum;
                 $priv_forum = $group->private_forum;
@@ -2921,19 +2920,20 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 $agenda = $group->agenda;
                 
                 Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $cid);
-                               
+                
                 $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $cid);
 				
                 foreach ($num as $group_num) {
-                        $group_id = $group_num->id;			
-                        Database::get()->query("INSERT INTO `group_properties` (course_id, group_id, self_registration, allow_unregister, forum, private_forum, documents, wiki, agenda)
-                                                                                   VALUES  (?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $cid, $group_id, $self_reg, $unreg, $forum, $priv_forum, $documents, $wiki, $agenda);									
-                }
+                    $group_id = $group_num->id;			
+                    Database::get()->query("INSERT INTO `group_properties` (course_id, group_id, self_registration, allow_unregister, forum, private_forum, documents, wiki, agenda)
+                                                                               VALUES  (?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $cid, $group_id, $self_reg, $unreg, $forum, $priv_forum, $documents, $wiki, $agenda);									
+                }                
                 setting_set(SETTING_GROUP_MULTIPLE_REGISTRATION, $multi_reg, $cid);
             }
             Database::get()->query("ALTER TABLE `group_properties` ADD PRIMARY KEY (group_id)");
+            delete_field('group_properties', 'multiple_registration');
         }
-	}
+    }
 
 
     // update eclass version
