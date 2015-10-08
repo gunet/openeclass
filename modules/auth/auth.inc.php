@@ -978,6 +978,7 @@ function alt_login($user_info_object, $uname, $pass) {
             $auth = $cas_altauth;
             // fetch settings of alt auth
             $auth_method_settings = get_auth_settings($auth);
+            $user_info_object->password = $auth_method_settings['auth_name'];
         } else {
             return 7; // Redirect to CAS login
         }
@@ -986,8 +987,7 @@ function alt_login($user_info_object, $uname, $pass) {
     if ($auth == 6) {
         return 6; // Redirect to Shibboleth login
     }
-
-    if (($user_info_object->password == $auth_method_settings['auth_name']) || !empty($cas_altauth)) {
+    if ($user_info_object->password == $auth_method_settings['auth_name']) {
         $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
         if ($is_valid) {
             $is_active = check_activity($user_info_object->id);
