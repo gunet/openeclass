@@ -74,39 +74,96 @@ if (isset($_REQUEST['search_terms'])) {
 if (empty($search_terms)) {
 
     // display form
+    $langSearchCriteria;
     $tool_content .= "
-        <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+    <div class='form-wrapper'>
+        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
-        <legend>$langSearchCriteria</legend>
-        <table class='table-default'>
-        <tr>
-          <th class='left' width='120'>$langOR</th>
-          <td colspan='2'><input name='search_terms' type='text' size='80'/></td>
-        </tr>
-        <tr>
-          <th width='30%' class='left' valign='top' rowspan='4'>$langSearchIn</th>
-          <td width='35%'><input type='checkbox' name='announcements' checked='checked' />$langAnnouncements</td>
-          <td width='35%'><input type='checkbox' name='agenda' checked='checked' />$langAgenda</td>
-        </tr>
-        <tr>
-          <td><input type='checkbox' name='course_units' checked='checked' />$langCourseUnits</td>
-          <td><input type='checkbox' name='documents' checked='checked' />$langDoc</td>
-        </tr>
-        <tr>
-          <td><input type='checkbox' name='forums' checked='checked' />$langForums</td>
-          <td><input type='checkbox' name='exercises' checked='checked' />$langExercices</td>
-        </tr>
-       <tr>
-          <td><input type='checkbox' name='video' checked='checked' />$langVideo</td>
-          <td><input type='checkbox' name='links' checked='checked' />$langLinks</td>
-       </tr>
-       <tr>
-         <th>&nbsp;</th>
-         <td colspan='2' class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch' /></td>
-       </tr>
-       </table>
+        <div class='form-group'>
+            <label for='search_terms' class='col-sm-2 control-label'>$langOR:</label>
+            <div class='col-sm-10'>
+                <input name='search_terms' type='text' class='form-control'>
+            </div>                
+        </div>
+        <div class='form-group'>
+            <label for='search_terms' class='col-sm-2 control-label'>$langSearchIn:</label>
+            <div class='col-sm-10'>
+                <div class='row'>
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='announcements' checked>
+                            $langAnnouncements
+                          </label>
+                        </div>                       
+                    </div>
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='agenda' checked>
+                            $langAgenda
+                          </label>
+                        </div>                    
+                    </div>
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='course_units' checked>
+                            $langCourseUnits
+                          </label>
+                        </div>                    
+                    </div>
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='documents' checked>
+                            $langDoc
+                          </label>
+                        </div>                    
+                    </div> 
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='forums' checked>
+                            $langForums
+                          </label>
+                        </div>                    
+                    </div> 
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='exercises' checked>
+                            $langExercices
+                          </label>
+                        </div>                    
+                    </div>  
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='video' checked>
+                            $langVideo
+                          </label>
+                        </div>                    
+                    </div>  
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='links' checked>
+                            $langLinks
+                          </label>
+                        </div>                    
+                    </div>                      
+                </div>
+            </div>                
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch'>
+            </div>
+        </div>
        </fieldset>
-       </form>";
+       </form>
+    </div>";
 } else {
     // ResourceIndexers require course_id inside the input data array (POST, but we do not want to pass it through the form)
     $_POST['course_id'] = $course_id;
