@@ -2906,12 +2906,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('group_properties', 'group_id')) {
             Database::get()->query("ALTER TABLE `group_properties` ADD `group_id` INT(11) NOT NULL DEFAULT 0");
             Database::get()->query("ALTER TABLE `group_properties` DROP PRIMARY KEY");
-
+            
+            delete_field('group_properties', 'multiple_registration');
+            
             $group_info = Database::get()->queryArray("SELECT * FROM group_properties");
             foreach ($group_info as $group) {
                 $cid = $group->course_id;
-                $self_reg = $group->self_registration;
-                $multi_reg = $group->multiple_registration;
+                $self_reg = $group->self_registration;                
                 $unreg = $group->allow_unregister;
                 $forum = $group->forum;
                 $priv_forum = $group->private_forum;
@@ -2920,9 +2921,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 $agenda = $group->agenda;
                 
                 Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $cid);
-                
-                delete_field('group_properties', 'multiple_registration');
-                
+                               
                 $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $cid);
 				
                 foreach ($num as $group_num) {
