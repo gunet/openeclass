@@ -118,8 +118,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['iTotalDisplayRecords'] = $filtered_results;
 
     $data['aaData'] = array();
-
-    foreach ($sql as $logs) {
+        
+    foreach ($sql as $logs) {        
         $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><b>" . q($logs->title) . "</b>
                         </a> (" . q($logs->code) . ")<br /><i>" . q($logs->prof_names) . "";
         // Define course type
@@ -261,4 +261,16 @@ $tool_content .= "<table id='course_results_table' class='display'>
 
 $tool_content .= "<tbody></tbody></table>";
 
+// edit department
+if (isset($_GET['formsearchfaculte']) and $_GET['formsearchfaculte'] and is_numeric($_GET['formsearchfaculte'])) {
+    $tool_content .= "<div align='right' style='margin-top: 60px; margin-bottom:10px;'>";
+    $tool_content .= "<form action='multieditcourse.php' method='post'>";
+    // redirect all request vars towards action
+    foreach ($_REQUEST as $key => $value) {
+        $tool_content .= "<input type='hidden' name='$key' value='$value'>";
+    }
+
+    $tool_content .= "<input class='btn btn-primary' type='submit' name='move_submit' value='$langChangeDepartment'> ";
+    $tool_content .= "</form></div>";
+}
 draw($tool_content, 3, null, $head_content);
