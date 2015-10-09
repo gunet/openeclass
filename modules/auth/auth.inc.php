@@ -112,6 +112,19 @@ function check_auth_active($auth_id) {
     return false;
 }
 
+/**
+ * @brief check if method $auth is configured
+ * @param type $auth_id
+ * @return boolean
+ */
+function check_auth_configured($auth_id) {
+    $auth = Database::get()->querySingle("SELECT auth_settings FROM auth WHERE auth_id = ?d", $auth_id);
+    if ($auth and !empty($auth->auth_settings)) {
+            return true;
+    }
+    return false;
+}
+
 
 /* * **************************************************************
   count users for each authentication method
@@ -973,11 +986,12 @@ function alt_login($user_info_object, $uname, $pass) {
     if ($auth == 7) {
         $cas = explode('|', $auth_method_settings['auth_settings']);
         $cas_altauth = intval(str_replace('cas_altauth=', '', $cas[7]));
-        // check if alt auth is valid and active
-        if (($cas_altauth > 0) && check_auth_active($cas_altauth)) {
+        // check if alt auth is valid and configured
+        if (($cas_altauth > 0) && check_auth_configured($cas_altauth)) {
             $auth = $cas_altauth;
             // fetch settings of alt auth
             $auth_method_settings = get_auth_settings($auth);
+            $user_info_object->password = $auth_method_settings['auth_name'];
         } else {
             return 7; // Redirect to CAS login
         }
@@ -986,8 +1000,7 @@ function alt_login($user_info_object, $uname, $pass) {
     if ($auth == 6) {
         return 6; // Redirect to Shibboleth login
     }
-
-    if (($user_info_object->password == $auth_method_settings['auth_name']) || !empty($cas_altauth)) {
+    if ($user_info_object->password == $auth_method_settings['auth_name']) {
         $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
         if ($is_valid) {
             $is_active = check_activity($user_info_object->id);

@@ -62,7 +62,7 @@ function getUserLessonInfo($uid) {
                        WHERE course.id = course_user.course_id AND
                              course_user.user_id = ?d AND
                              user.id = ?d
-                       ORDER BY course.title, course.prof_names", $uid, $uid);
+                       ORDER BY course_user.status, course.visible, course.created DESC", $uid, $uid);
     } else {
         $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                              course.code code,
