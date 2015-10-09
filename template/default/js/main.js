@@ -27,7 +27,9 @@ function act_confirm() {
 }
 
 function popover_init() {
-    $('.glossary').popover();
+    $('[data-toggle="popover"]').on('click',function(e){
+        e.preventDefault();
+    }).popover();
     var click_in_process = false;
     var hidePopover = function () {
         if (!click_in_process) {
@@ -38,8 +40,8 @@ function popover_init() {
         $(this).popover('toggle');
         $('#action_button_menu').parent().parent().addClass('menu-popover');
     };
-    $('[data-toggle="popover"]').popover().on('click', togglePopover).on('blur', hidePopover);
-    $('[data-toggle="popover"]').on('shown.bs.popover', function () {
+    $('.menu-popover').popover().on('click', togglePopover).on('blur', hidePopover);
+    $('.menu-popover').on('shown.bs.popover', function () {
         $('.popover').mousedown(function () {
             click_in_process = true;
         });

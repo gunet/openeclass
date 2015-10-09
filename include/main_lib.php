@@ -2120,7 +2120,7 @@ function glossary_expand_callback($matches) {
         $definition = '';
     }
 
-    return '<a href="#" class="glossary"' .
+    return '<a href="#" data-toggle="popover"' .
             $definition . '>' . $matches[0] . '</a>';
 }
 
@@ -3274,7 +3274,7 @@ function action_button($options, $secondary_menu_options = array()) {
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
         $action_button = "
-                <a tabindex='1' class='btn $secondary_btn_class' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
+                <a tabindex='1' class='menu-popover btn $secondary_btn_class' data-container='body' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
                     <i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
                 </a>";
     }
