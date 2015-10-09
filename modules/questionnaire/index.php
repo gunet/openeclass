@@ -24,7 +24,6 @@
  * @brief main script for the questionnaire tool
  */
 
-$require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';

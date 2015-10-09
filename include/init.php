@@ -519,7 +519,6 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                                                 " . MODULE_ID_ASSIGN . ",
                                                 " . MODULE_ID_BBB . ",
                                                 " . MODULE_ID_DROPBOX . ",
-                                                " . MODULE_ID_QUESTIONNAIRE . ",
                                                 " . MODULE_ID_FORUM . ",
                                                 " . MODULE_ID_GROUPS . ",
                                                 " . MODULE_ID_GRADEBOOK . ",
