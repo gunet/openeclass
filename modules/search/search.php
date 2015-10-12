@@ -98,7 +98,11 @@ $tool_content .= action_bar(array(
                           'button-class' => 'btn-success',)));
 
 $tool_content .= "
-    <div class='alert alert-info'>$langDoSearch:&nbsp;<label> '$_POST[search_terms]'</label><br><small>" . count($hits) . " $langResults2</small></div>
+    <div class='alert alert-info'>$langDoSearch";
+if (isset($_POST['search_terms'])) {
+    $tool_content .= ":&nbsp;<label> '$_POST[search_terms]'</label>";
+}
+$tool_content .= "<br><small>" . count($hits) . " $langResults2</small></div>
     <table class='table-default'>
     <tr>      
       <th class='text-left'>" . $langCourse . " ($langCode)</th>
