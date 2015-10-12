@@ -192,7 +192,7 @@ function css_link($file) {
 
 // Include a JavaScript file from the main js directory
 function load_js($file, $init='') {
-    global $head_content, $urlAppend, $theme, $theme_settings, $language;
+    global $head_content, $urlAppend, $theme, $theme_settings, $language, $langReadMore, $langReadLess;
     static $loaded;
 
     if (isset($loaded[$file])) {
@@ -276,6 +276,8 @@ function load_js($file, $init='') {
         } elseif ($file == 'trunk8') {
             $head_content .= "
 <script>
+    var readMore = '".js_escape($langReadMore)."';
+    var readLess = '".js_escape($langReadLess)."';
     $(function () { $('.trunk8').trunk8({
         lines: 3,
         fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',

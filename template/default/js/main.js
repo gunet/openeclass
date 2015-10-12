@@ -63,11 +63,11 @@ function trunk8_init(){
         parseHTML: true,
         lines: 12,
         tooltip: false,
-        fill: '&hellip;&nbsp;<a id="read-more-info" href="#">read more</a>&nbsp;'
+        fill: '&hellip;&nbsp;<a id="read-more-info" href="#">'+readMore+'</a>&nbsp;'
     });
 
     $(document).on('click', '#read-more-info', function (event) {
-        $(this).parents("#descr_content").trunk8('revert').append(' <a id="read-less-info" href="#">read less</a>');
+        $(this).parents("#descr_content").trunk8('revert').append(' <a id="read-less-info" href="#">'+readLess+'</a>');
         event.preventDefault();
     });
 

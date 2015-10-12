@@ -905,6 +905,8 @@ $langCourseInvalidDepartment = 'Το μάθημα βρίσκεται σε τμή
     επιτρέπεται πλέον η δημιουργία μαθημάτων.';
 $langCourseInvalidDepartmentPrompt = 'Παρακαλούμε %sμεταφέρετέ το
     μέσω των ρυθμίσεων μαθήματος%s.';
+$langReadMore = "Περισσότερα";
+$langReadLess = "Λιγότερα";
 
 /* * *******************************************
  * course_info.php
