@@ -65,14 +65,20 @@ if (isset($_GET['p']) and $_GET['p']) {
     $_SESSION['u_prof'] = 0;
 }
 
+if (!in_array($auth, $authmethods)) {
+    $tool_content .= "<div class='alert alert-danger'>$langCannotRegister</div>";
+    draw($tool_content, 0);
+    exit;
+}
+
 if (!$_SESSION['u_prof'] and !$alt_auth_stud_reg) {
-    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langCannotRegister</div>";
     draw($tool_content, 0);
     exit;
 }
 
 if ($_SESSION['u_prof'] and !$alt_auth_prof_reg) {
-    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langCannotRegister</div>";
     draw($tool_content, 0);
     exit;
 }
