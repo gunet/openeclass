@@ -704,26 +704,10 @@ function process_login() {
 * ************************************************************** */
 
 function hybridauth_login() {
-    //this is needed so as to include the HybridAuth error codes
-    global $language, $language_codes, $siteName, $Institution, $InstitutionUrl;
-    if (isset($language)) {
-        // include_messages
-        include "lang/$language/common.inc.php";
-        $extra_messages = "config/{$language_codes[$language]}.inc.php";
-        if (file_exists($extra_messages)) {
-            include $extra_messages;
-        } else {
-            $extra_messages = false;
-        }
-        include "lang/$language/messages.inc.php";
-        if ($extra_messages) {
-            include $extra_messages;
-        }
-    }
-    // end HybridAuth messages inclusion
-    
-    
-    global $warning;
+    global $surname, $givenname, $email, $status, $is_admin, $language,
+        $langInvalidId, $langAccountInactive1, $langAccountInactive2,
+        $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
+        $inactive_uid, $langTooManyFails, $warning;
     
     // include HubridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
@@ -737,29 +721,23 @@ function hybridauth_login() {
         Session::Messages(q(trim(strip_tags($_GET['error']))));
     }
 
-    // if user select a provider to login with
-    // then inlcude hybridauth config and main class
-    // then try to authenticate te current user
-    // finally redirect him to his profile page
+    // if user select a provider to login with then include hybridauth config
+    // and main class, try to authenticate, finally redirect to profile
     if (isset($_GET['provider'])) {
         try {
-            // create an instance for Hybridauth with the configuration file path as parameter
             $hybridauth = new Hybrid_Auth($config);
             
             // set selected provider name
-            $provider = @trim(strip_tags($_GET["provider"]));
+            $provider = @trim(strip_tags($_GET['provider']));
         
             // try to authenticate the selected $provider
-            $adapter = $hybridauth->authenticate( $provider );
+            $adapter = $hybridauth->authenticate($provider);
             
             // grab the user profile
             $user_data = $adapter->getUserProfile();
             
-            //user profile debug print
-            //echo $user_data->displayName;
-            //echo $user_data->email;
-            //echo $user_data->photoURL;
-            //echo $user_data->identifier;
+            // user profile debug print
+            // echo '<pre>'; print_r($user_data); echo '</pre>';
             
         } catch (Exception $e) {
             // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
@@ -787,18 +765,12 @@ function hybridauth_login() {
     } //endif( isset( $_GET["provider"] ) && $_GET["provider"] )
     
     
-    // *****************************
-    // from here on runs an alternative version of proccess_login() where
-    // instead of a password, the provider user id is used and matched against
+    // from here on an alternative version of proccess_login() runs where
+    // instead of a password, the provider uid is used and matched against
     // the corresponding field in the db table.
-    global $surname, $givenname, $email, $status, $is_admin, $language,
-    $langInvalidId, $langAccountInactive1, $langAccountInactive2,
-    $langNoCookies, $langEnterPlatform, $urlServer, $langHere,
-    $auth_ids, $inactive_uid, $langTooManyFails;
     
-    $pass = $user_data->identifier; //password = provider user id
-    $auth = get_auth_active_methods();
-    //$is_eclass_unique = is_eclass_unique();
+    $pass = $user_data->identifier; // password = provider user id
+    // $is_eclass_unique = is_eclass_unique();
     
     unset($_SESSION['uid']);
     $auth_allow = 0;
@@ -812,6 +784,7 @@ function hybridauth_login() {
         $auth_allow = 8;
     } else {
         $auth_id = array_search(strtolower($provider), $auth_ids);
+        $auth_methods = get_auth_active_methods();
         $myrow = Database::get()->querySingle("SELECT user.id, surname,
                     givenname, password, username, status, email, lang,
                     verified_mail, uid
@@ -826,24 +799,16 @@ function hybridauth_login() {
             $auth_allow = 5;
         } elseif ($myrow) {
             $exists = 1;
-            if (!empty($auth)) {
-                if (in_array($myrow->password, $auth_ids)) {
-                    // alternate methods login
-                    //$auth_allow = alt_login($myrow, $provider, $pass); //this should NOT be called during HybridAuth!
-                } else {
-                    // eclass login
-                    $auth_allow = login($myrow, $provider, $pass, $provider);
-                }
+            if (in_array($auth_id, $auth_methods)) {
+                $auth_allow = login($myrow, null, null, $provider);
             } else {
-                $tool_content .= "<br>$langInvalidAuth<br>";
+                Session::Messages($langInvalidAuth, 'alert-danger');
+                redirect_to_home_page();
             }
         }
         if (!$exists and !$auth_allow) {
             // Since HybridAuth was used and there is not user id matched in the db, send the user to the registration form.
-            header('Location: ' . $urlServer . 'modules/auth/registration.php?provider=' . $provider);
-            
-            // from this point and on, the code does not need to run since the user is redirected to the registration page
-            $auth_allow = 4;
+            redirect_to_home_page('modules/auth/registration.php?provider=' . $provider);
         }
     }
     
@@ -922,9 +887,8 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
             }
         }
     } else {
-        if ($pass == $user_info_object->uid) {
-            $pass_match = true;
-        }
+        // User was authenticated by HybridAuth
+        $pass_match = true;
     }
 
     if ($pass_match) {
