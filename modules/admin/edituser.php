@@ -283,7 +283,6 @@ if ($u) {
                 $tool_content .= "
                         <div class='col-xs-2 text-center'>
                           <img src='$themeimg/$lcProvider.png' alt='$langLoginVia'><br>$providerName<br>
-                          <img src='$themeimg/tick.png' alt=''>
                           <button type='submit' name='delete_ext_uid' value='$ext_uid_item->auth_id'>$langProviderDeleteConnection</button>
                         </div>";
                 
