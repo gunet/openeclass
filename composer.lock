@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d7726356f8af3f0ebb0e79770b35e8e0",
-    "content-hash": "c78401d1e4de0bb78f275bdcc75ad419",
+    "hash": "38c77fbbaec616de6cdc78d74665af28",
+    "content-hash": "88be93503a0adac336a682051e0462c9",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -644,16 +644,16 @@
         },
         {
             "name": "vlucas/valitron",
-            "version": "v1.2.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/valitron.git",
-                "reference": "c7342e025a95b2e400153bc10b059b16018220fe"
+                "reference": "9f9701833ccaaa8f6dc864c1ab6e3221045718a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/valitron/zipball/c7342e025a95b2e400153bc10b059b16018220fe",
-                "reference": "c7342e025a95b2e400153bc10b059b16018220fe",
+                "url": "https://api.github.com/repos/vlucas/valitron/zipball/9f9701833ccaaa8f6dc864c1ab6e3221045718a1",
+                "reference": "9f9701833ccaaa8f6dc864c1ab6e3221045718a1",
                 "shasum": ""
             },
             "require": {
@@ -686,13 +686,14 @@
                 "validation",
                 "validator"
             ],
-            "time": "2014-11-20 15:24:40"
+            "time": "2015-10-10 03:03:31"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "vlucas/valitron": 20,
         "ezyang/htmlpurifier": 20,
         "phpids/phpids": 20,
         "pragmarx/google2fa": 20
