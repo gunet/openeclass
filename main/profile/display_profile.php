@@ -106,7 +106,7 @@ if ($userdata) {
             $providers_text .= " <span class='tag-value'><img src='$themeimg/{$item->auth_name}.png' alt=''>&nbsp;$fullName</span>";
         }
         if (!empty($providers_text)) {
-            $providers .= "</div><span class='tag'>$langProviderConnectWith&nbsp;:&nbsp;</span>" . $providers_text . "</div>";
+            $providers .= "<div><span class='tag'>$langProviderConnectWith&nbsp;:&nbsp;</span>" . $providers_text . "</div>";
         }
     }
     

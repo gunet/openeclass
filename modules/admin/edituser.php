@@ -89,6 +89,13 @@ if ($u) {
         $info->password = $newpass;
     }
 
+    if (isset($_POST['delete_ext_uid'])) {
+        Database::get()->query('DELETE FROM user_ext_uid WHERE user_id = ?d AND auth_id = ?d',
+            $u, $_POST['delete_ext_uid']);
+        Session::Messages($langSuccessfulUpdate, 'alert-success');
+        redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
+    }
+
     // change user authentication method
     if (isset($_GET['edit']) and $_GET['edit'] = 'auth') {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?u=$u", 'name' => $langEditUser);
@@ -190,7 +197,7 @@ if ($u) {
             }
             $auth_text = get_auth_info($auth);
             $tool_content .= "<div class='col-sm-10'>
-                                <label>" . q($info->username) . "</label> [" . $auth_text . "] <input  class='form-control' type='hidden' name='username' value=" . q($info->username) . ">
+                                <p class='form-control-static'><b>" . q($info->username) . "</b> [" . $auth_text . "] <input  class='form-control' type='hidden' name='username' value=" . q($info->username) . "></p>
                             </div>";
         }
         $tool_content .= "</div>";
@@ -243,7 +250,7 @@ if ($u) {
         $exp_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->expires_at);
         $tool_content .= "<div class='form-group'>
                 <label class='col-sm-2 control-label'>$langRegistrationDate:</label>
-                <div class='col-sm-10'>" . $reg_date->format("d-m-Y H:i") . "</div>
+                <div class='col-sm-10'><p class='form-control-static'>" . $reg_date->format("d-m-Y H:i") . "</p></div>
             </div>
          <div class='input-append date form-group' id='user_date_expires_at' data-date='" . $exp_date->format("d-m-Y H:i") . "' data-date-format='dd-mm-yyyy'>
          <label class='col-sm-2 control-label'>$langExpirationDate: </label>
@@ -257,12 +264,32 @@ if ($u) {
          </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langUserID: </label>
-          <div class='col-sm-10'>$u</div>
+          <div class='col-sm-10'><p class='form-control-static'>$u</p></div>
         </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langUserWhitelist</label>
           <div class='col-sm-10'><textarea rows='6' cols='60' name='user_upload_whitelist'>" . q($info->whitelist) . "</textarea></div>
         </div>";
+        // Show HybridAuth provider data
+        $ext_uid = Database::get()->queryArray('SELECT * FROM user_ext_uid WHERE user_id = ?d', $u);
+        if ($ext_uid) {
+            $tool_content .= "<div class='form-group'>
+                <label class='col-sm-2 control-label'>$langProviderConnectWith:</label>
+                <div class='col-sm-10'>
+                    <div class='row'>";
+            foreach ($ext_uid as $ext_uid_item) {
+                $lcProvider = $auth_ids[$ext_uid_item->auth_id];
+                $providerName = $authFullName[$ext_uid_item->auth_id];
+                $tool_content .= "
+                        <div class='col-xs-2 text-center'>
+                          <img src='$themeimg/$lcProvider.png' alt='$langLoginVia'><br>$providerName<br>
+                          <img src='$themeimg/tick.png' alt=''>
+                          <button type='submit' name='delete_ext_uid' value='$ext_uid_item->auth_id'>$langProviderDeleteConnection</button>
+                        </div>";
+                
+            }
+            $tool_content .= "</div></div></div>";
+        }
         //show custom profile fields input
         if ($info->status != USER_GUEST) {
             $tool_content .= render_profile_fields_form(array('origin' => 'admin_edit_profile', 'user_id' => $u));

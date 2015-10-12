@@ -3850,6 +3850,7 @@ $langGradebookNoTitle2 = "Untitled gradebook";
 $langGroupMembersNum = "Members";
 $langLoginSSO = "Login with SSO account";
 $langLoginSocialNetwork = "Login with social networks";
+$langLoginVia = "Login via";
 $langNoForumTopic = "There are no forum topics";
 $langLogInWith = "Connect with";
 $langLogOutput = "Upgrade logs";

@@ -2007,6 +2007,7 @@ $langUserLogin = "Σύνδεση χρήστη";
 $langAdminLoginPage = "Σύνδεση διαχειριστή";
 $langLoginSSO = "Σύνδεση μέσω SSO λογαριασμού";
 $langLoginSocialNetwork = "Σύνδεση μέσω κοινωνικών δικτύων";
+$langLoginVia = "Σύνδεση μέσω";
 $langWelcomeToPortfolio = "Καλωσορίσατε στο προσωπικό σας χαρτοφυλάκιο";
 $langUnregCourse = "Απεγγραφή από μάθημα";
 $langUnCourse = "Απεγγραφή";

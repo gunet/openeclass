@@ -114,7 +114,7 @@ if ($display_captcha) {
     }
 }
 
-//check for validation errors in custom profile fields
+// check for validation errors in custom profile fields
 $cpf_check = cpf_validate_format();
 if ($cpf_check[0] === false) {
     $all_set = false;
@@ -124,21 +124,21 @@ if ($cpf_check[0] === false) {
     }
 }
 
-if(!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $provider_id = '';
+if (!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $provider_id = '';
 
-//check if it's valid and the provider enabled in the db
-if(is_numeric(@$_GET['auth']) && @$_GET['auth'] > 7 && @$_GET['auth'] < 14) {
+// check if it's valid and the provider enabled in the db
+if (is_numeric(@$_GET['auth']) && @$_GET['auth'] > 7 && @$_GET['auth'] < 14) {
     $provider_name = $auth_ids[$_GET['auth']];
     $result = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name = ?s", $provider_name);
-    if($result->auth_default != 1) {
-        $provider_name = "";
-        $provider_id = "";
+    if ($result->auth_default != 1) {
+        $provider_name = '';
+        $provider_id = '';
     }
-} else $provider_name = "";
+} else $provider_name = '';
 
-//authenticate user via hybridauth if requested by URL
+// authenticate user via hybridauth if requested by URL
 $user_data = '';
-if(!empty($provider_name) || (!empty($_POST['provider']) && !empty($_POST['provider_id']))) {
+if (!empty($provider_name) || (!empty($_POST['provider']) && !empty($_POST['provider_id']))) {
     require_once 'modules/auth/methods/hybridauth/config.php';
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
@@ -148,7 +148,7 @@ if(!empty($provider_name) || (!empty($_POST['provider']) && !empty($_POST['provi
     $warning = '';
     
     //additional layer of checks to verify that the provider is valid via hybridauth middleware
-    if(count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) { 
+    if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) { 
         try {
             // create an instance for Hybridauth with the configuration file path as parameter
             $hybridauth = new Hybrid_Auth($config);
@@ -160,17 +160,19 @@ if(!empty($provider_name) || (!empty($_POST['provider']) && !empty($_POST['provi
             $user_data = $adapter->getUserProfile();
             if($user_data->identifier) {
                 $result = Database::get()->querySingle("SELECT " . strtolower($provider_name) . "_uid FROM user_request WHERE " . strtolower($provider_name) . "_uid = ?s", $user_data->identifier);
-                if($result) $registration_errors[] = $langProviderError9; //the provider user id already exists the the db. show an error.
-                    else {
-                        $provider_id = $user_data->identifier; 
-                        if(empty($givenname)) $givenname = $user_data->firstName;
-                        if(empty($surname)) $surname = $user_data->lastName;
-                        if(empty($username)) $username = q(str_replace(' ', '', $user_data->displayName));
-                        if(empty($usermail)) $usermail = $user_data->email;
-                        if(empty($userphone)) $userphone = $user_data->phone;
-                    }
+                if ($result) {
+                    //the provider user id already exists the the db. show an error.
+                    $registration_errors[] = $langProviderError9;
+                } else {
+                    $provider_id = $user_data->identifier; 
+                    if (empty($givenname)) $givenname = $user_data->firstName;
+                    if (empty($surname)) $surname = $user_data->lastName;
+                    if (empty($username)) $username = q(str_replace(' ', '', $user_data->displayName));
+                    if (empty($usermail)) $usermail = $user_data->email;
+                    if (empty($userphone)) $userphone = $user_data->phone;
+                }
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
             // let hybridauth forget all about the user so we can try to authenticate again.
 
