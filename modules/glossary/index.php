@@ -150,6 +150,9 @@ if ($is_editor) {
 
     if (isset($_POST['submit'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        if (isset($_POST['url']) and !empty($_POST['url']) and !preg_match('/^\w+:/', $_POST['url'])) {
+            $_POST['url'] = 'http://' . $_POST['url'];
+        }
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('term', 'definition'));
         $v->rule('url', array('url'));
