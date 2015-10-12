@@ -186,7 +186,7 @@ $head_content .= "<script type='text/javascript'>
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
                 var row_id = $(this).data('id');
-                bootbox.confirm('$langSureToDelAnnounce', function(result) {
+                bootbox.confirm('".js_escape($langSureToDelAnnounce)."', function(result) {
                     if(result) {                       
                         $.ajax({
                           type: 'POST',
