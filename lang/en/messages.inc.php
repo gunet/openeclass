@@ -3539,6 +3539,7 @@ $langPollEndMessage = 'Completion message';
 $langPollEndMessageText = 'Thank you for participating in this questionnaire!';
 $langPollPercentResults = 'Percentage results';
 $langPollFullResults = 'Full results';
+$langPollParticipantInfo = 'Participant Information';
 $langCaptcha = "Type code as it is displayed ";
 $langCompulsory = "(required)";
 $langSearchFor = 'Names search type';

@@ -38,6 +38,13 @@ $action->record(MODULE_ID_QUESTIONNAIRE);
 $toolName = $langQuestionnaire;
 
 load_js('tools.js');
+if (isset($_GET['verification_code'])) {
+    $afftected_rows = Database::get()->query("UPDATE poll_user_record SET email_verification = 1, verification_code = NULL WHERE verification_code = ?s", $_GET['verification_code'])->affectedRows;
+    if ($afftected_rows > 0) {
+        Session::Messages('Η απαντήσεις σας καταμετρήθηκαν με επιτυχία', 'alert-success');
+    }
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
 if ($is_editor) {
     if (isset($_GET['pid'])) {
         $pid = $_GET['pid'];
@@ -67,12 +74,12 @@ if ($is_editor) {
             Database::get()->query("DELETE FROM `poll_to_specific` WHERE poll_id = ?d", $pid);
             Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
             Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
-            Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
+            Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
             Session::Messages($langPollDeleted, 'alert-success');
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);       
         // delete poll results
         } elseif (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
-            Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
+            Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
             Session::Messages($langPollResultsDeleted, 'alert-success');
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         //clone poll
@@ -198,11 +205,9 @@ function printPolls() {
                             label: '$langCancel',
                             className: 'btn-default'
                         }                        
-                    }
-                            
-                    
+                    }   
             });
-        });          
+        });
     </script>
     ";
     
@@ -251,7 +256,7 @@ function printPolls() {
         $index_aa = 1;
         $k = 0;
         foreach ($result as $thepoll) {
-            $total_participants = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) AS total FROM poll_answer_record WHERE pid = ?d", $thepoll->pid)->total;
+            $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d", $thepoll->pid)->total;
             $visibility = $thepoll->active;
 
             if (($visibility) or ($is_editor)) {
@@ -279,10 +284,11 @@ function printPolls() {
                 $creator_id = $thepoll->creator_id;
                 $theCreator = uid_to_name($creator_id);
                 $pid = $thepoll->pid;
-                $countAnswers = Database::get()->querySingle("SELECT COUNT(DISTINCT(user_id)) as counter FROM poll_answer_record WHERE pid = ?d", $pid)->counter;
+                $countAnswers = Database::get()->querySingle("SELECT COUNT(*) as counter FROM poll_user_record WHERE pid = ?d", $pid)->counter;
                 // check if user has participated
-                $has_participated = Database::get()->querySingle("SELECT COUNT(*) as counter FROM poll_answer_record
-                                        WHERE user_id = ?d AND pid = ?d", $uid, $pid)->counter;
+                $has_participated = Database::get()->querySingle("SELECT COUNT(*) as counter FROM poll_user_record
+                        WHERE uid = ?d AND pid = ?d", $uid, $pid)->counter;
+
                 // check if poll has ended OR not strarted yet
                 $poll_ended = 0;
                 $poll_not_started = 0;
@@ -298,7 +304,7 @@ function printPolls() {
                 } else {
                     $tool_content .= "
                         <td>";
-                    if (($has_participated == 0) and $poll_ended == 0) {
+                    if ($uid == 0 || $has_participated == 0 && $poll_ended == 0) {
                         $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>";
                     } else {
                         $tool_content .= q($thepoll->name);
@@ -355,18 +361,17 @@ function printPolls() {
                             )                                   
                         ))."</td></tr>";
                 } else {
+                    //!(course_status($course_id) == COURSE_OPEN && $uid ==0)
                     $tool_content .= "
                         <td class='text-center'>";
-                    if ($has_participated == 0 && $poll_ended == 0 && $poll_not_started == 0) {
-                        $tool_content .= "$langHasNotParticipated";
+                    if ($poll_ended == 1) {
+                        $tool_content .= $langPollHasEnded;
+                    } else if ($poll_not_started == 1) {
+                        $tool_content .= $langSurveyNotStarted;
+                    } elseif ($has_participated > 0) {
+                        $tool_content .= $uid ? $langHasParticipated : 'Οι συμμετοχές είναι ανοιχτές';
                     } else {
-                        if ($poll_ended == 1) {
-                            $tool_content .= $langPollHasEnded;
-                        } elseif($poll_not_started == 1) {
-                            $tool_content .= $langSurveyNotStarted;                           
-                        } else {
-                            $tool_content .= $langHasParticipated;
-                        }
+                        $tool_content .= $uid ? $langHasNotParticipated : 'Οι συμμετοχές είναι ανοιχτές';
                     }
                     $tool_content .= "</td>";
                     $line_chart_link = ($has_participated && $thepoll->show_results)? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "<span class='fa fa-line-chart' data-toggle='tooltip' title='$langNoAccessPrivilages'></span>" ;

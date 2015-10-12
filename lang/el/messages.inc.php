@@ -2751,6 +2751,7 @@ $langThereAreParticipants = "Στο Ερωτηματολόγιο έχουν ήδ
 $langPollEmpty = "Παρακαλώ προσθέστε ερωτήσεις στο Ερωτηματολόγιο!";
 $langPollPercentResults = 'Ποσοστιαία αποτελέσματα';
 $langPollFullResults = 'Αναλυτικά αποτελέσματα';
+$langPollParticipantInfo = 'Πληροφορίες Συμμετέχοντα';
 
 /* * **********************************************************
  * registration.php

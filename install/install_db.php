@@ -825,6 +825,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
     `group_id` int(11) NULL,
     `poll_id` int(11) NOT NULL ) $charset_spec"); 
 
+$db->query("CREATE TABLE IF NOT EXISTS `poll_user_record` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `email` VARCHAR(255) DEFAULT NULL,
+    `email_verification` TINYINT(1) DEFAULT NULL,
+    `verification_code` VARCHAR(255) DEFAULT NULL) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
     `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `pid` INT(11) NOT NULL DEFAULT 0,
@@ -832,7 +840,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
     `aid` INT(11) NOT NULL DEFAULT 0,
     `answer_text` TEXT NOT NULL,
     `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-    `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ) $charset_spec");
+    `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    FOREIGN KEY (`poll_user_record_id`) 
+    REFERENCES `poll_user_record` (`id`) 
+    ON DELETE CASCADE) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
     `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,

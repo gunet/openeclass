@@ -62,7 +62,7 @@ function printPollForm() {
     global $course_id, $course_code, $tool_content,
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
-    $langCancel, $head_content;
+    $langCancel, $head_content, $langPollParticipantInfo;
     
     $head_content .= " 
     <script>
@@ -74,7 +74,7 @@ function printPollForm() {
     $pid = $_REQUEST['pid'];
     
     // check if user has participated
-    $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE user_id = ?d AND pid = ?d", $uid, $pid)->count;
+    $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
     if ($has_participated > 0 && !$is_editor){
         Session::Messages($langPollAlreadyParticipated);
         redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
@@ -123,6 +123,25 @@ function printPollForm() {
         //******************************************************************************/
         $questions = Database::get()->queryArray("SELECT * FROM poll_question
 			WHERE pid = ?d ORDER BY q_position ASC", $pid);
+        if (!$uid) {
+            $email = Session::has('participantEmail') ? Session::get('participantEmail') : '';
+            $email_error = Session::getError('participantEmail') ? " has-error" : "";
+            $tool_content .= "
+                <div class='panel panel-info'>
+                    <div class='panel-heading'>
+                        $langPollParticipantInfo
+                    </div>
+                    <div class='panel-body'>
+                        <div class='form-group$email_error'>
+                            <label for='participantEmail' class='col-sm-1  control-label'>Email:</label>
+                            <div class='col-sm-11'>
+                                <input type='text' name='participantEmail' id='participantEmail' class='form-control' value='$email'>
+                                ".(Session::getError('participantEmail') ? "<span class='help-block'>" . Session::getError('participantEmail') . "</span>" : "")."
+                            </div>
+                        </div>
+                    </div>
+                </div>";
+        }
         $i=1;
         foreach ($questions as $theQuestion) {           
             $pqid = $theQuestion->pqid;
@@ -207,48 +226,85 @@ function printPollForm() {
 }
 
 function submitPoll() {
-    global $tool_content, $course_code, $user_id, $langPollSubmitted, $langBack,
-           $langUsage;
-
-    // first populate poll_answer
-    $user_id = $GLOBALS['uid'];
-    $CreationDate = date("Y-m-d H:i");
+    global $tool_content, $course_code, $uid, $langPollSubmitted, $langBack,
+           $langUsage, $langTheField, $langFormErrors, $charset, $urlServer;
+    
     $pid = intval($_POST['pid']);
-    $answer = $_POST['answer'];
-    foreach ($_POST['question'] as $pqid => $qtype) {
-        $pqid = intval($pqid);
-        if ($qtype == QTYPE_MULTIPLE) {
-            if(is_array($answer[$pqid])){
-                foreach ($answer[$pqid] as $aid) {
-                    $aid = intval($aid);
-                    Database::get()->query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
-                        VALUES (?d, ?d, ?d, '', ?d , NOW())", $pid, $pqid, $aid, $user_id);
-                }
-            } else {
-                $aid = -1;
-                Database::get()->query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
-                    VALUES (?d, ?d, ?d, '', ?d , NOW())", $pid, $pqid, $aid, $user_id);                
-            }
-            continue;
-        } elseif ($qtype == QTYPE_SCALE) {
-            $aid = 0;
-            $answer_text = $answer[$pqid];         
-        } elseif ($qtype == QTYPE_SINGLE) {
-            $aid = intval($answer[$pqid]);
-            $answer_text = '';
-        } elseif ($qtype == QTYPE_FILL) {
-            $answer_text = $answer[$pqid];
-            $aid = 0;
+    $v = new Valitron\Validator($_POST);
+    if (!$uid) {
+        $v->rule('required', array('participantEmail'));
+        $v->rule('email', array('participantEmail'));
+        $v->labels(array('participantEmail' => "$langTheField Email"));
+    }
+    if($v->validate()) {
+        // first populate poll_answer
+        $CreationDate = date("Y-m-d H:i");
+        $answer = $_POST['answer'];
+        if ($uid) {
+            $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid)->lastInsertID;
         } else {
-            continue;
+            require_once 'include/sendMail.inc.php';
+            $participantEmail = $_POST['participantEmail'];
+            $verification_code = randomkeys(255);
+            $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, $participantEmail, 0, $verification_code)->lastInsertID;
+            $subject = "Επιβεβαίωση Συμμετοχής σε Ερωτηματολόγιο";
+            $body_html = "
+             <!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$subject</div>
+                </div>
+            </div>
+            <!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div id='mail-body-inner'>
+                    <a href='{$urlServer}modules/questionnaire/index.php?course=$course_code&amp;verification_code=$verification_code'>test</a>
+                </div>
+            </div>"; 
+            $body_plain = html2text($body_html);
+            send_mail_multipart('', '', '', $participantEmail, $subject, $body_plain, $body_html, $charset);
         }
-        Database::get()->query("INSERT INTO poll_answer_record (pid, qid, aid, answer_text, user_id, submit_date)
-			VALUES (?d, ?d, ?d, ?s, ?d , ?t)", $pid, $pqid, $aid, $answer_text, $user_id, $CreationDate);
+
+        foreach ($_POST['question'] as $pqid => $qtype) {
+            $pqid = intval($pqid);
+            if ($qtype == QTYPE_MULTIPLE) {
+                if(is_array($answer[$pqid])){
+                    foreach ($answer[$pqid] as $aid) {
+                        $aid = intval($aid);
+                        Database::get()->query("INSERT INTO poll_answer_record (poll_user_record_id, qid, aid, answer_text, submit_date)
+                            VALUES (?d, ?d, ?d, '', NOW())", $user_record_id, $pqid, $aid);
+                    }
+                } else {
+                    $aid = -1;
+                    Database::get()->query("INSERT INTO poll_answer_record (poll_user_record_id, qid, aid, answer_text, submit_date)
+                        VALUES (?d, ?d, ?d, '', NOW())", $user_record_id, $pqid, $aid);                
+                }
+                continue;
+            } elseif ($qtype == QTYPE_SCALE) {
+                $aid = 0;
+                $answer_text = $answer[$pqid];         
+            } elseif ($qtype == QTYPE_SINGLE) {
+                $aid = intval($answer[$pqid]);
+                $answer_text = '';
+            } elseif ($qtype == QTYPE_FILL) {
+                $answer_text = $answer[$pqid];
+                $aid = 0;
+            } else {
+                continue;
+            }
+            Database::get()->query("INSERT INTO poll_answer_record (poll_user_record_id, qid, aid, answer_text, submit_date)
+                            VALUES (?d, ?d, ?d, ?s, ?t)", $user_record_id, $pqid, $aid, $answer_text, $CreationDate);
+        }
+        $end_message = Database::get()->querySingle("SELECT end_message FROM poll WHERE pid = ?d", $pid)->end_message;
+        $tool_content .= "<div class='alert alert-success'>".$langPollSubmitted."</div>";
+        if (!empty($end_message)) {
+            $tool_content .=  $end_message;
+        }
+        $tool_content .= "<br><div class=\"text-center\"><a class='btn btn-default' href=\"index.php?course=$course_code\">".$langBack."</a> <a class='btn btn-primary' href=\"pollresults.php?course=$course_code&amp;pid=$pid\">".$langUsage."</a></div>";
+    } else {
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
     }
-    $end_message = Database::get()->querySingle("SELECT end_message FROM poll WHERE pid = ?d", $pid)->end_message;
-    $tool_content .= "<div class='alert alert-success'>".$langPollSubmitted."</div>";
-    if (!empty($end_message)) {
-        $tool_content .=  $end_message;
-    }
-    $tool_content .= "<br><div class=\"text-center\"><a class='btn btn-default' href=\"index.php?course=$course_code\">".$langBack."</a> <a class='btn btn-primary' href=\"pollresults.php?course=$course_code&amp;pid=$pid\">".$langUsage."</a></div>";
 }

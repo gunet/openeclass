@@ -2933,6 +2933,26 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `group_properties` ADD PRIMARY KEY (group_id)");
             delete_field('group_properties', 'multiple_registration');
         }
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_user_record` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+            `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+            `email` VARCHAR(255) DEFAULT NULL,
+            `email_verification` TINYINT(1) DEFAULT NULL,
+            `verification_code` VARCHAR(255) DEFAULT NULL) $charset_spec");
+        if (!DBHelper::fieldExists('poll_answer_record', 'poll_user_record_id')) {
+            Database::get()->query("ALTER TABLE `poll_answer_record` "
+                    . "ADD `poll_user_record_id` INT(11) NOT NULL AFTER `arid`");
+            
+            $user_records = Database::get()->queryArray("SELECT DISTINCT `pid`, `user_id` FROM poll_answer_record");
+            foreach ($user_records as $user_record) {
+                $poll_user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $user_record->pid, $user_record->user_id)->lastInsertID;
+                Database::get()->query("UPDATE poll_answer_record SET poll_user_record_id = ?d", $poll_user_record_id);
+            }
+            Database::get()->query("ALTER TABLE `poll_answer_record` ADD FOREIGN KEY (`poll_user_record_id`) REFERENCES `poll_user_record` (`id`) ON DELETE CASCADE");
+            delete_field('poll_answer_record', 'pid');
+            delete_field('poll_answer_record', 'user_id');            
+        }
     }
 
 
