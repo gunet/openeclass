@@ -53,42 +53,34 @@ if (!register_posted_variables(array('search_terms' => false,
 
 // search in the index
 $idx = new Indexer();
-$hits1 = $idx->searchRaw(CourseIndexer::buildQuery($_POST));            // courses with visible 1 or 2
-// Additional Access Rights
-$anonymous = false;
-if (isset($uid) and $uid) {
-    $anonymous = true;
-    $hits2 = $idx->searchRaw(CourseIndexer::buildQuery($_POST, false)); // courses with visible 0 or 3
+$hits = $idx->searchRaw(CourseIndexer::buildQuery($_POST));
 
-    if ($uid == 0) {
-        $hits = array_merge($hits1, $hits2); // admin has access to all
-    } else {        
-        $res = Database::get()->queryArray("SELECT course.id 
-                           FROM course 
-                           JOIN course_user ON course.id = course_user.course_id 
-                            AND course_user.user_id = ?d", $uid);
-        $subscribed = array();
-        foreach ($res as $row) {
-            $subscribed[] = $row->id;
-        }
-        $hits3 = array();
-        foreach ($hits2 as $hit2) {
-            if (in_array($hit2->pkid, $subscribed)) {
-                $hits3[] = $hit2;
-            }
-        }
-        $hits = array_merge($hits1, $hits3); // eponymous user can also search for his subscribed courses
-    }
-} else {
-    $hits = $hits1;                          // anonymous can only access with visible 1 or 2
-}
- 
 // exit if not results
 if (count($hits) <= 0) {
     Session::Messages($langNoResult);
     redirect_to_home_page('modules/search/search.php');  
 }
 
+// Additional Access Rights
+$anonymous = (isset($uid) && $uid) ? false : true;
+$cnthits = count($hits);
+foreach ($hits as $hit) {
+    if ($hit->visible == 3 && $uid != 1) {
+        $cnthits--;
+    }
+}
+$subscribed = array();
+if ($uid > 1) {
+    $res = Database::get()->queryArray("SELECT course.id 
+                           FROM course 
+                           JOIN course_user ON course.id = course_user.course_id 
+                            AND course_user.user_id = ?d", $uid);
+        
+    foreach ($res as $row) {
+        $subscribed[] = $row->id;
+    }
+}
+ 
 //////// PRINT RESULTS ////////
 $tool_content .= action_bar(array(
                     array('title' => $langAdvancedSearch,
@@ -102,27 +94,59 @@ $tool_content .= "
 if (isset($_POST['search_terms'])) {
     $tool_content .= ":&nbsp;<label> '$_POST[search_terms]'</label>";
 }
-$tool_content .= "<br><small>" . count($hits) . " $langResults2</small></div>
+$tool_content .= "<br><small>" . $cnthits . " $langResults2</small></div>
     <table class='table-default'>
     <tr>      
       <th class='text-left'>" . $langCourse . " ($langCode)</th>
       <th class='text-left'>$langTeacher</th>
       <th class='text-left'>$langKeywords</th>
+      <th class='text-left'>$langType</th>
     </tr>";
+// use the following array for the legend icons
+$icons = array(
+    3 => "<img src='$themeimg/lock_inactive.png' alt='" . $langInactiveCourse . "' title='" . $langInactiveCourse . "' width='16' height='16' />",
+    2 => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' width='16' height='16' />",
+    1 => "<img src='$themeimg/lock_registration.png' alt='" . $langRegCourse . "' title='" . $langRegCourse . "' width='16' height='16' />",
+    0 => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
+);
 
 foreach ($hits as $hit) {    
-    $course = Database::get()->querySingle("SELECT code, title, public_code, prof_names, keywords FROM course WHERE id = ?d", $hit->pkid);
+    $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $hit->pkid);
 
     $urlParam = '';
     if (isset($_POST['search_terms']) && search_in_course($_POST['search_terms'], $hit->pkid, $anonymous)) {
         $urlParam = '?from_search=' . urlencode($_POST['search_terms']);
     }
     
+    $courseUrl = "<a href='../../courses/" . q($course->code) . "/" . $urlParam . "'>" . q($course->title) . "</a>";
+    if (($course->visible == 0 || $course->visible == 1) && $anonymous) {
+        $courseUrl = q($course->title);
+    }
+    // closed courses url displays contact form for logged in users
+    if ($course->visible == 0 && $uid > 1 && !in_array($course->id, $subscribed)) {
+        $courseUrl = "<a href='../contact/index.php?course_id=" . intval($course->id) . "'>" . q($course->title) . "</a>";
+    }
+    // reg courses url displays just title for logged in non-subscribed users
+    if ($course->visible == 1 && $uid > 1 && !in_array($course->id, $subscribed)) {
+        $courseUrl = q($course->title);
+    }
+    
+    //  inactive courses are hidden from anyone except admin
+    if ($course->visible == 3 && $uid != 1) {
+        continue;
+    }
+    
     $tool_content .= "<tr><td>
-                      <a href='../../courses/" . q($course->code) . "/" . $urlParam . "'>" . q($course->title) . "
-                      </a> (" . q($course->public_code) . ")</td>
+                      $courseUrl (" . q($course->public_code) . ")</td>
                       <td>" . q($course->prof_names) . "</td>
-                      <td>" . q($course->keywords) . "</td></tr>";
+                      <td>" . q($course->keywords) . "</td>
+                      <td>";
+    foreach ($icons as $visible => $image) {
+        if ($visible == $course->visible) {
+            $tool_content .= $image;
+        }
+    }
+    $tool_content .= "</td></tr>";
 }
 $tool_content .= "</table>";
 draw($tool_content, 0);

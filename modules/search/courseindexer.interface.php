@@ -19,7 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-interface ResourceIndexerInterface {
+interface CourseIndexerInterface {
 
     /**
      * Store a Resource in the Index.
@@ -39,19 +39,10 @@ interface ResourceIndexerInterface {
     public function remove($id, $existCheck, $optimize);
 
     /**
-     * Reindex all resources.
-     * 
-     * @param boolean $optimize - whether to optimize after reindexing
-     * @deprecated
-     */
-    //public function reindex();
-
-    /**
      * Build a Lucene Query.
      * 
      * @param array   $data      - The data (normally $_POST), needs specific array keys
-     * @param boolean $anonymous - whether we build query for anonymous user access or not
      * @return string            - the returned query string
      */
-    public static function buildQuery($data, $anonymous);
+    public static function buildQuery($data);
 }
