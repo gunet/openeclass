@@ -1933,6 +1933,55 @@ a.list-group-item.delete:hover{
         margin-right: 15px;
     }
 }
+#course-title-wrapper{
+    .popover-content{
+        padding: 3px;
+        .list-group{
+            margin: 0px;
+            .list-group-item{
+                white-space: nowrap;
+            }
+        }
+    }
+}
+.course-below-wrapper{
+    padding: 0;
+    .course-below-info{
+        font-size: 12px;
+        margin: 15px 0 0 0;
+        padding: 15px 0;
+        background-color: #f5f5f5;
+    }
+}
+ul.course-title-actions{
+    margin: 0;
+    li{
+        padding-left: 10px;
+        padding-right: 10px;
+        .fa-custom-lock{
+            position: absolute;
+            top: 27px;
+            right: 92px;
+            font-size: 11px;
+        }
+    }
+    li:first-child{
+        border-left: 2px solid #eeeeee;
+    }
+}
+.access{
+    &.access-edit{
+        margin-left: 10px;
+        padding-left: 10px;
+    }
+    font-size: 20px;
+    a:hover{
+        text-decoration: none;
+    }
+}
+.panel-footer .rating{
+    margin: 0px;
+}
 /* add unit button */
 .add-unit-btn{
     line-height: 37px;

@@ -53,25 +53,27 @@ function popover_init() {
     });
 
 }
+
 function tooltip_init() {
     $('[data-toggle="tooltip"]').tooltip({container: 'body'});
 }
+
 function trunk8_init(){
     $("#descr_content").trunk8({
+        parseHTML: true,
         lines: 12,
-        fill: '&hellip;&nbsp;<a id="read-more" href="#">read more</a>&nbsp;'
+        tooltip: false,
+        fill: '&hellip;&nbsp;<a id="read-more-info" href="#">read more</a>&nbsp;'
     });
 
-    $('#read-more').live('click', function (event) {
-
-        alert('hello');
-
+    $(document).on('click', '#read-more-info', function (event) {
+        $(this).parents("#descr_content").trunk8('revert').append(' <a id="read-less-info" href="#">read less</a>');
+        event.preventDefault();
     });
 
-    $('#read-less').live('click', function (event) {
-        $(this).parent().trunk8();
-
-        return false;
+    $(document).on('click', '#read-less-info', function (event) {
+        $(this).parents("#descr_content").trunk8();
+        event.preventDefault();
     });
 
 }
@@ -82,7 +84,7 @@ $(document).ready(function () {
     act_confirm();
     tooltip_init();
     popover_init();
-    if($.trunk8) {
+    if($.fn.trunk8) {
         trunk8_init();
     }
 

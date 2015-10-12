@@ -92,6 +92,9 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
             $this.click(function() {
                 calendar.view($this.data("calendar-view"));
             });
+        });
+        $(".modal").on("show.bs.modal", function(e){
+            $("#lalou").popover("hide");
         });'
 
     ."})
@@ -202,7 +205,7 @@ if(count($res)>0){
                                   </div>
                                 </div>
                               </div>";
-        $course_info_extra .= "<li><a data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($row->title) ."</a></li>";
+        $course_info_extra .= "<a class='list-group-item' data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($row->title) ."</a>";
     }
     $course_info_btn = "
               <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>
@@ -267,13 +270,13 @@ if(isset($rating_content) || isset($social_content) || isset($comment_content)) 
             $subcontent .= $comment_content;
         }
         if(isset($social_content) && isset($comment_content)){
-            $subcontent .= "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ";
+            $subcontent .= "&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp; ";
         }
         if(isset($social_content)){
             $subcontent .= $social_content;
         }
         $panel_footer .=
-            "<div class='col-sm-6 ".(isset($rating_content) ? "text-right" : "")."'>
+            "<div class='text-right ".(isset($rating_content) ? "col-xs-6" : "col-xs-12")."'>
                 $subcontent
             </div>";
     }
@@ -380,29 +383,28 @@ $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
 //set the lang var for lessons visibility status
 switch ($visible) {
     case COURSE_CLOSED: {
-            $lessonStatus = "<span title='$langClosedCourseShort'>$langPrivateShort</span>";
-            break;
-        }
+        $lessonStatus = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span>";
+        break;
+    }
     case COURSE_REGISTRATION: {
-            $lessonStatus = "<span title='$langPrivOpen'>$langPrivOpenShort</span>";
-            break;
-        }
+        $lessonStatus = "   <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPrivOpen'>
+                                <span class='fa fa-pencil text-danger fa-custom-lock'></span>
+                            </span>";
+        break;
+    }
     case COURSE_OPEN: {
-            $lessonStatus = "<span title='$langPublic'>$langPublicShort</span>";
-            break;
-        }
+        $lessonStatus = "    <span class='fa fa-unlock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPublic'></span>";
+        break;
+    }
     case COURSE_INACTIVE: {
-            $lessonStatus = "<span title='$langCourseInactiveShort'>$langCourseInactive</span>";
-            break;
-        }
+        $lessonStatus = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInactiveShort'>
+                                <span class='fa fa-times text-danger fa-custom-lock'></span>
+                             </span>";
+        break;
+    }
 }
-$bar_content_2 = "<br><b>$langConfidentiality:</b> $lessonStatus";
-if ($is_course_admin) {
-    $link = "<a href='{$urlAppend}modules/user/?course=$course_code'>$numUsers $langRegistered</a>";
-} else {
-    $link = "<a href='{$urlAppend}modules/user/userslist.php?course=$course_code'>$numUsers $langRegistered</a>";
-}
-$bar_content_2 .= "<br><b>$langUsers:</b> $link";
+//$bar_content_2 = "<br><b>$langConfidentiality:</b> $lessonStatus";
+//$bar_content_2 = "<br><b>$langUsers:</b> $Users_link";
 $citation_text = "$professor.&nbsp;<i>$currentCourseName.</i>&nbsp;$langAccessed" . claro_format_locale_date($dateFormatLong, strtotime('now')) . "&nbsp;$langFrom2 {$urlServer}courses/$course_code/";
 $tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                     <div class='modal-dialog'>
@@ -417,11 +419,11 @@ $tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dial
                         </div>
                     </div>
                 </div>";
-$bar_content_2 .= "<br><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'>$langCitation</a>";
+//$bar_content_2 .= "<br><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'>$langCitation</a>";
 
 // display course license
 if ($course_license) {
-    $license_info_box = "<small>" . copyright_info($course_id) . "</small>";
+    $license_info_box = "<span>" . copyright_info($course_id) . "</span>";
 } else {
     $license_info_box = '';
 }
@@ -488,35 +490,23 @@ if (!empty($rec_mail)) {
 }
 */
 // Contentbox: Course main contentbox
-//Temp commit (waiting for Alex to fix course description issue) 
+//Temp commit (waiting for Alex to fix course description issue)
+
+if(!empty($license_info_box)){
+
+    $license_holder = "
+                        <div class ='text-center'>
+                           $license_info_box
+                        </div>
+                        ";
+} else {
+    $license_holder = "";
+}
+
 if ($course_info->home_layout == 3) {
     $left_column = '';
     $main_content_cols = '';
-    $horizontal_info_row =
-                "<div class='col-xs-12'>
-                    <hr class='margin-top-fat margin-bottom-fat'>
-                </div>
-                <div class='col-xs-12 form-wrapper'>
-                <div class='row'>
-                <div class='col-xs-8'>              
-                     $bar_content
-                     $bar_content_2
-                </div>
-                <div class='col-xs-4 text-center'> 
-                    $license_info_box
-                </div></div></div>";    
-
 } else {
-    if(!empty($license_info_box)){
-
-        $license_holder = "<hr class='col-xs-12 margin-top-slim margin-bottom-fat'>
-                        <div class ='col-xs-12 text-center margin-top-fat'>
-                           $license_info_box
-                        </div>
-                        <hr class='col-xs-12 margin-top-fat margin-bottom-fat visible-xs-block'>";
-    } else {
-        $license_holder = "";
-    }           
    $left_column = "
             <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>"; 
    if ($course_info->home_layout == 1) {       
@@ -525,50 +515,54 @@ if ($course_info->home_layout == 3) {
                 <div>
                     <img class='banner-image img-responsive' src='$course_image_url'/>
                 </div>
-                <hr class='col-xs-12 margin-top-fat margin-bottom-fat'>";
+                ";
    }
     $left_column .= "
-                <div class='col-xs-12 form-wrapper'>              
-                     $bar_content
-                     $bar_content_2
-                </div>               
-                $license_holder
+
             </div>";
-   $horizontal_info_row = '';
    $main_content_cols = 'col-sm-7';
 }
 $edit_link = "";
 if ($is_editor) {
     warnCourseInvalidDepartment(true);
     $edit_link = "
-    <a class='btn btn-default btn-sm' href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' data-toggle='tooltip' data-placement='top' title='$langCourseInformationText'><i class='fa fa-edit'></i></a>";
+        <div class='access access-edit pull-left'><a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code'><span class='fa fa-pencil' style='line-height: 30px;' data-toggle='tooltip' data-placement='top' title='Επεξεργασία πληροφοριών'></span></a></div>";
 } else {
     $edit_link = " ";
 }
+$course_info_popover = "<div  class='list-group'>$course_info_extra</div>";
 $tool_content .= "
 <div class='row margin-top-thin margin-bottom-fat'>
     <div class='col-md-12'>
-            <div class='panel panel-default'>
-                
-                <div class='panel-body'>
-                    <div class='course-info-title clearfix'>
-                        <h4 class='pull-left'>$langCourseDescriptionShort</h4>
-                        <div class='btn-group pull-right' role='group'>
-                            $edit_link
-                            $course_info_btn
-                        </div>
-                    </div>
-                            $left_column
-                            <div class='col-xs-12 $main_content_cols'>
+        <div class='panel panel-default'>
 
-                                <div class=''>$main_content</div>
-                            </div>
-                            $horizontal_info_row
+            <div class='panel-body'>
+                <div id='course-title-wrapper' class='course-info-title clearfix'>
+                    <h4 class='pull-left'>$langCourseDescriptionShort</h4> $edit_link
+                    <ul class='course-title-actions clearfix pull-right list-inline'>
+                        <li class='access pull-right'><span id='lalou' class='fa fa-info-circle fa-fw' style='color:blue; cursor: pointer;' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='".q($course_info_popover)."'></span></li>
+                        <li class='access pull-right'>$lessonStatus</li>
+                        <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span></a></li>
+                        <li class='access pull-right'><a href='{$urlAppend}modules/user/".($is_course_admin?'':'userslist.php')."?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span></a></li>
+                    </ul>
                 </div>
-                
-                $panel_footer
+                $left_column
+                <div class='col-xs-12 $main_content_cols'>
+
+                    <div class=''>$main_content</div>
+                </div>
+                <div class='col-xs-12 course-below-wrapper'>
+                    <div class='row text-muted course-below-info'>
+                    <div class='col-xs-6'>
+                         $bar_content
+                     </div>
+                     <div class='col-xs-6'>$license_holder</div>
+                </div>
             </div>
         </div>
+        $panel_footer
+    </div>
+    </div>
 </div>
 ";
 
