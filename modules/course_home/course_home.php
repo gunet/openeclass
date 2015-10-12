@@ -518,9 +518,9 @@ if ($course_info->home_layout == 3) {
         $license_holder = "";
     }           
    $left_column = "
-            <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>";
-   if ($course_info->home_layout == 1) {
-       $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . urlencode($course_info->course_image) : "$themeimg/ph1.jpg";
+            <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>"; 
+   if ($course_info->home_layout == 1) {       
+       $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . rawurlencode($course_info->course_image) : "$themeimg/ph1.jpg";
        $left_column .= "
                 <div>
                     <img class='banner-image img-responsive' src='$course_image_url'/>
