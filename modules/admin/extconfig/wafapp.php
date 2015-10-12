@@ -68,8 +68,7 @@ class WafApp extends ExtApp {
             $connector = new phpids();
         } else {
             $connector = new $connector();
-        }
-        $connector->setEnabled($antivirus->isEnabled());
+        }       
         return $connector;
     }
 
