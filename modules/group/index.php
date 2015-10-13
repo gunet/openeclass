@@ -183,7 +183,8 @@ if ($is_editor) {
                                                                         'name' => $group_name,
                                                                         'max_members' => $group_max,
                                                                         'secret_directory' => $secretDirectory));
-            $message = "$langGroupAdded";
+            Session::Messages($langGroupAdded2, "alert-success");
+            redirect_to_home_page("modules/group/index.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/group/group_creation.php?course=$course_code");
@@ -287,11 +288,11 @@ if ($is_editor) {
                                                                             'max_members' => $group_max,
                                                                             'secret_directory' => $secretDirectory));
             }
-            if ($group_quantity == 1) {
-                $message = "$group_quantity $langGroupAdded";
-            } else {
-                $message = "$group_quantity $langGroupsAdded";
-            }
+
+            $group_message = $group_quantity == 1? $group_quantity.$langGroupAdded2:$group_quantity.$langGroupAdded2;
+            Session::Messages($group_message, "alert-succes");
+            redirect_to_home_page("modules/group/index.php?course=$course_code");
+
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/group/group_creation.php?course=$course_code");
@@ -390,7 +391,7 @@ if ($is_editor) {
 
         // move group directory to garbage collector
         if (!file_exists("courses/garbage")) {
-            mkdir("courses/garbage");
+            mkdir("courses/garbage", 0777);
         }
         $groupGarbage = "courses/garbage/{$course_code}_group_{$id}_" . uniqid(20);
         $myDir = Database::get()->querySingle("SELECT secret_directory, forum_id, name FROM `group` WHERE id = ?d", $id);
