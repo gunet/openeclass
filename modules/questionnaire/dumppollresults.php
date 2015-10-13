@@ -55,7 +55,7 @@ if (!$p) {
 
 $anonymized = $p->anonymized;
 $qlist = array();
-$total_participants = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) AS total FROM poll_answer_record WHERE pid = ?d", $p->pid)->total;
+$total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d", $p->pid)->total;
 echo csv_escape($langInfoPoll), $crlf, $crlf;
 echo csv_escape($langTitle), ';', csv_escape($p->name), $crlf;
 echo csv_escape($langPollTotalAnswers), ';', csv_escape($total_participants), $crlf, $crlf, $crlf;
@@ -129,7 +129,7 @@ if ($full) {
                                             ON poll_answer_record.aid = poll_question_answer.pqaid
                                     WHERE qid = ?d GROUP BY aid", $q->pqid);
             } else {
-                $answers = Database::get()->queryArray("SELECT COUNT(arid) AS count, answer_text, user_id FROM poll_answer_record
+                $answers = Database::get()->queryArray("SELECT COUNT(arid) AS count, answer_text FROM poll_answer_record
                                                            WHERE qid = ?d GROUP BY answer_text", $q->pqid);                
             }
             $answer_counts = array();
