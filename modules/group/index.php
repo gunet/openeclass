@@ -49,7 +49,6 @@ $action->record(MODULE_ID_GROUPS);
 $toolName = $langGroups;
 $totalRegistered = 0;
 unset($message);
-
 unset($_SESSION['secret_directory']);
 unset($_SESSION['forum_id']);
 
@@ -565,7 +564,9 @@ if ($is_editor) {
         foreach ($groupSelect as $group) {
             initialize_group_info($group->id);
             $tool_content .= "<tr>";
-            $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a><p>$group_description</p></td>";
+            $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
+                    <br><span class='small'>$user_group_description</span>
+                    <p>$group_description</p></td>";
             $tool_content .= "<td class='center'>";
             foreach ($tutors as $t) {
                 $tool_content .= display_user($t->user_id) . "<br>";
@@ -627,8 +628,9 @@ if ($is_editor) {
                         icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
                         icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
             } elseif ($is_member) {
-                $tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
+                $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
             }
+            $tool_content .= "<br><em>$group_description</em><br>";
             $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>";
             foreach ($tutors as $t) {

@@ -38,6 +38,7 @@ function initialize_group_id($param = 'group_id') {
  * @global type $tutors
  * @global type $member_count
  * @global type $is_tutor
+ * @global type $is_edito
  * @global type $is_member
  * @global type $uid
  * @global type $urlServer
@@ -47,7 +48,7 @@ function initialize_group_id($param = 'group_id') {
  */
 function initialize_group_info($group_id) {
     
-    global $course_id, $status, $self_reg, $has_forum, $private_forum, $documents, $wiki,
+    global $course_id, $is_editor, $status, $self_reg, $has_forum, $private_forum, $documents, $wiki,
     $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors,
     $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code;
  
@@ -90,7 +91,16 @@ function initialize_group_info($group_id) {
             $is_tutor = $res->is_tutor;
             $user_group_description = $res->description;
         }
-    }    
+    }
+    if ($is_tutor or $is_editor) {
+        $res = Database::get()->queryArray("SELECT description,user_id FROM group_members
+                                     WHERE group_id = ?d", $group_id);
+        foreach ($res as $d) {
+            if (!empty($d->description) or $d->description != ' ') {
+                $user_group_description .= "$d->description &nbsp;" . display_user($d->user_id, false, false) . "<br>";
+            }
+        }
+    }
 }
 
 /**
