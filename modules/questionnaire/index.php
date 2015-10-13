@@ -256,7 +256,6 @@ function printPolls() {
         $index_aa = 1;
         $k = 0;
         foreach ($result as $thepoll) {
-            $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d", $thepoll->pid)->total;
             $visibility = $thepoll->active;
 
             if (($visibility) or ($is_editor)) {
@@ -284,7 +283,7 @@ function printPolls() {
                 $creator_id = $thepoll->creator_id;
                 $theCreator = uid_to_name($creator_id);
                 $pid = $thepoll->pid;
-                $countAnswers = Database::get()->querySingle("SELECT COUNT(*) as counter FROM poll_user_record WHERE pid = ?d", $pid)->counter;
+                $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
                 // check if user has participated
                 $has_participated = Database::get()->querySingle("SELECT COUNT(*) as counter FROM poll_user_record
                         WHERE uid = ?d AND pid = ?d", $uid, $pid)->counter;
@@ -315,7 +314,7 @@ function printPolls() {
                         <td class='text-center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->end_date)), true) . "</td>";
                 if ($is_editor) {
                     $tool_content .= "
-                        <td class='text-center'>$countAnswers</td>
+                        <td class='text-center'>$total_participants</td>
                         <td class='text-center option-btn-cell'>" .action_button(array(
                             array(
                                 'title' => $langEditChange,

@@ -75,7 +75,7 @@ if (!$is_editor && !$thePoll->show_results) {
 if(!$thePoll){
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
-$total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d", $pid)->total;
+$total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
 if(!$total_participants) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
@@ -171,8 +171,15 @@ foreach ($questions as $theQuestion) {
             }
             if ($theQuestion->qtype == QTYPE_SINGLE) {
                 $chart->addPoint($langPollUnknown, 0);
-            }
-            $answers = Database::get()->queryArray("SELECT a.aid AS aid, b.answer_text AS answer_text, count(a.aid) AS count FROM poll_answer_record a LEFT JOIN poll_question_answer b ON a.aid = b.pqaid WHERE a.qid = ?d GROUP BY a.aid", $theQuestion->pqid);
+            }          
+            $answers = Database::get()->queryArray("SELECT a.aid AS aid, b.answer_text AS answer_text, count(a.aid) AS count
+                        FROM poll_user_record c, poll_answer_record a
+                        LEFT JOIN poll_question_answer b
+                        ON a.aid = b.pqaid
+                        WHERE a.qid = ?d
+                        AND a.poll_user_record_id = c.id
+                        AND (c.email_verification = 1 OR c.email_verification IS NULL)
+                        GROUP BY a.aid", $theQuestion->pqid);
             $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record WHERE qid= ?d", $theQuestion->pqid)->total;
             $answers_table = "
                 <table class='table-default'>
@@ -201,6 +208,7 @@ foreach ($questions as $theQuestion) {
                             FROM poll_user_record a, poll_answer_record b 
                             WHERE b.aid = ?d
                             AND a.email IS NOT NULL
+                            AND a.email_verification = 1
                             AND b.poll_user_record_id = a.id                            
                             ", $aid, $aid);                    
                     foreach($names as $name) {
@@ -225,8 +233,15 @@ foreach ($questions as $theQuestion) {
                 $chart->addPoint($i, 0);
             }
 
-            $answers = Database::get()->queryArray("SELECT answer_text, count(answer_text) as count FROM poll_answer_record WHERE qid = ?d GROUP BY answer_text", $theQuestion->pqid);
-            $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record WHERE qid= ?d", $theQuestion->pqid)->total;
+            $answers = Database::get()->queryArray("SELECT a.answer_text, count(a.answer_text) as count 
+                    FROM poll_answer_record a, poll_user_record b
+                    WHERE a.qid = ?d
+                    AND a.poll_user_record_id = b.id
+                    AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                    GROUP BY a.answer_text", $theQuestion->pqid);
+            $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total "
+                    . "FROM poll_answer_record "
+                    . "WHERE qid= ?d", $theQuestion->pqid)->total;
 
             $answers_table = "
                 <table class='table-default'>
@@ -249,6 +264,7 @@ foreach ($questions as $theQuestion) {
                             FROM poll_user_record a, poll_answer_record b 
                             WHERE b.answer_text = ?s
                             AND a.email IS NOT NULL
+                            AND a.email_verification = 1
                             AND b.poll_user_record_id = a.id                            
                             ", $answer->answer_text, $answer->answer_text);
                     
@@ -278,9 +294,13 @@ foreach ($questions as $theQuestion) {
             $chart->normalize();
             $tool_content .= $chart->plot();            
             $tool_content .= $answers_table;
-        } elseif ($theQuestion->qtype == QTYPE_FILL) {
-            $answers = Database::get()->queryArray("SELECT COUNT(arid) AS count, answer_text FROM poll_answer_record
-                                        WHERE qid = ?d GROUP BY answer_text", $theQuestion->pqid);                   
+        } elseif ($theQuestion->qtype == QTYPE_FILL) {            
+            $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text 
+                                        FROM poll_answer_record a, poll_user_record b
+                                        WHERE a.qid = ?d 
+                                        AND a.poll_user_record_id = b.id
+                                        AND (b.email_verification = 1 OR b.email_verification IS NULL)                                        
+                                        GROUP BY a.answer_text", $theQuestion->pqid);                   
             $tool_content .= "<table class='table-default'>
                     <tbody>
                     <tr>
@@ -303,6 +323,7 @@ foreach ($questions as $theQuestion) {
                             FROM poll_user_record a, poll_answer_record b 
                             WHERE b.answer_text = ?s
                             AND a.email IS NOT NULL
+                            AND a.email_verification = 1
                             AND b.poll_user_record_id = a.id                            
                             ", $answer->answer_text, $answer->answer_text);                    
                     foreach($names as $name) {

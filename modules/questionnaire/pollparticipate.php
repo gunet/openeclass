@@ -231,6 +231,7 @@ function submitPoll() {
            $langPollEmailUsed;
     
     $pid = intval($_POST['pid']);
+    $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
     $v = new Valitron\Validator($_POST);
     if (!$uid) {
         $v->addRule('unique', function($field, $value, array $params) use ($pid){
@@ -307,7 +308,11 @@ function submitPoll() {
         if (!empty($end_message)) {
             $tool_content .=  $end_message;
         }
-        $tool_content .= "<br><div class=\"text-center\"><a class='btn btn-default' href=\"index.php?course=$course_code\">".$langBack."</a> <a class='btn btn-primary' href=\"pollresults.php?course=$course_code&amp;pid=$pid\">".$langUsage."</a></div>";
+        $tool_content .= "<br><div class=\"text-center\"><a class='btn btn-default' href=\"index.php?course=$course_code\">".$langBack."</a> ";
+        if ($poll->show_results) {
+            $tool_content .= "<a class='btn btn-primary' href=\"pollresults.php?course=$course_code&amp;pid=$pid\">".$langUsage."</a>";
+        }
+        $tool_content .= "</div>";
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/questionnaire/pollparticipate.php?course=$course_code&UseCase=1&pid=$pid");
