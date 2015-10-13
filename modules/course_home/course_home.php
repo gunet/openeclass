@@ -540,8 +540,8 @@ $tool_content .= "
                 <div id='course-title-wrapper' class='course-info-title clearfix'>
                     <h4 class='pull-left'>$langCourseDescriptionShort</h4> $edit_link
                     <ul class='course-title-actions clearfix pull-right list-inline'>
-                        <li class='access pull-right'><span id='lalou' class='fa fa-info-circle fa-fw' style='color:blue; cursor: pointer;' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='".q($course_info_popover)."'></span></li>
-                        <li class='access pull-right'>$lessonStatus</li>
+                        <li class='access pull-right'><a href='javascript:void(0);'><span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='".q($course_info_popover)."'></span></a></li>
+                        <li class='access pull-right'><a href='javascript:void(0);'>$lessonStatus</a></li>
                         <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span></a></li>
                         <li class='access pull-right'><a href='{$urlAppend}modules/user/".($is_course_admin?'':'userslist.php')."?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span></a></li>
                     </ul>
