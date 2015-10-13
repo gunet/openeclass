@@ -2953,6 +2953,85 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             delete_field('poll_answer_record', 'pid');
             delete_field('poll_answer_record', 'user_id');            
         }
+        
+        // Gamification Tables
+        Database::get()->query("CREATE TABLE `certificate` (
+          `id` int(11) not null auto_increment primary key,
+          `course` int(11) not null references course(id),
+          `author` int(11) not null references user(id),
+          `title` varchar(255) not null,
+          `description` text,
+          `autoassign` tinyint(1) not null default 1,
+          `active` tinyint(1) not null default 1,
+          `created` datetime,
+          `expires` datetime,
+          index `certificate_course` (`course`)
+        )");
+
+        Database::get()->query("CREATE TABLE `badge` (
+          `id` int(11) not null auto_increment primary key,
+          `course` int(11) not null references course(id),
+          `author` int(11) not null references user(id),
+          `title` varchar(255) not null,
+          `description` text,
+          `autoassign` tinyint(1) not null default 1,
+          `active` tinyint(1) not null default 1,
+          `created` datetime,
+          `expires` datetime,
+          index `badge_course` (`course`)
+        )");
+
+        Database::get()->query("CREATE TABLE `user_certificate` (
+          `id` int(11) not null auto_increment primary key,
+          `user` int(11) not null references user(id),
+          `certificate` int(11) not null references certificate(id),
+          `created` datetime,
+          unique key `user_certificate` (`user`, `certificate`)
+        )");
+
+        Database::get()->query("CREATE TABLE `user_badge` (
+          `id` int(11) not null auto_increment primary key,
+          `user` int(11) not null references user(id),
+          `badge` int(11) not null references badge(id),
+          `created` datetime,
+          unique key `user_badge` (`user`, `badge`)
+        )");
+
+        Database::get()->query("CREATE TABLE `certificate_criterion` (
+          `id` int(11) not null auto_increment primary key,
+          `certificate` int(11) not null references certificate(id),
+          `activity_type` varchar(255),
+          `module` int(11),
+          `resource` int(11),
+          `threshold` decimal(7,2),
+          `operator` varchar(20)
+        )");
+
+        Database::get()->query("CREATE TABLE `badge_criterion` (
+          `id` int(11) not null auto_increment primary key,
+          `badge` int(11) not null references badge(id),
+          `activity_type` varchar(255),
+          `module` int(11),
+          `resource` int(11),
+          `threshold` decimal(7,2),
+          `operator` varchar(20)
+        )");
+
+        Database::get()->query("CREATE TABLE `user_certificate_criterion` (
+          `id` int(11) not null auto_increment primary key,
+          `user` int(11) not null references user(id),
+          `certificate_criterion` int(11) not null references certificate_criterion(id),
+          `created` datetime,
+          unique key `user_certificate_criterion` (`user`, `certificate_criterion`)
+        )");
+
+        Database::get()->query("CREATE TABLE `user_badge_criterion` (
+          `id` int(11) not null auto_increment primary key,
+          `user` int(11) not null references user(id),
+          `badge_criterion` int(11) not null references badge_criterion(id),
+          `created` datetime,
+          unique key `user_badge_criterion` (`user`, `badge_criterion`)
+        )");
     }
 
 
