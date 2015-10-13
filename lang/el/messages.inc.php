@@ -507,6 +507,7 @@ $langSearchUsers = "Αναζήτηση Χρηστών";
 $langInactiveUsers = "Μη ενεργοί χρήστες";
 $langAddSixMonths = "Επέκταση διάρκειας λογαριασμών";
 $langChangeDepartment = 'Αλλαγή σχολής - τμήματος';
+$langSearchInCourse = "Αναζήτηση στους πόρους";
 
 // eclassconf
 $langRestoredValues = "Επαναφορά προηγούμενων τιμών";
