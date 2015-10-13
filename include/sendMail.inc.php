@@ -37,7 +37,7 @@ function send_mail($from, $from_address, $to, $to_address, $subject, $body, $cha
         }
         $bcc = '';
     }
-    $headers = from($from, $from_address) . $bcc .
+    $headers = fromHeader($from, $from_address) . $bcc .
 		"MIME-Version: 1.0" . PHP_EOL .
 		"Content-Type: text/plain; charset=$charset" . PHP_EOL .
         "Content-Transfer-Encoding: 8bit" .
@@ -96,7 +96,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
     }
     $separator = uniqid('==eClass-Multipart_Boundary_0_', true) . '_' .
             md5(time());
-    $headers = from($from, $from_address) . $bcc .
+    $headers = fromHeader($from, $from_address) . $bcc .
 		   "MIME-Version: 1.0" . PHP_EOL .
            "Content-Type: multipart/alternative;" . PHP_EOL .
            "    boundary=\"$separator\"" .
@@ -146,7 +146,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
 
 
 // Determine the correct From: header
-function from($from, $from_address) {
+function fromHeader($from, $from_address) {
     global $langVia, $siteName, $charset;
 
     if (empty($from_address) or !get_config('email_from')) {
