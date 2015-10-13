@@ -389,10 +389,16 @@ if ($is_editor) {
         $id = intval($_REQUEST['delete']);
 
         // move group directory to garbage collector
+        if (!file_exists("courses/garbage")) {
+            mkdir("courses/garbage");
+        }
         $groupGarbage = "courses/garbage/{$course_code}_group_{$id}_" . uniqid(20);
         $myDir = Database::get()->querySingle("SELECT secret_directory, forum_id, name FROM `group` WHERE id = ?d", $id);
         if ($myDir and $myDir->secret_directory) {
-            rename("courses/$course_code/group/" . $myDir->secret_directory, $groupGarbage);
+            $secret_dir = "courses/$course_code/group/" . $myDir->secret_directory;
+            if (file_exists($secret_dir)) {
+                rename($secret_dir, $groupGarbage);
+            }
         }
         // delete group forum
         $result = Database::get()->querySingle("SELECT `forum_id` FROM `group` WHERE `course_id` = ?d AND `id` = ?d AND `forum_id` <> 0 AND `forum_id` IS NOT NULL", $course_id, $id);
