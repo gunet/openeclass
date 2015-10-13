@@ -2182,7 +2182,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     DBHelper::indexExists('poll', 'poll_index') or
             Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");
     DBHelper::indexExists('poll_answer_record', 'poll_ans_id') or
-            Database::get()->query("CREATE INDEX `poll_ans_id` ON poll_answer_record(pid, user_id)");
+            Database::get()->query("CREATE INDEX `poll_ans_id` ON poll_user_record(pid, uid)");
     DBHelper::indexExists('poll_question', 'poll_q_id') or
             Database::get()->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
     DBHelper::indexExists('poll_question_answer', 'poll_qa_id') or
@@ -2273,11 +2273,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("CREATE INDEX `lp_learnPath_module_id` ON lp_user_module_progress (learnPath_module_id)");
     DBHelper::indexExists('lp_user_module_progress', 'lp_user_id') or
             Database::get()->query("CREATE INDEX `lp_user_id` ON lp_user_module_progress (user_id)");
-
-    DBHelper::indexExists('poll_answer_record', 'poll_ans_id_user_id') or
-            Database::get()->query("CREATE INDEX `poll_ans_id_user_id` ON poll_answer_record(user_id)");
-    DBHelper::indexExists('poll_answer_record', 'poll_ans_id_user_id') or
-            Database::get()->query("CREATE INDEX `poll_ans_id_pid` ON poll_answer_record(pid)");
 
     DBHelper::indexExists('unit_resources', 'unit_res_unit_id') or
             Database::get()->query("CREATE INDEX `unit_res_unit_id` ON unit_resources (unit_id)");
