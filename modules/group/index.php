@@ -82,8 +82,8 @@ if ($is_editor) {
         delete_group($id);
         Session::Messages($langGroupDeleted, 'alert-success');
         redirect_to_home_page("modules/group/index.php");
-    }
-
+    }    	               
+    
     if (isset($_GET['group'])) {
         $group_name = $_POST['name'];
         $group_desc = $_POST['description'];
@@ -189,8 +189,8 @@ if ($is_editor) {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/group/group_creation.php?course=$course_code");
         }        
-    } elseif (isset($_POST['creation'])) {
-        $v = new Valitron\Validator($_POST);
+    } elseif (isset($_POST['creation'])) {         
+        $v = new Valitron\Validator($_POST);        
         $v->rule('required', array('group_quantity'));
         $v->rule('numeric', array('group_quantity'));
         $v->rule('min', array('group_quantity'), 1);
@@ -201,12 +201,16 @@ if ($is_editor) {
             'group_quantity' => "$langTheField $langNewGroups",
             'group_max' => "$langTheField $langNewGroupMembers"
         ));
-        if($v->validate()) {          
-            $group_quantity = intval($_POST['group_quantity']);
+        
+        if($v->validate()) {
             if (preg_match('/^[0-9]/', $_POST['group_max'])) {
                 $group_max = intval($_POST['group_max']);
             } else {
                 $group_max = 0;
+            }
+            $group_quantity = $_POST['group_quantity'];
+            if (isset($_POST['group_name'])) {
+                $group_name = $_POST['group_name'];
             }
             $group_num = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `group` WHERE course_id = ?d", $course_id)->count;
 
@@ -222,41 +226,56 @@ if ($is_editor) {
                 $cat_id = $req2->lastInsertID;
             }
             for ($i = 1; $i <= $group_quantity; $i++) {
-                $res = Database::get()->query("SELECT id FROM `group` WHERE name = '$langGroup ". $group_num . "'");
-                if ($res) {
-                    $group_num++;
-                }
-                $forumname = "$langForumGroup $group_num";
-                $q = Database::get()->query("INSERT INTO forum SET name = '$forumname',
-                                                        `desc` = ' ', num_topics = 0, num_posts = 0, last_post_id = 1, cat_id = ?d, course_id = ?d", $cat_id, $course_id);
-                $forum_id = $q->lastInsertID;
+                if (isset($_POST['all'])) {
+                    $g_name = "$langGroup $group_num";
+                    $res = Database::get()->query("SELECT id FROM `group` WHERE name = '$langGroup ". $group_num . "'");
+                    if ($res) {
+                        $group_num++;
+                    }
+                    $forumname = "$langForumGroup $group_num";                    
+                } else {
+                    $g_name = $_POST['group_name'];
+                    $forumname = "$langForumGroup $g_name";
+                }                                
                 // Create a unique path to group documents to try (!)
                 // avoiding groups entering other groups area
                 $secretDirectory = uniqid('');
                 mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
                 touch("courses/$course_code/group/index.php");
                 touch("courses/$course_code/group/$secretDirectory/index.php");
-
-                Database::get()->query("INSERT INTO `group` (max_members, secret_directory)
-                                    VALUES (?d, ?s)", $group_max, $secretDirectory);
-
+                
+                // group forum creation
+                $q = Database::get()->query("INSERT INTO forum SET name = '$forumname',
+                                                    `desc` = ' ', num_topics = 0, 
+                                                    num_posts = 0, last_post_id = 1, 
+                                                    cat_id = ?d, course_id = ?d", $cat_id, $course_id);
+                $forum_id = $q->lastInsertID;
+                
                 $id = Database::get()->query("INSERT INTO `group` SET
                                              course_id = ?d,
-                                             name = '$langGroup $group_num',
-                                             forum_id =  ?d,
+                                             name = ?s,
+                                             forum_id = ?d,
                                              max_members = ?d,
                                              secret_directory = ?s,
                                              category_id = ?d",
-                                    $course_id, $forum_id, $group_max, $secretDirectory, $_POST['selectcategory'])->lastInsertID;
-									
+                                    $course_id, $g_name, $forum_id, $group_max, $secretDirectory, $_POST['selectcategory'])->lastInsertID;
+					
+                
+                if (isset($_POST['tutor'])) {
+                    $user_tutor_id = 0;
+                    foreach ($_POST['tutor'] as $user_tutor_id) {
+                        Database::get()->query("INSERT INTO group_members SET group_id = ?d, user_id = ?d, is_tutor = 1", $id, $user_tutor_id);
+                    }
+                }
+
                 $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,
                                                                     group_id = ?d, self_registration = ?d, 
                                                                     allow_unregister = ?d, 
                                                                     forum = ?d, private_forum = ?d, 
                                                                     documents = ?d, wiki = ?d, 
                                                                     agenda = ?d",
-                                                                $course_id, $id, 1, 0, 1, 0, 1, 0, 0);
-
+                                                                $course_id, $id, 1, 0, 1, 0, 1, 0, 0);                
+                
                 /** ********Create Group Wiki*********** */
                 //Set ACL
                 $wikiACL = array();
@@ -288,9 +307,8 @@ if ($is_editor) {
                                                                             'max_members' => $group_max,
                                                                             'secret_directory' => $secretDirectory));
             }
-
-            $group_message = $group_quantity == 1? $group_quantity.$langGroupAdded2:$group_quantity.$langGroupAdded2;
-            Session::Messages($group_message, "alert-succes");
+            
+            Session::Messages($langGroupsAdded2, "alert-success");
             redirect_to_home_page("modules/group/index.php?course=$course_code");
 
         } else {
