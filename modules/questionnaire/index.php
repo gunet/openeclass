@@ -373,7 +373,7 @@ function printPolls() {
                         $tool_content .= $uid ? $langHasNotParticipated : 'Οι συμμετοχές είναι ανοιχτές';
                     }
                     $tool_content .= "</td>";
-                    $line_chart_link = ($uid && $has_participated && $thepoll->show_results)? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "<span class='fa fa-line-chart' data-toggle='tooltip' title='$langNoAccessPrivilages'></span>" ;
+                    $line_chart_link = ($has_participated && $thepoll->show_results)? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "<span class='fa fa-line-chart' data-toggle='tooltip' title='$langNoAccessPrivilages'></span>" ;
                     $tool_content .= "<td class='text-center option-btn-cell'><div style='padding-top:7px;padding-bottom:7px;'>$line_chart_link</div></td></tr>";
 //                    $tool_content .= "
 //                        <td class='text-center option-btn-cell'>" .action_button(array(

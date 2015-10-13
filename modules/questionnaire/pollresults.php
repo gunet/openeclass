@@ -200,17 +200,18 @@ foreach ($questions as $theQuestion) {
                     $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
                             FROM poll_user_record AS a, user AS b
                             WHERE a.id IN (
-                                    SELECT poll_user_record_id FROM poll_answer_record WHERE aid = ?d
+                                    SELECT poll_user_record_id FROM poll_answer_record WHERE qid = ?d AND aid = ?d
                                 )
                             AND a.uid = b.id
                             UNION
                             SELECT a.email AS fullname
                             FROM poll_user_record a, poll_answer_record b 
-                            WHERE b.aid = ?d
+                            WHERE b.qid = ?d
+                            AND b.aid = ?d
                             AND a.email IS NOT NULL
                             AND a.email_verification = 1
                             AND b.poll_user_record_id = a.id                            
-                            ", $aid, $aid);                    
+                            ", $theQuestion->pqid, $aid, $theQuestion->pqid, $aid);                    
                     foreach($names as $name) {
                       $names_array[] = $name->fullname;
                     }
@@ -256,17 +257,18 @@ foreach ($questions as $theQuestion) {
                     $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
                             FROM poll_user_record AS a, user AS b
                             WHERE a.id IN (
-                                    SELECT poll_user_record_id FROM poll_answer_record WHERE answer_text = ?s
+                                    SELECT poll_user_record_id FROM poll_answer_record WHERE qid = ?d AND answer_text = ?s
                                 )
                             AND a.uid = b.id
                             UNION
                             SELECT a.email AS fullname
                             FROM poll_user_record a, poll_answer_record b 
-                            WHERE b.answer_text = ?s
+                            WHERE b.qid = ?d 
+                            AND b.answer_text = ?s
                             AND a.email IS NOT NULL
                             AND a.email_verification = 1
                             AND b.poll_user_record_id = a.id                            
-                            ", $answer->answer_text, $answer->answer_text);
+                            ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);
                     
                     foreach($names as $name) {
                       $names_array[] = $name->fullname;
@@ -315,17 +317,20 @@ foreach ($questions as $theQuestion) {
                     $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
                             FROM poll_user_record AS a, user AS b
                             WHERE a.id IN (
-                                    SELECT poll_user_record_id FROM poll_answer_record WHERE answer_text = ?s
+                                    SELECT poll_user_record_id FROM poll_answer_record 
+                                    WHERE qid = ?d 
+                                    AND answer_text = ?s
                                 )
                             AND a.uid = b.id
                             UNION
                             SELECT a.email AS fullname
                             FROM poll_user_record a, poll_answer_record b 
-                            WHERE b.answer_text = ?s
+                            WHERE b.qid = ?d
+                            AND b.answer_text = ?s
                             AND a.email IS NOT NULL
                             AND a.email_verification = 1
                             AND b.poll_user_record_id = a.id                            
-                            ", $answer->answer_text, $answer->answer_text);                    
+                            ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);                    
                     foreach($names as $name) {
                       $names_array[] = $name->fullname;
                     }
