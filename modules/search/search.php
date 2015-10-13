@@ -113,10 +113,11 @@ $icons = array(
 foreach ($hits as $hit) {    
     $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $hit->pkid);
 
+    // search in-course: Commented out @ 2014-11-24 because too costly to run 11 index sub-queries for each hit result
     $urlParam = '';
-    if (isset($_POST['search_terms']) && search_in_course($_POST['search_terms'], $hit->pkid, $anonymous)) {
-        $urlParam = '?from_search=' . urlencode($_POST['search_terms']);
-    }
+    //if (isset($_POST['search_terms']) && search_in_course($_POST['search_terms'], $hit->pkid, $anonymous)) {
+    //    $urlParam = '?from_search=' . urlencode($_POST['search_terms']);
+    //}
     
     $courseUrl = "<a href='../../courses/" . q($course->code) . "/" . $urlParam . "'>" . q($course->title) . "</a>";
     if (($course->visible == 0 || $course->visible == 1) && $anonymous) {
