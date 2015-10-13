@@ -51,7 +51,7 @@ $course = new Course();
 $pageName = ''; // delete $pageName set in doc_init.php
 $require_help = TRUE;
 $helpTopic = 'course_home';
-$main_content = $cunits_content = $bar_content = "";
+$main_content = $cunits_content = $bar_content = $course_info_extra = "";
 
 add_units_navigation(TRUE);
 
@@ -173,8 +173,8 @@ $head_content .= "
                 }              
             };
         </script>";
-if(count($res)>0){
-    $course_info_extra = "";
+
+if(count($res)>0){   
     foreach ($res as $key => $row) {
         $desctype = intval($row->type) - 1;    
         $hidden_id = "hidden_" . $key;
