@@ -632,7 +632,7 @@ if ($is_editor) {
                 $tool_content .= q($group_name);
             }
             if ($user_group_description) {
-                $tool_content .= "<br><span class='small'><i>" . q($user_group_description) . "</i></span>&nbsp;&nbsp;" .
+                $tool_content .= "<br><span class='small'><i>$user_group_description</i></span>&nbsp;&nbsp;" .
                         icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
                         icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
             } elseif ($is_member) {

@@ -196,14 +196,14 @@ function showgroupsofcategory($catid) {
     $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
     $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
     $langEditChange, $groups_num, $uid, $totalRegistered,
-    $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members;
+    $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members, $group_description;
 
     $q = Database::get()->queryArray("SELECT id FROM `group`
                                    WHERE course_id = ?d AND category_id = ?d
                                    ORDER BY `id`", $course_id, $catid);
           
     foreach ($q as $row) {
-        $tool_content .= "<tr><td>";
+        $tool_content .= "<tr><td style='padding-left: 25px;'>";
         $group_id = $row->id;
         initialize_group_info($group_id);
         if ($is_editor) {
@@ -217,11 +217,12 @@ function showgroupsofcategory($catid) {
             }
         }
         if ($user_group_description) {
-            $tool_content .= "<br><span class='small'><i>" . q($user_group_description) . "</i></span>&nbsp;&nbsp;" .
+            $tool_content .= "<br><span class='small'>$user_group_description</span>
+                    <p>$group_description" .
                     icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
                     icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
         } elseif ($is_member) {
-            $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
+            $tool_content .= " </p><br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
         }
         $tool_content .= "</td>";
         $tool_content .= "<td class='text-center' width='250'>";
