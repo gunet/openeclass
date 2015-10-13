@@ -1,3 +1,5 @@
+<?php
+
 /* ========================================================================
  * Open eClass 
  * E-learning and Course Management System
@@ -17,3 +19,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== 
  */
+
+abstract class OperatorSimple {
+    const eq = 'equalTo';
+    const lt = 'lessThan';
+    const gt = 'greaterThan';
+    const let = 'lessThanOrEqualTo';
+    const get = 'greaterThanOrEqualTo';
+    const neq = 'notEqualTo';
+}

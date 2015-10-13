@@ -1,3 +1,5 @@
+<?php
+
 /* ========================================================================
  * Open eClass 
  * E-learning and Course Management System
@@ -17,3 +19,12 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== 
  */
+
+abstract class Operator {
+    const eq = '=';
+    const lt = '<';
+    const gt = '>';
+    const let = '<=';
+    const get = '>=';
+    const neq = '!=';
+}
