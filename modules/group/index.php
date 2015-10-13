@@ -72,124 +72,19 @@ if (isset($_GET['urlview'])) {
 }
 
 if ($is_editor) {    	
-    if (isset($_GET['deletecategory'])) {
+    if (isset($_GET['deletecategory'])) { // delete group category
         $id = $_GET['id'];
         delete_group_category($id);
         Session::Messages($langGroupCategoryDeleted, 'alert-success');
         redirect_to_home_page("modules/group/index.php");
-    } elseif (isset($_GET['deletegroup'])) {
+    } elseif (isset($_GET['deletegroup'])) { // delete group
         $id = $_GET['id'];
         delete_group($id);
         Session::Messages($langGroupDeleted, 'alert-success');
         redirect_to_home_page("modules/group/index.php");
     }    	               
     
-    if (isset($_GET['group'])) {
-        $group_name = $_POST['name'];
-        $group_desc = $_POST['description'];
-        $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('maxStudent'))->message($langTheFieldIsRequired)->label('');
-        $v->rule('numeric', array('maxStudent'))->message($langInvalidNumericValue)->label('');
-        $v->rule('required', array('name'))->message($langTheFieldIsRequired)->label('');;
-        if($v->validate()) {
-            if (preg_match('/^[0-9]/', $_POST['maxStudent'])) {
-                $group_max = intval($_POST['maxStudent']);
-            } else {
-                $group_max = 0;
-            }
-	
-
-            // Create a hidden category for group forums
-            $req = Database::get()->querySingle("SELECT id FROM forum_category
-                                    WHERE cat_order = -1
-                                    AND course_id = ?d", $course_id);
-            if ($req) {
-                $cat_id = $req->id;
-            } else {
-                $req2 = Database::get()->query("INSERT INTO forum_category (cat_title, cat_order, course_id)
-                                             VALUES (?s, -1, ?d)", $langCatagoryGroup, $course_id);
-                $cat_id = $req2->lastInsertID;
-            }
-
-            $res = Database::get()->query("SELECT id FROM `group` WHERE name = '$langGroup ". $group_name . "'");
-
-            $forumname = "$langForumGroup $group_name";
-            $q = Database::get()->query("INSERT INTO forum SET name = '$forumname',
-                                                    `desc` = ' ', num_topics = 0, num_posts = 0, last_post_id = 1, cat_id = ?d, course_id = ?d", $cat_id, $course_id);
-            $forum_id = $q->lastInsertID;
-
-            // Create a unique path to group documents to try (!)
-            // avoiding groups entering other groups area
-            $secretDirectory = uniqid('');
-            mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
-            touch("courses/$course_code/group/index.php");
-            touch("courses/$course_code/group/$secretDirectory/index.php");
-                    $category_id = intval($_POST['selectcategory']);
-                    $id = Database::get()->query("INSERT INTO `group` (course_id, name, description, forum_id, category_id, max_members, secret_directory)
-                                VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?s)",  $course_id, $group_name, $group_desc, $forum_id, $category_id, $group_max, $secretDirectory)->lastInsertID;
-
-            if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on'){
-                    $self_reg = 1;
-            }
-            else $self_reg = 0;
-
-            if (isset($_POST['forum']) and $_POST['forum'] == 'on'){
-                $has_forum = 1;
-            }
-            else $has_forum = 0;
-
-            if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
-                $documents = 1;
-            }
-            else $documents = 0;
-
-            if (isset($_POST['wiki']) and $_POST['wiki'] == 'on') {
-                $wiki = 1;
-            }
-            else $wiki = 0;
-
-            $private_forum = $_POST['private_forum'];
-
-            $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d, group_id = ?d, self_registration = ?d, allow_unregister = ?d, forum = ?d, private_forum = ?d, documents = ?d, wiki = ?d, agenda = ?d",
-                                                    $course_id, $id, $self_reg, 0, $has_forum, $private_forum, $documents, $wiki, 0);
-
-            /** ********Create Group Wiki*********** */
-            //Set ACL
-            $wikiACL = array();
-            $wikiACL['course_read'] = true;
-            $wikiACL['course_edit'] = false;
-            $wikiACL['course_create'] = false;
-            $wikiACL['group_read'] = true;
-            $wikiACL['group_edit'] = true;
-            $wikiACL['group_create'] = true;
-            $wikiACL['other_read'] = false;
-            $wikiACL['other_edit'] = false;
-            $wikiACL['other_create'] = false;
-
-            $wiki = new Wiki();
-            $wiki->setTitle($langGroup . " - Wiki");
-            $wiki->setDescription('');
-            $wiki->setACL($wikiACL);
-            $wiki->setGroupId($id);
-            $wikiId = $wiki->save();
-
-            $mainPageContent = $langWikiMainPageContent;
-
-            $wikiPage = new WikiPage($wikiId);
-            $wikiPage->create($uid, '__MainPage__', $mainPageContent, '', date("Y-m-d H:i:s"), true);
-            /** ************************************ */
-
-            Log::record($course_id, MODULE_ID_GROUPS, LOG_INSERT, array('id' => $id,
-                                                                        'name' => $group_name,
-                                                                        'max_members' => $group_max,
-                                                                        'secret_directory' => $secretDirectory));
-            Session::Messages($langGroupAdded2, "alert-success");
-            redirect_to_home_page("modules/group/index.php?course=$course_code");
-        } else {
-            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            redirect_to_home_page("modules/group/group_creation.php?course=$course_code");
-        }        
-    } elseif (isset($_POST['creation'])) {         
+    if (isset($_POST['creation'])) { // groups creation
         $v = new Valitron\Validator($_POST);        
         $v->rule('required', array('group_quantity'));
         $v->rule('numeric', array('group_quantity'));
