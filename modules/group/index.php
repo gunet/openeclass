@@ -397,11 +397,11 @@ if ($is_editor) {
         // Move all groups to garbage collector and re-create an empty work directory
         $groupGarbage = $course_code . '_groups_' . uniqid(20);
 
-        @mkdir("../../courses/garbage");
-        @touch("../../courses/garbage/index.php");
-        rename("../../courses/$course_code/group", "../../courses/garbage/$groupGarbage");
-        mkdir("../../courses/$course_code/group", 0777);
-        touch("../../courses/$course_code/group/index.php");
+        @mkdir("courses/garbage");
+        @touch("courses/garbage/index.php");
+        rename("courses/$course_code/group", "courses/garbage/$groupGarbage");
+        mkdir("courses/$course_code/group", 0777);
+        touch("courses/$course_code/group/index.php");
 
         $message = $langGroupsDeleted;
     } elseif (isset($_REQUEST['delete'])) {
