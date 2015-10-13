@@ -3542,6 +3542,7 @@ $langPollEndMessageText = 'Thank you for participating in this questionnaire!';
 $langPollPercentResults = 'Percentage results';
 $langPollFullResults = 'Full results';
 $langPollParticipantInfo = 'Participant Information';
+$langPollEmailUsed = 'contains an account already used to answer this survey';
 $langCaptcha = "Type code as it is displayed ";
 $langCompulsory = "(required)";
 $langSearchFor = 'Names search type';

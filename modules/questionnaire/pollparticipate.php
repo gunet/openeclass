@@ -75,7 +75,7 @@ function printPollForm() {
     
     // check if user has participated
     $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
-    if ($has_participated > 0 && !$is_editor){
+    if ($uid && $has_participated > 0 && !$is_editor){
         Session::Messages($langPollAlreadyParticipated);
         redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
     }        
@@ -227,13 +227,18 @@ function printPollForm() {
 
 function submitPoll() {
     global $tool_content, $course_code, $uid, $langPollSubmitted, $langBack,
-           $langUsage, $langTheField, $langFormErrors, $charset, $urlServer;
+           $langUsage, $langTheField, $langFormErrors, $charset, $urlServer,
+           $langPollEmailUsed;
     
     $pid = intval($_POST['pid']);
     $v = new Valitron\Validator($_POST);
     if (!$uid) {
+        $v->addRule('unique', function($field, $value, array $params) use ($pid){
+            return !Database::get()->querySingle("SELECT count(*) AS count FROM poll_user_record WHERE email = ?s AND pid = ?d", $value, $pid)->count;
+        }, $langPollEmailUsed);           
         $v->rule('required', array('participantEmail'));
         $v->rule('email', array('participantEmail'));
+        $v->rule('unique', array('participantEmail'));
         $v->labels(array('participantEmail' => "$langTheField Email"));
     }
     if($v->validate()) {
