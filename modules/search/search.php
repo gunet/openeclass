@@ -112,24 +112,27 @@ $icons = array(
 
 foreach ($hits as $hit) {    
     $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $hit->pkid);
-
-    // search in-course: Commented out @ 2014-11-24 because too costly to run 11 index sub-queries for each hit result
-    $urlParam = '';
-    //if (isset($_POST['search_terms']) && search_in_course($_POST['search_terms'], $hit->pkid, $anonymous)) {
-    //    $urlParam = '?from_search=' . urlencode($_POST['search_terms']);
-    //}
+    $courseHref = "../../courses/" . q($course->code) . "/";
+    $courseUrl = "<a href='$courseHref'>" . q($course->title) . "</a> (" . q($course->public_code) . ")";
     
-    $courseUrl = "<a href='../../courses/" . q($course->code) . "/" . $urlParam . "'>" . q($course->title) . "</a>";
+    // anonymous see only title for reg/closed courses
     if (($course->visible == 0 || $course->visible == 1) && $anonymous) {
         $courseUrl = q($course->title);
     }
+    
     // closed courses url displays contact form for logged in users
     if ($course->visible == 0 && $uid > 1 && !in_array($course->id, $subscribed)) {
         $courseUrl = "<a href='../contact/index.php?course_id=" . intval($course->id) . "'>" . q($course->title) . "</a>";
     }
+    
     // reg courses url displays just title for logged in non-subscribed users
     if ($course->visible == 1 && $uid > 1 && !in_array($course->id, $subscribed)) {
         $courseUrl = q($course->title);
+    }
+    
+    // logged in users have extended search options
+    if (!$anonymous && isset($_POST['search_terms'])) {
+        $courseUrl .= "<br/><small><em><a href='$courseHref?from_search=" . urlencode($_POST['search_terms']) . "'>$langSearchInCourse</a></em></small>";
     }
     
     //  inactive courses are hidden from anyone except admin
@@ -138,7 +141,7 @@ foreach ($hits as $hit) {
     }
     
     $tool_content .= "<tr><td>
-                      $courseUrl (" . q($course->public_code) . ")</td>
+                      $courseUrl</td>
                       <td>" . q($course->prof_names) . "</td>
                       <td>" . q($course->keywords) . "</td>
                       <td>";
