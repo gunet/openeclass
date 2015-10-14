@@ -320,7 +320,7 @@ if (empty($search_terms)) {
                         <tr>
                           <th colspan='2' class='left'>$langForum ($langCategories):</th>
                         </tr>";
-            $forums = Database::get()->querySingle("SELECT id, name, `desc` FROM forum WHERE id in " . inIdsFromHits($forumHits));
+            $forums = Database::get()->queryArray("SELECT id, name, `desc` FROM forum WHERE id in " . inIdsFromHits($forumHits));
             $forumUrls = urlsFromHits($forumHits);
 
             $numLine = 0;
@@ -354,7 +354,7 @@ if (empty($search_terms)) {
                     <td>";
                 $search_results .= "<strong>$langSubject</strong>: <a href='" . $ftopicUrls[$ftopic->id] . "'>" . q($ftopic->title) . "</a>";
                 if (count($forumPostHits) > 0) {
-                    $fposts = Database::get()->querySingle("SELECT id, post_text FROM forum_post WHERE id in " . inIdsFromHits($forumPostHits));
+                    $fposts = Database::get()->queryArray("SELECT id, post_text FROM forum_post WHERE id in " . inIdsFromHits($forumPostHits));
                     $fpostUrls = urlsFromHits($forumPostHits);
                     foreach ($fposts as $fpost) {
                         $search_results .= "<br /><strong>$langMessage</strong> <a href='" . $fpostUrls[$fpost->id] . "'>" . $fpost->post_text . "</a>";
