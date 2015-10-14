@@ -211,7 +211,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 var dateType = $(this).prop('id').replace('enable', '');
                 if($(this).prop('checked')) {
                     $('input#exercise'+dateType).prop('disabled', false);
-                    if ($('input#exercise'+dateType).val() !== '') {
+                    if (dateType === 'EndDate' && $('input#exerciseEndDate').val() !== '') {
                         $('#answersDispEndDate').removeClass('hidden');
                     }
                 } else {
