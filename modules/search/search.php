@@ -80,6 +80,14 @@ if ($uid > 1) {
         $subscribed[] = $row->id;
     }
 }
+
+// construct courses array
+$hitIds = array();
+foreach ($hits as $hit) {
+    $hitIds[] = intval($hit->pkid);
+}
+$inIds = "(" . implode(",", $hitIds) . ")";
+$courses = Database::get()->queryArray("SELECT * FROM course WHERE id in " . $inIds);
  
 //////// PRINT RESULTS ////////
 $tool_content .= action_bar(array(
@@ -110,8 +118,7 @@ $icons = array(
     0 => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
 );
 
-foreach ($hits as $hit) {    
-    $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $hit->pkid);
+foreach ($courses as $course) {    
     $courseHref = "../../courses/" . q($course->code) . "/";
     $courseUrl = "<a href='$courseHref'>" . q($course->title) . "</a> (" . q($course->public_code) . ")";
     
