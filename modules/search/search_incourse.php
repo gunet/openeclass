@@ -165,9 +165,8 @@ if (empty($search_terms)) {
        </form>
     </div>";
 } else {
-    // ResourceIndexers require course_id inside the input data array (POST, but we do not want to pass it through the form)
+    // prepare data in POST for feeding Indexer
     $_POST['course_id'] = $course_id;
-    // Search Terms might come from GET, but we want to pass it alltogether with POST in ResourceIndexers
     $_POST['search_terms'] = $search_terms;
     $idx = new Indexer();
     $tool_content .= action_bar(array(
