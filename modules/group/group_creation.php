@@ -159,7 +159,20 @@ if (isset($_GET['all'])) {
               $tool_content_tutor
           </div>
         </div>";
+   
+    $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 
+    if ($multi_reg) {
+        // Students registered to the course but not members of this group
+        $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
+                            FROM user u, course_user cu
+                            WHERE cu.course_id = ?d AND
+                                  cu.user_id = u.id AND
+                                  u.id NOT IN (SELECT user_id FROM group_members WHERE group_id = ?d) AND
+                                  cu.status = " . USER_STUDENT . "
+                            GROUP BY u.id
+                            ORDER BY u.surname, u.givenname", $course_id, $group_id);
+    } else {    
         // Students registered to the course but members of no group
         $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
                                                 FROM (user u, course_user cu)
@@ -171,6 +184,7 @@ if (isset($_GET['all'])) {
                                                                         `group`.course_id = ?d)
                                                     GROUP BY u.id
                                                     ORDER BY u.surname, u.givenname", $course_id);
+    }
         $tool_content_not_Member = $tool_content_group_members = '';
         foreach ($resultNotMember as $myNotMember) {
             $tool_content_not_Member .= "<option value='$myNotMember->id'>" .
