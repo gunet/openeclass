@@ -147,26 +147,4 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
         $this->optimizeOrCommit($optimize);
     }
 
-    /**
-     * Build a Lucene Query.
-     * 
-     * @param  array   $data      - The data (normally $_POST), needs specific array keys
-     * @param  boolean $anonymous - whether we build query for anonymous user access or not
-     * @return string             - the returned query string
-     */
-    public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['course_id']) && !empty($data['course_id'])) {
-            $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
-            $queryStr = '(';
-            foreach ($terms as $term) {
-                $queryStr .= 'content:' . $term . '* ';
-            }
-            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:fpost';
-            return $queryStr;
-        }
-
-        return null;
-    }
-
 }

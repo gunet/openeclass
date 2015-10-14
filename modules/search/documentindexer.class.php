@@ -131,35 +131,4 @@ class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterfac
             AND course_id = ?d", $courseId);
     }
 
-    /**
-     * Build a Lucene Query.
-     * 
-     * @param  array   $data      - The data (normally $_POST), needs specific array keys
-     * @param  boolean $anonymous - whether we build query for anonymous user access or not
-     * @return string             - the returned query string
-     */
-    public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['course_id']) && !empty($data['course_id'])) {
-            $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
-            $queryStr = '(';
-            foreach ($terms as $term) {
-                $queryStr .= 'title:' . $term . '* ';
-                $queryStr .= 'content:' . $term . '* ';
-                $queryStr .= 'filename:' . $term . '* ';
-                $queryStr .= 'comment:' . $term . '* ';
-                $queryStr .= 'creator:' . $term . '* ';
-                $queryStr .= 'subject:' . $term . '* ';
-                $queryStr .= 'author:' . $term . '* ';
-            }
-            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:doc AND visible:1';
-            if ($anonymous) {
-                $queryStr .= ' AND public:1';
-            }
-            return $queryStr;
-        }
-
-        return null;
-    }
-
 }

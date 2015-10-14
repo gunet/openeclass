@@ -489,6 +489,33 @@ class Indexer {
             $idxObj->$method($arg);
         }
     }
+    
+    /**
+     * Build a Lucene Query.
+     * 
+     * @param  array   $data      - The data (normally $_POST), needs specific array keys
+     * @return string             - the returned query string
+     */
+    public static function buildQuery($data) {
+        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
+                isset($data['course_id']) && !empty($data['course_id'])) {
+            $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
+            $queryStr = 'courseid:' . $data['course_id'] . ' AND (';
+            foreach ($terms as $term) {
+                $queryStr .= 'title:' . $term . '* ';
+                $queryStr .= 'content:' . $term . '* ';
+                $queryStr .= 'filename:' . $term . '* ';
+                $queryStr .= 'comment:' . $term . '* ';
+                $queryStr .= 'creator:' . $term . '* ';
+                $queryStr .= 'subject:' . $term . '* ';
+                $queryStr .= 'author:' . $term . '* ';
+            }
+            $queryStr .= ') ';
+            return $queryStr;
+        }
+
+        return null;
+    }
 
     /**
      * Unit test for phonetic conversion.

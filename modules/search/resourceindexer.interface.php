@@ -45,13 +45,4 @@ interface ResourceIndexerInterface {
      * @deprecated
      */
     //public function reindex();
-
-    /**
-     * Build a Lucene Query.
-     * 
-     * @param array   $data      - The data (normally $_POST), needs specific array keys
-     * @param boolean $anonymous - whether we build query for anonymous user access or not
-     * @return string            - the returned query string
-     */
-    public static function buildQuery($data, $anonymous);
 }
