@@ -185,7 +185,7 @@ $tool_content .= action_bar(array(
         $announceHitsCount = count($announceHits);
         if ($announceHitsCount > 0) {
             $results_count += $announceHitsCount;
-            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+            $search_results .= "
               <table class='table-default'>
               <tr>
                 <th colspan='2'>$langAnnouncements:</th>
@@ -214,7 +214,7 @@ $tool_content .= action_bar(array(
         $agendaHitsCount = count($agendaHits);
         if ($agendaHitsCount > 0) {
         $results_count += $agendaHitsCount;
-            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+            $search_results .= "
                   <table class='table-default'>
           <tr>
             <th colspan='2' class='left'>$langAgenda:</th>
@@ -256,7 +256,7 @@ $tool_content .= action_bar(array(
         $documentHitsCount = count($documentHits);
         if ($documentHitsCount > 0) {
             $results_count += $documentHitsCount;
-            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+            $search_results .= "
                   <table class='table-default'>
                   <tr>
                     <th colspan='2' class='left'>$langDoc:</th>
@@ -285,7 +285,7 @@ $tool_content .= action_bar(array(
         $exerciseHitsCount = count($exerciseHits);
         if ($exerciseHitsCount > 0) {
             $results_count += $exerciseHitsCount;
-            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+            $search_results .= "
                 <table class='table-default'>
                     <tr>
                       <th colspan='2' class='left'>$langExercices:</th>
@@ -316,8 +316,8 @@ $tool_content .= action_bar(array(
         $forumHitsCount = count($forumHits);
         if ($forumHitsCount > 0) {
             $results_count += $forumHitsCount;
-            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                        <table width='99%' class='sortable' id='t5' align='left'>
+            $search_results .= "
+                        <table class='table-default'>
                         <tr>
                         <th colspan='2' class='left'>$langForum ($langCategories):</th>
                         </tr>";
@@ -339,7 +339,7 @@ $tool_content .= action_bar(array(
         }
 
         if (count($forumTopicHits) > 0) {
-            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+            $search_results .= "
                 <table class='table-default'>
         <tr>
           <th colspan='2' class='left'>$langForum ($langSubjects - $langMessages):</th>
@@ -373,7 +373,7 @@ $tool_content .= action_bar(array(
         $linkHitsCount = count($linkHits);
         if ($linkHitsCount > 0) {
             $results_count += $linkHitsCount;
-            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+            $search_results .= "
                 <table class='table-default'>
                 <tr>
                   <th colspan='2' class='left'>$langLinks:</th>
@@ -403,7 +403,7 @@ $tool_content .= action_bar(array(
         $videoHitsCount = count($videoHits);
         if ($videoHitsCount > 0) {
             $results_count += $videoHitsCount;
-            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+            $search_results .= "
                 <table class='table-default'>
         <tr>
                   <th colspan='2' class='left'>$langVideo:</th>
@@ -426,10 +426,10 @@ $tool_content .= action_bar(array(
         $vlinkHitsCount = count($vlinkHits);
         if ($vlinkHitsCount > 0) {
             $results_count += $vlinkHitsCount;
-            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                        <table width='99%' class='sortable' id='t9' align='left'>
+            $search_results .= "
+                        <table class='table-default'>
                         <tr>
-                        <th colspan='2' class='left'>$langLinks:</th>
+                        <th colspan='2'>$langLinks:</th>
                         </tr>";
 
             $numLine = 0;
@@ -456,7 +456,7 @@ $tool_content .= action_bar(array(
         $unitHitsCount = count($unitHits);
         if ($unitHitsCount > 0) {
             $results_count += $unitHitsCount;
-            $search_results .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
+            $search_results .= "
                 <table class='table-default'>
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
@@ -480,8 +480,7 @@ $tool_content .= action_bar(array(
         if ($uresHitsCount > 0) {
             $results_count += $uresHitsCount;
             $search_results .= "
-                <script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table class='table-default sortable' align='left'>
+                <table class='table-default' align='left'>
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
                 </tr>";
