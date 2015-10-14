@@ -320,7 +320,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
         case '4':
             $ldap = ldap_connect($settings['ldaphost']);
             if (!$ldap) {
-                $GLOBALS['auth_errors'] = 'Error connecting to LDAP host';
+                $GLOBALS['auth_errors'] = ldap_error($ldap);
                 return false;
             } else {
                 // LDAP connection established - now search for user dn
