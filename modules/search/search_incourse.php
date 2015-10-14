@@ -409,21 +409,23 @@ if (empty($search_terms)) {
                 <tr>
                   <th colspan='2' class='left'>$langVideo:</th>
                 </tr>";
+            $videos = Database::get()->queryArray("SELECT id, title, description FROM video WHERE id in " . inIdsFromHits($videoHits));
+            $videoUrls = urlsFromHits($videoHits);
+            
             $numLine = 0;
-            foreach ($videoHits as $videoHit) {
-                $video = Database::get()->querySingle("SELECT title, description FROM video WHERE id = ?d", $videoHit->pkid);                
-
+            foreach ($videos as $video) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $desc_text = (empty($video->description)) ? "" : "<span class='smaller'>(" . q($video->description) . ")</span>";
-                $search_results .= "<a href='" . $videoHit->url . "' target=_blank>" . q($video->title) . "</a> $desc_text </td></tr>";
+                $search_results .= "<a href='" . $videoUrls[$video->id] . "' target=_blank>" . q($video->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
             $search_results .= "</table>";
             $found = true;
         }
+        
         $vlinkHitsCount = count($vlinkHits);
         if ($vlinkHitsCount > 0) {
             $results_count += $vlinkHitsCount;
@@ -432,17 +434,17 @@ if (empty($search_terms)) {
                         <tr>
                         <th colspan='2'>$langLinks:</th>
                         </tr>";
+            $vlinks = Database::get()->queryArray("SELECT id, title, description FROM videolink WHERE id in " . inIdsFromHits($vlinkHits));
+            $vlinkUrls = urlsFromHits($vlinkHits);
 
             $numLine = 0;
-            foreach ($vlinkHits as $vlinkHit) {
-                $vlink = Database::get()->querySingle("SELECT title, description FROM videolink WHERE id = ?d", $vlinkHit->pkid);
-
+            foreach ($vlinks as $vlink) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $desc_text = (empty($vlink->description)) ? "" : "<span class='smaller'>(" . q($vlink->description) . ")</span>";
-                $search_results .= "<a href='" . $vlinkHit->url . "' target=_blank>" . q($vlink->title) . "</a><br /> $desc_text </td></tr>";
+                $search_results .= "<a href='" . $vlinkUrls[$vlink->id] . "' target=_blank>" . q($vlink->title) . "</a><br /> $desc_text </td></tr>";
                 $numLine++;
             }
             $search_results .= "</table>";
@@ -462,21 +464,23 @@ if (empty($search_terms)) {
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
                 </tr>";
+            $units = Database::get()->queryArray("SELECT id, title, comments FROM course_units WHERE id in " . inIdsFromHits($unitHits));
+            $unitUrls = urlsFromHits($unitHits);
 
             $numLine = 0;
-            foreach ($unitHits as $unitHit) {
-                $unit = Database::get()->querySingle("SELECT title, comments FROM course_units WHERE id = ?d", $unitHit->pkid);
+            foreach ($units as $unit) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $comments_text = (empty($unit->comments)) ? "" : " " . $unit->comments;
-                $search_results .= "<a href='" . $unitHit->url . "'>" . q($unit->title) . "</a> $comments_text </td></tr>";
+                $search_results .= "<a href='" . $unitUrls[$unit->id] . "'>" . q($unit->title) . "</a> $comments_text </td></tr>";
                 $numLine++;
             }
             $search_results .= "</table>";
             $found = true;
         }
+        
         $uresHitsCount = count($uresHits);
         if ($uresHitsCount > 0) {
             $results_count += $uresHitsCount;
@@ -485,17 +489,17 @@ if (empty($search_terms)) {
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
                 </tr>";
+            $ureses = Database::get()->queryArray("SELECT id, title, comments FROM unit_resources WHERE id in " . inIdsFromHits($uresHits));
+            $uresUrls = urlsFromHits($uresHits);
 
             $numLine = 0;
-            foreach ($uresHits as $uresHit) {
-                $ures = Database::get()->querySingle("SELECT title, comments FROM unit_resources WHERE id = ?d", $uresHit->pkid);
-
+            foreach ($ureses as $ures) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $comments_text = (empty($ures->comments)) ? "" : "<span class='smaller'>" . $ures->comments . "</span>";
-                $search_results .= q($ures->title) . " <a href='" . $uresHit->url . "'> $comments_text </a></td></tr>";
+                $search_results .= q($ures->title) . " <a href='" . $uresUrls[$ures->id] . "'> $comments_text </a></td></tr>";
                 $numLine++;
             }
             $search_results .= "</table>";
