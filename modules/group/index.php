@@ -464,16 +464,11 @@ if ($is_editor) {
                 <div class='col-sm-12'>
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>
-				<tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>";
-            if ($is_editor) {
-                $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
-            }
-            $tool_content .= "</tr>";
-            $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupInCategory - </td>";
-            if ($is_editor) {
-                $tool_content .= "<td></td>";
-            }
-            $tool_content .= "</tr></table></div></div></div>";
+				<tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>
+                <th class=' option-btn-cell text-center'>" . icon('fa-gears') . "</th>
+                </tr>
+                <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
+                <td></td></tr></table></div></div></div>";
         } elseif ($num_of_groups > 0) {
             $tool_content .= "<div class='table-responsive'>
                 <table class='table-default'>
@@ -522,7 +517,15 @@ if ($is_editor) {
     // Begin student view
     $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
     if (count($q) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
+        $tool_content .= "
+            <div class='row'>
+                <div class='col-sm-12'>
+                <div class='table-responsive'>
+                <table class='table-default nocategory-links'>
+				<tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>
+                </tr>
+                <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
+                </tr></table></div></div></div>";
     } else {
         $tool_content .= "<div class='table-responsive'>
             <table class='table-default'>
@@ -580,7 +583,7 @@ if ($is_editor) {
 	$numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
 	$cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
 	$aantalcategories = count($cat);
-	$tool_content .= "<div class='row'>
+	$tool_content .= "<br><br><div class='row'>
             <div class='col-sm-12'>
             <div class='margin-bottom-thin' style='font-weight: bold;'>";
         if ($aantalcategories > 0) {
