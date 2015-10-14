@@ -908,6 +908,7 @@ $langCourseInvalidDepartmentPrompt = 'Παρακαλούμε %sμεταφέρε�
     μέσω των ρυθμίσεων μαθήματος%s.';
 $langReadMore = "Περισσότερα";
 $langReadLess = "Λιγότερα";
+$langNoInfoAvailable = "Δεν υπάρχουν διαθέσιμες πληροφορίες";
 
 /* * *******************************************
  * course_info.php

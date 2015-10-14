@@ -193,6 +193,7 @@ $langCourseEditSuccess = "Course information modified successfully!";
 $langCourseInfoEdit = "Modify Course Information";
 $langReadMore = "More";
 $langReadLess = "Less";
+$langNoInfoAvailable = "No information available";
 $langBackCourse = "Back to course homepage";
 $langOpenProfessorRequests = "" . $langTeachers . "Open Requests";
 $langProfessorRequestClosed = "" . $langTeacher . "request closed !";
