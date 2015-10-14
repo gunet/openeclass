@@ -236,7 +236,7 @@ if (empty($search_terms)) {
                 }
                 break;
             case Indexer::DOCTYPE_UNIT:
-                if $course_units && $hit->visible) {
+                if ($course_units && $hit->visible) {
                     $unitHits[] = $hit;
                 }
                 break;
