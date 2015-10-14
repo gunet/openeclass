@@ -207,17 +207,8 @@ if(count($res)>0){
                               </div>";
         $course_info_extra .= "<a class='list-group-item' data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($row->title) ."</a>";
     }
-    $course_info_btn = "
-              <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>
-                $langCourseDescription
-                <span class='caret'></span>
-                <span class='sr-only'>Toggle Dropdown</span>
-              </button>
-              <ul class='dropdown-menu pull-right' role='menu'>
-                $course_info_extra
-              </ul>";
 } else {
-   $course_info_btn = ''; 
+    $course_info_extra = "<div class='text-muted'>$langNoInfoAvailable</div>";
 }
 load_js('trunk8');
 $main_content .= "<div class='course_info'>";
