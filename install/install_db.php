@@ -835,11 +835,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_user_record` (
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
     `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `pid` INT(11) NOT NULL DEFAULT 0,
+    `poll_user_record_id` INT(11) NOT NULL,
     `qid` INT(11) NOT NULL DEFAULT 0,
     `aid` INT(11) NOT NULL DEFAULT 0,
     `answer_text` TEXT NOT NULL,
-    `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
     `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
     FOREIGN KEY (`poll_user_record_id`) 
     REFERENCES `poll_user_record` (`id`) 
