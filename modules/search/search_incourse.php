@@ -191,7 +191,6 @@ if (empty($search_terms)) {
     $uresHits = array();
     
     $idxQ = Indexer::buildQuery($_POST);
-    error_log($idxQ);
     $allHits = $idx->searchRaw($idxQ);
     foreach ($allHits as $hit) {
         switch ($hit->doctype) {
