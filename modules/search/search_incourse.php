@@ -196,52 +196,64 @@ if (empty($search_terms)) {
     foreach ($allHits as $hit) {
         switch ($hit->doctype) {
             case Indexer::DOCTYPE_AGENDA:
-                if ($hit->visible) {
+                if ($agenda && $hit->visible) {
                     $agendaHits[] = $hit;
                 }
                 break;
             case Indexer::DOCTYPE_ANNOUNCEMENT:
-                if ($hit->visible) {
+                if ($announcements && $hit->visible) {
                     $announceHits[] = $hit;
                 }
                 break;
             case Indexer::DOCTYPE_DOCUMENT:
-                if ($hit->visible) {
+                if ($documents && $hit->visible) {
                     $documentHits[] = $hit;
                 }
                 break;
             case Indexer::DOCTYPE_EXERCISE:
-                if ($hit->visible) {
+                if ($exercises && $hit->visible) {
                     $exerciseHits[] = $hit;
                 }
                 break;
             case Indexer::DOCTYPE_FORUM:
-                $forumHits[] = $hit;
+                if ($forums) {
+                    $forumHits[] = $hit;
+                }
                 break;
             case Indexer::DOCTYPE_FORUMPOST:
-                $forumPostHits[] = $hit;
+                if ($forums) {
+                    $forumPostHits[] = $hit;
+                }
                 break;
             case Indexer::DOCTYPE_FORUMTOPIC:
-                $forumTopicHits[] = $hit;
+                if ($forums) {
+                    $forumTopicHits[] = $hit;
+                }
                 break;
             case Indexer::DOCTYPE_LINK:
-                $linkHits[] = $hit;
+                if ($links) {
+                    $linkHits[] = $hit;
+                }
                 break;
             case Indexer::DOCTYPE_UNIT:
-                if ($hit->visible) {
+                if $course_units && $hit->visible) {
                     $unitHits[] = $hit;
                 }
                 break;
             case Indexer::DOCTYPE_UNITRESOURCE:
-                if ($hit->visible) {
+                if ($course_units && $hit->visible) {
                     $uresHits[] = $hit;
                 }
                 break;
             case Indexer::DOCTYPE_VIDEO:
-                $videoHits[] = $hit;
+                if ($video) {
+                    $videoHits[] = $hit;
+                }
                 break;
             case Indexer::DOCTYPE_VIDEOLINK:
-                $vlinkHits[] = $hit;
+                if ($video) {
+                    $vlinkHits[] = $hit;
+                }
                 break;
             default:
                 break;
