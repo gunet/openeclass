@@ -170,7 +170,7 @@ if (empty($search_terms)) {
     // Search Terms might come from GET, but we want to pass it alltogether with POST in ResourceIndexers
     $_POST['search_terms'] = $search_terms;
     $idx = new Indexer();
-$tool_content .= action_bar(array(
+    $tool_content .= action_bar(array(
                     array('title' => $langAdvancedSearch,
                           'url' => $_SERVER['SCRIPT_NAME'],
                           'icon' => 'fa-search',
@@ -190,15 +190,15 @@ $tool_content .= action_bar(array(
               <tr>
                 <th colspan='2'>$langAnnouncements:</th>
               </tr>";
+            $announces = Database::get()->queryArray("SELECT id, title, content, date FROM announcement WHERE id in " . inIdsFromHits($announceHits));
+            $announcesUrls = urlsFromHits($announceHits);
 
             $numLine = 0;
-            foreach ($announceHits as $annHit) {
-                $announce = Database::get()->querySingle("SELECT title, content, date FROM announcement WHERE id = ?d", $annHit->pkid);
-
+            foreach ($announces as $announce) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
                                   <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                                  <td><a href='" . $annHit->url . "'>" . q($announce->title) . "</a>&nbsp;&nbsp;
+                                  <td><a href='" . $announcesUrls[$announce->id] . "'>" . q($announce->title) . "</a>&nbsp;&nbsp;
                                   <small>(" . nice_format(claro_format_locale_date($dateFormatLong, strtotime($announce->date))) . ")
                                   </small><br />" . $announce->content . "</td></tr>";
                 $numLine++;
@@ -213,17 +213,16 @@ $tool_content .= action_bar(array(
         $agendaHits = $idx->searchRaw(AgendaIndexer::buildQuery($_POST));
         $agendaHitsCount = count($agendaHits);
         if ($agendaHitsCount > 0) {
-        $results_count += $agendaHitsCount;
+            $results_count += $agendaHitsCount;
             $search_results .= "
                   <table class='table-default'>
-          <tr>
-            <th colspan='2' class='left'>$langAgenda:</th>
+                  <tr>
+                    <th colspan='2' class='left'>$langAgenda:</th>
                   </tr>";
+            $agendas = Database::get()->queryArray("SELECT title, content, start, duration FROM agenda WHERE id in " . inIdsFromHits($agendaHits));
 
             $numLine = 0;
-            foreach ($agendaHits as $agHit) {
-                $agenda = Database::get()->querySingle("SELECT title, content, start, duration FROM agenda WHERE id = ?d", $agHit->pkid);                
-
+            foreach ($agendas as $agenda) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "
                   <tr class='$class'>
@@ -261,17 +260,17 @@ $tool_content .= action_bar(array(
                   <tr>
                     <th colspan='2' class='left'>$langDoc:</th>
                   </tr>";
+            $documents = Database::get()->queryArray("SELECT id, filename, path, comment FROM document WHERE id in " . inIdsFromHits($documentHits));
+            $docsUrls = urlsFromHits($documentHits);
 
             $numLine = 0;
-            foreach ($documentHits as $docHit) {
-                $document = Database::get()->querySingle("SELECT filename, path, comment FROM document WHERE id = ?d", $docHit->pkid);
-
+            foreach ($documents as $document) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $add_comment = (empty($document->comment)) ? "" : "<br /><span class='smaller'> (" . q($document->comment) . ")</span>";
-                $search_results .= "<a href='" . $docHit->url . "'>" . q($document->filename) . "</a> $add_comment </td></tr>";
+                $search_results .= "<a href='" . $docsUrls[$document->id] . "'>" . q($document->filename) . "</a> $add_comment </td></tr>";
                 $numLine++;
             }
             $search_results .= "</table>";
@@ -290,17 +289,17 @@ $tool_content .= action_bar(array(
                     <tr>
                       <th colspan='2' class='left'>$langExercices:</th>
                     </tr>";
+            $exercises = Database::get()->queryArray("SELECT id, title, description FROM exercise WHERE id in " . inIdsFromHits($exerciseHits));
+            $exerciseUrls = urlsFromHits($exerciseHits);
 
             $numLine = 0;
-            foreach ($exerciseHits as $exerciseHit) {
-                $exercise = Database::get()->querySingle("SELECT title, description FROM exercise WHERE id = ?d",$exerciseHit->pkid);
-
+            foreach ($exercises as $exercise) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $desc_text = (empty($exercise->description)) ? "" : "<br /> <span class='smaller'>" . $exercise->description . "</span>";
-                $search_results .= "<a href='" . $exerciseHit->url . "'>" . q($exercise->title) . "</a>$desc_text </td></tr>";
+                $search_results .= "<a href='" . $exerciseUrls[$exercise->id] . "'>" . q($exercise->title) . "</a>$desc_text </td></tr>";
                 $numLine++;
             }
             $search_results .= "</table>";
@@ -319,19 +318,19 @@ $tool_content .= action_bar(array(
             $search_results .= "
                         <table class='table-default'>
                         <tr>
-                        <th colspan='2' class='left'>$langForum ($langCategories):</th>
+                          <th colspan='2' class='left'>$langForum ($langCategories):</th>
                         </tr>";
+            $forums = Database::get()->querySingle("SELECT id, name, `desc` FROM forum WHERE id in " . inIdsFromHits($forumHits));
+            $forumUrls = urlsFromHits($forumHits);
 
             $numLine = 0;
-            foreach ($forumHits as $forumHit) {
-                $forum = Database::get()->querySingle("SELECT name, `desc` FROM forum WHERE id = ?d",$forumHit->pkid);                
-
+            foreach ($forums as $forum) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $desc_text = (empty($forum->desc)) ? "" : "<br /><span class='smaller'>(" . q($forum->desc) . ")</span>";
-                $search_results .= "<a href='" . $forumHit->url . "'>" . q($forum->name) . "</a> " . $desc_text . " </td></tr>";
+                $search_results .= "<a href='" . $forumUrls[$forum->id] . "'>" . q($forum->name) . "</a> " . $desc_text . " </td></tr>";
                 $numLine++;
             }
             $search_results .= "</table>";
@@ -341,22 +340,24 @@ $tool_content .= action_bar(array(
         if (count($forumTopicHits) > 0) {
             $search_results .= "
                 <table class='table-default'>
-        <tr>
-          <th colspan='2' class='left'>$langForum ($langSubjects - $langMessages):</th>
-                </tr>";
+                <tr>
+                  <th colspan='2' class='left'>$langForum ($langSubjects - $langMessages):</th>
+                        </tr>";
+            $ftopics = Database::get()->queryArray("SELECT id, title FROM forum_topic WHERE id in " . inIdsFromHits($forumTopicHits));
+            $ftopicUrls = urlsFromHits($forumTopicHits);
 
             $numLine = 0;
-            foreach ($forumTopicHits as $forumTopicHit) {
-                $ftopic = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $forumTopicHit->pkid);                
+            foreach ($ftopics as $ftopic) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-                $search_results .= "<strong>$langSubject</strong>: <a href='" . $forumTopicHit->url . "'>" . q($ftopic->title) . "</a>";
+                $search_results .= "<strong>$langSubject</strong>: <a href='" . $ftopicUrls[$ftopic->id] . "'>" . q($ftopic->title) . "</a>";
                 if (count($forumPostHits) > 0) {
-                    foreach ($forumPostHits as $forumPostHit) {
-                        $fpost = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $forumPostHit->pkid);                        
-                        $search_results .= "<br /><strong>$langMessage</strong> <a href='" . $forumPostHit->url . "'>" . $fpost->post_text . "</a>";
+                    $fposts = Database::get()->querySingle("SELECT id, post_text FROM forum_post WHERE id in " . inIdsFromHits($forumPostHits));
+                    $fpostUrls = urlsFromHits($forumPostHits);
+                    foreach ($fposts as $fpost) {
+                        $search_results .= "<br /><strong>$langMessage</strong> <a href='" . $fpostUrls[$fpost->id] . "'>" . $fpost->post_text . "</a>";
                     }
                 }
                 $search_results .= "</td></tr>";
@@ -378,17 +379,17 @@ $tool_content .= action_bar(array(
                 <tr>
                   <th colspan='2' class='left'>$langLinks:</th>
                 </tr>";
+            $links = Database::get()->queryArray("SELECT id, title, description FROM link WHERE id in " . inIdsFromHits($linkHits));
+            $linkUrls = urlsFromHits($linkHits);
 
             $numLine = 0;
-            foreach ($linkHits as $linkHit) {
-                $link = Database::get()->querySingle("SELECT title, description FROM link WHERE id = ?d", $linkHit->pkid);                
-
+            foreach ($links as $link) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
                 $search_results .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $desc_text = (empty($link->description)) ? "" : "<span class='smaller'>" . $link->description . "</span>";
-                $search_results .= "<a href='" . $linkHit->url . "' target='_blank'> " . q($link->title) . "</a> $desc_text </td></tr>";
+                $search_results .= "<a href='" . $linkUrls[$link->id] . "' target='_blank'> " . q($link->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
             $search_results .= "</table>";
@@ -405,7 +406,7 @@ $tool_content .= action_bar(array(
             $results_count += $videoHitsCount;
             $search_results .= "
                 <table class='table-default'>
-        <tr>
+                <tr>
                   <th colspan='2' class='left'>$langVideo:</th>
                 </tr>";
             $numLine = 0;
@@ -511,3 +512,19 @@ $tool_content .= action_bar(array(
     }
 } // end of search
 draw($tool_content, 2);
+
+function inIdsFromHits($hits) {
+    $hitIds = array();
+    foreach ($hits as $hit) {
+        $hitIds[] = intval($hit->pkid);
+    }
+    return "(" . implode(",", $hitIds) . ")";
+}
+
+function urlsFromHits($hits) {
+    $hitUrls = array();
+    foreach ($hits as $hit) {
+        $hitUrls[$hit->pkid] = $hit->url;
+    }
+    return $hitUrls;
+}
