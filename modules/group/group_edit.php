@@ -219,7 +219,7 @@ $tool_content .=  action_bar(array(
   
 
 $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
+        <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
         <fieldset>    
         <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
             <label class='col-sm-2 control-label'>$langGroupName:</label>

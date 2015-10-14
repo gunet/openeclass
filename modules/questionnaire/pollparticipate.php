@@ -320,7 +320,7 @@ function submitPoll() {
             $tool_content .=  $end_message;
         }
         $tool_content .= "<br><div class=\"text-center\"><a class='btn btn-default' href=\"index.php?course=$course_code\">".$langBack."</a> ";
-        if ($uid && $poll->show_results) {
+        if ($poll->show_results) {
             $tool_content .= "<a class='btn btn-primary' href=\"pollresults.php?course=$course_code&amp;pid=$pid\">".$langUsage."</a>";
         }
         $tool_content .= "</div>";

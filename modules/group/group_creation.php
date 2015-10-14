@@ -104,10 +104,11 @@ if (isset($_GET['all'])) {
         $tool_content .= "
             </select>
             </div>
-        </div>
-        <div class='form-group'>
-        <div class='col-sm-10 col-sm-offset-2'>
-            <input class='btn btn-primary' type='submit' value='$langCreate' name='creation'>
+        </div>";        
+        $tool_content .= "<input type='hidden' name='all' value='$_GET[all]'>";        
+        $tool_content .= "<div class='form-group'>
+        <div class='col-sm-10 col-sm-offset-2'>        
+            <input class='btn btn-primary' type='submit' value='$langCreate' name='creation'>            
             <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
         </div>
         </div>
@@ -132,24 +133,24 @@ if (isset($_GET['all'])) {
             $tool_content_tutor = display_user($tutors);
 	}	
     $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;group=1'>
+        <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>    
-        <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
+        <div class='form-group".(Session::getError('group_name') ? " has-error" : "")."'>
             <label class='col-sm-2 control-label'>$langGroupName:</label>
             <div class='col-sm-10'>
-                <input class='form-control' type=text name='name' size='40'>
-                <span class='help-block'>".Session::getError('name')."</span>
+                <input class='form-control' type=text name='group_name' size='40'>
+                <span class='help-block'>".Session::getError('group_name')."</span>
             </div>
         </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langDescription $langOptional:</label>
           <div class='col-sm-10'><textarea class='form-control' name='description' rows='2' cols='60'></textarea></div>
         </div>
-        <div class='form-group".(Session::getError('maxStudent') ? " has-error" : "")."'>
+        <div class='form-group".(Session::getError('group_max') ? " has-error" : "")."'>
             <label class='col-sm-2 control-label'>$langMax $langGroupPlacesThis:</label>
             <div class='col-sm-10'>
-                <input class='form-control' type=text name='maxStudent' size=2>
-                <span class='help-block'>".Session::getError('maxStudent')."</span>
+                <input class='form-control' type=text name='group_max' size=2>
+                <span class='help-block'>".Session::getError('group_max')."</span>
             </div>              
         </div>
 		<div class='form-group'>
@@ -294,8 +295,9 @@ if (isset($_GET['all'])) {
                       </label>
                     </div>                    
                 </div>
-            </div>
-        <div class='form-group'>
+            </div>";
+        $tool_content .= "<input type='hidden' name='group_quantity' value='1'>";
+        $tool_content .= "<div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' value='$langCreate' name='creation'>
                 <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
