@@ -71,7 +71,7 @@ if (isset($_GET['urlview'])) {
     $urlview = '';
 }
 
-if ($is_editor) {    	
+if ($is_editor) {
     if (isset($_GET['deletecategory'])) { // delete group category
         $id = $_GET['id'];
         delete_group_category($id);
@@ -82,8 +82,7 @@ if ($is_editor) {
         delete_group($id);
         Session::Messages($langGroupDeleted, 'alert-success');
         redirect_to_home_page("modules/group/index.php");
-    }    	               
-    
+    }
     if (isset($_POST['creation'])) { // groups creation
         $v = new Valitron\Validator($_POST);        
         $v->rule('required', array('group_quantity'));
@@ -97,12 +96,8 @@ if ($is_editor) {
             'group_max' => "$langTheField $langNewGroupMembers"
         ));
         
-        if($v->validate()) {
-            if (preg_match('/^[0-9]/', $_POST['group_max'])) {
-                $group_max = intval($_POST['group_max']);
-            } else {
-                $group_max = 0;
-            }
+        if($v->validate()) {            
+            $group_max = $_POST['group_max'];            
             $group_quantity = $_POST['group_quantity'];
             if (isset($_POST['group_name'])) {
                 $group_name = $_POST['group_name'];
@@ -161,6 +156,13 @@ if ($is_editor) {
                     foreach ($_POST['tutor'] as $user_tutor_id) {
                         Database::get()->query("INSERT INTO group_members SET group_id = ?d, user_id = ?d, is_tutor = 1", $id, $user_tutor_id);
                     }
+                }
+                if (isset($_POST['ingroup'])) {
+                    $new_group_members = count($_POST['ingroup']);                               
+                    for ($i = 0; $i < $new_group_members; $i++) {
+                       Database::get()->query("INSERT INTO group_members (user_id, group_id)
+                                              VALUES (?d, ?d)", $_POST['ingroup'][$i], $id);
+                    }               
                 }
 
                 $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,

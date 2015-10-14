@@ -299,7 +299,7 @@ if (isset($_GET['all'])) {
         $tool_content .= "<input type='hidden' name='group_quantity' value='1'>";
         $tool_content .= "<div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' value='$langCreate' name='creation'>
+                <input class='btn btn-primary' type='submit' value='$langCreate' name='creation' onClick=\"selectAll('members_box', true)\" >
                 <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
             </div>
         </div>

@@ -49,7 +49,7 @@ function initialize_group_id($param = 'group_id') {
 function initialize_group_info($group_id) {
     
     global $course_id, $is_editor, $status, $self_reg, $has_forum, $private_forum, $documents, $wiki,
-    $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors,
+    $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors, $group_category,
     $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code;
  
     $grp_property_item = Database::get()->querySingle("SELECT self_registration, forum, private_forum, documents, wiki
@@ -66,7 +66,7 @@ function initialize_group_info($group_id) {
         $self_reg = 0;
     }
     
-    $res = Database::get()->querySingle("SELECT name, description, forum_id, max_members, secret_directory
+    $res = Database::get()->querySingle("SELECT name, description, forum_id, max_members, secret_directory, category_id
                              FROM `group` WHERE course_id = ?d AND id = ?d", $course_id, $group_id);
     if (!$res) {
         header("Location: {$urlServer}modules/group/index.php?course=$course_code");
@@ -80,6 +80,7 @@ function initialize_group_info($group_id) {
     $member_count = Database::get()->querySingle("SELECT COUNT(*) as count FROM group_members
                                                                     WHERE group_id = ?d
                                                                     AND is_tutor = 0", $group_id)->count;
+    $group_category = $res->category_id;
 
     $tutors = group_tutors($group_id);
     $is_tutor = $is_member = $user_group_description = false;
