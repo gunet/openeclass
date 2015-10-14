@@ -40,9 +40,9 @@ class DocumentIndexer extends AbstractIndexer implements ResourceIndexerInterfac
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'doc_' . $docu->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_DOCUMENT . '_' . $docu->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $docu->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'doc', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_DOCUMENT, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $docu->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($docu->title), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($docu->description), $encoding));

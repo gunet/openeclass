@@ -71,6 +71,19 @@ class Indexer {
     const RESOURCE_VIDEO = 'video';
     const RESOURCE_VIDEOLINK = 'videolink';
     
+    const DOCTYPE_AGENDA = 'agenda';
+    const DOCTYPE_ANNOUNCEMENT = 'announce';
+    const DOCTYPE_DOCUMENT = 'doc';
+    const DOCTYPE_EXERCISE = 'exercise';
+    const DOCTYPE_FORUM = 'forum';
+    const DOCTYPE_FORUMPOST = 'fpost';
+    const DOCTYPE_FORUMTOPIC = 'ftopic';
+    const DOCTYPE_LINK = 'link';
+    const DOCTYPE_UNIT = 'unit';
+    const DOCTYPE_UNITRESOURCE = 'unitresource';
+    const DOCTYPE_VIDEO = 'video';
+    const DOCTYPE_VIDEOLINK = 'vlink';
+    
     const SESSION_PROCESS_AT_NEXT_DRAW = 'SESSION_PROCESS_AT_NEXT_DRAW';
     
     private $__index = null;

@@ -40,9 +40,9 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'fpost_' . $fpost->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_FORUMPOST . '_' . $fpost->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $fpost->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'fpost', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_FORUMPOST, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $fpost->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('topicid', $fpost->topic_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($fpost->post_text)), $encoding));

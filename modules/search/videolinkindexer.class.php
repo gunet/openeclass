@@ -39,9 +39,9 @@ class VideolinkIndexer extends AbstractIndexer implements ResourceIndexerInterfa
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'vlink_' . $vlink->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_VIDEOLINK . '_' . $vlink->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $vlink->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'vlink', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_VIDEOLINK, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $vlink->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($vlink->title), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($vlink->description), $encoding));

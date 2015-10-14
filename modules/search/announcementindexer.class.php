@@ -40,9 +40,9 @@ class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInte
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'announce_' . $announce->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_ANNOUNCEMENT . '_' . $announce->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $announce->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'announce', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_ANNOUNCEMENT, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $announce->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($announce->title), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($announce->content)), $encoding));

@@ -176,12 +176,69 @@ if (empty($search_terms)) {
                           'icon' => 'fa-search',
                           'level' => 'primary-label',
                           'button-class' => 'btn-success',)));
-
+    
+    $announceHits = array();
+    $agendaHits = array();
+    $documentHits = array();
+    $exerciseHits = array();
+    $forumHits = array();
+    $forumTopicHits = array();
+    $forumPostHits = array();
+    $linkHits = array();
+    $videoHits = array();
+    $vlinkHits = array();
+    $unitHits = array();
+    $uresHits = array();
+    
+    $idxQ = buildIdxQuery($_POST);
+    $allHits = $idx->searchRaw($idxQ);
+    foreach ($allHits as $hit) {
+        switch ($hit->doctype) {
+            case Indexer::DOCTYPE_AGENDA:
+                $agendaHits[] = $hit;
+                break;
+            case Indexer::DOCTYPE_ANNOUNCEMENT:
+                $announceHits[] = $hit;
+                break;
+            case Indexer::DOCTYPE_DOCUMENT:
+                $documentHits[] = $hit;
+                break;
+            case Indexer::DOCTYPE_EXERCISE:
+                $exerciseHits[] = $hit;
+                break;
+            case Indexer::DOCTYPE_FORUM:
+                $forumHits[] = $hit;
+                break;
+            case Indexer::DOCTYPE_FORUMPOST:
+                $forumPostHits[] = $hit;
+                break;
+            case Indexer::DOCTYPE_FORUMTOPIC:
+                $forumTopicHits[] = $hit;
+                break;
+            case Indexer::DOCTYPE_LINK:
+                $linkHits[] = $hit;
+                break;
+            case Indexer::DOCTYPE_UNIT:
+                $unitHits[] = $hit;
+                break;
+            case Indexer::DOCTYPE_UNITRESOURCE:
+                $uresHits[] = $hit;
+                break;
+            case Indexer::DOCTYPE_VIDEO:
+                $videoHits[] = $hit;
+                break;
+            case Indexer::DOCTYPE_VIDEOLINK:
+                $vlinkHits[] = $hit;
+                break;
+            default:
+                break;
+        }
+    }
+    
     $search_results = '';
     $results_count = 0;
     // search in announcements
     if ($announcements) {
-        $announceHits = $idx->searchRaw(AnnouncementIndexer::buildQuery($_POST));
         $announceHitsCount = count($announceHits);
         if ($announceHitsCount > 0) {
             $results_count += $announceHitsCount;
@@ -210,7 +267,6 @@ if (empty($search_terms)) {
 
     // search in agenda
     if ($agenda) {
-        $agendaHits = $idx->searchRaw(AgendaIndexer::buildQuery($_POST));
         $agendaHitsCount = count($agendaHits);
         if ($agendaHitsCount > 0) {
             $results_count += $agendaHitsCount;
@@ -251,7 +307,6 @@ if (empty($search_terms)) {
 
     // search in documents
     if ($documents) {
-        $documentHits = $idx->searchRaw(DocumentIndexer::buildQuery($_POST));
         $documentHitsCount = count($documentHits);
         if ($documentHitsCount > 0) {
             $results_count += $documentHitsCount;
@@ -280,7 +335,6 @@ if (empty($search_terms)) {
 
     // search in exercises
     if ($exercises) {
-        $exerciseHits = $idx->searchRaw(ExerciseIndexer::buildQuery($_POST));
         $exerciseHitsCount = count($exerciseHits);
         if ($exerciseHitsCount > 0) {
             $results_count += $exerciseHitsCount;
@@ -309,9 +363,6 @@ if (empty($search_terms)) {
 
     // search in forums
     if ($forums) {
-        $forumHits = $idx->searchRaw(ForumIndexer::buildQuery($_POST));
-        $forumTopicHits = $idx->searchRaw(ForumTopicIndexer::buildQuery($_POST));
-        $forumPostHits = $idx->searchRaw(ForumPostIndexer::buildQuery($_POST));
         $forumHitsCount = count($forumHits);
         if ($forumHitsCount > 0) {
             $results_count += $forumHitsCount;
@@ -370,7 +421,6 @@ if (empty($search_terms)) {
 
     // search in links
     if ($links) {
-        $linkHits = $idx->searchRaw(LinkIndexer::buildQuery($_POST));
         $linkHitsCount = count($linkHits);
         if ($linkHitsCount > 0) {
             $results_count += $linkHitsCount;
@@ -399,8 +449,6 @@ if (empty($search_terms)) {
 
     // search in video and videolinks
     if ($video) {
-        $videoHits = $idx->searchRaw(VideoIndexer::buildQuery($_POST));
-        $vlinkHits = $idx->searchRaw(VideolinkIndexer::buildQuery($_POST));
         $videoHitsCount = count($videoHits);
         if ($videoHitsCount > 0) {
             $results_count += $videoHitsCount;
@@ -454,8 +502,6 @@ if (empty($search_terms)) {
 
     // search in cours_units and unit_resources
     if ($course_units) {
-        $unitHits = $idx->searchRaw(UnitIndexer::buildQuery($_POST));
-        $uresHits = $idx->searchRaw(UnitResourceIndexer::buildQuery($_POST));
         $unitHitsCount = count($unitHits);
         if ($unitHitsCount > 0) {
             $results_count += $unitHitsCount;
@@ -531,4 +577,65 @@ function urlsFromHits($hits) {
         $hitUrls[$hit->pkid] = $hit->url;
     }
     return $hitUrls;
+}
+
+function buildIdxQuery($data) {
+    global $announcements, $agenda, $course_units, $documents, $exercises, $forums, $links, $video;
+    $query = '';
+    $needsOr = false;
+    
+    if ($announcements) {
+        $query .= concatIdxQuery(AnnouncementIndexer::buildQuery($data), $needsOr);
+        $needsOr = true;
+    }
+    
+    if ($agenda) {
+        $query .= concatIdxQuery(AgendaIndexer::buildQuery($data), $needsOr);
+        $needsOr = true;
+    }
+    
+    if ($course_units) {
+        $query .= concatIdxQuery(UnitIndexer::buildQuery($data), $needsOr);
+        $needsOr = true;
+        $query .= concatIdxQuery(UnitResourceIndexer::buildQuery($data), $needsOr);
+    }
+    
+    if ($documents) {
+        $query .= concatIdxQuery(DocumentIndexer::buildQuery($data), $needsOr);
+        $needsOr = true;
+    }
+    
+    if ($exercises) {
+        $query .= concatIdxQuery(ExerciseIndexer::buildQuery($data), $needsOr);
+        $needsOr = true;
+    }
+    
+    if ($forums) {
+        $query .= concatIdxQuery(ForumIndexer::buildQuery($data), $needsOr);
+        $needsOr = true;
+        $query .= concatIdxQuery(ForumTopicIndexer::buildQuery($data), $needsOr);
+        $query .= concatIdxQuery(ForumPostIndexer::buildQuery($data), $needsOr);
+    }
+    
+    if ($links) {
+        $query .= concatIdxQuery(LinkIndexer::buildQuery($data), $needsOr);
+        $needsOr = true;
+    }
+    
+    if ($video) {
+        $query .= concatIdxQuery(VideoIndexer::buildQuery($data), $needsOr);
+        $needsOr = true;
+        $query .= concatIdxQuery(VideolinkIndexer::buildQuery($data), $needsOr);
+    }
+    
+    return $query;
+}
+
+function concatIdxQuery($subQ, $needsOr) {
+    $q = '';
+    if ($needsOr) {
+        $q .= ' OR ';
+    }
+    $q .= " ( " . $subQ . " ) ";
+    return $q;
 }

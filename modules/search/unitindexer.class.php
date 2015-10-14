@@ -40,9 +40,9 @@ class UnitIndexer extends AbstractIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'unit_' . $unit->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_UNIT . '_' . $unit->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $unit->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'unit', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_UNIT, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $unit->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($unit->title), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($unit->comments)), $encoding));

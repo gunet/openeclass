@@ -40,9 +40,9 @@ class VideoIndexer extends AbstractIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'video_' . $video->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_VIDEO . '_' . $video->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $video->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'video', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_VIDEO, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $video->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($video->title), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($video->description), $encoding));

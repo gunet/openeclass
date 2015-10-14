@@ -40,9 +40,9 @@ class ForumTopicIndexer extends AbstractIndexer implements ResourceIndexerInterf
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'ftopic_' . $ftopic->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_FORUMTOPIC . '_' . $ftopic->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $ftopic->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'ftopic', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_FORUMTOPIC, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $ftopic->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('forumid', $ftopic->forum_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($ftopic->title), $encoding));

@@ -40,9 +40,9 @@ class AgendaIndexer extends AbstractIndexer implements ResourceIndexerInterface 
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'agenda_' . $agenda->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_AGENDA . '_' . $agenda->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $agenda->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'agenda', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_AGENDA, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $agenda->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($agenda->title), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($agenda->content)), $encoding));
