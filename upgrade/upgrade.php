@@ -2928,6 +2928,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `group_properties` ADD PRIMARY KEY (group_id)");
             delete_field('group_properties', 'multiple_registration');
         }
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `course_user_request` (
+                        `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                        `uid` int(11) NOT NULL,
+                        `course_id` int(11) NOT NULL,
+                        `comments` text,
+                        `status` int(11) NOT NULL,
+                        `ts` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+                        PRIMARY KEY (`id`)) $charset_spec");
+                
         Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_user_record` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,

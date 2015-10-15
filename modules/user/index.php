@@ -176,8 +176,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                 ($myrow->id != $_SESSION["uid"] && $is_opencourses_reviewer && $is_admin)
                             )
             )            
-        ));
-        //die(var_dump($myrow->id == $_SESSION["uid"] && $myrow->reviewer == '1'));
+        ));        
         $user_roles = array();
         ($myrow->status == '1') ? array_push($user_roles, $langTeacher) : array_push($user_roles, $langStudent);
         if ($myrow->tutor == '1') array_push($user_roles, $langTutor);
@@ -357,8 +356,21 @@ if (get_config('opencourses_enable')) {
 }
 
 // show help link and link to Add new user, search new user and management page of groups
+//$log_course_user_requests = get_config('log_course_user_requests');
+$log_course_user_requests = FALSE;
+$num_requests = '';
+if ($log_course_user_requests) {
+    $num_requests = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id)->cnt;
+}
+
 $tool_content .= 
         action_bar(array(
+            array('title' => "$num_requests $langsUserRequests",
+                  'url' => "course_user_requests.php?course=$course_code",
+                  'icon' => 'fa-plus-circle',
+                  'button-class' => 'btn-success',
+                  'level' => 'primary-label',
+                  'show' => $log_course_user_requests),
             array('title' => $langOneUser,
                 'url' => "adduser.php?course=$course_code",
                 'icon' => 'fa-plus-circle',

@@ -196,6 +196,15 @@ $db->query("CREATE TABLE `course_user` (
       `document_timestamp` datetime NOT NULL,
       PRIMARY KEY (course_id, user_id)) $charset_spec");
 
+$db->query("CREATE TABLE `course_user_request` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `uid` int(11) NOT NULL,
+    `course_id` int(11) NOT NULL,
+    `comments` text,
+    `status` int(11) NOT NULL,
+    `ts` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    PRIMARY KEY (`id`))  $charset_spec");
+
 $db->query("CREATE TABLE `course_description_type` (
     `id` smallint(6) NOT NULL AUTO_INCREMENT,
     `title` mediumtext,
@@ -1721,7 +1730,7 @@ $db->query("CREATE INDEX `lp_mod_id` ON lp_module(course_id)");
 $db->query("CREATE INDEX `lp_rel_lp_id` ON lp_rel_learnPath_module(learnPath_id, module_id)");
 $db->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
 $db->query("CREATE INDEX `poll_index` ON poll(course_id)");
-$db->query("CREATE INDEX `poll_ans_id` ON poll_answer_record(pid, user_id)");
+$db->query("CREATE INDEX `poll_ans_id` ON poll_user_record(pid, uid)");
 $db->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
 $db->query("CREATE INDEX `poll_qa_id` ON poll_question_answer(pqid)");
 $db->query("CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res_id)");
@@ -1782,9 +1791,6 @@ $db->query("CREATE INDEX `lp_rel_module_id` ON lp_rel_learnPath_module(module_id
 
 $db->query("CREATE INDEX `lp_learnPath_module_id` ON lp_user_module_progress (learnPath_module_id)");
 $db->query("CREATE INDEX `lp_user_id` ON lp_user_module_progress (user_id)");
-
-$db->query("CREATE INDEX `poll_ans_id_user_id` ON poll_answer_record(user_id)");
-$db->query("CREATE INDEX `poll_ans_id_pid` ON poll_answer_record(pid)");
 
 $db->query("CREATE INDEX `unit_res_unit_id` ON unit_resources (unit_id)");
 $db->query("CREATE INDEX `unit_res_visible` ON unit_resources (visible)");
