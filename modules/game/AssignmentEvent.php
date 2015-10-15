@@ -25,16 +25,27 @@ require_once 'BasicEvent.php';
 class AssignmentEvent extends BasicEvent {
     
     const ACTIVITY = 'assignment';
-    const NEWGRADE = 'assignment-graded';
+    const UPDGRADE = 'assignment-grade-changed';
     
     public function __construct() {
         parent::__construct();
         
-        $this->on(self::NEWGRADE, function($data) {
-            $this->setEventData($data);
+        $this->on(self::UPDGRADE, function($data) {
+            $threshold = 0;
             
-            // TODO: fetch data from DB: SELECT ASSIGNMENT GRADE FOR USER $data->uid
-            $this->context['threshold'] = 8.6;
+            // fetch grade from DB and use it as threshold
+            $subm = Database::get()->querySingle("SELECT s.* "
+                    . " FROM assignment_submit s "
+                    . " JOIN assignment a ON (s.assignment_id = a.id) "
+                    . " WHERE s.uid = ?d "
+                    . " AND s.assignment_id = ?d"
+                    . " AND a.course_id = ?d", $data->uid, $data->resource, $data->courseId);
+            if ($subm && floatval($subm->grade) > 0) {
+                $threshold = floatval($subm->grade);
+            }
+            
+            $this->setEventData($data);
+            $this->context['threshold'] = $threshold;
             $this->emit(parent::PREPARERULES);
         });
     }

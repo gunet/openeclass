@@ -43,8 +43,6 @@ class Criterion extends CriterionAbstract {
         $this->rule = implode(' and ', array_filter($ar, function ($v) {
             return $v !== null;
         }));
-        
-        //echo "buildRule() result: " . $this->rule . "\n";
     }
     
     public function evaluate($context) {
