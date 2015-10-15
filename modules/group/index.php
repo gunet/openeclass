@@ -485,9 +485,11 @@ if ($is_editor) {
             initialize_group_info($group->id);
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
-                    <br><p>$group_description</p><a href='javascirpt:void(0);' data-toggle='modal' data-target='#userFeedbacks'><span class='fa fa-comments'></span> $langCommentsUser</a>
-                    </td>";
-            $tool_content .= "<td class='center'>";
+                    <br><p>$group_description</p>";
+            if ($user_group_description) {
+                $tool_content .= "<a href = 'javascirpt:void(0);' data-toggle = 'modal' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a >";
+            }
+            $tool_content .= "</td><td class='center'>";
             foreach ($tutors as $t) {
                 $tool_content .= display_user($t->user_id) . "<br>";
             }

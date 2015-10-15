@@ -97,8 +97,8 @@ function initialize_group_info($group_id) {
         $res = Database::get()->queryArray("SELECT description,user_id FROM group_members
                                      WHERE group_id = ?d", $group_id);
         foreach ($res as $d) {
-            if (!empty($d->description) or $d->description != ' ') {
-                $user_group_description .= "$d->description &nbsp;" . display_user($d->user_id, false, false) . "<br>";
+            if (!empty($d->description) or $d->description != '') {
+                $user_group_description .= display_user($d->user_id, false, false)."<br>$d->description<br><br>";
             }
         }
     }
