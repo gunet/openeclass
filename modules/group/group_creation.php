@@ -163,15 +163,14 @@ if (isset($_GET['all'])) {
     $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 
     if ($multi_reg) {
-        // Students registered to the course but not members of this group
+        // All students registered to the course
         $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
                             FROM user u, course_user cu
                             WHERE cu.course_id = ?d AND
                                   cu.user_id = u.id AND
-                                  u.id NOT IN (SELECT user_id FROM group_members WHERE group_id = ?d) AND
                                   cu.status = " . USER_STUDENT . "
                             GROUP BY u.id
-                            ORDER BY u.surname, u.givenname", $course_id, $group_id);
+                            ORDER BY u.surname, u.givenname", $course_id);
     } else {    
         // Students registered to the course but members of no group
         $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
