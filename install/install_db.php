@@ -196,6 +196,15 @@ $db->query("CREATE TABLE `course_user` (
       `document_timestamp` datetime NOT NULL,
       PRIMARY KEY (course_id, user_id)) $charset_spec");
 
+$db->query("CREATE TABLE `course_user_request` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `uid` int(11) NOT NULL,
+    `course_id` int(11) NOT NULL,
+    `comments` text,
+    `status` int(11) NOT NULL,
+    `ts` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    PRIMARY KEY (`id`))  $charset_spec");
+
 $db->query("CREATE TABLE `course_description_type` (
     `id` smallint(6) NOT NULL AUTO_INCREMENT,
     `title` mediumtext,

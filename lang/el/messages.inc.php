@@ -121,6 +121,8 @@ $langInfoMail = "Ενημερωτικό email";
 $langProfReg = "Εγγραφή $langOfTeacher";
 $langProfOpen = "Αιτήσεις $langOfTeachers";
 $langUserOpen = "Αιτήσεις $langOfStudents";
+$langUserRequests = "Αιτήσεις χρηστών";
+$langsUserRequests = "αιτήσεις χρηστών";
 $langPHPInfo = "Πληροφορίες για την PHP";
 $langManuals = "Εγχειρίδια";
 $langFormatPDF = "Μορφή PDF";
@@ -3087,7 +3089,7 @@ $langError = "Σφάλμα";
 $langGeneralError = "Παρουσιάστηκε σφάλμα. Παρακαλούμε επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $langDirectoryCreateError = 'Δεν ήταν δυνατή η δημιουργία του υποκαταλόγου "%s".';
 $langRegistrationError = "Λάθος Ενέργεια. Επιστρέψτε στην αρχική σελίδα της πλατφόρμας.";
-$langUserNoRequests = "Δεν Υπάρχουν Ανοικτές Αιτήσεις";
+$langUserNoRequests = "Δεν υπάρχουν ανοικτές αιτήσεις.";
 $langCharactersNotAllowed = "Δεν επιτρέπονται στο password και στο username, οι χαρακτήρες: ',\" ή \\";
 $langStar2 = "Στα πεδία με (**) ";
 $langEditUser = "Επεξεργασία στοιχείων χρήστη";
@@ -3170,6 +3172,8 @@ $langChangeTo = "Αλλαγή σε";
 $langMailVerificationChanged = "Έγινε αλλαγή";
 $langMailVerificationChangedNo = "Δεν επιλέξατε κάποια αλλαγή";
 $langMailVerificationChangedNoAdmin = "Μηδενικός αριθμός χρηστών ή δεν επιτρέπεται η αλλαγή του χρήστη admin";
+$langCourseUserRegDone = "Η εγγραφή χρήστη πραγματοποιήθηκε με επιτυχία.";
+$langCourseUserRegError = "Παρουσιάστηκε σφάλμα κατά την εγγραφή χρήστη.";
 
 /* * **********************************************************
  * restore_course.php
