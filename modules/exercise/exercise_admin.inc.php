@@ -194,7 +194,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 autoclose: true    
             }).on('changeDate', function(ev){
                 if($(this).attr('id') === 'exerciseEndDate') {
-                    $('#answersDispEndDate').removeClass('hidden');
+                    $('#answersDispEndDate, #scoreDispEndDate').removeClass('hidden');
                 }
             }).on('blur', function(ev){
                 if($(this).attr('id') === 'exerciseEndDate') {
@@ -203,7 +203,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         if ($('input[name=\"dispresults\"]:checked').val() == 4) {
                             $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
                         }                          
-                        $('#answersDispEndDate').addClass('hidden');
+                        $('#answersDispEndDate, #scoreDispEndDate').addClass('hidden');
                     }
                 }
             });
@@ -212,14 +212,14 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 if($(this).prop('checked')) {
                     $('input#exercise'+dateType).prop('disabled', false);
                     if (dateType === 'EndDate' && $('input#exerciseEndDate').val() !== '') {
-                        $('#answersDispEndDate').removeClass('hidden');
+                        $('#answersDispEndDate, #scoreDispEndDate').removeClass('hidden');
                     }
                 } else {
                     $('input#exercise'+dateType).prop('disabled', true);
                     if ($('input[name=\"dispresults\"]:checked').val() == 4) {
                         $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
                     }                    
-                    $('#answersDispEndDate').addClass('hidden');
+                    $('#answersDispEndDate, #scoreDispEndDate').addClass('hidden');
                 }
             });
             
@@ -245,12 +245,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             $('#exerciseAttemptsAllowed').blur(function(){
                 var attempts = $(this).val();
                 if (attempts ==0) {
-                    $('#answersDispLastAttempt').addClass('hidden');
+                    $('#answersDispLastAttempt, #scoreDispLastAttempt').addClass('hidden');
                     if ($('input[name=\"dispresults\"]:checked').val() == 3) {
                         $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
                     }
                 } else {
-                    $('#answersDispLastAttempt').removeClass('hidden');
+                    $('#answersDispLastAttempt, #scoreDispLastAttempt').removeClass('hidden');
                 }
             });
             $('#exerciseIPLock').select2({
@@ -463,6 +463,18 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                              $langScoreNotDisp
                            </label>
                          </div>
+                         <div id='scoreDispLastAttempt' class='radio".($exerciseAttemptsAllowed ? '' : ' hidden')."'>
+                           <label>
+                             <input type='radio' name='dispscore' value='3' ".(($displayScore == 3)? 'checked' : '').">
+                             $langScoreDispLastAttempt
+                           </label>
+                         </div>
+                         <div id='scoreDispEndDate' class='radio".(!empty($exerciseEndDate) ? '' : ' hidden')."'>
+                           <label>
+                             <input type='radio' name='dispscore' value='4' ".(($displayScore == 4)? 'checked' : '').">
+                             $langScoreDispEndDate
+                           </label>
+                         </div>                           
                      </div>
                  </div>
                  <div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")."'>
