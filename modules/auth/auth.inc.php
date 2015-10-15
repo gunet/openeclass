@@ -320,11 +320,12 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
         case '4':
             $ldap = ldap_connect($settings['ldaphost']);
             if (!$ldap) {
-                $GLOBALS['auth_errors'] = 'Error connecting to LDAP host';
+                $GLOBALS['auth_errors'] = ldap_error($ldap);
                 return false;
             } else {
                 // LDAP connection established - now search for user dn
                 @ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+                @ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0); // for search in Active Directory
                 if (@ldap_bind($ldap, $settings['ldapbind_dn'], $settings['ldapbind_pw'])) {
                     if (empty($settings['ldap_login_attr2'])) {
                         $search_filter = "($settings[ldap_login_attr]=${test_username})";

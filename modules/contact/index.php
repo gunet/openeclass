@@ -28,13 +28,15 @@ $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 
+//log_course_user_requests = get_config('log_course_user_requests');
+$log_course_user_requests = FALSE;
 $toolName = $langContactProf;
 
-if (isset($_REQUEST['course_id'])) {    
+if (isset($_REQUEST['course_id'])) {
     $course_id = $_REQUEST['course_id'];
 }
 
-$userdata = Database::get()->querySingle("SELECT givenname, surname, email FROM user WHERE id = ?d", $uid);
+$userdata = Database::get()->querySingle("SELECT givenname, surname, username, email, verified_mail, am, lang FROM user WHERE id = ?d", $uid);
 
 if (empty($userdata->email)) {
     if ($uid) {
@@ -50,6 +52,19 @@ if (empty($userdata->email)) {
         $tool_content .= form();
     } else {
         $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->email);
+        if ($log_course_user_requests) { // log course user requests to `user_request` table
+            Database::get()->query("INSERT INTO user_request SET givenname = ?s, surname = ?s, username = ?s, 
+                                                            password = '', email = ?s, 
+                                                            verified_mail = ?d, faculty_id = 0, 
+                                                            phone = '', am = ?s, state = 1, 
+                                                            date_open = " . DBHelper::timeAfter() . ",
+                                                            comment = ?s, lang = ?s, status = " . USER_STUDENT . ",
+                                                            request_ip = ?s",
+                                                                 $userdata->givenname, $userdata->surname, 
+                                                                 $userdata->username, $userdata->email,
+                                                                 $userdata->verified_mail, $userdata->am,
+                                                                 $content, $userdata->lang, $_SERVER['REMOTE_ADDR']);
+        }
     }
 } else {
     $tool_content .= form();
@@ -157,6 +172,6 @@ function email_profs($course_id, $content, $from_name, $from_address) {
                 $ret .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>";
             }
         }
-    }
+    }    
     return $ret;
 }

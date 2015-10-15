@@ -3091,7 +3091,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $confirm_extra = " data-title='$title_conf' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='btn-danger'";
             $confirm_modal_class = ' confirmAction';
-            $form_begin = "<form method=post action='$url' style='display:inline-block;'>";
+            $form_begin = "<form method=post action='$url'>";
             $form_end = '</form>';
             $href = '';
         } else {

@@ -40,9 +40,9 @@ class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInte
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'announce_' . $announce->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_ANNOUNCEMENT . '_' . $announce->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $announce->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'announce', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_ANNOUNCEMENT, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $announce->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($announce->title), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($announce->content)), $encoding));
@@ -113,29 +113,6 @@ class AnnouncementIndexer extends AbstractIndexer implements ResourceIndexerInte
      */
     protected function getCourseResourcesFromDB($courseId) {
         return Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d", $courseId);
-    }
-
-    /**
-     * Build a Lucene Query.
-     * 
-     * @param  array   $data      - The data (usually $_POST), needs specific array keys
-     * @param  boolean $anonymous - whether we build query for anonymous user access or not
-     * @return string             - the returned query string
-     */
-    public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['course_id']) && !empty($data['course_id'])) {
-            $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
-            $queryStr = '(';
-            foreach ($terms as $term) {
-                $queryStr .= 'title:' . $term . '* ';
-                $queryStr .= 'content:' . $term . '* ';
-            }
-            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:announce AND visible:1';
-            return $queryStr;
-        }
-
-        return null;
     }
 
 }

@@ -157,7 +157,10 @@ $showResults = $displayResults == 1
                || $displayResults == 3 && $exerciseAttemptsAllowed == $userAttempts 
                || $displayResults == 4 && $end_date < $cur_date;
 
-$showScore = $displayScore == 1 || $is_editor;
+$showScore = $displayScore == 1 
+            || $is_editor
+            || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
+            || $displayScore == 4 && $end_date < $cur_date;
 $tool_content .= "<div class='panel panel-primary'>
   <div class='panel-heading'>
     <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>

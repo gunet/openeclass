@@ -80,6 +80,14 @@ if ($uid > 1) {
         $subscribed[] = $row->id;
     }
 }
+
+// construct courses array
+$hitIds = array();
+foreach ($hits as $hit) {
+    $hitIds[] = intval($hit->pkid);
+}
+$inIds = "(" . implode(",", $hitIds) . ")";
+$courses = Database::get()->queryArray("SELECT * FROM course WHERE id in " . $inIds);
  
 //////// PRINT RESULTS ////////
 $tool_content .= action_bar(array(
@@ -110,8 +118,7 @@ $icons = array(
     0 => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
 );
 
-foreach ($hits as $hit) {    
-    $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $hit->pkid);
+foreach ($courses as $course) {    
     $courseHref = "../../courses/" . q($course->code) . "/";
     $courseUrl = "<a href='$courseHref'>" . q($course->title) . "</a> (" . q($course->public_code) . ")";
     
@@ -154,87 +161,3 @@ foreach ($hits as $hit) {
 }
 $tool_content .= "</table>";
 draw($tool_content, 0);
-
-/**
- * @brief search in course
- * @global Indexer $idx
- * @param type $searchTerms
- * @param type $courseId
- * @param type $anonymous
- * @return boolean
- */
-function search_in_course($searchTerms, $courseId, $anonymous) {
-    global $idx;
-
-    $data = array();
-    $data['search_terms'] = $searchTerms;
-    $data['course_id'] = $courseId;
-
-    require_once 'announcementindexer.class.php';
-    $anhits = $idx->searchRaw(AnnouncementIndexer::buildQuery($data, $anonymous));
-    if (count($anhits) > 0) {
-        return true;
-    }
-
-    require_once 'agendaindexer.class.php';
-    $aghits = $idx->searchRaw(AgendaIndexer::buildQuery($data, $anonymous));
-    if (count($aghits) > 0) {
-        return true;
-    }
-
-    require_once 'documentindexer.class.php';
-    $dhits = $idx->searchRaw(DocumentIndexer::buildQuery($data, $anonymous));
-    if (count($dhits) > 0) {
-        return true;
-    }
-
-    require_once 'exerciseindexer.class.php';
-    $exhits = $idx->searchRaw(ExerciseIndexer::buildQuery($data, $anonymous));
-    if (count($exhits) > 0) {
-        return true;
-    }
-
-    require_once 'forumindexer.class.php';
-    $fhits = $idx->searchRaw(ForumIndexer::buildQuery($data, $anonymous));
-    if (count($fhits) > 0) {
-        return true;
-    }
-
-    require_once 'forumtopicindexer.class.php';
-    $fthits = $idx->searchRaw(ForumTopicIndexer::buildQuery($data, $anonymous));
-    if (count($fthits) > 0) {
-        return true;
-    }
-
-    require_once 'linkindexer.class.php';
-    $lhits = $idx->searchRaw(LinkIndexer::buildQuery($data, $anonymous));
-    if (count($lhits) > 0) {
-        return true;
-    }
-
-    require_once 'videoindexer.class.php';
-    $vhits = $idx->searchRaw(VideoIndexer::buildQuery($data, $anonymous));
-    if (count($vhits) > 0) {
-        return true;
-    }
-
-    require_once 'videolinkindexer.class.php';
-    $vlhits = $idx->searchRaw(VideolinkIndexer::buildQuery($data, $anonymous));
-    if (count($vlhits) > 0) {
-        return true;
-    }
-
-    require_once 'unitindexer.class.php';
-    $uhits = $idx->searchRaw(UnitIndexer::buildQuery($data, $anonymous));
-    if (count($uhits) > 0) {
-        return true;
-    }
-
-    require_once 'unitresourceindexer.class.php';
-    $urhits = $idx->searchRaw(UnitResourceIndexer::buildQuery($data, $anonymous));
-    if (count($urhits) > 0) {
-        return true;
-    }
-
-    return false;
-}

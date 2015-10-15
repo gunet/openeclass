@@ -292,8 +292,8 @@ $tool_content .= "<div class='form-wrapper'>
         $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
         foreach ($resultcategories as $myrow) {
             $tool_content .= "<option value='$myrow->id'";
-            $category_id = $myrow->id;
-            if ((isset($_GET['category']) and $_GET['category'] == $myrow->id) or (isset($_GET['from']) and $_GET['from'])) {
+            $category_id = $myrow->id;            
+            if ($group_category == $myrow->id) {
                 $tool_content .= " selected='selected'";
             }
             $tool_content .= '>' . q($myrow->name) . "</option>";
