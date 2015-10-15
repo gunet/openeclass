@@ -169,7 +169,7 @@ if (isset($_GET['all'])) {
                             WHERE cu.course_id = ?d AND
                                   cu.user_id = u.id AND
                                   cu.status = " . USER_STUDENT . "
-                            GROUP BY u.id
+                            GROUP BY u.idd
                             ORDER BY u.surname, u.givenname", $course_id);
     } else {    
         // Students registered to the course but members of no group

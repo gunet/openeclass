@@ -99,6 +99,7 @@ if ($is_editor) {
         if($v->validate()) {            
             $group_max = $_POST['group_max'];            
             $group_quantity = $_POST['group_quantity'];
+            $group_description = $_POST['description'];
             if (isset($_POST['group_name'])) {
                 $group_name = $_POST['group_name'];
             }
@@ -144,11 +145,12 @@ if ($is_editor) {
                 $id = Database::get()->query("INSERT INTO `group` SET
                                              course_id = ?d,
                                              name = ?s,
+                                             description = ?s,
                                              forum_id = ?d,
                                              max_members = ?d,
                                              secret_directory = ?s,
                                              category_id = ?d",
-                                    $course_id, $g_name, $forum_id, $group_max, $secretDirectory, $_POST['selectcategory'])->lastInsertID;
+                                    $course_id, $g_name, $group_description, $forum_id, $group_max, $secretDirectory, $_POST['selectcategory'])->lastInsertID;
 					
                 
                 if (isset($_POST['tutor'])) {
