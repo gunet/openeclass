@@ -473,7 +473,7 @@ if ($is_editor) {
             $tool_content .= "<div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
-                  <th>$langGroups</th>
+                  <th>$langGroupTeam</th>
                   <th width='250'>$langGroupTutor</th>
                   <th width='50'>$langGroupMembersNum</th>
                   <th width='50'>$langMax</th>
@@ -483,8 +483,8 @@ if ($is_editor) {
             initialize_group_info($group->id);
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
-                    <br><span class='small'>$user_group_description</span>
-                    <p>$group_description</p></td>";
+                    <br><p>$group_description</p><a href='javascirpt:void(0);' data-toggle='modal' data-target='#userFeedbacks'><span class='fa fa-comments'></span> $langCommentsUser</a>
+                    </td>";
             $tool_content .= "<td class='center'>";
             foreach ($tutors as $t) {
                 $tool_content .= display_user($t->user_id) . "<br>";
@@ -512,6 +512,21 @@ if ($is_editor) {
             $totalRegistered += $member_count;            
         }
         $tool_content .= "</table></div><br>";
+        $tool_content .= "
+            <div class='modal fade' id='userFeedbacks' tabindex='-1' role='dialog' aria-labelledby='myModalLabel'>
+              <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                  <div class='modal-header'>
+                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                    <h4 class='modal-title' id='myModalLabel'>$langCommentsUser</h4>
+                  </div>
+                  <div class='modal-body'>
+                    $user_group_description
+                  </div>
+                </div>
+              </div>
+            </div>
+        ";
     }
 } else {
     // Begin student view
@@ -530,7 +545,7 @@ if ($is_editor) {
         $tool_content .= "<div class='table-responsive'>
             <table class='table-default'>
                 <tr class='list-header'>
-                  <th class='text-left'>$langGroups</th>
+                  <th class='text-left'>$langGroupTeam</th>
                   <th width='250'>$langGroupTutor</th>
                   <th width='50'>$langGroupMembersNum</th>
                   <th width='50'>$langMax</th>
@@ -549,6 +564,7 @@ if ($is_editor) {
             } else {
                 $tool_content .= q($group_name);
             }
+            $tool_content .= "<br><em>$group_description</em><br>";
             if ($user_group_description) {
                 $tool_content .= "<br><span class='small'><i>$user_group_description</i></span>&nbsp;&nbsp;" .
                         icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
@@ -556,7 +572,6 @@ if ($is_editor) {
             } elseif ($is_member) {
                 $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
             }
-            $tool_content .= "<br><em>$group_description</em><br>";
             $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>";
             foreach ($tutors as $t) {

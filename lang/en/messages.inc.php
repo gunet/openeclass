@@ -47,6 +47,7 @@ $langPage = "Page:";
 $langBeforePage = "Previous";
 $langAfterPage = "Next";
 $langComments = "Comments";
+$langCommentsUser = "User comments";
 $langAdmin = "Platform Administration Tools";
 $langState = "Server State";
 $langDevAdmin = "Database Administration";
