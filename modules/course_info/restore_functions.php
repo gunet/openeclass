@@ -527,7 +527,9 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                                                                  'map' => array('id' => $group_category_map)), 
                                                             $url_prefix_map, $backupData, $restoreHelper);
         } else {
-            Database::get()->query("ALTER TABLE `group_properties` DROP PRIMARY KEY");               
+            if (DBHelper::primaryKeyOf('group_properties')) {
+                Database::get()->query("ALTER TABLE `group_properties` DROP PRIMARY KEY");
+            }
             $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $new_course_id);
             foreach ($num as $group_num) {            
                 $new_group_id = $group_num->id;       
