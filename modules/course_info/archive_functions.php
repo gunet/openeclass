@@ -42,6 +42,7 @@ function archiveTables($course_id, $course_code, $archivedir) {
                                           WHERE course = $course_id)",
         'announcement' => $sql_course,
         'group_properties' => $sql_course,
+        'group_category' => $sql_course,
         'group' => $sql_course,
         'group_members' => "group_id IN (SELECT id FROM `group`
                                                     WHERE course_id = $course_id)",
@@ -159,10 +160,6 @@ function archiveTables($course_id, $course_code, $archivedir) {
 function doArchive($course_id, $course_code) {
     global $webDir, $urlServer, $urlAppend, $siteName, $tool_content;
     
-    if (extension_loaded('zlib')) {
-        include 'include/pclzip/pclzip.lib.php';
-    }
-
     $basedir = "$webDir/courses/archive/$course_code";
     file_exists($basedir) or mkdir($basedir, 0755, true);
 

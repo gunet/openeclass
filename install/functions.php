@@ -34,7 +34,7 @@ require_once '../template/template.inc.php';
  * @global type $langInstallProgress
  * @param type $toolContent
  */
-function draw($toolContent, $options=null) {
+function draw($toolContent, $options=null, $head_content ='') {
 	global $urlServer, $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
 
     if (!$options) {
@@ -54,7 +54,8 @@ function draw($toolContent, $options=null) {
     $t->set_var('logo_img', '../template/default/img/logo_eclass.png');
     $t->set_var('logo_img_small', '../template/default/img/logo_eclass_small.png');
     $t->set_var('template_base', '../template/default');
-
+    $t->set_var('HEAD_EXTRAS', $head_content);
+    
     if (isset($options['no-menu'])) {
         $t->set_block('mainBlock', 'leftNavBlock', 'delete');
         $t->set_block('mainBlock', 'breadCrumbs', 'delete');

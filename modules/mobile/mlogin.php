@@ -27,7 +27,6 @@ if (isset($_POST['token'])) {
     require_once ('minit.php');
 
     if (isset($_REQUEST['logout'])) {
-        require_once ('include/CAS/CAS.php');
         require_once ('modules/auth/auth.inc.php');
 
         if (isset($_SESSION['uid'])) {
@@ -70,7 +69,6 @@ if (isset($_POST['token'])) {
 if (isset($_POST['uname']) && isset($_POST['pass'])) {
     $require_noerrors = true;
     require_once ('minit.php');
-    require_once ('include/CAS/CAS.php');
     require_once ('modules/auth/auth.inc.php');
 
     $uname = canonicalize_whitespace($_POST['uname']);

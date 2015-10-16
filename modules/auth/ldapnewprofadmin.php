@@ -120,11 +120,36 @@ if ($submit) {
             "$langManager $siteName \n$langTel $telephone \n" .
             "$langEmail: $emailhelpdesk";
 
-    if (!send_mail('', '', '', $pe, $mailsubject, $emailbody, $charset)) {
-        $tool_content .= "<table width='99%'><tbody><tr>
-	    <td class='alert alert-danger' height='60'>
-	    <p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
-	    </td></tr></tbody></table>";
+    $header_html_topic_notify = "<!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$langYouAreReg $siteName</div>
+            </div>
+        </div>";
+
+    $body_html_topic_notify = "<!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div id='mail-body-inner'>
+                <p>$langSettings</p>
+                <ul id='forum-category'>
+                    <li><span><b>$lang_username:</b></span> <span>$pu</span></li>
+                    <li><span><b>$langPassword:</b></span> <span>$langPassSameAuth</span></li>
+                    <li><span><b>$langAddress $siteName:</b></span> <span>$urlServer</span></li>
+                    </ul>
+                    <p>$langProblem<br><br>$langFormula<br>$administratorName<br>$langManager $siteName<br>$langTel: $telephone<br>$langEmail: $emailhelpdesk</p>
+
+            </div>
+        </div>";
+
+    $emailbody = $header_html_topic_notify.$body_html_topic_notify;
+    $plainemailbody = html2text($emailbody);
+
+    if (!send_mail_multipart('', '', '', $pe, $mailsubject, $plainemailbody, $emailbody, $charset)) {
+        $tool_content .= "
+	    <div class='alert alert-danger'>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></div>
+	    ";
         draw($tool_content, 3);
         exit();
     }

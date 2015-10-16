@@ -96,6 +96,7 @@ $langHelpManageDepartment = "Διαχειρίζεται τα τμήματα γι
  * ************************************************** */
 // index
 $langComments = "Σχόλια";
+$langCommentsUser = "Σχόλια χρηστών";
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
 $langState = "Διαχείριση εξυπηρετητή";
 $langDevAdmin = "Διαχείριση Βάσης Δεδομένων";
@@ -120,6 +121,8 @@ $langInfoMail = "Ενημερωτικό email";
 $langProfReg = "Εγγραφή $langOfTeacher";
 $langProfOpen = "Αιτήσεις $langOfTeachers";
 $langUserOpen = "Αιτήσεις $langOfStudents";
+$langUserRequests = "Αιτήσεις χρηστών";
+$langsUserRequests = "αιτήσεις χρηστών";
 $langPHPInfo = "Πληροφορίες για την PHP";
 $langManuals = "Εγχειρίδια";
 $langFormatPDF = "Μορφή PDF";
@@ -301,7 +304,6 @@ $langCourseInfo = "Ρυθμίσεις";
 $langCourseImage = "Φωτογραφία Μαθήματος";
 $langCourseLayout = "Διάταξη";
 $langCourseLayout1 = "2 Στήλες, Με Εικόνα (προεπιλογή)";
-$langCourseLayout2 = "2 Στήλες, Χωρίς Εικόνα";
 $langCourseLayout3 = "Πλήρες Πλάτος";
 $langQuota = "Όρια αποθηκευτικού χώρου";
 $langCourseStatus = "Κατάσταση Μαθήματος";
@@ -413,6 +415,7 @@ $langMultiDelUser = 'Μαζική διαγραφή λογαριασμών χρη
 $langMultiDelUserConfirm = "Η ενέργεια αυτή θα διαγράψει επίσης όλα τα ίχνη των χρηστών στην πλατφόρμα, όπως στατιστικά, συμμετοχές στα forums, κ.α.";
 $langMultiDelUserData = "Ονόματα Λογαριασμών Χρηστών (usernames)";
 $langMultiDelUserInfo = 'Εισάγετε στην παρακάτω περιοχή μια λίστα με τα ονόματα χρηστών (usernames), μία γραμμή ανα χρήστη που επιθυμείτε να διαγραφεί. Οι γραμμές που αρχίζουν από # αγνοούνται.';
+$langMultiMoveCourseInfo = "Επιλέξτε τη νέα $langsFaculty στην οποία θα μεταφερθούν τα μαθήματα.";
 $langActivateUserInfo = 'Εισάγετε στην παρακάτω περιοχή τα ονόματα χρηστών (usernames), ένα ανά γραμμή, των λογαριασμών που επιθυμείτε να επεκτείνετε. Οι γραμμές που αρχίζουν από # αγνοούνται.';
 $langMoveUserInfo = 'Εισάγετε στην παρακάτω περιοχή τα ονόματα χρηστών
     (usernames), ένα ανά γραμμή, των λογαριασμών που επιθυμείτε να μεταφέρετε
@@ -426,6 +429,8 @@ $langUserMoveError = 'Σφάλμα μεταφοράς λογαριασμού "%s
 $langActivateMonths = 'Μήνες επέκτασης διάρκειας λογαριασμών';
 $langMultiRegUser = 'Μαζική δημιουργία λογαριασμών χρηστών';
 $langMultiRegCourseUser = 'Μαζική εγγραφή χρηστών σε μαθήματα';
+$langMultiMoveCourses = "Μαζική μεταφορά μαθημάτων";
+$langConfirmMultiMoveCourses = "Επιβεβαίωση μεταφοράς μαθημάτων σε άλλο τμήμα.";
 $langCourseCodes = "Κωδικοί μαθημάτων";
 $langAskManyUsersToCourses = "Τα μαθήματα θα πρέπει να υπάρχουν και οι χρήστες θα πρέπει να έχουν ήδη λογαριασμό στην πλατφόρμα για να εγγραφούν σε αυτά. Πληκτρολογήστε τα ονόματα χρήστη (usernames) και τους κωδικούς των μαθημάτων σε ξεχωριστές γραμμές.";
 $langMultiRegUserInfo = "<p>Εισαγάγετε στην παρακάτω περιοχή έναν κατάλογο με
@@ -504,6 +509,7 @@ $langSearchUsers = "Αναζήτηση Χρηστών";
 $langInactiveUsers = "Μη ενεργοί χρήστες";
 $langAddSixMonths = "Επέκταση διάρκειας λογαριασμών";
 $langChangeDepartment = 'Αλλαγή σχολής - τμήματος';
+$langSearchInCourse = "Αναζήτηση στους πόρους";
 
 // eclassconf
 $langRestoredValues = "Επαναφορά προηγούμενων τιμών";
@@ -806,6 +812,7 @@ $langFlashPlayerNotInstalled = "Ο Flash Player δεν είναι εγκατεσ
 $langShockInstalled = "Ο Shockwave Player είναι εγκατεστημένος στην κατάλληλη έκδοση.";
 $langShockNotInstalled = "Ο Shockwave Player δεν είναι εγκατεστημένος ή είναι παλαιότερης έκδοσης. Για να εγκαταστήσετε την τελευταία έκδοση πατήστε";
 $langCheckNotOk1 = "Διαδικασία εγκατάστασης";
+$langInstallMsg = "Παρακαλώ περιμένετε! H εγκατάσταση μπορεί να διαρκέσει μερικά λεπτά.";
 $langCheckNotOk2 = "Ελέγξτε από το διαγνωστικό πινάκα ποια προαπαιτούμενα εργαλεία λογισμικού δεν είναι εγκατεστημένα (εμφανίζονται με κόκκινα γράμματα). Ακολουθήστε τις οδηγίες εγκατάστασης που σας δίνονται από τις επίσημες ιστοσελίδες των προγραμμάτων και προχωρήστε στην εγκατάστασή τους.";
 $langCheckNotOk3 = "Πρέπει να εγκαταστήσετε κάθε προαπαιτούμενο πρόγραμμα που δεν είναι εγκατεστημένο στη σωστή έκδοση.";
 $langCheckNotOk4 = "Όταν ολοκληρώσετε την εγκατάσταση όλων των προαπαιτούμενων εργαλείων λογισμικού, για να επαληθεύσετε εάν έχουν γίνει σωστά οι εγκαταστάσεις πατήστε";
@@ -901,6 +908,9 @@ $langCourseInvalidDepartment = 'Το μάθημα βρίσκεται σε τμή
     επιτρέπεται πλέον η δημιουργία μαθημάτων.';
 $langCourseInvalidDepartmentPrompt = 'Παρακαλούμε %sμεταφέρετέ το
     μέσω των ρυθμίσεων μαθήματος%s.';
+$langReadMore = "Περισσότερα";
+$langReadLess = "Λιγότερα";
+$langNoInfoAvailable = "Δεν υπάρχουν διαθέσιμες πληροφορίες";
 
 /* * *******************************************
  * course_info.php
@@ -923,7 +933,9 @@ $langForbidden = "Μη επιτρεπτή ενέργεια";
 $langConfTip = "Επιλέξτε τον τύπο πρόσβασης του μαθήματος από τους χρήστες.";
 $langOptPassword = "Προαιρετικό συνθηματικό";
 $langNoCourseTitle = "Δεν πληκτρολογήσατε τον τίτλο του μαθήματος";
-$langCourseWeeklyFormatNotice = "Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστο ημερομηνία έναρξης μαθήματος";
+$langCourseWeeklyFormatNotice = "Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστον την ημερομηνία έναρξης μαθήματος";
+$langCourseUserRequests = "Καταγραφή των αιτήσεων εγγραφής χρηστών στο μάθημα";
+$langCourseUserRequestsDisabled = "Αιτήσεις εγγραφής χρηστών δεν υπάρχουν για τα μη κλειστά μαθήματα.";
 
 // delete_course.php
 $langModifGroups = "Ομάδες Εργασίας";
@@ -1000,8 +1012,9 @@ $langNonUserContact = "Για να επικοινωνήσετε με τους υ
 $langIntroMessage = "Σύνταξη μηνύματος";
 $langHeaderMessage = "Μήνυμα από $langsstudent_acc";
 $langInfoAboutRegistration = "Το μάθημα που επιλέξατε είναι κλειστό. Για να εγγραφείτε, θα πρέπει
-να το ζητήσετε από τον υπεύθυνο εκπαιδευτή του μαθήματος, στέλνοντας του σχετικό μήνυμα στη φόρμα που ακολουθεί.<br />
+να το ζητήσετε από τους διαχειριστές του μαθήματος, γράφοντας σχετικό μήνυμα στη φόρμα που ακολουθεί.<br>
 Σημειώστε ότι θα πρέπει οπωσδήποτε να αναφέρετε το ονοματεπώνυμό σας ή / και το όνομα χρήστη (username), που έχετε στην πλατφόρμα.";
+$langLabelCourseUserRequest = "Αίτηση εγγραφής στο μάθημα";
 
 /* * **************************************************
  * create_course.php
@@ -1476,7 +1489,7 @@ $langPurgeFile = "Προσοχή! Το μήνυμα θα διαγραφεί απ
 $langOtherDropBoxFiles = "Λοιπές αποστολές";
 $langRecipient = "Παραλήπτης";
 $langRecipients = "Παραλήπτες";
-$langAttachedFile = "Συννημένο αρχείο";
+$langAttachedFile = "Συνημμένο αρχείο";
 $langDoNotReply = "Αν απαντήσετε απευθείας στο παραπάνω μήνυμα, η απάντηση θα φθάσει σε λάθος παραλήπτη. Για να απαντήσετε κάντε κλικ";
 $langParticipants = "Συμμετέχοντες";
 $langLoading = "Φόρτωση...";
@@ -1553,9 +1566,11 @@ $langTake = "διάλεξε";
 $langAnswersNotDisp = "Απόκρυψη απαντήσεων μετά το τέλος της άσκησης";
 $langAnswersDisp = "Εμφάνιση απαντήσεων μετά το τέλος της άσκησης";
 $langAnswersDispLastAttempt = "Εμφάνιση απαντήσεων μετά το τέλος της τελευταίας προσπάθειας του εκπαιδευόμενου";
-$langAnswersDispEndDate = "Εμφάνιση αποτελεσμάτων μετά την Ημερομηνία Λήξης της άσκησης";
+$langAnswersDispEndDate = "Εμφάνιση απαντήσεων μετά την Ημερομηνία Λήξης της άσκησης";
 $langScoreNotDisp = "Απόκρυψη βαθμολογίας μετά το τέλος της άσκησης";
 $langScoreDisp = "Εμφάνιση βαθμολογίας μετά το τέλος της άσκησης";
+$langScoreDispLastAttempt = "Εμφάνιση βαθμολογίας μετά το τέλος της τελευταίας προσπάθειας του εκπαιδευόμενου";
+$langScoreDispEndDate = "Εμφάνιση βαθμολογίας μετά την Ημερομηνία Λήξης της άσκησης";
 $langInfoGrades = "βαθμοί";
 $langInfoGrade = "βαθμός";
 $langFromRandomQuestions = "τυχαίες ερωτήσεις από το σύνολο";
@@ -1805,6 +1820,8 @@ $langMax = "Μέγ.";
 $langPlaces = "συμμετέχοντες στην ομάδα χρηστών";
 $langGroupPlacesThis = "συμμετέχοντες";
 $langDeleteGroups = "Διαγραφή όλων των ομάδων";
+$langGroupsAdded2 = "Οι ομάδες χρηστών δημιουργήθηκαν.";
+$langGroupAdded2 = "Η ομάδα χρηστών έχει προστεθεί";
 $langGroupsAdded = "ομάδες χρηστών έχουν προστεθεί";
 $langGroupAdded = "ομάδα χρηστών έχει προστεθεί";
 $langGroupsDeleted = "Ολες οι ομάδες χρηστών έχουν διαγραφεί";
@@ -1835,9 +1852,9 @@ $langInGroup = "στην ομάδα χρηστών";
 
 // Group Properties
 $langGroupProperties = "Ρυθμίσεις Ομάδων Χρηστών";
-$langGroupAllowStudentRegistration = "Οι " . $langsStudents . " επιτρέπονται να εγγραφούν";
+$langGroupAllowStudentRegistration = "Οι " . $langsStudents . " επιτρέπεται να εγγραφούν και να απεγγραφούν";
 $langGroupAllowMultipleRegistration = "Δυνατότητα εγγραφής χρηστών σε περισσότερες από μία ομάδες";
-$langGroupStudentRegistrationType = "Δυνατότητα εγγραφής";
+$langGroupStudentRegistrationType = "Δυνατότητα εγγραφής - απεγγραφής";
 $langGroupAllowUnregister = "Δυνατότητα απεγγραφής από ομάδα";
 $langGroupPrivatise = "Κλειστές περιοχές συζητήσεων ομάδων χρηστών";
 $langGroupForum = "Περιοχή συζητήσεων";
@@ -1871,7 +1888,8 @@ $langForumGroup = "Περιοχή συζητήσεων της ομάδας";
 $langMyGroup = "η ομάδα μου";
 $langOneMyGroups = "επιβλέπων";
 $langRegIntoGroup = "Προσθέστε με στην ομάδα";
-$langGroupNowMember = "Είσαι τώρα μέλος της ομάδας";
+$langGroupNowMember = "Εγγραφήκατε στην ομάδα με επιτυχία.";
+$langGroupNowNotMember = "Απεγγραφήκατε από την ομάδα με επιτυχία.";
 $langPublicAccess = "ανοικτό";
 $langForumType = "Τύπος περιοχής συζητήσεων";
 $langPropModify = "Αλλαγή ρυθμίσεων";
@@ -1998,8 +2016,10 @@ $langListCourses = "Μαθήματα";
 $langHierarchy = "Ιεραρχία Τμημάτων";
 $langAsynchronous = "Ομάδα Ασύγχρονης Τηλεκπαίδευσης";
 $langUserLogin = "Σύνδεση χρήστη";
+$langAdminLoginPage = "Σύνδεση διαχειριστή";
 $langLoginSSO = "Σύνδεση μέσω SSO λογαριασμού";
 $langLoginSocialNetwork = "Σύνδεση μέσω κοινωνικών δικτύων";
+$langLoginVia = "Σύνδεση μέσω";
 $langWelcomeToPortfolio = "Καλωσορίσατε στο προσωπικό σας χαρτοφυλάκιο";
 $langUnregCourse = "Απεγγραφή από μάθημα";
 $langUnCourse = "Απεγγραφή";
@@ -2431,15 +2451,11 @@ $lang_pass_intro = '<p>Αν έχετε ξεχάσει τα στοιχεία το
 $lang_pass_submit = 'Αποστολή';
 $langPassResetIntro = "
 Έχει ζητηθεί να οριστεί νέο συνθηματικό πρόσβασης σας στην
-πλατφόρμα τηλεκπαίδευσης $siteName. Αν δεν ζητήσατε εσείς αυτή την ενέργεια,
+πλατφόρμα τηλεκπαίδευσης $siteName.";
+$langPassResetIntro2 = "Αν δεν ζητήσατε εσείς αυτή την ενέργεια,
 απλώς αγνοήστε τις οδηγίες αυτού του μηνύματος και αναφέρετε το γεγονός αυτό
 στο διαχειριστή του συστήματος, στην διεύθυνση: ";
-$langHowToResetTitle = "
-
-===============================================================================
-			Οδηγίες ορισμού νέου συνθηματικού
-===============================================================================
-";
+$langHowToResetTitle = "Οδηγίες ορισμού νέου συνθηματικού";
 
 $langPassResetGoHere = "
 Για να ορίσετε νέο συνθηματικό πηγαίνετε στην παρακάτω διεύθυνση.
@@ -2750,6 +2766,8 @@ $langThereAreParticipants = "Στο Ερωτηματολόγιο έχουν ήδ
 $langPollEmpty = "Παρακαλώ προσθέστε ερωτήσεις στο Ερωτηματολόγιο!";
 $langPollPercentResults = 'Ποσοστιαία αποτελέσματα';
 $langPollFullResults = 'Αναλυτικά αποτελέσματα';
+$langPollParticipantInfo = 'Πληροφορίες Συμμετέχοντα';
+$langPollEmailUsed = 'περιέχει ένα λογαριασμό που έχει χρησιμοποιηθεί για την απάντηση του ερωτηματολογίου';
 
 /* * **********************************************************
  * registration.php
@@ -2889,6 +2907,7 @@ $langAddGUser = "Προσθήκη χρήστη επισκέπτη";
 $langNoUsersFound = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε ή ο χρήστης υπάρχει ήδη στο μάθημά σας.";
 $langNoUsersFound2 = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε";
 $langRegister = "Εγγραφή";
+$langUnRegister = "Απεγγραφή";
 $langAdded = " προστέθηκε στο μάθημά σας.";
 $langAddError = "Σφάλμα! Ο χρήστης δεν προστέθηκε στο μάθημα. Παρακαλούμε προσπαθήστε ξανά ή επικοινωνήστε με το διαχειριστή του συστήματος.";
 $langAddBack = "Επιστροφή στη σελίδα εγγραφής χρηστών";
@@ -3074,7 +3093,7 @@ $langError = "Σφάλμα";
 $langGeneralError = "Παρουσιάστηκε σφάλμα. Παρακαλούμε επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $langDirectoryCreateError = 'Δεν ήταν δυνατή η δημιουργία του υποκαταλόγου "%s".';
 $langRegistrationError = "Λάθος Ενέργεια. Επιστρέψτε στην αρχική σελίδα της πλατφόρμας.";
-$langUserNoRequests = "Δεν Υπάρχουν Ανοικτές Αιτήσεις";
+$langUserNoRequests = "Δεν υπάρχουν ανοικτές αιτήσεις.";
 $langCharactersNotAllowed = "Δεν επιτρέπονται στο password και στο username, οι χαρακτήρες: ',\" ή \\";
 $langStar2 = "Στα πεδία με (**) ";
 $langEditUser = "Επεξεργασία στοιχείων χρήστη";
@@ -3125,8 +3144,8 @@ $langMailVerificationSuccess = "Για να ολοκληρωθεί η διαδι
 $langMailVerificationSuccess2 = "Για το σκοπό αυτό, ελέγξτε το ηλεκτρονικό σας ταχυδρομείο όπου θα σας έχει σταλεί email επιβεβαίωσης.
                                 <br />Κατόπιν, θα σας σταλεί ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName,
                         με τις οδηγίες για την ολοκλήρωση της εγγραφής σας. <br /><br /><small>(Σημ. Αν τυχόν δεν λάβετε email ελέγξτε τον φάκελο ανεπιθύμητης αλληλογραφίας)</small>.";
-$langMailVerificationBody1 = "Ευχαριστούμε για την εγγραφή σας στο $siteName.\n\n$langMailVerificationSuccess.\n\n$langMailVerificationClick\n%s";
-$langMailVerificationChangeBody = "Για να ενεργοποιηθεί ο λογαριασμός σας θα πρέπει να επιβεβαιωθεί η e-mail διεύθυνση σας.\n\n$langMailVerificationClick\n%s";
+$langMailVerificationBody1 = "Ευχαριστούμε για την εγγραφή σας στο $siteName.<br><br>$langMailVerificationSuccess<br>$langMailVerificationClick<br>%s";
+$langMailVerificationChangeBody = "Για να ενεργοποιηθεί ο λογαριασμός σας θα πρέπει να επιβεβαιωθεί η e-mail διεύθυνση σας.<br><br>$langMailVerificationClick<br>%s";
 $langMailVerificationError = "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος προς τη διεύθυνση %s.<br/><br/>Παρακαλούμε <a href='%s'>δοκιμάστε ξανά</a> ή επικοινωνήστε με το διαχειριστή στη διεύθυνση: %s";
 $langMailVerificationError2 = "Παρουσιάστηκε σφάλμα. Παρακαλούμε επικοινωνήστε με το διαχειριστή της πλατφόρμας.";
 $langMailVerificationToaddr = "στην ηλεκτρονική διεύθυνση";
@@ -3157,6 +3176,8 @@ $langChangeTo = "Αλλαγή σε";
 $langMailVerificationChanged = "Έγινε αλλαγή";
 $langMailVerificationChangedNo = "Δεν επιλέξατε κάποια αλλαγή";
 $langMailVerificationChangedNoAdmin = "Μηδενικός αριθμός χρηστών ή δεν επιτρέπεται η αλλαγή του χρήστη admin";
+$langCourseUserRegDone = "Η εγγραφή χρήστη πραγματοποιήθηκε με επιτυχία.";
+$langCourseUserRegError = "Παρουσιάστηκε σφάλμα κατά την εγγραφή χρήστη.";
 
 /* * **********************************************************
  * restore_course.php
@@ -3241,6 +3262,7 @@ $langSearchDisabled = "Η μηχανή αναζήτησης είναι απεν�
  * upgrade.php
  * ********************************************************** */
 $langUpgrade = "Αναβάθμιση των βάσεων δεδομένων";
+$langLogFileWriteError = 'Σφάλμα κατά την εγγραφή του αρχείου καταγραφής:';
 $langExplUpgrade = "Το πρόγραμμα αναβάθμισης θα τροποποιήσει το αρχείο ρυθμίσεων <em>config.php</em>.
    Επομένως πριν προχωρήσετε στην αναβάθμιση βεβαιωθείτε ότι ο web server
    μπορεί να έχει πρόσβαση στο <em>config.php</em>. Για λόγους ασφαλείας, οι
@@ -4781,6 +4803,34 @@ $langAutoJudgeInputNotSupported = 'Δεν υποστηρίζεται από υπ
 $langAutoJudgeConnector = "Επιθυμητή υπηρεσία μεταγλώττισης";
 $langAutoJudgeUpdated = "Οι ρυθμίσεις αυτόματου κριτή ενημερώθηκαν με επιτυχία";
 
+//antivirus.php
+$langAntivirus = "Ρυθμίσεις λογισμικού προστασίας έναντι ιών του $siteName";
+$langAntivirusUpdated = "Οι ρυθμίσεις του λογισμικού προστασίας έναντι ιών ενημερώθηκαν με επιτυχία";
+$langAntivirusConnector = "Εγκατεστημένο Λογισμικό";
+$langAntivirusPath = "Θέση Λογισμικού";
+$langAntivirusConfig = "Ρυθμίσεις Λογισμικού";
+$langAntivirusInfected = "Το αρχείο αυτό δεν έγινε αποδεκτό, καθώς φαίνεται να είναι μολυσμένο. Παρακαλώ επικοινωνήστε με το διαχειριστή.";
+
+//waf.php
+$langWaf = "Ρυθμίσεις τείχους προστασίας εφαρμογής ιστού του $siteName";
+$langWafConnector = "Τείχος προστασίας";
+$langWafUpdated = "Οι ρυθμίσεις του λογισμικού τείχους προστασίας εφαρμογής ιστού ενημερώθηκαν με επιτυχία";
+$langWafConfig = "Ρυθμίσεις Φίλτρου";
+
+//SFA
+
+$langSFAConf = 'Ρύθμιση 2FA:';
+$langSFAType = 'Συνθηματικό 2FA:';
+$langSFAusage = 'Για να χρησιμοποιηθεί το Second Factor Authentication, ο χρήστης που το ενεργοποιεί απο το προφίλ του θα πρέπει να εγκαταστήσει ένα app τύπου Google Authenticator, απο αυτά που είναι διαθέσιμα:';
+$langsecondfaDescription = 'Οι περισσότεροι χρήστες χρησιμοποιούν μόνο ένα επίπεδο ασφάλειας για το λογαριασμό τους, τον κωδικό πρόσβασής τους. Με την επαλήθευση σε 2 βήματα, θα προστατεύσετε το λογαριασμό σας με κάτι που γνωρίζετε (τον κωδικό πρόσβασής σας) και κάτι που έχετε στην κατοχή σας (το τηλέφωνο ή το κλειδί ασφαλείας σας)';
+$langSFAfail = 'Λάθος Απάντηση 2FA';
+$langSFAremove = 'Απενεργοποίησε 2FA';
+$langSFAkeep = 'Διατήρησε 2FA';
+$langSFAadd = 'Ενεργοποίησε 2FA';
+$langSFATypeWYS = 'Πληκτρολογήστε τον κωδικό που εμφανίζει η εφαρμογή 2FA:';
+$langSFAScan = 'Σαρώστε την παρακάτω εικόνα με την εφαρμογή 2FA:';
+$langsecondfaUpdated = 'Οι ρυθμίσεις του λογισμικού 2FA ενημερώθηκαν με επιτυχία';
+
 // scenarios edit
 $langAutoJudgeEnable = 'Αυτόματος Κριτής';
 $langAutoJudgeInput = 'Είσοδος';
@@ -4857,3 +4907,6 @@ $langOwnCloudShortDescription = "Short Description about own cloud";
 $langOwnCloudLongDescription = "Long description about own cloud";
 $langWebDAVShortDescription = "Short Description about web dav";
 $langWebDAVLongDescription = "Long Description about web dav";
+$langAntivirusDescription = "<p>Σύνδεση με εγκατεστημένο λογισμικό προστασίας έναντι ιών</p>";
+$langWafDescription = "<p>Ενεργοποίηση τείχους προστασίας εφαρμογής ιστού</p>";
+

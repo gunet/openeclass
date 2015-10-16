@@ -21,12 +21,12 @@
 
 require_once 'indexer.class.php';
 require_once 'abstractbaseindexer.class.php';
-require_once 'resourceindexer.interface.php';
+require_once 'courseindexer.interface.php';
 require_once 'Zend/Search/Lucene/Document.php';
 require_once 'Zend/Search/Lucene/Field.php';
 require_once 'Zend/Search/Lucene/Index/Term.php';
 
-class CourseIndexer extends AbstractBaseIndexer implements ResourceIndexerInterface {
+class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterface {
 
     /**
      * Construct a Zend_Search_Lucene_Document object out of a course db row.
@@ -201,10 +201,9 @@ class CourseIndexer extends AbstractBaseIndexer implements ResourceIndexerInterf
      * Build a Lucene Query.
      * 
      * @param  array   $data      - The data (normally $_POST), needs specific array keys, @see getDetailedSearchForm()
-     * @param  boolean $anonymous - whether we build query for anonymous user access or not
      * @return string             - the returned query string
      */
-    public static function buildQuery($data, $anonymous = true) {
+    public static function buildQuery($data) {
         if (isset($data['search_terms']) && !empty($data['search_terms'])) {
             $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
             $queryStr = '(';
@@ -229,11 +228,6 @@ class CourseIndexer extends AbstractBaseIndexer implements ResourceIndexerInterf
             $queryStr .= ')';
         }
         $queryStr .= ' AND doctype:course';
-        if ($anonymous) {
-            $queryStr .= ' AND (visible:1 OR visible:2) ';
-        } else {
-            $queryStr .= ' AND (visible:0 OR visible:3) ';
-        }
         return $queryStr;
     }
 

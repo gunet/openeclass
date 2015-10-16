@@ -1732,7 +1732,6 @@ function fix_multiple_usernames()  {
 function importThemes($themes = null) {
     global $webDir;
     if (!isset($themes) || isset($themes) && !empty($themes)) {
-        require_once "$webDir/include/pclzip/pclzip.lib.php";
         $themesDir = "$webDir/template/$_SESSION[theme]/themes";
         if(!is_dir("$webDir/courses/theme_data")) mkdir("$webDir/courses/theme_data", 0755, true);
         if (is_dir($themesDir) && $handle = opendir($themesDir)) {

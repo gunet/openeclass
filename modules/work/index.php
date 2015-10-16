@@ -66,13 +66,13 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $sid = $_POST['sid'];
         $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
     } elseif ($_POST['assign_type']) {
-        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     } else {
         $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
                                 WHERE user.id = course_user.user_id
                                 AND course_user.course_id = ?d AND course_user.status = 5
-                                AND user.id", $course_id);
+                                AND user.id ORDER BY surname", $course_id);
 
     }
     echo json_encode($data);
@@ -95,7 +95,6 @@ if (isset($_GET['get'])) {
 // Only course admins can download all assignments in a zip file
 if ($is_editor) {
     if (isset($_GET['download'])) {
-        include 'include/pclzip/pclzip.lib.php';
         $as_id = intval($_GET['download']);
         // Allow unlimited time for creating the archive
         set_time_limit(0);
@@ -216,7 +215,7 @@ if ($is_editor) {
                 data = $.parseJSON(data);
                 bootbox.alert({
                     size: 'large',
-                    message: data.submission_text,
+                    message: data.submission_text ? data.submission_text : '',
                 });
               },
               error: function(xhr, textStatus, error){
@@ -728,7 +727,7 @@ function submit_work($id, $on_behalf_of = null) {
            $works_url, $langOnBehalfOfUserComment, $workPath,
            $langUploadSuccess, $langUploadError, $course_code,
            $langAutoJudgeEmptyFile, $langAutoJudgeInvalidFileType,
-           $langAutoJudgeScenariosPassed;
+           $langAutoJudgeScenariosPassed, $is_editor;
     $connector = AutojudgeApp::getAutojudge();
     $langExt = $connector->getSupportedLanguages();
 
@@ -812,7 +811,7 @@ function submit_work($id, $on_behalf_of = null) {
                     @chmod("$workPath/$filename", 0644);
                 }
                 $success_msgs[] = $langUploadSuccess;
-            } else {
+            } elseif(!$is_editor) {
                 $error_msgs[] = $langUploadError;
                 Session::Messages($error_msgs, 'alert-danger');
                 redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
@@ -2343,7 +2342,7 @@ function show_assignment($id, $display_graph_results = false) {
     $langDays, $langDaysLeft, $langGradeOk, $course_code, $webDir, $urlServer,
     $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
-    $langAutoJudgeShowWorkResultRpt;
+    $langAutoJudgeShowWorkResultRpt, $langGroupName;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
@@ -2421,7 +2420,7 @@ function show_assignment($id, $display_graph_results = false) {
                         <tbody>
                         <tr class='list-header'>
                       <th width='3'>&nbsp;</th>";
-            sort_link($m['username'], 'username');
+            sort_link($m['username'].' / '.$langGroupName, 'username');
             sort_link($m['am'], 'am');
             $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename');
             sort_link($m['sub_date'], 'date');
@@ -2438,7 +2437,7 @@ function show_assignment($id, $display_graph_results = false) {
                 } else {
                     $subContentGroup = '';
                 }
-                $uid_2_name = display_user($row->uid);
+                $name = empty($row->group_id) ? display_user($row->uid) : display_group($row->group_id);
                 $stud_am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $row->uid)->am;
                 if ($assign->submission_type) {
                     $filelink = "<a href='#' class='onlineText btn btn-xs btn-default' data-id='$row->id'>$langQuestionView</a>";
@@ -2475,7 +2474,12 @@ function show_assignment($id, $display_graph_results = false) {
                 $tool_content .= "
                                 <tr>
                                 <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
-                                <td>${uid_2_name}</td>
+                                <td>$name";
+                if (trim($row->comments != '')) {
+                    $tool_content .= "<div style='margin-top: .5em;'><small>" .
+                            q($row->comments) . '</small></div>';
+                }                
+                $tool_content .= "</td>
                                 <td width='85'>" . q($stud_am) . "</td>
                                 <td class='text-center' width='180'>
                                         $filelink
@@ -2506,12 +2510,8 @@ function show_assignment($id, $display_graph_results = false) {
                                 </td>
                                 </tr>
                                 <tr>
-                                <td colspan='6'>
-                                <div>$subContentGroup</div>";
-                if (trim($row->comments != '')) {
-                    $tool_content .= "<div style='margin-top: .5em;'>" .
-                            q($row->comments) . '</div>';
-                }
+                                <td colspan='6'>";
+
                 //professor comments
                 if ($row->grade_comments || $row->grade != '') {
                     $comments = "<br><div class='label label-primary'>" .

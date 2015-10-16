@@ -96,6 +96,8 @@ if (isset($_POST['delimage'])) {
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     // First process language changes
+    checkSecondFactorChallenge();
+    saveSecondFactorUserProfile();
     if (!file_exists($webDir . '/courses/userimg/')) {
         mkdir($webDir . '/courses/userimg/', 0775);
         touch($webDir."courses/userimg/index.php");
@@ -251,7 +253,7 @@ if (isset($_GET['provider'])) {
                 Database::get()->query('DELETE FROM user_ext_uid
                     WHERE user_id = ?d AND auth_id = ?d', $uid, $auth_id)) {
                 Session::Messages($langProfileReg, 'alert-success');
-                redirect_to_home_page('main/profile/display_profile.php');
+                redirect_to_home_page('main/profile/profile.php');
             }
         } elseif ($_GET['action'] == 'connect') {
             // HybridAuth checks, authentication and user profile info and finally store provider user id in the db
@@ -270,6 +272,7 @@ if (isset($_GET['provider'])) {
                     if (in_array($provider, $hybridAuthMethods)) {
                         $hybridauth = new Hybrid_Auth($config);
                         $adapter = $hybridauth->authenticate($provider);
+                        $providerAuthId = array_search(strtolower($provider), $auth_ids);
 
                         // grab the user profile
                         $user_data = $adapter->getUserProfile();
@@ -279,37 +282,57 @@ if (isset($_GET['provider'])) {
                         // authenticate two different eclass accounts with the same
                         // Facebook, etc. account)
                         if ($user_data->identifier)
-                            $r = Database::get()->querySingle('SELECT id FROM user_ext_uid, auth
-                                WHERE user_ext_uid.auth_id = auth.auth_id AND
-                                      auth.auth_name = ?s AND
-                                      uid = ?s AND
-                                      user_ext_uid.user_id <> ?d',
-                                $provider, $user_data->identifier, $uid);
+                            $r = Database::get()->querySingle('SELECT id FROM user_ext_uid
+                                WHERE auth_id = ?d AND uid = ?s AND user_id <> ?d',
+                                $providerAuthId, $user_data->identifier, $uid);
                             if ($r) {
-                                $ext_uid = '';
-                                $_GET['msg'] = 12;
+                                // HybridAuth provider uid is already in the db!
+                                // (which means the user tried to authenticate a second
+                                // eClass account with the same facebook etc. account)
+                                Session::Messages($langProviderIdAlreadyExists, 'alert-warning');
                             } else {
-                                $ext_uid = $user_data->identifier;
-                                $_GET['msg'] = 1;
+                                Database::get()->querySingle('INSERT INTO user_ext_uid
+                                    SET user_id = ?d, auth_id = ?d, uid = ?s',
+                                    $uid, $providerAuthId, $user_data->identifier);
+                                Session::Messages($langProfileReg, 'alert-success');
                             }
                     } else {
-                        $_GET['msg'] = 11;
+                        Session::Messages($langProviderError, 'alert-danger');
                     } 
-                } catch(Exception $e) {
+                    redirect_to_home_page('main/profile/profile.php');
+                } catch (Exception $e) {
                     // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
                     // let hybridauth forget all about the user so we can try to authenticate again.
 
-                    // Display the recived error,
+                    // Display the received error,
                     // to know more please refer to Exceptions handling section on the userguide
                     switch($e->getCode()) {
-                        case 0 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError1</td></tr></tbody></table><br /><br />"; break;
-                        case 1 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError2</td></tr></tbody></table><br /><br />"; break;
-                        case 2 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError3</td></tr></tbody></table><br /><br />"; break;
-                        case 3 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError4</td></tr></tbody></table><br /><br />"; break;
-                        case 4 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError5</td></tr></tbody></table><br /><br />"; break;
-                        case 5 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError6</td></tr></tbody></table><br /><br />"; break;
-                        case 6 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError7</td></tr></tbody></table><br /><br />"; $adapter->logout(); break;
-                        case 7 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError8</td></tr></tbody></table><br /><br />"; $adapter->logout(); break;
+                        case 0:
+                            Session::Messages($langProviderError1, 'alert-danger');
+                            break;
+                        case 1:
+                            Session::Messages($langProviderError2, 'alert-danger');
+                            break;
+                        case 2:
+                            Session::Messages($langProviderError3, 'alert-danger');
+                            break;
+                        case 3:
+                            Session::Messages($langProviderError4, 'alert-danger');
+                            break;
+                        case 4:
+                            Session::Messages($langProviderError5, 'alert-danger');
+                            break;
+                        case 5:
+                            Session::Messages($langProviderError6, 'alert-danger');
+                            break;
+                        case 6:
+                            Session::Messages($langProviderError7, 'alert-danger');
+                            $adapter->logout(); 
+                            break;
+                        case 7:
+                            Session::Messages($langProviderError8, 'alert-danger');
+                            $adapter->logout(); 
+                            break;
                     }
                     $_GET['msg'] = 11; // display generic error for now
 
@@ -349,12 +372,6 @@ if (isset($_GET['msg'])) {
             break;
         case 10: // invalid characters
             $message = $langInvalidCharsUsername;
-            break;
-        case 11: // invalid HybridAuth settings or authentication
-            $message = $langProviderError;
-            break;
-        case 12: //hybrid auth provider is already in the db! (which means the user tried to authenticate a second eclass account with the same facebook etc. account)
-            $message = $langProviderIdAlreadyExists;
             break;
         default:
             exit;
@@ -532,7 +549,7 @@ foreach ($hybridAuthMethods as $provider) {
 }
 Database::get()->queryFunc('SELECT auth_id FROM user_ext_uid WHERE user_id = ?d',
     function ($item) {
-        global $userProviders;
+        global $userProviders, $auth_ids;
         $userProviders[$auth_ids[$item->auth_id]] = true;
     }, $uid);
 
@@ -543,6 +560,14 @@ $config = get_hybridauth_config();
 
 $hybridauth = new Hybrid_Auth($config);
 $allProviders = $hybridauth->getProviders();
+$activeAuthMethods = get_auth_active_methods();
+foreach ($allProviders as $provider => $settings) {
+    $aid = array_search(strtolower($provider), $auth_ids);
+    if (array_search($aid, $activeAuthMethods) === false) {
+        unset($allProviders[$provider]);
+    }
+}
+
 if (count($allProviders)) {
     $tool_content .= "<div class='form-group'>
         <label class='col-sm-2 control-label'>$langProviderConnectWith:</label>
@@ -551,20 +576,24 @@ if (count($allProviders)) {
     foreach ($allProviders as $provider => $settings) {
         $lcProvider = strtolower($provider);
         $tool_content .= "
-            <div class='col-xs-1 text-center'>
-              <img src='$themeimg/$lcProvider.png' alt='Sign-in with $provider'><br>$provider<br>";
+                <div class='col-xs-2 text-center'>
+                  <img src='$themeimg/$lcProvider.png' alt='$langLoginVia'><br>$provider<br>";
         if ($userProviders[$lcProvider]) {
             $tool_content .= "
-              <img src='$themeimg/tick.png' alt='$langProviderConnectWith Facebook'>
-              <a href='$sec?action=delete&provider=$provider'>$langProviderDeleteConnection</a>";
+                  <img src='$themeimg/tick.png' alt='$langProviderConnectWith $provider'>
+                  <a href='$sec?action=delete&provider=$provider'>$langProviderDeleteConnection</a>";
         } else {
             $tool_content .= "<a href='$sec?action=connect&provider=$provider'>$langProviderConnect</a>";
         }
         $tool_content .= "</div>";
     }
     $tool_content .= "</div>
-      </div>";
+      </div></div>";
 } //endif(count($allProviders)) - in case no providers are enabled, do not show anything
+
+$tool_content .= showSecondFactorUserProfile();
+
+$tool_content .= showSecondFactorChallenge();
 
 $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
           <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>

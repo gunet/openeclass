@@ -38,6 +38,7 @@ function initialize_group_id($param = 'group_id') {
  * @global type $tutors
  * @global type $member_count
  * @global type $is_tutor
+ * @global type $is_edito
  * @global type $is_member
  * @global type $uid
  * @global type $urlServer
@@ -47,8 +48,8 @@ function initialize_group_id($param = 'group_id') {
  */
 function initialize_group_info($group_id) {
     
-    global $course_id, $status, $self_reg, $has_forum, $private_forum, $documents, $wiki,
-    $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors,
+    global $course_id, $is_editor, $status, $self_reg, $has_forum, $private_forum, $documents, $wiki,
+    $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors, $group_category,
     $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code;
  
     $grp_property_item = Database::get()->querySingle("SELECT self_registration, forum, private_forum, documents, wiki
@@ -65,7 +66,7 @@ function initialize_group_info($group_id) {
         $self_reg = 0;
     }
     
-    $res = Database::get()->querySingle("SELECT name, description, forum_id, max_members, secret_directory
+    $res = Database::get()->querySingle("SELECT name, description, forum_id, max_members, secret_directory, category_id
                              FROM `group` WHERE course_id = ?d AND id = ?d", $course_id, $group_id);
     if (!$res) {
         header("Location: {$urlServer}modules/group/index.php?course=$course_code");
@@ -79,6 +80,7 @@ function initialize_group_info($group_id) {
     $member_count = Database::get()->querySingle("SELECT COUNT(*) as count FROM group_members
                                                                     WHERE group_id = ?d
                                                                     AND is_tutor = 0", $group_id)->count;
+    $group_category = $res->category_id;
 
     $tutors = group_tutors($group_id);
     $is_tutor = $is_member = $user_group_description = false;
@@ -90,7 +92,16 @@ function initialize_group_info($group_id) {
             $is_tutor = $res->is_tutor;
             $user_group_description = $res->description;
         }
-    }    
+    }
+    if ($is_tutor or $is_editor) {
+        $res = Database::get()->queryArray("SELECT description,user_id FROM group_members
+                                     WHERE group_id = ?d", $group_id);
+        foreach ($res as $d) {
+            if (!empty($d->description) or $d->description != '') {
+                $user_group_description .= display_user($d->user_id, false, false)."<br>$d->description<br><br>";
+            }
+        }
+    }
 }
 
 /**
@@ -184,16 +195,16 @@ function showgroupsofcategory($catid) {
     
     global $is_editor, $course_id, $tool_content, $langConfig,
     $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
-    $langModify, $is_member, $multi_reg, $langMyGroup,
-    $langEditChange, $groups_num, $uid, $totalRegistered, 
-    $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members;
+    $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
+    $langEditChange, $groups_num, $uid, $totalRegistered,
+    $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members, $group_description;
 
     $q = Database::get()->queryArray("SELECT id FROM `group`
                                    WHERE course_id = ?d AND category_id = ?d
                                    ORDER BY `id`", $course_id, $catid);
           
     foreach ($q as $row) {
-        $tool_content .= "<tr><td>";
+        $tool_content .= "<tr><td style='padding-left: 25px;'>";
         $group_id = $row->id;
         initialize_group_info($group_id);
         if ($is_editor) {
@@ -207,11 +218,12 @@ function showgroupsofcategory($catid) {
             }
         }
         if ($user_group_description) {
-            $tool_content .= "<br><span class='small'><i>" . q($user_group_description) . "</i></span>&nbsp;&nbsp;" .
+            $tool_content .= "<br><span class='small'>$user_group_description</span>
+                    <p>$group_description" .
                     icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
                     icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
         } elseif ($is_member) {
-            $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
+            $tool_content .= " </p><br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
         }
         $tool_content .= "</td>";
         $tool_content .= "<td class='text-center' width='250'>";

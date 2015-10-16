@@ -43,6 +43,12 @@ header('Content-Type: text/html; charset=UTF-8');
 // Will add headers to prevent against clickjacking.
 add_framebusting_headers();
 
+add_xxsfilter_headers();
+
+add_nosniff_headers();
+
+add_hsts_headers();
+
 if (is_readable('config/config.php')) {
     require_once 'config/config.php';
 } else {
@@ -63,6 +69,15 @@ try {
 } catch (Exception $ex) {
     require_once 'include/not_installed.php';
 }
+require_once 'modules/admin/extconfig/externals.php';
+$connector = WafApp::getWaf();
+if($connector->isEnabled() == true ){
+    $output=$connector->check();
+    if($output->status==$output::STATUS_BLOCKED){
+        WafApp::block($output->output);
+    }
+}
+
 if (isset($language)) {
     // Old-style config.php, redirect to upgrade
     $language = langname_to_code($language);
@@ -111,7 +126,6 @@ $uid = $session->user_id;
 // construct $urlAppend from $urlServer
 $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
 // HTML Purifier
-require_once 'include/htmlpurifier-4.3.0-standalone/HTMLPurifier.standalone.php';
 require_once 'include/HTMLPurifier_Filter_MyIframe.php';
 $purifier = new HTMLPurifier();
 $purifier->config->set('Cache.SerializerPath', $webDir . '/courses/temp');
@@ -505,7 +519,6 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                                                 " . MODULE_ID_ASSIGN . ",
                                                 " . MODULE_ID_BBB . ",
                                                 " . MODULE_ID_DROPBOX . ",
-                                                " . MODULE_ID_QUESTIONNAIRE . ",
                                                 " . MODULE_ID_FORUM . ",
                                                 " . MODULE_ID_GROUPS . ",
                                                 " . MODULE_ID_GRADEBOOK . ",

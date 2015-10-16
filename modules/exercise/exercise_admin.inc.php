@@ -29,13 +29,13 @@ require_once 'modules/tags/moduleElement.class.php';
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['assign_type'])) {
         if ($_POST['assign_type'] == 2) {
-            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
         } elseif ($_POST['assign_type'] == 1) {
             $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                     FROM user, course_user
                                     WHERE user.id = course_user.user_id
                                     AND course_user.course_id = ?d AND course_user.status = 5
-                                    AND user.id", $course_id);
+                                    AND user.id ORDER BY surname", $course_id);
         }
         echo json_encode($data);
         exit;
@@ -194,7 +194,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 autoclose: true    
             }).on('changeDate', function(ev){
                 if($(this).attr('id') === 'exerciseEndDate') {
-                    $('#answersDispEndDate').removeClass('hidden');
+                    $('#answersDispEndDate, #scoreDispEndDate').removeClass('hidden');
                 }
             }).on('blur', function(ev){
                 if($(this).attr('id') === 'exerciseEndDate') {
@@ -203,7 +203,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         if ($('input[name=\"dispresults\"]:checked').val() == 4) {
                             $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
                         }                          
-                        $('#answersDispEndDate').addClass('hidden');
+                        $('#answersDispEndDate, #scoreDispEndDate').addClass('hidden');
                     }
                 }
             });
@@ -211,15 +211,15 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 var dateType = $(this).prop('id').replace('enable', '');
                 if($(this).prop('checked')) {
                     $('input#exercise'+dateType).prop('disabled', false);
-                    if ($('input#exercise'+dateType).val() !== '') {
-                        $('#answersDispEndDate').removeClass('hidden');
+                    if (dateType === 'EndDate' && $('input#exerciseEndDate').val() !== '') {
+                        $('#answersDispEndDate, #scoreDispEndDate').removeClass('hidden');
                     }
                 } else {
                     $('input#exercise'+dateType).prop('disabled', true);
                     if ($('input[name=\"dispresults\"]:checked').val() == 4) {
                         $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
                     }                    
-                    $('#answersDispEndDate').addClass('hidden');
+                    $('#answersDispEndDate, #scoreDispEndDate').addClass('hidden');
                 }
             });
             
@@ -245,12 +245,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             $('#exerciseAttemptsAllowed').blur(function(){
                 var attempts = $(this).val();
                 if (attempts ==0) {
-                    $('#answersDispLastAttempt').addClass('hidden');
+                    $('#answersDispLastAttempt, #scoreDispLastAttempt').addClass('hidden');
                     if ($('input[name=\"dispresults\"]:checked').val() == 3) {
                         $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
                     }
                 } else {
-                    $('#answersDispLastAttempt').removeClass('hidden');
+                    $('#answersDispLastAttempt, #scoreDispLastAttempt').removeClass('hidden');
                 }
             });
             $('#exerciseIPLock').select2({
@@ -463,6 +463,18 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                              $langScoreNotDisp
                            </label>
                          </div>
+                         <div id='scoreDispLastAttempt' class='radio".($exerciseAttemptsAllowed ? '' : ' hidden')."'>
+                           <label>
+                             <input type='radio' name='dispscore' value='3' ".(($displayScore == 3)? 'checked' : '').">
+                             $langScoreDispLastAttempt
+                           </label>
+                         </div>
+                         <div id='scoreDispEndDate' class='radio".(!empty($exerciseEndDate) ? '' : ' hidden')."'>
+                           <label>
+                             <input type='radio' name='dispscore' value='4' ".(($displayScore == 4)? 'checked' : '').">
+                             $langScoreDispEndDate
+                           </label>
+                         </div>                           
                      </div>
                  </div>
                  <div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")."'>
@@ -567,7 +579,20 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             $disp_results_message = $langAnswersDispEndDate;
             break;          
     }
-    $disp_score_message = ($displayScore == 1) ? $langScoreDisp : $langScoreNotDisp;
+    switch ($displayScore) {
+        case 0:
+            $disp_score_message = $langScoreNotDisp;
+            break;
+        case 1:
+            $disp_score_message = $langScoreDisp;
+            break;
+        case 3:
+            $disp_score_message = $langScoreDispLastAttempt;
+            break;
+        case 4:
+            $disp_score_message = $langScoreDispEndDate;
+            break;          
+    }    
     $exerciseDescription = standard_text_escape($exerciseDescription);
     $exerciseStartDate = $exerciseStartDate;
     $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];

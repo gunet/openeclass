@@ -44,14 +44,13 @@ require_once 'modules/dropbox/class.mailbox.php';
  */
 
 function getSideMenu($menuTypeID) {
-
     switch ($menuTypeID) {
         case 0: { //logged out
                 $menu = loggedOutMenu();
                 break;
             }
 
-        case 1: { //logged in
+        case 1: { //logged in                      
                 $menu = loggedInMenu();
                 break;
             }
@@ -103,7 +102,6 @@ function getToolsArray($cat) {
                         module_id NOT IN (" . MODULE_ID_CHAT . ",
                                           " . MODULE_ID_ASSIGN . ",
                                           " . MODULE_ID_DROPBOX . ",
-                                          " . MODULE_ID_QUESTIONNAIRE . ",
                                           " . MODULE_ID_FORUM . ",
                                           " . MODULE_ID_GROUPS . ",
                                           " . MODULE_ID_ATTENDANCE . ",

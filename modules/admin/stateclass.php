@@ -30,6 +30,37 @@ require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 require_once 'admin_statistics_tools_bar.php';
 
+load_js('tools.js');
+load_js('datatables');
+load_js('datatables_filtering_delay');
+load_js('bootstrap-datetimepicker');
+
+$head_content .= "<script type='text/javascript'>
+        $(document).ready(function() {
+            $('#log_results_table').dataTable ({                                
+                'sPaginationType': 'full_numbers',
+                'bAutoWidth': true,                
+                'oLanguage': {
+                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                   'sZeroRecords':  '" . $langNoResult . "',
+                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                   'sInfoFiltered': '',
+                   'sInfoPostFix':  '',
+                   'sSearch':       '" . $langSearch . "',
+                   'sUrl':          '',
+                   'oPaginate': {
+                       'sFirst':    '&laquo;',
+                       'sPrevious': '&lsaquo;',
+                       'sNext':     '&rsaquo;',
+                       'sLast':     '&raquo;'
+                   }
+               }
+            }).fnSetFilteringDelay(1000);
+            $('.dataTables_filter input').attr('placeholder', '$langDetail');
+        });
+        </script>";
+
 $toolName = $langPlatformGenStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
@@ -62,7 +93,7 @@ if (isset($_GET['stats'])) {
             $date_end = date("Y-m-d", strtotime("+1 days"));
             $page_link = "&amp;stats=failurelogin";
             $log = new Log();
-            $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end, $_SERVER['PHP_SELF'], $limit, $page_link);
+            $log->display(0, 0, 0, LOG_LOGIN_FAILURE, $date_start, $date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
             break;
         case 'unregusers':
             $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 0;
@@ -71,7 +102,7 @@ if (isset($_GET['stats'])) {
             $date_end = date("Y-m-d", strtotime("+1 days"));
             $page_link = "&amp;stats=unregusers";
             $log = new Log();
-            $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end, $_SERVER['PHP_SELF'], $limit, $page_link);
+            $log->display(0, -1, 0, LOG_DELETE_USER, $date_start, $date_end, $_SERVER['SCRIPT_NAME'], $limit, $page_link);
             break;
         case 'login':
             $course_codes = array();
@@ -298,6 +329,9 @@ if (isset($_GET['stats'])) {
     }
 }
 
+
+draw($tool_content, 3, null, $head_content);
+
 /**
  * @brief output a <tr> with an array
  * @global type $langTypesClosed
@@ -400,6 +434,3 @@ function list_ManyResult($sql, $fieldname) {
     }
     return $resu;
 }
-
-load_js('tools.js');
-draw($tool_content, 3, null, $head_content);

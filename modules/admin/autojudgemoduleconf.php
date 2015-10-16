@@ -30,11 +30,18 @@ require_once 'modules/admin/extconfig/autojudgeapp.php';
 $nameTools = $langAutoJudge;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
+$pageName = $langBasicCfgSetting;
 
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 // Scan the connectors directory and locate the appropriate classes
 $connectorClasses = AutojudgeApp::getAutoJudgeServices();
+
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "extapp.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')),false);
 
 // Save new auto_judge.php
 if (isset($_POST['submit'])) {
@@ -47,7 +54,8 @@ if (isset($_POST['submit'])) {
     }
 
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langAutoJudgeUpdated</div>";
+    Session::Messages($langAutoJudgeUpdated, 'alert-success');
+    redirect_to_home_page('modules/admin/extapp.php');
 } // end of if($submit)
 // Display auto_judge.php edit form
 else {
@@ -56,42 +64,49 @@ else {
         $selected = q(get_config('autojudge_connector')) == $connectorClass ? " selected='selected'" : '';
         return "<option value='$connectorClass'$selected>".$connector->getName()."</option>";
     }, $connectorClasses);
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-                <fieldset><legend>$langBasicCfgSetting</legend>
-	 <table class='table table-bordered' width='100%'>
-         <tr>
-            <th width='200' class='left'><b>$langAutoJudgeConnector</b></th>
-            <td><select name='formconnector'>".implode('', $connectorOptions)."</select></td>
-         </tr>";
+    $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='post'>
+	 <div class='form-group'>
+            <label class='col-sm-3 control-label'>$langAutoJudgeConnector:</label>
+            <div class='col-sm-8'><select class='form-control' name='formconnector'>".implode('', $connectorOptions)."</select></div>
+         </div>";
     foreach($connectorClasses as $curConnectorClass) {
         $connector = new $curConnectorClass();
         $tool_content .= "
-        <tr class='connector-config connector-$curConnectorClass' style='display: none;'>
-            <th width='200' class='left'><b>$langAutoJudgeSupportedLanguages</b></th>
-            <td>".implode(', ', array_keys($connector->getSupportedLanguages()))."</td>
-        </tr>
-        <tr class='connector-config connector-$curConnectorClass' style='display: none;'>
-            <th width='200' class='left'><b>$langAutoJudgeSupportsInput</b></th>
-            <td>".($connector->supportsInput() ? $langCMeta['true'] : $langCMeta['false'])."</td>
-        </tr>";
+        <div class='form-group connector-config connector-$curConnectorClass' style='display: none;'>
+            <label class='col-sm-3 control-label'>$langAutoJudgeSupportedLanguages:</label>
+            <div class='col-sm-8'>".implode(', ', array_keys($connector->getSupportedLanguages()))."</div>
+        </div>
+        <div class='form-group connector-config connector-$curConnectorClass' style='display: none;'>
+            <label class='col-sm-3 control-label'>$langAutoJudgeSupportsInput:</label>
+            <div class='col-sm-8'>".($connector->supportsInput() ? $langCMeta['true'] : $langCMeta['false'])."</div>
+        </div>";
         foreach($connector->getConfigFields() as $curField => $curLabel) {
             $tool_content .= "
-              <tr class='connector-config connector-$curConnectorClass' style='display: none;'>
-                <th width='200' class='left'><b>$curLabel</b></th>
-                <td><input class='FormData_InputText' type='text' name='form$curField' size='40' value='" . q(get_config($curField)) . "'></td>
-              </tr>";
+              <div class='form-group connector-config connector-$curConnectorClass' style='display: none;'>
+                <label class='col-sm-3 control-label'>$curLabel:</label>
+                <div class='col-sm-8'><input class='FormData_InputText' type='text' name='form$curField' size='40' value='" . q(get_config($curField)) . "'></div>
+              </div>";
         }
     }
-    $tool_content .= "</table></fieldset>";
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='submit' value='$langModify'> </form>";
-
+    $tool_content .= "</form><div class='form-group'><div class='col-sm-offset-3'>";
+    $tool_content .= form_buttons(array(
+                            array(
+                                'text' => $langModify,
+                                'name' => 'submit',
+                                'value'=> $langModify
+                            ),
+                            array(
+                                'href' => "extapp.php"
+                            )
+                    ));
+    $tool_content .= "</div></div></div>";
     $head_content .= "
         <script type='text/javascript'>
         function update_connector_config_visibility() {
-            $('tr.connector-config').hide();
-            $('tr.connector-config input').removeAttr('required');
-            $('tr.connector-'+$('select[name=\"formconnector\"]').val()).show();
-            $('tr.connector-'+$('select[name=\"formconnector\"]').val()+' input').attr('required', 'required');
+            $('div.connector-config').hide();
+            $('div.connector-config input').removeAttr('required');
+            $('div.connector-'+$('select[name=\"formconnector\"]').val()).show();
+            $('div.connector-'+$('select[name=\"formconnector\"]').val()+' input').attr('required', 'required');
         }
         $(document).ready(function() {
             $('select[name=\"formconnector\"]').change(function() {
@@ -102,11 +117,5 @@ else {
         </script>";
 }
 
-// Display link to index.php
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "extapp.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 draw($tool_content, 3, null, $head_content);
 

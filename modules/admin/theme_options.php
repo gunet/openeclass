@@ -60,7 +60,6 @@ if (isset($_GET['delete_image'])) {
 }
 if (isset($_GET['export'])) {
         if (!$theme_id) redirect_to_home_page('modules/admin/theme_options.php'); // if default theme
-        require_once 'include/pclzip/pclzip.lib.php';
         require_once 'include/lib/fileUploadLib.inc.php';
         if (!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);        
@@ -95,7 +94,14 @@ if (isset($_POST['import'])) {
         $file_name = php2phps($file_name);
         if(!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
         if (move_uploaded_file($_FILES['themeFile']['tmp_name'], "courses/theme_data/$file_name")) {
-            require_once 'include/pclzip/pclzip.lib.php';
+            require_once 'modules/admin/extconfig/externals.php';
+            $connector = AntivirusApp::getAntivirus();
+            if($connector->isEnabled() == true ){
+                $output=$connector->check("courses/theme_data/$file_name");
+                if($output->status==$output::STATUS_INFECTED){
+                    AntivirusApp::block($output->output);
+                }
+            }
             $archive = new PclZip("$webDir/courses/theme_data/$file_name");
             if ($archive->extract(PCLZIP_OPT_PATH, 'courses/theme_data/temp') == 0) {
                 die("Error : ".$archive->errorInfo(true));
@@ -692,6 +698,14 @@ function upload_images($new_theme_id = null) {
             }
             $file_name = php2phps($file_name);
             move_uploaded_file($_FILES[$image]['tmp_name'], "$webDir/courses/theme_data/$theme_id/$file_name");
+            require_once 'modules/admin/extconfig/externals.php';
+            $connector = AntivirusApp::getAntivirus();
+            if($connector->isEnabled() == true ){
+                $output=$connector->check("$webDir/courses/theme_data/$theme_id/$file_name");
+                if($output->status==$output::STATUS_INFECTED){
+                    AntivirusApp::block($output->output);
+                }
+            }
             $_POST[$image] = $file_name;
         }
     }

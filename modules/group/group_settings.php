@@ -49,7 +49,8 @@ if (isset($_POST['submit'])) {
     } else {
         setting_set(SETTING_GROUP_MULTIPLE_REGISTRATION, 0, $course_id);
     }
-    $tool_content .= "<div class='alert alert-success'>$langGlossaryUpdated</div>";    
+    Session::Messages($langGlossaryUpdated, "alert-success");
+    redirect_to_home_page("modules/group/group_settings.php?course=$course_code");
 } else {
     $tool_content .= "<div class='form-wrapper'>
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>

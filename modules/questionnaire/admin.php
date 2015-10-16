@@ -38,13 +38,13 @@ $navigation[] = array(
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if ($_POST['assign_type'] == 2) {
-        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     } elseif ($_POST['assign_type'] == 1) {
         $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
                                 WHERE user.id = course_user.user_id
                                 AND course_user.course_id = ?d AND course_user.status = 5
-                                AND user.id", $course_id);
+                                AND user.id ORDER BY surname", $course_id);
     }
     echo json_encode($data);
     exit;
@@ -213,7 +213,7 @@ if (isset($_GET['pid'])) {
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
     $pageName = $poll->name;
-    $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE pid = ?d", $pid)->count;  
+    $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE pid = ?d", $pid)->count;  
     if ($attempt_counter>0) {
         Session::Messages($langThereAreParticipants);
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");

@@ -52,7 +52,6 @@ define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
 
 require_once 'include/baseTheme.php';
-require_once 'include/CAS/CAS.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/textLib.inc.php';
 

@@ -113,6 +113,7 @@ define('SETTING_FORUM_RATING_ENABLE', 9);
 define('SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE', 10);
 define('SETTING_COURSE_ABUSE_REPORT_ENABLE', 11);
 define('SETTING_GROUP_MULTIPLE_REGISTRATION', 12);
+define('SETTING_COURSE_USER_REQUESTS', 20);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -192,7 +193,7 @@ function css_link($file) {
 
 // Include a JavaScript file from the main js directory
 function load_js($file, $init='') {
-    global $head_content, $urlAppend, $theme, $theme_settings, $language;
+    global $head_content, $urlAppend, $theme, $theme_settings, $language, $langReadMore, $langReadLess;
     static $loaded;
 
     if (isset($loaded[$file])) {
@@ -283,7 +284,7 @@ function load_js($file, $init='') {
             $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
             $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
         } elseif ($file == 'bootstrap-datepicker') {
-            $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.css') .
+            $head_content .= css_link('bootstrap-datepicker/css/datepicker3.css') .
                 js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
             $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
         } elseif ($file == 'bootstrap-validator') {
@@ -305,6 +306,8 @@ function load_js($file, $init='') {
         } elseif ($file == 'trunk8') {
             $head_content .= "
 <script>
+    var readMore = '".js_escape($langReadMore)."';
+    var readLess = '".js_escape($langReadLess)."';
     $(function () { $('.trunk8').trunk8({
         lines: 3,
         fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',
@@ -459,6 +462,19 @@ function gid_to_name($gid) {
     }
 }
 
+function display_group($gid) {
+    global $course_code, $urlAppend, $themeimg, $langGroup;
+    $res = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $gid);
+    if ($res) {
+        return "<span title='$langGroup' class='fa-stack fa-lg'>
+                    <i style='color:#f3f3f3;' class='fa fa-circle fa-stack-2x'></i>
+                    <i style='color:#cdcdcd;' class='fa fa-users fa-stack-1x'></i>
+                </span>
+                <a href='{$urlAppend}modules/group/group_space.php?course=$course_code&amp;group_id=$gid'>$res->name</a>";
+    } else {
+        return false;
+    }
+}
 /**
  * @brief Return the URL for a user profile image
  * @param int $uid user id
@@ -477,7 +493,7 @@ function user_icon($uid, $size = null) {
             if ($user->has_icon) {
                 return "${urlAppend}courses/userimg/${uid}_$size.jpg";
             } else {
-                return "$themeimg/default_$size.jpg";
+                return "$themeimg/default_$size.png";
             }
         }
     }
@@ -2136,7 +2152,7 @@ function glossary_expand_callback($matches) {
         $definition = '';
     }
 
-    return '<a href="#" class="glossary"' .
+    return '<a href="#" data-toggle="popover"' .
             $definition . '>' . $matches[0] . '</a>';
 }
 
@@ -2352,7 +2368,7 @@ function icon_old_style($name, $title = null, $link = null, $attrs = null, $form
  * @return type
  */
 function profile_image($uid, $size, $class=null) {
-    global $urlServer, $themeimg;
+    global $urlServer, $themeimg, $langStudent;
 
     // makes $class argument optional
     $class_attr = ($class == null)?'':"class='".q($class)."'";
@@ -2361,7 +2377,7 @@ function profile_image($uid, $size, $class=null) {
     if ($uid > 0 and file_exists("courses/userimg/${uid}_$size.jpg")) {
         return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' $class_attr title='$name' alt='$name'>";
     } else {
-        return "<img src='$themeimg/default_$size.jpg' $class_attr title='$name' alt='$name'>";
+        return "<img src='$themeimg/default_$size.png' $class_attr title='$name' alt='$name'>";
     }
 }
 
@@ -2822,6 +2838,35 @@ function add_framebusting_headers() {
     header('X-Frame-Options: SAMEORIGIN');
 }
 
+/**
+ * This header enables the Cross-site scripting (XSS) filter built into most 
+ * recent web browsers. It's usually enabled by default anyway, so the role of 
+ * this header is to re-enable the filter for this particular website if it 
+ * was disabled by the user.
+ */
+
+function add_xxsfilter_headers() {
+    header('X-XSS-Protection: 1; mode=block');
+}
+
+
+/**
+ * The nosniff header, prevents Internet Explorer and Google Chrome from 
+ * MIME-sniffing a response away from the declared content-type.
+ */
+
+function add_nosniff_headers() {
+    header('X-Content-Type-Options: nosniff');
+}
+
+/**
+ * HTTP Strict-Transport-Security (HSTS) enforces secure (HTTP over SSL/TLS) 
+ * connections to the server.
+ */
+
+function add_hsts_headers() {
+    header('Strict-Transport-Security: max-age=16070400');
+}
 
 /**
  * 
@@ -3076,7 +3121,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $confirm_extra = " data-title='$title_conf' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='btn-danger'";
             $confirm_modal_class = ' confirmAction';
-            $form_begin = "<form method=post action='$url' style='display:inline-block;'>";
+            $form_begin = "<form method=post action='$url'>";
             $form_end = '</form>';
             $href = '';
         } else {
@@ -3261,7 +3306,7 @@ function action_button($options, $secondary_menu_options = array()) {
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
         $action_button = "
-                <a tabindex='1' class='btn $secondary_btn_class' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
+                <a tabindex='1' class='menu-popover btn $secondary_btn_class' data-container='body' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
                     <i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
                 </a>";
     }
@@ -3728,5 +3773,84 @@ function login_hook($options) {
         return local_login_hook($options);
     } else {
         return $options;
+    }
+}
+
+
+/**
+ * Show Second Factor Initialization Dialog in User Profile
+ *
+ * @return string
+ */
+
+function showSecondFactorUserProfile(){
+    global $langSFAConf;
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return "<div class='form-group'>
+                  <label class='col-sm-2 control-label'>" . $langSFAConf . "</label>
+                  <div class='col-sm-4'>". secondfaApp::showUserProfile($_SESSION['uid']) . "</div>
+                </div>";
+    } else {
+        return "";
+    }
+}
+
+/**
+ * Save Second Factor Initialization in User Profile
+ *
+ * @param  POST variables
+ * @return string
+ */
+
+
+function saveSecondFactorUserProfile(){
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return secondfaApp::saveUserProfile($_SESSION['uid']); 
+    } else {
+        return "";
+    }
+}
+
+
+/**
+ * Show Second Factor Challenge
+ *
+ * @return string
+ */
+
+function showSecondFactorChallenge(){
+    global $langSFAType;
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        $challenge = secondfaApp::showChallenge($_SESSION['uid']);
+        if ($challenge!=""){
+            return "<div class='form-group'>
+                    <label class='col-sm-2 control-label'>" . $langSFAType . "</label>
+                    <div class='col-sm-4'>". $challenge . "</div>
+                    </div>";
+        }else{
+            return "";
+        }
+    } else {
+        return "";
+    }
+}
+
+/**
+ * Verify Second Factor Challenge
+ *
+ * @param  POST variables
+ * @return string
+ */
+
+
+function checkSecondFactorChallenge(){
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return secondfaApp::checkChallenge($_SESSION['uid']); 
+    } else {
+        return "";
     }
 }

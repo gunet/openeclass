@@ -112,6 +112,19 @@ function check_auth_active($auth_id) {
     return false;
 }
 
+/**
+ * @brief check if method $auth is configured
+ * @param type $auth_id
+ * @return boolean
+ */
+function check_auth_configured($auth_id) {
+    $auth = Database::get()->querySingle("SELECT auth_settings FROM auth WHERE auth_id = ?d", $auth_id);
+    if ($auth and !empty($auth->auth_settings)) {
+            return true;
+    }
+    return false;
+}
+
 
 /* * **************************************************************
   count users for each authentication method
@@ -204,7 +217,7 @@ function get_auth_settings($auth) {
     $settings['auth_title'] = $result->auth_title;
     $settings['auth_instructions'] = $result->auth_instructions;
     $settings['auth_default'] = $result->auth_default;
-    $settings['auth_name'] = $result->auth_id;
+    $settings['auth_name'] = $result->auth_name;
 
     foreach (explode('|', $result->auth_settings) as $item) {
         if (preg_match('/(\w+)=(.*)/', $item, $matches)) {
@@ -307,11 +320,12 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
         case '4':
             $ldap = ldap_connect($settings['ldaphost']);
             if (!$ldap) {
-                $GLOBALS['auth_errors'] = 'Error connecting to LDAP host';
+                $GLOBALS['auth_errors'] = ldap_error($ldap);
                 return false;
             } else {
                 // LDAP connection established - now search for user dn
                 @ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+                @ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0); // for search in Active Directory
                 if (@ldap_bind($ldap, $settings['ldapbind_dn'], $settings['ldapbind_pw'])) {
                     if (empty($settings['ldap_login_attr2'])) {
                         $search_filter = "($settings[ldap_login_attr]=${test_username})";
@@ -691,26 +705,10 @@ function process_login() {
 * ************************************************************** */
 
 function hybridauth_login() {
-    //this is needed so as to include the HybridAuth error codes
-    global $language, $language_codes, $siteName, $Institution, $InstitutionUrl;
-    if (isset($language)) {
-        // include_messages
-        include "lang/$language/common.inc.php";
-        $extra_messages = "config/{$language_codes[$language]}.inc.php";
-        if (file_exists($extra_messages)) {
-            include $extra_messages;
-        } else {
-            $extra_messages = false;
-        }
-        include "lang/$language/messages.inc.php";
-        if ($extra_messages) {
-            include $extra_messages;
-        }
-    }
-    // end HybridAuth messages inclusion
-    
-    
-    global $warning;
+    global $surname, $givenname, $email, $status, $is_admin, $language,
+        $langInvalidId, $langAccountInactive1, $langAccountInactive2,
+        $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
+        $inactive_uid, $langTooManyFails, $warning;
     
     // include HubridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
@@ -724,29 +722,23 @@ function hybridauth_login() {
         Session::Messages(q(trim(strip_tags($_GET['error']))));
     }
 
-    // if user select a provider to login with
-    // then inlcude hybridauth config and main class
-    // then try to authenticate te current user
-    // finally redirect him to his profile page
+    // if user select a provider to login with then include hybridauth config
+    // and main class, try to authenticate, finally redirect to profile
     if (isset($_GET['provider'])) {
         try {
-            // create an instance for Hybridauth with the configuration file path as parameter
             $hybridauth = new Hybrid_Auth($config);
             
             // set selected provider name
-            $provider = @trim(strip_tags($_GET["provider"]));
+            $provider = @trim(strip_tags($_GET['provider']));
         
             // try to authenticate the selected $provider
-            $adapter = $hybridauth->authenticate( $provider );
+            $adapter = $hybridauth->authenticate($provider);
             
             // grab the user profile
             $user_data = $adapter->getUserProfile();
             
-            //user profile debug print
-            //echo $user_data->displayName;
-            //echo $user_data->email;
-            //echo $user_data->photoURL;
-            //echo $user_data->identifier;
+            // user profile debug print
+            // echo '<pre>'; print_r($user_data); echo '</pre>';
             
         } catch (Exception $e) {
             // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
@@ -774,18 +766,12 @@ function hybridauth_login() {
     } //endif( isset( $_GET["provider"] ) && $_GET["provider"] )
     
     
-    // *****************************
-    // from here on runs an alternative version of proccess_login() where
-    // instead of a password, the provider user id is used and matched against
+    // from here on an alternative version of proccess_login() runs where
+    // instead of a password, the provider uid is used and matched against
     // the corresponding field in the db table.
-    global $surname, $givenname, $email, $status, $is_admin, $language,
-    $langInvalidId, $langAccountInactive1, $langAccountInactive2,
-    $langNoCookies, $langEnterPlatform, $urlServer, $langHere,
-    $auth_ids, $inactive_uid, $langTooManyFails;
     
-    $pass = $user_data->identifier; //password = provider user id
-    $auth = get_auth_active_methods();
-    //$is_eclass_unique = is_eclass_unique();
+    $pass = $user_data->identifier; // password = provider user id
+    // $is_eclass_unique = is_eclass_unique();
     
     unset($_SESSION['uid']);
     $auth_allow = 0;
@@ -799,6 +785,7 @@ function hybridauth_login() {
         $auth_allow = 8;
     } else {
         $auth_id = array_search(strtolower($provider), $auth_ids);
+        $auth_methods = get_auth_active_methods();
         $myrow = Database::get()->querySingle("SELECT user.id, surname,
                     givenname, password, username, status, email, lang,
                     verified_mail, uid
@@ -813,24 +800,16 @@ function hybridauth_login() {
             $auth_allow = 5;
         } elseif ($myrow) {
             $exists = 1;
-            if (!empty($auth)) {
-                if (in_array($myrow->password, $auth_ids)) {
-                    // alternate methods login
-                    //$auth_allow = alt_login($myrow, $provider, $pass); //this should NOT be called during HybridAuth!
-                } else {
-                    // eclass login
-                    $auth_allow = login($myrow, $provider, $pass, $provider);
-                }
+            if (in_array($auth_id, $auth_methods)) {
+                $auth_allow = login($myrow, null, null, $provider);
             } else {
-                $tool_content .= "<br>$langInvalidAuth<br>";
+                Session::Messages($langInvalidAuth, 'alert-danger');
+                redirect_to_home_page();
             }
         }
         if (!$exists and !$auth_allow) {
             // Since HybridAuth was used and there is not user id matched in the db, send the user to the registration form.
-            header('Location: ' . $urlServer . 'modules/auth/registration.php?provider=' . $provider);
-            
-            // from this point and on, the code does not need to run since the user is redirected to the registration page
-            $auth_allow = 4;
+            redirect_to_home_page('modules/auth/registration.php?provider=' . $provider);
         }
     }
     
@@ -895,19 +874,22 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
         if (check_username_sensitivity($posted_uname, $user_info_object->username)) {
             if ($hasher->CheckPassword($pass, $user_info_object->password)) {
                 $pass_match = true;
-            } else if (strlen($user_info_object->password) < 60 && md5($pass) == $user_info_object->password) {
+            } elseif (strlen($user_info_object->password) < 60 and md5($pass) == $user_info_object->password) {
                 $pass_match = true;
                 // password is in old md5 format, update transparently
                 $password_encrypted = $hasher->HashPassword($pass);
                 $user_info_object->password = $password_encrypted;
                 Database::core()->query("SET sql_mode = TRADITIONAL");
                 Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $user_info_object->id);
+            } elseif (get_config('course_guest') != 'off' and $user_info_object->status = USER_GUEST and 
+                $pass === '' and $user_info_object->password === '') {
+                // special case for guest login with empty password
+                $pass_match = true;
             }
         }
     } else {
-        if ($pass == $user_info_object->uid) {
-            $pass_match = true;
-        }
+        // User was authenticated by HybridAuth
+        $pass_match = true;
     }
 
     if ($pass_match) {
@@ -969,11 +951,12 @@ function alt_login($user_info_object, $uname, $pass) {
     if ($auth == 7) {
         $cas = explode('|', $auth_method_settings['auth_settings']);
         $cas_altauth = intval(str_replace('cas_altauth=', '', $cas[7]));
-        // check if alt auth is valid and active
-        if (($cas_altauth > 0) && check_auth_active($cas_altauth)) {
+        // check if alt auth is valid and configured
+        if (($cas_altauth > 0) && check_auth_configured($cas_altauth)) {
             $auth = $cas_altauth;
             // fetch settings of alt auth
             $auth_method_settings = get_auth_settings($auth);
+            $user_info_object->password = $auth_method_settings['auth_name'];
         } else {
             return 7; // Redirect to CAS login
         }
@@ -982,8 +965,7 @@ function alt_login($user_info_object, $uname, $pass) {
     if ($auth == 6) {
         return 6; // Redirect to Shibboleth login
     }
-
-    if (($user_info_object->password == $auth_method_settings['auth_name']) || !empty($cas_altauth)) {
+    if ($user_info_object->password == $auth_method_settings['auth_name']) {
         $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
         if ($is_valid) {
             $is_active = check_activity($user_info_object->id);

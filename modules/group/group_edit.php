@@ -145,7 +145,7 @@ if ($is_editor) {
     foreach ($q as $row) {
         $selected = $row->is_tutor ? ' selected="selected"' : '';
         $tool_content_tutor .= "<option value='$row->user_id'$selected>" . q($row->surname) .
-                ' ' . q($row->givenname) . "</option>\n";
+                ' ' . q($row->givenname) . "</option>";
     }
     $tool_content_tutor .= '</select>';
 } else {
@@ -155,7 +155,8 @@ if ($is_editor) {
 $tool_content_max_student = $max_members ? $max_members : 1;
 $tool_content_group_description = q($group_description);
 
-$multi_reg = Database::get()->querySingle("SELECT value FROM course_settings WHERE course_id = ?d AND setting_id = ?d", $course_id, SETTING_GROUP_MULTIPLE_REGISTRATION)->value;
+$multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
+
 if ($multi_reg) {
     // Students registered to the course but not members of this group
     $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
@@ -218,7 +219,7 @@ $tool_content .=  action_bar(array(
   
 
 $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
+        <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
         <fieldset>    
         <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
             <label class='col-sm-2 control-label'>$langGroupName:</label>
@@ -291,8 +292,8 @@ $tool_content .= "<div class='form-wrapper'>
         $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
         foreach ($resultcategories as $myrow) {
             $tool_content .= "<option value='$myrow->id'";
-			$category_id = $myrow->id;
-            if (isset($_GET['category']) and $_GET['category'] == $myrow->id) {
+            $category_id = $myrow->id;            
+            if ($group_category == $myrow->id) {
                 $tool_content .= " selected='selected'";
             }
             $tool_content .= '>' . q($myrow->name) . "</option>";

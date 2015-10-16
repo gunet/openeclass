@@ -40,9 +40,9 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'unitresource_' . $ures->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_UNITRESOURCE . '_' . $ures->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $ures->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'unitresource', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_UNITRESOURCE, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $ures->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('unitid', $ures->unit_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($ures->title), $encoding));
@@ -142,29 +142,6 @@ class UnitResourceIndexer extends AbstractIndexer implements ResourceIndexerInte
         }
 
         $this->optimizeOrCommit($optimize);
-    }
-
-    /**
-     * Build a Lucene Query.
-     * 
-     * @param  array   $data      - The data (normally $_POST), needs specific array keys
-     * @param  boolean $anonymous - whether we build query for anonymous user access or not
-     * @return string             - the returned query string
-     */
-    public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['course_id']) && !empty($data['course_id'])) {
-            $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
-            $queryStr = '(';
-            foreach ($terms as $term) {
-                $queryStr .= 'title:' . $term . '* ';
-                $queryStr .= 'content:' . $term . '* ';
-            }
-            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:unitresource AND visible:1';
-            return $queryStr;
-        }
-
-        return null;
     }
 
 }

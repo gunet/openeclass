@@ -172,11 +172,11 @@ if (isset($_GET['mid'])) {
                       
         $(".delete").click(function() {
             if (confirm("' . js_escape($langConfirmDelete) . '")) {
-            var rowContainer = $(this).parent().parent();
-                    var id = rowContainer.attr("id");
-                    var string = \'mid=\'+ id;
-    
-                    $.ajax({
+                var rowContainer = $(this).parent().parent();
+                var id = rowContainer.attr("id");
+                var string = \'mid=\'+ id;
+
+                $.ajax({
                        type: "POST",
                        url: "ajax_handler.php",
                        data: string,

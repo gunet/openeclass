@@ -40,9 +40,9 @@ class VideoIndexer extends AbstractIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'video_' . $video->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_VIDEO . '_' . $video->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $video->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'video', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_VIDEO, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $video->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($video->title), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($video->description), $encoding));
@@ -112,29 +112,6 @@ class VideoIndexer extends AbstractIndexer implements ResourceIndexerInterface {
      */
     protected function getCourseResourcesFromDB($courseId) {
         return Database::get()->queryArray("SELECT * FROM video WHERE course_id = ?d", $courseId);
-    }
-
-    /**
-     * Build a Lucene Query.
-     * 
-     * @param  array   $data      - The data (normally $_POST), needs specific array keys
-     * @param  boolean $anonymous - whether we build query for anonymous user access or not
-     * @return string             - the returned query string
-     */
-    public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['course_id']) && !empty($data['course_id'])) {
-            $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
-            $queryStr = '(';
-            foreach ($terms as $term) {
-                $queryStr .= 'title:' . $term . '* ';
-                $queryStr .= 'content:' . $term . '* ';
-            }
-            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:video';
-            return $queryStr;
-        }
-
-        return null;
     }
 
 }

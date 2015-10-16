@@ -27,13 +27,14 @@ $require_login = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
+require_once 'include/course_settings.php';
 
-$toolName = $langContactProf;
+$toolName = $langLabelCourseUserRequest;
 
-if (isset($_REQUEST['course_id'])) {    
+if (isset($_REQUEST['course_id'])) {
     $course_id = $_REQUEST['course_id'];
 }
-
+$log_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS, $course_id);
 $userdata = Database::get()->querySingle("SELECT givenname, surname, email FROM user WHERE id = ?d", $uid);
 
 if (empty($userdata->email)) {
@@ -50,6 +51,12 @@ if (empty($userdata->email)) {
         $tool_content .= form();
     } else {
         $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->email);
+        if ($log_course_user_requests) { // log course user requests to `course_user_request` table
+            Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
+                                                            status = 1, comments = ?s, 
+                                                            ts = " . DBHelper::timeAfter() . "",
+                                                        $uid, $course_id, $content);
+        }
     }
 } else {
     $tool_content .= form();
@@ -157,6 +164,6 @@ function email_profs($course_id, $content, $from_name, $from_address) {
                 $ret .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>";
             }
         }
-    }
+    }    
     return $ret;
 }

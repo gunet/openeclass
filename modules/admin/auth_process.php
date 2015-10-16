@@ -27,7 +27,6 @@
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
-require_once 'include/CAS/CAS.php';
 require_once 'modules/auth/auth.inc.php';
 $toolName = $langAuthSettings;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);

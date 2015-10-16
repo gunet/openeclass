@@ -75,7 +75,7 @@ if (!$is_editor && !$thePoll->show_results) {
 if(!$thePoll){
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
-$total_participants = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) AS total FROM poll_answer_record WHERE pid = ?d", $pid)->total;
+$total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
 if(!$total_participants) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
@@ -148,7 +148,7 @@ $export_box
 </div>";
 
 $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position ASC", $pid);
-$j=1;
+$j=1;                                                                  
 foreach ($questions as $theQuestion) {
     if ($theQuestion->qtype == QTYPE_LABEL) {
         $tool_content .= "<div class='alert alert-info'>$theQuestion->question_text</div>"; 
@@ -160,8 +160,9 @@ foreach ($questions as $theQuestion) {
             </div>
             <div class='panel-body'>
                 <h4>".q($theQuestion->question_text)."</h4>";
+
         $j++;
-        
+
         if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {
             $all_answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theQuestion->pqid);
             $chart = new Plotter(800, 300);
@@ -170,8 +171,15 @@ foreach ($questions as $theQuestion) {
             }
             if ($theQuestion->qtype == QTYPE_SINGLE) {
                 $chart->addPoint($langPollUnknown, 0);
-            }
-            $answers = Database::get()->queryArray("SELECT a.aid AS aid, b.answer_text AS answer_text, count(a.aid) AS count FROM poll_answer_record a LEFT JOIN poll_question_answer b ON a.aid = b.pqaid WHERE a.qid = ?d GROUP BY a.aid", $theQuestion->pqid);
+            }          
+            $answers = Database::get()->queryArray("SELECT a.aid AS aid, b.answer_text AS answer_text, count(a.aid) AS count
+                        FROM poll_user_record c, poll_answer_record a
+                        LEFT JOIN poll_question_answer b
+                        ON a.aid = b.pqaid
+                        WHERE a.qid = ?d
+                        AND a.poll_user_record_id = c.id
+                        AND (c.email_verification = 1 OR c.email_verification IS NULL)
+                        GROUP BY a.aid", $theQuestion->pqid);
             $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record WHERE qid= ?d", $theQuestion->pqid)->total;
             $answers_table = "
                 <table class='table-default'>
@@ -189,7 +197,21 @@ foreach ($questions as $theQuestion) {
                 }
                 $chart->addPoint($q_answer, $percentage);
                 if ($thePoll->anonymized != 1) {
-                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname FROM poll_answer_record AS a, user AS b WHERE a.aid = ?d AND a.user_id = b.id", $aid);   
+                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
+                            FROM poll_user_record AS a, user AS b
+                            WHERE a.id IN (
+                                    SELECT poll_user_record_id FROM poll_answer_record WHERE qid = ?d AND aid = ?d
+                                )
+                            AND a.uid = b.id
+                            UNION
+                            SELECT a.email AS fullname
+                            FROM poll_user_record a, poll_answer_record b 
+                            WHERE b.qid = ?d
+                            AND b.aid = ?d
+                            AND a.email IS NOT NULL
+                            AND a.email_verification = 1
+                            AND b.poll_user_record_id = a.id                            
+                            ", $theQuestion->pqid, $aid, $theQuestion->pqid, $aid);                    
                     foreach($names as $name) {
                       $names_array[] = $name->fullname;
                     }
@@ -211,19 +233,43 @@ foreach ($questions as $theQuestion) {
             for ($i=1;$i<=$theQuestion->q_scale;$i++) {
                 $chart->addPoint($i, 0);
             }
-            
-            $answers = Database::get()->queryArray("SELECT answer_text, count(answer_text) as count FROM poll_answer_record WHERE qid = ?d GROUP BY answer_text", $theQuestion->pqid);
-            $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record WHERE qid= ?d", $theQuestion->pqid)->total;
+
+            $answers = Database::get()->queryArray("SELECT a.answer_text, count(a.answer_text) as count 
+                    FROM poll_answer_record a, poll_user_record b
+                    WHERE a.qid = ?d
+                    AND a.poll_user_record_id = b.id
+                    AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                    GROUP BY a.answer_text", $theQuestion->pqid);
+            $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total "
+                    . "FROM poll_answer_record "
+                    . "WHERE qid= ?d", $theQuestion->pqid)->total;
+
             $answers_table = "
                 <table class='table-default'>
                     <tr>
                         <th>$langAnswer</th>
-                        <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";             
+                        <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
             foreach ($answers as $answer) {
                 $percentage = round(100 * ($answer->count / $answer_total),2);
                 $chart->addPoint(q($answer->answer_text), $percentage);
                 if ($thePoll->anonymized != 1) {
-                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname FROM poll_answer_record AS a, user AS b WHERE a.answer_text = ?s AND a.user_id = b.id", $answer->answer_text);
+                    // Gets names for registered users and emails for unregistered
+                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
+                            FROM poll_user_record AS a, user AS b
+                            WHERE a.id IN (
+                                    SELECT poll_user_record_id FROM poll_answer_record WHERE qid = ?d AND answer_text = ?s
+                                )
+                            AND a.uid = b.id
+                            UNION
+                            SELECT a.email AS fullname
+                            FROM poll_user_record a, poll_answer_record b 
+                            WHERE b.qid = ?d 
+                            AND b.answer_text = ?s
+                            AND a.email IS NOT NULL
+                            AND a.email_verification = 1
+                            AND b.poll_user_record_id = a.id                            
+                            ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);
+                    
                     foreach($names as $name) {
                       $names_array[] = $name->fullname;
                     }
@@ -250,9 +296,13 @@ foreach ($questions as $theQuestion) {
             $chart->normalize();
             $tool_content .= $chart->plot();            
             $tool_content .= $answers_table;
-        } elseif ($theQuestion->qtype == QTYPE_FILL) {
-            $answers = Database::get()->queryArray("SELECT COUNT(arid) AS count, answer_text, user_id FROM poll_answer_record
-                                        WHERE qid = ?d GROUP BY answer_text", $theQuestion->pqid);                   
+        } elseif ($theQuestion->qtype == QTYPE_FILL) {            
+            $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text 
+                                        FROM poll_answer_record a, poll_user_record b
+                                        WHERE a.qid = ?d 
+                                        AND a.poll_user_record_id = b.id
+                                        AND (b.email_verification = 1 OR b.email_verification IS NULL)                                        
+                                        GROUP BY a.answer_text", $theQuestion->pqid);                   
             $tool_content .= "<table class='table-default'>
                     <tbody>
                     <tr>
@@ -263,7 +313,24 @@ foreach ($questions as $theQuestion) {
             $k=1;
             foreach ($answers as $answer) {             
                 if (!$thePoll->anonymized) {
-                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname FROM poll_answer_record AS a, user AS b WHERE a.answer_text = ?s AND a.user_id = b.id", $answer->answer_text);
+                    // Gets names for registered users and emails for unregistered
+                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
+                            FROM poll_user_record AS a, user AS b
+                            WHERE a.id IN (
+                                    SELECT poll_user_record_id FROM poll_answer_record 
+                                    WHERE qid = ?d 
+                                    AND answer_text = ?s
+                                )
+                            AND a.uid = b.id
+                            UNION
+                            SELECT a.email AS fullname
+                            FROM poll_user_record a, poll_answer_record b 
+                            WHERE b.qid = ?d
+                            AND b.answer_text = ?s
+                            AND a.email IS NOT NULL
+                            AND a.email_verification = 1
+                            AND b.poll_user_record_id = a.id                            
+                            ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);                    
                     foreach($names as $name) {
                       $names_array[] = $name->fullname;
                     }
