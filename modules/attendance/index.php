@@ -225,11 +225,18 @@ if ($is_editor) {
         if ($_POST['specific_attendance_users'] == 2) { // specific users group
             foreach ($_POST['specific'] as $g) {
                 $ug = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
+                $already_inserted_users = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
+                $already_inserted_ids = [];
+                foreach ($already_inserted_users as $already_inserted_user) {
+                    array_push($already_inserted_ids, $already_inserted_user->uid);
+                }                
                 foreach ($ug as $u) {
-                    $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
-                            SELECT $attendance_id, user_id FROM course_user
-                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
-                    update_user_attendance_activities($attendance_id, $u->user_id);
+                    if (!in_array($u->user_id, $already_inserted_ids)) {
+                        $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
+                                SELECT $attendance_id, user_id FROM course_user
+                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
+                        update_user_attendance_activities($attendance_id, $u->user_id);
+                    }
                 }
             }
         } elseif ($_POST['specific_attendance_users'] == 1) { // specific users            
