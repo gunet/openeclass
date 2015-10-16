@@ -304,7 +304,6 @@ $langCourseInfo = "Ρυθμίσεις";
 $langCourseImage = "Φωτογραφία Μαθήματος";
 $langCourseLayout = "Διάταξη";
 $langCourseLayout1 = "2 Στήλες, Με Εικόνα (προεπιλογή)";
-$langCourseLayout2 = "2 Στήλες, Χωρίς Εικόνα";
 $langCourseLayout3 = "Πλήρες Πλάτος";
 $langQuota = "Όρια αποθηκευτικού χώρου";
 $langCourseStatus = "Κατάσταση Μαθήματος";

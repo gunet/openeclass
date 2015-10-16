@@ -512,19 +512,13 @@ if ($course_info->home_layout == 3) {
     $left_column = '';
     $main_content_cols = '';
 } else {
-   $left_column = "
-            <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>"; 
-   if ($course_info->home_layout == 1) {       
-       $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . rawurlencode($course_info->course_image) : "$themeimg/ph1.jpg";
-       $left_column .= "
-                <div>
-                    <img class='banner-image img-responsive' src='$course_image_url'/>
-                </div>
-                ";
-   }
-    $left_column .= "
-
-            </div>";
+    $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . rawurlencode($course_info->course_image) : "$themeimg/ph1.jpg";
+    $left_column = "
+        <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
+            <div>
+                <img class='banner-image img-responsive' src='$course_image_url'/>
+            </div>
+        </div>";
    $main_content_cols = 'col-sm-7';
 }
 $edit_link = "";

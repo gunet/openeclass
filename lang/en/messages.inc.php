@@ -3770,7 +3770,6 @@ $langTheFieldIsRequired = 'The field is required.';
 $langCourseImage = "Course Image";
 $langCourseLayout = "Layout";
 $langCourseLayout1 = "2 Columns, With Image (default)";
-$langCourseLayout2 = "2 Columns, No Image";
 $langCourseLayout3 = "Full Width";
 $langCloneCourse = "Clone this course";
 $langGradebookInfoForUsers = 'Choose users to be tracked in gradebook';
