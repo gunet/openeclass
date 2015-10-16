@@ -100,9 +100,14 @@ if (isset($_POST['submit'])) {
         process_profile_fields_data(array('uid' => $uid));
         
         // close request if needed
-        if (!empty($rid)) {
+        if ($rid) {
             $rid = intval($rid);
             Database::get()->query("UPDATE user_request set state = 2, date_closed = NOW() WHERE id = ?d", $rid);
+            // copy Hybrid Auth external uid if available
+            Database::get()->query('INSERT INTO user_ext_uid (user_id, auth_id, uid)
+                SELECT ?d, auth_id, uid FROM user_request_ext_uid
+                    WHERE user_request_id = ?d',
+                $uid, $rid);
         }
 
         if ($pstatus == 1) {
@@ -113,9 +118,8 @@ if (isset($_POST['submit'])) {
             $message = $usersuccess;
             $reqtype = '?type=user';
             $type_message = '';
-            // $langAsUser;
         }
-        $success = TRUE;
+
         // send email
         $telephone = get_config('phone');
         $emailsubject = "$langYourReg $siteName $type_message";
@@ -162,6 +166,13 @@ if (isset($_POST['submit'])) {
         Session::Messages(array($message,
             "$langTheU \"$givenname_form $surname_form\" $langAddedU" .
             ((isset($auth) and $auth == 1)? " $langAndP": '')), 'alert-success');
+        if ($rid) {
+            $req_type = Database::get()->querySingle('SELECT status FROM user_request WHERE id = ?d', $rid)->status;
+            redirect_to_home_page('modules/admin/listreq.php' .
+                ($req_type == USER_STUDENT? '?type=user': ''));
+        } else {
+            redirect_to_home_page('modules/admin/newuseradmin.php' . $reqtype);
+        }
     }    
 }
 
@@ -229,15 +240,11 @@ if (isset($_GET['id'])) {
         array('title' => $langBack,
               'class' => 'back_btn',
               'icon' => 'fa-reply',
-              'level' => 'primary-label'),
-        array('title' => $langBackRequests,
-            'url' => "listreq.php$reqtype",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label',
-            'show' => (isset($submit) and $success))));
+              'level' => 'primary-label')));
 }
 
 $lang = false;
+$ext_uid = null;
 $ps = $pn = $pu = $pe = $pam = $pphone = $pcom = $pdate = '';
 $depid = Session::has('department')? intval(Session::get('department')): null;
 $pv = Session::has('verified_mail_form')? Session::get('verified_mail_form'): '';
@@ -247,6 +254,8 @@ if (isset($_GET['id'])) { // if we come from prof request
     $res = Database::get()->querySingle("SELECT givenname, surname, username, email, faculty_id, phone, am,
                         comment, lang, date_open, status, verified_mail FROM user_request WHERE id =?d", $id);
     if ($res) {
+        $ext_uid = Database::get()->querySingle('SELECT *
+            FROM user_request_ext_uid WHERE user_request_id = ?d', $id);
         $ps = $res->surname;
         $pn = $res->givenname;
         $pu = $res->username;
@@ -356,16 +365,25 @@ formGroup('language_form', $langLanguage,
     lang_select_options('language_form', "class='form-control'",
         Session::has('language_form')? Session::get('language_form'): $language));
 
+if ($ext_uid) {
+    $provider_icon = $themeimg . '/' . $auth_ids[$ext_uid->auth_id] . '.png';
+    $provider_full_name = $authFullName[$ext_uid->auth_id];
+    formGroup('provider', $langProviderConnectWith,
+        "<p class='form-control-static'>
+           <img src='$provider_icon' alt=''>&nbsp;" . q($provider_full_name) .
+           "<br /><small>$langProviderConnectWithTooltip</small></p>");
+}
+
 if (isset($_GET['id'])) {
-    formGroup('comments', $langComments, q($pcom));
-    formGroup('date', $langDate, q($pdate));
+    formGroup('comments', $langComments, '<p class="form-control-static">' . q($pcom) . '</p>');
+    formGroup('date', $langDate, '<p class="form-control-static">' . q($pdate) . '</p>');
     $tool_content .= "<input type='hidden' name='rid' value='$id'>";
 }
 if (isset($pstatus)) { 
     $tool_content .= "<input type='hidden' name='pstatus' value='$pstatus'>";
 }
 
-//add custom profile fields input
+// add custom profile fields input
 $tool_content .= render_profile_fields_form($cpf_context, true);
 
 $tool_content .= "

@@ -124,21 +124,24 @@ if ($cpf_check[0] === false) {
     }
 }
 
-if (!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $provider_id = '';
+$user_data = $auth_id = $provider_name = $provider_id = null;
 
 // check if it's valid and the provider enabled in the db
-if (is_numeric(@$_GET['auth']) && @$_GET['auth'] > 7 && @$_GET['auth'] < 14) {
-    $provider_name = $auth_ids[$_GET['auth']];
-    $result = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name = ?s", $provider_name);
-    if ($result->auth_default != 1) {
-        $provider_name = '';
-        $provider_id = '';
+if (isset($_GET['auth']) and is_numeric($_GET['auth'])) {
+    $auth_id = $_GET['auth'];
+    $result = Database::get()->querySingle("SELECT auth_name, auth_default FROM auth WHERE auth_id = ?d", $auth_id);
+    if ($result and $result->auth_default and in_array($result->auth_name, $hybridAuthMethods)) {
+        $provider_name = $result->auth_name;
     }
-} else $provider_name = '';
+}
 
-// authenticate user via hybridauth if requested by URL
-$user_data = '';
-if (!empty($provider_name) || (!empty($_POST['provider']) && !empty($_POST['provider_id']))) {
+// Retrieve provider_id set in previous try...
+if ($provider_name and isset($_GET['provider_id']) and !empty($_GET['provider_id'])) {
+    $provider_id = $_GET['provider_id'];
+}
+
+// authenticate user via Hybrid Auth if requested by URL
+if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']))) {
     require_once 'modules/auth/methods/hybridauth/config.php';
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
@@ -147,10 +150,9 @@ if (!empty($provider_name) || (!empty($_POST['provider']) && !empty($_POST['prov
     $allProviders = $hybridauth->getProviders();
     $warning = '';
     
-    //additional layer of checks to verify that the provider is valid via hybridauth middleware
+    // additional layer of checks to verify that the provider is valid via hybridauth middleware
     if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) { 
         try {
-            // create an instance for Hybridauth with the configuration file path as parameter
             $hybridauth = new Hybrid_Auth($config);
     
             // try to authenticate the selected $provider
@@ -158,8 +160,9 @@ if (!empty($provider_name) || (!empty($_POST['provider']) && !empty($_POST['prov
     
             // grab the user profile and check if the provider_uid
             $user_data = $adapter->getUserProfile();
-            if($user_data->identifier) {
-                $result = Database::get()->querySingle("SELECT " . strtolower($provider_name) . "_uid FROM user_request WHERE " . strtolower($provider_name) . "_uid = ?s", $user_data->identifier);
+            if ($user_data->identifier) {
+                $result = Database::get()->querySingle("SELECT id FROM user_request_ext_uid
+                    WHERE auth_id = ?d AND uid = ?s", $auth_id, $user_data->identifier);
                 if ($result) {
                     //the provider user id already exists the the db. show an error.
                     $registration_errors[] = $langProviderError9;
@@ -221,14 +224,20 @@ if ($all_set) {
 
     // register user request
     $status = $prof ? USER_TEACHER : USER_STUDENT;
-    if(!empty($provider) && !empty($user_data->identifier)) {
-        $res = Database::get()->query("INSERT INTO user_request SET
-            givenname = ?s, surname = ?s, username = ?s, email = ?s,
-            am = ?s, faculty_id = ?d, phone = ?s,
-            state = 1, status = $status,
-            verified_mail = ?d, date_open = " . DBHelper::timeAfter() . ",
-			comment = ?s, lang = ?s, request_ip = ?s, " . $provider . "_uid = ?s",
-            $givenname, $surname, $username, $usermail, $am, $department, $userphone, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR'], $user_data->identifier);
+    if ($provider and !empty($user_data->identifier)) {
+        $res = Database::get()->query("INSERT INTO user_request
+            SET givenname = ?s, surname = ?s, username = ?s, email = ?s,
+                am = ?s, faculty_id = ?d, phone = ?s,
+                state = 1, status = $status,
+                verified_mail = ?d, date_open = " . DBHelper::timeAfter() . ",
+                comment = ?s, lang = ?s, request_ip = ?s",
+            $givenname, $surname, $username, $usermail, $am, $department, $userphone,
+            $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
+        if ($res) {
+            Database::get()->query('INSERT INTO user_request_ext_uid
+                SET auth_id = ?d, user_request_id = ?d, uid = ?s',
+                $auth_id, $res->lastInsertID, $user_data->identifier);
+        }
     } else {
         $res = Database::get()->query("INSERT INTO user_request SET
     			givenname = ?s, surname = ?s, username = ?s, email = ?s,
@@ -313,7 +322,7 @@ if ($all_set) {
             </div>
         </div>";
 
-        $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
+        $MailMessage = $header_html_topic_notify . $body_html_topic_notify;
 
         $plainMailMessage = html2text($MailMessage);
 
@@ -406,29 +415,30 @@ if ($all_set) {
             <div class='form-group'>
                 <label for='ProfComments' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
-        $head_content .= $js;
-        $tool_content .= $html;
-        $tool_content .= "</div></div>";
-        $tool_content .= "<div class='form-group'>
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
+    $head_content .= $js;
+    $tool_content .= $html;
+    $tool_content .= "</div></div>";
+    $tool_content .= "<div class='form-group'>
               <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
               <div class='col-sm-10'>";
-        $tool_content .= lang_select_options('localize', "class='form-control'");
-        $tool_content .= "</div></div>";
+    $tool_content .= lang_select_options('localize', "class='form-control'");
+    $tool_content .= "</div></div>";
     if ($display_captcha) {
         $tool_content .= "<div class='form-group'>
-                      <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></div><br>
-                      <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
-                      <div class='col-sm-10'><input class='form-control' type='text' name='captcha_code' maxlength='6'/></div>
-                    </div>";
+                <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></div><br>
+                <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
+                <div class='col-sm-10'><input class='form-control' type='text' name='captcha_code' maxlength='6'/></div>
+              </div>";
     }
 
-//check if provider_id from an authenticated user and a valid provider name are set so as to show the relevant form
-    if(!empty($provider_name) && !empty($provider_id)) {
-        $tool_content .= "<div class='form-group'>
+    // check if provider_id from an authenticated user and
+    // a valid provider name are set so as to show the relevant form
+    if ($provider_name and $provider_id) {
+    $tool_content .= "<div class='form-group'>
           <label for='UserLang' class='col-sm-2 control-label'>$langProviderConnectWith:</label>
-          <div class='col-sm-10'>
-            <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q(ucfirst($provider_name)) . "<br /><small>$langProviderConnectWithTooltip</small>
+          <div class='col-sm-10'><p class='form-control-static'>
+            <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q($authFullName[$auth_id]) . "<br /><small>$langProviderConnectWithTooltip</small></p>
           </div>
           <div class='col-sm-offset-2 col-sm-10'>
             <input type='hidden' name='provider' value='" . $provider_name . "' />
@@ -436,7 +446,7 @@ if ($all_set) {
           </div>
           </div>";
     }
-    //add custom profile fields
+    // add custom profile fields
     $tool_content .= render_profile_fields_form(array('origin' => 'teacher_register'));
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />

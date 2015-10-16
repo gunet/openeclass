@@ -255,8 +255,8 @@ if (!isset($_POST['submit'])) {
         if(!empty($provider_name) && !empty($provider_id)) {
             $tool_content .= "<div class='form-group'>
               <label for='UserLang' class='col-sm-2 control-label'>$langProviderConnectWith:</label>
-              <div class='col-sm-10'>
-                <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q(ucfirst($provider_name)) . "<br /><small>$langProviderConnectWithTooltip</small>
+              <div class='col-sm-10'><p class='form-control-static'>
+                <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "'>&nbsp;" . q(ucfirst($provider_name)) . "<br /><small>$langProviderConnectWithTooltip</small></p>
               </div>
               <div class='col-sm-offset-2 col-sm-10'>
                 <input type='hidden' name='provider' value='" . $provider_name . "' />
