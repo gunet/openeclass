@@ -2958,6 +2958,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             delete_field('poll_answer_record', 'pid');
             delete_field('poll_answer_record', 'user_id');            
         }
+        //Removing Course Home Layout 2
+        Database::get()->query("UPDATE course SET home_layout = 1 WHERE home_layout = 2");
     }
 
 

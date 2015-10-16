@@ -63,7 +63,22 @@ if (!$is_editor) {
             Session::Messages($langForbidden, 'alert-danger');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
-    } 
+    }
+    if (isset($_GET['selfUnReg']) and $_GET['selfUnReg'] == 1) {
+        if ($is_member and $status != USER_GUEST) { // if registration is possible
+            
+            Database::get()->query("DELETE FROM group_members WHERE user_id = ?d AND group_id = ?d", $uid, $group_id);
+            $group = gid_to_name($group_id);
+            Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('uid' => $uid,
+                                                                        'name' => $group));
+
+            Session::Messages($langGroupNowNotMember, 'alert-success');
+            redirect_to_home_page("modules/group/index.php?course=$course_code");
+        } else {
+            Session::Messages($langForbidden, 'alert-danger');
+            redirect_to_home_page("modules/group/index.php?course=$course_code");
+        }
+    }     
 }
 
 if (isset($_GET['group_as'])) {
