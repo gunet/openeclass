@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,8 +17,8 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== */
-
+ * ======================================================================== 
+ */
 
 // This script is a replicate from
 // exercise/exercise_result.php, but it is modified for the
@@ -37,6 +37,7 @@ require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/exercise/game.php';
 ModalBoxHelper::loadModalBox();
 
 // Ksekiname to diko mas html output giati probaloume mesa se iframe
@@ -346,6 +347,7 @@ $eurid = Database::get()->querySingle("SELECT MAX(eurid) AS max FROM `exercise_u
 
 // record results of exercise
 Database::get()->query("UPDATE exercise_user_record SET total_score = ?d, total_weighting = ?d, attempt = ?d WHERE eurid = ?d", $totalScore, $totalWeighting, $attempt, $eurid);
+triggerGame($course_id, $uid, $eid);
 
 if ($displayScore == 1) {
     echo ("
