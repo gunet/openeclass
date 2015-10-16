@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,8 +17,8 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== */
-
+ * ======================================================================== 
+ */
 
 $require_mlogin = true;
 $require_noerrors = true;
@@ -28,83 +28,80 @@ define('M_NOTERMINATE', 1);
 define('M_ROOT', 'portfolio');
 require_once('mcourses.php');
 
-$tools = populateTools();
+$profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
+$baseurl = $urlServer . 'modules/mobile/mlogin.php' . $profile . 'redirect=';
 
-echo appendToolsDom($coursesDom, $coursesDomRoot, $tools);
+$tools = populateTools($baseurl);
+$profileTools = populateProfileTools($baseurl);
+
+echo appendToolsDom($coursesDom, $coursesDomRoot, $tools, $profileTools);
 exit();
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-function appendToolsDom($dom, $domRoot, $toolsArr) {
-
-    if (isset($toolsArr) && count($toolsArr) > 0) {
-
-        $root = $domRoot->appendChild($dom->createElement('tools'));
-
-        foreach ($toolsArr as $tool) {
-
-            $t = $root->appendChild($dom->createElement('tool'));
-
-            $t->appendChild(new DOMAttr('name', $tool->name));
-            $t->appendChild(new DOMAttr('link', $tool->link));
-            $t->appendChild(new DOMAttr('redirect', $tool->redirect));
-            $t->appendChild(new DOMAttr('type', $tool->type));
-            $t->appendChild(new DOMAttr('active', $tool->active));
-        }
-    }
-
+function appendToolsDom($dom, $domRoot, $toolsArr, $profileToolsArr) {
+    appendToolArray($toolsArr, 'tools', $dom, $domRoot);
+    appendToolArray($profileToolsArr, 'profiletools', $dom, $domRoot);
+    
     $dom->formatOutput = true;
     $ret = $dom->saveXML();
     return $ret;
 }
 
-function populateTools() {
-    global $urlServer, $langMyAnnouncements, $langMyPersoDeadlines, $langMyProfile, $langRegCourses, $langMyAgenda;
+function appendToolArray($toolsArr, $elementName, $dom, $domRoot) {
+    if (isset($toolsArr) && count($toolsArr) > 0) {
+        $root = $domRoot->appendChild($dom->createElement($elementName));
+        foreach ($toolsArr as $tool) {
+            appendToolElement($root, $dom, $tool);
+        }
+    }
+}
 
-    $profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
-    $baseurl = $urlServer . 'modules/mobile/mlogin.php' . $profile . 'redirect=';
+function appendToolElement($root, $dom, $tool) {
+    $t = $root->appendChild($dom->createElement('tool'));
+    
+    $t->appendChild(new DOMAttr('name', q($tool->name)));
+    $t->appendChild(new DOMAttr('link', q($tool->link)));
+    $t->appendChild(new DOMAttr('redirect', q($tool->redirect)));
+    $t->appendChild(new DOMAttr('type', q($tool->type)));
+    $t->appendChild(new DOMAttr('active', q($tool->active)));
+}
+
+function populateTools($baseurl) {
+    global $langMyAnnouncements, $langMyPersoDeadlines, $langMyProfile, $langRegCourses, $langMyAgenda;
 
     $toolsArr = array();
-
-    $tool = new stdClass();
-    $tool->name = $langMyAnnouncements;
-    $tool->redirect = $urlServer . 'modules/announcements/myannouncements.php';
-    $tool->link = $baseurl . urlencode($tool->redirect);
-    $tool->type = 'myannouncements';
-    $tool->active = "true";
-    $toolsArr[] = $tool;
-
-    $tool = new stdClass();
-    $tool->name = $langMyPersoDeadlines;
-    $tool->redirect = $urlServer . 'modules/work/mydeadlines.php';
-    $tool->link = $baseurl . urlencode($tool->redirect);
-    $tool->type = 'mydeadlines';
-    $tool->active = "true";
-    $toolsArr[] = $tool;
-
-    $tool = new stdClass();
-    $tool->name = $langMyAgenda;
-    $tool->redirect = $urlServer . 'main/personal_calendar/index.php';
-    $tool->link = $baseurl . urlencode($tool->redirect);
-    $tool->type = 'myagenda';
-    $tool->active = "true";
-    $toolsArr[] = $tool;
-
-    $tool = new stdClass();
-    $tool->name = $langMyProfile;
-    $tool->redirect = $urlServer . 'main/profile/display_profile.php';
-    $tool->link = $baseurl . urlencode($tool->redirect);
-    $tool->type = 'myprofile';
-    $tool->active = "true";
-    $toolsArr[] = $tool;
-
-    $tool = new stdClass();
-    $tool->name = $langRegCourses;
-    $tool->redirect = $urlServer . 'modules/auth/courses.php';
-    $tool->link = $baseurl . urlencode($tool->redirect);
-    $tool->type = 'coursesubscribe';
-    $tool->active = "true";
-    $toolsArr[] = $tool;
+    $toolsArr[] = createNewTool($baseurl, $langMyAnnouncements, 'modules/announcements/myannouncements.php', 'myannouncements');
+    $toolsArr[] = createNewTool($baseurl, $langMyPersoDeadlines, 'modules/work/mydeadlines.php', 'mydeadlines');
+    $toolsArr[] = createNewTool($baseurl, $langMyAgenda, 'main/personal_calendar/index.php', 'myagenda');
+    $toolsArr[] = createNewTool($baseurl, $langMyProfile, 'main/profile/display_profile.php', 'myprofile');
+    $toolsArr[] = createNewTool($baseurl, $langRegCourses, 'modules/auth/courses.php', 'coursesubscribe');
 
     return $toolsArr;
+}
+
+function populateProfileTools($baseurl) {
+    $toolsArr = array();
+    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyCourses'], 'main/my_courses.php', 'mycourses');
+    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyDropBox'], 'modules/dropbox/index.php', 'mymessages');
+    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyAnnouncements'], 'modules/announcements/myannouncements.php', 'myannouncements');
+    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyAgenda'], 'main/personal_calendar/index.php', 'myagenda');
+    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langNotes'], 'main/notes/index.php', 'mynotes');
+    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyProfile'], 'main/profile/display_profile.php', 'myprofile');
+    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyStats'], 'main/profile/personal_stats.php', 'mystats');
+    
+    return $toolsArr;
+}
+
+function createNewTool($baseurl, $name, $redirect, $type) {
+    global $urlServer;
+    
+    $tool = new stdClass();
+    $tool->name = $name;
+    $tool->redirect = $urlServer . $redirect;
+    $tool->link = $baseurl . urlencode($tool->redirect);
+    $tool->type = $type;
+    $tool->active = "true";
+    
+    return $tool;
 }

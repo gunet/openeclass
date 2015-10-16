@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,8 +17,8 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== */
-
+ * ======================================================================== 
+ */
 
 $require_mlogin = true;
 $require_mcourse = true;
@@ -98,6 +98,8 @@ exit();
 //////////////////////////////////////////////////////////////////////////////////////
 
 function createDom($groupsArr, $toolsArr) {
+    global $status;
+    
     $dom = new DomDocument('1.0', 'utf-8');
 
     $root = $dom->appendChild($dom->createElement('tools'));
@@ -119,6 +121,12 @@ function createDom($groupsArr, $toolsArr) {
                 $acti = $t->appendChild(new DOMAttr('active', $tool->active));
             }
         }
+    }
+    
+    if ($status == USER_TEACHER || $status == USER_STUDENT) {
+        $stname = ($status == USER_TEACHER) ? 'teacher' : 'student';
+        $st = $root->appendChild($dom->createElement('status'));
+        $st->appendChild(new DOMAttr('name', q($stname)));
     }
 
     $dom->formatOutput = true;
