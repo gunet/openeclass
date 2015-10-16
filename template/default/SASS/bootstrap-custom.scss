@@ -2786,6 +2786,9 @@ div#profile-about-me{
     color: #cccccc;
 }
 
+div.modal-header, div.modal-footer{
+    background-color: #f5f5f5;
+}
 div #treeModal div .modal-body {
     max-height: calc(100vh - 210px);
     overflow-y: auto;
