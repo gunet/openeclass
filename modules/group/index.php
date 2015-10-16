@@ -588,8 +588,10 @@ if ($is_editor) {
             $tool_content .= "<td class='text-center'>";            
             if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
                 $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
+            } elseif (!$self_reg) {
+                $tool_content .= ' - ';
             } else {
-                $tool_content .= "-";
+                $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
             }
             $tool_content .= "</td></tr>";
             $totalRegistered += $member_count;
