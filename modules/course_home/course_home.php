@@ -215,8 +215,8 @@ if ($course_info->description) {
     $description = standard_text_escape($course_info->description);
 
     // Text button for read more & read less
-    $postfix_truncate_more = "<a href='#' class='more_less_btn'>$langReadMore</a>";
-    $postfix_truncate_less = "<a href='#' class='more_less_btn'>$langReadLess</a>";
+    $postfix_truncate_more = "<a href='#' class='more_less_btn'>$langReadMore &nbsp;<span class='fa fa-arrow-down'></span></a>";
+    $postfix_truncate_less = "<a href='#' class='more_less_btn'>$langReadLess &nbsp;<span class='fa fa-arrow-up'></span></a>";
 
     // Create full description text & truncated text
     $full_description = $description.$postfix_truncate_less;
