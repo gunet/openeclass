@@ -2181,7 +2181,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
     DBHelper::indexExists('poll', 'poll_index') or
             Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");
-    DBHelper::indexExists('poll_answer_record', 'poll_ans_id') or
+    DBHelper::indexExists('poll_user_record', 'poll_ans_id') or
             Database::get()->query("CREATE INDEX `poll_ans_id` ON poll_user_record(pid, uid)");
     DBHelper::indexExists('poll_question', 'poll_q_id') or
             Database::get()->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");

@@ -487,7 +487,7 @@ if ($is_editor) {
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                     <br><p>$group_description</p>";
             if ($user_group_description) {
-                $tool_content .= "<a href = 'javascirpt:void(0);' data-toggle = 'modal' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a >";
+                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
             }
             $tool_content .= "</td><td class='center'>";
             foreach ($tutors as $t) {
@@ -588,8 +588,10 @@ if ($is_editor) {
             $tool_content .= "<td class='text-center'>";            
             if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
                 $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
+            } elseif (!$self_reg) {
+                $tool_content .= ' - ';
             } else {
-                $tool_content .= "-";
+                $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
             }
             $tool_content .= "</td></tr>";
             $totalRegistered += $member_count;
