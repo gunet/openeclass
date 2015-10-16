@@ -210,11 +210,25 @@ if(count($res)>0){
 } else {
     $course_info_extra = "<div class='text-muted'>$langNoInfoAvailable</div>";
 }
-load_js('trunk8');
 $main_content .= "<div class='course_info'>";
 if ($course_info->description) {
     $description = standard_text_escape($course_info->description);
-    $main_content .= "<div id='descr_content'>$description</div>";
+
+    // Text button for read more & read less
+    $postfix_truncate_more = "<a href='#' class='more_less_btn'>$langReadMore</a>";
+    $postfix_truncate_less = "<a href='#' class='more_less_btn'>$langReadLess</a>";
+
+    // Create full description text & truncated text
+    $full_description = $description.$postfix_truncate_less;
+    $truncated_text = ellipsize_html($description, 680, $postfix_truncate_more);
+
+    // Hidden html text to store the full description text & the truncated desctiption text so as to be accessed by javascript
+    $main_content .= "<div id='not_truncated' class='hidden'>$full_description</div>";
+    $main_content .= "<div id='truncated' class='hidden'>$truncated_text</div>";
+
+    // Show the description text
+    $main_content .= "<div id='descr_content' class='is_less'>$truncated_text</div>";
+
 } else {
     $main_content .= "<p class='not_visible'> - $langThisCourseDescriptionIsEmpty - </p>";
 }
