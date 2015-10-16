@@ -27,6 +27,7 @@ $helpTopic = 'User';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
+require_once 'include/course_settings.php';
 
 //Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
@@ -356,11 +357,12 @@ if (get_config('opencourses_enable')) {
 }
 
 // show help link and link to Add new user, search new user and management page of groups
-//$log_course_user_requests = get_config('log_course_user_requests');
-$log_course_user_requests = FALSE;
-$num_requests = '';
-if ($log_course_user_requests) {
-    $num_requests = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id)->cnt;
+$num_requests = $log_course_user_requests = '';
+if (course_status($course_id) == COURSE_CLOSED) {
+    $log_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS, $course_id);    
+    if ($log_course_user_requests) {
+        $num_requests = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id)->cnt;
+    }
 }
 
 $tool_content .= 

@@ -381,7 +381,9 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['ar_radio'])) {
                 setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);
             }
-            
+            if (isset($_POST['log_course_user_requests'])) {
+                setting_set(SETTING_COURSE_USER_REQUESTS, $_POST['log_course_user_requests'], $course_id);
+            }
             if ($noWeeklyMessage) {
                 Session::Messages($langCourseWeeklyFormatNotice);
             } else {
@@ -459,7 +461,14 @@ if (isset($_POST['submit'])) {
             $cc_license[$id] = $l_info['title'];
         }
     }
-
+    // options about logging course user requests
+    if (course_status($course_id) != COURSE_CLOSED) {
+        $log_course_user_requests_inactive = ' disabled';
+        $log_course_user_requests_dis = $langCourseUserRequestsDisabled;
+    } else {
+        $log_course_user_requests_inactive = '';
+        $log_course_user_requests_dis = '';
+    }
     //Sharing options    
     if (!is_sharing_allowed($course_id)) {
         $sharing_radio_dis = ' disabled';
@@ -520,7 +529,15 @@ if (isset($_POST['submit'])) {
     } else {
         $checkAbuseReportDis = "checked ";
         $checkAbuseReportEn = "";
-    }    
+    }
+    // LOG COURSE USER REQUESTS
+    if (setting_get(SETTING_COURSE_USER_REQUESTS, $course_id) == 1) {
+        $log_course_user_requests_disable = "";
+        $log_course_user_requests_enable = "checked";
+    } else {
+        $log_course_user_requests_disable = "checked";
+        $log_course_user_requests_enable = "";
+    }
     $tool_content .= "<div class='form-wrapper'>
 	<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
 	<fieldset>
@@ -662,11 +679,27 @@ if (isset($_POST['submit'])) {
                 <div class='col-sm-10'>
                       <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
                 </div>
-            </div>            
+            </div>                        
 	    <div class='form-group'>
                 <label for='Options' class='col-sm-2 control-label'>$langLanguage:</label>
                 <div class='col-sm-10'>" . lang_select_options('localize', 'class="form-control"') . "</div>	        
 	    </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langCourseUserRequests:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='1' name='log_course_user_requests' $log_course_user_requests_enable $log_course_user_requests_inactive> $langActivate
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='0' name='log_course_user_requests' $log_course_user_requests_disable $log_course_user_requests_inactive> $langDeactivate
+                            <span class='help-block'><small>$log_course_user_requests_dis</small></span>
+                      </label>
+                    </div>
+                </div>
+            </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseSharing:</label>
                 <div class='col-sm-10'>
@@ -678,7 +711,7 @@ if (isset($_POST['submit'])) {
                     <div class='radio'>
                       <label>
                             <input type='radio' value='0' name='s_radio' $checkSharingDis $sharing_radio_dis> $langSharingDis
-                            <span class='help-block'><small>$sharing_dis_label</small></span>                                
+                            <span class='help-block'><small>$sharing_dis_label</small></span>
                       </label>
                     </div>                  
                 </div>                    

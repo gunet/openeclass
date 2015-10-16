@@ -27,15 +27,14 @@ $require_login = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
+require_once 'include/course_settings.php';
 
-//log_course_user_requests = get_config('log_course_user_requests');
-$log_course_user_requests = FALSE;
-$toolName = $langContactProf;
+$toolName = $langLabelCourseUserRequest;
 
 if (isset($_REQUEST['course_id'])) {
     $course_id = $_REQUEST['course_id'];
 }
-
+$log_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS, $course_id);
 $userdata = Database::get()->querySingle("SELECT givenname, surname, email FROM user WHERE id = ?d", $uid);
 
 if (empty($userdata->email)) {
