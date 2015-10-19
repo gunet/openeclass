@@ -4246,6 +4246,7 @@ $langCPFLinkValidFail = 'Field %s is not a valid url. ';
 $langCPFDateValidFail = 'Field %s is not a valid date. ';
 $langSFAConf = '2FA Configuration:';
 $langSFAType = 'Type 2FA Code:';
+$langSFAInsert = 'Or type the following key in your 2FA App:';
 $langSFAusage = 'To use the two factor authentication, your user will have to install a Google Authenticator compatible app, those are some of the currently available:';
 $langsecondfaDescription = 'Most users use only one level of security for their account, their password. With 2-Step Verification, you will protect your account with something you know (your password) and something you own (your phone or your security key)';
 $langSFAfail = 'Wrong Second Factor Authentication Response';
