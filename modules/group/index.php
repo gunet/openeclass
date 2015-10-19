@@ -501,7 +501,7 @@ if ($is_editor) {
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                     <br><p>$group_description</p>";
             if ($user_group_description && $student_desc) {
-                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
+                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langAddDescription</a ></small>";
             }
             $tool_content .= "</td><td class='center'>";
             foreach ($tutors as $t) {
