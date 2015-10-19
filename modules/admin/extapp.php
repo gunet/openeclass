@@ -87,6 +87,12 @@ if ($appName) {
                 $boolean_field .= "        <div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>\n";
                 $boolean_field .= "          <label><input type='checkbox' name='" . $param->name() . "' $checked>" . $param->display() . "</label>";
                 $boolean_field .= "        </div></div></div>\n";
+            } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
+                $tool_content .= "        <div class='form-group'>\n";
+                $tool_content .= "          <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
+                $tool_content .= "          <div class='col-sm-10'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
+                                                q($param->value()) . "</textarea></div>";
+                $tool_content .= "        </div>\n";
             } else {
                 $tool_content .= "        <div class='form-group'>\n";
                 $tool_content .= "          <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
