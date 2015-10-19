@@ -87,7 +87,10 @@ foreach ($hits as $hit) {
     $hitIds[] = intval($hit->pkid);
 }
 $inIds = "(" . implode(",", $hitIds) . ")";
-$courses = Database::get()->queryArray("SELECT * FROM course WHERE id in " . $inIds);
+$courses = Database::get()->queryArray("select c.*, cd.department "
+        . " from course c left "
+        . " join (select course, max(department) as department from course_department group by course) cd on (c.id = cd.course) "
+        . " where c.id in " . $inIds);
  
 //////// PRINT RESULTS ////////
 $tool_content .= action_bar(array(
@@ -121,6 +124,7 @@ $icons = array(
 foreach ($courses as $course) {    
     $courseHref = "../../courses/" . q($course->code) . "/";
     $courseUrl = "<a href='$courseHref'>" . q($course->title) . "</a> (" . q($course->public_code) . ")";
+    $skipincourse = false;
     
     // anonymous see only title for reg/closed courses
     if (($course->visible == 0 || $course->visible == 1) && $anonymous) {
@@ -130,15 +134,20 @@ foreach ($courses as $course) {
     // closed courses url displays contact form for logged in users
     if ($course->visible == 0 && $uid > 1 && !in_array($course->id, $subscribed)) {
         $courseUrl = "<a href='../contact/index.php?course_id=" . intval($course->id) . "'>" . q($course->title) . "</a>";
+        $skipincourse = true;
     }
     
-    // reg courses url displays just title for logged in non-subscribed users
+    // reg courses url displays just title and subscription url for logged in non-subscribed users
     if ($course->visible == 1 && $uid > 1 && !in_array($course->id, $subscribed)) {
         $courseUrl = q($course->title);
+        $courseUrl .= "<br/><small><em><a href='../auth/courses.php";
+        $courseUrl .= ($course->department) ? "?fc=" . intval($course->department) : "";
+        $courseUrl .= "'>$langRegCourses</a></em></small>";
+        $skipincourse = true;
     }
     
     // logged in users have extended search options
-    if (!$anonymous && isset($_POST['search_terms'])) {
+    if (!$anonymous && !$skipincourse && isset($_POST['search_terms'])) {
         $courseUrl .= "<br/><small><em><a href='$courseHref?from_search=" . urlencode($_POST['search_terms']) . "'>$langSearchInCourse</a></em></small>";
     }
     
