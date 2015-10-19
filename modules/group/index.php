@@ -457,6 +457,19 @@ if ($is_editor) {
 	$num_of_cat = count($cat);
 	$q = count(Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id));
         // groups list
+    if ($num_of_groups>0 || $num_of_cat>0) {
+        $head_content .= "
+                            <script>
+                            $(function(){
+                                $('#userFeedbacks').on('show.bs.modal', function (event) {
+                                  var button = $(event.relatedTarget) // Button that triggered the modal
+                                  var content = button.data('content') // Extract info from data-* attributes
+                                  var modal = $(this)
+                                  modal.find('.modal-body').html(content);
+                                })
+                            });
+                            </script>";
+    }
 	if ($num_of_groups==0 && $num_of_cat==0) {
             $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
         }
@@ -481,13 +494,14 @@ if ($is_editor) {
                   <th width='50'>$langMax</th>
                   <th class='text-center' style='width:45px;'>".icon('fa-gears', $langActions)."</th>
                 </tr>";
+
         foreach ($groupSelect as $group) {
             initialize_group_info($group->id);
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                     <br><p>$group_description</p>";
             if ($user_group_description && $student_desc) {
-                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
+                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
             }
             $tool_content .= "</td><td class='center'>";
             foreach ($tutors as $t) {
@@ -525,7 +539,6 @@ if ($is_editor) {
                     <h4 class='modal-title' id='myModalLabel'>$langCommentsUser</h4>
                   </div>
                   <div class='modal-body'>
-                    $user_group_description
                   </div>
                 </div>
               </div>
