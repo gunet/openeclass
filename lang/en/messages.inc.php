@@ -2351,6 +2351,7 @@ $langAddDescription = "Add description";
 $langGroupDescInfo = "Enter a description or note about you as member of this group. Please note that it will be visible to the group tutor as well as the other members of the group.";
 $langGroupMembersUnchanged = "Group contains more members than the maximum number you have entered. The maximum has been adjusted to equal the current member count.";
 $langGroupAllowMultipleRegistration = "Allow membership to more than one group";
+$langGroupAllowStudentGroupDescription = "Allow group members to add description to their groups";
 $langGroupAllowUnregister = "Allow members to unregister from a group";
 $langGroupTooManyMembers = "The members you have added exceed the maximum member count (which can be changed below). The group members have not been changed.";
 $langPassCannotChange4 = "for more information.";

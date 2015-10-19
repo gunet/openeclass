@@ -55,7 +55,7 @@ unset($_SESSION['forum_id']);
 $user_groups = user_group_info($uid, $course_id);
 
 $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
-
+$student_desc = setting_get(SETTING_GROUP_STUDENT_DESCRIPTION, $course_id);
 //check if social bookmarking is enabled for this course
 $social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
 if (isset($_GET['socialview'])) {
@@ -486,7 +486,7 @@ if ($is_editor) {
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                     <br><p>$group_description</p>";
-            if ($user_group_description) {
+            if ($user_group_description && $student_desc) {
                 $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
             }
             $tool_content .= "</td><td class='center'>";
@@ -569,12 +569,14 @@ if ($is_editor) {
                 $tool_content .= q($group_name);
             }
             $tool_content .= "<br><em>$group_description</em><br>";
-            if ($user_group_description) {
-                $tool_content .= "<br><span class='small'><i>$user_group_description</i></span>&nbsp;&nbsp;" .
-                        icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
-                        icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
-            } elseif ($is_member) {
-                $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
+            if ($student_desc) {
+                if ($user_group_description) {
+                    $tool_content .= "<br><span class='small'><i>$user_group_description</i></span>&nbsp;&nbsp;" .
+                            icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
+                            icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
+                } elseif ($is_member) {
+                    $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
+                }
             }
             $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>";
