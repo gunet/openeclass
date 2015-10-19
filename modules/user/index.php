@@ -369,8 +369,7 @@ $tool_content .=
         action_bar(array(
             array('title' => "$num_requests $langsUserRequests",
                   'url' => "course_user_requests.php?course=$course_code",
-                  'icon' => 'fa-plus-circle',
-                  'button-class' => 'btn-success',
+                  'icon' => 'fa-child',                  
                   'level' => 'primary-label',
                   'show' => $log_course_user_requests),
             array('title' => $langOneUser,

@@ -24,6 +24,7 @@ $require_current_course = true;
 $require_course_admin = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/sendMail.inc.php';
 
 $toolName = $langUserRequests;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langUsers);
@@ -40,6 +41,36 @@ $tool_content .= action_bar(array(
             'level' => 'primary')
         ));
 
+if (isset($_POST['rejected_req_id'])) { // do reject course user request
+    $from_name = uid_to_name($uid, 'fullname');
+    $from_address = uid_to_email($uid);
+    $to_name = uid_to_name($_POST['rejected_uid'], 'fullname');
+    $to_address = uid_to_email($_POST['rejected_uid']);
+    $subject = "$langReasonReject";
+    $mailHeader = "<div id='mail-header'><div><br>
+                    <div id='header-title'>".q(sprintf($langContactIntro, $from_name, $from_address))."</div>
+		</div></div>";    
+    $mailMain = "<div id='mail-body'><br><div><b>$langMessage:</b></div>
+		<div id='mail-body-inner'>$_POST[rej_content]</div></div>";
+    
+    $mailFooter = "
+    <!-- Footer Section -->
+	<div id='mail-footer'>
+		<br>
+		<div id='alert'><small><b class='notice'>$langNote:</b> $langContactIntroFooter.</small></div>
+	</div>";
+
+    $message = $mailHeader.$mailMain.$mailFooter;    
+    $plainMessage = html2text($message);
+    
+    if (!send_mail_multipart($from_name, $from_address, $to_name, $to_address, $subject, $plainMessage, $message, $GLOBALS['charset'])) {
+        $tool_content .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>";
+    }
+    Database::get()->query("UPDATE course_user_request SET status = 0 WHERE id = ?d", $_POST['rejected_req_id']);        
+    $tool_content .= "<div class='alert alert-success'>$langRequestReject</div>";
+}
+
+
 if (isset($_GET['rid'])) {
     if (isset($_GET['reg'])) {
         $sql = Database::get()->query("INSERT INTO course_user SET user_id = ?d, course_id = ?d,
@@ -52,9 +83,25 @@ if (isset($_GET['rid'])) {
         } else {
             $tool_content .= "<div class='alert alert-danger'>$langCourseUserRegError</div>";
         }
-    } else {
-            Database::get()->query("UPDATE course_user_request SET status = 0 WHERE id = ?d", $_GET['rid']);
-            $tool_content .= "<div class='alert alert-success'>$langRequestReject</div>";
+    } else {        
+        $tool_content .= "<div class='form-wrapper'>";
+        $tool_content .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+	<fieldset>
+        <div class='col-sm-12'><label>$langReasonReject</label></div>
+        <div class='form-group'>
+            <div class='col-sm-12'>
+              <textarea name='rej_content' rows='8' cols='80'></textarea>
+            </div>
+	</div>
+        <div class='form-group'>
+            <div class='col-sm-offset-1 col-sm-11'>
+                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRejectRequest) . "'>
+            </div>
+        </div>		
+        ". generate_csrf_token_form_field() ."
+        <input type='hidden' name='rejected_req_id' value='$_GET[rid]'>
+            <input type='hidden' name='rejected_uid' value='$_GET[u]'>
+	</fieldset></form></div>";                
     }
 } else { // display course user requests
     $sql = Database::get()->queryArray("SELECT id, uid, course_id, comments FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id);
