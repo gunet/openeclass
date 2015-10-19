@@ -35,7 +35,12 @@ if (isset($_REQUEST['course_id'])) {
     $course_id = $_REQUEST['course_id'];
 }
 $log_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS, $course_id);
-$userdata = Database::get()->querySingle("SELECT givenname, surname, email FROM user WHERE id = ?d", $uid);
+
+if (!$log_course_user_requests) {
+    redirect_to_home_page();
+}
+
+$userdata = Database::get()->querySingle("SELECT surname, givenname, surname, email FROM user WHERE id = ?d", $uid);
 
 if (empty($userdata->email)) {
     if ($uid) {
@@ -48,41 +53,50 @@ if (empty($userdata->email)) {
     $content = trim($_POST['content']);
     if (empty($content)) {
         $tool_content .= "<div class='alert alert-warning'>$langEmptyMessage</div>";
-        $tool_content .= form();
+        $tool_content .= form("$userdata->surname $userdata->givenname");
     } else {
-        $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->email);
-        if ($log_course_user_requests) { // log course user requests to `course_user_request` table
-            Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
-                                                            status = 1, comments = ?s, 
-                                                            ts = " . DBHelper::timeAfter() . "",
-                                                        $uid, $course_id, $content);
-        }
+        $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->email);        
+        Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
+                                                        status = 1, comments = ?s, 
+                                                        ts = " . DBHelper::timeAfter() . "",
+                                                    $uid, $course_id, $content);
+        
     }
 } else {
-    $tool_content .= form();
+    $tool_content .= form("$userdata->surname $userdata->givenname");
 }
 
 draw($tool_content, 1);
 
 /**
  * @brief display form
- * @global type $from_reg
+ * @param type $user
  * @global type $course_id
- * @global type $langInfoAboutRegistration
- * @global type $langContactMessage
- * @global type $langMessage
- * @global type $langSendMessage
  * @global type $course_code
+ * @global type $langInfoAboutRegistration 
+ * @global type $langSendTo
+ * @global type $course_code
+ * @global type $langFrom 
  * @return type
  */
-function form() {
-    global $course_id, $langInfoAboutRegistration, $langMessage, $langSendMessage, $course_code;
+function form($user) {
+    global $course_id, $langInfoAboutRegistration, $langFrom, $langSendTo, $langSubmitNew, $course_code, $langRequest;
            
+    $userprof = '';
+    $profdata = Database::get()->queryArray("SELECT user.surname, user.givenname
+                           FROM course_user JOIN user ON user.id = course_user.user_id
+                           WHERE course_id = ?d AND course_user.status = " . USER_TEACHER . "", $course_id);
+    foreach ($profdata as $prof) {
+        $userprof .= "$prof->surname $prof->givenname &nbsp;&nbsp;";
+    }
+    
     $ret = "<div class='alert alert-info'>$langInfoAboutRegistration</div>";
     $ret .= "<div class='form-wrapper'>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-	<fieldset>        
-        <div class='col-sm-12'><label>$langMessage</label></div>
+	<fieldset>
+        <div class='col-sm-12'><label>$langRequest</label></div>
+        <div class='col-sm-12'><label>$langFrom:&nbsp;</label><small>$user</small></div>
+        <div class='col-sm-12'><label>$langSendTo:&nbsp;</label><small>$userprof</small></div>
         <div class='form-group'>
             <div class='col-sm-12'>
               <textarea name='content' rows='10' cols='80'></textarea>
@@ -90,7 +104,7 @@ function form() {
 	</div>
         <div class='form-group'>
             <div class='col-sm-offset-1 col-sm-11'>
-                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSendMessage) . "' />
+                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
             </div>
         </div>		
         ". generate_csrf_token_form_field() ."

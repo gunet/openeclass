@@ -193,11 +193,11 @@ function showgroupcategoryadmintools($categoryid) {
  */
 function showgroupsofcategory($catid) {
     
-    global $is_editor, $course_id, $tool_content, $langConfig,
+    global $is_editor, $course_id, $tool_content, $langConfig, $langUnRegister,
     $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
     $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
-    $langEditChange, $groups_num, $uid, $totalRegistered,
-    $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members, $group_description;
+    $langEditChange, $groups_num, $uid, $totalRegistered, $student_desc,
+    $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members, $group_description, $langCommentsUser;
 
     $q = Database::get()->queryArray("SELECT id FROM `group`
                                    WHERE course_id = ?d AND category_id = ?d
@@ -217,13 +217,25 @@ function showgroupsofcategory($catid) {
                 $tool_content .= q($group_name);
             }
         }
-        if ($user_group_description) {
-            $tool_content .= "<br><span class='small'>$user_group_description</span>
-                    <p>$group_description" .
-                    icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
-                    icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
-        } elseif ($is_member) {
-            $tool_content .= " </p><br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
+        $tool_content .= "<br><p>$group_description</p>";
+        if (!$is_editor){
+            if ($student_desc) {
+                if ($user_group_description) {
+                    $tool_content .= "<br>
+                            <span class='small'>$user_group_description</span> &nbsp;" .
+                            icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
+                            icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
+                } elseif ($is_member) {
+                    $tool_content .= "
+                            <a href='group_description.php?course=$course_code&amp;group_id=$group_id'>
+                                <i>$langAddDescription</i>
+                            </a>";
+                }
+            }
+        } else {
+            if ($user_group_description && $student_desc) {
+                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
+            }
         }
         $tool_content .= "</td>";
         $tool_content .= "<td class='text-center' width='250'>";
@@ -259,10 +271,12 @@ function showgroupsofcategory($catid) {
         } else {            
             $tool_content .= "<td class='text-center'>";
             // If self-registration and multi registration allowed by admin and group is not full        
-            if ($uid and $self_reg and (!$user_groups or $multi_reg) and !$is_member and (!$max_members or $member_count < $max_members)) {
+            if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
                 $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
+            } elseif (!$self_reg) {
+                $tool_content .= ' - ';
             } else {
-                $tool_content .= "-";
+                $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
             }
             $tool_content .= "</td>";
         }

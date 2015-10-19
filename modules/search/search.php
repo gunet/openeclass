@@ -24,6 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'indexer.class.php';
 require_once 'courseindexer.class.php';
 $pageName = $langSearch;
+$courses_list = array();
 
 // exit if search is disabled
 if (!get_config('enable_search')) {
@@ -87,7 +88,10 @@ foreach ($hits as $hit) {
     $hitIds[] = intval($hit->pkid);
 }
 $inIds = "(" . implode(",", $hitIds) . ")";
-$courses = Database::get()->queryArray("SELECT * FROM course WHERE id in " . $inIds);
+$courses = Database::get()->queryArray("select c.*, cd.department "
+        . " from course c left "
+        . " join (select course, max(department) as department from course_department group by course) cd on (c.id = cd.course) "
+        . " where c.id in " . $inIds);
  
 //////// PRINT RESULTS ////////
 $tool_content .= action_bar(array(
@@ -104,51 +108,74 @@ if (isset($_POST['search_terms'])) {
 }
 $tool_content .= "<br><small>" . $cnthits . " $langResults2</small></div>
     <table class='table-default'>
-    <tr>      
-      <th class='text-left'>" . $langCourse . " ($langCode)</th>
+    <tr>";
+if ($uid > 0) {
+    $tool_content .= "<th width='50' align='center'>$langRegistration</th>";
+}
+$tool_content .= "<th class='text-left'>" . $langCourse . " ($langCode)</th>
       <th class='text-left'>$langTeacher</th>
       <th class='text-left'>$langKeywords</th>
       <th class='text-left'>$langType</th>
     </tr>";
 // use the following array for the legend icons
 $icons = array(
-    3 => "<img src='$themeimg/lock_inactive.png' alt='" . $langInactiveCourse . "' title='" . $langInactiveCourse . "' width='16' height='16' />",
-    2 => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' width='16' height='16' />",
-    1 => "<img src='$themeimg/lock_registration.png' alt='" . $langRegCourse . "' title='" . $langRegCourse . "' width='16' height='16' />",
-    0 => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
+    COURSE_INACTIVE => "<img src='$themeimg/lock_inactive.png' alt='" . $langInactiveCourse . "' title='" . $langInactiveCourse . "' width='16' height='16' />",
+    COURSE_OPEN => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' width='16' height='16' />",
+    COURSE_REGISTRATION => "<img src='$themeimg/lock_registration.png' alt='" . $langRegCourse . "' title='" . $langRegCourse . "' width='16' height='16' />",
+    COURSE_CLOSED => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
 );
 
 foreach ($courses as $course) {    
     $courseHref = "../../courses/" . q($course->code) . "/";
-    $courseUrl = "<a href='$courseHref'>" . q($course->title) . "</a> (" . q($course->public_code) . ")";
+    $courseUrl = "<span id='cid" . $course->id . "'><a href='$courseHref'>" . q($course->title) . "</a></span> (" . q($course->public_code) . ")";
+    $skipincourse = false;
+    $courses_list[$course->id] = array($course->code, $course->visible);
     
     // anonymous see only title for reg/closed courses
-    if (($course->visible == 0 || $course->visible == 1) && $anonymous) {
-        $courseUrl = q($course->title);
+    if (($course->visible == COURSE_CLOSED || $course->visible == COURSE_REGISTRATION) && $anonymous) {
+        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
     }
     
     // closed courses url displays contact form for logged in users
-    if ($course->visible == 0 && $uid > 1 && !in_array($course->id, $subscribed)) {
-        $courseUrl = "<a href='../contact/index.php?course_id=" . intval($course->id) . "'>" . q($course->title) . "</a>";
+    if ($course->visible == COURSE_CLOSED && $uid > 1 && !in_array($course->id, $subscribed)) {
+        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
+        $courseUrl .= "<br/><small><em><a href='../contact/index.php?course_id=" . intval($course->id) . "'>$langLabelCourseUserRequest</a></em></small>";
+        $skipincourse = true;
     }
     
-    // reg courses url displays just title for logged in non-subscribed users
-    if ($course->visible == 1 && $uid > 1 && !in_array($course->id, $subscribed)) {
-        $courseUrl = q($course->title);
+    // reg courses url displays just title and subscription url for logged in non-subscribed users
+    if ($course->visible == COURSE_REGISTRATION && $uid > 1 && !in_array($course->id, $subscribed)) {
+        $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
+        $skipincourse = true;
     }
     
     // logged in users have extended search options
-    if (!$anonymous && isset($_POST['search_terms'])) {
+    if (!$anonymous && !$skipincourse && isset($_POST['search_terms'])) {
         $courseUrl .= "<br/><small><em><a href='$courseHref?from_search=" . urlencode($_POST['search_terms']) . "'>$langSearchInCourse</a></em></small>";
     }
     
     //  inactive courses are hidden from anyone except admin
-    if ($course->visible == 3 && $uid != 1) {
+    if ($course->visible == COURSE_INACTIVE && $uid != 1) {
         continue;
     }
     
-    $tool_content .= "<tr><td>
-                      $courseUrl</td>
+    $requirepassword = '';
+    $tool_content .= "<tr>";
+    if ($uid > 0) {
+        if (in_array($course->id, $subscribed)) {
+            $tool_content .= "<td align='center'><img src='$themeimg/tick.png' title='$langAlreadySubscribe' alt='$langAlreadySubscribe'/></td>";
+        } else {
+            if (!empty($course->password) && ($course->visible == COURSE_REGISTRATION || $course->visible == COURSE_OPEN)) {
+                $requirepassword = "<br />$m[code]: <input type='password' name='pass" . $course->id . "' autocomplete='off' />";
+            }
+            
+            $disabled = ($course->visible == COURSE_CLOSED) ? 'disabled' : '';
+            $vis_class = ($course->visible == COURSE_CLOSED) ? 'class="reg_closed"' : '';
+            $tool_content .= "<td align='center'><input type='checkbox' name='selectCourse[]' value='" . $course->id . "' $disabled $vis_class />"
+                    . "<input type='hidden' name='changeCourse[]' value='" . $course->id . "' /></td>";
+        }
+    }
+    $tool_content .= "<td>" . $courseUrl . $requirepassword . "</td>
                       <td>" . q($course->prof_names) . "</td>
                       <td>" . q($course->keywords) . "</td>
                       <td>";
@@ -160,4 +187,21 @@ foreach ($courses as $course) {
     $tool_content .= "</td></tr>";
 }
 $tool_content .= "</table>";
-draw($tool_content, 0);
+
+$tool_content .= "<script type='text/javascript'>$(course_list_init);
+var themeimg = '" . js_escape($themeimg) . "';
+var urlAppend = '".js_escape($urlAppend)."';
+var lang = {
+        unCourse: '" . js_escape($langUnCourse) . "',
+        cancel: '" . js_escape($langCancel) . "',
+        close: '" . js_escape($langClose) . "',
+        unregCourse: '" . js_escape($langUnregCourse) . "',
+        reregisterImpossible: '" . js_escape("$langConfirmUnregCours $m[unsub]") . "',
+        invalidCode: '" . js_escape($langInvalidCode) . "',
+};
+var courses = ".(json_encode($courses_list)).";
+</script>";
+
+load_js('tools.js');
+
+draw($tool_content, 0, null, $head_content);

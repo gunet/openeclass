@@ -62,7 +62,10 @@ class AntivirusApp extends ExtApp {
         } else {
             $connector = new $connector();
         }
-        $connector->setEnabled($antivirus->isEnabled());
+        $param = $connector->getParam('enabled');
+        if ($param) {
+            $param->setValue($antivirus->isEnabled());
+        }
         return $connector;
     }
 

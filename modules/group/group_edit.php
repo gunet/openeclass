@@ -111,13 +111,23 @@ if (isset($_POST['modify'])) {
             $message .= "<div class='alert alert-warning'>$langGroupTooManyMembers</div>";
         } else {
             // Delete all members of this group
+            $cur_member_ids = [];
+            Database::get()->queryFunc("SELECT user_id FROM group_members "
+                    . "WHERE group_id = ?d AND is_tutor = 0", 
+                    function ($group_member) use (&$cur_member_ids) {
+                        array_push($cur_member_ids, $group_member->user_id);
+                    },$group_id);
+            $ids_to_be_inserted = array_diff($_POST['ingroup'], $cur_member_ids);
+            $ids_to_be_deleted = implode(', ', array_diff($cur_member_ids, $_POST['ingroup']));
+            if ($ids_to_be_deleted) {
             Database::get()->query("DELETE FROM group_members
-                                        WHERE group_id = ?d AND is_tutor = 0", $group_id);
+                                        WHERE group_id = ?d AND is_tutor = 0 AND user_id IN ($ids_to_be_deleted)", $group_id);
+            }
             $numberMembers--;
 
-            for ($i = 0; $i <= $numberMembers; $i++) {
-                Database::get()->query("INSERT IGNORE INTO group_members (user_id, group_id)
-                                          VALUES (?d, ?d)", $_POST['ingroup'][$i], $group_id);
+            foreach ($ids_to_be_inserted as $user_id) {
+                Database::get()->query("INSERT INTO group_members (user_id, group_id)
+                                          VALUES (?d, ?d)", $user_id, $group_id);
             }
             $message .= "<div class='alert alert-success'>$langGroupSettingsModified</div>";
 			redirect_to_home_page("modules/group/index.php?course=$course_code");

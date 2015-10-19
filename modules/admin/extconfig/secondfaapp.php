@@ -62,7 +62,10 @@ class secondfaApp extends ExtApp {
         } else {
             $connector = new $connector();
         }
-        $connector->setEnabled($secondfa->isEnabled());
+        $param = $connector->getParam('enabled');
+        if ($param) {
+            $param->setValue($secondfa->isEnabled());
+        }
         return $connector;
     }
 
@@ -201,7 +204,7 @@ class secondfaApp extends ExtApp {
     }
 
     public function getInitialize($userid,$company,$email){
-        global $langSFAadd, $langSFAremove, $langSFAScan, $langSFATypeWYS;
+        global $langSFAadd, $langSFAremove, $langSFAScan, $langSFATypeWYS, $langSFAInsert;
         $keypack =  self::getsecondfa()->generateSecret($userid,$company,$email);
         if($keypack){
             $sfa_url = $keypack[0];
@@ -215,6 +218,10 @@ class secondfaApp extends ExtApp {
                     <table style='width:100%'>
                     <tr><p>$langSFAScan</p></tr>
                     <tr><img src='".$sfa_url."'/></tr>
+                    <tr><p>".$langSFAInsert."</p></tr>
+                    <div class=''>
+                        <input class='form-control' type='text' autocomplete='off' name='sfasecret' disabled=disabled value='" . q($sfa_secret) . "'/></tr>
+                    </div>
                     <tr><p>$langSFATypeWYS</p></tr>
                     <tr>
                     <div class=''>

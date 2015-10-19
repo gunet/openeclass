@@ -256,10 +256,10 @@ if ($paging and $total > $posts_per_page) {
 
 $tool_content .= "<div class='table-responsive'><table class='table-default'>
     <tr class='list-header'>
-      <th width='220'>$langUserForum</th>
+      <th style='width:20%'>$langUserForum</th>
       <th>$langMessage</th>";
 if ($is_editor || $topic_locked != 1) {
-    $tool_content .= "<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>";
+    $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
 }
 $tool_content .= "</tr>";
 
@@ -294,7 +294,7 @@ foreach ($result as $myrow) {
         }
     }
     
-    $tool_content .= "<td valign='top'>" . display_user($myrow->poster_id) . $user_stats[$myrow->poster_id]."</td>";    
+    $tool_content .= "<td>" . display_user($myrow->poster_id) . $user_stats[$myrow->poster_id]."</td>";    
     $message = $myrow->post_text;
     // support for math symbols
     $message = mathfilter($message, 12, "../../courses/mathimg/");
@@ -339,7 +339,8 @@ foreach ($result as $myrow) {
             'confirm' => $langConfirmDelete)
     );
     if ($topic_locked != 1) {
-        $dyntools[] = array('title' => $langForumPostReply,
+        $dyntools[] = array('title' => $langReply,
+            'level' => 'primary-label',
             'url' => "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id",
             'icon' => 'fa-reply');
     }
@@ -352,10 +353,10 @@ foreach ($result as $myrow) {
     }
     if (!empty($dyntools)) {
         if (isset($report_modal)) {
-            $tool_content .= "<td valign='center'>" . action_button($dyntools) . $report_modal . "</td>";
+            $tool_content .= "<td class='option-btn-cell'>" . action_button($dyntools) . $report_modal . "</td>";
             unset($report_modal);
         } else {
-            $tool_content .= "<td valign='center'>" . action_button($dyntools) . "</td>";
+            $tool_content .= "<td class='option-btn-cell'>" . action_button($dyntools) . "</td>";
         }
     }
     $tool_content .= "</tr>";

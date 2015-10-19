@@ -616,6 +616,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_block('mainBlock', 'closingTagsBlock', 'delete');
     }
 
+    if (get_config('ext_analytics_enabled') and $html_footer = get_config('ext_analytics_code')) {
+        $t->set_var('HTML_FOOTER', $html_footer);
+    }
+
     //	At this point all variables are set and we are ready to send the final output
     //	back to the browser
     $t->parse('main', 'mainBlock', false);

@@ -1,7 +1,7 @@
 <?php
 
 // From http://htmlpurifier.org/phorum/read.php?3,4646,4646
-
+require_once 'htmlpurifier-4.3.0-standalone/HTMLPurifier.standalone.php';
 class HTMLPurifier_Filter_MyIframe extends HTMLPurifier_Filter {
 
     public $name = 'MyIframe';

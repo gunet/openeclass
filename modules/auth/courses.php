@@ -22,11 +22,12 @@
 
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'include/log.php';
 require_once 'include/lib/hierarchy.class.php';
 $tree = new Hierarchy();
 
-$pageName = $langChoiceLesson;
+$toolName = $langChoiceLesson;
 
 $icons = array(
     COURSE_OPEN => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' />",
@@ -190,16 +191,12 @@ function getdepnumcourses($fac) {
  * @global type $m
  * @global array $icons
  * @global type $langTutor
- * @global type $langBegin
  * @global type $langRegistration
  * @global type $langRegistration
  * @global type $langCourseCode
  * @global type $langTeacher
  * @global type $langType
  * @global type $langFaculty
- * @global type $langpres
- * @global type $langposts
- * @global type $langothers
  * @global type $themeimg
  * @global Hierarchy $tree
  * @param type $facid
@@ -207,9 +204,9 @@ function getdepnumcourses($fac) {
  * @return string
  */
 function expanded_faculte($facid, $uid) {
-    global $m, $icons, $langTutor, $langBegin, $langRegistration,
+    global $m, $icons, $langTutor, $langRegistration,
     $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
-    $langpres, $langposts, $langothers, $themeimg, $tree;
+    $themeimg, $tree;
 
     $retString = '';
 
@@ -223,16 +220,13 @@ function expanded_faculte($facid, $uid) {
         $myCourses[$course->course_id] = $course;
     }, intval($uid));
 
-
-
-    $retString .= "\n    <div class='table-responsive'><table class='table-default'>";
-    $retString .= "\n    <tr class='list-header'>";
-    $retString .= "\n      <th width='50' align='center'>$langRegistration</th>";
-    $retString .= "\n      <th>$langCourseCode</th>";
-    $retString .= "\n      <th width='220'>$langTeacher</th>";
-    $retString .= "\n      <th width='30' align='center'>$langType</th>";
-    $retString .= "\n    </tr>";
-    $k = 0;
+    $retString .= "<div class='table-responsive'><table class='table-default'>";
+    $retString .= "<tr class='list-header'>";
+    $retString .= "<th width='50' align='center'>$langRegistration</th>";
+    $retString .= "<th>$langCourseCode</th>";
+    $retString .= "<th width='220'>$langTeacher</th>";
+    $retString .= "<th width='30' align='center'>$langType</th>";
+    $retString .= "</tr>";
 
     Database::get()->queryFunc("SELECT
                             course.id cid,
@@ -246,7 +240,7 @@ function expanded_faculte($facid, $uid) {
                       WHERE course.id = course_department.course
                         AND course_department.department = ?d
                         AND course.visible != ?d
-                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $k, $uid, $myCourses, $themeimg, $langTutor, $m, $icons) {
+                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $icons) {
         global $urlAppend, $courses_list;
         $cid = $mycours->cid;
         $course_title = q($mycours->i);
@@ -256,19 +250,17 @@ function expanded_faculte($facid, $uid) {
         if ($mycours->visible == COURSE_OPEN or $GLOBALS['is_power_user'] or isset($myCourses[$cid])) {
             // open course, registered to course, or power user who can see all
             $codelink = "<a href='{$urlAppend}courses/" . $mycours->k . "/'>$course_title</a>";
-        } elseif ($mycours->visible == COURSE_CLOSED) {
-            // closed course
-            $codelink = "<a href='{$urlAppend}modules/contact/index.php?course_id=$cid'>$course_title</a>";
+        } elseif ($mycours->visible == COURSE_CLOSED) { // closed course            
+            $log_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS, $cid);
+            if ($log_course_user_requests) {
+                $codelink = "<a href='{$urlAppend}modules/contact/index.php?course_id=$cid'>$course_title</a>";
+            } else {
+                $codelink = $course_title;
+            }
         } else {
             $codelink = $course_title;
         }
-
-        if ($k % 2 == 0) {
-            $retString .= "<tr class='even'>";
-        } else {
-            $retString .= "<tr class='odd'>";
-        }
-
+       
         $retString .= "<td align='center'>";
         $requirepassword = '';
         $vis_class = ($mycours->visible == 0) ? 'class="reg_closed"' : '';
@@ -305,9 +297,7 @@ function expanded_faculte($facid, $uid) {
                 $retString .= $image;
             }
         }
-
-        $retString .= "</td></tr>";
-        $k++;
+        $retString .= "</td></tr>";        
     }, intval($facid), COURSE_INACTIVE);
     $retString .= "</table></div>";
 
