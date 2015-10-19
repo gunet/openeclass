@@ -70,17 +70,17 @@ draw($tool_content, 1);
 
 /**
  * @brief display form
- * @global type $from_reg
+ * @param type $user
  * @global type $course_id
- * @global type $langInfoAboutRegistration
- * @global type $langContactMessage
- * @global type $langMessage
- * @global type $langSendMessage
  * @global type $course_code
+ * @global type $langInfoAboutRegistration 
+ * @global type $langSendTo
+ * @global type $course_code
+ * @global type $langFrom 
  * @return type
  */
 function form($user) {
-    global $course_id, $langInfoAboutRegistration, $langFrom, $langSendTo, $langSubmitNew, $course_code;
+    global $course_id, $langInfoAboutRegistration, $langFrom, $langSendTo, $langSubmitNew, $course_code, $langRequest;
            
     $userprof = '';
     $profdata = Database::get()->queryArray("SELECT user.surname, user.givenname
@@ -93,7 +93,8 @@ function form($user) {
     $ret = "<div class='alert alert-info'>$langInfoAboutRegistration</div>";
     $ret .= "<div class='form-wrapper'>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-	<fieldset>        
+	<fieldset>
+        <div class='col-sm-12'><label>$langRequest</label></div>
         <div class='col-sm-12'><label>$langFrom:&nbsp;</label><small>$user</small></div>
         <div class='col-sm-12'><label>$langSendTo:&nbsp;</label><small>$userprof</small></div>
         <div class='form-group'>

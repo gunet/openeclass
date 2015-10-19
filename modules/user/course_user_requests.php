@@ -30,15 +30,15 @@ $toolName = $langUserRequests;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langUsers);
 
 $tool_content .= action_bar(array(
+        array('title' => "$langUsers",
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-users',
+            'level' => 'primary-label'),
         array('title' => "$langBackRequests",
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label',
-            'show' => isset($_GET['rid'])),
-        array('title' => "$langBack",
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary')
+            'show' => isset($_GET['rid']))
         ));
 
 if (isset($_POST['rejected_req_id'])) { // do reject course user request
@@ -77,7 +77,26 @@ if (isset($_GET['rid'])) {
                                 status = " . USER_STUDENT . ",
                                 reg_date = " . DBHelper::timeAfter() . ", 
                                 document_timestamp = " . DBHelper::timeAfter() . "", $_GET['u'], $course_id);
-        if ($sql) {
+        if ($sql) { // notify user
+            $email = uid_to_email($_GET['u']);
+            if (!empty($email) and email_seems_valid($email)) {
+                $emailsubject = "$langYourReg " . course_id_to_title($course_id);
+                $emailbody = "$langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2 $langFormula \n$gunet";
+                $header_html_topic_notify = "<!-- Header Section -->
+                <div id='mail-header'><br><div><div id='header-title'>$langYourReg " . course_id_to_title($course_id)."</div></div></div>";
+                $body_html_topic_notify = "<!-- Body Section -->
+                <div id='mail-body'><br>
+                    <div id='mail-body-inner'>
+                        $langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2
+                        <br><br>$langFormula<br>$gunet
+                    </div>
+                </div>";
+
+                $emailbody = $header_html_topic_notify.$body_html_topic_notify;
+                $plainemailbody = html2text($emailbody);
+                send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody, $charset);
+            }
+            // close user request
             Database::get()->query("UPDATE course_user_request SET status = 2 WHERE id = ?d", $_GET['rid']);
             $tool_content .= "<div class='alert alert-success'>$langCourseUserRegDone</div>";
         } else {
@@ -88,6 +107,8 @@ if (isset($_GET['rid'])) {
         $tool_content .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
         <div class='col-sm-12'><label>$langReasonReject</label></div>
+        <div class='col-sm-12'><label>$langFrom:&nbsp;</label><small>" . uid_to_name($uid, 'fullname') . "</small></div>
+        <div class='col-sm-12'><label>$langSendTo:&nbsp;</label><small>" . uid_to_name($_GET['u'], 'fullname') . "</small></div>
         <div class='form-group'>
             <div class='col-sm-12'>
               <textarea name='rej_content' rows='8' cols='80'></textarea>
@@ -112,7 +133,7 @@ if (isset($_GET['rid'])) {
         $tool_content .= "</tr>";
         foreach ($sql as $udata) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td>" . display_user($udata->uid, false)."</td><td>" . q($udata->comments) . "</td>";
+            $tool_content .= "<td>" . display_user($udata->uid, false)."<br>&nbsp;&nbsp;<small>" . uid_to_am($udata->uid) . "</small></td><td>" . q($udata->comments) . "</td>";
             $tool_content .= "<td>".
                             action_button(array(
                                 array('title' => $langRegistration, 

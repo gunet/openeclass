@@ -3900,6 +3900,7 @@ $langAssignmentWillBeActive = 'Η εργασία θα είναι ενεργή σ
 $langRequestStudent = "Η αίτηση του $langsOfStudent έκλεισε!";
 $langRequestReject = "Η αίτηση απορρίφθηκε";
 $langInformativeEmail = "Στάλθηκε ενημερωτικό μήνυμα στη διεύθυνση";
+$langRequest = "Αίτηση";
 
 /* * ***********************************************************
   editpost.php
