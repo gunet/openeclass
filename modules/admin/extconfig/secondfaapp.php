@@ -62,7 +62,10 @@ class secondfaApp extends ExtApp {
         } else {
             $connector = new $connector();
         }
-        $connector->setEnabled($secondfa->isEnabled());
+        $param = $connector->getParam('enabled');
+        if ($param) {
+            $param->setValue($secondfa->isEnabled());
+        }
         return $connector;
     }
 
