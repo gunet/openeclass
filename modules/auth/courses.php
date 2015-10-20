@@ -27,7 +27,7 @@ require_once 'include/log.php';
 require_once 'include/lib/hierarchy.class.php';
 $tree = new Hierarchy();
 
-$toolName = $langChoiceLesson;
+$toolδιName = $langChoiceLesson;
 
 $icons = array(
     COURSE_OPEN => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' />",
@@ -251,11 +251,11 @@ function expanded_faculte($facid, $uid) {
             // open course, registered to course, or power user who can see all
             $codelink = "<a href='{$urlAppend}courses/" . $mycours->k . "/'>$course_title</a>";
         } elseif ($mycours->visible == COURSE_CLOSED) { // closed course            
-            $log_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS, $cid);
-            if ($log_course_user_requests) {
-                $codelink = "<a href='{$urlAppend}modules/contact/index.php?course_id=$cid'>$course_title</a>";
+            $disable_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $cid);
+            if ($disable_course_user_requests) {
+                $codelink = $course_title;                
             } else {
-                $codelink = $course_title;
+                $codelink = "<a href='{$urlAppend}modules/contact/index.php?course_id=$cid'>$course_title</a>";
             }
         } else {
             $codelink = $course_title;

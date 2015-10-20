@@ -42,28 +42,18 @@ $tool_content .= action_bar(array(
         ));
 
 if (isset($_POST['rejected_req_id'])) { // do reject course user request
-    $from_name = uid_to_name($uid, 'fullname');
-    $from_address = uid_to_email($uid);
-    $to_name = uid_to_name($_POST['rejected_uid'], 'fullname');
+    $from_name = uid_to_name($uid, 'fullname');        
     $to_address = uid_to_email($_POST['rejected_uid']);
-    $subject = "$langReasonReject";
+    $subject = "$langCourse: " .  course_id_to_title($course_id) . " - $langCourseUserRequestReject";
     $mailHeader = "<div id='mail-header'><div><br>
-                    <div id='header-title'>".q(sprintf($langContactIntro, $from_name, $from_address))."</div>
+                    <div id='header-title'>$langTeacher: $from_name</div>
 		</div></div>";    
-    $mailMain = "<div id='mail-body'><br><div><b>$langMessage:</b></div>
+    $mailMain = "<div id='mail-body'><br><div><b>$langReasonReject:</b></div>
 		<div id='mail-body-inner'>$_POST[rej_content]</div></div>";
-    
-    $mailFooter = "
-    <!-- Footer Section -->
-	<div id='mail-footer'>
-		<br>
-		<div id='alert'><small><b class='notice'>$langNote:</b> $langContactIntroFooter.</small></div>
-	</div>";
-
-    $message = $mailHeader.$mailMain.$mailFooter;    
-    $plainMessage = html2text($message);
-    
-    if (!send_mail_multipart($from_name, $from_address, $to_name, $to_address, $subject, $plainMessage, $message, $GLOBALS['charset'])) {
+        
+    $message = $mailHeader.$mailMain;    
+    $plainMessage = html2text($message);    
+    if (!send_mail_multipart('', '', '', $to_address, $subject, $plainMessage, $message, $GLOBALS['charset'])) {
         $tool_content .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>";
     }
     Database::get()->query("UPDATE course_user_request SET status = 0 WHERE id = ?d", $_POST['rejected_req_id']);        
@@ -125,15 +115,23 @@ if (isset($_GET['rid'])) {
 	</fieldset></form></div>";                
     }
 } else { // display course user requests
-    $sql = Database::get()->queryArray("SELECT id, uid, course_id, comments FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id);
+    $sql = Database::get()->queryArray("SELECT id, uid, course_id, comments, ts FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id);
     if ($sql) {  
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr>";
-        $tool_content .= "<th width='300'>$langSurnameName</th><th>$langComments</th><th width='80' class='text-center'>".icon('fa-gears')."</th>";
+        $tool_content .= "<th width='320'>$langSurnameName</th><th>$langComments</th><th width='110'>$langDateRequest</th><th width='80' class='text-center'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr>";
         foreach ($sql as $udata) {
+            $am_message = '';
+            $user_am = uid_to_am($udata->uid);
+            if ($user_am) {
+                $am_message = "$langAm: $user_am";            
+            }
+            
             $tool_content .= "<tr>";
-            $tool_content .= "<td>" . display_user($udata->uid, false)."<br>&nbsp;&nbsp;<small>" . uid_to_am($udata->uid) . "</small></td><td>" . q($udata->comments) . "</td>";
+            $tool_content .= "<td>" . display_user($udata->uid, false)."<br>&nbsp;&nbsp;<small>$am_message</small></td>";
+            $tool_content .= "<td>" . q($udata->comments) . "</td>";
+            $tool_content .= "<td>" . nice_format(date('Y-m-d', strtotime($udata->ts))) . "</td>";
             $tool_content .= "<td>".
                             action_button(array(
                                 array('title' => $langRegistration, 

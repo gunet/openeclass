@@ -381,8 +381,8 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['ar_radio'])) {
                 setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);
             }
-            if (isset($_POST['log_course_user_requests'])) {
-                setting_set(SETTING_COURSE_USER_REQUESTS, $_POST['log_course_user_requests'], $course_id);
+            if (isset($_POST['disable_log_course_user_requests'])) {
+                setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, $_POST['disable_log_course_user_requests'], $course_id);
             }
             if ($noWeeklyMessage) {
                 Session::Messages($langCourseWeeklyFormatNotice);
@@ -531,12 +531,12 @@ if (isset($_POST['submit'])) {
         $checkAbuseReportEn = "";
     }
     // LOG COURSE USER REQUESTS
-    if (setting_get(SETTING_COURSE_USER_REQUESTS, $course_id) == 1) {
-        $log_course_user_requests_disable = "";
-        $log_course_user_requests_enable = "checked";
-    } else {
+    if (setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id) == 1) {
         $log_course_user_requests_disable = "checked";
         $log_course_user_requests_enable = "";
+    } else {
+        $log_course_user_requests_disable = "";
+        $log_course_user_requests_enable = "checked";
     }
     $tool_content .= "<div class='form-wrapper'>
 	<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
@@ -692,16 +692,16 @@ if (isset($_POST['submit'])) {
                 <label class='col-sm-2 control-label'>$langCourseUserRequests:</label>
                 <div class='col-sm-10'>
                     <div class='radio'>
-                      <label>
-                            <input type='radio' value='1' name='log_course_user_requests' $log_course_user_requests_enable $log_course_user_requests_inactive> $langActivate
-                      </label>
-                    </div>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='0' name='log_course_user_requests' $log_course_user_requests_disable $log_course_user_requests_inactive> $langDeactivate
+                            <input type='radio' value='0' name='disable_log_course_user_requests' $log_course_user_requests_enable $log_course_user_requests_inactive> $langActivate
                             <span class='help-block'><small>$log_course_user_requests_dis</small></span>
                       </label>
                     </div>
+                      <label>
+                            <input type='radio' value='1' name='disable_log_course_user_requests' $log_course_user_requests_disable $log_course_user_requests_inactive> $langDeactivate
+                      </label>
+                    </div>                    
                 </div>
             </div>
             <div class='form-group'>
