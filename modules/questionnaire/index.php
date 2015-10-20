@@ -328,9 +328,10 @@ function printPolls() {
                             ),
                             array(
                                 'title' => $langUsage,
+                                'level' => 'primary',
                                 'icon' => 'fa-line-chart',
                                 'url' => "pollresults.php?course=$course_code&pid=$pid",
-                                'show' => $total_participants > 0
+                                'disabled' => $total_participants == 0
                             ),
                             array(
                                 'title' => $langSee,
