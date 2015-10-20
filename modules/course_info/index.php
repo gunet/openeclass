@@ -647,7 +647,7 @@ if (isset($_POST['submit'])) {
                     <div class='radio'>
                       <label>
                         <input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2]>
-                        <img src='$themeimg/lock_open.png' alt='$langOpenCourse' title='$langOpenCourse' width='16'>&nbsp;$langOpenCourse
+                        <span class='fa fa-lock-open'></span><img src='$themeimg/lock_open.png' alt='$langOpenCourse' title='$langOpenCourse' width='16'>&nbsp;$langOpenCourse
                         <span class='help-block'><small>$langPublic</small></span>
                       </label>
                     </div>
