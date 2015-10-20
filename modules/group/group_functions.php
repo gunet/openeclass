@@ -84,16 +84,8 @@ function initialize_group_info($group_id) {
 
     $tutors = group_tutors($group_id);
     $is_tutor = $is_member = $user_group_description = false;
-    if (isset($uid)) {
-        $res = Database::get()->querySingle("SELECT is_tutor, description FROM group_members
-                                     WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
-        if ($res) {
-            $is_member = true;
-            $is_tutor = $res->is_tutor;
-            $user_group_description = $res->description;
-        }
-    }
-    if ($is_tutor or $is_editor) {
+
+    if ($is_tutor || $is_editor) {
         $res = Database::get()->queryArray("SELECT description,user_id FROM group_members
                                      WHERE group_id = ?d", $group_id);
         foreach ($res as $d) {
@@ -101,6 +93,16 @@ function initialize_group_info($group_id) {
                 $user_group_description .= display_user($d->user_id, false, false)."<br>$d->description<br><br>";
             }
         }
+    } else {
+        if (isset($uid)) {
+            $res = Database::get()->querySingle("SELECT is_tutor, description FROM group_members
+                                         WHERE group_id = ?d AND user_id = ?d AND is_tutor != 1", $group_id, $uid);
+            if ($res) {
+                $is_member = true;
+                $is_tutor = $res->is_tutor;
+                $user_group_description .= $res->description;
+            }
+        }        
     }
 }
 
