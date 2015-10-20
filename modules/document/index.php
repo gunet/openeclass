@@ -190,7 +190,7 @@ if ($can_upload) {
             redirect_to_current_dir();
         } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1 and preg_match('/\.zip$/i', $fileName)) {
             /* ** Unzipping stage ** */            
-            $zipFile = new pclZip($userFile);
+            $zipFile = new PclZip($userFile);
             validateUploadedZipFile($zipFile->listContent(), $menuTypeID);
             $realFileSize = 0;
             $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');

@@ -94,7 +94,8 @@ function archiveTables($course_id, $course_code, $archivedir) {
                                                                              WHERE course_id = $course_id))",
         'poll' => $sql_course,
         'poll_question' => "pid IN (SELECT pid FROM poll WHERE course_id = $course_id)",
-        'poll_answer_record' => "pid IN (SELECT pid FROM poll WHERE course_id = $course_id)",
+        'poll_answer_record' => "poll_user_record_id IN (SELECT id FROM poll_user_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = $course_id))",
+        'poll_user_record' => "pid IN (SELECT pid FROM poll WHERE course_id = $course_id)",
         'poll_question_answer' => "pqid IN (SELECT pqid FROM poll_question
                                                        WHERE pid IN (SELECT pid FROM poll
                                                                             WHERE course_id = $course_id))",

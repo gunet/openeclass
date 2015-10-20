@@ -40,10 +40,9 @@ function visibility_select($current) {
 // Unzip backup file
 function unpack_zip_inner($zipfile, $clone) {
     global $webDir, $uid;
-
     require_once 'include/lib/fileUploadLib.inc.php';
 
-    $zip = new pclZip($zipfile);
+    $zip = new PclZip($zipfile);
     if (!$clone) {
         validateUploadedZipFile($zip->listContent(), 3);
     }

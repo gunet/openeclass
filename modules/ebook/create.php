@@ -44,7 +44,7 @@ if (!$is_editor) {
             redirect_to_home_page("modules/ebook/index.php?course=$course_code&create=1");
         }
         validateUploadedFile($_FILES['file']['name'], 2);
-        $zipFile = new pclZip($_FILES['file']['tmp_name']);
+        $zipFile = new PclZip($_FILES['file']['tmp_name']);
         validateUploadedZipFile($zipFile->listContent(), 2);
     }
 
