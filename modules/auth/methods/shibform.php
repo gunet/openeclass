@@ -39,9 +39,10 @@ if ($f = @fopen($secureIndexPath, 'r')) {
     fclose($f);
 }
 
-$r = Database::get()->querySingle("SELECT auth_settings, auth_instructions FROM auth WHERE auth_id = 6");
+$r = Database::get()->querySingle("SELECT auth_settings, auth_instructions, auth_title FROM auth WHERE auth_id = 6");
 $shibsettings = $r->auth_settings;
 $auth_instructions = $r->auth_instructions;
+$auth_title = $r->auth_title;
 if ($shibsettings != 'shibboleth' and $shibsettings != '') {
     $shibseparator = $shibsettings;
     $checkedshib = 'checked';
@@ -78,6 +79,12 @@ $tool_content .= "
             </div>
         </div>     
     </div>   
+    <div class='form-group'>
+            <label for='auth_title' class='col-sm-2 control-label'>$langAuthTitle:</label>
+            <div class='col-sm-10'>
+                <input class='form-control' name='auth_title' id='auth_title' type='text' value='" . q($auth_title) . "'>
+            </div>
+        </div>
     <div class='form-group'>
         <label for='auth_instructions' class='col-sm-2 control-label'>$langInstructionsAuth:</label>
         <div class='col-sm-10'>
