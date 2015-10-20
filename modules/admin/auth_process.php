@@ -181,6 +181,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                         'cas_logout' => $_SESSION['cas_logout'],
                         'cas_ssout' => $_SESSION['cas_ssout'],
                         'casuserstudentid' => $_SESSION['casuserstudentid']);
+                    $auth_title = $_SESSION['auth_title'];
                     $auth_instructions = $_SESSION['auth_instructions'];
 	                break;
                 case 8:  // Facebook
