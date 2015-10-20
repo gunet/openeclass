@@ -45,7 +45,11 @@ if($stats_type == 'course'){
 }
 elseif($stats_type == 'admin'){
     /**Get course departments/categories**/
-    $result = Database::get()->queryArray("SELECT id, name, depth FROM hierarchy_depth ORDER BY lft");
+    $result = Database::get()->queryArray("SELECT chid id, chname name, IF(parent=-1,0,pars) depth  FROM "
+            . "(SELECT chid, chname, chlft, COUNT(DISTINCT parid) pars, MAX(parid) parent FROM (SELECT IFNULL(h1.id,-1) parid, h1.name parname, h2.name chname, h2.id chid, h1.lft parlft, h2.lft chlft from hierarchy h1 right "
+            . "  JOIN hierarchy h2 ON h1.lft<h2.lft and h1.rgt>=h2.rgt order by h1.id, h2.id) x "
+            . "  group by chid) y "
+            . "LEFT JOIN hierarchy h ON y.parent=h.id ORDER BY chlft");
     $statsDepOptions = "";
     foreach($result as $d){
        $indentation = "";
