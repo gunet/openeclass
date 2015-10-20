@@ -1508,7 +1508,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM wiki_acls WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM wiki_properties WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM poll_answer_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM poll_user_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM poll WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = ?d)", $cid);
@@ -1587,7 +1587,7 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM logins WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM poll WHERE creator_id = ?d", $u);
-            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM user_department WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d", $u);
