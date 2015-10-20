@@ -1045,7 +1045,7 @@ jContent;
      * @param  string   $url           - The php script to call in the navigational URLs
      * @param  function $countCallback - An optional closure that will be used for the counting
      * @param  bool     $showEmpty     - Whether to display nodes with count == 0
-     * @return string   $ret           - The returned HTML output
+     * @return array    $ret           - An array containing the children count and the HTML output
      */
     public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null, $showEmpty = true) {
         $parent = Database::get()->querySingle("select lft, rgt from hierarchy where id = ?d", $depid);
@@ -1055,11 +1055,12 @@ jContent;
         $searchLft = intval($parent->lft) + 1;
         
         list($children, $subtrees) = $this->locateSubordinatesAndSubTrees($searchLft);
+        $chCnt = count($children);
         
-        if (count($children) > 0) {
-            return $this->buildNodesNavigationHtml($children, $url, $countCallback, $showEmpty, $subtrees);
+        if ($chCnt > 0) {
+            return array($chCnt, $this->buildNodesNavigationHtml($children, $url, $countCallback, $showEmpty, $subtrees));
         } else {
-            return " ";
+            return array($chCnt, " ");
         }
     }
 

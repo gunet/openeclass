@@ -88,7 +88,8 @@ $tool_content .= "
         <div class='col-xs-12'>
             <ul class='list-group'>
                 <li class='list-group-item list-header'>$langFaculty: <b>" . $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "</b>";
-            $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, $showEmpty);
+            list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, $showEmpty);
+            $tool_content .= $childHTML;
        $tool_content .= "</ul>
            </div>
     </div>";
@@ -221,7 +222,7 @@ if (count($courses) > 0) {
         $tool_content .= "</tr>";        
     }
     $tool_content .= "</table></div></div></div>";
-} else {
+} else if ($childCount <= 0) {
     $tool_content .= "<div class='alert alert-warning text-center'>- $langNoCourses -</div>\n";
 }
 

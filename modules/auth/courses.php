@@ -132,16 +132,16 @@ if (isset($_POST['submit'])) {
                                   <li class='list-group-item list-header'><a name='top'></a>$langFaculty: " .
                 $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
                                   </li>";
-        $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
+        list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
+        $tool_content .= $childHTML;
         $subTrees = $tree->buildSubtrees(array($fc));
         $tool_content .= "</ul></form>";
 
         if ($numofcourses > 0) {
             $tool_content .= expanded_faculte($fc, $uid);
             $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
-        } else {
+        } else if ($childCount <= 0) {
             $tool_content .= "<div class='alert alert-warning text-center'>- $langNoCourses -</div>\n";
-
         }
     } // end of else (department exists)
 }
