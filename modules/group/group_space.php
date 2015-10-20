@@ -44,11 +44,7 @@ if (!$is_editor) {
     if ((!$is_member) and (!$self_reg)) { // check if we are group member
         Session::Messages($langForbidden, 'alert-danger');
         redirect_to_home_page("modules/group/index.php?course=$course_code");       
-    }
-    if (!$self_reg) { // if group self registration is enabled    
-        Session::Messages($langForbidden, 'alert-danger');
-        redirect_to_home_page("modules/group/index.php?course=$course_code");
-    }    
+    }   
     if (isset($_GET['selfReg']) and $_GET['selfReg'] == 1) {
         if (!$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) { // if registration is possible
             $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
