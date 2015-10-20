@@ -2180,9 +2180,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     DBHelper::indexExists('lp_user_module_progress', 'optimize') or
             Database::get()->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
     DBHelper::indexExists('poll', 'poll_index') or
-            Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");
-    DBHelper::indexExists('poll_user_record', 'poll_ans_id') or
-            Database::get()->query("CREATE INDEX `poll_ans_id` ON poll_user_record(pid, uid)");
+            Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");    
     DBHelper::indexExists('poll_question', 'poll_q_id') or
             Database::get()->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
     DBHelper::indexExists('poll_question_answer', 'poll_qa_id') or
@@ -2958,6 +2956,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             delete_field('poll_answer_record', 'pid');
             delete_field('poll_answer_record', 'user_id');            
         }
+        DBHelper::indexExists('poll_user_record', 'poll_user_rec_id') or
+            Database::get()->query("CREATE INDEX `poll_user_rec_id` ON poll_user_record(pid, uid)");
         //Removing Course Home Layout 2
         Database::get()->query("UPDATE course SET home_layout = 1 WHERE home_layout = 2");
     }

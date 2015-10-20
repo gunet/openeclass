@@ -165,7 +165,7 @@ function do_user_merge($source, $target) {
         fix_table('logins', 'user_id', $source_id, $target_id);
         fix_table('lp_user_module_progress', 'user_id', $source_id, $target_id);
         fix_table('poll', 'creator_id', $source_id, $target_id);
-        fix_table('poll_answer_record', 'user_id', $source_id, $target_id);
+        fix_table('poll_user_record', 'uid', $source_id, $target_id);
         fix_table('forum_notify', 'user_id', $source_id, $target_id);
         fix_table('forum_post', 'poster_id', $source_id, $target_id);
         fix_table('forum_topic', 'poster_id', $source_id, $target_id);
