@@ -161,7 +161,7 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
         }
         if (isset($options['map'])) {
             foreach ($options['map'] as $field => &$map) {
-                if (isset ($data[$restoreHelper->getField($table, $field)]) && isset($map[$data[$restoreHelper->getField($table, $field)]])) { // map needs reverse resolution
+                if (isset($data[$restoreHelper->getField($table, $field)]) && isset($map[$data[$restoreHelper->getField($table, $field)]])) { // map needs reverse resolution
                     $data[$restoreHelper->getField($table, $field)] = $map[$data[$restoreHelper->getField($table, $field)]];
                 } else {
                     continue 2;
@@ -758,11 +758,28 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'return_mapping' => 'pqid'), $url_prefix_map, $backupData, $restoreHelper);
         $poll_answer_map = restore_table($restoreThis, 'poll_question_answer', array('map' => array('pqid' => $poll_question_map),
             'return_mapping' => 'pqaid'), $url_prefix_map, $backupData, $restoreHelper);
-        restore_table($restoreThis, 'poll_answer_record', array('delete' => array('arid'),
-            'map' => array('pid' => $poll_map,
-            'qid' => $poll_question_map,
-            'aid' => $poll_answer_map,
-            'user_id' => $userid_map)), $url_prefix_map, $backupData, $restoreHelper);
+        if (file_exists("$restoreThis/poll_user_record")) {
+            // 3.2-style poll answer tables
+            $poll_user_record_map = restore_table($restoreThis, 'poll_user_record',
+                array('return_mapping' => 'id',
+                      'map' => array('pid' => $poll_map, 'uid' => $userid_map)),
+                $url_prefix_map, $backupData, $restoreHelper);
+            restore_table($restoreThis, 'poll_answer_record',
+                array('delete' => array('arid'),
+                      'map' => array('qid' => $poll_question_map,
+                                     'aid' => $poll_answer_map,
+                                     'poll_user_record_id' => $poll_user_record_map)),
+                $url_prefix_map, $backupData, $restoreHelper);
+        } else {
+            // 3.[0-1]-style tables
+            restore_table($restoreThis, 'poll_answer_record',
+                array('delete' => array('arid'),
+                      'map' => array('qid' => $poll_question_map,
+                                     'aid' => $poll_answer_map),
+                      'map_function' => 'poll_map_function',
+                      'map_function_data' => array($userid_map, $poll_map)),
+                $url_prefix_map, $backupData, $restoreHelper);
+        }
 
         // Assignments
         if (!isset($group_map[0])) {
@@ -1255,6 +1272,36 @@ function search_table_dump($table, $field, $value) {
         }
     }
     return null;
+}
+
+// Translate 3.1-style poll_answer_record data to 3.2-style poll_answer_record
+// and poll_user_record
+function poll_map_function(&$data, $maps) {
+    static $poll_user_record_map = array();
+
+    $uid_map = $maps[0];
+    $poll_map = $maps[1];
+
+    $uid = $data['user_id'];
+    $pid = $data['pid'];
+    unset($data['user_id']);
+    unset($data['pid']);
+
+    // If user doesnt exist in target, skip this record
+    if (!isset($uid_map[$uid]) or !isset($poll_map[$pid])) {
+        return false;
+    }
+
+    $uid = $uid_map[$uid];
+    $pid = $poll_map[$pid];
+    if (isset($poll_user_record_map[$uid][$pid])) {
+        $data['poll_user_record_id'] = $poll_user_record_map[$uid][$pid];
+    } else {
+        $pum_id = Database::get()->query('INSERT INTO poll_user_record
+            SET pid = ?d, uid = ?d', $pid, $uid)->lastInsertID;
+        $poll_user_record_map[$uid][$pid] = $pum_id;
+    }
+    return true;
 }
 
 function document_map_function(&$data, $maps) {
