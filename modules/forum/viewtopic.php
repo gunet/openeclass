@@ -258,7 +258,7 @@ $tool_content .= "<div class='table-responsive'><table class='table-default'>
     <tr class='list-header'>
       <th style='width:20%'>$langUserForum</th>
       <th>$langMessage</th>";
-if ($is_editor || $topic_locked != 1) {
+if ($is_editor ) {
     $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
 }
 $tool_content .= "</tr>";
