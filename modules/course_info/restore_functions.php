@@ -755,6 +755,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'return_mapping' => 'pqid'), $url_prefix_map, $backupData, $restoreHelper);
         $poll_answer_map = restore_table($restoreThis, 'poll_question_answer', array('map' => array('pqid' => $poll_question_map),
             'return_mapping' => 'pqaid'), $url_prefix_map, $backupData, $restoreHelper);
+        $poll_answer_map[0] = 0; // aid = 0 means "scale answer" - doesn't need mapping
         if (file_exists("$restoreThis/poll_user_record")) {
             // 3.2-style poll answer tables
             $poll_user_record_map = restore_table($restoreThis, 'poll_user_record',
