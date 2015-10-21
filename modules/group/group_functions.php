@@ -355,7 +355,7 @@ function makedefaultviewcode($locatie) {
 function delete_group($id) {
     global $course_id, $langGroupDeleted;
 
-    $tuple = Database::get()->querySingle("SELECT name, category_id FROM group WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $tuple = Database::get()->querySingle("SELECT name, category_id FROM `group` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $name = $tuple->name;
     $category_id = $tuple->category_id;
 
