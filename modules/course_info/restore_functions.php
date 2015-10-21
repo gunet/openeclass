@@ -501,51 +501,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             }
         }
         restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $new_course_id), 'delete' => array('id', 'preview')), $url_prefix_map, $backupData, $restoreHelper);
-        
-        // groups restore
-        $group_category_map  = restore_table($restoreThis, 'group_category',
-            array('set' => array('course_id' => $new_course_id),
-                                 'return_mapping' => 'id'),
-            $url_prefix_map, $backupData, $restoreHelper);        
-        if (count($group_category_map) > 0) { // version >= 3.2
-            $group_category_map[0] = 0;          
-            $group_map = restore_table($restoreThis, 'group',
-                array('set' => array('course_id' => $new_course_id), 
-                      'map' => array('category_id' => $group_category_map), 
-                      'return_mapping' => 'id'),
-                $url_prefix_map, $backupData, $restoreHelper);
-        } else {
-            $group_map = restore_table($restoreThis, 'group',
-                array('set' => array('course_id' => $new_course_id), 
-                      'init' => array('category_id' => 0), 
-                      'return_mapping' => 'id'),
-                $url_prefix_map, $backupData, $restoreHelper);
-        }
-        
-        restore_table($restoreThis, 'group_members',
-            array('map' => array('group_id' => $group_map,
-                  'user_id' => $userid_map)),
-            $url_prefix_map, $backupData, $restoreHelper);
-                        
-        $config_data = unserialize(file_get_contents($restoreThis . '/group_properties'));        
-        if (isset($config_data[0]['group_id'])) { // version >= 3.2
-            restore_table($restoreThis, 'group_properties',
-                array('set' => array('course_id' => $new_course_id), 
-                      'map' => array('group_id' => $group_map)), 
-                $url_prefix_map, $backupData, $restoreHelper);
-        } else {
-            $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $new_course_id);
-            foreach ($num as $group_num) {            
-                $new_group_id = $group_num->id;       
-                restore_table($restoreThis, 'group_properties',
-                    array('set' => array('course_id' => $new_course_id), 
-                          'init' => array('group_id' => $new_group_id), 
-                          'delete' => array('multiple_registration')), 
-                    $url_prefix_map, $backupData, $restoreHelper);
-            }
-        }                    
-        
-        // Forums Restore
+
+                // Forums Restore
         $forum_category_map = restore_table($restoreThis, 'forum_category', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         $forum_category_map[0] = 0;
@@ -606,7 +563,56 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             }
         }
         // Forums Restore End
-
+        
+        // groups restore
+        $group_category_map  = restore_table($restoreThis, 'group_category',
+            array('set' => array('course_id' => $new_course_id),
+                                 'return_mapping' => 'id'),
+            $url_prefix_map, $backupData, $restoreHelper);        
+        if (count($group_category_map) > 0) { // version >= 3.2
+            $group_category_map[0] = 0;          
+            $group_map = restore_table($restoreThis, 'group',
+                array('set' => array('course_id' => $new_course_id), 
+                      'map' => array(
+                          'category_id' => $group_category_map,
+                          'forum_id' => $forum_map
+                        ), 
+                      'return_mapping' => 'id'),
+                $url_prefix_map, $backupData, $restoreHelper);
+        } else {
+            $group_map = restore_table($restoreThis, 'group',
+                array('set' => array('course_id' => $new_course_id),
+                      'map' => array(
+                          'forum_id' => $forum_map
+                        ),                    
+                      'init' => array('category_id' => 0), 
+                      'return_mapping' => 'id'),
+                $url_prefix_map, $backupData, $restoreHelper);
+        }
+        
+        restore_table($restoreThis, 'group_members',
+            array('map' => array('group_id' => $group_map,
+                  'user_id' => $userid_map)),
+            $url_prefix_map, $backupData, $restoreHelper);
+                        
+        $config_data = unserialize(file_get_contents($restoreThis . '/group_properties'));        
+        if (isset($config_data[0]['group_id'])) { // version >= 3.2
+            restore_table($restoreThis, 'group_properties',
+                array('set' => array('course_id' => $new_course_id), 
+                      'map' => array('group_id' => $group_map)), 
+                $url_prefix_map, $backupData, $restoreHelper);
+        } else {
+            $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $new_course_id);
+            foreach ($num as $group_num) {            
+                $new_group_id = $group_num->id;       
+                restore_table($restoreThis, 'group_properties',
+                    array('set' => array('course_id' => $new_course_id), 
+                          'init' => array('group_id' => $new_group_id), 
+                          'delete' => array('multiple_registration')), 
+                    $url_prefix_map, $backupData, $restoreHelper);
+            }
+        }                    
+        
         // Glossary Restore
         $glossary_category_map = restore_table($restoreThis, 'glossary_category', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
