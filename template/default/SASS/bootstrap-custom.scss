@@ -2617,6 +2617,10 @@ th.forum_td:first-child{
 td.forum-response-column {
     position: relative;
     padding-bottom: 0px !important;
+    .reply-post-btn{
+        margin-right: 5px;
+        margin-top: -3px;
+    }
     .forum-post-header {
         border-bottom: 1px solid #ddd;
         margin: 10px 10px;

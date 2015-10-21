@@ -325,7 +325,11 @@ foreach ($result as $myrow) {
 
     $tool_content .= "<td class='forum-response-column'>
 	  <div class='forum-post-header'>
-	    <span class='pull-right forum-anchor-link'><a name='".$myrow->id."'></a>".$anchor_link."</span>";
+	    <span class='pull-right forum-anchor-link'>";
+    if ($topic_locked != 1) {
+        $tool_content .= "<a class='btn btn-default btn-xs reply-post-btn' href='reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id'>$langReply</a>";
+    }
+        $tool_content .= "<a name='".$myrow->id."'></a>".$anchor_link."</span>";
 	$tool_content .= "$postTitle<small class='text-muted'>$langSent: " . $myrow->post_time . "</small>
 	  </div>
 	  <div class='forum-post-message'>$message</div><div class='forum-post-footer clearfix'><div class='pull-left'>$rate_str</div><div class='pull-right text-muted'><small>$parent_post_link</small></div>
@@ -342,12 +346,7 @@ foreach ($result as $myrow) {
             'class' => 'delete',
             'confirm' => $langConfirmDelete)
     );
-    if ($topic_locked != 1) {
-        $dyntools[] = array('title' => $langReply,
-            'level' => 'primary-label',
-            'url' => "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id",
-            'icon' => 'fa-reply');
-    }
+
     if (abuse_report_show_flag('forum_post', $myrow->id, $course_id, $is_editor)) {
         $head_content .= abuse_report_add_js();
         $flag_arr = abuse_report_action_button_flag('forum_post', $myrow->id, $course_id);
