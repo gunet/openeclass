@@ -526,9 +526,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                                                                  'map' => array('id' => $group_category_map)), 
                                                             $url_prefix_map, $backupData, $restoreHelper);
         } else {
-            if (DBHelper::primaryKeyOf('group_properties')) {
-                Database::get()->query("ALTER TABLE `group_properties` DROP PRIMARY KEY");
-            }
             $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $new_course_id);
             foreach ($num as $group_num) {            
                 $new_group_id = $group_num->id;       
@@ -785,8 +782,11 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         if (!isset($group_map[0])) {
             $group_map[0] = 0;
         }
-        $assignments_map = restore_table($restoreThis, 'assignment', array('set' => array('course_id' => $new_course_id),
-            'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        $assignments_map = restore_table($restoreThis, 'assignment',
+            array('set' => array('course_id' => $new_course_id),
+                  'return_mapping' => 'id',
+                  'init' => array('max_grade' => 10)),
+            $url_prefix_map, $backupData, $restoreHelper);
         $assignments_map[0] = 0;
         restore_table($restoreThis, 'assignment_submit', array('delete' => array('id'),
             'map' => array('uid' => $userid_map, 'assignment_id' => $assignments_map, 'group_id' => $group_map)), $url_prefix_map, $backupData, $restoreHelper);
