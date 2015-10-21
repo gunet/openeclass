@@ -192,7 +192,7 @@ if ($topic_locked == 1) {
                     'url' => "viewforum.php?course=$course_code&forum=$forum",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')                
-                ));
+                ),false);
 }
 
 if ($paging and $total > $posts_per_page) {
@@ -295,7 +295,7 @@ foreach ($result as $myrow) {
     }
     
     $tool_content .= "<td>
-                        <div>".profile_image($myrow->poster_id, '100px', 'img-responsive img-circle center-block margin-bottom-thin'). "</div>
+                        <div>".profile_image($myrow->poster_id, '100px', 'img-responsive img-circle margin-bottom-thin'). "</div>
                         <div>" .display_user($myrow->poster_id, false, false)."</div>
                         <div>".$user_stats[$myrow->poster_id]."</div>
                       </td>";
@@ -303,7 +303,7 @@ foreach ($result as $myrow) {
     // support for math symbols
     $message = mathfilter($message, 12, "../../courses/mathimg/");
     if ($count == 0) {
-        $postTitle = "<b>$langPostTitle: </b>" . q($topic_subject);
+        $postTitle = "<h4 class='h4'>".q($topic_subject)."</h4>";
     } else {
         $postTitle = "";
     }
@@ -318,18 +318,18 @@ foreach ($result as $myrow) {
     if ($myrow->parent_post_id == -1) {
         $parent_post_link = "<br/>$langForumPostParentDel";
     } elseif ($myrow->parent_post_id != 0) {
-        $parent_post_link = "$langForumPostParent<a href='viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;post_id=$myrow->parent_post_id#$myrow->parent_post_id'>#$myrow->parent_post_id</a><br/><br/>";
+        $parent_post_link = "$langForumPostParent<a href='viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;post_id=$myrow->parent_post_id#$myrow->parent_post_id'>#$myrow->parent_post_id</a>";
     } else {
         $parent_post_link = "";
     }
 
-    $tool_content .= "<td>
-	  <div>
+    $tool_content .= "<td class='forum-response-column'>
+	  <div class='forum-post-header'>
 	    <span class='pull-right forum-anchor-link'><a name='".$myrow->id."'></a>".$anchor_link."</span>";
-	$tool_content .= "$postTitle<br><b>$langSent: </b>" . $myrow->post_time . "
+	$tool_content .= "$postTitle<small class='text-muted'>$langSent: " . $myrow->post_time . "</small>
 	  </div>
-	  <br />$message<br />" . $parent_post_link . $rate_str . "
-	</td>";
+	  <div class='forum-post-message'>$message</div><div class='forum-post-footer clearfix'><div class='pull-left'>$rate_str</div><div class='pull-right text-muted'><small>$parent_post_link</small></div>
+	</div></td>";
 
     $dyntools = (!$is_editor) ? array() : array(
         array('title' => $langModify,
