@@ -751,6 +751,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $poll_map = restore_table($restoreThis, 'poll', array('set' => array('course_id' => $new_course_id),
             'map' => array('creator_id' => $userid_map), 'return_mapping' => 'pid', 'delete' => array('type')),
              $url_prefix_map, $backupData, $restoreHelper);
+        $poll_to_specific_map = restore_table($restoreThis, 'poll_to_specific', array('map' => array('poll_id' => $poll_map),
+            'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);        
         $poll_question_map = restore_table($restoreThis, 'poll_question', array('map' => array('pid' => $poll_map),
             'return_mapping' => 'pqid'), $url_prefix_map, $backupData, $restoreHelper);
         $poll_answer_map = restore_table($restoreThis, 'poll_question_answer', array('map' => array('pqid' => $poll_question_map),
@@ -789,6 +791,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                   'init' => array('max_grade' => 10)),
             $url_prefix_map, $backupData, $restoreHelper);
         $assignments_map[0] = 0;
+        $assignment_to_specific_map = restore_table($restoreThis, 'assignment_to_specific', array('map' => array('assignment_id' => $assignments_map)), 
+                $url_prefix_map, $backupData, $restoreHelper);            
         restore_table($restoreThis, 'assignment_submit', array('delete' => array('id'),
             'map' => array('uid' => $userid_map, 'assignment_id' => $assignments_map, 'group_id' => $group_map)), $url_prefix_map, $backupData, $restoreHelper);
 
@@ -805,6 +809,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'return_mapping' => 'id'
             ), $url_prefix_map, $backupData, $restoreHelper);
         $exercise_map[0] = 0;
+        $exercise_to_specific_map = restore_table($restoreThis, 'exercise_to_specific', array('map' => array('exercise_id' => $exercise_map),
+            'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);               
         restore_table($restoreThis, 'exercise_user_record', array(
             'delete' => array('eurid'),
             'map' => array('eid' => $exercise_map, 'uid' => $userid_map)
