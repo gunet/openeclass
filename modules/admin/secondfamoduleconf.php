@@ -27,7 +27,7 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/secondfaapp.php';
-$nameTools = $langsecondfa;
+$nameTools = $langSFAadd;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
@@ -57,7 +57,7 @@ else {
                 <fieldset><legend>$langBasicCfgSetting</legend>
 	 <table class='table table-bordered' width='100%'>
          <tr>
-            <th width='200' class='left'><b>$langsecondfaConnector</b></th>
+            <th width='200' class='left'><b>$langSFAConf</b></th>
             <td><select name='formconnector'>".implode('', $connectorOptions)."</select></td>
          </tr>";
     foreach($connectorClasses as $curConnectorClass) {
