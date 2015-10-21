@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2015-10-21 17:27:18
+// Generated 2015-10-21 17:29:46
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -2323,8 +2323,7 @@ $langNotSSL = "Connection wasn't made using SSL because no certificate was provi
 $langViaCAS = "authentication via CAS Single Sign On";
 $langCASnochange = "Please close your browser in order to change CAS settings";
 $langBeforeRegDate = "registered before";
-$langInfoAboutRegistration = "You are trying to access a closed course. To register, you need to contact the course administrator.<br />
-Please note that you should mention your full name or username on the platform so that administrator can register you to the course.";
+$langInfoAboutRegistration = "You are trying to access a closed course. To register, you need to complete the following request form, which will be recorded and sent to the course administrators.";
 $langReplace = "Replace";
 $langReplaceFile = "Replace %s with";
 $langReplaceOK = "File replaced successfully";
