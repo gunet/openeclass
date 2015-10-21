@@ -285,16 +285,20 @@ foreach ($result as $myrow) {
         $user_num_posts = Database::get()->querySingle("SELECT num_posts FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $myrow->poster_id, $course_id);
         if ($user_num_posts) {
             if ($user_num_posts->num_posts == 1) {
-                $user_stats[$myrow->poster_id] = "<br/>".$user_num_posts->num_posts." $langMessage";
+                $user_stats[$myrow->poster_id] = "<span class='text-muted'>$langMessage: " . $user_num_posts->num_posts."</span>";
             } else {
-                $user_stats[$myrow->poster_id] = "<br/>".$user_num_posts->num_posts." $langMessages";
+                $user_stats[$myrow->poster_id] = "<span class='text-muted'>$langMessages: " . $user_num_posts->num_posts."</span>";
             }
         } else {
             $user_stats[$myrow->poster_id] = '';
         }
     }
     
-    $tool_content .= "<td>" . display_user($myrow->poster_id) . $user_stats[$myrow->poster_id]."</td>";    
+    $tool_content .= "<td>
+                        <div>".profile_image($myrow->poster_id, '100px', 'img-responsive img-circle center-block margin-bottom-thin'). "</div>
+                        <div>" .display_user($myrow->poster_id, false, false)."</div>
+                        <div>".$user_stats[$myrow->poster_id]."</div>
+                      </td>";
     $message = $myrow->post_text;
     // support for math symbols
     $message = mathfilter($message, 12, "../../courses/mathimg/");
