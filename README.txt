@@ -1,6 +1,6 @@
 EN - English
 ----------------------------------------------------------
-The Open eClass Platform 3.1 (http://www.openeclass.org)
+The Open eClass Platform 3.2 (http://www.openeclass.org)
 ----------------------------------------------------------
 
 The Open eClass platform (formerly known as GUnet eClass) is a complete Course
@@ -18,12 +18,12 @@ contributors can be found in the CREDITS.txt file.
 
 Sincerely,
 Gunet Asychronous eLearning Group
-May 2015
+October 2015
 
 
 EL - Ελληνικά
 ----------------------------------------------------------
-Πλατφόρμα Open eClass 3.1 (http://www.openeclass.org)
+Πλατφόρμα Open eClass 3.2 (http://www.openeclass.org)
 ----------------------------------------------------------
 
 Η πλατφόρμα Open eClass (παλιότερη ονομασία: GUnet eClass) είναι ένα
@@ -57,4 +57,4 @@ EL - Ελληνικά
 
 Με τιμή,
 Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUnet
-Μάιος 2015
+Οκτώβριος 2015
