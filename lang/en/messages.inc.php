@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2015-10-21 17:29:46
+// Generated 2015-10-22 16:35:58
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -1914,7 +1914,6 @@ $charset = 'UTF-8';
 $dateFormatShort = "%b %d, %y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
-$dateTimeFormatShort = '%d %b %Y %R';
 $timeNoSecFormat = '%I:%M %p';
 $langNoAdminAccess = '<b>The page you tried to access requires a valid username and password.</b><br/>
 The system has automatically redirected you to the start page to login. This could have been caused
@@ -3794,9 +3793,6 @@ $langDropboxNumUnreadMessages = "Unread messages";
 $langNationalOpenCourses = "National Open Courses Portal";
 $langEnterNote = "Enter note";
 $langAttemptWasCanceled = "The attempt was canceled.";
-$langExerciseAttemptLeft = 'Beware! Only one attempt remaining.';
-$langExerciseAttemptsLeft = 'Beware! You have %d attempts remaining.';
-$langExerciseAttemptContinue = 'By clicking the "Continue" button, a new attempt is recorded.';
 $langNoUnits = "No course units";
 $langExternalTools = 'External tools';
 $langTeacherTutorials = "$langTeacher Tutorials";
@@ -4322,3 +4318,7 @@ $langAnalyticsDescription = '<p>You can connect the platform to an external web 
     Analytics, Piwiki) in order to record detailed statistics and information on visitors.</p>';
 $langAntivirusDescription = "<p>Connection with existing Antivirus software</p>";
 $langWafDescription = "<p>Enable Web Application Firewall</p>";
+$langExerciseAttemptLeft = 'Beware! Only one attempt remaining.';
+$langExerciseAttemptsLeft = 'Beware! You have %d attempts remaining.';
+$langExerciseAttemptContinue = 'By clicking the "Continue" button, a new attempt is recorded.';
+$dateTimeFormatShort = '%d %b %Y %R';

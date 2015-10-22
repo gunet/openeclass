@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2015-10-21 17:29:46
+// Generated 2015-10-22 16:35:59
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -4308,3 +4308,7 @@ $langAnalyticsDescription = '<p>You can connect the platform to an external web 
     Analytics, Piwiki) in order to record detailed statistics and information on visitors.</p>';
 $langAntivirusDescription = "<p>Connection with existing Antivirus software</p>";
 $langWafDescription = "<p>Enable Web Application Firewall</p>";
+$langExerciseAttemptLeft = 'Beware! Only one attempt remaining.';
+$langExerciseAttemptsLeft = 'Beware! You have %d attempts remaining.';
+$langExerciseAttemptContinue = 'By clicking the "Continue" button, a new attempt is recorded.';
+$dateTimeFormatShort = '%d %b %Y %R';
