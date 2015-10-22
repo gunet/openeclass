@@ -183,6 +183,7 @@ hContent;
 // Add a new node
 elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (isset($_POST['add'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $code = $_POST['code'];
 
         $names = array();
@@ -283,6 +284,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
           </div>
         </div>
         </fieldset>
+        ". generate_csrf_token_form_field() ."
         </form>
         </div>";
     }    
@@ -324,6 +326,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
     validateNode($id, isDepartmentAdmin());
 
     if (isset($_POST['edit'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         // Check for empty fields
 
         $names = array();
@@ -457,6 +460,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
           </div>
         </div>        
         </fieldset>
+        ". generate_csrf_token_form_field() ."
         </form>
         </div>";           
     }

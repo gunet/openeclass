@@ -69,6 +69,7 @@ define('MB', 1048576);
 
 // Update course quota
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $dq = $_POST['dq'] * MB;
     $vq = $_POST['vq'] * MB;
     $gq = $_POST['gq'] * MB;
@@ -120,6 +121,7 @@ else {
                     </div>
                 </div>
             </fieldset>
+            ". generate_csrf_token_form_field() ."
             </form>
         </div>";
 }

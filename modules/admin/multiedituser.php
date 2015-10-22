@@ -40,6 +40,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['months'])) {
         $months = intval($_POST['months']);
     } elseif (isset($_POST['department'])) {
@@ -105,6 +106,7 @@ if (isset($_POST['submit'])) {
     $usernames = '';
 
     if (isset($_POST['dellall_submit']) or isset($_POST['activate_submit']) or isset($_POST['move_submit'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         // get the incoming values
         $search = isset($_POST['search']) ? $_POST['search'] : '';
         $c = isset($_POST['c']) ? intval($_POST['c']) : '';
@@ -302,6 +304,7 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
             </fieldset>
+            ". generate_csrf_token_form_field() ."
         </form>
     </div>";
 }

@@ -88,6 +88,7 @@ if (isset($_GET['export'])) {
         exit;
 }
 if (isset($_POST['import'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     validateUploadedFile($_FILES['themeFile']['name'], 2);
     if (get_file_extension($_FILES['themeFile']['name']) == 'zip') {
         $file_name = $_FILES['themeFile']['name'];
@@ -123,6 +124,7 @@ if (isset($_POST['import'])) {
     redirect_to_home_page('modules/admin/theme_options.php');
 }
 if (isset($_POST['optionsSave'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     upload_images();
     clear_default_settings();
     $serialized_data = serialize($_POST);
@@ -141,6 +143,7 @@ if (isset($_POST['optionsSave'])) {
     }
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['themeOptionsName'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $theme_options_name = $_POST['themeOptionsName'];
     $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, '')", $theme_options_name)->lastInsertID;
     clear_default_settings();
@@ -152,6 +155,7 @@ if (isset($_POST['optionsSave'])) {
     $_SESSION['theme_options_id'] = $new_theme_id;
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['active_theme_options'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['preview'])){
         if ($_POST['active_theme_options'] == $active_theme) {
             unset($_SESSION['theme_options_id']);
@@ -201,7 +205,7 @@ if (isset($_POST['optionsSave'])) {
                                             '<input id=\"themeFile\" name=\"themeFile\" type=\"file\" class=\"form-control\">'+
                                             '<input name=\"import\" type=\"hidden\">'+
                                         '</div>'+
-                                        '</div>'+
+                                        '</div>". addslashes(generate_csrf_token_form_field()) ."'+
                                     '</form>'+
                                 '</div>'+
                             '</div>',                          
@@ -252,7 +256,7 @@ if (isset($_POST['optionsSave'])) {
                                         '<div class=\"col-sm-12\">'+
                                             '<input id=\"themeOptionsName\" name=\"themeOptionsName\" type=\"text\" placeholder=\"$langThemeOptionsName\" class=\"form-control\">'+
                                         '</div>'+
-                                        '</div>'+
+                                        '</div>". addslashes(generate_csrf_token_form_field()) ."'+
                                     '</form>'+
                                 '</div>'+
                             '</div>',                          
@@ -420,6 +424,7 @@ if (isset($_POST['optionsSave'])) {
                     ".  selection($themes_arr, 'active_theme_options', $theme_id, 'class="form-control form-submit" id="theme_selection"')."
                 </div>
             </div>
+            ". generate_csrf_token_form_field() ."
         </form>
         <div class='form-group margin-bottom-fat'>
             <div class='col-sm-9 col-sm-offset-3'>
@@ -639,7 +644,8 @@ $tool_content .= "
             <input class='btn btn-success' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
             ".($theme_id ? "<a class='btn btn-info' href='theme_options.php?export=true'>$langExport</a>" : "")."
         </div>
-    </div>     
+    </div> 
+    ". generate_csrf_token_form_field() ."    
 </form>
 </div>";    
 }

@@ -38,6 +38,7 @@ $tool_content .= action_bar(array(
         'level' => 'primary-label')));
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $line = strtok($_POST['courses'], "\n");
 
     $departments = isset($_POST['department']) ? $_POST['department'] : array();
@@ -162,6 +163,7 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
         </fieldset>
+        ". generate_csrf_token_form_field() ."
         </form>
         </div>";
 }

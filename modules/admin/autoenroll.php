@@ -42,6 +42,7 @@ if (isset($_GET['delete'])) {
     }
     redirect_to_home_page('modules/admin/autoenroll.php');
 } elseif (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['id'])) {
         if (!($rule = getDirectReference($_POST['id']))) {
             forbidden();
@@ -294,6 +295,7 @@ if (isset($_GET['delete'])) {
               </div>
             </div>
           </fieldset>
+          ". generate_csrf_token_form_field() ."
         </form>
       </div>";
 

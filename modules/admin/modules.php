@@ -29,6 +29,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $pageName = $langDisableModules;
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     Database::get()->query('DELETE FROM module_disable');
     if (isset($_POST['moduleDisable'])) {
         $optArray = implode(', ', array_fill(0, count($_POST['moduleDisable']), '(?d)'));
@@ -78,6 +79,7 @@ if (isset($_POST['submit'])) {
                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitChanges) . "'>
              </div>
            </div>
+           ". generate_csrf_token_form_field() ."
          </form>
        </div>";
 }
