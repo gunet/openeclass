@@ -329,8 +329,9 @@ foreach ($result as $myrow) {
     if ($topic_locked != 1) {
         $tool_content .= "<a class='btn btn-default btn-xs reply-post-btn' href='reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id'>$langReply</a>";
     }
+
         $tool_content .= "<a name='".$myrow->id."'></a>".$anchor_link."</span>";
-	$tool_content .= "$postTitle<small class='text-muted'>$langSent: " . $myrow->post_time . "</small>
+	$tool_content .= "$postTitle<small class='text-muted'><b>$langSent:</b> " . date_format(new DateTime($myrow->post_time, new DateTimeZone('Europe/Athens')), "j M 'y G:i:s" ) . "</small>
 	  </div>
 	  <div class='forum-post-message'>$message</div><div class='forum-post-footer clearfix'><div class='pull-left'>$rate_str</div><div class='pull-right text-muted'><small>$parent_post_link</small></div>
 	</div></td>";
