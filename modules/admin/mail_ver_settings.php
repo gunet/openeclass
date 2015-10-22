@@ -56,6 +56,7 @@ $mail_ver_data[1] = $langMailVerificationYesU;
 $mail_ver_data[2] = $langMailVerificationNoU;
 
 if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if ($old_mail_ver != $new_mail_ver) {
         $old_mail_ver = intval($old_mail_ver);
         $new_mail_ver = intval($new_mail_ver);
@@ -110,10 +111,11 @@ if (empty($submit0) && empty($submit1) && empty($submit2)) {
 			<td class='text-center'><b>" .
             Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user;")->cnt .
             "</b></td><td class='text-right'>&nbsp;</td></tr>
-	</table></div></form>";
+	</table></div>". generate_csrf_token_form_field() ."</form>";
 }
 // admin wants to change user's mail verification value. 3 possible
 else { 
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (!empty($submit0)) {
         $sub = 0;
         $msg = $langMailVerificationPending;
@@ -140,6 +142,7 @@ else {
 		<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langEdit'></div>
 		<input type='hidden' name='old_mail_ver' value='$sub'>		
 		</fieldset>
+        ". generate_csrf_token_form_field() ."
 		</form></div>";
     }
 }

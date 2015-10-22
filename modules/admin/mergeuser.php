@@ -79,6 +79,7 @@ if (isset($_REQUEST['u'])) {
                 $target_field .= "<div class='alert alert-warning'>$langUserMergeForbidden</div>";
             } else {
                 if ($_POST['submit'] == $langUserMerge) {
+                    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
                     do_user_merge($info, $target);
                 }
                 $submit_button = $langUserMerge;
@@ -112,6 +113,7 @@ if (isset($_REQUEST['u'])) {
                     </div>                                                  
                  </fieldset>
                  $target_user_input
+                 ". generate_csrf_token_form_field() ."
                </form></div>";
     }
 } else {

@@ -42,6 +42,7 @@ $error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     register_posted_variables(array('email_public' => true,
         'am_public' => true,
         'phone_public' => true), 'all', 'intval');
@@ -248,6 +249,7 @@ if (isset($_POST['submit'])) {
             </div>
         </div>       
         </fieldset>
+        ". generate_csrf_token_form_field() ."
         </form>
         </div>";
 }

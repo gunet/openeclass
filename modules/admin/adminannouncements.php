@@ -123,6 +123,7 @@ if (isset($_GET['delete'])) {
         }
     }
 } elseif (isset($_POST['submitAnnouncement'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     // submit announcement command
     $dates = array();
     if (isset($_POST['startdate_active']) and isset($_POST['startdate'])) {
@@ -264,6 +265,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                     <input class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'>
                 </div>
             </div>
+            ". generate_csrf_token_form_field() ."
             </form>
             </div>";
 }

@@ -35,7 +35,8 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 load_js('jstree3');
 
-if (isset($_POST['submit'])) {    
+if (isset($_POST['submit'])) { 
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();   
     $newdepip = isset($_POST['newdepid']) ? $_POST['newdepid'] : array();
     foreach ($_POST['lessons'] as $cId) {
         $course->refresh($cId, $_POST['newdepid']);
@@ -112,6 +113,7 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>";
             $tool_content .= "</fieldset>
+            ". generate_csrf_token_form_field() ."
             </form>
             </div>";
 }

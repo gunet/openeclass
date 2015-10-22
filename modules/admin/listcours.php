@@ -271,6 +271,6 @@ if (isset($_GET['formsearchfaculte']) and $_GET['formsearchfaculte'] and is_nume
     }
 
     $tool_content .= "<input class='btn btn-primary' type='submit' name='move_submit' value='$langChangeDepartment'> ";
-    $tool_content .= "</form></div>";
+    $tool_content .= generate_csrf_token_form_field() ."</form></div>";
 }
 draw($tool_content, 3, null, $head_content);

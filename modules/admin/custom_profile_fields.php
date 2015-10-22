@@ -45,7 +45,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                       <div class='col-sm-10'><input id='catname' type='text' name='cat_name'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit_cat' value='$langAdd'></div>";
-    $tool_content .= "</fieldset></form></div>";
+    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
                         var chkValidator  = new Validator("catForm");
@@ -92,7 +92,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                       <div class='col-sm-10'><input id='catname' type='text' name='cat_name' value='$cat_name'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit_cat' value='$langAdd'></div>";
-    $tool_content .= "</fieldset></form></div>";
+    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
             var chkValidator  = new Validator("catForm");
@@ -120,9 +120,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
                       <div class='col-sm-10'>".selection($field_types, 'datatype', 1, 'class="form-control"')."</div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
-    $tool_content .= "</fieldset></form></div>";
+    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
     
 } elseif (isset($_POST['add_field_proceed_step2'])) { //add new field form 2nd step
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $catid = intval($_POST['catid']);
     
     load_js('validation.js');
@@ -180,7 +181,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                       <div class='col-sm-10'>".selection($visibility, 'visibility', 10, 'class="form-control"')."</div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit_field' value='$langAdd'></div>";
-    $tool_content .= "</fieldset></form></div>";
+    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
     
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
@@ -194,7 +195,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= '//]]></script>';
                 
 } elseif (isset($_POST['submit_field'])) {
-    
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $name = $_POST['field_name'];
     $shortname = $_POST['field_shortname'];
     $description = $_POST['fielddescr'];
@@ -363,7 +364,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                           <div class='col-sm-10'>".selection($visibility, 'visibility', $vis, 'class="form-control"')."</div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit_field' value='$langSave'></div>";
-        $tool_content .= "</fieldset></form></div>";
+        $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
         
         $tool_content .='<script language="javaScript" type="text/javascript">
                         //<![CDATA[
@@ -379,6 +380,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         
     }
 } elseif (isset($_POST['submit_cat'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['cat_id'])) { //save edited category
         $catid = intval($_POST['cat_id']);
         Database::get()->query("UPDATE custom_profile_fields_category SET name = ?s WHERE id = ?d", $_POST['cat_name'], $catid);
@@ -531,7 +533,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "</div>";
         $tool_content .= "<form name='sortOrderForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<input type='button' class='btn btn-success' onclick='submitSortOrderForm();' name='submitOrderForm' value='$langCPFChangeOrder'>";
-        $tool_content .= "</form>";
+        $tool_content .= generate_csrf_token_form_field() ."</form>";
         $tool_content .= "<script src='custom_profile_fields.js'></script>";
     }
     

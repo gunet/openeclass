@@ -239,6 +239,7 @@ if (!empty($show) and $show == 'closed') {
         case '2':
             $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
             if (!empty($submit)) {
+                if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
                 // post the comment and do the delete action
                 if (!empty($_POST['comment'])) {
                     $sql = "UPDATE user_request
@@ -267,7 +268,7 @@ if (!empty($show) and $show == 'closed') {
                             <div id='mail-body'>
                                 <br>
                                 <div id='mail-body-inner'>
-                                    $_POST[comment]<br><br>
+                                    ".q($_POST[comment])."<br><br>
                                     <ul id='forum-category'>
                                         <li><span><b>$langManager $siteName:</b></span> <span class='left-space'>$administratorName</span></li>
                                         <li><span><b>$langPhone:</b></span> <span class='left-space'>$telephone</span></li>
@@ -284,8 +285,8 @@ if (!empty($show) and $show == 'closed') {
 
                         }
                         $tool_content .= "<div class='alert alert-success'>" . (($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject);
-                        $tool_content .= " $langRequestMessageHasSent <b>$_POST[prof_email]</b></div>";
-                        $tool_content .= "<br><p><b>$langComments:</b><br>$_POST[comment]</p>";
+                        $tool_content .= " $langRequestMessageHasSent <b>" . q($_POST[prof_email]) . "</b></div>";
+                        $tool_content .= "<br><p><b>$langComments:</b><br>" . q($_POST[comment]) . "</p>";
                     }
                 }
             } else {
@@ -316,6 +317,7 @@ if (!empty($show) and $show == 'closed') {
 			<tr><th class='left'>&nbsp;</th>
 			<td><input class='btn btn-primary' type='submit' name='submit' value='" . q($langRejectRequest) . "'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
 			</tr></table>
+            ". generate_csrf_token_form_field() ."
 			</form>";
             }
             break;

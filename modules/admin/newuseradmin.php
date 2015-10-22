@@ -35,6 +35,7 @@ $tree = new Hierarchy();
 $user = new User();
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $requiredFields = array('auth_form', 'surname_form',
         'givenname_form', 'language_form', 'department', 'pstatus');        
     if (get_config('am_required') and @$_POST['pstatus'] == 5) {
@@ -391,6 +392,7 @@ $tool_content .= "
           <input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>
         </div>        
       </fieldset>
+      ". generate_csrf_token_form_field() ."
     </form>
   </div>";
 

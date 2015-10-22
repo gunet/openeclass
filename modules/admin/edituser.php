@@ -75,6 +75,7 @@ if ($u) {
                               verified_mail, whitelist
                          FROM user WHERE id = ?s", $u);
     if (isset($_POST['submit_editauth'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $auth = intval($_POST['auth']);
         $oldauth = array_search($info->password, $auth_ids);
         $tool_content .= "<div class='alert alert-success'>$langQuotaSuccess.";
@@ -90,6 +91,7 @@ if ($u) {
     }
 
     if (isset($_POST['delete_ext_uid'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         Database::get()->query('DELETE FROM user_ext_uid WHERE user_id = ?d AND auth_id = ?d',
             $u, $_POST['delete_ext_uid']);
         Session::Messages($langSuccessfulUpdate, 'alert-success');
@@ -122,6 +124,7 @@ if ($u) {
                               </div>
                             <input type='hidden' name='u' value='$u'>
                             </fieldset>
+                            ". generate_csrf_token_form_field() ."
                             </form>
                             </div>";
         draw($tool_content, 3, null, $head_content);
@@ -300,6 +303,7 @@ if ($u) {
 	    <input class='btn btn-primary' type='submit' name='submit_edituser' value='$langModify' />
         </div>
         </fieldset>
+        ". generate_csrf_token_form_field() ."
         </form>
         </div>";
         $sql = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, DATE(b.reg_date) AS reg_date, b.status

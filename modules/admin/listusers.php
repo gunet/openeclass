@@ -507,6 +507,7 @@ if (isset($_GET['department']) and $_GET['department'] and is_numeric($_GET['dep
 
 $tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'>
     <input class='btn btn-primary' type='submit' name='activate_submit' value='$langAddSixMonths'>
+    ". generate_csrf_token_form_field() ."
   </form></div>";
 
 draw($tool_content, 3, null, $head_content);

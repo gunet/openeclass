@@ -279,6 +279,7 @@ EOF;
 
 // Save new `config` table
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $active_lang_codes = array();
     if (isset($_POST['av_lang'])) {
         foreach ($_POST['av_lang'] as $langcode) {
@@ -1134,6 +1135,7 @@ $tool_content .= "
                     <a class='btn btn-default' href='index.php'>$langCancel</a>
                 </div>
             </div>
+            ". generate_csrf_token_form_field() ."
         </form>
     </div>";
     $head_content .= "
