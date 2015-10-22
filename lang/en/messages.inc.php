@@ -3794,6 +3794,7 @@ $langDropboxNumUnreadMessages = "Unread messages";
 $langNationalOpenCourses = "National Open Courses Portal";
 $langEnterNote = "Enter note";
 $langAttemptWasCanceled = "The attempt was canceled.";
+$langExerciseAttemptLeft = "Beware! There are %d attempts left. By pressing continue button a new attempt is recorded.";
 $langNoUnits = "No course units";
 $langExternalTools = 'External tools';
 $langTeacherTutorials = "$langTeacher Tutorials";

@@ -170,6 +170,7 @@ $temp_CurrentDate = $recordStartDate = time();
 $exercise_StartDate = new DateTime($objExercise->selectStartDate());
 $exercise_EndDate = $objExercise->selectEndDate();
 $exercise_EndDate = isset($exercise_EndDate) ? new DateTime($objExercise->selectEndDate()) : $exercise_EndDate;
+
 //exercise has ended or hasn't been enabled yet due to declared dates
 if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp())) {
     //if that happens during an active attempt
@@ -241,17 +242,29 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
     }
 } elseif (!isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) && $nbrQuestions > 0) {
     $attempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
-    $attempt++;
+
     // Check if allowed number of attempts surpassed and if so redirect 
-   if ($exerciseAllowedAttempts > 0 && $attempt > $exerciseAllowedAttempts) {
+   if ($exerciseAllowedAttempts > 0 && $attempt >= $exerciseAllowedAttempts) {
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseMaxAttemptsReached);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
    } else {
+        if ($exerciseAllowedAttempts > 0 && !isset($_POST['acceptAttempt'])) {
+            $left_attempts = $exerciseAllowedAttempts - $attempt;
+            $tool_content .= "<div class='alert alert-warning text-center'>". sprintf($langExerciseAttemptLeft, $left_attempts) . "</div>
+                <div class='text-center'>
+                    <form action='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$exerciseId' method='post'>
+                        <input class='btn btn-primary' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
+                        <a href='{$urlServer}modules/exercise/index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
+                    </form>
+                </div>";
+            draw($tool_content, 2, null, $head_content);
+            exit;
+         }
         // count this as an attempt by saving it as an incomplete record, if there are any available attempts left
         $start = date('Y-m-d H:i:s', $attempt_value);
         $eurid = Database::get()->query("INSERT INTO exercise_user_record (eid, uid, record_start_date, total_score, total_weighting, attempt, attempt_status)
-                        VALUES (?d, ?d, ?t, 0, 0, ?d, 0)", $exerciseId, $uid, $start, $attempt)->lastInsertID;            
+                        VALUES (?d, ?d, ?t, 0, 0, ?d, 0)", $exerciseId, $uid, $start, $attempt+1)->lastInsertID;            
         $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $eurid;
         $timeleft = $exerciseTimeConstraint*60;            
    }
