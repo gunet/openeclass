@@ -48,6 +48,7 @@ if ($appName) {
     $app = ExtAppManager::getApp($appName);
 
     if (isset($_POST['submit'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if ($_POST['submit'] == 'clear') {
             foreach ($app->getParams() as $param) {
                 $param->setValue('');
@@ -107,7 +108,7 @@ if ($appName) {
     $tool_content .= "                  <button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>";
         $tool_content .= "              </div>\n";
         $tool_content .= "          </div>\n";
-        $tool_content .= "      </fieldset>\n";
+        $tool_content .= "      </fieldset>". generate_csrf_token_form_field() ."\n";
         $tool_content .= "    </form>\n</div>\n</div>\n</div>\n";
         //$tool_content .= "<p>".$app->getLongDescription()."</p>";
 } else {
