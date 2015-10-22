@@ -27,6 +27,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
+require_once 'include/lib/textLib.inc.php';
 
 if (!add_units_navigation(true)) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
@@ -301,7 +302,7 @@ if (count($result) > 0) { // topics found
         $tool_content .= "<td class='text-center'>$replies</td>";
         $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "</td>";
         $tool_content .= "<td class='text-center'>$myrow->num_views</td>";
-        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "<br />$last_post_datetime</td>";
+        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "<br />".claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time))."</td>";
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
 			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $myrow->id, $course_id);
         if ($sql) {
