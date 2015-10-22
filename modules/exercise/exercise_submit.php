@@ -251,7 +251,9 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
    } else {
         if ($exerciseAllowedAttempts > 0 && !isset($_POST['acceptAttempt'])) {
             $left_attempts = $exerciseAllowedAttempts - $attempt;
-            $tool_content .= "<div class='alert alert-warning text-center'>". sprintf($langExerciseAttemptLeft, $left_attempts) . "</div>
+            $tool_content .= "<div class='alert alert-warning text-center'>" .
+                ($left_attempts == 1? $langExerciseAttemptLeft: sprintf($langExerciseAttemptsLeft, $left_attempts)) .
+                ' ' . $langExerciseAttemptContinue . "</div>
                 <div class='text-center'>
                     <form action='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$exerciseId' method='post'>
                         <input class='btn btn-primary' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
