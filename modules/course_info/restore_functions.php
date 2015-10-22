@@ -558,7 +558,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         if (is_array($parentPosts) && count($parentPosts) > 0) {
             foreach ($parentPosts as $parentPost) {
                 if (isset($forum_post_map[$parentPost->parent_post_id])) {
-                    Database::get()->query("UPDATE forum_post SET parent_post_id = ?d WHERE parent_post_id = ?d", intval($forum_post_map[$parentPost->parent_post_id]), intval($parentPost->parent_post_id));
+                    Database::get()->query("UPDATE forum_post SET parent_post_id = ?d WHERE parent_post_id = ?d AND topic_id IN (SELECT id FROM forum_topic WHERE forum_id IN (SELECT id FROM forum WHERE course_id = ?d))", $forum_post_map[$parentPost->parent_post_id], $parentPost->parent_post_id, $new_course_id);
                 }
             }
         }
