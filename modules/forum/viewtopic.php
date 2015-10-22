@@ -29,6 +29,7 @@ require_once 'modules/forum/config.php';
 require_once 'modules/forum/functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'include/lib/textLib.inc.php';
 require_once 'include/course_settings.php';
 require_once 'include/log.php';
 require_once 'modules/search/indexer.class.php';
@@ -331,7 +332,7 @@ foreach ($result as $myrow) {
     }
 
         $tool_content .= "<a name='".$myrow->id."'></a>".$anchor_link."</span>";
-	$tool_content .= "$postTitle<small class='text-muted'><b>$langSent:</b> " . date_format(new DateTime($myrow->post_time, new DateTimeZone('Europe/Athens')), "j M 'y G:i:s" ) . "</small>
+	$tool_content .= "$postTitle<small class='text-muted'><b>$langSent:</b> " . claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time)) . "</small>
 	  </div>
 	  <div class='forum-post-message'>$message</div><div class='forum-post-footer clearfix'><div class='pull-left'>$rate_str</div><div class='pull-right text-muted'><small>$parent_post_link</small></div>
 	</div></td>";

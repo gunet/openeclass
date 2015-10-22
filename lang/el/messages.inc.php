@@ -3380,6 +3380,7 @@ $charset = 'UTF-8';
 $dateFormatShort = "%b %d, %y";
 $dateFormatLong = '%A, %d %B %Y';
 $dateTimeFormatLong = '%d %B %Y / Ώρα: %R';
+$dateTimeFormatShort = '%d %b %Y %R';
 $timeNoSecFormat = '%R';
 $langNoAdminAccess = '
         <b>Η σελίδα που προσπαθείτε να μπείτε απαιτεί όνομα χρήστη και συνθηματικό.</b>

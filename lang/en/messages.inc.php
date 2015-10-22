@@ -1914,6 +1914,7 @@ $charset = 'UTF-8';
 $dateFormatShort = "%b %d, %y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
+$dateTimeFormatShort = '%d %b %Y %R';
 $timeNoSecFormat = '%I:%M %p';
 $langNoAdminAccess = '<b>The page you tried to access requires a valid username and password.</b><br/>
 The system has automatically redirected you to the start page to login. This could have been caused
