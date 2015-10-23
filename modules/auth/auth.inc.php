@@ -558,15 +558,15 @@ function get_cas_attrs($phpCASattrs, $settings) {
                    'givenname' => 'casuserfirstattr',
                    'surname' => 'casuserlastattr',
                    'studentid' => 'casuserstudentid') as $name => $attrname) {
-        $_SESSION['auth_user_info'][$name] = $ret[$attrname] = '';
-        if (isset($settings[$attrname]) and $settings[$attrname]) {
-            $setting = strtolower($settings[$attrname]);
-            if (isset($attrs[$setting])) {
-                $_SESSION['auth_user_info'][$name] = $ret[$attrname] = $attrs[$setting];
+        $_SESSION['auth_user_info'][$name] = $ret[$name] = '';
+        $attrnames = explode(' ', $settings[$attrname]);
+        foreach ($attrnames as $anam) {
+            $anam = strtolower($anam);
+            if (isset($attrs[$anam])) {
+                $_SESSION['auth_user_info'][$name] = $ret[$name] = $attrs[$anam];
             }
         }
     }
-
     return $ret;
 }
 
