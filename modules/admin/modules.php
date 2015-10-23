@@ -31,10 +31,13 @@ $pageName = $langDisableModules;
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     Database::get()->query('DELETE FROM module_disable');
+    $arr = array();
     if (isset($_POST['moduleDisable'])) {
+        foreach ($_POST['moduleDisable'] as $key => &$value){
+          $arr[getDirectReference($key)] = $value;
+        }
         $optArray = implode(', ', array_fill(0, count($_POST['moduleDisable']), '(?d)'));
-        Database::get()->query('INSERT INTO module_disable (module_id) VALUES ' . $optArray,
-            array_keys($_POST['moduleDisable']));
+        Database::get()->query('INSERT INTO module_disable (module_id) VALUES ' . $optArray, array_keys($arr));
     }
     Session::Messages($langWikiEditionSucceed, 'alert-success');
     redirect_to_home_page('modules/admin/modules.php');
@@ -67,7 +70,7 @@ if (isset($_POST['submit'])) {
            <div class='form-group'>
              <div class='col-xs-12 checkbox'>
                <label>
-                 <input type='checkbox' name='moduleDisable[$mid]' value='1'$checked> " .
+                 <input type='checkbox' name='moduleDisable[" . getIndirectReference($mid) . "]' value='1'$checked> " .
                     $icon . '&nbsp;' . q($minfo['title']) . "
                </label>
              </div>

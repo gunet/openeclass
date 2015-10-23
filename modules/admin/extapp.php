@@ -37,7 +37,7 @@ $appName = isset($_GET['edit'])? $_GET['edit']: null;
 // Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page
 if (isset($_POST['state'])) {
     $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
-    $appNameAjax = $_POST['appName'];
+    $appNameAjax = getDirectReference($_POST['appName']);
     ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
 
     echo $newState;
@@ -131,9 +131,9 @@ if ($appName) {
             $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
         }
         if ($app->isConfigured()){
-            $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-off\"></i></button>";
+            $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"".getIndirectReference($app->getName()) . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . getIndirectReference($app->getName()) . "\"> <i class=\"fa fa-toggle-off\"></i></button>";
         } else {
-            $app_active = "<button type=\"button\" class=\"btn btn-default\" data-app=\"" . $app->getName() . "\"  data-toggle='modal' data-target='#noSettings'> <i class=\"fa fa-warning\"></i> </button>";
+            $app_active = "<button type=\"button\" class=\"btn btn-default\" data-app=\"".getIndirectReference($app->getName()) . "\"  data-toggle='modal' data-target='#noSettings'> <i class=\"fa fa-warning\"></i> </button>";
         }
         $tool_content .= $app->getDisplayName() . "</a></div></td>\n";
 

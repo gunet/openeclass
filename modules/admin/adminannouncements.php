@@ -94,19 +94,19 @@ if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
 
 // modify visibility
 if (isset($_GET['vis'])) {
-    $id = q($_GET['id']);
+    $id = q(getDirectReference($_GET['id']));
     $vis = q($_GET['vis']);
     Database::get()->query("UPDATE admin_announcement SET visible = ?b WHERE id = ?d", $vis, $id);
 }
 
 if (isset($_GET['delete'])) {
     // delete announcement command
-    $id = intval($_GET['delete']);
+    $id = intval(getDirectReference($_GET['delete']));
     Database::get()->query("DELETE FROM admin_announcement WHERE id = ?d", $id)->affectedRows;
     $message = $langAdminAnnDel;
 } elseif (isset($_GET['modify'])) {
     // modify announcement command
-    $id = intval($_GET['modify']);
+    $id = intval(getDirectReference($_GET['modify']));
     $myrow = Database::get()->querySingle("SELECT id, title, body, `date`, `begin`,`end`, 
                                                 lang, `order`, visible FROM admin_announcement WHERE id = ?d", $id);
     if ($myrow) {
@@ -143,7 +143,7 @@ if (isset($_GET['delete'])) {
     $newContent = purify($newContent);
     if (isset($_POST['id'])) {
         // modify announcement
-        $id = $_POST['id'];
+        $id = getDirectReference($_POST['id']);
         Database::get()->query("UPDATE admin_announcement
                         SET title = ?s, body = ?s, lang = ?s,
                             `date` = " . DBHelper::timeAfter() . ", $start_sql, $end_sql
@@ -189,7 +189,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form role='form' class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>";
     if (isset($_GET['modify'])) {
-        $tool_content .= "<input type='hidden' name='id' value='$id' />";
+        $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
     }
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>
@@ -271,11 +271,11 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
 }
 
 if (isset($_GET['down'])) {
-    $thisAnnouncementId = q($_GET['down']);
+    $thisAnnouncementId = q(getDirectReference($_GET['down']));
     $sortDirection = "DESC";
 }
 if (isset($_GET['up'])) {
-    $thisAnnouncementId = q($_GET['up']);
+    $thisAnnouncementId = q(getDirectReference($_GET['up']));
     $sortDirection = "ASC";
 }
 
@@ -321,25 +321,25 @@ if ($displayAnnouncementList == true) {
             }
             $myrow->date = claro_format_locale_date($dateFormatLong, strtotime($myrow->date));
             $tool_content .= "<tr class='$classvis'>
-                <td width='200'><b>" . q($myrow->title) . "</b><br><span class='smaller'>$myrow->date</span></td>
+                <td width='200'><b>" . q($myrow->title) . "</b><br><span class='smaller'>" . q($myrow->date) . "</span></td>
                 <td>" . standard_text_escape($myrow->body) . "</td>
                 <td width='6'>" .
                     action_button(array(
                         array('title' => $langEditChange,
-                            'url' => "$_SERVER[SCRIPT_NAME]?modify=$myrow->id",
+                            'url' => "$_SERVER[SCRIPT_NAME]?modify=" . getIndirectReference($myrow->id),
                             'icon' => 'fa-edit'),
                         array('title' => $visibility == 0 ? $langViewHide : $langViewShow,
-                            'url' => "$_SERVER[SCRIPT_NAME]?id=$myrow->id&amp;vis=$visibility",
+                            'url' => "$_SERVER[SCRIPT_NAME]?id=" . getIndirectReference($myrow->id) . "&amp;vis=$visibility",
                             'icon' => $visibility == 0 ? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $langUp,
-                            'url' => "$_SERVER[SCRIPT_NAME]?up=$myrow->id",
+                            'url' => "$_SERVER[SCRIPT_NAME]?up=" . getIndirectReference($myrow->id),
                             'icon' => 'fa-arrow-up'),
                         array('title' => $langDown,
-                            'url' => "$_SERVER[SCRIPT_NAME]?down=$myrow->id",
+                            'url' => "$_SERVER[SCRIPT_NAME]?down=" . getIndirectReference($myrow->id),
                             'icon' => 'fa-arrow-down'),
                         array('title' => $langDelete,
                             'class' => 'delete',
-                            'url' => "$_SERVER[SCRIPT_NAME]?delete=$myrow->id",
+                            'url' => "$_SERVER[SCRIPT_NAME]?delete=" . getIndirectReference($myrow->id),
                             'confirm' => $langConfirmDelete,
                             'icon' => 'fa-times')
                     )) . "
