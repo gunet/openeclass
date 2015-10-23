@@ -195,8 +195,8 @@ function show_resources($unit_id) {
  */
 function show_resource($info) {
     global $tool_content, $langUnknownResType, $is_editor;
-
-    if ($info->visible == 0 and ! $is_editor) {
+      
+    if ($info->visible == 0 and $info->type != 'doc' and ! $is_editor) { // special case handling for old unit resources with type 'doc' . 
         return;
     }
     switch ($info->type) {
