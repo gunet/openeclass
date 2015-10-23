@@ -260,6 +260,7 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
                         <a href='{$urlServer}modules/exercise/index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
                     </form>
                 </div>";
+            unset_exercise_var($exerciseId);
             draw($tool_content, 2, null, $head_content);
             exit;
          }
