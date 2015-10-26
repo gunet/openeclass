@@ -90,7 +90,7 @@ draw($tool_content, 1);
  */
 function form($user) {
     global $course_id, $langInfoAboutRegistration, $langFrom, $langSendTo, 
-            $langSubmitNew, $course_code, $langRequest, $langOfCourse, $langRequestReasons;
+            $langSubmitNew, $course_code, $langRequest, $langOfCourse, $urlserver, $langCourse, $langRequestReasons, $langBack, $langLabelCourseUserRequest;
            
     $userprof = '';
     $profdata = Database::get()->queryArray("SELECT user.surname, user.givenname
@@ -99,23 +99,38 @@ function form($user) {
     foreach ($profdata as $prof) {
         $userprof .= "$prof->surname $prof->givenname &nbsp;&nbsp;";
     }
-        
-    $ret = "<div class='alert alert-info'>$langInfoAboutRegistration</div>";
+
+    $ret = action_bar(array(
+        array(  'title' => $langBack,
+                'url' => "$urlserver/modules/auth/courses.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')
+    ));
     $ret .= "<div class='form-wrapper'>";
+    $ret .= "<p>$langInfoAboutRegistration</p><br/>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
-        <div class='col-sm-12'><label>$langRequest $langOfCourse</label>&nbsp;&nbsp;<small>" . course_id_to_title($course_id) . "</small></div>
-        <div class='col-sm-12'><label>$langFrom:&nbsp;</label><small>$user</small></div>
-        <div class='col-sm-12'><label>$langSendTo:&nbsp;</label><small>$userprof</small></div>
+        <div class='form-group'>
+            <label class='col-sm-1 control-label'>$langCourse:</label>
+            <div class='col-xs-11'><p class='form-control-static'>" . course_id_to_title($course_id) . "</p></div>
+        </div>
+        <div class='form-group'>
+            <label class='col-sm-1 control-label'>$langFrom:</label>
+            <div class='col-xs-11'><p class='form-control-static'>$user</p></div>
+        </div>
+        <div class='form-group'>
+            <label class='col-sm-1 control-label'>$langSendTo:</label>
+            <div class='col-xs-11'><p class='form-control-static'>$userprof</p></div>
+        </div>
             
-        <div class='help-block' style='margin-top: 2.5cm;'><small>$langRequestReasons</small></div>            
+        <div class='help-block'>$langRequestReasons</div>
         <div class='form-group'>
             <div class='col-sm-12'>
               <textarea name='content' rows='10' cols='80'></textarea>
             </div>
 	</div>
         <div class='form-group'>
-            <div class='col-sm-offset-1 col-sm-11'>
+            <div class='col-sm-12'>
                 <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
             </div>
         </div>		
