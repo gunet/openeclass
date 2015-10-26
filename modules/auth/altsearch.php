@@ -449,7 +449,7 @@ if ($is_valid) {
             <div id='mail-body'>
                 <br>
                 <div id='mail-body-inner'>".
-                    sprintf($mailbody1 . $langMailVerificationBody1, "<a href='{$urlServer}modules/auth/mail_verify.php?ver=" . $hmac . "&amp;rid=" . $request_id."'>{$urlServer}modules/auth/mail_verify.php?ver=" . $hmac . "&amp;rid=" . $request_id ."</a>")."
+                    sprintf($mailbody1 . $langMailVerificationBody1, "<a href='{$urlServer}modules/auth/mail_verify.php?h=" . $hmac . "&amp;rid=" . $request_id."'>{$urlServer}modules/auth/mail_verify.php?h=" . $hmac . "&amp;rid=" . $request_id ."</a>")."
                 </div>
             </div>";
 
