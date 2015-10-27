@@ -21,7 +21,9 @@
 
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
 
-$require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
+if (!isset($require_current_course)) {
+    $require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
+}
 
 $guest_allowed = true;
 require_once '../../include/baseTheme.php';
