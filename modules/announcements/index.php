@@ -473,10 +473,8 @@ if ($is_editor) {
         }
         else {
             Session::Messages($langAnnAdd, 'alert-success');
-        }
-        echo $emailBody;
-        die;
-        //redirect_to_home_page("modules/announcements/index.php?course=$course_code");
+        }        
+        redirect_to_home_page("modules/announcements/index.php?course=$course_code");
     } // end of if $submit
 
     /* display form */
