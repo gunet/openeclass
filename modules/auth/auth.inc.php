@@ -564,6 +564,7 @@ function get_cas_attrs($phpCASattrs, $settings) {
             $anam = strtolower($anam);
             if (isset($attrs[$anam])) {
                 $_SESSION['auth_user_info'][$name] = $ret[$name] = $attrs[$anam];
+                break;
             }
         }
     }
