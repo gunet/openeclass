@@ -511,7 +511,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                             
                             // trap links to open inside tabs
                             $('.tab-content').on('click', 'a', function(e) {
-                                if (e.target.className != 'outtabs' && e.target.className.indexOf('paginate_button') == -1) {
+                                if (e.currentTarget.className != 'outtabs' && e.currentTarget.className.indexOf('paginate_button') == -1) {
                                     e.preventDefault();
                                     $(this).closest('.tab-pane').load(this.href);
                                 }

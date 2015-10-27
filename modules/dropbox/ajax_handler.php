@@ -107,8 +107,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         
         if (($msg->filename != '') and ($msg->filesize != 0)) {
             $ahref = "dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=".$msg->id;
-            $filename = "&nbsp;&nbsp;&#124;&nbsp;&nbsp;<a class='outtabs' href='$ahref' target='_blank'><span class='fa fa-paperclip'></span>
-            </a><span class='smaller'>&nbsp;&nbsp;(".format_file_size($msg->filesize).")</span><br />";
+            $filename = "&nbsp;&nbsp;&#124;&nbsp;&nbsp;" .
+                "<a class='outtabs' href='$ahref' target='_blank' title='$langDownload' data-toggle='tooltip' data-placement='top'>" .
+                "<span class='fa fa-paperclip'></span></a>" .
+                "<span class='smaller'>&nbsp;&nbsp;(".format_file_size($msg->filesize).")</span><br />";
         } else {
             $filename = '';
         }
