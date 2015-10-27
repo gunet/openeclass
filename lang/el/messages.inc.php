@@ -728,6 +728,7 @@ $langTotalResults = "συνολικά αποτελέσματα";
 $langDisplayed = "Εμφανίζονται";
 $langTill = "έως";
 $langAnnouncementActivePeriod = "Διάστημα εμφάνισης";
+$langAnnHasPublished = "Έχει δημοσιευθεί ανακοίνωση στο μάθημα";
 
 /* * *****************************************
  * archive_course.php
