@@ -323,9 +323,12 @@ if ($is_editor) {
     }
 
     /* submit */
-    if (isset($_POST['submitAnnouncement'])) {
-        // modify announcement
-        $datetime = date('l jS \of F Y h:i:s A');
+    if (isset($_POST['submitAnnouncement'])) { // modify announcement        
+        if ($language == 'el') {
+            $datetime = claro_format_locale_date($dateTimeFormatShort);
+        } else {
+            $datetime = date('l jS \of F Y h:i A');
+        }        
         $antitle = $_POST['antitle'];
         $newContent = purify($_POST['newContent']);
         $send_mail = isset($_POST['recipients']) && (count($_POST['recipients'])>0);
@@ -404,7 +407,7 @@ if ($is_editor) {
                 <div id='mail-header'>
                     <br>
                     <div>
-                        <div id='header-title'>Έχει δημοσιευθεί ανακοίνωση στο μάθημα <a href='{$urlServer}courses/$course_code'>" . q($title) . "</a>.</div>
+                        <div id='header-title'>$langAnnHasPublished <a href='{$urlServer}courses/$course_code'>" . q($title) . "</a>.</div>
                         <ul id='forum-category'>
                             <li><span><b>$langSender:</b></span> <span class='left-space'>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "</span></li>
                             <li><span><b>$langdate:</b></span> <span class='left-space'>$datetime</span></li>
@@ -471,7 +474,9 @@ if ($is_editor) {
         else {
             Session::Messages($langAnnAdd, 'alert-success');
         }
-        redirect_to_home_page("modules/announcements/index.php?course=$course_code");
+        echo $emailBody;
+        die;
+        //redirect_to_home_page("modules/announcements/index.php?course=$course_code");
     } // end of if $submit
 
     /* display form */
