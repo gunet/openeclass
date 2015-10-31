@@ -31,7 +31,7 @@ $courselist = Database::get()->queryArray("SELECT id, title, public_code FROM co
 
 if ($courselist) {
     foreach ($courselist as $course) {
-        $courses[] = array('id' => $course->id, 'text' => $course->title . ' (' . $course->public_code . ')');
+        $courses[] = array('id' => getIndirectReference($course->id), 'text' => $course->title . ' (' . $course->public_code . ')');
     }
 } else {
     $courses[] = array('title' => '');

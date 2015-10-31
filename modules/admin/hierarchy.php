@@ -218,7 +218,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
                     'level' => 'primary-label')));
         } else {
             // OK Create the new node
-            $pid = intval($_POST['parentid']);
+            $pid = intval(getDirectReference($_POST['parentid']));
             validateParentId($pid, isDepartmentAdmin());
             $tree->addNode($name, $tree->getNodeLft($pid), $code, $allow_course, $allow_user, $order_priority);
             $tool_content .= "<div class='alert alert-success'>" . $langAddSuccess . "</div>";
@@ -247,7 +247,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         $tool_content .= "<div class='form-group'>
                         <label class='col-sm-3 control-label'>$langNodeParent:</label>
                         <div class='col-sm-9'>";
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="parentid"', 'tree' => array('0' => 'Top'), 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
+        list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="parentid"', 'tree' => array('0' => 'Top'), 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "<span class='help-block'><small>$langNodeParent2</small></span>
@@ -291,7 +291,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
 }
 // Delete node
 elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
-    $id = intval($_GET['id']);
+    $id = intval(getDirectReference($_GET['id']));
     validateNode($id, isDepartmentAdmin());
 
     // locate the lft and rgt of the node we want to delete
@@ -322,7 +322,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
 }
 // Edit a node
 elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
-    $id = intval($_REQUEST['id']);
+    $id = intval(getDirectReference($_REQUEST['id']));
     validateNode($id, isDepartmentAdmin());
 
     if (isset($_POST['edit'])) {
@@ -347,20 +347,20 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
             $tool_content .= "<div class='alert alert-danger'>" . $langEmptyNodeName . "<br>";
             $tool_content .= action_bar(array(
                 array('title' => $langReturnToEditNode,
-                    'url' => $_SERVER['SCRIPT_NAME'] . "?action=edit&amp;id=$id",
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?action=edit&amp;id=" . getIndirectReference($id),
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')));
         } else {
             // OK Update the node
-            $oldpid = intval($_POST['oldparentid']);
-            $newpid = intval($_POST['newparentid']);
+            $oldpid = intval(getDirectReference($_POST['oldparentid']));
+            $newpid = intval(getDirectReference($_POST['newparentid']));
             validateParentId($newpid, isDepartmentAdmin());
             $tree->updateNode($id, $name, $tree->getNodeLft($newpid), intval($_POST['lft']), intval($_POST['rgt']), $tree->getNodeLft($oldpid), $code, $allow_course, $allow_user, $order_priority);
             $tool_content .= "<div class='alert alert-success'>$langEditNodeSuccess</div><br />";
         }
     } else {
         // Get node information
-        $id = intval($_GET['id']);
+        $id = intval(getDirectReference($_GET['id']));
         $mynode = Database::get()->querySingle("SELECT name, lft, rgt, code, allow_course, allow_user, order_priority FROM hierarchy WHERE id = ?d", $id);
         $parent = $tree->getParent($mynode->lft, $mynode->rgt);
         $check_course = ($mynode->allow_course == 1) ? " checked=1 " : '';
@@ -403,7 +403,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
 
         $treeopts = array(
             'params' => 'name="newparentid"',
-            'exclude' => $id,
+            'exclude' => getIndirectReference($id),
             'tree' => array('0' => 'Top'),
             'multiple' => false);
         if (isset($parent) && isset($parent->id)) {
@@ -414,10 +414,10 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         }
         
         if ($is_admin) {
-            list($js, $html) = $tree->buildNodePicker($treeopts);
+            list($js, $html) = $tree->buildNodePickerIndirect($treeopts);
         } else {
             $treeopts['allowables'] = $user->getDepartmentIds($uid);
-            list($js, $html) = $tree->buildNodePicker($treeopts);
+            list($js, $html) = $tree->buildNodePickerIndirect($treeopts);
         }
         
         $head_content .= $js;
@@ -442,8 +442,8 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
               <input class='form-control' type='text' name='order_priority' value='" . q($mynode->order_priority) . "'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
           </div>
         </div>
-        <input type='hidden' name='id' value='$id' />
-               <input type='hidden' name='oldparentid' value='" . $formOPid . "'/>
+        <input type='hidden' name='id' value='" . getIndirectReference($id) . "' />
+               <input type='hidden' name='oldparentid' value='" . getIndirectReference($formOPid) . "'/>
                <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
                <input type='hidden' name='rgt' value='" . q($mynode->rgt) . "'/>
         <div class='form-group'>

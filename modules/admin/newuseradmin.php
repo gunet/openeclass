@@ -67,7 +67,7 @@ if (isset($_POST['submit'])) {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
     } else {
         // register user
-        $depid = intval(isset($_POST['department']) ? $_POST['department'] : 0);
+        $depid = intval(isset($_POST['department']) ? getDirectReference($_POST['department']) : 0);
         $verified_mail = intval($_POST['verified_mail_form']);
         $all_set = register_posted_variables(array(
             'auth_form' => true,
@@ -319,7 +319,7 @@ $nodePickerParams = array(
 if (isDepartmentAdmin()) {
     $nodePickerParams['allowables'] = $user->getDepartmentIds($uid);
 }
-list($tree_js, $tree_html) = $tree->buildNodePicker($nodePickerParams);
+list($tree_js, $tree_html) = $tree->buildNodePickerIndirect($nodePickerParams);
 $head_content .= $tree_js;
 
 if ($eclass_method_unique) {

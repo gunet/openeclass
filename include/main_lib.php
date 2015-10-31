@@ -2890,6 +2890,43 @@ function csrf_token_error() {
 
 
 
+/**
+ * Indirect Reference to HelpFul Functions
+ * @param  ArrayObject
+ * @return ArrayObject
+ */
+
+function arrayValuesToIndirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[$key] = getIndirectReference($value);
+    }
+    return $outputarray;
+}
+
+function arrayKeysToIndirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[getIndirectReference($key)] = $value;
+    }
+    return $outputarray;
+}
+
+function arrayValuesDirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[$key] = getDirectReference($value);
+    }
+    return $outputarray;
+}
+
+function arrayKeysToDirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[getDirectReference($key)] = $value;
+    }
+    return $outputarray;
+}
 
 
 

@@ -33,8 +33,8 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
-if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
-    $auth = intval($_REQUEST['auth']); // $auth gets the integer value of the auth method if it is set
+if (isset($_REQUEST['auth']) && is_numeric(getDirectReference($_REQUEST['auth']))) {
+    $auth = intval(getDirectReference($_REQUEST['auth'])); // $auth gets the integer value of the auth method if it is set
 } else {
     $auth = false;
 }
@@ -282,7 +282,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
     $tool_content .= "<div class='form-wrapper'>
     <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
 	<fieldset>	
-        <input type='hidden' name='auth' value='" . intval($auth) . "'>";
+        <input type='hidden' name='auth' value='" . getIndirectReference(intval($auth)) . "'>";
 
     if (!empty($_SESSION['cas_warn']) && $_SESSION['cas_do']) {
         $auth = 7;

@@ -142,7 +142,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     // Department search
     $depqryadd = '';
-    $dep = (isset($_GET['department'])) ? intval($_GET['department']) : 0;
+    $dep = (isset($_GET['department'])) ? intval(getDirectReference($_GET['department'])) : 0;
     if ($dep || isDepartmentAdmin()) {
         $depqryadd = ', user_department';
 

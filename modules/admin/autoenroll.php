@@ -26,6 +26,8 @@ require_once 'include/lib/hierarchy.class.php';
 $toolName = $langAutoEnroll;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
+
+
 if (isset($_REQUEST['add'])) {
     $type = intval($_REQUEST['add']);
     if (!in_array($type, array(USER_STUDENT, USER_TEACHER))) {
@@ -92,13 +94,14 @@ if (isset($_GET['delete'])) {
         $q = Database::get()->querySingle('SELECT * FROM autoenroll_rule WHERE id = ?d', $rule);
         $type = $q->status;
 
-        $department = array_map(function ($item) { return $item->department; },
+        $department = array_map(function ($item) { return getIndirectReference($item->department); },
             Database::get()->queryArray(
                 'SELECT department FROM autoenroll_rule_department WHERE rule = ?d', $rule));
+     
 
         $courses = implode(',',
             array_map(function ($course) { 
-                return "{id: {$course->course_id}, text: '" .
+                return "{id: '" . getIndirectReference($course->course_id) . "', text: '" .
                     js_escape($course->title . ' (' . $course->public_code . ')') .
                     "'}";
                 },
@@ -106,9 +109,9 @@ if (isset($_GET['delete'])) {
                     'SELECT course_id, title, public_code FROM autoenroll_course, course
                          WHERE autoenroll_course.course_id = course.id AND
                                rule = ?d', $rule)));
-        $ruleInput = "<input type='hidden' name='id' value='$_GET[edit]'>";
+        $ruleInput = "<input type='hidden' name='id' value='" . q($_GET['edit']) . "'>";
 
-        $deps = array_map(function ($dep) { return $dep->department_id; },
+        $deps = array_map(function ($dep) { return getIndirectReference($dep->department_id); },
             Database::get()->queryArray('SELECT department_id
                 FROM autoenroll_department
                 WHERE rule = ?d', $rule));
@@ -118,7 +121,7 @@ if (isset($_GET['delete'])) {
     }
 
     $tree = new Hierarchy();
-    list($jsTree, $htmlTree) = $tree->buildUserNodePicker(array('defaults' => $department, 'multiple' => true));
+    list($jsTree, $htmlTree) = $tree->buildUserNodePickerIndirect(array('defaults' => $department, 'multiple' => true));
 
     // The following code is modified from Hierarchy::buildJSNodePicker()
     $options = array('defaults' => $deps, 'where' => 'AND node.allow_course = true');
@@ -129,7 +132,7 @@ if (isset($_GET['delete'])) {
     foreach ($deps as $dep) {
         $htmlTreeCourse .= "<p id='nc_$i'>
             <input type='hidden' name='rule_deps[]' value='$dep'>" .
-            $tree->getFullPath($dep) .
+            $tree->getFullPath(getDirectReference($dep)) .
             "&nbsp;<a href='#nodCnt2'><span class='fa fa-times' data-toggle='tooltip' data-original-title='".q($langNodeDel)."' data-placement='top' title='".q($langNodeDel)."'></span></a></p>";
         $i++;
     }
@@ -408,7 +411,7 @@ function multiInsert($table, $signature, $key, $values) {
     foreach ($values as $value) {
         $count++;
         $terms[] = $key;
-        $terms[] = $value;
+        $terms[] = getDirectReference($value);
     }
     Database::get()->query("INSERT INTO `$table` ($signature) VALUES " .
             implode(', ', array_fill(0, $count, '(?d, ?d)')),

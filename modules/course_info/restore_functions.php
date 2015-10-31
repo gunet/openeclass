@@ -261,7 +261,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     $langOk, $langAll, $langsTeachers, $langMultiRegType,
     $langNone, $langOldValue, $treeObj, $langBack, $course_code;
 
-    list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
+    list($tree_js, $tree_html) = $treeObj->buildCourseNodePickerIndirect();
     if ($type) {
         if (isset($GLOBALS['lang' . $type])) {
             $type_label = ' (' . $GLOBALS['lang' . $type] . ')';
@@ -380,6 +380,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
     Database::get()->transaction(function() use (&$new_course_code, &$new_course_id, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $webDir, &$tool_content, $urlServer, $urlAppend) {
         $departments = array();
         if (isset($_POST['department'])) {
+            $_POST['department'] = arrayValuesDirect($_POST['department']);
             foreach ($_POST['department'] as $did) {
                 $departments[] = intval($did);
             }

@@ -34,7 +34,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
 
 if (isset($_REQUEST['u'])) {
-    $u = intval($_REQUEST['u']);
+    $u = intval(getDirectReference($_REQUEST['u']));
     $navigation[] = array('url' => "edituser.php?u=$u", 'name' => $langEditUser);
     if ($u == 1 or get_admin_rights($u) >= 0) {
         $tool_content = "<div class='alert alert-danger'>$langUserMergeAdminForbidden</div>";
@@ -107,7 +107,7 @@ if (isset($_REQUEST['u'])) {
                          <div class='col-sm-9'>" . q($status_names[$info['status']]) . "</div>
                     </div>                    
                      $target_field
-                    <input type='hidden' name='u' value='$u'>
+                    <input type='hidden' name='u' value='" . getIndirectReference($u) . "'>
                      <div class='col-sm-offset-3 col-sm-9'>                                                  
                            <input class='btn btn-primary' type='submit' name='submit' value='$submit_button'>
                     </div>                                                  

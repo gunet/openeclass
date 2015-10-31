@@ -33,7 +33,7 @@ $courseObj = new Course();
 
 load_js('jstree3');
 
-list($js, $html) = $treeObj->buildCourseNodePicker();
+list($js, $html) = $treeObj->buildCourseNodePickerIndirect();
 $head_content .= $js;
 
 $pageName = $langRestoreCourse;

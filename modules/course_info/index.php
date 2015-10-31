@@ -235,7 +235,7 @@ if (isset($_POST['submit'])) {
         }
 
         // validate departments
-        $departments = isset($_POST['department']) ? $_POST['department'] : array();
+        $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
         $deps_valid = true;
         foreach ($departments as $dep) {
             if ($depadmin_mode && !in_array($dep, $allowables)) {
@@ -563,9 +563,9 @@ if (isset($_POST['submit'])) {
 	    <label for='Faculty' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";
         if ($depadmin_mode) {
-            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
+            list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
         } else {
-            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id)));
+            list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($c->id)));
         }
         $head_content .= $js;
         $tool_content .= $html;
