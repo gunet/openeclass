@@ -463,6 +463,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             </div>
         </div>
         </fieldset>	
+        ". generate_csrf_token_form_field() ."
         </form></div>";
 	if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
         load_js('select2');
