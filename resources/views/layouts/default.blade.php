@@ -23,7 +23,7 @@
     bootbox.setDefaults({
       locale: "{{ $language }}"
     });
-    var sidebarConfig = { notesLink: '{{ $urlAppend }}main/notes/index.php', messagesLink: '{{ $urlAppend }}main/ajax_sidebar.php', courseCode: '{{ $course_code }}', courseId: '{{ $course_id }}', note_fail_messge: '{!! trans("langFieldsRequ") !!}' };
+    var sidebarConfig = { notesLink: '{{ $urlAppend }}main/notes/index.php', messagesLink: '{{ $urlAppend }}main/ajax_sidebar.php', courseCode: '{{ isset($course_code) ? $course_code : ""}}', courseId: '{{ isset($course_id) ? $course_id : "" }}', note_fail_messge: '{!! trans("langFieldsRequ") !!}' };
     </script>
     <!-- Our javascript -->
     <script type="text/javascript" src="{{ $template_base }}/js/main.js?v={{ $eclass_version }}"></script>
@@ -65,7 +65,7 @@
                             <span class="sr-only">$langMenu</span>
                         </button>
                         <a href='{{ $urlAppend }}' class="navbar-brand small-logo">
-                            <img class="img-responsive hidden-md hidden-lg" src="{{ $logo_img_small }}" style="height: 36px;margin-top:8px;" alt='{{ $page_title }} logo'>
+                            <img class="img-responsive hidden-md hidden-lg" src="{{ $logo_img_small }}" style="height: 36px;margin-top:8px;" alt='{{ $pageTitle }} logo'>
                         </a>
                         <ul class="nav navbar-nav navbar-right">
                             @if ($uid && !defined('UPGRADE'))
@@ -205,7 +205,7 @@
             <div id="leftnav" class="col-md-2 col-xs-pull-10 col-sm-pull-10 col-md-pull-10 sidebar float-menu">            
                 <div class="logo">
                     <a href='{{ $urlAppend }}'>
-                    <img class="img-responsive hidden-xs hidden-sm" src="{{ $logo_img }}" alt='{{ $page_title }} logo'>
+                    <img class="img-responsive hidden-xs hidden-sm" src="{{ $logo_img }}" alt='{{ $pageTitle }} logo'>
                     </a>
                 </div>
                 @if (get_config('enable_search'))
