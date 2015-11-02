@@ -204,105 +204,102 @@ function load_js($file, $init='') {
     }
 
     // Load file only if not provided by template
-    if (!(isset($theme_settings['js_loaded']) and
-          in_array($file, $theme_settings['js_loaded']))) {
-        if ($file == 'jstree') {
-            $head_content .= js_link('jstree/jquery.cookie.min.js');
-            $file = 'jstree/jquery.jstree.min.js';
-        } elseif ($file == 'jstree3') {
-            $head_content .= css_link('jstree3/themes/proton/style.min.css');
-            $file = 'jstree3/jstree.min.js';
-        } elseif ($file == 'jstree3d') {
-            $head_content .= css_link('jstree3/themes/default/style.min.css');
-            $file = 'jstree3/jstree.min.js';
-        } elseif ($file == 'shadowbox') {
-            $head_content .= css_link('shadowbox/shadowbox.css');
-            $file = 'shadowbox/shadowbox.js';
-        } elseif ($file == 'fancybox2') {
-            $head_content .= css_link('fancybox2/jquery.fancybox.css');
-            $file = 'fancybox2/jquery.fancybox.pack.js';
-        } elseif ($file == 'colorbox') {
-            $head_content .= css_link('colorbox/colorbox.css');
-            $file = 'colorbox/jquery.colorbox.min.js';
-        } elseif ($file == 'flot') {
-            $head_content .= css_link('flot/flot.css') .
-                "<!--[if lte IE 8]><script language='javascript' type='text/javascript' src='{$urlAppend}js/flot/excanvas.min.js'></script><![endif]-->\n" .
-                js_link('jquery-migrate-1.2.1.min.js') .
-                js_link('flot/jquery.flot.min.js');
-            $file = 'flot/jquery.flot.categories.min.js';
-        } elseif ($file == 'slick') {
-            $head_content .= css_link('slick-master/slick/slick.css');
-            $file = 'slick-master/slick/slick.min.js';
-        } elseif ($file == 'datatables') {
-            $head_content .= css_link('datatables/media/css/jquery.dataTables.css');
-            $file = 'datatables/media/js/jquery.dataTables.min.js';
-        } elseif ($file == 'datatables_bootstrap') {
-            $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
-            $file = 'datatables/media/js/dataTables.bootstrap.js';
-        } elseif ($file == 'datatables_filtering_delay') {
-            $file = 'datatables/media/js/jquery.dataTables_delay.js';
-        } elseif ($file == 'RateIt') {
-            $file = 'jquery.rateit.min.js';
-        } elseif ($file == 'select2') {
-            $head_content .= css_link('select2-3.5.1/select2.css') .
-                css_link('select2-3.5.1/select2-bootstrap.css') .
-                js_link('select2-3.5.1/select2.min.js');
-            $file = "select2-3.5.1/select2_locale_$language.js";
-        } elseif ($file == 'bootstrap-datetimepicker') {
-            $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') .
-            js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
-            $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
-        } elseif ($file == 'bootstrap-timepicker') {
-            $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
-            $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
-        } elseif ($file == 'bootstrap-datepicker') {
-            $head_content .= css_link('bootstrap-datepicker/css/datepicker3.css') .
-                js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
-            $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
-        } elseif ($file == 'bootstrap-validator') {
-            $file = "bootstrap-validator/validator.js";
-        } elseif ($file == 'bootstrap-slider') {
-            $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
-            $file = 'bootstrap-slider/js/bootstrap-slider.min.js';
-        } elseif ($file == 'bootstrap-colorpicker') {
-            $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
-            $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
-        }   elseif ($file == 'spectrum') {
-            $head_content .= css_link('spectrum/spectrum.css');
-            $file = 'spectrum/spectrum.js';
-        } elseif ($file == 'sortable') {
-            $file = "sortable/Sortable.min.js";
-        } elseif ($file == 'filetree') {
-            $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
-            $file = 'jquery_filetree/jqueryFileTree.js';            
-        } elseif ($file == 'trunk8') {
-            $head_content .= "
-<script>
-    var readMore = '".js_escape($langReadMore)."';
-    var readLess = '".js_escape($langReadLess)."';
-    $(function () { $('.trunk8').trunk8({
-        lines: 3,
-        fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',
-    });
+    if ($file == 'jstree') {
+        $head_content .= js_link('jstree/jquery.cookie.min.js');
+        $file = 'jstree/jquery.jstree.min.js';
+    } elseif ($file == 'jstree3') {
+        $head_content .= css_link('jstree3/themes/proton/style.min.css');
+        $file = 'jstree3/jstree.min.js';
+    } elseif ($file == 'jstree3d') {
+        $head_content .= css_link('jstree3/themes/default/style.min.css');
+        $file = 'jstree3/jstree.min.js';
+    } elseif ($file == 'shadowbox') {
+        $head_content .= css_link('shadowbox/shadowbox.css');
+        $file = 'shadowbox/shadowbox.js';
+    } elseif ($file == 'fancybox2') {
+        $head_content .= css_link('fancybox2/jquery.fancybox.css');
+        $file = 'fancybox2/jquery.fancybox.pack.js';
+    } elseif ($file == 'colorbox') {
+        $head_content .= css_link('colorbox/colorbox.css');
+        $file = 'colorbox/jquery.colorbox.min.js';
+    } elseif ($file == 'flot') {
+        $head_content .= css_link('flot/flot.css') .
+            "<!--[if lte IE 8]><script language='javascript' type='text/javascript' src='{$urlAppend}js/flot/excanvas.min.js'></script><![endif]-->\n" .
+            js_link('jquery-migrate-1.2.1.min.js') .
+            js_link('flot/jquery.flot.min.js');
+        $file = 'flot/jquery.flot.categories.min.js';
+    } elseif ($file == 'slick') {
+        $head_content .= css_link('slick-master/slick/slick.css');
+        $file = 'slick-master/slick/slick.min.js';
+    } elseif ($file == 'datatables') {
+        $head_content .= css_link('datatables/media/css/jquery.dataTables.css');
+        $file = 'datatables/media/js/jquery.dataTables.min.js';
+    } elseif ($file == 'datatables_bootstrap') {
+        $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
+        $file = 'datatables/media/js/dataTables.bootstrap.js';
+    } elseif ($file == 'datatables_filtering_delay') {
+        $file = 'datatables/media/js/jquery.dataTables_delay.js';
+    } elseif ($file == 'RateIt') {
+        $file = 'jquery.rateit.min.js';
+    } elseif ($file == 'select2') {
+        $head_content .= css_link('select2-3.5.1/select2.css') .
+            css_link('select2-3.5.1/select2-bootstrap.css') .
+            js_link('select2-3.5.1/select2.min.js');
+        $file = "select2-3.5.1/select2_locale_$language.js";
+    } elseif ($file == 'bootstrap-datetimepicker') {
+        $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') .
+        js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
+        $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
+    } elseif ($file == 'bootstrap-timepicker') {
+        $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
+        $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
+    } elseif ($file == 'bootstrap-datepicker') {
+        $head_content .= css_link('bootstrap-datepicker/css/datepicker3.css') .
+            js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
+        $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
+    } elseif ($file == 'bootstrap-validator') {
+        $file = "bootstrap-validator/validator.js";
+    } elseif ($file == 'bootstrap-slider') {
+        $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
+        $file = 'bootstrap-slider/js/bootstrap-slider.min.js';
+    } elseif ($file == 'bootstrap-colorpicker') {
+        $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
+        $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
+    }   elseif ($file == 'spectrum') {
+        $head_content .= css_link('spectrum/spectrum.css');
+        $file = 'spectrum/spectrum.js';
+    } elseif ($file == 'sortable') {
+        $file = "sortable/Sortable.min.js";
+    } elseif ($file == 'filetree') {
+        $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
+        $file = 'jquery_filetree/jqueryFileTree.js';            
+    } elseif ($file == 'trunk8') {
+        $head_content .= "
+            <script>
+                var readMore = '".js_escape($langReadMore)."';
+                var readLess = '".js_escape($langReadLess)."';
+                $(function () { $('.trunk8').trunk8({
+                    lines: 3,
+                    fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',
+                });
 
-    $(document).on('click', '.read-more', function (event) {
-        $(this).parent().trunk8('revert').append(' <a class=\"read-less\" href=\"#\">" . js_escape($GLOBALS['shownone']) . "</a>');
-        event.preventDefault();
-    });
+                $(document).on('click', '.read-more', function (event) {
+                    $(this).parent().trunk8('revert').append(' <a class=\"read-less\" href=\"#\">" . js_escape($GLOBALS['shownone']) . "</a>');
+                    event.preventDefault();
+                });
 
-    $(document).on('click', '.read-less', function (event) {
-console.log('aaa');
-        $(this).parent().trunk8();
-        event.preventDefault();
-    });
+                $(document).on('click', '.read-less', function (event) {
+            console.log('aaa');
+                    $(this).parent().trunk8();
+                    event.preventDefault();
+                });
 
-});
-</script>";
-            $file = 'trunk8.js';
-        }
-
-        $head_content .= js_link($file);
+            });
+            </script>";
+        $file = 'trunk8.js';
     }
+
+    $head_content .= js_link($file);
 
     if (strlen($init) > 0) {
         $head_content .= $init;
@@ -3868,6 +3865,18 @@ function checkSecondFactorChallenge(){
     }
 }
 
+function trans($var_name) {
+    if (preg_match("/\['.+'\]/", $var_name)) {
+        preg_match_all("([^\['\]]+)", $var_name, $matches);
+        global ${$matches[0][0]};
+        
+        return ${$matches[0][0]}[$matches[0][1]];
+    } else {
+        global ${$var_name};
+        
+        return ${$var_name};
+    }   
+}
 
 
 
