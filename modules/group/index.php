@@ -100,9 +100,28 @@ if ($is_editor) {
             $group_max = $_POST['group_max'];            
             $group_quantity = $_POST['group_quantity'];
             $group_description = $_POST['description'];
+            $private_forum = $_POST['private_forum'];
+            if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on') {
+                    $self_reg = 1;
+            }
+            else $self_reg = 0;            
             if (isset($_POST['group_name'])) {
                 $group_name = $_POST['group_name'];
             }
+            if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
+                    $has_forum = 1;
+            }
+            else $has_forum = 0;
+
+            if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
+                    $documents = 1;
+            }
+            else $documents = 0;
+
+            if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
+                    $wiki = 1;
+            }
+            else $wiki = 0;                 
             $group_num = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `group` WHERE course_id = ?d", $course_id)->count;
 
             // Create a hidden category for group forums
@@ -173,7 +192,7 @@ if ($is_editor) {
                                                                     forum = ?d, private_forum = ?d, 
                                                                     documents = ?d, wiki = ?d, 
                                                                     agenda = ?d",
-                                                                $course_id, $id, 1, 0, 1, 0, 1, 0, 0);                
+                                                                $course_id, $id, $self_reg, 0, $has_forum, $private_forum, $documents, $wiki, 0);                
                 
                 /** ********Create Group Wiki*********** */
                 //Set ACL
