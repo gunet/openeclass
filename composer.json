@@ -8,5 +8,10 @@
         "ezyang/htmlpurifier": "dev-master",
         "phpids/phpids": "dev-master",
         "pragmarx/google2fa":"dev-master"
-    }  
+    },
+    "autoload": {
+        "psr-4": {
+            "Widgets\\": "widgets"
+        }
+    }      
 }

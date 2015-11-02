@@ -68,10 +68,11 @@ function view($view_file, $view_data = array()) {
     
     $pageTitle = $siteName;
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
-    
+
     // Setting $menuTypeID and Getting Side Menu
     $menuTypeID = isset($view_data['menuTypeID']) ? $view_data['menuTypeID'] : 2;
-    $toolArr = ($is_mobile) ? array() : getSideMenu($menuTypeID);
+
+    $toolArr = $is_mobile || !isset($view_data['menuTypeID']) ? array() : getSideMenu($menuTypeID);
 
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
     unset($_SESSION['embedonce']);
@@ -274,7 +275,7 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view');
     $data = array_merge($global_data, $view_data);
-    echo $blade->view()->make($view_file, $data)->render();
+    return $blade->view()->make($view_file, $data)->render();
 }
 /**
  * Function draw
@@ -309,11 +310,10 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);    
     if ($is_embedonce) {
         unset($_SESSION['embedonce']);
-        view('layouts.embed', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
+        echo view('layouts.embed', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
     } else {
-        view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
+        echo view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
     }
-    
     // FOR REFERENCE ONLY (SHOULD BE REMOVED)
     
     // get blocks content from $toolContent array
