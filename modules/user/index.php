@@ -357,21 +357,17 @@ if (get_config('opencourses_enable')) {
 }
 
 // show help link and link to Add new user, search new user and management page of groups
-$num_requests = $log_course_user_requests = '';
-if (course_status($course_id) == COURSE_CLOSED) {
-    $log_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS, $course_id);    
-    if ($log_course_user_requests) {
+$num_requests = '';
+$course_user_requests = FALSE;
+if (course_status($course_id) == COURSE_CLOSED) {    
+    if (!setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) {
         $num_requests = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id)->cnt;
+        $course_user_requests = TRUE;
     }
 }
 
 $tool_content .= 
-        action_bar(array(
-            array('title' => "$num_requests $langsUserRequests",
-                  'url' => "course_user_requests.php?course=$course_code",
-                  'icon' => 'fa-child',                  
-                  'level' => 'primary-label',
-                  'show' => $log_course_user_requests),
+        action_bar(array(            
             array('title' => $langOneUser,
                 'url' => "adduser.php?course=$course_code",
                 'icon' => 'fa-plus-circle',
@@ -386,6 +382,11 @@ $tool_content .=
                 'url' => "guestuser.php?course=$course_code",
                 'icon' => 'fa-plane',
                 'show' => get_config('course_guest') != 'off'),
+            array('title' => "$num_requests $langsUserRequests",
+                  'url' => "course_user_requests.php?course=$course_code",
+                  'icon' => 'fa-child',                  
+                  'level' => 'primary-label',
+                  'show' => $course_user_requests),
             array('title' => $langGroupUserManagement,
                 'url' => "../group/index.php?course=$course_code",
                 'icon' => 'fa-users'),

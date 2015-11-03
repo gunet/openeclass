@@ -553,7 +553,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
             $errorFound = true;
             array_push($errorMsgs, $langErrorNoZlibExtension);
         } else {
-            $zipFile = new pclZip($_FILES['uploadedPackage']['tmp_name']);
+            $zipFile = new PclZip($_FILES['uploadedPackage']['tmp_name']);
             $is_allowedToUnzip = true; // default initialisation
             // Check the zip content (real size and file extension)
 

@@ -42,6 +42,7 @@ $error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     register_posted_variables(array('email_public' => true,
         'am_public' => true,
         'phone_public' => true), 'all', 'intval');
@@ -49,7 +50,7 @@ if (isset($_POST['submit'])) {
     $unparsed_lines = '';
     $new_users_info = array();
     $newstatus = ($_POST['type'] == 'prof') ? 1 : 5;
-    $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
+    $departments = isset($_POST['facid']) ? arrayValuesDirect($_POST['facid']) : array();
     $am = $_POST['am'];
     $auth_methods_form = isset($_POST['auth_methods_form']) ? $_POST['auth_methods_form'] : 1;
     $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
@@ -200,10 +201,10 @@ if (isset($_POST['submit'])) {
         <label class='col-sm-3 control-label'>$langFaculty:</label>
             <div class='col-sm-9'>";
     if (isDepartmentAdmin()) {
-        list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"',
+        list($js, $html) = $tree->buildUserNodePickerIndirect(array('params' => 'name="facid[]"',
             'allowables' => $user->getDepartmentIds($uid)));
     } else {
-        list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"'));
+        list($js, $html) = $tree->buildUserNodePickerIndirect(array('params' => 'name="facid[]"'));
     }
     $head_content .= $js;
     $tool_content .= $html;
@@ -248,6 +249,7 @@ if (isset($_POST['submit'])) {
             </div>
         </div>       
         </fieldset>
+        ". generate_csrf_token_form_field() ."
         </form>
         </div>";
 }

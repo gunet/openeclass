@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "38c77fbbaec616de6cdc78d74665af28",
-    "content-hash": "88be93503a0adac336a682051e0462c9",
+    "hash": "8ea3fddb4f2fbf65f8d06d5fd65b7977",
+    "content-hash": "a55ee4841d9a1a2e5cdf6536d97a3c95",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -315,17 +315,60 @@
             "time": "2012-08-31 00:00:00"
         },
         {
-            "name": "illuminate/contracts",
-            "version": "v5.1.16",
+            "name": "illuminate/container",
+            "version": "v5.1.20",
             "source": {
                 "type": "git",
-                "url": "https://github.com/illuminate/contracts.git",
-                "reference": "610aea16e3d91dfd85db4cf43703403a83b7cba2"
+                "url": "https://github.com/illuminate/container.git",
+                "reference": "4ecdb3df4de7a4587914f44c8e3a129a12ba6eb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/610aea16e3d91dfd85db4cf43703403a83b7cba2",
-                "reference": "610aea16e3d91dfd85db4cf43703403a83b7cba2",
+                "url": "https://api.github.com/repos/illuminate/container/zipball/4ecdb3df4de7a4587914f44c8e3a129a12ba6eb4",
+                "reference": "4ecdb3df4de7a4587914f44c8e3a129a12ba6eb4",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "5.1.*",
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Container\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "The Illuminate Container package.",
+            "homepage": "http://laravel.com",
+            "time": "2015-09-24 11:16:48"
+        },
+        {
+            "name": "illuminate/contracts",
+            "version": "v5.1.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/contracts.git",
+                "reference": "e2b71fdbeeb3438748dca5f497e205888788a883"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/e2b71fdbeeb3438748dca5f497e205888788a883",
+                "reference": "e2b71fdbeeb3438748dca5f497e205888788a883",
                 "shasum": ""
             },
             "require": {
@@ -354,20 +397,115 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "http://laravel.com",
-            "time": "2015-08-31 12:59:22"
+            "time": "2015-09-24 11:16:48"
         },
         {
-            "name": "illuminate/support",
-            "version": "v5.1.16",
+            "name": "illuminate/events",
+            "version": "v5.1.20",
             "source": {
                 "type": "git",
-                "url": "https://github.com/illuminate/support.git",
-                "reference": "c5389968d48517b3b51cfd8cd4abd72f0cc1575b"
+                "url": "https://github.com/illuminate/events.git",
+                "reference": "fdb64e091b635bf1525c157f1cfdd19cbca508c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/c5389968d48517b3b51cfd8cd4abd72f0cc1575b",
-                "reference": "c5389968d48517b3b51cfd8cd4abd72f0cc1575b",
+                "url": "https://api.github.com/repos/illuminate/events/zipball/fdb64e091b635bf1525c157f1cfdd19cbca508c9",
+                "reference": "fdb64e091b635bf1525c157f1cfdd19cbca508c9",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/container": "5.1.*",
+                "illuminate/contracts": "5.1.*",
+                "illuminate/support": "5.1.*",
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Events\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "The Illuminate Events package.",
+            "homepage": "http://laravel.com",
+            "time": "2015-09-23 13:19:23"
+        },
+        {
+            "name": "illuminate/filesystem",
+            "version": "v5.1.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/filesystem.git",
+                "reference": "43032afcbc57cc31a7c6a423e7420cb09a941df2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/filesystem/zipball/43032afcbc57cc31a7c6a423e7420cb09a941df2",
+                "reference": "43032afcbc57cc31a7c6a423e7420cb09a941df2",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "5.1.*",
+                "illuminate/support": "5.1.*",
+                "php": ">=5.5.9",
+                "symfony/finder": "2.7.*"
+            },
+            "suggest": {
+                "league/flysystem": "Required to use the Flysystem local and FTP drivers (~1.0).",
+                "league/flysystem-aws-s3-v3": "Required to use the Flysystem S3 driver (~1.0).",
+                "league/flysystem-rackspace": "Required to use the Flysystem Rackspace driver (~1.0)."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Filesystem\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "The Illuminate Filesystem package.",
+            "homepage": "http://laravel.com",
+            "time": "2015-10-13 14:34:04"
+        },
+        {
+            "name": "illuminate/support",
+            "version": "v5.1.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/support.git",
+                "reference": "cf634d1b61d80ea1d7749ef71e0ab3c088931463"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/cf634d1b61d80ea1d7749ef71e0ab3c088931463",
+                "reference": "cf634d1b61d80ea1d7749ef71e0ab3c088931463",
                 "shasum": ""
             },
             "require": {
@@ -379,6 +517,7 @@
             },
             "suggest": {
                 "jeremeamia/superclosure": "Required to be able to serialize closures (~2.0).",
+                "paragonie/random_compat": "Provides a compatible interface like PHP7's random_bytes() in PHP 5 projects (^1.0.4).",
                 "symfony/var-dumper": "Required to use the dd function (2.7.*)."
             },
             "type": "library",
@@ -407,7 +546,54 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "http://laravel.com",
-            "time": "2015-09-03 15:47:41"
+            "time": "2015-10-12 17:24:03"
+        },
+        {
+            "name": "illuminate/view",
+            "version": "v5.1.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/view.git",
+                "reference": "f1f87dd100c67fc598955fab8bf91f3c1656c8f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/view/zipball/f1f87dd100c67fc598955fab8bf91f3c1656c8f3",
+                "reference": "f1f87dd100c67fc598955fab8bf91f3c1656c8f3",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/container": "5.1.*",
+                "illuminate/contracts": "5.1.*",
+                "illuminate/events": "5.1.*",
+                "illuminate/filesystem": "5.1.*",
+                "illuminate/support": "5.1.*",
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\View\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "The Illuminate View package.",
+            "homepage": "http://laravel.com",
+            "time": "2015-09-30 04:10:43"
         },
         {
             "name": "jasig/phpcas",
@@ -498,6 +684,47 @@
                 "zip"
             ],
             "time": "2014-06-05 11:42:24"
+        },
+        {
+            "name": "philo/laravel-blade",
+            "version": "v3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PhiloNL/Laravel-Blade.git",
+                "reference": "728be672354bdd377da56394e699112ddfa0628b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PhiloNL/Laravel-Blade/zipball/728be672354bdd377da56394e699112ddfa0628b",
+                "reference": "728be672354bdd377da56394e699112ddfa0628b",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/events": "~5",
+                "illuminate/view": "~5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Philo\\Blade\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philo Hermans",
+                    "email": "me@philohermans.com"
+                }
+            ],
+            "description": "Use the simple and yet powerful Laravel Blade templating engine as a standalone component.",
+            "keywords": [
+                "blade",
+                "laravel"
+            ],
+            "time": "2015-04-18 21:03:31"
         },
         {
             "name": "phpids/phpids",
@@ -643,17 +870,66 @@
             "time": "2015-09-18 00:38:04"
         },
         {
+            "name": "symfony/finder",
+            "version": "v2.7.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/finder.git",
+                "reference": "8262ab605973afbb3ef74b945daabf086f58366f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/8262ab605973afbb3ef74b945daabf086f58366f",
+                "reference": "8262ab605973afbb3ef74b945daabf086f58366f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "~2.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Finder\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Finder Component",
+            "homepage": "https://symfony.com",
+            "time": "2015-09-19 19:59:23"
+        },
+        {
             "name": "vlucas/valitron",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/valitron.git",
-                "reference": "9f9701833ccaaa8f6dc864c1ab6e3221045718a1"
+                "reference": "8cfa3bd93216848e0507589e008a344f6eac7486"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/valitron/zipball/9f9701833ccaaa8f6dc864c1ab6e3221045718a1",
-                "reference": "9f9701833ccaaa8f6dc864c1ab6e3221045718a1",
+                "url": "https://api.github.com/repos/vlucas/valitron/zipball/8cfa3bd93216848e0507589e008a344f6eac7486",
+                "reference": "8cfa3bd93216848e0507589e008a344f6eac7486",
                 "shasum": ""
             },
             "require": {
@@ -686,7 +962,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2015-10-10 03:03:31"
+            "time": "2015-10-21 02:43:17"
         }
     ],
     "packages-dev": [],

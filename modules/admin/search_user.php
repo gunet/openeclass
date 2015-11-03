@@ -64,7 +64,7 @@ $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 $user_registered_at = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
 
 if (isset($_GET['department'])) {
-    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'defaults' => array_map('intval', $_GET['department']));
+    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'defaults' => array_map('intval', arrayValuesDirect($_GET['department'])));
 } else {
     $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false);
 }
@@ -104,7 +104,7 @@ $authtype_data = $auth_ids;
 $authtype_data[0] = $langAllAuthTypes;
 
 $tree = new Hierarchy();
-list($js, $html) = $tree->buildNodePicker($depts_defaults);
+list($js, $html) = $tree->buildNodePickerIndirect($depts_defaults);
 $head_content .= $js;
 
 // display the search form

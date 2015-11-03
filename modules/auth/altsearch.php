@@ -199,7 +199,7 @@ if ($is_valid) {
     if (!$ok and $submit) {
         $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing</div>";
     }
-    $depid = intval($department);
+    $depid = intval(getDirectReference($department));
     if (isset($_SESSION['auth_user_info'])) {
         $givenname_form = $_SESSION['auth_user_info']['givenname'];
         $surname_form = $_SESSION['auth_user_info']['surname'];
@@ -449,7 +449,7 @@ if ($is_valid) {
             <div id='mail-body'>
                 <br>
                 <div id='mail-body-inner'>".
-                    sprintf($mailbody1 . $langMailVerificationBody1, "<a href='{$urlServer}modules/auth/mail_verify.php?ver=" . $hmac . "&amp;rid=" . $request_id."'>{$urlServer}modules/auth/mail_verify.php?ver=" . $hmac . "&amp;rid=" . $request_id ."</a>")."
+                    sprintf($mailbody1 . $langMailVerificationBody1, "<a href='{$urlServer}modules/auth/mail_verify.php?h=" . $hmac . "&amp;rid=" . $request_id."'>{$urlServer}modules/auth/mail_verify.php?h=" . $hmac . "&amp;rid=" . $request_id ."</a>")."
                 </div>
             </div>";
 
@@ -602,7 +602,7 @@ function user_info_form() {
     $tool_content .= "<div class='form-group'>
               <label for='UserFac' class='col-sm-2 control-label'>$langFaculty:</label>
                 <div class='col-sm-10'>";
-    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'where' => 'AND node.allow_user = true', 'multiple' => false));
+    list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'where' => 'AND node.allow_user = true', 'multiple' => false));
     $head_content .= $js;
     $tool_content .= $html . "</div>
         </div>

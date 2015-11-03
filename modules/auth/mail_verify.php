@@ -57,8 +57,12 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
         $user_error_msg = $langMailVerifyNoId;        
     }
     $res = Database::get()->querySingle($qry);
-    if ($res) {        
-            $username = $res->username;
+    if ($res) {                                
+            if (get_config('case_insensitive_usernames')) {
+                $username = strtolower($res->username);
+            } else {
+                $username = $res->username;
+            }
             $email = $res->email;
             // success
             if (token_validate($username . $email . $id, $code)) {

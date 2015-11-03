@@ -128,7 +128,7 @@ if (isset($_POST['submit'])) {
         if (!isset($_POST['department']) and !$is_admin) {
             $all_ok = false;
         } else {
-            $departments = $_POST['department'];
+            $departments = arrayValuesDirect($_POST['department']);
         }
     }
     $email_public = valid_access($email_public);
@@ -513,7 +513,7 @@ if (get_config('email_verification_required')) {
 if (!get_config('restrict_owndep')) {
     $tool_content .= "<div class='form-group'><label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>";
     $tool_content .= "<div class='col-sm-10 form-control-static'>";
-    list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $userObj->getDepartmentIds($uid)));
+    list($js, $html) = $tree->buildUserNodePickerIndirect(array('defaults' => $userObj->getDepartmentIds($uid)));
     $head_content .= $js;
     $tool_content .= $html;
     $tool_content .= "</div></div>";

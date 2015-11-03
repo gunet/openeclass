@@ -27,6 +27,7 @@
 $require_help = true;
 if(!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c'){
     $require_current_course = true;
+    $require_course_admin = true;
     $stats_type = 'course';
 }
 elseif(isset($_REQUEST['t']) && $_REQUEST['t'] == 'a'){

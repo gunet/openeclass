@@ -143,17 +143,17 @@ $tool_content .= "
         <div id='my-courses' class='col-md-7'>
             <div class='row'>
                 <div class='col-md-12'>
-                    <h2 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h2>
+                    <h2 class='content-title'>".trans('langMyCourses')."</h2>
                     <div class='panel'>
                         <div class='panel-body'>
-                            {%LESSON_CONTENT%}                        
+                            $perso_tool_content[lessons_content]                       
                         </div>
                     </div>
                 </div>
             </div>
             <div class='row'>
             <div class='col-md-12 my-announcement-list'>
-                <h2 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h2>
+                <h2 class='content-title'>".trans('langMyPersoAnnouncements')."</h2>
                 <div class='panel'>
                     <div class='panel-body'>
                         <ul class='tablelist'>";
@@ -174,27 +174,27 @@ $tool_content .= "
     <div class='col-md-5'>
         <div class='row'>
             <div class='col-md-12'>
-                <h2 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h2>
+                <h2 class='content-title'>".trans('langMyAgenda')."</h2>
                 <div class='panel'>
                     <div class='panel-body'>
-                        {%PERSONAL_CALENDAR_CONTENT%}
+                        $perso_tool_content[personal_calendar_content]
                     </div>
                     <div class='panel-footer'>
                         <div class='row'>
                             <div class='col-sm-6 event-legend'>
                                 <div>
-                                    <span class='event event-important'></span><span>$langAgendaDueDay</span>
+                                    <span class='event event-important'></span><span>".trans('langAgendaDueDay')."</span>
                                 </div>
                                 <div>
-                                    <span class='event event-info'></span><span>$langAgendaCourseEvent</span>
+                                    <span class='event event-info'></span><span>".trans('langAgendaCourseEvent')."</span>
                                 </div>
                             </div>
                             <div class='col-sm-6 event-legend'>
                                 <div>
-                                    <span class='event event-success'></span><span>$langAgendaSystemEvent</span>
+                                    <span class='event event-success'></span><span>".trans('langAgendaSystemEvent')."</span>
                                 </div>
                                 <div>
-                                    <span class='event event-special'></span><span>$langAgendaPersonalEvent</span>
+                                    <span class='event event-special'></span><span>".trans('langAgendaPersonalEvent')."</span>
                                 </div>
                             </div>
                         </div>

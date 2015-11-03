@@ -27,7 +27,7 @@ if (!isset($_REQUEST['nodeid'])) {
     exit();
 }
 
-$nodeid = intval($_REQUEST['nodeid']);
+$nodeid = intval(getDirectReference($_REQUEST['nodeid']));
 
 if ($nodeid <= 0) {
     exit();

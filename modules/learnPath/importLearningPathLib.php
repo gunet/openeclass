@@ -583,7 +583,7 @@ function doImport($course_code, $webDir, $scoFileSize, $scoFileName, $displayExt
             $errorFound = true;
             array_push($errorMsgs, $langErrorNoZlibExtension);
         } else {
-            $zipFile = new pclZip($tempWorkDir . $scoFileName);
+            $zipFile = new PclZip($tempWorkDir . $scoFileName);
             $is_allowedToUnzip = true; // default initialisation
             // Check the zip content (real size and file extension)
 

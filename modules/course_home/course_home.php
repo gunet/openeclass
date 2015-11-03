@@ -462,21 +462,24 @@ if (isset($level) && !empty($level)) {
 </script>";
     $opencourses_level = "
     <div class='row'>
-        <div class='col-md-4'>
-            <img src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
+        <div class='col-xs-4'>
+            <img class='img-responsive center-block' src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
         </div>
-        <div class='col-md-8 margin-top-thin'>
-            ${langOpenCoursesLevel}: $level
+        <div class='col-xs-8'>
+            <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>${langOpenCoursesLevel}: $level</div>
+            <p class='not_visible'>
+            <small>$langVisitsShort : &nbsp;$visitsopencourses</small>
             <br />
-            <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata " .
-            icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");") . "</small>
-            <br />
-            <small>$langVisits: $visitsopencourses</small>
-            <br />
-            <small>$langHits: $hitsopencourses</small>
+            <small>$langHitsShort : &nbsp;$hitsopencourses</small>
+            </p>
         </div>
     </div>
 ";
+    $opencourses_level_footer = "<div class='row'>
+        <div class='col-xs-12 text-right'>
+            <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata</a>".icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");")."</small>
+        </div>
+    </div>";
 }
 
 // display `contact teacher via email` link if teacher actually receives email from his course
@@ -728,6 +731,9 @@ $tool_content .="<div class='row'>";
                         <div class='panel'>
                             <div class='panel-body'>
                                 $opencourses_level
+                            </div>
+                            <div class='panel-footer'>
+                                $opencourses_level_footer
                             </div>
                         </div>
                     </div>

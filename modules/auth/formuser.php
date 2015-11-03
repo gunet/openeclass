@@ -78,6 +78,8 @@ $var_arr = array('usercomment' => true,
 //add custom profile fields required variables
 augment_registered_posted_variables_arr($var_arr);
 
+$department = getDirectReference($department);
+
 $all_set = register_posted_variables($var_arr);
 
 if (!$all_set) {
@@ -415,7 +417,7 @@ if ($all_set) {
             <div class='form-group'>
                 <label for='ProfComments' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";
-    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
+    list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
     $head_content .= $js;
     $tool_content .= $html;
     $tool_content .= "</div></div>";

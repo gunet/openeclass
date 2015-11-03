@@ -153,9 +153,9 @@ if (count($paused_exercises) > 0) {
 }
 if ($is_editor) {
     $pending_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
-            . "JOIN exercise b ON a.eid = b.id WHERE a.attempt_status = ?d AND b.course_id = ?d", ATTEMPT_PENDING, $course_id);
+            . "JOIN exercise b ON a.eid = b.id WHERE a.attempt_status = ?d AND b.course_id = ?d GROUP BY eid", ATTEMPT_PENDING, $course_id);
     if (count($pending_exercises) > 0) {
-        foreach ($pending_exercises as $row) {           
+        foreach ($pending_exercises as $row) {
             $tool_content .="<div class='alert alert-info'>$langPendingExercise " . q($row->title) . ". (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langView</a>)</div>";
         }
     }
@@ -236,10 +236,10 @@ if (!$nbrExercises) {
                 $lock_description .= "<li>$langIPUnlock</li>";
             }
             $lock_description .= "</ul>";
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'><span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
         }
         if (!$row->public) {
-            $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'><span>";
+            $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
         }
         // prof only
         if ($is_editor) {
@@ -308,7 +308,7 @@ if (!$nbrExercises) {
             } else { // exercise has expired
                 $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
             }
-            $tool_content .= "<br />" . $row->description . "</td><td class='smaller' align='center'>
+            $tool_content .= $row->description . "</td><td class='smaller' align='center'>
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
                                 " . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</td>";          														  
             if ($row->time_constraint > 0) {

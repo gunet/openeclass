@@ -8,7 +8,7 @@ syntax: regexp
 ^html/
 
 ^composer\.phar
-^storage/
+^storage/views/
 ^vendor/
 
 ^nbproject/private/

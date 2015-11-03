@@ -194,9 +194,9 @@ function insert_docs($id) {
             }
             $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='doc', 
                                             title = ?s, comments = ?s, 
-                                            visible = ?d, `order` = ?d, 
+                                            visible = 1, `order` = ?d, 
                                             `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
-                                        $id, $title, $comment, $file->visible, $order, $file->id);
+                                        $id, $title, $comment, $order, $file->id);
             $uresId = $q->lastInsertID;
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
         }

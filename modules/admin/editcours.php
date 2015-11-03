@@ -100,7 +100,7 @@ if (isset($c)) {
 	</table>";
     // Display course quota and link to edit
     $tool_content .= "<table class='table-default'>
-	<th colspan='2'>$langQuota ".icon('fa-gear', $langModify, "quotacours.php?c=" . q($c) . ""). "
+	<th colspan='2'>$langQuota ".icon('fa-gear', $langModify, "quotacours.php?c=" . getIndirectReference($c) . ""). "
 	<tr>
 	  <td colspan='2'><div class='sub_title1'>$langTheCourse " . q($row->title) . " $langMaxQuota</div></td>
 	  </tr>";
@@ -177,7 +177,7 @@ if (isset($c)) {
     // Delete course
     $tool_content .= "
 	<tr>
-	  <td><a href='delcours.php?c=" . $cId . "'>" . $langCourseDel . "</a></td>
+	  <td><a href='delcours.php?c=" . getIndirectReference($cId) . "'>" . $langCourseDel . "</a></td>
 	</tr>";
     $tool_content .= "</table>";
 }

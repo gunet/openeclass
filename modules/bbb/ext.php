@@ -20,7 +20,7 @@
  * ========================================================================
  */
 
-$require_current_course = TRUE;
+$require_current_course = FALSE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';

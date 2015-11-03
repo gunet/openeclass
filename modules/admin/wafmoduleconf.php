@@ -37,6 +37,7 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 $connectorClasses = WafApp::getWafServices();
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     set_config('waf_connector', $_POST['formconnector']);
     foreach($connectorClasses as $curConnectorClass) {
         $connector = new $curConnectorClass();
@@ -90,7 +91,7 @@ else {
         }
     }
     $tool_content .= "</table></fieldset>";
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='submit' value='$langModify'> </form>";
+    $tool_content .= "<input class='btn btn-primary' type='submit' name='submit' value='$langModify'>". generate_csrf_token_form_field() ."</form>";
 
     $head_content .= "
         <script type='text/javascript'>

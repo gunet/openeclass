@@ -40,12 +40,17 @@ if (isset($_GET['add'])) {
     $uid_to_add = intval(getDirectReference($_GET['add']));
     $result = Database::get()->query("INSERT IGNORE INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
                                     VALUES (?d, ?d, " . USER_STUDENT . ", " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")", $uid_to_add, $course_id);
-
+    $r = Database::get()->queryArray("SELECT id FROM course_user_request WHERE uid = ?d AND course_id = ?d", $uid_to_add, $course_id);
+    if ($r) { // close course user request (if any)
+        foreach ($r as $req) {
+            Database::get()->query("UPDATE course_user_request SET status = 2 WHERE id = ?d", $req->id);
+        }
+    }
+    
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
                                                                'right' => '+5'));
     if ($result) {
-        Session::Messages( $langTheU . $langAdded, "alert alert-success");
-        //$tool_content .= "<div class='alert alert-success'>$langTheU $langAdded</div>";
+        Session::Messages( $langTheU . $langAdded, "alert alert-success");        
         // notify user via email
         $email = uid_to_email($uid_to_add);
         if (!empty($email) and email_seems_valid($email)) {
@@ -76,11 +81,9 @@ if (isset($_GET['add'])) {
             send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody, $charset);
         }
     } else {
-        Session::Messages( $langAddError, "alert alert-warning");
-        //$tool_content .= "<div class='alert alert-warning'>$langAddError</div>";
+        Session::Messages( $langAddError, "alert alert-warning");        
     }
-    redirect_to_home_page("modules/user/index.php?course=$course_code");
-    //$tool_content .= "<br /><p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAddBack</a></p><br />\n";
+    redirect_to_home_page("modules/user/index.php?course=$course_code");    
 } else {    
     register_posted_variables(array('search_surname' => true,
                                     'search_givenname' => true,

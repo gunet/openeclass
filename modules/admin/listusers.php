@@ -142,7 +142,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     // Department search
     $depqryadd = '';
-    $dep = (isset($_GET['department'])) ? intval($_GET['department']) : 0;
+    $dep = (isset($_GET['department'])) ? intval(getDirectReference($_GET['department'])) : 0;
     if ($dep || isDepartmentAdmin()) {
         $depqryadd = ', user_department';
 
@@ -507,6 +507,7 @@ if (isset($_GET['department']) and $_GET['department'] and is_numeric($_GET['dep
 
 $tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'>
     <input class='btn btn-primary' type='submit' name='activate_submit' value='$langAddSixMonths'>
+    ". generate_csrf_token_form_field() ."
   </form></div>";
 
 draw($tool_content, 3, null, $head_content);

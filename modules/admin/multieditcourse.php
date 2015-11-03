@@ -35,10 +35,11 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 load_js('jstree3');
 
-if (isset($_POST['submit'])) {    
-    $newdepip = isset($_POST['newdepid']) ? $_POST['newdepid'] : array();
+if (isset($_POST['submit'])) { 
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();   
+    $newdepip = isset($_POST['newdepid']) ? arrayValuesDirect($_POST['newdepid']) : array();
     foreach ($_POST['lessons'] as $cId) {
-        $course->refresh($cId, $_POST['newdepid']);
+        $course->refresh($cId, arrayValuesDirect($_POST['newdepid']));
     }
     $tool_content .= "<div class='alert alert-success'>$langModifDone</div>";
     
@@ -46,7 +47,7 @@ if (isset($_POST['submit'])) {
     $searchtitle = isset($_POST['formsearchtitle']) ? $_POST['formsearchtitle'] : '';
     $searchcode = isset($_POST['formsearchcode']) ? $_POST['formsearchcode'] : '';
     $searchtype = isset($_POST['formsearchtype']) ? intval($_POST['formsearchtype']) : '-1';
-    $searchfaculte = isset($_POST['formsearchfaculte']) ? intval($_POST['formsearchfaculte']) : '';
+    $searchfaculte = isset($_POST['formsearchfaculte']) ? intval(getDirectReference($_POST['formsearchfaculte'])) : '';
     // Search for courses
     $query = '';
     $terms = array();
@@ -96,7 +97,7 @@ if (isset($_POST['submit'])) {
                 <label for='Faculty' class='col-sm-2 control-label'>$langFaculty:</label>
                 <div class='col-sm-10'>";    
 
-            list($js, $html) = $tree->buildNodePicker(array('params' => 'name="newdepid[]"', 
+            list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="newdepid[]"', 
                                                             'defaults' => $course->getDepartmentIds($searchfaculte),                                                            
                                                             'multiple' => false));        
             $head_content .= $js;
@@ -112,6 +113,7 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>";
             $tool_content .= "</fieldset>
+            ". generate_csrf_token_form_field() ."
             </form>
             </div>";
 }

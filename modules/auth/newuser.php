@@ -230,7 +230,7 @@ if (!isset($_POST['submit'])) {
             <div class='form-group'>
               <label for='UserFac' class='col-sm-2 control-label'>$langFaculty:</label>
                 <div class='col-sm-10'>";
-            list($js, $html) = $tree->buildUserNodePicker();
+            list($js, $html) = $tree->buildUserNodePickerIndirect();
             $head_content .= $js;
             $tool_content .= $html;
             $tool_content .= "</div>
@@ -303,7 +303,7 @@ if (!isset($_POST['submit'])) {
         $departments = array();
         $missing = false;
     } else {
-        $departments = $_POST['department'];
+        $departments = arrayValuesDirect($_POST['department']);
     }
 
     $registration_errors = array();

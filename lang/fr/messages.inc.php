@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2015-09-23 18:35:01
+// Generated 2015-10-22 16:36:01
 
 $langCourse = "Cours";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -919,7 +919,6 @@ $langGroupForum = "Forum";
 $langGroupPropertiesModified = "Les paramètres du groupe ont été modifiés";
 $langGroupThisSpace = "Espace pour le groupe d'utilisateurs";
 $langGroupName = "Nom du groupe d'utilisateurs";
-$langEditGroup = "Corriger le groupe d'utilisateurs";
 $langNoGroupStudents = "".$langsStudents." non inscrits";
 $langGroupMembers = "Membres du groupe d'utilisateurs";
 $langGroupValidate = "Valider";
@@ -1407,8 +1406,7 @@ and email.
 (<em>CAUTION: This email must much the one set in your user profile</em>).</p> <p>After submitting these data you will receive an email with instruction on how to reset your password.</p>';
 $lang_pass_submit = 'Envoyer';
 $langPassResetIntro = "
-Someone has asked to reset your access password on the $siteName platform.
-If this was not yourself, ignore the instructions of this email and report this incident to the system administrator, at the address: ";
+Someone has asked to reset your access password on the $siteName platform.";
 $langHowToResetTitle = " =============================================================================== Instructions pour créer un nouveau mot de passe =============================================================================== ";
 $langPassResetGoHere = "To reset your password go to the following address through your web browser.
 If you cannot click on the address, copy & paste it on your browser's address bar.
@@ -3023,7 +3021,6 @@ $langFlashPlayerNotInstalled = "Flash Player is not installed or too old. To ins
 $langShockInstalled = "An adequate version of Shockwave Player is installed.";
 $langShockNotInstalled = "Shockwave Player is not installed or too old. To install the latest version click";
 $langCheckNotOk1 = "Installation Process";
-$langInstallMsg = "Please wait! Installation may take a few minutes.";
 $langCheckNotOk2 = "Use the diagnostics table to check which of the required software tools are not installed (they are displayed in red). Please follow the instructions given in the official software web pages to proceed with their installation.";
 $langCheckNotOk3 = "You have to install all required programs which don't have the correct version.";
 $langCheckNotOk4 = "After completing the installation of all required software tools, please check installation by clicking";
@@ -3956,6 +3953,7 @@ $langTheFieldIsRequired = 'The field is required.';
 $langCourseImage = "Course Image";
 $langCourseLayout = "Layout";
 $langCourseLayout1 = "2 Columns, With Image (default)";
+$langCourseLayout2 = "2 Columns, No Image";
 $langCourseLayout3 = "Full Width";
 $langCloneCourse = "Clone this course";
 $langGradebookInfoForUsers = 'Choose users to be tracked in gradebook';
@@ -4156,9 +4154,6 @@ $langOwnCloudShortDescription = "Short Description about own cloud";
 $langOwnCloudLongDescription = "Long description about own cloud";
 $langWebDAVShortDescription = "Short Description about web dav";
 $langWebDAVLongDescription = "Long Description about web dav";
-$langAntivirusDescription = "<p>Connection with existing Antivirus software</p>";
-$langAntivirusInfected = "This file is infected with a virus and has been rejected. Please contact the administrator";
-$langWafDescription = "<p>Enable Web Application Firewall</p>";
 $langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
 $langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 5.4.0 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
 $langPHPVersion = 'PHP version';
@@ -4285,15 +4280,6 @@ $langAbuseReportClosed = 'Closed report';
 $langClearSettings = "Reset settings";
 $langNotConfigured = 'Not configured';
 $langEnableAfterConfig = 'To activate this tool, you first need to configure the required options.';
-$langAntivirus = "$siteName Antivirus Settings";
-$langAntivirusUpdated = "Antivirus settings successfully updated";
-$langAntivirusConnector = "Installed Software";
-$langAntivirusPath = "Location Path";
-$langAntivirusConfig = "Configuration";
-$langWaf = "Configure Web Application Firewall on $siteName";
-$langWafConnector = "Selected WAF";
-$langWafUpdated = "Web Application Firewall settings successfully updated";
-$langWafConfig = "Configure Filter";
 $langauto_judge = 'Auto Judge Settings';
 $langHackerEarth = "HackerEarth Key";
 $langAutoJudge = "$siteName auto judge settings";
@@ -4453,6 +4439,68 @@ $langCPFSortOrderSuccess = 'The sort order of categories and fields was saved.';
 $langCPFAdminSideMenuLink = 'User profile fields';
 $langCPFLinkValidFail = 'Field %s is not a valid url. ';
 $langCPFDateValidFail = 'Field %s is not a valid date. ';
+$langInCoursesL = "in course";
+$langOfCourse = "for course";
+$langCommentsUser = "User comments";
+$langUserRequests = "User requests";
+$langsUserRequests = "user requests";
+$langBlogComment = "blog comments";
+$langsCourseSharing = "course sharing in social networks";
+$langsCourseRating = "course rating";
+$langCourseComment = "course comments";
+$langsCourseAnonymousRating = "course comments by anonymous users";
+$langForumRating = "forum post ratings";
+$langCourseSocialBookmarks = "social bookmarks";
+$langCourseAbuseReport = "abuse reporting";
+$langCourseUserRequestReject = "Reject registration request";
+$langMultiMoveCourseInfo = "Select the new $langsFaculty where courses will be moved to.";
+$langMultiMoveCourses = "Multiple course move";
+$langConfirmMultiMoveCourses = "Confirm move of courses to other $langsFaculty.";
+$langSearchInCourse = "Search in educational resources";
+$langInstallMsg = "Please wait! Installation may take a few minutes.";
+$langReadMore = "More";
+$langReadLess = "Less";
+$langNoInfoAvailable = "No information available";
+$langCourseUserRequests = "User requests for registration to course";
+$langCourseUserRequestsDisabled = "User registration requests supported only for non-closed courses.";
+$langContactIntroFooter = "If you reply to this message, the answer will be addressed to this user.";
+$langLabelCourseUserRequest = "Course registration request";
+$langReasonReject = "Reason for rejection";
+$langRequestReasons = "Please enter your reasons to request registration to this course.";
+$langGroupTeam = "General User Groups";
+$langInvalidNumericValue = "invalid field value";
+$langCreateOneGroup = "Create a group";
+$langScoreDispLastAttempt = "Display score after student's last attempt";
+$langScoreDispEndDate = "Display score after exercise's end date";
+$langGroupsAdded2 = "The groups have been added";
+$langGroupAdded2 = "The group has been added";
+$langEmptyGroups = "Empty all groups";
+$langEmptyGroupsAll = "Empty All";
+$langGroupAllowStudentGroupDescription = "Allow group members to add description to their groups";
+$langGroupNowNotMember = "You unregistered from this group successfully.";
+$langAdminLoginPage = "Admin login";
+$langLoginVia = "Login via";
+$langPassResetIntro2 = "If this was not yourself, ignore the instructions of this email and report this incident to the system administrator, at the address: ";
+$langPollParticipantInfo = 'Participant Information';
+$langPollEmailUsed = 'contains an account already used to answer this survey';
+$langUnRegister = "Unregister";
+$langCourseUserRegDone = "User registration completed successfully.";
+$langCourseUserRegError = "User registration error.";
+$langLogFileWriteError = 'Error writing log file:';
+$langVisitsShort = "Num. of Visits";
+$langHitsShort = "Num. of Hits";
+$langRequest = "Request";
+$langUnknownSetting = 'Unknown setting';
+$langAntivirus = "$siteName Antivirus Settings";
+$langAntivirusUpdated = "Antivirus settings successfully updated";
+$langAntivirusConnector = "Installed Software";
+$langAntivirusPath = "Location Path";
+$langAntivirusConfig = "Configuration";
+$langAntivirusInfected = "This file is infected with a virus and has been rejected. Please contact the administrator";
+$langWaf = "Configure Web Application Firewall on $siteName";
+$langWafConnector = "Selected WAF";
+$langWafUpdated = "Web Application Firewall settings successfully updated";
+$langWafConfig = "Configure Filter";
 $langSFAConf = '2FA Configuration:';
 $langSFAType = 'Type 2FA Code:';
 $langSFAInsert = 'Or type the following key in your 2FA App:';
@@ -4465,4 +4513,11 @@ $langSFAadd = 'Add Second Factor Authentication';
 $langSFATypeWYS = 'Type the code that you see in the App:';
 $langSFAScan = 'Scan Image:';
 $langsecondfaUpdated = '2FA settings successfully updated';
-
+$langAnalyticsDescription = '<p>You can connect the platform to an external web analytics service (e.g. Google
+    Analytics, Piwiki) in order to record detailed statistics and information on visitors.</p>';
+$langAntivirusDescription = "<p>Connection with existing Antivirus software</p>";
+$langWafDescription = "<p>Enable Web Application Firewall</p>";
+$langExerciseAttemptLeft = 'Beware! Only one attempt remaining.';
+$langExerciseAttemptsLeft = 'Beware! You have %d attempts remaining.';
+$langExerciseAttemptContinue = 'By clicking the "Continue" button, a new attempt is recorded.';
+$dateTimeFormatShort = '%d %b %Y %R';

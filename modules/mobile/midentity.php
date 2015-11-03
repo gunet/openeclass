@@ -20,7 +20,7 @@
  * ======================================================================== 
  */
 
-$require_mlogin = true;
+$require_mlogin = false;
 $require_noerrors = true;
 require_once('minit.php');
 

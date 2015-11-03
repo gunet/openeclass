@@ -88,18 +88,21 @@ else {
               </div>";
         }
     }
-    $tool_content .= "</form><div class='form-group'><div class='col-sm-offset-3'>";
+    $tool_content .= "<div class='form-group'><div class='col-sm-offset-3'>";
     $tool_content .= form_buttons(array(
-                            array(
-                                'text' => $langModify,
-                                'name' => 'submit',
-                                'value'=> $langModify
-                            ),
-                            array(
-                                'href' => "extapp.php"
-                            )
-                    ));
-    $tool_content .= "</div></div></div>";
+        array(
+            'text' => $langModify,
+            'name' => 'submit',
+            'value'=> $langModify
+        ),
+        array(
+            'href' => "extapp.php"
+        )
+    ));
+    $tool_content .= "</div></div>";
+    $tool_content .= "</form>";
+
+    $tool_content .= "</div>";
     $head_content .= "
         <script type='text/javascript'>
         function update_connector_config_visibility() {

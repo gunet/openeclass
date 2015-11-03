@@ -62,6 +62,7 @@ $langOfUser = "χρήστη";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
 $langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
+$langOfCourse = "μαθήματος";
 
 /* * ******************************************
  * addadmin.php
@@ -727,6 +728,7 @@ $langTotalResults = "συνολικά αποτελέσματα";
 $langDisplayed = "Εμφανίζονται";
 $langTill = "έως";
 $langAnnouncementActivePeriod = "Διάστημα εμφάνισης";
+$langAnnHasPublished = "Έχει δημοσιευθεί ανακοίνωση στο μάθημα";
 
 /* * *****************************************
  * archive_course.php
@@ -935,7 +937,7 @@ $langConfTip = "Επιλέξτε τον τύπο πρόσβασης του μα�
 $langOptPassword = "Προαιρετικό συνθηματικό";
 $langNoCourseTitle = "Δεν πληκτρολογήσατε τον τίτλο του μαθήματος";
 $langCourseWeeklyFormatNotice = "Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστον την ημερομηνία έναρξης μαθήματος";
-$langCourseUserRequests = "Καταγραφή των αιτήσεων εγγραφής χρηστών στο μάθημα";
+$langCourseUserRequests = "Αιτήσεις εγγραφής χρηστών στο μάθημα";
 $langCourseUserRequestsDisabled = "Αιτήσεις εγγραφής χρηστών δεν υπάρχουν για τα μη κλειστά μαθήματα.";
 
 // delete_course.php
@@ -988,6 +990,9 @@ $langTemporarySaveNotice = "Έχετε αποθηκεύσει προσωρινά
 $langTemporarySaveNotice2 = "Υπάρχει μια προσωρινά αποθηκευμένη προσπάθεια προς ολοκλήρωση η οποια θα εκτελεστεί αν συνεχίσετε. Θέλετε να συνεχίσετε?";
 $langPendingExercise = "Υπάρχουν υποβολές προς βαθμολόγηση στην άσκηση";
 $langAttemptWasCanceled = "Η προσπάθεια ακυρώθηκε.";
+$langExerciseAttemptLeft = 'Προσοχή! Σας απομένει μία προσπάθεια.';
+$langExerciseAttemptsLeft = 'Προσοχή! Σας απομένουν %d προσπάθειες.';
+$langExerciseAttemptContinue = 'Πατώντας στο κουμπί «Συνέχεια» η προσπάθειά σας θα καταγραφεί.';
 /* * ***************************************************
  * contact.php
  * **************************************************** */
@@ -998,24 +1003,23 @@ $langEmailEmpty = "Η διεύθυνση ηλεκτρονικού ταχυδρο
 διεύθυνσή σας από την επιλογή <a href='%s'>«Αλλαγή του προφίλ μου»</a> στη
 σελίδα του χαρτοφυλακίου σας.";
 
-$langEmptyMessage = "Αφήσατε το κείμενο του μηνύματος κενό. Το μήνυμα δε στάλθηκε";
+$langEmptyMessage = "Αφήσατε το κείμενο της αίτησης κενό. Η αίτηση δε στάλθηκε.";
 $langSendMessage = "Αποστολή μηνύματος";
 $langContactMessage = "Πληκτρολογήστε το κείμενο του μηνύματός σας. Αυτό θα σταλεί μεσω email στους υπεύθυνους $langsTeachers του μαθήματος.";
-$langSendingMessage = "Το μήνυμά σας στάλθηκε στους εκπαιδευτές του μαθήματος:";
-$langErrorSendingMessage = "Σφάλμα αποστολής! Το μήνυμα δε στάλθηκε.";
-$langContactIntro = "Ο χρήστης της πλατφόρμας $siteName με όνομα %s (<%s>) σας έστειλε
-το παρακάτω μήνυμα.";
-$langContactIntroFooter = "Αν απαντήσετε, η απάντησή σας θα σταλεί στον παραπάνω χρήστη";
+$langSendingMessage = "Η αίτηση στάλθηκε στους $langsTeachers του μαθήματος:";
+$langErrorSendingMessage = "Σφάλμα αποστολής! Η αίτηση δε στάλθηκε.";
+$langContactIntro = "Ο χρήστης της πλατφόρμας $siteName με όνομα %s (<%s>) σας έστειλε την παρακάτω αίτηση εγγραφής.";
+$langContactIntroFooter = "Για να διαχειριστείτε τις αιτήσεις εγγραφής στο μάθημα κάντε κλικ ";
 
 $langNonUserContact = "Για να επικοινωνήσετε με τους υπεύθυνους $langsTeachers
 του μαθήματος, θα πρέπει να έχετε λογαριασμό στο σύστημα και
 να έχετε συνδεθεί. Παρακαλούμε επισκεφθείτε την <a href='%s'>αρχική σελίδα</a>.";
 $langIntroMessage = "Σύνταξη μηνύματος";
-$langHeaderMessage = "Μήνυμα από $langsstudent_acc";
 $langInfoAboutRegistration = "Το μάθημα που επιλέξατε είναι κλειστό. Για να εγγραφείτε, θα πρέπει
 να συμπληρώσετε την παρακάτω αίτηση, η οποία θα καταγραφεί και θα αποσταλεί στους διαχειριστές του μαθήματος.";
 $langLabelCourseUserRequest = "Αίτηση εγγραφής στο μάθημα";
 $langReasonReject = "Αιτιολογία απόρριψης";
+$langRequestReasons = "Αναφέρετε τους λόγους που επιθυμείτε την εγγραφή σας στο μάθημα.";
 
 /* * **************************************************
  * create_course.php
@@ -3380,6 +3384,7 @@ $charset = 'UTF-8';
 $dateFormatShort = "%b %d, %y";
 $dateFormatLong = '%A, %d %B %Y';
 $dateTimeFormatLong = '%d %B %Y / Ώρα: %R';
+$dateTimeFormatShort = '%d %b %Y %R';
 $timeNoSecFormat = '%R';
 $langNoAdminAccess = '
         <b>Η σελίδα που προσπαθείτε να μπείτε απαιτεί όνομα χρήστη και συνθηματικό.</b>
@@ -3476,6 +3481,8 @@ $langStatsType = "Είδος Στατιστικών";
 $langTotalVisits = "Συνολικές Eπισκέψεις";
 $langVisits = "Αριθμός Επισκέψεων";
 $langHits = "Αριθμός Προβολών";
+$langVisitsShort = "Αρ. Επισκέψεων";
+$langHitsShort = "Αρ. Προβολώς";
 $langFirstLetterUser = "Πρώτο Γράμμα Επωνύμου";
 $langFirstLetterCourse = "Πρώτο Γράμμα Τίτλου";
 $langUsageVisits = "Στατιστικά Επισκεψιμότητας";

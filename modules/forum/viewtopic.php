@@ -29,6 +29,7 @@ require_once 'modules/forum/config.php';
 require_once 'modules/forum/functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'include/lib/textLib.inc.php';
 require_once 'include/course_settings.php';
 require_once 'include/log.php';
 require_once 'modules/search/indexer.class.php';
@@ -192,7 +193,7 @@ if ($topic_locked == 1) {
                     'url' => "viewforum.php?course=$course_code&forum=$forum",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')                
-                ));
+                ),false);
 }
 
 if ($paging and $total > $posts_per_page) {
@@ -258,7 +259,7 @@ $tool_content .= "<div class='table-responsive'><table class='table-default'>
     <tr class='list-header'>
       <th style='width:20%'>$langUserForum</th>
       <th>$langMessage</th>";
-if ($is_editor || $topic_locked != 1) {
+if ($is_editor ) {
     $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
 }
 $tool_content .= "</tr>";
@@ -285,21 +286,25 @@ foreach ($result as $myrow) {
         $user_num_posts = Database::get()->querySingle("SELECT num_posts FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $myrow->poster_id, $course_id);
         if ($user_num_posts) {
             if ($user_num_posts->num_posts == 1) {
-                $user_stats[$myrow->poster_id] = "<br/>".$user_num_posts->num_posts." $langMessage";
+                $user_stats[$myrow->poster_id] = "<span class='text-muted'>$langMessage: " . $user_num_posts->num_posts."</span>";
             } else {
-                $user_stats[$myrow->poster_id] = "<br/>".$user_num_posts->num_posts." $langMessages";
+                $user_stats[$myrow->poster_id] = "<span class='text-muted'>$langMessages: " . $user_num_posts->num_posts."</span>";
             }
         } else {
             $user_stats[$myrow->poster_id] = '';
         }
     }
     
-    $tool_content .= "<td>" . display_user($myrow->poster_id) . $user_stats[$myrow->poster_id]."</td>";    
+    $tool_content .= "<td>
+                        <div>".profile_image($myrow->poster_id, '100px', 'img-responsive img-circle margin-bottom-thin'). "</div>
+                        <div>" .display_user($myrow->poster_id, false, false)."</div>
+                        <div>".$user_stats[$myrow->poster_id]."</div>
+                      </td>";
     $message = $myrow->post_text;
     // support for math symbols
     $message = mathfilter($message, 12, "../../courses/mathimg/");
     if ($count == 0) {
-        $postTitle = "<b>$langPostTitle: </b>" . q($topic_subject);
+        $postTitle = "<h4 class='h4'>".q($topic_subject)."</h4>";
     } else {
         $postTitle = "";
     }
@@ -314,18 +319,23 @@ foreach ($result as $myrow) {
     if ($myrow->parent_post_id == -1) {
         $parent_post_link = "<br/>$langForumPostParentDel";
     } elseif ($myrow->parent_post_id != 0) {
-        $parent_post_link = "$langForumPostParent<a href='viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;post_id=$myrow->parent_post_id#$myrow->parent_post_id'>#$myrow->parent_post_id</a><br/><br/>";
+        $parent_post_link = "$langForumPostParent<a href='viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;post_id=$myrow->parent_post_id#$myrow->parent_post_id'>#$myrow->parent_post_id</a>";
     } else {
         $parent_post_link = "";
     }
 
-    $tool_content .= "<td>
-	  <div>
-	    <span class='pull-right forum-anchor-link'><a name='".$myrow->id."'></a>".$anchor_link."</span>";
-	$tool_content .= "$postTitle<br><b>$langSent: </b>" . $myrow->post_time . "
+    $tool_content .= "<td class='forum-response-column'>
+	  <div class='forum-post-header'>
+	    <span class='pull-right forum-anchor-link'>";
+    if ($topic_locked != 1) {
+        $tool_content .= "<a class='btn btn-default btn-xs reply-post-btn' href='reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id'>$langReply</a>";
+    }
+
+        $tool_content .= "<a name='".$myrow->id."'></a>".$anchor_link."</span>";
+	$tool_content .= "$postTitle<small class='text-muted'><b>$langSent:</b> " . claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time)) . "</small>
 	  </div>
-	  <br />$message<br />" . $parent_post_link . $rate_str . "
-	</td>";
+	  <div class='forum-post-message'>$message</div><div class='forum-post-footer clearfix'><div class='pull-left'>$rate_str</div><div class='pull-right text-muted'><small>$parent_post_link</small></div>
+	</div></td>";
 
     $dyntools = (!$is_editor) ? array() : array(
         array('title' => $langModify,
@@ -338,12 +348,7 @@ foreach ($result as $myrow) {
             'class' => 'delete',
             'confirm' => $langConfirmDelete)
     );
-    if ($topic_locked != 1) {
-        $dyntools[] = array('title' => $langReply,
-            'level' => 'primary-label',
-            'url' => "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id",
-            'icon' => 'fa-reply');
-    }
+
     if (abuse_report_show_flag('forum_post', $myrow->id, $course_id, $is_editor)) {
         $head_content .= abuse_report_add_js();
         $flag_arr = abuse_report_action_button_flag('forum_post', $myrow->id, $course_id);

@@ -38,7 +38,7 @@ $tool_content .= action_bar(array(
                 ),false);
 
 if (isset($_GET['auth'])) {
-    $auth = $_GET['auth'];
+    $auth = getDirectReference($_GET['auth']);
     if (isset($_GET['q'])) { // activate / deactivate authentication method
         $q = $_GET['q'];
         $s = get_auth_settings($auth);
@@ -70,9 +70,9 @@ if (isset($_GET['auth'])) {
         $auth_active = in_array($auth_id, $auth_active_ids);
         if ($auth_count > 0 or $auth_active) {
             $auth_search_link = ($auth_count == 0)? '0':
-                "<a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type=$auth_id&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=0'>$auth_count</a>";
+                "<a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type=$auth_id&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=" . getIndirectReferences(0) . "'>$auth_count</a>";
             if ($auth_id != 1 and $auth_count > 0) {
-                $auth_change_link = " - <a href='auth_change.php?auth=$auth_id'>$langAuthChangeUser</a>";
+                $auth_change_link = " - <a href='auth_change.php?auth=" . getIndirectReference($auth_id) . "'>$langAuthChangeUser</a>";
             } else {
                 $auth_change_link = '';
             }
@@ -96,7 +96,7 @@ if (isset($_GET['auth'])) {
         $primary = $info->auth_default > 1;
         $primaryLabel = $primary? "&nbsp;&nbsp;<small><span class='label label-default'>$langPrimaryAuthType</span></small>": '';
         $visibility = $active? '': ' class=not_visible';
-        $activation_url = "$_SERVER[PHP_SELF]?auth=$auth_id&amp;q=" . !$active;
+        $activation_url = "$_SERVER[PHP_SELF]?auth=" . getIndirectReference($auth_id) . "&amp;q=" . !$active;
         $activation_title = $active? $langDeactivate: $langActivate;
         $activation_icon = $active? 'fa-toggle-off': 'fa-toggle-on';
         $tool_content .= "<tr><td$visibility>" . strtoupper($auth_name) . "$primaryLabel</td><td class='option-btn-cell'>";
@@ -106,14 +106,14 @@ if (isset($_GET['auth'])) {
                   'icon' => $activation_icon,
                   'show' => $auth_id == 1 or $info->auth_settings),
             array('title' => $langAuthSettings,
-                  'url' => "auth_process.php?auth=$auth_id",
+                  'url' => "auth_process.php?auth=" . getIndirectReference($auth_id),
                   'icon' => 'fa-gear'),
             array('title' => $langPrimaryAuthType,
-                  'url' => "$_SERVER[PHP_SELF]?auth=$auth_id&amp;p=1",
+                  'url' => "$_SERVER[PHP_SELF]?auth=" . getIndirectReference($auth_id) . "&amp;p=1",
                   'icon' => 'fa-flag',
                   'show' => $active and !$primary),
             array('title' => $langSecondaryAuthType,
-                  'url' => "$_SERVER[PHP_SELF]?auth=$auth_id&amp;p=0",
+                  'url' => "$_SERVER[PHP_SELF]?auth=" . getIndirectReference($auth_id) . "&amp;p=0",
                   'icon' => 'fa-circle-o',
                   'show' => $primary)));
             $tool_content .= "</td><tr>";

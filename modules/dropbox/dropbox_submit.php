@@ -66,6 +66,7 @@ $file_attached = FALSE;
   form submission
  */
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $error = FALSE;
     $errormsg = '';
     if (!isset($_POST['body'])) {

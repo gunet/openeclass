@@ -29,7 +29,7 @@ $tree = new Hierarchy();
 $user = new User();
 $requestId = 0;
 if (isset($_POST['id'])) {
-    $requestId = intval($_POST['id']);
+    $requestId = intval(getDirectReference($_POST['id']));
 }
 $nodes = array();
 $data = array();
@@ -71,7 +71,7 @@ if ($requestId <= 0) {
     
     foreach ($tree_array as $key => $value) {
         $data[] = array(
-            "id" => $key,
+            "id" => getIndirectReference($key),
             "text" => $value
         );
     }
@@ -122,7 +122,7 @@ foreach ($nodes as $node) {
     $valcode = ($codesuffix && strlen($node->code) > 0) ? ' (' . $node->code . ')' : '';
     
     $data[] = array(
-        "id" => $node->id,
+        "id" => getIndirectReference($node->id),
         "text" => Hierarchy::unserializeLangField($node->name) . $valcode,
         "state" => array("disabled" => $disabled),
         "children" => (($node->rgt - $node->lft) > 1),

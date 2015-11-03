@@ -60,7 +60,7 @@ if ($submit) {
     $pu = $_POST['pu'];
     $pe = $_POST['pe'];
     $phone = $_POST['phone'];
-    $department = $_POST['department'];
+    $department = getDirectReference($_POST['department']);
     $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
     $lang = $session->validate_language_code(@$_POST['language']);
     
@@ -239,7 +239,7 @@ if ($submit) {
         $tool_content .= "<div class='form-group'>
         <label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";           
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
+        list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</div></div>";

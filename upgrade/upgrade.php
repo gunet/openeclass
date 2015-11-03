@@ -2180,9 +2180,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     DBHelper::indexExists('lp_user_module_progress', 'optimize') or
             Database::get()->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
     DBHelper::indexExists('poll', 'poll_index') or
-            Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");
-    DBHelper::indexExists('poll_user_record', 'poll_ans_id') or
-            Database::get()->query("CREATE INDEX `poll_ans_id` ON poll_user_record(pid, uid)");
+            Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");    
     DBHelper::indexExists('poll_question', 'poll_q_id') or
             Database::get()->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
     DBHelper::indexExists('poll_question_answer', 'poll_qa_id') or
@@ -2952,12 +2950,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             $user_records = Database::get()->queryArray("SELECT DISTINCT `pid`, `user_id` FROM poll_answer_record");
             foreach ($user_records as $user_record) {
                 $poll_user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $user_record->pid, $user_record->user_id)->lastInsertID;
-                Database::get()->query("UPDATE poll_answer_record SET poll_user_record_id = ?d", $poll_user_record_id);
+                Database::get()->query("UPDATE poll_answer_record SET poll_user_record_id = ?d WHERE pid = ?d AND user_id = ?d", $poll_user_record_id, $user_record->pid, $user_record->user_id);
             }
             Database::get()->query("ALTER TABLE `poll_answer_record` ADD FOREIGN KEY (`poll_user_record_id`) REFERENCES `poll_user_record` (`id`) ON DELETE CASCADE");
             delete_field('poll_answer_record', 'pid');
             delete_field('poll_answer_record', 'user_id');            
         }
+        DBHelper::indexExists('poll_user_record', 'poll_user_rec_id') or
+            Database::get()->query("CREATE INDEX `poll_user_rec_id` ON poll_user_record(pid, uid)");
         //Removing Course Home Layout 2
         Database::get()->query("UPDATE course SET home_layout = 1 WHERE home_layout = 2");
     }
