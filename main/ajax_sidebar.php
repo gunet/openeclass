@@ -34,7 +34,6 @@ header('Content-Type: application/json; charset=UTF-8');
 
 function getSidebarNotifications() {
     global $modules, $admin_modules, $theme_settings, $urlAppend;
-
     $notifications_html = array();
     if (isset($_GET['courseIDs']) and count($_GET['courseIDs'])) {
         $t = new Template();

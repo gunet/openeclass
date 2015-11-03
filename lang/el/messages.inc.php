@@ -3487,6 +3487,7 @@ $langFirstLetterUser = "Πρώτο Γράμμα Επωνύμου";
 $langFirstLetterCourse = "Πρώτο Γράμμα Τίτλου";
 $langUsageVisits = "Στατιστικά Επισκεψιμότητας";
 $langFavourite = "Προτίμηση Υποσυστημάτων";
+$langFavouriteCourse = "Προτίμηση Μαθημάτων";
 $langFavouriteExpl = "Παρουσιάζεται η προτίμηση ενός χρήστη ή όλων των χρηστών στα υποσυστήματα μέσα σε ένα χρονικό διάστημα.";
 $langOldStats = "Εμφάνιση παλιών στατιστικών";
 $langOldStatsExpl = "Συγκεντρωτικά μηνιαία στατιστικά στοιχεία <u>παλιότερα των %s μηνών</u>.";
@@ -3498,6 +3499,17 @@ $langWeekly = "Εβδομαδιαίο";
 $langMonthly = "Μηνιαίο";
 $langYearly = "Ετήσιο";
 $langSummary = "Συνολικά";
+$langPerDay = "ανά ημέρα";
+$langPerWeek = "ανά εβδομάδα";
+$langPerMonth = "ανά μήνα";
+$langPerYear = "ανά έτος";
+$langStatsUserStatus = array(1=>"Εκπαιδευτές",5=>"Εκπαιδευόμενοι");
+$langCourseVisibility = array(0=>'Ανενεργά',1=>'Ελεγχόμενης πρόσβασης',2=>'Ανοικτά',3=>'Κλειστά');
+$langHits = "Επισκέψεις";
+$langRegisterActions = "Εγγραφές";
+$langUnregisterActions = "Απεγγραφές";
+$langMonthlyCourseRegistrations = "Εγγραφές χρηστών στο μάθημα";
+$langDurationOfVisits = "διάρκεια επισκέψεων";
 $langDurationVisits = "Χρονική Διάρκεια Επισκέψεων";
 $langDurationExpl = "Η χρονική διάρκεια των επισκέψεων σε κάθε υποσύστημα είναι σε λεπτά της ώρας και υπολογίζεται κατά προσέγγιση.";
 $langMonths[1] = "Ιαν";
@@ -3534,6 +3546,10 @@ $langStatAccueil = "Για το χρονικό διάστημα που ζητή�
 $langHost = "Υπολογιστής";
 $langGroupUsage = 'Στατιστικά ομάδων χρηστών';
 $langNoStats = "Δεν υπάρχουν διαθέσιμα στατιστικά";
+$langDetails = "Αναλυτικά";
+$langPlots = "Γραφήματα";
+$langIpAddress = "Διεύθυνση IP";
+
 
 #for platform Statistics
 $langUsersCourse = "Χρήστες ανά μάθημα";

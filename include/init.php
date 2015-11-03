@@ -430,7 +430,7 @@ $modules = array(
 $admin_modules = array(
     MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info', 'image' => 'fa-cogs'),
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'fa-user'),
-    MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'fa-cogs'),
+    MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'fa-area-chart'),
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'fa-cogs'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'fa-flag'),
 );
