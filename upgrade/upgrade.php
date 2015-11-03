@@ -2962,7 +2962,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE course SET home_layout = 1 WHERE home_layout = 2");
     }
 
-
+    if (version_compare($oldversion, '3.3', '<')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
+                        `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `class` varchar(400) NOT NULL) $charset_spec"); 
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
+                        `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `widget_id` int(11) unsigned NOT NULL,
+                        `widget_area_id` int(11) NOT NULL,
+                        `options` text NOT NULL,
+                        `position` int(3) NOT NULL,
+                         FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");          
+    }
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 

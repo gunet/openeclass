@@ -300,7 +300,10 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                 $langInfoAbout
             </div>
         </div>";
-
+        $home_main_area = new \Widgets\WidgetArea(HOME_PAGE_MAIN);
+        foreach ($home_main_area->getWidgets() as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }   
         // display admin announcements
         if(!empty($ann_content)) {
             $tool_content .= "<h3 class='content-title'>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>
@@ -373,7 +376,10 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                 </div></div>
             </div>";
     }
-
+        $home_main_area = new \Widgets\WidgetArea(HOME_PAGE_SIDEBAR);
+        foreach ($home_main_area->getWidgets() as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }  
         $tool_content .= "</div>
         </div>";
     draw($tool_content, 0, null, $head_content);

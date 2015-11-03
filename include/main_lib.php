@@ -131,6 +131,10 @@ define('ATTEMPT_PENDING', 2);
 define('ATTEMPT_PAUSED', 3);
 define('ATTEMPT_CANCELED', 4);
 
+// Widget Areas
+define('HOME_PAGE_MAIN', 1);
+define('HOME_PAGE_SIDEBAR', 2);
+
 // for fill in blanks questions
 define('TEXTFIELD_FILL', 1);
 define('LISTBOX_FILL', 2); //

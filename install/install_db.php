@@ -1587,7 +1587,16 @@ $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_department` (
     `department_id` INT(11) NOT NULL,
     FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
     FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE)");
-
+$db->query("CREATE TABLE IF NOT EXISTS `widget` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `class` varchar(400) NOT NULL) $charset_spec"); 
+$db->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `widget_id` int(11) unsigned NOT NULL,
+                `widget_area_id` int(11) NOT NULL,
+                `options` text NOT NULL,
+                `position` int(3) NOT NULL,
+                FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");   
 $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();
