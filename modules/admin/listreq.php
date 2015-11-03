@@ -285,8 +285,8 @@ if (!empty($show) and $show == 'closed') {
 
                         }
                         $tool_content .= "<div class='alert alert-success'>" . (($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject);
-                        $tool_content .= " $langRequestMessageHasSent <b>" . q($_POST[prof_email]) . "</b></div>";
-                        $tool_content .= "<br><p><b>$langComments:</b><br>" . q($_POST[comment]) . "</p>";
+                        $tool_content .= " $langRequestMessageHasSent <b>" . q($_POST['prof_email']) . "</b></div>";
+                        $tool_content .= "<br><p><b>$langComments:</b><br>" . q($_POST['comment']) . "</p>";
                     }
                 }
             } else {

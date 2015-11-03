@@ -296,15 +296,14 @@ if ($all_set) {
                 ($prof ? $langDearProf : $langDearUser) .
                 "!<br />$success</div><p>$infoprof<br /><br />$click <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</p>";
     }
-    // email needs verification -> mail user
     else {
+        // email needs verification -> mail user
         $hmac = token_generate($username . $usermail . $request_id);
-        //----------------------------- Email Verification -----------------------
         $subject = $langMailVerificationSubject;
         $emailhelpdesk = get_config('email_helpdesk');
         $emailAdministrator = get_config('email_sender');
 
-        $activateLink = "<a href='".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid.$request_id."'>".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid.$request_id."</a>";;
+        $activateLink = "<a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;rid=$request_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$request_id</a>";;
 
         $header_html_topic_notify = "<!-- Header Section -->
         <div id='mail-header'>
