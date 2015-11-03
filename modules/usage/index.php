@@ -118,8 +118,6 @@ $head_content .= "<style>
 
 $pageName = $langUsage;
 
-ob_start();
-
 if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)){
     require_once "course.php";
 }
@@ -136,7 +134,7 @@ add_units_navigation(true);
 if($stats_type == 'admin'){
     draw($tool_content, 3, null, $head_content);
 }
-if($stats_type == 'course'){
+elseif($stats_type == 'course'){
     draw($tool_content, 2, null, $head_content);
 }
 else{

@@ -534,7 +534,7 @@ function get_user_login_details($start = null, $end = null, $user){
             JOIN user u ON l.user_id=u.id 
             JOIN course c ON l.course_id=c.id"; 
     
-    if(!is_null($start) && !is_empty($start) && !is_null($end) && !is_empty($end)){
+    if(!is_null($start) && !empty($start) && !is_null($end) && !empty($end)){
         $q .= " WHERE l.date_time BETWEEN ?t AND ?t";
         $r = Database::get()->queryArray($q, $start, $end);
     }

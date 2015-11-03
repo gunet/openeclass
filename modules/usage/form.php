@@ -23,8 +23,6 @@
  * @file form.php
  * @brief display form for creating graph statistics
  */
-$require_current_course = true;
-$require_course_admin = true;
 $require_login = true;
 
 $mod_opts = '<option value="-1">' . $langAllModules . "</option>";
