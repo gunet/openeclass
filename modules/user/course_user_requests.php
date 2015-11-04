@@ -63,32 +63,39 @@ if (isset($_POST['rejected_req_id'])) { // do reject course user request
 
 if (isset($_GET['rid'])) {
     if (isset($_GET['reg'])) {
-        $sql = Database::get()->query("INSERT INTO course_user SET user_id = ?d, course_id = ?d,
-                                status = " . USER_STUDENT . ",
-                                reg_date = " . DBHelper::timeAfter() . ", 
-                                document_timestamp = " . DBHelper::timeAfter() . "", $_GET['u'], $course_id);
-        if ($sql) { // notify user
-            $email = uid_to_email($_GET['u']);
-            if (!empty($email) and email_seems_valid($email)) {
-                $emailsubject = "$langYourReg " . course_id_to_title($course_id);
-                $emailbody = "$langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2 $langFormula \n$gunet";
-                $header_html_topic_notify = "<!-- Header Section -->
-                <div id='mail-header'><br><div><div id='header-title'>$langYourReg " . course_id_to_title($course_id)."</div></div></div>";
-                $body_html_topic_notify = "<!-- Body Section -->
-                <div id='mail-body'><br>
-                    <div id='mail-body-inner'>
+        $sql = Database::get()->query("INSERT IGNORE INTO course_user
+                    SET user_id = ?d, course_id = ?d,
+                        status = " . USER_STUDENT . ",
+                        reg_date = " . DBHelper::timeAfter() . ", 
+                        document_timestamp = " . DBHelper::timeAfter(),
+                    $_GET['u'], $course_id);
+        if ($sql) {
+            if ($sql->affectedRows) { // notify user if registered
+                $email = uid_to_email($_GET['u']);
+                if (!empty($email) and email_seems_valid($email)) {
+                    $emailsubject = "$langYourReg " . course_id_to_title($course_id);
+                    $emailbody = "$langNotifyRegUser1 '" . course_id_to_title($course_id) .
+                        "' $langNotifyRegUser2 $langFormula \n$gunet";
+                    $header_html_topic_notify = "<!-- Header Section -->
+                        <div id='mail-header'><br><div><div id='header-title'>$langYourReg " .
+                        course_id_to_title($course_id) . "</div></div></div>";
+                    $body_html_topic_notify = "<!-- Body Section -->
+                        <div id='mail-body'><br>
+                        <div id='mail-body-inner'>
                         $langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2
                         <br><br>$langFormula<br>$gunet
-                    </div>
-                </div>";
+                        </div>
+                        </div>";
 
-                $emailbody = $header_html_topic_notify.$body_html_topic_notify;
-                $plainemailbody = html2text($emailbody);
-                send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody, $charset);
+                    $emailbody = $header_html_topic_notify . $body_html_topic_notify;
+                    $plainemailbody = html2text($emailbody);
+                    send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody, $charset);
+                }
             }
             // close user request
             Database::get()->query("UPDATE course_user_request SET status = 2 WHERE id = ?d", $_GET['rid']);
-            $tool_content .= "<div class='alert alert-success'>$langCourseUserRegDone</div>";
+            Session::Messages($langCourseUserRegDone, 'alert-success');
+            redirect_to_home_page('modules/user/course_user_requests.php?course=' . $course_code);
         } else {
             $tool_content .= "<div class='alert alert-danger'>$langCourseUserRegError</div>";
         }
