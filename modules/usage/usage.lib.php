@@ -178,8 +178,8 @@ function get_course_activity_details($start = null, $end = null, $user, $course,
     $user_cond1 = "";
     $user_cond2 = "";
     if($user > 0 ){
-        $user_cond1 = " AND u.id";
-        $user_cond2 = " AND l.user_id";
+        $user_cond1 = " AND u.id = ?d";
+        $user_cond2 = " AND l.user_id = ?d";
         $pars[] = $user;
         $pars[] = $user;
     }
@@ -333,7 +333,7 @@ function get_course_preference_stats($start = null, $end = null, $user, $course 
 
 /**
  * Get user visits and duration in a course. If the course is specified in the 
- * reports' parameters then return the visits in a specified module os a course.
+ * reports' parameters then return the visits in a specified module of a course.
  * The results are shown in a bar chart (third plot) of the user stats
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for

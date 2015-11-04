@@ -96,7 +96,7 @@ $tschema = "<thead><tr>"
 $tool_content .= table_placeholder("cdetails2", "table table-striped table-bordered", $tschema, $langMonthlyCourseRegistrations);
 $tool_content .= "</div>";
 
-$tool_content .= "<div class='panel panel-default detailscontainer'>";
+$tool_content .= "<div class='panel panel-default logscontainer'>";
 $tschema = "<thead><tr>"
         . "<th>$langDate - $langHour</th>"
         . "<th>$langUser</th>"
