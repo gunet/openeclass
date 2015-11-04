@@ -74,7 +74,7 @@ $tool_content .= '<div class="form-group" data-placement="top">';
 $endDate_obj = new DateTime();
 $enddate = $endDate_obj->format('d-m-Y');
 $showUntil = q($enddate);
-$startDate_obj = $endDate_obj->sub(new DateInterval('P1Y'));
+$startDate_obj = $endDate_obj->sub(new DateInterval('P6M'));
 $startdate = $startDate_obj->format('d-m-Y');
 $showFrom = q($startdate);
 

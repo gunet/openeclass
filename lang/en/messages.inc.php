@@ -2267,6 +2267,7 @@ $langUpdates = "updates";
 $langNoChanges = "No changes were made";
 $langAddUnit = "Add new course unit";
 $langEditUnit = "Edit course unit details";
+$langUnits = "Course units";
 $langUnitTitle = "Course unit title";
 $langUnitDescr = "Short description";
 $langUnitUnknown = "Unknown course unit";

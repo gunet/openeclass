@@ -315,7 +315,7 @@ function get_course_preference_stats($start = null, $end = null, $user, $course 
         $formattedr = get_module_preference_stats($start, $end, $course, $user);
     }
     else{
-        $q = "SELECT c.id cid, c.title, s.hits, s.dur from (SELECT course_id cid, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE user_id=?d AND day BETWEEN ?t AND ?t GROUP BY course_id) s JOIN course c on s.cid=c.id ORDER BY hits DESC";
+        $q = "SELECT c.id cid, c.title, s.hits, s.dur FROM (SELECT course_id cid, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE user_id=?d AND day BETWEEN ?t AND ?t GROUP BY course_id) s JOIN course c on s.cid=c.id ORDER BY hits DESC LIMIT 10";
         $r = Database::get()->queryArray($q, $user, $start, $end);
         $formattedr = array();
         $courses = array();

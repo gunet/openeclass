@@ -371,6 +371,7 @@ function refresh_generic_user_plot(){
 }
 
 function refresh_course_pref_plot(){
+    piecourse = -1;
     $.getJSON('results.php',{t:'ucp', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
         if(data.pcid != null){
             var options = {
@@ -387,7 +388,7 @@ function refresh_course_pref_plot(){
                     }
                 }
             };
-            course = data.pcid;
+            piecourse = data.pcid;
         }
         else{
             encapsulateddata = data.chartdata;
@@ -402,13 +403,14 @@ function refresh_course_pref_plot(){
             };
         }
         charts.cp = refreshChart("cp", options);
-           
-        refresh_user_course_plot();
+        
+        piecourse = (piecourse < 0)? course:piecourse;
+        refresh_user_course_plot(piecourse);
     });
 }
 
-function refresh_user_course_plot(){
-    $.getJSON('results.php',{t:'uc', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
+function refresh_user_course_plot(piecourse){
+    $.getJSON('results.php',{t:'uc', s:startdate, e:enddate, i:interval, u:user, c:piecourse, m:module},function(data){
         if(data.chartdata.chartdata == null){
             $("#course_stats_title").text(data.charttitle);
             chartdata = data.chartdata;
