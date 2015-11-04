@@ -102,12 +102,15 @@ elseif($stats_type == 'user'){
     $tool_content .= '
     <div class="col-sm-3 col-xs-3"><select name="course" id="course" class="form-control">' . $statsCourseOptions . '</select></div>';
 }
-
+//<a id="list-view" class="btn btn-default"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><i class="fa fa-list"  data-toggle="tooltip" data-placement="top"></i></a>
+        
 $tool_content .= '<div class="pull-right">
     <div id="toggle-view" class="btn-group">
-    	<a id="plots-view" class="btn btn-default active"  data-placement="top" title="'.$langPlots.'" data-toggle="tooltip" data-original-title="'.$langPlots.'"><i class="fa fa-bar-chart"  data-toggle="tooltip" data-placement="top"></i></a>
-        <a id="list-view" class="btn btn-default"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><i class="fa fa-list"  data-toggle="tooltip" data-placement="top"></i></a>
-    </div>
+    	<a id="plots-view" class="btn btn-info active"  data-placement="top" title="'.$langPlots.'" data-toggle="tooltip" data-original-title="'.$langPlots.'"><i class="fa fa-bar-chart"  data-toggle="tooltip" data-placement="top"></i></a>
+        <a id="list-view" class="btn btn-info"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><i class="fa fa-list"  data-toggle="tooltip" data-placement="top"></i></a>';
+$tool_content .= ($stats_type == 'course')? '<a id="logs-view" class="btn btn-primary"  data-placement="top" title="'.$langUsersLog.'" data-toggle="tooltip" data-original-title="'.$langUsersLog.'"><i class="fa fa-list-alt"  data-toggle="tooltip" data-placement="top"></i></a>':'';
+
+$tool_content .= '</div>
 </div>';
 
 $tool_content .= '</div><div style="clear:both;"></div></div>';
