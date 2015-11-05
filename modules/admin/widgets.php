@@ -173,7 +173,7 @@ $head_content .=
                      action: 'remove'
                   },
                   success: function(data){
-                    item.remove();    
+                    item.hide('slow', function(){ item.remove(); });
                   },
                   error: function(xhr, textStatus, error){
                       console.log(xhr.statusText);
@@ -185,6 +185,7 @@ $head_content .=
             function addWidget(e) {
                 if (e.from['id'] == 'widgets') {
                     var item = $(e.item);  // dragged HTMLElement
+                    item.find('div.panel-heading a').append('<span class=\'fa fa-spinner fa-spin\'></span>');
                     var widget_area_id = item.closest('div.panel-body').data('widget-area-id');
                     var widget_id = item.data('widget-id');   
                     $.ajax({
@@ -264,6 +265,7 @@ $head_content .=
                             .find('#widget_form_'+obj.widget_widget_area_id)
                             .find('.panel-body')
                             .append(form_obj.form_view);
+                            item.find('div.panel-heading a span').removeClass().addClass('fa fa-check');
                       },
                       error: function(xhr, textStatus, error){
                           console.log(xhr.statusText);

@@ -40,8 +40,8 @@ class TextWidget extends Widget implements WidgetInterface {
          * Fallback language is English
          */        
         $this->name = array(
-            'en' => 'Text Widget',
-            'el' => 'Widget Κειμένου'     
+            'en' => 'Text / HTML',
+            'el' => 'Text / HTML'     
         );
         $this->description = array(
             'en' => 'This is a widget that simply displays some text or html',

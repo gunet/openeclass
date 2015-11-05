@@ -40,12 +40,12 @@ class ClockWidget extends Widget implements WidgetInterface {
          * Fallback language is English
          */        
         $this->name = array(
-            'en' => 'Clock Widget',
-            'el' => 'Widget Ρολόι'     
+            'en' => 'Analog Clock',
+            'el' => 'Αναλογικό Ρολόι'     
         );
         $this->description = array(
-            'en' => 'This is a widget that simply displays a clock',
-            'el' => 'Ένα widget με το οποίο μπορείτε να εμφανίσετε ένα ρολόι'     
+            'en' => 'This is a widget that simply displays an analog clock',
+            'el' => 'Ένα widget με το οποίο μπορείτε να εμφανίσετε ένα αναλογικό ρολόι'     
         );               
     }
     
