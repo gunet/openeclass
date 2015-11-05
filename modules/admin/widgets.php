@@ -98,7 +98,6 @@ $head_content .=
         <script type='text/javascript'>
             $(function() {
                 var byId = function (id) { return document.getElementById(id); }
-                initOptionsSubmit();
                 Sortable.create(byId('widgets'), {
                     draggable: '.widget',
                     sort: false,
@@ -273,8 +272,9 @@ $head_content .=
                       }
                     });
             }
-            function initOptionsSubmit() {
-                $('.submitOptions').on('click', function() {
+
+                $(document).on('click', '.submitOptions', function(e) {
+                    e.preventDefault();
                     var widget_widget_area_id = $(this).closest('.panel').data('widget-widget-area-id');
                     var options = $(this).closest('.panel-body').find('form#optionsForm'+widget_widget_area_id).serializeArray();
                     $.ajax({
@@ -296,7 +296,7 @@ $head_content .=
                         } 
                       });
                 });            
-            }
+
         </script>
         ";
         

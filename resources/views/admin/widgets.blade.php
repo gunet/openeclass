@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-xs-4">
-        <h3 class="content-title">Installed Widgets</h3>
+        <h3 class="content-title">{{ trans('langInstalledWidgets') }}</h3>
         <hr>
         <div id="widgets">
         @foreach ($installed_widgets as $key => $installed_widget)
@@ -26,7 +26,7 @@
                                     <input type="hidden" name='widgetAction' value='uninstall'>
                                 </form>
                                 <a href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
-                                    <small>Uninstall</small>
+                                    <small>{{ trans('langWidgetUninstall') }}</small>
                                 </a>                               
                             </div>                      
                         </div>                        
@@ -37,7 +37,7 @@
                         </div>
                         <div class="panel-footer clearfix">
                             <a href="#" class="remove">
-                                <small>Delete</small>
+                                <small>{{ trans('langDelete') }}</small>
                             </a>
                             <div class="pull-right">
                                 <a href="#" class="btn btn-xs btn-primary submitOptions">
@@ -49,7 +49,7 @@
                 </div>
        @endforeach       
         </div>
-        <h3 class="content-title">Unistalled Widgets</h3>
+        <h3 class="content-title">{{ trans('langAvailableWidgets') }}</h3>
         <hr>
         <div>           
             @foreach ($uninstalled_widgets as $key => $uninstalled_widget)
@@ -72,7 +72,7 @@
                                 <input type="hidden" name='widgetAction' value='install'>
                             </form>
                             <a href="#" onclick="$('#installForm{{ $key }}').submit();">
-                                <small>Install</small>
+                                <small>{{ trans('langWidgetInstall') }}</small>
                             </a>                               
                         </div>
                     </div>
@@ -84,7 +84,7 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h4 class="panel-title">                
-                    Home Page Main Content
+                    {{ trans('langHomePageMainContent') }}
                 </h4>
             </div>
             <div class="panel-body" id="home_widget_main" data-widget-area-id="1">
@@ -102,7 +102,7 @@
                         </div>
                         <div class="panel-footer clearfix">
                             <a href="#" class="remove">
-                                <small>Delete</small>
+                                <small>{{ trans('langDelete') }}</small>
                             </a>
                             <div class="pull-right">
                                 <a href="#" class="btn btn-xs btn-primary submitOptions">
@@ -120,7 +120,7 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h4 class="panel-title">                
-                    Home Page Sidebar
+                    {{ trans('langHomePageSidebarContent') }}
                 </h4>
             </div>
             <div class="panel-body" id="home_widget_sidebar" data-widget-area-id="2">
@@ -138,7 +138,7 @@
                         </div>
                         <div class="panel-footer clearfix">
                             <a href="#" class="remove">
-                                <small>Delete</small>
+                                <small>{{ trans('langDelete') }}</small>
                             </a>
                             <div class="pull-right">
                                 <a href="#" class="btn btn-xs btn-primary submitOptions">
