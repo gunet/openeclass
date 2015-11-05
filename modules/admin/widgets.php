@@ -277,6 +277,8 @@ $head_content .=
 
                 $(document).on('click', '.submitOptions', function(e) {
                     e.preventDefault();
+                    var item = $(this).closest('.panel');
+                    item.find('div.panel-heading a span').removeClass().addClass('fa fa-spinner fa-spin');
                     var widget_widget_area_id = $(this).closest('.panel').data('widget-widget-area-id');
                     var options = $(this).closest('.panel-body').find('form#optionsForm'+widget_widget_area_id).serializeArray();
                     $.ajax({
@@ -289,7 +291,7 @@ $head_content .=
                          action: 'saveOptions'
                         },
                         success: function(data){
-
+                            item.find('div.panel-heading a span').removeClass().addClass('fa fa-check');
                         },
                         error: function(xhr, textStatus, error){
                             console.log(xhr.statusText);

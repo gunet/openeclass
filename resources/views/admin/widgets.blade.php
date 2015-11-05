@@ -93,7 +93,7 @@
                     <div class="panel-heading">                   
                         <a style="text-decoration: none; display: block; color: #777;" data-toggle="collapse" data-target="#widget_desc_{{ $key }}" 
                            href="#widget_desc_{{ $key }}" class="widget_title">
-                          {{ $home_main_area_widget->getName() }}
+                            {{ $home_main_area_widget->getName() }} <span></span>
                         </a>                     
                     </div>
                     <div id="widget_form" class="panel-collapse collapse in">
