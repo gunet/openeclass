@@ -609,11 +609,15 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langExtAppConfig']);
         array_push($sideMenuLink, "../admin/extapp.php");
         array_push($sideMenuImg, "fa-caret-right");
-
+        
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);
         array_push($sideMenuLink, "../admin/theme_options.php");
         array_push($sideMenuImg, "fa-caret-right");
-
+        
+        array_push($sideMenuText, $GLOBALS['langWidgets']);
+        array_push($sideMenuLink, "../admin/widgets.php");
+        array_push($sideMenuImg, "fa-caret-right");
+        
         array_push($sideMenuText, $GLOBALS['langDisableModules']);
         array_push($sideMenuLink, "../admin/modules.php");
         array_push($sideMenuImg, "fa-caret-right");

@@ -3745,6 +3745,7 @@ $langBBBConnectionError = "Unable to connect to the teleconference server";
 $langBBBGetUsersError = "Unable to retrieve teleconference information ";
 $langBBBCreationRoomError = "Unable to create a room on the teleconference server";
 $langBBBImportRecordingsNo = "Unable to import to multimedia, either because recording is disabled or because processing is not yet finished.";
+$langWidgets = "Widgets";
 $langThemeSettings = 'Theme Settings';
 $langActiveThemeSettings = 'Active Theme Settings';
 $langDefaultThemeSettings = 'Open eClass Default';
