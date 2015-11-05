@@ -24,10 +24,12 @@ abstract class Widget {
     public $id;
     public $name;
     public $description;
+    public $folder;
     
     public function __construct() {
         $widget = \Database::get()->querySingle("SELECT id FROM widget WHERE class = ?s", get_called_class());
         $this->id = $widget ? $widget->id : null;
+        $this->folder = strtolower(str_replace('\\', '/', substr(get_called_class(), 0, strrpos(get_called_class(), "\\"))));
     }
     
     protected static function register_widget() {

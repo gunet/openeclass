@@ -277,6 +277,20 @@ function view($view_file, $view_data = array()) {
     $data = array_merge($global_data, $view_data);
     return $blade->view()->make($view_file, $data)->render();
 }
+function widget_view($view_file, $view_data = array()) {
+    global $webDir, $is_editor, $course_code, $course_id, $language, $siteName,
+    $urlAppend, $theme, $pageName, $currentCourseName, $uid, $session, $toolName,
+    $require_help, $professor, $helpTopic, $head_content, $toolName, $themeimg, $navigation,
+    $require_current_course, $saved_is_editor, $require_course_admin, $require_editor;
+    
+    $views = $webDir."/$view_data[widget_folder]/views";
+    $cache = $webDir . '/storage/views';
+    $blade = new Blade($views, $cache);
+    
+    $global_data = [];
+    $data = array_merge($global_data, $view_data);
+    return $blade->view()->make($view_file, $data)->render();
+}
 /**
  * Function draw
  *

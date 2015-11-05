@@ -1,4 +1,4 @@
-<?php namespace Widgets\Openeclass;
+<?php namespace Widgets\Openeclass\Clock;
 use Widgets\Widget;
 use Widgets\WidgetWidgetArea;
 use Widgets\WidgetInterface;
@@ -27,8 +27,8 @@ use Widgets\WidgetInterface;
  *
  * @author nikos
  */
-class TextWidget extends Widget implements WidgetInterface {
-   
+class ClockWidget extends Widget implements WidgetInterface {
+  
     public function __construct() {  
         parent::__construct();
         
@@ -40,12 +40,12 @@ class TextWidget extends Widget implements WidgetInterface {
          * Fallback language is English
          */        
         $this->name = array(
-            'en' => 'Text / HTML',
-            'el' => 'Text / HTML'     
+            'en' => 'Analog Clock',
+            'el' => 'Αναλογικό Ρολόι'     
         );
         $this->description = array(
-            'en' => 'This is a widget that simply displays some text or html',
-            'el' => 'Ένα widget με το οποίο μπορείτε να εμφανίσετε απλό κείμενο ή html'     
+            'en' => 'This is a widget that simply displays an analog clock',
+            'el' => 'Ένα widget με το οποίο μπορείτε να εμφανίσετε ένα αναλογικό ρολόι'     
         );               
     }
     
@@ -66,27 +66,25 @@ class TextWidget extends Widget implements WidgetInterface {
     }
     public function run($widget_widget_area_id)
     {
-        
+        global $head_content;
         $widget_widget_area = new WidgetWidgetArea($widget_widget_area_id);
         $view_data = $widget_widget_area->getOptions();
+        $view_data['widget_folder'] = $this->folder;
         /* START CUSTOM CODE */
-        global $language;
-        $view_data['language'] = $language;
+        $head_content .= css_link('widgets/clock/clock.css');
+        $head_content .= js_link('widgets/clock/clock.js');
+        return widget_view("run", $view_data);
         /* END CUSTOM CODE */
-        return view("widgets.text.run", $view_data);
     }
     public function getOptionsForm($widget_widget_area_id)
     {
         $widget_widget_area = new WidgetWidgetArea($widget_widget_area_id);
         $view_data = $widget_widget_area->getOptions();
+        $view_data['widget_folder'] = $this->folder;
         //START CUSTOM CODE
-        global $native_language_names_init;
 
-        $view_data['widget_widget_area_id'] = $widget_widget_area_id;
-        $view_data['active_ui_languages'] = explode(' ', get_config('active_ui_languages'));
-        $view_data['native_language_names_init'] = $native_language_names_init;
         //END CUSTOM CODE
-        return view("widgets.text.options", $view_data);
+        return widget_view("options", $view_data);
     }
 
 }
