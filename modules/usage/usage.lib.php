@@ -71,7 +71,7 @@ function get_course_stats($start = null, $end = null, $interval, $cid, $user_id 
 */
 function get_course_module_stats($start = null, $end = null, $interval, $cid, $mid, $user_id = null){
     global $modules;
-    $mtitle = (isset($modules[$mid]))? $modules[$mid]['title']:'module '.$mid;
+    $mtitle = which_module($mid);
     $g = build_group_selector_cond($interval);
     $groupby = $g['groupby'];
     $date_components = $g['select'];
@@ -117,7 +117,7 @@ function get_module_preference_stats($start = null, $end = null, $cid, $user_id 
     $mdls = array();
     $pmid = null;
     foreach($r as $record){
-        $mtitle = (isset($modules[$record->mdl]))? $modules[$record->mdl]['title']:'module '.$record->mdl;
+        $mtitle = which_module($record->mdl);
         $formattedr[$record->mdl] = $record->hits;
         $mdls[$record->mdl] = $mtitle;
         if(is_null($pmid)){
@@ -237,7 +237,7 @@ function get_course_details($start = null, $end = null, $interval, $cid, $user_i
     }
     $formattedr = array();
     foreach($r as $record){
-       $mtitle = (isset($modules[$record->module_id]))? $modules[$record->module_id]['title']:'module '.$record->module_id;
+       $mtitle = which_module($record->module_id);
        $formattedr[] = array($record->day, $mtitle, $record->uname, $record->hits, $record->duration, $record->username, $record->email);
     }
     return $formattedr;
@@ -377,7 +377,7 @@ function get_user_details($start = null, $end = null, $interval, $user, $course 
     }
     $formattedr = array();
     foreach($r as $record){
-        $mtitle = (isset($modules[$record->module_id]))? $modules[$record->module_id]['title']:'module '.$record->module_id;
+        $mtitle = which_module($record->module_id);
         $formattedr[] = array($record->day, $record->title, $mtitle, $record->hits, $record->dur);
     }
     return $formattedr;
@@ -640,7 +640,7 @@ function count_course_users($cid, $user_type = null){
  * @return string the title of the course module 
 */
 function which_module($mid){
-    global $langAdminUsers, $langExternalLinks, $langCourseInfo, $langAbuseReport, $langModifyInfo, $modules; 
+    global $langAdminUsers, $langExternalLinks, $langCourseInfo, $langAbuseReport, $langModifyInfo, $langUnits, $modules; 
     switch($mid) {                  
         case MODULE_ID_USERS:
             return $langAdminUsers;
@@ -652,8 +652,12 @@ function which_module($mid){
           //  return $langAbuseReport;
         case MODULE_ID_COURSEINFO:
             return $langModifyInfo;
+        case MODULE_ID_COURSEINFO:
+            return $langModifyInfo;
+        case MODULE_ID_UNITS:
+            return $langUnits;
         default:
-            return $modules[$mid]['title'];
+            return (isset($modules[$mid]))? $modules[$mid]['title']: 'module '.$mid;
     }
 }
   

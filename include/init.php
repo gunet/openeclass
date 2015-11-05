@@ -423,7 +423,6 @@ $modules = array(
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-sort-numeric-desc'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-check-square-o'),
     MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'fa-exchange'),
-    MODULE_ID_UNITS => array('title' => $langUnits, 'link' => '', 'image' => 'fa-list')
 );
 // ----------------------------------------
 // course admin modules
