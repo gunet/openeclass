@@ -1035,7 +1035,7 @@ function visible_module($module_id) {
 
 // Find the current module id from the script URL
 function current_module_id() {
-    global $modules, $urlAppend, $static_module_paths;
+    global $modules, $urlAppend, $static_modules;
     static $module_id;
 
     if (isset($module_id)) {
@@ -1044,11 +1044,13 @@ function current_module_id() {
 
     $module_path = str_replace($urlAppend . 'modules/', '', $_SERVER['SCRIPT_NAME']);
     $link = preg_replace('|/.*$|', '', $module_path);
-    if (isset($static_module_paths[$link])) {
-        $module_id = $static_module_paths[$link];
-        define('STATIC_MODULE', true);
-        return $module_id;
-    }
+    foreach ($static_modules as $smid => $info) {
+        if ($info['link'] == $link) {
+            $module_id = $smid;
+            define('STATIC_MODULE', true);
+            return $module_id;
+        }
+    }    
 
     foreach ($modules as $mid => $info) {
         if ($info['link'] == $link) {

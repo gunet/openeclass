@@ -637,28 +637,24 @@ function count_course_users($cid, $user_type = null){
 /**
  * Return module title based on the course module id
  * @param int mid the id of the module
+ * @global $modules,
+ * @global $admin_modules,
+ * @global static_modules,
  * @return string the title of the course module 
 */
 function which_module($mid){
-    global $langAdminUsers, $langExternalLinks, $langCourseInfo, $langAbuseReport, $langModifyInfo, $langUnits, $modules; 
-    switch($mid) {                  
-        case MODULE_ID_USERS:
-            return $langAdminUsers;
-        case MODULE_ID_TOOLADMIN:
-            return $langExternalLinks;
-        case MODULE_ID_SETTINGS:
-            return $langCourseInfo;
-        //case MODULE_ID_ABUSE_REPORT:
-          //  return $langAbuseReport;
-        case MODULE_ID_COURSEINFO:
-            return $langModifyInfo;
-        case MODULE_ID_COURSEINFO:
-            return $langModifyInfo;
-        case MODULE_ID_UNITS:
-            return $langUnits;
-        default:
-            return (isset($modules[$mid]))? $modules[$mid]['title']: 'module '.$mid;
+    global $modules, $static_modules, $admin_modules; 
+    
+    if (isset($modules[$mid])) {
+        $m_title = $modules[$mid]['title'];
+    } elseif (isset($admin_modules[$mid])) {
+        $m_title = $admin_modules[$mid]['title'];
+    }  elseif (isset($static_modules[$mid])) {
+        $m_title = $static_modules[$mid]['title'];
+    } else { 
+        $m_title = 'module '.$mid;
     }
+    return $m_title;   
 }
   
 /**
