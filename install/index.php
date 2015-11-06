@@ -485,7 +485,9 @@ elseif (isset($_POST['install1'])) {
     touch_try('courses/commondocs/index.php');
     mkdir_try('video');
     touch_try('video/index.php');
-
+    mkdir_try('storage');
+    mkdir_try('storage/views');
+    
     if ($configErrorExists) {
         $tool_content .= "<div class='alert alert-danger'>" . implode('', $errorContent) . "</div>" .
             "<div class='alert alert-warning'>$langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</div>";

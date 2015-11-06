@@ -2972,7 +2972,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `widget_area_id` int(11) NOT NULL,
                         `options` text NOT NULL,
                         `position` int(3) NOT NULL,
-                         FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");          
+                         FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");
     }
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
