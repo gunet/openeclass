@@ -56,7 +56,7 @@ require_once 'tools.php';
 
 function view($view_file, $view_data = array()) {
     global $webDir, $is_editor, $course_code, $course_id, $language, $siteName,
-    $urlAppend, $theme, $pageName, $currentCourseName, $uid, $session, $toolName,
+    $urlAppend, $urlServer, $theme, $pageName, $currentCourseName, $uid, $session, $toolName,
     $require_help, $professor, $helpTopic, $head_content, $toolName, $themeimg, $navigation,
     $require_current_course, $saved_is_editor, $require_course_admin, $require_editor;
 
@@ -266,7 +266,7 @@ function view($view_file, $view_data = array()) {
     $blade = new Blade($views, $cache);
 
     $global_data = compact('is_editor', 'course_code', 'course_id', 'language', 
-            'pageTitle', 'urlAppend', 'eclass_version', 'template_base', 'toolName',
+            'pageTitle', 'urlAppend', 'urlServer', 'eclass_version', 'template_base', 'toolName',
             'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam', 
             'require_help', 'helpTopic', 'head_content', 'toolArr', 'module_id',
             'module_visibility', 'professor', 'pageName', 'menuTypeID', 'section_title',

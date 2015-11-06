@@ -146,7 +146,7 @@
                             <div class="col-xs-9">
                                 <h1 class='page-title'>
                                     @if ($menuTypeID == 2 && $pageName)
-                                        <a href='${urlServer}courses/$course_code/'> {{ $section_title }}</a>
+                                        <a href='{{ $urlServer }}courses/{{ $course_code }}/'> {{ $section_title }}</a>
                                     @else
                                         {{ $section_title }}
                                     @endif                                    
