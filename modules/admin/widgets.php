@@ -328,7 +328,7 @@ function recursiveWidgetIterator ($directory = null, $view_data = array()) {
     foreach ($files as $file) {
         if ($file->isFile ()) {
             $widget_class = $file->getBasename('.php');
-            if (!in_array($widget_class, ['Widget', 'WidgetInterface', 'WidgetArea', 'WidgetWidgetArea'])) {
+            if (!in_array($widget_class, ['Widget', 'WidgetInterface', 'WidgetArea', 'WidgetWidgetArea', '.DS_Store'])) {
                 $namespace = by_token(file_get_contents($directory.'/'.$file));
                 $namespaced_class = $namespace."\\".$widget_class;
                 $widget = new $namespaced_class;
