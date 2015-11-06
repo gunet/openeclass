@@ -340,7 +340,7 @@ function recursiveWidgetIterator ($directory = null, $view_data = array()) {
                     array_push($view_data['uninstalled_widgets'], $widget);
                 }
             }
-        } elseif (!$file->isDot() && $file->getFilename() != 'views') {
+        } elseif (!$file->isDot() && !in_array($file->getFilename(), ['views', 'css', 'images', 'js'])) {
             $view_data = recursiveWidgetIterator($directory.DIRECTORY_SEPARATOR.$file->__toString(), $view_data);
         }
     }

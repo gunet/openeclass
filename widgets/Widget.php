@@ -25,6 +25,7 @@ abstract class Widget {
     public $name;
     public $description;
     public $folder;
+    public $view_data = [];
     
     public function __construct() {
         $widget = \Database::get()->querySingle("SELECT id FROM widget WHERE class = ?s", get_called_class());
@@ -59,5 +60,10 @@ abstract class Widget {
             }
         }
         return $data;
+    }
+    protected function initialize_widget_data($widget_widget_area_id) {
+        $widget_widget_area = new WidgetWidgetArea($widget_widget_area_id);
+        $this->view_data = $widget_widget_area->getOptions();
+        $this->view_data['widget_folder'] = $this->folder;        
     }
 }

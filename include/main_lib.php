@@ -195,6 +195,17 @@ function css_link($file) {
     $v = '?v=' . ECLASS_VERSION;
     return "<link href='{$urlAppend}js/$file$v' rel='stylesheet' type='text/css'>\n";
 }
+function widget_js_link($file, $folder) {
+    global $urlAppend, $head_content;
+    $v = '?v=' . ECLASS_VERSION;
+    $head_content .= "<script type='text/javascript' src='$urlAppend{$folder}/js/$file$v'></script>\n";
+}
+
+function widget_css_link($file, $folder) {
+    global $urlAppend, $head_content;
+    $v = '?v=' . ECLASS_VERSION;
+    $head_content .= "<link href='$urlAppend{$folder}/css/$file$v' rel='stylesheet' type='text/css'>\n";
+}
 
 // Include a JavaScript file from the main js directory
 function load_js($file, $init='') {

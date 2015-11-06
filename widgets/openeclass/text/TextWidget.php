@@ -65,30 +65,25 @@ class TextWidget extends Widget implements WidgetInterface {
         return self::unregister_widget();
     }
     public function run($widget_widget_area_id)
-    {
-        
-        $widget_widget_area = new WidgetWidgetArea($widget_widget_area_id);
-        $view_data = $widget_widget_area->getOptions();
-        $view_data['widget_folder'] = $this->folder;
+    {       
+        $this->initialize_widget_data($widget_widget_area_id);
         /* START CUSTOM CODE */
         global $language;
-        $view_data['language'] = $language;
+        $this->view_data['language'] = $language;
         /* END CUSTOM CODE */
-        return widget_view("run", $view_data);
+        return widget_view("run", $this->view_data);
     }
     public function getOptionsForm($widget_widget_area_id)
     {
-        $widget_widget_area = new WidgetWidgetArea($widget_widget_area_id);
-        $view_data = $widget_widget_area->getOptions();
-        $view_data['widget_folder'] = $this->folder;
+        $this->initialize_widget_data($widget_widget_area_id);
         //START CUSTOM CODE
         global $native_language_names_init;
 
-        $view_data['widget_widget_area_id'] = $widget_widget_area_id;
-        $view_data['active_ui_languages'] = explode(' ', get_config('active_ui_languages'));
-        $view_data['native_language_names_init'] = $native_language_names_init;
+        $this->view_data['widget_widget_area_id'] = $widget_widget_area_id;
+        $this->view_data['active_ui_languages'] = explode(' ', get_config('active_ui_languages'));
+        $this->view_data['native_language_names_init'] = $native_language_names_init;
         //END CUSTOM CODE
-        return widget_view("options", $view_data);
+        return widget_view("options", $this->view_data);
     }
 
 }

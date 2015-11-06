@@ -66,25 +66,21 @@ class ClockWidget extends Widget implements WidgetInterface {
     }
     public function run($widget_widget_area_id)
     {
-        global $head_content;
-        $widget_widget_area = new WidgetWidgetArea($widget_widget_area_id);
-        $view_data = $widget_widget_area->getOptions();
-        $view_data['widget_folder'] = $this->folder;
+        $this->initialize_widget_data($widget_widget_area_id);
         /* START CUSTOM CODE */
-        $head_content .= css_link('widgets/clock/clock.css');
-        $head_content .= js_link('widgets/clock/clock.js');
-        return widget_view("run", $view_data);
+        widget_css_link('clock.css', $this->folder);
+        widget_js_link('clock.js', $this->folder);
         /* END CUSTOM CODE */
+        return widget_view("run", $this->view_data);
+
     }
     public function getOptionsForm($widget_widget_area_id)
     {
-        $widget_widget_area = new WidgetWidgetArea($widget_widget_area_id);
-        $view_data = $widget_widget_area->getOptions();
-        $view_data['widget_folder'] = $this->folder;
+        $this->initialize_widget_data($widget_widget_area_id);
         //START CUSTOM CODE
 
         //END CUSTOM CODE
-        return widget_view("options", $view_data);
+        return widget_view("options", $this->view_data);
     }
 
 }
