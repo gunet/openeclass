@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,103 +17,184 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== */
-
-/**
- * @file chat.php
- * @brief Main script for chat module
+ * ======================================================================== 
  */
+
 $require_current_course = TRUE;
 $require_login = TRUE;
-$require_help = TRUE;
-$helpTopic = 'Conference';
-
 require_once '../../include/baseTheme.php';
 $coursePath = $webDir . '/courses/';
-    $fileChatName = $coursePath . $course_code . '/chat.txt';
-    $tmpArchiveFile = $coursePath . $course_code . '/tmpChatArchive.txt';
-
-    $nick = uid_to_name($uid);
-
-// How many lines to show on screen
-    define('MESSAGE_LINE_NB', 40);
-// How many lines to keep in temporary archive
-// (the rest are in the current chat file)
-    define('MAX_LINE_IN_FILE', 80);
-
-    if ($GLOBALS['language'] == 'el') {
-        $timeNow = date("d-m-Y / H:i", time());
-    } else {
-        $timeNow = date("Y-m-d / H:i", time());
-    }
-
-    if (!file_exists($fileChatName)) {
-        $fp = fopen($fileChatName, 'w') or die('<center>$langChatError</center>');
-        fclose($fp);
-    }
-
-/* * ** The following is added for statistics purposes ** */
-require_once 'include/action.php';
-$action = new action();
-$action->record(MODULE_ID_CHAT);
-/* * *********************************** */
 
 $toolName = $langChat;
-// guest user not allowed
-if (check_guest()) {
-    $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
-    draw($tool_content, 2, 'conference');
-}
 
-$head_content .= '<script type="text/javascript">
-    function prepare_message() {
-            document.chatForm.chatLine.value=document.chatForm.msg.value;
-            document.chatForm.msg.value = "";
-            document.chatForm.msg.focus();
-            return true;
-    }
-    setTimeout(function(){
-        $( "#iframe" ).attr( "src", function ( i, val ) { return val; });
-    }, 2000);        
-</script>';
+load_js('tools.js');
+load_js('validation.js');
 
-if ($is_editor) {
+$available_themes = active_subdirs("$webDir/template", 'theme.html');
+
+if (isset($_GET['add_conference'])) {
+    $pageName = $langAdd;
+    $textarea = rich_text_editor('description', 4, 20, '');
+    
     $tool_content .= action_bar(array(
-        array('title' => $langSave,
-            'url' => "messageList.php?course=$course_code&amp;store=true&amp;".generate_csrf_token_link_parameter(),
-            'icon' => 'fa-plus-circle',
-            'level' => 'primary-label',
-            'button-class' => 'btn-success',
-            'link-attrs' => "target='messageList'"
-        ),
-        array('title' => $langWash,
-            'url' => "messageList.php?course=$course_code&amp;reset=true&amp;".generate_csrf_token_link_parameter(),
-            'icon' => 'fa-trash',
-            'level' => 'primary',
-            'link-attrs' => "target='messageList'"
-            )
-    ));
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
+    
+    $tool_content .= "<div class='form-wrapper'>";
+    $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+    $tool_content .= "<fieldset>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label for='description' class='col-sm-2 control-label'>$langDescr:</label>";
+    $tool_content .= "<div class='col-sm-10'>";
+    $tool_content .= "$textarea";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";   
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-2 control-label'>$langActivate</label>
+            <div class='col-sm-10 radio'><label><input type='radio' id='enabled_false' name='status' checked='false' value='inactive'>$langNo</label></div>
+            <div class='col-sm-offset-2 col-sm-10 radio'><label><input type='radio' id='enabled_true' name='status' checked='true' value='active'>$langYes</label></div>
+        </div>";
+    $tool_content .= "<input type = 'hidden' name = 'course_id' value='$course_id'>";
+
+    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
+    $tool_content .= "</fieldset></form></div>";
+
+} else if (isset($_GET['delete_conference'])) {
+    $id = $_GET['delete_conference'];
+    Database::get()->querySingle("DELETE FROM conference WHERE conf_id=?d", $id);
+    $fileChatName = $coursePath . $course_code . '/'.$id.'_chat.txt';
+    $tmpArchiveFile = $coursePath . $course_code . '/'.$id.'_tmpChatArchive.txt';
+
+    unlink($fileChatName);
+    unlink($tmpArchiveFile);
+    
+    // Display result message
+    $tool_content .= "<div class='alert alert-success'>$langChatDeleted</div>";    
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
+}
+else if (isset($_POST['submit'])) {
+    $description = $_POST['description'];
+    $status = $_POST['status'];
+    if (isset($_POST['conference_id'])) {
+    $conf_id = $_POST['conference_id'];
+        Database::get()->querySingle("UPDATE conference SET conf_description = ?s,
+                status = ?s
+                WHERE conf_id =?d", $description, $status, $conf_id);
+    } else {
+        $course_id = $_POST['course_id'];
+        Database::get()->querySingle("INSERT INTO conference (course_id,conf_description,status) VALUES
+        (?d,?s,?s)", $course_id,$description,$status);
+    }    
+    // Display result message
+    $tool_content .= "<div class='alert alert-success'>$langNoteSaved</div>";
+    // Display link to go back to index.php
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
+} // end of if($submit)
+else {    
+    if (isset($_GET['edit_conference'])) {
+        $pageName = $langEdit;
+        $conf_id = $_GET['edit_conference'];
+        $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
+        
+        $conf = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id);
+        $textarea = rich_text_editor('description', 4, 20, $conf->conf_description);
+
+        $tool_content .= "<div class='form-wrapper'>";
+        $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+        $tool_content .= "<fieldset>";        
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='desc' class='col-sm-2 control-label'>$langDescr:</label>";
+        $tool_content .= "<div class='col-sm-10'>";
+        $tool_content .= "$textarea";
+        $tool_content .= "</div>";
+        $tool_content .= "</div>";         
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label class='col-sm-2 control-label'>$langActivate</label>";
+        if ($conf->status == "inactive") {
+            $checkedfalse2 = " checked='false' ";
+        } else $checkedfalse2 = '';
+        
+        $tool_content .= "<div class='col-sm-10 radio'><label><input type='radio' id='enabled_false' name='status' $checkedfalse2 value='inactive'>$langNo</label></div>";
+        
+        if ($conf->status == "active") {
+            $checkedtrue2 = " checked='false' ";
+        } else $checkedtrue2 = '';
+        
+         $tool_content .= "<div class='col-sm-offset-2 col-sm-10 radio'><label><input type='radio' id='enabled_true' name='status' $checkedtrue2 value='active'>$langYes</label></div>
+            </div>";
+        $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
+        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
+        $tool_content .= "</fieldset></form></div>";
+        $tool_content .='<script language="javaScript" type="text/javascript">
+                //<![CDATA[
+                    var chkValidator  = new Validator("confForm");
+                    //chkValidator.addValidation("description","req","' . $langBBBServerAlertHostname . '");
+                //]]></script>';
+                    
+    } else {
+        //display available conferences
+        $tool_content .= action_bar(array(
+            array('title' => $langAdd,
+                'url' => "index.php?add_conference",
+                'icon' => 'fa-plus-circle',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success')));
+
+        $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d ORDER BY conf_id DESC",$course_id);
+        if (count($q)>0) {
+            $tool_content .= "<div class='table-responsive'>";
+            $tool_content .= "<table class='table-default'>
+                <thead>
+                <tr><th class = 'text-center'>$langDescr</th>
+                    <th class = 'text-center'>$langChatActive</th>
+                    <th class = 'text-center'>$langStartDate</th>";
+                    
+            if($is_editor){
+                $tool_content .= "<th class = 'text-center'>".icon('fa-gears')."</th>"; 
+            }
+            $tool_content .="</tr></thead>";
+            foreach ($q as $conf) {
+                $enabled_conference = ($conf->status == 'active')? $langYes : $langNo;
+                $tool_content .= "<tr>";
+                $tool_content .= "<td>";
+                ($conf->status == 'active')? $tool_content .= "<a href='./conference.php?conference_id=$conf->conf_id'>$conf->conf_description</a>" : $tool_content .= $conf->conf_description;
+                $tool_content .= "</td>";
+                $tool_content .= "<td>$enabled_conference</td>";
+                $tool_content .= "<td>$conf->start</td>";
+                if($is_editor)
+                {
+                    $tool_content .= "<td class='option-btn-cell'>".action_button(array(
+                                                        array('title' => $langEdit,
+                                                              'url' => "$_SERVER[SCRIPT_NAME]?edit_conference=$conf->conf_id",
+                                                              'icon' => 'fa-edit'),
+                                                        array('title' => $langDelete,
+                                                              'url' => "$_SERVER[SCRIPT_NAME]?delete_conference=$conf->conf_id",
+                                                              'icon' => 'fa-times',
+                                                              'class' => 'delete',
+                                                              'confirm' => $langConfirmDelete)
+                                                        ))."</td>";
+                }
+                    $tool_content .= "</tr>";
+            }            	
+            $tool_content .= "</table></div>";
+        } else {
+             $tool_content .= "<div class='alert alert-warning'>$langNoChatAvailable</div>";
+        }
+    }
 }
 
-$tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
-    <div class='row'><div class='col-sm-12'><div class='form-wrapper'>
-   <form name='chatForm' action='messageList.php' method='POST' target='messageList' onSubmit='return prepare_message();'><input type='hidden' name='course' value='$course_code'/>
-   <fieldset>
-    <div class='col-xs-12'>
-        <div class='input-group'>
-          <input type='text' name='msg' size='80' class='form-control'>
-          <input type='hidden' name='chatLine'>
-          <span class='input-group-btn'>
-            <input class='btn btn-primary' type='submit' value='&raquo;'>
-          </span>
-        </div>
-        <div class='embed-responsive embed-responsive-4by3 margin-top-fat'>
-          <iframe class='embed-responsive-item' id='iframe' src='messageList.php?course=$course_code' name='messageList' style='border: 1px solid #CAC3B5;width:100%;overflow-x: hidden;'></iframe>
-        </div>       
-    </div>   
-   </fieldset>
-   ". generate_csrf_token_form_field() ."
-   </form></div></div></div>";
-
-add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);

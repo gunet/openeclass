@@ -1597,6 +1597,16 @@ $db->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
                 `options` text NOT NULL,
                 `position` int(3) NOT NULL,
                 FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");   
+
+// Conference table
+$db->query("CREATE TABLE IF NOT EXISTS `conference` (
+  `conf_id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) NOT NULL,
+  `conf_description` text NOT NULL,
+  `status` enum('active','inactive') DEFAULT NULL,
+  `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`conf_id`)) $charset_spec");
+
 $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();
