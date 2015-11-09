@@ -336,7 +336,7 @@ $view_data['course_home_main_area_widgets'] = $course_home_main_area->getWidgets
 $course_home_sidebar_area = new Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
 $view_data['course_home_sidebar_widgets'] = $course_home_sidebar_area->getWidgets();
 
-$view_data = recursiveWidgetIterator('widgets', $view_data);
+$view_data = recursiveWidgetIterator('Widgets', $view_data);
 
 $view_data['menuTypeID'] = 3;
 $pageName = $langWidgets;
