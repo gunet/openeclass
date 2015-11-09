@@ -1,5 +1,5 @@
     <div class="panel">
-        <div class="panel-body">
-              <h1>Hello World! Nice to meet you!</h1>
+        <div class="panel-body text-center">
+            <span class="text-success">Hello World! Nice to meet you!</span>
         </div>
     </div>

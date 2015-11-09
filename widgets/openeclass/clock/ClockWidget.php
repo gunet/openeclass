@@ -43,18 +43,12 @@ class ClockWidget extends Widget implements WidgetInterface {
     }
     
     public static function install()
-    {
-//        $tbl_name = self::widget_tbl_name();
-//        \Database::get()->query("CREATE TABLE IF NOT EXISTS $tbl_name (
-//          `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-//          `module_id` int(11) NOT NULL)");        
+    {     
         return self::register_widget();
     }
     
     public static function uninstall()
     {  
-//        $tbl_name = self::widget_tbl_name();
-//        \Database::get()->query("DROP TABLE IF EXISTS $tbl_name");
         return self::unregister_widget();
     }
     public function run($widget_widget_area_id)
