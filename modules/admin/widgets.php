@@ -189,7 +189,8 @@ $head_content .=
             function addWidget(e) {
                 if (e.from['id'] == 'widgets') {
                     var item = $(e.item);  // dragged HTMLElement
-                    item.find('div.panel-heading a').append('<span class=\'fa fa-spinner fa-spin\'></span>');
+                    item.removeClass('panel-success').addClass('panel-default');
+                    item.find('div.panel-heading a span').removeClass().addClass('fa fa-spinner fa-spin');
                     var widget_area_id = item.closest('div.panel-body').data('widget-area-id');
                     var widget_id = item.data('widget-id');   
                     $.ajax({
@@ -215,6 +216,8 @@ $head_content .=
             }
             function moveWidget(e) {
                 var item = $(e.item);  // dragged HTMLElement
+                item.removeClass('panel-success').addClass('panel-default');
+                item.find('div.panel-heading a span').removeClass().addClass('fa fa-spinner fa-spin');
                 var widget_widget_area_id = item.data('widget-widget-area-id');
                 var widget_area_id = item.closest('div.panel-body').data('widget-area-id');
                 $.ajax({
@@ -229,7 +232,8 @@ $head_content .=
                      action: 'move'
                   },
                   success: function(data){
-
+                    item.removeClass('panel-default').addClass('panel-success');
+                    item.find('div.panel-heading a span').removeClass().addClass('fa fa-check');
                   },
                   error: function(xhr, textStatus, error){
                       console.log(xhr.statusText);
@@ -269,6 +273,7 @@ $head_content .=
                             .find('#widget_form_'+obj.widget_widget_area_id)
                             .find('.panel-body')
                             .append(form_obj.form_view);
+                            item.removeClass('panel-default').addClass('panel-success');
                             item.find('div.panel-heading a span').removeClass().addClass('fa fa-check');
                       },
                       error: function(xhr, textStatus, error){
@@ -282,6 +287,7 @@ $head_content .=
                 $(document).on('click', '.submitOptions', function(e) {
                     e.preventDefault();
                     var item = $(this).closest('.panel');
+                    item.removeClass('panel-success').addClass('panel-default');
                     item.find('div.panel-heading a span').removeClass().addClass('fa fa-spinner fa-spin');
                     var widget_widget_area_id = $(this).closest('.panel').data('widget-widget-area-id');
                     var options = $(this).closest('.panel-body').find('form#optionsForm'+widget_widget_area_id).serializeArray();
@@ -295,6 +301,7 @@ $head_content .=
                          action: 'saveOptions'
                         },
                         success: function(data){
+                            item.removeClass('panel-default').addClass('panel-success');
                             item.find('div.panel-heading a span').removeClass().addClass('fa fa-check');
                         },
                         error: function(xhr, textStatus, error){
@@ -332,6 +339,8 @@ $view_data['course_home_sidebar_widgets'] = $course_home_sidebar_area->getWidget
 $view_data = recursiveWidgetIterator('widgets', $view_data);
 
 $view_data['menuTypeID'] = 3;
+$pageName = $langWidgets;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 echo view('admin.widgets', $view_data);
 
 function recursiveWidgetIterator ($directory = null, $view_data = array()) {
