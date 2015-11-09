@@ -70,7 +70,7 @@ if (isset($_GET['auth'])) {
         $auth_active = in_array($auth_id, $auth_active_ids);
         if ($auth_count > 0 or $auth_active) {
             $auth_search_link = ($auth_count == 0)? '0':
-                "<a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type=$auth_id&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=" . getIndirectReferences(0) . "'>$auth_count</a>";
+                "<a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type=$auth_id&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=" . getIndirectReference(0) . "'>$auth_count</a>";
             if ($auth_id != 1 and $auth_count > 0) {
                 $auth_change_link = " - <a href='auth_change.php?auth=" . getIndirectReference($auth_id) . "'>$langAuthChangeUser</a>";
             } else {
