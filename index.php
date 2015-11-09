@@ -376,8 +376,8 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                 </div></div>
             </div>";
     }
-        $home_main_area = new \Widgets\WidgetArea(HOME_PAGE_SIDEBAR);
-        foreach ($home_main_area->getWidgets() as $key => $widget) {
+        $home_page_sidebar = new \Widgets\WidgetArea(HOME_PAGE_SIDEBAR);
+        foreach ($home_page_sidebar->getWidgets() as $key => $widget) {
             $tool_content .= $widget->run($key);
         }  
         $tool_content .= "</div>

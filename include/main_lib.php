@@ -134,6 +134,10 @@ define('ATTEMPT_CANCELED', 4);
 // Widget Areas
 define('HOME_PAGE_MAIN', 1);
 define('HOME_PAGE_SIDEBAR', 2);
+define('PORTFOLIO_PAGE_MAIN', 3);
+define('PORTFOLIO_PAGE_SIDEBAR', 4);
+define('COURSE_HOME_PAGE_MAIN', 5);
+define('COURSE_HOME_PAGE_SIDEBAR', 6);
 
 // for fill in blanks questions
 define('TEXTFIELD_FILL', 1);

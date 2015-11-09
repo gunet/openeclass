@@ -152,25 +152,30 @@ $tool_content .= "
                 </div>
             </div>
             <div class='row'>
-            <div class='col-md-12 my-announcement-list'>
-                <h2 class='content-title'>".trans('langMyPersoAnnouncements')."</h2>
-                <div class='panel'>
-                    <div class='panel-body'>
-                        <ul class='tablelist'>";
-                            if(!empty($user_announcements)){
-                                $tool_content.=$user_announcements;
-                            }else{
-                                $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langNoRecentAnnounce - </div></li>";
-                            }
-                            $tool_content.="</ul>
-                    </div>
-                    <div class='panel-footer clearfix'>
-                        <div class='pull-right'><a href='../modules/announcements/myannouncements.php'><small>$langMore&hellip;</small></a></div>
+                <div class='col-md-12 my-announcement-list'>
+                    <h2 class='content-title'>".trans('langMyPersoAnnouncements')."</h2>
+                    <div class='panel'>
+                        <div class='panel-body'>
+                            <ul class='tablelist'>";
+                                if(!empty($user_announcements)){
+                                    $tool_content.=$user_announcements;
+                                }else{
+                                    $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langNoRecentAnnounce - </div></li>";
+                                }
+                                $tool_content.="</ul>
+                        </div>
+                        <div class='panel-footer clearfix'>
+                            <div class='pull-right'><a href='../modules/announcements/myannouncements.php'><small>$langMore&hellip;</small></a></div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div>";
+        $portfolio_page_main = new \Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
+        foreach ($portfolio_page_main->getWidgets() as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }                                
+$tool_content .= "            
         </div>
-    </div>
     <div class='col-md-5'>
         <div class='row'>
             <div class='col-md-12'>
@@ -203,24 +208,29 @@ $tool_content .= "
             </div>
         </div>
         <div class='row'>
-                <div class='col-md-12 my-messages-list'>
-                    <h2 class='content-title'>$langMyPersoMessages</h2>
-                    <div class='panel'>
-                        <div class='panel-body'>
-                            <ul class='tablelist'>";
-                            if(!empty($user_messages)){
-                                $tool_content.=$user_messages;
-                            }else{
-                                $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langDropboxNoMessage- </div></li>";
-                            }
-                            $tool_content.="</ul>
-                        </div>
-                        <div class='panel-footer clearfix'>
-                            <div class='pull-right'><a href='{$urlAppend}modules/dropbox/'><small>$langMore&hellip;</small></a></div>
-                        </div>
+            <div class='col-md-12 my-messages-list'>
+                <h2 class='content-title'>$langMyPersoMessages</h2>
+                <div class='panel'>
+                    <div class='panel-body'>
+                        <ul class='tablelist'>";
+                        if(!empty($user_messages)){
+                            $tool_content.=$user_messages;
+                        }else{
+                            $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langDropboxNoMessage- </div></li>";
+                        }
+                        $tool_content.="</ul>
+                    </div>
+                    <div class='panel-footer clearfix'>
+                        <div class='pull-right'><a href='{$urlAppend}modules/dropbox/'><small>$langMore&hellip;</small></a></div>
                     </div>
                 </div>
             </div>
+        </div>";
+        $portfolio_page_sidebar = new \Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
+        foreach ($portfolio_page_sidebar->getWidgets() as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }
+$tool_content .= "        
     </div>";
 
 $userdata = Database::get()->querySingle("SELECT surname, givenname, username, email, status, phone, am, registered_at,

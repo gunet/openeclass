@@ -67,4 +67,14 @@ abstract class Widget {
         $this->view_data['widget_folder'] = $this->folder; 
         $this->view_data['widget_widget_area_id'] = $widget_widget_area_id;
     }
+    protected static function widget_tbl_name($tbl_name = '') {
+        $lc_namespace = strtolower(substr(get_called_class(), 0, strrpos(get_called_class(), "\\")));
+        $namespace_parts = explode('\\', $lc_namespace);
+        if (empty($tbl_name)) {
+            $wdgt_table_name = "`wdgt_".$namespace_parts[1]."_".$namespace_parts[2]."`";
+        } else {
+            $wdgt_table_name = "`wdgt_".$namespace_parts[1]."_".$tbl_name."`";
+        }
+        return $wdgt_table_name;
+    }
 }

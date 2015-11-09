@@ -708,6 +708,10 @@ if (!$alter_layout) {
         $tool_content .= "<div class='row boxlist no-list'>
             $cunits_content
         </div>";
+        $course_home_page_main = new \Widgets\WidgetArea(COURSE_HOME_PAGE_MAIN);
+        foreach ($course_home_page_main->getWidgets() as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }                    
     $tool_content .= "</div>";
 }
 
@@ -739,7 +743,8 @@ $tool_content .="<div class='row'>";
                     </div>
                 ";
             }
-                $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
+                $tool_content .= "
+                <div class='col-md-$cunits_sidebar_subcolumns'>
                     <h3 class='content-title'>$langCalendar</h3>
                     <div class='panel'>
                         <div class='panel-body'>
@@ -768,20 +773,27 @@ $tool_content .="<div class='row'>";
                     </div>
                 </div>
                 <div class='col-md-$cunits_sidebar_subcolumns'>
-                                <h3 class='content-title'>$langAnnouncements</h3>
-                                <div class='panel'>
-                                    <div class='panel-body'>
-                                        <ul class='tablelist'>" . course_announcements() . "
-                                        </ul>
-                                    </div>
-                                    <div class='panel-footer clearfix'>
-                                        <div class='pull-right'><a href='{$urlAppend}modules/announcements/?course=$course_code'><small>$langMore&hellip;</small></a></div>
-                                    </div>
-                                </div>
-                            </div>
-                       </div>
-                       </div>
-                </div>";
+                    <h3 class='content-title'>$langAnnouncements</h3>
+                    <div class='panel'>
+                        <div class='panel-body'>
+                            <ul class='tablelist'>" . course_announcements() . "
+                            </ul>
+                        </div>
+                        <div class='panel-footer clearfix'>
+                            <div class='pull-right'><a href='{$urlAppend}modules/announcements/?course=$course_code'><small>$langMore&hellip;</small></a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-$cunits_sidebar_subcolumns'>";
+        $course_home_page_sidebar = new \Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
+        foreach ($course_home_page_sidebar->getWidgets() as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }                              
+$tool_content .= "
+                </div>
+            </div>
+        </div>
+    </div>";
 
 draw($tool_content, 2, null, $head_content);
 

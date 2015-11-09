@@ -33,29 +33,35 @@ class ClockWidget extends Widget implements WidgetInterface {
         parent::__construct();
         
         $this->name = array(
-            'en' => 'Analog Clock',
-            'el' => 'Αναλογικό Ρολόι'     
+            'en' => 'Clock',
+            'el' => 'Ρολόι'     
         );
         $this->description = array(
-            'en' => 'This is a widget that simply displays an analog clock',
-            'el' => 'Ένα widget με το οποίο μπορείτε να εμφανίσετε ένα αναλογικό ρολόι'     
+            'en' => 'This is a widget that simply displays an analog / digital clock',
+            'el' => 'Ένα widget με το οποίο μπορείτε να εμφανίσετε ένα αναλογικό ή ψηφιακό ρολόι'     
         );               
     }
     
     public static function install()
     {
+//        $tbl_name = self::widget_tbl_name();
+//        \Database::get()->query("CREATE TABLE IF NOT EXISTS $tbl_name (
+//          `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+//          `module_id` int(11) NOT NULL)");        
         return self::register_widget();
     }
     
     public static function uninstall()
     {  
+//        $tbl_name = self::widget_tbl_name();
+//        \Database::get()->query("DROP TABLE IF EXISTS $tbl_name");
         return self::unregister_widget();
     }
     public function run($widget_widget_area_id)
     {
         $this->initialize_widget_data($widget_widget_area_id);
-        
-        $clock_type = $this->view_data['clock_type'] ? "digital" : "analog";
+
+        $clock_type = isset($this->view_data['clock_type']) && $this->view_data['clock_type'] ? "digital" : "analog";
         widget_css_link($clock_type.'_clock.css', $this->folder);
         widget_js_link('moment.min.js', $this->folder);
         widget_js_link($clock_type.'_clock.js', $this->folder);

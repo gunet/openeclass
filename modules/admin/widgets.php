@@ -106,7 +106,11 @@ $head_content .=
                 });
                 [
                 'home_widget_main',
-                'home_widget_sidebar'
+                'home_widget_sidebar',
+                'portfolio_widget_main',
+                'portfolio_widget_sidebar',
+                'course_home_widget_main',
+                'course_home_widget_sidebar'                
                 ].forEach(function (id, i) { 
                     Sortable.create(byId(id), {
                         draggable: '.widget',
@@ -312,11 +316,19 @@ foreach ($installed_widgets as $installed_widget) {
 $view_data['installed_widgets'] = [];
 $view_data['uninstalled_widgets'] = [];
 
-$home_main_area = new Widgets\WidgetArea(1);
+$home_main_area = new Widgets\WidgetArea(HOME_PAGE_MAIN);
 $view_data['home_main_area_widgets'] = $home_main_area->getWidgets();
-$home_sidebar_area = new Widgets\WidgetArea(2);
+$home_sidebar_area = new Widgets\WidgetArea(HOME_PAGE_SIDEBAR);
 $view_data['home_sidebar_widgets'] = $home_sidebar_area->getWidgets();
-  
+$portfolio_main_area = new Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
+$view_data['portfolio_main_area_widgets'] = $portfolio_main_area->getWidgets();
+$portfolio_sidebar_area = new Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
+$view_data['portfolio_sidebar_widgets'] = $portfolio_sidebar_area->getWidgets();
+$course_home_main_area = new Widgets\WidgetArea(COURSE_HOME_PAGE_MAIN);
+$view_data['course_home_main_area_widgets'] = $course_home_main_area->getWidgets();
+$course_home_sidebar_area = new Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
+$view_data['course_home_sidebar_widgets'] = $course_home_sidebar_area->getWidgets();
+
 $view_data = recursiveWidgetIterator('widgets', $view_data);
 
 $view_data['menuTypeID'] = 3;

@@ -4736,8 +4736,12 @@ $langInstalledWidgets = "Εγκατεστημένα Μικροεργαλεία";
 $langAvailableWidgets = "Διαθέσιμα Μικροεργαλεία";
 $langWidgetInstall = "Εγκατάσταση";
 $langWidgetUninstall = "Απεγκατάσταση";
-$langHomePageMainContent = "Κυρίως περιεχόμενο αρχικής σελίδας";
-$langHomePageSidebarContent = "Στήλη κυρίως περιεχομένου";
+$langHomePageMainContent = "Κυρίως περιεχόμενο Αρχικής Σελίδας";
+$langHomePageSidebarContent = "Στήλη κυρίως περιεχομένου Αρχικής Σελίδας";
+$langPortfolioMainContent = "Κυρίως περιεχόμενο Χαρτοφυλακίου";
+$langPortfolioSidebarContent = "Στήλη κυρίως περιεχομένου Χαρτοφυλακίου";
+$langCourseHomeMainContent = "Κυρίως περιεχόμενο Αρχικής Σελίδας Μαθήματος";
+$langCourseHomeSidebarContent = "Στήλη κυρίως περιεχομένου Αρχικής Σελίδας Μαθήματος";
 /* * ******************************************
   Theme Options
  * ***************************************** */
