@@ -54,9 +54,11 @@ class ClockWidget extends Widget implements WidgetInterface {
     public function run($widget_widget_area_id)
     {
         $this->initialize_widget_data($widget_widget_area_id);
-
-        widget_css_link('clock.css', $this->folder);
-        widget_js_link('clock.js', $this->folder);
+        
+        $clock_type = $this->view_data['clock_type'] ? "digital" : "analog";
+        widget_css_link($clock_type.'_clock.css', $this->folder);
+        widget_js_link('moment.min.js', $this->folder);
+        widget_js_link($clock_type.'_clock.js', $this->folder);
 
         return widget_view("run", $this->view_data);
 

@@ -67,7 +67,6 @@ class TextWidget extends Widget implements WidgetInterface {
         global $native_language_names_init;
         $this->initialize_widget_data($widget_widget_area_id);
 
-        $this->view_data['widget_widget_area_id'] = $widget_widget_area_id;
         $this->view_data['active_ui_languages'] = explode(' ', get_config('active_ui_languages'));
         $this->view_data['native_language_names_init'] = $native_language_names_init;
 

@@ -64,6 +64,7 @@ abstract class Widget {
     protected function initialize_widget_data($widget_widget_area_id) {
         $widget_widget_area = new WidgetWidgetArea($widget_widget_area_id);
         $this->view_data = $widget_widget_area->getOptions();
-        $this->view_data['widget_folder'] = $this->folder;        
+        $this->view_data['widget_folder'] = $this->folder; 
+        $this->view_data['widget_widget_area_id'] = $widget_widget_area_id;
     }
 }
