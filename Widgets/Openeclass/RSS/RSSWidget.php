@@ -48,11 +48,13 @@ class RSSWidget extends Widget implements WidgetInterface {
     {
         $this->initialize_widget_data($widget_widget_area_id);
         /* START CUSTOM CODE */
-        //test url
-        $url = "http://www.developphp.com/feed_all_vids.php";
+
+        $url = isset($this->view_data['feed_url']) ? $this->view_data['feed_url'] : "https://www.auth.gr/rss.xml";
+        $max = isset($this->view_data['feed_items']) && $this->view_data['feed_items'] ? $this->view_data['feed_items'] : 3;
+        //$url = "http://www.developphp.com/feed_all_vids.php";
         $xml = simplexml_load_file($url);
         $arr = array();
-        for($i = 0; $i < 5; $i++){
+        for($i = 0; $i < $max; $i++){
             array_push($arr, array(
                                             'title' => (string)$xml->channel->item[$i]->title,
                                             'link' => (string)$xml->channel->item[$i]->link, 
