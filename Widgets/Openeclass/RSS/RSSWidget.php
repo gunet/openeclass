@@ -52,7 +52,7 @@ class RSSWidget extends Widget implements WidgetInterface {
         $url = "http://www.developphp.com/feed_all_vids.php";
         $xml = simplexml_load_file($url);
         $arr = array();
-        for($i = 0; $i < 10; $i++){
+        for($i = 0; $i < 5; $i++){
             array_push($arr, array(
                                             'title' => (string)$xml->channel->item[$i]->title,
                                             'link' => (string)$xml->channel->item[$i]->link, 
@@ -61,6 +61,8 @@ class RSSWidget extends Widget implements WidgetInterface {
                     );
         }
        $this->view_data['feed_items'] = (array)$arr;
+       
+       //var_dump($this->view_data['feed_items']);die();
 
         /* END CUSTOM CODE */
         return widget_view("run", $this->view_data);
