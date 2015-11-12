@@ -1609,6 +1609,18 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
   `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`conf_id`)) $charset_spec");
 
+// om_servers table
+$db->query('CREATE TABLE IF NOT EXISTS `om_servers` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `hostname` varchar(255) DEFAULT NULL,
+    `port` varchar(255) DEFAULT NULL,
+    `username` varchar(255) DEFAULT NULL,
+    `password` varchar(255) DEFAULT NULL,
+    `module_key` int(11) DEFAULT NULL,
+    `webapp` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idx_om_servers` (`hostname`))');
+
 $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();
