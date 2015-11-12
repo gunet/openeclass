@@ -139,7 +139,7 @@ else {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
         
-        $server = Database::get()->querySingle("SELECT * FROpenMeetings om_servers WHERE id = ?d", $om_server);
+        $server = Database::get()->querySingle("SELECT * FROM om_servers WHERE id = ?d", $om_server);
         
         $tool_content .= "<div class='form-wrapper'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
@@ -200,7 +200,7 @@ else {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
-        $q = Database::get()->queryArray("SELECT * FROpenMeetings om_servers");
+        $q = Database::get()->queryArray("SELECT * FROM om_servers");
         if (count($q)>0) {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
