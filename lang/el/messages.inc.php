@@ -4943,3 +4943,18 @@ $langWebDAVLongDescription = "Long Description about web dav";
 $langAntivirusDescription = "<p>Σύνδεση με εγκατεστημένο λογισμικό προστασίας έναντι ιών</p>";
 $langWafDescription = "<p>Ενεργοποίηση τείχους προστασίας εφαρμογής ιστού</p>";
 
+/* * ******************************************
+  Messages for OpenMeetings
+ * ***************************************** */
+
+$langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
+$langAddOpenMeetingsServer = "Προσθήκη εξυπηρετητή";
+$langAddOpenMeetingsServerInfo = "Στοιχεία νέου εξυπηρετητή OpenMeetings";
+$langUpdateOpenMeetingsServer = "Στοιχεία εξυπηρετητή OpenMeetings";
+$langAvailableOpenMeetingsServers = "Διαθέσιμοι εξυπηρετητές OpenMeetings";
+$langOpenMeetingsServer = "ΙP ή FQDN OpenMeetings Server";
+$langOpenMeetingsPort = "Port";
+$langOpenMeetingsAdminUser ="Username διαχειριστή OpenMeetings";
+$langOpenMeetingsAdminPass ="Password διαχειριστή OpenMeetings";
+$langOpenMeetingsModuleKey = "Module key";
+$langOpenMeetingsWebApp = "Όνομα WebApp";
