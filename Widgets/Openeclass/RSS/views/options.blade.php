@@ -1,6 +1,6 @@
         <form id="optionsForm{{ $widget_widget_area_id }}">
               <label>
-                  RSS feed url: <input type='text' size='50' name='feed_url' value='{{ $feed_url }}'>
+                  RSS feed url: <input type='text' size='50' name='feed_url' value='{{ isset($feed_url) ? $feed_url : '' }}'>
               </label><br />
               <label>
                 Πλήθος νέων:    <select name='feed_items'>
