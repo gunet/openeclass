@@ -29,7 +29,7 @@ class ExtAppManager {
 
     public static $AppNames = array('GoogleDriveApp', 'OneDriveApp',
         'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp', 'OpenDelosApp',
-        'BBBApp', 'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
+        'BBBApp', 'OpenMeetings', 'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
         'AnalyticsApp');
     private static $APPS = null;
 
