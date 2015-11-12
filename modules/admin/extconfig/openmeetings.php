@@ -35,11 +35,11 @@ class OpenMeetings extends ExtApp {
     }
 
     public function getShortDescription() {
-        return $GLOBALS['langBBBDescription'];
+        return $GLOBALS['langOpenMeetingsDescription'];
     }
 
     public function getLongDescription() {
-        return $GLOBALS['langBBBDescription'];
+        return $GLOBALS['langOpenMeetingsDescription'];
     }
 
     public function getConfigUrl() {
