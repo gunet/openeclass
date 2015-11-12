@@ -40,10 +40,10 @@ $om_server = isset($_GET['edit_server']) ?  intval(getDirectReference($_GET['edi
 if (isset($_GET['add_server'])) {
     $pageName = $$langAddOpenMeetingsServer;
     $toolName = $langOpenMeetingsConf;
-    $navigation[] = array('url' => 'openmeetings.php', 'name' => $langOpenMeetingsConf);
+    $navigation[] = array('url' => 'openmeetingsconf.php', 'name' => $langOpenMeetingsConf);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => "openmeetings.php",
+            'url' => "openmeetingsconf.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
     $tool_content .= "<div class='form-wrapper'>";
