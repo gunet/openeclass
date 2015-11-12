@@ -2968,6 +2968,27 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `user_id` int(11) NULL,
                          FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
                          FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");
+        
+            // Conference table
+            Database::get()->query("CREATE TABLE IF NOT EXISTS `conference` (
+                        `conf_id` int(11) NOT NULL AUTO_INCREMENT,
+                        `course_id` int(11) NOT NULL,
+                        `conf_description` text NOT NULL,
+                        `status` enum('active','inactive') DEFAULT NULL,
+                        `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        PRIMARY KEY (`conf_id`)) $charset_spec");
+
+            // om_servers table
+            Database::get()->query('CREATE TABLE IF NOT EXISTS `om_servers` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `hostname` varchar(255) DEFAULT NULL,
+                        `port` varchar(255) DEFAULT NULL,
+                        `username` varchar(255) DEFAULT NULL,
+                        `password` varchar(255) DEFAULT NULL,
+                        `module_key` int(11) DEFAULT NULL,
+                        `webapp` int(11) DEFAULT NULL,
+                        PRIMARY KEY (`id`),
+                        KEY `idx_om_servers` (`hostname`))');
     }
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
