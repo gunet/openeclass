@@ -532,7 +532,7 @@ function user_info_form() {
         $mail_message = $langEmailNotice;
     } else {
         $mail_message = '';
-    }
+    }   
     if (isset($_SESSION['auth_user_info']) and !empty($_SESSION['auth_user_info']['givenname'])) {
         $givennameClass = ' form-control-static';
         $givennameInput = q($_SESSION['auth_user_info']['givenname']);
@@ -596,7 +596,7 @@ function user_info_form() {
         $tool_content .= "<div class='form-group'>
           <label for='UserComment' class='col-sm-2 control-label'>$langComments:</label>
             <div class='col-sm-10'>
-             <textarea name='usercomment' cols='32' rows='4'>" . q($usercomment) . "</textarea>&nbsp;&nbsp;(*) $profreason</div>
+             <textarea class='form-control' name='usercomment' cols='30' rows='4' placeholder='$profreason'>" . q($usercomment) . "</textarea></div>
           </div>";
     }
     $tool_content .= "<div class='form-group'>
