@@ -27,16 +27,27 @@ class WidgetArea {
      
     public function __construct($id) {
         $this->id = $id;
-        $counter = 0;
-        \Database::get()->queryFunc("SELECT a.id AS widget_widget_area_id, b.id AS widget_id, b.class AS class "
-                . "FROM widget_widget_area a, widget b "
-                . "WHERE a.widget_area_id = ?d AND b.id = a.widget_id ORDER BY a.position", function($widget) use (&$counter) {
-            $widget_obj = new $widget->class;
-            $this->widgets[$widget->widget_widget_area_id] = $widget_obj;
-        }, $this->id);
     }
     public function getWidgets()
     {
+        \Database::get()->queryFunc("SELECT a.id AS widget_widget_area_id, b.id AS widget_id, b.class AS class "
+                . "FROM widget_widget_area a, widget b "
+                . "WHERE a.widget_area_id = ?d AND a.user_id IS NULL AND b.id = a.widget_id ORDER BY a.position", function($widget) {
+            $widget_obj = new $widget->class;
+            $this->widgets[$widget->widget_widget_area_id] = $widget_obj;
+        }, $this->id);        
         return $this->widgets;
-    }   
+    }
+    public function getUserAndAdminWidgets($uid)
+    {
+        \Database::get()->queryFunc("SELECT a.id AS widget_widget_area_id, a.user_id AS user_id, b.id AS widget_id, b.class AS class "
+                . "FROM widget_widget_area a, widget b "
+                . "WHERE a.widget_area_id = ?d AND (a.user_id = ?d OR a.user_id IS NULL) AND b.id = a.widget_id ORDER BY a.position", function($widget) use ($uid){
+            $widget_obj = new $widget->class;
+            $widget_obj->is_user_widget = $widget->user_id == $uid;
+            $this->widgets[$widget->widget_widget_area_id] = $widget_obj;          
+        }, $this->id, $uid); 
+
+        return $this->widgets;
+    }      
 }

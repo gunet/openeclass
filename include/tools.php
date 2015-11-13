@@ -315,6 +315,10 @@ function loggedInMenu() {
     array_push($sideMenuLink, $urlServer . "main/profile/display_profile.php");
     array_push($sideMenuImg, "fa-user");
 
+    array_push($sideMenuText, $GLOBALS['langMyWidgets']);
+    array_push($sideMenuLink, $urlServer . "main/my_widgets.php");
+    array_push($sideMenuImg, "fa-magic");
+    
     array_push($sideMenuText, $GLOBALS['langMyStats']);
     array_push($sideMenuLink, $urlServer . "modules/usage/?t=u");
     array_push($sideMenuImg, "fa-area-chart");

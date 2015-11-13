@@ -105,7 +105,10 @@
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/profile/display_profile.php"><span class="fa fa-user fa-fw"></span>{{ trans('langMyProfile') }}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/profile/personal_stats.php"><span class="fa fa-area-chart fa-fw"></span>{{ trans('langMyStats') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_widgets.php"><span class="fa fa-magic fa-fw"></span>{{ trans('langMyWidgets') }}</a>
+                                        </li>                                        
+                                        <li role="presentation">
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/usage/?t=u"><span class="fa fa-area-chart fa-fw"></span>{{ trans('langMyStats') }}</a>
                                         </li>
                                         <li role="presentation" style="border-top: 1px solid #ddd">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}index.php?logout=yes"><span class="fa fa-unlock fa-fw"></span>{{ trans('langLogout') }}</a>

@@ -22,10 +22,11 @@
 
 
 class WidgetWidgetArea {
-    public $id;
-    public $widget_id;
-    public $widget_area_id;
-    public $options = null;
+    private $id;
+    private $widget_id;
+    private $widget_area_id;
+    private $options = null;
+    private $user_id = null;
      
     public function __construct($id) {
         $widget_widget_area = \Database::get()->querySingle("SELECT * FROM widget_widget_area WHERE id = ?d", $id);
@@ -33,10 +34,11 @@ class WidgetWidgetArea {
             $this->id = $id;
             $this->widget_id = $widget_widget_area->widget_id;
             $this->widget_area_id = $widget_widget_area->widget_area_id;
-            $this->options = unserialize($widget_widget_area->options);            
+            $this->options = unserialize($widget_widget_area->options);
+            $this->user_id = $widget_widget_area->user_id;
         }
     }
-    public function getOptions() {
+    public function getOptions() {        
         $data = array();
         if ($this->options) {
             foreach ($this->options as $key => $value) {
@@ -44,5 +46,11 @@ class WidgetWidgetArea {
             }
         }
         return $data;
-    } 
+    }
+    public function getUserID() {        
+        return $this->user_id;
+    }
+    public function isUserWidget($uid) {
+        return isset($this->user_id) ? $this->user_id == $uid : false;
+    }     
 }

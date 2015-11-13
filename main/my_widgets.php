@@ -23,8 +23,7 @@
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 
-$require_admin = true;
-require_once '../../include/baseTheme.php';
+require_once '../include/baseTheme.php';
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if ($_POST['action'] == 'add') {
@@ -32,7 +31,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $widget_id = $_POST['widget_id'];
         $position = $_POST['position'];
         Database::get()->query("UPDATE `widget_widget_area` SET `position` = `position` + 1 WHERE `position` >= ?d AND `widget_area_id` = ?d", $position, $widget_area_id);
-        $widget_widget_area_id = Database::get()->query("INSERT INTO `widget_widget_area` (`widget_id`, `widget_area_id`, `position`) VALUES (?d, ?d, ?d)", $widget_id, $widget_area_id, $position)->lastInsertID;
+        $widget_widget_area_id = Database::get()->query("INSERT INTO `widget_widget_area` (`widget_id`, `widget_area_id`, `position`, `user_id`) VALUES (?d, ?d, ?d, ?d)", $widget_id, $widget_area_id, $position, $uid)->lastInsertID;
         $data['widget_widget_area_id'] = $widget_widget_area_id;
     } elseif ($_POST['action'] == 'move') {
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
@@ -105,12 +104,8 @@ $head_content .=
                     animation: 150
                 });
                 [
-                'home_widget_main',
-                'home_widget_sidebar',
                 'portfolio_widget_main',
-                'portfolio_widget_sidebar',
-                'course_home_widget_main',
-                'course_home_widget_sidebar'                
+                'portfolio_widget_sidebar',              
                 ].forEach(function (id, i) { 
                     Sortable.create(byId(id), {
                         draggable: '.widget',
@@ -321,30 +316,23 @@ foreach ($installed_widgets as $installed_widget) {
     $installed_widgets_arr[$installed_widget->id] = $installed_widget->class;
 }    
 
-$home_main_area = new Widgets\WidgetArea(HOME_PAGE_MAIN);
-$view_data['home_main_area_widgets'] = $home_main_area->getWidgets();
-$home_sidebar_area = new Widgets\WidgetArea(HOME_PAGE_SIDEBAR);
-$view_data['home_sidebar_widgets'] = $home_sidebar_area->getWidgets();
-$portfolio_main_area = new Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
-$view_data['portfolio_main_area_widgets'] = $portfolio_main_area->getWidgets();
-$portfolio_sidebar_area = new Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
-$view_data['portfolio_sidebar_widgets'] = $portfolio_sidebar_area->getWidgets();
-$course_home_main_area = new Widgets\WidgetArea(COURSE_HOME_PAGE_MAIN);
-$view_data['course_home_main_area_widgets'] = $course_home_main_area->getWidgets();
-$course_home_sidebar_area = new Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
-$view_data['course_home_sidebar_widgets'] = $course_home_sidebar_area->getWidgets();
+$view_data['portfolio_main_area'] = new Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
+$view_data['portfolio_main_area_widgets'] = $view_data['portfolio_main_area']->getUserAndAdminWidgets($uid);
+$view_data['portfolio_sidebar_area'] = new Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
+$view_data['portfolio_sidebar_widgets'] = $view_data['portfolio_sidebar_area']->getUserAndAdminWidgets($uid);
 
 $view_data = recursiveWidgetIterator('Widgets', $view_data);
 
-$view_data['menuTypeID'] = 3;
-$pageName = $langWidgets;
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-echo view('admin.widgets.index', $view_data);
+$view_data['myWidgets'] = 1;
+
+$view_data['menuTypeID'] = 1;
+$pageName = $langMyWidgets;
+echo view('admin.widgets.my_widgets', $view_data);
 
 function recursiveWidgetIterator ($directory = null, $view_data = array()) {
     global $installed_widgets_arr;
     if (!isset($view_data['installed_widgets'])) $view_data['installed_widgets'] = [];
-    if (!isset($view_data['uninstalled_widgets'])) $view_data['uninstalled_widgets'] = [];     
+    if (!isset($view_data['uninstalled_widgets'])) $view_data['uninstalled_widgets'] = [];    
     $files = new \DirectoryIterator ( $directory );
     foreach ($files as $file) {
         if ($file->isFile ()) {

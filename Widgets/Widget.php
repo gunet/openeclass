@@ -1,5 +1,5 @@
 <?php namespace Widgets;
-
+use Widgets\WidgetWidgetArea;
 /* ========================================================================
  * Open eClass 
  * E-learning and Course Management System
@@ -52,16 +52,9 @@ abstract class Widget {
         $description = isset($this->description[$language]) ? $this->description[$language] : $this->description['en'];
         return $description;
     }      
-    protected function get_options($widget_widget_area_id) {
-        $options = unserialize(\Database::get()->querySingle("SELECT options FROM widget_widget_area WHERE id = ?d", $widget_widget_area_id)->options);
-        if ($options) {
-            foreach ($options as $key => $value) {
-                $data[$key] = $value;
-            }
-        }
-        return $data;
-    }
+
     protected function initialize_widget_data($widget_widget_area_id) {
+        global $uid;
         $widget_widget_area = new WidgetWidgetArea($widget_widget_area_id);
         $this->view_data = $widget_widget_area->getOptions();
         $this->view_data['widget_folder'] = $this->folder; 
