@@ -52,7 +52,7 @@ class OpenMeetings extends ExtApp {
      * @return boolean
      */
     public function isConfigured() {
-        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count > 0;
+        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM om_servers WHERE enabled='true'")->count > 0;
     }
 
 }
