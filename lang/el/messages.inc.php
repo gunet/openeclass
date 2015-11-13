@@ -4733,7 +4733,9 @@ $langCPFDateValidFail = 'Το πεδίο %s δεν είναι έγκυρη ημ�
  * ***************************************** */
 $langWidgets = "Μικροεργαλεία";
 $langInstalledWidgets = "Εγκατεστημένα Μικροεργαλεία";
+$langNoInstalledWidgets = "Δεν υπάρχουν εγκατεστημένα Μικροεργαλεία";
 $langAvailableWidgets = "Διαθέσιμα Μικροεργαλεία";
+$langNoAvailableWidgets = "Δεν υπάρχουν διαθέσιμα προς εγκατάσταση Μικροεργαλεία";
 $langWidgetInstall = "Εγκατάσταση";
 $langWidgetUninstall = "Απεγκατάσταση";
 $langHomePageMainContent = "Κυρίως περιεχόμενο Αρχικής Σελίδας";

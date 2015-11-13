@@ -52,12 +52,10 @@
         </div>   
         @else
         <div class='text-warning margin-bottom-fat'>
-            Δεν υπάρχουν εγκατεστημένα widgets
+            {{ trans('langNoInstalledWidgets') }}
         </div>       
         @endif
            
-
-
         <h3 class="content-title">{{ trans('langAvailableWidgets') }}</h3>
         <hr>
         @if (count($uninstalled_widgets))
@@ -91,7 +89,7 @@
         </div>
         @else
         <div class='text-warning margin-bottom-fat'>
-            Δεν υπάρχουν διαθέσιμα προς εγκατάσταση widgets
+            {{ trans('langNoAvailableWidgets') }}
         </div>       
         @endif        
     </div>    
