@@ -161,16 +161,16 @@
         },
         {
             "name": "doctrine/inflector",
-            "version": "v1.0.1",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "0bcb2e79d8571787f18b7eb036ed3d004908e604"
+                "reference": "90b2128806bfde671b6952ab8bea493942c1fdae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/0bcb2e79d8571787f18b7eb036ed3d004908e604",
-                "reference": "0bcb2e79d8571787f18b7eb036ed3d004908e604",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/90b2128806bfde671b6952ab8bea493942c1fdae",
+                "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
                 "shasum": ""
             },
             "require": {
@@ -182,7 +182,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -224,7 +224,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2014-12-20 21:24:13"
+            "time": "2015-11-06 14:35:42"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -770,12 +770,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/antonioribeiro/google2fa.git",
-                "reference": "3b33781730f3d8d17f3866f9866cf0caed0c12a9"
+                "reference": "f26612a3ac03dfaafec6e8fd8dd28239cd0a8c6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/3b33781730f3d8d17f3866f9866cf0caed0c12a9",
-                "reference": "3b33781730f3d8d17f3866f9866cf0caed0c12a9",
+                "url": "https://api.github.com/repos/antonioribeiro/google2fa/zipball/f26612a3ac03dfaafec6e8fd8dd28239cd0a8c6a",
+                "reference": "f26612a3ac03dfaafec6e8fd8dd28239cd0a8c6a",
                 "shasum": ""
             },
             "require": {
@@ -816,7 +816,7 @@
                 "google2fa",
                 "laravel"
             ],
-            "time": "2015-09-12 15:25:17"
+            "time": "2015-11-07 14:02:49"
         },
         {
             "name": "simplesoftwareio/simple-qrcode",
@@ -921,12 +921,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/valitron.git",
-                "reference": "8cfa3bd93216848e0507589e008a344f6eac7486"
+                "reference": "3ab56a285dad8610e48518dc57b0f16c5f867578"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/valitron/zipball/8cfa3bd93216848e0507589e008a344f6eac7486",
-                "reference": "8cfa3bd93216848e0507589e008a344f6eac7486",
+                "url": "https://api.github.com/repos/vlucas/valitron/zipball/3ab56a285dad8610e48518dc57b0f16c5f867578",
+                "reference": "3ab56a285dad8610e48518dc57b0f16c5f867578",
                 "shasum": ""
             },
             "require": {
@@ -959,7 +959,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2015-10-21 02:43:17"
+            "time": "2015-11-09 19:55:45"
         }
     ],
     "packages-dev": [],
