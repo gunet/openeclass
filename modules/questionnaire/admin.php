@@ -87,20 +87,21 @@ if (isset($_POST['submitPoll'])) {
         $PollShowResults = (isset($_POST['PollShowResults'])) ? $_POST['PollShowResults'] : 0;
         $PollAssignToSpecific = $_POST['assign_to_specific'];
         $PollAssignees = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
+		$PollSurveyType = $_POST['survey_type'];
         if(isset($pid)) {
             Database::get()->query("UPDATE poll SET name = ?s,
                     start_date = ?t, end_date = ?t, description = ?s, 
                     end_message = ?s, anonymized = ?d, show_results = ?d,
-                    assign_to_specific = ?d
+					type = ?d, assign_to_specific = ?d
                     WHERE course_id = ?d AND pid = ?d", 
-                    $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollAssignToSpecific, $course_id, $pid);
+                    $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollSurveyType, $PollAssignToSpecific, $course_id, $pid);
             Database::get()->query("DELETE FROM poll_to_specific WHERE poll_id = ?d", $pid);
             Session::Messages($langPollEdited, 'alert-success');
         } else {
             $PollActive = 1;
             $pid = Database::get()->query("INSERT INTO poll
-                        (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results, assign_to_specific)
-                        VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollAssignToSpecific)->lastInsertID;         
+                        (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results,type, assign_to_specific)
+                        VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollSurveyType, $PollAssignToSpecific)->lastInsertID;         
             Session::Messages($langPollCreated, 'alert-success');
         }
         if ($PollAssignToSpecific && !empty($PollAssignees)) {
@@ -329,6 +330,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $PollStart = Session::has('PollStart') ? Session::get('PollStart') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->start_date) : strtotime('now')));
     $PollEnd = Session::has('PollEnd') ? Session::get('PollEnd') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->end_date) : strtotime('now +1 year')));
     $PollAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : (isset($poll) ? $poll->assign_to_specific : 0);
+	$PollSurveyType = Session::has('PollType') ? Session::get('PollType') : (isset($poll) ? $poll->type : '');
 
     $link_back = isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code";
     $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
@@ -448,6 +450,29 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </div>
                 </div>
             </div>            
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langSurveyType:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='general_type' name='survey_type' value='0'".($PollSurveyType == 0 ? " checked" : "").">
+                        <span>$langGeneralSurvey </span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == 1 ? " checked" : "").">
+                        <span>$langCollesSurvey </span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == 2 ? " checked" : "").">
+                        <span>$langATTLSSurvey</span>
+                      </label>
+                    </div>                        
+                </div>
+            </div>
             <div class='form-group'>
               <div class='col-sm-offset-2 col-sm-10'>".
             form_buttons(array(
@@ -722,11 +747,20 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </div>";
 // View edit poll page     
 } else {  
+$tool_content .= $ToolSurveyType;
     $pageName = $langEditChange;
     $navigation[] = array(
             'url' => "admin.php?course=$course_code&amp;pid=$pid", 
             'name' => $poll->name
         );
+
+	if($poll->type == 0)
+		$poll_type = $langGeneralSurvey;
+	else if($poll->type == 1)
+		$poll_type = $langCollesSurvey." $langSurvey";
+	else if($poll->type == 2)
+		$poll_type = $langATTLSSurvey." $langSurvey";
+		
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -774,6 +808,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
+                    <strong>$langSurveyType:</strong>
+                </div>
+                <div class='col-sm-9'>
+					$poll_type
+                </div>                
+            </div>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
                     <strong>$langDescription:</strong>
                 </div>
                 <div class='col-sm-9'>
@@ -791,6 +833,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
           </div>          
         </div>        
     ";
+    
+	if($poll->type == 0){
+
     $tool_content .= action_bar(array(
         array('title' => $langNewQu,
               'level' => 'primary-label',
@@ -850,6 +895,195 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $tool_content .= "</tbody></table>";
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langPollEmpty</div>";
+    }
+	}
+	else if ($poll->type == 1){
+	
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles1, 5, 1, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles2, 5, 2, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles3, 5, 3, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles4, 5, 4, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles5, 5, 5, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles6, 5, 6, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles7, 5, 7, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles8, 5, 8, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles9, 5, 9, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles10, 5, 10, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles11, 5, 11, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles12, 5, 12, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles13, 5, 13, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles14, 5, 14, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles15, 5, 15, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles16, 5, 16, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles17, 5, 17, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles18, 5, 18, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles19, 5, 19, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles20, 5, 20, 5)->lastInsertID;
+
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles21, 5, 21, 5)->lastInsertID;
+
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles22, 5, 22, 5)->lastInsertID;
+
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles23, 5, 23, 5)->lastInsertID;
+
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles24, 5, 24, 5)->lastInsertID;					
+		$tool_content .= "<div class='alert alert-info' role='alert'>
+                        $colles_desc
+                    </div>";
+	
+	}
+	else if ($poll->type == 2){
+	
+        $pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question1, 5, 1, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question2, 5, 2, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question3, 5, 3, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question4, 5, 4, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question5, 5, 5, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question6, 5, 6, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question7, 5, 7, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question8, 5, 8, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question9, 5, 9, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question10, 5, 10, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question11, 5, 11, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question12, 5, 12, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question13, 5, 13, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question14, 5, 14, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question15, 5, 15, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question16, 5, 16, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question17, 5, 17, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question18, 5, 18, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question19, 5, 19, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question20, 5, 20, 5)->lastInsertID;
+					
+		$tool_content .= "<div class='alert alert-info' role='alert'>
+                        $rate_scale
+                    </div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

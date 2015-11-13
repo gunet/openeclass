@@ -313,9 +313,14 @@ function printPolls() {
                         <td class='text-center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->start_date)), true) . "</td>
                         <td class='text-center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->end_date)), true) . "</td>";
                 if ($is_editor) {
+				
+                    if ($thepoll->type==0){
+					
                     $tool_content .= "
                         <td class='text-center'>$total_participants</td>
-                        <td class='text-center option-btn-cell'>" .action_button(array(
+                        <td class='text-center option-btn-cell'>" .
+						
+							action_button(array(                       
                             array(
                                 'title' => $langEditChange,
                                 'icon' => 'fa-edit',
@@ -360,6 +365,52 @@ function printPolls() {
                                 'confirm' => $langConfirmDelete                               
                             )                                   
                         ))."</td></tr>";
+					}
+					else {
+					$tool_content .= "
+                        <td class='text-center'>$total_participants</td>						
+                        <td class='text-center option-btn-cell'>" .
+					action_button(array(                       
+                            array(
+                                'title' => $visibility?  $langDeactivate : $langActivate,
+                                'icon' => $visibility ?  'fa-toggle-off' : 'fa-toggle-on',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"
+                            ),
+                            array(
+                                'title' => $langUsage,
+                                'level' => 'primary',
+                                'icon' => 'fa-line-chart',
+                                'url' => "pollresults.php?course=$course_code&pid=$pid",
+                                'disabled' => $total_participants == 0
+                            ),
+                            array(
+                                'title' => $langSee,
+                                'icon' => 'fa-search',
+                                'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid"
+                            ),
+                            array(
+                                'title' => $langCreateDuplicate,
+                                'icon' => 'fa-copy',
+                                'icon-class' => 'warnLink',
+                                'icon-extra' => "data-pid='$pid'",
+                                'url' => "#"
+                            ),
+                            array(
+                                'title' => $langPurgeExercises,
+                                'icon' => 'fa-eraser',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
+                                'confirm' => $langConfirmPurgeExercises,
+                                'show' => $total_participants > 0
+                            ),                                        
+                            array(
+                                'title' => $langDelete,
+                                'icon' => 'fa-times',
+                                'class' => 'delete',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
+                                'confirm' => $langConfirmDelete                               
+                            )                                   
+                        ))."</td></tr>";
+					}
                 } else {
                     //!(course_status($course_id) == COURSE_OPEN && $uid ==0)
                     $tool_content .= "
