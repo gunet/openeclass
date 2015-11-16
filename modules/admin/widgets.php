@@ -189,35 +189,37 @@ $head_content .=
             function addWidget(e) {
                 if (e.from['id'] == 'widgets') {
                     var item = $(e.item);  // dragged HTMLElement
-                    item.removeClass('panel-success').addClass('panel-default');
-                    item.find('div.panel-heading a span').removeClass().addClass('fa fa-spinner fa-spin');
                     var widget_area_id = item.closest('div.panel-body').data('widget-area-id');
-                    var widget_id = item.data('widget-id');   
-                    $.ajax({
-                      type: 'POST',
-                      url: '',
-                      datatype: 'json',
-                      data: {
-                        widget_id: widget_id,
-                        widget_area_id: widget_area_id,
-                        position: e.newIndex,
-                        action: 'add'
-                      },
-                      success: function(data){ 
-                            initializeWidget(e, data);
-                      },
-                      error: function(xhr, textStatus, error){
-                          console.log(xhr.statusText);
-                          console.log(textStatus);
-                          console.log(error);
-                      }
-                    });                                  
+                    var widget_id = item.data('widget-id'); 
+                    if (widget_id && widget_area_id) {
+                        item.removeClass('panel-success').addClass('panel-default');
+                        item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-spinner fa-spin');
+                        $.ajax({
+                          type: 'POST',
+                          url: '',
+                          datatype: 'json',
+                          data: {
+                            widget_id: widget_id,
+                            widget_area_id: widget_area_id,
+                            position: e.newIndex,
+                            action: 'add'
+                          },
+                          success: function(data){ 
+                                initializeWidget(e, data);
+                          },
+                          error: function(xhr, textStatus, error){
+                              console.log(xhr.statusText);
+                              console.log(textStatus);
+                              console.log(error);
+                          }
+                        });
+                    }   
                 }              
             }
             function moveWidget(e) {
                 var item = $(e.item);  // dragged HTMLElement
                 item.removeClass('panel-success').addClass('panel-default');
-                item.find('div.panel-heading a span').removeClass().addClass('fa fa-spinner fa-spin');
+                item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-spinner fa-spin');
                 var widget_widget_area_id = item.data('widget-widget-area-id');
                 var widget_area_id = item.closest('div.panel-body').data('widget-area-id');
                 $.ajax({
@@ -233,7 +235,7 @@ $head_content .=
                   },
                   success: function(data){
                     item.removeClass('panel-default').addClass('panel-success');
-                    item.find('div.panel-heading a span').removeClass().addClass('fa fa-check');
+                    item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-check');
                   },
                   error: function(xhr, textStatus, error){
                       console.log(xhr.statusText);
@@ -274,7 +276,7 @@ $head_content .=
                             .find('.panel-body')
                             .append(form_obj.form_view);
                             item.removeClass('panel-default').addClass('panel-success');
-                            item.find('div.panel-heading a span').removeClass().addClass('fa fa-check');
+                            item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-check');
                       },
                       error: function(xhr, textStatus, error){
                           console.log(xhr.statusText);
@@ -288,7 +290,7 @@ $head_content .=
                     e.preventDefault();
                     var item = $(this).closest('.panel');
                     item.removeClass('panel-success').addClass('panel-default');
-                    item.find('div.panel-heading a span').removeClass().addClass('fa fa-spinner fa-spin');
+                    item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-spinner fa-spin');
                     var widget_widget_area_id = $(this).closest('.panel').data('widget-widget-area-id');
                     var options = $(this).closest('.panel-body').find('form#optionsForm'+widget_widget_area_id).serializeArray();
                     $.ajax({
@@ -302,7 +304,7 @@ $head_content .=
                         },
                         success: function(data){
                             item.removeClass('panel-default').addClass('panel-success');
-                            item.find('div.panel-heading a span').removeClass().addClass('fa fa-check');
+                            item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-check');
                         },
                         error: function(xhr, textStatus, error){
                             console.log(xhr.statusText);

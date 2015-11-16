@@ -171,9 +171,9 @@ $tool_content .= "
                 </div>
             </div>";
         $portfolio_page_main = new \Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
-        foreach ($portfolio_page_main->getWidgets() as $key => $widget) {
+        foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
             $tool_content .= $widget->run($key);
-        }                                
+        }        
 $tool_content .= "            
         </div>
     <div class='col-md-5'>
@@ -227,7 +227,7 @@ $tool_content .= "
             </div>
         </div>";
         $portfolio_page_sidebar = new \Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
-        foreach ($portfolio_page_sidebar->getWidgets() as $key => $widget) {
+        foreach ($portfolio_page_sidebar->getUserAndAdminWidgets($uid) as $key => $widget) {
             $tool_content .= $widget->run($key);
         }
 $tool_content .= "        

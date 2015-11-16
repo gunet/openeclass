@@ -34,6 +34,7 @@ class WidgetArea {
                 . "FROM widget_widget_area a, widget b "
                 . "WHERE a.widget_area_id = ?d AND a.user_id IS NULL AND b.id = a.widget_id ORDER BY a.position", function($widget) {
             $widget_obj = new $widget->class;
+            $widget_obj->is_user_widget = false;
             $this->widgets[$widget->widget_widget_area_id] = $widget_obj;
         }, $this->id);        
         return $this->widgets;

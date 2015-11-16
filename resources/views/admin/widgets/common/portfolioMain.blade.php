@@ -10,7 +10,7 @@
                                 <div class="panel-heading">                   
                                     <a style="text-decoration: none; display: block; color: #777;" data-toggle="collapse" data-target="#widget_desc_{{ $key }}" 
                                        href="#widget_desc_{{ $key }}" class="widget_title">
-                                        {{ $portfolio_main_area_widget->getName() }} <span></span>
+                                        {{ $portfolio_main_area_widget->getName() }} <span></span> <small class="pull-right">{{ $portfolio_main_area_widget->is_user_widget ? 'Προσωπικό' : 'Διαχείρισης'}}</small>
                                     </a>                     
                                 </div>
                                 @if (!isset($myWidgets) || isset($myWidgets) && $portfolio_main_area_widget->is_user_widget)
