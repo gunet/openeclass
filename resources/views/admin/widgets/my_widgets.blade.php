@@ -13,7 +13,7 @@
                         <div class="panel-heading">                   
                             <a style="text-decoration: none; display: block; color: #777;" data-toggle="collapse" data-target="#widget_desc_{{ $key }}" 
                                href="#widget_desc_{{ $key }}" class="widget_title">
-                                {{ $installed_widget->getName() }} <span></span>
+                                {{ $installed_widget->getName() }} <span></span> <span class="pull-right"></span>
                             </a>                     
                         </div>
                         <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">

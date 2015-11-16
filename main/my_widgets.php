@@ -272,6 +272,7 @@ $head_content .=
                             .append(form_obj.form_view);
                             item.removeClass('panel-default').addClass('panel-success');
                             item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-check');
+                            item.find('div.panel-heading a span:nth-child(2)').html('<small>".trans('langWidgetPersonal')."</small>');
                       },
                       error: function(xhr, textStatus, error){
                           console.log(xhr.statusText);
