@@ -2966,7 +2966,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `options` text NOT NULL,
                         `position` int(3) NOT NULL,
                         `user_id` int(11) NULL,
+                        `course_id` int(11) NULL,
                          FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+                         FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
                          FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");
         
             // Conference table

@@ -3690,7 +3690,6 @@ $langLegendRequiredFields = "<span class=\"required\">*</span> δείχνει α
 $langProfileMenu = "Μενού Προφίλ Χρήστη";
 $langProfileImage = "Εικόνα Προφίλ";
 $langMyProfile = "Το προφίλ μου";
-$langMyWidgets = "Τα μικροεργαλεία μου";
 $langModifyProfile = "Αλλαγή του Προφίλ μου";
 $langOfficialCode = "Κωδικός διαχείρισης";
 $langPersonalCourseList = "Προσωπική λίστα μαθήματος";
@@ -4790,6 +4789,7 @@ $langCPFDateValidFail = 'Το πεδίο %s δεν είναι έγκυρη ημ�
  * ***************************************** */
 $langWidgets = "Μικροεργαλεία";
 $langMyWidgets = "Τα μικροεργαλεία μου";
+$langCourseWidgets = "Mικροεργαλεία μαθήματος";
 $langInstalledWidgets = "Εγκατεστημένα Μικροεργαλεία";
 $langNoInstalledWidgets = "Δεν υπάρχουν εγκατεστημένα Μικροεργαλεία";
 $langAvailableWidgets = "Διαθέσιμα Μικροεργαλεία";
@@ -4798,6 +4798,7 @@ $langWidgetInstall = "Εγκατάσταση";
 $langWidgetUninstall = "Απεγκατάσταση";
 $langWidgetAdmin = "Διαχείρισης";
 $langWidgetPersonal = "Προσωπικό";
+$langWidgetCourse = "Μαθήματος";
 $langHomePageMainContent = "Κυρίως περιεχόμενο Αρχικής Σελίδας";
 $langHomePageSidebarContent = "Στήλη κυρίως περιεχομένου Αρχικής Σελίδας";
 $langPortfolioMainContent = "Κυρίως περιεχόμενο Χαρτοφυλακίου";

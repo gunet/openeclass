@@ -54,69 +54,11 @@
         <div class='text-warning margin-bottom-fat'>
             {{ trans('langNoInstalledWidgets') }}
         </div>       
-        @endif
-           
-        <h3 class="content-title">{{ trans('langAvailableWidgets') }}</h3>
-        <hr>
-        @if (count($uninstalled_widgets))
-        <div>           
-            @foreach ($uninstalled_widgets as $key => $uninstalled_widget)
-                <div class="panel panel-default">
-                    <div class="panel-heading">                   
-                        <span class="text-muted">
-                            {{ $uninstalled_widget->getName() }}
-                        </span>
-
-                    </div>
-                    <div class="panel-body">
-                        <span class="text-muted">
-                        {{ $uninstalled_widget->getDesc() }}
-                        </span>
-                    </div>
-                    <div class="panel-footer clearfix">
-                        <div class="pull-right">
-                            <form action='{{ $_SERVER['SCRIPT_NAME'] }}' id="installForm{{ $key }}" method="post">
-                                <input type="hidden" name='widgetClassName' value='{{ get_class($uninstalled_widget) }}'>
-                                <input type="hidden" name='widgetAction' value='install'>
-                            </form>
-                            <a href="#" onclick="$('#installForm{{ $key }}').submit();">
-                                <small>{{ trans('langWidgetInstall') }}</small>
-                            </a>                               
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-        @else
-        <div class='text-warning margin-bottom-fat'>
-            {{ trans('langNoAvailableWidgets') }}
-        </div>       
-        @endif        
+        @endif      
     </div>    
     <div class="col-xs-8">
-
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Αρχική</a></li>
-              <li role="presentation"><a href="#portfolio" aria-controls="portfolio" role="tab" data-toggle="tab">Χαρτοφυλάκιο</a></li>
-              <li role="presentation"><a href="#course_home" aria-controls="course_home" role="tab" data-toggle="tab">Αρχική Μαθήματος</a></li>
-            </ul>
-
-          <!-- Tab panes -->
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="home">
-                    @include('admin.widgets.common.homePageMain')
-                    @include('admin.widgets.common.homePageSide')
-                </div>
-                <div role="tabpanel" class="tab-pane" id="portfolio">
-                    @include('admin.widgets.common.portfolioMain')
-                    @include('admin.widgets.common.portfolioSide')                  
-                </div>                  
-                <div role="tabpanel" class="tab-pane" id="course_home">
-                    @include('admin.widgets.common.courseHomeMain')
-                    @include('admin.widgets.common.courseHomeSide')                    
-                </div>
-            </div>
+        @include('admin.widgets.common.courseHomeMain')
+        @include('admin.widgets.common.courseHomeSide')                   
     </div>    
 </div>
                             

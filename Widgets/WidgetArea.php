@@ -32,9 +32,10 @@ class WidgetArea {
     {
         \Database::get()->queryFunc("SELECT a.id AS widget_widget_area_id, b.id AS widget_id, b.class AS class "
                 . "FROM widget_widget_area a, widget b "
-                . "WHERE a.widget_area_id = ?d AND a.user_id IS NULL AND b.id = a.widget_id ORDER BY a.position", function($widget) {
+                . "WHERE a.widget_area_id = ?d AND a.user_id IS NULL AND a.course_id IS NULL AND b.id = a.widget_id ORDER BY a.position", function($widget) {
             $widget_obj = new $widget->class;
             $widget_obj->is_user_widget = false;
+            $widget_obj->is_course_admin_widget = false;
             $this->widgets[$widget->widget_widget_area_id] = $widget_obj;
         }, $this->id);        
         return $this->widgets;
@@ -50,5 +51,17 @@ class WidgetArea {
         }, $this->id, $uid); 
 
         return $this->widgets;
-    }      
+    }
+    public function getCourseAndAdminWidgets($course_id)
+    {
+        \Database::get()->queryFunc("SELECT a.id AS widget_widget_area_id, a.course_id AS course_id, b.id AS widget_id, b.class AS class "
+                . "FROM widget_widget_area a, widget b "
+                . "WHERE a.widget_area_id = ?d AND (a.course_id = ?d OR a.course_id IS NULL) AND b.id = a.widget_id ORDER BY a.position", function($widget) use ($course_id){
+            $widget_obj = new $widget->class;
+            $widget_obj->is_course_admin_widget = $widget->course_id == $course_id;
+            $this->widgets[$widget->widget_widget_area_id] = $widget_obj;          
+        }, $this->id, $course_id); 
+
+        return $this->widgets;
+    }     
 }

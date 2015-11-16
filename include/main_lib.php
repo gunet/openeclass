@@ -91,6 +91,7 @@ define('MODULE_ID_RATING', 39);
 define('MODULE_ID_SHARING', 40);
 define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_ABUSE_REPORT', 42);
+define('MODULE_ID_COURSE_WIDGETS', 44);
 
 // user modules
 
