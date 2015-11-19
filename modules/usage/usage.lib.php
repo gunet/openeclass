@@ -259,7 +259,7 @@ function get_course_registration_details($start = null, $end = null, $cid)
     $q = "SELECT DATE_FORMAT(x.day,'%d-%m-%Y') day, uname, username, email, action FROM (($reg_t) UNION ($unreg_t)) x  ORDER BY day";
     $r = Database::get()->queryArray($q, $cid, $start, $end, $cid, $start, $end);
     foreach($r as $record){
-       $formattedr[] = array($record->day, $record->uname, $record->action, $record->username, $record->email);
+       $formattedr[] = array($record->day, $record->uname, which_registration_action($record->action), $record->username, $record->email);
     }
     return $formattedr;
 }
@@ -655,6 +655,17 @@ function which_module($mid){
         $m_title = 'module '.$mid;
     }
     return $m_title;   
+}
+
+function which_registration_action($registration_action_id) {
+    global $langRegistration, $langUnRegister;
+    
+    if ($registration_action_id == 1) {
+        $r_title = $langRegistration;
+    } else {
+        $r_title = $langUnRegister;
+    }
+    return $r_title;
 }
   
 /**
