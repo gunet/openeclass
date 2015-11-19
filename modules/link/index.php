@@ -213,7 +213,7 @@ if ($is_editor) {
             <label for='selectcategory' class='col-sm-2 control-label'>$langCategory:</label>
             <div class='col-sm-3'>
                 <select class='form-control' name='selectcategory' id='selectcategory'>
-                <option value='0'>--</option>";
+                <option value='" . getIndirectReference(0) . "'>--</option>";
         if ($social_bookmarks_enabled) {
             $tool_content .= "<option value='" . getIndirectReference(-2) . "'";
             if (isset($category) and -2 == $category) {
