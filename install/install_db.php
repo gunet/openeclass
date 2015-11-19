@@ -35,7 +35,7 @@ set_time_limit(0);
 // set default storage engine
 Database::core()->query("SET storage_engine = InnoDB");
 // create eclass database
-Database::core()->query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
+Database::core()->query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb` CHARACTER SET utf8");
 
 $db = Database::get();
 
