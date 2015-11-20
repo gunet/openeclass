@@ -80,15 +80,6 @@ if (isset($_POST['submit'])) {
                                     reg_date = " . DBHelper::timeAfter() . " ,
                                     document_timestamp = " . DBHelper::timeAfter() . "");
                 }
-                Database::get()->query("INSERT INTO group_properties SET
-                            course_id = $cid,
-                            self_registration = 1,
-                            multiple_registration = 0,
-                            forum = 1,
-                            private_forum = 0,
-                            documents = 1,
-                            wiki = 0,
-                            agenda = 0");
                 create_modules($cid);
             }
             if ($code) {
