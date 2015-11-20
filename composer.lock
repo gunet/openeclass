@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8952ef1b964ed9e5f30e4336b843cb9a",
+    "hash": "4f97f46dd533db3248e75498f3625ff9",
     "content-hash": "a55ee4841d9a1a2e5cdf6536d97a3c95",
     "packages": [
         {
@@ -597,19 +597,20 @@
         },
         {
             "name": "jasig/phpcas",
-            "version": "1.3.3",
+            "version": "1.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Jasig/phpCAS.git",
-                "reference": "b6f5d484735d3b0e80b068a87bd1eabac04b2cbe"
+                "reference": "8c74d21630f74278270830fdbdb0c1317bce3f0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Jasig/phpCAS/zipball/b6f5d484735d3b0e80b068a87bd1eabac04b2cbe",
-                "reference": "b6f5d484735d3b0e80b068a87bd1eabac04b2cbe",
+                "url": "https://api.github.com/repos/Jasig/phpCAS/zipball/8c74d21630f74278270830fdbdb0c1317bce3f0a",
+                "reference": "8c74d21630f74278270830fdbdb0c1317bce3f0a",
                 "shasum": ""
             },
             "require": {
+                "ext-curl": "*",
                 "php": ">=5.0.0"
             },
             "require-dev": {
@@ -646,7 +647,7 @@
                 "cas",
                 "jasig"
             ],
-            "time": "2014-07-24 20:29:29"
+            "time": "2015-11-16 20:44:36"
         },
         {
             "name": "pclzip/pclzip",
