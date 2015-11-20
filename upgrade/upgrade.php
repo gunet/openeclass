@@ -2991,6 +2991,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `webapp` int(11) DEFAULT NULL,
                         PRIMARY KEY (`id`),
                         KEY `idx_om_servers` (`hostname`))');
+						
+			if (!DBHelper::fieldExists('poll', 'type')) {
+				Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");
+			}
     }
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
