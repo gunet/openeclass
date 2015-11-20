@@ -30,7 +30,7 @@ require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
 $base_url = 'index.php?course=' . $course_code;
-$cat_url = 'categories.php?course=' . $course_code;
+$cat_url = $data['cat_url'] = 'categories.php?course=' . $course_code;
 
 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
 $toolName = $langGlossary;
@@ -146,40 +146,20 @@ if ($is_editor) {
 
     // display form for adding or editing a category
     if (isset($_GET['add']) or isset($_GET['edit'])) {
-        $html_id = '';
         if (isset($_GET['add'])) {
             $pageName = $langCategoryAdd;
             $submit_value = $langSubmit;
         } else {
             $pageName = $langCategoryMod;
-            $cat_id = intval(getDirectReference($_GET['edit']));
-            $data = Database::get()->querySingle("SELECT name, description
-                                              FROM glossary_category WHERE id = ?d", $cat_id);
-            if ($data) {
-                $html_id = "<input type = 'hidden' name='category_id' value='" . getIndirectReference($cat_id) . "'>";
-            }
+            $cat_id = getDirectReference($_GET['edit']);
             $submit_value = $langModify;
+            $data['glossary_cat'] = Database::get()->querySingle("SELECT id, name, description
+                                              FROM glossary_category WHERE id = ?d", $cat_id);
         }
-        $name = Session::has('name') ? Session::get('name') : ( isset($_GET['add']) ? "" : q($data->name) );
-        $description = Session::has('description') ? Session::get('description') : ( isset($_GET['add']) ? "" : q($data->description) );
-        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$cat_url' method='post'>
-                    $html_id
-                    <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
-                         <label for='name' class='col-sm-2 control-label'>$langCategoryName: </label>
-                         <div class='col-sm-10'>
-                             <input type='text' class='form-control' id='term' name='name' placeholder='$langCategoryName' value='$name'>
-                             <span class='help-block'>".Session::getError('name')."</span>    
-                         </div>
-                    </div>
-                    <div class='form-group'>
-                         <label for='description' class='col-sm-2 control-label'>$langDescription: </label>
-                         <div class='col-sm-10'>
-                             " . rich_text_editor('description', 4, 60, $description) . "
-                         </div>
-                    </div>
-                   <div class='form-group'>    
-                        <div class='col-sm-10 col-sm-offset-2'>".
-                                    form_buttons(array(
+        $data['name'] = Session::has('name') ? Session::get('name') : ( isset($_GET['add']) ? "" : $data['glossary_cat']->name );
+        $data['description'] = Session::has('description') ? Session::get('description') : ( isset($_GET['add']) ? "" : $data['glossary_cat']->description);
+        
+        $data['form_buttons'] = form_buttons(array(
                                     array(
                                         'text' => $langSave,
                                         'value'=> $submit_value,
@@ -188,11 +168,8 @@ if ($is_editor) {
                                     array(
                                         'href' => $cat_url
                                     )
-                                ))."</div>
-                    </div>
-                ". generate_csrf_token_form_field() ."                              
-                </form>
-            </div>";                       
+                                ));
+        echo view('modules.glossary.createCategory', $data);                
     }
 }
 

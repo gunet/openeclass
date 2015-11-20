@@ -72,7 +72,7 @@ function view($view_file, $view_data = array()) {
     // Setting $menuTypeID and Getting Side Menu
     $menuTypeID = isset($view_data['menuTypeID']) ? $view_data['menuTypeID'] : 2;
 
-    $toolArr = $is_mobile || !isset($view_data['menuTypeID']) ? array() : getSideMenu($menuTypeID);
+    $toolArr = $is_mobile ? array() : getSideMenu($menuTypeID);
 
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
     unset($_SESSION['embedonce']);
