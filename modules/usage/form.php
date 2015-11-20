@@ -54,7 +54,7 @@ elseif($stats_type == 'admin'){
        for($i=0;$i<$d->depth;$i++){
            $indentation .= "&nbsp;&nbsp;";
        }
-       $statsDepOptions .= '<option value="'.$d->id.'" >' . $indentation.$d->name . "</option>\n"; 
+       $statsDepOptions .= '<option value="'.$d->id.'" >' . $indentation.hierarchy::unserializeLangField($d->name) . "</option>\n";
     }    
 }
 else{

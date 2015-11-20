@@ -21,6 +21,7 @@
  */
 
 require_once 'include/log.php';
+require_once 'include/lib/hierarchy.class.php';
 
 /**
  * Get statistics of visits and visit duration to a course. The results are 
@@ -401,7 +402,7 @@ function get_user_login_stats($start = null, $end = null, $interval, $user){
     $date_components = $g['select'];
     $q = "SELECT $date_components, COUNT(*) c FROM logins WHERE date_time BETWEEN ?t AND ?t $groupby";
     $r = Database::get()->queryArray($q, $start, $end);
-    $formattedr = array('time'=>array(),'logins'=>array());
+    $formattedr = array('time'=>array(),'logins'=>array());    
     foreach($r as $record){
         $formattedr['time'][] = $record->cat_title;
         $formattedr['logins'][] = $record->c;
@@ -448,13 +449,13 @@ function get_department_user_stats($root_department = 1, $total = false){
     $depids = array();
     $leaves = array();
     $d = '';
-    $i = -1;
+    $i = -1;    
     foreach($r as $record){
         if($record->dname != $d){
             $i++;
             $depids[] = ($total)? $record->root:$record->did;
-            $leaves[] = $record->leaf;
-            $formattedr['department'][] = $record->dname;
+            $leaves[] = $record->leaf;            
+            $formattedr['department'][] = hierarchy::unserializeLangField($record->dname);
             $d = $record->dname;
             $formattedr[$langStatsUserStatus[USER_TEACHER]][] = 0;
             $formattedr[$langStatsUserStatus[USER_STUDENT]][] = 0;
@@ -462,7 +463,7 @@ function get_department_user_stats($root_department = 1, $total = false){
        if(!is_null($record->status)){
            $formattedr[$langStatsUserStatus[$record->status]][$i] = $record->users_count;
        }
-    }
+    }    
     return array('deps'=>$depids,'leafdeps'=>$leaves,'chartdata'=>$formattedr);
 
 }
@@ -505,7 +506,7 @@ function get_department_course_stats($root_department = 1){
             $i++;
             $depids[] = $record->did;
             $leaves[] = $record->leaf;
-            $formattedr['department'][] = $record->dname;
+            $formattedr['department'][] = hierarchy::unserializeLangField($record->dname);
             $d = $record->dname;
             $formattedr[$langCourseVisibility[COURSE_CLOSED]][] = 0;
             $formattedr[$langCourseVisibility[COURSE_REGISTRATION]][] = 0;
@@ -516,7 +517,7 @@ function get_department_course_stats($root_department = 1){
            $formattedr[$langCourseVisibility[$record->visible]][$i] = $record->courses_count;
         }
     }
-    return  array('deps'=>$depids,'leafdeps'=>$leaves,'chartdata'=>$formattedr);
+    return array('deps'=>$depids,'leafdeps'=>$leaves,'chartdata'=>$formattedr);
 
 }
 
