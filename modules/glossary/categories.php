@@ -29,7 +29,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
-$base_url = 'index.php?course=' . $course_code;
+$base_url = $data['base_url'] = 'index.php?course=' . $course_code;
 $cat_url = $data['cat_url'] = 'categories.php?course=' . $course_code;
 
 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
@@ -57,13 +57,13 @@ if ($is_editor) {
             $pageName = $langCategoryMod;
         }
         
-        $tool_content .= action_bar(array(
+        $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                       'url' => "$cat_url",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));        
     } else {
-        $tool_content .= action_bar(array(
+        $data['action_bar'] = action_bar(array(
                 array('title' => $langAddGlossaryTerm,
                       'url' => "$base_url&amp;add=1",
                       'icon' => 'fa-plus-circle',
@@ -157,8 +157,8 @@ if ($is_editor) {
                                               FROM glossary_category WHERE id = ?d", $cat_id);
         }
         $data['name'] = Session::has('name') ? Session::get('name') : ( isset($_GET['add']) ? "" : $data['glossary_cat']->name );
-        $data['description'] = Session::has('description') ? Session::get('description') : ( isset($_GET['add']) ? "" : $data['glossary_cat']->description);
-        
+        $description = Session::has('description') ? Session::get('description') : ( isset($_GET['add']) ? "" : $data['glossary_cat']->description);
+        $data['description_rich'] = rich_text_editor('description', 4, 60, $description);
         $data['form_buttons'] = form_buttons(array(
                                     array(
                                         'text' => $langSave,
@@ -174,46 +174,11 @@ if ($is_editor) {
 }
 
 if (!isset($_GET['edit']) && !isset($_GET['add'])) {
-    $q = Database::get()->queryArray("SELECT id, name, description
+    $data['categories'] = Database::get()->queryArray("SELECT id, name, description
                           FROM glossary_category WHERE course_id = ?d
                           ORDER BY name", $course_id);
-
-    if ($q and count($q)) {    
-            $tool_content .= "
-        <div class='table-responsive glossary-categories'>    
-            <table class='table-default'>
-                <tr class='list-header'><th class='text-left'>$langName</th>" .
-             ($is_editor ? "<th class='text-center'>" . icon('fa-gears') . "</th>" : '') . "
-                </tr>";
-
-        foreach ($q as $cat) {        
-            if ($cat->description) {
-                $desc = "<br>" . standard_text_escape($cat->description);
-            } else {
-                $desc = '';
-            }        
-            $tool_content .= "<tr><td class='space-left'><a href='$base_url&amp;cat=" . getIndirectReference($cat->id) . "'><strong>" . q($cat->name) . "</strong></a><small><span class='text-muted'>$desc</span></small></td>";                       
-            if ($is_editor) {
-                $tool_content .= "<td class='option-btn-cell'>";
-                $tool_content .= action_button(array(
-                        array('title' => $langCategoryMod,
-                              'url' => "$cat_url&amp;edit=" . getIndirectReference($cat->id),
-                              'icon' => 'fa-edit'),
-                        array('title' => $langCategoryDel,
-                              'url' => "$cat_url&amp;delete=" . getIndirectReference($cat->id),
-                              'icon' => 'fa-times',
-                              'class' => 'delete',
-                              'confirm' => $langConfirmDelete))
-                    );
-               $tool_content .= "</td>";                        
-            }
-            $tool_content .= "</tr>";
-        }
-        $tool_content .= "</table></div>";
-    } else {
-        $tool_content .= "<br><br><br><div class='alert alert-warning'>$langNoResult</div>";
-    }
+    echo view('modules.glossary.indexCategory', $data);
 }
 
-draw($tool_content, 2, null, $head_content);
+//draw($tool_content, 2, null, $head_content);
 

@@ -1,6 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
+        {!! $action_bar !!}
         <div class='form-wrapper'><form class='form-horizontal' role='form' action='{{ $cat_url }}' method='post'>
                     @if(isset($glossary_cat))
                     <input type='hidden' name='category_id' value='{{ getIndirectReference($glossary_cat->id) }}'>
@@ -15,7 +16,7 @@
                     <div class='form-group'>
                          <label for='description' class='col-sm-2 control-label'>{{ trans('langDescription') }}</label>
                          <div class='col-sm-10'>
-                             {!! rich_text_editor('description', 4, 60, $description) !!}
+                             {!! $description_rich !!}
                          </div>
                     </div>
                    <div class='form-group'>    

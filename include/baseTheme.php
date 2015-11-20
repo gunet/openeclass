@@ -257,10 +257,11 @@ function view($view_file, $view_data = array()) {
         WHERE course.id = course_id AND course.visible != " . COURSE_INACTIVE . " AND user_id = ?d
         ORDER BY reg_date DESC", $uid); 
        
-    $show_toggle_student_view = $is_editor && isset($require_current_course) and 
+    $show_toggle_student_view = isset($require_current_course) and 
                                     ($is_editor or (isset($saved_is_editor) and $saved_is_editor)) and
                                     !(isset($require_course_admin) and $require_course_admin) and
                                     !(isset($require_editor) and $require_editor);
+
     $views = $webDir.'/resources/views';
     $cache = $webDir . '/storage/views';
     $blade = new Blade($views, $cache);
