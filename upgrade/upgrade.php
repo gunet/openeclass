@@ -2616,6 +2616,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         @unlink("$webDir/template/default/img/eclass_classic2-1-1.png");
         @unlink("$webDir/template/default/img/eclass-new-logo_classic.png");
     }
+
     // -----------------------------------
     // upgrade queries for 3.2
     // -----------------------------------
@@ -2955,6 +2956,24 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE course SET home_layout = 1 WHERE home_layout = 2");
     }
 
+    // -----------------------------------
+    // upgrade queries for 3.3
+    // -----------------------------------
+    if (version_compare($oldversion, '3.3', '<')) {
+        // Fix duplicate link orders
+        Database::get()->queryFunc('SELECT DISTINCT course_id, category FROM link
+            GROUP BY course_id, category, `order` HAVING COUNT(*) > 1',
+            function ($item) {
+                $order = 0;
+                foreach (Database::get()->queryArray('SELECT id FROM link
+                    WHERE course_id = ?d AND category = ?d
+                    ORDER BY `order`',
+                    $item->course_id, $item->category) as $link) {
+                        Database::get()->query('UPDATE link SET `order` = ?d
+                            WHERE id = ?d', $order++, $link->id);
+                }
+            });
+    }
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
