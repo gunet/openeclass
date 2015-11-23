@@ -237,6 +237,14 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                           <div class='wrapper-login-option'>";
         
         $show_seperator = count($authLink) > 1;
+        if (count($authLink) > 3) {
+            // home page login form with more than 3 buttons not supported
+            $authLink = array($authLink[0]);
+            $show_buttons = false;
+        } else {
+            $show_buttons = true;
+        }
+            
         foreach ($authLink as $i => $l) {
             $tool_content .= "<div class='$l[class]'>
                                 <h2>$langUserLogin</h2>
@@ -249,10 +257,14 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                                   <div class='or-separator'><span>$langOr</span></div>
                                   <div class='alt_login text-center'>
                                     <span>";
-                foreach ($authLink as $j => $otherAuth) {
-                    if ($j != $i) {
-                        $tool_content .= "<button type='button' data-target='$j' class='option-btn-login hide'>$otherAuth[title]</button>";
+                if ($show_buttons) {
+                    foreach ($authLink as $j => $otherAuth) {
+                        if ($j != $i) {
+                            $tool_content .= "<button type='button' data-target='$j' class='option-btn-login hide'>$otherAuth[title]</button>";
+                        }
                     }
+                } else {
+                    $tool_content .= "<a href='{$urlAppend}main/login_form.php' class='btn btn-default option-btn-login'>$langAlternateLogin</a>";
                 }
                 $tool_content .= "
                                     </span>
