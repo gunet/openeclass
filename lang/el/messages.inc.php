@@ -3610,6 +3610,7 @@ $langNoStats = "Δεν υπάρχουν διαθέσιμα στατιστικά"
 $langDetails = "Αναλυτικά";
 $langPlots = "Γραφήματα";
 $langIpAddress = "Διεύθυνση IP";
+$langLoginUser = "Είσοδοι";
 
 
 #for platform Statistics

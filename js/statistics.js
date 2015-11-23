@@ -231,7 +231,7 @@ $(document).ready(function(){
 
 function refresh_plots(){
     xAxisTicksAdjust();
-    console.log('refresh: selectedview='+selectedview+', stats = '+stats)
+    console.log('refresh: selectedview='+selectedview+', stats = '+stats);
     if(stats === 'c'){
         logs_refresh_required = true;
         if(selectedview == 'logs'){
@@ -242,7 +242,7 @@ function refresh_plots(){
     if(stats === 'u'){
         refresh_generic_user_plot();
     }
-    if(stats === 'a'){
+    if(stats === 'a'){        
         refresh_user_login_plot();
         refresh_department_user_plot(department, 0);
     }
@@ -269,7 +269,7 @@ function refresh_generic_course_plot(){
                     duration: langDuration
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label:'hours', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label: langHours, min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#generic_stats'
         };
@@ -326,7 +326,7 @@ function refresh_course_module_plot(mdl){
                     duration: langDuration
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false, rotate:60}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'hours', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false, rotate:60}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min:0, padding:{top:0, bottom:0}}, y2: {show: true, label: langHours, min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#module_stats'
         };
@@ -387,7 +387,7 @@ function refresh_generic_user_plot(){
                     duration: langDuration
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min: 0,padding:{top:0, bottom:0}}, y2: {show: true, label:'hours', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min: 0,padding:{top:0, bottom:0}}, y2: {show: true, label: langHours, min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#generic_userstats'
         };
@@ -469,7 +469,7 @@ function refresh_user_course_plot(){
                     duration: langDuration
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false, rotate:60}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'hours', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false, rotate:60}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min:0, padding:{top:0, bottom:0}}, y2: {show: true, label: langHours, min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#course_stats'
         };
@@ -487,11 +487,14 @@ function refresh_user_login_plot(){
                 json: data,
                 x: 'time',
                 xFormat: '%Y-%m-%d',
-                type:'area'
+                type:'area',
+                names:{
+                    logins: langLoginUser
+                }
             },
             zoom:{enabled:true},
             size:{height:250},
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], rotate:60, values:xTicks, fit:false}, min: xMinVal, label: xAxisLabels[interval]}, y:{label:'logins', padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], rotate:60, values:xTicks, fit:false}, min: xMinVal, label: xAxisLabels[interval]}, y:{label: langLoginUser, padding:{top:0, bottom:0}}},
             bindto: '#userlogins_stats'
         };
         /*if(typeof charts.ul !== "undefined"){
@@ -518,7 +521,7 @@ function refresh_department_user_plot(depid, leafdepartment){
             },
             size:{height:250},
             //bar:{width:50},
-            axis:{ x: {type:'category', label:'department'}, y:{label:langUsers, min: 0, padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
+            axis:{ x: {type:'category', label:langDepartment}, y:{label:langUsers, min: 0, padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
             bindto: '#depuser_stats'
         };
         charts.du = refreshChart("du", options);

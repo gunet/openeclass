@@ -60,7 +60,7 @@ $head_content .= "
     var langWeek = '$langWeek';
     var langMonth = '$langMonth';
     var langYear = '$langYear';
-    var langDepartment = '';
+    var langDepartment = '$langFaculty';
     var langCourses = '$langCourses';
     var langUsers = '$langUsers';
     var maxintervals = 20;
@@ -82,6 +82,8 @@ $head_content .= "
     var langExport = '$langSaveAs';
     var langFavouriteModule = '$langFavourite';
     var langFavouriteCourse = '$langFavouriteCourse';
+    var langLoginUser = '$langLoginUser';
+    var langHours = '$langHours';
 </script>";
 load_js('datatables');
 load_js('datatables_filtering_delay');
