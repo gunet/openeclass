@@ -509,7 +509,7 @@ hContent;
         } else if ($_GET['form_input'] === 'opendelos') {
             $jsonObj = requestDelosJSON();
             // construct the form/table from the JSON received
-            if ($jsonObj !== null) {
+            if ($jsonObj !== null && property_exists($jsonObj, "resources")) {
                 $tool_content .= displayDelosForm($jsonObj, getCurrentVideoLinks());
             } else {
                 $tool_content .= "<div class='alert alert-warning' role='alert'>$langNoVideo</div>";
