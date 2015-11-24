@@ -132,7 +132,7 @@ $('input[id=button_groups]').click(changeAssignLabel);
         $('#all_users').hide();
         $('#participants_tbl').removeClass('hide');
         var type = $('input:radio[name=specific_attendance_users]:checked').val();        
-        $.post('$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$_REQUEST[attendance_id]&editUsers=1',
+        $.post('$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=".q($_REQUEST['attendance_id'])."&editUsers=1',
         {
           assign_type: type
         },
@@ -217,7 +217,7 @@ if ($is_editor) {
     //delete user from attendance list
     if (isset($_GET['deleteuser']) and isset($_GET['ruid'])) {
         delete_attendance_user($_GET['at'], $_GET['ruid']);        
-        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$_GET[at]&attendanceBook=1");        
+        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=".urlencode($_GET[at])."&attendanceBook=1");        
     }
     
     //reset attendance users
