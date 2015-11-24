@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.3
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -104,7 +104,7 @@ if (isset($_GET['auth'])) {
             array('title' => $activation_title,
                   'url' => $activation_url,
                   'icon' => $activation_icon,
-                  'show' => $auth_id == 1 or $info->auth_settings),
+                  'show' => $auth_id == 1 || $info->auth_settings),
             array('title' => $langAuthSettings,
                   'url' => "auth_process.php?auth=$auth_id",
                   'icon' => 'fa-gear'),
@@ -115,7 +115,11 @@ if (isset($_GET['auth'])) {
             array('title' => $langSecondaryAuthType,
                   'url' => "$_SERVER[PHP_SELF]?auth=$auth_id&amp;p=0",
                   'icon' => 'fa-circle-o',
-                  'show' => $primary)));
+                  'show' => $primary),
+            array('title' => $langConnTest,
+                  'url' => "auth_test.php?auth=$auth_id",
+                  'icon' => 'fa-plug',
+                  'show' => $auth_id != 1 && $info->auth_settings)));
             $tool_content .= "</td><tr>";
     }
     $tool_content .= "</table></div>";

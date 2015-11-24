@@ -348,6 +348,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                                     $givenname = trim(str_replace($surname, '', $cn));
                                 }
                                 $_SESSION['auth_user_info'] = array(
+                                    'attributes' => get_ldap_attributes($userinfo),
                                     'givenname' => $givenname,
                                     'surname' => $surname,
                                     'email' => get_ldap_attribute($userinfo, 'mail'));
@@ -463,6 +464,22 @@ function get_ldap_attribute($search_result, $attribute) {
     } else {
         return '';
     }
+}
+
+// Return an array of LDAP attributes
+function get_ldap_attributes($search_result, $flatten = false) {
+    $attrs = array();
+    foreach ($search_result[0] as $key => $val) {
+        if (!is_numeric($key) and isset($val['count'])) {
+            if ($val['count'] > 1 and $flatten) {
+                unset($val['count']);
+                $attrs[$key] = implode(', ', $val);
+            } else {
+                $attrs[$key] = $val[0];
+            }
+        }
+    }
+    return $attrs;
 }
 
 /* * **************************************************************
