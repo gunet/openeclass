@@ -92,6 +92,7 @@ define('MODULE_ID_SHARING', 40);
 define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_ABUSE_REPORT', 42);
 define('MODULE_ID_COURSE_WIDGETS', 44);
+define('MODULE_ID_MINDMAP', 45);
 
 // user modules
 

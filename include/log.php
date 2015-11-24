@@ -279,6 +279,8 @@ class Log {
                 break;            
             case MODULE_ID_SETTINGS: $content = $this->modify_course_action_details($details); // <-- for backward compatibility only !!!
                 break;
+			case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
+                break;	
             default: $content = $langUnknownModule;
                 break;
         }
