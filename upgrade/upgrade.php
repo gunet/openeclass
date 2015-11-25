@@ -2985,6 +2985,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `hostname` varchar(255) DEFAULT NULL,
                         `port` varchar(255) DEFAULT NULL,
+                        `enabled` enum("true","false") DEFAULT NULL,
                         `username` varchar(255) DEFAULT NULL,
                         `password` varchar(255) DEFAULT NULL,
                         `module_key` int(11) DEFAULT NULL,
