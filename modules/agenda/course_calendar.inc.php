@@ -714,7 +714,7 @@ require_once 'include/lib/references.class.php';
      */
     function get_course_events($scope = "month", $startdate = null, $enddate = null){
 
-        global $course_id;
+        global $course_id, $uid;
         //form date range condition
         $dateconditions = array("month" => "date_format(?t".',"%Y-%m") = date_format(start,"%Y-%m")',
                                 "week" => "YEARWEEK(?t,1) = YEARWEEK(start,1)",
@@ -770,11 +770,14 @@ require_once 'include/lib/references.class.php';
         }
         $dc = str_replace('start','ass.deadline',$datecond);
         $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
-                . "FROM assignment ass JOIN course c ON ass.course_id=c.id "
-                . "WHERE ass.course_id =?d "
+                . "FROM assignment ass "
+                . "LEFT JOIN course_user cu ON ass.course_id=cu.course_id "
+                . "JOIN course c ON ass.course_id=c.id "
+                . "LEFT JOIN (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d OR group_id IN (SELECT group_id FROM group_members WHERE user_id = ?d)) ass_sp ON ass.id=ass_sp.assignment_id "
+                . "WHERE cu.user_id = ?d AND ass.course_id = ?d AND (cu.status = 1 OR ass.assign_to_specific = '0' OR (ass.assign_to_specific = 1 AND ass_sp.assignment_id IS NOT NULL)) AND ass.active = 1"
                 . $dc;
-        $q_args = array_merge($q_args, $q_args_templ);
-
+        $q_args = array_merge($q_args, array($uid, $uid, $uid), $q_args_templ);
+        
         //exercises
         if(!empty($q)){
             $q .= " UNION ";
@@ -782,10 +785,12 @@ require_once 'include/lib/references.class.php';
         $dc = str_replace('start','ex.end_date',$datecond);
         $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
                 . "FROM exercise ex JOIN course c ON ex.course_id=c.id "
-                . "WHERE ex.course_id =?d "
+                . "LEFT JOIN course_user cu ON ex.course_id=cu.course_id  "
+                . "LEFT JOIN (SELECT exercise_id from exercise_to_specific WHERE user_id = ?d OR group_id IN (SELECT group_id FROM group_members WHERE user_id = ?d)) ets ON ex.id = ets.exercise_id "
+                . "WHERE cu.user_id =?d AND ex.course_id =?d AND (cu.status = 1 OR ex.assign_to_specific = 0 OR (ex.assign_to_specific = 1 AND ets.exercise_id IS NOT NULL)) AND ex.active = 1"
                 . $dc;
-        $q_args = array_merge($q_args, $q_args_templ);
-
+        $q_args = array_merge($q_args, array($uid, $uid, $uid), $q_args_templ);
+        
         if(empty($q))
         {
             return null;
