@@ -99,7 +99,7 @@ if (isset($language)) {
     $urlServer = get_config('base_url');
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;    
+    $language = $session->language;
 }
 //Initializing Valitron (form validation library)
 use Valitron\Validator as V;
@@ -423,7 +423,7 @@ $modules = array(
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-sort-numeric-desc'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-check-square-o'),
     MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'fa-exchange'),
-	MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'mindmap')
+    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'mindmap'),
 );
 // ----------------------------------------
 // course admin modules
@@ -433,7 +433,7 @@ $admin_modules = array(
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'fa-user'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'fa-area-chart'),
     MODULE_ID_COURSE_WIDGETS => array('title' => $langCourseWidgets, 'link' => 'course_widgets', 'image' => 'fa-magic'),
-    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'fa-cogs'),    
+    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'fa-cogs'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'fa-flag'),
 );
 // -------------------------------------------
@@ -443,7 +443,7 @@ $static_modules = array(
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage'),
     MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info'),
-    MODULE_ID_COURSE_WIDGETS => array('title' => $langCourseWidgets, 'link' => 'course_widgets'),     
+    MODULE_ID_COURSE_WIDGETS => array('title' => $langCourseWidgets, 'link' => 'course_widgets'),
     MODULE_ID_TOOLADMIN => array('title' => $langCourseTools, 'link' => 'course_tools'),
     MODULE_ID_UNITS => array('title' => $langUnits, 'link' => 'units'),
     MODULE_ID_WEEKS => array('title' => $langCourseWeeklyFormat, 'link' => 'weeks'),
@@ -454,7 +454,7 @@ $static_modules = array(
     MODULE_ID_SHARING => array('title' => $langCourseSharing, 'link' => 'sharing'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReport, 'link' => 'abuse_report'),
     MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes'));
-    
+
 
 // the system admin and power users have rights to all courses
 if ($is_admin or $is_power_user) {

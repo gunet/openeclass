@@ -4357,3 +4357,4 @@ $langExerciseAttemptLeft = 'Beware! Only one attempt remaining.';
 $langExerciseAttemptsLeft = 'Beware! You have %d attempts remaining.';
 $langExerciseAttemptContinue = 'By clicking the "Continue" button, a new attempt is recorded.';
 $dateTimeFormatShort = '%d %b %Y %R';
+$langMindmap = 'Mind Map';

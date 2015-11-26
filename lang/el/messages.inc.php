@@ -4975,16 +4975,11 @@ $langAutoJudgeResultsFor = 'Αποτελέσματα για';
 $langAutoJudgeNotEnabledForReport = ' Ο αυτόματος κριτής δεν είναι ενεργοποιημένος για την συγκεκριμένη εργασία. ';
 $langAutoJudgeDownloadPdf = 'Λήψη σε μορφή PDF';
 
-/* * ***********************************************************
- * Tags
- * ************************************************************ */
+// Tags
 $langTag = 'Ετικέτα';
 $langTags = 'Ετικέτες';
 
-//
 // Messages for external tools
-//
-
 $langAnalyticsDescription = '<p>Μπορείτε να συνδέσετε την πλατφόρμα με κάποια
     εξωτερική υπηρεσία ανάλυσης επισκέψεων (Web Analytics, π.χ. Google
     Analytics, Piwiki) προκειμένου να διατηρούνται αναλυτικά στατιστικά
@@ -5012,10 +5007,7 @@ $langOpenMeetingsDescription = "<p>Το υποσύστημα <b>Τηλεσυνε
 <p>Το OpenMeetings ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα OpenMeetings επιλέξτε <a href=\"openmeetingsconf.php\">Ρυθμίσεις</a>.</p>";
 
 
-/* * ******************************************
-  Messages for OpenMeetings
- * ***************************************** */
-
+// Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
 $langAddOpenMeetingsServer = "Προσθήκη εξυπηρετητή";
 $langAddOpenMeetingsServerInfo = "Στοιχεία νέου εξυπηρετητή OpenMeetings";
@@ -5027,3 +5019,6 @@ $langOpenMeetingsAdminUser ="Username διαχειριστή OpenMeetings";
 $langOpenMeetingsAdminPass ="Password διαχειριστή OpenMeetings";
 $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "Όνομα WebApp";
+
+// Messages for Mindmaps
+$langMindmap = 'Εννοιογικός χάρτης';

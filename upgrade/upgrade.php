@@ -2956,6 +2956,22 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
     if (version_compare($oldversion, '3.3', '<')) {
+        // Fix duplicate link orders
+        Database::get()->queryFunc('SELECT DISTINCT course_id, category FROM link
+            GROUP BY course_id, category, `order` HAVING COUNT(*) > 1',
+            function ($item) {
+                $order = 0;
+                foreach (Database::get()->queryArray('SELECT id FROM link
+                    WHERE course_id = ?d AND category = ?d
+                    ORDER BY `order`',
+                    $item->course_id, $item->category) as $link) {
+                        Database::get()->query('UPDATE link SET `order` = ?d
+                            WHERE id = ?d', $order++, $link->id);
+                }
+            });
+    }
+
+    if (version_compare($oldversion, '3.4', '<')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
                         `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `class` varchar(400) NOT NULL) $charset_spec"); 
@@ -2971,8 +2987,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                          FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
                          FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");
         
-            // Conference table
-            Database::get()->query("CREATE TABLE IF NOT EXISTS `conference` (
+        // Conference table
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `conference` (
                         `conf_id` int(11) NOT NULL AUTO_INCREMENT,
                         `course_id` int(11) NOT NULL,
                         `conf_description` text NOT NULL,
@@ -2980,8 +2996,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
                         PRIMARY KEY (`conf_id`)) $charset_spec");
 
-            // om_servers table
-            Database::get()->query('CREATE TABLE IF NOT EXISTS `om_servers` (
+        // om_servers table
+        Database::get()->query('CREATE TABLE IF NOT EXISTS `om_servers` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `hostname` varchar(255) DEFAULT NULL,
                         `port` varchar(255) DEFAULT NULL,
@@ -2993,10 +3009,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         PRIMARY KEY (`id`),
                         KEY `idx_om_servers` (`hostname`))');
 						
-			if (!DBHelper::fieldExists('poll', 'type')) {
-				Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");
-			}
+        if (!DBHelper::fieldExists('poll', 'type')) {
+            Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");
+        }
+
+        Database::get()->query('INSERT IGNORE INTO course_module
+            (module_id, visible, course_id)
+            SELECT ?d, 0, id FROM course', MODULE_ID_MINDMAP);
+    
     }
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 
