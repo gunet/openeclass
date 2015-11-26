@@ -1951,47 +1951,60 @@ function show_student_assignment($id) {
         $course_id, $course_code, $langAssignmentWillBeActive;
 
     $user_group_info = user_group_info($uid, $course_id);
-    $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                         FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    $WorkStart = new DateTime($row->submission_date);
-    $current_date = new DateTime('NOW');
-    $interval = $WorkStart->diff($current_date);
-    if ($WorkStart > $current_date) {
-        Session::Messages($langAssignmentWillBeActive . ' ' . $WorkStart->format('d-m-Y H:i'));
-        redirect_to_home_page("modules/work/index.php?course=$course_code");
-    }
-
-    $tool_content .= action_bar(array(
-       array(
-           'title' => $langBack,
-           'icon' => 'fa-reply',
-           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-           'level' => "primary-label"
-       )
-    ));
-    assignment_details($id, $row);
-
-    $submit_ok = ($row->time > 0 || !(int) $row->deadline || $row->time <= 0 && $row->late_submission);
-    $submissions_exist = false;
-
-    if (!$uid) {
-        $tool_content .= "<p>$langUserOnly</p>";
-        $submit_ok = FALSE;
-    } elseif ($GLOBALS['status'] == 10) {
-        $tool_content .= "\n  <div class='alert alert-warning'>$m[noguest]</div>";
-        $submit_ok = FALSE;;
+    if (!empty($user_group_info)) {
+        $gids_sql_ready = implode(',',array_keys($user_group_info));
     } else {
-        foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
-            $submissions_exist = true;
-            if ($sub->grade != '') {
-                $submit_ok = false;
-
-            }
-            show_submission_details($sub->id);
-        }
+        $gids_sql_ready = "''";
     }
-    if ($submit_ok) {
-        show_submission_form($id, $user_group_info, false, $submissions_exist);
+
+    $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+                                         FROM assignment WHERE course_id = ?d AND id = ?d AND active = '1' AND
+                                            (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
+                                               (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d UNION SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
+                                            )", $course_id, $id, $uid);
+    if ($row) {
+        $WorkStart = new DateTime($row->submission_date);
+        $current_date = new DateTime('NOW');
+        $interval = $WorkStart->diff($current_date);
+        if ($WorkStart > $current_date) {
+            Session::Messages($langAssignmentWillBeActive . ' ' . $WorkStart->format('d-m-Y H:i'));
+            redirect_to_home_page("modules/work/index.php?course=$course_code");
+        }
+
+        $tool_content .= action_bar(array(
+           array(
+               'title' => $langBack,
+               'icon' => 'fa-reply',
+               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+               'level' => "primary-label"
+           )
+        ));
+        assignment_details($id, $row);
+
+        $submit_ok = ($row->time > 0 || !(int) $row->deadline || $row->time <= 0 && $row->late_submission);
+        $submissions_exist = false;
+
+        if (!$uid) {
+            $tool_content .= "<p>$langUserOnly</p>";
+            $submit_ok = FALSE;
+        } elseif ($GLOBALS['status'] == 10) {
+            $tool_content .= "\n  <div class='alert alert-warning'>$m[noguest]</div>";
+            $submit_ok = FALSE;;
+        } else {
+            foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
+                $submissions_exist = true;
+                if ($sub->grade != '') {
+                    $submit_ok = false;
+
+                }
+                show_submission_details($sub->id);
+            }
+        }
+        if ($submit_ok) {
+            show_submission_form($id, $user_group_info, false, $submissions_exist);
+        }
+    } else {
+        redirect_to_home_page("modules/work/?course=$course_code");
     }
 }
 
