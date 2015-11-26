@@ -149,7 +149,7 @@ if (!$info) {
     draw($tool_content, 2, null, $head_content);
     exit;
 } else {
-    $pageName = "$langWeek $cnt$langor";
+    $pageName = "$cnt$langor $langWeek ";
     if (!empty($info->title)) {
         $pageName = htmlspecialchars($info->title);
     }

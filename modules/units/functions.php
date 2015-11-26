@@ -882,8 +882,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
     }
     $comment_box = $class_vis = $imagelink = $link = '';
     $class_vis = ($visibility == 0 or ! $module_visible) ?
-            ' class="not_visible"' : ' ';
-    $title = q($title);
+            ' class="not_visible"' : ' ';    
     $l = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
     if (!$l) { // check if it was deleted
         if (!$is_editor) {
@@ -896,13 +895,15 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
     } else {
         if ($title == '') {
             $title = q($l->url);
-        }        
+        } else {
+            $title = q($title);
+        }
         $link = "<a href='" . q($l->url) . "' target='_blank'>";
         $exlink = $link . "$title</a>";
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "</a>" . icon('fa-link') . "";
+        $imagelink = icon('fa-link');
     }
 
     if (!empty($comments)) {
@@ -913,7 +914,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
 
     return "
         <tr$class_vis>
-          <td>$imagelink</td>
+          <td width='1'>$imagelink</td>
           <td>$exlink $comment_box</td>" . actions('link', $resource_id, $visibility) . "
         </tr>";
 }
