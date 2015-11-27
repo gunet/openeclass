@@ -872,16 +872,16 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "2ffb4e9598db3c48eb6d0ae73b04bbf09280c59d"
+                "reference": "a06a0c0ff7db3736a50d530c908cca547bf13da9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/2ffb4e9598db3c48eb6d0ae73b04bbf09280c59d",
-                "reference": "2ffb4e9598db3c48eb6d0ae73b04bbf09280c59d",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/a06a0c0ff7db3736a50d530c908cca547bf13da9",
+                "reference": "a06a0c0ff7db3736a50d530c908cca547bf13da9",
                 "shasum": ""
             },
             "require": {
@@ -896,7 +896,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Finder\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -914,7 +917,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-11 09:39:48"
+            "time": "2015-10-30 20:10:21"
         },
         {
             "name": "vlucas/valitron",
@@ -922,12 +925,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/valitron.git",
-                "reference": "3ab56a285dad8610e48518dc57b0f16c5f867578"
+                "reference": "a06309ce75faf394cad7b7d9a5de4831103b4b8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/valitron/zipball/3ab56a285dad8610e48518dc57b0f16c5f867578",
-                "reference": "3ab56a285dad8610e48518dc57b0f16c5f867578",
+                "url": "https://api.github.com/repos/vlucas/valitron/zipball/a06309ce75faf394cad7b7d9a5de4831103b4b8e",
+                "reference": "a06309ce75faf394cad7b7d9a5de4831103b4b8e",
                 "shasum": ""
             },
             "require": {
@@ -960,7 +963,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2015-11-09 19:55:45"
+            "time": "2015-11-24 17:20:47"
         }
     ],
     "packages-dev": [],

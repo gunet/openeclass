@@ -224,7 +224,7 @@ function printPolls() {
         }        
         $query .= " AND
                     (assign_to_specific = '0' OR assign_to_specific != '0' AND pid IN
-                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d UNION SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
+                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d OR group_id IN ($gids_sql_ready))
                     )";
         $query_params[] = $uid;
     }

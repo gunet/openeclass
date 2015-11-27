@@ -14,7 +14,7 @@
                                     </a>                     
                                 </div>
                                 @if (!isset($courseWidgets) || isset($courseWidgets) && $course_home_main_area_widget->is_course_admin_widget)
-                                <div id="widget_form" class="panel-collapse collapse in">
+                                <div class="panel-collapse collapse in">
                                     <div class="panel-body">
                                         {!! $course_home_main_area_widget->getOptionsForm($key) !!}
                                     </div>

@@ -279,10 +279,14 @@ $tool_content .= "
                               <span class='badge'>$student_courses_count</span>
                               <span class='text-muted'>$langSumCoursesEnrolled</span>
                             </li>
-                            <li class='list-group-item'>
-                              <span class='badge'>$teacher_courses_count</span>
-                              <span class='text-muted'>$langSumCoursesSupport</span>
-                            </li>
+                            ";
+                            if( !$is_editor && $teacher_courses_count>0 ) {
+                                $tool_content .= "<li class='list-group-item'>
+                                                    <span class='badge'>$teacher_courses_count</span>
+                                                    <span class='text-muted'>$langSumCoursesSupport</span>
+                                                    </li>";
+                            }
+                            $tool_content .= "
                         </ul>
                         <div class='pull-right'><a href='".$urlServer."main/profile/password.php'><small>$langProfileQuickPassword</small></a></div>
                     </div>

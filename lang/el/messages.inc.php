@@ -5021,4 +5021,4 @@ $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "Όνομα WebApp";
 
 // Messages for Mindmaps
-$langMindmap = 'Εννοιογικός χάρτης';
+$langMindmap = 'Εννοιολογικός χάρτης';

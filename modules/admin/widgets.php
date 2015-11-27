@@ -27,12 +27,13 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    $data = [];
     if ($_POST['action'] == 'add') {
         $widget_area_id = $_POST['widget_area_id'];
         $widget_id = $_POST['widget_id'];
         $position = $_POST['position'];
         Database::get()->query("UPDATE `widget_widget_area` SET `position` = `position` + 1 WHERE `position` >= ?d AND `widget_area_id` = ?d", $position, $widget_area_id);
-        $widget_widget_area_id = Database::get()->query("INSERT INTO `widget_widget_area` (`widget_id`, `widget_area_id`, `position`) VALUES (?d, ?d, ?d)", $widget_id, $widget_area_id, $position)->lastInsertID;
+        $widget_widget_area_id = Database::get()->query("INSERT INTO `widget_widget_area` (`widget_id`, `widget_area_id`, `position`, `options`) VALUES (?d, ?d, ?d, '')", $widget_id, $widget_area_id, $position)->lastInsertID;
         $data['widget_widget_area_id'] = $widget_widget_area_id;
     } elseif ($_POST['action'] == 'move') {
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
@@ -190,13 +191,12 @@ $head_content .=
                 if (e.from['id'] == 'widgets') {
                     var item = $(e.item);  // dragged HTMLElement
                     var widget_area_id = item.closest('div.panel-body').data('widget-area-id');
-                    var widget_id = item.data('widget-id'); 
+                    var widget_id = item.data('widget-id');
                     if (widget_id && widget_area_id) {
                         item.removeClass('panel-success').addClass('panel-default');
                         item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-spinner fa-spin');
                         $.ajax({
                           type: 'POST',
-                          url: '',
                           datatype: 'json',
                           data: {
                             widget_id: widget_id,
@@ -204,7 +204,7 @@ $head_content .=
                             position: e.newIndex,
                             action: 'add'
                           },
-                          success: function(data){ 
+                          success: function(data){
                                 initializeWidget(e, data);
                           },
                           error: function(xhr, textStatus, error){
@@ -246,15 +246,15 @@ $head_content .=
             }            
             function initializeWidget(e, data) {
                     var item = $(e.item);  // dragged HTMLElement
-                    var widget_id = item.data('widget-id');            
-                    var obj = jQuery.parseJSON(data);                                  
+                    var widget_id = item.data('widget-id');
+                    var obj = jQuery.parseJSON(data);
                     item
                         .attr('data-widget-widget-area-id', obj.widget_widget_area_id)
                         .find('.widget_title')
                         .attr('data-target', '#widget_form_'+obj.widget_widget_area_id)
                         .attr('href', '#widget_form_'+obj.widget_widget_area_id)
                         .end()
-                        .find('#widget_form')
+                        .find('.panel-collapse:eq(1)')
                         .attr('id', 'widget_form_'+obj.widget_widget_area_id)
                         .removeClass('hidden')
                         .prev()

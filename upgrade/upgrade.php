@@ -32,7 +32,7 @@ require_once 'upgradeHelper.php';
 stop_output_buffering();
 
 // set default storage engine
-Database::get()->query("SET storage_engine = InnoDB");
+Database::get()->query("SET default_storage_engine = InnoDB");
 
 require_once 'upgrade/functions.php';
 
@@ -1419,8 +1419,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `max_grade` FLOAT DEFAULT NULL,
                             `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
                             `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
-                            `file_name` VARCHAR(200) DEFAULT '' NOT NULL,
-							`grading_method` TINYINT(2) DEFAULT '' NOT NULL)
+                            `file_name` VARCHAR(200) DEFAULT '' NOT NULL)
                             $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

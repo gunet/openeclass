@@ -110,42 +110,22 @@ $head_content .= <<<hContent
             autoclose: true
         }).on('changeDate', function(e){
             var date2 = $('input[name=start_date]').datepicker('getDate');
-            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
-                date2.setDate(date2.getDate() + 7);
-                $('input[name=finish_date]').datepicker('setDate', date2);
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }else{
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }
+            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){              
+                $('input[name=finish_date]').datepicker('setDate', date2);                
+            }            
         });
         
         $('input[name=finish_date]').datepicker({
             format: 'yyyy-mm-dd',
-            autoclose: true
+            autoclose: true,            
+            startDate: $('input[name=start_date]').datepicker('getDate')
         }).on('changeDate', function(e){
-            var dt1 = $('input[name=start_date]').datepicker('getDate');
-            var dt2 = $('input[name=finish_date]').datepicker('getDate');
-            if (dt2 <= dt1) {
-                var minDate = $('input[name=finish_date]').datepicker('startDate');
-                $('input[name=finish_date]').datepicker('setDate', minDate);
-            }            
+           var date1 = $('input[name=start_date]').datepicker('getDate');           
+            if($('input[name=finish_date]').datepicker('getDate')<$('input[name=start_date]').datepicker('getDate')){
+                $('input[name=finish_date]').datepicker('setStartDate', date1);
+            }           
         });
-        
-        if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=start_date]').datepicker('setDate', new Date());
-            var date2 = $('input[name=start_date]').datepicker('getDate');
-            date2.setDate(date2.getDate() + 7);
-            $('input[name=finish_date]').datepicker('setDate', date2);
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }else{
-            var date2 = $('input[name=finish_date]').datepicker('getDate');
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }
-        
-        if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=finish_date]').datepicker("setDate", 7);
-        }
-        
+                        
         $('#weeklyDates').hide();
         
         $('input[name=view_type]').change(function () {

@@ -32,7 +32,7 @@
                                 </div>                      
                             </div>                        
                         </div>
-                        <div id="widget_form" class="panel-collapse collapse in hidden">
+                        <div class="panel-collapse collapse in hidden">
                             <div class="panel-body">
 
                             </div>

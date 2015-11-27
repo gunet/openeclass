@@ -26,12 +26,13 @@
 require_once '../include/baseTheme.php';
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    $data = [];
     if ($_POST['action'] == 'add') {
         $widget_area_id = $_POST['widget_area_id'];
         $widget_id = $_POST['widget_id'];
         $position = $_POST['position'];
         Database::get()->query("UPDATE `widget_widget_area` SET `position` = `position` + 1 WHERE `position` >= ?d AND `widget_area_id` = ?d", $position, $widget_area_id);
-        $widget_widget_area_id = Database::get()->query("INSERT INTO `widget_widget_area` (`widget_id`, `widget_area_id`, `position`, `user_id`) VALUES (?d, ?d, ?d, ?d)", $widget_id, $widget_area_id, $position, $uid)->lastInsertID;
+        $widget_widget_area_id = Database::get()->query("INSERT INTO `widget_widget_area` (`widget_id`, `widget_area_id`, `position`, `user_id`, `options`) VALUES (?d, ?d, ?d, ?d, '')", $widget_id, $widget_area_id, $position, $uid)->lastInsertID;
         $data['widget_widget_area_id'] = $widget_widget_area_id;
     } elseif ($_POST['action'] == 'move') {
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
@@ -49,7 +50,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $widget_area_id = $_POST['widget_area_id'];
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
         $position = $_POST['position'];
-        $data = Database::get()->query("DELETE FROM widget_widget_area WHERE id = ?d", $widget_widget_area_id);
+        $data[] = Database::get()->query("DELETE FROM widget_widget_area WHERE id = ?d", $widget_widget_area_id);
         Database::get()->query("UPDATE `widget_widget_area` SET `position` = `position` - 1 WHERE `position` > ?d AND `widget_area_id` = ?d", $position, $widget_area_id);
     } elseif ($_POST['action'] == 'changePos') {
         $widget_area_id = $_POST['widget_area_id'];
@@ -249,7 +250,7 @@ $head_content .=
                         .attr('data-target', '#widget_form_'+obj.widget_widget_area_id)
                         .attr('href', '#widget_form_'+obj.widget_widget_area_id)
                         .end()
-                        .find('#widget_form')
+                        .find('.panel-collapse:eq(1)')
                         .attr('id', 'widget_form_'+obj.widget_widget_area_id)
                         .removeClass('hidden')
                         .prev()
