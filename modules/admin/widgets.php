@@ -32,7 +32,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $widget_id = $_POST['widget_id'];
         $position = $_POST['position'];
         Database::get()->query("UPDATE `widget_widget_area` SET `position` = `position` + 1 WHERE `position` >= ?d AND `widget_area_id` = ?d", $position, $widget_area_id);
-        $widget_widget_area_id = Database::get()->query("INSERT INTO `widget_widget_area` (`widget_id`, `widget_area_id`, `position`) VALUES (?d, ?d, ?d)", $widget_id, $widget_area_id, $position)->lastInsertID;
+        $widget_widget_area_id = Database::get()->query("INSERT INTO `widget_widget_area` (`widget_id`, `widget_area_id`, `position`, `options`) VALUES (?d, ?d, ?d, '')", $widget_id, $widget_area_id, $position)->lastInsertID;
         $data['widget_widget_area_id'] = $widget_widget_area_id;
     } elseif ($_POST['action'] == 'move') {
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
@@ -190,13 +190,12 @@ $head_content .=
                 if (e.from['id'] == 'widgets') {
                     var item = $(e.item);  // dragged HTMLElement
                     var widget_area_id = item.closest('div.panel-body').data('widget-area-id');
-                    var widget_id = item.data('widget-id'); 
+                    var widget_id = item.data('widget-id');
                     if (widget_id && widget_area_id) {
                         item.removeClass('panel-success').addClass('panel-default');
                         item.find('div.panel-heading a span').first().removeClass().addClass('fa fa-spinner fa-spin');
                         $.ajax({
                           type: 'POST',
-                          url: '',
                           datatype: 'json',
                           data: {
                             widget_id: widget_id,
