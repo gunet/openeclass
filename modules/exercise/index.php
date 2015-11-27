@@ -123,7 +123,7 @@ if ($is_editor) {
 	$result = Database::get()->queryArray("SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed, score, ip_lock, password_lock " .
             "FROM exercise WHERE course_id = ?d AND active = 1 "
             . "AND (assign_to_specific = '0' OR assign_to_specific != '0' AND id IN
-                       (SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d UNION SELECT exercise_id FROM exercise_to_specific WHERE group_id IN ($gids_sql_ready))
+                       (SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d OR group_id IN ($gids_sql_ready))
                     ) "
             ."ORDER BY id LIMIT ?d, ?d", $course_id, $uid, $from, $limitExPage);
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;

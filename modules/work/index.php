@@ -1960,7 +1960,7 @@ function show_student_assignment($id) {
     $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                          FROM assignment WHERE course_id = ?d AND id = ?d AND active = '1' AND
                                             (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
-                                               (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d UNION SELECT assignment_id FROM assignment_to_specific WHERE group_id != 0 AND group_id IN ($gids_sql_ready))
+                                               (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d OR group_id != 0 AND group_id IN ($gids_sql_ready))
                                             )", $course_id, $id, $uid);
     if ($row) {
         $WorkStart = new DateTime($row->submission_date);
