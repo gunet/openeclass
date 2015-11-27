@@ -19,14 +19,21 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== 
  */
-
+$statsuser = (isset($_REQUEST['u']) && intval($_REQUEST['u'])>0)? intval($_REQUEST['u']):$uid;
+if($statsuser != $uid)
+{ 
+    $toolName .= "$langUserStats: " . uid_to_name($statsuser)." (".uid_to_name($statsuser, 'username').")";
+    $pageName = "$langUserStats: " . uid_to_name($statsuser)." (".uid_to_name($statsuser, 'username').")";
+    $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
+    $navigation[] = array('url' => '../admin/listusers.php', 'name' => $langListUsers);
+}
 $head_content .= 
     "<script type='text/javascript'>
         startdate = null;
         interval = 1;
         enddate = null;
         module = null;
-        user = $uid;
+        user = $statsuser;
         course = null;
         stats = 'u';
     </script>";

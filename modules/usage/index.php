@@ -30,9 +30,10 @@ if(!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c'){
     $require_course_admin = true;
     $stats_type = 'course';
 }
-elseif(isset($_REQUEST['t']) && $_REQUEST['t'] == 'a'){
+elseif(isset($_REQUEST['t']) && ($_REQUEST['t'] == 'a' || ($_REQUEST['t'] == 'u' && isset($_REQUEST['u'])))){
     $require_admin = true;
-    $stats_type = 'admin';
+    $stats_type = ($_REQUEST['t'] == 'u')? 'user':'admin';
+    
 }
 else{ // expecting $_REQUEST['t'] == 'u'
     $require_valid_uid = TRUE;
@@ -133,7 +134,7 @@ else{
 
 add_units_navigation(true);
 
-if($stats_type == 'admin'){
+if($stats_type == 'admin' || ($stats_type == 'user' && isset($_REQUEST['u']))){
     draw($tool_content, 3, null, $head_content);
 }
 elseif($stats_type == 'course'){

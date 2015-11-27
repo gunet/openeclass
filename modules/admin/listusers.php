@@ -342,7 +342,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 array(
                     'title' => $langStat,
                     'icon' => 'fa-pie-chart',
-                    'url' => "userstats.php?u=$logs->id"
+                    'url' => "../usage/?t=u&u=$logs->id"
                 ),
                 array(
                     'title' => $langDelete,

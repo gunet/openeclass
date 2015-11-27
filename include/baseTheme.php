@@ -1021,7 +1021,7 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
  *
  */
 function module_path($path) {
-    global $urlAppend, $urlServer;
+    global $urlAppend, $urlServer, $is_admin;
 
     if (strpos($path, 'modules/units/insert.php') !== false) {
         if (strpos($path, '&dir=') !== false) {
@@ -1066,6 +1066,8 @@ function module_path($path) {
     } elseif (isset($GLOBALS['course_code']) and
               strpos($path, '/courses/' . $GLOBALS['course_code']) !== false) {
         return 'course_home';
+    } elseif (strpos($path, '/usage/') !== false && $is_admin && isset($_REQUEST['t']) && $_REQUEST['t'] == 'u' && isset($_REQUEST['u'])) {
+        return '/admin/search_user.php';
     }
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
