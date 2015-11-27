@@ -204,7 +204,7 @@ $head_content .=
                             position: e.newIndex,
                             action: 'add'
                           },
-                          success: function(data){ 
+                          success: function(data){
                                 initializeWidget(e, data);
                           },
                           error: function(xhr, textStatus, error){
@@ -246,8 +246,8 @@ $head_content .=
             }            
             function initializeWidget(e, data) {
                     var item = $(e.item);  // dragged HTMLElement
-                    var widget_id = item.data('widget-id');            
-                    var obj = jQuery.parseJSON(data);                                  
+                    var widget_id = item.data('widget-id');
+                    var obj = jQuery.parseJSON(data);
                     item
                         .attr('data-widget-widget-area-id', obj.widget_widget_area_id)
                         .find('.widget_title')

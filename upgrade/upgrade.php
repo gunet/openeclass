@@ -32,7 +32,7 @@ require_once 'upgradeHelper.php';
 stop_output_buffering();
 
 // set default storage engine
-Database::get()->query("SET storage_engine = InnoDB");
+Database::get()->query("SET default_storage_engine = InnoDB");
 
 require_once 'upgrade/functions.php';
 
