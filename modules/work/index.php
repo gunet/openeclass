@@ -2411,17 +2411,23 @@ function show_assignment($id, $display_graph_results = false) {
         if (!$display_graph_results) {
             $group_id = 0;
             $extra_sql = '';
+            $sql_vars[] = $id;
             if(isset($_POST['group_id']) && $_POST['group_id']) {
-               $group_id = $_POST['group_id'];
-               $users = Database::get()->queryArray("SELECT `user_id` FROM `group_members` WHERE `group_id` = ?d", $group_id);
-               $users_sql_ready = '';
-               if($users) {                                          
-                    foreach ($users as $user) {
-                        $user_ids[] = $user->user_id;
+                $group_id = $_POST['group_id'];
+                if ($assign->group_submissions) {
+                    $extra_sql .= " AND assign.group_id = ?d";
+                    $sql_vars[] = $group_id;
+                } else {
+                    $users = Database::get()->queryArray("SELECT `user_id` FROM `group_members` WHERE `group_id` = ?d", $group_id);
+                    $users_sql_ready = '';
+                    if($users) {                                          
+                         foreach ($users as $user) {
+                             $user_ids[] = $user->user_id;
+                         }
+                         $users_sql_ready .= implode(', ',$user_ids);
                     }
-                    $users_sql_ready .= implode(', ',$user_ids);
-               }
-               $extra_sql .= " AND user.id IN ($users_sql_ready)";
+                    $extra_sql .= " AND user.id IN ($users_sql_ready)";
+                }
             }           
             $result = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
                                                    assign.uid uid, assign.group_id group_id,
@@ -2435,7 +2441,7 @@ function show_assignment($id, $display_graph_results = false) {
                                                    WHERE assign.assignment_id = ?d 
                                                    AND assign.assignment_id = assignment.id 
                                                    AND user.id = assign.uid$extra_sql
-                                                   ORDER BY $order $rev", $id);
+                                                   ORDER BY $order $rev", $sql_vars);
             $groups = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d", $course_id);
             $group_options = "";
             foreach ($groups as $group) {
