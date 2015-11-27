@@ -256,11 +256,11 @@ function view($view_file, $view_data = array()) {
         FROM course, course_user
         WHERE course.id = course_id AND course.visible != " . COURSE_INACTIVE . " AND user_id = ?d
         ORDER BY reg_date DESC", $uid); 
-       
-    $show_toggle_student_view = isset($require_current_course) and 
-                                    ($is_editor or (isset($saved_is_editor) and $saved_is_editor)) and
-                                    !(isset($require_course_admin) and $require_course_admin) and
-                                    !(isset($require_editor) and $require_editor);
+        
+    $show_toggle_student_view = isset($require_current_course) && 
+                                ($is_editor || isset($saved_is_editor) && $saved_is_editor) &&
+                                !(isset($require_course_admin) && $require_course_admin) &&
+                                !(isset($require_editor) && $require_editor);
 
     $views = $webDir.'/resources/views';
     $cache = $webDir . '/storage/views';
