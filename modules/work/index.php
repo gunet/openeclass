@@ -2355,7 +2355,7 @@ function show_assignment($id, $display_graph_results = false) {
     $langDays, $langDaysLeft, $langGradeOk, $course_code, $webDir, $urlServer,
     $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
-    $langAutoJudgeShowWorkResultRpt, $langGroupName;
+    $langAutoJudgeShowWorkResultRpt, $langGroupName, $langGroups;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
@@ -2409,7 +2409,20 @@ function show_assignment($id, $display_graph_results = false) {
             }
         }
         if (!$display_graph_results) {
-
+            $group_id = 0;
+            $extra_sql = '';
+            if(isset($_POST['group_id']) && $_POST['group_id']) {
+               $group_id = $_POST['group_id'];
+               $users = Database::get()->queryArray("SELECT `user_id` FROM `group_members` WHERE `group_id` = ?d", $group_id);
+               $users_sql_ready = '';
+               if($users) {                                          
+                    foreach ($users as $user) {
+                        $user_ids[] = $user->user_id;
+                    }
+                    $users_sql_ready .= implode(', ',$user_ids);
+               }
+               $extra_sql .= " AND user.id IN ($users_sql_ready)";
+            }           
             $result = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
                                                    assign.uid uid, assign.group_id group_id,
                                                    assign.submission_date submission_date,
@@ -2419,15 +2432,36 @@ function show_assignment($id, $display_graph_results = false) {
                                                    assignment.grading_scale_id grading_scale_id,
                                                    assignment.deadline deadline
                                                    FROM assignment_submit AS assign, user, assignment
-                                                   WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
+                                                   WHERE assign.assignment_id = ?d 
+                                                   AND assign.assignment_id = assignment.id 
+                                                   AND user.id = assign.uid$extra_sql
                                                    ORDER BY $order $rev", $id);
+            $groups = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d", $course_id);
+            $group_options = "";
+            foreach ($groups as $group) {
+                $selected = '';
+                if($group_id == $group->id) {
+                    $selected = ' selected';
+                }
+                $group_options .= "<option value='$group->id'$selected>$group->name</option>";
+            }
             $tool_content .= "
-                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
-                        <input type='hidden' name='grades_id' value='$id' />
                         <br>
-                        <div class='margin-bottom-thin'>
-                            <b>$langSubmissions:</b>&nbsp; $num_results
+                        <div class='row margin-bottom-thin'>                   
+                            <div class='col-sm-8'>
+                                <b>$langSubmissions:</b>&nbsp; $num_results
+                            </div>
+                            <div class='col-sm-4'>
+                                <form name='gfilter' action='$_SERVER[REQUEST_URI]' method='post'>
+                                    <select class='form-control pull-right' name='group_id' onchange='document.gfilter.submit();'>
+                                        <option value='0'>-- $langGroups --</option>
+                                        $group_options                               
+                                    </select>
+                                </form>
+                            </div>
                         </div>
+                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
+                        <input type='hidden' name='grades_id' value='$id' />                        
                         <div class='table-responsive'>
                         <table class='table-default'>
                         <tbody>
