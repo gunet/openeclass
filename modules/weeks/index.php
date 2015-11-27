@@ -248,8 +248,10 @@ $tool_content .= "
 
 $q = Database::get()->queryArray("SELECT id, start_week, finish_week, title FROM course_weekly_view
                WHERE course_id = ?d $visibility_check", $course_id);
+$cnt_weeks = 0;
 $course_weeks_options = "";
 foreach ($q as $info) {
+    $cnt_weeks++;
     $selected = ($info->id == $id) ? ' selected ' : '';
     $course_weeks_options .= "<option value='$info->id'$selected>" .
             nice_format($info->start_week)." ... " . nice_format($info->finish_week) ."</option>";
