@@ -2307,6 +2307,7 @@ $langChanges = "changes";
 $langldap_base = "LDAP Base for user search";
 $langldap_login_attr = 'Username attribute';
 $langldap_login_attr2 = 'Alternate username attribute';
+$langldap_mail_attr = 'E-mail attribute';
 $langcas_host = "CAS server";
 $langcas_port = 'CAS port';
 $langcas_context = 'Entry page address';

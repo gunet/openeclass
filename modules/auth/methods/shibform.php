@@ -56,7 +56,7 @@ $tool_content .= "
         <div class='col-sm-10'>
             <input class='form-control' name='shibemail' id='shibemail' type='text' value='" . q($shibemail) . "'>
         </div>
-    </div>    
+    </div>
     <div class='form-group'>
         <label for='shibuname' class='col-sm-2 control-label'>$langShibUsername:</label>
         <div class='col-sm-10'>
@@ -68,26 +68,15 @@ $tool_content .= "
         <div class='col-sm-10'>
             <input class='form-control' name='shibcn' id='shibcn' type='text' value='" . q($shibcn) . "'>
         </div>
-    </div>  
+    </div>
      <div class='form-group form-inline'>
-        <div class='col-sm-10 col-sm-offset-2'>            
+        <div class='col-sm-10 col-sm-offset-2'>
             <div class='checkbox'>
               <label>
                    <input type='checkbox' name='checkseparator' value='on' $checkedshib />&nbsp;$langCharSeparator&nbsp;
                    <input class='form-control' name='shibseparator' type='text' size='1' maxlength='2' value='" . q($shibseparator) . "' />
               </label>
             </div>
-        </div>     
-    </div>   
-    <div class='form-group'>
-            <label for='auth_title' class='col-sm-2 control-label'>$langAuthTitle:</label>
-            <div class='col-sm-10'>
-                <input class='form-control' name='auth_title' id='auth_title' type='text' value='" . q($auth_title) . "'>
-            </div>
         </div>
-    <div class='form-group'>
-        <label for='auth_instructions' class='col-sm-2 control-label'>$langInstructionsAuth:</label>
-        <div class='col-sm-10'>
-            <textarea class='form-control' name='auth_instructions' id='auth_instructions' rows='10'>" . q($auth_instructions) . "</textarea>
-        </div>
-    </div>";
+    </div>" .
+    eclass_auth_form($auth_title, $auth_instructions);

@@ -71,9 +71,9 @@ try {
 }
 require_once 'modules/admin/extconfig/externals.php';
 $connector = WafApp::getWaf();
-if($connector->isEnabled() == true ){
-    $output=$connector->check();
-    if($output->status==$output::STATUS_BLOCKED){
+if ($connector->isEnabled() == true ){
+    $output = $connector->check();
+    if ($output->status == $output::STATUS_BLOCKED){
         WafApp::block($output->output);
     }
 }

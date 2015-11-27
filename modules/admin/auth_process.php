@@ -43,7 +43,7 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'ldaphost' => true, 'ldap_base' => true,
     'ldapbind_dn' => true, 'ldapbind_pw' => true,
     'ldap_login_attr' => true, 'ldap_login_attr2' => true,
-    'ldap_id_attr' => true,
+    'ldap_studentid' => true, 'ldap_mail_attr' => true,
     'dbhost' => true, 'dbtype' => true, 'dbname' => true,
     'dbuser' => true, 'dbpass' => true, 'dbtable' => true,
     'dbfielduser' => true, 'dbfieldpass' => true, 'dbpassencr' => true,
@@ -53,7 +53,7 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'cas_cachain' => true, 'casusermailattr' => true,
     'casuserfirstattr' => true, 'casuserlastattr' => true, 'cas_altauth' => true,
     'cas_logout' => true, 'cas_ssout' => true, 'casuserstudentid' => true,
-    'submit' => true, 'auth_instructions' => true, 'auth_title' => true,
+    'auth_instructions' => true, 'auth_title' => true,
 	'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
     'test_username' => true), 'all');
 
@@ -61,7 +61,7 @@ if (empty($ldap_login_attr)) {
     $ldap_login_attr = 'uid';
 }
 
-if ($submit) {
+if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     switch ($auth) {
         case 1:
@@ -80,7 +80,8 @@ if ($submit) {
                 'ldapbind_pw' => $ldapbind_pw,
                 'ldap_login_attr' => $ldap_login_attr,
                 'ldap_login_attr2' => $ldap_login_attr2,
-                'ldap_studentid' => $ldap_id_attr);
+                'ldap_mail_attr' => $ldap_mail_attr,
+                'ldap_studentid' => $ldap_studentid);
             break;
         case 5:
             $settings = array('dbhost' => $dbhost,
