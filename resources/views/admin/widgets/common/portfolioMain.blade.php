@@ -14,7 +14,7 @@
                                     </a>                     
                                 </div>
                                 @if (!isset($myWidgets) || isset($myWidgets) && $portfolio_main_area_widget->is_user_widget)
-                                <div id="widget_form" class="panel-collapse collapse in">
+                                <div class="panel-collapse collapse in">
                                     <div class="panel-body">
                                         {!! $portfolio_main_area_widget->getOptionsForm($key) !!}
                                     </div>

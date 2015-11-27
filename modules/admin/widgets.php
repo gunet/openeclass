@@ -254,7 +254,7 @@ $head_content .=
                         .attr('data-target', '#widget_form_'+obj.widget_widget_area_id)
                         .attr('href', '#widget_form_'+obj.widget_widget_area_id)
                         .end()
-                        .find('#widget_form')
+                        .find('.panel-collapse:eq(1)')
                         .attr('id', 'widget_form_'+obj.widget_widget_area_id)
                         .removeClass('hidden')
                         .prev()

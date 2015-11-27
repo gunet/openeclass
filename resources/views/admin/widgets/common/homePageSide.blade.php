@@ -13,7 +13,7 @@
                                     {{ $home_sidebar_widget->getName() }} <span></span>
                                 </a>                     
                             </div>
-                            <div id="widget_form" class="panel-collapse collapse in">
+                            <div class="panel-collapse collapse in">
                                 <div class="panel-body">
                                     {!! $home_sidebar_widget->getOptionsForm($key) !!}
                                 </div>
