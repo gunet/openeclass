@@ -27,6 +27,7 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    $data = [];
     if ($_POST['action'] == 'add') {
         $widget_area_id = $_POST['widget_area_id'];
         $widget_id = $_POST['widget_id'];
