@@ -55,17 +55,22 @@ require_once('form.php');
 
 /****   Plots   ****/
 $tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
+$tool_content .= "<div id='userlogins_container' style='width:69%;float:left;margin-right:2%;'>";
 $tool_content .= plot_placeholder("userlogins_stats", $langNbLogin);
+$tool_content .= "</div>";
+$tool_content .= "<div id='favcourses_container' style='width:29%;float:left;'>";
+$tool_content .= plot_placeholder("popular_courses", $langFavouriteCourses);
+$tool_content .= "</div>";
 $tool_content .= "</div></div>";
 
 $tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
 $tool_content .= "<div id='modulepref_pie_container' style='width:49%;float:left;margin-right:2%;'>";
 $tool_content .= plot_placeholder("depuser_stats", $langUsers);
-$tool_content .= "</div>"
-              . "<div id='module_container' style='width:49%;float:left;'>";
+$tool_content .= "</div>";
+$tool_content .= "<div id='module_container' style='width:49%;float:left;'>";
 $tool_content .= plot_placeholder("depcourse_stats", $langCoursesHeader);
-$tool_content .= "</div>"
-              . "</div></div>";
+$tool_content .= "</div>";
+$tool_content .= "</div></div>";
 
 /****   Datatables   ****/
 

@@ -244,6 +244,7 @@ function refresh_plots(){
     }
     if(stats === 'a'){        
         refresh_user_login_plot();
+        refresh_popular_courses_plot();
         refresh_department_user_plot(department, 0);
     }
     plotsgenerated = true;
@@ -481,7 +482,7 @@ function refresh_user_course_plot(){
 }
 
 function refresh_user_login_plot(){
-    $.getJSON('results.php',{t:'ul', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
+    $.getJSON('results.php',{t:'ul', s:startdate, e:enddate, i:interval, u:user, c:course, m:module, d:department},function(data){
         var options = {
             data: {
                 json: data,
@@ -505,6 +506,31 @@ function refresh_user_login_plot(){
     });
 }
 
+function refresh_popular_courses_plot(){
+    $.getJSON('results.php',{t:'pcs', s:startdate, e:enddate, d:department},function(data){
+        var options = {
+            data: {
+                json: data,
+                x: 'courses',
+                axes: {
+                    hits: 'y'                },
+                types:{
+                    hits: 'bar'
+                },
+                names:{
+                    hits: langHits
+                }
+            },
+            axis:{ rotated:true, x: {type:'category', tick:{inner:true}}, y:{show:false}},
+            size:{height:250},
+            bar:{width:{ratio:0.9}},
+            legend:{show: false},
+            bindto: '#popular_courses'
+        };
+        charts.pcs = refreshChart("pcs", options);
+    });
+}
+
 function refresh_department_user_plot(depid, leafdepartment){
     if(leafdepartment>0){
         return null;
@@ -520,7 +546,7 @@ function refresh_department_user_plot(depid, leafdepartment){
                 onclick: function (d,i){refresh_department_user_plot(data.deps[d.index], data.leafdeps[d.index]);}
             },
             size:{height:250},
-            //bar:{width:50},
+            bar:{width:{ratio:0.9}},
             axis:{ x: {type:'category', label:langDepartment}, y:{label:langUsers, min: 0, padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
             bindto: '#depuser_stats'
         };
@@ -558,6 +584,7 @@ function refresh_department_course_plot(depid, leafdepartment){
                 onclick: function (d,i){refresh_department_user_plot(data.deps[d.index], data.leafdeps[d.index]);}
             },
             size:{height:250},
+            bar:{width:{ratio:0.9}},
             axis:{ x: {type:'category', label:langDepartment}, y:{label:langCourses, min: 0, padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
             //bar:{width:{ratio:0.3}},
             bindto: '#depcourse_stats'

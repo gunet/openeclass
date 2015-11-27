@@ -396,11 +396,15 @@ function get_user_details($start = null, $end = null, $interval, $user, $course 
  * @param int $user the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a c3 plot when json encoded 
 */
-function get_user_login_stats($start = null, $end = null, $interval, $user){
+function get_user_login_stats($start = null, $end = null, $interval, $user, $root_department = 1){
     $g = build_group_selector_cond($interval, 'date_time');
     $groupby = $g['groupby'];
     $date_components = $g['select'];
-    $q = "SELECT $date_components, COUNT(*) c FROM logins WHERE date_time BETWEEN ?t AND ?t $groupby";
+    $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
+    Database::get()->query($q, $root_department);
+    $q = "SELECT $date_components, COUNT(*) c FROM logins WHERE "
+            . "course_id IN (SELECT course FROM course_department cd JOIN hierarchy h ON cd.department=h.id where h.lft>=@rootlft and h.rgt<=@rootrgt) "
+            . "AND date_time BETWEEN ?t AND ?t $groupby";
     $r = Database::get()->queryArray($q, $start, $end);
     $formattedr = array('time'=>array(),'logins'=>array());    
     foreach($r as $record){
@@ -411,8 +415,34 @@ function get_user_login_stats($start = null, $end = null, $interval, $user){
 }
 
 /**
+ * Get top-k most popular courses. 
+ * The results are shown in the top right chart of the admin stats (second plot).
+ * @param date $start the start of period to retrieve statistics for
+ * @param date $end the end of period to retrieve statistics for
+ * @param int $root_department the department id for which to show popular courses
+ * @param int $k the k parameter of top-k
+ * @return array an array appropriate for displaying in a c3 plot when json encoded 
+*/
+function get_popular_courses_stats($start = null, $end = null, $root_department = 1, $k = 10){
+    $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
+    Database::get()->query($q, $root_department);
+    $q = "SELECT c.id cid, c.title, s.hits FROM (SELECT course_id cid, sum(hits) hits "
+        . "FROM actions_daily WHERE day BETWEEN ?t AND ?t GROUP BY course_id) s "
+        . "JOIN course c on s.cid=c.id "
+        . "WHERE c.id IN (SELECT course FROM course_department cd JOIN hierarchy h ON cd.department=h.id where h.lft>=@rootlft and h.rgt<=@rootrgt) "
+        . "ORDER BY hits DESC LIMIT $k";
+    $r = Database::get()->queryArray($q, $start, $end);
+    $formattedr = array();
+    foreach($r as $record){
+        $formattedr['courses'][] = $record->title;
+        $formattedr['hits'][] = $record->hits;
+    }
+    return $formattedr;
+}
+
+/**
  * Get number of users per type and per department of the platform. 
- * The results are shown in the a bar chart of the admin stats (second plot)
+ * The results are shown in the a bar chart of the admin stats (third plot)
  * @param date $root_department the deprtament for which statistics will be retrieved per subdepartment
  * @param boolean $total if true only the total number of users will be returned 
  * (used by the footer of the corresponding datatable), otherwise per subdepartment
@@ -470,7 +500,7 @@ function get_department_user_stats($root_department = 1, $total = false){
 
 /**
  * Get number of courses per type and per department of the platform. 
- * The results are shown in the a bar chart of the admin stats (third plot)
+ * The results are shown in the a bar chart of the admin stats (fourth plot)
  * @param date $root_department the deprtament for which statistics will be retrieved per subdepartment
  * @return array an array appropriate for displaying in a c3 plot when json encoded 
 */
@@ -529,14 +559,17 @@ function get_department_course_stats($root_department = 1){
  * @param int $user the id of the user to filter out the statistics for
  * @return array an array appropriate for displaying in a datatables table  
 */
-function get_user_login_details($start = null, $end = null, $user){
+function get_user_login_details($start = null, $end = null, $user, $root_department = 1){
+    $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
+    Database::get()->query($q, $root_department);
     $q = "SELECT l.date_time, concat(u.surname, ' ', u.givenname) user_name, username, email, c.title course_title, l.ip 
             FROM logins l 
             JOIN user u ON l.user_id=u.id 
-            JOIN course c ON l.course_id=c.id"; 
+            JOIN course c ON l.course_id=c.id 
+            WHERE l.course_id IN (SELECT course FROM course_department cd JOIN hierarchy h ON cd.department=h.id where h.lft>=@rootlft and h.rgt<=@rootrgt) "; 
     
     if(!is_null($start) && !empty($start) && !is_null($end) && !empty($end)){
-        $q .= " WHERE l.date_time BETWEEN ?t AND ?t";
+        $q .= " AND l.date_time BETWEEN ?t AND ?t";
         $r = Database::get()->queryArray($q, $start, $end);
     }
     else {

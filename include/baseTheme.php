@@ -1037,7 +1037,11 @@ function module_path($path) {
             return 'listreq';
         }
     }
-
+    
+    if (strpos($path, '/usage/') !== false && strpos($path, 't=u') !== false && strpos($path, 'u=') !== false && $is_admin) {
+        return '/admin/search_user.php';
+    }
+    
     $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
     $path = str_replace(array($urlServer, $urlAppend, 'index.php'),
                         array('/', '/', ''), $path);
@@ -1066,9 +1070,7 @@ function module_path($path) {
     } elseif (isset($GLOBALS['course_code']) and
               strpos($path, '/courses/' . $GLOBALS['course_code']) !== false) {
         return 'course_home';
-    } elseif (strpos($path, '/usage/') !== false && $is_admin && isset($_REQUEST['t']) && $_REQUEST['t'] == 'u' && isset($_REQUEST['u'])) {
-        return '/admin/search_user.php';
-    }
+    } 
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
 

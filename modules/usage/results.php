@@ -84,10 +84,13 @@ if(isset($_REQUEST['t'])){
             $result = get_department_course_stats($department);
             break;
         case 'ul':
-            $result = get_user_login_stats($startdate, $enddate, $interval, $plotuser);
+            $result = get_user_login_stats($startdate, $enddate, $interval, $plotuser, $department);
             break;
         case 'uld':
-            $result = get_user_login_details($startdate, $enddate, $plotuser);
+            $result = get_user_login_details($startdate, $enddate, $plotuser, $department);
+            break;
+        case 'pcs':
+            $result = get_popular_courses_stats($startdate, $enddate, $department);
             break;
         case 'crd':
             $result = get_course_registration_details($startdate, $enddate, $plotcourse);

@@ -1966,6 +1966,7 @@ $langFirstLetterCourse = "First letter of course name";
 $langUsageVisits = "Course Visits";
 $langFavourite = "Module Preferences";
 $langFavouriteCourse = "Course Preferences";
+$langFavouriteCourses = "Popular Courses";
 $langFavouriteExpl = "One user or all users preference for modules in a certain time period.";
 $langOldStats = "Show Old Statistics";
 $langOldStatsExpl = "Monthly statistics older than eight months.";
