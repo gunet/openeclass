@@ -64,7 +64,7 @@ if (isset($_GET['export'])) {
         require_once 'include/lib/fileUploadLib.inc.php';
         if (!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);        
-        $theme_name = $theme_options->name;
+        $theme_name = str_replace(' ', '', $theme_options->name);
 
         $styles = unserialize($theme_options->styles);
         $export_data = base64_encode(serialize($theme_options));
@@ -80,11 +80,7 @@ if (isset($_GET['export'])) {
 
         $zip = new PclZip($filename);
         $zip->create($file_list, PCLZIP_OPT_REMOVE_PATH, 'courses/theme_data');
-        send_file_to_client($filename, 'test.zip');
-//        header("Content-Type: application/x-zip");
-//        header("Content-Disposition: attachment; filename=$filename");
-//        stop_output_buffering();
-//        @readfile($filename);
+        send_file_to_client($filename, $filename, null, true);
         @unlink($filename);
         @unlink($export_data_file);
         exit;
