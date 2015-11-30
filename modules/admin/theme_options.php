@@ -59,6 +59,7 @@ if (isset($_GET['delete_image'])) {
         redirect_to_home_page('modules/admin/theme_options.php');
 }
 if (isset($_GET['export'])) {
+        require_once '/include/lib/forcedownload.php';
         if (!$theme_id) redirect_to_home_page('modules/admin/theme_options.php'); // if default theme
         require_once 'include/lib/fileUploadLib.inc.php';
         if (!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
@@ -76,13 +77,14 @@ if (isset($_GET['export'])) {
         if (isset($styles['imageUpload'])) array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUpload]");
         if (isset($styles['imageUploadSmall'])) array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadSmall]");
         if (isset($styles['loginImg'])) array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImg]");
-        
+
         $zip = new PclZip($filename);
         $zip->create($file_list, PCLZIP_OPT_REMOVE_PATH, 'courses/theme_data');
-        header("Content-Type: application/x-zip");
-        header("Content-Disposition: attachment; filename=$filename");
-        stop_output_buffering();
-        @readfile($filename);
+        send_file_to_client($filename, 'test.zip');
+//        header("Content-Type: application/x-zip");
+//        header("Content-Disposition: attachment; filename=$filename");
+//        stop_output_buffering();
+//        @readfile($filename);
         @unlink($filename);
         @unlink($export_data_file);
         exit;
