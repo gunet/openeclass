@@ -62,18 +62,29 @@ $toolName = $langWorks;
 // main program
 //-------------------------------------------
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    
+    if (isset($_POST['group_filter'])) {
+        $result = Database::get()->queryArray("SELECT user_id FROM `group_members` WHERE group_id = ?d", $_POST['group_filter']);
+        $data = [];
+        foreach ($result as $row) {
+            $data[] = $row->user_id;
+        }
+    }
     if (isset($_POST['sid'])) {
         $sid = $_POST['sid'];
         $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
-    } elseif ($_POST['assign_type']) {
-        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
-    } else {
-        $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
-                                FROM user, course_user
-                                WHERE user.id = course_user.user_id
-                                AND course_user.course_id = ?d AND course_user.status = 5
-                                AND user.id ORDER BY surname", $course_id);
+    }
+    if (isset($_POST['assign_type'])) {
+        if ($_POST['assign_type']) {
+            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
+        } else {
+            $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                    FROM user, course_user
+                                    WHERE user.id = course_user.user_id
+                                    AND course_user.course_id = ?d AND course_user.status = 5
+                                    AND user.id ORDER BY surname", $course_id);
 
+        }
     }
     echo json_encode($data);
     exit;
@@ -257,6 +268,40 @@ if ($is_editor) {
                $('#assignees').text('$langStudents');
             }
         }
+        $('#groupFilter').change(function() {
+            if ($(this).val() == 0) {
+                    $('#assign_box option').each(function()
+                    {
+                        $(this).show();
+                    });                
+            } else {
+                $.ajax({
+                  type: 'POST',
+                  url: '',
+                  datatype: 'json',
+                  data: {
+                     group_filter : $(this).val()
+                  },
+                  success: function(data){
+                    data = $.parseJSON(data);
+                    $('#assign_box option').each(function()
+                    {
+                        if($.inArray($(this).val(), data) >= 0) { 
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+
+                    });
+                  },
+                  error: function(xhr, textStatus, error){
+                      console.log(xhr.statusText);
+                      console.log(textStatus);
+                      console.log(error);
+                  }
+                });           
+            }
+        });
         function ajaxAssignees()
         {
             $('#assignees_tbl').removeClass('hide');
@@ -1357,7 +1402,7 @@ function show_edit_assignment($id) {
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
         $langLessOptions, $langMoreOptions, $langWorkOnlineText, $langWorkSubType,
         $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales,
-        $langLessOptions, $langMoreOptions, $langAutoJudgeInputNotSupported,
+        $langLessOptions, $langMoreOptions, $langAutoJudgeInputNotSupported, $langGroups,
         $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable,
         $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langAutoJudgeOperator,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions;
@@ -1492,6 +1537,15 @@ function show_edit_assignment($id) {
     $max_grade_error = Session::getError('max_grade');
     $scale_error = Session::getError('scale');
 
+    $groups = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d", $course_id);
+    $group_options = "";
+    foreach ($groups as $group) {
+        $selected = '';
+//        if($group_id == $group->id) {
+//            $selected = ' selected';
+//        }
+        $group_options .= "<option value='$group->id'$selected>$group->name</option>";
+    }
     $tool_content .= "
     <div class='form-wrapper'>
     <form class='form-horizontal' role='form' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
@@ -1655,6 +1709,14 @@ function show_edit_assignment($id) {
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
+                        <div class='row margin-bottom-thin'>
+                            <div class='col-sm-4'>
+                                <select class='form-control' id='groupFilter'>
+                                    <option value='0'>-- $langGroups --</option>
+                                    $group_options
+                                </select>
+                            </div>
+                        </div>
                         <div class='table-responsive'>
                             <table id='assignees_tbl' class='table-default ".(($row->assign_to_specific==1) ? '' : 'hide')."'>
                             <tr class='title1'>
