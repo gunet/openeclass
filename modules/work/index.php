@@ -250,6 +250,7 @@ if ($is_editor) {
         function hideAssignees()
         {
             $('#assignees_tbl').addClass('hide');
+            $('#groupFiltering').addClass('hide').find('#groupFilter').val('0');
             $('#assignee_box').find('option').remove();
         }
         function changeAssignLabel()
@@ -315,10 +316,12 @@ if ($is_editor) {
                 var parsed_data = JSON.parse(data);
                 var select_content = '';
                 if(type==0){
+                    $('#groupFiltering').removeClass('hide');
                     for (index = 0; index < parsed_data.length; ++index) {
                         select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
                     }
                 } else {
+                    $('#groupFiltering').addClass('hide').find('#groupFilter').val('0');
                     for (index = 0; index < parsed_data.length; ++index) {
                         select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
                     }
@@ -1043,7 +1046,7 @@ function new_assignment() {
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
            $langAutoJudgeOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
-           $langAutoJudgeAssertions;
+           $langAutoJudgeAssertions, $langGroups;
 
     $connector = AutojudgeApp::getAutojudge();
 
@@ -1096,19 +1099,6 @@ function new_assignment() {
                     $('#late_sub_row').addClass('hide');
                 }
             });
-            $('#hidden-opt-btn').on('click', function(e) {
-                e.preventDefault();
-                $('#hidden-opt').collapse('toggle');
-            });
-            $('#hidden-opt').on('shown.bs.collapse', function () {
-                $('#hidden-opt-btn i').removeClass('fa-caret-down').addClass('fa-caret-up');
-                var caret = '<i class=\"fa fa-caret-up\"></i>';
-                $('#hidden-opt-btn').html('$langLessOptions '+caret);
-            })
-            $('#hidden-opt').on('hidden.bs.collapse', function () {
-                var caret = '<i class=\"fa fa-caret-down\"></i>';
-                $('#hidden-opt-btn').html('$langMoreOptions '+caret);
-            })
         });
 
     </script>";
@@ -1130,6 +1120,11 @@ function new_assignment() {
     $enableWorkStart = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : null;
     $enableWorkEnd = Session::has('enableWorkEnd') ? Session::get('enableWorkEnd') : ($WorkEnd ? 1 : 0);
     enableCheckFileSize();
+    $groups = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d", $course_id);
+    $group_options = "";
+    foreach ($groups as $group) {
+        $group_options .= "<option value='$group->id'>$group->name</option>";
+    }    
     $tool_content .= "
         <div class='row'><div class='col-sm-12'>
         <div class='form-wrapper'>
@@ -1148,12 +1143,6 @@ function new_assignment() {
                 " . rich_text_editor('desc', 4, 20, $desc) . "
                 </div>
             </div>
-            <div class='form-group'>
-                <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
-                    <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
-                </div>
-            </div>
-            <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
                     <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
                     <div class='col-sm-10'>" .
@@ -1280,7 +1269,17 @@ function new_assignment() {
                     </div>
                 </div>
                 <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>
+                    <div class='col-sm-10 col-sm-offset-2'>";
+        $tool_content .= "       
+                        <div class='row margin-bottom-thin hide' id='groupFiltering'>
+                            <div class='col-sm-4'>
+                                <select class='form-control' id='groupFilter'>
+                                    <option value='0'>-- $langGroups --</option>
+                                    $group_options
+                                </select>
+                            </div>
+                        </div>";
+        $tool_content .= "                      
                         <div class='table-responsive'>
                             <table id='assignees_tbl' class='table-default hide'>
                                 <tr class='title1'>
@@ -1374,7 +1373,7 @@ function new_assignment() {
                 ";
                 }
                 $tool_content .= Tag::tagInput()."
-            </div>
+
             <div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>".
                     form_buttons(array(
@@ -1453,19 +1452,6 @@ function show_edit_assignment($id) {
                     $('#late_sub_row').addClass('hide');
                 }
             });
-            $('#hidden-opt-btn').on('click', function(e) {
-                e.preventDefault();
-                $('#hidden-opt').collapse('toggle');
-            });
-            $('#hidden-opt').on('shown.bs.collapse', function () {
-                $('#hidden-opt-btn i').removeClass('fa-caret-down').addClass('fa-caret-up');
-                var caret = '<i class=\"fa fa-caret-up\"></i>';
-                $('#hidden-opt-btn').html('$langLessOptions '+caret);
-            })
-            $('#hidden-opt').on('hidden.bs.collapse', function () {
-                var caret = '<i class=\"fa fa-caret-down\"></i>';
-                $('#hidden-opt-btn').html('$langMoreOptions '+caret);
-            })
         });
     </script>";
 
@@ -1575,12 +1561,6 @@ function show_edit_assignment($id) {
     }
 
     $tool_content .= "
-        <div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
-                <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
-            </div>
-        </div>
-            <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
                     <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
                     <div class='col-sm-10'>
@@ -1695,28 +1675,33 @@ function show_edit_assignment($id) {
                     <div class='col-sm-10'>
                         <div class='radio'>
                           <label>
-                            <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' ".(($row->assign_to_specific==1) ? '' : 'checked').">
+                            <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' ".($row->assign_to_specific ? '' : 'checked').">
                             <span id='assign_button_all_text'>$m[WorkToAllUsers]</span>
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
-                            <input type='radio' id='assign_button_some' name='assign_to_specific' value='1' ".(($row->assign_to_specific==1) ? 'checked' : '').">
-                            <span id='assign_button_some_text'>$m[WorkToUser]</span>
+                            <input type='radio' id='assign_button_some' name='assign_to_specific' value='1' ".($row->assign_to_specific ? 'checked' : '').">
+                            <span id='assign_button_some_text'>".($row->group_submissions ? $m['WorkToGroup'] : $m['WorkToUser'])."</span>
                           </label>
                         </div>
                     </div>
                 </div>
                 <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>
-                        <div class='row margin-bottom-thin'>
+                    <div class='col-sm-10 col-sm-offset-2'>";
+    if ($row->assign_to_specific && !$row->group_submissions) {
+        $tool_content .= "       
+                        <div class='row margin-bottom-thin' id='groupFiltering'>
                             <div class='col-sm-4'>
                                 <select class='form-control' id='groupFilter'>
                                     <option value='0'>-- $langGroups --</option>
                                     $group_options
                                 </select>
                             </div>
-                        </div>
+                        </div>";        
+    }
+
+        $tool_content .= "                        
                         <div class='table-responsive'>
                             <table id='assignees_tbl' class='table-default ".(($row->assign_to_specific==1) ? '' : 'hide')."'>
                             <tr class='title1'>
@@ -1869,7 +1854,6 @@ function show_edit_assignment($id) {
                 </div>";
                 }
                 $tool_content .= Tag::tagInput($id)."
-            </div>
             <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>".
                     form_buttons(array(
@@ -2507,11 +2491,7 @@ function show_assignment($id, $display_graph_results = false) {
             $groups = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d", $course_id);
             $group_options = "";
             foreach ($groups as $group) {
-                $selected = '';
-                if($group_id == $group->id) {
-                    $selected = ' selected';
-                }
-                $group_options .= "<option value='$group->id'$selected>$group->name</option>";
+                $group_options .= "<option value='$group->id'>$group->name</option>";
             }
             $tool_content .= "
                         <br>
