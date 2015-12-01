@@ -3612,7 +3612,8 @@ $langDetails = "Αναλυτικά";
 $langPlots = "Γραφήματα";
 $langIpAddress = "Διεύθυνση IP";
 $langLoginUser = "Είσοδοι";
-
+$langUsageCoursesHeader = "Σύνολο μαθημάτων";
+$langUsageUsers = "Σύνολο χρηστών";
 
 #for platform Statistics
 $langUsersCourse = "Χρήστες ανά μάθημα";
