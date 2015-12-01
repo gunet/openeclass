@@ -630,7 +630,7 @@ function adminMenu() {
         array_push($sideMenuLink, "../../modules/usage/?t=a");
         array_push($sideMenuImg, "fa-caret-right");
         
-        array_push($sideMenuText, $GLOBALS['langOtherActions']);
+        array_push($sideMenuText, $GLOBALS['langUsersLog']);
         array_push($sideMenuLink, "../admin/otheractions.php");
         array_push($sideMenuImg, "fa-caret-right");
 

@@ -638,14 +638,14 @@ function count_users($user_type = null){
  * @return int the number of all the users or of specific type of the system 
 */
 function count_courses($course_type = null){
-    if(is_null($course_type)){
+    if(is_null($course_type)){        
         return Database::get()->querySingle("SELECT COUNT(*) as count FROM course")->count;
     }
     elseif(!in_array($course_type,array(COURSE_INACTIVE, COURSE_OPEN, COURSE_REGISTRATION, COURSE_CLOSED))){
         return 0;
     }
-    else{
-        return Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", $course_type)->count;
+    else{        
+        return Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", $course_type)->count;
     }
 }
 
