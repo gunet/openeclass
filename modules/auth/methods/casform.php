@@ -41,7 +41,7 @@ if (!empty($auth_data['auth_settings'])) {
     $auth_data['cas_altauth'] = 0;
 }
 
-$cas_ssout_data = array(0 => $m['no'], 1 => $m['yes'])
+$cas_ssout_data = array(0 => $m['no'], 1 => $m['yes']);
 
 $cas_altauth_data = array(
     0 => '-',
