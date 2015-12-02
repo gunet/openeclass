@@ -726,9 +726,10 @@ function footerCB(tabId,tabEl){
     }
 }
     
-function userFriendlyDuration(seconds){
+function userFriendlyDuration(seconds){    
+    seconds = Math.abs(seconds);
     hours = Math.floor(seconds / 3600);
-    mins = Math.floor((seconds - (hours*3600)) / 60);
+    mins = Math.floor((seconds - (hours*3600)) / 60);    
     secs = Math.floor(seconds % 60);
     fd = (hours<10)? '0'+hours:''+hours;
     fd += ':';
