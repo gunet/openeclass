@@ -20,6 +20,7 @@
  * ======================================================================== 
  */
 
+
 $head_content .= 
     "<script type='text/javascript'>
         startdate = null;
@@ -49,11 +50,19 @@ $tool_content .="<table class='table-default' style='border:0;'>"
         . "</tr>"
         . "</table>";
 $tool_content .= "</div></div></div>";*/
+
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "/modules/admin/",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+            ),false);
+
 $tool_content .= "
 <div class='row'>
     <div class='col-xs-12'>
         <div class='panel panel-default'>
-            <div class='panel-heading'>$langPlatformGenStats</div>
+            <div class='panel-heading'><strong>$langPlatformGenStats</strong></div>
             <div class='panel-body'>
                 <div class='row'>
                     <div class='col-sm-6'>

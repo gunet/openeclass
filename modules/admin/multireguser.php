@@ -305,19 +305,6 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     $administratorName = get_config('admin_name');
     $emailhelpdesk = get_config('email_helpdesk');
     $emailsubject = "$langYourReg $siteName $type_message"; 
-    $emailbody = "
-    $langDestination $givenname $surname
-
-    $langYouAreReg $siteName$type_message $langSettings $uname
-    $langPass : $mail_message
-    $langAddress $siteName $langIs: $urlServer
-    $langProblem
-
-    $administratorName
-    $langManager: $siteName
-    $langTel: $telephone
-    $langEmail: $emailhelpdesk
-    ";
 
     $emailHeader = "
     <!-- Header Section -->
@@ -335,7 +322,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
             <div>$langSettings</div>
             <div id='mail-body-inner'>
                 <ul id='forum-category'>
-                    <li><span><b>$langUserCodename: </b></span> <span>$uname_form</span></li>
+                    <li><span><b>$langUserCodename: </b></span> <span>$uname</span></li>
                     <li><span><b>$langPass: </b></span> <span>$password</span></li>
                     <li><span><b>$langAddress $siteName $langIs: </b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
                 </ul>
@@ -352,7 +339,6 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         </div>";
 
     $emailbody = $emailHeader.$emailMain;
-
 
     $emailPlainBody = html2text($emailbody);
     if ($send_mail) {
