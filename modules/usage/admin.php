@@ -20,6 +20,7 @@
  * ======================================================================== 
  */
 
+
 $head_content .= 
     "<script type='text/javascript'>
         startdate = null;

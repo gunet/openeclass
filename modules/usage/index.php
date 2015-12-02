@@ -120,6 +120,7 @@ $head_content .= "<style>
 </style>";
 
 $pageName = $langUsage;
+$navigation[] = array('url' => '/modules/admin/', 'name' => $langAdmin);
 
 if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)){
     require_once "course.php";
