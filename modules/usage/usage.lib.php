@@ -489,6 +489,7 @@ function get_department_user_stats($root_department = 1, $total = false){
             $d = $record->dname;
             $formattedr[$langStatsUserStatus[USER_TEACHER]][] = 0;
             $formattedr[$langStatsUserStatus[USER_STUDENT]][] = 0;
+            $formattedr[$langStatsUserStatus[USER_GUEST]][] = 0;
        }
        if(!is_null($record->status)){
            $formattedr[$langStatsUserStatus[$record->status]][$i] = $record->users_count;

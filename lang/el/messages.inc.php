@@ -3565,7 +3565,7 @@ $langPerDay = "ανά ημέρα";
 $langPerWeek = "ανά εβδομάδα";
 $langPerMonth = "ανά μήνα";
 $langPerYear = "ανά έτος";
-$langStatsUserStatus = array(1=>"Εκπαιδευτές",5=>"Εκπαιδευόμενοι");
+$langStatsUserStatus = array(1=>"Εκπαιδευτές",5=>"Εκπαιδευόμενοι",10=>"Επισκέπτες");
 $langCourseVisibility = array(0=>'Ανενεργά',1=>'Ελεγχόμενης πρόσβασης',2=>'Ανοικτά',3=>'Κλειστά');
 $langHits = "Επισκέψεις";
 $langRegisterActions = "Εγγραφές";
