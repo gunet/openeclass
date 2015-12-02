@@ -826,6 +826,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `end_message` MEDIUMTEXT NULL DEFAULT NULL,
     `anonymized` INT(1) NOT NULL DEFAULT 0,
     `show_results` INT(1) NOT NULL DEFAULT 0,
+	`type` TINYINT NOT NULL DEFAULT 0,
     `assign_to_specific` TINYINT NOT NULL DEFAULT '0' ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
@@ -1587,6 +1588,40 @@ $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_department` (
     `department_id` INT(11) NOT NULL,
     FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
     FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE)");
+$db->query("CREATE TABLE IF NOT EXISTS `widget` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `class` varchar(400) NOT NULL) $charset_spec"); 
+$db->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `widget_id` int(11) unsigned NOT NULL,
+                `widget_area_id` int(11) NOT NULL,
+                `options` text NOT NULL,
+                `position` int(3) NOT NULL,
+                `user_id` int(11) NULL,
+                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,                
+                FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");   
+
+// Conference table
+$db->query("CREATE TABLE IF NOT EXISTS `conference` (
+  `conf_id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) NOT NULL,
+  `conf_description` text NOT NULL,
+  `status` enum('active','inactive') DEFAULT NULL,
+  `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`conf_id`)) $charset_spec");
+
+// om_servers table
+$db->query('CREATE TABLE IF NOT EXISTS `om_servers` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `hostname` varchar(255) DEFAULT NULL,
+    `port` varchar(255) DEFAULT NULL,
+    `enabled` enum("true","false") DEFAULT NULL,
+    `username` varchar(255) DEFAULT NULL,
+    `password` varchar(255) DEFAULT NULL,
+    `module_key` int(11) DEFAULT NULL,
+    `webapp` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idx_om_servers` (`hostname`))');
 
 // Gamification Tables
 $db->query("CREATE TABLE `certificate` (

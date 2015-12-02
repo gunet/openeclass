@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_current_course = true;
@@ -38,17 +38,24 @@ $tool_content .= action_bar(array(
                 'level' => 'primary-label'),
     ));
 
-$checked = '';
-$value = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
-if ($value == 1) {
-    $checked = ' checked';
-}
-if (isset($_POST['submit'])) {            
+$checked_multi_reg = '';
+$multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
+$student_desc = setting_get(SETTING_GROUP_STUDENT_DESCRIPTION, $course_id);
+
+$checked_multi_reg = $multi_reg ? ' checked' : '';
+$checked_student_desc = $student_desc ? ' checked' : '';
+
+if (isset($_POST['submit'])) {
     if (isset($_POST['multi_reg'])) {
         setting_set(SETTING_GROUP_MULTIPLE_REGISTRATION, $_POST['multi_reg'], $course_id);
     } else {
         setting_set(SETTING_GROUP_MULTIPLE_REGISTRATION, 0, $course_id);
     }
+    if (isset($_POST['student_desc'])) {
+        setting_set(SETTING_GROUP_STUDENT_DESCRIPTION, $_POST['student_desc'], $course_id);
+    } else {
+        setting_set(SETTING_GROUP_STUDENT_DESCRIPTION, 0, $course_id);
+    }    
     Session::Messages($langGlossaryUpdated, "alert-success");
     redirect_to_home_page("modules/group/group_settings.php?course=$course_code");
 } else {
@@ -58,9 +65,14 @@ if (isset($_POST['submit'])) {
                         <div class='col-sm-12'>
                             <div class='checkbox'>
                               <label>
-                                <input type='checkbox' name='multi_reg' value='1'$checked>$langGroupAllowMultipleRegistration
+                                <input type='checkbox' name='multi_reg' value='1'$checked_multi_reg>$langGroupAllowMultipleRegistration
                               </label>
                             </div>
+                            <div class='checkbox'>
+                              <label>
+                                <input type='checkbox' name='student_desc' value='1'$checked_student_desc>$langGroupAllowStudentGroupDescription
+                              </label>
+                            </div>                            
                         </div>
                     </div>
                     <div class='form-group'>
@@ -75,8 +87,8 @@ if (isset($_POST['submit'])) {
                                 )
                             ))
                             ."</div>
-                    </div>   
-                ". generate_csrf_token_form_field() ."                
+                    </div>
+                ". generate_csrf_token_form_field() ."
                 </form>
               </div>";
 }

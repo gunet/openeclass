@@ -123,7 +123,7 @@ Class Mailbox {
         }
         
         if ($this->courseId == 0) { //all messages except those from courses where dropbox is inactive
-            $sql = "SELECT DISTINCT `dropbox_msg`.`id`
+            $sql = "SELECT `dropbox_msg`.`id`
                     FROM `dropbox_msg`,`dropbox_index`, `course_module`
                     WHERE `dropbox_msg`.`id` = `dropbox_index`.`msg_id`
                     AND (
@@ -138,7 +138,7 @@ Class Mailbox {
                     AND `dropbox_index`.`recipient_id` = ?d 
                     AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`
                     AND `dropbox_index`.`deleted` = ?d $query_sql
-                    ORDER BY `timestamp` DESC $extra_sql";
+                    GROUP BY `dropbox_msg`.`id` ORDER BY `timestamp` DESC $extra_sql";
             $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, 0, $this->uid, 0, $args);
         } else { //messages in course context
             $sql = "SELECT `dropbox_msg`.`id` 

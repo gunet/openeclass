@@ -20,13 +20,17 @@
  * ======================================================================== 
  */
 
-foreach (ExtAppManager::$AppNames as $appName)
+foreach (ExtAppManager::$AppNames as $appName) {
     require_once strtolower($appName) . '.php';
+}
 require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 
 class ExtAppManager {
 
-    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp", "BBBApp", "AutojudgeApp","AntivirusApp","WafApp","secondfaApp");
+    public static $AppNames = array('GoogleDriveApp', 'OneDriveApp',
+        'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp', 'OpenDelosApp',
+        'BBBApp', 'OpenMeetings', 'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
+        'AnalyticsApp');
     private static $APPS = null;
 
     /**
@@ -185,6 +189,7 @@ abstract class ExtParam {
 
     const TYPE_STRING = 0;
     const TYPE_BOOLEAN = 1;
+    const TYPE_MULTILINE = 2;
 
     function __construct($display, $name, $defaultValue = "", $type = ExtParam::TYPE_STRING) {
         $this->display = $display;

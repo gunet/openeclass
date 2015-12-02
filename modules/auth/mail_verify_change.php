@@ -65,8 +65,13 @@ if (!empty($_POST['submit'])) {
             $_SESSION['email'] = $email;
             Database::get()->query("UPDATE user SET email = ?s WHERE id = ?d", $email, $uid);            
         }
-        //send new code
-        $hmac = token_generate($_SESSION['uname'] . $email . $uid);
+        //send new code                
+        if (get_config('case_insensitive_usernames')) {
+            $hmac = token_generate(strtolower($_SESSION['uname']) . $email . $uid);
+        } else {
+            $hmac = token_generate($_SESSION['uname'] . $email . $uid);
+        }
+        
         $activateLink = "<a href='".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid."'>".$urlServer."modules/auth/mail_verify.php?h=".$hmac."&amp;id=".$uid."</a>";
 
         $subject = $langMailChangeVerificationSubject;

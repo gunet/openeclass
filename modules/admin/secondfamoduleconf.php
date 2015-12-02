@@ -27,7 +27,7 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/secondfaapp.php';
-$nameTools = $langsecondfa;
+$nameTools = $langSFAadd;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
@@ -36,6 +36,7 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 // Scan the connectors directory and locate the appropriate classes
 $connectorClasses = secondfaApp::getsecondfaServices();
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     set_config('secondfa_connector', $_POST['formconnector']);
     foreach($connectorClasses as $curConnectorClass) {
         $connector = new $curConnectorClass();
@@ -57,7 +58,7 @@ else {
                 <fieldset><legend>$langBasicCfgSetting</legend>
 	 <table class='table table-bordered' width='100%'>
          <tr>
-            <th width='200' class='left'><b>$langsecondfaConnector</b></th>
+            <th width='200' class='left'><b>$langSFAConf</b></th>
             <td><select name='formconnector'>".implode('', $connectorOptions)."</select></td>
          </tr>";
     foreach($connectorClasses as $curConnectorClass) {
@@ -83,7 +84,7 @@ else {
                         <li><a href='http://apps.microsoft.com/windows/en-us/app/google-authenticator/7ea6de74-dddb-47df-92cb-40afac4d38bb%22'>Google Authenticator (port) on Windows app store</a></li>
                         </ul>
                         <BR>";
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='submit' value='$langModify'> </form>";
+    $tool_content .= "<input class='btn btn-primary' type='submit' name='submit' value='$langModify'>". generate_csrf_token_form_field() ."</form>";
     $head_content .= "
         <script type='text/javascript'>
         function update_connector_config_visibility() {

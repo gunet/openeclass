@@ -84,16 +84,8 @@ function initialize_group_info($group_id) {
 
     $tutors = group_tutors($group_id);
     $is_tutor = $is_member = $user_group_description = false;
-    if (isset($uid)) {
-        $res = Database::get()->querySingle("SELECT is_tutor, description FROM group_members
-                                     WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
-        if ($res) {
-            $is_member = true;
-            $is_tutor = $res->is_tutor;
-            $user_group_description = $res->description;
-        }
-    }
-    if ($is_tutor or $is_editor) {
+
+    if ($is_tutor || $is_editor) {
         $res = Database::get()->queryArray("SELECT description,user_id FROM group_members
                                      WHERE group_id = ?d", $group_id);
         foreach ($res as $d) {
@@ -101,6 +93,16 @@ function initialize_group_info($group_id) {
                 $user_group_description .= display_user($d->user_id, false, false)."<br>$d->description<br><br>";
             }
         }
+    } else {
+        if (isset($uid)) {
+            $res = Database::get()->querySingle("SELECT is_tutor, description FROM group_members
+                                         WHERE group_id = ?d AND user_id = ?d AND is_tutor != 1", $group_id, $uid);
+            if ($res) {
+                $is_member = true;
+                $is_tutor = $res->is_tutor;
+                $user_group_description .= $res->description;
+            }
+        }        
     }
 }
 
@@ -193,11 +195,11 @@ function showgroupcategoryadmintools($categoryid) {
  */
 function showgroupsofcategory($catid) {
     
-    global $is_editor, $course_id, $tool_content, $langConfig,
+    global $is_editor, $course_id, $tool_content, $langConfig, $langUnRegister,
     $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
     $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
-    $langEditChange, $groups_num, $uid, $totalRegistered,
-    $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members, $group_description;
+    $langEditChange, $groups_num, $uid, $totalRegistered, $student_desc,
+    $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members, $group_description, $langCommentsUser;
 
     $q = Database::get()->queryArray("SELECT id FROM `group`
                                    WHERE course_id = ?d AND category_id = ?d
@@ -217,13 +219,25 @@ function showgroupsofcategory($catid) {
                 $tool_content .= q($group_name);
             }
         }
-        if ($user_group_description) {
-            $tool_content .= "<br><span class='small'>$user_group_description</span>
-                    <p>$group_description" .
-                    icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
-                    icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
-        } elseif ($is_member) {
-            $tool_content .= " </p><br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
+        $tool_content .= "<br><p>$group_description</p>";
+        if (!$is_editor){
+            if ($student_desc) {
+                if ($user_group_description) {
+                    $tool_content .= "<br>
+                            <span class='small'>$user_group_description</span> &nbsp;" .
+                            icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
+                            icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
+                } elseif ($is_member) {
+                    $tool_content .= "
+                            <a href='group_description.php?course=$course_code&amp;group_id=$group_id'>
+                                <i>$langAddDescription</i>
+                            </a>";
+                }
+            }
+        } else {
+            if ($user_group_description && $student_desc) {
+                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
+            }
         }
         $tool_content .= "</td>";
         $tool_content .= "<td class='text-center' width='250'>";
@@ -259,10 +273,12 @@ function showgroupsofcategory($catid) {
         } else {            
             $tool_content .= "<td class='text-center'>";
             // If self-registration and multi registration allowed by admin and group is not full        
-            if ($uid and $self_reg and (!$user_groups or $multi_reg) and !$is_member and (!$max_members or $member_count < $max_members)) {
+            if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
                 $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
+            } elseif (!$self_reg) {
+                $tool_content .= ' - ';
             } else {
-                $tool_content .= "-";
+                $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
             }
             $tool_content .= "</td>";
         }
@@ -339,7 +355,7 @@ function makedefaultviewcode($locatie) {
 function delete_group($id) {
     global $course_id, $langGroupDeleted;
 
-    $tuple = Database::get()->querySingle("SELECT name, category_id FROM group WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $tuple = Database::get()->querySingle("SELECT name, category_id FROM `group` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $name = $tuple->name;
     $category_id = $tuple->category_id;
 

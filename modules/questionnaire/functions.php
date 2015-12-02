@@ -35,3 +35,193 @@ function validate_qtype($qtype)
         return QTYPE_LABEL;
     }
 }
+
+	function createcolles($pid) {
+	
+		global $qcolles1, $qcolles2,$qcolles3,$qcolles4,$qcolles5,$qcolles6,
+				$qcolles7,$qcolles8,$qcolles9,$qcolles10,$qcolles11,$qcolles12,
+				$qcolles13,$qcolles14,$qcolles15,$qcolles16,$qcolles17,$qcolles18,
+				$qcolles19,$qcolles20,$qcolles21,$qcolles22, $qcolles23,$qcolles24;
+				
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles1, 5, 1, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles2, 5, 2, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles3, 5, 3, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles4, 5, 4, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles5, 5, 5, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles6, 5, 6, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles7, 5, 7, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles8, 5, 8, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles9, 5, 9, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles10, 5, 10, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles11, 5, 11, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles12, 5, 12, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles13, 5, 13, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles14, 5, 14, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles15, 5, 15, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles16, 5, 16, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles17, 5, 17, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles18, 5, 18, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles19, 5, 19, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles20, 5, 20, 5)->lastInsertID;
+
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles21, 5, 21, 5)->lastInsertID;
+
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles22, 5, 22, 5)->lastInsertID;
+
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles23, 5, 23, 5)->lastInsertID;
+
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles24, 5, 24, 5)->lastInsertID;					
+	}
+	function createattls($pid) {
+		global $question1, $question2, $question3, $question4, $question5, 
+				$question6, $question7, $question8, $question9, $question10, 
+				$question11, $question12, $question13, $question14, $question15, 
+				$question16, $question17, $question18, $question19, $question20; 
+				
+	    $pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question1, 5, 1, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question2, 5, 2, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question3, 5, 3, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question4, 5, 4, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question5, 5, 5, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question6, 5, 6, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question7, 5, 7, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question8, 5, 8, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question9, 5, 9, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question10, 5, 10, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question11, 5, 11, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question12, 5, 12, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question13, 5, 13, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question14, 5, 14, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question15, 5, 15, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question16, 5, 16, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question17, 5, 17, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question18, 5, 18, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question19, 5, 19, 5)->lastInsertID;
+		
+		$pqid = Database::get()->query("INSERT INTO poll_question
+                    (pid, question_text, qtype, q_position, q_scale)
+                    VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $question20, 5, 20, 5)->lastInsertID;
+	}

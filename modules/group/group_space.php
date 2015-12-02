@@ -44,11 +44,7 @@ if (!$is_editor) {
     if ((!$is_member) and (!$self_reg)) { // check if we are group member
         Session::Messages($langForbidden, 'alert-danger');
         redirect_to_home_page("modules/group/index.php?course=$course_code");       
-    }
-    if (!$self_reg) { // if group self registration is enabled    
-        Session::Messages($langForbidden, 'alert-danger');
-        redirect_to_home_page("modules/group/index.php?course=$course_code");
-    }    
+    }   
     if (isset($_GET['selfReg']) and $_GET['selfReg'] == 1) {
         if (!$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) { // if registration is possible
             $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
@@ -87,7 +83,7 @@ if (isset($_GET['group_as'])) {
     $group_id = $_GET['group_id'];
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time FROM assignment AS a LEFT JOIN assignment_to_specific AS b ON a.id=b.assignment_id 
-                                                        WHERE a.course_id = ?d AND a.group_submissions= ?d AND (b.group_id= ?d OR b.group_id is null) ORDER BY a.id", $course_id, 1, $group_id);
+                                                        WHERE a.course_id = ?d AND a.group_submissions= ?d AND (b.group_id= ?d OR b.group_id is null) AND a.active = 1 ORDER BY a.id", $course_id, 1, $group_id);
     $tool_content .= action_bar(array(               
                 array('title' => "$langBack",
                       'level' => "primary-label",
@@ -134,6 +130,8 @@ if (isset($_GET['group_as'])) {
            $tool_content .= "</td></tr>";
         }
         $tool_content .= '</table></div></div></div>';	
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }	     
 } else {
     $tool_content .= action_bar(array(

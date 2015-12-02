@@ -33,8 +33,8 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
-if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
-    $auth = intval($_REQUEST['auth']); // $auth gets the integer value of the auth method if it is set
+if (isset($_REQUEST['auth']) && is_numeric(getDirectReference($_REQUEST['auth']))) {
+    $auth = intval(getDirectReference($_REQUEST['auth'])); // $auth gets the integer value of the auth method if it is set
 } else {
     $auth = false;
 }
@@ -57,6 +57,7 @@ $test_password = isset($_POST['test_password']) ? $_POST['test_password'] : '';
 
 if ($auth == 7) {
     if ($submit) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $_SESSION['cas_do'] = true;
         // $_POST is lost after we come back from CAS
         foreach (array('cas_host', 'cas_port', 'cas_context', 'cas_cachain',
@@ -100,6 +101,7 @@ if (!empty($_SESSION['cas_warn']) and $auth == 7) {
 }
 
 if ($submit or ! empty($_SESSION['cas_do'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (!empty($_SESSION['cas_do']) and empty($_SESSION['cas_warn'])) {
         // test new CAS settings
         $cas_ret = cas_authenticate(7, true, $_SESSION['cas_host'], $_SESSION['cas_port'], $_SESSION['cas_context'], $_SESSION['cas_cachain']);
@@ -121,6 +123,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
 
     // if form is submitted
     if (isset($_POST['submit']) or $cas_valid == true) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if ($auth == 1) {
             $settings = array();
             $auth_allow = 1; //eclass method doesn't need test
@@ -181,6 +184,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                         'cas_logout' => $_SESSION['cas_logout'],
                         'cas_ssout' => $_SESSION['cas_ssout'],
                         'casuserstudentid' => $_SESSION['casuserstudentid']);
+                    $auth_title = $_SESSION['auth_title'];
                     $auth_instructions = $_SESSION['auth_instructions'];
 	                break;
                 case 8:  // Facebook
@@ -278,7 +282,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
     $tool_content .= "<div class='form-wrapper'>
     <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
 	<fieldset>	
-        <input type='hidden' name='auth' value='" . intval($auth) . "'>";
+        <input type='hidden' name='auth' value='" . getIndirectReference(intval($auth)) . "'>";
 
     if (!empty($_SESSION['cas_warn']) && $_SESSION['cas_do']) {
         $auth = 7;
@@ -335,6 +339,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     </div>
                 </div>
             </fieldset>
+            ". generate_csrf_token_form_field() ."
         </form>
     </div>";
 }

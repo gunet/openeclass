@@ -664,6 +664,84 @@ jContent;
         return $html;
     }
 
+
+    private function buildHtmlNodePickerIndirect($options) {
+        global $themeimg, $langNodeAdd, $langNodeDel, $langCancel, $langSelect;
+
+        $params = (array_key_exists('params', $options)) ? $options['params'] : '';
+        $defaults = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
+        $exclude = (array_key_exists('exclude', $options)) ? $options['exclude'] : null;
+        $tree_array = (array_key_exists('tree', $options)) ? $options['tree'] : array('0' => 'Top');
+        $where = (array_key_exists('where', $options)) ? $options['where'] : '';
+        $multiple = (array_key_exists('multiple', $options)) ? $options['multiple'] : false;
+        $skip_preloaded_defaults = (array_key_exists('skip_preloaded_defaults', $options)) ? $options['skip_preloaded_defaults'] : false;
+
+
+        $html = '';
+        $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
+
+        if ($multiple) {
+            $html .= '<div id="nodCnt">';
+
+            if (!$skip_preloaded_defaults && is_array($defaults)) {
+                $i = 0;
+                foreach ($defaults as $def) {
+                    $html .= '<p id="nd_' . $i . '">';
+                    $html .= '<input type="hidden" ' . $params . ' value="' . $def . '" />';
+                    $html .= $this->getFullPath(getDirectReference($def));
+                    $html .= '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></span></a></p>';
+                    $i++;
+                }
+            }
+
+            $html .= '</div>';
+            $html .= '<div><p><a id="ndAdd" href="#add"><i class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="'.q($langNodeAdd).'"></i></a></p></div>';
+
+            // Unused for multi usecase, however present to use a unique generic JS event function
+            $html .= '<input id="dialog-set-key" type="hidden" onchange="" />';
+            $html .= '<input id="dialog-set-value" type="hidden" />';
+        } else {
+            if (isset($defs[0])) {
+                if (isset($tree_array[$defs[0]])) {
+                    $def = $tree_array[$defs[0]];
+                } else {
+                    $def = $this->getFullPath($defs[0], true, '');
+                }
+            }
+            else {
+                $defs[0] = '';
+                $def = '';
+            }
+
+            // satisfy JS code: getElementById().onchange()
+            if (stristr($params, 'onchange') === false) {
+                $params .= ' onchange="" ';
+            }
+
+            $html .= '<input id="dialog-set-key" type="hidden" ' . $params . ' value="' . getIndirectReference($defs[0]) . '" />';
+            $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#' . getIndirectReference($defs[0]) . '\', true, null);' : '';
+            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . $def . '" />&nbsp;';
+        }
+
+        $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close treeModalClose"><span aria-hidden="true">&times;</span><span class="sr-only">' . $langCancel . '</span></button>
+                    <h4 class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="js-tree"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default treeModalClose">' . $langCancel . '</button>
+                    <button type="button" class="btn btn-primary" id="treeModalSelect">' . $langSelect . '</button>
+                </div>
+            </div>
+        </div></div>';
+
+        return $html;
+    }
     /**
      * Build a Tree Node Picker (UI). The method's output provides all necessary JS and HTML code.
      * The php script calling this should provide:
@@ -691,6 +769,14 @@ jContent;
         return array($js, $html);
     }
     
+    public function buildNodePickerIndirect($options) {
+        $js = $this->buildJSNodePicker($options);
+        $html = $this->buildHtmlNodePickerIndirect($options);
+
+        return array($js, $html);
+    }
+    
+
     /**
      * Build a Tree Node Picker (UI) for attaching courses under tree nodes. The method's output provides all necessary JS and HTML code.
      * The php script calling this should provide:
@@ -721,6 +807,17 @@ jContent;
         return $this->buildNodePicker($options);
     }
 
+    public function buildCourseNodePickerIndirect($options = array()) {
+        $defaults = array('params' => 'name="department[]"',
+            'tree' => null,
+            'where' => 'AND node.allow_course = true',
+            'multiple' => get_config('course_multidep'));
+        $this->populateOptions($options, $defaults);
+
+        return $this->buildNodePickerIndirect($options);
+    }
+
+
     /**
      * Build a Tree Node Picker (UI) for attaching users under tree nodes. The method's output provides all necessary JS and HTML code.
      * The php script calling this should provide:
@@ -749,6 +846,16 @@ jContent;
         $this->populateOptions($options, $defaults);
 
         return $this->buildNodePicker($options);
+    }
+
+    public function buildUserNodePickerIndirect($options = array()) {
+        $defaults = array('params' => 'name="department[]"',
+            'tree' => null,
+            'where' => 'AND node.allow_user = true',
+            'multiple' => get_config('user_multidep'));
+        $this->populateOptions($options, $defaults);
+
+        return $this->buildNodePickerIndirect($options);
     }
 
     /**
@@ -861,17 +968,18 @@ jContent;
         $subs = array();
         $nodelfts = array();
         $ids = '';
-        
+
+   
         if (count($nodes) <= 0) {
             return $subs;
         }
-
+   
         foreach ($nodes as $key => $id) {
             $ids .= $id . ',';
         }
         // remove last ',' from $ids
         $q = substr($ids, 0, -1);
-        
+
         Database::get()->queryFunc("SELECT node.id, node.lft FROM hierarchy AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
             $nodelfts[] = $row->lft;
         });
@@ -1045,7 +1153,7 @@ jContent;
      * @param  string   $url           - The php script to call in the navigational URLs
      * @param  function $countCallback - An optional closure that will be used for the counting
      * @param  bool     $showEmpty     - Whether to display nodes with count == 0
-     * @return string   $ret           - The returned HTML output
+     * @return array    $ret           - An array containing the children count and the HTML output
      */
     public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null, $showEmpty = true) {
         $parent = Database::get()->querySingle("select lft, rgt from hierarchy where id = ?d", $depid);
@@ -1055,11 +1163,12 @@ jContent;
         $searchLft = intval($parent->lft) + 1;
         
         list($children, $subtrees) = $this->locateSubordinatesAndSubTrees($searchLft);
+        $chCnt = count($children);
         
-        if (count($children) > 0) {
-            return $this->buildNodesNavigationHtml($children, $url, $countCallback, $showEmpty, $subtrees);
+        if ($chCnt > 0) {
+            return array($chCnt, $this->buildNodesNavigationHtml($children, $url, $countCallback, $showEmpty, $subtrees));
         } else {
-            return " ";
+            return array($chCnt, " ");
         }
     }
 

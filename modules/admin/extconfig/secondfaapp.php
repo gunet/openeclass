@@ -50,7 +50,7 @@ class secondfaApp extends ExtApp {
      *
      * @return boolean
      */
-    public function isConfigured() {
+    public  function isConfigured() {
         return (q(get_config('secondfa_connector')) != null);
     }
 
@@ -62,7 +62,10 @@ class secondfaApp extends ExtApp {
         } else {
             $connector = new $connector();
         }
-        $connector->setEnabled($secondfa->isEnabled());
+        $param = $connector->getParam('enabled');
+        if ($param) {
+            $param->setValue($secondfa->isEnabled());
+        }
         return $connector;
     }
 
@@ -97,11 +100,11 @@ class secondfaApp extends ExtApp {
  * @param $arr array
  * @return array
  */
-    public function initializedb(){
+    public static function initializedb(){
         Database::get()->query("CREATE TABLE IF NOT EXISTS secondfactorauth (id int(11) NOT NULL,secret varchar(100) NOT NULL,FOREIGN KEY (id) REFERENCES user(id) ON UPDATE CASCADE ON DELETE CASCADE)");
     }
 
-    public function storeSecret($userid, $sfa_secret){
+    public static function storeSecret($userid, $sfa_secret){
         $_SESSION['sfakey'] = $sfa_secret;
         self::initializedb();
         Database::get()->query("INSERT INTO secondfactorauth SET
@@ -110,7 +113,7 @@ class secondfaApp extends ExtApp {
                                 ", $userid, $sfa_secret);
     }
 
-    public function retrieveSecret($userid){
+    public static function retrieveSecret($userid){
         $sfa_secret = "";
         if (isset($_SESSION['sfakey'])){
             $sfa_secret =  $_SESSION['sfakey'];
@@ -134,7 +137,7 @@ class secondfaApp extends ExtApp {
      */
 
 
-    public function showUserProfile($userid){
+    public static function showUserProfile($userid){
         $sfa_secret = self::retrieveSecret($userid);
         if ($sfa_secret and $sfa_secret!=""){
             return self::getUnitialize();
@@ -146,7 +149,7 @@ class secondfaApp extends ExtApp {
         }
     }
 
-    public function saveUserProfile($userid){
+    public static function saveUserProfile($userid){
         $sfa_secret = self::retrieveSecret($userid);
         if ($sfa_secret and $sfa_secret!=""){
             return self::setUnitialize($userid);
@@ -156,7 +159,7 @@ class secondfaApp extends ExtApp {
     }
 
 
-     public function showChallenge($userid){
+     public static function showChallenge($userid){
         $sfa_secret = self::retrieveSecret($userid);
         if ($sfa_secret and $sfa_secret!=""){
             return self::challenge();
@@ -165,7 +168,7 @@ class secondfaApp extends ExtApp {
         }
     }
 
-    public function checkChallenge($userid){
+    public static function checkChallenge($userid){
         global $langSFAfail;
         $sfa_secret = self::retrieveSecret($userid);
         if ($sfa_secret and $sfa_secret!=""){
@@ -189,19 +192,19 @@ class secondfaApp extends ExtApp {
 
     /* INITIALIZATION FUNCTIONS */
 
-    public function getUnitialize(){
+    public static function getUnitialize(){
         global $langSFAkeep,$langSFAremove;
         return "<select name='sfaremove' class='form-control'><option value='KEEP' selected>$langSFAkeep</option><option value='REMOVE'>$langSFAremove</option></select>";
     }
 
-    public function setUnitialize($userid){
+    public static function setUnitialize($userid){
         if(isset($_POST['sfaremove']) && !empty($_POST['sfaremove']) && $_POST['sfaremove']==='REMOVE'){
             self::storeSecret($userid, '');
         }
     }
 
-    public function getInitialize($userid,$company,$email){
-        global $langSFAadd, $langSFAremove, $langSFAScan, $langSFATypeWYS;
+    public static function getInitialize($userid,$company,$email){
+        global $langSFAadd, $langSFAremove, $langSFAScan, $langSFATypeWYS, $langSFAInsert;
         $keypack =  self::getsecondfa()->generateSecret($userid,$company,$email);
         if($keypack){
             $sfa_url = $keypack[0];
@@ -215,6 +218,10 @@ class secondfaApp extends ExtApp {
                     <table style='width:100%'>
                     <tr><p>$langSFAScan</p></tr>
                     <tr><img src='".$sfa_url."'/></tr>
+                    <tr><p>".$langSFAInsert."</p></tr>
+                    <div class=''>
+                        <input class='form-control' type='text' autocomplete='off' name='sfasecret' disabled=disabled value='" . q($sfa_secret) . "'/></tr>
+                    </div>
                     <tr><p>$langSFATypeWYS</p></tr>
                     <tr>
                     <div class=''>
@@ -228,7 +235,7 @@ class secondfaApp extends ExtApp {
         }
     }
 
-    public function setInitialize($userid){
+    public static function setInitialize($userid){
         global $langSFAfail;
         if(isset($_POST['sfaanswer']) && !empty($_POST['sfaanswer'])){
             $answer = $_POST['sfaanswer'];
@@ -255,11 +262,11 @@ class secondfaApp extends ExtApp {
 
     /* Challenge Responce Functions */ 
 
-    public function challenge(){
+    public static function challenge(){
         return "<input type='password' class='form-control'  autocomplete='off' name='sfaanswer' value=''/>";
     }
 
-    public function verify($userid, $sfa_secret){
+    public static function verify($userid, $sfa_secret){
         $status = 0;
         if(isset($_POST['sfaanswer']) && !empty($_POST['sfaanswer'])){
             $answer = $_POST['sfaanswer'];

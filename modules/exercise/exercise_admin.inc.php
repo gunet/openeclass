@@ -579,7 +579,20 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             $disp_results_message = $langAnswersDispEndDate;
             break;          
     }
-    $disp_score_message = ($displayScore == 1) ? $langScoreDisp : $langScoreNotDisp;
+    switch ($displayScore) {
+        case 0:
+            $disp_score_message = $langScoreNotDisp;
+            break;
+        case 1:
+            $disp_score_message = $langScoreDisp;
+            break;
+        case 3:
+            $disp_score_message = $langScoreDispLastAttempt;
+            break;
+        case 4:
+            $disp_score_message = $langScoreDispEndDate;
+            break;          
+    }    
     $exerciseDescription = standard_text_escape($exerciseDescription);
     $exerciseStartDate = $exerciseStartDate;
     $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];

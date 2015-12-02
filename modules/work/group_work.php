@@ -46,7 +46,7 @@ if (isset($_GET['submit'])) {
     show_assignments();
     draw($tool_content, 2);
 } elseif (isset($_POST['assign'])) {
-    submit_work($uid, $group_id, $_POST['assign'], $_POST['file']);
+    submit_work($uid, $group_id, $_POST['assign'], getDirectReference($_POST['file']));
     draw($tool_content, 2);
 } else {
     header("Location: index.php?course=$course_code");

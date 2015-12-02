@@ -276,6 +276,10 @@ $ebook_title = Database::get()->querySingle("SELECT title FROM ebook WHERE id = 
 $t->set_var('ebook_title', q($ebook_title));
 $t->set_var('ebook_title_short', q(ellipsize($ebook_title, 35)));
 
+if (get_config('ext_analytics_enabled') and $html_footer = get_config('ext_analytics_code')) {
+    $t->set_var('HTML_FOOTER', $html_footer);
+}
+
 $t->pparse('Output', 'page');
 
 /**

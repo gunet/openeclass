@@ -82,31 +82,30 @@ if ($is_editor or $is_tutor) {
                 $_POST[body_mail]\n\n$langSender: $sender->surname $sender->givenname <$sender->email>\n$langProfLesson\n
             </div>
         </div>";
+        $footer_html_topic_notify = "
+            <!-- Footer Section -->
+            <div id='mail-footer'>
+                <br>
+                <div>
+                    <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                </div>
+            </div>";
 
-        $html_topic_notify = $header_html_topic_notify.$body_html_topic_notify;
+        $html_topic_notify = $header_html_topic_notify.$body_html_topic_notify.$footer_html_topic_notify;
 
         $emailPlainBody = html2text($html_topic_notify);
 
         $req = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
         foreach ($req as $userid) {
             $email = Database::get()->querySingle("SELECT email FROM user WHERE id = $userid->user_id")->email;
-            if (get_user_email_notification($userid->user_id, $course_id)) {
-                $footer_html_topic_notify = "
-                <!-- Footer Section -->
-                <div id='mail-footer'>
-                    <br>
-                    <div>
-                        <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
-                    </div>
-                </div>";
-                $html_topic_notify .= $footer_html_topic_notify;
-                $emailPlainBody = html2text($html_topic_notify);
-                if (email_seems_valid($email) and ! send_mail_multipart($sender_name, $sender_email, '', $email, $emailsubject, $emailPlainBody, $html_topic_notify, $charset)) {
+            if (get_user_email_notification($userid->user_id, $course_id)) {            
+                if (email_seems_valid($email) and !send_mail_multipart($sender_name, $sender_email, '', $email, $emailsubject, $emailPlainBody, $html_topic_notify, $charset)) {
                     $tool_content .= "<h4>$langMailError</h4>";
                 }
             }
         }
-        // aldo send email to professor
+        
+        // also send email to professor
         send_mail_multipart($sender_name, $sender_email, '', $sender_email, $emailsubject, $emailPlainBody, $html_topic_notify, $charset);
         $tool_content .= "<div class='alert alert-success'>$langEmailSuccess<br>";
         $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";

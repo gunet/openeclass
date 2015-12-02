@@ -22,6 +22,10 @@
 define('UPGRADE', true);
 
 require_once '../include/baseTheme.php';
+require_once 'upgrade/functions.php';
+
+mkdir_or_error('storage');
+mkdir_or_error('storage/views');
 
 if ($urlAppend[strlen($urlAppend) - 1] != '/') {
     $urlAppend .= '/';

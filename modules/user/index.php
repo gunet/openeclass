@@ -27,6 +27,7 @@ $helpTopic = 'User';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
+require_once 'include/course_settings.php';
 
 //Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
@@ -356,21 +357,17 @@ if (get_config('opencourses_enable')) {
 }
 
 // show help link and link to Add new user, search new user and management page of groups
-//$log_course_user_requests = get_config('log_course_user_requests');
-$log_course_user_requests = FALSE;
 $num_requests = '';
-if ($log_course_user_requests) {
-    $num_requests = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id)->cnt;
+$course_user_requests = FALSE;
+if (course_status($course_id) == COURSE_CLOSED) {    
+    if (!setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) {
+        $num_requests = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id)->cnt;
+        $course_user_requests = TRUE;
+    }
 }
 
 $tool_content .= 
-        action_bar(array(
-            array('title' => "$num_requests $langsUserRequests",
-                  'url' => "course_user_requests.php?course=$course_code",
-                  'icon' => 'fa-plus-circle',
-                  'button-class' => 'btn-success',
-                  'level' => 'primary-label',
-                  'show' => $log_course_user_requests),
+        action_bar(array(            
             array('title' => $langOneUser,
                 'url' => "adduser.php?course=$course_code",
                 'icon' => 'fa-plus-circle',
@@ -385,6 +382,11 @@ $tool_content .=
                 'url' => "guestuser.php?course=$course_code",
                 'icon' => 'fa-plane',
                 'show' => get_config('course_guest') != 'off'),
+            array('title' => "$num_requests $langsUserRequests",
+                  'url' => "course_user_requests.php?course=$course_code",
+                  'icon' => 'fa-child',                  
+                  'level' => 'primary-label',
+                  'show' => $course_user_requests),
             array('title' => $langGroupUserManagement,
                 'url' => "../group/index.php?course=$course_code",
                 'icon' => 'fa-users'),

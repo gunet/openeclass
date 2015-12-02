@@ -4,11 +4,17 @@
         "hautelook/phpass": "0.3.*",
         "jasig/phpcas": "1.3.*",
         "pclzip/pclzip": "2.8.*",
+        "philo/laravel-blade": "3.*",
         "ezyang/htmlpurifier": "dev-master",
         "phpids/phpids": "dev-master",
         "pragmarx/google2fa":"dev-master",
         "hoa/ruler": "~1.0",
         "sabre/event": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Widgets\\": "Widgets"
+        }
     },
     "require-dev": {
         "phpunit/phpunit": "~4.8.0"

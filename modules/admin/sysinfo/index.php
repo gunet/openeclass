@@ -13,17 +13,15 @@
  * @version   SVN: $Id: index.php 687 2012-09-06 20:54:49Z namiltd $
  * @link      http://phpsysinfo.sourceforge.net
  */
- 
+
 // eclass specific
-$path2add = 3;
-require_once ('../../../include/init.php');
-if (!$is_admin) {
-    header("Location:" . $urlServer);
+if (!session_id()) {
+    session_start();
+}
+if (!isset($_SESSION['is_admin'])) {
+    echo "Not allowed!";
     exit;
 }
- 
- 
- 
 /**
  * define the application root path on the webserver
  * @var string

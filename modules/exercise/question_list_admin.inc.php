@@ -177,7 +177,7 @@ $head_content .= "
                 initAjaxSelect();
            
     });
-    $('[data-toggle=\"popover\"]').on('shown.bs.popover', function () {
+    $('.menu-popover').on('shown.bs.popover', function () {
         $('.warnLink').on('click', function(e){
               var modifyAllLink = $(this).attr('href');
               var modifyOneLink = modifyAllLink.concat('&clone=true');

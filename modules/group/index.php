@@ -55,7 +55,7 @@ unset($_SESSION['forum_id']);
 $user_groups = user_group_info($uid, $course_id);
 
 $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
-
+$student_desc = setting_get(SETTING_GROUP_STUDENT_DESCRIPTION, $course_id);
 //check if social bookmarking is enabled for this course
 $social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
 if (isset($_GET['socialview'])) {
@@ -103,6 +103,20 @@ if ($is_editor) {
             if (isset($_POST['group_name'])) {
                 $group_name = $_POST['group_name'];
             }
+            if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
+                    $has_forum = 1;
+            }
+            else $has_forum = 0;
+
+            if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
+                    $documents = 1;
+            }
+            else $documents = 0;
+
+            if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
+                    $wiki = 1;
+            }
+            else $wiki = 0;            
             $group_num = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `group` WHERE course_id = ?d", $course_id)->count;
 
             // Create a hidden category for group forums
@@ -173,7 +187,7 @@ if ($is_editor) {
                                                                     forum = ?d, private_forum = ?d, 
                                                                     documents = ?d, wiki = ?d, 
                                                                     agenda = ?d",
-                                                                $course_id, $id, 1, 0, 1, 0, 1, 0, 0);                
+                                                                $course_id, $id, 1, 0, 1, $has_forum, $documents, $wiki, 0);                
                 
                 /** ********Create Group Wiki*********** */
                 //Set ACL
@@ -457,6 +471,19 @@ if ($is_editor) {
 	$num_of_cat = count($cat);
 	$q = count(Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id));
         // groups list
+    if ($num_of_groups>0 || $num_of_cat>0) {
+        $head_content .= "
+                            <script>
+                            $(function(){
+                                $('#userFeedbacks').on('show.bs.modal', function (event) {
+                                  var button = $(event.relatedTarget) // Button that triggered the modal
+                                  var content = button.data('content') // Extract info from data-* attributes
+                                  var modal = $(this)
+                                  modal.find('.modal-body').html(content);
+                                })
+                            });
+                            </script>";
+    }
 	if ($num_of_groups==0 && $num_of_cat==0) {
             $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
         }
@@ -481,13 +508,14 @@ if ($is_editor) {
                   <th width='50'>$langMax</th>
                   <th class='text-center' style='width:45px;'>".icon('fa-gears', $langActions)."</th>
                 </tr>";
+
         foreach ($groupSelect as $group) {
             initialize_group_info($group->id);
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                     <br><p>$group_description</p>";
-            if ($user_group_description) {
-                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
+            if ($user_group_description && $student_desc) {
+                $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
             }
             $tool_content .= "</td><td class='center'>";
             foreach ($tutors as $t) {
@@ -525,7 +553,6 @@ if ($is_editor) {
                     <h4 class='modal-title' id='myModalLabel'>$langCommentsUser</h4>
                   </div>
                   <div class='modal-body'>
-                    $user_group_description
                   </div>
                 </div>
               </div>
@@ -569,12 +596,14 @@ if ($is_editor) {
                 $tool_content .= q($group_name);
             }
             $tool_content .= "<br><em>$group_description</em><br>";
-            if ($user_group_description) {
-                $tool_content .= "<br><span class='small'><i>$user_group_description</i></span>&nbsp;&nbsp;" .
-                        icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
-                        icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
-            } elseif ($is_member) {
-                $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
+            if ($student_desc) {
+                if ($user_group_description) {
+                    $tool_content .= "<br><span class='small'><i>$user_group_description</i></span>&nbsp;&nbsp;" .
+                            icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
+                            icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
+                } elseif ($is_member) {
+                    $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
+                }
             }
             $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>";
@@ -612,7 +641,7 @@ if ($is_editor) {
             if (isset($urlview) and abs($urlview) == 0) {
                 $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $showall)."</a>";
             } else {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-plus-square-o', $shownone)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $shownone)."</a>";
             }
         }
         $tool_content .= "</div>
@@ -637,8 +666,9 @@ if ($is_editor) {
             if ((isset($urlview[$i]) and $urlview[$i] == '1')) {
                 $newurlview = $urlview;
                 $newurlview[$i] = '0';
-                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link' colspan='4'>".icon('fa-plus-square-o', $shownone)."&nbsp;
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>" . q($myrow->name) . "</a>";
+                $tool_content .= "<tr class='link-subcategory-title'>
+                                    <th class = 'text-left category-link' colspan='4'>
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>".icon('fa-minus-square-o', $shownone)."&nbsp;&nbsp;". q($myrow->name) . "</a>";
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span></th>";
                 } else {
@@ -663,10 +693,12 @@ if ($is_editor) {
                 }
 
             } else {
-                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link' colspan='4'>".icon('fa-plus-square', $showall)
-                    . "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
+                $tool_content .= "
+                        <tr class='link-subcategory-title'>
+                            <th class = 'text-left category-link' colspan='4'>&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
                 $tool_content .= is_array($view) ? implode('', $view) : $view;
-                $tool_content .= "' class='open-category'>" . q($myrow->name) . "</a>";
+                $tool_content .= "' class='open-category'>".icon('fa-plus-square', $showall)
+                    . "&nbsp;&nbsp;" . q($myrow->name) . "</a>";
                 $description = standard_text_escape($myrow->description);
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span</th>";

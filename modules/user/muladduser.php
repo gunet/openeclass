@@ -84,7 +84,6 @@ if (isset($_POST['submit'])) {
     }
 }
 
-
 $tool_content .= "<div class='alert alert-info'>$langAskManyUsers</div>
         <div class='form-wrapper'>
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
@@ -102,7 +101,7 @@ $tool_content .= "<div class='alert alert-info'>$langAskManyUsers</div>
         </fieldset>
         ". generate_csrf_token_form_field() ."  
         </form>
-        </div";
+        </div>";
 
 draw($tool_content, 2);
 
@@ -138,6 +137,12 @@ function adduser($userid, $cid) {
         Database::get()->query("INSERT INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
                                    VALUES (?d, ?d, " . USER_STUDENT . ", " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). " )", $userid, $cid);
 
+        $r = Database::get()->queryArray("SELECT id FROM course_user_request WHERE uid = ?d AND course_id = ?d", $userid, $cid);
+        if ($r) { // close course user request (if any)
+            foreach ($r as $req) {
+                Database::get()->query("UPDATE course_user_request SET status = 2 WHERE id = ?d", $req->id);
+            }
+        }
         Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array('uid' => $userid,
                                                              'right' => '+5'));
         return true;

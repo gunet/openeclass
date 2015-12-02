@@ -37,7 +37,7 @@ $appName = isset($_GET['edit'])? $_GET['edit']: null;
 // Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page
 if (isset($_POST['state'])) {
     $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
-    $appNameAjax = $_POST['appName'];
+    $appNameAjax = getDirectReference($_POST['appName']);
     ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
 
     echo $newState;
@@ -48,6 +48,7 @@ if ($appName) {
     $app = ExtAppManager::getApp($appName);
 
     if (isset($_POST['submit'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if ($_POST['submit'] == 'clear') {
             foreach ($app->getParams() as $param) {
                 $param->setValue('');
@@ -87,6 +88,12 @@ if ($appName) {
                 $boolean_field .= "        <div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>\n";
                 $boolean_field .= "          <label><input type='checkbox' name='" . $param->name() . "' $checked>" . $param->display() . "</label>";
                 $boolean_field .= "        </div></div></div>\n";
+            } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
+                $tool_content .= "        <div class='form-group'>\n";
+                $tool_content .= "          <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
+                $tool_content .= "          <div class='col-sm-10'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
+                                                q($param->value()) . "</textarea></div>";
+                $tool_content .= "        </div>\n";
             } else {
                 $tool_content .= "        <div class='form-group'>\n";
                 $tool_content .= "          <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
@@ -101,7 +108,7 @@ if ($appName) {
     $tool_content .= "                  <button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>";
         $tool_content .= "              </div>\n";
         $tool_content .= "          </div>\n";
-        $tool_content .= "      </fieldset>\n";
+        $tool_content .= "      </fieldset>". generate_csrf_token_form_field() ."\n";
         $tool_content .= "    </form>\n</div>\n</div>\n</div>\n";
         //$tool_content .= "<p>".$app->getLongDescription()."</p>";
 } else {
@@ -124,9 +131,9 @@ if ($appName) {
             $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
         }
         if ($app->isConfigured()){
-            $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-off\"></i></button>";
+            $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"".getIndirectReference($app->getName()) . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . getIndirectReference($app->getName()) . "\"> <i class=\"fa fa-toggle-off\"></i></button>";
         } else {
-            $app_active = "<button type=\"button\" class=\"btn btn-default\" data-app=\"" . $app->getName() . "\"  data-toggle='modal' data-target='#noSettings'> <i class=\"fa fa-warning\"></i> </button>";
+            $app_active = "<button type=\"button\" class=\"btn btn-default\" data-app=\"".getIndirectReference($app->getName()) . "\"  data-toggle='modal' data-target='#noSettings'> <i class=\"fa fa-warning\"></i> </button>";
         }
         $tool_content .= $app->getDisplayName() . "</a></div></td>\n";
 

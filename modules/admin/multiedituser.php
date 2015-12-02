@@ -40,10 +40,11 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['months'])) {
         $months = intval($_POST['months']);
     } elseif (isset($_POST['department'])) {
-        $dest_dep = $_POST['department'][0];
+        $dest_dep = arrayValuesDirect($_POST['department'])[0];
         $old_dep = $_POST['old_dep'];
     }
 
@@ -105,6 +106,7 @@ if (isset($_POST['submit'])) {
     $usernames = '';
 
     if (isset($_POST['dellall_submit']) or isset($_POST['activate_submit']) or isset($_POST['move_submit'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         // get the incoming values
         $search = isset($_POST['search']) ? $_POST['search'] : '';
         $c = isset($_POST['c']) ? intval($_POST['c']) : '';
@@ -186,7 +188,7 @@ if (isset($_POST['submit'])) {
 
         // Department search
         $depqryadd = '';
-        $dep = (isset($_POST['department'])) ? intval($_POST['department']) : 0;
+        $dep = (isset($_POST['department'])) ? intval(getDirectReference($_POST['department'])) : 0;
         if ($dep || isDepartmentAdmin()) {
             $depqryadd = ', user_department';
 
@@ -268,7 +270,7 @@ if (isset($_POST['submit'])) {
             $nodePickerParams['allowables'] = $user->getDepartmentIds($uid);
         }
         load_js('jstree3');
-        list($js, $html) = $tree->buildUserNodePicker($nodePickerParams);
+        list($js, $html) = $tree->buildUserNodePickerIndirect($nodePickerParams);
         $head_content .= $js;
         $infoText = sprintf($langMoveUserInfo, '<b>' . q($tree->getNodeName($dep)) . '</b>');
         $monthsField = "
@@ -302,6 +304,7 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
             </fieldset>
+            ". generate_csrf_token_form_field() ."
         </form>
     </div>";
 }

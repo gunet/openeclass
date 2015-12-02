@@ -110,42 +110,22 @@ $head_content .= <<<hContent
             autoclose: true
         }).on('changeDate', function(e){
             var date2 = $('input[name=start_date]').datepicker('getDate');
-            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
-                date2.setDate(date2.getDate() + 7);
-                $('input[name=finish_date]').datepicker('setDate', date2);
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }else{
-                $('input[name=finish_date]').datepicker('setStartDate', date2);
-            }
+            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){              
+                $('input[name=finish_date]').datepicker('setDate', date2);                
+            }            
         });
         
         $('input[name=finish_date]').datepicker({
             format: 'yyyy-mm-dd',
-            autoclose: true
+            autoclose: true,            
+            startDate: $('input[name=start_date]').datepicker('getDate')
         }).on('changeDate', function(e){
-            var dt1 = $('input[name=start_date]').datepicker('getDate');
-            var dt2 = $('input[name=finish_date]').datepicker('getDate');
-            if (dt2 <= dt1) {
-                var minDate = $('input[name=finish_date]').datepicker('startDate');
-                $('input[name=finish_date]').datepicker('setDate', minDate);
-            }            
+           var date1 = $('input[name=start_date]').datepicker('getDate');           
+            if($('input[name=finish_date]').datepicker('getDate')<$('input[name=start_date]').datepicker('getDate')){
+                $('input[name=finish_date]').datepicker('setStartDate', date1);
+            }           
         });
-        
-        if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=start_date]').datepicker('setDate', new Date());
-            var date2 = $('input[name=start_date]').datepicker('getDate');
-            date2.setDate(date2.getDate() + 7);
-            $('input[name=finish_date]').datepicker('setDate', date2);
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }else{
-            var date2 = $('input[name=finish_date]').datepicker('getDate');
-            $('input[name=finish_date]').datepicker('setStartDate', date2);
-        }
-        
-        if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
-            $('input[name=finish_date]').datepicker("setDate", 7);
-        }
-        
+                        
         $('#weeklyDates').hide();
         
         $('input[name=view_type]').change(function () {
@@ -235,7 +215,7 @@ if (isset($_POST['submit'])) {
         }
 
         // validate departments
-        $departments = isset($_POST['department']) ? $_POST['department'] : array();
+        $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
         $deps_valid = true;
         foreach ($departments as $dep) {
             if ($depadmin_mode && !in_array($dep, $allowables)) {
@@ -381,7 +361,9 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['ar_radio'])) {
                 setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);
             }
-            
+            if (isset($_POST['disable_log_course_user_requests'])) {
+                setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, $_POST['disable_log_course_user_requests'], $course_id);
+            }
             if ($noWeeklyMessage) {
                 Session::Messages($langCourseWeeklyFormatNotice);
             } else {
@@ -459,7 +441,14 @@ if (isset($_POST['submit'])) {
             $cc_license[$id] = $l_info['title'];
         }
     }
-
+    // options about logging course user requests
+    if (course_status($course_id) != COURSE_CLOSED) {
+        $log_course_user_requests_inactive = ' disabled';
+        $log_course_user_requests_dis = $langCourseUserRequestsDisabled;
+    } else {
+        $log_course_user_requests_inactive = '';
+        $log_course_user_requests_dis = '';
+    }
     //Sharing options    
     if (!is_sharing_allowed($course_id)) {
         $sharing_radio_dis = ' disabled';
@@ -520,7 +509,15 @@ if (isset($_POST['submit'])) {
     } else {
         $checkAbuseReportDis = "checked ";
         $checkAbuseReportEn = "";
-    }    
+    }
+    // LOG COURSE USER REQUESTS
+    if (setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id) == 1) {
+        $log_course_user_requests_disable = "checked";
+        $log_course_user_requests_enable = "";
+    } else {
+        $log_course_user_requests_disable = "";
+        $log_course_user_requests_enable = "checked";
+    }
     $tool_content .= "<div class='form-wrapper'>
 	<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
 	<fieldset>
@@ -546,9 +543,9 @@ if (isset($_POST['submit'])) {
 	    <label for='Faculty' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";
         if ($depadmin_mode) {
-            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
+            list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
         } else {
-            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id)));
+            list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($c->id)));
         }
         $head_content .= $js;
         $tool_content .= $html;
@@ -630,28 +627,32 @@ if (isset($_POST['submit'])) {
                     <div class='radio'>
                       <label>
                         <input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2]>
-                        <img src='$themeimg/lock_open.png' alt='$langOpenCourse' title='$langOpenCourse' width='16'>&nbsp;$langOpenCourse
+                        <span class='fa fa-unlock fa-fw' style='font-size:23px;'></span>&nbsp;$langOpenCourse
                         <span class='help-block'><small>$langPublic</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1]>
-                        <img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16'>&nbsp;$m[legrestricted]
+                        <span class='fa fa-lock fa-fw'  style='font-size:23px;'>
+                                <span class='fa fa-pencil text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
+                            </span>&nbsp;$m[legrestricted]
                         <span class='help-block'><small>$langPrivOpen</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='courseclose' type='radio' name='formvisible' value='0' $visibleChecked[0] $disabledVisibility>
-                        <img src='$themeimg/lock_closed.png' alt='$langClosedCourse' title='$langClosedCourse' width='16'>&nbsp;$langClosedCourse
+                        <span class='fa fa-lock fa-fw' style='font-size:23px;'></span>&nbsp;$langClosedCourse
                         <span class='help-block'><small>$langClosedCourseShort</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input id='courseinactive' type='radio' name='formvisible' value='3' $visibleChecked[3] $disabledVisibility>
-                        <img src='$themeimg/lock_inactive.png' alt='$langInactiveCourse' title='$langInactiveCourse' width='16'>&nbsp;$langInactiveCourse
+                            <span class='fa fa-lock fa-fw' style='font-size:23px;'>
+                                <span class='fa fa-times text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
+                            </span>&nbsp;$langInactiveCourse
                         <span class='help-block'><small>$langCourseInactiveShort</small></span>
                       </label>
                     </div>                   
@@ -662,11 +663,27 @@ if (isset($_POST['submit'])) {
                 <div class='col-sm-10'>
                       <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
                 </div>
-            </div>            
+            </div>                        
 	    <div class='form-group'>
                 <label for='Options' class='col-sm-2 control-label'>$langLanguage:</label>
                 <div class='col-sm-10'>" . lang_select_options('localize', 'class="form-control"') . "</div>	        
 	    </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langCourseUserRequests:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='0' name='disable_log_course_user_requests' $log_course_user_requests_enable $log_course_user_requests_inactive> $langActivate
+                            <span class='help-block'><small>$log_course_user_requests_dis</small></span>
+                      </label>
+                    </div>
+                      <label>
+                            <input type='radio' value='1' name='disable_log_course_user_requests' $log_course_user_requests_disable $log_course_user_requests_inactive> $langDeactivate
+                      </label>
+                    </div>                    
+                </div>
+            </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseSharing:</label>
                 <div class='col-sm-10'>
@@ -678,7 +695,7 @@ if (isset($_POST['submit'])) {
                     <div class='radio'>
                       <label>
                             <input type='radio' value='0' name='s_radio' $checkSharingDis $sharing_radio_dis> $langSharingDis
-                            <span class='help-block'><small>$sharing_dis_label</small></span>                                
+                            <span class='help-block'><small>$sharing_dis_label</small></span>
                       </label>
                     </div>                  
                 </div>                    

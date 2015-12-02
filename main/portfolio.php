@@ -143,58 +143,63 @@ $tool_content .= "
         <div id='my-courses' class='col-md-7'>
             <div class='row'>
                 <div class='col-md-12'>
-                    <h2 class='content-title'>{%LANG_MY_PERSO_LESSONS%}</h2>
+                    <h2 class='content-title'>".trans('langMyCourses')."</h2>
                     <div class='panel'>
                         <div class='panel-body'>
-                            {%LESSON_CONTENT%}                        
+                            $perso_tool_content[lessons_content]                       
                         </div>
                     </div>
                 </div>
             </div>
             <div class='row'>
-            <div class='col-md-12 my-announcement-list'>
-                <h2 class='content-title'>{%LANG_MY_PERSO_ANNOUNCEMENTS%}</h2>
-                <div class='panel'>
-                    <div class='panel-body'>
-                        <ul class='tablelist'>";
-                            if(!empty($user_announcements)){
-                                $tool_content.=$user_announcements;
-                            }else{
-                                $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langNoRecentAnnounce - </div></li>";
-                            }
-                            $tool_content.="</ul>
-                    </div>
-                    <div class='panel-footer clearfix'>
-                        <div class='pull-right'><a href='../modules/announcements/myannouncements.php'><small>$langMore&hellip;</small></a></div>
+                <div class='col-md-12 my-announcement-list'>
+                    <h2 class='content-title'>".trans('langMyPersoAnnouncements')."</h2>
+                    <div class='panel'>
+                        <div class='panel-body'>
+                            <ul class='tablelist'>";
+                                if(!empty($user_announcements)){
+                                    $tool_content.=$user_announcements;
+                                }else{
+                                    $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langNoRecentAnnounce - </div></li>";
+                                }
+                                $tool_content.="</ul>
+                        </div>
+                        <div class='panel-footer clearfix'>
+                            <div class='pull-right'><a href='../modules/announcements/myannouncements.php'><small>$langMore&hellip;</small></a></div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div>";
+        $portfolio_page_main = new \Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
+        foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }        
+$tool_content .= "            
         </div>
-    </div>
     <div class='col-md-5'>
         <div class='row'>
             <div class='col-md-12'>
-                <h2 class='content-title'>{%LANG_MY_PERSONAL_CALENDAR%}</h2>
+                <h2 class='content-title'>".trans('langMyAgenda')."</h2>
                 <div class='panel'>
                     <div class='panel-body'>
-                        {%PERSONAL_CALENDAR_CONTENT%}
+                        $perso_tool_content[personal_calendar_content]
                     </div>
                     <div class='panel-footer'>
                         <div class='row'>
                             <div class='col-sm-6 event-legend'>
                                 <div>
-                                    <span class='event event-important'></span><span>$langAgendaDueDay</span>
+                                    <span class='event event-important'></span><span>".trans('langAgendaDueDay')."</span>
                                 </div>
                                 <div>
-                                    <span class='event event-info'></span><span>$langAgendaCourseEvent</span>
+                                    <span class='event event-info'></span><span>".trans('langAgendaCourseEvent')."</span>
                                 </div>
                             </div>
                             <div class='col-sm-6 event-legend'>
                                 <div>
-                                    <span class='event event-success'></span><span>$langAgendaSystemEvent</span>
+                                    <span class='event event-success'></span><span>".trans('langAgendaSystemEvent')."</span>
                                 </div>
                                 <div>
-                                    <span class='event event-special'></span><span>$langAgendaPersonalEvent</span>
+                                    <span class='event event-special'></span><span>".trans('langAgendaPersonalEvent')."</span>
                                 </div>
                             </div>
                         </div>
@@ -203,24 +208,29 @@ $tool_content .= "
             </div>
         </div>
         <div class='row'>
-                <div class='col-md-12 my-messages-list'>
-                    <h2 class='content-title'>$langMyPersoMessages</h2>
-                    <div class='panel'>
-                        <div class='panel-body'>
-                            <ul class='tablelist'>";
-                            if(!empty($user_messages)){
-                                $tool_content.=$user_messages;
-                            }else{
-                                $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langDropboxNoMessage- </div></li>";
-                            }
-                            $tool_content.="</ul>
-                        </div>
-                        <div class='panel-footer clearfix'>
-                            <div class='pull-right'><a href='{$urlAppend}modules/dropbox/'><small>$langMore&hellip;</small></a></div>
-                        </div>
+            <div class='col-md-12 my-messages-list'>
+                <h2 class='content-title'>$langMyPersoMessages</h2>
+                <div class='panel'>
+                    <div class='panel-body'>
+                        <ul class='tablelist'>";
+                        if(!empty($user_messages)){
+                            $tool_content.=$user_messages;
+                        }else{
+                            $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langDropboxNoMessage- </div></li>";
+                        }
+                        $tool_content.="</ul>
+                    </div>
+                    <div class='panel-footer clearfix'>
+                        <div class='pull-right'><a href='{$urlAppend}modules/dropbox/'><small>$langMore&hellip;</small></a></div>
                     </div>
                 </div>
             </div>
+        </div>";
+        $portfolio_page_sidebar = new \Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
+        foreach ($portfolio_page_sidebar->getUserAndAdminWidgets($uid) as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }
+$tool_content .= "        
     </div>";
 
 $userdata = Database::get()->querySingle("SELECT surname, givenname, username, email, status, phone, am, registered_at,
@@ -269,10 +279,14 @@ $tool_content .= "
                               <span class='badge'>$student_courses_count</span>
                               <span class='text-muted'>$langSumCoursesEnrolled</span>
                             </li>
-                            <li class='list-group-item'>
-                              <span class='badge'>$teacher_courses_count</span>
-                              <span class='text-muted'>$langSumCoursesSupport</span>
-                            </li>
+                            ";
+                            if( !$is_editor && $teacher_courses_count>0 ) {
+                                $tool_content .= "<li class='list-group-item'>
+                                                    <span class='badge'>$teacher_courses_count</span>
+                                                    <span class='text-muted'>$langSumCoursesSupport</span>
+                                                    </li>";
+                            }
+                            $tool_content .= "
                         </ul>
                         <div class='pull-right'><a href='".$urlServer."main/profile/password.php'><small>$langProfileQuickPassword</small></a></div>
                     </div>

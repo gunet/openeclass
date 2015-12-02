@@ -34,7 +34,7 @@ require_once 'imsqtilib.php';
 $head_content .= "
 <script>
 $(function() {
-    $('[data-toggle=\"popover\"]').on('shown.bs.popover', function () {
+    $('.menu-popover').on('shown.bs.popover', function () {
           $('.warnLink').click( function(e){
                 var modifyAllLink = $(this).attr('href');
                 var modifyOneLink = modifyAllLink.concat('&clone=true');

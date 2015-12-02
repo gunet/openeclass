@@ -190,7 +190,7 @@ if(count($res)>0){
                                         <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
                                         <h4 class='modal-title' id='myModalLabel'>" . q($row->title) . "</h4>
                                     </div>
-                                    <div class='modal-body'>".
+                                    <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".
                                       standard_text_escape($row->comments)
                                     ."</div>
                                     <div class='modal-footer'>";
@@ -215,8 +215,8 @@ if ($course_info->description) {
     $description = standard_text_escape($course_info->description);
 
     // Text button for read more & read less
-    $postfix_truncate_more = "<a href='#' class='more_less_btn'>$langReadMore</a>";
-    $postfix_truncate_less = "<a href='#' class='more_less_btn'>$langReadLess</a>";
+    $postfix_truncate_more = "<a href='#' class='more_less_btn'>$langReadMore &nbsp;<span class='fa fa-arrow-down'></span></a>";
+    $postfix_truncate_less = "<a href='#' class='more_less_btn'>$langReadLess &nbsp;<span class='fa fa-arrow-up'></span></a>";
 
     // Create full description text & truncated text
     $full_description = $description.$postfix_truncate_less;
@@ -462,21 +462,24 @@ if (isset($level) && !empty($level)) {
 </script>";
     $opencourses_level = "
     <div class='row'>
-        <div class='col-md-4'>
-            <img src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
+        <div class='col-xs-4'>
+            <img class='img-responsive center-block' src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
         </div>
-        <div class='col-md-8 margin-top-thin'>
-            ${langOpenCoursesLevel}: $level
+        <div class='col-xs-8'>
+            <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>${langOpenCoursesLevel}: $level</div>
+            <p class='not_visible'>
+            <small>$langVisitsShort : &nbsp;$visitsopencourses</small>
             <br />
-            <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata " .
-            icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");") . "</small>
-            <br />
-            <small>$langVisits: $visitsopencourses</small>
-            <br />
-            <small>$langHits: $hitsopencourses</small>
+            <small>$langHitsShort : &nbsp;$hitsopencourses</small>
+            </p>
         </div>
     </div>
 ";
+    $opencourses_level_footer = "<div class='row'>
+        <div class='col-xs-12 text-right'>
+            <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata</a>".icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");")."</small>
+        </div>
+    </div>";
 }
 
 // display `contact teacher via email` link if teacher actually receives email from his course
@@ -512,19 +515,13 @@ if ($course_info->home_layout == 3) {
     $left_column = '';
     $main_content_cols = '';
 } else {
-   $left_column = "
-            <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>"; 
-   if ($course_info->home_layout == 1) {       
-       $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . rawurlencode($course_info->course_image) : "$themeimg/ph1.jpg";
-       $left_column .= "
-                <div>
-                    <img class='banner-image img-responsive' src='$course_image_url'/>
-                </div>
-                ";
-   }
-    $left_column .= "
-
-            </div>";
+    $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . rawurlencode($course_info->course_image) : "$themeimg/ph1.jpg";
+    $left_column = "
+        <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
+            <div>
+                <img class='banner-image img-responsive' src='$course_image_url'/>
+            </div>
+        </div>";
    $main_content_cols = 'col-sm-7';
 }
 $edit_link = "";
@@ -611,7 +608,7 @@ if ($is_editor) {
                 if (!empty($cu->title)) {
                     $cwtitle = "" . q($cu->title) . " ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";                    
                 } else {
-                    $cwtitle = "$count_index$langOr $langsWeek ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")"; 
+                    $cwtitle = "$count_index$langor $langsWeek ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")"; 
                 }                
                 $href = "<a class = '$class_vis' href='${urlServer}modules/weeks/?course=$course_code&amp;id=$cu->id&amp;cnt=$count_index'>$cwtitle</a>";
             } else {
@@ -711,6 +708,10 @@ if (!$alter_layout) {
         $tool_content .= "<div class='row boxlist no-list'>
             $cunits_content
         </div>";
+        $course_home_page_main = new \Widgets\WidgetArea(COURSE_HOME_PAGE_MAIN);
+        foreach ($course_home_page_main->getCourseAndAdminWidgets($course_id) as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }                    
     $tool_content .= "</div>";
 }
 
@@ -735,11 +736,15 @@ $tool_content .="<div class='row'>";
                             <div class='panel-body'>
                                 $opencourses_level
                             </div>
+                            <div class='panel-footer'>
+                                $opencourses_level_footer
+                            </div>
                         </div>
                     </div>
                 ";
             }
-                $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
+                $tool_content .= "
+                <div class='col-md-$cunits_sidebar_subcolumns'>
                     <h3 class='content-title'>$langCalendar</h3>
                     <div class='panel'>
                         <div class='panel-body'>
@@ -768,20 +773,27 @@ $tool_content .="<div class='row'>";
                     </div>
                 </div>
                 <div class='col-md-$cunits_sidebar_subcolumns'>
-                                <h3 class='content-title'>$langAnnouncements</h3>
-                                <div class='panel'>
-                                    <div class='panel-body'>
-                                        <ul class='tablelist'>" . course_announcements() . "
-                                        </ul>
-                                    </div>
-                                    <div class='panel-footer clearfix'>
-                                        <div class='pull-right'><a href='{$urlAppend}modules/announcements/?course=$course_code'><small>$langMore&hellip;</small></a></div>
-                                    </div>
-                                </div>
-                            </div>
-                       </div>
-                       </div>
-                </div>";
+                    <h3 class='content-title'>$langAnnouncements</h3>
+                    <div class='panel'>
+                        <div class='panel-body'>
+                            <ul class='tablelist'>" . course_announcements() . "
+                            </ul>
+                        </div>
+                        <div class='panel-footer clearfix'>
+                            <div class='pull-right'><a href='{$urlAppend}modules/announcements/?course=$course_code'><small>$langMore&hellip;</small></a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-$cunits_sidebar_subcolumns'>";
+        $course_home_page_sidebar = new \Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
+        foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }                              
+$tool_content .= "
+                </div>
+            </div>
+        </div>
+    </div>";
 
 draw($tool_content, 2, null, $head_content);
 

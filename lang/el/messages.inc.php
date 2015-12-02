@@ -62,6 +62,7 @@ $langOfUser = "χρήστη";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
 $langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
+$langOfCourse = "μαθήματος";
 
 /* * ******************************************
  * addadmin.php
@@ -148,6 +149,7 @@ $langLastStudNone = "Δεν υπάρχουν εγγραφές";
 $langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρμα:";
 $langAfterLastLoginInfo = "Στοιχεία μετά την τελευταία σας είσοδο:";
 $langOtherActions = "Άλλες Ενέργειες";
+$langOtherStats = "Άλλα στοιχεία";
 $langTutorialDesc = "Επίσης, στον παρακάτω σύνδεσμο, θα βρείτε χρήσιμους οδηγούς λειτουργίας και διαχείρισης της πλατφόρμας Open eClass με πρακτικά παραδείγματα που διευκολύνουν τόσο τους εκπαιδευτές και τους εκπαιδευόμενους όσο και τους υπεύθυνους διαχειριστές. Οι οδηγοί αυτοί είναι διαθέσιμοι σε 3 διαφορετικές μορφές: α) εικονογραφημένοι οδηγοί, β) βιντεοπαρουσιάσεις και γ) SCORM Packages.";
 $langTeacherTutorials = "Χρήσιμοι Οδηγοί $langsOfTeacher";
 $langStudentTutorials = "Χρήσιμοι Οδηγοί $langsOfStudent";
@@ -304,7 +306,6 @@ $langCourseInfo = "Ρυθμίσεις";
 $langCourseImage = "Φωτογραφία Μαθήματος";
 $langCourseLayout = "Διάταξη";
 $langCourseLayout1 = "2 Στήλες, Με Εικόνα (προεπιλογή)";
-$langCourseLayout2 = "2 Στήλες, Χωρίς Εικόνα";
 $langCourseLayout3 = "Πλήρες Πλάτος";
 $langQuota = "Όρια αποθηκευτικού χώρου";
 $langCourseStatus = "Κατάσταση Μαθήματος";
@@ -342,6 +343,7 @@ $langReqHaveClosed = "Αιτήσεις που έχουν κλείσει";
 $langReqHaveBlocked = "Αιτήσεις που έχουν απορριφθεί";
 $langReqHaveFinished = "Αιτήσεις που έχουν ολοκληρωθεί";
 $langemailsubjectBlocked = "Απόρριψη αίτησης εγγραφής στην Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης";
+$langCourseUserRequestReject = "Απόρριψη αίτησης εγγραφής";
 $langemailbodyBlocked = "Η αίτησή σας για εγγραφή στην πλατφόρμα " . $siteName . " απορρίφθηκε.";
 $langCloseConf = "Επιβεβαίωση κλεισίματος αίτησης";
 $langReintroductionApplication = "Η επαναφορά της αίτησης ολοκληρώθηκε με επιτυχία!";
@@ -727,6 +729,7 @@ $langTotalResults = "συνολικά αποτελέσματα";
 $langDisplayed = "Εμφανίζονται";
 $langTill = "έως";
 $langAnnouncementActivePeriod = "Διάστημα εμφάνισης";
+$langAnnHasPublished = "Έχει δημοσιευθεί ανακοίνωση στο μάθημα";
 
 /* * *****************************************
  * archive_course.php
@@ -841,6 +844,9 @@ $langSaveChat = "Αποθήκευση κουβέντας";
 $langSaveMessage = "Η κουβέντα αποθηκεύθηκε στα Έγγραφα";
 $langSaveErrorMessage = "Η κουβέντα δεν μπόρεσε να αποθηκευθεί";
 $langNoGuest = "Οι χρήστες-επισκέπτες δεν μπορούν να χρησιμοποιήσουν το υποσύστημα 'Κουβέντα' !";
+$langChatDeleted ="Η διαγραφή της κουβέντας πραγματοποιήθηκε";
+$langNoChatAvailable = "Δεν υπάρχουν διαθέσιμες \"Κουβεντούλες\"";
+$langChatActive = "Ενεργή Κουβεντούλα";
 
 /* * ***************************************************************
  * copyright.php
@@ -934,7 +940,9 @@ $langForbidden = "Μη επιτρεπτή ενέργεια";
 $langConfTip = "Επιλέξτε τον τύπο πρόσβασης του μαθήματος από τους χρήστες.";
 $langOptPassword = "Προαιρετικό συνθηματικό";
 $langNoCourseTitle = "Δεν πληκτρολογήσατε τον τίτλο του μαθήματος";
-$langCourseWeeklyFormatNotice = "Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστο ημερομηνία έναρξης μαθήματος";
+$langCourseWeeklyFormatNotice = "Για εβδομαδιαία απεικόνιση πρέπει να επιλέξετε τουλάχιστον την ημερομηνία έναρξης μαθήματος";
+$langCourseUserRequests = "Αιτήσεις εγγραφής χρηστών στο μάθημα";
+$langCourseUserRequestsDisabled = "Αιτήσεις εγγραφής χρηστών δεν υπάρχουν για τα μη κλειστά μαθήματα.";
 
 // delete_course.php
 $langModifGroups = "Ομάδες Εργασίας";
@@ -986,6 +994,9 @@ $langTemporarySaveNotice = "Έχετε αποθηκεύσει προσωρινά
 $langTemporarySaveNotice2 = "Υπάρχει μια προσωρινά αποθηκευμένη προσπάθεια προς ολοκλήρωση η οποια θα εκτελεστεί αν συνεχίσετε. Θέλετε να συνεχίσετε?";
 $langPendingExercise = "Υπάρχουν υποβολές προς βαθμολόγηση στην άσκηση";
 $langAttemptWasCanceled = "Η προσπάθεια ακυρώθηκε.";
+$langExerciseAttemptLeft = 'Προσοχή! Σας απομένει μία προσπάθεια.';
+$langExerciseAttemptsLeft = 'Προσοχή! Σας απομένουν %d προσπάθειες.';
+$langExerciseAttemptContinue = 'Πατώντας στο κουμπί «Συνέχεια» η προσπάθειά σας θα καταγραφεί.';
 /* * ***************************************************
  * contact.php
  * **************************************************** */
@@ -996,23 +1007,23 @@ $langEmailEmpty = "Η διεύθυνση ηλεκτρονικού ταχυδρο
 διεύθυνσή σας από την επιλογή <a href='%s'>«Αλλαγή του προφίλ μου»</a> στη
 σελίδα του χαρτοφυλακίου σας.";
 
-$langEmptyMessage = "Αφήσατε το κείμενο του μηνύματος κενό. Το μήνυμα δε στάλθηκε";
+$langEmptyMessage = "Αφήσατε το κείμενο της αίτησης κενό. Η αίτηση δε στάλθηκε.";
 $langSendMessage = "Αποστολή μηνύματος";
 $langContactMessage = "Πληκτρολογήστε το κείμενο του μηνύματός σας. Αυτό θα σταλεί μεσω email στους υπεύθυνους $langsTeachers του μαθήματος.";
-$langSendingMessage = "Το μήνυμά σας στάλθηκε στους εκπαιδευτές του μαθήματος:";
-$langErrorSendingMessage = "Σφάλμα αποστολής! Το μήνυμα δε στάλθηκε.";
-$langContactIntro = "Ο χρήστης της πλατφόρμας $siteName με όνομα %s (<%s>) σας έστειλε
-το παρακάτω μήνυμα.";
-$langContactIntroFooter = "Αν απαντήσετε, η απάντησή σας θα σταλεί στον παραπάνω χρήστη";
+$langSendingMessage = "Η αίτηση στάλθηκε στους $langsTeachers του μαθήματος:";
+$langErrorSendingMessage = "Σφάλμα αποστολής! Η αίτηση δε στάλθηκε.";
+$langContactIntro = "Ο χρήστης της πλατφόρμας $siteName με όνομα %s (<%s>) σας έστειλε την παρακάτω αίτηση εγγραφής.";
+$langContactIntroFooter = "Για να διαχειριστείτε τις αιτήσεις εγγραφής στο μάθημα κάντε κλικ ";
 
 $langNonUserContact = "Για να επικοινωνήσετε με τους υπεύθυνους $langsTeachers
 του μαθήματος, θα πρέπει να έχετε λογαριασμό στο σύστημα και
 να έχετε συνδεθεί. Παρακαλούμε επισκεφθείτε την <a href='%s'>αρχική σελίδα</a>.";
 $langIntroMessage = "Σύνταξη μηνύματος";
-$langHeaderMessage = "Μήνυμα από $langsstudent_acc";
 $langInfoAboutRegistration = "Το μάθημα που επιλέξατε είναι κλειστό. Για να εγγραφείτε, θα πρέπει
-να το ζητήσετε από τον υπεύθυνο εκπαιδευτή του μαθήματος, στέλνοντας του σχετικό μήνυμα στη φόρμα που ακολουθεί.<br />
-Σημειώστε ότι θα πρέπει οπωσδήποτε να αναφέρετε το ονοματεπώνυμό σας ή / και το όνομα χρήστη (username), που έχετε στην πλατφόρμα.";
+να συμπληρώσετε την παρακάτω αίτηση, η οποία θα καταγραφεί και θα αποσταλεί στους διαχειριστές του μαθήματος.";
+$langLabelCourseUserRequest = "Αίτηση εγγραφής στο μάθημα";
+$langReasonReject = "Αιτιολογία απόρριψης";
+$langRequestReasons = "Αναφέρετε τους λόγους που επιθυμείτε την εγγραφή σας στο μάθημα.";
 
 /* * **************************************************
  * create_course.php
@@ -1852,6 +1863,7 @@ $langInGroup = "στην ομάδα χρηστών";
 $langGroupProperties = "Ρυθμίσεις Ομάδων Χρηστών";
 $langGroupAllowStudentRegistration = "Οι " . $langsStudents . " επιτρέπεται να εγγραφούν και να απεγγραφούν";
 $langGroupAllowMultipleRegistration = "Δυνατότητα εγγραφής χρηστών σε περισσότερες από μία ομάδες";
+$langGroupAllowStudentGroupDescription = "Δυνατότητα προσθήκης περιγραφής ομάδας από τα μέλη της ομάδας";
 $langGroupStudentRegistrationType = "Δυνατότητα εγγραφής - απεγγραφής";
 $langGroupAllowUnregister = "Δυνατότητα απεγγραφής από ομάδα";
 $langGroupPrivatise = "Κλειστές περιοχές συζητήσεων ομάδων χρηστών";
@@ -1886,8 +1898,8 @@ $langForumGroup = "Περιοχή συζητήσεων της ομάδας";
 $langMyGroup = "η ομάδα μου";
 $langOneMyGroups = "επιβλέπων";
 $langRegIntoGroup = "Προσθέστε με στην ομάδα";
-$langGroupNowMember = "Εγγραφείκατε στην ομάδα με επιτυχία.";
-$langGroupNowNotMember = "Απεγγραφείκατε από την ομάδα με επιτυχία.";
+$langGroupNowMember = "Εγγραφήκατε στην ομάδα με επιτυχία.";
+$langGroupNowNotMember = "Απεγγραφήκατε από την ομάδα με επιτυχία.";
 $langPublicAccess = "ανοικτό";
 $langForumType = "Τύπος περιοχής συζητήσεων";
 $langPropModify = "Αλλαγή ρυθμίσεων";
@@ -2490,6 +2502,7 @@ $langShortDesc = "Σύντομη Περιγραφή $siteName";
 $langManS = "Εγχειρίδιο $langOfStudent";
 $langManT = "Εγχειρίδιο $langOfTeacher";
 $langOr = "ή";
+$langor =  "η";
 $langNote = "Σημείωση";
 $langAcrobat = "Για να διαβάσετε τα αρχεία PDF μπορείτε να χρησιμοποιήσετε το %sπρόγραμμα Acrobat Reader%s ή άλλα %sελεύθερα διαθέσιμα προγράμματα που θα βρείτε εδώ%s.";
 $langTutorials = "Οδηγοί";
@@ -2717,6 +2730,62 @@ $langCopyDuplicate = "(Αντίγραφο)";
 $langCreateDuplicateIn = "Δημιουργία Αντιγράφου στο ...";
 $langCurrentCourse = "Τρέχον Μάθημα";
 $langCopySuccess = "Το αντίγραφο δημιουργήθηκε με επιτυχία!";
+$langGeneralSurvey = "Γενικό ερωτηματολόγιο";
+$langCollesSurvey = "COLLES";
+$langATTLSSurvey = "A.T.T.L.S.";
+
+//COLLES survey
+$qcolles1 = "Σε αυτή την ενότητα εστιάζω μόνο σε ό,τι με ενδιαφέρει";
+$qcolles2 = "Σε αυτή την ενότητα ό,τι μαθαίνω είναι σημαντικό για την επιστημονική μου πρακτική";
+$qcolles3 = "Σε αυτή την ενότητα μαθαίνω πως να βελτιώνω την επιστημονική μου πρακτική";
+$qcolles4 = "Σε αυτή την ενότητα ό,τι μαθαίνω συνδέεται καλά με την επιστημονική μου πρακτική";
+$qcolles5 = "Σε αυτή την ενότητα σκέφτομαι κριτικά για ό,τι μαθαίνω";
+$qcolles6 = "Σε αυτή την ενότητα σκέφτομαι κριτικά για τις ιδέες μου";
+$qcolles7 = "Σε αυτή την ενότητα σκέφτομαι κριτικά για τις ιδέες των άλλων μαθητών";
+$qcolles8 = "Σε αυτή την ενότητα σκέφτομαι κριτικά για τις ιδέες των αναγνωσμάτων";
+$qcolles9 = "Σε αυτή την ενότητα εξηγώ τις ιδέες μου στους άλλους μαθητές";
+$qcolles10 = "Σε αυτή την ενότητα ρωτώ άλλους μαθητές να εξηγήσουν τις ιδέες τους";
+$qcolles11 = "Σε αυτή την ενότητα άλλοι μαθητές μου ζητούν να εξηγήσω τις ιδέες μου";
+$qcolles12 = "Σε αυτή την ενότητα άλλοι μαθητές απαντούν στις ιδέες μου";
+$qcolles13 = "Σε αυτή την ενότητα ο εκπαιδευτής διεγείρει τη σκέψη μου";
+$qcolles14 = "Σε αυτή την ενότητα ο εκπαιδευτής με ενθαρρύνει να συμμετέχω";
+$qcolles15 = "Σε αυτή την ενότητα ο εκπαιδευτής προβάλει τη σωστή συζήτηση";
+$qcolles16 = "Σε αυτή την ενότητα ο εκπαιδευτής προβάλει την κριτική θεώρηση του εαυτού μας";
+$qcolles17 = "Σε αυτή την ενότητα οι άλλοι μαθητές ενθαρρύνουν τη συμμετοχή μου";
+$qcolles18 = "Σε αυτή την ενότητα οι άλλοι μαθητές επαινούν τη συνεισφορά μου";
+$qcolles19 = "Σε αυτή την ενότητα οι άλλοι μαθητές εκτιμούν τη συνεισφορά μου";
+$qcolles20 = "Σε αυτή την ενότητα οι άλλοι μαθητές κατανοούν την προσπάθειά μου για μάθηση";
+$qcolles21 = "Σε αυτή την ενότητα βγάζω νόημα από τα μηνύματα των άλλων μαθητών";
+$qcolles22 = "Σε αυτή την ενότητα οι άλλοι μαθητές κατανοούν τα μηνύματά μου";
+$qcolles23 = "Σε αυτή την ενότητα κατανοώ τα μηνύματα του εκπαιδευτή";
+$qcolles24 = "Σε αυτή την ενότητα ο εκπαιδευτής κατανοεί τα μηνύματά μου";
+$colles_desc = "Το ερωτηματολόγιο COLLES (Constructive On Line Learning Environment Survey) χρησιμοποιείται για να διερευνηθούν οι απόψεις για το μαθησιακό περιβάλλον που
+				έχουν διαμορφώσει οι συμμετέχοντες. Πρόκειται για ένα ερωτηματολόγιο που αποτελείται από 24 ερωτήσεις. Κάθε ερώτηση έχει ως απάντηση έναν αριθμό από το 1 (Σχεδόν Ποτέ),
+				2 (Σπάνια), 3 (Μερικές φορές), 4(Συχνά), μέχρι το 5 (Σχεδόν πάντα)";
+				
+//ATTLS survey
+$question1 = "Όταν εκτιμώ τι λέει κάποιος, εστιάζω πάνω στην ποιότητα των λόγων του και όχι στο πρόσωπο που τα παρουσιάζει";
+$question2 = "Μου αρέσει να κάνω το δικηγόρο του διαβόλου - υποστηρίζοντας το αντίθετο από αυτό που κάποιος λέει";
+$question3 = "Μου αρέσει να κατανοώ από που 'προέρχονται' οι άλλοι άνθρωποι, ποιες εμπειρίες τους έχουν οδηγήσει στο να σκέφτονται έτσι";
+$question4 = "Το πιο σημαντικό μέρος της εκπαίδευσής μου είναι να μάθω να καταλαβαίνω τους ανθρώπους οι οποίοι είναι πολύ διαφορετικοί από εμένα";
+$question5 = "Αισθάνομαι ότι ο καλύτερος τρόπος για μένα στο να επιτύχω την προσωπική μου ταυτότητα, είναι να αλληλεπιδράσω με πολλούς άλλους ανθρώπους";
+$question6 = "Απολαμβάνω να ακούω τις απόψεις ανθρώπων οι οποίοι προέρχονται από διαφορετικά υπόβαθρα από το δικό μου - με βοηθάει να καταλάβω πώς τα ίδια πράγματα μπορούν να φαίνονται με τόσους διαφορετικούς τρόπους";
+$question7 = "Μπορώ να ενισχύσω τη δική μου γνώμη μέσω της συζήτησης με κάποιον που διαφωνεί μαζί μου";
+$question8 = "Πάντα με ενδιέφερε να μαθαίνω γιατί οι άνθρωποι λένε και πιστεύουν τα πράγματα που κάνουν";
+$question9 = "Συχνά πιάνω τον εαυτό μου να διαφωνεί με τους συντάκτες των βιβλίων που διαβάζω, προσπαθώντας με τη λογική να καταλάβω γιατί είναι λάθος";
+$question10 = "Είναι σημαντικό για μένα να παραμένω όσο αντικειμενικός γίνεται όταν αναλύω κάτι.";
+$question11 = "Προσπαθώ να σκέφτομαι με τους ανθρώπους παρά να είμαι αντίθετος σε αυτούς";
+$question12 = "Έχω συγκεκριμένα κριτήρια που χρησιμοποιώ στην εκτίμηση μιας συζήτησης";
+$question13 = "Είναι πιο πιθανό να προσπαθήσω να κατανοήσω τη γνώμη κάποιου άλλου παρά να την αξιολογήσω";
+$question14 = "Προσπαθώ να επισημάνω αδυναμίες στη σκέψη των άλλων για να τους βοηθήσω να διευκρινήσουν την άποψή τους";
+$question15 = "Έχω την τάση να βάζω τον εαυτό μου στη θέση των άλλων όταν συζητώ αμφιλεγόμενα θέματα, για να δω γιατί σκέφτονται κατ' αυτόν τον τρόπο";
+$question16 = "Κάποιος θα μπορούσε να χαρακτηρίσει τον τρόπο με τον οποίο αναλύω τα πράγματα ότι 'τα περνάω από  κόσκινο', επειδή είμαι προσεκτικός στο να εκτιμήσω όλα τα στοιχεία";
+$question17 = "Αξιολογώ με τη χρήση της λογικής και της αιτιολόγησης, περισσότερο από την εμπλοκή των δικών μου ανησυχιών, όταν επιλύω προβλήματα";
+$question18 = "Μπορώ να αποκτήσω διορατικότητα σχετικά με τις απόψεις που διαφέρουν από τη δική μου, μέσω της ταύτισης";
+$question19 = "Όταν συναντώ άτομα των οποίων οι απόψεις μου φαίνονται παράξενες, κάνω συνειδητή προσπάθεια να 'επεκτείνω' τον εαυτό μου στη θέση τους, να δω για ποιο λόγο έχουν αυτές τις απόψεις";
+$question20 = "Αφιερώνω χρόνο προσπαθώντας να καταλάβω τι είναι 'λάθος'. Για παράδειγμα, θα ψάξω κάτι σε βάθος όταν δεν μου ακούγεται καλά";
+$rate_scale = "To ερωτηματολόγιο A.T.T.L.S. Attitudes (Στάσεις) Towards (προς) Thinking (τη σκέψη) Learning (τη μάθηση) Survey (την έρευνα) 'Έρευνα για τη διαπίστωση της στάσης απέναντι στη σκέψη και τη μάθηση' δημιουργήθηκε με επιτυχία. 
+				Πρόκειται για ένα ερωτηματολόγιο που αποτελείται από 20 ερωτήσεις. Κάθε ερώτηση έχει ως απάντηση έναν αριθμό από το 1 (Διαφωνώ πλήρως) μέχρι το 5 (Συμφωνώ πλήρως)";
 
 // polls
 $langPollsActive = "Ενεργά Ερωτηματολόγια";
@@ -3376,6 +3445,7 @@ $charset = 'UTF-8';
 $dateFormatShort = "%b %d, %y";
 $dateFormatLong = '%A, %d %B %Y';
 $dateTimeFormatLong = '%d %B %Y / Ώρα: %R';
+$dateTimeFormatShort = '%d %b %Y %R';
 $timeNoSecFormat = '%R';
 $langNoAdminAccess = '
         <b>Η σελίδα που προσπαθείτε να μπείτε απαιτεί όνομα χρήστη και συνθηματικό.</b>
@@ -3472,10 +3542,14 @@ $langStatsType = "Είδος Στατιστικών";
 $langTotalVisits = "Συνολικές Eπισκέψεις";
 $langVisits = "Αριθμός Επισκέψεων";
 $langHits = "Αριθμός Προβολών";
+$langVisitsShort = "Αρ. Επισκέψεων";
+$langHitsShort = "Αρ. Προβολών";
 $langFirstLetterUser = "Πρώτο Γράμμα Επωνύμου";
 $langFirstLetterCourse = "Πρώτο Γράμμα Τίτλου";
 $langUsageVisits = "Στατιστικά Επισκεψιμότητας";
 $langFavourite = "Προτίμηση Υποσυστημάτων";
+$langFavouriteCourse = "Προτίμηση Μαθημάτων";
+$langFavouriteCourses = "Δημοφιλέστερα Μαθήματα";
 $langFavouriteExpl = "Παρουσιάζεται η προτίμηση ενός χρήστη ή όλων των χρηστών στα υποσυστήματα μέσα σε ένα χρονικό διάστημα.";
 $langOldStats = "Εμφάνιση παλιών στατιστικών";
 $langOldStatsExpl = "Συγκεντρωτικά μηνιαία στατιστικά στοιχεία <u>παλιότερα των %s μηνών</u>.";
@@ -3487,6 +3561,17 @@ $langWeekly = "Εβδομαδιαίο";
 $langMonthly = "Μηνιαίο";
 $langYearly = "Ετήσιο";
 $langSummary = "Συνολικά";
+$langPerDay = "ανά ημέρα";
+$langPerWeek = "ανά εβδομάδα";
+$langPerMonth = "ανά μήνα";
+$langPerYear = "ανά έτος";
+$langStatsUserStatus = array(1=>"Εκπαιδευτές",5=>"Εκπαιδευόμενοι",10=>"Επισκέπτες");
+$langCourseVisibility = array(0=>'Ανενεργά',1=>'Ελεγχόμενης πρόσβασης',2=>'Ανοικτά',3=>'Κλειστά');
+$langHits = "Επισκέψεις";
+$langRegisterActions = "Εγγραφές";
+$langUnregisterActions = "Απεγγραφές";
+$langMonthlyCourseRegistrations = "Εγγραφές χρηστών στο μάθημα";
+$langDurationOfVisits = "διάρκεια επισκέψεων";
 $langDurationVisits = "Χρονική Διάρκεια Επισκέψεων";
 $langDurationExpl = "Η χρονική διάρκεια των επισκέψεων σε κάθε υποσύστημα είναι σε λεπτά της ώρας και υπολογίζεται κατά προσέγγιση.";
 $langMonths[1] = "Ιαν";
@@ -3523,6 +3608,12 @@ $langStatAccueil = "Για το χρονικό διάστημα που ζητή�
 $langHost = "Υπολογιστής";
 $langGroupUsage = 'Στατιστικά ομάδων χρηστών';
 $langNoStats = "Δεν υπάρχουν διαθέσιμα στατιστικά";
+$langDetails = "Αναλυτικά";
+$langPlots = "Γραφήματα";
+$langIpAddress = "Διεύθυνση IP";
+$langLoginUser = "Είσοδοι";
+$langUsageCoursesHeader = "Σύνολο μαθημάτων";
+$langUsageUsers = "Σύνολο χρηστών";
 
 #for platform Statistics
 $langUsersCourse = "Χρήστες ανά μάθημα";
@@ -3534,7 +3625,8 @@ $langDumpUserDurationToFile = "σε αρχείο τύπου csv";
 $langCodeUTF = "κωδικοποίηση UTF-8";
 $langCodeWin = "κωδικοποίηση Windows-1253";
 $langNoUserSelected = "Δεν επιλέξατε χρήστη";
-
+$langRecordLog = "Καταγραφές ενεργειών";
+        
 /* * ***********************************************
  * log.php
  * *********************************************** */
@@ -3896,6 +3988,7 @@ $langAssignmentWillBeActive = 'Η εργασία θα είναι ενεργή σ
 $langRequestStudent = "Η αίτηση του $langsOfStudent έκλεισε!";
 $langRequestReject = "Η αίτηση απορρίφθηκε";
 $langInformativeEmail = "Στάλθηκε ενημερωτικό μήνυμα στη διεύθυνση";
+$langRequest = "Αίτηση";
 
 /* * ***********************************************************
   editpost.php
@@ -3937,6 +4030,7 @@ $langUpdates = "ενημερώσεις";
 /* * ********************************************************************
   units.php
  * ********************************************************************* */
+$langUnits = "Θεματικές ενότητες";
 $langAddUnit = "Προσθήκη θεματικής ενότητας";
 $langEditUnit = "Επεξεργασία θεματικής ενότητας";
 $langEditUnitSection = "Επεξεργασία";
@@ -4165,7 +4259,7 @@ $langOpenCoursesFiles = "Αρχεία";
 $langOpenCoursesIsAMinusLevel = "Open Courses Α-";
 $langOpenCoursesIsALevel = "Open Courses Α";
 $langOpenCoursesIsAPlusLevel = "Open Courses Α+";
-$langOpenCoursesLevel = "Επίπεδο";
+$langOpenCoursesLevel = "Τύπος";
 $langOpenCoursesAMinusLevel = "A-";
 $langOpenCoursesALevel = "A";
 $langOpenCoursesAPlusLevel = "A+";
@@ -4697,6 +4791,27 @@ $langCPFLinkValidFail = 'Το πεδίο %s δεν είναι έγκυρη δι�
 $langCPFDateValidFail = 'Το πεδίο %s δεν είναι έγκυρη ημερομηνία. ';
 
 /* * ******************************************
+  Widgets
+ * ***************************************** */
+$langWidgets = "Μικροεργαλεία";
+$langMyWidgets = "Τα μικροεργαλεία μου";
+$langCourseWidgets = "Mικροεργαλεία μαθήματος";
+$langInstalledWidgets = "Εγκατεστημένα Μικροεργαλεία";
+$langNoInstalledWidgets = "Δεν υπάρχουν εγκατεστημένα Μικροεργαλεία";
+$langAvailableWidgets = "Διαθέσιμα Μικροεργαλεία";
+$langNoAvailableWidgets = "Δεν υπάρχουν διαθέσιμα προς εγκατάσταση Μικροεργαλεία";
+$langWidgetInstall = "Εγκατάσταση";
+$langWidgetUninstall = "Απεγκατάσταση";
+$langWidgetAdmin = "Διαχείρισης";
+$langWidgetPersonal = "Προσωπικό";
+$langWidgetCourse = "Μαθήματος";
+$langHomePageMainContent = "Κυρίως περιεχόμενο Αρχικής Σελίδας";
+$langHomePageSidebarContent = "Στήλη κυρίως περιεχομένου Αρχικής Σελίδας";
+$langPortfolioMainContent = "Κυρίως περιεχόμενο Χαρτοφυλακίου";
+$langPortfolioSidebarContent = "Στήλη κυρίως περιεχομένου Χαρτοφυλακίου";
+$langCourseHomeMainContent = "Κυρίως περιεχόμενο Αρχικής Σελίδας Μαθήματος";
+$langCourseHomeSidebarContent = "Στήλη κυρίως περιεχομένου Αρχικής Σελίδας Μαθήματος";
+/* * ******************************************
   Theme Options
  * ***************************************** */
 $langThemeSettings = 'Ρυθμίσεις Εμφάνισης';
@@ -4803,6 +4918,7 @@ $langWafConfig = "Ρυθμίσεις Φίλτρου";
 
 $langSFAConf = 'Ρύθμιση 2FA:';
 $langSFAType = 'Συνθηματικό 2FA:';
+$langSFAInsert = 'Εναλλακτικά, εισάγετε τον παρακάτω στην εφαρμογή 2FA:';
 $langSFAusage = 'Για να χρησιμοποιηθεί το Second Factor Authentication, ο χρήστης που το ενεργοποιεί απο το προφίλ του θα πρέπει να εγκαταστήσει ένα app τύπου Google Authenticator, απο αυτά που είναι διαθέσιμα:';
 $langsecondfaDescription = 'Οι περισσότεροι χρήστες χρησιμοποιούν μόνο ένα επίπεδο ασφάλειας για το λογαριασμό τους, τον κωδικό πρόσβασής τους. Με την επαλήθευση σε 2 βήματα, θα προστατεύσετε το λογαριασμό σας με κάτι που γνωρίζετε (τον κωδικό πρόσβασής σας) και κάτι που έχετε στην κατοχή σας (το τηλέφωνο ή το κλειδί ασφαλείας σας)';
 $langSFAfail = 'Λάθος Απάντηση 2FA';
@@ -4862,16 +4978,15 @@ $langAutoJudgeResultsFor = 'Αποτελέσματα για';
 $langAutoJudgeNotEnabledForReport = ' Ο αυτόματος κριτής δεν είναι ενεργοποιημένος για την συγκεκριμένη εργασία. ';
 $langAutoJudgeDownloadPdf = 'Λήψη σε μορφή PDF';
 
-/* * ***********************************************************
- * Tags
- * ************************************************************ */
+// Tags
 $langTag = 'Ετικέτα';
 $langTags = 'Ετικέτες';
 
-//
 // Messages for external tools
-//
-
+$langAnalyticsDescription = '<p>Μπορείτε να συνδέσετε την πλατφόρμα με κάποια
+    εξωτερική υπηρεσία ανάλυσης επισκέψεων (Web Analytics, π.χ. Google
+    Analytics, Piwiki) προκειμένου να διατηρούνται αναλυτικά στατιστικά
+    για τους επισκέπτες.</p>';
 $langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
 <p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών Μαθημάτων</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης μαθημάτων που επίσης αναπτύσσει το GUNET.</p>";
 $langBBBDescription = "<p>Το υποσύστημα <b>Τηλεσυνεργασίας</b> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p>
@@ -4879,16 +4994,34 @@ $langBBBDescription = "<p>Το υποσύστημα <b>Τηλεσυνεργασ�
 $langAutojudgeDescription = "<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα συνδέεται με τρίτες υπηρεσίες μεταγλώττισης οι οποίες μπορούν να επιλεχθούν στις <a href=\"autojudgemoduleconf.php\">Ρυθμίσεις</a>.</p>";
 $langFtpShortDescription = "Σύνδεση με υπηρεσία FTP";
 $langFtpLongDescription = "Πληκτρολογήστε το σύνδεσμο FTP";
-$langGoogleDriveShortDescription = "Short Description about google drive";
+$langGoogleDriveShortDescription = "Υποστήριξη λειτουργίας κατεβάσματος αρχείων από το Google Drive.";
 $langGoogleDriveLongDescription = "Long description about google drive";
-$langOneDriveShortDescription = "Short Description about one drive";
+$langOneDriveShortDescription = "Υποστήριξη λειτουργίας κατεβάσματος αρχείων από το One Drive.";
 $langOneDriveLongDescription = "Long description about one drive";
-$langDropboxShortDescription = "Short Description about dropbox";
+$langDropboxShortDescription = "Υποστήριξη λειτουργίας κατεβάσματος αρχείων από το Dropbox.";
 $langDropboxLongDescription = "Long description about dropbox";
-$langOwnCloudShortDescription = "Short Description about own cloud";
+$langOwnCloudShortDescription = "Υποστήριξη λειτουργίας κατεβάσματος αρχείων από το Own Cloud.";
 $langOwnCloudLongDescription = "Long description about own cloud";
-$langWebDAVShortDescription = "Short Description about web dav";
+$langWebDAVShortDescription = "Υποστήριξη λειτουργίας κατεβάσματος αρχείων μέσω WebDav.";
 $langWebDAVLongDescription = "Long Description about web dav";
 $langAntivirusDescription = "<p>Σύνδεση με εγκατεστημένο λογισμικό προστασίας έναντι ιών</p>";
 $langWafDescription = "<p>Ενεργοποίηση τείχους προστασίας εφαρμογής ιστού</p>";
+$langOpenMeetingsDescription = "<p>Το υποσύστημα <b>Τηλεσυνεργασίας</b> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://openmeetings.apache.org/\" target=\"_blank\">Apache OpenMeetings</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p>
+<p>Το OpenMeetings ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα OpenMeetings επιλέξτε <a href=\"openmeetingsconf.php\">Ρυθμίσεις</a>.</p>";
 
+
+// Messages for OpenMeetings
+$langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
+$langAddOpenMeetingsServer = "Προσθήκη εξυπηρετητή";
+$langAddOpenMeetingsServerInfo = "Στοιχεία νέου εξυπηρετητή OpenMeetings";
+$langUpdateOpenMeetingsServer = "Στοιχεία εξυπηρετητή OpenMeetings";
+$langAvailableOpenMeetingsServers = "Διαθέσιμοι εξυπηρετητές OpenMeetings";
+$langOpenMeetingsServer = "ΙP ή FQDN OpenMeetings Server";
+$langOpenMeetingsPort = "Port";
+$langOpenMeetingsAdminUser ="Username διαχειριστή OpenMeetings";
+$langOpenMeetingsAdminPass ="Password διαχειριστή OpenMeetings";
+$langOpenMeetingsModuleKey = "Module key";
+$langOpenMeetingsWebApp = "Όνομα WebApp";
+
+// Messages for Mindmaps
+$langMindmap = 'Εννοιολογικός χάρτης';

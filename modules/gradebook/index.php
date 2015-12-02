@@ -221,11 +221,18 @@ if ($is_editor) {
         if ($_POST['specific_gradebook_users'] == 2) { // specific users group
             foreach ($_POST['specific'] as $g) {
                 $ug = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
+                $already_inserted_users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+                $already_inserted_ids = [];
+                foreach ($already_inserted_users as $already_inserted_user) {
+                    array_push($already_inserted_ids, $already_inserted_user->uid);
+                }
                 foreach ($ug as $u) {
-                    Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
-                            SELECT $gradebook_id, user_id FROM course_user
-                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u->user_id);
-                    update_user_gradebook_activities($gradebook_id, $u->user_id);
+                    if (!in_array($u->user_id, $already_inserted_ids)) {
+                        Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+                                SELECT $gradebook_id, user_id FROM course_user
+                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u->user_id);
+                        update_user_gradebook_activities($gradebook_id, $u->user_id);
+                    }
                 }
             }
         } elseif ($_POST['specific_gradebook_users'] == 1) { // specific users            

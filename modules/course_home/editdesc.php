@@ -90,7 +90,7 @@ if (isset($_GET['delete_image'])) {
             });          
         });
     </script>";        
-$layouts = array(1 => $langCourseLayout1, 2 => $langCourseLayout2, 3 => $langCourseLayout3);
+$layouts = array(1 => $langCourseLayout1, 3 => $langCourseLayout3);
 $description = $course->description;
 $layout = $course->home_layout;
 

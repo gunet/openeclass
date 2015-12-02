@@ -42,7 +42,7 @@ $tool_content .= action_bar(array(
  * **************************************************************************** */
 // Send email after form post
 if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] == $langSend)) {
-
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isDepartmentAdmin()) {
         $depwh = ' user_department.department IN (' . implode(', ', $user->getDepartmentIds($uid)) . ') ';
     }
@@ -159,6 +159,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
 	  <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>          
         </div>	
     </fieldset>
+    ". generate_csrf_token_form_field() ."
     </form>
     </div>";
 }

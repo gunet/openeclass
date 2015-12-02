@@ -230,7 +230,7 @@ if (!isset($_POST['submit'])) {
             <div class='form-group'>
               <label for='UserFac' class='col-sm-2 control-label'>$langFaculty:</label>
                 <div class='col-sm-10'>";
-            list($js, $html) = $tree->buildUserNodePicker();
+            list($js, $html) = $tree->buildUserNodePickerIndirect();
             $head_content .= $js;
             $tool_content .= $html;
             $tool_content .= "</div>
@@ -255,8 +255,8 @@ if (!isset($_POST['submit'])) {
         if(!empty($provider_name) && !empty($provider_id)) {
             $tool_content .= "<div class='form-group'>
               <label for='UserLang' class='col-sm-2 control-label'>$langProviderConnectWith:</label>
-              <div class='col-sm-10'>
-                <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q(ucfirst($provider_name)) . "<br /><small>$langProviderConnectWithTooltip</small>
+              <div class='col-sm-10'><p class='form-control-static'>
+                <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "'>&nbsp;" . q(ucfirst($provider_name)) . "<br /><small>$langProviderConnectWithTooltip</small></p>
               </div>
               <div class='col-sm-offset-2 col-sm-10'>
                 <input type='hidden' name='provider' value='" . $provider_name . "' />
@@ -303,7 +303,7 @@ if (!isset($_POST['submit'])) {
         $departments = array();
         $missing = false;
     } else {
-        $departments = $_POST['department'];
+        $departments = arrayValuesDirect($_POST['department']);
     }
 
     $registration_errors = array();

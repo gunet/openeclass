@@ -35,7 +35,7 @@ load_js('validation.js');
 
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
-$bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
+$bbb_server = isset($_GET['edit_server']) ? intval(getDirectReference($_GET['edit_server'])) : '';
 
 if (isset($_GET['add_server'])) {
     $pageName = $langAddBBBServer;
@@ -117,7 +117,7 @@ if (isset($_GET['add_server'])) {
         //]]></script>';
     
 } else if (isset($_GET['delete_server'])) {
-    $id = $_GET['delete_server'];
+    $id = getDirectReference($_GET['delete_server']);
     Database::get()->querySingle("DELETE FROM bbb_servers WHERE id=?d", $id);
     // Display result message
     Session::Messages($langFileUpdatedSuccess, 'alert-success');
@@ -140,7 +140,7 @@ else if (isset($_POST['submit'])) {
     $weight = $_POST['weight'];
 
     if (isset($_POST['id_form'])) {
-        $id = $_POST['id_form'];
+        $id = getDirectReference($_POST['id_form']);
         Database::get()->querySingle("UPDATE bbb_servers SET hostname = ?s,
                 ip = ?s,
                 server_key = ?s,
@@ -233,7 +233,7 @@ else {
         $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
                 <div class='col-sm-9'><input class='form-control' type='text' name='weight' value='$server->weight'></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<input class='form-control' type = 'hidden' name = 'id_form' value='$bbb_server'>";
+        $tool_content .= "<input class='form-control' type = 'hidden' name = 'id_form' value='" . getIndirectReference($bbb_server) . "'>";
         $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
         $tool_content .= "</fieldset></form></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
@@ -289,10 +289,10 @@ else {
                     "<td class='option-btn-cell'>" .
                     action_button(array(
                         array('title' => $langEditChange,
-                              'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?edit_server=" . getIndirectReference($srv->id),
                               'icon' => 'fa-edit'),
                         array('title' => $langDelete,
-                              'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$srv->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?delete_server=" . getIndirectReference($srv->id),
                               'icon' => 'fa-times',
                               'class' => 'delete',
                               'confirm' => $langConfirmDelete))) . "</td>" .

@@ -59,12 +59,14 @@ if (!isset($_POST['doit'])) {
               </div>
               <form method='post' action='$_SERVER[SCRIPT_NAME]?u=$iuid'>
                 <input class='btn btn-danger' type='submit' name='doit' value='$langDelete'>
+                ". generate_csrf_token_form_field() ."
               </form>";
         }
     } else {
         $tool_content .= "<div class='alert alert-danger'>$langErrorDelete</div>";
     }
 } else {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (get_admin_rights($user) > 0) {
         Session::Messages($langTryDeleteAdmin, 'alert-danger');
         redirect_to_home_page("modules/admin/deluser.php?u=$iuid");

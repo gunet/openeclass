@@ -32,7 +32,7 @@ require_once 'upgradeHelper.php';
 stop_output_buffering();
 
 // set default storage engine
-Database::get()->query("SET storage_engine = InnoDB");
+Database::get()->query("SET default_storage_engine = InnoDB");
 
 require_once 'upgrade/functions.php';
 
@@ -1419,8 +1419,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `max_grade` FLOAT DEFAULT NULL,
                             `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
                             `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
-                            `file_name` VARCHAR(200) DEFAULT '' NOT NULL,
-							`grading_method` TINYINT(2) DEFAULT '' NOT NULL)
+                            `file_name` VARCHAR(200) DEFAULT '' NOT NULL)
                             $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -2180,9 +2179,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     DBHelper::indexExists('lp_user_module_progress', 'optimize') or
             Database::get()->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
     DBHelper::indexExists('poll', 'poll_index') or
-            Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");
-    DBHelper::indexExists('poll_user_record', 'poll_ans_id') or
-            Database::get()->query("CREATE INDEX `poll_ans_id` ON poll_user_record(pid, uid)");
+            Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");    
     DBHelper::indexExists('poll_question', 'poll_q_id') or
             Database::get()->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
     DBHelper::indexExists('poll_question_answer', 'poll_qa_id') or
@@ -2456,14 +2453,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `name` VARCHAR(300) NOT NULL,
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
-
-
-            if ($q = Database::get()->querySingle("SELECT id FROM theme_options WHERE name = ?s", $theme['name'])) {
-                Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $theme['styles'], $q->id);
-            } else {
-        }
-        copyThemeImages();
-
+            
         if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
             Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
         }
@@ -2952,12 +2942,79 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             $user_records = Database::get()->queryArray("SELECT DISTINCT `pid`, `user_id` FROM poll_answer_record");
             foreach ($user_records as $user_record) {
                 $poll_user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $user_record->pid, $user_record->user_id)->lastInsertID;
-                Database::get()->query("UPDATE poll_answer_record SET poll_user_record_id = ?d", $poll_user_record_id);
+                Database::get()->query("UPDATE poll_answer_record SET poll_user_record_id = ?d WHERE pid = ?d AND user_id = ?d", $poll_user_record_id, $user_record->pid, $user_record->user_id);
             }
             Database::get()->query("ALTER TABLE `poll_answer_record` ADD FOREIGN KEY (`poll_user_record_id`) REFERENCES `poll_user_record` (`id`) ON DELETE CASCADE");
             delete_field('poll_answer_record', 'pid');
             delete_field('poll_answer_record', 'user_id');            
         }
+        DBHelper::indexExists('poll_user_record', 'poll_user_rec_id') or
+            Database::get()->query("CREATE INDEX `poll_user_rec_id` ON poll_user_record(pid, uid)");
+        //Removing Course Home Layout 2
+        Database::get()->query("UPDATE course SET home_layout = 1 WHERE home_layout = 2");
+    }
+
+    if (version_compare($oldversion, '3.3', '<')) {
+        // Fix duplicate link orders
+        Database::get()->queryFunc('SELECT DISTINCT course_id, category FROM link
+            GROUP BY course_id, category, `order` HAVING COUNT(*) > 1',
+            function ($item) {
+                $order = 0;
+                foreach (Database::get()->queryArray('SELECT id FROM link
+                    WHERE course_id = ?d AND category = ?d
+                    ORDER BY `order`',
+                    $item->course_id, $item->category) as $link) {
+                        Database::get()->query('UPDATE link SET `order` = ?d
+                            WHERE id = ?d', $order++, $link->id);
+                }
+            });
+    }
+
+    if (version_compare($oldversion, '3.4', '<')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
+                        `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `class` varchar(400) NOT NULL) $charset_spec"); 
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
+                        `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `widget_id` int(11) unsigned NOT NULL,
+                        `widget_area_id` int(11) NOT NULL,
+                        `options` text NOT NULL,
+                        `position` int(3) NOT NULL,
+                        `user_id` int(11) NULL,
+                        `course_id` int(11) NULL,
+                         FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+                         FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+                         FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");
+        
+        // Conference table
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `conference` (
+                        `conf_id` int(11) NOT NULL AUTO_INCREMENT,
+                        `course_id` int(11) NOT NULL,
+                        `conf_description` text NOT NULL,
+                        `status` enum('active','inactive') DEFAULT NULL,
+                        `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        PRIMARY KEY (`conf_id`)) $charset_spec");
+
+        // om_servers table
+        Database::get()->query('CREATE TABLE IF NOT EXISTS `om_servers` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `hostname` varchar(255) DEFAULT NULL,
+                        `port` varchar(255) DEFAULT NULL,
+                        `enabled` enum("true","false") DEFAULT NULL,
+                        `username` varchar(255) DEFAULT NULL,
+                        `password` varchar(255) DEFAULT NULL,
+                        `module_key` int(11) DEFAULT NULL,
+                        `webapp` int(11) DEFAULT NULL,
+                        PRIMARY KEY (`id`),
+                        KEY `idx_om_servers` (`hostname`))');
+						
+        if (!DBHelper::fieldExists('poll', 'type')) {
+            Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");
+        }
+
+        Database::get()->query('INSERT IGNORE INTO course_module
+            (module_id, visible, course_id)
+            SELECT ?d, 0, id FROM course', MODULE_ID_MINDMAP);
         
         // Gamification Tables
         Database::get()->query("CREATE TABLE `certificate` (
@@ -3052,7 +3109,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           foreign key (`badge_criterion`) references `badge_criterion`(`id`)
         )");
     }
-
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);

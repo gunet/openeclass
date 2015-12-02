@@ -75,11 +75,12 @@ if ($u) {
                               verified_mail, whitelist
                          FROM user WHERE id = ?s", $u);
     if (isset($_POST['submit_editauth'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $auth = intval($_POST['auth']);
         $oldauth = array_search($info->password, $auth_ids);
         $tool_content .= "<div class='alert alert-success'>$langQuotaSuccess.";
         if ($auth == 1 and $oldauth != 1) {
-            $tool_content .= " <a href='password.php?userid=$u'>$langEditAuthSetPass</a>";
+            $tool_content .= " <a href='password.php?userid=" . getIndirectReference($u) . "'>$langEditAuthSetPass</a>";
             $newpass = '.';
         } else {
             $newpass = $auth_ids[$auth];
@@ -90,6 +91,7 @@ if ($u) {
     }
 
     if (isset($_POST['delete_ext_uid'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         Database::get()->query('DELETE FROM user_ext_uid WHERE user_id = ?d AND auth_id = ?d',
             $u, $_POST['delete_ext_uid']);
         Session::Messages($langSuccessfulUpdate, 'alert-success');
@@ -122,6 +124,7 @@ if ($u) {
                               </div>
                             <input type='hidden' name='u' value='$u'>
                             </fieldset>
+                            ". generate_csrf_token_form_field() ."
                             </form>
                             </div>";
         draw($tool_content, 3, null, $head_content);
@@ -132,12 +135,12 @@ if ($u) {
         $ind_u = getIndirectReference($u);
         $tool_content .= action_bar(array(
             array('title' => $langUserMerge,
-                'url' => "mergeuser.php?u=$u",
+                'url' => "mergeuser.php?u=" . getIndirectReference($u),
                 'icon' => 'fa-share-alt',
                 'level' => 'primary-label',
                 'show' => ($u != 1 and get_admin_rights($u) < 0)),
             array('title' => $langChangePass,
-                'url' => "password.php?userid=$u",
+                'url' => "password.php?userid=" . getIndirectReference($u),
                 'icon' => 'fa-key',
                 'level' => 'primary-label',
                 'show' => !(in_array($info->password, $auth_ids))),
@@ -229,9 +232,9 @@ if ($u) {
           <label class='col-sm-2 control-label'>$langFaculty:</label>
         <div class='col-sm-10'>";
         if (isDepartmentAdmin()) {
-            list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($uid)));
+            list($js, $html) = $tree->buildUserNodePickerIndirect(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($uid)));
         } else {
-            list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u)));
+            list($js, $html) = $tree->buildUserNodePickerIndirect(array('defaults' => $user->getDepartmentIds($u)));
         }
         $head_content .= $js;
         $tool_content .= $html;
@@ -300,6 +303,7 @@ if ($u) {
 	    <input class='btn btn-primary' type='submit' name='submit_edituser' value='$langModify' />
         </div>
         </fieldset>
+        ". generate_csrf_token_form_field() ."
         </form>
         </div>";
         $sql = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, DATE(b.reg_date) AS reg_date, b.status
@@ -360,7 +364,7 @@ if ($u) {
         $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
         $phone = isset($_POST['phone']) ? $_POST['phone'] : '';
         $am = isset($_POST['am']) ? $_POST['am'] : '';
-        $departments = isset($_POST['department']) ? $_POST['department'] : 'NULL';
+        $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : 'NULL';
         $newstatus = isset($_POST['newstatus']) ? $_POST['newstatus'] : 'NULL';
         $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';
         if (isset($_POST['user_date_expires_at'])) {

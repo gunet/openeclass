@@ -26,6 +26,7 @@ include '../../include/baseTheme.php';
 $toolName = $langMultiRegCourseUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 if (isset($_POST['submit'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $ok = array();
         $not_found = array();
         $course_not_found = array();
@@ -110,6 +111,7 @@ $tool_content .= "<div class='form-wrapper'>
                 <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "'>
             </div>
         </fieldset>
+        ". generate_csrf_token_form_field() ."
     </form>
     </div>";
 
