@@ -47,8 +47,9 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'dbhost' => true, 'dbtype' => true, 'dbname' => true,
     'dbuser' => true, 'dbpass' => true, 'dbtable' => true,
     'dbfielduser' => true, 'dbfieldpass' => true, 'dbpassencr' => true,
-    'shibemail' => true, 'shibuname' => true,
-    'shibcn' => true, 'checkseparator' => true,
+    'shib_email' => true, 'shib_uname' => true, 'shib_surname' => true,
+    'shib_givenname' => true, 'shib_cn' => true, 'shib_studentid' => true,
+    'checkseparator' => true,
     'cas_host' => true, 'cas_port' => true, 'cas_context' => true,
     'cas_cachain' => true, 'casusermailattr' => true,
     'casuserfirstattr' => true, 'casuserlastattr' => true, 'cas_altauth' => true,
@@ -99,9 +100,21 @@ if (isset($_POST['submit'])) {
             } else {
                 $auth_settings = 'shibboleth';
             }
-            $settings = array('shibemail' => $shibemail,
-                'shibuname' => $shibuname,
-                'shibcn' => $shibcn);
+            $settings = array('shib_email' => $shib_email,
+                'shib_uname' => $shib_uname);
+            if ($shib_cn) {
+                $settings['shib_cn'] = $shib_cn;
+            }
+            if ($shib_surname) {
+                $settings['shib_surname'] = $shib_surname;
+            }
+            if ($shib_givenname) {
+                $settings['shib_givenname'] = $shib_givenname;
+            }
+            if ($shib_studentid) {
+                $settings['shib_studentid'] = $shib_studentid;
+            }
+            update_shibboleth_endpoint($settings);
             break;
         case 7:
             $settings = array('cas_host' => $cas_host,

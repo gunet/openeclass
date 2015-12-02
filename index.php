@@ -72,8 +72,8 @@ if (isset($_SESSION['shib_uname'])) {
     // authenticate via cas
     shib_cas_login('cas');
 } elseif (isset($_GET['provider'])) {
-        //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
-        hybridauth_login();
+    //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
+    hybridauth_login();
 } else {
     // normal authentication
     process_login();

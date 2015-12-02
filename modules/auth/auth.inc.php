@@ -382,47 +382,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             break;
 
         case '6':
-            $path = $webDir . '/secure/';
-            if (!file_exists($path)) {
-                if (!mkdir($path, 0700)) {
-                    $testauth = false;
-                }
-            } else {
-                $indexfile = $path . 'index.php';
-                $index_regfile = $path . 'index_reg.php';
-
-                // creation of secure/index.php file
-                $filecontents = '<?php
-session_start();
-$_SESSION[\'shib_email\'] = ' . $settings['shibemail'] . ';
-$_SESSION[\'shib_uname\'] = ' . $settings['shibuname'] . ';
-$_SESSION[\'shib_surname\'] = ' . $settings['shibcn'] . ';
-header("Location: ../index.php");
-';
-                if ($f = fopen($indexfile, 'w')) {
-                    if (fwrite($f, $filecontents)) {
-                        $testauth = true;
-                    }
-                    fclose($f);
-                }
-
-                // creation of secure/index_reg.php
-                // used in professor request registration process via shibboleth
-                $f = fopen($index_regfile, "w");
-                $filecontents = '<?php
-session_start();
-$_SESSION[\'shib_email\'] = ' . $settings['shibemail'] . ';
-$_SESSION[\'shib_uname\'] = ' . $settings['shibuname'] . ';
-$_SESSION[\'shib_surname\'] = ' . $settings['shibcn'] . ';
-$_SESSION[\'shib_status\'] = $_SERVER[\'unscoped-affiliation\'];
-$_SESSION[\'shib_auth\'] = true;
-header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["p"]? "?p=1": ""));
-';
-                if (fwrite($f, $filecontents)) {
-                    $testauth = true;
-                }
-                fclose($f);
-            }
+            return false; // this function doesn't support Shibboleth authentication
             break;
 
         case '7':
@@ -1060,19 +1020,15 @@ function shib_cas_login($type) {
 
     if ($type == 'shibboleth') {
         $uname = $_SESSION['shib_uname'];
-        $email = $_SESSION['shib_email'];
-        $shib_surname = $_SESSION['shib_surname'];
-        $shibsettings = Database::get()->querySingle("SELECT auth_settings FROM auth WHERE auth_id = 6");
-        if ($shibsettings) {
-            if ($shibsettings->auth_settings != 'shibboleth' and $shibsettings->auth_settings != '') {
-                $shibseparator = $shibsettings->auth_settings;
-            }
-            if (strpos($shib_surname, $shibseparator)) {
-                $temp = explode($shibseparator, $shib_surname);
-                $givenname = $temp[0];
-                $surname = $temp[1];
-            }
+        $_SESSION['auth_user_info'] = $shib = get_shibboleth_user_info();
+        if (isset($_SESSION['shib_auth_test'])) {
+            $_SESSION['shib_auth_test'] = true;
+            redirect_to_home_page('modules/admin/auth_test.php?auth=7');
         }
+        $givenname = $shib['givenname'];
+        $surname = $shib['surname'];
+        $email = $shib['email'];
+        $am = $shib['studentid'];
     } elseif ($type == 'cas') {
         $uname = $_SESSION['cas_uname'];
         $surname = $_SESSION['cas_surname'];
@@ -1102,9 +1058,6 @@ function shib_cas_login($type) {
         // if user found
         if ($info->password != $type) {
             // has different auth method - redirect to home page
-            unset($_SESSION['shib_uname']);
-            unset($_SESSION['shib_email']);
-            unset($_SESSION['shib_surname']);
             unset($_SESSION['cas_uname']);
             unset($_SESSION['cas_email']);
             unset($_SESSION['cas_surname']);
@@ -1300,4 +1253,98 @@ function external_DB_Check_Pass($test_password, $hash, $encryption) {
         default:
             /* Maybe append an error message to tool_content, telling not supported encryption */
     }
+}
+
+function get_shibboleth_user_info() {
+    $info = array(
+        'givenname' => '',
+        'surname' => '',
+        'email' => '',
+        'studentid' => '',
+        'attributes' => array());
+    if (isset($_SESSION['shib_email'])) {
+        $info['email'] = $_SESSION['shib_email'];
+        unset($_SESSION['shib_email']);
+    }
+    if (isset($_SESSION['shib_surname'])) {
+        $info['surname'] = $_SESSION['shib_surname'];
+        unset($_SESSION['shib_surname']);
+    }
+    if (isset($_SESSION['shib_givenname'])) {
+        $info['givenname'] = $_SESSION['shib_givenname'];
+        unset($_SESSION['shib_givenname']);
+    } elseif (isset($_SESSION['shib_cn'])) {
+        if (!empty($info['surname'])) {
+            $info['givenname'] = str_replace($info['surname'], '', $_SESSION['shib_cn']);
+        } else {
+            $shibseparator = ' ';
+            if ($r = Database::get()->querySingle("SELECT auth_settings FROM auth WHERE auth_id = 6")) {
+                $shibsettings = $r->auth_settings;
+                if ($shibsettings !== 'shibboleth' and $shibsettings !== '') {
+                    $shibseparator = $shibsettings;
+                }
+            }
+            $parts = explode($shibseparator, $_SESSION['shib_cn']);
+            $info['surname'] = array_pop($parts);
+            $info['givenname'] = implode(' ', $parts);
+        }
+    }
+    unset($_SESSION['shib_cn']);
+    if (isset($_SESSION['shib_studentid'])) {
+        $info['studentid'] = $_SESSION['shib_studentid'];
+        unset($_SESSION['shib_studentid']);
+    }
+    $info['givenname'] = trim($info['givenname']);
+    $info['surname'] = trim($info['surname']);
+    return $info;
+}
+
+function update_shibboleth_endpoint($settings) {
+    global $webDir;
+
+    $path = $webDir . '/secure';
+    if (!file_exists($path)) {
+        if (!mkdir($path, 0700, true)) {
+            Session::Messages("Error: mkdir($path)", 'alert-danger');
+            return false;
+        }
+    }
+   
+    $indexfile = $path . '/index.php';
+    $filecontents = '<?php
+session_start();
+';
+    foreach (array('shib_email', 'shib_uname', 'shib_cn', 'shib_surname',
+                   'shib_givenname', 'shib_studentid') as $var) {
+        if (isset($settings[$var]) and $settings[$var]) {
+            $filecontents .= '$_SESSION["' . $var . '"] = @' .
+                $settings[$var] . ";\n";
+        }
+    }
+    $filecontents .= '
+if (isset($_GET["reg"])) {
+    header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["p"]? "?p=1": ""));
+} else {
+    header("Location: ../index.php");
+}
+';
+    if ($f = fopen($indexfile, 'w')) {
+        if (!fwrite($f, $filecontents)) {
+            Session::Messages("Error: write($indexfile)<pre>" .
+                q($filecontents) . '</pre>', 'alert-danger');
+            return false;
+        }
+        fclose($f);
+    } else {
+        Session::Messages("Error: open($indexfile)<pre>" .
+            q($filecontents) . '</pre>', 'alert-danger');
+        return false;
+    }
+
+    // Remove obsolete secure/index_reg.php
+    $indexregfile = $path . '/index_reg.php';
+    if (file_exists($indexregfile) and !unlink($indexregfile)) {
+        Session::Messages("Warning: unable to delete obsolete $indexregfile", 'alert-warning');
+    }
+    return true;
 }
