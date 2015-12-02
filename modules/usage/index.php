@@ -120,7 +120,6 @@ $head_content .= "<style>
 </style>";
 
 $pageName = $langUsage;
-$navigation[] = array('url' => '/modules/admin/', 'name' => $langAdmin);
 
 if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)){
     require_once "course.php";
@@ -136,6 +135,7 @@ else{
 add_units_navigation(true);
 
 if($stats_type == 'admin' || ($stats_type == 'user' && isset($_REQUEST['u']))){
+    $navigation[] = array('url' => '/modules/admin/', 'name' => $langAdmin);
     draw($tool_content, 3, null, $head_content);
 }
 elseif($stats_type == 'course'){
