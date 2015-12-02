@@ -116,7 +116,7 @@ $tool_content .= "</div></div>";
 $tool_content .= "<div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr>"
         . "<th rowspan='2'>$langCategory</th>"
-        . "<th colspan='2'>$langUsers</th>"
+        . "<th colspan='3'>$langUsers</th>"
         . "<th colspan='4'>$langCoursesHeader</th>"
         . "</tr><tr>";
 foreach($langStatsUserStatus as $us){
