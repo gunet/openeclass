@@ -176,7 +176,7 @@ if ($is_editor) {
             'icon' => 'fa-university',
             'level' => 'primary'
             )
-    ));
+    ),false);
 
 } else {
     $tool_content .= "";
