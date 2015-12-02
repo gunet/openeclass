@@ -434,9 +434,9 @@ function get_popular_courses_stats($start = null, $end = null, $root_department 
     $r = Database::get()->queryArray($q, $start, $end);
     $formattedr = array();
     foreach($r as $record){
-        $formattedr['courses'][] = $record->title;
+        $formattedr['courses'][] = ellipsize($record->title, 25);
         $formattedr['hits'][] = $record->hits;
-    }
+    }    
     return $formattedr;
 }
 
