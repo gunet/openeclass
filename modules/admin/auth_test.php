@@ -52,6 +52,17 @@ if ($auth == 7) { // CAS
             Session::Messages("<p>$langCASRetAttr:<br>" . array2html($cas_ret['attrs']) . "</p>");
         }
     }
+} elseif ($auth == 6) { // Shibboleth
+    if (isset($_SESSION['shib_auth_test']) and $_SESSION['shib_auth_test']) {
+        // logged-in successfully with Shibboleth
+        unset($_SESSION['shib_auth_test']);
+        Session::Messages($langConnYes, 'alert-success');
+        Session::Messages("<p>$langCASRetAttr:<br>" . array2html($_SESSION['auth_user_info']) . "</p>");
+        unset($_SESSION['auth_user_info']);
+    } else {
+        $_SESSION['shib_auth_test'] = false;
+        redirect_to_home_page('secure/index.php');
+    }
 }
 
 $toolName = $langConnTest . ' (' . $auth_ids[$auth] . ')';
