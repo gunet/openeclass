@@ -521,7 +521,7 @@ function refresh_popular_courses_plot(){
                     hits: langHits
                 }
             },
-            axis:{ rotated:true, x: {type:'category', tick:{inner:true}}, y:{show:false}},
+            axis:{ rotated:false, x: {type:'category', tick:{inner:true}}, y:{show:false}},
             size:{height:250},
             bar:{width:{ratio:0.9}},
             legend:{show: false},
