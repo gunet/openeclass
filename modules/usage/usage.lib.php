@@ -747,17 +747,16 @@ function user_friendly_seconds($seconds){
  * @return string a formated element ready to display a plot
 */
 function plot_placeholder($plot_id, $title = null){
-    $p = "<ul class='list-group'>";
+    //$p = "<ul class='list-group'>";
+    $p = "<div class='panel panel-default'><div class='panel-body'>";
     if(!is_null($title)){
-        $p .= "<li class='list-group-item'>"
-            . "<label id='".$plot_id."_title'>"
+        $p .= "<div class='inner-heading'><strong id='{$plot_id}_title'>"
             . $title
-            . "</label>"
-            . "</li>";
+            . "</strong>"
+            . "</div>";
     }
-    $p .= "<li class='list-group-item'>"
-            . "<div id='$plot_id'></div>"
-            . "</li></ul>";
+    $p .= "<div id='$plot_id'></div>";
+    $p .= "</div></div>";
     return $p;
 }
 
