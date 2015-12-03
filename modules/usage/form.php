@@ -28,17 +28,17 @@ $require_login = true;
 $mod_opts = '<option value="-1">' . $langAllModules . "</option>";
 $result = Database::get()->queryArray("SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ?d", $course_id);
 
-$statsIntervalOptions = '<option value="1" >' . $langPerDay . "</option>\n" .
-        '<option value="7">' . $langPerWeek . "</option>\n" .
-        '<option value="30" selected>' . $langPerMonth . "</option>\n" .
-        '<option value="365">' . $langPerYear . "</option>\n";
+$statsIntervalOptions = '<option value="1" >' . $langPerDay . "</option>" .
+        '<option value="7">' . $langPerWeek . "</option>" .
+        '<option value="30" selected>' . $langPerMonth . "</option>" .
+        '<option value="365">' . $langPerYear . "</option>";
 
 if($stats_type == 'course'){
     /**Get users of course**/
-    $result = Database::get()->queryArray("SELECT u.id, concat(givenname,' ',surname,' (',username,')') name FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE course_id=?d AND cu.status=5", $course_id);
-    $statsUserOptions = '<option value="0" >' . $langAllUsers . "</option>\n";
+    $result = Database::get()->queryArray("SELECT u.id, concat(givenname,' ',surname,' (',username,')') name FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE course_id=?d", $course_id);
+    $statsUserOptions = '<option value="0" >' . $langAllUsers . "</option>";
     foreach($result as $u){
-       $statsUserOptions .= '<option value="'.$u->id.'" >' . $u->name . "</option>\n"; 
+       $statsUserOptions .= '<option value="'.$u->id.'" >' . $u->name . "</option>";
     }
 }
 elseif($stats_type == 'admin'){
