@@ -255,7 +255,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseCourses">
                                 <h4 class="panel-title title">
-                                    <i class="fa fa-list-alt"></i><span class="txt" >{{ trans('langMyCoursesSide') }}</span>
+                                    <span class="fa fa-list-alt"></span><span class="txt" >{{ trans('langMyCoursesSide') }}</span>
                                 </h4>
                             </div>
                             <div id="collapseCourses" class="panel-collapse collapse side-list">
@@ -266,7 +266,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right" data-target="#collapse{{ $key }}-right">
                                                 <div class="panel-title lesson-title clearfix">
-                                                    <a href="{{ $urlAppend }}courses/{{ $sidebar_course->code }}/" class="lesson-title-link">{{ $sidebar_course->title }}</a><i class="fa fa-caret-down lesson-title-caret"></i>
+                                                    <a href="{{ $urlAppend }}courses/{{ $sidebar_course->code }}/" class="lesson-title-link">{{ $sidebar_course->title }}</a><span class="fa fa-caret-down lesson-title-caret"></span>
                                                 </div>
                                             </div>
                                             <div id="collapse{{ $key }}-right" class="panel-collapse collapse">
@@ -288,7 +288,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseMessages">
                                 <h4 class="panel-title title">
-                                    <i class="fa fa-envelope"></i><span class="txt">{{ trans('langNewMyMessagesSide') }}</span><span class="num-msgs"></span>
+                                    <span class="fa fa-envelope"></span><span class="txt">{{ trans('langNewMyMessagesSide') }}</span><span class="num-msgs"></span>
                                 </h4>
                             </div>
                             <div id="collapseMessages" class="panel-collapse collapse side-list overlayed">
@@ -304,7 +304,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseNotices">
                                 <h4 class="panel-title title">
-                                    <i class="fa fa-pencil"></i><span class="txt">{{ trans('langQuickNotesSide') }}</span>
+                                    <span class="fa fa-pencil"></span><span class="txt">{{ trans('langQuickNotesSide') }}</span>
                                 </h4>
                             </div>
                             <div id="collapseNotices" class="panel-collapse collapse side-list overlayed">
@@ -314,11 +314,12 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="input-parent input-group">
-                                        <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <label class="sr-only" for="title-note">{{ trans('langNoteTitle') }}</label>
                                         <input id="title-note" class="form-control" type="text" placeholder="{{ trans('langNoteTitle') }}...">
                                     </div>
                                     <div class="input-parent input-group">
-                                        <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <label class="sr-only" for="text-note">{{ trans('langNote') }}</label>
                                         <textarea id="text-note" class="form-control" rows="6" placeholder="{{ trans('langEnterNote') }}..."></textarea>
                                     </div>
