@@ -32,7 +32,7 @@ $head_content .=
 
 $tool_content .= action_bar(array(
     array('title' => $langBack,
-        'url' => "/courses/{$course_code}",
+        'url' => "{$urlServer}courses/{$course_code}",
         'icon' => 'fa-reply',
         'level' => 'primary-label')
 ),false);

@@ -36,7 +36,7 @@ $head_content .=
 
 $tool_content .= action_bar(array(
                 array('title' => $langBack,
-                    'url' => "/modules/admin/",
+                    'url' => "../admin/",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
             ),false);
