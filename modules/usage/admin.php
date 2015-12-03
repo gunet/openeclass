@@ -33,23 +33,6 @@ $head_content .=
     </script>";
 
 /**** Summary info    ****/
-/*$tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel-body'>";
-$tool_content .="<table class='table-default' style='border:0;'>"
-        . "<tr class='even' style='border:0;'>"
-        . "<td style='border:0;'>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'><strong>$langCoursesHeader</strong></div><div class='col-sm-2'><span class='badge'>".count_courses()."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langOpenCoursesShort</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_OPEN)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langOpenCourseWithRegistration</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_REGISTRATION)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langClosedCourses</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_CLOSED)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langCourseInactiveShort</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_INACTIVE)."</span></div></div></td>"
-        . "<td style='border:0;'>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'><strong>$langUsers</strong></div><div class='col-sm-2'><span class='badge'>".count_users()."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langTeachers</div><div class='col-sm-2'><span class='badge'>".count_users(USER_TEACHER)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langStudents</div><div class='col-sm-2'><span class='badge'>".count_users(USER_STUDENT)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langGuest</div><div class='col-sm-2'><span class='badge'>".count_users(USER_GUEST)."</span></div></div></td>"
-        . "</tr>"
-        . "</table>";
-$tool_content .= "</div></div></div>";*/
 
 $tool_content .= action_bar(array(
                 array('title' => $langBack,
@@ -68,18 +51,18 @@ $tool_content .= "
                     <div class='col-sm-6'>
                         <ul class='list-group'>
                             <li class='list-group-item'><strong>$langUsageCoursesHeader</strong><span class='badge'>".count_courses()."</span></li>
-                            <li class='list-group-item'>$langOpenCoursesShort<span class='badge'>".count_courses(COURSE_OPEN)."</span></li>
-                            <li class='list-group-item'>$langOpenCourseWithRegistration<span class='badge'>".count_courses(COURSE_REGISTRATION)."</span></li>
-                            <li class='list-group-item'>$langClosedCourses<span class='badge'>".count_courses(COURSE_CLOSED)."</span></li>
-                            <li class='list-group-item'>$langCourseInactiveShort<span class='badge'>".count_courses(COURSE_INACTIVE)."</span></li>
+                            <li class='list-group-item li-indented'>$langOpenCoursesShort<span class='badge'>".count_courses(COURSE_OPEN)."</span></li>
+                            <li class='list-group-item li-indented'>$langOpenCourseWithRegistration<span class='badge'>".count_courses(COURSE_REGISTRATION)."</span></li>
+                            <li class='list-group-item li-indented'>$langClosedCourses<span class='badge'>".count_courses(COURSE_CLOSED)."</span></li>
+                            <li class='list-group-item li-indented'>$langCourseInactiveShort<span class='badge'>".count_courses(COURSE_INACTIVE)."</span></li>
                         </ul>
                     </div>
                     <div class='col-sm-6'>
                         <ul class='list-group'>
                             <li class='list-group-item'><strong>$langUsageUsers</strong><span class='badge'>".count_users()."</span></li>
-                            <li class='list-group-item'>$langTeachers<span class='badge'>".count_users(USER_TEACHER)."</span></li>
-                            <li class='list-group-item'>$langStudents<span class='badge'>".count_users(USER_STUDENT)."</span></li>
-                            <li class='list-group-item'>$langGuest<span class='badge'>".count_users(USER_GUEST)."</span></li>
+                            <li class='list-group-item li-indented'>$langTeachers<span class='badge'>".count_users(USER_TEACHER)."</span></li>
+                            <li class='list-group-item li-indented'>$langStudents<span class='badge'>".count_users(USER_STUDENT)."</span></li>
+                            <li class='list-group-item li-indented'>$langGuest<span class='badge'>".count_users(USER_GUEST)."</span></li>
                         </ul>
                     </div>
                 </div>
