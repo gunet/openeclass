@@ -230,8 +230,7 @@ $(document).ready(function(){
 });//document ready   
 
 function refresh_plots(){
-    xAxisTicksAdjust();
-    console.log('refresh: selectedview='+selectedview+', stats = '+stats);
+    xAxisTicksAdjust();    
     if(stats === 'c'){
         logs_refresh_required = true;
         if(selectedview == 'logs'){
@@ -289,7 +288,7 @@ function refresh_module_pref_plot(){
                 json: data.chartdata,
                 names: data.modules,
                 type:'pie',
-                onclick: function (d,i){ console.log(d.id);refresh_course_module_plot(d.id);}
+                onclick: function (d,i){ refresh_course_module_plot(d.id);}
                 },
             bindto: '#modulepref_pie',
             tooltip: {
@@ -441,8 +440,7 @@ function refresh_course_pref_plot(){
     });
 }
 
-function refresh_user_course_plot(){
-    console.log('course = '+course+', piecourse = '+piecourse+', module = '+module+', piemodule = '+piemodule);
+function refresh_user_course_plot(){    
     $.getJSON('results.php',{t:'uc', s:startdate, e:enddate, i:interval, u:user, c:piecourse, m:piemodule},function(data){
         if(data.chartdata.chartdata == null){
             $("#course_stats_title").text(data.charttitle);
