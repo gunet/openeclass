@@ -306,9 +306,9 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         }   
         // display admin announcements
         if(!empty($ann_content)) {
-            $tool_content .= "<h3 class='content-title'>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>
-                    <i class='fa fa-rss-square'></i>
-                    </a></h3>";
+            $tool_content .= "<div class='content-title h3'>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>
+                    <span class='fa fa-rss-square'></span>
+                    </a></div>";
             $tool_content .= "<div class='panel'>
                             <div class='panel-body'>";
             $tool_content .= $ann_content;

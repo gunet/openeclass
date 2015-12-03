@@ -230,10 +230,10 @@
                         
                         <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{{ $key }}">
                             <div class="panel-heading">
-                                <h3 class="panel-title">
+                                <div class="panel-title h3">
                                     <span class="fa fa-chevron-right"></span>
                                     <span>{{ $tool_group[0]['text'] }}</span>
-                                </h3>
+                                </div>
                             </div>
                         </a>
                         <div id="collapse{{ $key }}" class="panel-collapse list-group collapse{{ $tool_group[0]['class'] }}">
@@ -254,9 +254,9 @@
                     <div class="panel-group outerpanel" id="accordion-right-parent">
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseCourses">
-                                <h4 class="panel-title title">
+                                <div class="panel-title title h4">
                                     <span class="fa fa-list-alt"></span><span class="txt" >{{ trans('langMyCoursesSide') }}</span>
-                                </h4>
+                                </div>
                             </div>
                             <div id="collapseCourses" class="panel-collapse collapse side-list">
                                 <div class="panel-body">
@@ -287,9 +287,9 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseMessages">
-                                <h4 class="panel-title title">
+                                <div class="panel-title title h4">
                                     <span class="fa fa-envelope"></span><span class="txt">{{ trans('langNewMyMessagesSide') }}</span><span class="num-msgs"></span>
-                                </h4>
+                                </div>
                             </div>
                             <div id="collapseMessages" class="panel-collapse collapse side-list overlayed">
                                 <div class="panel-body">
@@ -303,9 +303,9 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseNotices">
-                                <h4 class="panel-title title">
+                                <div class="panel-title title h4">
                                     <span class="fa fa-pencil"></span><span class="txt">{{ trans('langQuickNotesSide') }}</span>
-                                </h4>
+                                </div>
                             </div>
                             <div id="collapseNotices" class="panel-collapse collapse side-list overlayed">
                                 <div class="spinner-div hidden">

@@ -880,7 +880,7 @@ a.toggle-active{
                 text-align: center;
                 overflow: hidden;
 
-                i.fa
+                span.fa
                 {
                     padding-right: 10px;
                     opacity:.9;
@@ -978,7 +978,7 @@ a.toggle-active{
                     text-decoration: none;
                     color: #1a70b1;
                 }
-                i.lesson-title-caret
+                span.lesson-title-caret
                 {
                     background-color: #efefef;
                     display: block;
@@ -2450,13 +2450,13 @@ div.login-form .login-option-social .social-btn{
     color: white;
 }
 
-div.login-form .login-option-social .social-btn i.fa{
+div.login-form .login-option-social .social-btn span.fa{
     float: left;
     font-size: 1.6em;
     position: relative;
 }
 
-div.login-form .login-option-social .social-btn i.fa:after{
+div.login-form .login-option-social .social-btn span.fa:after{
     content: "";
     display: inline-block;
     position: absolute;

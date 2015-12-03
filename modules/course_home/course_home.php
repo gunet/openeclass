@@ -694,7 +694,7 @@ if (!$alter_layout) {
     <div class='col-md-8 course-units'>
         <div class='row'>
             <div class='col-md-12'>
-                <h3 class='content-title  pull-left'>$unititle</h3>
+                <div class='content-title pull-left h3'>$unititle</div>
             ";
             
         if ($is_editor and $course_info->view_type == 'units') {            
@@ -731,7 +731,7 @@ $tool_content .="<div class='row'>";
             if (isset($level) && !empty($level)) {
                 $tool_content .= "
                     <div class='col-md-$cunits_sidebar_subcolumns'>
-                        <h3 class='content-title'>$langOpenCourseShort</h3>
+                        <div class='content-title h3'>$langOpenCourseShort</div>
                         <div class='panel'>
                             <div class='panel-body'>
                                 $opencourses_level
@@ -745,7 +745,7 @@ $tool_content .="<div class='row'>";
             }
                 $tool_content .= "
                 <div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h3 class='content-title'>$langCalendar</h3>
+                    <div class='content-title h3'>$langCalendar</div>
                     <div class='panel'>
                         <div class='panel-body'>
                             $user_personal_calendar
@@ -773,7 +773,7 @@ $tool_content .="<div class='row'>";
                     </div>
                 </div>
                 <div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h3 class='content-title'>$langAnnouncements</h3>
+                    <div class='content-title h3'>$langAnnouncements</div>
                     <div class='panel'>
                         <div class='panel-body'>
                             <ul class='tablelist'>" . course_announcements() . "

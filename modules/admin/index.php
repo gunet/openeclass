@@ -45,7 +45,7 @@ $tool_content .= "
         <div class='col-md-12'>
             <div class='panel panel-default'>
                 <div class='panel-heading'>
-                    <h3 class='panel-title'>$langPlatformIdentity</h3>
+                    <div class='panel-title h3'>$langPlatformIdentity</div>
                 </div>                
                 <div class='panel-body'>                
                     <div class='row margin-bottom-thin'>
@@ -139,7 +139,7 @@ if ($lastadminloginres && $lastadminloginres->when) {
 $tool_content .= "
     <div class='panel panel-default'>
         <div class='panel-heading'>
-            <h3 class='panel-title'>$langInfoAdmin</h3>
+            <div class='panel-title h3'>$langInfoAdmin</div>
         </div>
         <div class='panel-body'>
             <div class='row margin-bottom-thin'>
@@ -202,7 +202,7 @@ if (get_config('enable_indexing')) {
     $tool_content .= "
     <div class='panel panel-default'>
         <div class='panel-heading'>
-            <h3 class='panel-title'>$langIndexInfo</h3>
+            <div class='panel-title h3'>$langIndexInfo</div>
         </div>
         <div class='panel-body'>
             <div class='row margin-bottom-thin'>
@@ -247,7 +247,7 @@ if (count($res) >= 1) {
     $tool_content .= "
     <div class='panel panel-default'>
         <div class='panel-heading'>
-            <h3 class='panel-title'>$langCronInfo</h3>
+            <div class='panel-title h3'>$langCronInfo</div>
         </div>
         <div class='panel-body'>
             <div class='row margin-bottom-thin'>
