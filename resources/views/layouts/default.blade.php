@@ -164,12 +164,12 @@
                                             {{ $toolName }}
                                             @if ($require_help)
                                                 <a id='help-btn' href='{{ $urlAppend }}modules/help/help.php?topic={{ $helpTopic }}&amp;language={{ $language }}'>
-                                                    <i class='fa fa-question-circle tiny-icon' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'></i>
+                                                    <span class='fa fa-question-circle tiny-icon' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'></span>
                                                 </a>                                            
                                             @endif
                                             @if(defined('RSS'))
                                                 <a href='{{ $urlAppend.RSS }}'>
-                                                    <i class='fa fa-rss-square tiny-icon tiny-icon-rss' data-toggle='tooltip' data-placement='top' title='RSS Feed'></i>
+                                                    <span class='fa fa-rss-square tiny-icon tiny-icon-rss' data-toggle='tooltip' data-placement='top' title='RSS Feed'></span>
                                                 </a>
                                             @endif
                                             @if ($is_editor and isset($course_code) and display_activation_link($module_id))
@@ -187,8 +187,8 @@
                                 <div class='pull-right'>
                                     <form method='post' action='{{ $urlAppend }}main/student_view.php?course={{ $course_code }}' id='student-view-form'>
                                         <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-toggle='tooltip' data-placement='top' title='{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}'>
-                                            <span class='on'><i class='fa fa-users'></i></span>
-                                            <span class='off'><i class='fa fa-graduation-cap'></i></span>
+                                            <span class='on'><span class='fa fa-users'></span></span>
+                                            <span class='off'><span class='fa fa-graduation-cap'></span></span>
                                         </button>
                                     </form>
                                 </div>
