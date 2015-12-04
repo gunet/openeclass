@@ -211,7 +211,7 @@ $tool_content .= "<div class='row margin-bottom'>
       <div class='col-md-12'>
         <div class='panel panel-default'>
             <div class='panel-heading'>
-                < class='panel-title'>".q($pageName)."</>
+                <div class='panel-title h3'>".q($pageName)."</div>
             </div>
             <div class='panel-body'>$comments";
 if (!empty($tags_list)) {

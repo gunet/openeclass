@@ -49,8 +49,8 @@ $tool_content .= "
                 <div class='col-sm-6'>
                     <ul class='list-group'>
                         <li class='list-group-item'><strong>$langUsageUsers</strong><span class='badge'>".count_course_users($course_id)."</span></li>
-                        <li class='list-group-item li-indented'>$langTeachers<span class='badge'>".count_course_users($course_id,USER_TEACHER)."</span></li>
-                        <li class='list-group-item li-indented'>$langStudents<span class='badge'>".count_course_users($course_id,USER_STUDENT)."</span></li>
+                        <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge'>".count_course_users($course_id,USER_TEACHER)."</span></li>
+                        <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge'>".count_course_users($course_id,USER_STUDENT)."</span></li>
                     </ul>
                     </div>
                     <div class='col-sm-6'>
