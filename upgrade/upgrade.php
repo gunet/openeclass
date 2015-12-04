@@ -175,6 +175,26 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     if (ini_get('short_open_tag')) { // check if short_open_tag is Off
         $tool_content .= "<div class='alert alert-danger'>$langWarningInstall2</div>";
     }
+    if (version_compare(PHP_VERSION, '5.4.0') < 0) {        
+        $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
+    }
+    $tool_content .= "<h5>$langRequiredPHP</h5>";
+    $tool_content .= "<ul class='list-unstyled'>";
+    warnIfExtNotLoaded('standard');
+    warnIfExtNotLoaded('session');
+    warnIfExtNotLoaded('pdo');
+    warnIfExtNotLoaded('pdo_mysql');
+    warnIfExtNotLoaded('gd');
+    warnIfExtNotLoaded('mbstring');
+    warnIfExtNotLoaded('xml');
+    warnIfExtNotLoaded('dom');
+    warnIfExtNotLoaded('zlib');
+    warnIfExtNotLoaded('pcre');
+    warnIfExtNotLoaded("curl");
+    $tool_content .= "</ul><h5>$langOptionalPHP</h5>";
+    $tool_content .= "<ul class='list-unstyled'>";
+    warnIfExtNotLoaded('ldap');    
+    $tool_content .= "</ul>";
 
     setGlobalContactInfo();
     $tool_content .= "<div class='alert alert-info'>$langConfigFound<br>$langConfigMod</div>
