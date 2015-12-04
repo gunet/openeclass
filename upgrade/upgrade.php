@@ -2994,6 +2994,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             WHERE id = ?d', $order++, $link->id);
                 }
             });
+        if (!DBHelper::fieldExists('poll', 'public')) {
+            Database::get()->query("ALTER TABLE `poll` ADD `public` TINYINT(1) NOT NULL DEFAULT 1 AFTER `active`");
+            Database::get()->query("UPDATE `poll` SET `public` = 0");
+        }        
     }
 
     // update eclass version

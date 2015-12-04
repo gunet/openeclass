@@ -66,7 +66,19 @@ if ($is_editor) {
             }
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         }
-
+        if (isset($_GET['access'])) {
+            switch ($_GET['access']) {
+                case 'public':
+                    Database::get()->query("UPDATE poll SET public = 1 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+                    Session::Messages($langPollUnlocked, 'alert-success');
+                    break;
+                case 'limited':
+                    Database::get()->query("UPDATE poll SET public = 0 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+                    Session::Messages($langPollLocked, 'alert-success');
+                    break;
+            }
+            redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+        }
         // delete polls
         if (isset($_GET['delete']) and $_GET['delete'] == 'yes') {
             Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
@@ -168,8 +180,8 @@ function printPolls() {
     global $tool_content, $course_id, $course_code,
     $langTitle, $langCancel,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
-    $langEditChange, $langDelete, $langSurveyNotStarted,
-    $langDeactivate, $langPollHasEnded, $langActivate,
+    $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
+    $langDeactivate, $langPollHasEnded, $langActivate, $langResourceAccessUnlock,
     $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
@@ -256,6 +268,9 @@ function printPolls() {
         $index_aa = 1;
         $k = 0;
         foreach ($result as $thepoll) {
+            if (!$is_editor && !resource_access($thepoll->active, $thepoll->public)) {
+                continue;
+            }            
             $visibility = $thepoll->active;
 
             if (($visibility) or ($is_editor)) {
@@ -298,8 +313,12 @@ function printPolls() {
                 }
                 
                 if ($is_editor) {
+                    $lock_icon = "";
+                    if (!$thepoll->public) {
+                        $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
+                    }                              
                     $tool_content .= "
-                        <td><a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>";
+                        <td><a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>$lock_icon";
                 } else {
                     $tool_content .= "
                         <td>";
@@ -330,14 +349,19 @@ function printPolls() {
                                 'title' => $langUsage,
                                 'level' => 'primary',
                                 'icon' => 'fa-line-chart',
-                                'url' => "pollresults.php?course=$course_code&pid=$pid",
+                                'url' => "pollresults.php?course=$course_code&amp;pid=$pid",
                                 'disabled' => $total_participants == 0
                             ),
                             array(
                                 'title' => $langSee,
                                 'icon' => 'fa-search',
-                                'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid"
+                                'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&amp;pid=$pid"
                             ),
+                            array(
+                                'title' => $thepoll->public ? $langResourceAccessLock : $langResourceAccessUnlock,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($thepoll->public ? "access=limited" : "access=public")."&amp;pid=$pid",
+                                'icon' => $thepoll->public ? 'fa-lock' : 'fa-unlock',
+                                'show' => course_status($course_id) == COURSE_OPEN),                                        
                             array(
                                 'title' => $langCreateDuplicate,
                                 'icon' => 'fa-copy',
