@@ -792,9 +792,9 @@ function upgrade_course_3_0($code, $course_id) {
                      FROM poll AS old ORDER by pid");
 
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.poll
-                         (`pid`, `course_id`, `creator_id`, `name`, `creation_date`, `start_date`, `end_date`, `active`)
+                         (`pid`, `course_id`, `creator_id`, `name`, `creation_date`, `start_date`, `end_date`, `active`, `anonymized`)
                          SELECT `pid` + $pollid_offset, $course_id, `creator_id`, `name`, `creation_date`, `start_date`,
-                                `end_date`, `active`
+                                `end_date`, `active`, `anonymized`
                            FROM poll ORDER BY pid") != null);
 
         // ----- poll_question DB Table ----- //
