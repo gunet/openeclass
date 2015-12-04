@@ -769,16 +769,16 @@ function plot_placeholder($plot_id, $title = null){
  * @return string a formated element containing the specified table
 */
 function table_placeholder($table_id, $table_class, $table_schema, $title = null){
-    $t = "";
+    $t = "<div class='panel-body'>";
     if(!is_null($title)){
-        $t .= "<div class='panel-heading'>"
-            . "<label id='".$table_id."_title'>"
+        $t .= "<div class='inner-heading'>"
+            . "<strong id='".$table_id."_title'>"
             . $title
-            . "</label>"
+            . "</strong>"
             ."<div class='pull-right' id='{$table_id}_buttons'></div><div style='clear:both;'></div>"
             . "</div>";
     }
-    $t .= "<div class='panel-body'><div class='table-responsive'>"
+    $t .= "<div class='table-responsive'>"
        . "<table id='$table_id' class='$table_class'>"
        . "$table_schema"
        . "</table>"
