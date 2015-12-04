@@ -778,10 +778,10 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
             ."<div class='pull-right' id='{$table_id}_buttons'></div><div style='clear:both;'></div>"
             . "</div>";
     }
-    $t .= "<div class='panel-body'>"
+    $t .= "<div class='panel-body'><div class='table-responsive'>"
        . "<table id='$table_id' class='$table_class'>"
        . "$table_schema"
        . "</table>"
-       . "</div>";
+       . "</div></div>";
     return $t;
 }

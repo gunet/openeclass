@@ -111,7 +111,7 @@ foreach($langCourseVisibility as $ct){
 $tschema .= "</tr></thead>"
         . "<tbody></tbody>"
         . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>";
-$tool_content .= table_placeholder("adetails1", "table table-striped table-bordered", $tschema, "$langUsers $langAnd $langCourses");
+$tool_content .= table_placeholder("adetails1", "table table-default dataTable", $tschema, "$langUsers $langAnd $langCourses");
 $tool_content .= "</div>";
 
 $tool_content .= "<div class='panel panel-default detailscontainer'>";
