@@ -822,11 +822,12 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
     `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
     `active` INT(11) NOT NULL DEFAULT 0,
+    `public` TINYINT(1) NOT NULL DEFAULT 1,    
     `description` MEDIUMTEXT NULL DEFAULT NULL,
     `end_message` MEDIUMTEXT NULL DEFAULT NULL,
     `anonymized` INT(1) NOT NULL DEFAULT 0,
     `show_results` INT(1) NOT NULL DEFAULT 0,
-	`type` TINYINT NOT NULL DEFAULT 0,
+    `type` TINYINT NOT NULL DEFAULT 0,
     `assign_to_specific` TINYINT NOT NULL DEFAULT '0' ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
