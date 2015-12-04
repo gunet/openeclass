@@ -432,7 +432,7 @@ $admin_modules = array(
     MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info', 'image' => 'fa-cogs'),
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'fa-user'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'fa-area-chart'),
-    MODULE_ID_COURSE_WIDGETS => array('title' => $langCourseWidgets, 'link' => 'course_widgets', 'image' => 'fa-magic'),
+    MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets', 'image' => 'fa-magic'),
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'fa-cogs'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'fa-flag'),
 );
@@ -443,7 +443,7 @@ $static_modules = array(
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage'),
     MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info'),
-    MODULE_ID_COURSE_WIDGETS => array('title' => $langCourseWidgets, 'link' => 'course_widgets'),
+    MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets'),
     MODULE_ID_TOOLADMIN => array('title' => $langCourseTools, 'link' => 'course_tools'),
     MODULE_ID_UNITS => array('title' => $langUnits, 'link' => 'units'),
     MODULE_ID_WEEKS => array('title' => $langCourseWeeklyFormat, 'link' => 'weeks'),

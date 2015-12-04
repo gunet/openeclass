@@ -4793,13 +4793,13 @@ $langCPFDateValidFail = 'Το πεδίο %s δεν είναι έγκυρη ημ�
 /* * ******************************************
   Widgets
  * ***************************************** */
-$langWidgets = "Μικροεργαλεία";
-$langMyWidgets = "Τα μικροεργαλεία μου";
-$langCourseWidgets = "Mικροεργαλεία μαθήματος";
-$langInstalledWidgets = "Εγκατεστημένα Μικροεργαλεία";
-$langNoInstalledWidgets = "Δεν υπάρχουν εγκατεστημένα Μικροεργαλεία";
-$langAvailableWidgets = "Διαθέσιμα Μικροεργαλεία";
-$langNoAvailableWidgets = "Δεν υπάρχουν διαθέσιμα προς εγκατάσταση Μικροεργαλεία";
+$langWidgets = "Μικροεφαρμογές";
+$langMyWidgets = "Οι μικροεφαρμογές μου";
+$langCourseWidgets = "Mικροεφαρμογές μαθήματος";
+$langInstalledWidgets = "Εγκατεστημένες Μικροεφαρμογές";
+$langNoInstalledWidgets = "Δεν υπάρχουν εγκατεστημένες μικροεφαρμογές";
+$langAvailableWidgets = "Διαθέσιμες Μικροεφαρμογές";
+$langNoAvailableWidgets = "Δεν υπάρχουν διαθέσιμες μικροεφαρμογές προς εγκατάσταση.";
 $langWidgetInstall = "Εγκατάσταση";
 $langWidgetUninstall = "Απεγκατάσταση";
 $langWidgetAdmin = "Διαχείρισης";
