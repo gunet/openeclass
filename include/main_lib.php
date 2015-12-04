@@ -3633,6 +3633,29 @@ function my_dirname($path) {
     return $path;
 }
 
+/*
+ * check extension and  write  if exist  in a  <LI></LI>
+ * @params string       $extensionName  name  of  php extension to be checked
+ * @params boolean      $echoWhenOk     true => show ok when  extension exist
+ * @author Christophe Gesche
+ * @desc check extension and  write  if exist  in a  <LI></LI>
+ */
+function warnIfExtNotLoaded($extensionName) {
+
+    global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
+    
+    if (extension_loaded($extensionName)) {
+        $tool_content .= '<li>' . icon('fa-check') . ' ' . $extensionName . '</li>';
+    } else {
+        $tool_content .= "
+                <li class='bg-danger'>" . icon('fa-times') . " $extensionName
+                <b>$langModuleNotInstalled</b>
+                (<a href='http://www.php.net/$extensionName' target=_blank>$langReadHelp $langHere</a>)
+                </li>";
+    }
+}
+
+
 /**
  * @brief IP address and IP CIDR validation functions
  *
