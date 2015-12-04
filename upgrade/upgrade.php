@@ -2989,13 +2989,25 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             WHERE id = ?d', $order++, $link->id);
                 }
             });
+        // Fix duplicate poll_question orders    
+        Database::get()->queryFunc('SELECT `pid`
+                FROM `poll_question`
+                GROUP BY `pid`, `q_position` HAVING COUNT(`pqid`) > 1',
+                function ($item) {
+                    $poll_questions = Database::get()->queryArray("SELECT * FROM `poll_question` WHERE pid = ?d", $item->pid);
+                    $order = 1;
+                    foreach ($poll_questions as $poll_question) {
+                        Database::get()->query('UPDATE `poll_question` SET `q_position` = ?d
+                                                    WHERE pqid = ?d', $order++, $poll_question->pqid);                        
+                    }
+                });            
         if (!DBHelper::fieldExists('poll', 'public')) {
             Database::get()->query("ALTER TABLE `poll` ADD `public` TINYINT(1) NOT NULL DEFAULT 1 AFTER `active`");
             Database::get()->query("UPDATE `poll` SET `public` = 0");
         }            
     }
-
-    if (version_compare($oldversion, '3.4', '<')) {
+       
+    if (version_compare($oldversion, '3.4', '<')) {      
         Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
                         `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `class` varchar(400) NOT NULL) $charset_spec"); 
