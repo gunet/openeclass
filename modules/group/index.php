@@ -99,7 +99,7 @@ if ($is_editor) {
         if($v->validate()) {            
             $group_max = $_POST['group_max'];            
             $group_quantity = $_POST['group_quantity'];
-            $group_description = $_POST['description'];
+            $group_description = isset($_POST['description']) ? $_POST['description'] : '';
             if (isset($_POST['group_name'])) {
                 $group_name = $_POST['group_name'];
             }
@@ -116,7 +116,7 @@ if ($is_editor) {
             if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
                     $wiki = 1;
             }
-            else $wiki = 0;            
+            else $wiki = 0;    
             $group_num = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `group` WHERE course_id = ?d", $course_id)->count;
 
             // Create a hidden category for group forums
@@ -180,14 +180,21 @@ if ($is_editor) {
                                               VALUES (?d, ?d)", $_POST['ingroup'][$i], $id);
                     }               
                 }
+                
+                $query_vars = [
+                    $course_id, 
+                    $id, 
+                    $has_forum, 
+                    $documents, 
+                    $wiki
+                ];
 
                 $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,
-                                                                    group_id = ?d, self_registration = ?d, 
-                                                                    allow_unregister = ?d, 
-                                                                    forum = ?d, private_forum = ?d, 
+                                                                    group_id = ?d, self_registration = 1, 
+                                                                    allow_unregister = 0, 
+                                                                    forum = 1, private_forum = ?d, 
                                                                     documents = ?d, wiki = ?d, 
-                                                                    agenda = ?d",
-                                                                $course_id, $id, 1, 0, 1, $has_forum, $documents, $wiki, 0);                
+                                                                    agenda = 0", $query_vars);                
                 
                 /** ********Create Group Wiki*********** */
                 //Set ACL
@@ -202,12 +209,12 @@ if ($is_editor) {
                 $wikiACL['other_edit'] = false;
                 $wikiACL['other_create'] = false;
 
-                $wiki = new Wiki();
-                $wiki->setTitle($langGroup . " " . $group_num . " - Wiki");
-                $wiki->setDescription('');
-                $wiki->setACL($wikiACL);
-                $wiki->setGroupId($id);
-                $wikiId = $wiki->save();
+                $wiki_obj = new Wiki();
+                $wiki_obj->setTitle($langGroup . " " . $group_num . " - Wiki");
+                $wiki_obj->setDescription('');
+                $wiki_obj->setACL($wikiACL);
+                $wiki_obj->setGroupId($id);
+                $wikiId = $wiki_obj->save();
 
                 $mainPageContent = $langWikiMainPageContent;
 
