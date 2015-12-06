@@ -206,9 +206,9 @@ class CourseXMLElement extends SimpleXMLElement {
             $fieldStart .= "<div class='panel-group'>
                 <div class='panel panel-default'>
                     <div class='panel-heading'>
-                        <h3 class='panel-title'>
+                        <div class='panel-title h3'>
                             <a data-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "</a>
-                        </h3>
+                        </div>
                     </div>
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
                         <div class='panel-body'>";
@@ -407,9 +407,9 @@ class CourseXMLElement extends SimpleXMLElement {
             $fieldStart .= "<div class='panel-group'>
                 <div class='panel panel-default'>
                     <div class='panel-heading'>
-                        <h3 class='panel-title'>
+                        <div class='panel-title h3'>
                             <a data-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "</a>
-                        </h3>
+                        </div>
                     </div>
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
                         <div class='panel-body'>";

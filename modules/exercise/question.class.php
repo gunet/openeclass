@@ -598,7 +598,7 @@ if (!class_exists('Question')):
                 // and (incorrect answers == 0) (this control is necessary mostly in cases of MULTIPLE ANSWER type)               
                 if ($q_correct_answers_cnt > 0) {
                     $correct_answer_attempts = Database::get()->querySingle("
-                        SELECT COUNT(*) AS counter FROM(
+                        SELECT COUNT(*) AS counter FROM (
                             SELECT a.eurid, 
                             SUM($q_correct_answers_sql) as correct_answer_cnt,
                             SUM($q_incorrect_answers_sql) as incorrect_answer_cnt

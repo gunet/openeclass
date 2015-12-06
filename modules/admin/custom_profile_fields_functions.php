@@ -154,6 +154,7 @@ function render_profile_fields_form($context, $valitron = false) {
                             $val = $_REQUEST['cpf_'.$f->shortname];
                         }
                         $return_string .= rich_text_editor('cpf_'.$f->shortname, 8, 20, $val);
+                        $req_label = $langCompulsory;
                         break;
                     case CPF_DATE:
                         if (isset($fdata) && $fdata != '') {
@@ -178,7 +179,11 @@ function render_profile_fields_form($context, $valitron = false) {
                             $def_selection = 0;
                         }
                         $options = unserialize($f->data);
+                        $options = array_combine(range(1, count($options)), array_values($options));
+                        $options[0] = "";
+                        ksort($options);
                         $return_string .= selection($options, 'cpf_'.$f->shortname, $def_selection);
+                        $req_label = $langCompulsory;
                         break;
                     case CPF_LINK:
                         if (isset($fdata) && $fdata != '') {
@@ -195,9 +200,16 @@ function render_profile_fields_form($context, $valitron = false) {
                         break;
                 }
                 if (!empty($f->description)) {
-                    $return_string .= '<small><em>'.standard_text_escape($f->description).'</em></small>';
+                    $return_string .= '<small><em>'.standard_text_escape($f->description);
+                    if (isset($req_label)) {
+                        $return_string .= $req_label;
+                    }
+                    $return_string .= '</em></small>';
+                } elseif (isset($req_label)) {
+                    $return_string .= '<small><em>'.$req_label.'</em></small>';
                 }
                 $return_string .= $help_block.'</div></div>';
+                unset($req_label);
             }
         }
     }
@@ -363,6 +375,9 @@ function render_profile_fields_content($context) {
                         break;
                     case CPF_MENU:
                         $options = unserialize($f->data);
+                        $options = array_combine(range(1, count($options)), array_values($options));
+                        $options[0] = "";
+                        ksort($options);
                         $return_str .= "<span class='tag-value'>".q($options[$fdata_res->data])."</span>";
                         break;
                     case CPF_LINK:
@@ -422,7 +437,7 @@ function cpf_validate_format() {
 }
 
 function cpf_validate_format_valitron(&$valitron_object) {
-    global $langCPFLinkValidFail, $langCPFDateValidFail;
+    global $langCPFLinkValidFail, $langCPFDateValidFail, $langTheFieldIsRequired;
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
             $field_name = substr($key, 4);
@@ -433,6 +448,8 @@ function cpf_validate_format_valitron(&$valitron_object) {
                 $valitron_object->rule('url', $key)->message(sprintf($langCPFLinkValidFail, q($field_name)))->label($field_name);
             } elseif ($datatype == CPF_DATE) {
                 $valitron_object->rule('date', $key)->message(sprintf($langCPFDateValidFail, q($field_name)))->label($field_name);
+            } elseif ($datatype == CPF_MENU) {
+                $valitron_object->rule('notIn', $key, array(0))->message($langTheFieldIsRequired)->label($field_name);
             }
         }
     }

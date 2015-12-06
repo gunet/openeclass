@@ -220,7 +220,7 @@ function course_list_handler() {
     if (passfield.length) {
         submit_info.password = passfield.val();
     }
-    $.post('course_submit.php',
+    $.post(urlAppend + 'modules/auth/course_submit.php',
         submit_info,
         function (result) {
             var title_span = $('#cid'+cid);

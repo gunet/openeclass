@@ -167,14 +167,14 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><i class="fa fa-arrow-circle-left fa-lg"></i> </a></li>';
+        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-left fa-lg"></span> </a></li>';
     } else {
         $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><i class='fa fa-arrow-circle-left'></i></a></li>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><i class="fa fa-arrow-circle-right fa-lg"></i></a></li>';
+        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-right fa-lg"></span></a></li>';
     } else {
-        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><i class='fa fa-arrow-circle-right'></i></a></li>";
+        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><span class='fa fa-arrow-circle-right'></span></a></li>";
     }
 }
 

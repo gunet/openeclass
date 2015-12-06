@@ -212,9 +212,12 @@ hContent;
             $form_legend = $langCategoryAdd;
         }
         $tool_content .= "<fieldset>
-                        <div class='form-group'>
+                         <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
                             <label for='CatName' class='col-sm-2 control-label'>$langCategoryName:</label>
-                            <div class='col-sm-10'><input class='form-control' type='text' name='categoryname' size='53'$form_name /></div>
+                            <div class='col-sm-10'>
+								<input class='form-control' type='text' name='categoryname' size='53'$form_name />
+								<span class='help-block'>".Session::getError('categoryname')."</span>
+							</div>
                         </div>
                         <div class='form-group'>
                             <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
@@ -334,6 +337,14 @@ hContent;
                                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div>";
                     draw($tool_content, $menuTypeID, null, $head_content);
                     exit;
+                }
+                require_once 'modules/admin/extconfig/externals.php';
+                $connector = AntivirusApp::getAntivirus();
+                if($connector->isEnabled() == true ){
+                    $output=$connector->check("$updir/$safe_filename");
+                    if($output->status==$output::STATUS_INFECTED){
+                        AntivirusApp::block($output->output);
+                    }
                 }
                 
                 $path = '/' . $safe_filename;
@@ -498,7 +509,7 @@ hContent;
         } else if ($_GET['form_input'] === 'opendelos') {
             $jsonObj = requestDelosJSON();
             // construct the form/table from the JSON received
-            if ($jsonObj !== null) {
+            if ($jsonObj !== null && property_exists($jsonObj, "resources")) {
                 $tool_content .= displayDelosForm($jsonObj, getCurrentVideoLinks());
             } else {
                 $tool_content .= "<div class='alert alert-warning' role='alert'>$langNoVideo</div>";
@@ -745,19 +756,27 @@ function select_proper_filters($requestDocsFilter) {
  */
 function submit_video_category() {
     global $langCategoryAdded, $langCategoryModded,
-    $categoryname, $description, $course_id;
+    $categoryname, $description, $course_id, 
+	$langTheFieldIsRequired, $langFormErrors, $course_code;
 
     register_posted_variables(array('categoryname' => true,
         'description' => true), 'all', 'trim');
     $description = purify($description);
-    if (isset($_POST['id'])) {
-        Database::get()->query("UPDATE `video_category` SET name = ?s,
-                                        description = ?s WHERE id = ?d", $categoryname, $description, $_POST['id']);
-        $catlinkstatus = $langCategoryModded;
-    } else {
-        Database::get()->query("INSERT INTO `video_category` SET name = ?s,
-                                description = ?s, course_id = ?d", $categoryname, $description, $course_id);
-        $catlinkstatus = $langCategoryAdded;
+	$v = new Valitron\Validator($_POST);
+    $v->rule('required', array('categoryname'))->message($langTheFieldIsRequired)->label('');
+    if($v->validate()) {
+		if (isset($_POST['id'])) {
+			Database::get()->query("UPDATE `video_category` SET name = ?s,
+											description = ?s WHERE id = ?d", $categoryname, $description, $_POST['id']);
+			$catlinkstatus = $langCategoryModded;
+		} else {
+			Database::get()->query("INSERT INTO `video_category` SET name = ?s,
+									description = ?s, course_id = ?d", $categoryname, $description, $course_id);
+			$catlinkstatus = $langCategoryAdded;
+		}
+	} else {
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("modules/video/index.php?course=$course_code&action=addcategory");
     }
 }
 

@@ -528,9 +528,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
     }
 
-    // unzip package
-    require_once "include/pclzip/pclzip.lib.php";
-
     /*
      * Check if the file is valid (not to big and exists)
      */
@@ -556,7 +553,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
             $errorFound = true;
             array_push($errorMsgs, $langErrorNoZlibExtension);
         } else {
-            $zipFile = new pclZip($_FILES['uploadedPackage']['tmp_name']);
+            $zipFile = new PclZip($_FILES['uploadedPackage']['tmp_name']);
             $is_allowedToUnzip = true; // default initialisation
             // Check the zip content (real size and file extension)
 

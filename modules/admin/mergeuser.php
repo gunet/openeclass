@@ -34,7 +34,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
 
 if (isset($_REQUEST['u'])) {
-    $u = intval($_REQUEST['u']);
+    $u = intval(getDirectReference($_REQUEST['u']));
     $navigation[] = array('url' => "edituser.php?u=$u", 'name' => $langEditUser);
     if ($u == 1 or get_admin_rights($u) >= 0) {
         $tool_content = "<div class='alert alert-danger'>$langUserMergeAdminForbidden</div>";
@@ -79,6 +79,7 @@ if (isset($_REQUEST['u'])) {
                 $target_field .= "<div class='alert alert-warning'>$langUserMergeForbidden</div>";
             } else {
                 if ($_POST['submit'] == $langUserMerge) {
+                    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
                     do_user_merge($info, $target);
                 }
                 $submit_button = $langUserMerge;
@@ -106,12 +107,13 @@ if (isset($_REQUEST['u'])) {
                          <div class='col-sm-9'>" . q($status_names[$info['status']]) . "</div>
                     </div>                    
                      $target_field
-                    <input type='hidden' name='u' value='$u'>
+                    <input type='hidden' name='u' value='" . getIndirectReference($u) . "'>
                      <div class='col-sm-offset-3 col-sm-9'>                                                  
                            <input class='btn btn-primary' type='submit' name='submit' value='$submit_button'>
                     </div>                                                  
                  </fieldset>
                  $target_user_input
+                 ". generate_csrf_token_form_field() ."
                </form></div>";
     }
 } else {
@@ -165,7 +167,7 @@ function do_user_merge($source, $target) {
         fix_table('logins', 'user_id', $source_id, $target_id);
         fix_table('lp_user_module_progress', 'user_id', $source_id, $target_id);
         fix_table('poll', 'creator_id', $source_id, $target_id);
-        fix_table('poll_answer_record', 'user_id', $source_id, $target_id);
+        fix_table('poll_user_record', 'uid', $source_id, $target_id);
         fix_table('forum_notify', 'user_id', $source_id, $target_id);
         fix_table('forum_post', 'poster_id', $source_id, $target_id);
         fix_table('forum_topic', 'poster_id', $source_id, $target_id);
@@ -181,7 +183,7 @@ function do_user_merge($source, $target) {
         fix_table('personal_calendar_settings', 'user_id', $source_id, $target_id);
         fix_table('rating', 'user_id', $source_id, $target_id);
         fix_table('user_department', 'user', $source_id, $target_id);
-        fix_table('custom_profile_fields_data', 'user_id', $source, $target);
+        fix_table('custom_profile_fields_data', 'user_id', $source_id, $target_id);
 
         $tool_content = sprintf('<div class="alert alert-success">' . $langUserMergeSuccess . '</div>', '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>') .
                 "<p><a href='search_user.php'>$langBack</p>";

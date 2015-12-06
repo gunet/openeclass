@@ -40,9 +40,9 @@ class ForumIndexer extends AbstractIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'forum_' . $forum->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_FORUM . '_' . $forum->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $forum->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'forum', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_FORUM, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $forum->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($forum->name), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics($forum->desc), $encoding));
@@ -122,29 +122,6 @@ class ForumIndexer extends AbstractIndexer implements ResourceIndexerInterface {
             JOIN forum_category fc ON f.cat_id = fc.id 
             WHERE fc.cat_order >= 0
             AND f.course_id = ?d", $courseId);
-    }
-
-    /**
-     * Build a Lucene Query.
-     * 
-     * @param  array   $data      - The data (normally $_POST), needs specific array keys
-     * @param  boolean $anonymous - whether we build query for anonymous user access or not
-     * @return string             - the returned query string
-     */
-    public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['course_id']) && !empty($data['course_id'])) {
-            $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
-            $queryStr = '(';
-            foreach ($terms as $term) {
-                $queryStr .= 'title:' . $term . '* ';
-                $queryStr .= 'content:' . $term . '* ';
-            }
-            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:forum';
-            return $queryStr;
-        }
-
-        return null;
     }
 
 }

@@ -276,9 +276,9 @@ $out .=         "
                   $(function() {
                     $("#in_msg_body").find("a").addClass("outtabs");
 
-                    $(document).off( "click",".delete_in");
+                    $(document).off("click", ".delete_in");
 
-                    $(document).on( "click",".delete_in_inner", function (e) {
+                    $(document).on("click", ".delete_in_inner", function (e) {
                          e.preventDefault();
                          var id = $(this).data("id");
                          var string = "mid="+id;

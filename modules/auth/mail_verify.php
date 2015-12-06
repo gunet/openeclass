@@ -57,8 +57,12 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
         $user_error_msg = $langMailVerifyNoId;        
     }
     $res = Database::get()->querySingle($qry);
-    if ($res) {        
-            $username = $res->username;
+    if ($res) {                                
+            if (get_config('case_insensitive_usernames')) {
+                $username = strtolower($res->username);
+            } else {
+                $username = $res->username;
+            }
             $email = $res->email;
             // success
             if (token_validate($username . $email . $id, $code)) {
@@ -76,15 +80,38 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                     $userphone = $res->phone;
 
                     $subject = $prof ? $mailsubject : $mailsubject2;
-                    $MailMessage = $mailbody1 . $mailbody2 . "$givenname $surname\n\n" .
-                            $mailbody3 . $mailbody4 . $mailbody5 .
-                            ($prof ? $mailbody6 : $mailbody8) .
-                            "\n\n$langFaculty: $department\n$langComments: $usercomment\n" .
-                            "$langAm: $am\n" .
-                            "$langProfUname: $username\n$langProfEmail : $usermail\n" .
-                            "$contactphone: $userphone\n\n\n$logo\n\n";
-                    $emailAdministrator = get_config('email_sender');        
-                    if (!send_mail($siteName, $emailAdministrator, '', get_config('email_helpdesk'), $subject, $MailMessage, $charset, "Reply-To: $usermail")) {
+
+                    $emailAdministrator = get_config('email_sender');
+
+                    $header_html_topic_notify = "<!-- Header Section -->
+                    <div id='mail-header'>
+                        <br>
+                        <div>
+                            <div id='header-title'>$mailbody1</div>
+                        </div>
+                    </div>";
+
+                    $body_html_topic_notify = "<!-- Body Section -->
+                    <div id='mail-body'>
+                        <br>
+                        <div id='mail-body-inner'>
+                        $mailbody2 $givenname $surname $mailbody3 $mailbody4 $mailbody5 ".($prof ? $mailbody6 : $mailbody8)."
+                            <ul id='forum-category'>
+                                <li><span><b>$langFaculty:</b></span> <span>$department</span></li>
+                                <li><span><b>$langComments:</b></span> <span>$usercomment</a></span></li>
+                                <li><span><b>$langAm :</b></span> <span>$am</span></li>
+                                <li><span><b>$langProfUname:</b></span> <span> $username </span></li>
+                                <li><span><b>$langProfEmail:</b></span> <span> $usermail </span></li>
+                                <li><span><b>$contactphone:</b></span> <span> $userphone </span></li>
+                            </ul><br><br>$logo
+                        </div>
+                    </div>";
+
+                    $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
+
+                    $plainMailMessage = html2text($MailMessage);
+
+                    if (!send_mail_multipart($siteName, $emailAdministrator, '', get_config('email_helpdesk'), $subject, $plainMailMessage, $MailMessage, $charset, "Reply-To: $usermail")) {
                         $user_msg = $langMailErrorMessage;
                     } else {
                         $user_msg = $infoprof;

@@ -30,7 +30,7 @@ $require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
 
 if (isset($_GET['c'])) {
-    $course_id = intval($_GET['c']);
+    $course_id = intval(getDirectReference($_GET['c']));
 } else {
     $course_id = 0;
 }
@@ -82,7 +82,7 @@ else {
 		<br><br><i>" . $langNoticeDel . "</i><br>
 		</div>";
     $tool_content .= "<ul class='list-group'>
-                        <li class='list-group-item'><a href='" . $_SERVER['SCRIPT_NAME'] . "?c=" . q($course_id) . "&amp;delete=yes'><b>$langYes</b></a></li>
+                        <li class='list-group-item'><a href='" . $_SERVER['SCRIPT_NAME'] . "?c=" . getIndirectReference($course_id) . "&amp;delete=yes'><b>$langYes</b></a></li>
                         <li class='list-group-item'><a href='listcours.php'><b>$langNo</b></a></li>
                     </ul>";
 }

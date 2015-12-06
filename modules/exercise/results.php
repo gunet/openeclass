@@ -67,7 +67,15 @@ if ($is_editor && isset($_GET['purgeAttempID'])) {
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
- 
+$displayScore = $objExercise->selectScore();
+$exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
+$userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
+$cur_date = new DateTime("now");
+$end_date = new DateTime($objExercise->selectEndDate());
+$showScore = $displayScore == 1 
+            || $is_editor
+            || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
+            || $displayScore == 4 && $end_date < $cur_date; 
 $tool_content .= "
 <div class='table-responsive'>
     <table class='table-default'>
@@ -141,7 +149,21 @@ foreach ($result as $row) {
                 $tool_content .= "<td class='text-center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
             if ($row2->attempt_status == ATTEMPT_COMPLETED) {
-                $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . q($row2->total_score) . "/" . q($row2->total_weighting) . "</a>";
+                if ($showScore) {
+                    $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . q($row2->total_score) . "/" . q($row2->total_weighting) . "</a>";
+                } else {
+                    switch ($displayScore) {
+                        case 2:
+                            $results_link = $langScoreNotDisp;
+                            break;
+                        case 3:
+                            $results_link = $langScoreDispLastAttempt;
+                            break;
+                        case 4:
+                            $results_link = $langScoreDispEndDate;
+                            break;                        
+                    }
+                }
             } else {
                 if ($row2->attempt_status == ATTEMPT_PAUSED) {
                     $results_link = "-/-";

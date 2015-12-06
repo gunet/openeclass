@@ -58,6 +58,14 @@ if (isset($_GET['delete_image'])) {
         }
         $file_name = php2phps($file_name);
         move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$course_code/image/$file_name");
+        require_once 'modules/admin/extconfig/externals.php';
+        $connector = AntivirusApp::getAntivirus();
+        if($connector->isEnabled() == true ){
+            $output=$connector->check("$webDir/courses/$course_code/image/$file_name");
+            if($output->status==$output::STATUS_INFECTED){
+                AntivirusApp::block($output->output);
+            }
+        }
         $extra_sql = ", course_image = ?s";
         array_push($db_vars, $file_name);
     }
@@ -82,7 +90,7 @@ if (isset($_GET['delete_image'])) {
             });          
         });
     </script>";        
-$layouts = array(1 => $langCourseLayout1, 2 => $langCourseLayout2, 3 => $langCourseLayout3);
+$layouts = array(1 => $langCourseLayout1, 3 => $langCourseLayout3);
 $description = $course->description;
 $layout = $course->home_layout;
 

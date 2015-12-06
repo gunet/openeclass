@@ -79,31 +79,6 @@ if ($is_in_tinymce) {
 }
 
 ModalBoxHelper::loadModalBox();
-$head_content .= <<<hContent
-<script type="text/javascript">
-function checkrequired(which, entry) {
-	var pass=true;
-	if (document.images) {
-		for (i=0;i<which.length;i++) {
-			var tempobj=which.elements[i];
-			if (tempobj.name == entry) {
-				if (tempobj.type=="text"&&tempobj.value=='') {
-					pass=false;
-					break;
-		  		}
-	  		}
-		}
-	}
-	if (!pass) {
-		alert("$langFieldsMissing");
-		return false;
-	} else {
-		return true;
-	}
-}
-
-</script>
-hContent;
 
 if (isset($_GET['category'])) {
     $category = intval(getDirectReference($_GET['category']));
@@ -204,7 +179,7 @@ if ($is_editor) {
     if (in_array($action, array('addlink', 'editlink'))) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
         $tool_content .= "<div class = 'form-wrapper'>";
-        $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
+        $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview'>";
         if ($action == 'editlink') {
             $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
             link_form_defaults($id);
@@ -217,10 +192,11 @@ if ($is_editor) {
         }
         $tool_content .= "
         <fieldset>
-        <div class='form-group'>
+        <div class='form-group".(Session::getError('urllink') ? " has-error" : "")."'>
             <label for='urllink' class='col-sm-2 control-label'>URL:</label>
             <div class='col-sm-10'>
                 <input class='form-control' type='text' id='urllink' name='urllink' $form_url >
+				<span class='help-block'>".Session::getError('urllink')."</span>
             </div>
         </div>
         <div class='form-group'>
@@ -237,7 +213,7 @@ if ($is_editor) {
             <label for='selectcategory' class='col-sm-2 control-label'>$langCategory:</label>
             <div class='col-sm-3'>
                 <select class='form-control' name='selectcategory' id='selectcategory'>
-                <option value='0'>--</option>";
+                <option value='" . getIndirectReference(0) . "'>--</option>";
         if ($social_bookmarks_enabled) {
             $tool_content .= "<option value='" . getIndirectReference(-2) . "'";
             if (isset($category) and -2 == $category) {
@@ -270,7 +246,7 @@ if ($is_editor) {
     } elseif (in_array($action, array('addcategory', 'editcategory'))) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
         $tool_content .= "<div class = 'form-wrapper'>";
-        $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview' onsubmit=\"return checkrequired(this, 'categoryname');\">";
+        $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview'>";
         if ($action == 'editcategory') {
             $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
             category_form_defaults($id);
@@ -280,10 +256,11 @@ if ($is_editor) {
             $form_legend = $langCategoryAdd;
         }
         $tool_content .= "<fieldset>
-                        <div class='form-group'>
+                         <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
                             <label for='CatName' class='col-sm-2 control-label'>$langCategoryName:</label>
                             <div class='col-sm-10'>
                                 <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName' $form_name>
+								<span class='help-block'>".Session::getError('categoryname')."</span>
                             </div>
                         </div>
                         <div class='form-group'>
@@ -389,7 +366,7 @@ if ($is_editor) {
                 if ((isset($id) && is_link_creator($id)) || !isset($id)) {
                     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
                     $tool_content .= "<div class = 'form-wrapper'>";
-                    $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
+                    $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview'>";
                     if ($action == 'editlink') {
                         $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
                         link_form_defaults($id);

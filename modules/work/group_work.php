@@ -25,7 +25,6 @@ $require_login = true;
 
 require_once 'work_functions.php';
 require_once '../../include/baseTheme.php';
-require_once 'include/pclzip/pclzip.lib.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 
@@ -47,7 +46,7 @@ if (isset($_GET['submit'])) {
     show_assignments();
     draw($tool_content, 2);
 } elseif (isset($_POST['assign'])) {
-    submit_work($uid, $group_id, $_POST['assign'], $_POST['file']);
+    submit_work($uid, $group_id, $_POST['assign'], getDirectReference($_POST['file']));
     draw($tool_content, 2);
 } else {
     header("Location: index.php?course=$course_code");

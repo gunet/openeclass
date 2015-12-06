@@ -39,9 +39,9 @@ class LinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'link_' . $link->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_LINK . '_' . $link->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $link->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'link', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_LINK, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $link->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('title', Indexer::phonetics($link->title), $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($link->description)), $encoding));
@@ -111,29 +111,6 @@ class LinkIndexer extends AbstractIndexer implements ResourceIndexerInterface {
      */
     protected function getCourseResourcesFromDB($courseId) {
         return Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $courseId);
-    }
-
-    /**
-     * Build a Lucene Query.
-     * 
-     * @param  array   $data      - The data (normally $_POST), needs specific array keys
-     * @param  boolean $anonymous - whether we build query for anonymous user access or not
-     * @return string             - the returned query string
-     */
-    public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['course_id']) && !empty($data['course_id'])) {
-            $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
-            $queryStr = '(';
-            foreach ($terms as $term) {
-                $queryStr .= 'title:' . $term . '* ';
-                $queryStr .= 'content:' . $term . '* ';
-            }
-            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:link';
-            return $queryStr;
-        }
-
-        return null;
     }
 
 }

@@ -30,7 +30,6 @@ require_once "include/lib/fileManageLib.inc.php";
 require_once "include/lib/fileUploadLib.inc.php";
 require_once "include/lib/fileDisplayLib.inc.php";
 require_once "imsqtilib.php";
-require_once "include/pclzip/pclzip.lib.php";
 
 $pwd = getcwd();
 

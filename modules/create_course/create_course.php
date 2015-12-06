@@ -214,8 +214,9 @@ if ($allow_only_defaults) {
         }
     }
 }
-$departments = isset($_POST['department']) ? $_POST['department'] : array();
+$departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
 $deps_valid = true;
+
 
 foreach ($departments as $dep) {
     if ($allow_only_defaults && !in_array($dep, $allowables)) {
@@ -236,7 +237,7 @@ if (!$deps_valid) {
 // display form
 if (!isset($_POST['create_course'])) {
         // set skip_preloaded_defaults in order to not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
+        list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
         $head_content .= $js;
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
@@ -560,16 +561,7 @@ if (!isset($_POST['create_course'])) {
                                         reg_date = " . DBHelper::timeAfter() . ",
                                         document_timestamp = " . DBHelper::timeAfter() . "",
                            intval($new_course_id), intval($uid));
-
-    Database::get()->query("INSERT INTO group_properties SET
-                                        course_id = ?d,
-                                        self_registration = 1,
-                                        multiple_registration = 0,
-                                        forum = 1,
-                                        private_forum = 0,
-                                        documents = 1,
-                                        wiki = 0,
-                                        agenda = 0", intval($new_course_id));
+    
     $course->refresh($new_course_id, $departments);
 
     // create courses/<CODE>/index.php

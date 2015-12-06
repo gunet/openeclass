@@ -44,7 +44,6 @@ initialize_group_info($group_id);
 $group = Database::get()->querySingle("SELECT * FROM group_properties WHERE group_id = ?d AND course_id = ?d", $group_id, $course_id);
 
 $checked['self_reg'] = ($group->self_registration?'checked':'');
-$checked['multi_reg'] = ($group->multiple_registration?'checked':'');
 $checked['private_forum_yes'] =($group->private_forum?' checked="1"' : '');
 $checked['private_forum_no'] = ($group->private_forum? '' : ' checked="1"');
 $checked['has_forum'] = ($group->forum?'checked':'');
@@ -73,13 +72,7 @@ $tool_content .= "
                      <input type='checkbox' name='self_reg' $checked[self_reg]>
                         $langGroupAllowStudentRegistration
                         </label>
-                        </div>
-                    <div class='checkbox'>
-                        <label>
-                        <input type='checkbox' name='multi_reg' $checked[multi_reg]>
-                        $langGroupAllowMultipleRegistration
-                      </label>
-                    </div>                    
+                        </div>                    
                 </div>
             </div>        
 		    <div class='form-group'>

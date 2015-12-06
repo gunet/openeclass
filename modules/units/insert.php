@@ -187,11 +187,16 @@ function insert_docs($id) {
             $file = Database::get()->querySingle("SELECT * FROM document
                                         WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
             $title = (empty($file->title)) ? $file->filename : $file->title;
+            if (empty($file->comment)) {
+                $comment = '';
+            } else {
+                $comment = $file->comment;
+            }
             $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='doc', 
                                             title = ?s, comments = ?s, 
-                                            visible = ?d, `order` = ?d, 
+                                            visible = 1, `order` = ?d, 
                                             `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
-                                        $id, $title, $file->comment, $file->visible, $order, $file->id);
+                                        $id, $title, $comment, $order, $file->id);
             $uresId = $q->lastInsertID;
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
         }

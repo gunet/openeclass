@@ -83,9 +83,9 @@ Class Commenting {
         $commentsNum = $this->getCommentsNum();
 
         if (!$always_open) {
-            $comments_title = "<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#commentArea-$this->rid'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</button>";
+            $comments_title = "<span class='fa fa-comments'></span>&nbsp;&nbsp;<a class='course_commenting' data-toggle='modal' data-target='#commentArea-$this->rid'><span id='commentsNum-$this->rid'>$commentsNum</span> $langComments</a>";
             $out = "$comments_title
-                    <div class='modal fade' id='commentArea-$this->rid' role='dialog'>
+                    <div class='modal fade text-left' id='commentArea-$this->rid' role='dialog'>
                       <div class='modal-dialog modal-lg'>
                         <div class='modal-content' style='padding:1%'>
                           <div class='modal-header'>

@@ -37,7 +37,7 @@ function send_mail($from, $from_address, $to, $to_address, $subject, $body, $cha
         }
         $bcc = '';
     }
-    $headers = from($from, $from_address) . $bcc .
+    $headers = fromHeader($from, $from_address) . $bcc .
 		"MIME-Version: 1.0" . PHP_EOL .
 		"Content-Type: text/plain; charset=$charset" . PHP_EOL .
         "Content-Transfer-Encoding: 8bit" .
@@ -96,7 +96,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
     }
     $separator = uniqid('==eClass-Multipart_Boundary_0_', true) . '_' .
             md5(time());
-    $headers = from($from, $from_address) . $bcc .
+    $headers = fromHeader($from, $from_address) . $bcc .
 		   "MIME-Version: 1.0" . PHP_EOL .
            "Content-Type: multipart/alternative;" . PHP_EOL .
            "    boundary=\"$separator\"" .
@@ -121,7 +121,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
 
             /* Header Styles */
             #mail-header{ padding-top: 10px; border-bottom: 1px solid #ddd; color: #666; }
-            #header-title{ background-color: #f5f5f5; margin-left: -15px; margin-right: -15px; padding: 12px 15px; font-weight: bold; }
+            #header-title{ background-color: #f5f5f5; margin-left: -15px; margin-right: -15px; margin-bottom: 12px; padding: 12px 15px; font-weight: bold; }
             #forum-category{ list-style: none; padding-left: 0px; }
             #forum-category li{ padding-bottom: 1px; }
             #forum-category li span:first-child{ width: 150px; }
@@ -146,7 +146,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
 
 
 // Determine the correct From: header
-function from($from, $from_address) {
+function fromHeader($from, $from_address) {
     global $langVia, $siteName, $charset;
 
     if (empty($from_address) or !get_config('email_from')) {

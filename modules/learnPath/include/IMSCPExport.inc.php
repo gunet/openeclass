@@ -63,7 +63,6 @@
 
 if(!class_exists('IMSCPExport')):
 
-require_once 'include/pclzip/pclzip.lib.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/exercise/exercise.class.php';
 require_once 'modules/exercise/question.class.php';

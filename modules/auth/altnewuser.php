@@ -65,20 +65,26 @@ if (isset($_GET['p']) and $_GET['p']) {
     $_SESSION['u_prof'] = 0;
 }
 
+if (!in_array($auth, $authmethods)) {
+    $tool_content .= "<div class='alert alert-danger'>$langCannotRegister</div>";
+    draw($tool_content, 0);
+    exit;
+}
+
 if (!$_SESSION['u_prof'] and !$alt_auth_stud_reg) {
-    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langCannotRegister</div>";
     draw($tool_content, 0);
     exit;
 }
 
 if ($_SESSION['u_prof'] and !$alt_auth_prof_reg) {
-    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langCannotRegister</div>";
     draw($tool_content, 0);
     exit;
 }
 $tool_content .= "<div class='form-wrapper'>";
 $tool_content .= "<form class='form-horizontal' role='form' method='post' action='altsearch.php'>";
-$tool_content .= "<fieldset>" . q($settings['auth_instructions']) . "";
+$tool_content .= "<fieldset>" . q($settings['auth_instructions']);
 
 if (isset($_SESSION['prof']) and $_SESSION['prof']) {
     $tool_content .= "<input type='hidden' name='p' value='1'>";
@@ -89,28 +95,43 @@ if (($auth != 7) and ($auth != 6)) {
     $tool_content .= "<div class='form-group'>
                         <label for='UserName' class='col-sm-2 control-label'>$langUsername</label>
                         <div class='col-sm-10'>
-                            <input type='text' size='30' maxlength='30' name='uname' autocomplete='off' $set_uname placeholder='$langUserNotice'>
+                            <input class='form-control' type='text' size='30' maxlength='30' name='uname' autocomplete='off' $set_uname placeholder='$langUserNotice'>
                         </div>
                     </div>
                     <div class='form-group'>
                         <label for='Pass' class='col-sm-2 control-label'>$langPass</label>
                         <div class='col-sm-10'>
-                            <input type='password' size='30' maxlength='30' name='passwd' autocomplete='off' placeholder='$langPass'>
+                            <input class='form-control' type='password' size='30' maxlength='30' name='passwd' autocomplete='off' placeholder='$langPass'>
                         </div>
                     </div>";
 }
 
 $tool_content .= "<input type='hidden' name='auth' value='$auth'>";
 
-$tool_content .= "<div class='col-sm-offset-2 col-sm-10'>";
+$tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>";
 
 if (($auth != 7) and ($auth != 6)) {
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='is_submit' value='" . q($langSubmit) . "'>";
+    $tool_content .= form_buttons(array(
+                                array(
+                                    'text' => q($langSubmit),
+                                    'name' => 'is_submit',
+                                    'value'=> q($langSubmit)
+                                )
+                            ))
+                            ;
 } else {
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='is_submit' value='" . q($langCheck) . "'>";
+    $tool_content .= form_buttons(array(
+        array(
+            'text' => q($langCheck),
+            'name' => 'is_submit',
+            'value'=> q($langCheck)
+        )
+    ))
+    ;
 }
 
-$tool_content .= "</div>";
+$tool_content .= "</div></div>";
 $tool_content .= "</fieldset></form></div>";
 
+unset($uid);
 draw($tool_content, 0);

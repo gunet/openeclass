@@ -21,7 +21,9 @@
 
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
 
-$require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
+if (!isset($require_current_course)) {
+    $require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
+}
 
 $guest_allowed = true;
 require_once '../../include/baseTheme.php';
@@ -36,7 +38,6 @@ require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/fileUploadLib.inc.php';
-require_once 'include/pclzip/pclzip.lib.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
@@ -97,7 +98,7 @@ if (isset($_GET['showQuota'])) {
 // download directory or file
 // ---------------------------
 if (isset($_GET['download'])) {
-    $downloadDir = $_GET['download'];
+    $downloadDir = getDirectReference($_GET['download']);
 
     if ($downloadDir == '/') {
         $format = '.dir';
@@ -191,7 +192,7 @@ if ($can_upload) {
             redirect_to_current_dir();
         } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1 and preg_match('/\.zip$/i', $fileName)) {
             /* ** Unzipping stage ** */            
-            $zipFile = new pclZip($userFile);
+            $zipFile = new PclZip($userFile);
             validateUploadedZipFile($zipFile->listContent(), $menuTypeID);
             $realFileSize = 0;
             $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
@@ -268,6 +269,15 @@ if ($can_upload) {
         } elseif (isset($userFile)) {
             $fileUploadOK = @copy($userFile, $basedir . $file_path);
         }
+        require_once 'modules/admin/extconfig/externals.php';
+        $connector = AntivirusApp::getAntivirus();
+        if($connector->isEnabled() == true ){
+            $output=$connector->check($basedir . $file_path);
+            if($output->status==$output::STATUS_INFECTED){
+                AntivirusApp::block($output->output);
+            }
+        }
+
         if ($extra_path or $fileUploadOK) {
             $vis = 1;
             $file_format = get_file_extension($fileName);
@@ -420,7 +430,7 @@ if ($can_upload) {
     // Move file or directory: Step 2
     if (isset($_POST['moveTo'])) {
         $moveTo = $_POST['moveTo'];
-        $source = $_POST['source'];
+        $source = getDirectReference($_POST['source']);
         $sourceXml = $source . '.xml';
         // check if source and destination are the same
         if ($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
@@ -450,7 +460,7 @@ if ($can_upload) {
 
     // Move file or directory: Step 1
     if (isset($_GET['move'])) {
-        $move = $_GET['move'];
+        $move = getDirectReference($_GET['move']);
         $curDirPath = my_dirname($move);
         $navigation[] = array('url' => documentBackLink($curDirPath), 'name' => $pageName);
 
@@ -459,13 +469,13 @@ if ($can_upload) {
                                                 WHERE $group_sql AND path=?s", $move);
         $moveFileNameAlias = $q->filename;
         $exclude = ($q->format == '.dir')? $move: '';
-        $dialogBox .= directory_selection($move, 'moveTo', $curDirPath, $exclude);
+        $dialogBox .= directory_selection(getIndirectReference($move), 'moveTo', $curDirPath, $exclude);
     }
 
     // Delete file or directory
     if (isset($_GET['delete']) and isset($_GET['filePath'])) {
-        $filePath = $_GET['filePath'];
-        $curDirPath = my_dirname($_GET['filePath']);
+        $filePath =  getDirectReference($_GET['filePath']);
+        $curDirPath = my_dirname(getDirectReference($_GET['filePath']));
         // Check if file actually exists
         $r = Database::get()->querySingle("SELECT id, path, extra_path, format, filename FROM document
                                         WHERE $group_sql AND path = ?s", $filePath);
@@ -507,8 +517,9 @@ if ($can_upload) {
     // Step 2: Rename file by updating record in database
     if (isset($_POST['renameTo'])) {
         
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
-        $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s", $_POST['sourceFile']);
+        $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s", getDirectReference($_POST['sourceFile']));
 
         if ($r->format != '.dir') {
             validateRenamedFile($_POST['renameTo'], $menuTypeID);
@@ -516,18 +527,18 @@ if ($can_upload) {
 
         Database::get()->query("UPDATE document SET filename = ?s, date_modified = NOW()
                           WHERE $group_sql AND path=?s"
-                , $_POST['renameTo'], $_POST['sourceFile']);
+                , $_POST['renameTo'], getDirectReference($_POST['sourceFile']));
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-        Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $_POST['sourceFile'],
+        Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => getDirectReference($_POST['sourceFile']),
             'filename' => $r->filename,
             'newfilename' => $_POST['renameTo']));
-        if (hasMetaData($_POST['sourceFile'], $basedir, $group_sql)) {
+        if (hasMetaData(getDirectReference($_POST['sourceFile']), $basedir, $group_sql)) {
             if (Database::get()->query("UPDATE document SET filename=?s WHERE $group_sql AND path = ?s"
                             , ($_POST['renameTo'] . '.xml'), ($_POST['sourceFile'] . '.xml'))->affectedRows > 0) {
-                metaRenameDomDocument($basedir . $_POST['sourceFile'] . '.xml', $_POST['renameTo']);
+                metaRenameDomDocument($basedir . getDirectReference($_POST['sourceFile']) . '.xml', $_POST['renameTo']);
             }
         }
-        $curDirPath = my_dirname($_POST['sourceFile']);
+        $curDirPath = my_dirname(getDirectReference($_POST['sourceFile']));
         Session::Messages($langElRen, 'alert-success');
         redirect_to_current_dir();
     }
@@ -535,12 +546,12 @@ if ($can_upload) {
     // Step 1: Show rename dialog box
     if (isset($_GET['rename'])) {
         
-        $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s", $_GET['rename']);
+        $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s",  getDirectReference($_GET['rename']));
         
         $fileName = Database::get()->querySingle("SELECT filename FROM document
                                              WHERE $group_sql AND
-                                                   path = ?s", $_GET['rename'])->filename;
-        $curDirPath = my_dirname($_GET['rename']);
+                                                   path = ?s",  getDirectReference($_GET['rename']))->filename;
+        $curDirPath = my_dirname(getDirectReference($_GET['rename']));
         $backUrl = documentBackLink($curDirPath);
         $navigation[] = array('url' => $backUrl, 'name' => $pageName);
         $dialogBox .= "
@@ -565,6 +576,7 @@ if ($can_upload) {
                                         </div>
                                     </div>
                             </fieldset>
+            ". generate_csrf_token_form_field() ."
                         </form>
                     </div>
                 </div>
@@ -574,6 +586,7 @@ if ($can_upload) {
     // create directory
     // step 2: create the new directory
     if (isset($_POST['newDirPath'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $newDirName = canonicalize_whitespace($_POST['newDirName']);
         if (!empty($newDirName)) {
             $newDirPath = make_path($_POST['newDirPath'], array($newDirName));
@@ -619,6 +632,7 @@ if ($can_upload) {
                                     )
                                 ))."</div>
                         </div>
+            ". generate_csrf_token_form_field() ."
                     </form>
                     
                 </div>
@@ -628,7 +642,8 @@ if ($can_upload) {
 
     // add/update/remove comment
     if (isset($_POST['commentPath'])) {
-        $commentPath = $_POST['commentPath'];
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        $commentPath = getDirectReference($_POST['commentPath']);
         // check if file exists
         $res = Database::get()->querySingle("SELECT * FROM document
                                              WHERE $group_sql AND
@@ -707,7 +722,8 @@ if ($can_upload) {
             isset($_FILES['newFile']) and
             is_uploaded_file($_FILES['newFile']['tmp_name'])) {
         validateUploadedFile($_FILES['newFile']['name'], $menuTypeID);
-        $replacePath = $_POST['replacePath'];
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        $replacePath = getDirectReference($_POST['replacePath']);
         // Check if file actually exists
         $result = Database::get()->querySingle("SELECT id, path, format FROM document WHERE
                                         $group_sql AND
@@ -717,7 +733,7 @@ if ($can_upload) {
             $docId = $result->id;
             $oldpath = $result->path;
             $oldformat = $result->format;
-            $curDirPath = my_dirname($_POST['replacePath']);
+            $curDirPath = my_dirname(getDirectReference($_POST['replacePath']));
             // check for disk quota
             if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
                 Session::Messages($langNoSpace, 'alert-danger');
@@ -738,6 +754,14 @@ if ($can_upload) {
                     Session::Messages($langGeneralError, 'alert-danger');
                     redirect_to_current_dir();
                 } else {
+                    require_once 'modules/admin/extconfig/externals.php';
+                    $connector = AntivirusApp::getAntivirus();
+                    if($connector->isEnabled() == true ){
+                        $output=$connector->check($basedir . $newpath);
+                        if($output->status==$output::STATUS_INFECTED){
+                            AntivirusApp::block($output->output);
+                        }
+                    }
                     if (hasMetaData($oldpath, $basedir, $group_sql)) {
                         rename($basedir . $oldpath . ".xml", $basedir . $newpath . ".xml");
                         Database::get()->query("UPDATE document SET path = ?s, filename=?s WHERE $group_sql AND path = ?s"
@@ -760,7 +784,7 @@ if ($can_upload) {
         $result = Database::get()->querySingle("SELECT filename, path FROM document
                                         WHERE $group_sql AND
                                                 format <> '.dir' AND
-                                                path = ?s", $_GET['replace']);
+                                                path = ?s",  getDirectReference($_GET['replace']));
         if ($result) {
             $curDirPath = my_dirname($result->path);
             $navigation[] = array('url' => documentBackLink($curDirPath), 'name' => $pageName);
@@ -789,6 +813,7 @@ if ($can_upload) {
                                 ))."</div>
                         </div>
                         </fieldset>
+            ". generate_csrf_token_form_field() ."
                         </form></div>";
         }
     }
@@ -796,7 +821,7 @@ if ($can_upload) {
     // Add comment form
     if (isset($_GET['comment'])) {
         
-        $comment = $_GET['comment'];
+        $comment =  getDirectReference($_GET['comment']);
         // Retrieve the old comment and metadata
         $row = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $comment);
         if ($row) {
@@ -821,7 +846,7 @@ if ($can_upload) {
             $dialogBox .= "<div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <fieldset>
-                  <input type='hidden' name='commentPath' value='" . q($comment) . "' />
+                  <input type='hidden' name='commentPath' value='" . q(getIndirectReference($comment)) . "' />
                   <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
                   $group_hidden_input
                   <div class='form-group'>
@@ -911,6 +936,7 @@ if ($can_upload) {
                 $dialogBox .= "<input type='hidden' size='80' name='file_creator' value='$oldCreator'>
                 <input type='hidden' size='80' name='file_date' value='$oldDate'>
                 </fieldset>
+            ". generate_csrf_token_form_field() ."
                 </form></div>";
         } else {
             $action_message = "<div class='alert alert-danger'>$langFileNotFound</div>";
@@ -938,10 +964,10 @@ if ($can_upload) {
     if (isset($_GET['mkVisibl']) || isset($_GET['mkInvisibl'])) {
         if (isset($_GET['mkVisibl'])) {
             $newVisibilityStatus = 1;
-            $visibilityPath = $_GET['mkVisibl'];
+            $visibilityPath = getDirectReference($_GET['mkVisibl']);
         } else {
             $newVisibilityStatus = 0;
-            $visibilityPath = $_GET['mkInvisibl'];
+            $visibilityPath = getDirectReference($_GET['mkInvisibl']);
         }
         Database::get()->query("UPDATE document SET visible = ?d
                                           WHERE $group_sql AND
@@ -956,7 +982,7 @@ if ($can_upload) {
     // Public accessibility commands
     if (isset($_GET['public']) || isset($_GET['limited'])) {
         $new_public_status = intval(isset($_GET['public']));
-        $path = isset($_GET['public']) ? $_GET['public'] : $_GET['limited'];
+        $path = isset($_GET['public']) ? getDirectReference($_GET['public']) : getDirectReference($_GET['limited']);
         Database::get()->query("UPDATE document SET public = ?d
                                           WHERE $group_sql AND
                                                 path = ?s", $new_public_status, $path);
@@ -1120,8 +1146,14 @@ if ($can_upload) {
                   'show' => !defined('MY_DOCUMENTS') && !defined('COMMON_DOCUMENTS') && get_config('enable_common_docs')),
             array('title' => $langQuotaBar,
                   'url' => "{$base_url}showQuota=true",
-                  'icon' => 'fa-pie-chart')
+                  'icon' => 'fa-pie-chart'),
+            array('title' => $langBack,
+                  'url' => "group_space.php?course=$course_code&group_id=$group_id",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label',        
+                  'show' => $subsystem == GROUP)                          
             ),false);
+                  
     }
     // Dialog Box
     if (!empty($dialogBox)) {
@@ -1165,7 +1197,7 @@ if ($doc_count == 0) {
         $dirComment = '';
     }
     $download_path = empty($curDirPath) ? '/' : $curDirPath;
-    $download_dir = (!$is_in_tinymce and $uid) ? icon('fa-download', $langDownloadDir, "{$base_url}download=$download_path") : '';
+    $download_dir = (!$is_in_tinymce and $uid) ? icon('fa-download', $langDownloadDir, "{$base_url}download=" . getIndirectReference($download_path)) : '';
     $tool_content .= "<div>".make_clickable_path($curDirPath) .
             "&nbsp;&nbsp;$download_dir</div>";
     if ($dirComment) {
@@ -1274,7 +1306,7 @@ if ($doc_count == 0) {
             }
             if (!$entry['extra_path'] or common_doc_path($entry['extra_path'])) {
                 // Normal or common document
-                $download_url = $base_url . "download=$cmdDirName";
+                $download_url = $base_url . "download=" . getIndirectReference($cmdDirName);
             } else {
                 // External document
                 $download_url = $entry['extra_path'];
@@ -1310,23 +1342,23 @@ if ($doc_count == 0) {
                     $xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
                     $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
-                                          'url' => "{$base_url}comment=$cmdDirName",
+                                          'url' => "{$base_url}comment=" . getIndirectReference($cmdDirName),
                                           'icon' => 'fa-edit',
                                           'show' => $entry['format'] != '.meta'),
                                     array('title' => $langGroupSubmit,
-                                          'url' => "{$urlAppend}modules/work/group_work.php?course=$course_code&amp;group_id=$group_id&amp;submit=$cmdDirName",
+                                          'url' => "{$urlAppend}modules/work/group_work.php?course=$course_code&amp;group_id=$group_id&amp;submit=" . getIndirectReference($cmdDirName),
                                           'icon' => 'fa-book',
                                           'show' => $subsystem == GROUP and isset($is_member) and $is_member),
                                     array('title' => $langMove,
-                                          'url' => "{$base_url}move=$cmdDirName",
+                                          'url' => "{$base_url}move=" . getIndirectReference($cmdDirName),
                                           'icon' => 'fa-arrows',
                                           'show' => $entry['format'] != '.meta'),
                                     array('title' => $langRename,
-                                          'url' => "{$base_url}rename=$cmdDirName",
+                                          'url' => "{$base_url}rename=" . getIndirectReference($cmdDirName),
                                           'icon' => 'fa-pencil',
                                           'show' => $entry['format'] != '.meta'),
                                     array('title' => $langReplace,
-                                          'url' => "{$base_url}replace=$cmdDirName",
+                                          'url' => "{$base_url}replace=" . getIndirectReference($cmdDirName),
                                           'icon' => 'fa-exchange',
                                           'show' => !$is_dir && $entry['format'] != '.meta'),
                                     array('title' => $langMetadata,
@@ -1334,16 +1366,16 @@ if ($doc_count == 0) {
                                           'icon' => 'fa-tags',
                                           'show' => get_config("insert_xml_metadata")),
                                     array('title' => $entry['visible'] ? $langViewHide : $langViewShow,
-                                          'url' => "{$base_url}" . ($entry['visible']? "mkInvisibl=$cmdDirName" : "mkVisibl=$cmdDirName"),
+                                          'url' => "{$base_url}" . ($entry['visible']? "mkInvisibl=" . getIndirectReference($cmdDirName) : "mkVisibl=" . getIndirectReference($cmdDirName)),
                                           'icon' => $entry['visible'] ? 'fa-eye-slash' : 'fa-eye' ),
                                     array('title' => $entry['public'] ? $langResourceAccessLock : $langResourceAccessUnlock,
-                                          'url' => $entry['public'] ? "{$base_url}limited=$cmdDirName" : "{$base_url}public=$cmdDirName",
+                                          'url' => $entry['public'] ? "{$base_url}limited=" . getIndirectReference($cmdDirName) : "{$base_url}public=" . getIndirectReference($cmdDirName),
                                           'icon' => $entry['public'] ? 'fa-lock' : 'fa-unlock'),
                                     array('title' => $langDownload,
                                           'url' => $download_url,
                                           'icon' => 'fa-download'),
                                     array('title' => $langDelete,
-                                          'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
+                                          'url' => "{$base_url}filePath=" . getIndirectReference($cmdDirName) . "&amp;delete=1",
                                           'icon' => 'fa-times',
                                           'class' => 'delete',
                                           'confirm' => "$langConfirmDelete $entry[filename]")));

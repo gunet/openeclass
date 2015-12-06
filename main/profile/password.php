@@ -71,6 +71,7 @@ $passLocation = 'Location: ' . $passUrl;
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('password_form', 'password_form1', 'old_pass'));
     $v->rule('equals', 'password_form', 'password_form1');
@@ -146,6 +147,7 @@ if (!isset($_POST['changePass'])) {
         <span class='help-block'>$password_form1_error</span>
       </div>
     </div>
+    ".showSecondFactorChallenge()."
     <div class='form-group'>
       <div class='col-sm-offset-2 col-sm-8'>
          <input type='submit' class='btn btn-primary' name='submit' value='$langModify'>

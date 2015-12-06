@@ -42,9 +42,7 @@ interface ResourceIndexerInterface {
      * Reindex all resources.
      * 
      * @param boolean $optimize - whether to optimize after reindexing
-     * @deprecated since version number
+     * @deprecated
      */
-//    public function reindex();
-
-    public static function buildQuery($data, $anonymous);
+    //public function reindex();
 }

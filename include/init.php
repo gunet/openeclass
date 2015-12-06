@@ -43,6 +43,12 @@ header('Content-Type: text/html; charset=UTF-8');
 // Will add headers to prevent against clickjacking.
 add_framebusting_headers();
 
+add_xxsfilter_headers();
+
+add_nosniff_headers();
+
+//add_hsts_headers();
+
 if (is_readable('config/config.php')) {
     require_once 'config/config.php';
 } else {
@@ -63,6 +69,15 @@ try {
 } catch (Exception $ex) {
     require_once 'include/not_installed.php';
 }
+require_once 'modules/admin/extconfig/externals.php';
+$connector = WafApp::getWaf();
+if ($connector->isEnabled() == true ){
+    $output = $connector->check();
+    if ($output->status == $output::STATUS_BLOCKED){
+        WafApp::block($output->output);
+    }
+}
+
 if (isset($language)) {
     // Old-style config.php, redirect to upgrade
     $language = langname_to_code($language);
@@ -84,7 +99,7 @@ if (isset($language)) {
     $urlServer = get_config('base_url');
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;    
+    $language = $session->language;
 }
 //Initializing Valitron (form validation library)
 use Valitron\Validator as V;
@@ -111,7 +126,6 @@ $uid = $session->user_id;
 // construct $urlAppend from $urlServer
 $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
 // HTML Purifier
-require_once 'include/htmlpurifier-4.3.0-standalone/HTMLPurifier.standalone.php';
 require_once 'include/HTMLPurifier_Filter_MyIframe.php';
 $purifier = new HTMLPurifier();
 $purifier->config->set('Cache.SerializerPath', $webDir . '/courses/temp');
@@ -200,9 +214,6 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
 
 $theme = $_SESSION['theme'] = 'default';
 $themeimg = $urlAppend . 'template/' . $theme . '/img';
-if (file_exists("template/$theme/settings.php")) {
-    require_once "template/$theme/settings.php";
-}
 
 if (isset($require_login) and $require_login and ! $uid) {
     $toolContent_ErrorExists = $langSessionIsLost;
@@ -391,54 +402,60 @@ require_once "license_info.php";
 // user modules
 // ----------------------------------------
 $modules = array(
-    MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'calendar'),
-    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'links'),
-    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'docs'),
-    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'videos'),
-    MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work', 'image' => 'assignments'),
-    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'announcements'),
-    MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum', 'image' => 'forum'),
-    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'exercise'),
-    MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group', 'image' => 'groups'),
-    MODULE_ID_DROPBOX => array('title' => $langDropBox, 'link' => 'dropbox', 'image' => 'dropbox'),
-    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'glossary'),
-    MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'ebook'),
-    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'conference', 'image' => 'conference'),
-    MODULE_ID_DESCRIPTION => array('title' => $langDescription, 'link' => 'course_description', 'image' => 'description'),
-    MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'questionnaire'),
-    MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'lp'),
-    MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
-    MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'blog'),
+    MODULE_ID_AGENDA => array('title' => $langAgenda, 'link' => 'agenda', 'image' => 'fa-calendar-o'),
+    MODULE_ID_LINKS => array('title' => $langLinks, 'link' => 'link', 'image' => 'fa-link'),
+    MODULE_ID_DOCS => array('title' => $langDoc, 'link' => 'document', 'image' => 'fa-folder-open-o'),
+    MODULE_ID_VIDEO => array('title' => $langVideo, 'link' => 'video', 'image' => 'fa-film'),
+    MODULE_ID_ASSIGN => array('title' => $langWorks, 'link' => 'work', 'image' => 'fa-flask'),
+    MODULE_ID_ANNOUNCE => array('title' => $langAnnouncements, 'link' => 'announcements', 'image' => 'fa-bullhorn'),
+    MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum', 'image' => 'fa-comments'),
+    MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'fa-pencil-square-o'),
+    MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group', 'image' => 'fa-users'),
+    MODULE_ID_DROPBOX => array('title' => $langDropBox, 'link' => 'dropbox', 'image' => 'fa-envelope-o'),
+    MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-list'),
+    MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-book'),
+    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'conference', 'image' => 'fa-exchange'),
+    MODULE_ID_DESCRIPTION => array('title' => $langDescription, 'link' => 'course_description', 'image' => 'fa-info-circle'),
+    MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-question-circle'),
+    MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'fa-ellipsis-h'),
+    MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'fa-wikipedia'),
+    MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'fa-columns'),
     MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => ''),
-    MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
-    MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
-    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')
+    MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-sort-numeric-desc'),
+    MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-check-square-o'),
+    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'fa-exchange'),
+    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'mindmap'),
 );
 // ----------------------------------------
 // course admin modules
 // ----------------------------------------
 $admin_modules = array(
-    MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info', 'image' => 'course_info'),
-    MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'users'),
-    MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'usage'),
-    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'tooladmin'),
-    MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'abuse'),
+    MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info', 'image' => 'fa-cogs'),
+    MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'fa-user'),
+    MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'fa-area-chart'),
+    MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets', 'image' => 'fa-magic'),
+    MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'fa-cogs'),
+    MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'fa-flag'),
 );
-
+// -------------------------------------------
 // modules which can't be enabled or disabled
-$static_module_paths = array('user' => MODULE_ID_USERS,
-    'usage' => MODULE_ID_USAGE,
-    'course_info' => MODULE_ID_COURSEINFO,
-    'course_tools' => MODULE_ID_TOOLADMIN,
-    'units' => MODULE_ID_UNITS,
-    'weeks' => MODULE_ID_WEEKS,
-    'search' => MODULE_ID_SEARCH,
-    'contact' => MODULE_ID_CONTACT,
-    'comments' => MODULE_ID_COMMENTS,
-    'rating' => MODULE_ID_RATING,
-    'sharing' => MODULE_ID_SHARING,
-    'abuse_report' => MODULE_ID_ABUSE_REPORT,            
-    'notes' => MODULE_ID_NOTES);
+// -------------------------------------------
+$static_modules = array(
+    MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user'),
+    MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage'),
+    MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info'),
+    MODULE_ID_COURSE_WIDGETS => array('title' => $langWidgets, 'link' => 'course_widgets'),
+    MODULE_ID_TOOLADMIN => array('title' => $langCourseTools, 'link' => 'course_tools'),
+    MODULE_ID_UNITS => array('title' => $langUnits, 'link' => 'units'),
+    MODULE_ID_WEEKS => array('title' => $langCourseWeeklyFormat, 'link' => 'weeks'),
+    MODULE_ID_SEARCH => array('title' => $langSearch, 'link' => 'search'),
+    MODULE_ID_CONTACT => array('title' => $langContact, 'link' => 'contact'),
+    MODULE_ID_COMMENTS => array('title' => $langComments, 'link' => 'comments'),
+    MODULE_ID_RATING => array('title' => $langCourseRating, 'link' => 'rating'),
+    MODULE_ID_SHARING => array('title' => $langCourseSharing, 'link' => 'sharing'),
+    MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReport, 'link' => 'abuse_report'),
+    MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes'));
+
 
 // the system admin and power users have rights to all courses
 if ($is_admin or $is_power_user) {
@@ -506,7 +523,6 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                                                 " . MODULE_ID_ASSIGN . ",
                                                 " . MODULE_ID_BBB . ",
                                                 " . MODULE_ID_DROPBOX . ",
-                                                " . MODULE_ID_QUESTIONNAIRE . ",
                                                 " . MODULE_ID_FORUM . ",
                                                 " . MODULE_ID_GROUPS . ",
                                                 " . MODULE_ID_GRADEBOOK . ",

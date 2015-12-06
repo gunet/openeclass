@@ -27,9 +27,12 @@ $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
-    $coursePath = $webDir . '/courses/';
-    $fileChatName = $coursePath . $course_code . '/chat.txt';
-    $tmpArchiveFile = $coursePath . $course_code . '/tmpChatArchive.txt';
+    $coursePath = $webDir . '/courses/';    
+    $conference_id = $_POST['conference_id'];
+    (isset($_POST['conference_id']) ? $conference_id = $_POST['conference_id'] : $conference_id = $_GET['conference_id']);
+
+    $fileChatName = $coursePath . $course_code . '/' . $conference_id. '_chat.txt';
+    $tmpArchiveFile = $coursePath . $course_code . '/' . $conference_id. '_tmpChatArchive.txt';
 
     $nick = uid_to_name($uid);
 
@@ -64,7 +67,7 @@ require_once 'include/lib/textLib.inc.php';
         }
         fclose($fchat);
         @unlink($tmpArchiveFile);
-        redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
+        redirect_to_home_page("modules/conference/messageList.php?course=$course_code&conference_id=$conference_id");
     }
 
 // store
@@ -75,7 +78,7 @@ require_once 'include/lib/textLib.inc.php';
         $chat_filename = '/' . safe_filename('txt');
         
         //Concat temp & chat file removing system messages and html tags
-        $exportFileChat = $coursePath . $course_code . '/chat_export.txt';
+        $exportFileChat = $coursePath . $course_code . '/'. $conference_id . '_chat_export.txt';
         $fp = fopen($exportFileChat, 'a+');        
         $tmp_file = @file_get_contents($tmpArchiveFile);
         $chat_file = @file_get_contents($fileChatName);        
@@ -99,7 +102,7 @@ require_once 'include/lib/textLib.inc.php';
         } else {
         }
         @unlink($exportFileChat);
-        redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
+        redirect_to_home_page("modules/conference/messageList.php?course=$course_code&conference_id=$conference_id");
     }
   
 // add new line
@@ -112,7 +115,7 @@ require_once 'include/lib/textLib.inc.php';
         }
         fwrite($fchat, $timeNow . ' - ' . $nick . ' : ' . stripslashes($chatLine) . " !@#$ $uid       \n");
         fclose($fchat);
-        redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
+        redirect_to_home_page("modules/conference/messageList.php?course=$course_code&conference_id=$conference_id");
     }
 ?>
 <!DOCTYPE html>

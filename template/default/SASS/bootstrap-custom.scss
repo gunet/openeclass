@@ -614,12 +614,19 @@ a
 }
 
 /* Share Module styles */
-ul.sharinglist li a i{
-    color: #666;
+ul.sharinglist li {
+    font-size: 11px;
+    &:last-child{
+        padding-right: 0px;
+    }
+    a i:hover{
+        color: #333;
+    }
+    a i{
+        color: #666;
+    }
 }
-ul.sharinglist li a i:hover{
-    color: #333;
-}
+
 
 /* DataTables styles */
 .dataTables_filter
@@ -873,7 +880,7 @@ a.toggle-active{
                 text-align: center;
                 overflow: hidden;
 
-                i.fa
+                span.fa
                 {
                     padding-right: 10px;
                     opacity:.9;
@@ -971,7 +978,7 @@ a.toggle-active{
                     text-decoration: none;
                     color: #1a70b1;
                 }
-                i.lesson-title-caret
+                span.lesson-title-caret
                 {
                     background-color: #efefef;
                     display: block;
@@ -1198,7 +1205,7 @@ input[type="file"] {
         @include box-shadow(3px 0px 2px #555555 inset);
     }
 
-    span{
+    &>span{
         border-radius: 5rem;
         text-align:center;
         vertical-align: middle;
@@ -1214,7 +1221,7 @@ input[type="file"] {
         @include box-shadow(2px 0px 2px rgb(221, 221, 221));
     }
 
-    &:hover span{
+    &:hover>span{
         background:$color-hover;
         color: white;
         @include box-shadow(0px 0px 4px #000000);
@@ -1926,6 +1933,55 @@ a.list-group-item.delete:hover{
         margin-right: 15px;
     }
 }
+#course-title-wrapper{
+    .popover-content{
+        padding: 3px;
+        .list-group{
+            margin: 0px;
+            .list-group-item{
+                white-space: nowrap;
+            }
+        }
+    }
+}
+.course-below-wrapper{
+    padding: 0;
+    .course-below-info{
+        font-size: 12px;
+        margin: 15px 0 0 0;
+        padding: 15px 0;
+        background-color: #f5f5f5;
+    }
+}
+ul.course-title-actions{
+    margin: 0;
+    li{
+        padding-left: 10px;
+        padding-right: 10px;
+        .fa-custom-lock{
+            position: absolute;
+            top: 27px;
+            right: 92px;
+            font-size: 11px;
+        }
+    }
+    li:first-child{
+        border-left: 2px solid #eeeeee;
+    }
+}
+.access{
+    &.access-edit{
+        margin-left: 10px;
+        padding-left: 10px;
+    }
+    font-size: 20px;
+    a:hover{
+        text-decoration: none;
+    }
+}
+.panel-footer .rating{
+    margin: 0px;
+}
 /* add unit button */
 .add-unit-btn{
     line-height: 37px;
@@ -1950,6 +2006,9 @@ a.list-group-item.delete:hover{
 }
 .rating-container{
     text-align: left;
+}
+ul.sharinglist{
+    padding-left: 0px;
 }
 .social-container{
     text-align: right;
@@ -2391,13 +2450,13 @@ div.login-form .login-option-social .social-btn{
     color: white;
 }
 
-div.login-form .login-option-social .social-btn i.fa{
+div.login-form .login-option-social .social-btn span.fa{
     float: left;
     font-size: 1.6em;
     position: relative;
 }
 
-div.login-form .login-option-social .social-btn i.fa:after{
+div.login-form .login-option-social .social-btn span.fa:after{
     content: "";
     display: inline-block;
     position: absolute;
@@ -2554,6 +2613,42 @@ th.forum_td:first-child{
 .forum-anchor-link
 {
     font-size: 16px;
+}
+td.forum-response-column {
+    position: relative;
+    padding-bottom: 0px !important;
+    .reply-post-btn{
+        margin-right: 5px;
+        margin-top: -3px;
+    }
+    .forum-post-header {
+        border-bottom: 1px solid #ddd;
+        margin: 10px 10px;
+        padding-bottom: 10px;
+        h4.h4 {
+            margin: 5px 0px;
+        }
+    }
+    .forum-post-message {
+        margin: 5px 10px;
+        padding-bottom: 32px;
+    }
+    .forum-post-footer {
+        margin: 20px 0px 0px;
+        padding: 10px 0;
+        bottom: 0px;
+        background-color: #f5f5f5;
+        width: 100%;
+        .rating{
+            margin: 0px;
+        }
+        .pull-left{
+            padding-left: 10px;
+        }
+        .pull-right{
+            padding-right: 10px;
+        }
+    }
 }
 
 /* LINKS */
@@ -2727,6 +2822,9 @@ div#profile-about-me{
     color: #cccccc;
 }
 
+div.modal-header, div.modal-footer{
+    background-color: #f5f5f5;
+}
 div #treeModal div .modal-body {
     max-height: calc(100vh - 210px);
     overflow-y: auto;
@@ -2736,4 +2834,15 @@ div #treeModal div .modal-body {
   font-style: italic;
   font-weight: bold;
   color: #000000 !important;
+}
+
+/* Usage Module */
+.inner-heading
+{
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #ccc;
+}
+.li-indented{
+    padding-left: 15px !important;
 }

@@ -174,7 +174,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
     global $logo, $langNewForumNotify, $course_code, $course_code, $course_id, $langForumFrom,
         $uid, $langBodyForumNotify, $langInForums, $urlServer, $langdate, $langSender,
         $langCourse, $langCategory, $langForum, $langSubject, $langNote,
-        $langLinkUnsubscribe, $langHere, $charset, $langMailBody;
+        $langLinkUnsubscribe, $langHere, $charset, $langMailBody, $langMailSubject;
 
     $subject_notify = "$logo - $langNewForumNotify";
     $category_id = forum_category($forum_id);
@@ -200,8 +200,8 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
     $body_html_topic_notify = "<!-- Body Section -->
     <div id='mail-body'>
         <br>
-        <div><b>$langSubject:</b> <span class='left-space'><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;topic=$topic_id'>" . q($subject) . "</a></span></div><br>
-        <div><b>$langMailBody:</b></div>
+        <div><b>$langMailSubject</b> <span class='left-space'><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;topic=$topic_id'>" . q($subject) . "</a></span></div><br>
+        <div><b>$langMailBody</b></div>
         <div id='mail-body-inner'>
             $message
         </div>
@@ -217,7 +217,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
 
     $html_topic_notify = $header_html_topic_notify.$body_html_topic_notify.$footer_html_topic_notify;
 
-    $plain_message = html2text($message);
+    $plain_message = html2text($html_topic_notify);
     $plain_topic_notify = "$langBodyForumNotify $langInForums\n" .
        "$langSender: $name\n" .
        "$langCourse: $title\n    {$urlServer}courses/$course_code/\n" .

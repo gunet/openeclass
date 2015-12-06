@@ -34,7 +34,7 @@ require_once '../template/template.inc.php';
  * @global type $langInstallProgress
  * @param type $toolContent
  */
-function draw($toolContent, $options=null) {
+function draw($toolContent, $options=null, $head_content ='') {
 	global $urlServer, $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
 
     if (!$options) {
@@ -54,7 +54,8 @@ function draw($toolContent, $options=null) {
     $t->set_var('logo_img', '../template/default/img/logo_eclass.png');
     $t->set_var('logo_img_small', '../template/default/img/logo_eclass_small.png');
     $t->set_var('template_base', '../template/default');
-
+    $t->set_var('HEAD_EXTRAS', $head_content);
+    
     if (isset($options['no-menu'])) {
         $t->set_block('mainBlock', 'leftNavBlock', 'delete');
         $t->set_block('mainBlock', 'breadCrumbs', 'delete');
@@ -169,30 +170,6 @@ function installerMenu(){
 	array_push($sideMenuGroup, $sideMenuSubGroup);
 
 	return $sideMenuGroup;
-}
-
-
-/*
- * check extension and  write  if exist  in a  <LI></LI>
- * @params string       $extensionName  name  of  php extension to be checked
- * @params boolean      $echoWhenOk     true => show ok when  extension exist
- * @author Christophe Gesche
- * @desc check extension and  write  if exist  in a  <LI></LI>
- */
-
-function warnIfExtNotLoaded($extensionName) {
-
-    global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
-    
-    if (extension_loaded($extensionName)) {
-        $tool_content .= '<li>' . icon('fa-check') . ' ' . $extensionName . '</li>';
-    } else {
-        $tool_content .= "
-                <li class='bg-danger'>" . icon('fa-times') . " $extensionName
-                <b>$langModuleNotInstalled</b>
-                (<a href='http://www.php.net/$extensionName' target=_blank>$langReadHelp $langHere</a>)
-                </li>";
-    }
 }
 
 /**

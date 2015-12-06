@@ -24,7 +24,6 @@ $require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
-require_once 'include/pclzip/pclzip.lib.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'restore_functions.php';
@@ -34,7 +33,7 @@ $courseObj = new Course();
 
 load_js('jstree3');
 
-list($js, $html) = $treeObj->buildCourseNodePicker();
+list($js, $html) = $treeObj->buildCourseNodePickerIndirect();
 $head_content .= $js;
 
 $pageName = $langRestoreCourse;

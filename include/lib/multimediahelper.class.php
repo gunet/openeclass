@@ -513,14 +513,14 @@ class MultimediaHelper {
         foreach (self::getYoutubePatterns() as $pattern) {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
-                $medialink = 'http://www.youtube.com/embed/' . $sanitized . '?hl=en&fs=1&rel=0&autoplay=1&wmode=transparent';
+                $medialink = 'https://www.youtube.com/embed/' . $sanitized . '?hl=en&fs=1&rel=0&autoplay=1&wmode=transparent';
             }
         }
 
         foreach (self::getVimeoPatterns() as $pattern) {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
-                $medialink = 'http://player.vimeo.com/video/' . $sanitized . '?color=00ADEF&fullscreen=1&autoplay=1';
+                $medialink = 'https://player.vimeo.com/video/' . $sanitized . '?color=00ADEF&fullscreen=1&autoplay=1';
             }
         }
 
@@ -548,14 +548,14 @@ class MultimediaHelper {
         foreach (self::getDailymotionPatterns() as $pattern) {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
-                $medialink = 'http://www.dailymotion.com/embed/video/' . $sanitized . '?autoPlay=1';
+                $medialink = 'https://www.dailymotion.com/embed/video/' . $sanitized . '?autoPlay=1';
             }
         }
         
         foreach (self::getNineSlidesPatterns() as $pattern) {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
-                $medialink = 'http://www.9slides.com/embed/' . $sanitized;
+                $medialink = 'https://www.9slides.com/embed/' . $sanitized;
             }
         }
 

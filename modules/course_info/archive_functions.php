@@ -42,6 +42,7 @@ function archiveTables($course_id, $course_code, $archivedir) {
                                           WHERE course = $course_id)",
         'announcement' => $sql_course,
         'group_properties' => $sql_course,
+        'group_category' => $sql_course,
         'group' => $sql_course,
         'group_members' => "group_id IN (SELECT id FROM `group`
                                                     WHERE course_id = $course_id)",
@@ -93,11 +94,14 @@ function archiveTables($course_id, $course_code, $archivedir) {
                                                                              WHERE course_id = $course_id))",
         'poll' => $sql_course,
         'poll_question' => "pid IN (SELECT pid FROM poll WHERE course_id = $course_id)",
-        'poll_answer_record' => "pid IN (SELECT pid FROM poll WHERE course_id = $course_id)",
+        'poll_to_specific' => "poll_id IN (SELECT pid FROM poll WHERE course_id = $course_id)",
+        'poll_answer_record' => "poll_user_record_id IN (SELECT id FROM poll_user_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = $course_id))",
+        'poll_user_record' => "pid IN (SELECT pid FROM poll WHERE course_id = $course_id)",
         'poll_question_answer' => "pqid IN (SELECT pqid FROM poll_question
                                                        WHERE pid IN (SELECT pid FROM poll
                                                                             WHERE course_id = $course_id))",
         'assignment' => $sql_course,
+        'assignment_to_specific' => "assignment_id IN (SELECT id FROM assignment WHERE course_id = $course_id)",
         'assignment_submit' => "assignment_id IN (SELECT id FROM assignment
                                                              WHERE course_id = $course_id)",
         'gradebook' => $sql_course,
@@ -114,6 +118,7 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'attendance_users' => "attendance_id IN (SELECT id FROM attendance WHERE course_id = $course_id)",
         'agenda' => $sql_course,
         'exercise' => $sql_course,
+        'exercise_to_specific' => "exercise_id IN (SELECT id FROM exercise WHERE course_id = $course_id)",
         'exercise_question' => $sql_course,
         'exercise_answer' => "question_id IN (SELECT id FROM exercise_question
                                                          WHERE course_id = $course_id)",
@@ -162,10 +167,6 @@ function archiveTables($course_id, $course_code, $archivedir) {
 function doArchive($course_id, $course_code) {
     global $webDir, $urlServer, $urlAppend, $siteName, $tool_content;
     
-    if (extension_loaded('zlib')) {
-        include 'include/pclzip/pclzip.lib.php';
-    }
-
     $basedir = "$webDir/courses/archive/$course_code";
     file_exists($basedir) or mkdir($basedir, 0755, true);
 

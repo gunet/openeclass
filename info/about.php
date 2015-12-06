@@ -54,7 +54,10 @@ $tool_content .= "<ul class='list-group'>
 $tool_content .= "</div>";
 
 $total = 0;
+$count = array(USER_TEACHER => 0, USER_STUDENT => 0, USER_GUEST => 0);
+
 $userCounts = Database::get()->queryArray("SELECT status, COUNT(*) as count FROM user WHERE expires_at > NOW() GROUP BY status");
+
 foreach ($userCounts as $item) {
     $total += $count[$item->status] = $item->count;
 }

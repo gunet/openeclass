@@ -51,7 +51,7 @@ $course = new Course();
 $pageName = ''; // delete $pageName set in doc_init.php
 $require_help = TRUE;
 $helpTopic = 'course_home';
-$main_content = $cunits_content = $bar_content = "";
+$main_content = $cunits_content = $bar_content = $course_info_extra = "";
 
 add_units_navigation(TRUE);
 
@@ -92,6 +92,9 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
             $this.click(function() {
                 calendar.view($this.data("calendar-view"));
             });
+        });
+        $(".modal").on("show.bs.modal", function(e){
+            $("#lalou").popover("hide");
         });'
 
     ."})
@@ -170,8 +173,8 @@ $head_content .= "
                 }              
             };
         </script>";
-if(count($res)>0){
-    $course_info_extra = "";
+
+if(count($res)>0){   
     foreach ($res as $key => $row) {
         $desctype = intval($row->type) - 1;    
         $hidden_id = "hidden_" . $key;
@@ -185,59 +188,64 @@ if(count($res)>0){
                                     <div class='modal-content'>
                                         <div class='modal-header'>
                                         <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <h4 class='modal-title' id='myModalLabel'>" . q($row->title) . "</h4>
+                                        <div class='modal-title h4' id='myModalLabel'>" . q($row->title) . "</div>
                                     </div>
-                                    <div class='modal-body'>".
+                                    <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".
                                       standard_text_escape($row->comments)
                                     ."</div>
                                     <div class='modal-footer'>";
                                         if ($previous_id) {
-                                            $tool_content .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><i class='fa fa-arrow-left'></i></a>";
+                                            $tool_content .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><span class='fa fa-arrow-left'></span></a>";
                                         } 
                                         if ($next_id) {
-                                            $tool_content .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><i class='fa fa-arrow-right'></i></a>";
+                                            $tool_content .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
                                         }                                                                              
         $tool_content .=    "                                            
                                     </div>                                        
                                   </div>
                                 </div>
                               </div>";
-        $course_info_extra .= "<li><a data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($row->title) ."</a></li>";
+        $course_info_extra .= "<a class='list-group-item' data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($row->title) ."</a>";
     }
-    $course_info_btn = "
-            <div class='btn-group' role='group'>
-              <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>
-                $langCourseDescription
-                <span class='caret'></span>
-                <span class='sr-only'>Toggle Dropdown</span>
-              </button>
-              <ul class='dropdown-menu pull-right' role='menu'>
-                $course_info_extra
-              </ul>
-            </div>";    
 } else {
-   $course_info_btn = ''; 
+    $course_info_extra = "<div class='text-muted'>$langNoInfoAvailable</div>";
 }
-
 $main_content .= "<div class='course_info'>";
 if ($course_info->description) {
     $description = standard_text_escape($course_info->description);
-    $main_content .= "<div id='descr_content'>$description</div>";
+
+    // Text button for read more & read less
+    $postfix_truncate_more = "<a href='#' class='more_less_btn'>$langReadMore &nbsp;<span class='fa fa-arrow-down'></span></a>";
+    $postfix_truncate_less = "<a href='#' class='more_less_btn'>$langReadLess &nbsp;<span class='fa fa-arrow-up'></span></a>";
+
+    // Create full description text & truncated text
+    $full_description = $description.$postfix_truncate_less;
+    $truncated_text = ellipsize_html($description, 680, $postfix_truncate_more);
+
+    // Hidden html text to store the full description text & the truncated desctiption text so as to be accessed by javascript
+    $main_content .= "<div id='not_truncated' class='hidden'>$full_description</div>";
+    $main_content .= "<div id='truncated' class='hidden'>$truncated_text</div>";
+
+    // Show the description text
+    $main_content .= "<div id='descr_content' class='is_less'>$truncated_text</div>";
+
 } else {
     $main_content .= "<p class='not_visible'> - $langThisCourseDescriptionIsEmpty - </p>";
 }
+/* Disable keywords
 if (!empty($keywords)) {
-    $main_content .= "<p id='keywords'><b>$langCourseKeywords</b> $keywords</p>";
+    $main_content .= "<p id='keywords'><strong>$langCourseKeywords</strong> $keywords</p>";
 }
+*/
 $main_content .= "</div>";
 
 if (!empty($addon)) {
-    $main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
+    $main_content .= "<div class='course_info'><div class='h1'>$langCourseAddon</div><p>$addon</p></div>";
 }
 if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
     commenting_add_js();
     $comm = new Commenting('course', $course_id);
-    $main_content .= $comm->put($course_code, $is_editor, $uid);
+    $comment_content = $comm->put($course_code, $is_editor, $uid);
 }
 if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
     $rating = new Rating('fivestar', 'course', $course_id);
@@ -249,7 +257,7 @@ if (is_sharing_allowed($course_id)) {
     }
 }
 $panel_footer = "";
-if(isset($rating_content) || isset($social_content)) {
+if(isset($rating_content) || isset($social_content) || isset($comment_content)) {
     $panel_footer .= "                
                 <div class='panel-footer'>
                     <div class='row'>";
@@ -259,12 +267,25 @@ if(isset($rating_content) || isset($social_content)) {
                 $rating_content
             </div>";       
     }
-    if(isset($social_content)){
-     $panel_footer .=
-            "<div class='col-sm-6 ".(isset($rating_content) ? "text-right" : "")."'>
-                $social_content
-            </div>";         
+    if(isset($social_content) || isset($comment_content)){
+
+        $subcontent = "";
+
+        if(isset($comment_content)){
+            $subcontent .= $comment_content;
+        }
+        if(isset($social_content) && isset($comment_content)){
+            $subcontent .= "&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp; ";
+        }
+        if(isset($social_content)){
+            $subcontent .= $social_content;
+        }
+        $panel_footer .=
+            "<div class='text-right ".(isset($rating_content) ? "col-xs-6" : "col-xs-12")."'>
+                $subcontent
+            </div>";
     }
+
     $panel_footer .= "                
                 </div>
             </div>";          
@@ -349,8 +370,8 @@ if ($is_editor) {
 
 }
 //style='color:#999999; font-size:13px;'
-$bar_content .= "<b>" . $langCode . ":</b> " . q($public_code) . "" .
-                "<br><b>" . $langFaculty . ":</b> ";
+$bar_content .= "<strong>" . $langCode . ":</strong> " . q($public_code) . "" .
+                "<br><strong>" . $langFaculty . ":</strong> ";
 
 $departments = $course->getDepartmentIds($course_id);
 $i = 1;
@@ -367,36 +388,35 @@ $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
 //set the lang var for lessons visibility status
 switch ($visible) {
     case COURSE_CLOSED: {
-            $lessonStatus = "<span title='$langClosedCourseShort'>$langPrivateShort</span>";
-            break;
-        }
+        $lessonStatus = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span>";
+        break;
+    }
     case COURSE_REGISTRATION: {
-            $lessonStatus = "<span title='$langPrivOpen'>$langPrivOpenShort</span>";
-            break;
-        }
+        $lessonStatus = "   <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPrivOpen'>
+                                <span class='fa fa-pencil text-danger fa-custom-lock'></span>
+                            </span>";
+        break;
+    }
     case COURSE_OPEN: {
-            $lessonStatus = "<span title='$langPublic'>$langPublicShort</span>";
-            break;
-        }
+        $lessonStatus = "    <span class='fa fa-unlock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPublic'></span>";
+        break;
+    }
     case COURSE_INACTIVE: {
-            $lessonStatus = "<span title='$langCourseInactiveShort'>$langCourseInactive</span>";
-            break;
-        }
+        $lessonStatus = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInactiveShort'>
+                                <span class='fa fa-times text-danger fa-custom-lock'></span>
+                             </span>";
+        break;
+    }
 }
-$bar_content_2 = "<br><b>$langConfidentiality:</b> $lessonStatus";
-if ($is_course_admin) {
-    $link = "<a href='{$urlAppend}modules/user/?course=$course_code'>$numUsers $langRegistered</a>";
-} else {
-    $link = "<a href='{$urlAppend}modules/user/userslist.php?course=$course_code'>$numUsers $langRegistered</a>";
-}
-$bar_content_2 .= "<br><b>$langUsers:</b> $link";
-$citation_text = "$professor.&nbsp;<i>$currentCourseName.</i>&nbsp;$langAccessed" . claro_format_locale_date($dateFormatLong, strtotime('now')) . "&nbsp;$langFrom2 {$urlServer}courses/$course_code/";
+//$bar_content_2 = "<br><strong>$langConfidentiality:</strong> $lessonStatus";
+//$bar_content_2 = "<br><strong>$langUsers:</strong> $Users_link";
+$citation_text = "$professor.&nbsp;<span>$currentCourseName.</span>&nbsp;$langAccessed" . claro_format_locale_date($dateFormatLong, strtotime('now')) . "&nbsp;$langFrom2 {$urlServer}courses/$course_code/";
 $tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                     <div class='modal-dialog'>
                         <div class='modal-content'>
                             <div class='modal-header'>
                                 <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                <h4 class='modal-title' id='myModalLabel'>$langCitation</h4>
+                                <div class='modal-title h4' id='myModalLabel'>$langCitation</div>
                             </div>
                             <div class='modal-body'>".
                               standard_text_escape($citation_text)
@@ -404,11 +424,11 @@ $tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dial
                         </div>
                     </div>
                 </div>";
-$bar_content_2 .= "<br><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'>$langCitation</a>";
+//$bar_content_2 .= "<br><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'>$langCitation</a>";
 
 // display course license
 if ($course_license) {
-    $license_info_box = "<small>" . copyright_info($course_id) . "</small>";
+    $license_info_box = "<span>" . copyright_info($course_id) . "</span>";
 } else {
     $license_info_box = '';
 }
@@ -435,28 +455,31 @@ if (isset($level) && !empty($level)) {
     };
         
     $(document).ready(function() {
-        dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><h4 class='modal-title' id='modal-label'>{$langCourseMetadata}</h4></div><div class='modal-body'>body</div></div></div></div>\");
+        dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><div class='modal-title h4' id='modal-label'>{$langCourseMetadata}</div></div><div class='modal-body'>body</div></div></div></div>\");
     });
 
 /* ]]> */
 </script>";
     $opencourses_level = "
     <div class='row'>
-        <div class='col-md-4'>
-            <img src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
+        <div class='col-xs-4'>
+            <img class='img-responsive center-block' src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
         </div>
-        <div class='col-md-8 margin-top-thin'>
-            ${langOpenCoursesLevel}: $level
+        <div class='col-xs-8'>
+            <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>${langOpenCoursesLevel}: $level</div>
+            <p class='not_visible'>
+            <small>$langVisitsShort : &nbsp;$visitsopencourses</small>
             <br />
-            <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata " .
-            icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");") . "</small>
-            <br />
-            <small>$langVisits: $visitsopencourses</small>
-            <br />
-            <small>$langHits: $hitsopencourses</small>
+            <small>$langHitsShort : &nbsp;$hitsopencourses</small>
+            </p>
         </div>
     </div>
 ";
+    $opencourses_level_footer = "<div class='row'>
+        <div class='col-xs-12 text-right'>
+            <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata</a>".icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");")."</small>
+        </div>
+    </div>";
 }
 
 // display `contact teacher via email` link if teacher actually receives email from his course
@@ -475,84 +498,73 @@ if (!empty($rec_mail)) {
 }
 */
 // Contentbox: Course main contentbox
-//Temp commit (waiting for Alex to fix course description issue) 
+//Temp commit (waiting for Alex to fix course description issue)
+
+if(!empty($license_info_box)){
+
+    $license_holder = "
+                        <div class ='text-center'>
+                           $license_info_box
+                        </div>
+                        ";
+} else {
+    $license_holder = "";
+}
+
 if ($course_info->home_layout == 3) {
     $left_column = '';
     $main_content_cols = '';
-    $horizontal_info_row =
-                "<div class='col-xs-12'>
-                    <hr class='margin-top-fat margin-bottom-fat'>
-                </div>
-                <div class='col-xs-12 form-wrapper'>
-                <div class='row'>
-                <div class='col-xs-8'>              
-                     $bar_content
-                     $bar_content_2
-                </div>
-                <div class='col-xs-4 text-center'> 
-                    $license_info_box
-                </div></div></div>";    
-
 } else {
-    if(!empty($license_info_box)){
-
-        $license_holder = "<hr class='col-xs-12 margin-top-slim margin-bottom-fat'>
-                        <div class ='col-xs-12 text-center margin-top-fat'>
-                           $license_info_box
-                        </div>
-                        <hr class='col-xs-12 margin-top-fat margin-bottom-fat visible-xs-block'>";
-    } else {
-        $license_holder = "";
-    }           
-   $left_column = "
-            <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>";
-   if ($course_info->home_layout == 1) {
-       $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . urlencode($course_info->course_image) : "$themeimg/ph1.jpg";
-       $left_column .= "
-                <div>
-                    <img class='banner-image img-responsive' src='$course_image_url'/>
-                </div>
-                <hr class='col-xs-12 margin-top-fat margin-bottom-fat'>";
-   }
-    $left_column .= "
-                <div class='col-xs-12 form-wrapper'>              
-                     $bar_content
-                     $bar_content_2
-                </div>               
-                $license_holder
-            </div>";
-   $horizontal_info_row = '';
+    $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . rawurlencode($course_info->course_image) : "$themeimg/ph1.jpg";
+    $left_column = "
+        <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
+            <div>
+                <img class='banner-image img-responsive' src='$course_image_url' alt='Course image'/>
+            </div>
+        </div>";
    $main_content_cols = 'col-sm-7';
 }
 $edit_link = "";
 if ($is_editor) {
     warnCourseInvalidDepartment(true);
     $edit_link = "
-    <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' data-toggle='tooltip' data-placement='top' title='$langCourseInformationText'><i class='pull-left fa fa-edit fa'></i></a>";
+        <div class='access access-edit pull-left'><a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code'><span class='fa fa-pencil' style='line-height: 30px;' data-toggle='tooltip' data-placement='top' title='Επεξεργασία πληροφοριών'></span></a></div>";
 } else {
     $edit_link = " ";
 }
+$course_info_popover = "<div  class='list-group'>$course_info_extra</div>";
 $tool_content .= "
 <div class='row margin-top-thin margin-bottom-fat'>
     <div class='col-md-12'>
-            <div class='panel panel-default'>
-                
-                <div class='panel-body'>
-                            $left_column
-                            <div class='col-xs-12 $main_content_cols'>
-                                <div class='course-info-title clearfix'>
-                                <h4 class='pull-left'>$langCourseDescriptionShort</h4><div class='pull-left edit-course-title'>$edit_link</div><div class='info-course-btn pull-right'>
-                      $course_info_btn
-                    </div>
-                            </div>
-                                <div class=''>$main_content</div>
-                            </div>
-                            $horizontal_info_row
+        <div class='panel panel-default'>
+
+            <div class='panel-body'>
+                <div id='course-title-wrapper' class='course-info-title clearfix'>
+                    <div class='pull-left h4'>$langCourseDescriptionShort</div> $edit_link
+                    <ul class='course-title-actions clearfix pull-right list-inline'>
+                        <li class='access pull-right'><a href='javascript:void(0);' style='color: #23527C;''><span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='".q($course_info_popover)."'></span></a></li>
+                        <li class='access pull-right'><a href='javascript:void(0);'>$lessonStatus</a></li>
+                        <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span></a></li>
+                        <li class='access pull-right'><a href='{$urlAppend}modules/user/".($is_course_admin?'':'userslist.php')."?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span></a></li>
+                    </ul>
                 </div>
-                
-                $panel_footer
+                $left_column
+                <div class='col-xs-12 $main_content_cols'>
+
+                    <div class=''>$main_content</div>
+                </div>
+                <div class='col-xs-12 course-below-wrapper'>
+                    <div class='row text-muted course-below-info'>
+                    <div class='col-xs-6'>
+                         $bar_content
+                     </div>
+                     <div class='col-xs-6'>$license_holder</div>
+                </div>
             </div>
         </div>
+        $panel_footer
+    </div>
+    </div>
 </div>
 ";
 
@@ -596,7 +608,7 @@ if ($is_editor) {
                 if (!empty($cu->title)) {
                     $cwtitle = "" . q($cu->title) . " ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";                    
                 } else {
-                    $cwtitle = "$count_index$langOr $langsWeek ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")"; 
+                    $cwtitle = "$count_index$langor $langsWeek ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")"; 
                 }                
                 $href = "<a class = '$class_vis' href='${urlServer}modules/weeks/?course=$course_code&amp;id=$cu->id&amp;cnt=$count_index'>$cwtitle</a>";
             } else {
@@ -605,7 +617,7 @@ if ($is_editor) {
             $cunits_content .= "<div class='col-xs-12'><div class='panel clearfix'><div class='col-xs-12'>
                                     <div class='item-content'>
                                         <div class='item-header clearfix'>
-                                            <h4 class='item-title'>$href</h4>";
+                                            <div class='item-title h4'>$href</div>";
                                 if ($is_editor) {
                 if ($course_info->view_type == 'weekly') { // actions for course weekly format
                     $cunits_content .= "<div class='item-side'>" .
@@ -682,13 +694,13 @@ if (!$alter_layout) {
     <div class='col-md-8 course-units'>
         <div class='row'>
             <div class='col-md-12'>
-                <h3 class='content-title  pull-left'>$unititle</h3>
+                <div class='content-title pull-left h3'>$unititle</div>
             ";
             
         if ($is_editor and $course_info->view_type == 'units') {            
             $link = "{$urlServer}modules/units/info.php?course=$course_code";
             $tool_content .= "<a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
-                                <i class='fa fa-plus-circle'></i>
+                                <span class='fa fa-plus-circle'></span>
                             </a>";           
         }
             
@@ -696,6 +708,10 @@ if (!$alter_layout) {
         $tool_content .= "<div class='row boxlist no-list'>
             $cunits_content
         </div>";
+        $course_home_page_main = new \Widgets\WidgetArea(COURSE_HOME_PAGE_MAIN);
+        foreach ($course_home_page_main->getCourseAndAdminWidgets($course_id) as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }                    
     $tool_content .= "</div>";
 }
 
@@ -715,17 +731,21 @@ $tool_content .="<div class='row'>";
             if (isset($level) && !empty($level)) {
                 $tool_content .= "
                     <div class='col-md-$cunits_sidebar_subcolumns'>
-                        <h3 class='content-title'>$langOpenCourseShort</h3>
+                        <div class='content-title h3'>$langOpenCourseShort</div>
                         <div class='panel'>
                             <div class='panel-body'>
                                 $opencourses_level
+                            </div>
+                            <div class='panel-footer'>
+                                $opencourses_level_footer
                             </div>
                         </div>
                     </div>
                 ";
             }
-                $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h3 class='content-title'>$langCalendar</h3>
+                $tool_content .= "
+                <div class='col-md-$cunits_sidebar_subcolumns'>
+                    <div class='content-title h3'>$langCalendar</div>
                     <div class='panel'>
                         <div class='panel-body'>
                             $user_personal_calendar
@@ -753,20 +773,27 @@ $tool_content .="<div class='row'>";
                     </div>
                 </div>
                 <div class='col-md-$cunits_sidebar_subcolumns'>
-                                <h3 class='content-title'>$langAnnouncements</h3>
-                                <div class='panel'>
-                                    <div class='panel-body'>
-                                        <ul class='tablelist'>" . course_announcements() . "
-                                        </ul>
-                                    </div>
-                                    <div class='panel-footer clearfix'>
-                                        <div class='pull-right'><a href='{$urlAppend}modules/announcements/?course=$course_code'><small>$langMore&hellip;</small></a></div>
-                                    </div>
-                                </div>
-                            </div>
-                       </div>
-                       </div>
-                </div>";
+                    <div class='content-title h3'>$langAnnouncements</div>
+                    <div class='panel'>
+                        <div class='panel-body'>
+                            <ul class='tablelist'>" . course_announcements() . "
+                            </ul>
+                        </div>
+                        <div class='panel-footer clearfix'>
+                            <div class='pull-right'><a href='{$urlAppend}modules/announcements/?course=$course_code'><small>$langMore&hellip;</small></a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-$cunits_sidebar_subcolumns'>";
+        $course_home_page_sidebar = new \Widgets\WidgetArea(COURSE_HOME_PAGE_SIDEBAR);
+        foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }                              
+$tool_content .= "
+                </div>
+            </div>
+        </div>
+    </div>";
 
 draw($tool_content, 2, null, $head_content);
 

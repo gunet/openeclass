@@ -68,7 +68,7 @@ if (isset($_GET['c'])) {
 
 // Update course basic information
 if (isset($_POST['submit'])) {
-    $departments = isset($_POST['department']) ? $_POST['department'] : array();
+    $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
 
     // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
     if (isDepartmentAdmin()) {
@@ -107,9 +107,9 @@ else {
             <div class='col-sm-10'>";    
 
         if (isDepartmentAdmin()) {
-            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row->id), 'allowables' => $user->getDepartmentIds($uid)));
+            list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($row->id), 'allowables' => $user->getDepartmentIds($uid)));
         } else {
-            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row->id)));
+            list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($row->id)));
         }
         $head_content .= $js;
         $tool_content .= $html;

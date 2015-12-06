@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.3
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,17 +21,16 @@
 
 /**
  * @file: altsearch.php
- * @authors list: Karatzidis Stratos <kstratos@uom.gr>
- *                 Vagelis Pitsioygas <vagpits@uom.gr>
- * @description: This script/file tries to authenticate the user, using
+ * @author Karatzidis Stratos <kstratos@uom.gr>
+ * @author Vagelis Pitsioygas <vagpits@uom.gr>
+ * @description This script/file tries to authenticate the user, using
  * his user/pass pair and the authentication method defined by the admin
  */
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
-require_once 'include/CAS/CAS.php';
-require_once 'auth.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/auth/auth.inc.php';
 
 $tree = new Hierarchy();
 $userObj = new User();
@@ -39,11 +38,11 @@ $userObj = new User();
 load_js('jstree3');
 
 $user_registration = get_config('user_registration');
-$alt_auth_stud_reg = get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
+$alt_auth_stud_reg = get_config('alt_auth_stud_reg'); // user registration via alternative auth methods
 $alt_auth_prof_reg = get_config('alt_auth_prof_reg'); // prof registration via alternative auth methods
 
 if (!$user_registration) {
-    $tool_content .= "<div class='alert alert-info'>$langCannotRegister</div>";
+    Session::Messages($langCannotRegister, 'alert-info');
     draw($tool_content, 0);
     exit;
 }
@@ -58,6 +57,13 @@ if (isset($_POST['auth'])) {
 if (isset($_SESSION['u_prof'])) {
     $prof = intval($_SESSION['u_prof']);
 }
+
+if (!in_array($auth, get_auth_active_methods())) {
+    $tool_content .= "<div class='alert alert-danger'>$langCannotRegister</div>";
+    draw($tool_content, 0);
+    exit;
+}
+
 if (!$_SESSION['u_prof'] and !$alt_auth_stud_reg) {
     $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
     draw($tool_content, 0);
@@ -102,21 +108,9 @@ if (!isset($_SESSION['was_validated']) or
     // If user wasn't authenticated in the previous step, try
     // an authentication step now:
     // First check for Shibboleth
-    if (isset($_SESSION['shib_auth']) and $_SESSION['shib_auth'] == true) {
-        $r = Database::get()->querySingle("SELECT auth_settings FROM auth WHERE auth_id = 6");
-        if ($r) {
-            $shibsettings = $r->auth_settings;
-            if ($shibsettings != 'shibboleth' and $shibsettings != '') {
-                $shibseparator = $shibsettings;
-            }
-            if (strpos($_SESSION['shib_surname'], $shibseparator)) {
-                $temp = explode($shibseparator, $_SESSION['shib_surname']);
-                $_SESSION['auth_user_info']['givenname'] = $temp[0];
-                $_SESSION['auth_user_info']['surname'] = $temp[1];
-            }
-        }
-        $_SESSION['auth_user_info']['email'] = $_SESSION['shib_email'];
+    if (isset($_SESSION['shib_uname'])) {
         $uname = $_SESSION['shib_uname'];
+        $_SESSION['auth_user_info'] = get_shibboleth_user_info();;
         $is_valid = true;
     } elseif ($is_submit or ($auth == 7 and !$submit)) {
         unset($_SESSION['was_validated']);
@@ -193,7 +187,7 @@ if ($is_valid) {
     if (!$ok and $submit) {
         $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing</div>";
     }
-    $depid = intval($department);
+    $depid = intval(getDirectReference($department));
     if (isset($_SESSION['auth_user_info'])) {
         $givenname_form = $_SESSION['auth_user_info']['givenname'];
         $surname_form = $_SESSION['auth_user_info']['surname'];
@@ -288,14 +282,41 @@ if ($is_valid) {
                 "$langYouAreReg $siteName $langSettings $uname\n" .
                 "$langPassSameAuth\n$langAddress $siteName: " .
                 "$urlServer\n" .
-                ($vmail ? "\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer" . "modules/auth/mail_verify.php?ver=" . $hmac . "&id=" . $last_id . "\n" : "") .
+                ($vmail ? "\n$langMailVerificationSuccess.\n$langMailVerificationClick\n{$urlServer}modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id . "\n" : "") .
                 "$langProblem\n$langFormula" .
                 "$administratorName\n" .
                 "$langManager $siteName \n$langTel $telephone \n" .
                 "$langEmail: $emailhelpdesk";
 
+        $header_html_topic_notify = "<!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$langYouAreReg $siteName</div>
+            </div>
+        </div>";
+
+        $body_html_topic_notify = "<!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div id='mail-body-inner'>
+                <p>$langSettings</p>
+                <ul id='forum-category'>
+                    <li><span><b>$lang_username:</b></span> <span>$uname</span></li>
+                    <li><span><b>$langPassword:</b></span> <span>$langPassSameAuth</span></li>
+                    <li><span><b>$langAddress $siteName:</b></span> <span>$urlServer</span></li>
+                    </ul>
+                    <p>".($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick<br><a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id</a>" : "")."</p>
+                    <p>$langProblem<br><br>$langFormula<br>$administratorName<br>$langManager $siteName<br>$langTel: $telephone<br>$langEmail: $emailhelpdesk</p>
+
+            </div>
+        </div>";
+
+        $emailbody = $header_html_topic_notify.$body_html_topic_notify;
+        $plainemailbody = html2text($emailbody);
+
         if (!empty($email)) {
-            send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $emailbody, $charset, "Reply-To: $emailhelpdesk");
+            send_mail_multipart($siteName, $emailAdministrator, '', $email, $emailsubject, $plainemailbody, $emailbody, $charset, "Reply-To: $emailhelpdesk");
         }
 
         $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
@@ -358,12 +379,38 @@ if ($is_valid) {
             $emailAdministrator = get_config('email_sender');
             $emailhelpdesk = get_config('email_helpdesk');
             // send email
-            $MailMessage = $mailbody1 . $mailbody2 . "$givenname_form $surname_form\n\n" . $mailbody3
-                    . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . $tree->getFullPath($depid) . "
-        \n$langComments: $usercomment\n"
-                    . "$langProfUname : $uname\n$langProfEmail : $email\n" . "$contactphone : $userphone\n\n\n$logo\n\n";
 
-            if (!send_mail($siteName, $emailAdministrator, $gunet, $emailhelpdesk, $mailsubject, $MailMessage, $charset, "Reply-To: $email")) {
+
+
+            $header_html_topic_notify = "<!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$mailbody1</div>
+                </div>
+            </div>";
+
+            $body_html_topic_notify = "<!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div id='mail-body-inner'>
+                    <p>$mailbody2 $givenname_form $surname_form $mailbody3
+                     $mailbody4  $mailbody5 $mailbody6 </p>
+            <ul id='forum-category'>
+                <li><span><b>$langProfUname:</b></span> <span>$uname</span></li>
+                <li><span><b>$contactphone :</b></span> <span>$userphone</span></li>
+                <li><span><b>$langProfEmail :</b></span> <span>$email</span></li>
+                <li><span><b>$langFaculty:</b></span> <span>".$tree->getFullPath($depid)."</span></li>
+                <li><span><b>$langComments:</b></span> <span> $usercomment </span></li>
+            </ul>
+            <p>$logo</p>
+                </div>
+            </div>";
+
+            $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
+            $plainemailbody = html2text($MailMessage);
+
+            if (!send_mail_multipart($siteName, $emailAdministrator, $gunet, $emailhelpdesk, $mailsubject, $plainemailbody, $MailMessage, $charset, "Reply-To: $email")) {
                 $tool_content .= "<div class='alert alert-warning'>$langMailErrorMessage &nbsp; <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a></div>";
                 draw($tool_content, 0);
                 exit();
@@ -377,8 +424,27 @@ if ($is_valid) {
             $emailhelpdesk = get_config('email_helpdesk');
             $emailAdministrator = get_config('email_sender');
             $subject = $langMailVerificationSubject;
-            $MailMessage = sprintf($mailbody1 . $langMailVerificationBody1, $urlServer . 'modules/auth/mail_verify.php?ver=' . $hmac . '&rid=' . $request_id);
-            if (!send_mail($siteName, $emailAdministrator, '', $email, $subject, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
+
+            $header_html_topic_notify = "<!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$mailbody1</div>
+                </div>
+            </div>";
+
+            $body_html_topic_notify = "<!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div id='mail-body-inner'>".
+                    sprintf($mailbody1 . $langMailVerificationBody1, "<a href='{$urlServer}modules/auth/mail_verify.php?h=" . $hmac . "&amp;rid=" . $request_id."'>{$urlServer}modules/auth/mail_verify.php?h=" . $hmac . "&amp;rid=" . $request_id ."</a>")."
+                </div>
+            </div>";
+
+            $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
+            $plainemailbody = html2text($MailMessage);
+
+            if (!send_mail_multipart($siteName, $emailAdministrator, '', $email, $subject, $plainemailbody, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
                 $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>");
                 $tool_content .= $mail_ver_error;
                 draw($tool_content, 0);
@@ -454,7 +520,7 @@ function user_info_form() {
         $mail_message = $langEmailNotice;
     } else {
         $mail_message = '';
-    }
+    }   
     if (isset($_SESSION['auth_user_info']) and !empty($_SESSION['auth_user_info']['givenname'])) {
         $givennameClass = ' form-control-static';
         $givennameInput = q($_SESSION['auth_user_info']['givenname']);
@@ -476,7 +542,7 @@ function user_info_form() {
         $amMessage = get_config('am_required')? $langCompulsory: $langOptional;
         $amClass = '';
         $amInput = '<input type="text" class="form-control" id="am_id" name="am" maxlength="20"' .
-            set('am') . ' placeholder="' . q($am_message) . '>';
+            set('am') . ' placeholder="' . q($amMessage) . '">';
     }
     $tool_content .= "<div class='form-wrapper'>
         <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='post'>
@@ -511,20 +577,20 @@ function user_info_form() {
     $tool_content .= "<div class='form-group'>
                 <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='userphone' size='20' maxlength='20'" . set('userphone') . "' placeholder = '$phone_message'>
+                    <input class='form-control' type='text' name='userphone' size='20' maxlength='20'" . set('userphone') . "' placeholder = '$phone_message'>
                 </div>
             </div>";
     if ($comment_required) {
         $tool_content .= "<div class='form-group'>
           <label for='UserComment' class='col-sm-2 control-label'>$langComments:</label>
             <div class='col-sm-10'>
-             <textarea name='usercomment' cols='32' rows='4'>" . q($usercomment) . "</textarea>&nbsp;&nbsp;(*) $profreason</div>
+             <textarea class='form-control' name='usercomment' cols='30' rows='4' placeholder='$profreason'>" . q($usercomment) . "</textarea></div>
           </div>";
     }
     $tool_content .= "<div class='form-group'>
               <label for='UserFac' class='col-sm-2 control-label'>$langFaculty:</label>
                 <div class='col-sm-10'>";
-    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'where' => 'AND node.allow_user = true', 'multiple' => false));
+    list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'where' => 'AND node.allow_user = true', 'multiple' => false));
     $head_content .= $js;
     $tool_content .= $html . "</div>
         </div>
@@ -532,8 +598,10 @@ function user_info_form() {
           <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
           <div class='col-sm-10'>" . lang_select_options('localize', "class='form-control'") . "</div>
         </div>
-        <div class='col-sm-offset-2 col-sm-10'>
-          <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "'>
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>
+              <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "'>
+            </div>
         </div>
         <input type='hidden' name='p' value='$prof'>";
 

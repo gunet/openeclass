@@ -31,6 +31,7 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
+
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     $tree = new Hierarchy();
     $course = new Course();
@@ -42,7 +43,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $searchtitle = isset($_GET['formsearchtitle']) ? $_GET['formsearchtitle'] : '';
     $searchcode = isset($_GET['formsearchcode']) ? $_GET['formsearchcode'] : '';
     $searchtype = isset($_GET['formsearchtype']) ? intval($_GET['formsearchtype']) : '-1';
-    $searchfaculte = isset($_GET['formsearchfaculte']) ? intval($_GET['formsearchfaculte']) : '';
+    $searchfaculte = isset($_GET['formsearchfaculte']) ? intval(getDirectReference($_GET['formsearchfaculte'])) : '';
     // pagination
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
@@ -62,6 +63,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $query .= ' AND visible = ?d';
         $terms[] = $searchtype;
     }
+
     if ($searchfaculte) {
         $subs = $tree->buildSubtrees(array($searchfaculte));
         $ids = 0;
@@ -118,8 +120,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['iTotalDisplayRecords'] = $filtered_results;
 
     $data['aaData'] = array();
-
-    foreach ($sql as $logs) {
+        
+    foreach ($sql as $logs) {        
         $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><b>" . q($logs->title) . "</b>
                         </a> (" . q($logs->code) . ")<br /><i>" . q($logs->prof_names) . "";
         // Define course type
@@ -172,7 +174,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             array(
                 'title' => $langDelete,
                 'icon' => 'fa-times',
-                'url' => "delcours.php?c=$logs->id"
+                'url' => "delcours.php?c=" . getIndirectReference($logs->id)
             )            
         ));
         $data['aaData'][] = array(
@@ -240,7 +242,7 @@ $toolName = $langListCours;
 // Display Actions Toolbar
 $tool_content .= action_bar(array(
             array('title' => $langAllCourses,
-                'url' => "$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=0&amp;search_submit=$langSearch",
+                'url' => "$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=" . getIndirectReference(0) . "&amp;search_submit=$langSearch",
                 'icon' => 'fa-search',
                 'level' => 'primary-label'),            
             array('title' => $langReturnSearch,
@@ -261,4 +263,16 @@ $tool_content .= "<table id='course_results_table' class='display'>
 
 $tool_content .= "<tbody></tbody></table>";
 
+// edit department
+if (isset($_GET['formsearchfaculte']) and $_GET['formsearchfaculte'] and is_numeric(getDirectReference($_GET['formsearchfaculte']))) {
+    $tool_content .= "<div align='right' style='margin-top: 60px; margin-bottom:10px;'>";
+    $tool_content .= "<form action='multieditcourse.php' method='post'>";
+    // redirect all request vars towards action
+    foreach ($_REQUEST as $key => $value) {
+        $tool_content .= "<input type='hidden' name='$key' value='$value'>";
+    }
+
+    $tool_content .= "<input class='btn btn-primary' type='submit' name='move_submit' value='$langChangeDepartment'> ";
+    $tool_content .= generate_csrf_token_form_field() ."</form></div>";
+}
 draw($tool_content, 3, null, $head_content);

@@ -1,4 +1,4 @@
-/*! DataTables Bootstrap integration
+/*! DataTables Bootstrap 3 integration
  * ©2011-2014 SpryMedia Ltd - datatables.net/license
  */
 
@@ -19,9 +19,9 @@ var factory = function( $, DataTable ) {
 /* Set the defaults for DataTables initialisation */
 $.extend( true, DataTable.defaults, {
 	dom:
-		"<'row'<'col-xs-6'l><'col-xs-6'f>r>" +
-		"<'row'<'col-xs-12't>>" +
-		"<'row'<'col-xs-6'i><'col-xs-6'p>>",
+		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+		"<'row'<'col-sm-12'tr>>" +
+		"<'row'<'col-sm-5'i><'col-sm-7'p>>",
 	renderer: 'bootstrap'
 } );
 
@@ -39,14 +39,14 @@ DataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, bu
 	var api     = new DataTable.Api( settings );
 	var classes = settings.oClasses;
 	var lang    = settings.oLanguage.oPaginate;
-	var btnDisplay, btnClass;
+	var btnDisplay, btnClass, counter=0;
 
 	var attach = function( container, buttons ) {
 		var i, ien, node, button;
 		var clickHandler = function ( e ) {
 			e.preventDefault();
 			if ( !$(e.currentTarget).hasClass('disabled') ) {
-				api.page( e.data.action ).draw( false );
+				api.page( e.data.action ).draw( 'page' );
 			}
 		};
 
@@ -100,14 +100,15 @@ DataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, bu
 				if ( btnDisplay ) {
 					node = $('<li>', {
 							'class': classes.sPageButton+' '+btnClass,
-							'aria-controls': settings.sTableId,
-							'tabindex': settings.iTabIndex,
 							'id': idx === 0 && typeof button === 'string' ?
 								settings.sTableId +'_'+ button :
 								null
 						} )
 						.append( $('<a>', {
-								'href': '#'
+								'href': '#',
+								'aria-controls': settings.sTableId,
+								'data-dt-idx': counter,
+								'tabindex': settings.iTabIndex
 							} )
 							.html( btnDisplay )
 						)
@@ -116,15 +117,34 @@ DataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, bu
 					settings.oApi._fnBindAction(
 						node, {action: button}, clickHandler
 					);
+
+					counter++;
 				}
 			}
 		}
 	};
 
+	// IE9 throws an 'unknown error' if document.activeElement is used
+	// inside an iframe or frame. 
+	var activeEl;
+
+	try {
+		// Because this approach is destroying and recreating the paging
+		// elements, focus is lost on the select button which is bad for
+		// accessibility. So we want to restore focus once the draw has
+		// completed
+		activeEl = $(host).find(document.activeElement).data('dt-idx');
+	}
+	catch (e) {}
+
 	attach(
 		$(host).empty().html('<ul class="pagination"/>').children('ul'),
 		buttons
 	);
+
+	if ( activeEl ) {
+		$(host).find( '[data-dt-idx='+activeEl+']' ).focus();
+	}
 };
 
 

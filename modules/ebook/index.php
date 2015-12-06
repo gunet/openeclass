@@ -211,13 +211,15 @@ function tools($id, $k, $num, $vis) {
                           'class' => 'delete',
                           'confirm' => $langEBookDelConfirm),
                     array('title' => "$langMove $langDown",
+                          'level' => 'primary',
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$id",
                           'icon' => 'fa-arrow-down',
-                          'show' => $k < $num),
+                          'disabled' => $k >= $num),
                     array('title' => "$langMove $langUp",
+                          'level' => 'primary',
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$id",
                           'icon' => 'fa-arrow-up',
-                          'show' => $k > 0)
+                          'disabled' => $k <= 0)
         ));
         return "$content";        
     }

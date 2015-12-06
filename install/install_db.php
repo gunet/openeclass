@@ -35,7 +35,7 @@ set_time_limit(0);
 // set default storage engine
 Database::core()->query("SET storage_engine = InnoDB");
 // create eclass database
-Database::core()->query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
+Database::core()->query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb` CHARACTER SET utf8");
 
 $db = Database::get();
 
@@ -195,6 +195,15 @@ $db->query("CREATE TABLE `course_user` (
       `receive_mail` BOOL NOT NULL DEFAULT 1,
       `document_timestamp` datetime NOT NULL,
       PRIMARY KEY (course_id, user_id)) $charset_spec");
+
+$db->query("CREATE TABLE `course_user_request` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `uid` int(11) NOT NULL,
+    `course_id` int(11) NOT NULL,
+    `comments` text,
+    `status` int(11) NOT NULL,
+    `ts` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    PRIMARY KEY (`id`))  $charset_spec");
 
 $db->query("CREATE TABLE `course_description_type` (
     `id` smallint(6) NOT NULL AUTO_INCREMENT,
@@ -831,10 +840,12 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
     `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
     `active` INT(11) NOT NULL DEFAULT 0,
+    `public` TINYINT(1) NOT NULL DEFAULT 1,    
     `description` MEDIUMTEXT NULL DEFAULT NULL,
     `end_message` MEDIUMTEXT NULL DEFAULT NULL,
     `anonymized` INT(1) NOT NULL DEFAULT 0,
     `show_results` INT(1) NOT NULL DEFAULT 0,
+    `type` TINYINT NOT NULL DEFAULT 0,
     `assign_to_specific` TINYINT NOT NULL DEFAULT '0' ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
@@ -843,14 +854,24 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
     `group_id` int(11) NULL,
     `poll_id` int(11) NOT NULL ) $charset_spec"); 
 
+$db->query("CREATE TABLE IF NOT EXISTS `poll_user_record` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `email` VARCHAR(255) DEFAULT NULL,
+    `email_verification` TINYINT(1) DEFAULT NULL,
+    `verification_code` VARCHAR(255) DEFAULT NULL) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
     `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `pid` INT(11) NOT NULL DEFAULT 0,
+    `poll_user_record_id` INT(11) NOT NULL,
     `qid` INT(11) NOT NULL DEFAULT 0,
     `aid` INT(11) NOT NULL DEFAULT 0,
     `answer_text` TEXT NOT NULL,
-    `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-    `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ) $charset_spec");
+    `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    FOREIGN KEY (`poll_user_record_id`) 
+    REFERENCES `poll_user_record` (`id`) 
+    ON DELETE CASCADE) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
     `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1586,6 +1607,42 @@ $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_department` (
     `department_id` INT(11) NOT NULL,
     FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
     FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE)");
+$db->query("CREATE TABLE IF NOT EXISTS `widget` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `class` varchar(400) NOT NULL) $charset_spec"); 
+$db->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `widget_id` int(11) unsigned NOT NULL,
+                `widget_area_id` int(11) NOT NULL,
+                `options` text NOT NULL,
+                `position` int(3) NOT NULL,
+                `user_id` int(11) NULL,
+                `course_id` int(11) NULL,
+                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+                 FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+                 FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");
+
+// Conference table
+$db->query("CREATE TABLE IF NOT EXISTS `conference` (
+  `conf_id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) NOT NULL,
+  `conf_description` text NOT NULL,
+  `status` enum('active','inactive') DEFAULT NULL,
+  `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`conf_id`)) $charset_spec");
+
+// om_servers table
+$db->query('CREATE TABLE IF NOT EXISTS `om_servers` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `hostname` varchar(255) DEFAULT NULL,
+    `port` varchar(255) DEFAULT NULL,
+    `enabled` enum("true","false") DEFAULT NULL,
+    `username` varchar(255) DEFAULT NULL,
+    `password` varchar(255) DEFAULT NULL,
+    `module_key` int(11) DEFAULT NULL,
+    `webapp` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idx_om_servers` (`hostname`))');
 
 $_SESSION['theme'] = 'default';
 $webDir = '..';
@@ -1650,7 +1707,7 @@ $db->query("CREATE INDEX `lp_mod_id` ON lp_module(course_id)");
 $db->query("CREATE INDEX `lp_rel_lp_id` ON lp_rel_learnPath_module(learnPath_id, module_id)");
 $db->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
 $db->query("CREATE INDEX `poll_index` ON poll(course_id)");
-$db->query("CREATE INDEX `poll_ans_id` ON poll_answer_record(pid, user_id)");
+$db->query("CREATE INDEX `poll_ans_id` ON poll_user_record(pid, uid)");
 $db->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
 $db->query("CREATE INDEX `poll_qa_id` ON poll_question_answer(pqid)");
 $db->query("CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res_id)");
@@ -1711,9 +1768,6 @@ $db->query("CREATE INDEX `lp_rel_module_id` ON lp_rel_learnPath_module(module_id
 
 $db->query("CREATE INDEX `lp_learnPath_module_id` ON lp_user_module_progress (learnPath_module_id)");
 $db->query("CREATE INDEX `lp_user_id` ON lp_user_module_progress (user_id)");
-
-$db->query("CREATE INDEX `poll_ans_id_user_id` ON poll_answer_record(user_id)");
-$db->query("CREATE INDEX `poll_ans_id_pid` ON poll_answer_record(pid)");
 
 $db->query("CREATE INDEX `unit_res_unit_id` ON unit_resources (unit_id)");
 $db->query("CREATE INDEX `unit_res_visible` ON unit_resources (visible)");

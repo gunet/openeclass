@@ -220,12 +220,13 @@ class Calendar_Events {
                 $q .= " UNION ";
             }
             $dc = str_replace('start', 'ass.deadline', $datecond);
-            $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(ass.deadline, interval 1 hour), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
-                    . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
-                    . "WHERE cu.user_id =?d AND (assign_to_specific = '0' OR  ass_sp.user_id = ?d OR cu.status = 1) AND ass.active = 1"
+            $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+                    . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id "
+                    . "JOIN course c ON cu.course_id=c.id "
+                    . "LEFT JOIN (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d OR group_id IN (SELECT group_id FROM group_members WHERE user_id = ?d)) ass_sp ON ass.id=ass_sp.assignment_id "
+                    . "WHERE cu.user_id =?d AND (cu.status = 1 OR ass.assign_to_specific = '0' OR (ass.assign_to_specific = 1 AND ass_sp.assignment_id IS NOT NULL)) AND ass.active = 1"
                     . $dc;
-            $q_args = array_merge($q_args, array($user_id));
-            $q_args = array_merge($q_args, $q_args_templ);
+            $q_args = array_merge($q_args, array($user_id, $user_id), $q_args_templ);
 
             // exercises
             if (!empty($q)) {
@@ -233,10 +234,12 @@ class Calendar_Events {
             }
             $dc = str_replace('start', 'ex.end_date', $datecond);
             $q .= "SELECT ex.id, CONCAT(c.title,': ',ex.title), ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
-                    . "FROM exercise ex JOIN course_user cu ON ex.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id "
-                    . "WHERE cu.user_id =?d AND (ex.public = 1 OR cu.status = 1) AND ex.active = 1"
+                    . "FROM exercise ex JOIN course_user cu ON ex.course_id=cu.course_id  "
+                    . "JOIN course c ON cu.course_id=c.id "
+                    . "LEFT JOIN (SELECT exercise_id from exercise_to_specific WHERE user_id = ?d OR group_id IN (SELECT group_id FROM group_members WHERE user_id = ?d)) ets ON ex.id = ets.exercise_id "
+                    . "WHERE cu.user_id =?d AND (cu.status = 1 OR ex.assign_to_specific = 0 OR (ex.assign_to_specific = 1 AND ets.exercise_id IS NOT NULL)) AND ex.active = 1"
                     . $dc;
-            $q_args = array_merge($q_args, $q_args_templ);
+            $q_args = array_merge($q_args, array($user_id, $user_id), $q_args_templ);
         }
         if (empty($q)) {
             return null;
@@ -1367,9 +1370,9 @@ class Calendar_Events {
        global $langNextMonth, $langPreviousMonth;
 
        $calendar = "<div id='cal-header' class='btn-group btn-group-justified btn-group-sm'>
-                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='prev'><i class='fa fa-caret-left'></i><span class='sr-only'>$langPreviousMonth</span></button></div>
+                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='prev'><span class='fa fa-caret-left'></span><span class='sr-only'>$langPreviousMonth</span></button></div>
                             <div class='btn-group btn-group-sm' style='width:60%;'><button id='current-month' type='button' class='btn btn-default' disabled='disabled'>&nbsp;</button></div>
-                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='next'><i class='fa fa-caret-right'></i><span class='sr-only'>$langNextMonth</span></button></div>
+                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='next'><span class='fa fa-caret-right'></span><span class='sr-only'>$langNextMonth</span></button></div>
                     </div>";
 
        $calendar .= '<div id="bootstrapcalendar"></div><div class="clearfix"></div>';

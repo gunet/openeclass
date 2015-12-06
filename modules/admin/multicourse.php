@@ -38,9 +38,10 @@ $tool_content .= action_bar(array(
         'level' => 'primary-label')));
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $line = strtok($_POST['courses'], "\n");
 
-    $departments = isset($_POST['department']) ? $_POST['department'] : array();
+    $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
     // validation in case it skipped JS validation for department(s)
     if (count($departments) < 1 || empty($departments[0])) {
         Session::Messages($langEmptyAddNode);
@@ -79,15 +80,6 @@ if (isset($_POST['submit'])) {
                                     reg_date = " . DBHelper::timeAfter() . " ,
                                     document_timestamp = " . DBHelper::timeAfter() . "");
                 }
-                Database::get()->query("INSERT INTO group_properties SET
-                            course_id = $cid,
-                            self_registration = 1,
-                            multiple_registration = 0,
-                            forum = 1,
-                            private_forum = 0,
-                            documents = 1,
-                            wiki = 0,
-                            agenda = 0");
                 create_modules($cid);
             }
             if ($code) {
@@ -123,7 +115,7 @@ if (isset($_POST['submit'])) {
 	<div class='form-group'>
             <label for='title' class='col-sm-3 control-label'>$langFaculty:</label>	  
             <div class='col-sm-9'>";
-        list($js, $html) = $tree->buildCourseNodePicker(array('allowables' => $user->getDepartmentIds($uid)));
+        list($js, $html) = $tree->buildCourseNodePickerIndirect(array('allowables' => $user->getDepartmentIds($uid)));
         $head_content .= $js;
         $tool_content .= $html;
     $tool_content .= "</div></div>";
@@ -162,6 +154,7 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
         </fieldset>
+        ". generate_csrf_token_form_field() ."
         </form>
         </div>";
 }

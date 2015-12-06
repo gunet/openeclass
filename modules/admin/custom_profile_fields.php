@@ -45,18 +45,22 @@ if (isset($_GET['add_cat'])) { //add a new category form
                       <div class='col-sm-10'><input id='catname' type='text' name='cat_name'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit_cat' value='$langAdd'></div>";
-    $tool_content .= "</fieldset></form></div>";
+    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
                         var chkValidator  = new Validator("catForm");
                         chkValidator.addValidation("catname","req","' . $langCPFCategoryNameAlert . '");
                     //]]></script>';
 } elseif (isset($_GET['del_cat'])) { //delete category
-    $catid = intval($_GET['del_cat']);
+    $catid = intval(getDirectReference($_GET['del_cat']));
     //delete fields profile data
     Database::get()->query("DELETE custom_profile_fields_data FROM custom_profile_fields_data INNER JOIN custom_profile_fields
                             ON custom_profile_fields_data.field_id = custom_profile_fields.id INNER JOIN custom_profile_fields_category
                             ON custom_profile_fields.categoryid = custom_profile_fields_category.id 
+                            WHERE custom_profile_fields_category.id = ?d", $catid);
+    Database::get()->query("DELETE custom_profile_fields_data_pending FROM custom_profile_fields_data_pending INNER JOIN custom_profile_fields
+                            ON custom_profile_fields_data_pending.field_id = custom_profile_fields.id INNER JOIN custom_profile_fields_category
+                            ON custom_profile_fields.categoryid = custom_profile_fields_category.id
                             WHERE custom_profile_fields_category.id = ?d", $catid);
     //delete fields
     Database::get()->query("DELETE custom_profile_fields FROM custom_profile_fields INNER JOIN custom_profile_fields_category
@@ -67,7 +71,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     Session::Messages($langCPFCatDelSuccess, 'alert-success');
     redirect_to_home_page("modules/admin/custom_profile_fields.php");
 } elseif (isset($_GET['edit_cat'])) { //edit category form
-    $catid = intval($_GET['edit_cat']);
+    $catid = intval(getDirectReference($_GET['edit_cat']));
     $cat_name = Database::get()->querySingle("SELECT name FROM custom_profile_fields_category WHERE id = ?d", $catid)->name;
     
     load_js('validation.js');
@@ -81,21 +85,21 @@ if (isset($_GET['add_cat'])) { //add a new category form
               'level' => 'primary-label')));
     $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-    $tool_content .= "<input type='hidden' name='cat_id' value='$catid'>";
+    $tool_content .= "<input type='hidden' name='cat_id' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='catname' class='col-sm-2 control-label'>$langName</label>
                       <div class='col-sm-10'><input id='catname' type='text' name='cat_name' value='$cat_name'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit_cat' value='$langAdd'></div>";
-    $tool_content .= "</fieldset></form></div>";
+    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
             var chkValidator  = new Validator("catForm");
             chkValidator.addValidation("catname","req","' . $langCPFCategoryNameAlert . '");
     //]]></script>';
 } elseif (isset($_GET['add_field'])) { //add new field form (first step)
-    $catid = intval($_GET['add_field']);
+    $catid = intval(getDirectReference($_GET['add_field']));
     
     $pageName = $langAddField;
     
@@ -110,16 +114,17 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
-    $tool_content .= "<input type='hidden' name='catid' value='$catid'>";
+    $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='datatype' class='col-sm-2 control-label'>$langCPFFieldDatatype</label>
                       <div class='col-sm-10'>".selection($field_types, 'datatype', 1, 'class="form-control"')."</div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
-    $tool_content .= "</fieldset></form></div>";
+    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
     
 } elseif (isset($_POST['add_field_proceed_step2'])) { //add new field form 2nd step
-    $catid = intval($_POST['catid']);
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    $catid = intval(getDirectReference($_POST['catid']));
     
     load_js('validation.js');
     
@@ -127,7 +132,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-              'url' => "custom_profile_fields.php?add_field=".$catid,
+              'url' => "custom_profile_fields.php?add_field=" . getIndirectReference($catid),
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
     
@@ -140,7 +145,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
-    $tool_content .= "<input type='hidden' name='catid' value='$catid'>";
+    $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='name' class='col-sm-2 control-label'>$langName</label>
@@ -153,12 +158,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langCPFFieldDescr</label>
                       <div class='col-sm-10'>".rich_text_editor('fielddescr', 8, 20, '')."</div>";
     $tool_content .= "</div>";
-    if ($datatype != CPF_MENU) {
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
-                          <div class='col-sm-10'>".selection($yes_no, 'required', 0, 'class="form-control"')."</div>";
-        $tool_content .= "</div>";
-    }
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
+                      <div class='col-sm-10'>".selection($yes_no, 'required', 0, 'class="form-control"')."</div>";
+    $tool_content .= "</div>";
     if ($datatype == CPF_MENU) {
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='options' class='col-sm-2 control-label'>$langCPFMenuOptions <small>($langCPFMenuOptionsExplan)</small></label>
@@ -178,7 +181,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                       <div class='col-sm-10'>".selection($visibility, 'visibility', 10, 'class="form-control"')."</div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit_field' value='$langAdd'></div>";
-    $tool_content .= "</fieldset></form></div>";
+    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
     
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
@@ -192,7 +195,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= '//]]></script>';
                 
 } elseif (isset($_POST['submit_field'])) {
-    
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $name = $_POST['field_name'];
     $shortname = $_POST['field_shortname'];
     $description = $_POST['fielddescr'];
@@ -203,7 +206,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $required = 0;
     }
     if ($datatype == CPF_MENU && isset($_POST['options'])) {
-        $data = explode("\r\n", $_POST['options']);
+        $data = explode(PHP_EOL, $_POST['options']);
         $data = serialize($data);
     } else {
         $data = '';
@@ -213,7 +216,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $visibility = intval($_POST['visibility']);
     
     if (isset($_POST['field_id'])) { //save edited field
-        $fieldid = intval($_POST['field_id']);
+        $fieldid = intval(getDirectReference($_POST['field_id']));
         
         //check for unique shortname
         $is_unique = true;
@@ -232,9 +235,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
                                     datatype = ?d,
                                     required = ?d,
                                     visibility = ?d,
+                                    user_type = ?d,
                                     registration = ?d,
                                     data = ?s
-                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $registration, $data, $fieldid);
+                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $user_type, $registration, $data, $fieldid);
             Session::Messages($langCPFFieldEditSuccess, 'alert-success');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
         } else {
@@ -247,7 +251,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $count = Database::get()->querySingle("SELECT COUNT(*) AS c FROM custom_profile_fields WHERE shortname = ?s", $shortname)->c;
         if ($count == 0) { //shortname is unique, proceed
         
-            $catid = intval($_POST['catid']);
+            $catid = intval(getDirectReference($_POST['catid']));
             
             $result = Database::get()->querySingle("SELECT MIN(sortorder) AS m FROM custom_profile_fields WHERE categoryid = ?d", $catid);
             if (!is_null($result->m)) {
@@ -266,10 +270,13 @@ if (isset($_GET['add_cat'])) { //add a new category form
         }
     }
 } elseif (isset($_GET['del_field'])) { //delete fields
-    $fieldid = intval($_GET['del_field']);
+    $fieldid = intval(getDirectReference($_GET['del_field']));
     //delete fields profile data
     Database::get()->query("DELETE custom_profile_fields_data FROM custom_profile_fields_data INNER JOIN custom_profile_fields
                             ON custom_profile_fields_data.field_id = custom_profile_fields.id
+                            WHERE custom_profile_fields.id = ?d", $fieldid);
+    Database::get()->query("DELETE custom_profile_fields_data_pending FROM custom_profile_fields_data_pending INNER JOIN custom_profile_fields
+                            ON custom_profile_fields_data_pending.field_id = custom_profile_fields.id
                             WHERE custom_profile_fields.id = ?d", $fieldid);
     //delete field
     Database::get()->query("DELETE FROM custom_profile_fields WHERE id = ?d", $fieldid);
@@ -284,7 +291,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
     
-    $fieldid = intval($_GET['edit_field']);
+    $fieldid = intval(getDirectReference($_GET['edit_field']));
     $result = Database::get()->querySingle("SELECT * FROM custom_profile_fields WHERE id = ?d", $fieldid);
     if (count($result) != 0) {
         
@@ -317,7 +324,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "<div class='form-wrapper'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<fieldset>";
-        $tool_content .= "<input type='hidden' name='field_id' value='$fieldid'>";
+        $tool_content .= "<input type='hidden' name='field_id' value='" . getIndirectReference($fieldid) . "'>";
         $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='name' class='col-sm-2 control-label'>$langName</label>
@@ -334,12 +341,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "<label for='datatype' class='col-sm-2 control-label'>$langCPFFieldDatatype</label>
                           <div class='col-sm-10'>".selection($field_types, 'datatype_disabled', $datatype, 'class="form-control" disabled')."</div>";
         $tool_content .= "</div>";
-        if ($datatype != CPF_MENU) {
-            $tool_content .= "<div class='form-group'>";
-            $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
-                              <div class='col-sm-10'>".selection($yes_no, 'required', $required, 'class="form-control"')."</div>";
-            $tool_content .= "</div>";
-        }
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
+                          <div class='col-sm-10'>".selection($yes_no, 'required', $required, 'class="form-control"')."</div>";
+        $tool_content .= "</div>";
         if ($datatype == CPF_MENU) {
             $tool_content .= "<div class='form-group'>";
             $tool_content .= "<label for='options' class='col-sm-2 control-label'>$langCPFMenuOptions <small>($langCPFMenuOptionsExplan - $langCPFMenuOptionsChangeExplan)</small></label>
@@ -359,7 +364,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                           <div class='col-sm-10'>".selection($visibility, 'visibility', $vis, 'class="form-control"')."</div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit_field' value='$langSave'></div>";
-        $tool_content .= "</fieldset></form></div>";
+        $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
         
         $tool_content .='<script language="javaScript" type="text/javascript">
                         //<![CDATA[
@@ -375,8 +380,9 @@ if (isset($_GET['add_cat'])) { //add a new category form
         
     }
 } elseif (isset($_POST['submit_cat'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['cat_id'])) { //save edited category
-        $catid = intval($_POST['cat_id']);
+        $catid = intval(getDirectReference($_POST['cat_id']));
         Database::get()->query("UPDATE custom_profile_fields_category SET name = ?s WHERE id = ?d", $_POST['cat_name'], $catid);
         Session::Messages($langCPFCatModSuccess, 'alert-success');
         redirect_to_home_page("modules/admin/custom_profile_fields.php");
@@ -448,17 +454,17 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $dyntools = array(
                 array(
                         'title' => $langCPFNewField,
-                        'url' => "$_SERVER[SCRIPT_NAME]?add_field=$res->id",
+                        'url' => "$_SERVER[SCRIPT_NAME]?add_field=" . getIndirectReference($res->id),
                         'icon' => 'fa-plus-circle',
                         'level' => 'primary'
                 ),
                 array('title' => $langModify,
-                        'url' => "$_SERVER[SCRIPT_NAME]?edit_cat=$res->id",
+                        'url' => "$_SERVER[SCRIPT_NAME]?edit_cat=" . getIndirectReference($res->id),
                         'icon' => 'fa-edit',
                         'level' => 'primary'
                 ),
                 array('title' => $langDelete,
-                        'url' => "$_SERVER[SCRIPT_NAME]?del_cat=$res->id",
+                        'url' => "$_SERVER[SCRIPT_NAME]?del_cat=" . getIndirectReference($res->id),
                         'icon' => 'fa-times',
                         'class' => 'delete',
                         'confirm' => $langCPFConfirmCatDelete
@@ -493,21 +499,21 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 
                 $tool_content .= "<tbody class='tile__list'>";
                 foreach ($q as $f) {
-                    $form_data_array[$res->id][] = $f->id;
+                    $form_data_array[getIndirectReference($res->id)][] = getIndirectReference($f->id);
                     $field_dyntools = array(
                         array('title' => $langModify,
-                              'url' => "$_SERVER[SCRIPT_NAME]?edit_field=$f->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?edit_field=" . getIndirectReference($f->id),
                               'icon' => 'fa-edit',
                         ),
                         array('title' => $langDelete,
-                              'url' => "$_SERVER[SCRIPT_NAME]?del_field=$f->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?del_field=" . getIndirectReference($f->id),
                               'icon' => 'fa-times',
                               'class' => 'delete',
                               'confirm' => $langCPFConfirmFieldDelete
                         )
                     );
                     
-                    $tool_content .= "<tr id='field_".$f->id."'>";
+                    $tool_content .= "<tr id='field_" . getIndirectReference($f->id) . "'>";
                     $tool_content .= "<td>".q($f->name)."</td>";
                     $tool_content .= "<td>".q($f->shortname)."</td>";
                     $tool_content .= "<td>".standard_text_escape($f->description)."</td>";
@@ -527,7 +533,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "</div>";
         $tool_content .= "<form name='sortOrderForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<input type='button' class='btn btn-success' onclick='submitSortOrderForm();' name='submitOrderForm' value='$langCPFChangeOrder'>";
-        $tool_content .= "</form>";
+        $tool_content .= generate_csrf_token_form_field() ."</form>";
         $tool_content .= "<script src='custom_profile_fields.js'></script>";
     }
     

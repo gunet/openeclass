@@ -152,7 +152,8 @@ if ($user_registration) {
                 if ($v != 1) {  // bypass the eclass auth method
                     //hybridauth registration is performed in newuser.php rather than altnewuser
                     if ($v < 8) {
-                        $tool_content .= "<br /><a href='altnewuser.php?auth=" . $v . "'>" . get_auth_info($v) . "</a>";
+                        if ($alt_auth_prof_reg) $tool_content .= "<br /><a href='altnewuser.php?auth=" . $v . "&p=1'>" . get_auth_info($v) . "</a>";
+                        else $tool_content .= "<br /><a href='altnewuser.php?auth=" . $v . "'>" . get_auth_info($v) . "</a>";
                     } else {
                         if ($alt_auth_prof_reg) $tool_content .= "<br /><a href='formuser.php?auth=" . $v . "&p=1'>" . get_auth_info($v) . "</a>";
                             else $tool_content .= "<br /><a href='newuser.php?auth=" . $v . "&p=1'>" . get_auth_info($v) . "</a>";

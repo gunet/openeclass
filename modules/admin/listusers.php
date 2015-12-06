@@ -82,24 +82,28 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $date_user_registered_at = DateTime::createFromFormat("d-m-Y H:i", $user_registered_at);
         $terms[] = $date_user_registered_at->format("Y-m-d H:i:s");
     }
+
     // surname search
     if (!empty($lname)) {
         $criteria[] = 'surname LIKE ?s ' . $cs;
         $terms[] = $l1 . $lname . $l2;
         add_param('lname');
     }
+
     // first name search
     if (!empty($fname)) {
         $criteria[] = 'givenname LIKE ?s '. $cs;
         $terms[] = $l1 . $fname . $l2;
         add_param('fname');
     }
+
     // username search
     if (!empty($uname)) {
         $criteria[] = 'username LIKE ?s ' . $cs;
         $terms[] = $l1 . $uname . $l2;
         add_param('uname');
     }
+
     // mail verified
     if ($verified_mail === EMAIL_VERIFICATION_REQUIRED or
             $verified_mail === EMAIL_VERIFIED or
@@ -108,43 +112,28 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $terms[] = $verified_mail;
         add_param('verified_mail');
     }
+
     //user am search
     if (!empty($am)) {
         $criteria[] = 'am LIKE ?s';
         $terms[] = $l1 . $am . $l2;
         add_param('am');
     }
+
     // user type search
     if (!empty($user_type)) {
         $criteria[] = 'status = ?d';
         $terms[] = $user_type;
         add_param('user_type');
     }
-    // auth type search
-    if (!empty($auth_type)) {
-        if ($auth_type >= 2 && $auth_type < 8) {
-            $criteria[] = "password = '{$auth_ids[$auth_type]}'";
-        } elseif ($auth_type == 1) {
-            $q1 = "'". implode("','", $auth_ids) . "'";
-            $criteria[] = 'password NOT IN ('.$q1.')';
-        }
-        // FIXME: ext auth uid's moved to new table user_ext_uid
-        switch($auth_type) {
-            case '8': $criteria[] = "facebook_uid <> ''"; break;
-            case '9': $criteria[] = "twitter_uid <> ''"; break;
-            case '10': $criteria[] = "google_uid <> ''"; break;
-            case '11': $criteria[] = "live_uid <> ''"; break;
-            case '12': $criteria[] = "yahoo_uid <> ''"; break;
-            case '13': $criteria[] = "linkedin_uid <> ''"; break;
-        }
-        add_param('auth_type');
-    }
+
     // email search
     if (!empty($email)) {
         $criteria[] = 'email LIKE ?s';
         $terms[] = $l1 . $email . $l2;
         add_param('email');
     }
+
     // search for inactive users
     if ($search == 'inactive') {
         $criteria[] = 'expires_at < CURRENT_DATE()';
@@ -153,7 +142,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     // Department search
     $depqryadd = '';
-    $dep = (isset($_GET['department'])) ? intval($_GET['department']) : 0;
+    $dep = (isset($_GET['department'])) ? intval(getDirectReference($_GET['department'])) : 0;
     if ($dep || isDepartmentAdmin()) {
         $depqryadd = ', user_department';
 
@@ -174,6 +163,22 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
         $criteria[] = 'user.id = user_department.user';
         $criteria[] = 'department IN (' . $deps . ')';
+    }
+
+    // auth type search
+    if (!empty($auth_type)) {
+        if ($auth_type >= 2 && $auth_type < 8) {
+            $criteria[] = "password = '{$auth_ids[$auth_type]}'";
+        } elseif ($auth_type == 1) {
+            $q1 = "'". implode("','", $auth_ids) . "'";
+            $criteria[] = 'password NOT IN ('.$q1.')';
+        } else {
+            $depqryadd .= ', user_ext_uid';
+            // ext auth uid's from user_ext_uid table
+            $criteria[] = '(user_ext_uid.user_id = user.id AND user_ext_uid.auth_id = ?d)';
+            $terms[] = $auth_type;
+        }
+        add_param('auth_type');
     }
 
     // user status
@@ -252,7 +257,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $terms[] = $offset;
         $terms[] = $limit;
     }
-    $sql = Database::get()->queryArray($qry, $terms);    
+    $sql = Database::get()->queryArray($qry, $terms);
     $all_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base", $terms_base)->total;
     if ($qry_criteria or $c) {
         $filtered_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base
@@ -337,7 +342,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 array(
                     'title' => $langStat,
                     'icon' => 'fa-pie-chart',
-                    'url' => "userstats.php?u=$logs->id"
+                    'url' => "../usage/?t=u&u=$logs->id"
                 ),
                 array(
                     'title' => $langDelete,
@@ -502,6 +507,7 @@ if (isset($_GET['department']) and $_GET['department'] and is_numeric($_GET['dep
 
 $tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'>
     <input class='btn btn-primary' type='submit' name='activate_submit' value='$langAddSixMonths'>
+    ". generate_csrf_token_form_field() ."
   </form></div>";
 
 draw($tool_content, 3, null, $head_content);

@@ -24,6 +24,7 @@ define('UPGRADE', true);
 require '../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
+require_once 'include/course_settings.php';
 require_once 'modules/db/recycle.php';
 require_once 'modules/db/foreignkeys.php';
 require_once 'upgradeHelper.php';
@@ -31,7 +32,7 @@ require_once 'upgradeHelper.php';
 stop_output_buffering();
 
 // set default storage engine
-Database::get()->query("SET storage_engine = InnoDB");
+Database::get()->query("SET default_storage_engine = InnoDB");
 
 require_once 'upgrade/functions.php';
 
@@ -174,6 +175,26 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     if (ini_get('short_open_tag')) { // check if short_open_tag is Off
         $tool_content .= "<div class='alert alert-danger'>$langWarningInstall2</div>";
     }
+    if (version_compare(PHP_VERSION, '5.4.0') < 0) {        
+        $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
+    }
+    $tool_content .= "<h5>$langRequiredPHP</h5>";
+    $tool_content .= "<ul class='list-unstyled'>";
+    warnIfExtNotLoaded('standard');
+    warnIfExtNotLoaded('session');
+    warnIfExtNotLoaded('pdo');
+    warnIfExtNotLoaded('pdo_mysql');
+    warnIfExtNotLoaded('gd');
+    warnIfExtNotLoaded('mbstring');
+    warnIfExtNotLoaded('xml');
+    warnIfExtNotLoaded('dom');
+    warnIfExtNotLoaded('zlib');
+    warnIfExtNotLoaded('pcre');
+    warnIfExtNotLoaded("curl");
+    $tool_content .= "</ul><h5>$langOptionalPHP</h5>";
+    $tool_content .= "<ul class='list-unstyled'>";
+    warnIfExtNotLoaded('ldap');    
+    $tool_content .= "</ul>";
 
     setGlobalContactInfo();
     $tool_content .= "<div class='alert alert-info'>$langConfigFound<br>$langConfigMod</div>
@@ -224,6 +245,19 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         }
     }
 
+    $logdate = date("Y-m-d_G.i:s");
+    $logfile = "log-$logdate.html";
+    if (!($logfile_handle = @fopen("$webDir/courses/$logfile", 'w'))) {
+        $error = error_get_last();
+        Session::Messages($langLogFileWriteError .
+            '<br><i>' . q($error['message']) . '</i>');
+        draw($tool_content, 0);
+        exit;
+    }
+
+    fwrite($logfile_handle, "<!DOCTYPE html><html><head><meta charset='UTF-8'>
+      <title>Open eClass upgrade log of $logdate</title></head><body>\n");
+
     set_config('upgrade_begin', time());
 
     if (!$command_line) {
@@ -232,10 +266,11 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         draw($tool_content, 0);
     }
     updateInfo(0.01, $langUpgradeStart . " : " . $langUpgradeConfig);
-    Debug::setOutput(function ($message, $level) use (&$debug_output, &$debug_error) {
-        $debug_output .= $message;
-        if ($level > Debug::WARNING)
+    Debug::setOutput(function ($message, $level) use ($logfile_handle, &$debug_error) {
+        fwrite($logfile_handle, $message);
+        if ($level > Debug::WARNING) {
             $debug_error = true;
+        }
     });
     Debug::setLevel(Debug::WARNING);
 
@@ -1404,8 +1439,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `max_grade` FLOAT DEFAULT NULL,
                             `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
                             `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
-                            `file_name` VARCHAR(200) DEFAULT '' NOT NULL,
-							`grading_method` TINYINT(2) DEFAULT '' NOT NULL)
+                            `file_name` VARCHAR(200) DEFAULT '' NOT NULL)
                             $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -2165,9 +2199,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     DBHelper::indexExists('lp_user_module_progress', 'optimize') or
             Database::get()->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
     DBHelper::indexExists('poll', 'poll_index') or
-            Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");
-    DBHelper::indexExists('poll_answer_record', 'poll_ans_id') or
-            Database::get()->query("CREATE INDEX `poll_ans_id` ON poll_answer_record(pid, user_id)");
+            Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");    
     DBHelper::indexExists('poll_question', 'poll_q_id') or
             Database::get()->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
     DBHelper::indexExists('poll_question_answer', 'poll_qa_id') or
@@ -2258,11 +2290,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("CREATE INDEX `lp_learnPath_module_id` ON lp_user_module_progress (learnPath_module_id)");
     DBHelper::indexExists('lp_user_module_progress', 'lp_user_id') or
             Database::get()->query("CREATE INDEX `lp_user_id` ON lp_user_module_progress (user_id)");
-
-    DBHelper::indexExists('poll_answer_record', 'poll_ans_id_user_id') or
-            Database::get()->query("CREATE INDEX `poll_ans_id_user_id` ON poll_answer_record(user_id)");
-    DBHelper::indexExists('poll_answer_record', 'poll_ans_id_user_id') or
-            Database::get()->query("CREATE INDEX `poll_ans_id_pid` ON poll_answer_record(pid)");
 
     DBHelper::indexExists('unit_resources', 'unit_res_unit_id') or
             Database::get()->query("CREATE INDEX `unit_res_unit_id` ON unit_resources (unit_id)");
@@ -2446,14 +2473,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `name` VARCHAR(300) NOT NULL,
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
-
-
-            if ($q = Database::get()->querySingle("SELECT id FROM theme_options WHERE name = ?s", $theme['name'])) {
-                Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $theme['styles'], $q->id);
-            } else {
-        }
-        copyThemeImages();
-
+            
         if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
             Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
         }
@@ -2870,7 +2890,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         if (!DBHelper::fieldExists('attendance', 'start_date')) {
             Database::get()->query("ALTER TABLE `attendance` ADD `start_date` DATETIME NOT NULL");
-            Database::get()->query("UPDATE `attendance` SET `start_date` = " . DBHelper::timeAfter(-6*30*24*60*60) . ""); // 6 months after
+            Database::get()->query("UPDATE `attendance` SET `start_date` = " . DBHelper::timeAfter(-6*30*24*60*60) . ""); // 6 months before
         }
         if (!DBHelper::fieldExists('attendance', 'end_date')) {
             Database::get()->query("ALTER TABLE `attendance` ADD `end_date` DATETIME NOT NULL");
@@ -2921,20 +2941,137 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 $documents = $group->documents;
                 $wiki = $group->wiki;
                 $agenda = $group->agenda;
+                
                 Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $cid);
-
+                
                 $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $cid);
 				
                 foreach ($num as $group_num) {
-                        $group_id = $group_num->id;			
-                        Database::get()->query("INSERT INTO `group_properties` (course_id, group_id, self_registration, multiple_registration, allow_unregister, forum, private_forum, documents, wiki, agenda)
-                                                                                   VALUES  (?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $cid, $group_id, $self_reg, $multi_reg, $unreg, $forum, $priv_forum, $documents, $wiki, $agenda);									
-                }
+                    $group_id = $group_num->id;			
+                    Database::get()->query("INSERT INTO `group_properties` (course_id, group_id, self_registration, allow_unregister, forum, private_forum, documents, wiki, agenda)
+                                                    VALUES  (?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $cid, $group_id, $self_reg, $unreg, $forum, $priv_forum, $documents, $wiki, $agenda);
+                }                
+                setting_set(SETTING_GROUP_MULTIPLE_REGISTRATION, $multi_reg, $cid);
             }
             Database::get()->query("ALTER TABLE `group_properties` ADD PRIMARY KEY (group_id)");
+            delete_field('group_properties', 'multiple_registration');
         }
-	}
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `course_user_request` (
+                        `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                        `uid` int(11) NOT NULL,
+                        `course_id` int(11) NOT NULL,
+                        `comments` text,
+                        `status` int(11) NOT NULL,
+                        `ts` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+                        PRIMARY KEY (`id`)) $charset_spec");
+                
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_user_record` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+            `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+            `email` VARCHAR(255) DEFAULT NULL,
+            `email_verification` TINYINT(1) DEFAULT NULL,
+            `verification_code` VARCHAR(255) DEFAULT NULL) $charset_spec");
+        if (!DBHelper::fieldExists('poll_answer_record', 'poll_user_record_id')) {
+            Database::get()->query("ALTER TABLE `poll_answer_record` "
+                    . "ADD `poll_user_record_id` INT(11) NOT NULL AFTER `arid`");
+            
+            if ($user_records = Database::get()->queryArray("SELECT DISTINCT `pid`, `user_id` FROM poll_answer_record")) {
+                foreach ($user_records as $user_record) {
+                    $poll_user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $user_record->pid, $user_record->user_id)->lastInsertID;
+                    Database::get()->query("UPDATE poll_answer_record SET poll_user_record_id = ?d WHERE pid = ?d AND user_id = ?d", $poll_user_record_id, $user_record->pid, $user_record->user_id);
+                }
+            }
+            Database::get()->query("ALTER TABLE `poll_answer_record` ADD FOREIGN KEY (`poll_user_record_id`) REFERENCES `poll_user_record` (`id`) ON DELETE CASCADE");
+            delete_field('poll_answer_record', 'pid');
+            delete_field('poll_answer_record', 'user_id');            
+        }
+        DBHelper::indexExists('poll_user_record', 'poll_user_rec_id') or
+            Database::get()->query("CREATE INDEX `poll_user_rec_id` ON poll_user_record(pid, uid)");
+        //Removing Course Home Layout 2
+        Database::get()->query("UPDATE course SET home_layout = 1 WHERE home_layout = 2");
+    }
 
+    if (version_compare($oldversion, '3.3', '<')) {
+        // Fix duplicate link orders
+        Database::get()->queryFunc('SELECT DISTINCT course_id, category FROM link
+            GROUP BY course_id, category, `order` HAVING COUNT(*) > 1',
+            function ($item) {
+                $order = 0;
+                foreach (Database::get()->queryArray('SELECT id FROM link
+                    WHERE course_id = ?d AND category = ?d
+                    ORDER BY `order`',
+                    $item->course_id, $item->category) as $link) {
+                        Database::get()->query('UPDATE link SET `order` = ?d
+                            WHERE id = ?d', $order++, $link->id);
+                }
+            });
+        // Fix duplicate poll_question orders    
+        Database::get()->queryFunc('SELECT `pid`
+                FROM `poll_question`
+                GROUP BY `pid`, `q_position` HAVING COUNT(`pqid`) > 1',
+                function ($item) {
+                    $poll_questions = Database::get()->queryArray("SELECT * FROM `poll_question` WHERE pid = ?d", $item->pid);
+                    $order = 1;
+                    foreach ($poll_questions as $poll_question) {
+                        Database::get()->query('UPDATE `poll_question` SET `q_position` = ?d
+                                                    WHERE pqid = ?d', $order++, $poll_question->pqid);                        
+                    }
+                });            
+        if (!DBHelper::fieldExists('poll', 'public')) {
+            Database::get()->query("ALTER TABLE `poll` ADD `public` TINYINT(1) NOT NULL DEFAULT 1 AFTER `active`");
+            Database::get()->query("UPDATE `poll` SET `public` = 0");
+        }            
+    }
+       
+    if (version_compare($oldversion, '3.4', '<')) {      
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
+                        `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `class` varchar(400) NOT NULL) $charset_spec"); 
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
+                        `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                        `widget_id` int(11) unsigned NOT NULL,
+                        `widget_area_id` int(11) NOT NULL,
+                        `options` text NOT NULL,
+                        `position` int(3) NOT NULL,
+                        `user_id` int(11) NULL,
+                        `course_id` int(11) NULL,
+                         FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+                         FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+                         FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");
+        
+        // Conference table
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `conference` (
+                        `conf_id` int(11) NOT NULL AUTO_INCREMENT,
+                        `course_id` int(11) NOT NULL,
+                        `conf_description` text NOT NULL,
+                        `status` enum('active','inactive') DEFAULT NULL,
+                        `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        PRIMARY KEY (`conf_id`)) $charset_spec");
+
+        // om_servers table
+        Database::get()->query('CREATE TABLE IF NOT EXISTS `om_servers` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `hostname` varchar(255) DEFAULT NULL,
+                        `port` varchar(255) DEFAULT NULL,
+                        `enabled` enum("true","false") DEFAULT NULL,
+                        `username` varchar(255) DEFAULT NULL,
+                        `password` varchar(255) DEFAULT NULL,
+                        `module_key` int(11) DEFAULT NULL,
+                        `webapp` int(11) DEFAULT NULL,
+                        PRIMARY KEY (`id`),
+                        KEY `idx_om_servers` (`hostname`))');
+						
+        if (!DBHelper::fieldExists('poll', 'type')) {
+            Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");
+        }
+
+        Database::get()->query('INSERT IGNORE INTO course_module
+            (module_id, visible, course_id)
+            SELECT ?d, 0, id FROM course', MODULE_ID_MINDMAP);
+    
+    }
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
@@ -2954,14 +3091,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     set_config('upgrade_begin', '');
     updateInfo(1, $langUpgradeSuccess);
-    $logdate = date("Y-m-d_G.i:s");
 
-    $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/log-$logdate.html\" target=\"_blank\">$langLogOutput</a></div><p/>";
+    $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/$logfile\" target=\"_blank\">$langLogOutput</a></div><p/>";
     if ($command_line) {
         if ($debug_error) {
             echo " * $langUpgSucNotice\n";
         }
-        echo $langUpgradeSuccess, "\n", $langLogOutput, ": courses/log-$logdate.html\n";
+        echo $langUpgradeSuccess, "\n", $langLogOutput, ": courses/$logfile\n";
     } else {
         if ($debug_error) {
             $output_result .= "<div class='alert alert-danger'>" . $langUpgSucNotice . "</div>";
@@ -2971,7 +3107,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         echo "</body></html>\n";
     }
 
-    $debug_output = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/><title>Open eClass upgrade log of $logdate</title></head><body>$debug_output</body></html>";
-    file_put_contents($webDir . "/courses/log-$logdate.html", $debug_output);
+    fwrite($logfile_handle, "\n</body>\n</html>\n");
+    fclose($logfile_handle);
 
 } // end of if not submit

@@ -122,7 +122,7 @@ function check_admin_unit_resource($resource_id) {
  * @param type $unit_id
  */
 function show_resourcesWeeks($unit_id) {
-    global $tool_content, $max_resource_id, $langAvailableUnitResources,
+    global $tool_content, $max_resource_id,
            $head_content, $langDownload, $langPrint, $langCancel;
     
     $req = Database::get()->queryArray("SELECT * FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
@@ -171,8 +171,7 @@ function show_resourcesWeeks($unit_id) {
         $max_resource_id = Database::get()->querySingle("SELECT id FROM course_weekly_view_activities
                                 WHERE course_weekly_view_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;                     
         $tool_content .= "<div class='table-responsive'>";
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<th colspan='2'>$langAvailableUnitResources</th><th>".icon('fa-gears')."</th>";
+        $tool_content .= "<table class='table-default'>";        
         foreach ($req as $info) {
             $info->comments = standard_text_escape($info->comments);
             show_resourceWeek($info);
@@ -869,8 +868,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
     }
     $comment_box = $class_vis = $imagelink = $link = '';
     $class_vis = ($visibility == 0 or ! $module_visible) ?
-            ' class="not_visible"' : ' ';
-    $title = q($title);
+            ' class="not_visible"' : ' ';    
     $l = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
     if (!$l) { // check if it was deleted
         if (!$is_editor) {
@@ -883,13 +881,15 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
     } else {
         if ($title == '') {
             $title = q($l->url);
+        } else {
+            $title = q($title);
         }        
         $link = "<a href='" . q($l->url) . "' target='_blank'>";        
         $exlink = $link . "$title</a>";
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "</a>" . icon('fa-link') . "";
+        $imagelink = icon('fa-link');
     }
 
     if (!empty($comments)) {
@@ -900,7 +900,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
 
     return "
         <tr$class_vis>
-          <td>$imagelink</td>
+          <td width='1'>$imagelink</td>
           <td>$exlink $comment_box</td>" . actions('link', $resource_id, $visibility) . "
         </tr>";
 }

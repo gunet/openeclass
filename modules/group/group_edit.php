@@ -111,13 +111,26 @@ if (isset($_POST['modify'])) {
             $message .= "<div class='alert alert-warning'>$langGroupTooManyMembers</div>";
         } else {
             // Delete all members of this group
-            Database::get()->query("DELETE FROM group_members
-                                        WHERE group_id = ?d AND is_tutor = 0", $group_id);
-            $numberMembers--;
-
-            for ($i = 0; $i <= $numberMembers; $i++) {
-                Database::get()->query("INSERT IGNORE INTO group_members (user_id, group_id)
-                                          VALUES (?d, ?d)", $_POST['ingroup'][$i], $group_id);
+            $cur_member_ids = [];
+            Database::get()->queryFunc("SELECT user_id FROM group_members "
+                    . "WHERE group_id = ?d AND is_tutor = 0", 
+                    function ($group_member) use (&$cur_member_ids) {
+                        array_push($cur_member_ids, $group_member->user_id);
+                    },$group_id);
+            if (isset($_POST['ingroup'])) {        
+                $ids_to_be_inserted = array_diff($_POST['ingroup'], $cur_member_ids);
+                $ids_to_be_deleted = implode(', ', array_diff($cur_member_ids, $_POST['ingroup']));
+                if ($ids_to_be_deleted) {
+                Database::get()->query("DELETE FROM group_members
+                                            WHERE group_id = ?d AND is_tutor = 0 AND user_id IN ($ids_to_be_deleted)", $group_id);
+                }
+                foreach ($ids_to_be_inserted as $user_id) {
+                    Database::get()->query("INSERT INTO group_members (user_id, group_id)
+                                              VALUES (?d, ?d)", $user_id, $group_id);
+                }                
+            } else {
+                Database::get()->query("DELETE FROM group_members
+                                            WHERE group_id = ?d AND is_tutor = 0",$group_id);
             }
             $message .= "<div class='alert alert-success'>$langGroupSettingsModified</div>";
 			redirect_to_home_page("modules/group/index.php?course=$course_code");
@@ -145,7 +158,7 @@ if ($is_editor) {
     foreach ($q as $row) {
         $selected = $row->is_tutor ? ' selected="selected"' : '';
         $tool_content_tutor .= "<option value='$row->user_id'$selected>" . q($row->surname) .
-                ' ' . q($row->givenname) . "</option>\n";
+                ' ' . q($row->givenname) . "</option>";
     }
     $tool_content_tutor .= '</select>';
 } else {
@@ -155,6 +168,7 @@ if ($is_editor) {
 $tool_content_max_student = $max_members ? $max_members : 1;
 $tool_content_group_description = q($group_description);
 
+$multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
 
 if ($multi_reg) {
     // Students registered to the course but not members of this group
@@ -218,7 +232,7 @@ $tool_content .=  action_bar(array(
   
 
 $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
+        <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
         <fieldset>    
         <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
             <label class='col-sm-2 control-label'>$langGroupName:</label>
@@ -291,8 +305,8 @@ $tool_content .= "<div class='form-wrapper'>
         $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
         foreach ($resultcategories as $myrow) {
             $tool_content .= "<option value='$myrow->id'";
-			$category_id = $myrow->id;
-            if (isset($_GET['category']) and $_GET['category'] == $myrow->id) {
+            $category_id = $myrow->id;            
+            if ($group_category == $myrow->id) {
                 $tool_content .= " selected='selected'";
             }
             $tool_content .= '>' . q($myrow->name) . "</option>";

@@ -4,11 +4,12 @@ syntax: regexp
 
 ^courses/
 ^video/
+^secure/
 ^config/.*\.php
 ^html/
 
 ^composer\.phar
-^storage/
+^storage/views/
 ^vendor/
 
 ^nbproject/private/

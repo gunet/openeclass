@@ -1,0 +1,59 @@
+.digital_clock {
+    width: 100%;
+    margin: 0 auto;
+    padding: 30px;
+    color: #4f4f4f;
+}
+
+.digital_clock ul {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0px;
+    list-style: none;
+    text-align: center;
+}
+
+.digital_clock ul li {
+    display: inline;
+    font-size: 3em;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.digital_clock .point {
+    position: relative;
+    -moz-animation: mymove 1s ease infinite;
+    -webkit-animation: mymove 1s ease infinite;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/* Simple Animation */
+@-webkit-keyframes mymove {
+    0% {opacity: 1.0;
+}
+
+50% {
+    opacity: 0;
+    text-shadow: none;
+}
+
+100% {
+    opacity: 1.0;
+}	
+}
+
+@-moz-keyframes mymove {
+    0% {
+        opacity: 1.0;
+    }
+
+    50% {
+        opacity: 0;
+        text-shadow: none;
+    }
+
+    100% {
+        opacity: 1.0;
+    };
+}

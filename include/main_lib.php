@@ -2,7 +2,7 @@
 
 /*
  * ========================================================================
- * Open eClass 3.0 - E-learning and Course Management System
+ * Open eClass 3.2 - E-learning and Course Management System
  * ========================================================================
   Copyright(c) 2003-2015  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.1.99');
+define('ECLASS_VERSION', '3.2.99');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
@@ -91,7 +91,9 @@ define('MODULE_ID_RATING', 39);
 define('MODULE_ID_SHARING', 40);
 define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_ABUSE_REPORT', 42);
-define('MODULE_ID_WALL', 43);
+define('MODULE_ID_COURSE_WIDGETS', 44);
+define('MODULE_ID_MINDMAP', 45);
+define('MODULE_ID_WALL', 46);
 
 // user modules
 
@@ -113,6 +115,9 @@ define('SETTING_COURSE_ANONYMOUS_RATING_ENABLE', 8);
 define('SETTING_FORUM_RATING_ENABLE', 9);
 define('SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE', 10);
 define('SETTING_COURSE_ABUSE_REPORT_ENABLE', 11);
+define('SETTING_GROUP_MULTIPLE_REGISTRATION', 12);
+define('SETTING_GROUP_STUDENT_DESCRIPTION', 13);
+define('SETTING_COURSE_USER_REQUESTS_DISABLE', 20);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -128,6 +133,14 @@ define('ATTEMPT_COMPLETED', 1);
 define('ATTEMPT_PENDING', 2);
 define('ATTEMPT_PAUSED', 3);
 define('ATTEMPT_CANCELED', 4);
+
+// Widget Areas
+define('HOME_PAGE_MAIN', 1);
+define('HOME_PAGE_SIDEBAR', 2);
+define('PORTFOLIO_PAGE_MAIN', 3);
+define('PORTFOLIO_PAGE_SIDEBAR', 4);
+define('COURSE_HOME_PAGE_MAIN', 5);
+define('COURSE_HOME_PAGE_SIDEBAR', 6);
 
 // for fill in blanks questions
 define('TEXTFIELD_FILL', 1);
@@ -189,10 +202,21 @@ function css_link($file) {
     $v = '?v=' . ECLASS_VERSION;
     return "<link href='{$urlAppend}js/$file$v' rel='stylesheet' type='text/css'>\n";
 }
+function widget_js_link($file, $folder) {
+    global $urlAppend, $head_content;
+    $v = '?v=' . ECLASS_VERSION;
+    $head_content .= "<script type='text/javascript' src='$urlAppend{$folder}/js/$file$v'></script>\n";
+}
+
+function widget_css_link($file, $folder) {
+    global $urlAppend, $head_content;
+    $v = '?v=' . ECLASS_VERSION;
+    $head_content .= "<link href='$urlAppend{$folder}/css/$file$v' rel='stylesheet' type='text/css'>\n";
+}
 
 // Include a JavaScript file from the main js directory
 function load_js($file, $init='') {
-    global $head_content, $urlAppend, $theme, $theme_settings, $language;
+    global $head_content, $urlAppend, $theme, $theme_settings, $language, $langReadMore, $langReadLess;
     static $loaded;
 
     if (isset($loaded[$file])) {
@@ -202,88 +226,117 @@ function load_js($file, $init='') {
     }
 
     // Load file only if not provided by template
-    if (!(isset($theme_settings['js_loaded']) and
-          in_array($file, $theme_settings['js_loaded']))) {
-        if ($file == 'jstree') {
-            $head_content .= js_link('jstree/jquery.cookie.min.js');
-            $file = 'jstree/jquery.jstree.min.js';
-        } elseif ($file == 'jstree3') {
-            $head_content .= css_link('jstree3/themes/proton/style.min.css');
-            $file = 'jstree3/jstree.min.js';
-        } elseif ($file == 'jstree3d') {
-            $head_content .= css_link('jstree3/themes/default/style.min.css');
-            $file = 'jstree3/jstree.min.js';
-        } elseif ($file == 'shadowbox') {
-            $head_content .= css_link('shadowbox/shadowbox.css');
-            $file = 'shadowbox/shadowbox.js';
-        } elseif ($file == 'fancybox2') {
-            $head_content .= css_link('fancybox2/jquery.fancybox.css');
-            $file = 'fancybox2/jquery.fancybox.pack.js';
-        } elseif ($file == 'colorbox') {
-            $head_content .= css_link('colorbox/colorbox.css');
-            $file = 'colorbox/jquery.colorbox.min.js';
-        } elseif ($file == 'flot') {
-            $head_content .= css_link('flot/flot.css') .
-                "<!--[if lte IE 8]><script language='javascript' type='text/javascript' src='{$urlAppend}js/flot/excanvas.min.js'></script><![endif]-->\n" .
-                js_link('jquery-migrate-1.2.1.min.js') .
-                js_link('flot/jquery.flot.min.js');
-            $file = 'flot/jquery.flot.categories.min.js';
-        } elseif ($file == 'slick') {
-            $head_content .= css_link('slick-master/slick/slick.css');
-            $file = 'slick-master/slick/slick.min.js';
-        } elseif ($file == 'datatables') {
-            $head_content .= css_link('datatables/media/css/jquery.dataTables.css');
-            $file = 'datatables/media/js/jquery.dataTables.min.js';
-        } elseif ($file == 'datatables_bootstrap') {
-            $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
-            $file = 'datatables/media/js/dataTables.bootstrap.js';
-        } elseif ($file == 'datatables_filtering_delay') {
-            $file = 'datatables/media/js/jquery.dataTables_delay.js';
-        } elseif ($file == 'RateIt') {
-            $file = 'jquery.rateit.min.js';
+
+    if ($file == 'jstree') {
+        $head_content .= js_link('jstree/jquery.cookie.min.js');
+        $file = 'jstree/jquery.jstree.min.js';
+    } elseif ($file == 'jstree3') {
+        $head_content .= css_link('jstree3/themes/proton/style.min.css');
+        $file = 'jstree3/jstree.min.js';
+    } elseif ($file == 'jstree3d') {
+        $head_content .= css_link('jstree3/themes/default/style.min.css');
+        $file = 'jstree3/jstree.min.js';
+    } elseif ($file == 'shadowbox') {
+        $head_content .= css_link('shadowbox/shadowbox.css');
+        $file = 'shadowbox/shadowbox.js';
+    } elseif ($file == 'fancybox2') {
+        $head_content .= css_link('fancybox2/jquery.fancybox.css');
+        $file = 'fancybox2/jquery.fancybox.pack.js';
+    } elseif ($file == 'colorbox') {
+        $head_content .= css_link('colorbox/colorbox.css');
+        $file = 'colorbox/jquery.colorbox.min.js';
+    } elseif ($file == 'flot') {
+        $head_content .= css_link('flot/flot.css') .
+            "<!--[if lte IE 8]><script language='javascript' type='text/javascript' src='{$urlAppend}js/flot/excanvas.min.js'></script><![endif]-->\n" .
+            js_link('jquery-migrate-1.2.1.min.js') .
+            js_link('flot/jquery.flot.min.js');
+        $file = 'flot/jquery.flot.categories.min.js';
+    } elseif ($file == 'slick') {
+        $head_content .= css_link('slick-master/slick/slick.css');
+        $file = 'slick-master/slick/slick.min.js';
+    } elseif ($file == 'datatables') {
+        $head_content .= css_link('datatables/media/css/jquery.dataTables.css');
+        $file = 'datatables/media/js/jquery.dataTables.min.js';
+    } elseif ($file == 'datatables_bootstrap') {
+        $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
+        $file = 'datatables/media/js/dataTables.bootstrap.js';
+    } elseif ($file == 'datatables_filtering_delay') {
+        $file = 'datatables/media/js/jquery.dataTables_delay.js';
+         } elseif ($file == 'datatables_tabletools') {
+            $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
+            $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
+        } elseif ($file == 'jszip') {
+            $file = 'jszip/dist/jszip.js';
+        } elseif ($file == 'pdfmake') {
+            $file = 'pdfmake/build/pdfmake.js';
+        } elseif ($file == 'vfs_fonts') {
+            $file = 'pdfmake/build/vfs_fonts.js';
+        } elseif ($file == 'datatables_buttons') {
+            $file = 'datatables/extensions/Buttons/js/dataTables.buttons.js';
+            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.dataTables.css');
+        } elseif ($file == 'datatables_buttons_jqueryui') {
+            $file = 'datatables/extensions/Buttons/js/buttons.jqueryui.js';
+            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.jqueryui.css');
+        } elseif ($file == 'datatables_buttons_bootstrap') {
+            $file = 'datatables/extensions/Buttons/js/buttons.bootstrap.js';
+            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.bootstrap.css');
+        } elseif ($file == 'datatables_buttons_print') {
+            $file = 'datatables/extensions/Buttons/js/buttons.print.js';
+        } elseif ($file == 'datatables_buttons_flash') {
+            $file = 'datatables/extensions/Buttons/js/buttons.flash.js';
+        } elseif ($file == 'datatables_buttons_html5') {
+            $file = 'datatables/extensions/Buttons/js/buttons.html5.js';
+        } elseif ($file == 'datatables_buttons_colVis') {
+            $file = 'datatables/extensions/Buttons/js/buttons.colVis.js';
+        } elseif ($file == 'datatables_buttons_foundation') {
+            $file = 'datatables/extensions/Buttons/js/buttons.foundation.js';
+            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.foundation.css');
+   } elseif ($file == 'RateIt') {
+        $file = 'jquery.rateit.min.js';
         } elseif ($file == 'waypoints-infinite') {
             $head_content .= js_link('waypoints/jquery.waypoints.min.js');
             $file = 'waypoints/shortcuts/infinite.min.js';
-        } elseif ($file == 'select2') {
-            $head_content .= css_link('select2-3.5.1/select2.css') .
-                css_link('select2-3.5.1/select2-bootstrap.css') .
-                js_link('select2-3.5.1/select2.min.js');
-            $file = "select2-3.5.1/select2_locale_$language.js";
-        } elseif ($file == 'bootstrap-datetimepicker') {
-            $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') .
-            js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
-            $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
-        } elseif ($file == 'bootstrap-timepicker') {
-            $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
-            $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
-        } elseif ($file == 'bootstrap-datepicker') {
-            $head_content .= css_link('bootstrap-datepicker/css/datepicker3.css') .
-                js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
-            $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
-        } elseif ($file == 'bootstrap-validator') {
-            $file = "bootstrap-validator/validator.js";
-        } elseif ($file == 'bootstrap-slider') {
-            $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
-            $file = 'bootstrap-slider/js/bootstrap-slider.min.js';
-        } elseif ($file == 'bootstrap-colorpicker') {
-            $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
-            $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
-        }   elseif ($file == 'spectrum') {
-            $head_content .= css_link('spectrum/spectrum.css');
-            $file = 'spectrum/spectrum.js';
-        } elseif ($file == 'sortable') {
-            $file = "sortable/Sortable.min.js";
-        } elseif ($file == 'filetree') {
-            $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
-            $file = 'jquery_filetree/jqueryFileTree.js';            
-        } elseif ($file == 'trunk8') {
-            $head_content .= "
-<script>
-    $(function () { $('.trunk8').trunk8({
-        lines: 3,
-        fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',
-    });
-
+    } elseif ($file == 'select2') {
+        $head_content .= css_link('select2-3.5.1/select2.css') .
+            css_link('select2-3.5.1/select2-bootstrap.css') .
+            js_link('select2-3.5.1/select2.min.js');
+        $file = "select2-3.5.1/select2_locale_$language.js";
+    } elseif ($file == 'bootstrap-datetimepicker') {
+        $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') .
+        js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
+        $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
+    } elseif ($file == 'bootstrap-timepicker') {
+        $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
+        $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
+    } elseif ($file == 'bootstrap-datepicker') {
+        $head_content .= css_link('bootstrap-datepicker/css/datepicker3.css') .
+            js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
+        $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
+    } elseif ($file == 'bootstrap-validator') {
+        $file = "bootstrap-validator/validator.js";
+    } elseif ($file == 'bootstrap-slider') {
+        $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
+        $file = 'bootstrap-slider/js/bootstrap-slider.min.js';
+    } elseif ($file == 'bootstrap-colorpicker') {
+        $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
+        $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
+    }   elseif ($file == 'spectrum') {
+        $head_content .= css_link('spectrum/spectrum.css');
+        $file = 'spectrum/spectrum.js';
+    } elseif ($file == 'sortable') {
+        $file = "sortable/Sortable.min.js";
+    } elseif ($file == 'filetree') {
+        $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
+        $file = 'jquery_filetree/jqueryFileTree.js';            
+    } elseif ($file == 'trunk8') {
+        $head_content .= "
+            <script>
+                var readMore = '".js_escape($langReadMore)."';
+                var readLess = '".js_escape($langReadLess)."';
+                $(function () { $('.trunk8').trunk8({
+                    lines: 3,
+                    fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',
+                });
     $(document).on('click', '.read-more', function (event) {
         $(this).parent().trunk8('revert').append(' <a class=\"read-less\" href=\"#\">" . js_escape($GLOBALS['shownone']) . "</a>');
         event.preventDefault();
@@ -295,13 +348,12 @@ console.log('aaa');
         event.preventDefault();
     });
 
-});
-</script>";
-            $file = 'trunk8.js';
-        }
-
-        $head_content .= js_link($file);
+            });
+            </script>";
+        $file = 'trunk8.js';
     }
+
+    $head_content .= js_link($file);
 
     if (strlen($init) > 0) {
         $head_content .= $init;
@@ -433,6 +485,19 @@ function gid_to_name($gid) {
     }
 }
 
+function display_group($gid) {
+    global $course_code, $urlAppend, $themeimg, $langGroup;
+    $res = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $gid);
+    if ($res) {
+        return "<span title='$langGroup' class='fa-stack fa-lg'>
+                    <span style='color:#f3f3f3;' class='fa fa-circle fa-stack-2x'></span>
+                    <span style='color:#cdcdcd;' class='fa fa-users fa-stack-1x'></span>
+                </span>
+                <a href='{$urlAppend}modules/group/group_space.php?course=$course_code&amp;group_id=$gid'>$res->name</a>";
+    } else {
+        return false;
+    }
+}
 /**
  * @brief Return the URL for a user profile image
  * @param int $uid user id
@@ -451,7 +516,7 @@ function user_icon($uid, $size = null) {
             if ($user->has_icon) {
                 return "${urlAppend}courses/userimg/${uid}_$size.jpg";
             } else {
-                return "$themeimg/default_$size.jpg";
+                return "$themeimg/default_$size.png";
             }
         }
     }
@@ -991,7 +1056,7 @@ function visible_module($module_id) {
 
 // Find the current module id from the script URL
 function current_module_id() {
-    global $modules, $urlAppend, $static_module_paths;
+    global $modules, $urlAppend, $static_modules;
     static $module_id;
 
     if (isset($module_id)) {
@@ -1000,11 +1065,13 @@ function current_module_id() {
 
     $module_path = str_replace($urlAppend . 'modules/', '', $_SERVER['SCRIPT_NAME']);
     $link = preg_replace('|/.*$|', '', $module_path);
-    if (isset($static_module_paths[$link])) {
-        $module_id = $static_module_paths[$link];
-        define('STATIC_MODULE', true);
-        return $module_id;
-    }
+    foreach ($static_modules as $smid => $info) {
+        if ($info['link'] == $link) {
+            $module_id = $smid;
+            define('STATIC_MODULE', true);
+            return $module_id;
+        }
+    }    
 
     foreach ($modules as $mid => $info) {
         if ($info['link'] == $link) {
@@ -1038,38 +1105,38 @@ function cp737_to_utf8($s) {
         return $cp737;
     } else {
         // ... if it fails, fall back to manual conversion
-        return strtr($s, array("\x80" => 'Α', "\x81" => 'Β', "\x82" => 'Γ', "\x83" => 'Δ',
-                               "\x84" => 'Ε', "\x85" => 'Ζ', "\x86" => 'Η', "\x87" => 'Θ',
-                               "\x88" => 'Ι', "\x89" => 'Κ', "\x8a" => 'Λ', "\x8b" => 'Μ',
-                               "\x8c" => 'Ν', "\x8d" => 'Ξ', "\x8e" => 'Ο', "\x8f" => 'Π',
-                               "\x90" => 'Ρ', "\x91" => 'Σ', "\x92" => 'Τ', "\x93" => 'Υ',
-                               "\x94" => 'Φ', "\x95" => 'Χ', "\x96" => 'Ψ', "\x97" => 'Ω',
-                               "\x98" => 'α', "\x99" => 'β', "\x9a" => 'γ', "\x9b" => 'δ',
-                               "\x9c" => 'ε', "\x9d" => 'ζ', "\x9e" => 'η', "\x9f" => 'θ',
-                               "\xa0" => 'ι', "\xa1" => 'κ', "\xa2" => 'λ', "\xa3" => 'μ',
-                               "\xa4" => 'ν', "\xa5" => 'ξ', "\xa6" => 'ο', "\xa7" => 'π',
-                               "\xa8" => 'ρ', "\xa9" => 'σ', "\xaa" => 'ς', "\xab" => 'τ',
-                               "\xac" => 'υ', "\xad" => 'φ', "\xae" => 'χ', "\xaf" => 'ψ',
-                               "\xb0" => '░', "\xb1" => '▒', "\xb2" => '▓', "\xb3" => '│',
-                               "\xb4" => '┤', "\xb5" => '╡', "\xb6" => '╢', "\xb7" => '╖',
-                               "\xb8" => '╕', "\xb9" => '╣', "\xba" => '║', "\xbb" => '╗',
-                               "\xbc" => '╝', "\xbd" => '╜', "\xbe" => '╛', "\xbf" => '┐',
-                               "\xc0" => '└', "\xc1" => '┴', "\xc2" => '┬', "\xc3" => '├',
-                               "\xc4" => '─', "\xc5" => '┼', "\xc6" => '╞', "\xc7" => '╟',
-                               "\xc8" => '╚', "\xc9" => '╔', "\xca" => '╩', "\xcb" => '╦',
-                               "\xcc" => '╠', "\xcd" => '═', "\xce" => '╬', "\xcf" => '╧',
-                               "\xd0" => '╨', "\xd1" => '╤', "\xd2" => '╥', "\xd3" => '╙',
-                               "\xd4" => '╘', "\xd5" => '╒', "\xd6" => '╓', "\xd7" => '╫',
-                               "\xd8" => '╪', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
-                               "\xdc" => '▄', "\xdd" => '▌', "\xde" => '▐', "\xdf" => '▀',
-                               "\xe0" => 'ω', "\xe1" => 'ά', "\xe2" => 'έ', "\xe3" => 'ή',
-                               "\xe4" => 'ϊ', "\xe5" => 'ί', "\xe6" => 'ό', "\xe7" => 'ύ',
-                               "\xe8" => 'ϋ', "\xe9" => 'ώ', "\xea" => 'Ά', "\xeb" => 'Έ',
-                               "\xec" => 'Ή', "\xed" => 'Ί', "\xee" => 'Ό', "\xef" => 'Ύ',
-                               "\xf0" => 'Ώ', "\xf1" => '±', "\xf2" => '≥', "\xf3" => '≤',
-                               "\xf4" => 'Ϊ', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
-                               "\xf8" => '°', "\xf9" => '∙', "\xfa" => '·', "\xfb" => '√',
-                               "\xfc" => 'ⁿ', "\xfd" => '²', "\xfe" => '■', "\xff" => ' '));
+        return strtr($s, array("\x80" => 'Ξ‘', "\x81" => 'Ξ’', "\x82" => 'Ξ“', "\x83" => 'Ξ”',
+                               "\x84" => 'Ξ•', "\x85" => 'Ξ–', "\x86" => 'Ξ—', "\x87" => 'Ξ',
+                               "\x88" => 'Ξ™', "\x89" => 'Ξ', "\x8a" => 'Ξ›', "\x8b" => 'Ξ',
+                               "\x8c" => 'Ξ', "\x8d" => 'Ξ', "\x8e" => 'Ξ', "\x8f" => 'Ξ ',
+                               "\x90" => 'Ξ΅', "\x91" => 'Ξ£', "\x92" => 'Ξ¤', "\x93" => 'Ξ¥',
+                               "\x94" => 'Ξ¦', "\x95" => 'Ξ§', "\x96" => 'Ξ¨', "\x97" => 'Ξ©',
+                               "\x98" => 'Ξ±', "\x99" => 'Ξ²', "\x9a" => 'Ξ³', "\x9b" => 'Ξ΄',
+                               "\x9c" => 'Ξµ', "\x9d" => 'Ξ¶', "\x9e" => 'Ξ·', "\x9f" => 'ΞΈ',
+                               "\xa0" => 'ΞΉ', "\xa1" => 'ΞΊ', "\xa2" => 'Ξ»', "\xa3" => 'ΞΌ',
+                               "\xa4" => 'Ξ½', "\xa5" => 'ΞΎ', "\xa6" => 'ΞΏ', "\xa7" => 'Ο€',
+                               "\xa8" => 'Ο', "\xa9" => 'Οƒ', "\xaa" => 'Ο‚', "\xab" => 'Ο„',
+                               "\xac" => 'Ο…', "\xad" => 'Ο†', "\xae" => 'Ο‡', "\xaf" => 'Ο',
+                               "\xb0" => 'β–‘', "\xb1" => 'β–’', "\xb2" => 'β–“', "\xb3" => 'β”‚',
+                               "\xb4" => 'β”¤', "\xb5" => 'β•΅', "\xb6" => 'β•Ά', "\xb7" => 'β•–',
+                               "\xb8" => 'β••', "\xb9" => 'β•£', "\xba" => 'β•‘', "\xbb" => 'β•—',
+                               "\xbc" => 'β•', "\xbd" => 'β•', "\xbe" => 'β•›', "\xbf" => 'β”',
+                               "\xc0" => 'β””', "\xc1" => 'β”΄', "\xc2" => 'β”¬', "\xc3" => 'β”',
+                               "\xc4" => 'β”€', "\xc5" => 'β”Ό', "\xc6" => 'β•', "\xc7" => 'β•',
+                               "\xc8" => 'β•', "\xc9" => 'β•”', "\xca" => 'β•©', "\xcb" => 'β•¦',
+                               "\xcc" => 'β• ', "\xcd" => 'β•', "\xce" => 'β•¬', "\xcf" => 'β•§',
+                               "\xd0" => 'β•¨', "\xd1" => 'β•¤', "\xd2" => 'β•¥', "\xd3" => 'β•™',
+                               "\xd4" => 'β•', "\xd5" => 'β•’', "\xd6" => 'β•“', "\xd7" => 'β•«',
+                               "\xd8" => 'β•', "\xd9" => 'β”', "\xda" => 'β”', "\xdb" => 'β–',
+                               "\xdc" => 'β–„', "\xdd" => 'β–', "\xde" => 'β–', "\xdf" => 'β–€',
+                               "\xe0" => 'Ο‰', "\xe1" => 'Ξ¬', "\xe2" => 'Ξ­', "\xe3" => 'Ξ®',
+                               "\xe4" => 'Ο', "\xe5" => 'Ξ―', "\xe6" => 'Ο', "\xe7" => 'Ο',
+                               "\xe8" => 'Ο‹', "\xe9" => 'Ο', "\xea" => 'Ξ†', "\xeb" => 'Ξ',
+                               "\xec" => 'Ξ‰', "\xed" => 'Ξ', "\xee" => 'Ξ', "\xef" => 'Ξ',
+                               "\xf0" => 'Ξ', "\xf1" => 'Β±', "\xf2" => 'β‰¥', "\xf3" => 'β‰¤',
+                               "\xf4" => 'Ξ', "\xf5" => 'Ξ«', "\xf6" => 'Γ·', "\xf7" => 'β‰',
+                               "\xf8" => 'Β°', "\xf9" => 'β™', "\xfa" => 'Β·', "\xfb" => 'β',
+                               "\xfc" => 'βΏ', "\xfd" => 'Β²', "\xfe" => 'β– ', "\xff" => 'Β '));
     }
 }
 
@@ -1137,24 +1204,24 @@ function resource_access($visible, $public) {
 # If you add any new languages, make sure they are defined in the
 # next array as well
 $native_language_names_init = array(
-    'el' => 'Ελληνικά',
+    'el' => 'Ξ•Ξ»Ξ»Ξ·Ξ½ΞΉΞΊΞ¬',
     'en' => 'English',
-    'es' => 'Español',
-    'cs' => 'Česky',
+    'es' => 'EspaΓ±ol',
+    'cs' => 'Δesky',
     'sq' => 'Shqip',
-    'bg' => 'Български',
-    'ca' => 'Català',
+    'bg' => 'Π‘ΡΠ»Π³Π°Ρ€ΡΠΊΠΈ',
+    'ca' => 'CatalΓ ',
     'da' => 'Dansk',
     'nl' => 'Nederlands',
     'fi' => 'Suomi',
-    'fr' => 'Français',
+    'fr' => 'FranΓ§ais',
     'de' => 'Deutsch',
-    'is' => 'Íslenska',
+    'is' => 'Γslenska',
     'it' => 'Italiano',
-    'jp' => '日本語',
+    'jp' => 'ζ—¥ζ¬θ',
     'pl' => 'Polski',
-    'ru' => 'Русский',
-    'tr' => 'Türkçe',
+    'ru' => 'Π ΡƒΡΡΠΊΠΈΠΉ',
+    'tr' => 'TΓΌrkΓ§e',
     'sv' => 'Svenska',
     'xx' => 'Variable Names',
 );
@@ -1503,7 +1570,8 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM wiki_acls WHERE wiki_id IN (SELECT id FROM wiki_properties WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM wiki_properties WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN (SELECT pqid FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d))", $cid);
-    Database::get()->query("DELETE FROM poll_answer_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d))", $cid);
+    Database::get()->query("DELETE FROM poll_user_record WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM poll_question WHERE pid IN (SELECT pid FROM poll WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM poll WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id IN (SELECT id FROM assignment WHERE course_id = ?d)", $cid);
@@ -1582,7 +1650,8 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM logins WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM lp_user_module_progress WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM poll WHERE creator_id = ?d", $u);
-            Database::get()->query("DELETE FROM poll_answer_record WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d)", $u);
+            Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d", $u);
             Database::get()->query("DELETE FROM user_department WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d", $u);
@@ -2122,7 +2191,7 @@ function glossary_expand_callback($matches) {
         $definition = '';
     }
 
-    return '<a href="#" class="glossary"' .
+    return '<a href="#" data-toggle="popover"' .
             $definition . '>' . $matches[0] . '</a>';
 }
 
@@ -2168,7 +2237,7 @@ function set_glossary_cache() {
             $_SESSION['glossary_course_id'] != $course_id) {
         if (get_glossary_terms($course_id) and count($_SESSION['glossary']) > 0) {
             // Test whether \b works correctly, workaround if not
-            if (preg_match('/α\b/u', 'α')) {
+            if (preg_match('/Ξ±\b/u', 'Ξ±')) {
                 $spre = $spost = '\b';
             } else {
                 $spre = '(?<=[\x01-\x40\x5B-\x60\x7B-\x7F]|^)';
@@ -2225,11 +2294,11 @@ function odd_even($k, $extra = '') {
 function greek_to_latin($string) {
     return str_replace(
             array(
-        'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π',
-        'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
-        'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
-        'ς', 'ά', 'έ', 'ή', 'ί', 'ύ', 'ό', 'ώ', 'Ά', 'Έ', 'Ή', 'Ί', 'Ύ', 'Ό', 'Ώ', 'ϊ',
-        'ΐ', 'ϋ', 'ΰ', 'ϊ', 'Ϋ', '–'), array(
+        'Ξ±', 'Ξ²', 'Ξ³', 'Ξ΄', 'Ξµ', 'Ξ¶', 'Ξ·', 'ΞΈ', 'ΞΉ', 'ΞΊ', 'Ξ»', 'ΞΌ', 'Ξ½', 'ΞΎ', 'ΞΏ', 'Ο€',
+        'Ο', 'Οƒ', 'Ο„', 'Ο…', 'Ο†', 'Ο‡', 'Ο', 'Ο‰', 'Ξ‘', 'Ξ’', 'Ξ“', 'Ξ”', 'Ξ•', 'Ξ–', 'Ξ—', 'Ξ',
+        'Ξ™', 'Ξ', 'Ξ›', 'Ξ', 'Ξ', 'Ξ', 'Ξ', 'Ξ ', 'Ξ΅', 'Ξ£', 'Ξ¤', 'Ξ¥', 'Ξ¦', 'Ξ§', 'Ξ¨', 'Ξ©',
+        'Ο‚', 'Ξ¬', 'Ξ­', 'Ξ®', 'Ξ―', 'Ο', 'Ο', 'Ο', 'Ξ†', 'Ξ', 'Ξ‰', 'Ξ', 'Ξ', 'Ξ', 'Ξ', 'Ο',
+        'Ξ', 'Ο‹', 'Ξ°', 'Ο', 'Ξ«', 'β€“'), array(
         'a', 'b', 'g', 'd', 'e', 'z', 'i', 'th', 'i', 'k', 'l', 'm', 'n', 'x', 'o', 'p',
         'r', 's', 't', 'y', 'f', 'x', 'ps', 'o', 'A', 'B', 'G', 'D', 'E', 'Z', 'H', 'Th',
         'I', 'K', 'L', 'M', 'N', 'X', 'O', 'P', 'R', 'S', 'T', 'Y', 'F', 'X', 'Ps', 'O',
@@ -2240,14 +2309,14 @@ function greek_to_latin($string) {
 // Convert to uppercase and remove accent marks
 // Limited coverage for now
 function remove_accents($string) {
-    return strtr(mb_strtoupper($string, 'UTF-8'), array('Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
-        'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
-        'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
-        'Ç' => 'C', 'Ñ' => 'N', 'Ý' => 'Y',
-        'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
-        'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I',
-        'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O',
-        'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U'));
+    return strtr(mb_strtoupper($string, 'UTF-8'), array('Ξ†' => 'Ξ‘', 'Ξ' => 'Ξ•', 'Ξ' => 'Ξ™', 'Ξ‰' => 'Ξ—', 'Ξ' => 'Ξ¥',
+        'Ξ' => 'Ξ', 'Ξ' => 'Ξ©', 'Ξ' => 'Ξ™', 'Ξ«' => 'Ξ¥',
+        'Γ€' => 'A', 'Γ' => 'A', 'Γ‚' => 'A', 'Γƒ' => 'A', 'Γ„' => 'A',
+        'Γ‡' => 'C', 'Γ‘' => 'N', 'Γ' => 'Y',
+        'Γ' => 'E', 'Γ‰' => 'E', 'Γ' => 'E', 'Γ‹' => 'E',
+        'Γ' => 'I', 'Γ' => 'I', 'Γ' => 'I', 'Γ' => 'I',
+        'Γ’' => 'O', 'Γ“' => 'O', 'Γ”' => 'O', 'Γ•' => 'O', 'Γ–' => 'O',
+        'Γ™' => 'U', 'Γ' => 'U', 'Γ›' => 'U', 'Γ' => 'U'));
 }
 
 // resize an image ($source_file) of type $type to a new size ($maxheight and $maxwidth) and copies it to path $target_file
@@ -2297,9 +2366,9 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
         $extra = '';
     }
     if (isset($title) && $with_title) {
-        $img = $sr_only ? "<i class='fa $name' $extra></i><span class='sr-only'>$title</span>" : "<i class='fa $name' $extra></i> $title";
+        $img = $sr_only ? "<span class='fa $name' $extra></span><span class='sr-only'>$title</span>" : "<span class='fa $name' $extra></span> $title";
     } else {
-        $img = "<i class='fa $name' $extra></i>";
+        $img = "<span class='fa $name' $extra></span>";
     }
     if (isset($link)) {
         return "<a href='$link'$link_attrs>$img</a>";
@@ -2338,16 +2407,18 @@ function icon_old_style($name, $title = null, $link = null, $attrs = null, $form
  * @return type
  */
 function profile_image($uid, $size, $class=null) {
-    global $urlServer, $themeimg;
+    global $urlServer, $themeimg, $langStudent;
 
     // makes $class argument optional
     $class_attr = ($class == null)?'':"class='".q($class)."'";
 
     $name = ($uid > 0) ? q(trim(uid_to_name($uid))) : '';
+    $size_width = ($size != IMAGESIZE_SMALL || $size != IMAGESIZE_LARGE)? "style='width:$size'":'';
+    $size = ($size != IMAGESIZE_SMALL && $size != IMAGESIZE_LARGE)? IMAGESIZE_LARGE:$size;
     if ($uid > 0 and file_exists("courses/userimg/${uid}_$size.jpg")) {
-        return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' $class_attr title='$name' alt='$name'>";
+        return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' $class_attr title='$name' alt='$name' $size_width>";
     } else {
-        return "<img src='$themeimg/default_$size.jpg' $class_attr title='$name' alt='$name'>";
+        return "<img src='$themeimg/default_$size.png' $class_attr title='$name' alt='$name' $size_width>";
     }
 }
 
@@ -2632,7 +2703,7 @@ class HtmlCutString {
     function __construct($string, $limit, $postfix) {
         // create dom element using the html string
         $this->tempDiv = new DomDocument;
-        @$this->tempDiv->loadXML('<div>' . $string . '</div>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
+        $this->tempDiv->loadHTML('<?xml encoding="UTF-8"><div>' . $string . '</div>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
         // keep the characters count till now
         $this->charCount = 0;
         // put the postfix at the end
@@ -2808,6 +2879,35 @@ function add_framebusting_headers() {
     header('X-Frame-Options: SAMEORIGIN');
 }
 
+/**
+ * This header enables the Cross-site scripting (XSS) filter built into most 
+ * recent web browsers. It's usually enabled by default anyway, so the role of 
+ * this header is to re-enable the filter for this particular website if it 
+ * was disabled by the user.
+ */
+
+function add_xxsfilter_headers() {
+    header('X-XSS-Protection: 1; mode=block');
+}
+
+
+/**
+ * The nosniff header, prevents Internet Explorer and Google Chrome from 
+ * MIME-sniffing a response away from the declared content-type.
+ */
+
+function add_nosniff_headers() {
+    header('X-Content-Type-Options: nosniff');
+}
+
+/**
+ * HTTP Strict-Transport-Security (HSTS) enforces secure (HTTP over SSL/TLS) 
+ * connections to the server.
+ */
+
+function add_hsts_headers() {
+    header('Strict-Transport-Security: max-age=16070400');
+}
 
 /**
  * 
@@ -2855,6 +2955,43 @@ function csrf_token_error() {
 
 
 
+/**
+ * Indirect Reference to HelpFul Functions
+ * @param  ArrayObject
+ * @return ArrayObject
+ */
+
+function arrayValuesToIndirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[$key] = getIndirectReference($value);
+    }
+    return $outputarray;
+}
+
+function arrayKeysToIndirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[getIndirectReference($key)] = $value;
+    }
+    return $outputarray;
+}
+
+function arrayValuesDirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[$key] = getDirectReference($value);
+    }
+    return $outputarray;
+}
+
+function arrayKeysToDirect($inputarray){
+    $outputarray = [];
+    foreach ($inputarray as $key => $value) {
+        $outputarray[getDirectReference($key)] = $value;
+    }
+    return $outputarray;
+}
 
 
 
@@ -3062,7 +3199,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $confirm_extra = " data-title='$title_conf' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='btn-danger'";
             $confirm_modal_class = ' confirmAction';
-            $form_begin = "<form method=post action='$url' style='display:inline-block;'>";
+            $form_begin = "<form method=post action='$url'>";
             $form_end = '</form>';
             $href = '';
         } else {
@@ -3142,7 +3279,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gears";
     if (count($out_secondary)) {
-        $action_button .= "<div class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span></button>";
+        $action_button .= "<div class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span></button>";
         $action_button .= "  <ul class='dropdown-menu dropdown-menu-right' role='menu'>
                      ".implode('', $out_secondary)."
                   </ul></div>";
@@ -3229,9 +3366,9 @@ function action_button($options, $secondary_menu_options = array()) {
         }
 
         if ($level == 'primary-label') {
-            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon] space-after-icon$primary_icon_class'></i>" . q($option['title']) . "</a>");
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon] space-after-icon$primary_icon_class'></span>" . q($option['title']) . "</a>");
         } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]$primary_icon_class'></i></a>");
+            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><span class='fa $option[icon]$primary_icon_class'></span></a>");
         } else {
             array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }
@@ -3247,8 +3384,8 @@ function action_button($options, $secondary_menu_options = array()) {
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
         $action_button = "
-                <a tabindex='1' class='btn $secondary_btn_class' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
-                    <i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
+                <a tabindex='1' class='menu-popover btn $secondary_btn_class' data-container='body' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
+                    <span class='fa $secondary_icon'></span> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
                 </a>";
     }
 
@@ -3512,6 +3649,29 @@ function my_dirname($path) {
     return $path;
 }
 
+/*
+ * check extension and  write  if exist  in a  <LI></LI>
+ * @params string       $extensionName  name  of  php extension to be checked
+ * @params boolean      $echoWhenOk     true => show ok when  extension exist
+ * @author Christophe Gesche
+ * @desc check extension and  write  if exist  in a  <LI></LI>
+ */
+function warnIfExtNotLoaded($extensionName) {
+
+    global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
+    
+    if (extension_loaded($extensionName)) {
+        $tool_content .= '<li>' . icon('fa-check') . ' ' . $extensionName . '</li>';
+    } else {
+        $tool_content .= "
+                <li class='bg-danger'>" . icon('fa-times') . " $extensionName
+                <b>$langModuleNotInstalled</b>
+                (<a href='http://www.php.net/$extensionName' target=_blank>$langReadHelp $langHere</a>)
+                </li>";
+    }
+}
+
+
 /**
  * @brief IP address and IP CIDR validation functions
  *
@@ -3715,4 +3875,96 @@ function login_hook($options) {
     } else {
         return $options;
     }
+}
+
+
+/**
+ * Show Second Factor Initialization Dialog in User Profile
+ *
+ * @return string
+ */
+
+function showSecondFactorUserProfile(){
+    global $langSFAConf;
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return "<div class='form-group'>
+                  <label class='col-sm-2 control-label'>" . $langSFAConf . "</label>
+                  <div class='col-sm-4'>". secondfaApp::showUserProfile($_SESSION['uid']) . "</div>
+                </div>";
+    } else {
+        return "";
+    }
+}
+
+/**
+ * Save Second Factor Initialization in User Profile
+ *
+ * @param  POST variables
+ * @return string
+ */
+
+
+function saveSecondFactorUserProfile(){
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return secondfaApp::saveUserProfile($_SESSION['uid']); 
+    } else {
+        return "";
+    }
+}
+
+
+/**
+ * Show Second Factor Challenge
+ *
+ * @return string
+ */
+
+function showSecondFactorChallenge(){
+    global $langSFAType;
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        $challenge = secondfaApp::showChallenge($_SESSION['uid']);
+        if ($challenge!=""){
+            return "<div class='form-group'>
+                    <label class='col-sm-2 control-label'>" . $langSFAType . "</label>
+                    <div class='col-sm-4'>". $challenge . "</div>
+                    </div>";
+        }else{
+            return "";
+        }
+    } else {
+        return "";
+    }
+}
+
+/**
+ * Verify Second Factor Challenge
+ *
+ * @param  POST variables
+ * @return string
+ */
+
+
+function checkSecondFactorChallenge(){
+    $connector = secondfaApp::getsecondfa();
+    if($connector->isEnabled() == true ){
+        return secondfaApp::checkChallenge($_SESSION['uid']); 
+    } else {
+        return "";
+    }
+}
+
+function trans($var_name) {
+    if (preg_match("/\['.+'\]/", $var_name)) {
+        preg_match_all("([^\['\]]+)", $var_name, $matches);
+        global ${$matches[0][0]};
+        
+        return ${$matches[0][0]}[$matches[0][1]];
+    } else {
+        global ${$var_name};
+        
+        return ${$var_name};
+    }   
 }

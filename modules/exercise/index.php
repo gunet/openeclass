@@ -27,10 +27,10 @@ require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 $require_current_course = TRUE;
-
 $require_help = TRUE;
+$guest_allowed = TRUE;
+
 $helpTopic = 'Exercise';
-$guest_allowed = true;
 
 include '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
@@ -123,7 +123,7 @@ if ($is_editor) {
 	$result = Database::get()->queryArray("SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed, score, ip_lock, password_lock " .
             "FROM exercise WHERE course_id = ?d AND active = 1 "
             . "AND (assign_to_specific = '0' OR assign_to_specific != '0' AND id IN
-                       (SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d UNION SELECT exercise_id FROM exercise_to_specific WHERE group_id IN ($gids_sql_ready))
+                       (SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d OR group_id IN ($gids_sql_ready))
                     ) "
             ."ORDER BY id LIMIT ?d, ?d", $course_id, $uid, $from, $limitExPage);
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
@@ -153,9 +153,9 @@ if (count($paused_exercises) > 0) {
 }
 if ($is_editor) {
     $pending_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
-            . "JOIN exercise b ON a.eid = b.id WHERE a.attempt_status = ?d AND b.course_id = ?d", ATTEMPT_PENDING, $course_id);
+            . "JOIN exercise b ON a.eid = b.id WHERE a.attempt_status = ?d AND b.course_id = ?d GROUP BY eid", ATTEMPT_PENDING, $course_id);
     if (count($pending_exercises) > 0) {
-        foreach ($pending_exercises as $row) {           
+        foreach ($pending_exercises as $row) {
             $tool_content .="<div class='alert alert-info'>$langPendingExercise " . q($row->title) . ". (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langView</a>)</div>";
         }
     }
@@ -176,7 +176,7 @@ if ($is_editor) {
             'icon' => 'fa-university',
             'level' => 'primary'
             )
-    ));
+    ),false);
 
 } else {
     $tool_content .= "";
@@ -207,12 +207,14 @@ if (!$nbrExercises) {
                 <th class='text-center'>".icon('fa-gears')."</th>
               </tr>";
     } else { // student view
+        $previousResultsAllowed = !(course_status($course_id) == COURSE_OPEN && $uid ==0);
+        $resultsHeader = $previousResultsAllowed ? "<th class='text-center'>$langResults</th>" : "";
         $tool_content .= "
                 <th>$langExerciseName</th>
                 <th class='text-center'>$langStart / $langEnd</th>
                 <th class='text-center'>$langExerciseConstrain</th>
                 <th class='text-center'>$langExerciseAttemptsAllowed</th>
-                <th class='text-center'>$langResults</th>
+                $resultsHeader
               </tr>";
     }
     // display exercise list
@@ -234,10 +236,10 @@ if (!$nbrExercises) {
                 $lock_description .= "<li>$langIPUnlock</li>";
             }
             $lock_description .= "</ul>";
-            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'><span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
         }
         if (!$row->public) {
-            $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'><span>";
+            $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
         }
         // prof only
         if ($is_editor) {
@@ -249,7 +251,6 @@ if (!$nbrExercises) {
             $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
             $eid = $row->id;
 			$NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?d", $eid)->count;
-
             if ($NumOfResults) {
                 $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId={$row->id}'>$langExerciseScores1</a> |
 				<a href='csv.php?course=$course_code&amp;exerciseId=" . $row->id . "' target=_blank>" . $langExerciseScores3 . "</a></td>";
@@ -307,7 +308,7 @@ if (!$nbrExercises) {
             } else { // exercise has expired
                 $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
             }
-            $tool_content .= "<br />" . $row->description . "</td><td class='smaller' align='center'>
+            $tool_content .= $row->description . "</td><td class='smaller' align='center'>
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
                                 " . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</td>";          														  
             if ($row->time_constraint > 0) {
@@ -322,19 +323,21 @@ if (!$nbrExercises) {
             } else {
                 $tool_content .= "<td class='text-center'> - </td>";
             }
-            if ($row->score) {
-                // user last exercise score
-                $attempts = Database::get()->querySingle("SELECT COUNT(*) AS count
-                                            FROM exercise_user_record WHERE uid = ?d
-                                            AND eid = ?d", $uid, $row->id)->count;
-                if ($attempts > 0) {
-                    $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId={$row->id}'>$langExerciseScores1</a></td>";
+            if ($previousResultsAllowed) {
+                if ($row->score) {
+                    // user last exercise score
+                    $attempts = Database::get()->querySingle("SELECT COUNT(*) AS count
+                                                FROM exercise_user_record WHERE uid = ?d
+                                                AND eid = ?d", $uid, $row->id)->count;
+                    if ($attempts > 0) {
+                        $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId={$row->id}'>$langExerciseScores1</a></td>";
+                    } else {
+                        $tool_content .= "<td class='text-center''>&dash;</td>";
+                    }
+                $tool_content .= "</tr>";
                 } else {
-                    $tool_content .= "<td class='text-center''>&dash;</td>";
+                    $tool_content .= "<td class='text-center'>$langNotAvailable</td>";
                 }
-            $tool_content .= "</tr>";
-            } else {
-                $tool_content .= "<td class='text-center'>$langNotAvailable</td>";
             }
         }
         // skips the last exercise, that is only used to know if we have or not to create a link "Next page"

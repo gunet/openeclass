@@ -24,7 +24,6 @@
  * @brief main script for the questionnaire tool
  */
 
-$require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
@@ -39,6 +38,13 @@ $action->record(MODULE_ID_QUESTIONNAIRE);
 $toolName = $langQuestionnaire;
 
 load_js('tools.js');
+if (isset($_GET['verification_code'])) {
+    $afftected_rows = Database::get()->query("UPDATE poll_user_record SET email_verification = 1, verification_code = NULL WHERE verification_code = ?s", $_GET['verification_code'])->affectedRows;
+    if ($afftected_rows > 0) {
+        Session::Messages('Η απαντήσεις σας καταμετρήθηκαν με επιτυχία', 'alert-success');
+    }
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
 if ($is_editor) {
     if (isset($_GET['pid'])) {
         $pid = $_GET['pid'];
@@ -60,7 +66,19 @@ if ($is_editor) {
             }
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         }
-
+        if (isset($_GET['access'])) {
+            switch ($_GET['access']) {
+                case 'public':
+                    Database::get()->query("UPDATE poll SET public = 1 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+                    Session::Messages($langPollUnlocked, 'alert-success');
+                    break;
+                case 'limited':
+                    Database::get()->query("UPDATE poll SET public = 0 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+                    Session::Messages($langPollLocked, 'alert-success');
+                    break;
+            }
+            redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
+        }
         // delete polls
         if (isset($_GET['delete']) and $_GET['delete'] == 'yes') {
             Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
@@ -68,12 +86,12 @@ if ($is_editor) {
             Database::get()->query("DELETE FROM `poll_to_specific` WHERE poll_id = ?d", $pid);
             Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
             Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
-            Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
+            Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
             Session::Messages($langPollDeleted, 'alert-success');
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);       
         // delete poll results
         } elseif (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {
-            Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
+            Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
             Session::Messages($langPollResultsDeleted, 'alert-success');
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
         //clone poll
@@ -162,8 +180,8 @@ function printPolls() {
     global $tool_content, $course_id, $course_code,
     $langTitle, $langCancel,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
-    $langEditChange, $langDelete, $langSurveyNotStarted,
-    $langDeactivate, $langPollHasEnded, $langActivate,
+    $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
+    $langDeactivate, $langPollHasEnded, $langActivate, $langResourceAccessUnlock,
     $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
@@ -199,11 +217,9 @@ function printPolls() {
                             label: '$langCancel',
                             className: 'btn-default'
                         }                        
-                    }
-                            
-                    
+                    }   
             });
-        });          
+        });
     </script>
     ";
     
@@ -220,7 +236,7 @@ function printPolls() {
         }        
         $query .= " AND
                     (assign_to_specific = '0' OR assign_to_specific != '0' AND pid IN
-                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d UNION SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
+                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d OR group_id IN ($gids_sql_ready))
                     )";
         $query_params[] = $uid;
     }
@@ -252,7 +268,9 @@ function printPolls() {
         $index_aa = 1;
         $k = 0;
         foreach ($result as $thepoll) {
-            $total_participants = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) AS total FROM poll_answer_record WHERE pid = ?d", $thepoll->pid)->total;
+            if (!$is_editor && !resource_access($thepoll->active, $thepoll->public)) {
+                continue;
+            }
             $visibility = $thepoll->active;
 
             if (($visibility) or ($is_editor)) {
@@ -280,10 +298,11 @@ function printPolls() {
                 $creator_id = $thepoll->creator_id;
                 $theCreator = uid_to_name($creator_id);
                 $pid = $thepoll->pid;
-                $countAnswers = Database::get()->querySingle("SELECT COUNT(DISTINCT(user_id)) as counter FROM poll_answer_record WHERE pid = ?d", $pid)->counter;
+                $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
                 // check if user has participated
-                $has_participated = Database::get()->querySingle("SELECT COUNT(*) as counter FROM poll_answer_record
-                                        WHERE user_id = ?d AND pid = ?d", $uid, $pid)->counter;
+                $has_participated = Database::get()->querySingle("SELECT COUNT(*) as counter FROM poll_user_record
+                        WHERE uid = ?d AND pid = ?d", $uid, $pid)->counter;
+
                 // check if poll has ended OR not strarted yet
                 $poll_ended = 0;
                 $poll_not_started = 0;
@@ -294,12 +313,16 @@ function printPolls() {
                 }
                 
                 if ($is_editor) {
+                    $lock_icon = "";
+                    if (!$thepoll->public) {
+                        $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
+                    }                    
                     $tool_content .= "
-                        <td><a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>";
+                        <td><a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>$lock_icon";
                 } else {
                     $tool_content .= "
                         <td>";
-                    if (($has_participated == 0) and $poll_ended == 0) {
+                    if ($uid == 0 || $has_participated == 0 && $poll_ended == 0) {
                         $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>";
                     } else {
                         $tool_content .= q($thepoll->name);
@@ -309,9 +332,14 @@ function printPolls() {
                         <td class='text-center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->start_date)), true) . "</td>
                         <td class='text-center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->end_date)), true) . "</td>";
                 if ($is_editor) {
+				
+                    if ($thepoll->type==0){
+					
                     $tool_content .= "
-                        <td class='text-center'>$countAnswers</td>
-                        <td class='text-center option-btn-cell'>" .action_button(array(
+                        <td class='text-center'>$total_participants</td>
+                        <td class='text-center option-btn-cell'>" .
+						
+							action_button(array(                       
                             array(
                                 'title' => $langEditChange,
                                 'icon' => 'fa-edit',
@@ -324,15 +352,21 @@ function printPolls() {
                             ),
                             array(
                                 'title' => $langUsage,
+                                'level' => 'primary',
                                 'icon' => 'fa-line-chart',
-                                'url' => "pollresults.php?course=$course_code&pid=$pid",
-                                'show' => $total_participants > 0
+                                'url' => "pollresults.php?course=$course_code&amp;pid=$pid",
+                                'disabled' => $total_participants == 0
                             ),
                             array(
                                 'title' => $langSee,
                                 'icon' => 'fa-search',
-                                'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid"
+                                'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&amp;pid=$pid"
                             ),
+                            array(
+                                'title' => $thepoll->public ? $langResourceAccessLock : $langResourceAccessUnlock,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($thepoll->public ? "access=limited" : "access=public")."&amp;pid=$pid",
+                                'icon' => $thepoll->public ? 'fa-lock' : 'fa-unlock',
+                                'show' => course_status($course_id) == COURSE_OPEN),
                             array(
                                 'title' => $langCreateDuplicate,
                                 'icon' => 'fa-copy',
@@ -355,19 +389,69 @@ function printPolls() {
                                 'confirm' => $langConfirmDelete                               
                             )                                   
                         ))."</td></tr>";
+					}
+					else {
+					$tool_content .= "
+                        <td class='text-center'>$total_participants</td>						
+                        <td class='text-center option-btn-cell'>" .
+					action_button(array(                       
+                            array(
+                                'title' => $visibility?  $langDeactivate : $langActivate,
+                                'icon' => $visibility ?  'fa-toggle-off' : 'fa-toggle-on',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"
+                            ),
+                            array(
+                                'title' => $langUsage,
+                                'level' => 'primary',
+                                'icon' => 'fa-line-chart',
+                                'url' => "pollresults.php?course=$course_code&pid=$pid",
+                                'disabled' => $total_participants == 0
+                            ),
+                            array(
+                                'title' => $langSee,
+                                'icon' => 'fa-search',
+                                'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid"
+                            ),
+                            array(
+                                'title' => $thepoll->public ? $langResourceAccessLock : $langResourceAccessUnlock,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($thepoll->public ? "access=limited" : "access=public")."&amp;pid=$pid",
+                                'icon' => $thepoll->public ? 'fa-lock' : 'fa-unlock',
+                                'show' => course_status($course_id) == COURSE_OPEN),                                        
+                            array(
+                                'title' => $langCreateDuplicate,
+                                'icon' => 'fa-copy',
+                                'icon-class' => 'warnLink',
+                                'icon-extra' => "data-pid='$pid'",
+                                'url' => "#"
+                            ),
+                            array(
+                                'title' => $langPurgeExercises,
+                                'icon' => 'fa-eraser',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
+                                'confirm' => $langConfirmPurgeExercises,
+                                'show' => $total_participants > 0
+                            ),                                        
+                            array(
+                                'title' => $langDelete,
+                                'icon' => 'fa-times',
+                                'class' => 'delete',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
+                                'confirm' => $langConfirmDelete                               
+                            )                                   
+                        ))."</td></tr>";
+					}
                 } else {
+                    //!(course_status($course_id) == COURSE_OPEN && $uid ==0)
                     $tool_content .= "
                         <td class='text-center'>";
-                    if ($has_participated == 0 && $poll_ended == 0 && $poll_not_started == 0) {
-                        $tool_content .= "$langHasNotParticipated";
+                    if ($poll_ended == 1) {
+                        $tool_content .= $langPollHasEnded;
+                    } else if ($poll_not_started == 1) {
+                        $tool_content .= $langSurveyNotStarted;
+                    } elseif ($has_participated > 0) {
+                        $tool_content .= $uid ? $langHasParticipated : 'Οι συμμετοχές είναι ανοιχτές';
                     } else {
-                        if ($poll_ended == 1) {
-                            $tool_content .= $langPollHasEnded;
-                        } elseif($poll_not_started == 1) {
-                            $tool_content .= $langSurveyNotStarted;                           
-                        } else {
-                            $tool_content .= $langHasParticipated;
-                        }
+                        $tool_content .= $uid ? $langHasNotParticipated : 'Οι συμμετοχές είναι ανοιχτές';
                     }
                     $tool_content .= "</td>";
                     $line_chart_link = ($has_participated && $thepoll->show_results)? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "<span class='fa fa-line-chart' data-toggle='tooltip' title='$langNoAccessPrivilages'></span>" ;

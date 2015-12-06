@@ -38,13 +38,13 @@ $navigation[] = array(
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if ($_POST['assign_type'] == 2) {
-        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     } elseif ($_POST['assign_type'] == 1) {
         $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
                                 WHERE user.id = course_user.user_id
                                 AND course_user.course_id = ?d AND course_user.status = 5
-                                AND user.id", $course_id);
+                                AND user.id ORDER BY surname", $course_id);
     }
     echo json_encode($data);
     exit;
@@ -87,20 +87,29 @@ if (isset($_POST['submitPoll'])) {
         $PollShowResults = (isset($_POST['PollShowResults'])) ? $_POST['PollShowResults'] : 0;
         $PollAssignToSpecific = $_POST['assign_to_specific'];
         $PollAssignees = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
+		$PollSurveyType = $_POST['survey_type'];
         if(isset($pid)) {
             Database::get()->query("UPDATE poll SET name = ?s,
                     start_date = ?t, end_date = ?t, description = ?s, 
                     end_message = ?s, anonymized = ?d, show_results = ?d,
-                    assign_to_specific = ?d
+					type = ?d, assign_to_specific = ?d
                     WHERE course_id = ?d AND pid = ?d", 
-                    $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollAssignToSpecific, $course_id, $pid);
+                    $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollSurveyType, $PollAssignToSpecific, $course_id, $pid);
             Database::get()->query("DELETE FROM poll_to_specific WHERE poll_id = ?d", $pid);
             Session::Messages($langPollEdited, 'alert-success');
         } else {
             $PollActive = 1;
             $pid = Database::get()->query("INSERT INTO poll
-                        (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results, assign_to_specific)
-                        VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollAssignToSpecific)->lastInsertID;         
+                        (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results,type, assign_to_specific)
+                        VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollSurveyType, $PollAssignToSpecific)->lastInsertID;         
+				
+
+			if($PollSurveyType == 1)
+				createcolles($pid);
+			
+			elseif($PollSurveyType == 2)
+				createattls($pid);
+				
             Session::Messages($langPollCreated, 'alert-success');
         }
         if ($PollAssignToSpecific && !empty($PollAssignees)) {
@@ -213,7 +222,7 @@ if (isset($_GET['pid'])) {
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
     $pageName = $poll->name;
-    $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE pid = ?d", $pid)->count;  
+    $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE pid = ?d", $pid)->count;  
     if ($attempt_counter>0) {
         Session::Messages($langThereAreParticipants);
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -329,6 +338,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $PollStart = Session::has('PollStart') ? Session::get('PollStart') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->start_date) : strtotime('now')));
     $PollEnd = Session::has('PollEnd') ? Session::get('PollEnd') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->end_date) : strtotime('now +1 year')));
     $PollAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : (isset($poll) ? $poll->assign_to_specific : 0);
+	$PollSurveyType = Session::has('PollType') ? Session::get('PollType') : (isset($poll) ? $poll->type : '');
 
     $link_back = isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code";
     $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
@@ -448,6 +458,29 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </div>
                 </div>
             </div>            
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langSurveyType:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='general_type' name='survey_type' value='0'".($PollSurveyType == 0 ? " checked" : "").">
+                        <span>$langGeneralSurvey </span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == 1 ? " checked" : "").">
+                        <span>$langCollesSurvey </span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == 2 ? " checked" : "").">
+                        <span>$langATTLSSurvey</span>
+                      </label>
+                    </div>                        
+                </div>
+            </div>
             <div class='form-group'>
               <div class='col-sm-offset-2 col-sm-10'>".
             form_buttons(array(
@@ -722,11 +755,20 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </div>";
 // View edit poll page     
 } else {  
+$tool_content .= $ToolSurveyType;
     $pageName = $langEditChange;
     $navigation[] = array(
             'url' => "admin.php?course=$course_code&amp;pid=$pid", 
             'name' => $poll->name
         );
+
+	if($poll->type == 0)
+		$poll_type = $langGeneralSurvey;
+	else if($poll->type == 1)
+		$poll_type = $langCollesSurvey." $langSurvey";
+	else if($poll->type == 2)
+		$poll_type = $langATTLSSurvey." $langSurvey";
+		
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -774,6 +816,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
+                    <strong>$langSurveyType:</strong>
+                </div>
+                <div class='col-sm-9'>
+					$poll_type
+                </div>                
+            </div>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
                     <strong>$langDescription:</strong>
                 </div>
                 <div class='col-sm-9'>
@@ -791,6 +841,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
           </div>          
         </div>        
     ";
+    
+	if($poll->type == 0){
+
     $tool_content .= action_bar(array(
         array('title' => $langNewQu,
               'level' => 'primary-label',
@@ -850,6 +903,18 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $tool_content .= "</tbody></table>";
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langPollEmpty</div>";
+    }
+	}
+  elseif ($poll->type==1){  
+		$tool_content .= "<div class='alert alert-info' role='alert'>
+                        $colles_desc
+                    </div>";
+	
+	}
+  elseif ($poll->type==2){  			
+		$tool_content .= "<div class='alert alert-info' role='alert'>
+                        $rate_scale
+                    </div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

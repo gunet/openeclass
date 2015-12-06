@@ -203,7 +203,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                             'icon' => 'fa-times')
                     ))
                ."</div>
-                <h3 class='panel-title'>".q($note->title)."</h3>
+                <div class='panel-title h3'>".q($note->title)."</div>
             </div>
             <div class='panel-body'>
                 <div class='label label-success'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</div><br><br>

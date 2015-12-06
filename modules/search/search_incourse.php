@@ -74,99 +74,236 @@ if (isset($_REQUEST['search_terms'])) {
 if (empty($search_terms)) {
 
     // display form
+    $langSearchCriteria;
     $tool_content .= "
-        <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+    <div class='form-wrapper'>
+        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
-        <legend>$langSearchCriteria</legend>
-        <table class='table-default'>
-        <tr>
-          <th class='left' width='120'>$langOR</th>
-          <td colspan='2'><input name='search_terms' type='text' size='80'/></td>
-        </tr>
-        <tr>
-          <th width='30%' class='left' valign='top' rowspan='4'>$langSearchIn</th>
-          <td width='35%'><input type='checkbox' name='announcements' checked='checked' />$langAnnouncements</td>
-          <td width='35%'><input type='checkbox' name='agenda' checked='checked' />$langAgenda</td>
-        </tr>
-        <tr>
-          <td><input type='checkbox' name='course_units' checked='checked' />$langCourseUnits</td>
-          <td><input type='checkbox' name='documents' checked='checked' />$langDoc</td>
-        </tr>
-        <tr>
-          <td><input type='checkbox' name='forums' checked='checked' />$langForums</td>
-          <td><input type='checkbox' name='exercises' checked='checked' />$langExercices</td>
-        </tr>
-       <tr>
-          <td><input type='checkbox' name='video' checked='checked' />$langVideo</td>
-          <td><input type='checkbox' name='links' checked='checked' />$langLinks</td>
-       </tr>
-       <tr>
-         <th>&nbsp;</th>
-         <td colspan='2' class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch' /></td>
-       </tr>
-       </table>
+        <div class='form-group'>
+            <label for='search_terms' class='col-sm-2 control-label'>$langOR:</label>
+            <div class='col-sm-10'>
+                <input name='search_terms' type='text' class='form-control'>
+            </div>                
+        </div>
+        <div class='form-group'>
+            <label for='search_terms' class='col-sm-2 control-label'>$langSearchIn:</label>
+            <div class='col-sm-10'>
+                <div class='row'>
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='announcements' checked>
+                            $langAnnouncements
+                          </label>
+                        </div>                       
+                    </div>
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='agenda' checked>
+                            $langAgenda
+                          </label>
+                        </div>                    
+                    </div>
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='course_units' checked>
+                            $langCourseUnits
+                          </label>
+                        </div>                    
+                    </div>
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='documents' checked>
+                            $langDoc
+                          </label>
+                        </div>                    
+                    </div> 
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='forums' checked>
+                            $langForums
+                          </label>
+                        </div>                    
+                    </div> 
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='exercises' checked>
+                            $langExercices
+                          </label>
+                        </div>                    
+                    </div>  
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='video' checked>
+                            $langVideo
+                          </label>
+                        </div>                    
+                    </div>  
+                    <div class='col-xs-6 col-sm-4'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='links' checked>
+                            $langLinks
+                          </label>
+                        </div>                    
+                    </div>                      
+                </div>
+            </div>                
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch'>
+            </div>
+        </div>
        </fieldset>
-       </form>";
+       </form>
+    </div>";
 } else {
-    // ResourceIndexers require course_id inside the input data array (POST, but we do not want to pass it through the form)
+    // prepare data in POST for feeding Indexer
     $_POST['course_id'] = $course_id;
-    // Search Terms might come from GET, but we want to pass it alltogether with POST in ResourceIndexers
     $_POST['search_terms'] = $search_terms;
     $idx = new Indexer();
-
-    $tool_content .= "
-        <div id=\"operations_container\">
-      <ul id='opslist'>
-        <li><a href='" . $_SERVER['SCRIPT_NAME'] . "'>$langNewSearch</a></li>
-      </ul>
-    </div>
-        <p class='sub_title1'>$langResults</p>";
-
+    $tool_content .= action_bar(array(
+                    array('title' => $langAdvancedSearch,
+                          'url' => $_SERVER['SCRIPT_NAME'],
+                          'icon' => 'fa-search',
+                          'level' => 'primary-label',
+                          'button-class' => 'btn-success',)));
+    
+    $announceHits = array();
+    $agendaHits = array();
+    $documentHits = array();
+    $exerciseHits = array();
+    $forumHits = array();
+    $forumTopicHits = array();
+    $forumPostHits = array();
+    $linkHits = array();
+    $videoHits = array();
+    $vlinkHits = array();
+    $unitHits = array();
+    $uresHits = array();
+    
+    $idxQ = Indexer::buildQuery($_POST);
+    $allHits = $idx->searchRaw($idxQ);
+    foreach ($allHits as $hit) {
+        switch ($hit->doctype) {
+            case Indexer::DOCTYPE_AGENDA:
+                if ($agenda && $hit->visible) {
+                    $agendaHits[] = $hit;
+                }
+                break;
+            case Indexer::DOCTYPE_ANNOUNCEMENT:
+                if ($announcements && $hit->visible) {
+                    $announceHits[] = $hit;
+                }
+                break;
+            case Indexer::DOCTYPE_DOCUMENT:
+                if ($documents && $hit->visible) {
+                    $documentHits[] = $hit;
+                }
+                break;
+            case Indexer::DOCTYPE_EXERCISE:
+                if ($exercises && $hit->visible) {
+                    $exerciseHits[] = $hit;
+                }
+                break;
+            case Indexer::DOCTYPE_FORUM:
+                if ($forums) {
+                    $forumHits[] = $hit;
+                }
+                break;
+            case Indexer::DOCTYPE_FORUMPOST:
+                if ($forums) {
+                    $forumPostHits[] = $hit;
+                }
+                break;
+            case Indexer::DOCTYPE_FORUMTOPIC:
+                if ($forums) {
+                    $forumTopicHits[] = $hit;
+                }
+                break;
+            case Indexer::DOCTYPE_LINK:
+                if ($links) {
+                    $linkHits[] = $hit;
+                }
+                break;
+            case Indexer::DOCTYPE_UNIT:
+                if ($course_units && $hit->visible) {
+                    $unitHits[] = $hit;
+                }
+                break;
+            case Indexer::DOCTYPE_UNITRESOURCE:
+                if ($course_units && $hit->visible) {
+                    $uresHits[] = $hit;
+                }
+                break;
+            case Indexer::DOCTYPE_VIDEO:
+                if ($video) {
+                    $videoHits[] = $hit;
+                }
+                break;
+            case Indexer::DOCTYPE_VIDEOLINK:
+                if ($video) {
+                    $vlinkHits[] = $hit;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    
+    $search_results = '';
+    $results_count = 0;
     // search in announcements
     if ($announcements) {
-        $announceHits = $idx->searchRaw(AnnouncementIndexer::buildQuery($_POST));
-
-        if (count($announceHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-              <table class='table-default sortable' align='left'>
+        $announceHitsCount = count($announceHits);
+        if ($announceHitsCount > 0) {
+            $results_count += $announceHitsCount;
+            $search_results .= "
+              <table class='table-default'>
               <tr>
                 <th colspan='2'>$langAnnouncements:</th>
               </tr>";
+            $announces = Database::get()->queryArray("SELECT id, title, content, date FROM announcement WHERE id in " . inIdsFromHits($announceHits));
+            $announcesUrls = urlsFromHits($announceHits);
 
             $numLine = 0;
-            foreach ($announceHits as $annHit) {
-                $announce = Database::get()->querySingle("SELECT title, content, date FROM announcement WHERE id = ?d", $annHit->pkid);
-
+            foreach ($announces as $announce) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                                   <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                                  <td><b><a href='" . $annHit->url . "'>" . q($announce->title) . "</a></b>&nbsp;&nbsp;
+                                  <td><a href='" . $announcesUrls[$announce->id] . "'>" . q($announce->title) . "</a>&nbsp;&nbsp;
                                   <small>(" . nice_format(claro_format_locale_date($dateFormatLong, strtotime($announce->date))) . ")
                                   </small><br />" . $announce->content . "</td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
 
     // search in agenda
     if ($agenda) {
-        $agendaHits = $idx->searchRaw(AgendaIndexer::buildQuery($_POST));
-
-        if (count($agendaHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                  <table width='99%' class='sortable' id='t2' align='left'>
-          <tr>
-            <th colspan='2' class='left'>$langAgenda:</th>
+        $agendaHitsCount = count($agendaHits);
+        if ($agendaHitsCount > 0) {
+            $results_count += $agendaHitsCount;
+            $search_results .= "
+                  <table class='table-default'>
+                  <tr>
+                    <th colspan='2' class='left'>$langAgenda:</th>
                   </tr>";
+            $agendas = Database::get()->queryArray("SELECT title, content, start, duration FROM agenda WHERE id in " . inIdsFromHits($agendaHits));
 
             $numLine = 0;
-            foreach ($agendaHits as $agHit) {
-                $agenda = Database::get()->querySingle("SELECT title, content, start, duration FROM agenda WHERE id = ?d", $agHit->pkid);                
-
+            foreach ($agendas as $agenda) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "
+                $search_results .= "
                   <tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
@@ -178,7 +315,7 @@ if (empty($search_terms)) {
                         $message = $langHours;
                     }
                 }
-                $tool_content .= "<span class=day>" .
+                $search_results .= "<span class='day'>" .
                         ucfirst(claro_format_locale_date($dateFormatLong, strtotime($agenda->start))) .
                         "</span> ($langHour: " . ucfirst(date("H:i", strtotime($agenda->start))) . ")<br />"
                         . q($agenda->title) . " (" . $langDuration . ": " . q($agenda->duration) . " $message) " . $agenda->content . "
@@ -186,256 +323,281 @@ if (empty($search_terms)) {
                   </tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
 
     // search in documents
     if ($documents) {
-        $documentHits = $idx->searchRaw(DocumentIndexer::buildQuery($_POST));
-
-        if (count($documentHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                  <table class='table-default sortable'>
+        $documentHitsCount = count($documentHits);
+        if ($documentHitsCount > 0) {
+            $results_count += $documentHitsCount;
+            $search_results .= "
+                  <table class='table-default'>
                   <tr>
                     <th colspan='2' class='left'>$langDoc:</th>
                   </tr>";
+            $documents = Database::get()->queryArray("SELECT id, filename, path, comment FROM document WHERE id in " . inIdsFromHits($documentHits));
+            $docsUrls = urlsFromHits($documentHits);
 
             $numLine = 0;
-            foreach ($documentHits as $docHit) {
-                $document = Database::get()->querySingle("SELECT filename, path, comment FROM document WHERE id = ?d", $docHit->pkid);
-
+            foreach ($documents as $document) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $add_comment = (empty($document->comment)) ? "" : "<br /><span class='smaller'> (" . q($document->comment) . ")</span>";
-                $tool_content .= "<a href='" . $docHit->url . "'>" . q($document->filename) . "</a> $add_comment </td></tr>";
+                $search_results .= "<a href='" . $docsUrls[$document->id] . "'>" . q($document->filename) . "</a> $add_comment </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
 
     // search in exercises
     if ($exercises) {
-        $exerciseHits = $idx->searchRaw(ExerciseIndexer::buildQuery($_POST));
-        if (count($exerciseHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='100%' class='sortable' id='t4' align='left'>
-        <tr>
-          <th colspan='2' class='left'>$langExercices:</th>
-                </tr>";
+        $exerciseHitsCount = count($exerciseHits);
+        if ($exerciseHitsCount > 0) {
+            $results_count += $exerciseHitsCount;
+            $search_results .= "
+                <table class='table-default'>
+                    <tr>
+                      <th colspan='2' class='left'>$langExercices:</th>
+                    </tr>";
+            $exercises = Database::get()->queryArray("SELECT id, title, description FROM exercise WHERE id in " . inIdsFromHits($exerciseHits));
+            $exerciseUrls = urlsFromHits($exerciseHits);
 
             $numLine = 0;
-            foreach ($exerciseHits as $exerciseHit) {
-                $exercise = Database::get()->querySingle("SELECT title, description FROM exercise WHERE id = ?d",$exerciseHit->pkid);
-
+            foreach ($exercises as $exercise) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $desc_text = (empty($exercise->description)) ? "" : "<br /> <span class='smaller'>" . $exercise->description . "</span>";
-                $tool_content .= "<a href='" . $exerciseHit->url . "'>" . q($exercise->title) . "</a>$desc_text </td></tr>";
+                $search_results .= "<a href='" . $exerciseUrls[$exercise->id] . "'>" . q($exercise->title) . "</a>$desc_text </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
 
     // search in forums
     if ($forums) {
-        $forumHits = $idx->searchRaw(ForumIndexer::buildQuery($_POST));
-        $forumTopicHits = $idx->searchRaw(ForumTopicIndexer::buildQuery($_POST));
-        $forumPostHits = $idx->searchRaw(ForumPostIndexer::buildQuery($_POST));
-
-        if (count($forumHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                        <table width='99%' class='sortable' id='t5' align='left'>
+        $forumHitsCount = count($forumHits);
+        if ($forumHitsCount > 0) {
+            $results_count += $forumHitsCount;
+            $search_results .= "
+                        <table class='table-default'>
                         <tr>
-                        <th colspan='2' class='left'>$langForum ($langCategories):</th>
+                          <th colspan='2' class='left'>$langForum ($langCategories):</th>
                         </tr>";
+            $forums = Database::get()->queryArray("SELECT id, name, `desc` FROM forum WHERE id in " . inIdsFromHits($forumHits));
+            $forumUrls = urlsFromHits($forumHits);
 
             $numLine = 0;
-            foreach ($forumHits as $forumHit) {
-                $forum = Database::get()->querySingle("SELECT name, `desc` FROM forum WHERE id = ?d",$forumHit->pkid);                
-
+            foreach ($forums as $forum) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $desc_text = (empty($forum->desc)) ? "" : "<br /><span class='smaller'>(" . q($forum->desc) . ")</span>";
-                $tool_content .= "<a href='" . $forumHit->url . "'>" . q($forum->name) . "</a> " . $desc_text . " </td></tr>";
+                $search_results .= "<a href='" . $forumUrls[$forum->id] . "'>" . q($forum->name) . "</a> " . $desc_text . " </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
 
         if (count($forumTopicHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='99%' class='sortable' id='t6' align='left'>
-        <tr>
-          <th colspan='2' class='left'>$langForum ($langSubjects - $langMessages):</th>
-                </tr>";
+            $search_results .= "
+                <table class='table-default'>
+                <tr>
+                  <th colspan='2' class='left'>$langForum ($langSubjects - $langMessages):</th>
+                        </tr>";
+            $ftopics = Database::get()->queryArray("SELECT id, title FROM forum_topic WHERE id in " . inIdsFromHits($forumTopicHits));
+            $ftopicUrls = urlsFromHits($forumTopicHits);
 
             $numLine = 0;
-            foreach ($forumTopicHits as $forumTopicHit) {
-                $ftopic = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $forumTopicHit->pkid);                
+            foreach ($ftopics as $ftopic) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
-                $tool_content .= "<strong>$langSubject</strong>: <a href='" . $forumTopicHit->url . "'>" . q($ftopic->title) . "</a>";
+                $search_results .= "<strong>$langSubject</strong>: <a href='" . $ftopicUrls[$ftopic->id] . "'>" . q($ftopic->title) . "</a>";
                 if (count($forumPostHits) > 0) {
-                    foreach ($forumPostHits as $forumPostHit) {
-                        $fpost = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $forumPostHit->pkid);                        
-                        $tool_content .= "<br /><strong>$langMessage</strong> <a href='" . $forumPostHit->url . "'>" . $fpost->post_text . "</a>";
+                    $fposts = Database::get()->queryArray("SELECT id, post_text FROM forum_post WHERE id in " . inIdsFromHits($forumPostHits));
+                    $fpostUrls = urlsFromHits($forumPostHits);
+                    foreach ($fposts as $fpost) {
+                        $search_results .= "<br /><strong>$langMessage</strong> <a href='" . $fpostUrls[$fpost->id] . "'>" . $fpost->post_text . "</a>";
                     }
                 }
-                $tool_content .= "</td></tr>";
+                $search_results .= "</td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
 
     // search in links
     if ($links) {
-        $linkHits = $idx->searchRaw(LinkIndexer::buildQuery($_POST));
-        if (count($linkHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='100%' class='sortable' id='t7' align='left'>
-        <tr>
+        $linkHitsCount = count($linkHits);
+        if ($linkHitsCount > 0) {
+            $results_count += $linkHitsCount;
+            $search_results .= "
+                <table class='table-default'>
+                <tr>
                   <th colspan='2' class='left'>$langLinks:</th>
                 </tr>";
+            $links = Database::get()->queryArray("SELECT id, title, description FROM link WHERE id in " . inIdsFromHits($linkHits));
+            $linkUrls = urlsFromHits($linkHits);
 
             $numLine = 0;
-            foreach ($linkHits as $linkHit) {
-                $link = Database::get()->querySingle("SELECT title, description FROM link WHERE id = ?d", $linkHit->pkid);                
-
+            foreach ($links as $link) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $desc_text = (empty($link->description)) ? "" : "<span class='smaller'>" . $link->description . "</span>";
-                $tool_content .= "<a href='" . $urlServer . "modules/link/go.php?course=" . course_id_to_code($linkHit->courseid) . "&amp;id=" . getIndirectReference($linkHit->pkid) . "&amp;url=" .
-                urlencode($linkHit->url) . "' target=_blank> " . q($link->title) . "</a> $desc_text </td></tr>";
+                $search_results .= "<a href='" . $linkUrls[$link->id] . "' target='_blank'> " . q($link->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
 
     // search in video and videolinks
     if ($video) {
-        $videoHits = $idx->searchRaw(VideoIndexer::buildQuery($_POST));
-        $vlinkHits = $idx->searchRaw(VideolinkIndexer::buildQuery($_POST));
-        if (count($videoHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='99%' class='sortable'  id='t8' align='left'>
-        <tr>
+        $videoHitsCount = count($videoHits);
+        if ($videoHitsCount > 0) {
+            $results_count += $videoHitsCount;
+            $search_results .= "
+                <table class='table-default'>
+                <tr>
                   <th colspan='2' class='left'>$langVideo:</th>
                 </tr>";
+            $videos = Database::get()->queryArray("SELECT id, title, description FROM video WHERE id in " . inIdsFromHits($videoHits));
+            $videoUrls = urlsFromHits($videoHits);
+            
             $numLine = 0;
-            foreach ($videoHits as $videoHit) {
-                $video = Database::get()->querySingle("SELECT title, description FROM video WHERE id = ?d", $videoHit->pkid);                
-
+            foreach ($videos as $video) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $desc_text = (empty($video->description)) ? "" : "<span class='smaller'>(" . q($video->description) . ")</span>";
-                $tool_content .= "<a href='" . $videoHit->url . "' target=_blank>" . q($video->title) . "</a> $desc_text </td></tr>";
+                $search_results .= "<a href='" . $videoUrls[$video->id] . "' target=_blank>" . q($video->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
-
-        if (count($vlinkHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                        <table width='99%' class='sortable' id='t9' align='left'>
+        
+        $vlinkHitsCount = count($vlinkHits);
+        if ($vlinkHitsCount > 0) {
+            $results_count += $vlinkHitsCount;
+            $search_results .= "
+                        <table class='table-default'>
                         <tr>
-                        <th colspan='2' class='left'>$langLinks:</th>
+                        <th colspan='2'>$langLinks:</th>
                         </tr>";
+            $vlinks = Database::get()->queryArray("SELECT id, title, description FROM videolink WHERE id in " . inIdsFromHits($vlinkHits));
+            $vlinkUrls = urlsFromHits($vlinkHits);
 
             $numLine = 0;
-            foreach ($vlinkHits as $vlinkHit) {
-                $vlink = Database::get()->querySingle("SELECT title, description FROM videolink WHERE id = ?d", $vlinkHit->pkid);
-
+            foreach ($vlinks as $vlink) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $desc_text = (empty($vlink->description)) ? "" : "<span class='smaller'>(" . q($vlink->description) . ")</span>";
-                $tool_content .= "<a href='" . $vlinkHit->url . "' target=_blank>" . q($vlink->title) . "</a><br /> $desc_text </td></tr>";
+                $search_results .= "<a href='" . $vlinkUrls[$vlink->id] . "' target=_blank>" . q($vlink->title) . "</a><br /> $desc_text </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
 
     // search in cours_units and unit_resources
     if ($course_units) {
-        $unitHits = $idx->searchRaw(UnitIndexer::buildQuery($_POST));
-        $uresHits = $idx->searchRaw(UnitResourceIndexer::buildQuery($_POST));
-
-        if (count($unitHits) > 0) {
-            $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table class='table-default sortable' align='left'>
+        $unitHitsCount = count($unitHits);
+        if ($unitHitsCount > 0) {
+            $results_count += $unitHitsCount;
+            $search_results .= "
+                <table class='table-default'>
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
                 </tr>";
+            $units = Database::get()->queryArray("SELECT id, title, comments FROM course_units WHERE id in " . inIdsFromHits($unitHits));
+            $unitUrls = urlsFromHits($unitHits);
 
             $numLine = 0;
-            foreach ($unitHits as $unitHit) {
-                $unit = Database::get()->querySingle("SELECT title, comments FROM course_units WHERE id = ?d", $unitHit->pkid);
+            foreach ($units as $unit) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $comments_text = (empty($unit->comments)) ? "" : " " . $unit->comments;
-                $tool_content .= "<a href='" . $unitHit->url . "'>" . q($unit->title) . "</a> $comments_text </td></tr>";
+                $search_results .= "<a href='" . $unitUrls[$unit->id] . "'>" . q($unit->title) . "</a> $comments_text </td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
-
-        if (count($uresHits) > 0) {
-            $tool_content .= "
-                <script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table class='table-default sortable' align='left'>
+        
+        $uresHitsCount = count($uresHits);
+        if ($uresHitsCount > 0) {
+            $results_count += $uresHitsCount;
+            $search_results .= "
+                <table class='table-default' align='left'>
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
                 </tr>";
+            $ureses = Database::get()->queryArray("SELECT id, title, comments FROM unit_resources WHERE id in " . inIdsFromHits($uresHits));
+            $uresUrls = urlsFromHits($uresHits);
 
             $numLine = 0;
-            foreach ($uresHits as $uresHit) {
-                $ures = Database::get()->querySingle("SELECT title, comments FROM unit_resources WHERE id = ?d", $uresHit->pkid);
-
+            foreach ($ureses as $ures) {
                 $class = ($numLine % 2) ? 'odd' : 'even';
-                $tool_content .= "<tr class='$class'>
+                $search_results .= "<tr class='$class'>
                         <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                         <td>";
                 $comments_text = (empty($ures->comments)) ? "" : "<span class='smaller'>" . $ures->comments . "</span>";
-                $tool_content .= q($ures->title) . " <a href='" . $uresHit->url . "'> $comments_text </a></td></tr>";
+                $search_results .= q($ures->title) . " <a href='" . $uresUrls[$ures->id] . "'> $comments_text </a></td></tr>";
                 $numLine++;
             }
-            $tool_content .= "</table>";
+            $search_results .= "</table>";
             $found = true;
         }
     }
+    $tool_content .= "
+        <div class='alert alert-info'>$langDoSearch:&nbsp;<label> '$search_terms'</label><br><small>$results_count $langResults2</small></div>
+    ";
+    $tool_content .= $search_results;
     // else ... no results found
     if ($found == false) {
         $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
     }
 } // end of search
 draw($tool_content, 2);
+
+function inIdsFromHits($hits) {
+    $hitIds = array();
+    foreach ($hits as $hit) {
+        $hitIds[] = intval($hit->pkid);
+    }
+    return "(" . implode(",", $hitIds) . ")";
+}
+
+function urlsFromHits($hits) {
+    $hitUrls = array();
+    foreach ($hits as $hit) {
+        $hitUrls[$hit->pkid] = $hit->url;
+    }
+    return $hitUrls;
+}

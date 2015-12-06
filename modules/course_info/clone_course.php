@@ -71,6 +71,6 @@ if (isset($_POST['create_restored_course'])) {
 }
 
 load_js('jstree3');
-list($js, $html) = $treeObj->buildCourseNodePicker();
+list($js, $html) = $treeObj->buildCourseNodePickerIndirect();
 $head_content .= $js;
 draw($tool_content, 2, null, $head_content);

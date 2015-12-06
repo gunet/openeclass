@@ -31,6 +31,8 @@ require_once 'include/log.php';
  * @return int Setting value
  */
 function setting_default($setting_id) {
+    global $langUnknownSetting;
+    
     $defaults = array(
         SETTING_BLOG_COMMENT_ENABLE => 1,
         SETTING_BLOG_STUDENT_POST => 1,
@@ -42,11 +44,14 @@ function setting_default($setting_id) {
         SETTING_COURSE_ANONYMOUS_RATING_ENABLE => 0,
         SETTING_FORUM_RATING_ENABLE => 0,
         SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE => 0,
-        SETTING_COURSE_ABUSE_REPORT_ENABLE => 0);
+        SETTING_COURSE_ABUSE_REPORT_ENABLE => 0,
+        SETTING_COURSE_USER_REQUESTS_DISABLE => 0,        
+        SETTING_GROUP_MULTIPLE_REGISTRATION => 0,
+        SETTING_GROUP_STUDENT_DESCRIPTION => 0);
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];
     } else {
-        die("Error: Unknown setting id: $setting_id\n");
+        die("$langUnknownSetting $setting_id\n");
     }
 }
 

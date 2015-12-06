@@ -40,9 +40,9 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
         $encoding = 'utf-8';
 
         $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', 'fpost_' . $fpost->id, $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('pk', Indexer::DOCTYPE_FORUMPOST . '_' . $fpost->id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('pkid', $fpost->id, $encoding));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', 'fpost', $encoding));
+        $doc->addField(Zend_Search_Lucene_Field::Keyword('doctype', Indexer::DOCTYPE_FORUMPOST, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('courseid', $fpost->course_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Keyword('topicid', $fpost->topic_id, $encoding));
         $doc->addField(Zend_Search_Lucene_Field::Text('content', Indexer::phonetics(strip_tags($fpost->post_text)), $encoding));
@@ -145,28 +145,6 @@ class ForumPostIndexer extends AbstractIndexer implements ResourceIndexerInterfa
         }
 
         $this->optimizeOrCommit($optimize);
-    }
-
-    /**
-     * Build a Lucene Query.
-     * 
-     * @param  array   $data      - The data (normally $_POST), needs specific array keys
-     * @param  boolean $anonymous - whether we build query for anonymous user access or not
-     * @return string             - the returned query string
-     */
-    public static function buildQuery($data, $anonymous = true) {
-        if (isset($data['search_terms']) && !empty($data['search_terms']) &&
-                isset($data['course_id']) && !empty($data['course_id'])) {
-            $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
-            $queryStr = '(';
-            foreach ($terms as $term) {
-                $queryStr .= 'content:' . $term . '* ';
-            }
-            $queryStr .= ') AND courseid:' . $data['course_id'] . ' AND doctype:fpost';
-            return $queryStr;
-        }
-
-        return null;
     }
 
 }

@@ -60,7 +60,7 @@ if ($submit) {
     $pu = $_POST['pu'];
     $pe = $_POST['pe'];
     $phone = $_POST['phone'];
-    $department = $_POST['department'];
+    $department = getDirectReference($_POST['department']);
     $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
     $lang = $session->validate_language_code(@$_POST['language']);
     
@@ -120,11 +120,36 @@ if ($submit) {
             "$langManager $siteName \n$langTel $telephone \n" .
             "$langEmail: $emailhelpdesk";
 
-    if (!send_mail('', '', '', $pe, $mailsubject, $emailbody, $charset)) {
-        $tool_content .= "<table width='99%'><tbody><tr>
-	    <td class='alert alert-danger' height='60'>
-	    <p>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></p>
-	    </td></tr></tbody></table>";
+    $header_html_topic_notify = "<!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$langYouAreReg $siteName</div>
+            </div>
+        </div>";
+
+    $body_html_topic_notify = "<!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div id='mail-body-inner'>
+                <p>$langSettings</p>
+                <ul id='forum-category'>
+                    <li><span><b>$lang_username:</b></span> <span>$pu</span></li>
+                    <li><span><b>$langPassword:</b></span> <span>$langPassSameAuth</span></li>
+                    <li><span><b>$langAddress $siteName:</b></span> <span>$urlServer</span></li>
+                    </ul>
+                    <p>$langProblem<br><br>$langFormula<br>$administratorName<br>$langManager $siteName<br>$langTel: $telephone<br>$langEmail: $emailhelpdesk</p>
+
+            </div>
+        </div>";
+
+    $emailbody = $header_html_topic_notify.$body_html_topic_notify;
+    $plainemailbody = html2text($emailbody);
+
+    if (!send_mail_multipart('', '', '', $pe, $mailsubject, $plainemailbody, $emailbody, $charset)) {
+        $tool_content .= "
+	    <div class='alert alert-danger'>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></div>
+	    ";
         draw($tool_content, 3);
         exit();
     }
@@ -214,7 +239,7 @@ if ($submit) {
         $tool_content .= "<div class='form-group'>
         <label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";           
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
+        list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</div></div>";

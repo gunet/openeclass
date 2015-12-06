@@ -145,11 +145,15 @@ if ($is_editor) {
                                            glossary_index = ?d WHERE id = ?d"
                 , $expand_glossary, (isset($_POST['index']) ? 1 : 0), $course_id);
         invalidate_glossary_cache();
-        $tool_content .= "<div class='alert alert-success'>$langQuotaSuccess</div>";
+        Session::Messages($langQuotaSuccess, 'alert-success');
+        redirect_to_home_page("modules/glossary/index.php?course=$course_code");
     }
 
     if (isset($_POST['submit'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        if (isset($_POST['url']) and !empty($_POST['url']) and !preg_match('/^\w+:/', $_POST['url'])) {
+            $_POST['url'] = 'http://' . $_POST['url'];
+        }
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('term', 'definition'));
         $v->rule('url', array('url'));
@@ -229,60 +233,39 @@ if ($is_editor) {
         Log::record($course_id, MODULE_ID_GLOSSARY, LOG_DELETE, array('id' => $id,
                                                                       'term' => $term));
         if ($q and $q->affectedRows) {
-            $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div><br />";
+            Session::Messages($langGlossaryDeleted, 'alert-success');
         }
-        draw($tool_content, 2, null, $head_content);
-        exit;
+        redirect_to_home_page("modules/glossary/index.php?course=$course_code");
     }       
 
     // display configuration form
     if (isset($_GET['config'])) {
         $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
         $pageName = $langConfig;
-        $checked_expand = $expand_glossary ? ' checked="1"' : '';
-        $checked_index = $glossary_index ? ' checked="1"' : '';
-        $tool_content .= "<div class='form-wrapper'>
-                <form class='form-horizontal' role='form' action='$base_url' method='post'>
-                    <div class='form-group'>
-                        <div class='col-sm-12'>            
-                            <div class='checkbox'>
-                              <label>
-                                <input type='checkbox' name='index' value='yes'$checked_index>$langGlossaryIndex                               
-                              </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <div class='col-sm-12'>            
-                            <div class='checkbox'>
-                              <label>
-                                <input type='checkbox' name='expand' value='yes'$checked_expand>$langGlossaryExpand                               
-                              </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <div class='col-sm-12'>".form_buttons(array(
-                                array(
-                                    'text' => $langSave,
-                                    'name' => 'submit_config',
-                                    'value'=> $langSubmit
-                                ),
-                                array(
-                                    'href' => $base_url
-                                )
-                            ))
-                            ."</div>
-                    </div>   
-                ". generate_csrf_token_form_field() ."                
-                </form>
-              </div>";
+        
+        $data['base_url'] = $base_url;
+        $data['checked_expand'] = $expand_glossary ? ' checked="1"' : '';
+        $data['checked_index'] = $glossary_index ? ' checked="1"' : '';
+        $data['form_buttons'] = form_buttons(array(
+                            array(
+                                'text' => $langSave,
+                                'name' => 'submit_config',
+                                'value'=> $langSubmit
+                            ),
+                            array(
+                                'href' => $base_url
+                            )
+                        ));
+        echo view('modules.glossary.config', $data);
+        exit;
     }
 
     // display form for adding or editing a glossary term
     if (isset($_GET['add']) or isset($_GET['edit'])) {
-        $navigation[] = array('url' => $base_url,
-            'name' => $langGlossary);
+        $navigation[] = array(
+                'url' => $base_url,
+                'name' => $langGlossary
+            );
         $html_id = '';
         $category_id = 'none';
         if (isset($_GET['add'])) {

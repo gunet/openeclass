@@ -73,7 +73,7 @@ function display_attendances() {
             $tool_content .= "
                     <tr $row_class>
                         <td>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>".$a->title."</a>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>".q($a->title)."</a>
                         </td>
                         <td>$start_date</td>
                         <td>$end_date</td>";
@@ -127,7 +127,7 @@ function register_user_presences($attendance_id, $actID) {
            $langAm, $langAttendanceBooking, $langID, $langAttendanceEdit, $langCancel;
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
-    $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
+    $tool_content .= "<div class='alert alert-info'>" . q($result->title) . "</div>";
     //record booking
     if(isset($_POST['bookUsersToAct'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -999,7 +999,7 @@ function attendance_settings($attendance_id) {
                     <div class='form-group".($title_error ? " has-error" : "")."'>
                         <label class='col-xs-12'>$langTitle</label>                           
                         <div class='col-xs-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
+                            <input class='form-control' type='text' placeholder='$langTitle' name='title' value='".q($title)."'>
                             <span class='help-block'>$title_error</span>
                         </div>
                     </div>
@@ -1519,12 +1519,11 @@ function delete_attendance_user($attendance_id, $userid) {
 function clone_attendance($attendance_id) {
         
     global $course_id, $langCopyDuplicate;
-    
-    $newTitle = get_attendance_title($attendance_id).$langCopyDuplicate;
-    $newLimit = get_attendance_limit($attendance_id);
+    $attendance = Database::get()->querySingle("SELECT * FROM attendance WHERE id = ?d", $attendance_id);
+    $newTitle = $attendance->title.' '.$langCopyDuplicate;
     $new_attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d,
                                                       students_semester = 1, `limit` = ?d,
-                                                      active = 1, title = ?s", $course_id, $newLimit, $newTitle)->lastInsertID;
+                                                      active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $attendance->limit, $newTitle, $attendance->start_date, $attendance->end_date)->lastInsertID;
     Database::get()->query("INSERT INTO attendance_activities (attendance_id, title, date, description, module_auto_id, module_auto_type, auto)
                                 SELECT $new_attendance_id, title, " . DBHelper::timeAfter() . ", description, module_auto_id, module_auto_type, auto 
                                  FROM attendance_activities WHERE attendance_id = ?d", $attendance_id);

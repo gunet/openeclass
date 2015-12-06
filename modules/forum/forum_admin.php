@@ -245,8 +245,9 @@ elseif (isset($_GET['forumcatadd'])) {
 }
 
 // forum go add
-elseif (isset($_GET['forumgoadd'])) {        
+elseif (isset($_GET['forumgoadd'])) {
     $ctg = category_name($cat_id);
+    $title = course_id_to_title($course_id);
     $forid = Database::get()->query("INSERT INTO forum (name, `desc`, cat_id, course_id)
                                 VALUES (?s, ?s, ?d, ?d)"
             , $_POST['forum_name'], $_POST['forum_desc'], $cat_id, $course_id)->lastInsertID;
@@ -268,7 +269,37 @@ elseif (isset($_GET['forumgoadd'])) {
             $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
             $body_topic_notify .= $unsubscribe . $linkhere;
             $emailaddr = uid_to_email($r->user_id);
-            send_mail('', '', '', $emailaddr, $subject_notify, $body_topic_notify, $charset);
+
+            $header_html_topic_notify = "<!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$subject_notify</div>
+                </div>
+            </div>";
+
+            $body_html_topic_notify = "<!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div><b>$langMailBody</b></div>
+                <div id='mail-body-inner'>
+                    $langBodyCatNotify $langInCat '$ctg' $gunet.
+                </div>
+            </div>";
+
+            $footer_html_topic_notify = "<!-- Footer Section -->
+            <div id='mail-footer'>
+                <br>
+                <div>
+                    <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                </div>
+            </div>";
+
+            $html_topic_notify = $header_html_topic_notify.$body_html_topic_notify.$footer_html_topic_notify;
+
+            $plain_message = html2text($html_topic_notify);
+
+            send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_message, $html_topic_notify, $charset);
         }
     }
     // end of notification

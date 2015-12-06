@@ -52,7 +52,6 @@ define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
 
 require_once 'include/baseTheme.php';
-require_once 'include/CAS/CAS.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/textLib.inc.php';
 
@@ -73,8 +72,8 @@ if (isset($_SESSION['shib_uname'])) {
     // authenticate via cas
     shib_cas_login('cas');
 } elseif (isset($_GET['provider'])) {
-        //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
-        hybridauth_login();
+    //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
+    hybridauth_login();
 } else {
     // normal authentication
     process_login();
@@ -238,6 +237,14 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                           <div class='wrapper-login-option'>";
         
         $show_seperator = count($authLink) > 1;
+        if (count($authLink) > 3) {
+            // home page login form with more than 3 buttons not supported
+            $authLink = array($authLink[0]);
+            $show_buttons = false;
+        } else {
+            $show_buttons = true;
+        }
+            
         foreach ($authLink as $i => $l) {
             $tool_content .= "<div class='$l[class]'>
                                 <h2>$langUserLogin</h2>
@@ -250,10 +257,14 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                                   <div class='or-separator'><span>$langOr</span></div>
                                   <div class='alt_login text-center'>
                                     <span>";
-                foreach ($authLink as $j => $otherAuth) {
-                    if ($j != $i) {
-                        $tool_content .= "<button type='button' data-target='$j' class='option-btn-login hide'>$otherAuth[title]</button>";
+                if ($show_buttons) {
+                    foreach ($authLink as $j => $otherAuth) {
+                        if ($j != $i) {
+                            $tool_content .= "<button type='button' data-target='$j' class='option-btn-login hide'>$otherAuth[title]</button>";
+                        }
                     }
+                } else {
+                    $tool_content .= "<a href='{$urlAppend}main/login_form.php' class='btn btn-default option-btn-login'>$langAlternateLogin</a>";
                 }
                 $tool_content .= "
                                     </span>
@@ -301,12 +312,15 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                 $langInfoAbout
             </div>
         </div>";
-
+        $home_main_area = new \Widgets\WidgetArea(HOME_PAGE_MAIN);
+        foreach ($home_main_area->getWidgets() as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }   
         // display admin announcements
         if(!empty($ann_content)) {
-            $tool_content .= "<h3 class='content-title'>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>
-                    <i class='fa fa-rss-square'></i>
-                    </a></h3>";
+            $tool_content .= "<div class='content-title h3'>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>
+                    <span class='fa fa-rss-square'></span>
+                    </a></div>";
             $tool_content .= "<div class='panel'>
                             <div class='panel-body'>";
             $tool_content .= $ann_content;
@@ -374,7 +388,10 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                 </div></div>
             </div>";
     }
-
+        $home_page_sidebar = new \Widgets\WidgetArea(HOME_PAGE_SIDEBAR);
+        foreach ($home_page_sidebar->getWidgets() as $key => $widget) {
+            $tool_content .= $widget->run($key);
+        }  
         $tool_content .= "</div>
         </div>";
     draw($tool_content, 0, null, $head_content);

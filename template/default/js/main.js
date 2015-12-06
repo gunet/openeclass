@@ -27,7 +27,9 @@ function act_confirm() {
 }
 
 function popover_init() {
-    $('.glossary').popover();
+    $('[data-toggle="popover"]').on('click',function(e){
+        e.preventDefault();
+    }).popover();
     var click_in_process = false;
     var hidePopover = function () {
         if (!click_in_process) {
@@ -38,8 +40,8 @@ function popover_init() {
         $(this).popover('toggle');
         $('#action_button_menu').parent().parent().addClass('menu-popover');
     };
-    $('[data-toggle="popover"]').popover().on('click', togglePopover).on('blur', hidePopover);
-    $('[data-toggle="popover"]').on('shown.bs.popover', function () {
+    $('.menu-popover').popover().on('click', togglePopover).on('blur', hidePopover);
+    $('.menu-popover').on('shown.bs.popover', function () {
         $('.popover').mousedown(function () {
             click_in_process = true;
         });
@@ -51,18 +53,49 @@ function popover_init() {
     });
 
 }
+
 function tooltip_init() {
     $('[data-toggle="tooltip"]').tooltip({container: 'body'});
 }
-function sidebar_reset() {
 
+function truncate_toggle(click_elem, truncated, not_truncated, container_elem){
+
+    /*
+    / click_elem -> The element where the click event handler will be attached
+    / truncated -> The element in dom which is hidden and stores the truncated text
+    / not_truncated -> The element in dom which is hidden and stores the full text
+    / container_elem -> The container of the toggled text
+    */
+
+    var show_text = function(e) {
+
+        var expand = $(container_elem).hasClass('is_less');
+
+        if(expand) {
+            // Get the full text stored in the hidden div with id -> not_truncated
+            var full_text = $(not_truncated).html();
+            $(container_elem).html(full_text);
+            $(container_elem).toggleClass('is_less');
+        } else {
+            // Get the truncated text stored in the hidden div with id -> truncated
+            var less_text = $(truncated).html();
+            $(container_elem).html(less_text);
+            $(container_elem).toggleClass('is_less');
+        }
+        e.preventDefault();
+    }
+
+    $(document).on("click", click_elem, show_text);
 }
+
 $(document).ready(function () {
 
     // Initialisations
     act_confirm();
     tooltip_init();
     popover_init();
+    truncate_toggle('.more_less_btn', '#truncated', '#not_truncated', '#descr_content');
+
 
     // Login Box
     var width;

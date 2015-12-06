@@ -230,7 +230,7 @@ if (!isset($_POST['submit'])) {
             <div class='form-group'>
               <label for='UserFac' class='col-sm-2 control-label'>$langFaculty:</label>
                 <div class='col-sm-10'>";
-            list($js, $html) = $tree->buildUserNodePicker();
+            list($js, $html) = $tree->buildUserNodePickerIndirect();
             $head_content .= $js;
             $tool_content .= $html;
             $tool_content .= "</div>
@@ -255,8 +255,8 @@ if (!isset($_POST['submit'])) {
         if(!empty($provider_name) && !empty($provider_id)) {
             $tool_content .= "<div class='form-group'>
               <label for='UserLang' class='col-sm-2 control-label'>$langProviderConnectWith:</label>
-              <div class='col-sm-10'>
-                <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q(ucfirst($provider_name)) . "<br /><small>$langProviderConnectWithTooltip</small>
+              <div class='col-sm-10'><p class='form-control-static'>
+                <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "'>&nbsp;" . q(ucfirst($provider_name)) . "<br /><small>$langProviderConnectWithTooltip</small></p>
               </div>
               <div class='col-sm-offset-2 col-sm-10'>
                 <input type='hidden' name='provider' value='" . $provider_name . "' />
@@ -303,7 +303,7 @@ if (!isset($_POST['submit'])) {
         $departments = array();
         $missing = false;
     } else {
-        $departments = $_POST['department'];
+        $departments = arrayValuesDirect($_POST['department']);
     }
 
     $registration_errors = array();
@@ -450,19 +450,41 @@ if (!isset($_POST['submit'])) {
         $telephone = get_config('phone');
         $administratorName = get_config('admin_name');
         $emailhelpdesk = get_config('email_helpdesk');
-        $emailbody = "$langDestination $givenname_form $surname_form\n" .
-                "$langYouAreReg $siteName $langSettings $uname\n" .
-                "$langPass: $password\n$langAddress $siteName: " .
-                "$urlServer\n" .
-                ($vmail ? "\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer" . "modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id . "\n" : "") .
-                "$langProblem\n$langFormula\n" .
-                "$administratorName\n" .
-                "$langManager $siteName \n$langTel $telephone\n" .
-                "$langEmail: $emailhelpdesk";
+
+
+        $header_html_topic_notify = "<!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$langYouAreReg $siteName</div>
+            </div>
+        </div>";
+
+        $body_html_topic_notify = "<!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div id='mail-body-inner'>
+            <p>$langSettings</p>
+                <ul id='forum-category'>
+                    <li><span><b>$langUsername:</b></span> <span>$uname</span></li>
+                    <li><span><b>$langPass:</b></span> <span>$password</span></li>
+                    <li><span><b>$langAddress $siteName:</b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
+                </ul>
+                <p>".($vmail ? "$langMailVerificationSuccess<br>$langMailVerificationClick <a href='{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id'>{$urlServer}modules/auth/mail_verify.php?h=$hmac&amp;id=$last_id</a>" : "") .
+                "<br><br>"."$langProblem"."<br><br><br>"."$langFormula" .
+                "<br>"."$administratorName" ."<br><br>".
+                "$langTel: $telephone " ."<br>".
+                "$langEmail: $emailhelpdesk"."</p>
+            </div>
+        </div>";
+
+        $html_topic_notify = $header_html_topic_notify.$body_html_topic_notify;
+
+        $emailPlainBody = html2text($html_topic_notify);
 
         // send email to user
         if (!empty($email)) {
-            send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+            send_mail_multipart('', '', '', $email, $emailsubject, $emailPlainBody, $html_topic_notify, $charset);
             $user_msg = $langPersonalSettings;
         } else {
             $user_msg = $langPersonalSettingsLess;
@@ -519,4 +541,5 @@ if (!isset($_POST['submit'])) {
     }
 } // end of registration
 
+unset($uid);
 draw($tool_content, 0, null, $head_content);
