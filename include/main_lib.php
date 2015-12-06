@@ -291,11 +291,11 @@ function load_js($file, $init='') {
         } elseif ($file == 'datatables_buttons_foundation') {
             $file = 'datatables/extensions/Buttons/js/buttons.foundation.js';
             $head_content .= css_link('datatables/extensions/Buttons/css/buttons.foundation.css');
-   } elseif ($file == 'RateIt') {
+    } elseif ($file == 'RateIt') {
         $file = 'jquery.rateit.min.js';
-        } elseif ($file == 'waypoints-infinite') {
-            $head_content .= js_link('waypoints/jquery.waypoints.min.js');
-            $file = 'waypoints/shortcuts/infinite.min.js';
+    } elseif ($file == 'waypoints-infinite') {
+        $head_content .= js_link('waypoints/jquery.waypoints.min.js');
+        $file = 'waypoints/shortcuts/infinite.min.js';
     } elseif ($file == 'select2') {
         $head_content .= css_link('select2-3.5.1/select2.css') .
             css_link('select2-3.5.1/select2-bootstrap.css') .
@@ -1105,38 +1105,38 @@ function cp737_to_utf8($s) {
         return $cp737;
     } else {
         // ... if it fails, fall back to manual conversion
-        return strtr($s, array("\x80" => 'Ξ‘', "\x81" => 'Ξ’', "\x82" => 'Ξ“', "\x83" => 'Ξ”',
-                               "\x84" => 'Ξ•', "\x85" => 'Ξ–', "\x86" => 'Ξ—', "\x87" => 'Ξ',
-                               "\x88" => 'Ξ™', "\x89" => 'Ξ', "\x8a" => 'Ξ›', "\x8b" => 'Ξ',
-                               "\x8c" => 'Ξ', "\x8d" => 'Ξ', "\x8e" => 'Ξ', "\x8f" => 'Ξ ',
-                               "\x90" => 'Ξ΅', "\x91" => 'Ξ£', "\x92" => 'Ξ¤', "\x93" => 'Ξ¥',
-                               "\x94" => 'Ξ¦', "\x95" => 'Ξ§', "\x96" => 'Ξ¨', "\x97" => 'Ξ©',
-                               "\x98" => 'Ξ±', "\x99" => 'Ξ²', "\x9a" => 'Ξ³', "\x9b" => 'Ξ΄',
-                               "\x9c" => 'Ξµ', "\x9d" => 'Ξ¶', "\x9e" => 'Ξ·', "\x9f" => 'ΞΈ',
-                               "\xa0" => 'ΞΉ', "\xa1" => 'ΞΊ', "\xa2" => 'Ξ»', "\xa3" => 'ΞΌ',
-                               "\xa4" => 'Ξ½', "\xa5" => 'ΞΎ', "\xa6" => 'ΞΏ', "\xa7" => 'Ο€',
-                               "\xa8" => 'Ο', "\xa9" => 'Οƒ', "\xaa" => 'Ο‚', "\xab" => 'Ο„',
-                               "\xac" => 'Ο…', "\xad" => 'Ο†', "\xae" => 'Ο‡', "\xaf" => 'Ο',
-                               "\xb0" => 'β–‘', "\xb1" => 'β–’', "\xb2" => 'β–“', "\xb3" => 'β”‚',
-                               "\xb4" => 'β”¤', "\xb5" => 'β•΅', "\xb6" => 'β•Ά', "\xb7" => 'β•–',
-                               "\xb8" => 'β••', "\xb9" => 'β•£', "\xba" => 'β•‘', "\xbb" => 'β•—',
-                               "\xbc" => 'β•', "\xbd" => 'β•', "\xbe" => 'β•›', "\xbf" => 'β”',
-                               "\xc0" => 'β””', "\xc1" => 'β”΄', "\xc2" => 'β”¬', "\xc3" => 'β”',
-                               "\xc4" => 'β”€', "\xc5" => 'β”Ό', "\xc6" => 'β•', "\xc7" => 'β•',
-                               "\xc8" => 'β•', "\xc9" => 'β•”', "\xca" => 'β•©', "\xcb" => 'β•¦',
-                               "\xcc" => 'β• ', "\xcd" => 'β•', "\xce" => 'β•¬', "\xcf" => 'β•§',
-                               "\xd0" => 'β•¨', "\xd1" => 'β•¤', "\xd2" => 'β•¥', "\xd3" => 'β•™',
-                               "\xd4" => 'β•', "\xd5" => 'β•’', "\xd6" => 'β•“', "\xd7" => 'β•«',
-                               "\xd8" => 'β•', "\xd9" => 'β”', "\xda" => 'β”', "\xdb" => 'β–',
-                               "\xdc" => 'β–„', "\xdd" => 'β–', "\xde" => 'β–', "\xdf" => 'β–€',
-                               "\xe0" => 'Ο‰', "\xe1" => 'Ξ¬', "\xe2" => 'Ξ­', "\xe3" => 'Ξ®',
-                               "\xe4" => 'Ο', "\xe5" => 'Ξ―', "\xe6" => 'Ο', "\xe7" => 'Ο',
-                               "\xe8" => 'Ο‹', "\xe9" => 'Ο', "\xea" => 'Ξ†', "\xeb" => 'Ξ',
-                               "\xec" => 'Ξ‰', "\xed" => 'Ξ', "\xee" => 'Ξ', "\xef" => 'Ξ',
-                               "\xf0" => 'Ξ', "\xf1" => 'Β±', "\xf2" => 'β‰¥', "\xf3" => 'β‰¤',
-                               "\xf4" => 'Ξ', "\xf5" => 'Ξ«', "\xf6" => 'Γ·', "\xf7" => 'β‰',
-                               "\xf8" => 'Β°', "\xf9" => 'β™', "\xfa" => 'Β·', "\xfb" => 'β',
-                               "\xfc" => 'βΏ', "\xfd" => 'Β²', "\xfe" => 'β– ', "\xff" => 'Β '));
+        return strtr($s, array("\x80" => 'Α', "\x81" => 'Β', "\x82" => 'Γ', "\x83" => 'Δ',
+                               "\x84" => 'Ε', "\x85" => 'Ζ', "\x86" => 'Η', "\x87" => 'Θ',
+                               "\x88" => 'Ι', "\x89" => 'Κ', "\x8a" => 'Λ', "\x8b" => 'Μ',
+                               "\x8c" => 'Ν', "\x8d" => 'Ξ', "\x8e" => 'Ο', "\x8f" => 'Π',
+                               "\x90" => 'Ρ', "\x91" => 'Σ', "\x92" => 'Τ', "\x93" => 'Υ',
+                               "\x94" => 'Φ', "\x95" => 'Χ', "\x96" => 'Ψ', "\x97" => 'Ω',
+                               "\x98" => 'α', "\x99" => 'β', "\x9a" => 'γ', "\x9b" => 'δ',
+                               "\x9c" => 'ε', "\x9d" => 'ζ', "\x9e" => 'η', "\x9f" => 'θ',
+                               "\xa0" => 'ι', "\xa1" => 'κ', "\xa2" => 'λ', "\xa3" => 'μ',
+                               "\xa4" => 'ν', "\xa5" => 'ξ', "\xa6" => 'ο', "\xa7" => 'π',
+                               "\xa8" => 'ρ', "\xa9" => 'σ', "\xaa" => 'ς', "\xab" => 'τ',
+                               "\xac" => 'υ', "\xad" => 'φ', "\xae" => 'χ', "\xaf" => 'ψ',
+                               "\xb0" => '░', "\xb1" => '▒', "\xb2" => '▓', "\xb3" => '│',
+                               "\xb4" => '┤', "\xb5" => '╡', "\xb6" => '╢', "\xb7" => '╖',
+                               "\xb8" => '╕', "\xb9" => '╣', "\xba" => '║', "\xbb" => '╗',
+                               "\xbc" => '╝', "\xbd" => '╜', "\xbe" => '╛', "\xbf" => '┐',
+                               "\xc0" => '└', "\xc1" => '┴', "\xc2" => '┬', "\xc3" => '├',
+                               "\xc4" => '─', "\xc5" => '┼', "\xc6" => '╞', "\xc7" => '╟',
+                               "\xc8" => '╚', "\xc9" => '╔', "\xca" => '╩', "\xcb" => '╦',
+                               "\xcc" => '╠', "\xcd" => '═', "\xce" => '╬', "\xcf" => '╧',
+                               "\xd0" => '╨', "\xd1" => '╤', "\xd2" => '╥', "\xd3" => '╙',
+                               "\xd4" => '╘', "\xd5" => '╒', "\xd6" => '╓', "\xd7" => '╫',
+                               "\xd8" => '╪', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
+                               "\xdc" => '▄', "\xdd" => '▌', "\xde" => '▐', "\xdf" => '▀',
+                               "\xe0" => 'ω', "\xe1" => 'ά', "\xe2" => 'έ', "\xe3" => 'ή',
+                               "\xe4" => 'ϊ', "\xe5" => 'ί', "\xe6" => 'ό', "\xe7" => 'ύ',
+                               "\xe8" => 'ϋ', "\xe9" => 'ώ', "\xea" => 'Ά', "\xeb" => 'Έ',
+                               "\xec" => 'Ή', "\xed" => 'Ί', "\xee" => 'Ό', "\xef" => 'Ύ',
+                               "\xf0" => 'Ώ', "\xf1" => '±', "\xf2" => '≥', "\xf3" => '≤',
+                               "\xf4" => 'Ϊ', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
+                               "\xf8" => '°', "\xf9" => '∙', "\xfa" => '·', "\xfb" => '√',
+                               "\xfc" => 'ⁿ', "\xfd" => '²', "\xfe" => '■', "\xff" => ' '));
     }
 }
 
@@ -1204,24 +1204,24 @@ function resource_access($visible, $public) {
 # If you add any new languages, make sure they are defined in the
 # next array as well
 $native_language_names_init = array(
-    'el' => 'Ξ•Ξ»Ξ»Ξ·Ξ½ΞΉΞΊΞ¬',
+    'el' => 'Ελληνικά',
     'en' => 'English',
-    'es' => 'EspaΓ±ol',
-    'cs' => 'Δesky',
+    'es' => 'Español',
+    'cs' => 'Česky',
     'sq' => 'Shqip',
-    'bg' => 'Π‘ΡΠ»Π³Π°Ρ€ΡΠΊΠΈ',
-    'ca' => 'CatalΓ ',
+    'bg' => 'Български',
+    'ca' => 'Català',
     'da' => 'Dansk',
     'nl' => 'Nederlands',
     'fi' => 'Suomi',
-    'fr' => 'FranΓ§ais',
+    'fr' => 'Français',
     'de' => 'Deutsch',
-    'is' => 'Γslenska',
+    'is' => 'Íslenska',
     'it' => 'Italiano',
-    'jp' => 'ζ—¥ζ¬θ',
+    'jp' => '日本語',
     'pl' => 'Polski',
-    'ru' => 'Π ΡƒΡΡΠΊΠΈΠΉ',
-    'tr' => 'TΓΌrkΓ§e',
+    'ru' => 'Русский',
+    'tr' => 'Türkçe',
     'sv' => 'Svenska',
     'xx' => 'Variable Names',
 );
@@ -1660,7 +1660,7 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM comments WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM blog_post WHERE user_id = ?d", $u);
             Database::get()->query("DELETE wall_post_resources FROM wall_post_resources INNER JOIN wall_post ON wall_post_resources.post_id = wall_post.id
-                            WHERE wall_post.user_id = ?d", $u);
+                                    WHERE wall_post.user_id = ?d", $u);
             Database::get()->query("DELETE FROM wall_post WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM abuse_report WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
@@ -2237,7 +2237,7 @@ function set_glossary_cache() {
             $_SESSION['glossary_course_id'] != $course_id) {
         if (get_glossary_terms($course_id) and count($_SESSION['glossary']) > 0) {
             // Test whether \b works correctly, workaround if not
-            if (preg_match('/Ξ±\b/u', 'Ξ±')) {
+            if (preg_match('/α\b/u', 'α')) {
                 $spre = $spost = '\b';
             } else {
                 $spre = '(?<=[\x01-\x40\x5B-\x60\x7B-\x7F]|^)';
@@ -2294,11 +2294,11 @@ function odd_even($k, $extra = '') {
 function greek_to_latin($string) {
     return str_replace(
             array(
-        'Ξ±', 'Ξ²', 'Ξ³', 'Ξ΄', 'Ξµ', 'Ξ¶', 'Ξ·', 'ΞΈ', 'ΞΉ', 'ΞΊ', 'Ξ»', 'ΞΌ', 'Ξ½', 'ΞΎ', 'ΞΏ', 'Ο€',
-        'Ο', 'Οƒ', 'Ο„', 'Ο…', 'Ο†', 'Ο‡', 'Ο', 'Ο‰', 'Ξ‘', 'Ξ’', 'Ξ“', 'Ξ”', 'Ξ•', 'Ξ–', 'Ξ—', 'Ξ',
-        'Ξ™', 'Ξ', 'Ξ›', 'Ξ', 'Ξ', 'Ξ', 'Ξ', 'Ξ ', 'Ξ΅', 'Ξ£', 'Ξ¤', 'Ξ¥', 'Ξ¦', 'Ξ§', 'Ξ¨', 'Ξ©',
-        'Ο‚', 'Ξ¬', 'Ξ­', 'Ξ®', 'Ξ―', 'Ο', 'Ο', 'Ο', 'Ξ†', 'Ξ', 'Ξ‰', 'Ξ', 'Ξ', 'Ξ', 'Ξ', 'Ο',
-        'Ξ', 'Ο‹', 'Ξ°', 'Ο', 'Ξ«', 'β€“'), array(
+        'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'ι', 'κ', 'λ', 'μ', 'ν', 'ξ', 'ο', 'π',
+        'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
+        'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
+        'ς', 'ά', 'έ', 'ή', 'ί', 'ύ', 'ό', 'ώ', 'Ά', 'Έ', 'Ή', 'Ί', 'Ύ', 'Ό', 'Ώ', 'ϊ',
+        'ΐ', 'ϋ', 'ΰ', 'ϊ', 'Ϋ', '–'), array(
         'a', 'b', 'g', 'd', 'e', 'z', 'i', 'th', 'i', 'k', 'l', 'm', 'n', 'x', 'o', 'p',
         'r', 's', 't', 'y', 'f', 'x', 'ps', 'o', 'A', 'B', 'G', 'D', 'E', 'Z', 'H', 'Th',
         'I', 'K', 'L', 'M', 'N', 'X', 'O', 'P', 'R', 'S', 'T', 'Y', 'F', 'X', 'Ps', 'O',
@@ -2309,14 +2309,14 @@ function greek_to_latin($string) {
 // Convert to uppercase and remove accent marks
 // Limited coverage for now
 function remove_accents($string) {
-    return strtr(mb_strtoupper($string, 'UTF-8'), array('Ξ†' => 'Ξ‘', 'Ξ' => 'Ξ•', 'Ξ' => 'Ξ™', 'Ξ‰' => 'Ξ—', 'Ξ' => 'Ξ¥',
-        'Ξ' => 'Ξ', 'Ξ' => 'Ξ©', 'Ξ' => 'Ξ™', 'Ξ«' => 'Ξ¥',
-        'Γ€' => 'A', 'Γ' => 'A', 'Γ‚' => 'A', 'Γƒ' => 'A', 'Γ„' => 'A',
-        'Γ‡' => 'C', 'Γ‘' => 'N', 'Γ' => 'Y',
-        'Γ' => 'E', 'Γ‰' => 'E', 'Γ' => 'E', 'Γ‹' => 'E',
-        'Γ' => 'I', 'Γ' => 'I', 'Γ' => 'I', 'Γ' => 'I',
-        'Γ’' => 'O', 'Γ“' => 'O', 'Γ”' => 'O', 'Γ•' => 'O', 'Γ–' => 'O',
-        'Γ™' => 'U', 'Γ' => 'U', 'Γ›' => 'U', 'Γ' => 'U'));
+    return strtr(mb_strtoupper($string, 'UTF-8'), array('Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
+        'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
+        'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
+        'Ç' => 'C', 'Ñ' => 'N', 'Ý' => 'Y',
+        'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
+        'Ì' => 'I', 'Í' => 'I', 'Î' => 'I', 'Ï' => 'I',
+        'Ò' => 'O', 'Ó' => 'O', 'Ô' => 'O', 'Õ' => 'O', 'Ö' => 'O',
+        'Ù' => 'U', 'Ú' => 'U', 'Û' => 'U', 'Ü' => 'U'));
 }
 
 // resize an image ($source_file) of type $type to a new size ($maxheight and $maxwidth) and copies it to path $target_file
