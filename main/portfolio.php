@@ -143,7 +143,7 @@ $tool_content .= "
         <div id='my-courses' class='col-md-7'>
             <div class='row'>
                 <div class='col-md-12'>
-                    <h2 class='content-title'>".trans('langMyCourses')."</h2>
+                    <div class='content-title h2'>".trans('langMyCourses')."</div>
                     <div class='panel'>
                         <div class='panel-body'>
                             $perso_tool_content[lessons_content]                       
@@ -153,7 +153,7 @@ $tool_content .= "
             </div>
             <div class='row'>
                 <div class='col-md-12 my-announcement-list'>
-                    <h2 class='content-title'>".trans('langMyPersoAnnouncements')."</h2>
+                    <div class='content-title h2'>".trans('langMyPersoAnnouncements')."</div>
                     <div class='panel'>
                         <div class='panel-body'>
                             <ul class='tablelist'>";
@@ -179,7 +179,7 @@ $tool_content .= "
     <div class='col-md-5'>
         <div class='row'>
             <div class='col-md-12'>
-                <h2 class='content-title'>".trans('langMyAgenda')."</h2>
+                <div class='content-title h2'>".trans('langMyAgenda')."</div>
                 <div class='panel'>
                     <div class='panel-body'>
                         $perso_tool_content[personal_calendar_content]
@@ -209,7 +209,7 @@ $tool_content .= "
         </div>
         <div class='row'>
             <div class='col-md-12 my-messages-list'>
-                <h2 class='content-title'>$langMyPersoMessages</h2>
+                <div class='content-title h2'>$langMyPersoMessages</div>
                 <div class='panel'>
                     <div class='panel-body'>
                         <ul class='tablelist'>";
@@ -254,7 +254,7 @@ $tool_content .= "
 </div>
 <div id='profile_box' class='row'>
     <div class='col-md-12'>
-        <h2 class='content-title'>$langCompactProfile</h2>
+        <div class='content-title h2'>$langCompactProfile</div>
         <div class='panel'>
             <div class='panel-body'>
                 <div class='row'>
@@ -263,8 +263,8 @@ $tool_content .= "
                         <div class='not_visible text-center' style='margin:0px;'>".q($_SESSION['uname'])."</div>
                     </div>
                     <div class='col-xs-8 col-sm-5'>
-                    <h3 style='font-size: 18px; margin: 10px 0 10px 0;'><a href='".$urlServer."main/profile/display_profile.php'>".q("$_SESSION[givenname] $_SESSION[surname]")."</a></h3>
-                    <div><h5><span class='tag'>$langHierarchyNode :</span></h5><span class='tag-value text-muted'>";
+                    <div class='h3' style='font-size: 18px; margin: 10px 0 10px 0;'><a href='".$urlServer."main/profile/display_profile.php'>".q("$_SESSION[givenname] $_SESSION[surname]")."</a></div>
+                    <div><div class='h5'><span class='tag'>$langHierarchyNode :</span></div><span class='tag-value text-muted'>";
                     $departments = $user->getDepartmentIds($uid);
                         $i = 1;
                         foreach ($departments as $dep) {

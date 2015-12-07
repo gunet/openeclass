@@ -164,12 +164,12 @@
                                             {{ $toolName }}
                                             @if ($require_help)
                                                 <a id='help-btn' href='{{ $urlAppend }}modules/help/help.php?topic={{ $helpTopic }}&amp;language={{ $language }}'>
-                                                    <i class='fa fa-question-circle tiny-icon' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'></i>
+                                                    <span class='fa fa-question-circle tiny-icon' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'></span>
                                                 </a>                                            
                                             @endif
                                             @if(defined('RSS'))
                                                 <a href='{{ $urlAppend.RSS }}'>
-                                                    <i class='fa fa-rss-square tiny-icon tiny-icon-rss' data-toggle='tooltip' data-placement='top' title='RSS Feed'></i>
+                                                    <span class='fa fa-rss-square tiny-icon tiny-icon-rss' data-toggle='tooltip' data-placement='top' title='RSS Feed'></span>
                                                 </a>
                                             @endif
                                             @if ($is_editor and isset($course_code) and display_activation_link($module_id))
@@ -187,8 +187,8 @@
                                 <div class='pull-right'>
                                     <form method='post' action='{{ $urlAppend }}main/student_view.php?course={{ $course_code }}' id='student-view-form'>
                                         <button class='btn-toggle{{ !$is_editor ? " btn-toggle-on" : "" }}' data-toggle='tooltip' data-placement='top' title='{{ $is_editor ? trans('langStudentViewEnable') : trans('langStudentViewDisable')}}'>
-                                            <span class='on'><i class='fa fa-users'></i></span>
-                                            <span class='off'><i class='fa fa-graduation-cap'></i></span>
+                                            <span class='on'><span class='fa fa-users'></span></span>
+                                            <span class='off'><span class='fa fa-graduation-cap'></span></span>
                                         </button>
                                     </form>
                                 </div>
@@ -230,10 +230,10 @@
                         
                         <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{{ $key }}">
                             <div class="panel-heading">
-                                <h3 class="panel-title">
+                                <div class="panel-title h3">
                                     <span class="fa fa-chevron-right"></span>
                                     <span>{{ $tool_group[0]['text'] }}</span>
-                                </h3>
+                                </div>
                             </div>
                         </a>
                         <div id="collapse{{ $key }}" class="panel-collapse list-group collapse{{ $tool_group[0]['class'] }}">
@@ -254,9 +254,9 @@
                     <div class="panel-group outerpanel" id="accordion-right-parent">
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseCourses">
-                                <h4 class="panel-title title">
-                                    <i class="fa fa-list-alt"></i><span class="txt" >{{ trans('langMyCoursesSide') }}</span>
-                                </h4>
+                                <div class="panel-title title h4">
+                                    <span class="fa fa-list-alt"></span><span class="txt" >{{ trans('langMyCoursesSide') }}</span>
+                                </div>
                             </div>
                             <div id="collapseCourses" class="panel-collapse collapse side-list">
                                 <div class="panel-body">
@@ -266,7 +266,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right" data-target="#collapse{{ $key }}-right">
                                                 <div class="panel-title lesson-title clearfix">
-                                                    <a href="{{ $urlAppend }}courses/{{ $sidebar_course->code }}/" class="lesson-title-link">{{ $sidebar_course->title }}</a><i class="fa fa-caret-down lesson-title-caret"></i>
+                                                    <a href="{{ $urlAppend }}courses/{{ $sidebar_course->code }}/" class="lesson-title-link">{{ $sidebar_course->title }}</a><span class="fa fa-caret-down lesson-title-caret"></span>
                                                 </div>
                                             </div>
                                             <div id="collapse{{ $key }}-right" class="panel-collapse collapse">
@@ -287,9 +287,9 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseMessages">
-                                <h4 class="panel-title title">
-                                    <i class="fa fa-envelope"></i><span class="txt">{{ trans('langNewMyMessagesSide') }}</span><span class="num-msgs"></span>
-                                </h4>
+                                <div class="panel-title title h4">
+                                    <span class="fa fa-envelope"></span><span class="txt">{{ trans('langNewMyMessagesSide') }}</span><span class="num-msgs"></span>
+                                </div>
                             </div>
                             <div id="collapseMessages" class="panel-collapse collapse side-list overlayed">
                                 <div class="panel-body">
@@ -303,9 +303,9 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseNotices">
-                                <h4 class="panel-title title">
-                                    <i class="fa fa-pencil"></i><span class="txt">{{ trans('langQuickNotesSide') }}</span>
-                                </h4>
+                                <div class="panel-title title h4">
+                                    <span class="fa fa-pencil"></span><span class="txt">{{ trans('langQuickNotesSide') }}</span>
+                                </div>
                             </div>
                             <div id="collapseNotices" class="panel-collapse collapse side-list overlayed">
                                 <div class="spinner-div hidden">
@@ -314,11 +314,12 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="input-parent input-group">
-                                        <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <label class="sr-only" for="title-note">{{ trans('langNoteTitle') }}</label>
                                         <input id="title-note" class="form-control" type="text" placeholder="{{ trans('langNoteTitle') }}...">
                                     </div>
                                     <div class="input-parent input-group">
-                                        <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <label class="sr-only" for="text-note">{{ trans('langNote') }}</label>
                                         <textarea id="text-note" class="form-control" rows="6" placeholder="{{ trans('langEnterNote') }}..."></textarea>
                                     </div>

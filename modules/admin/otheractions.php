@@ -167,7 +167,7 @@ if (isset($_GET['stats'])) {
         case 'vmusers':
             $tool_content .= "<div class='row'>
                         <div class='col-sm-12'>
-                        <h3 class='content-title'>$langUsers</h3>
+                        <div class='content-title h3'>$langUsers</div>
                         <ul class='list-group'>
                         <li class='list-group-item'><label><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></label>          
                             <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt . "</span>

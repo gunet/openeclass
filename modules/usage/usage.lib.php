@@ -433,8 +433,8 @@ function get_popular_courses_stats($start = null, $end = null, $root_department 
         . "ORDER BY hits DESC LIMIT $k";
     $r = Database::get()->queryArray($q, $start, $end);
     $formattedr = array();
-    foreach($r as $record){
-        $formattedr['courses'][] = ellipsize($record->title, 25);
+    foreach($r as $record){        
+        $formattedr['courses'][] = $record->title;
         $formattedr['hits'][] = $record->hits;
     }    
     return $formattedr;
@@ -747,17 +747,16 @@ function user_friendly_seconds($seconds){
  * @return string a formated element ready to display a plot
 */
 function plot_placeholder($plot_id, $title = null){
-    $p = "<ul class='list-group'>";
+    //$p = "<ul class='list-group'>";
+    $p = "<div class='panel panel-default'><div class='panel-body'>";
     if(!is_null($title)){
-        $p .= "<li class='list-group-item'>"
-            . "<label id='".$plot_id."_title'>"
+        $p .= "<div class='inner-heading'><strong id='{$plot_id}_title'>"
             . $title
-            . "</label>"
-            . "</li>";
+            . "</strong>"
+            . "</div>";
     }
-    $p .= "<li class='list-group-item'>"
-            . "<div id='$plot_id'></div>"
-            . "</li></ul>";
+    $p .= "<div id='$plot_id'></div>";
+    $p .= "</div></div>";
     return $p;
 }
 
@@ -770,19 +769,19 @@ function plot_placeholder($plot_id, $title = null){
  * @return string a formated element containing the specified table
 */
 function table_placeholder($table_id, $table_class, $table_schema, $title = null){
-    $t = "";
+    $t = "<div class='panel-body'>";
     if(!is_null($title)){
-        $t .= "<div class='panel-heading'>"
-            . "<label id='".$table_id."_title'>"
+        $t .= "<div class='inner-heading'>"
+            . "<strong id='".$table_id."_title'>"
             . $title
-            . "</label>"
+            . "</strong>"
             ."<div class='pull-right' id='{$table_id}_buttons'></div><div style='clear:both;'></div>"
             . "</div>";
     }
-    $t .= "<div class='panel-body'>"
+    $t .= "<div class='table-responsive'>"
        . "<table id='$table_id' class='$table_class'>"
        . "$table_schema"
        . "</table>"
-       . "</div>";
+       . "</div></div>";
     return $t;
 }

@@ -880,7 +880,7 @@ a.toggle-active{
                 text-align: center;
                 overflow: hidden;
 
-                i.fa
+                span.fa
                 {
                     padding-right: 10px;
                     opacity:.9;
@@ -978,7 +978,7 @@ a.toggle-active{
                     text-decoration: none;
                     color: #1a70b1;
                 }
-                i.lesson-title-caret
+                span.lesson-title-caret
                 {
                     background-color: #efefef;
                     display: block;
@@ -1205,7 +1205,7 @@ input[type="file"] {
         @include box-shadow(3px 0px 2px #555555 inset);
     }
 
-    span{
+    &>span{
         border-radius: 5rem;
         text-align:center;
         vertical-align: middle;
@@ -1221,7 +1221,7 @@ input[type="file"] {
         @include box-shadow(2px 0px 2px rgb(221, 221, 221));
     }
 
-    &:hover span{
+    &:hover>span{
         background:$color-hover;
         color: white;
         @include box-shadow(0px 0px 4px #000000);
@@ -2450,13 +2450,13 @@ div.login-form .login-option-social .social-btn{
     color: white;
 }
 
-div.login-form .login-option-social .social-btn i.fa{
+div.login-form .login-option-social .social-btn span.fa{
     float: left;
     font-size: 1.6em;
     position: relative;
 }
 
-div.login-form .login-option-social .social-btn i.fa:after{
+div.login-form .login-option-social .social-btn span.fa:after{
     content: "";
     display: inline-block;
     position: absolute;
@@ -2834,4 +2834,15 @@ div #treeModal div .modal-body {
   font-style: italic;
   font-weight: bold;
   color: #000000 !important;
+}
+
+/* Usage Module */
+.inner-heading
+{
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #ccc;
+}
+.li-indented{
+    padding-left: 15px !important;
 }

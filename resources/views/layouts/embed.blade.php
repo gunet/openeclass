@@ -62,7 +62,7 @@
                         <div id="collapse{{ $key }}" class="panel-collapse list-group collapse{{ $tool_group[0]['class'] }}">
                             @foreach ($tool_group[1] as $key2 => $tool)
                             <a href="{{ $tool_group[2][$key2] }}" class="list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}">
-                                <i class="fa {{ $tool_group[3][$key2] }}"></i>
+                                <span class="fa {{ $tool_group[3][$key2] }}"></span>
                                 <span class="">{!! $tool !!}</span>
                             </a>
                             @endforeach

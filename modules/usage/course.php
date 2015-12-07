@@ -30,24 +30,41 @@ $head_content .=
         stats = 'c';
     </script>";
 
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "{$urlServer}courses/{$course_code}",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')
+),false);
+
 /**** Summary info    ****/
 $visits = course_visits($course_id);
-$tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel-body'>";
-$tool_content .="<table class='table-default' style='border:0;'>"
-        . "<tr class='even' style='border:0;'>"
-        . "<td style='border:0;'>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'><strong>$langUsers</strong></div><div class='col-sm-2'><span class='badge'>".count_course_users($course_id)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langTeachers</div><div class='col-sm-2'><span class='badge'>".count_course_users($course_id,USER_TEACHER)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langStudents</div><div class='col-sm-2'><span class='badge'>".count_course_users($course_id,USER_STUDENT)."</span></div></div>"
-        . "</td>"
-        . "<td style='border:0;'>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'><strong>$langGroups</strong></div><div class='col-sm-2'><span class='badge'>".count_course_groups($course_id)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'><strong>$langHits</strong></div><div class='col-sm-2'><span class='badge'>".$visits['hits']."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langDuration</div><div class='col-sm-2'><span class='badge'>".$visits['duration']."</span></div></div>"
-        . "</td>"
-        . "</tr>"
-        . "</table>"
-        . "</div></div></div>";
+$tool_content .= "
+<div class='row'>
+    <div class='col-xs-12'>
+        <div class='panel panel-default'>
+            <div class='panel-body'>
+                <div class='inner-heading'><strong>$langPlatformGenStats</strong></div>
+                <div class='row'>
+                <div class='col-sm-6'>
+                    <ul class='list-group'>
+                        <li class='list-group-item'><strong>$langUsageUsers</strong><span class='badge'>".count_course_users($course_id)."</span></li>
+                        <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge'>".count_course_users($course_id,USER_TEACHER)."</span></li>
+                        <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge'>".count_course_users($course_id,USER_STUDENT)."</span></li>
+                    </ul>
+                    </div>
+                    <div class='col-sm-6'>
+                        <ul class='list-group'>
+                        <li class='list-group-item'><strong>$langGroups</strong><span class='badge'>".count_course_groups($course_id)."</span></li>
+                        <li class='list-group-item'><strong>$langHits</strong><span class='badge'>".$visits['hits']."</span></li>
+                        <li class='list-group-item'><strong>$langDuration</strong><span class='badge'>".$visits['duration']."</span></li>
+                    </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>";
 
 require_once('form.php');
 /****   Plots   ****/

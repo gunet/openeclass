@@ -87,7 +87,7 @@ $tool_content .= "
     <div class='row'>
         <div class='col-xs-12'>
             <ul class='list-group'>
-                <li class='list-group-item list-header'>$langFaculty: <b>" . $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "</b>";
+                <li class='list-group-item list-header'>$langFaculty: <strong>" . $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "</strong>";
             list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, $showEmpty);
             $tool_content .= $childHTML;
        $tool_content .= "</ul>

@@ -19,6 +19,14 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== 
  */
+
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "/main/portfolio.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')
+),false);
+
 $statsuser = (isset($_REQUEST['u']) && intval($_REQUEST['u'])>0)? intval($_REQUEST['u']):$uid;
 if($statsuser != $uid)
 { 
@@ -38,6 +46,7 @@ $head_content .=
         stats = 'u';
     </script>";
 require_once('form.php');
+
 
 /****   Plots   ****/
 $tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";

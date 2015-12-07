@@ -135,7 +135,7 @@ else{
 add_units_navigation(true);
 
 if($stats_type == 'admin' || ($stats_type == 'user' && isset($_REQUEST['u']))){
-    $navigation[] = array('url' => '/modules/admin/', 'name' => $langAdmin);
+    $navigation[] = array('url' => '../admin/', 'name' => $langAdmin);
     draw($tool_content, 3, null, $head_content);
 }
 elseif($stats_type == 'course'){

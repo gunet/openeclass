@@ -175,6 +175,26 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     if (ini_get('short_open_tag')) { // check if short_open_tag is Off
         $tool_content .= "<div class='alert alert-danger'>$langWarningInstall2</div>";
     }
+    if (version_compare(PHP_VERSION, '5.4.0') < 0) {        
+        $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
+    }
+    $tool_content .= "<h5>$langRequiredPHP</h5>";
+    $tool_content .= "<ul class='list-unstyled'>";
+    warnIfExtNotLoaded('standard');
+    warnIfExtNotLoaded('session');
+    warnIfExtNotLoaded('pdo');
+    warnIfExtNotLoaded('pdo_mysql');
+    warnIfExtNotLoaded('gd');
+    warnIfExtNotLoaded('mbstring');
+    warnIfExtNotLoaded('xml');
+    warnIfExtNotLoaded('dom');
+    warnIfExtNotLoaded('zlib');
+    warnIfExtNotLoaded('pcre');
+    warnIfExtNotLoaded("curl");
+    $tool_content .= "</ul><h5>$langOptionalPHP</h5>";
+    $tool_content .= "<ul class='list-unstyled'>";
+    warnIfExtNotLoaded('ldap');    
+    $tool_content .= "</ul>";
 
     setGlobalContactInfo();
     $tool_content .= "<div class='alert alert-info'>$langConfigFound<br>$langConfigMod</div>
@@ -2939,10 +2959,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `poll_answer_record` "
                     . "ADD `poll_user_record_id` INT(11) NOT NULL AFTER `arid`");
             
-            $user_records = Database::get()->queryArray("SELECT DISTINCT `pid`, `user_id` FROM poll_answer_record");
-            foreach ($user_records as $user_record) {
-                $poll_user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $user_record->pid, $user_record->user_id)->lastInsertID;
-                Database::get()->query("UPDATE poll_answer_record SET poll_user_record_id = ?d WHERE pid = ?d AND user_id = ?d", $poll_user_record_id, $user_record->pid, $user_record->user_id);
+            if ($user_records = Database::get()->queryArray("SELECT DISTINCT `pid`, `user_id` FROM poll_answer_record")) {
+                foreach ($user_records as $user_record) {
+                    $poll_user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $user_record->pid, $user_record->user_id)->lastInsertID;
+                    Database::get()->query("UPDATE poll_answer_record SET poll_user_record_id = ?d WHERE pid = ?d AND user_id = ?d", $poll_user_record_id, $user_record->pid, $user_record->user_id);
+                }
             }
             Database::get()->query("ALTER TABLE `poll_answer_record` ADD FOREIGN KEY (`poll_user_record_id`) REFERENCES `poll_user_record` (`id`) ON DELETE CASCADE");
             delete_field('poll_answer_record', 'pid');
@@ -2968,9 +2989,25 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             WHERE id = ?d', $order++, $link->id);
                 }
             });
+        // Fix duplicate poll_question orders    
+        Database::get()->queryFunc('SELECT `pid`
+                FROM `poll_question`
+                GROUP BY `pid`, `q_position` HAVING COUNT(`pqid`) > 1',
+                function ($item) {
+                    $poll_questions = Database::get()->queryArray("SELECT * FROM `poll_question` WHERE pid = ?d", $item->pid);
+                    $order = 1;
+                    foreach ($poll_questions as $poll_question) {
+                        Database::get()->query('UPDATE `poll_question` SET `q_position` = ?d
+                                                    WHERE pqid = ?d', $order++, $poll_question->pqid);                        
+                    }
+                });            
+        if (!DBHelper::fieldExists('poll', 'public')) {
+            Database::get()->query("ALTER TABLE `poll` ADD `public` TINYINT(1) NOT NULL DEFAULT 1 AFTER `active`");
+            Database::get()->query("UPDATE `poll` SET `public` = 0");
+        }            
     }
-
-    if (version_compare($oldversion, '3.4', '<')) {
+       
+    if (version_compare($oldversion, '3.4', '<')) {      
         Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
                         `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `class` varchar(400) NOT NULL) $charset_spec"); 

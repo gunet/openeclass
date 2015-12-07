@@ -4,7 +4,7 @@
 // Generated 2015-10-22 16:35:58
 
 $langCourse = "Course";
-$langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
+$langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
 $langAboutText = "The platform version is";
 $langHostName = "Host Name is";
@@ -218,7 +218,7 @@ $langChooseAuthMethod = "Select the user authentication Method and define its me
 $langConnYes = "Successful Connection!";
 $langConnNo = "The connection does not work properly!";
 $langAuthNoValidUser = "No valid user in the auth method. Unsuccessful registration";
-$langConnTest = "Checking the comfirmation mode...";
+$langConnTest = 'Test Authentication Method';
 $langAuthMethod = "User Authentication Method";
 $langdbhost = "Database Host";
 $langdbname = "Database Name";
@@ -228,7 +228,7 @@ $langdbtable = "Database Table Name";
 $langdbfielduser = "Table field name for users";
 $langdbfieldpass = "Table field name for users'passwords";
 $langInstructionsAuth = "Liaison and Use Instructions/Info";
-$langTestAccount = "To activate the authentication method, you have to do probational use through a selected method account";
+$langTestAccount = "You can try to authenticate with an account using the selected method";
 $langpop3host = "POP3 server";
 $langpop3port = "POP3 port";
 $langimaphost = "IMAP server";
@@ -560,7 +560,7 @@ $langToolManagement = "Tool Management";
 $langUsage = "Usage Statistics";
 $langVideoText = "This is an example of a RealVideo file. You can upload any audio and video file type (.mov, .rm, .mpeg...), as far as your " . $langsStudents . "have the corresponding plug-in to read them";
 $langGoogle = "Quick and powerfull search engine";
-$langIntroductionText = "This is the introduction text of your course. To replace it by your own text, click below on <b>modify</b>.";
+$langIntroductionText = "This is the introduction text of your course. To replace it by your own text, click below on <strong>modify</strong>.";
 $langJustCreated = "You just created the course titled ";
 $langCreateCourseGroups = "Groups";
 $langCatagoryMain = "Main";
@@ -933,11 +933,11 @@ $mailbody7 = "Faculty / Department:";
 $mailbody8 = "as a $langsStudent.";
 $logo = "Asynchronous eLearning Platform $siteName";
 $gunet = "$siteName Asynchronous eLearning Group";
-$introcontact = "You can contact with the Asynchronous eLearning Group of <b>" . $siteName . "</b> using the
+$introcontact = "You can contact with the Asynchronous eLearning Group of <strong>" . $siteName . "</strong> using the
  following ways:";
-$langPostMail = "<b>Post Office Address:</b>";
+$langPostMail = "<strong>Post Office Address:</strong>";
 $langPhone = "Telephone";
-$langFax = "<b>Fax:</b>";
+$langFax = "<strong>Fax:</strong>";
 $langForm = "Completion Form";
 $langReturn = "Back";
 $langAddPage = "Add a page";
@@ -947,7 +947,7 @@ $langSendPage = "Page to send";
 $langCouldNotSendPage = "This file is not in HTML format and could not be sent. If you want to send non HTML documents (PDF, Word, Power Point, Video, etc.) use <a href='../document/index.php'>Documents tool</a>";
 $langAddPageToSite = "Add a page to site";
 $langCouldNot = "File could not be sent";
-$langOkSent = "<p><b>Your page has been sent</b><br/><br/>A link has been created on the left menu</p>";
+$langOkSent = "<p><strong>Your page has been sent</strong><br/><br/>A link has been created on the left menu</p>";
 $langTooBig = "You didn't choose any file or the file is too big.";
 $langExplanation_0 = "The page must be in HTML format (e.g. \"my_page.htm\"). It will be linked from Homepage.";
 $langExplanation_1 = "Page info";
@@ -990,8 +990,8 @@ $langCourseCode = "Code";
 $langWelcomeStud = "Select \"Courses list\"to review the available courses.";
 $langWelcomeProf = "Select \"Create course site\"to create your on-line courses.";
 $langWelcomeSelect = "Select";
-$langWelcomeStudPerso = "<b>\"$langListCourses\"</b> to review the available courses.";
-$langWelcomeProfPerso = "<b>\"Create course site\"</b> to create your on-line courses.";
+$langWelcomeStudPerso = "<strong>\"$langListCourses\"</strong> to review the available courses.";
+$langWelcomeProfPerso = "<strong>\"Create course site\"</strong> to create your on-line courses.";
 $langTitleInstall = "Open eClass Install Wizard";
 $langWelcomeWizard = "Welcome to installation wizard of Open eClass!";
 $langInstallProgress = "Install Progress";
@@ -1041,17 +1041,17 @@ $langRequirements = "System Requirements";
 $langInstallEnd = "Installation Finished";
 $langModuleNotInstalled = "Not installed";
 $langReadHelp = "Read more";
-$langWarnConfig = "Warning !! File <b>config.php</b> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
-$langWarnConfig1 = "File <b>config.php</b> exists";
+$langWarnConfig = "Warning !! File <strong>config.php</strong> exists !! Installation cannot proceed. If you want to rerun installation, first delete config.php file!";
+$langWarnConfig1 = "File <strong>config.php</strong> exists";
 $langWarnConfig2 = "If you want to rerun installation, first delete config.php file";
 $langWarnConfig3 = "Installation cannot proceed";
-$langErrorConfig = "<br><b>Error occured!</b><br><br>Creation of file config.php is not possible.<br><br>Please check access rights in subdirectories of Open eClass and rerun installation.";
+$langErrorConfig = "<br><strong>Error occured!</strong><br><br>Creation of file config.php is not possible.<br><br>Please check access rights in subdirectories of Open eClass and rerun installation.";
 $langErrorMysql = "MySQL is not working or username / password is wrong.<br/>Please check your settings:";
 $langBackStep3 = "Back to Step 3";
 $langBackStep3_2 = "Back to step 3.";
 $langNotNeedChange = "No need to change";
 $langNeedChangeDB = "if there is any database with the same name (eclass) you must change it";
-$langWillWrite = "Information below will be written in <b>config.php</b>";
+$langWillWrite = "Information below will be written in <strong>config.php</strong>";
 $langProtect = "Notice: To protect Open eClass, change access rights of
            <tt>/config/config.php</tt> and <tt>/install/index.php</tt> and make it read only (CHMOD 444).";
 $langInstallSuccess = "Installation completed successfully! Click below to enter Open eClass";
@@ -1059,9 +1059,9 @@ $langEnterFirstTime = "Enter Open eClass";
 $langSiteUrl = " URL of Open eClass";
 $langInstall = "Installation of Open eClass";
 $langAddOnStreaming = "Addon Functionality";
-$langWarningInstall1 = "<b>Warning!</b> It seems that the option register_globals of php.ini is not set. Without it Open eClass cannot run. Please modify php.ini accordingly (i.e.: add the line <b>register_globals = On</b>).";
-$langWarningInstall2 = "<b>Warning!</b> It seems that option <em>short_open_tag</em> in php.ini is set. It is recommended to disable it";
-$langWarningInstall3 = "<b>Warning!</b> It seems that installation wizard has not creation rights of directory <b>/config</b>.<br/>Without creation rights, the installation wizard cannot continue. Please change the directory access permissions.";
+$langWarningInstall1 = "<strong>Warning!</strong> It seems that the option register_globals of php.ini is not set. Without it Open eClass cannot run. Please modify php.ini accordingly (i.e.: add the line <strong>register_globals = On</strong>).";
+$langWarningInstall2 = "<strong>Warning!</strong> It seems that option <em>short_open_tag</em> in php.ini is set. It is recommended to disable it";
+$langWarningInstall3 = "<strong>Warning!</strong> It seems that installation wizard has not creation rights of directory <strong>/config</strong>.<br/>Without creation rights, the installation wizard cannot continue. Please change the directory access permissions.";
 $langWarnInstallNotice1 = "Probably some other changes are required. Read the installation instructions in";
 $langWarnInstallNotice2 = "and restart the installation wizard.";
 $langReviewSettings = "Your settings are: (You can print them if you want to remember admin password and/or other settings)";
@@ -1238,7 +1238,7 @@ $langProgress = "Progress";
 $langQuitViewer = "Back to list";
 $langRawHasBeenChanged = "Minimum raw to pass has been changed";
 $langSCORMTypeDesc = "SCORM conformable content";
-$langScormIntroTextForDummies = "Imported packages must consist of a zip file and be <b>SCORM 2004</b> or <b>SCORM 1.2</b> or <b>IMS CP 1.1.4</b> conformable.";
+$langScormIntroTextForDummies = "Imported packages must consist of a zip file and be <strong>SCORM 2004</strong> or <strong>SCORM 1.2</strong> or <strong>IMS CP 1.1.4</strong> conformable.";
 $langSecondShort = "sec.";
 $langStartModule = "Start Module";
 $langStatsOfLearnPath = "Statistics";
@@ -1503,6 +1503,8 @@ $langPollCreateDate = "Questionnaire created on";
 $langPollDeleted = "Questionnaire deleted successfully.";
 $langPollDeactivated = "Questionnaire deactivated successfully.";
 $langPollActivated = "Questionnaire activated successfully.";
+$langPollLocked = "Limited access was enabled successfully!";
+$langPollUnlocked = "Limited access was disabled successfully!";
 $langPollSubmitted = "Thanks for your participating!";
 $langPollTotalAnswers = "Total number of contributions";
 $langPollNone = "There are no Questionnaires for the current course.";
@@ -1562,8 +1564,8 @@ $langChangePass = "Modify password";
 $langNewUser = "Register";
 $langModRight = "Modify admin rights of";
 $langNone = "None";
-$langNoAdmin = "has now <b>NO admin rights on this site</b>";
-$langAllAdmin = "has now <b>ALL admin rights on this site</b>";
+$langNoAdmin = "has now <strong>NO admin rights on this site</strong>";
+$langAllAdmin = "has now <strong>ALL admin rights on this site</strong>";
 $langModRole = "Modify the role of";
 $langRole = "Role";
 $langIsNow = "is now";
@@ -1599,7 +1601,7 @@ $langUserNoneMasc = "-";
 $langTutor = "Tutor";
 $langTutorDefinition = "Tutor (right to supervise groups)";
 $langAdminDefinition = "Admin (right to modify course website content)";
-$langDeleteUserDefinition = "Unregister (delete from users list of  <b>this</b> course)";
+$langDeleteUserDefinition = "Unregister (delete from users list of  <strong>this</strong> course)";
 $langNoTutor = "is not tutor for this course";
 $langYesTutor = "is tutor for this course";
 $langUserRights = "Users rights";
@@ -1607,9 +1609,9 @@ $langNow = "now";
 $langOneByOne = "Add user manually";
 $langUserMany = "Import users list through textfile";
 $langUserAddExplanation = "every line of file to send will necessarily an only
-        include 5 fields: <b>Name&nbsp;&nbsp;&nbsp;Surname&nbsp;&nbsp;&nbsp;
+        include 5 fields: <strong>Name&nbsp;&nbsp;&nbsp;Surname&nbsp;&nbsp;&nbsp;
         Login&nbsp;&nbsp;&nbsp;Password&nbsp;
-        &nbsp;&nbsp;Email</b> separated by tabs and in this order.
+        &nbsp;&nbsp;Email</strong> separated by tabs and in this order.
         Users will recieve email confirmation with login/password.";
 $langDownloadUserList = "Upload list";
 $langUserNumber = "number";
@@ -1915,20 +1917,20 @@ $dateFormatShort = "%b %d, %y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
-$langNoAdminAccess = '<b>The page you tried to access requires a valid username and password.</b><br/>
+$langNoAdminAccess = '<strong>The page you tried to access requires a valid username and password.</strong><br/>
 The system has automatically redirected you to the start page to login. This could have been caused
 by a mistyped URL or due to session timeout.';
-$langLoginRequired = '<b>You are not enrolled to the lesson you are trying to access.</b><br/> The system has automatically redirect you to the start page to enroll to the lesson (if the lesson is open for registration).
+$langLoginRequired = '<strong>You are not enrolled to the lesson you are trying to access.</strong><br/> The system has automatically redirect you to the start page to enroll to the lesson (if the lesson is open for registration).
 ';
-$langSessionIsLost = "<b>Your session has timed-out.</b><br/>The system has automatically redirected you to the start page to login again.";
-$langCheckProf = "<b>Your action requires $langsTeacher privileges. </b><br/> The system has
+$langSessionIsLost = "<strong>Your session has timed-out.</strong><br/>The system has automatically redirected you to the start page to login again.";
+$langCheckProf = "<strong>Your action requires $langsTeacher privileges. </strong><br/> The system has
 automatically redirect you to the start page to login. If you are the lesson's $langsTeacher you will be
 allowed access to the course administration tools.";
-$langLessonDoesNotExist = "<b>The lesson you are trying to access does not exist.</b><br/> This could have been caused by a disallowed action or a platform error.";
-$langCheckAdmin = "<b>Your action requires administrator privileges. </b><br/> The system has automatically redirected you to the start page to login. If you are the platform administrator, you will be allowed access to the administration tools.";
-$langCheckGuest = "<b>The action you attempted to execute is not possible with guest user privileges. </b><br/> For security reasons the system has automatically redirected you to the start page to login again.";
-$langCheckPublicTools = "<b>You tried to access an inactive module.</b><br/> For security reasons the system has automatically redirected you to the start page to login again.";
-$langWarnShibUser = "<p><b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.</p>";
+$langLessonDoesNotExist = "<strong>The lesson you are trying to access does not exist.</strong><br/> This could have been caused by a disallowed action or a platform error.";
+$langCheckAdmin = "<strong>Your action requires administrator privileges. </strong><br/> The system has automatically redirected you to the start page to login. If you are the platform administrator, you will be allowed access to the administration tools.";
+$langCheckGuest = "<strong>The action you attempted to execute is not possible with guest user privileges. </strong><br/> For security reasons the system has automatically redirected you to the start page to login again.";
+$langCheckPublicTools = "<strong>You tried to access an inactive module.</strong><br/> For security reasons the system has automatically redirected you to the start page to login again.";
+$langWarnShibUser = "<p><strong>Warning:</strong> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.</p>";
 $langUserPortfolio = "User portfolio";
 $langPortfolio = "Portfolio";
 $langAdvancedSearch = "Advanced search";
@@ -2288,8 +2290,8 @@ $langInsertWork = 'assignment';
 $langUnknownResType = "Error: Unknown unit resource";
 $langNoExercises = "There are no exercises";
 $langVia = 'via';
-$langStudentViewEnable = "Enable <b>$langsStudent</b> view";
-$langStudentViewDisable = "Back to <b>$langsTeacher</b>view";
+$langStudentViewEnable = "Enable <strong>$langsStudent</strong> view";
+$langStudentViewDisable = "Back to <strong>$langsTeacher</strong>view";
 $langNoRead = "You don't have read access for this forum";
 $langNoForumsCat = "There are no forums in this category.";
 $langNoCookies = 'Warning! Cookies are deactivated in your browser. Log-in is not possible.';
@@ -2321,6 +2323,7 @@ $langChanges = "changes";
 $langldap_base = "LDAP Base for user search";
 $langldap_login_attr = 'Username attribute';
 $langldap_login_attr2 = 'Alternate username attribute';
+$langldap_mail_attr = 'E-mail attribute';
 $langcas_host = "CAS server";
 $langcas_port = 'CAS port';
 $langcas_context = 'Entry page address';
@@ -2399,7 +2402,7 @@ $langOfSite = "of platform";
 $langElaboration = "Edit";
 $langStudentsOnly = "only in " . $langsOfStudentss . "";
 $langChangeUserAs = 'Login as';
-$langCASRetAttr = "CAS server returned the following atrributes";
+$langCASRetAttr = 'User object atrributes';
 $langRSSFeed = 'RSS feed';
 $langPrivOpenShort = "Open (with registration)";
 $langPublicShort = "Open (without registration)";
@@ -2595,7 +2598,7 @@ $langMailVerificationCode = "Verification Code";
 $langMailVerificationNewCode = "Send verification code";
 $langMailVerificationWrong = "email address hasn't changed because is not completed or is invalid";
 $langMailVerificationAddrChange = "If email address is wrong, please enter a correct one";
-$langMailVerificationSuccess3 = "Check that email address is correct and click in '<b>$langMailVerificationNewCode</b>'";
+$langMailVerificationSuccess3 = "Check that email address is correct and click in '<strong>$langMailVerificationNewCode</strong>'";
 $langMailVerificationReq = "email address must be verified before proceeding.<br /><br />$langMailVerificationSuccess3";
 $langMailVerificationSuccess4 = "Soon an email will be sent to you by $siteName with instructions for completing your registration";
 $langMailVerification = "$langUser e-mail Verification";
@@ -2613,15 +2616,15 @@ $langMailVerificationChanged = "Has changed";
 $langMailVerificationChangedNo = "You haven't choose some change";
 $langMailVerificationChangedNoAdmin = "No users or admin email address is not allowed";
 $langCheckCourseAdmin = "
-        <b>Action requires course administrator rights.</b>
+        <strong>Action requires course administrator rights.</strong>
         <br>You have been redirected to home page for logging in again.";
 $langCheckPowerUser = "
-        <b>Action requires course and user administration rights.</b>
+        <strong>Action requires course and user administration rights.</strong>
         <br>You have been redirected to home page for logging in again.";
-$langCheckUserManageUser = "<b>Action requires user administration rights.</b>
+$langCheckUserManageUser = "<strong>Action requires user administration rights.</strong>
         <br>You have been redirected to home page for logging in again.";
 $langCheckMailVerify = "
-        <b>$langMailVerificationSuccess</b>";
+        <strong>$langMailVerificationSuccess</strong>";
 $langAllAuthTypes = "All authentication methods";
 $m['from'] = "from";
 $m['pending'] = "email address verification pending";
@@ -2741,7 +2744,7 @@ $lang_restrict_teacher_owndep = 'Restrict course creation to the departments the
 $langUpgTooOld = 'The currently installed version of Open eClass you are trying to upgrade is
 too old. Upgrade to version 3.x is only supported from version 2.2 and above.
 Please upgrade your installation to 2.2 and then to the latest version.';
-$langCheckDepartmentManageUser = "<b>The action you requested requires department manager access.</b>
+$langCheckDepartmentManageUser = "<strong>The action you requested requires department manager access.</strong>
         <br>You have been redirected to the front page to log-in.";
 $langNoUserSelected = "No user selected";
 $langUsersLog = "User actions log";
@@ -2873,7 +2876,7 @@ $langAttachedFile = "Attached file";
 $langPurgeExercises = "Clear results";
 $langConfirmPurgeExercises = "Confirm results deletion";
 $langInGroup = "in group";
-$langErrorConfigAlt = "Alternatively, you can manually create the <b>config.php</b> file in the <b>%s</b> subdirectory with the following contents:";
+$langErrorConfigAlt = "Alternatively, you can manually create the <strong>config.php</strong> file in the <strong>%s</strong> subdirectory with the following contents:";
 $lang_restrict_owndep = "Disallow department change to users";
 $lang_disable_log_actions = "Disable action log";
 $lang_disable_log_course_actions = "Disable action log in courses";
@@ -3978,7 +3981,7 @@ $langLoginConfiguration = "Login Screen Configuration";
 $langTag = 'Tag';
 $langOpenDelosDescription = "<p>OpenDelos is the open-source platform designed by GUnet for the administration, recording and play-back of videolectures.</p>
 <p>The platform supports the <a href='http://ocw-project.gunet.gr/'>Open Academic Courses</a> project along with the <a href='http://openeclass.org/'>Open eClass platform</a> and the national course seach portal also developed by GUnet.</p>";
-$langBBBDescription = "<p>Operation of the <b>Teleconference</b> Open eClass module is based on the open source <a href='http://www.bigbluebutton.org/' target='_blank'>BigBlueButton</a> platform which is a complete system of direct web-based communication and collaboration between instructors and trainees.</p> <p>BigBlueButton does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a BigBlueButton installation plase select <a href='bbbmoduleconf.php'>Settings</a>.</p>";
+$langBBBDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href='http://www.bigbluebutton.org/' target='_blank'>BigBlueButton</a> platform which is a complete system of direct web-based communication and collaboration between instructors and trainees.</p> <p>BigBlueButton does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a BigBlueButton installation plase select <a href='bbbmoduleconf.php'>Settings</a>.</p>";
 $langFtpShortDescription = "Link to FTP service";
 $langFtpLongDescription = "Enter the FTP link";
 $langGoogleDriveShortDescription = "Short Description about google drive";
@@ -4091,14 +4094,14 @@ $langAbuseReportCatError = 'You did not select a reason for this abuse report';
 $langAbuseReportMsgError = 'You have to complete a justification message in order to submit an abuse report';
 $langAbuseReportSaveSuccess = 'The abuse report was succesfully sent to the course administrators. They were informed with a message sent via the Messages subsystem.';
 $langAbuseReportPMBody = 'I have just sumbitted an abuse report for %s. <br/>
-<b>Reason:</b><br/> %s <br/>
-<b>Justification:</b><br/> %s <br/>
-<b>Content:</b><br/> %s <br/>
+<strong>Reason:</strong><br/> %s <br/>
+<strong>Justification:</strong><br/> %s <br/>
+<strong>Content:</strong><br/> %s <br/>
 <a class="outtabs" href="%s">Go to content</a>';
 $langAbuseReportClosePMBody = 'I have just closed an abuse report for %s. <br/>
-<b>Reason:</b><br/> %s <br/>
-<b>Justification:</b><br/> %s <br/>
-<b>Content:</b><br/> %s <br/>
+<strong>Reason:</strong><br/> %s <br/>
+<strong>Justification:</strong><br/> %s <br/>
+<strong>Content:</strong><br/> %s <br/>
 <a class="outtabs" href="%s">Go to content</a>';
 $langAComment = 'a comment';
 $langAForumPost = 'a forum post';

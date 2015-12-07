@@ -43,227 +43,133 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'ldaphost' => true, 'ldap_base' => true,
     'ldapbind_dn' => true, 'ldapbind_pw' => true,
     'ldap_login_attr' => true, 'ldap_login_attr2' => true,
-    'ldap_id_attr' => true,
+    'ldap_studentid' => true, 'ldap_mail_attr' => true,
     'dbhost' => true, 'dbtype' => true, 'dbname' => true,
     'dbuser' => true, 'dbpass' => true, 'dbtable' => true,
     'dbfielduser' => true, 'dbfieldpass' => true, 'dbpassencr' => true,
-    'shibemail' => true, 'shibuname' => true,
-    'shibcn' => true, 'checkseparator' => true,
-    'submit' => true, 'auth_instructions' => true, 'auth_title' => true,
+    'shib_email' => true, 'shib_uname' => true, 'shib_surname' => true,
+    'shib_givenname' => true, 'shib_cn' => true, 'shib_studentid' => true,
+    'checkseparator' => true,
+    'cas_host' => true, 'cas_port' => true, 'cas_context' => true,
+    'cas_cachain' => true, 'casusermailattr' => true,
+    'casuserfirstattr' => true, 'casuserlastattr' => true, 'cas_altauth' => true,
+    'cas_logout' => true, 'cas_ssout' => true, 'casuserstudentid' => true,
+    'auth_instructions' => true, 'auth_title' => true,
 	'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
     'test_username' => true), 'all');
-
-$test_password = isset($_POST['test_password']) ? $_POST['test_password'] : '';
-
-if ($auth == 7) {
-    if ($submit) {
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-        $_SESSION['cas_do'] = true;
-        // $_POST is lost after we come back from CAS
-        foreach (array('cas_host', 'cas_port', 'cas_context', 'cas_cachain',
-                        'casusermailattr', 'casuserfirstattr', 'casuserlastattr',
-                        'cas_altauth', 'cas_logout', 'cas_ssout', 'casuserstudentid', 
-                        'auth_instructions', 'auth_title') as $var) {
-            if (isset($_POST[$var])) {
-                $_SESSION[$var] = $_POST[$var];
-            }
-        }
-    } else {
-        $_SESSION['cas_do'] = false;
-    }
-}
-
-if (isset($_GET['ticket'])) {
-    $_SESSION['cas_do'] = true;
-}
-
-if (!empty($_SESSION['cas_warn'])) {
-    $_SESSION['cas_do'] = false;
-}
 
 if (empty($ldap_login_attr)) {
     $ldap_login_attr = 'uid';
 }
 
-
-$tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'icon' => 'fa-reply',
-            'level' => 'primary-label',
-            'url' => 'auth.php'
-        )));
-
-// You have to logout from CAS and preferably close your browser
-// to change CAS settings
-if (!empty($_SESSION['cas_warn']) and $auth == 7) {
-    $tool_content .= "<div class='alert alert-warning'>$langCASnochange</div>";
-}
-
-if ($submit or ! empty($_SESSION['cas_do'])) {
+if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    if (!empty($_SESSION['cas_do']) and empty($_SESSION['cas_warn'])) {
-        // test new CAS settings
-        $cas_ret = cas_authenticate(7, true, $_SESSION['cas_host'], $_SESSION['cas_port'], $_SESSION['cas_context'], $_SESSION['cas_cachain']);
-        if (phpCAS::checkAuthentication()) {
-            $test_username = phpCAS::getUser();
-            if (!empty($test_username)) {
-                $cas_valid = true;
-                $_SESSION['cas_warn'] = true;
-            } else {
-                $cas_valid = false;
-            }
-        } else {
-            $cas_valid = false;
-        }
-
-        if (!empty($cas_ret['error']))
-            $tool_content .= "<div class='alert alert-warning'>$cas_ret[error]</div>";
-    }
-
-    // if form is submitted
-    if (isset($_POST['submit']) or $cas_valid == true) {
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-        if ($auth == 1) {
+    switch ($auth) {
+        case 1:
             $settings = array();
-            $auth_allow = 1; //eclass method doesn't need test
-        } else {
-            $tool_content .= "<div class='alert alert-info'>$langConnTest</div>";
-            if (($auth == 6) or (isset($cas_valid) and $cas_valid == true)) {
-                $test_username = $test_password = " ";
+            break;
+        case 2:
+            $settings = array('pop3host' => $pop3host);
+            break;
+        case 3:
+            $settings = array('imaphost' => $imaphost);
+            break;
+        case 4:
+            $settings = array('ldaphost' => $ldaphost,
+                'ldap_base' => $ldap_base,
+                'ldapbind_dn' => $ldapbind_dn,
+                'ldapbind_pw' => $ldapbind_pw,
+                'ldap_login_attr' => $ldap_login_attr,
+                'ldap_login_attr2' => $ldap_login_attr2,
+                'ldap_mail_attr' => $ldap_mail_attr,
+                'ldap_studentid' => $ldap_studentid);
+            break;
+        case 5:
+            $settings = array('dbhost' => $dbhost,
+                'dbname' => $dbname,
+                'dbuser' => $dbuser,
+                'dbpass' => $dbpass,
+                'dbtable' => $dbtable,
+                'dbfielduser' => $dbfielduser,
+                'dbfieldpass' => $dbfieldpass,
+                'dbpassencr' => $dbpassencr);
+            break;
+        case 6:
+            if ($checkseparator) {
+                $auth_settings = $_POST['shibseparator'];
+            } else {
+                $auth_settings = 'shibboleth';
             }
-            // when we come back from CAS
-            if (isset($_SESSION['cas_do']) && $_SESSION['cas_do']) {
-                $auth = 7;
+            $settings = array('shib_email' => $shib_email,
+                'shib_uname' => $shib_uname);
+            if ($shib_cn) {
+                $settings['shib_cn'] = $shib_cn;
             }
-            switch ($auth) {
-                case 2:
-                    $settings = array('pop3host' => $pop3host);
-                    break;
-                case 3:
-                    $settings = array('imaphost' => $imaphost);
-                    break;
-                case 4:
-                    $settings = array('ldaphost' => $ldaphost,
-                        'ldap_base' => $ldap_base,
-                        'ldapbind_dn' => $ldapbind_dn,
-                        'ldapbind_pw' => $ldapbind_pw,
-                        'ldap_login_attr' => $ldap_login_attr,
-                        'ldap_login_attr2' => $ldap_login_attr2,
-                        'ldap_studentid' => $ldap_id_attr);
-                    break;
-                case 5:
-                    $settings = array('dbhost' => $dbhost,
-                        'dbname' => $dbname,
-                        'dbuser' => $dbuser,
-                        'dbpass' => $dbpass,
-                        'dbtable' => $dbtable,
-                        'dbfielduser' => $dbfielduser,
-                        'dbfieldpass' => $dbfieldpass,
-                        'dbpassencr' => $dbpassencr);
-                    break;
-                case 6:
-                    if ($checkseparator) {
-                        $auth_settings = $_POST['shibseparator'];
-                    } else {
-                        $auth_settings = 'shibboleth';
-                    }
-                    $settings = array('shibemail' => $shibemail,
-                        'shibuname' => $shibuname,
-                        'shibcn' => $shibcn);
-                    break;
-                case 7:
-                    $settings = array('cas_host' => $_SESSION['cas_host'],
-                        'cas_port' => $_SESSION['cas_port'],
-                        'cas_context' => $_SESSION['cas_context'],
-                        'cas_cachain' => $_SESSION['cas_cachain'],
-                        'casusermailattr' => $_SESSION['casusermailattr'],
-                        'casuserfirstattr' => $_SESSION['casuserfirstattr'],
-                        'casuserlastattr' => $_SESSION['casuserlastattr'],
-                        'cas_altauth' => $_SESSION['cas_altauth'],
-                        'cas_logout' => $_SESSION['cas_logout'],
-                        'cas_ssout' => $_SESSION['cas_ssout'],
-                        'casuserstudentid' => $_SESSION['casuserstudentid']);
-                    $auth_title = $_SESSION['auth_title'];
-                    $auth_instructions = $_SESSION['auth_instructions'];
-	                break;
-                case 8:  // Facebook
-                case 10: // Google
-                case 11: // Live
-                    $settings = array('id' => $hybridauth_id_key,
-                                      'secret' => $hybridauth_secret);
-            	    $auth_instructions = $hybridauth_instructions;
-                    break;
-                case 9:  // Twitter
-                case 12: // Yahoo
-                case 13: // LinkedIn
-                    $settings = array('key' => $hybridauth_id_key,
-                                      'secret' => $hybridauth_secret);
-            	    $auth_instructions = $hybridauth_instructions;
-                    break;
-                default:
-                    break;
+            if ($shib_surname) {
+                $settings['shib_surname'] = $shib_surname;
             }
-            if ($test_username !== '' and $test_password !== '') {
-                $test_username = canonicalize_whitespace($test_username);
-                if (isset($cas_valid) and $cas_valid) {
-                    $is_valid = true;
-                } else {
-                    $is_valid = auth_user_login($auth, $test_username, $test_password, $settings);
-                }
-                if ($is_valid) {
-                    $auth_allow = 1;
-                    $tool_content .= "<div class='alert alert-success'>$langConnYes</div>";
-                    // Debugging CAS
-                    if ($debugCAS) {
-                        if (!empty($cas_ret['message']))
-                            $tool_content .= "<p>{$cas_ret['message']}</p>";
-                        if (!empty($cas_ret['attrs']) && is_array($cas_ret['attrs'])) {
-                            $tmp_attrs = "<p>$langCASRetAttr:<br />" . array2html($cas_ret['attrs']);
-                            $tool_content .= "$tmp_attrs</p>";
-                        }
-                    }
-                } else {
-                    $tool_content .= "<div class='alert alert-danger'>$langConnNo";
-                    if (isset($GLOBALS['auth_errors'])) {
-                        $tool_content .= "<p>$GLOBALS[auth_errors]</p>";
-                    }
-                    $tool_content .= "</div>";
-                    $auth_allow = 0;
-                }
-            } elseif ($auth < 8) { //display the wrong username/password message only if the auth method is NOT a hybridauth method
-                $tool_content .= "<div class='alert alert-danger'>$langWrongAuth</div>";
-                $auth_allow = 0;
-            } elseif ($auth >= 8) {
-                $auth_allow = 1; //hybridauth provider, so no username-password testing
+            if ($shib_givenname) {
+                $settings['shib_givenname'] = $shib_givenname;
             }
-        } 
+            if ($shib_studentid) {
+                $settings['shib_studentid'] = $shib_studentid;
+            }
+            update_shibboleth_endpoint($settings);
+            break;
+        case 7:
+            $settings = array('cas_host' => $cas_host,
+                'cas_port' => $cas_port,
+                'cas_context' => $cas_context,
+                'cas_cachain' => $cas_cachain,
+                'casusermailattr' => $casusermailattr,
+                'casuserfirstattr' => $casuserfirstattr,
+                'casuserlastattr' => $casuserlastattr,
+                'cas_altauth' => $cas_altauth,
+                'cas_logout' => $cas_logout,
+                'cas_ssout' => $cas_ssout,
+                'casuserstudentid' => $casuserstudentid);
+            break;
+        case 8:  // Facebook
+        case 10: // Google
+        case 11: // Live
+            $settings = array('id' => $hybridauth_id_key,
+                'secret' => $hybridauth_secret);
+            $auth_instructions = $hybridauth_instructions;
+            break;
+        case 9:  // Twitter
+        case 12: // Yahoo
+        case 13: // LinkedIn
+            $settings = array('key' => $hybridauth_id_key,
+                'secret' => $hybridauth_secret);
+            $auth_instructions = $hybridauth_instructions;
+            break;
+        default:
+            break;
+    }
 
-        // update table `auth`
-        if (!empty($auth_allow) and $auth_allow == 1) {
-            if ($auth != 6 && $auth < 8) {
-                $auth_settings = pack_settings($settings);
-            } elseif ($auth >= 8) {
-                $auth_settings = serialize($settings);
-            }
-            $result = Database::get()->query("UPDATE auth
-            			SET auth_settings = ?s,
-                            auth_instructions = ?s,
-                            auth_default = GREATEST(auth_default, 1),
-                            auth_title = ?s
-                        WHERE auth_id = ?d",
-                function ($error) use(&$tool_content, $langErrActiv) {
-                    $tool_content .= "<div class='alert alert-warning'>$langErrActiv</div>";
-                }, $auth_settings, $auth_instructions, $auth_title, $auth);
-            if ($result) {
-                if ($result->affectedRows == 1) {
-                    $tool_content .= "<div class='alert alert-success'>$langHasActivate</div>";
-                } else {
-                    $tool_content .= "<div class='alert alert-warning'>$langAlreadyActiv</div>";
-                }
-            }
+    // update table `auth`
+    if ($auth != 6 && $auth < 8) {
+        $auth_settings = pack_settings($settings);
+    } elseif ($auth >= 8) {
+        $auth_settings = serialize($settings);
+    }
+    $result = Database::get()->query("UPDATE auth
+        SET auth_settings = ?s,
+            auth_instructions = ?s,
+            auth_default = GREATEST(auth_default, 1),
+            auth_title = ?s
+        WHERE auth_id = ?d",
+        function ($error) use (&$tool_content, $langErrActiv) {
+            Session::Messages($langErrActiv, 'alert-warning');
+        }, $auth_settings, $auth_instructions, $auth_title, $auth);
+    if ($result) {
+        if ($result->affectedRows == 1) {
+            Session::Messages($langHasActivate, 'alert-success');
+        } else {
+            Session::Messages($langAlreadyActiv, 'alert-info');
         }
     }
+    redirect_to_home_page('modules/admin/auth_process.php?auth=' . $auth);
 } else {
     // handle reloads on auth_process.php after authentication check
     // also handles requests with empty $auth
@@ -271,6 +177,17 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
     if (!$auth) {
         redirect_to_home_page('modules/admin/auth.php');
     }
+
+    $tool_content .= action_bar(array(
+        array('title' => $langConnTest,
+              'url' => "auth_test.php?auth=$auth",
+              'icon' => 'fa-plug',
+              'level' => 'primary-label',
+              'show' => $auth != 1 && get_auth_settings($auth)),
+        array('title' => $langBack,
+              'icon' => 'fa-reply',
+              'level' => 'primary-label',
+              'url' => 'auth.php')));
 
     $pageName = get_auth_info($auth);
 
@@ -284,10 +201,6 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
 	<fieldset>	
         <input type='hidden' name='auth' value='" . getIndirectReference(intval($auth)) . "'>";
 
-    if (!empty($_SESSION['cas_warn']) && $_SESSION['cas_do']) {
-        $auth = 7;
-        $tool_content .= "<div class='alert alert-warning'>$langCASnochange</div>";
-    }
     switch ($auth) {
         case 1: $tool_content .= eclass_auth_form($auth_data['auth_title'], $auth_data['auth_instructions']);
             break;
@@ -309,27 +222,11 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
         case 11:
         case 12:
         case 13:
-            require_once 'modules/auth/methods/hybridauthform.php'; //generic HybridAuth form for provider settings
+            require_once 'modules/auth/methods/hybridauthform.php'; // generic HybridAuth form for provider settings
             hybridAuthForm($auth);
             break;
         default:
             break;
-    }
-    if ($auth > 1 and $auth < 6) {
-        $tool_content .= "
-                <div class='alert alert-info'>$langTestAccount</div>
-                <div class='form-group'>
-                    <label for='test_username' class='col-sm-2 control-label'>$langUsername:</label>
-                    <div class='col-sm-10'>
-                        <input class='form-control' type='text' name='test_username' id='test_username' value='" . q(canonicalize_whitespace($test_username)) . "' autocomplete='off'>
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <label for='test_password' class='col-sm-2 control-label'>$langPass:</label>
-                    <div class='col-sm-10'>
-                        <input class='form-control' type='password' name='test_password' id='test_password' value='" . q($test_password) . "' autocomplete='off'>
-                    </div>
-                </div>";
     }
     $tool_content .= "
                 <div class='form-group'>
@@ -388,15 +285,3 @@ function pack_settings($settings) {
     return implode('|', $items);
 }
 
-/**
- * @implode settings but only values
- * @param type $settings
- * @return string
- */
-function pack_settings_alt($settings) {
-    $items = array();
-    foreach ($settings as $key => $value) {
-        $items[] = "$value";
-    }
-    return implode('|', $items);
-}

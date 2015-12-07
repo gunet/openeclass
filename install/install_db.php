@@ -35,7 +35,7 @@ set_time_limit(0);
 // set default storage engine
 Database::core()->query("SET storage_engine = InnoDB");
 // create eclass database
-Database::core()->query("CREATE DATABASE `$mysqlMainDb` CHARACTER SET utf8");
+Database::core()->query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb` CHARACTER SET utf8");
 
 $db = Database::get();
 
@@ -822,11 +822,12 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
     `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
     `active` INT(11) NOT NULL DEFAULT 0,
+    `public` TINYINT(1) NOT NULL DEFAULT 1,    
     `description` MEDIUMTEXT NULL DEFAULT NULL,
     `end_message` MEDIUMTEXT NULL DEFAULT NULL,
     `anonymized` INT(1) NOT NULL DEFAULT 0,
     `show_results` INT(1) NOT NULL DEFAULT 0,
-	`type` TINYINT NOT NULL DEFAULT 0,
+    `type` TINYINT NOT NULL DEFAULT 0,
     `assign_to_specific` TINYINT NOT NULL DEFAULT '0' ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
@@ -1598,8 +1599,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
                 `options` text NOT NULL,
                 `position` int(3) NOT NULL,
                 `user_id` int(11) NULL,
-                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,                
-                FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");   
+                `course_id` int(11) NULL,
+                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+                 FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+                 FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");
 
 // Conference table
 $db->query("CREATE TABLE IF NOT EXISTS `conference` (

@@ -28,17 +28,17 @@ $require_login = true;
 $mod_opts = '<option value="-1">' . $langAllModules . "</option>";
 $result = Database::get()->queryArray("SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ?d", $course_id);
 
-$statsIntervalOptions = '<option value="1" >' . $langPerDay . "</option>\n" .
-        '<option value="7">' . $langPerWeek . "</option>\n" .
-        '<option value="30" selected>' . $langPerMonth . "</option>\n" .
-        '<option value="365">' . $langPerYear . "</option>\n";
+$statsIntervalOptions = '<option value="1" >' . $langPerDay . "</option>" .
+        '<option value="7">' . $langPerWeek . "</option>" .
+        '<option value="30" selected>' . $langPerMonth . "</option>" .
+        '<option value="365">' . $langPerYear . "</option>";
 
 if($stats_type == 'course'){
     /**Get users of course**/
-    $result = Database::get()->queryArray("SELECT u.id, concat(givenname,' ',surname,' (',username,')') name FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE course_id=?d AND cu.status=5", $course_id);
-    $statsUserOptions = '<option value="0" >' . $langAllUsers . "</option>\n";
+    $result = Database::get()->queryArray("SELECT u.id, concat(givenname,' ',surname,' (',username,')') name FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE course_id=?d", $course_id);
+    $statsUserOptions = '<option value="0" >' . $langAllUsers . "</option>";
     foreach($result as $u){
-       $statsUserOptions .= '<option value="'.$u->id.'" >' . $u->name . "</option>\n"; 
+       $statsUserOptions .= '<option value="'.$u->id.'" >' . $u->name . "</option>";
     }
 }
 elseif($stats_type == 'admin'){
@@ -102,13 +102,13 @@ elseif($stats_type == 'user'){
     $tool_content .= '
     <div class="col-sm-3 col-xs-3"><select name="course" id="course" class="form-control">' . $statsCourseOptions . '</select></div>';
 }
-//<a id="list-view" class="btn btn-default"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><i class="fa fa-list"  data-toggle="tooltip" data-placement="top"></i></a>
+//<a id="list-view" class="btn btn-default"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-toggle="tooltip" data-placement="top"></span></a>
         
 $tool_content .= '<div class="pull-right">
     <div id="toggle-view" class="btn-group">
-    	<a id="plots-view" class="btn btn-info active"  data-placement="top" title="'.$langPlots.'" data-toggle="tooltip" data-original-title="'.$langPlots.'"><i class="fa fa-bar-chart"  data-toggle="tooltip" data-placement="top"></i></a>
-        <a id="list-view" class="btn btn-info"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><i class="fa fa-list"  data-toggle="tooltip" data-placement="top"></i></a>';
-$tool_content .= ($stats_type == 'course')? '<a id="logs-view" class="btn btn-primary"  data-placement="top" title="'.$langUsersLog.'" data-toggle="tooltip" data-original-title="'.$langUsersLog.'"><i class="fa fa-list-alt"  data-toggle="tooltip" data-placement="top"></i></a>':'';
+    	<a id="plots-view" class="btn btn-info active"  data-placement="top" title="'.$langPlots.'" data-toggle="tooltip" data-original-title="'.$langPlots.'"><span class="fa fa-bar-chart"  data-toggle="tooltip" data-placement="top"></span></a>
+        <a id="list-view" class="btn btn-info"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-toggle="tooltip" data-placement="top"></span></a>';
+$tool_content .= ($stats_type == 'course')? '<a id="logs-view" class="btn btn-primary"  data-placement="top" title="'.$langUsersLog.'" data-toggle="tooltip" data-original-title="'.$langUsersLog.'"><span class="fa fa-list-alt"  data-toggle="tooltip" data-placement="top"></span></a>':'';
 
 $tool_content .= '</div>
 </div>';

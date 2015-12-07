@@ -662,7 +662,7 @@ class Calendar_Events {
             $q .= " UNION ";
         }
         $dc = str_replace('start', 'bbb.start_date', $datecond);
-        $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date, '%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + time('01:00'), '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
+        $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date, '%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + time('00:00:01'), '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
                 . "FROM bbb_session bbb JOIN course c ON bbb.course_id=c.id "
                 . "WHERE bbb.course_id =?d AND bbb.active = '1' "
                 . $dc;
@@ -674,7 +674,7 @@ class Calendar_Events {
             $q .= " UNION ";
         }
         $dc = str_replace('start', 'ass.deadline', $datecond);
-        $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline, '%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + time('01:00'), '%Y-%m-%d %H:%i') `end`, concat(ass.description, '\n', '(deadline: ', deadline, ')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+        $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline, '%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + time('00:00:01'), '%Y-%m-%d %H:%i') `end`, concat(ass.description, '\n', '(deadline: ', deadline, ')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                 . "FROM assignment ass JOIN course c ON ass.course_id=c.id "
                 . "WHERE ass.course_id =?d AND ass.active = 1 "
                 . $dc;
@@ -685,7 +685,7 @@ class Calendar_Events {
             $q .= " UNION ";
         }
         $dc = str_replace('start', 'ex.end_date', $datecond);
-        $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date, '%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + time('01:00'), '%Y-%m-%d %H:%i') `end`, concat(ex.description, '\n', '(deadline: ', end_date, ')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
+        $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date, '%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + time('00:00:01'), '%Y-%m-%d %H:%i') `end`, concat(ex.description, '\n', '(deadline: ', end_date, ')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
                 . "FROM exercise ex JOIN course c ON ex.course_id=c.id "
                 . "WHERE ex.course_id =?d AND ex.active = 1 "
                 . $dc;
@@ -1370,9 +1370,9 @@ class Calendar_Events {
        global $langNextMonth, $langPreviousMonth;
 
        $calendar = "<div id='cal-header' class='btn-group btn-group-justified btn-group-sm'>
-                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='prev'><i class='fa fa-caret-left'></i><span class='sr-only'>$langPreviousMonth</span></button></div>
+                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='prev'><span class='fa fa-caret-left'></span><span class='sr-only'>$langPreviousMonth</span></button></div>
                             <div class='btn-group btn-group-sm' style='width:60%;'><button id='current-month' type='button' class='btn btn-default' disabled='disabled'>&nbsp;</button></div>
-                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='next'><i class='fa fa-caret-right'></i><span class='sr-only'>$langNextMonth</span></button></div>
+                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='next'><span class='fa fa-caret-right'></span><span class='sr-only'>$langNextMonth</span></button></div>
                     </div>";
 
        $calendar .= '<div id="bootstrapcalendar"></div><div class="clearfix"></div>';

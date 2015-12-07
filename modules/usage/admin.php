@@ -33,27 +33,10 @@ $head_content .=
     </script>";
 
 /**** Summary info    ****/
-/*$tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel-body'>";
-$tool_content .="<table class='table-default' style='border:0;'>"
-        . "<tr class='even' style='border:0;'>"
-        . "<td style='border:0;'>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'><strong>$langCoursesHeader</strong></div><div class='col-sm-2'><span class='badge'>".count_courses()."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langOpenCoursesShort</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_OPEN)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langOpenCourseWithRegistration</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_REGISTRATION)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langClosedCourses</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_CLOSED)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langCourseInactiveShort</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_INACTIVE)."</span></div></div></td>"
-        . "<td style='border:0;'>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'><strong>$langUsers</strong></div><div class='col-sm-2'><span class='badge'>".count_users()."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langTeachers</div><div class='col-sm-2'><span class='badge'>".count_users(USER_TEACHER)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langStudents</div><div class='col-sm-2'><span class='badge'>".count_users(USER_STUDENT)."</span></div></div>"
-        . "<div class='row' style='margin-bottom:1px;'><div class='col-sm-4'>$langGuest</div><div class='col-sm-2'><span class='badge'>".count_users(USER_GUEST)."</span></div></div></td>"
-        . "</tr>"
-        . "</table>";
-$tool_content .= "</div></div></div>";*/
 
 $tool_content .= action_bar(array(
                 array('title' => $langBack,
-                    'url' => "/modules/admin/",
+                    'url' => "../admin/",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
             ),false);
@@ -62,24 +45,24 @@ $tool_content .= "
 <div class='row'>
     <div class='col-xs-12'>
         <div class='panel panel-default'>
-            <div class='panel-heading'><strong>$langPlatformGenStats</strong></div>
             <div class='panel-body'>
+                <div class='inner-heading'><strong>$langPlatformGenStats</strong></div>
                 <div class='row'>
                     <div class='col-sm-6'>
                         <ul class='list-group'>
                             <li class='list-group-item'><strong>$langUsageCoursesHeader</strong><span class='badge'>".count_courses()."</span></li>
-                            <li class='list-group-item'>$langOpenCoursesShort<span class='badge'>".count_courses(COURSE_OPEN)."</span></li>
-                            <li class='list-group-item'>$langOpenCourseWithRegistration<span class='badge'>".count_courses(COURSE_REGISTRATION)."</span></li>
-                            <li class='list-group-item'>$langClosedCourses<span class='badge'>".count_courses(COURSE_CLOSED)."</span></li>
-                            <li class='list-group-item'>$langCourseInactiveShort<span class='badge'>".count_courses(COURSE_INACTIVE)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langOpenCoursesShort<span class='badge'>".count_courses(COURSE_OPEN)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langOpenCourseWithRegistration<span class='badge'>".count_courses(COURSE_REGISTRATION)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langClosedCourses<span class='badge'>".count_courses(COURSE_CLOSED)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langCourseInactiveShort<span class='badge'>".count_courses(COURSE_INACTIVE)."</span></li>
                         </ul>
                     </div>
                     <div class='col-sm-6'>
                         <ul class='list-group'>
                             <li class='list-group-item'><strong>$langUsageUsers</strong><span class='badge'>".count_users()."</span></li>
-                            <li class='list-group-item'>$langTeachers<span class='badge'>".count_users(USER_TEACHER)."</span></li>
-                            <li class='list-group-item'>$langStudents<span class='badge'>".count_users(USER_STUDENT)."</span></li>
-                            <li class='list-group-item'>$langGuest<span class='badge'>".count_users(USER_GUEST)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge'>".count_users(USER_TEACHER)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge'>".count_users(USER_STUDENT)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langGuest<span class='badge'>".count_users(USER_GUEST)."</span></li>
                         </ul>
                     </div>
                 </div>
@@ -93,23 +76,23 @@ $tool_content .= "
 require_once('form.php');
 
 /****   Plots   ****/
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
-$tool_content .= "<div id='userlogins_container' style='width:69%;float:left;margin-right:2%;'>";
+$tool_content .= "<div class='row plotscontainer'>";
+$tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
 $tool_content .= plot_placeholder("userlogins_stats", $langNbLogin);
 $tool_content .= "</div>";
-$tool_content .= "<div id='favcourses_container' style='width:29%;float:left;'>";
+$tool_content .= "<div id='favcourses_container' class='col-lg-12'>";
 $tool_content .= plot_placeholder("popular_courses", $langFavouriteCourses);
 $tool_content .= "</div>";
-$tool_content .= "</div></div>";
+$tool_content .= "</div>";
 
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
-$tool_content .= "<div id='modulepref_pie_container' style='width:49%;float:left;margin-right:2%;'>";
+$tool_content .= "<div class='row plotscontainer'>";
+$tool_content .= "<div id='modulepref_pie_container' class='col-sm-6'>";
 $tool_content .= plot_placeholder("depuser_stats", $langUsers);
 $tool_content .= "</div>";
-$tool_content .= "<div id='module_container' style='width:49%;float:left;'>";
+$tool_content .= "<div id='module_container' class='col-sm-6'>";
 $tool_content .= plot_placeholder("depcourse_stats", $langCoursesHeader);
 $tool_content .= "</div>";
-$tool_content .= "</div></div>";
+$tool_content .= "</div>";
 
 /****   Datatables   ****/
 
@@ -128,7 +111,7 @@ foreach($langCourseVisibility as $ct){
 $tschema .= "</tr></thead>"
         . "<tbody></tbody>"
         . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th><th></th><th></th></tr></tfoot>";
-$tool_content .= table_placeholder("adetails1", "table table-striped table-bordered", $tschema, "$langUsers $langAnd $langCourses");
+$tool_content .= table_placeholder("adetails1", "table table-default dataTable", $tschema, "$langUsers $langAnd $langCourses");
 $tool_content .= "</div>";
 
 $tool_content .= "<div class='panel panel-default detailscontainer'>";

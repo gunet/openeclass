@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.3
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,16 +21,16 @@
 
 /**
  * @file: altsearch.php
- * @authors list: Karatzidis Stratos <kstratos@uom.gr>
- *                 Vagelis Pitsioygas <vagpits@uom.gr>
- * @description: This script/file tries to authenticate the user, using
+ * @author Karatzidis Stratos <kstratos@uom.gr>
+ * @author Vagelis Pitsioygas <vagpits@uom.gr>
+ * @description This script/file tries to authenticate the user, using
  * his user/pass pair and the authentication method defined by the admin
  */
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
-require_once 'auth.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/auth/auth.inc.php';
 
 $tree = new Hierarchy();
 $userObj = new User();
@@ -38,11 +38,11 @@ $userObj = new User();
 load_js('jstree3');
 
 $user_registration = get_config('user_registration');
-$alt_auth_stud_reg = get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
+$alt_auth_stud_reg = get_config('alt_auth_stud_reg'); // user registration via alternative auth methods
 $alt_auth_prof_reg = get_config('alt_auth_prof_reg'); // prof registration via alternative auth methods
 
 if (!$user_registration) {
-    $tool_content .= "<div class='alert alert-info'>$langCannotRegister</div>";
+    Session::Messages($langCannotRegister, 'alert-info');
     draw($tool_content, 0);
     exit;
 }
@@ -108,21 +108,9 @@ if (!isset($_SESSION['was_validated']) or
     // If user wasn't authenticated in the previous step, try
     // an authentication step now:
     // First check for Shibboleth
-    if (isset($_SESSION['shib_auth']) and $_SESSION['shib_auth'] == true) {
-        $r = Database::get()->querySingle("SELECT auth_settings FROM auth WHERE auth_id = 6");
-        if ($r) {
-            $shibsettings = $r->auth_settings;
-            if ($shibsettings != 'shibboleth' and $shibsettings != '') {
-                $shibseparator = $shibsettings;
-            }
-            if (strpos($_SESSION['shib_surname'], $shibseparator)) {
-                $temp = explode($shibseparator, $_SESSION['shib_surname']);
-                $_SESSION['auth_user_info']['givenname'] = $temp[0];
-                $_SESSION['auth_user_info']['surname'] = $temp[1];
-            }
-        }
-        $_SESSION['auth_user_info']['email'] = $_SESSION['shib_email'];
+    if (isset($_SESSION['shib_uname'])) {
         $uname = $_SESSION['shib_uname'];
+        $_SESSION['auth_user_info'] = get_shibboleth_user_info();;
         $is_valid = true;
     } elseif ($is_submit or ($auth == 7 and !$submit)) {
         unset($_SESSION['was_validated']);

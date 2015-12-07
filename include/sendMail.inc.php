@@ -94,8 +94,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
         }
         $bcc = '';
     }
-    $separator = uniqid('==eClass-Multipart_Boundary_0_', true) . '_' .
-            md5(time());
+    $separator = uniqid('==OeCl_0_', true) . '_' . md5(time());
     $headers = fromHeader($from, $from_address) . $bcc .
 		   "MIME-Version: 1.0" . PHP_EOL .
            "Content-Type: multipart/alternative;" . PHP_EOL .

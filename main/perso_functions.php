@@ -94,7 +94,7 @@ function getUserLessonInfo($uid) {
             }
             $lesson_content .= "<tr class='$visclass'>
 			  <td class='text-left'>
-			  <b><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
+			  <strong><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
 			  <div class='smaller'>" . q($data->professor) . "</div></td>";
             $lesson_content .= "<td class='text-center right-cell'>";
             if ($data->status == USER_STUDENT) {

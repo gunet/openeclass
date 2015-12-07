@@ -208,8 +208,8 @@
                                 <div class='pull-right'>
                                     <form method='post' action='{%STUDENT_VIEW_URL%}' id='student-view-form'>
                                         <button class='btn-toggle {%STUDENT_VIEW_CLASS%}' data-toggle='tooltip' data-placement='top' title='{%STUDENT_VIEW_TITLE%}'>
-                                            <span class='on'><i class='fa fa-users'></i></span>
-                                            <span class='off'><i class='fa fa-graduation-cap'></i></span>
+                                            <span class='on'><span class='fa fa-users'></span></span>
+                                            <span class='off'><span class='fa fa-graduation-cap'></span></span>
                                         </button>
                                     </form>
                                 </div>
@@ -257,10 +257,10 @@
                         <!-- BEGIN leftNavCategoryTitleBlock -->
                         <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{%TOOL_GROUP_ID%}">
                             <div class="panel-heading">
-                                <h3 class="panel-title">
+                                <div class="panel-title h3">
                                     <span class="fa fa-chevron-right"></span>
                                     <span>{%ACTIVE_TOOLS%}</span>
-                                </h3>
+                                </div>
                             </div>
                         </a>
                         <!-- END leftNavCategoryTitleBlock -->
@@ -286,9 +286,9 @@
                     <div class="panel-group outerpanel" id="accordion-right-parent">
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseCourses">
-                                <h4 class="panel-title title">
-                                    <i class="fa fa-list-alt"></i><span class="txt" >{%MY_COURSES%}</span>
-                                </h4>
+                                <div class="panel-title title h5">
+                                    <span class="fa fa-list-alt"></span><span class="txt" >{%MY_COURSES%}</span>
+                                </div>
                             </div>
                             <div id="collapseCourses" class="panel-collapse collapse side-list">
                                 <div class="panel-body">
@@ -298,7 +298,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right" data-target="#collapse{%sideBarCollapseId%}-right">
                                                 <div class="panel-title lesson-title clearfix">
-                                                    <a href="{%sideBarCourseURL%}" class="lesson-title-link">{%sideBarCourseTitle%}</a><i class="fa fa-caret-down lesson-title-caret"></i>
+                                                    <a href="{%sideBarCourseURL%}" class="lesson-title-link">{%sideBarCourseTitle%}</a><span class="fa fa-caret-down lesson-title-caret"></span>
                                                 </div>
                                             </div>
                                             <div id="collapse{%sideBarCollapseId%}-right" class="panel-collapse collapse">
@@ -307,7 +307,7 @@
                                                         <li class="lesson-professor">{%sideBarCourseProf%}</li>
                                                         <li class="lesson-notifications" data-id="{%sideBarCourseID%}">
                                                             <!-- BEGIN sideBarCourseNotifyBlock -->
-                                                            <a href='{%sideBarCourseNotifyURL%}' class='item' title='{%sideBarCourseNotifyTitle%}' data-toggle='tooltip'><i class='fa {%sideBarCourseNotifyIcon%}'></i><span class='count'>{%sideBarCourseNotifyCount%}</span></a>
+                                                            <a href='{%sideBarCourseNotifyURL%}' class='item' title='{%sideBarCourseNotifyTitle%}' data-toggle='tooltip'><span class='fa {%sideBarCourseNotifyIcon%}'></span><span class='count'>{%sideBarCourseNotifyCount%}</span></a>
                                                             <!-- END sideBarCourseNotifyBlock -->
                                                         </li>
                                                     </ul>
@@ -322,9 +322,9 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseMessages">
-                                <h4 class="panel-title title">
-                                    <i class="fa fa-envelope"></i><span class="txt">{%MY_MESSAGES%}</span><span class="num-msgs"></span>
-                                </h4>
+                                <div class="panel-title title h5">
+                                    <span class="fa fa-envelope"></span><span class="txt">{%MY_MESSAGES%}</span><span class="num-msgs"></span>
+                                </div>
                             </div>
                             <div id="collapseMessages" class="panel-collapse collapse side-list overlayed">
                                 <div class="panel-body">
@@ -338,9 +338,9 @@
                         </div>
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseNotices">
-                                <h4 class="panel-title title">
-                                    <i class="fa fa-pencil"></i><span class="txt">{%QUICK_NOTES%}</span>
-                                </h4>
+                                <div class="panel-title title h4">
+                                    <span class="fa fa-pencil"></span><span class="txt">{%QUICK_NOTES%}</span>
+                                </div>
                             </div>
                             <div id="collapseNotices" class="panel-collapse collapse side-list overlayed">
                                 <div class="spinner-div hidden">
@@ -349,11 +349,12 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="input-parent input-group">
-                                        <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <label class="sr-only" for="title-note">{%langEnterNoteLabel%}</label>
                                         <input id="title-note" class="form-control" type="text" placeholder="{%langNoteTitle%}...">
                                     </div>
                                     <div class="input-parent input-group">
-                                        <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <label class="sr-only" for="text-note">{%langEnterNoteLabel%}</label>
                                         <textarea id="text-note" class="form-control" rows="6" placeholder="{%langEnterNote%}..."></textarea>
                                     </div>
