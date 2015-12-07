@@ -188,17 +188,17 @@ if(count($res)>0){
                                     <div class='modal-content'>
                                         <div class='modal-header'>
                                         <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <h4 class='modal-title' id='myModalLabel'>" . q($row->title) . "</h4>
+                                        <div class='modal-title h4' id='myModalLabel'>" . q($row->title) . "</div>
                                     </div>
                                     <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".
                                       standard_text_escape($row->comments)
                                     ."</div>
                                     <div class='modal-footer'>";
                                         if ($previous_id) {
-                                            $tool_content .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><i class='fa fa-arrow-left'></i></a>";
+                                            $tool_content .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><span class='fa fa-arrow-left'></span></a>";
                                         } 
                                         if ($next_id) {
-                                            $tool_content .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><i class='fa fa-arrow-right'></i></a>";
+                                            $tool_content .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
                                         }                                                                              
         $tool_content .=    "                                            
                                     </div>                                        
@@ -234,13 +234,13 @@ if ($course_info->description) {
 }
 /* Disable keywords
 if (!empty($keywords)) {
-    $main_content .= "<p id='keywords'><b>$langCourseKeywords</b> $keywords</p>";
+    $main_content .= "<p id='keywords'><strong>$langCourseKeywords</strong> $keywords</p>";
 }
 */
 $main_content .= "</div>";
 
 if (!empty($addon)) {
-    $main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
+    $main_content .= "<div class='course_info'><div class='h1'>$langCourseAddon</div><p>$addon</p></div>";
 }
 if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
     commenting_add_js();
@@ -370,8 +370,8 @@ if ($is_editor) {
 
 }
 //style='color:#999999; font-size:13px;'
-$bar_content .= "<b>" . $langCode . ":</b> " . q($public_code) . "" .
-                "<br><b>" . $langFaculty . ":</b> ";
+$bar_content .= "<strong>" . $langCode . ":</strong> " . q($public_code) . "" .
+                "<br><strong>" . $langFaculty . ":</strong> ";
 
 $departments = $course->getDepartmentIds($course_id);
 $i = 1;
@@ -408,15 +408,15 @@ switch ($visible) {
         break;
     }
 }
-//$bar_content_2 = "<br><b>$langConfidentiality:</b> $lessonStatus";
-//$bar_content_2 = "<br><b>$langUsers:</b> $Users_link";
+//$bar_content_2 = "<br><strong>$langConfidentiality:</strong> $lessonStatus";
+//$bar_content_2 = "<br><strong>$langUsers:</strong> $Users_link";
 $citation_text = "$professor.&nbsp;<i>$currentCourseName.</i>&nbsp;$langAccessed" . claro_format_locale_date($dateFormatLong, strtotime('now')) . "&nbsp;$langFrom2 {$urlServer}courses/$course_code/";
 $tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                     <div class='modal-dialog'>
                         <div class='modal-content'>
                             <div class='modal-header'>
                                 <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                <h4 class='modal-title' id='myModalLabel'>$langCitation</h4>
+                                <div class='modal-title h4' id='myModalLabel'>$langCitation</div>
                             </div>
                             <div class='modal-body'>".
                               standard_text_escape($citation_text)
@@ -455,7 +455,7 @@ if (isset($level) && !empty($level)) {
     };
         
     $(document).ready(function() {
-        dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><h4 class='modal-title' id='modal-label'>{$langCourseMetadata}</h4></div><div class='modal-body'>body</div></div></div></div>\");
+        dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><div class='modal-title h4' id='modal-label'>{$langCourseMetadata}</div></div><div class='modal-body'>body</div></div></div></div>\");
     });
 
 /* ]]> */
@@ -519,7 +519,7 @@ if ($course_info->home_layout == 3) {
     $left_column = "
         <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
             <div>
-                <img class='banner-image img-responsive' src='$course_image_url'/>
+                <img class='banner-image img-responsive' src='$course_image_url' alt='Course image'/>
             </div>
         </div>";
    $main_content_cols = 'col-sm-7';
@@ -540,7 +540,7 @@ $tool_content .= "
 
             <div class='panel-body'>
                 <div id='course-title-wrapper' class='course-info-title clearfix'>
-                    <h4 class='pull-left'>$langCourseDescriptionShort</h4> $edit_link
+                    <div class='pull-left h4'>$langCourseDescriptionShort</div> $edit_link
                     <ul class='course-title-actions clearfix pull-right list-inline'>
                         <li class='access pull-right'><a href='javascript:void(0);' style='color: #23527C;''><span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='".q($course_info_popover)."'></span></a></li>
                         <li class='access pull-right'><a href='javascript:void(0);'>$lessonStatus</a></li>
@@ -617,7 +617,7 @@ if ($is_editor) {
             $cunits_content .= "<div class='col-xs-12'><div class='panel clearfix'><div class='col-xs-12'>
                                     <div class='item-content'>
                                         <div class='item-header clearfix'>
-                                            <h4 class='item-title'>$href</h4>";
+                                            <div class='item-title h4'>$href</div>";
                                 if ($is_editor) {
                 if ($course_info->view_type == 'weekly') { // actions for course weekly format
                     $cunits_content .= "<div class='item-side'>" .
@@ -700,7 +700,7 @@ if (!$alter_layout) {
         if ($is_editor and $course_info->view_type == 'units') {            
             $link = "{$urlServer}modules/units/info.php?course=$course_code";
             $tool_content .= "<a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
-                                <i class='fa fa-plus-circle'></i>
+                                <span class='fa fa-plus-circle'></span>
                             </a>";           
         }
             
