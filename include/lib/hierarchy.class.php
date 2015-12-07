@@ -616,7 +616,7 @@ jContent;
             }
 
             $html .= '</div>';
-            $html .= '<div><p><a id="ndAdd" href="#add"><i class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="'.q($langNodeAdd).'"></i></a></p></div>';
+            $html .= '<div><p><a id="ndAdd" href="#add"><span class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="'.q($langNodeAdd).'"></span></a></p></div>';
 
             // Unused for multi usecase, however present to use a unique generic JS event function
             $html .= '<input id="dialog-set-key" type="hidden" onchange="" />';

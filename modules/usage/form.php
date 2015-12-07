@@ -61,8 +61,8 @@ $tool_content .= "<div class='input-append date form-group' id='user_date_start'
             <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
         </div>
         <div class='col-xs-2 col-sm-1'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
+            <span class='add-on'><span class='fa fa-times'></span></span>
+            <span class='add-on'><span class='fa fa-calendar'></span></span>
         </div>
         </div>";        
 $tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
@@ -71,8 +71,8 @@ $tool_content .= "<div class='input-append date form-group' id='user_date_end' d
                 <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
             </div>
         <div class='col-xs-2 col-sm-1'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
+            <span class='add-on'><span class='fa fa-times'></span></span>
+            <span class='add-on'><span class='fa fa-calendar'></span></span>
         </div>
         </div>";
 $tool_content .= '<div class="form-group">

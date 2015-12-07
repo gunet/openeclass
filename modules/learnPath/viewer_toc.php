@@ -167,14 +167,14 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><i class="fa fa-arrow-circle-left fa-lg"></i> </a></li>';
+        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-left fa-lg"></span> </a></li>';
     } else {
-        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><i class='fa fa-arrow-circle-left'></i></a></li>";
+        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><span class='fa fa-arrow-circle-left'></span></a></li>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><i class="fa fa-arrow-circle-right fa-lg"></i></a></li>';
+        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-right fa-lg"></span></a></li>';
     } else {
-        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><i class='fa fa-arrow-circle-right'></i></a></li>";
+        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><span class='fa fa-arrow-circle-right'></span></a></li>";
     }
 }
 
@@ -310,13 +310,13 @@ echo "<!DOCTYPE HTML>
     <nav class='navbar navbar-inverse navbar-static-top' role='navigation'>
             <div class='container-fluid'>
                 <div class='navbar-header col-xs-2'>
-                  <a id='leftTOCtoggler' class='btn pull-left'><i class='fa fa-bars fa-lg'></i></a>
+                  <a id='leftTOCtoggler' class='btn pull-left'><span class='fa fa-bars fa-lg'></span></a>
                   <a id='toc_logo' class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='{$themeimg}/eclass-new-logo-small.png' alt='Logo'></a>
                 </div>
                 <div class='navbar-header col-xs-10 pull-right'>
                     <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
                         $prevNextString
-                        <li id='close-btn'><a href='$returl' target='_top'><i class='fa fa-times fa-lg'>&nbsp;<span class='hidden-xs'>$langLogout</span></i></a></li>
+                        <li id='close-btn'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'>&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></li>
                     </ul>
                     <div class='pull-right progressbar-plr'>";
 

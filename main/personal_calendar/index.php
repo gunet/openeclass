@@ -369,7 +369,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
               <div class='col-sm-10'>
                   <div class='input-group'>
                      <input class='form-control' type='text' name='startdate' id='startdate' value='$datetimeToModify'>
-                     <div class='input-group-addon'><span class='add-on'><i class='fa fa-calendar fa-fw'></i></span></i></div>
+                     <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                   </div>
               </div>
         </div>
@@ -378,7 +378,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             <div class='col-sm-10'>
                 <div class='input-group add-on'>
                     <input class='form-control' name='duration' id='duration' type='text' class='input-small' value='" . $durationToModify . "'>
-                    <div class='input-group-addon'><i class='fa fa-clock-o fa-fw'></i></div>
+                    <div class='input-group-addon'><span class='fa fa-clock-o fa-fw'></span></div>
                 </div>
             </div>
         </div>
@@ -415,7 +415,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                 <div class='col-sm-4'>
                   <div class='input-group'>
                      <input class='form-control' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
-                     <div class='input-group-addon'><span class='add-on'><i class='fa fa-calendar fa-fw'></i></span></i></div>
+                     <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                   </div>
                 </div>
               </div>
@@ -501,9 +501,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                         <div id="calendar-header">
                             <div class="pull-right form-inline">
                                 <div class="btn-group">
-                                        <button class="btn btn-default btn-sm" data-calendar-nav="prev"><i class="fa fa-caret-left"></i>  ' . '' . '</button>
+                                        <button class="btn btn-default btn-sm" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
                                         <button class="btn btn-default btn-sm" data-calendar-nav="today">' . $langToday . '</button>
-                                        <button class="btn btn-default btn-sm" data-calendar-nav="next">' . '' . ' <i class="fa fa-caret-right"></i> </button>
+                                        <button class="btn btn-default btn-sm" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
                                 </div>
                                 <div class="btn-group">
                                         <button class="btn btn-default btn-sm" data-calendar-view="year">' . $langYear . '</button>
