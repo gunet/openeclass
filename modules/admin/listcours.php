@@ -188,10 +188,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
 load_js('tools.js');
 load_js('datatables');
-load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#course_results_table').dataTable ({
+            $('#course_results_table').DataTable ({
                 ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."            
                 'bProcessing': true,
                 'bServerSide': true,
@@ -202,6 +201,7 @@ $head_content .= "<script type='text/javascript'>
                 ],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': false,
+                'searchDelay': 1000,
                 'aoColumns': [
                     {'bSortable' : true, 'sWidth': '50%' },
                     {'bSortable' : false, 'sClass': 'center' },
@@ -227,7 +227,7 @@ $head_content .= "<script type='text/javascript'>
                        'sLast':     '&raquo;'
                    }
                }
-            }).fnSetFilteringDelay(1000);
+            });
             $('.dataTables_filter input').attr('placeholder', '$langTitle, $langTeacher');
         });
         </script>";

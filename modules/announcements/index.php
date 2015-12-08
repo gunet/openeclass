@@ -142,16 +142,16 @@ load_js('tools.js');
 //check if Datables code is needed
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
 load_js('datatables');
-load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-           var oTable = $('#ann_table{$course_id}').dataTable ({
+           var oTable = $('#ann_table{$course_id}').DataTable ({
                 ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
                 'sScrollX': true,
                 'responsive': true,
+                'searchDelay': 1000,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -182,7 +182,7 @@ $head_content .= "<script type='text/javascript'>
                            'sLast':     '&raquo;'
                        }
                    }
-            }).fnSetFilteringDelay(1000);
+            });
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
                 var row_id = $(this).data('id');
@@ -197,16 +197,16 @@ $head_content .= "<script type='text/javascript'>
                              value: row_id
                           },
                           success: function(data){
-                            var num_page_records = oTable.fnGetData().length;
-                            var per_page = oTable.fnPagingInfo().iLength;
-                            var page_number = oTable.fnPagingInfo().iPage;
-                            if(num_page_records==1){
+                            var info = oTable.page.info();                            
+                            /*var num_page_records = info.recordsDisplay;
+                            var per_page = info.iLength;*/
+                            var page_number = info.page;                            
+                            /*if(num_page_records==1){
                                 if(page_number!=0) {
                                     page_number--;
                                 }
-                            }
-                            console.log(page_number);
-                            oTable.fnPageChange(page_number);
+                            } */                           
+                            oTable.draw(false);
                           },
                           error: function(xhr, textStatus, error){
                               console.log(xhr.statusText);
@@ -234,10 +234,8 @@ $head_content .= "<script type='text/javascript'>
                         value: row_id, 
                         visible: vis
                   },
-                  success: function(data){
-                    var page_number = oTable.fnPagingInfo().iPage;
-                    var per_page = oTable.fnPagingInfo().iLength
-                    oTable.fnPageChange(page_number);
+                  success: function(data){                    
+                    oTable.draw(false);
                   },
                   error: function(xhr, textStatus, error){
                       console.log(xhr.statusText);
