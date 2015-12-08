@@ -438,20 +438,24 @@ $admin_modules = array(
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'abuse'),
 );
 
+
+// -------------------------------------------
 // modules which can't be enabled or disabled
-$static_module_paths = array('user' => MODULE_ID_USERS,
-    'usage' => MODULE_ID_USAGE,
-    'course_info' => MODULE_ID_COURSEINFO,
-    'course_tools' => MODULE_ID_TOOLADMIN,
-    'units' => MODULE_ID_UNITS,
-    'weeks' => MODULE_ID_WEEKS,
-    'search' => MODULE_ID_SEARCH,
-    'contact' => MODULE_ID_CONTACT,
-    'comments' => MODULE_ID_COMMENTS,
-    'rating' => MODULE_ID_RATING,
-    'sharing' => MODULE_ID_SHARING,
-    'abuse_report' => MODULE_ID_ABUSE_REPORT,            
-    'notes' => MODULE_ID_NOTES);
+// -------------------------------------------
+$static_modules = array(
+    MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user'),
+    MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage'),
+    MODULE_ID_COURSEINFO => array('title' => $langCourseInfo, 'link' => 'course_info'),
+    MODULE_ID_TOOLADMIN => array('title' => $langCourseTools, 'link' => 'course_tools'),
+    MODULE_ID_UNITS => array('title' => $langUnits, 'link' => 'units'),
+    MODULE_ID_WEEKS => array('title' => $langCourseWeeklyFormat, 'link' => 'weeks'),
+    MODULE_ID_SEARCH => array('title' => $langSearch, 'link' => 'search'),
+    MODULE_ID_CONTACT => array('title' => $langContact, 'link' => 'contact'),
+    MODULE_ID_COMMENTS => array('title' => $langComments, 'link' => 'comments'),
+    MODULE_ID_RATING => array('title' => $langCourseRating, 'link' => 'rating'),
+    MODULE_ID_SHARING => array('title' => $langCourseSharing, 'link' => 'sharing'),
+    MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReport, 'link' => 'abuse_report'),
+    MODULE_ID_NOTES => array('title' => $langNotes, 'link' => 'notes'));
 
 // the system admin and power users have rights to all courses
 if ($is_admin or $is_power_user) {
