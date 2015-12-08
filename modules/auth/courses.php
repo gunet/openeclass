@@ -27,7 +27,7 @@ require_once 'include/log.php';
 require_once 'include/lib/hierarchy.class.php';
 $tree = new Hierarchy();
 
-$toolδιName = $langChoiceLesson;
+$toolName = $langChoiceLesson;
 
 $icons = array(
     COURSE_OPEN => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' />",
