@@ -131,7 +131,7 @@ function getToolsArray($cat) {
     // Ignore items not listed in $modules array
     // (for development, when moving to a branch with fewer modules)
     return array_filter($result, function ($item) {
-        return isset($GLOBALS['modules'][$item->id]);
+        return isset($GLOBALS['modules'][$item->module_id]);
     });
 }
 
