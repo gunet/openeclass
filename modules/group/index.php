@@ -207,12 +207,12 @@ if ($is_editor) {
                 $wikiACL['other_edit'] = false;
                 $wikiACL['other_create'] = false;
 
-                $has_wiki = new Wiki();
-                $has_wiki->setTitle($langGroup . " " . $group_num . " - Wiki");
-                $has_wiki->setDescription('');
-                $has_wiki->setACL($wikiACL);
-                $has_wiki->setGroupId($id);
-                $wikiId = $has_wiki->save();
+                $wiki = new Wiki();
+                $wiki->setTitle($langGroup . " " . $group_num . " - Wiki");
+                $wiki->setDescription('');
+                $wiki->setACL($wikiACL);
+                $wiki->setGroupId($id);
+                $wikiId = $wiki->save();
 
                 $mainPageContent = $langWikiMainPageContent;
 
@@ -251,9 +251,9 @@ if ($is_editor) {
 	else $documents = 0;
 	
 	if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
-		$has_wiki = 1;
+		$wiki_enabled = 1;
 	}
-	else $has_wiki = 0;
+	else $wiki_enabled = 0;
 
 	$private_forum = $_POST['private_forum'];
 	$group_id = $_POST['group_id'];
@@ -264,7 +264,7 @@ if ($is_editor) {
                                 private_forum = ?d,
                                 documents = ?d,
                                 wiki = ?d WHERE course_id = ?d AND group_id = ?d",
-                     $self_reg, $has_forum, $private_forum, $documents, $has_wiki, $course_id, $group_id);
+                     $self_reg, $has_forum, $private_forum, $documents, $wiki_enabled, $course_id, $group_id);
         $message = $langGroupPropertiesModified;
 
     } elseif (isset($_POST['submitCategory'])) {
