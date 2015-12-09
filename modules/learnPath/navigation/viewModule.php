@@ -63,7 +63,7 @@ $unitParam = isset($_GET['unit']) ? ('&unit=' . intval($_GET['unit'])) : '';
 if (isset($_GET['go']) and strlen($_GET['go']) > 0) {
     $redirect = "../" . js_escape($_GET['go']) . ".php?course=$course_code" . $unitParam;
 } else {
-    $redirect = "startModule.php?course=$course_code&viewModule_id=" . $_GET['viewModule_id'] . $unitParam;
+    $redirect = "startModule.php?course=$course_code&viewModule_id=" . urlencode($_GET['viewModule_id']) . $unitParam;
 }
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
