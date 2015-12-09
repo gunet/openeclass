@@ -46,7 +46,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     if (isset($_POST['action']) && $is_editor) {
         if ($_POST['action']=='delete') {
            /* delete announcement */
-            $row_id = intval(getDirectReference($_POST['value']));
+            $row_id = intval($_POST['value']);
             $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
             $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
             Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
@@ -57,7 +57,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             exit();
         } elseif ($_POST['action']=='visible') {
           /* modify visibility */
-           $row_id = intval(getDirectReference($_POST['value']));
+           $row_id = intval($_POST['value']);
            $visible = intval($_POST['visible']) ? 1 : 0;
            Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", $visible, $row_id);
            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
@@ -105,26 +105,26 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 '2' => action_button(array(
                     array('title' => $langEditChange,
                           'icon' => 'fa-edit',
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=" . getIndirectReference($myrow->id)),
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id"),
                     array('title' => !$myrow->visible == '0' ? $langViewHide : $langViewShow,
                           'icon' => !$myrow->visible == '0' ? 'fa-eye-slash' : 'fa-eye',
                           'icon-class' => 'vis_btn',
-                          'icon-extra' => "data-vis='$visible' data-id='" . getIndirectReference($myrow->id) . "'"),
+                          'icon-extra' => "data-vis='$visible' data-id='$myrow->id'"),
                     array('title' => $langDelete,
                           'class' => 'delete',
                           'icon' => 'fa-times',
                           'icon-class' => 'delete_btn',
-                          'icon-extra' => "data-id='" . getIndirectReference($myrow->id) . "'"),                    
+                          'icon-extra' => "data-id='$myrow->id'"),                    
                     array('title' => $langMove,
                           'level' => 'primary',
                           'icon' => 'fa-arrow-up',
                           'disabled' => !($iterator != 1 || $offset > 0),
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=" . getIndirectReference($myrow->id)),
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id"),
                     array('title' => $langMove,
                           'level' => 'primary',
                           'disabled' => $offset + $iterator >= $all_announc->total,
                           'icon' => 'fa-arrow-down',
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=" . getIndirectReference($myrow->id)))));
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id"))));
             $iterator++;
         }
     } else {
@@ -142,16 +142,16 @@ load_js('tools.js');
 //check if Datables code is needed
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
 load_js('datatables');
-load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-           var oTable = $('#ann_table{$course_id}').dataTable ({
+           var oTable = $('#ann_table{$course_id}').DataTable ({
                 ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
                 'sScrollX': true,
                 'responsive': true,
+                'searchDelay': 1000,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -182,7 +182,7 @@ $head_content .= "<script type='text/javascript'>
                            'sLast':     '&raquo;'
                        }
                    }
-            }).fnSetFilteringDelay(1000);
+            });
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
                 var row_id = $(this).data('id');
@@ -197,16 +197,16 @@ $head_content .= "<script type='text/javascript'>
                              value: row_id
                           },
                           success: function(data){
-                            var num_page_records = oTable.fnGetData().length;
-                            var per_page = oTable.fnPagingInfo().iLength;
-                            var page_number = oTable.fnPagingInfo().iPage;
-                            if(num_page_records==1){
+                            var info = oTable.page.info();                            
+                            /*var num_page_records = info.recordsDisplay;
+                            var per_page = info.iLength;*/
+                            var page_number = info.page;                            
+                            /*if(num_page_records==1){
                                 if(page_number!=0) {
                                     page_number--;
                                 }
-                            }
-                            console.log(page_number);
-                            oTable.fnPageChange(page_number);
+                            } */                           
+                            oTable.draw(false);
                           },
                           error: function(xhr, textStatus, error){
                               console.log(xhr.statusText);
@@ -234,10 +234,8 @@ $head_content .= "<script type='text/javascript'>
                         value: row_id, 
                         visible: vis
                   },
-                  success: function(data){
-                    var page_number = oTable.fnPagingInfo().iPage;
-                    var per_page = oTable.fnPagingInfo().iLength
-                    oTable.fnPageChange(page_number);
+                  success: function(data){                    
+                    oTable.draw(false);
                   },
                   error: function(xhr, textStatus, error){
                       console.log(xhr.statusText);
@@ -271,11 +269,11 @@ if ($is_editor) {
   $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' . $langEmptyAnTitle . '";</script>';
   /* up and down commands */
   if (isset($_GET['down'])) {
-    $thisAnnouncementId = getDirectReference($_GET['down']);
+    $thisAnnouncementId = $_GET['down'];
     $sortDirection = "DESC";
   }
   if (isset($_GET['up'])) {
-    $thisAnnouncementId = getDirectReference($_GET['up']);
+    $thisAnnouncementId = $_GET['up'];
     $sortDirection = "ASC";
   }
 
@@ -303,7 +301,7 @@ if ($is_editor) {
 
     /* modify */
     if (isset($_GET['modify'])) {
-        $modify = intval(getDirectReference($_GET['modify']));
+        $modify = intval($_GET['modify']);
         $announce = Database::get()->querySingle("SELECT * FROM announcement WHERE id=?d", $modify);
         if ($announce) {
             $AnnouncementToModify = $announce->id;
@@ -323,8 +321,7 @@ if ($is_editor) {
     }
 
     /* submit */
-    if (isset($_POST['submitAnnouncement'])) { // modify announcement 
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();       
+    if (isset($_POST['submitAnnouncement'])) { // modify announcement        
         if ($language == 'el') {
             $datetime = claro_format_locale_date($dateTimeFormatShort);
         } else {
@@ -347,7 +344,7 @@ if ($is_editor) {
         }
         
         if (!empty($_POST['id'])) {
-            $id = intval(getDirectReference($_POST['id']));
+            $id = intval($_POST['id']);
             Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = " . DBHelper::timeAfter() . ", start_display = ?t, stop_display = ?t  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $id);
             $log_type = LOG_MODIFY;
             $message = "<div class='alert alert-success'>$langAnnModify</div>";
@@ -568,13 +565,10 @@ if ($is_editor) {
                 array(
                     'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                 )
-            ))."</div>";
-        if($AnnouncementToModify!=""){
-          $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($AnnouncementToModify) . "'>";
-        }
-        $tool_content .= "</div>
+            ))."</div>
+        <input type='hidden' name='id' value='$AnnouncementToModify'>
+        </div>
         </fieldset>
-        ". generate_csrf_token_form_field() ."
         </form>
         </div>";
     }

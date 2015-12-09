@@ -128,7 +128,11 @@ function getToolsArray($cat) {
                                          course_id = ?d", $cid);
             break;
     }
-    return $result;
+    // Ignore items not listed in $modules array
+    // (for development, when moving to a branch with fewer modules)
+    return array_filter($result, function ($item) {
+        return isset($GLOBALS['modules'][$item->module_id]);
+    });
 }
 
 

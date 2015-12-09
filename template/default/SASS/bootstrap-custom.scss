@@ -913,7 +913,7 @@ a.toggle-active{
                 border: none;
                 background-color: #DEE0E2;
 
-                h4{
+                h4, .h4{
                     cursor: pointer;
                 }
             }
@@ -993,7 +993,7 @@ a.toggle-active{
             }
         }
     }
-    h1,h2,h3,h4,h5,h6{
+    h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
         color: #686868;
         font-weight: 600;
     }
@@ -1105,7 +1105,7 @@ a.toggle-active{
 }
 
 /* Styles for headings and titles */
-h1.page-title
+h1.page-title, .h1.page-title
 {
     margin:0em;
     font-weight: 400!important;
@@ -1166,7 +1166,7 @@ tr.not_visible{
 /* Form styles */
 .form-wrapper {
     @extend .well;
-    h4.form-heading{
+    h4.form-heading, .h4.form-heading{
         border-bottom: 1px solid #ccc;
         padding-bottom: 10px;
         color: #000;
@@ -1451,7 +1451,7 @@ ul.tablelist
         border-bottom:1px solid #ccc;
         margin-top: 15px;
     }
-    .item-header h4.item-title
+    .item-header h4.item-title, .item-header .h4.item-title
     {
         margin:0px;
         font-size: 15px;
@@ -1624,7 +1624,7 @@ ul.tablelist
     & > .panel-heading {
         @extend .clearfix;
         padding: 0 0 0 20px;
-        h3 { 
+        h3, .h3 {
             line-height: 45px; 
         }
     }
@@ -1634,7 +1634,7 @@ ul.tablelist
     & > .panel-heading {
         @extend .clearfix;
         padding: 0 0 0 20px;
-        h3 { 
+        h3, .h3 {
             line-height: 45px;
         }
     }
@@ -1921,7 +1921,7 @@ a.list-group-item.delete:hover{
     margin-bottom: 15px;
     padding-bottom: 5px;
     border-bottom: 1px solid #aaaaaa;
-    h4{
+    h4, .h4{
         line-height: 30px;
         font-size: 16px;
         padding: 0px;
@@ -2308,7 +2308,7 @@ div.login-form:hover {
     -ms-transition: all 120ms linear;
     transition: all 120ms linear;
 }
-div.login-form h2 {
+div.login-form h2, div.login-form .h2 {
     text-align: center;
     font-size: 1.8em;
     margin: 2rem 0rem;
@@ -2625,7 +2625,7 @@ td.forum-response-column {
         border-bottom: 1px solid #ddd;
         margin: 10px 10px;
         padding-bottom: 10px;
-        h4.h4 {
+        h4.h4, div.h4 {
             margin: 5px 0px;
         }
     }
@@ -2724,7 +2724,7 @@ div.glossary-categories{
             border-bottom: 1px #999 solid;
         }
 
-        h4{
+        h4, .h4{
             margin: 0px;
             padding: 0px;
             line-height: 50px;
@@ -2845,4 +2845,7 @@ div #treeModal div .modal-body {
 }
 .li-indented{
     padding-left: 15px !important;
+}
+.h1, .h2, .h3, .h4, .h5, .h6{
+    display: inline;
 }

@@ -32,10 +32,9 @@ if(!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c'){
 }
 elseif(isset($_REQUEST['t']) && ($_REQUEST['t'] == 'a' || ($_REQUEST['t'] == 'u' && isset($_REQUEST['u'])))){
     $require_admin = true;
-    $stats_type = ($_REQUEST['t'] == 'u')? 'user':'admin';
-    
+    $stats_type = ($_REQUEST['t'] == 'u')? 'user':'admin';    
 }
-else{ // expecting $_REQUEST['t'] == 'u'
+else{ // expecting $_REQUEST['t'] == 'u'    
     $require_valid_uid = TRUE;
     $stats_type = 'user';
 }
@@ -121,15 +120,28 @@ $head_content .= "<style>
 
 $pageName = $langUsage;
 
-if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)){
-    require_once "course.php";
-}
-elseif($stats_type == 'admin' && $is_admin){
-    require_once "admin.php";
-}
-else{
-    require_once "user.php";
-    $stats_type = 'user';
+
+if (isset($_GET['per_course_dur'])) {
+    $tool_content .= action_bar(array(
+        array('title' => $langPersonalStats,
+            'url' => "../usage/?t=u",
+            'level' => 'primary-label'),
+        array('title' => $langBack,
+            'url' => "../../main/portfolio.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')
+        ),false);    
+    $tool_content .= user_duration_per_course();
+} else {
+    if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)){
+        require_once "course.php";
+    }
+    elseif($stats_type == 'admin' && $is_admin){
+        require_once "admin.php";
+    } else {
+        require_once "user.php";
+        $stats_type = 'user';
+    }
 }
 
 add_units_navigation(true);
