@@ -99,7 +99,7 @@ if ($is_editor) {
         if($v->validate()) {            
             $group_max = $_POST['group_max'];            
             $group_quantity = $_POST['group_quantity'];
-            $group_description = isset($_POST['description']) ? $_POST['description'] : '';
+            $group_description = isset($_POST['description']) ? $_POST['description'] : '';            
             if (isset($_POST['group_name'])) {
                 $group_name = $_POST['group_name'];
             }
@@ -184,15 +184,15 @@ if ($is_editor) {
                 $query_vars = [
                     $course_id, 
                     $id, 
-                    $has_forum, 
+                    $has_forum,                    
                     $documents, 
                     $wiki
                 ];
-
+                
                 $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,
                                                                     group_id = ?d, self_registration = 1, 
                                                                     allow_unregister = 0, 
-                                                                    forum = 1, private_forum = ?d, 
+                                                                    forum = ?d, private_forum = 0, 
                                                                     documents = ?d, wiki = ?d, 
                                                                     agenda = 0", $query_vars);                
                 
