@@ -99,12 +99,12 @@ if ($is_editor) {
         if($v->validate()) {            
             $group_max = $_POST['group_max'];            
             $group_quantity = $_POST['group_quantity'];
-            $group_description = $_POST['description'];
-            $private_forum = $_POST['private_forum'];
+            $group_description = isset($_POST['description']) ? $_POST['description'] : '';            
             if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on') {
                     $self_reg = 1;
             }
             else $self_reg = 0;            
+
             if (isset($_POST['group_name'])) {
                 $group_name = $_POST['group_name'];
             }
@@ -119,9 +119,9 @@ if ($is_editor) {
             else $documents = 0;
 
             if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
-                    $wiki = 1;
+                    $wiki_enabled = 1;
             }
-            else $wiki = 0;                 
+            else $wiki_enabled = 0;                 
             $group_num = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `group` WHERE course_id = ?d", $course_id)->count;
 
             // Create a hidden category for group forums
@@ -188,11 +188,11 @@ if ($is_editor) {
 
                 $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,
                                                                     group_id = ?d, self_registration = ?d, 
-                                                                    allow_unregister = ?d, 
-                                                                    forum = ?d, private_forum = ?d, 
+                                                                    allow_unregister = 0, 
+                                                                    forum = ?d, private_forum = 0,                                                                    
                                                                     documents = ?d, wiki = ?d, 
-                                                                    agenda = ?d",
-                                                                $course_id, $id, $self_reg, 0, $has_forum, $private_forum, $documents, $wiki, 0);                
+                                                                    agenda = 0",
+                                                                $course_id, $id, $self_reg, $has_forum, $documents, $wiki_enabled);
                 
                 /** ********Create Group Wiki*********** */
                 //Set ACL
@@ -207,12 +207,12 @@ if ($is_editor) {
                 $wikiACL['other_edit'] = false;
                 $wikiACL['other_create'] = false;
 
-                $wiki = new Wiki();
-                $wiki->setTitle($langGroup . " " . $group_num . " - Wiki");
-                $wiki->setDescription('');
-                $wiki->setACL($wikiACL);
-                $wiki->setGroupId($id);
-                $wikiId = $wiki->save();
+                $has_wiki = new Wiki();
+                $has_wiki->setTitle($langGroup . " " . $group_num . " - Wiki");
+                $has_wiki->setDescription('');
+                $has_wiki->setACL($wikiACL);
+                $has_wiki->setGroupId($id);
+                $wikiId = $has_wiki->save();
 
                 $mainPageContent = $langWikiMainPageContent;
 
@@ -251,9 +251,9 @@ if ($is_editor) {
 	else $documents = 0;
 	
 	if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
-		$wiki = 1;
+		$has_wiki = 1;
 	}
-	else $wiki = 0;
+	else $has_wiki = 0;
 
 	$private_forum = $_POST['private_forum'];
 	$group_id = $_POST['group_id'];
@@ -264,7 +264,7 @@ if ($is_editor) {
                                 private_forum = ?d,
                                 documents = ?d,
                                 wiki = ?d WHERE course_id = ?d AND group_id = ?d",
-                     $self_reg, $has_forum, $private_forum, $documents, $wiki, $course_id, $group_id);
+                     $self_reg, $has_forum, $private_forum, $documents, $has_wiki, $course_id, $group_id);
         $message = $langGroupPropertiesModified;
 
     } elseif (isset($_POST['submitCategory'])) {
