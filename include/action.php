@@ -137,7 +137,7 @@ class action {
             // edw kanoume douleia gia ka8e module
             $module_id = $row->module_id;
             
-            $row2 = Database::get()->querySingle("SELECT SUM(hits) AS visits, sum(duration) AS total_dur 
+            $row2 = Database::get()->querySingle("SELECT IFNULL(SUM(hits),0) AS visits, IFNULL(SUM(duration),0) AS total_dur 
                         FROM actions_daily
                        WHERE module_id = ?d
                          AND course_id = ?d
@@ -146,16 +146,15 @@ class action {
             $visits = $row2->visits;
             $total_dur = $row2->total_dur;            
             
-            $result_3 = Database::get()->query("INSERT INTO actions_summary SET 
+	    $result_3 = Database::get()->query("INSERT INTO actions_summary SET 
                                 module_id  = ?d, 
                                 course_id  = ?d, 
                                 visits = ?d, 
                                 start_date = '$start_date', 
                                 end_date = '$end_date', 
-                                duration = $total_dur", $module_id, $course_id, $visits);
+                                duration = ?d", $module_id, $course_id, $visits, $total_dur);
             
-            
-            $result_4 = Database::get()->query("DELETE FROM actions_daily 
+           $result_4 = Database::get()->query("DELETE FROM actions_daily 
                                     WHERE module_id = ?d 
                                       AND course_id = ?d
                                       AND day >= '$start_date' 
