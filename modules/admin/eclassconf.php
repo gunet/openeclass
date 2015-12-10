@@ -804,7 +804,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                            <label for='formSMTPPassword' class='col-sm-2 control-label'>$langPassword:</label>
                            <div class='col-sm-10'>
                                 <div class='input-group'>
-                                    <input type='password' class='form-control' name='smtp_password' id='formSMTPPassword' value='".q(get_config('smtp_password'))."'><span id='revealPass' class='input-group-addon fa fa-eye'></span>
+                                    <input type='password' class='form-control' name='smtp_password' id='formSMTPPassword' value='".q(get_config('smtp_password'))."'><span id='revealPass' class='input-group-addon'><span class='fa fa-eye'></span></span>
                                 </div>
                            </div>
                         </div>
