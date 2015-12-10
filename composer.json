@@ -6,6 +6,7 @@
         "pclzip/pclzip": "2.8.*",
         "ezyang/htmlpurifier": "dev-master",
         "phpids/phpids": "dev-master",
-        "pragmarx/google2fa":"dev-master"
+        "pragmarx/google2fa":"dev-master",
+        "swiftmailer/swiftmailer": "@stable"
     }  
 }

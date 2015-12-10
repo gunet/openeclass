@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "38c77fbbaec616de6cdc78d74665af28",
-    "content-hash": "88be93503a0adac336a682051e0462c9",
+    "hash": "97ad8c50e21e56c7566d6673f7137ec4",
+    "content-hash": "5a5ce08e6b609c00a676266c35555193",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -644,6 +644,59 @@
             "time": "2015-09-18 00:38:04"
         },
         {
+            "name": "swiftmailer/swiftmailer",
+            "version": "v5.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swiftmailer/swiftmailer.git",
+                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/0697e6aa65c83edf97bb0f23d8763f94e3f11421",
+                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9.1,<0.9.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.4-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "lib/swift_required.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Corbyn"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Swiftmailer, free feature-rich PHP mailer",
+            "homepage": "http://swiftmailer.org",
+            "keywords": [
+                "email",
+                "mail",
+                "mailer"
+            ],
+            "time": "2015-06-06 14:19:39"
+        },
+        {
             "name": "vlucas/valitron",
             "version": "dev-master",
             "source": {
@@ -653,7 +706,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/valitron/zipball/3ab56a285dad8610e48518dc57b0f16c5f867578",
+                "url": "https://api.github.com/repos/vlucas/valitron/zipball/46acc7aa565215689952111a7e9774c8a4c0a290",
                 "reference": "3ab56a285dad8610e48518dc57b0f16c5f867578",
                 "shasum": ""
             },
@@ -697,7 +750,8 @@
         "vlucas/valitron": 20,
         "ezyang/htmlpurifier": 20,
         "phpids/phpids": 20,
-        "pragmarx/google2fa": 20
+        "pragmarx/google2fa": 20,
+        "swiftmailer/swiftmailer": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,
