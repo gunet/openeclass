@@ -388,23 +388,23 @@ $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
 //set the lang var for lessons visibility status
 switch ($visible) {
     case COURSE_CLOSED: {
-        $lessonStatus = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span>";
+        $lessonStatus = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span><span class='hidden'>.</span>";
         break;
     }
     case COURSE_REGISTRATION: {
         $lessonStatus = "   <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPrivOpen'>
                                 <span class='fa fa-pencil text-danger fa-custom-lock'></span>
-                            </span>";
+                            </span><span class='hidden'>.</span>";
         break;
     }
     case COURSE_OPEN: {
-        $lessonStatus = "    <span class='fa fa-unlock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPublic'></span>";
+        $lessonStatus = "    <span class='fa fa-unlock fa-fw' data-toggle='tooltip' data-placement='top' title='$langPublic'></span><span class='hidden'>.</span>";
         break;
     }
     case COURSE_INACTIVE: {
         $lessonStatus = "    <span class='fa fa-lock fa-fw' data-toggle='tooltip' data-placement='top' title='$langCourseInactiveShort'>
                                 <span class='fa fa-times text-danger fa-custom-lock'></span>
-                             </span>";
+                             </span><span class='hidden'>.</span>";
         break;
     }
 }
@@ -519,7 +519,7 @@ if ($course_info->home_layout == 3) {
     $left_column = "
         <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
             <div>
-                <img class='banner-image img-responsive' src='$course_image_url' alt='Course image'/>
+                <img class='banner-image img-responsive' src='$course_image_url' alt='Course Banner'/>
             </div>
         </div>";
    $main_content_cols = 'col-sm-7';
@@ -528,7 +528,7 @@ $edit_link = "";
 if ($is_editor) {
     warnCourseInvalidDepartment(true);
     $edit_link = "
-        <div class='access access-edit pull-left'><a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code'><span class='fa fa-pencil' style='line-height: 30px;' data-toggle='tooltip' data-placement='top' title='Επεξεργασία πληροφοριών'></span></a></div>";
+        <div class='access access-edit pull-left'><a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code'><span class='fa fa-pencil' style='line-height: 30px;' data-toggle='tooltip' data-placement='top' title='Επεξεργασία πληροφοριών'></span><span class='hidden'>.</span></a></div>";
 } else {
     $edit_link = " ";
 }
@@ -542,10 +542,10 @@ $tool_content .= "
                 <div id='course-title-wrapper' class='course-info-title clearfix'>
                     <div class='pull-left h4'>$langCourseDescriptionShort</div> $edit_link
                     <ul class='course-title-actions clearfix pull-right list-inline'>
-                        <li class='access pull-right'><a href='javascript:void(0);' style='color: #23527C;''><span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='".q($course_info_popover)."'></span></a></li>
+                        <li class='access pull-right'><a href='javascript:void(0);' style='color: #23527C;''><span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='".q($course_info_popover)."'></span><span class='hidden'>.</span></a></li>
                         <li class='access pull-right'><a href='javascript:void(0);'>$lessonStatus</a></li>
-                        <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span></a></li>
-                        <li class='access pull-right'><a href='{$urlAppend}modules/user/".($is_course_admin?'':'userslist.php')."?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span></a></li>
+                        <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span><span class='hidden'>.</span></a></li>
+                        <li class='access pull-right'><a href='{$urlAppend}modules/user/".($is_course_admin?'':'userslist.php')."?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span><span class='hidden'>.</span></a></li>
                     </ul>
                 </div>
                 $left_column
@@ -700,7 +700,7 @@ if (!$alter_layout) {
         if ($is_editor and $course_info->view_type == 'units') {            
             $link = "{$urlServer}modules/units/info.php?course=$course_code";
             $tool_content .= "<a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
-                                <span class='fa fa-plus-circle'></span>
+                                <span class='fa fa-plus-circle'></span><span class='hidden'>.</span>
                             </a>";           
         }
             
