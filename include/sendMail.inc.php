@@ -158,7 +158,6 @@ function getMailer() {
         }
         $mailer = Swift_Mailer::newInstance($transport);
     }
-echo '<pre>'; print_r($mailer); die;
     return $mailer;
 }
 
