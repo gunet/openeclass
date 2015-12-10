@@ -71,8 +71,9 @@ $tool_content .= action_bar(array(
                     ));
 
 $tool_content .= "<div class='table-responsive'>
-                <table class='table-default'>                    
-                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></td></tr>                                        
+                <table class='table-default'>
+                    <tr><td><a href='../usage/displaylog.php?from_other=TRUE'>$langSystemActions</a></td></tr>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></td></tr>
                     <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=musers'>$langMultipleUsers</a></td></tr>
                     <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=memail'>$langMultipleAddr e-mail</a></td></tr>
                     <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></td></tr>
