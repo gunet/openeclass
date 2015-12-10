@@ -46,9 +46,7 @@ $head_content .= "<script type='text/javascript'>
 
 $toolName = $langOldStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
-
-require_once 'admin_statistics_tools_bar.php';
-admin_statistics_tools("oldStats");
+$navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
 //$min_w is the min date in 'loginout'. Statistics older than $min_w will be shown.
 $query = "SELECT MIN(`when`) AS min_when FROM loginout";
@@ -96,14 +94,14 @@ $result = Database::get()->queryArray($query);
 
 if (count($result) > 0) {
     $chart = new Plotter();
-    $chart->setTitle($langOldStats);
+    $chart->setTitle($langLoginUser);
 
     //add points to chart
     foreach ($result as $row) {
         $mont = $langMonths[$row->month];
         $chart->growWithPoint($mont . " - " . $row->year, $row->visits);
     }
-    $tool_content .= "<p>" . $langVisits . "</p>" . $chart->plot();
+    $tool_content .= $chart->plot();
 } else {
     $tool_content .= "<div class='alert alert-warning'>$langNoStatistics</div>";
 }
