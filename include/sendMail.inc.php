@@ -142,7 +142,7 @@ function getMailer() {
     if (!isset($transport)) {
         $type = get_config('email_transport');
         if ($type == 'smtp') {
-            $transport = Swift_SmtpTransport::newInstance(get_config('smtp_host'), get_config('smtp_port'));
+            $transport = Swift_SmtpTransport::newInstance(get_config('smtp_host'), get_config('smtp_server'));
             $username = get_config('smtp_username');
             if ($username) {
                 $transport->setUsername($username)->setPassword(get_config('smtp_password'));
@@ -158,6 +158,7 @@ function getMailer() {
         }
         $mailer = Swift_Mailer::newInstance($transport);
     }
+echo '<pre>'; print_r($mailer); die;
     return $mailer;
 }
 
