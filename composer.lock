@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4f97f46dd533db3248e75498f3625ff9",
-    "content-hash": "a55ee4841d9a1a2e5cdf6536d97a3c95",
+    "hash": "1153d83875ee7c089dfcedd1a03da8e2",
+    "content-hash": "ac68a95716bf93ea5d2b11ead041ce63",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -871,6 +871,59 @@
             "time": "2015-09-18 00:38:04"
         },
         {
+            "name": "swiftmailer/swiftmailer",
+            "version": "v5.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swiftmailer/swiftmailer.git",
+                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/0697e6aa65c83edf97bb0f23d8763f94e3f11421",
+                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9.1,<0.9.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.4-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "lib/swift_required.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Corbyn"
+                },
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Swiftmailer, free feature-rich PHP mailer",
+            "homepage": "http://swiftmailer.org",
+            "keywords": [
+                "email",
+                "mail",
+                "mailer"
+            ],
+            "time": "2015-06-06 14:19:39"
+        },
+        {
             "name": "symfony/finder",
             "version": "v2.7.7",
             "source": {
@@ -973,7 +1026,8 @@
         "vlucas/valitron": 20,
         "ezyang/htmlpurifier": 20,
         "phpids/phpids": 20,
-        "pragmarx/google2fa": 20
+        "pragmarx/google2fa": 20,
+        "swiftmailer/swiftmailer": 0
     },
     "prefer-stable": false,
     "prefer-lowest": false,
