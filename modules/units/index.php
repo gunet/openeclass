@@ -255,7 +255,7 @@ $tool_content .= "
                             <label class='col-sm-8 control-label'>$langCourseUnits</label>
                             <div class='col-sm-4'>
                                 <label class='hidden' for='id'>$langCourseUnits</label>
-                                <select name='id' class='form-control' title='$langCourseUnits' onChange='document.unitselect.submit();'>
+                                <select name='id' id='id' class='form-control' onChange='document.unitselect.submit();'>
                                     $course_units_options
                                 </select>
                             </div>
