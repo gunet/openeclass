@@ -53,7 +53,7 @@ $head_content .= "<script type='text/javascript'>
                    'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
-                   'sSearch':       '" . $langSearch . "',
+                   'sSearch':       '',
                    'sUrl':          '',
                    'oPaginate': {
                        'sFirst':    '&laquo;',
@@ -63,7 +63,10 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
-            $('.dataTables_filter input').attr('placeholder', '$langDetail');
+            $('.dataTables_filter input').attr({
+                          class : 'form-control input-sm',
+                          placeholder : '$langSearch...'
+                        });
         });
         </script>";
 
@@ -101,12 +104,8 @@ if (isset($_GET['from_other'])) {
     $toolName = $langUsersLog;
     $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
     $tool_content .= action_bar(array(
-        array('title' => $langStat,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-bar-chart',
-            'level' => 'primary-label'),
         array('title' => $langBack,
-            'url' => "../../courses/{$course_code}/",
+            'url' => "index.php?course=$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
     ),false);
@@ -137,8 +136,14 @@ if (isset($_POST['user_date_end'])) {
 }
 
 if (isset($_REQUEST['submit'])) {   
-    $log = new Log();    
-    $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);    
+    $log = new Log();
+    $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
+    if (isset($_GET['from_admin']) or isset($_GET['from_other'])) {
+        draw($tool_content, 3, null, $head_content);
+    } else {
+        draw($tool_content, 2, null, $head_content);
+    }
+    exit();
 }
 
 // if we haven't choose 'system actions'
@@ -262,10 +267,16 @@ if (!isset($_GET['from_other'])) {
       </div>';
 }
 
-$tool_content .= '<div class="col-sm-offset-2 col-sm-10">    
-    <input class="btn btn-primary" type="submit" name="submit" value="' . $langSubmit . '">
-    </div>  
-</form></div>';        
+$tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
+                array(
+                    'text' => $langSubmit,
+                    'name' => 'submit',
+                    'value'=> $langSubmit
+                ),
+                array(
+                    'href' => "index.php?course=$course_code",
+                )
+            ))."</div></div></form></div>";
 
 if (isset($_GET['from_admin']) or isset($_GET['from_other'])) {
     draw($tool_content, 3, null, $head_content);
