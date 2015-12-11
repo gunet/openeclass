@@ -239,8 +239,6 @@ function load_js($file, $init='') {
         } elseif ($file == 'datatables_bootstrap') {
             $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
             $file = 'datatables/media/js/dataTables.bootstrap.js';
-        } elseif ($file == 'datatables_filtering_delay') {
-            $file = 'datatables/media/js/jquery.dataTables_delay.js';
         } elseif ($file == 'jszip') {
             $file = 'jszip/dist/jszip.js';
         } elseif ($file == 'pdfmake') {
