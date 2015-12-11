@@ -2835,6 +2835,21 @@ div #treeModal div .modal-body {
   font-weight: bold;
   color: #000000 !important;
 }
+
+/* Usage Module */
+.inner-heading
+{
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #ccc;
+}
+.li-indented{
+    padding-left: 15px !important;
+}
+.h1, .h2, .h3, .h4, .h5, .h6{
+    display: inline;
+}
+
 .li-indented {
     padding-left: 30px !important;
     padding-left: 15px !important;
