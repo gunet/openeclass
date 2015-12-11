@@ -190,9 +190,9 @@ if ($is_editor) {
                 $query_vars = [
                     $course_id, 
                     $id, 
-                    $has_forum, 
-                    $documents,
+                    $has_forum,
                     $private_forum,
+                    $documents,                  
                     $wiki
                 ];
 
