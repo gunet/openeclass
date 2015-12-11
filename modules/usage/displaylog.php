@@ -138,12 +138,7 @@ if (isset($_POST['user_date_end'])) {
 if (isset($_REQUEST['submit'])) {   
     $log = new Log();
     $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
-    if (isset($_GET['from_admin']) or isset($_GET['from_other'])) {
-        draw($tool_content, 3, null, $head_content);
-    } else {
-        draw($tool_content, 2, null, $head_content);
-    }
-    exit();
+
 }
 
 // if we haven't choose 'system actions'
