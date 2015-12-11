@@ -141,7 +141,7 @@ class Log {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
                 }
             }            
-            $tool_content .= "<table id = 'log_results_table' class='table-default'>";
+            $tool_content .= "<div class='table-responsive'> <table id = 'log_results_table' class='table table-default'>";
             $tool_content .= "<thead>";
             // log header
             $tool_content .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
@@ -192,7 +192,7 @@ class Log {
                 $tool_content .= "</tr>";
             }
             $tool_content .= "</tbody>";
-            $tool_content .= "</table>";
+            $tool_content .= "</table></div>";
         } else {
             $tool_content .= "<div class='alert alert-warning'>$langNoUsersLog</div>";
         }
