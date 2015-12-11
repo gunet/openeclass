@@ -268,7 +268,7 @@ if (!empty($show) and $show == 'closed') {
                             <div id='mail-body'>
                                 <br>
                                 <div id='mail-body-inner'>
-                                    ".q($_POST[comment])."<br><br>
+                                    ".q($_POST['comment'])."<br><br>
                                     <ul id='forum-category'>
                                         <li><span><b>$langManager $siteName:</b></span> <span class='left-space'>$administratorName</span></li>
                                         <li><span><b>$langPhone:</b></span> <span class='left-space'>$telephone</span></li>
