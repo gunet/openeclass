@@ -33,7 +33,7 @@ function send_mail($from, $from_address, $to, $to_address, $subject, $body) {
         $message->setTo(array($to_address => $to));
     }
 
-    getMailer()->send($message);
+    return sendMessage($message);
 }
 
 
@@ -103,9 +103,20 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
   </div>
 </body></html>", 'text/html');
 
-    getMailer()->send($message);
+    return sendMessage($message);
 }
 
+// Try to send a message using Swift Mailer, catching exceptions
+function sendMessage($message) {
+    global $langMailError;
+    try {
+        return getMailer()->send($message);
+    } catch (Exception $e) {
+        Session::Messages("$langMailError<p>" . q($e->getMessage()) . '</p>',
+            'alert-danger');
+        return false;
+    }
+}
 
 // Determine the correct From: header
 function fromHeader($from, $from_address) {
