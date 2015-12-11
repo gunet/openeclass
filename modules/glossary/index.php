@@ -31,7 +31,7 @@ require_once 'include/log.php';
 
 ModalBoxHelper::loadModalBox();
 
-$edit_url = $base_url = 'index.php?course=' . $course_code;
+$data['edit_url'] = $base_url = 'index.php?course=' . $course_code;
 $cat_url = 'categories.php?course=' . $course_code;
 
 /*
@@ -61,12 +61,12 @@ foreach ($categories as $k => $v) {
 }
 if (isset($_GET['cat'])) {
     $cat_id = intval(getDirectReference($_GET['cat']));
-    $edit_url .= "&amp;cat=$cat_id";
+    $data['edit_url'] .= "&amp;cat=$cat_id";
 } else {
     $cat_id = false;
 }
 if (isset($_GET['prefix'])) {
-    $edit_url .= '&amp;prefix=' . urlencode($_GET['prefix']);
+    $data['edit_url'] .= '&amp;prefix=' . urlencode($_GET['prefix']);
 }
 
 $glossary_data = Database::get()->querySingle("SELECT glossary_expand, glossary_index
@@ -93,7 +93,6 @@ if ($glossary_data) {
  * ****************************************** */
 
 if ($is_editor) {
-    
     if (isset($_GET['add']) or isset($_GET['config']) or isset($_GET['edit'])) {
         if (isset($_GET['add'])) {
             $pageName = $langAddGlossaryTerm;
@@ -266,7 +265,14 @@ if ($is_editor) {
                 'url' => $base_url,
                 'name' => $langGlossary
             );
-        $html_id = '';
+        $data['action_bar'] =    
+            action_bar(array(
+                array('title' => $langBack,
+                      'url' => "$base_url",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')
+                )
+            );          
         $category_id = 'none';
         if (isset($_GET['add'])) {
             $pageName = $langAddGlossaryTerm;
@@ -274,87 +280,51 @@ if ($is_editor) {
         } else {
             $pageName = $langEditGlossaryTerm;
             $id = intval(getDirectReference($_GET['edit']));
-            $data = Database::get()->querySingle("SELECT term, definition, url, notes, category_id
+            $data['glossary_item'] = $glossary_item = Database::get()->querySingle("SELECT id, term, definition, url, notes, category_id
                                               FROM glossary WHERE id = ?d", $id);
-            if ($data) {
-                $html_id = "<input type = 'hidden' name='id' value='" . getIndirectReference($id) . "'>";
-                $category_id = is_null($data->category_id) ? 'none' : $data->category_id;
+            if ($glossary_item) {
+                $category_id = is_null($glossary_item->category_id) ? 'none' : $glossary_item->category_id;
             }
             $submit_value = $langModify;
         }
-        $term = Session::has('term') ? Session::get('term') : ( isset($_GET['add']) ? "" : q($data->term) );
-        $url = Session::has('url') ? Session::get('url') : ( isset($_GET['add']) ? "" : q($data->url) );
-        $definition = Session::has('definition') ? Session::get('definition') : (isset($_GET['add']) ? "" : $data->definition );
-        $notes = Session::has('notes') ? Session::get('notes') : (isset($_GET['add']) ? "" : $data->notes );
+        $data['term'] = Session::has('term') ? Session::get('term') : ( isset($_GET['add']) ? "" : q($glossary_item->term) );
+        $data['url'] = Session::has('url') ? Session::get('url') : ( isset($_GET['add']) ? "" : q($glossary_item->url) );
+        $data['definition'] = Session::has('definition') ? Session::get('definition') : (isset($_GET['add']) ? "" : $glossary_item->definition );
+        $notes = Session::has('notes') ? Session::get('notes') : (isset($_GET['add']) ? "" : $glossary_item->notes );
+        $data['category_selection'] = '';
         if ($categories) {
             $categories[0] = '-';
             $indirectcategories[0] = '-';
-            $category_selection = "
+            $data['category_selection'] = "
                         <div class='form-group'>
                              <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
                              <div class='col-sm-10'>
-                                 " . selection($indirectcategories, 'category_id', ($category_id), 'class="form-control"') . "
+                                 " . selection($indirectcategories, 'category_id', $category_id, 'class="form-control"') . "
                              </div>
                         </div>";
             unset($categories['none']);
             unset($indirectcategories['none']);
-        } else {
-            $category_selection = '';
         }
-        
-        $tool_content .= "
-            <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' action='$edit_url' method='post'>
-                  $html_id
-                   <div class='form-group".(Session::getError('term') ? " has-error" : "")."'>
-                        <label for='term' class='col-sm-2 control-label'>$langGlossaryTerm: </label>
-                        <div class='col-sm-10'>
-                            <input type='text' class='form-control' id='term' name='term' placeholder='$langGlossaryTerm' value='$term'>
-                            <span class='help-block'>".Session::getError('term')."</span>
-                        </div>
-                   </div>
-                   <div class='form-group".(Session::getError('definition') ? " has-error" : "")."'>
-                        <label for='term' class='col-sm-2 control-label'>$langGlossaryDefinition: </label>
-                        <div class='col-sm-10'>
-                            " . @text_area('definition', 4, 60, $definition) . "
-                            <span class='help-block'>".Session::getError('definition')."</span>    
-                        </div>
-                   </div>
-                   <div class='form-group".(Session::getError('url') ? " has-error" : "")."'>
-                        <label for='url' class='col-sm-2 control-label'>$langGlossaryUrl: </label>
-                        <div class='col-sm-10'>
-                            <input type='text' class='form-control' id='url' name='url' value='$url'>
-                            <span class='help-block'>".Session::getError('url')."</span>     
-                        </div>
-                   </div>
-                   <div class='form-group'>
-                        <label for='notes' class='col-sm-2 control-label'>$langCategoryNotes: </label>
-                        <div class='col-sm-10'>
-                            " . @rich_text_editor('notes', 4, 60, $notes) . "
-                        </div>
-                   </div>
-                   $category_selection
-                   <div class='form-group'>    
-                        <div class='col-sm-10 col-sm-offset-2'>".form_buttons(array(
-                                    array(
-                                        'text' => $langSave,
-                                        'value'=> $submit_value,
-                                        'name' => 'submit'
-                                    ),
-                                    array(
-                                        'href' => $base_url,
-                                    )
-                                ))."</div>
-                    </div>
-                ". generate_csrf_token_form_field() ."
-                </form>
-            </div>";
+        $data['notes_rich'] = rich_text_editor('notes', 4, 60, $notes);
+        $data['form_buttons'] =
+            form_buttons(array(
+                    array(
+                        'text' => $langSave,
+                        'value'=> $submit_value,
+                        'name' => 'submit'
+                    ),
+                    array(
+                        'href' => $base_url,
+                    )
+                ));
+        echo view('modules.glossary.create', $data);
+        exit;
     }
     $total_glossary_terms = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
-                                                          WHERE course_id = ?d", $course_id)->count;
-    if ($expand_glossary and $total_glossary_terms > $max_glossary_terms) {
+                                                          WHERE course_id = ?d", $course_id)->count;    
+    if ($expand_glossary && $total_glossary_terms > $max_glossary_terms) {
         $tool_content .= sprintf("<div class='alert alert-warning'>$langGlossaryOverLimit</div>", "<b>$max_glossary_terms</b>");
-    }
+    }        
 } else {
     // Show categories link for students if needed
     if ($categories) {
@@ -457,10 +427,10 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
                         array('title' => $langEditChange,
-                              'url' => "$edit_url&amp;edit=" . getIndirectReference($g->id),
+                              'url' => "$data[edit_url]&amp;edit=" . getIndirectReference($g->id),
                               'icon' => 'fa-edit'),
                         array('title' => $langDelete,
-                              'url' => "$edit_url&amp;delete=" . getIndirectReference($g->id),
+                              'url' => "$data[edit_url]&amp;delete=" . getIndirectReference($g->id),
                               'icon' => 'fa-times',
                               'class' => 'delete',
                               'confirm' => $langConfirmDelete))
