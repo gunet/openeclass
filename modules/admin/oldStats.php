@@ -48,6 +48,13 @@ $toolName = $langOldStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "../usage/index.php?t=a",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+            ),false);
+
 //$min_w is the min date in 'loginout'. Statistics older than $min_w will be shown.
 $query = "SELECT MIN(`when`) AS min_when FROM loginout";
 foreach (Database::get()->queryArray($query) as $row) {
