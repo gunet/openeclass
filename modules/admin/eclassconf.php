@@ -298,6 +298,7 @@ EOF;
 // Save new `config` table
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $active_lang_codes = array();
     if (isset($_POST['av_lang'])) {
         foreach ($_POST['av_lang'] as $langcode) {
@@ -1238,6 +1239,7 @@ $tool_content .= "
                     </fieldset>
                 </div>
             </div>
+            ".showSecondFactorChallenge()."
             <div class='form-group'>
                 <div class='col-sm-12'>
                     <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
