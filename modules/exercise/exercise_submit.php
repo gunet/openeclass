@@ -68,6 +68,10 @@ if (isset($_COOKIE['inExercise'])) {
 
 //Identifying ajax request that cancels an active attempt
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        if ($_POST['action'] == 'refreshSession') {
+            // Does nothing just refreshes the session
+            exit();
+        } 
         if ($_POST['action'] == 'endExerciseNoSubmit') {   
             
             $exerciseId = $_POST['eid'];             
@@ -499,7 +503,12 @@ $head_content .= "<script type='text/javascript'>
                             $(window).unbind('unload');
                             document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';                            
                     });
-                    
+                    setInterval(function() {
+                        $.ajax({
+                          type: 'POST',
+                          data: { action: 'refreshSession'}
+                        });                    
+                    }, 300000);
     		});
                 $(exercise_enter_handler);</script>";
 }
