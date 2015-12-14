@@ -467,6 +467,7 @@ if (!$questionList) {
 }
 $tool_content .= "</form>";
 if ($questionList) {
+$refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
 $head_content .= "<script type='text/javascript'>            
                 $(window).bind('beforeunload', function(){
                     var date = new Date();
@@ -508,7 +509,7 @@ $head_content .= "<script type='text/javascript'>
                           type: 'POST',
                           data: { action: 'refreshSession'}
                         });                    
-                    }, 300000);
+                    }, $refresh_time);
     		});
                 $(exercise_enter_handler);</script>";
 }
