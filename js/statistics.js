@@ -56,7 +56,6 @@ var tableOptions = {
 charts = new Object();
 piecourse = -1;
 piemodule = -1;
-logs_refresh_required = true;
 
 $(document).ready(function(){
     $("#toggle-view").children("i").attr('class', views['list'].class);
@@ -89,8 +88,7 @@ $(document).ready(function(){
     });
    $('#plots-view').click(function(){
         if(selectedview != 'plots'){
-            $('#list-view').removeClass("active");
-            $('#logs-view').removeClass("active");
+            $('#list-view').removeClass("active");            
             $(this).addClass("active");
             selectedview = 'plots';
             $('#interval').prop('disabled', false);
@@ -98,35 +96,20 @@ $(document).ready(function(){
             for(var c in charts){
                 charts[c].resize();
             }
-            $('.detailscontainer').hide();
-            $('.logscontainer').hide();
+            $('.detailscontainer').hide();            
         }
     });
     $('#list-view').click(function(){
         if(selectedview != 'list'){
-            $('#plots-view').removeClass("active");
-            $('#logs-view').removeClass("active");
+            $('#plots-view').removeClass("active");            
             $(this).addClass("active");
             selectedview = 'list';
             $('#interval').prop('disabled', true);
-            $('.detailscontainer').show();
-            $('.logscontainer').hide();
+            $('.detailscontainer').show();            
             $('.plotscontainer').hide();
         }
     });
-    $('#logs-view').click(function(){
-        if(selectedview != 'logs'){
-            refresh_users_activity_table();
-            $('#plots-view').removeClass("active");
-            $('#list-view').removeClass("active");
-            $(this).addClass("active");
-            selectedview = 'logs';
-            $('#interval').prop('disabled', true);
-            $('.logscontainer').show();
-            $('.detailscontainer').hide();
-            $('.plotscontainer').hide();
-        }
-    });
+    
     sdate = $('#startdate').datepicker("getDate");
     startdate = sdate.getFullYear()+"-"+(sdate.getMonth()+1)+"-"+sdate.getDate();
     edate = $('#enddate').datepicker("getDate");
@@ -222,8 +205,7 @@ $(document).ready(function(){
         detailsTables[tableElId].buttons().container().appendTo( '#'+tableElId+'_buttons');
     }
     
-    $('.detailscontainer').hide();
-    $('.logscontainer').hide();
+    $('.detailscontainer').hide();    
     refresh_plots();
     
     
@@ -231,11 +213,7 @@ $(document).ready(function(){
 
 function refresh_plots(){
     xAxisTicksAdjust();    
-    if(stats === 'c'){
-        logs_refresh_required = true;
-        if(selectedview == 'logs'){
-            refresh_users_activity_table();
-        }
+    if(stats === 'c'){        
         refresh_generic_course_plot();
     }
     if(stats === 'u'){
@@ -599,15 +577,6 @@ function refresh_department_course_plot(depid, leafdepartment){
         refreshDataTable($('#adetails1'), department_details);
         fillTableTotalUsers();
     });
-}
-
-function refresh_users_activity_table(){
-    if(logs_refresh_required){
-        $.getJSON('results.php',{t:'cad', s:startdate, e:enddate, u:user, c:course, m:module},function(data){
-            refreshDataTable($('#cdetails3'), data);
-        });
-        logs_refresh_required = false;
-    }
 }
             
 function adjust_interval_options(){

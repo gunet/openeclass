@@ -120,18 +120,3 @@ $tschema = "<thead><tr>"
         . "<tbody></tbody>";
 $tool_content .= table_placeholder("cdetails2", "table table-striped table-bordered", $tschema, $langMonthlyCourseRegistrations);
 $tool_content .= "</div>";
-
-$tool_content .= "<div class='panel panel-default logscontainer'>";
-$tschema = "<thead><tr>"
-        . "<th>$langDate - $langHour</th>"
-        . "<th>$langUser</th>"
-        . "<th>$langModule</th>"
-        . "<th>$langAction</th>"
-        . "<th>$langDetail</th>"
-        . "<th>$langIpAddress</th>"
-        . "<th>$langUsername</th>"
-        . "<th>$langEmail</th>"
-        . "</tr></thead>"
-        . "<tbody></tbody>";
-$tool_content .= table_placeholder("cdetails3", "table table-striped table-bordered", $tschema, $langUsersLog);
-$tool_content .= "</div>";   

@@ -94,10 +94,7 @@ if(isset($_REQUEST['t'])){
             break;
         case 'crd':
             $result = get_course_registration_details($startdate, $enddate, $plotcourse);
-            break;
-        case 'cad':
-            $result = get_course_activity_details($startdate, $enddate, $plotuser, $plotcourse, $plotmodule);
-            break;
+            break;        
         case 'crs':
             $result = get_course_registration_stats($startdate, $enddate, $interval, $plotcourse);
             break;
