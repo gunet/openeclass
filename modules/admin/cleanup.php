@@ -33,6 +33,7 @@ $tool_content .= action_bar(array(
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     foreach (array('temp' => 2, 'garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
         $tool_content .= sprintf("<div class='alert alert-success'>$langCleaningUp</div>", "<b>$days</b>", ($days == 1) ? $langDaySing : $langDayPlur, $dir);
         cleanup("$webDir/courses/$dir", $days);
@@ -42,6 +43,7 @@ if (isset($_POST['submit'])) {
     <div class='alert alert-danger'>$langCleanupInfo</div>
     <div class='col-sm-12 col-sm-offset-5'>
     <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+        ". showSecondFactorChallenge()."
         <input class='btn btn-primary' type='submit' name='submit' value='$langCleanup'>
         ". generate_csrf_token_form_field() ."
     </form>

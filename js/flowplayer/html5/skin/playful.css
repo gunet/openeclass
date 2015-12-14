@@ -77,7 +77,8 @@
 .flowplayer .fp-tooltip{background-color:#000;color:#fff;display:none;position:absolute;padding:5px;}
 .flowplayer .fp-tooltip:before{content:'';display:block;position:absolute;bottom:-5px;width:0;height:0;left:calc(50% - 5px);border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid #000}
 .flowplayer .fp-timeline-tooltip{bottom:41px}
-.flowplayer .fp-timeline:hover+.fp-timeline-tooltip{display:block}
+.flowplayer .fp-timeline:hover+.fp-timeline-tooltip{display:block;}
+.is-touch.flowplayer .fp-timeline:hover+.fp-timeline-tooltip{display:none}
 .flowplayer .fp-subtitle{position:absolute;bottom:40px;left:-99999em;z-index:10;text-align:center;width:100%;opacity:0;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);-webkit-transition:opacity .3s;-moz-transition:opacity .3s;transition:opacity .3s;}
 .flowplayer .fp-subtitle p{display:inline;background-color:#333;background-color:rgba(51,51,51,0.9);color:#eee;padding:.1em .4em;font-size:16px;line-height:1.6;}
 .flowplayer .fp-subtitle p:after{content:'';clear:both}
@@ -97,7 +98,7 @@
 .flowplayer .fp-flash-disabled{background:#333;width:390px;margin:0 auto;position:absolute;bottom:0;color:#fff}
 .is-splash.flowplayer .fp-ui,.is-paused.flowplayer .fp-ui{background:url(img/play_white.png) center no-repeat;background-size:11%;}
 .is-rtl.is-splash.flowplayer .fp-ui,.is-rtl.is-paused.flowplayer .fp-ui{background:url(img/play_white_rtl.png) center no-repeat;background-size:11%}
-@media (-webkit-min-device-pixel-ratio: 2){.is-splash.flowplayer .fp-ui,.is-paused.flowplayer .fp-ui{background:url(img/play_white@x2.png) center no-repeat;background-size:11%}
+@media (-webkit-min-device-pixel-ratio: 2),(min-resolution: 2dppx){.is-splash.flowplayer .fp-ui,.is-paused.flowplayer .fp-ui{background:url(img/play_white@x2.png) center no-repeat;background-size:11%}
 .is-rtl.is-splash.flowplayer .fp-ui,.is-rtl.is-paused.flowplayer .fp-ui{background:url(img/play_white_rtl@x2.png) center no-repeat;background-size:11%}
 }.is-fullscreen.flowplayer .fp-ui{background-size:auto}
 .is-seeking.flowplayer .fp-ui,.is-loading.flowplayer .fp-ui{background-image:none}
@@ -243,11 +244,11 @@
 .flowplayer.is-error object,.flowplayer.is-error video,.flowplayer.is-error .fp-controls,.flowplayer.is-error .fp-time,.flowplayer.is-error .fp-subtitle{display:none}
 .flowplayer.is-ready.is-muted .fp-mute{opacity:.7;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70)}
 .flowplayer.is-ready.is-muted .fp-mute:before{content:"\e605"}
-.flowplayer.is-mouseout .fp-controls,.flowplayer.is-mouseout .fp-title{height:0;-webkit-transition:height .15s .3s;-moz-transition:height .15s .3s;transition:height .15s .3s}
+.flowplayer.is-mouseout .fp-controls,.flowplayer.is-mouseout .fp-mute,.flowplayer.is-mouseout .fp-title{height:0;-webkit-transition:height .15s .3s;-moz-transition:height .15s .3s;transition:height .15s .3s}
 .is-fullscreen.flowplayer.is-mouseout .fp-controls{height:3px;bottom:0}
 .flowplayer.is-mouseout .fp-title{overflow:hidden}
 .flowplayer.is-mouseout .fp-timeline{margin:0 !important}
-.flowplayer.is-mouseout .fp-timeline{-webkit-transition:height .15s .3s,top .15s .3s,margin .15s .3s;-moz-transition:height .15s .3s,top .15s .3s,margin .15s .3s;transition:height .15s .3s,top .15s .3s,margin .15s .3s;height:4px;top:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
+.flowplayer.is-mouseout .fp-timeline,.flowplayer.is-mouseout .fp-volume{-webkit-transition:height .15s .3s,top .15s .3s,margin .15s .3s;-moz-transition:height .15s .3s,top .15s .3s,margin .15s .3s;transition:height .15s .3s,top .15s .3s,margin .15s .3s;height:4px;top:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
 .flowplayer.is-mouseout .fp-fullscreen,.flowplayer.is-mouseout .fp-unload,.flowplayer.is-mouseout .fp-elapsed,.flowplayer.is-mouseout .fp-remaining,.flowplayer.is-mouseout .fp-duration,.flowplayer.is-mouseout .fp-embed,.flowplayer.is-mouseout .fp-volume,.flowplayer.is-mouseout .fp-play,.flowplayer.is-mouseout .fp-menu,.flowplayer.is-mouseout .fp-brand,.flowplayer.is-mouseout .fp-timeline-tooltip,.flowplayer.is-mouseout.aside-time .fp-time{opacity:0;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);-webkit-transition:opacity .15s .3s;-moz-transition:opacity .15s .3s;transition:opacity .15s .3s}
 .flowplayer.is-mouseover .fp-controls,.flowplayer.fixed-controls .fp-controls{height:35px}
 .flowplayer.is-mouseover .fp-title,.flowplayer.fixed-controls .fp-title{height:35px}
@@ -279,7 +280,7 @@
 .flowplayer .fp-context-menu li a{color:#00a7c8 !important;font-size:12.100000000000001px !important}
 .flowplayer .fp-context-menu li:hover:not(.copyright){background-color:#eee}
 .flowplayer .fp-context-menu li.copyright{margin:0;padding-left:110px;background-image:url("img/flowplayer.png");background-repeat:no-repeat;background-size:100px 20px;background-position:5px 5px;border-bottom:1px solid #bbb;}
-@media (-webkit-min-device-pixel-ratio: 2){.flowplayer .fp-context-menu li.copyright{background-image:url("img/flowplayer@2x.png")}
+@media (-webkit-min-device-pixel-ratio: 2),(min-resolution: 2dppx){.flowplayer .fp-context-menu li.copyright{background-image:url("img/flowplayer@2x.png")}
 }@-moz-keyframes pulse{0%{opacity:0}
 100%{opacity:1}
 }@-webkit-keyframes pulse{0%{opacity:0}

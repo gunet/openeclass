@@ -35,6 +35,10 @@ $head_content .=
 /**** Summary info    ****/
 
 $tool_content .= action_bar(array(
+                array('title' => $langOldStats,
+                    'url' => "../admin/oldStats.php",
+                    'icon' => 'fa-bar-chart',
+                    'level' => 'primary-label'),
                 array('title' => $langBack,
                     'url' => "../admin/",
                     'icon' => 'fa-reply',

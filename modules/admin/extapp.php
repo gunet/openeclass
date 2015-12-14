@@ -36,8 +36,19 @@ $appName = isset($_GET['edit'])? $_GET['edit']: null;
 
 // Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page
 if (isset($_POST['state'])) {
+    $appName = $_POST['appName'];
+    if(showSecondFactorChallenge()!=""){
+        $parts = explode(",",$appName);
+        if(count($parts)>1){ 
+            $appName = $parts[0];
+            $_POST['sfaanswer'] = $parts[count($parts)-1];
+        }else{
+            $_POST['sfaanswer'] = '';
+        }
+        checkSecondFactorChallenge();
+    }
     $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
-    $appNameAjax = getDirectReference($_POST['appName']);
+    $appNameAjax = getDirectReference($appName);
     ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
 
     echo $newState;
@@ -122,6 +133,10 @@ if ($appName) {
     $tool_content .="<table class=\"table-default dataTable no-footer extapp-table\">\n";
     $tool_content.="<thead class='list-header'><td>$langExtAppName</td><td>$langExtAppDescription</td></thead>\n";
     $tool_content.="\n";
+    $asktotp ="";
+    if(showSecondFactorChallenge()!=""){
+        $asktotp = " onclick=\"var totp=prompt('Type 2FA:','');this.setAttribute('data-app', this.getAttribute('data-app')+','+escape(totp));\" ";
+    }
     foreach (ExtAppManager::getApps() as $app) {
         $tool_content .="<tr>\n";
         // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!
@@ -131,7 +146,7 @@ if ($appName) {
             $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
         }
         if ($app->isConfigured()){
-            $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"".getIndirectReference($app->getName()) . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . getIndirectReference($app->getName()) . "\"> <i class=\"fa fa-toggle-off\"></i></button>";
+            $app_active = $app->isEnabled() ? "<button $asktotp  type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"".getIndirectReference($app->getName()) . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button $asktotp type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . getIndirectReference($app->getName()) . "\"> <i class=\"fa fa-toggle-off\"></i></button>";
         } else {
             $app_active = "<button type=\"button\" class=\"btn btn-default\" data-app=\"".getIndirectReference($app->getName()) . "\"  data-toggle='modal' data-target='#noSettings'> <i class=\"fa fa-warning\"></i> </button>";
         }

@@ -39,6 +39,7 @@ $tool_content .= action_bar(array(
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $line = strtok($_POST['courses'], "\n");
 
     $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
@@ -147,6 +148,7 @@ if (isset($_POST['submit'])) {
           <label for='language' class='col-sm-3 control-label'>$langLanguage:</label>	  
            <div class='col-sm-9'>" . lang_select_options('lang') . "</div>
          </div>
+         ".showSecondFactorChallenge()."
          <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>

@@ -31,7 +31,6 @@ include '../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/fileUploadLib.inc.php';
-require_once 'modules/graphics/plotter.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 
@@ -51,7 +50,7 @@ $head_content .= "
 <link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />"
 ."<script type='text/javascript'>
 jQuery(document).ready(function() {
-  jQuery('#portfolio_lessons').dataTable({
+  jQuery('#portfolio_lessons').DataTable({
     'bLengthChange': false,
     'iDisplayLength': 5,
     'bSort' : false,
@@ -264,7 +263,7 @@ $tool_content .= "
                     </div>
                     <div class='col-xs-8 col-sm-5'>
                     <div class='h3' style='font-size: 18px; margin: 10px 0 10px 0;'><a href='".$urlServer."main/profile/display_profile.php'>".q("$_SESSION[givenname] $_SESSION[surname]")."</a></div>
-                    <div><div class='h5'><span class='tag'>$langHierarchyNode :</span></div><span class='tag-value text-muted'>";
+                    <div><div class='h5'><span class='tag'>$langHierarchyNode: </span></div><span class='tag-value text-muted'>";
                     $departments = $user->getDepartmentIds($uid);
                         $i = 1;
                         foreach ($departments as $dep) {
@@ -297,57 +296,3 @@ $tool_content .= "
 </div>
 ";
 draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);
-
-/**
- * draws statistics graph
- * @global type $uid
- * @global type $langCourseVisits
-s * @return type
- */
-function courseVisitsPlot() {
-    global $uid, $langCourseVisits, $langNoStats;
-    
-    $totalHits = 0;
-    $totalDuration = 0;
-
-    $result = Database::get()->queryArray("SELECT a.code code, a.title title
-                                        FROM course AS a LEFT JOIN course_user AS b
-                                             ON a.id = b.course_id
-                                        WHERE b.user_id = ?d
-                                        AND a.visible != " . COURSE_INACTIVE . "
-                                        ORDER BY a.title", $uid);
-
-    if (count($result) > 0) {  // found courses ?    
-        foreach ($result as $row) {
-            $course_codes[] = $row->code;
-            $course_names[$row->code] = $row->title;
-        }
-        foreach ($course_codes as $code) {
-            $cid = course_code_to_id($code);
-            $row = Database::get()->querySingle("SELECT SUM(hits) AS cnt FROM actions_daily
-                                WHERE user_id = ?d
-                                AND course_id =?d", $uid, $cid);
-            if ($row) {
-                $totalHits += $row->cnt;
-                $hits[$code] = $row->cnt;
-            }
-            $result = Database::get()->querySingle("SELECT SUM(duration) AS duration FROM actions_daily
-                                        WHERE user_id = ?d
-                                        AND course_id = ?d", $uid, $cid);
-            $duration[$code] = $result->duration;
-            $totalDuration += $duration[$code];
-        }
-
-        $chart = new Plotter(600, 300);
-        $chart->setTitle($langCourseVisits);
-        foreach ($hits as $code => $count) {
-            if ($count > 0) {
-                $chart->addPoint($course_names[$code], $count);
-                $chart->modDimension(7, 0);
-            }
-        }
-        return $chart->plot();
-    } else {
-        return "$langNoStats";
-    }
-}

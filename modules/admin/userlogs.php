@@ -36,14 +36,14 @@ $user = new User();
 
 load_js('tools.js');
 load_js('datatables');
-load_js('datatables_filtering_delay');
 load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#log_results_table').dataTable ({
+            $('#log_results_table').DataTable ({
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
+                'searchDelay': 1000,
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '".$langNoResult."',
@@ -60,7 +60,7 @@ $head_content .= "<script type='text/javascript'>
                        'sLast':     '&raquo;'
                    }
                }
-            }).fnSetFilteringDelay(1000);
+            });
             $('.dataTables_filter input').attr('placeholder', '$langDetail');
         });
         </script>";

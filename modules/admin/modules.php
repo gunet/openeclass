@@ -30,6 +30,7 @@ $pageName = $langDisableModules;
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     Database::get()->query('DELETE FROM module_disable');
     $arr = array();
     if (isset($_POST['moduleDisable'])) {
@@ -76,7 +77,7 @@ if (isset($_POST['submit'])) {
              </div>
            </div>";
     }
-    $tool_content .= "
+    $tool_content .= showSecondFactorChallenge()."
            <div class='form-group'>
              <div class='col-xs-12'>
                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitChanges) . "'>

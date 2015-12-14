@@ -37,6 +37,7 @@ $tool_content .= action_bar(array(
 
 if (isset($_POST['submit']) and ! empty($username)) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $res = Database::get()->querySingle("SELECT id FROM user WHERE username=?s", $username);
     if ($res) {
         $user_id = $res->id;
@@ -178,6 +179,7 @@ function printform($message) {
                         </div>
                     </label>
                 </div>
+                ".showSecondFactorChallenge()."
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>

@@ -31,14 +31,14 @@ require_once 'include/log.php';
 
 load_js('tools.js');
 load_js('datatables');
-load_js('datatables_filtering_delay');
 load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#log_results_table').dataTable ({                                
+            $('#log_results_table').DataTable ({                                
                 'sPaginationType': 'full_numbers',
-                'bAutoWidth': true,                
+                'bAutoWidth': true,
+                'searchDelay': 1000,
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -55,7 +55,7 @@ $head_content .= "<script type='text/javascript'>
                        'sLast':     '&raquo;'
                    }
                }
-            }).fnSetFilteringDelay(1000);
+            });
             $('.dataTables_filter input').attr('placeholder', '$langDetail');
         });
         </script>";
@@ -71,8 +71,9 @@ $tool_content .= action_bar(array(
                     ));
 
 $tool_content .= "<div class='table-responsive'>
-                <table class='table-default'>                    
-                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></td></tr>                                        
+                <table class='table-default'>
+                    <tr><td><a href='../usage/displaylog.php?from_other=TRUE'>$langSystemActions</a></td></tr>
+                    <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></td></tr>
                     <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=musers'>$langMultipleUsers</a></td></tr>
                     <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=memail'>$langMultipleAddr e-mail</a></td></tr>
                     <tr><td><a href='$_SERVER[SCRIPT_NAME]?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></td></tr>

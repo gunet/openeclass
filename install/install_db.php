@@ -1359,7 +1359,7 @@ $default_config = array(
     'login_fail_threshold', 15,
     'login_fail_deny_interval', 5,
     'login_fail_forgive_interval', 24,
-    'actions_expire_interval', 12,
+    'actions_expire_interval', 24,
     'log_expire_interval', 5,
     'log_purge_interval', 12,
     'course_metadata', 0,

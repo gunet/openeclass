@@ -2154,8 +2154,13 @@ $langCaseInsensitiveUsername = "Χωρίς διάκριση πεζών/κεφα�
 $lang_email_required = "Να είναι υποχρεωτικό το email του $langOfUser";
 $lang_email_verification_required = "Να είναι υποχρεωτική η επιβεβαίωση του e-mail του $langOfUser";
 $lang_dont_mail_unverified_mails = "Να μην γίνεται αποστολή e-mail σε $langUsersS που δεν έχουν επιβεβαιώσει την ηλεκτρονική τους διεύθυνση";
-$lang_email_from = "Τα emails που στέλνονται θα έχουν την διεύθυνση του αποστολέα";
+$lang_email_from = "Τα emails θα στέλνονται από την προσωπική διεύθυνση αποστολέα των χρηστών";
 $lang_am_required = "Να είναι υποχρεωτικός ο αριθμός μητρώου του $langsOfStudent κατά την εγγραφή";
+$langEmailTransport = "Μέθοδος αποστολής μηνυμάτων";
+$langEmailSMTPServer = 'Διακομιστής SMTP';
+$langEmailSMTPPort = 'Θύρα SMTP';
+$langEmailEncryption = 'Ασφαλής σύνδεση';
+$langEmailSendmail = 'Εντολή sendmail';
 $lang_dropbox_allow_student_to_student = "Να επιτρέπεται η ανταλλαγή μηνυμάτων μαθήματος μεταξύ $langsOfStudents στο υποσύστημα 'Ανταλλαγή Μηνυμάτων'";
 $lang_dropbox_allow_personal_messages = "Να επιτρέπεται η ανταλλαγή προσωπικών μηνυμάτων στο υποσύστημα 'Ανταλλαγή Μηνυμάτων'";
 $lang_login_form = "Οθόνη Σύνδεσης";
@@ -3095,7 +3100,7 @@ $langLogInWith = "Σύνδεση με";
 $langAction = 'Ενέργεια';
 $langRequiredFields = 'Τα πεδία με (*) είναι υποχρεωτικά';
 $langCourseVisits = "Επισκέψεις ανά μάθημα";
-$langDurationVisitsPerCourse = "Χρονική διάρκεια συμμετοχής ανά μάθημα";
+$langDurationVisitsPerCourse = "Διάρκεια συμμετοχής ανά μάθημα";
 $langSearchFor = 'Αναζήτηση στα ονόματα';
 $langSearchExact = 'Για ακριβείς τιμές';
 $langSearchStartsWith = 'Στην αρχή των ονομάτων';
@@ -3557,7 +3562,7 @@ $langFavourite = "Προτίμηση Υποσυστημάτων";
 $langFavouriteCourse = "Προτίμηση Μαθημάτων";
 $langFavouriteCourses = "Δημοφιλέστερα Μαθήματα";
 $langFavouriteExpl = "Παρουσιάζεται η προτίμηση ενός χρήστη ή όλων των χρηστών στα υποσυστήματα μέσα σε ένα χρονικό διάστημα.";
-$langOldStats = "Εμφάνιση παλιών στατιστικών";
+$langOldStats = "Παλιά στατιστικά";
 $langOldStatsExpl = "Συγκεντρωτικά μηνιαία στατιστικά στοιχεία <u>παλιότερα των %s μηνών</u>.";
 $langOldStatsLoginsExpl = "Συγκεντρωτικά μηνιαία στατιστικά σχετικά με τις εισόδους στην πλατφόρμα παλιότερα των %s μηνών.";
 $langOldStatsExpireConfirm = "Επιβεβαίωση εμφάνισης παλιότερων στατιστικών (θα ξεκινήσει διαδικασία συγκέντρωσης στατιστικών παλιότερων των δεκατεσσάρων μηνών). Επιθυμείτε να συνεχίσετε;";
@@ -3656,7 +3661,6 @@ $langLastMonth = "τον τελευταίο μήνα";
 $langUnregUsers = "Απεγγραφές χρηστών από την πλατφόρμα";
 $langLogExpireInterval = "Διάστημα διατήρησης καταγραφής ενεργειών";
 $langLogPurgeInterval = "Διάστημα οριστικής διαγραφής καταγραφής ενεργειών";
-
 
 /* * **************************************************************
  * video.php

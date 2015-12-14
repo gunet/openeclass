@@ -220,7 +220,7 @@ if ($course_info->description) {
 
     // Create full description text & truncated text
     $full_description = $description.$postfix_truncate_less;
-    $truncated_text = ellipsize_html($description, 680, $postfix_truncate_more);
+    $truncated_text = ellipsize_html($description, 1000, $postfix_truncate_more);
 
     // Hidden html text to store the full description text & the truncated desctiption text so as to be accessed by javascript
     $main_content .= "<div id='not_truncated' class='hidden'>$full_description</div>";

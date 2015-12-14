@@ -785,3 +785,59 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
        . "</div></div>";
     return $t;
 }
+
+/**
+ * @brief calculate user duration per course
+ * @global $uid
+ * @global $tool_content
+ * @global $langDurationVisitsPerCourse
+*/
+function user_duration_per_course() {
+    
+    global $uid, $tool_content, $langDurationVisitsPerCourse, $langNotEnrolledToLessons;
+    
+    $totalDuration = 0;
+    $result = Database::get()->queryArray("SELECT SUM(hits) AS cnt, SUM(duration) AS duration, course.code
+                                        FROM course
+                                            LEFT JOIN course_user ON course.id = course_user.course_id
+                                            LEFT JOIN actions_daily
+                                                ON actions_daily.user_id = course_user.user_id AND
+                                                   actions_daily.course_id = course_user.course_id
+                                        WHERE course_user.user_id = ?d
+                                        AND course.visible != " . COURSE_INACTIVE . "
+                                        GROUP BY course.id
+                                        ORDER BY duration DESC", $uid);
+    if (count($result) > 0) {  // found courses ?
+        foreach ($result as $item) {            
+            $totalDuration += $item->duration;    
+            $duration[$item->code] = $item->duration;            
+        }
+       
+    $totalDuration = format_time_duration(0 + $totalDuration, 240);
+    $tool_content .= "                
+                <div class='row margin-bottom-fat margin-top-fat'>
+                  <div class='col-xs-12'>
+                    <ul class='list-group'>
+                      <li class='list-group-item disabled'>
+                        <div class='row'>
+                          <div class='col-sm-12'><b>$langDurationVisitsPerCourse</b></div>
+                        </div>
+                      </li>";
+    foreach ($duration as $code => $time) {
+        $tool_content .= "
+                      <li class='list-group-item'>
+                        <div class='row'>
+                          <div class='col-sm-8'><b>" . q(course_code_to_title($code)) . "</b></div>
+                          <div class='col-sm-4 text-muted'>" . format_time_duration(0 + $time, 240) . "</div>
+                        </div>
+                      </li>";
+    }
+    $tool_content .= "
+                    </ul>
+                  </div>
+                </div>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langNotEnrolledToLessons</div>";
+    }
+    
+}

@@ -41,6 +41,7 @@ load_js('tools.js');
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     if (isset($_POST['months'])) {
         $months = intval($_POST['months']);
     } elseif (isset($_POST['department'])) {
@@ -297,6 +298,7 @@ if (isset($_POST['submit'])) {
                         <textarea class='auth_input form-control' name='user_names' rows='30'>$usernames</textarea>
                     </div>
                 </div>
+                ".showSecondFactorChallenge()."
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "'$confirm>

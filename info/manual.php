@@ -36,73 +36,31 @@ $tool_content .= action_bar(array(
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-$tool_content .= "<table class='table table-striped table-bordered table-hover'>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langFinalDesc, 'detail_descr', $language) . "</td>
-  </tr>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td> " . manlink($langShortDesc, 'short_descr', $language) . "</td>
-  </tr>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langManT, 'mant', $language) . "</td>
-  </tr>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td> " . manlink($langManS, 'mans', $language) . "</td>
-  </tr>
-</table>";
+$tool_content .= "<div class='list-group'>
+  " . manlink($langFinalDesc, 'detail_descr', $language)
+    . manlink($langShortDesc, 'short_descr', $language)
+    . manlink($langManT, 'mant', $language)
+    . manlink($langManS, 'mans', $language) . "
+</div>";
 
-$tool_content .= "<br><p class='tool_title'>$langTeacherTutorials$addon";
+$tool_content .= "<br><p class='tool_title'>$langTeacherTutorials$addon</p>";
 
-$tool_content .= "</p><table class='table table-striped table-bordered table-hover'>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langCreateAccount, 'create_account', $language) . "</a></td>
-  </tr>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langCourseCreate, 'create_course', $language) . "</a></td>
-  </tr>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langUserPortfolio, 'portfolio_management', $language) . "</a></td>
-  </tr>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langAdministratorCourse, 'course_management', $language) . "</a></td>
-  </tr>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langAdministratorForum, 'forum_management', $language) . "</a></td>
-  </tr>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langAdministratorGroup, 'group_management', $language) . "</a></td>
-  </tr>
-</table>";
+$tool_content .= "<div class='list-group'>"
+    . manlink($langCreateAccount, 'create_account', $language)
+    . manlink($langCourseCreate, 'create_course', $language)
+    . manlink($langUserPortfolio, 'portfolio_management', $language)
+    . manlink($langAdministratorCourse, 'course_management', $language)
+    . manlink($langAdministratorForum, 'forum_management', $language)
+    . manlink($langAdministratorGroup, 'group_management', $language) . "
+</div>";
 
 $tool_content .= "<br /><p class='tool_title'>$langStudentTutorials$addon</p>
-<table class='table table-striped table-bordered table-hover'>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langRegCourses, 'register_course', $language) . "</a></td>
-  </tr>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-   <td>" . manlink($langUserPortfolio, 'personal_portfolio', $language) . "</a></td>
-  </tr>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langIntroToCourse, 'ecourse', $language) . "</a>
-  </tr>
-  <tr>
-    <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langForumParticipation, 'forum', $language) . "</a>
-  </tr>
-</table>";
+<div class='list-group'>"
+    . manlink($langRegCourses, 'register_course', $language)
+    . manlink($langUserPortfolio, 'personal_portfolio', $language)
+    . manlink($langIntroToCourse, 'ecourse', $language)
+    . manlink($langForumParticipation, 'forum', $language) . "
+</div>";
 
 
 if (isset($uid) and $uid) {
@@ -120,5 +78,5 @@ if (isset($uid) and $uid) {
  */
 function manlink($desc, $link, $language) {
     $url = 'http://docs.openeclass.org/3.1';
-    return "<a href='$url/$language:$link' target='_blank' class='mainpage'>$desc</a>";
+    return "<a href='$url/$language:$link' target='_blank' class='mainpage list-group-item'>" .icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;$desc</a>";
 }

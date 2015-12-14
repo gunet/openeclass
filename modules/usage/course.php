@@ -31,6 +31,14 @@ $head_content .=
     </script>";
 
 $tool_content .= action_bar(array(
+    array('title' => $langUsersLog,
+        'url' => "displaylog.php?course=$course_code",
+        'icon' => 'fa-user',
+        'level' => 'primary-label'),
+    array('title' => $langOldStats,
+        'url' => "oldStats.php",
+        'icon' => 'fa-bar-chart',
+        'level' => 'primary-label'),
     array('title' => $langBack,
         'url' => "{$urlServer}courses/{$course_code}",
         'icon' => 'fa-reply',

@@ -260,37 +260,35 @@ function load_js($file, $init='') {
     } elseif ($file == 'datatables_bootstrap') {
         $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
         $file = 'datatables/media/js/dataTables.bootstrap.js';
-    } elseif ($file == 'datatables_filtering_delay') {
-        $file = 'datatables/media/js/jquery.dataTables_delay.js';
-         } elseif ($file == 'datatables_tabletools') {
-            $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
-            $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
-        } elseif ($file == 'jszip') {
-            $file = 'jszip/dist/jszip.js';
-        } elseif ($file == 'pdfmake') {
-            $file = 'pdfmake/build/pdfmake.js';
-        } elseif ($file == 'vfs_fonts') {
-            $file = 'pdfmake/build/vfs_fonts.js';
-        } elseif ($file == 'datatables_buttons') {
-            $file = 'datatables/extensions/Buttons/js/dataTables.buttons.js';
-            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.dataTables.css');
-        } elseif ($file == 'datatables_buttons_jqueryui') {
-            $file = 'datatables/extensions/Buttons/js/buttons.jqueryui.js';
-            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.jqueryui.css');
-        } elseif ($file == 'datatables_buttons_bootstrap') {
-            $file = 'datatables/extensions/Buttons/js/buttons.bootstrap.js';
-            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.bootstrap.css');
-        } elseif ($file == 'datatables_buttons_print') {
-            $file = 'datatables/extensions/Buttons/js/buttons.print.js';
-        } elseif ($file == 'datatables_buttons_flash') {
-            $file = 'datatables/extensions/Buttons/js/buttons.flash.js';
-        } elseif ($file == 'datatables_buttons_html5') {
-            $file = 'datatables/extensions/Buttons/js/buttons.html5.js';
-        } elseif ($file == 'datatables_buttons_colVis') {
-            $file = 'datatables/extensions/Buttons/js/buttons.colVis.js';
-        } elseif ($file == 'datatables_buttons_foundation') {
-            $file = 'datatables/extensions/Buttons/js/buttons.foundation.js';
-            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.foundation.css');
+    } elseif ($file == 'datatables_tabletools') {
+       $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
+       $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
+    } elseif ($file == 'jszip') {
+        $file = 'jszip/dist/jszip.js';
+    } elseif ($file == 'pdfmake') {
+        $file = 'pdfmake/build/pdfmake.js';
+    } elseif ($file == 'vfs_fonts') {
+        $file = 'pdfmake/build/vfs_fonts.js';
+    } elseif ($file == 'datatables_buttons') {
+        $file = 'datatables/extensions/Buttons/js/dataTables.buttons.js';
+        $head_content .= css_link('datatables/extensions/Buttons/css/buttons.dataTables.css');
+    } elseif ($file == 'datatables_buttons_jqueryui') {
+        $file = 'datatables/extensions/Buttons/js/buttons.jqueryui.js';
+        $head_content .= css_link('datatables/extensions/Buttons/css/buttons.jqueryui.css');
+    } elseif ($file == 'datatables_buttons_bootstrap') {
+        $file = 'datatables/extensions/Buttons/js/buttons.bootstrap.js';
+        $head_content .= css_link('datatables/extensions/Buttons/css/buttons.bootstrap.css');
+    } elseif ($file == 'datatables_buttons_print') {
+        $file = 'datatables/extensions/Buttons/js/buttons.print.js';
+    } elseif ($file == 'datatables_buttons_flash') {
+        $file = 'datatables/extensions/Buttons/js/buttons.flash.js';
+    } elseif ($file == 'datatables_buttons_html5') {
+        $file = 'datatables/extensions/Buttons/js/buttons.html5.js';
+    } elseif ($file == 'datatables_buttons_colVis') {
+        $file = 'datatables/extensions/Buttons/js/buttons.colVis.js';
+    } elseif ($file == 'datatables_buttons_foundation') {
+        $file = 'datatables/extensions/Buttons/js/buttons.foundation.js';
+        $head_content .= css_link('datatables/extensions/Buttons/css/buttons.foundation.css');
     } elseif ($file == 'RateIt') {
         $file = 'jquery.rateit.min.js';
     } elseif ($file == 'waypoints-infinite') {
@@ -1127,14 +1125,14 @@ function cp737_to_utf8($s) {
                                "\xcc" => '╠', "\xcd" => '═', "\xce" => '╬', "\xcf" => '╧',
                                "\xd0" => '╨', "\xd1" => '╤', "\xd2" => '╥', "\xd3" => '╙',
                                "\xd4" => '╘', "\xd5" => '╒', "\xd6" => '╓', "\xd7" => '╫',
-                               "\xd8" => '╪', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
+                               "\xd8" => '�', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
                                "\xdc" => '▄', "\xdd" => '▌', "\xde" => '▐', "\xdf" => '▀',
                                "\xe0" => 'ω', "\xe1" => 'ά', "\xe2" => 'έ', "\xe3" => 'ή',
                                "\xe4" => 'ϊ', "\xe5" => 'ί', "\xe6" => 'ό', "\xe7" => 'ύ',
                                "\xe8" => 'ϋ', "\xe9" => 'ώ', "\xea" => 'Ά', "\xeb" => 'Έ',
                                "\xec" => 'Ή', "\xed" => 'Ί', "\xee" => 'Ό', "\xef" => 'Ύ',
                                "\xf0" => 'Ώ', "\xf1" => '±', "\xf2" => '≥', "\xf3" => '≤',
-                               "\xf4" => 'Ϊ', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
+                               "\xf4" => '�', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
                                "\xf8" => '°', "\xf9" => '∙', "\xfa" => '·', "\xfb" => '√',
                                "\xfc" => 'ⁿ', "\xfd" => '²', "\xfe" => '■', "\xff" => ' '));
     }
@@ -1218,7 +1216,7 @@ $native_language_names_init = array(
     'de' => 'Deutsch',
     'is' => 'Íslenska',
     'it' => 'Italiano',
-    'jp' => '日本語',
+    'jp' => '日本�',
     'pl' => 'Polski',
     'ru' => 'Русский',
     'tr' => 'Türkçe',
@@ -2310,7 +2308,7 @@ function greek_to_latin($string) {
 // Limited coverage for now
 function remove_accents($string) {
     return strtr(mb_strtoupper($string, 'UTF-8'), array('Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
-        'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
+        'Ό' => 'Ο', 'Ώ' => 'Ω', '�' => 'Ι', 'Ϋ' => 'Υ',
         'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
         'Ç' => 'C', 'Ñ' => 'N', 'Ý' => 'Y',
         'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
