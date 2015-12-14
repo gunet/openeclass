@@ -86,7 +86,6 @@ $head_content .= "
     var langHours = '$langHours';
 </script>";
 load_js('datatables');
-load_js('datatables_filtering_delay');
 load_js('datatables_bootstrap');
 //load_js('datatables_tabletools');
 load_js('datatables_buttons');
