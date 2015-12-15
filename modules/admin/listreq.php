@@ -32,13 +32,13 @@ $tree = new Hierarchy();
 $user = new User();
 
 load_js('datatables');
-load_js('datatables_filtering_delay');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#requests_table').DataTable ({                                
                 'sPaginationType': 'full_numbers',
-                'bAutoWidth': true,                
+                'bAutoWidth': true,
+                'searchDelay': 1000,
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -55,7 +55,7 @@ $head_content .= "<script type='text/javascript'>
                        'sLast':     '&raquo;'
                    }
                }
-            }).fnSetFilteringDelay(1000);
+            });
             $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
         });
         </script>";

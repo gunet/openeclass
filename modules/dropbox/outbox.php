@@ -222,6 +222,7 @@ if (isset($_GET['mid'])) {
                     'bProcessing': true,
                     'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                     'bServerSide': true,
+                    'searchDelay': 1000,
                     'sAjaxSource': 'ajax_handler.php?mbox_type=outbox&course_id=$course_id',
                     'aLengthMenu': [
                        [10, 15, 20 , -1],
@@ -252,7 +253,7 @@ if (isset($_GET['mid'])) {
                                  'sLast':     '&raquo;'
                             }
                         }
-                    }).fnSetFilteringDelay(1000);
+                    });
                     
                     $(document).off( 'click','.delete_out_inner');
                     $(document).on( 'click','.delete_out', function (e) {

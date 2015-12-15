@@ -60,7 +60,6 @@ load_js('tools.js');
 load_js('jquery');
 load_js('bootstrap-datetimepicker');
 load_js('datatables');
-load_js('datatables_filtering_delay');
 
 @$head_content .= "
 <script type='text/javascript'>
@@ -84,6 +83,7 @@ $(function() {
                         },
                'sPaginationType': 'full_numbers',              
                 'bSort': true,
+                'searchDelay': 1000,
                 'oLanguage': {                       
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '".$langNoResult."',
