@@ -4175,7 +4175,7 @@ $langAutoJudgeResultsFor = 'Results for';
 $langAutoJudgeNotEnabledForReport = 'Autojudge is not enabled for this assignment';
 $langAutoJudgeDownloadPdf = 'Download in PDF format';
 $langAutojudgeDescription = '<p>The Auto Judge is a tool to automate grading and correction of programming assignments. More specifically, the course administrator can define scenarios that include input and output based on which the posted assignments are automatically graded.</p><p>This module contacts third-party compilation services which can be selected in <a href="autojudgemoduleconf.php">Settings</a>.</p>';
-$langCourseInvalidDepartment = 'The course is department where course creation is no longer permitted.';
+$langCourseInvalidDepartment = 'The course belongs to a department where course creation is no longer permitted.';
 $langCourseInvalidDepartmentPrompt = 'Please %smove it from course settings%s.';
 $langActivateUserInfo = 'Enter below the usernames, one per line, of the accounts you wish to extend. Lines starting with # are ignored.';
 $langUserDurationExtended = 'The expiration date of user "%s" was extended by %d months.';
