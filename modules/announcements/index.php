@@ -405,7 +405,7 @@ if ($is_editor) {
                 <div id='mail-header'>
                     <br>
                     <div>
-                        <div id='header-title'>$langAnnHasPublished <a href='{$urlServer}courses/$course_code'>" . q($title) . "</a>.</div>
+                        <div id='header-title'>$langAnnHasPublished <a href='{$urlServer}courses/$course_code/'>" . q($title) . "</a>.</div>
                         <ul id='forum-category'>
                             <li><span><b>$langSender:</b></span> <span class='left-space'>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "</span></li>
                             <li><span><b>$langdate:</b></span> <span class='left-space'>$datetime</span></li>
@@ -419,9 +419,9 @@ if ($is_editor) {
                     <br>
                     <div><b>$langSubject:</b> <span class='left-space'>".q($_POST['antitle'])."</span></div><br>
                     <div><b>$langMailBody</b></div>
-                    <div id='mail-body-inner'>".
-                        $_POST['newContent']
-                    ."</div>
+                    <div id='mail-body-inner'>
+                        $newContent
+                    </div>
                 </div>";
 
             $emailFooterContent = "
