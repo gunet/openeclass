@@ -61,7 +61,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 load_js('tools.js');
 load_js('jquery');
 load_js('datatables');
-load_js('datatables_filtering_delay');
 
 @$head_content .= "
 <script type='text/javascript'>

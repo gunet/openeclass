@@ -366,7 +366,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
 load_js('tools.js');
 load_js('datatables');
-load_js('datatables_filtering_delay');
 $head_content .= "<script>
     var csrf_token = '$_SESSION[csrf_token]';
     $(document).ready(function() {
@@ -398,6 +397,7 @@ $head_content .= "<script>
             },
             'bProcessing': true,
             'bServerSide': true,
+            'searchDelay': 1000,
             'sAjaxSource': '$_SERVER[REQUEST_URI]',
             'aLengthMenu': [
                [10, 15, 20 , -1],
