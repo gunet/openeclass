@@ -485,8 +485,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `attendance_users` (
 $db->query("CREATE TABLE IF NOT EXISTS `link` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `course_id` INT(11) NOT NULL,
-    `url` VARCHAR(255),
-    `title` VARCHAR(255),
+    `url` TEXT NOT NULL,
+    `title` TEXT NOT NULL,
     `description` TEXT NOT NULL,
     `category` INT(6) DEFAULT 0 NOT NULL,
     `order` INT(6) DEFAULT 0 NOT NULL,    
