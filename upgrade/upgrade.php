@@ -2994,6 +2994,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             WHERE id = ?d', $order++, $link->id);
                 }
             });
+
+        Database::get()->query("UPDATE link SET `url` = '' WHERE `url` IS NULL");
+        Database::get()->query("UPDATE link SET `title` = '' WHERE `title` IS NULL");
+        Database::get()->query('ALTER TABLE link
+            CHANGE `url` `url` TEXT NOT NULL, 
+            CHANGE `title` `title` TEXT NOT NULL');
+
         // Fix duplicate poll_question orders    
         Database::get()->queryFunc('SELECT `pid`
                 FROM `poll_question`
