@@ -35,7 +35,13 @@ load_js('bootstrap-slider');
 $toolName = $langQuestionnaire;
 $pageName = $langParticipate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
-
+//Identifying ajax request that cancels an active attempt
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        if ($_POST['action'] == 'refreshSession') {
+            // Does nothing just refreshes the session
+            exit();
+        } 
+}
 if (!isset($_REQUEST['UseCase']))
     $_REQUEST['UseCase'] = "";
 if (!isset($_REQUEST['pid']))
@@ -64,10 +70,17 @@ function printPollForm() {
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo;
     
+    $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     $head_content .= " 
     <script>
         $(function() {
-            $('.grade_bar').slider();    
+            $('.grade_bar').slider(); 
+            setInterval(function() {
+                $.ajax({
+                  type: 'POST',
+                  data: { action: 'refreshSession'}
+                });                    
+            }, $refresh_time);            
         });
     </script>";
     
