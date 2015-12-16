@@ -55,6 +55,7 @@ $head_content .= "<script type='text/javascript'>
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-left',
                 language: '".$language."',
+                minuteStep: 10,
                 autoclose: true
             });
         });
@@ -251,20 +252,20 @@ if ($u) {
         $tool_content .= "</div></div>";
         $reg_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);
         $exp_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->expires_at);
-        $tool_content .= "<div class='form-group'>
+        $tool_content .= "
+            <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langRegistrationDate:</label>
                 <div class='col-sm-10'><p class='form-control-static'>" . $reg_date->format("d-m-Y H:i") . "</p></div>
             </div>
-         <div class='input-append date form-group' id='user_date_expires_at' data-date='" . $exp_date->format("d-m-Y H:i") . "' data-date-format='dd-mm-yyyy'>
-         <label class='col-sm-2 control-label'>$langExpirationDate: </label>
-            <div class='col-xs-10 col-sm-9'>
-                <input class='form-control' name='user_date_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
+            <div class='input-append date form-group'>
+                <label class='col-sm-2 control-label'>$langExpirationDate:</label>
+                <div class='col-sm-10'>
+                    <div class='input-group'>
+                        <input class='form-control' id='user_date_expires_at' name='user_date_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
+                        <span class='input-group-addon'><i class='fa fa-calendar'></i></span>
+                    </div>
+                </div>
             </div>
-        <div class='col-xs-2 col-sm-1'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
-         </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langUserID: </label>
           <div class='col-sm-10'><p class='form-control-static'>$u</p></div>
