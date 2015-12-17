@@ -203,7 +203,6 @@ $limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : 0;
 $toolName = $langUsers;
 load_js('tools.js');
 load_js('datatables');
-load_js('datatables_filtering_delay');
 $head_content .= "
 <script type='text/javascript'>
         $(document).ready(function() {

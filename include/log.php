@@ -238,7 +238,7 @@ class Log {
      * @return type
      * drive to appropriate subsystem for displaying details
      */
-    public function course_action_details($module_id, $details) {
+    private function course_action_details($module_id, $details) {
 
         global $langUnknownModule;
 
@@ -959,7 +959,7 @@ class Log {
      * @param type $action_type
      * @return type (real action names)
      */
-    public function get_action_names($action_type) {
+    private function get_action_names($action_type) {
 
         global $langInsert, $langModify, $langDelete, $langModProfile, $langLoginFailures,
         $langFinalize, $langCourseDel, $langModifyInfo, $langUnregUsers, $langUnknownAction;

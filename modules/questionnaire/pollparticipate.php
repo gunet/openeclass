@@ -35,7 +35,13 @@ load_js('bootstrap-slider');
 $toolName = $langQuestionnaire;
 $pageName = $langParticipate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
-
+//Identifying ajax request that cancels an active attempt
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        if ($_POST['action'] == 'refreshSession') {
+            // Does nothing just refreshes the session
+            exit();
+        } 
+}
 if (!isset($_REQUEST['UseCase']))
     $_REQUEST['UseCase'] = "";
 if (!isset($_REQUEST['pid']))
@@ -64,10 +70,17 @@ function printPollForm() {
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo;
     
+    $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     $head_content .= " 
     <script>
         $(function() {
-            $('.grade_bar').slider();    
+            $('.grade_bar').slider(); 
+            setInterval(function() {
+                $.ajax({
+                  type: 'POST',
+                  data: { action: 'refreshSession'}
+                });                    
+            }, $refresh_time);            
         });
     </script>";
     
@@ -92,7 +105,7 @@ function printPollForm() {
     $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
     $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
     
-    if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
+    if ($is_editor || ($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
         $tool_content .= action_bar(array(
             array(
                 'title' => $langBack,

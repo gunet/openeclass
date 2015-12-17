@@ -301,15 +301,15 @@ function load_js($file, $init='') {
         $file = "select2-3.5.1/select2_locale_$language.js";
     } elseif ($file == 'bootstrap-datetimepicker') {
         $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') .
-        js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
+        js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');        
         $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
     } elseif ($file == 'bootstrap-timepicker') {
         $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
         $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
     } elseif ($file == 'bootstrap-datepicker') {
-        $head_content .= css_link('bootstrap-datepicker/css/datepicker3.css') .
-            js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
-        $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
+            $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.min.css') .
+        js_link('bootstrap-datepicker/js/bootstrap-datepicker.min.js');        
+        $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.min.js";    
     } elseif ($file == 'bootstrap-validator') {
         $file = "bootstrap-validator/validator.js";
     } elseif ($file == 'bootstrap-slider') {

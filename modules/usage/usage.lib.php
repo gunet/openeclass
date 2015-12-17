@@ -162,62 +162,6 @@ function get_course_registration_stats($start = null, $end = null, $interval, $c
 
 
 /**
- * Detailed list of user activity in course. The results are 
- * listed in the first table of the course detailed statistics 
- * @param date $start the start of period to retrieve statistics for
- * @param date $end the end of period to retrieve statistics for
- * @param int $user the id of the user to filter out the statistics for
- * @param int $course the id of the course
- * @param int $module the module id
- * @return array an array appropriate for displaying in a datatables table  
-*/
-function get_course_activity_details($start = null, $end = null, $user, $course, $module = -1){
-    
-    $course_cond = " WHERE course_id = ?d";
-    $pars = array($course);
-    
-    $user_cond1 = "";
-    $user_cond2 = "";
-    if($user > 0 ){
-        $user_cond1 = " AND u.id = ?d";
-        $user_cond2 = " AND l.user_id = ?d";
-        $pars[] = $user;
-        $pars[] = $user;
-    }
-    
-    $pars[] = $course;
-    
-    if(!is_null($module) && $module > 0){
-        $module_cond = " AND module_id = ?d ";
-    }
-    else {
-        $module = 0;
-        $module_cond = " AND module_id > ?d";
-    }
-    $pars[] = $module;
-    
-    $date_cond = "";
-    if(!is_null($start) && !empty($start) && !is_null($end) && !empty($end)){
-        $date_cond = " AND ts BETWEEN ?t AND ?t ";
-    }
-    $pars[] = $start;
-    $pars[] = $end;
-    
-    $q = "SELECT l.user_id, course_id, module_id, details, ip, action_type, ts, user_name, username, email FROM log l
-                                JOIN 
-                                (SELECT user_id, username, email, concat(u.surname, ' ', u.givenname) user_name FROM course_user cui JOIN user u ON cui.user_id=u.id $course_cond $user_cond1) cu ON l.user_id=cu.user_id
-                                $user_cond2 $course_cond $module_cond $date_cond 
-                                ORDER BY ts DESC";
-    $r = Database::get()->queryArray($q, $pars);
-    $l = new Log();
-    $formattedr = array();
-    foreach($r AS $record){
-        $formattedr[] = array($record->ts, $record->user_name, which_module($record->module_id), $l->get_action_names($record->action_type), $l->course_action_details($record->module_id, $record->details), $record->ip, $record->username, $record->email);
-    }
-    return $formattedr;
-}
-
-/**
  * Detailed list of user visits and duaration in course. The results are 
  * listed in the second table of the course detailed statistics 
  * @param date $start the start of period to retrieve statistics for

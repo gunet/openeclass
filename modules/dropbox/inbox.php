@@ -354,6 +354,7 @@ $out .=         "
                    'bProcessing': true,
                    'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                    'bServerSide': true,
+                   'searchDelay': 1000,
                    'sAjaxSource': 'ajax_handler.php?mbox_type=inbox&course_id=$course_id',
                    'aLengthMenu': [
                        [10, 15, 20 , -1],
@@ -384,7 +385,7 @@ $out .=         "
                              'sLast':     '&raquo;'
                         }
                     }
-                 }).fnSetFilteringDelay(1000);
+                 });
                  $(document).off( 'click','.delete_in_inner');
                  $(document).on( 'click','.delete_in', function (e) {
                      e.preventDefault();

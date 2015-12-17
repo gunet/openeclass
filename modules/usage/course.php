@@ -35,6 +35,10 @@ $tool_content .= action_bar(array(
         'url' => "displaylog.php?course=$course_code",
         'icon' => 'fa-user',
         'level' => 'primary-label'),
+    array('title' => $langUserDuration,
+        'url' => "userduration?course=$course_code",
+        'icon' => 'fa-clock-o',
+        'level' => 'primary-label'),
     array('title' => $langOldStats,
         'url' => "oldStats.php",
         'icon' => 'fa-bar-chart',
@@ -120,18 +124,3 @@ $tschema = "<thead><tr>"
         . "<tbody></tbody>";
 $tool_content .= table_placeholder("cdetails2", "table table-striped table-bordered", $tschema, $langMonthlyCourseRegistrations);
 $tool_content .= "</div>";
-
-$tool_content .= "<div class='panel panel-default logscontainer'>";
-$tschema = "<thead><tr>"
-        . "<th>$langDate - $langHour</th>"
-        . "<th>$langUser</th>"
-        . "<th>$langModule</th>"
-        . "<th>$langAction</th>"
-        . "<th>$langDetail</th>"
-        . "<th>$langIpAddress</th>"
-        . "<th>$langUsername</th>"
-        . "<th>$langEmail</th>"
-        . "</tr></thead>"
-        . "<tbody></tbody>";
-$tool_content .= table_placeholder("cdetails3", "table table-striped table-bordered", $tschema, $langUsersLog);
-$tool_content .= "</div>";   
