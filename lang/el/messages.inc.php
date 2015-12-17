@@ -4848,6 +4848,9 @@ $langCourseHomeSidebarContent = "Στήλη κυρίως περιεχομένο�
   Theme Options
  * ***************************************** */
 $langThemeSettings = 'Ρυθμίσεις Εμφάνισης';
+$langThemeHomePage = 'Ρυθμίσεις αρχικής σελίδας';
+$langSiteTitle = 'Τίτλος πλατφόρμας';
+$langSiteDescr = 'Περιγραφή αρχικής σελίδας';
 $langActiveTheme = 'Ενεργό Θέμα';
 $langPreviewState = 'Βρίσκετε σε κατάσταση προεπισκόπησης του θέματος';
 $langThemeInstalled = 'Το θέμα εγκαταστάθηκε με επιτυχία';

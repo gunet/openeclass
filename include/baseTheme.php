@@ -98,12 +98,17 @@ function view($view_file, $view_data = array()) {
     }
     
     // set the text and icon on the third bar (header)
+    $active_theme = get_config('theme_options_id');
+    $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $active_theme);
+    $theme_options_styles = unserialize($theme_options->styles);
     if ($menuTypeID == 2) {
         $section_title = $currentCourseName;
     } elseif ($menuTypeID == 3) {
         $section_title = trans('langAdmin');
     } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
         $section_title = trans('langUserPortfolio');
+    } elseif ($theme_options_styles['siteTitle']) {
+        $section_title = $theme_options_styles['siteTitle'];
     } else {
         $section_title = trans('langEclass');
     }

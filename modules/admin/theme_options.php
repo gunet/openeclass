@@ -439,6 +439,7 @@ $tool_content .= "
   <ul class='nav nav-tabs' role='tablist'>
     <li role='presentation' class='active'><a href='#generalsetting' aria-controls='generalsetting' role='tab' data-toggle='tab'>$langGeneralSettings</a></li>
     <li role='presentation'><a href='#navsettings' aria-controls='navsettings' role='tab' data-toggle='tab'>$langNavSettings</a></li>
+    <li role='presentation'><a href='#homesettings' aria-controls='homesettings' role='tab' data-toggle='tab'>$langThemeHomePage</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -631,6 +632,25 @@ $tool_content .= "
                 <input name='leftSubMenuHoverBgColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverBgColor' value='$theme_options_styles[leftSubMenuHoverBgColor]'>
               </div>
             </div>                                       
+        </div>
+    </div>
+    <div role='tabpanel' class='tab-pane fade' id='homesettings'>
+        <div class='panel panel-default'>
+            <div class='panel-body'>
+                <div class='inner-heading'><strong>$langSiteTitle</strong></div>
+                <div class='form-group'>
+                    <label for='siteTitle' class='col-sm-3 control-label'>$langSiteTitle:</label>
+                    <div class='col-sm-9'>
+                        <input name='siteTitle' type='text' class='form-control' id='siteTitle' value='$theme_options_styles[siteTitle]'>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label for='siteDescr' class='col-sm-3 control-label'>$langSiteDescr:</label>
+                    <div class='col-sm-9'>
+                        <input name='siteDescr' type='text' class='form-control' id='siteDescr' value='$theme_options_styles[siteDescr]'>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div role='tabpanel' class='tab-pane' id='messages'>...</div>
