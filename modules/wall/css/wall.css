@@ -1,0 +1,23 @@
+.infinite-container.infinite-loading:after {
+  content: url(../images/loading.gif);
+  display: block;
+  margin-top: 10px;
+  text-align: center; 
+}
+
+.video_status {
+  background: white;
+  display: inline-block;
+  padding: 4px 4px 2px 4px;
+  -webkit-box-shadow: #858585 1px 1px 4px;
+  -moz-box-shadow: #858585 1px 1px 4px;
+  box-shadow: #858585 1px 1px 4px;
+  margin-bottom: 12px;
+}
+
+.userContent {
+  padding: 5px 0 10px 0;
+  width: 100%;
+  line-height: 15pt;
+  font-weight: normal;
+}

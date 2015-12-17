@@ -813,6 +813,24 @@ $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
                 `name` MEDIUMTEXT NOT NULL,
                 `sortorder`  INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `wall_post` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `course_id` INT(11) NOT NULL,
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `content` TEXT DEFAULT '',
+                `youtube` VARCHAR(250) DEFAULT '',
+                `timestamp` INT(11) NOT NULL DEFAULT 0,
+                `pinned` TINYINT(1) NOT NULL DEFAULT 0,
+                INDEX `wall_post_index` (`course_id`)) $charset_spec");
+
+$db->query("CREATE TABLE `wall_post_resources` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `post_id` INT(11) NOT NULL,
+                `title` VARCHAR(255) NOT NULL DEFAULT '',
+                `res_id` INT(11) NOT NULL,
+                `type` VARCHAR(255) NOT NULL DEFAULT '',
+                INDEX `wall_post_resources_index` (`post_id`)) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `course_id` INT(11) NOT NULL,

@@ -4756,6 +4756,28 @@ $langAbuseReportOpen = 'Ανοιχτή αναφορά';
 $langAbuseReportClosed = 'Κλειστή αναφορά';
 
 /* * ***********************************************************
+ * Social Wall
+ * ************************************************************ */
+$langWall = 'Τοίχος';
+$langWallYoutubeVideo = 'Βίντεο Youtube';
+$langWallPostSaved = 'Η ανάρτηση αποθηκεύθηκε';
+$langWallMessageEmpty = 'Το μήνυμα της ανάρτησης ήταν κενό';
+$langWallYoutubeVideoLink = 'Διεύθυνση βίντεο Youtube';
+$langWallYoutubeVideoLinkNotValid = 'Η τιμή του πεδίου για τη διεύθυνση του βίντεο δεν είναι έγκυρη διεύθυνση του Youtube';
+$langNoWallPosts = 'Δεν υπάρχουν αναρτήσεις στον τοίχο του μαθήματος';
+$langWallUser = 'Ο χρήστης ';
+$langWallSharedVideo = ' μοιράστηκε ένα βίντεο';
+$langWallSharedPost = ' μοιράστηκε μια ανάρτηση';
+$langWallPostDeleted = 'Η διαγραφή της ανάρτησης πραγματοποιήθηκε επιτυχώς';
+$langWallPostDelConfirm = 'Είστε σίγουροι ότι επιθυμείτε να διαγράψετε αυτή την ανάρτηση;';
+$langWallPost = 'Ανάρτηση τοίχου'; 
+$langWallPinPost = 'Μόνιμη τοποθέτηση στην κορυφή του τοίχου';
+$langWallUnPinPost = 'Απομάκρυνση από την κορυφή του τοίχου';
+$langWallGeneralSuccess = 'Η ενέργεια εκτελέστηκε επιτυχώς';
+$langWallAttachedResources = 'Συνημμένοι πόροι';
+$langWallHiddenResource = 'Μη ορατός πόρος';
+
+/**************************************************************
  * Custom Profile Fields
  * ************************************************************ */ 
 $langCPFAdmin = 'Διαχείριση προσαρμοσμένων πεδίων προφίλ χρήστη';

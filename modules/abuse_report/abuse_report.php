@@ -24,7 +24,7 @@ require_once 'include/course_settings.php';
  * Needed javascript for abuse report to work
  * @return string
  */
-function abuse_report_add_js() {
+function abuse_report_add_js($deleg_selector = NULL) {
     global $urlServer, $langError;
     static $loaded;
     
@@ -34,9 +34,13 @@ function abuse_report_add_js() {
      
     $loaded = true;
     
+    if (is_null($deleg_selector)) {
+        $deleg_selector = ".modal-footer";
+    }
+    
     return '<script>
               $(function() {
-                $(".modal-footer").on("click", "button.btn-primary", function(event){
+                $("'.$deleg_selector.'").on("click", "button.btn-primary", function(event){
                   var id = $(this).attr("id");
                   var sub_id = id.substr(13);
                   var splitted_id = sub_id.split("_");
@@ -224,6 +228,15 @@ function abuse_report_show_flag ($rtype, $rid, $course_id, $is_editor) {
             }
         } elseif ($rtype == 'link') {
             $result = Database::get()->querySingle("SELECT `user_id` FROM `link` WHERE `id` = ?d", $rid);
+            if ($result) {
+                if ($result->user_id == $_SESSION['uid']) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } elseif ($rtype == 'wallpost') {
+            $result = Database::get()->querySingle("SELECT `user_id` FROM `wall_post` WHERE `id` = ?d", $rid);
             if ($result) {
                 if ($result->user_id == $_SESSION['uid']) {
                     return false;
