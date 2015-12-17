@@ -108,13 +108,13 @@ a
     outline: 0;
 
     &:hover
-        {
+    {
         text-decoration: underline;
-        outline: 0; 
+        outline: 0;
     }
 
     &:focus
-        {
+    {
         outline: 0;
     }
 }
@@ -161,7 +161,7 @@ a
     color: #888888;
 }
 .word-wrapping {
-    word-wrap: break-word;  
+    word-wrap: break-word;
 }
 /* Tiny Module Icons */
 
@@ -196,14 +196,14 @@ a
 {
     color: $color-green !important;
     text-decoration: none;
-    @include transition(all $transition-time linear); 
+    @include transition(all $transition-time linear);
 }
 
 .tiny-icon-red:hover
 {
     color: $color-red !important;
     text-decoration: none;
-    @include transition(all $transition-time linear); 
+    @include transition(all $transition-time linear);
 }
 
 /*!
@@ -717,10 +717,10 @@ footer.footer
                 line-height: 22px;
                 @include transition(all $transition-time linear);
                 span.fa{
-                    margin:0 1em;		
+                    margin:0 1em;
                 }
                 &:hover,
-                    &:focus{
+                &:focus{
                     background: $color-hover;
                     color: white;
                 }
@@ -808,7 +808,7 @@ footer.footer
 }
 @media (max-width: 992px){
     .navbar .navbar-nav > li a{
-        padding: 15px 0.5em;    
+        padding: 15px 0.5em;
     }
 
     #header.navbar .navbar-nav > li:last-child > a,
@@ -902,7 +902,7 @@ a.toggle-active{
             #down.course-btn{
                 padding-top: 0px;
             }
-            .panel{ 
+            .panel{
                 border: none;
                 margin: 0px;
                 @include border-radius(0px);
@@ -974,7 +974,7 @@ a.toggle-active{
                     color: #4da1e4;
                 }
                 a.lesson-title-link:hover, a.lesson-title-link.active
-                    {
+                {
                     text-decoration: none;
                     color: #1a70b1;
                 }
@@ -1021,7 +1021,7 @@ a.toggle-active{
             cursor: pointer;
             position: relative;
             color: rgba(255,255,255,0.5);
-            font-weight: 600;      
+            font-weight: 600;
             margin: 0 16px;
             border-top-width: 0px;
             @include transition(all $transition-time linear);
@@ -1030,7 +1030,7 @@ a.toggle-active{
             font-size: 0.75em;
 
             >li{
-                padding: 5px 5px;          
+                padding: 5px 5px;
             }
         }
         .lesson-id{
@@ -1067,7 +1067,7 @@ a.toggle-active{
                 .fa{
                     font-size: 1.2em;
                     color: rgba(255,255,255,.8);
-                }    
+                }
             }
         }
     }
@@ -1150,7 +1150,7 @@ td.option-btn-cell{
 }
 .not_visible{
     color: rgba(3,3,3,0.3) !important;
-    font-style: italic;        
+    font-style: italic;
 }
 tr.not_visible{
     td:not(:last-child){
@@ -1260,7 +1260,7 @@ ul.tablelist
         overflow:hidden;
 
         &:last-child
-            {
+        {
             border-bottom: none;
         }
 
@@ -1270,12 +1270,12 @@ ul.tablelist
         }
 
         .item-right-cols > span:not(:last-child)
-            {
+        {
             border-right:1px solid #eee;
         }
 
         .item-right-cols > span:first-child
-            {
+        {
             border-left: 1px solid #eee;
             border-bottom: 1px solid #eee;
         }
@@ -1299,7 +1299,7 @@ ul.tablelist
         {
             padding:0.7em 0;
             /*padding-right: 60px;*/
-            display: inline-block;  
+            display: inline-block;
         }
 
         .item-right-cols .item-content
@@ -1347,7 +1347,7 @@ ul.tablelist
         }
 
         .item-right-cols .item-options:hover .options-icon
-            {
+        {
             background: $color-hover;
             color:white;
             @include transition(all $transition-time linear);
@@ -1363,7 +1363,7 @@ ul.tablelist
         }
 
         .item-options:hover .options-content
-            {
+        {
             margin-right: 0em;
             background:#333333;
         }
@@ -1373,7 +1373,7 @@ ul.tablelist
             color: white;
         }
         .item-right-cols .item-options a:hover
-            {
+        {
             color:white;
             background: $color-hover;
             @include transition(all $transition-time linear);
@@ -1395,7 +1395,7 @@ ul.tablelist
 
     }
     li.list-item:hover
-        {
+    {
         background:#FCFCFC;
         @include transition(all $transition-time linear);
     }
@@ -1431,7 +1431,7 @@ ul.tablelist
     }
 
     .list-item:hover .side-header
-        {
+    {
         color:#eee;
         @include transition(all $transition-time linear);
     }
@@ -1439,9 +1439,9 @@ ul.tablelist
     .list-item .item-content
     {
         width: 100%;
-        position: relative;    
+        position: relative;
         display: inline-block;
-        
+
         @include box-sizing(border-box);
     }
 
@@ -1500,7 +1500,7 @@ ul.tablelist
     }
 
     .list-item .item-side .item-options:hover .option-button
-        {
+    {
         background: $color-hover;
         color:white;
         @include transition(all $transition-time linear);
@@ -1520,7 +1520,7 @@ ul.tablelist
     }
 
     .list-item .item-side .item-options:hover ul
-        {
+    {
         margin-right:0%;
     }
 
@@ -1530,7 +1530,7 @@ ul.tablelist
     }
 
     .list-item .item-side:hover .item-options ul
-        {
+    {
         display:block;
     }
 
@@ -1548,7 +1548,7 @@ ul.tablelist
 
 
     .list-item .item-options ul li:hover
-        {
+    {
         background:$color-hover;
         @include transition(all $transition-time linear);
     }
@@ -1620,17 +1620,17 @@ ul.tablelist
 
 /* New Panel Classes (to support action_button() in panel heading) */
 .panel-action-btn-default {
-    @extend .panel-default;   
+    @extend .panel-default;
     & > .panel-heading {
         @extend .clearfix;
         padding: 0 0 0 20px;
         h3, .h3 {
-            line-height: 45px; 
+            line-height: 45px;
         }
     }
 }
 .panel-action-btn-primary {
-    @extend .panel-primary;   
+    @extend .panel-primary;
     & > .panel-heading {
         @extend .clearfix;
         padding: 0 0 0 20px;
@@ -1645,14 +1645,14 @@ ul.tablelist
     display: flex;
     display: -webkit-flex;
     display: -moz-flex;
-    display: -ms-flex;    
+    display: -ms-flex;
 }
 .menu-popover .popover-content {
     a{
-       min-width: 150px; 
+        min-width: 150px;
     }
     padding: 3px 3px;
-    
+
     .list-group {
         margin-bottom: 0px;
     }
@@ -1687,7 +1687,7 @@ a.list-group-item.delete:hover{
     text-decoration: none;
     color: #262626;
     background-color: whitesmoke;
-    cursor: pointer; 
+    cursor: pointer;
 }
 
 /* Left navigation styles */
@@ -1702,7 +1702,7 @@ a.list-group-item.delete:hover{
         border: none;
         margin: 0;
         //margin-bottom: 1em;
-        background: inherit;		
+        background: inherit;
         //border-top: 2px solid rgba(255,255,255,.1);
         border-bottom: 1px solid rgba(255,255,255,.1);
         .list-group{
@@ -1858,7 +1858,7 @@ a.list-group-item.delete:hover{
 }
 
 /* Speech bubble styles (for chat and comments) */
-.bubble 
+.bubble
 {
     position: relative;
     width: 100%;
@@ -1870,7 +1870,7 @@ a.list-group-item.delete:hover{
     border: #dddddd solid 2px;
 }
 
-.bubble:after 
+.bubble:after
 {
     content: '';
     position: absolute;
@@ -1884,7 +1884,7 @@ a.list-group-item.delete:hover{
     top: 9px;
 }
 
-.bubble:before 
+.bubble:before
 {
     content: '';
     position: absolute;
@@ -2032,7 +2032,7 @@ ul.sharinglist{
 
 
 /* PORTFOLIO */
-/* portfolio datatable right cell fix */ 
+/* portfolio datatable right cell fix */
 table.dataTable tbody td.right-cell{
     border-left: 1px solid #ddd;
     line-height:56px;
@@ -2040,7 +2040,7 @@ table.dataTable tbody td.right-cell{
     padding-bottom: 0px;
     width: 40px;
 }
-/* portfolio datatable 'all courses' button fix */ 
+/* portfolio datatable 'all courses' button fix */
 @media(min-width: $screen-sm){
     div.all_courses {
         float: left;
@@ -2078,18 +2078,18 @@ legend.theme_options_legend {
 @media(min-width: $screen-lg-desktop){
     .affix {
         width: 17%;
-    }   
+    }
 }
 @media(min-width: 1450px){
     .affix {
         width: 12.4%;
-    }   
+    }
 }
 
 /* DOCUMENTS */
 /* styles for the case that documents 
 open in a modal with the help of an iframe */
-.iframe-container {    
+.iframe-container {
     padding-bottom: 60%;
     padding-top: 30px; height: 0; overflow: hidden;
 }
@@ -2496,11 +2496,11 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
     -moz-transition:250ms margin ease-out;
     -o-transition:250ms margin ease-out;
 
-    &:after{  
-        content: "."; 
-        visibility: hidden; 
-        display: block; 
-        height: 0; 
+    &:after{
+        content: ".";
+        visibility: hidden;
+        display: block;
+        height: 0;
         clear: both;
     }
     .login-option{
@@ -2536,7 +2536,7 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
     background-color: #025694;
     /* fallback from css grandient */
 
-    background: url('../img/jumbotron-bg.png') repeat center center fixed; 
+    background: url('../img/jumbotron-bg.png') repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -2568,9 +2568,9 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
     }
 }
 @media print {
-  a[href]:after {
-    content: none;
-  }
+    a[href]:after {
+        content: none;
+    }
 }
 
 /* LOGIN page*/
@@ -2831,9 +2831,9 @@ div #treeModal div .modal-body {
 }
 
 .jstree-strong {
-  font-style: italic;
-  font-weight: bold;
-  color: #000000 !important;
+    font-style: italic;
+    font-weight: bold;
+    color: #000000 !important;
 }
 
 /* Usage Module */
@@ -2853,7 +2853,7 @@ div #treeModal div .modal-body {
 .li-indented {
     padding-left: 30px !important;
     padding-left: 15px !important;
-    }
+}
 .h1, .h2, .h3, .h4, .h5{
     display: inline;
 }
