@@ -207,9 +207,9 @@ a
 }
 
 /*!
- * 
+ *
  * Bootstrap Theme CSS
- * 
+ *
  */
 
 .btn-default,
@@ -880,7 +880,7 @@ a.toggle-active{
                 text-align: center;
                 overflow: hidden;
 
-                i.fa
+                span.fa
                 {
                     padding-right: 10px;
                     opacity:.9;
@@ -978,7 +978,7 @@ a.toggle-active{
                     text-decoration: none;
                     color: #1a70b1;
                 }
-                i.lesson-title-caret
+                span.lesson-title-caret
                 {
                     background-color: #efefef;
                     display: block;
@@ -993,7 +993,7 @@ a.toggle-active{
             }
         }
     }
-    h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5{
+    h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
         color: #686868;
         font-weight: 600;
     }
@@ -1105,7 +1105,7 @@ a.toggle-active{
 }
 
 /* Styles for headings and titles */
-h1.page-title
+h1.page-title, .h1.page-title
 {
     margin:0em;
     font-weight: 400!important;
@@ -1898,8 +1898,8 @@ a.list-group-item.delete:hover{
     top: 8px;
 }
 
-/* ******************** 
-   PAGE-SPECIFIC STYLES 
+/* ********************
+   PAGE-SPECIFIC STYLES
    ******************** */
 
 /* COMMON PORTFOLIO AND COURSE HOME STYLES */
@@ -2087,7 +2087,7 @@ legend.theme_options_legend {
 }
 
 /* DOCUMENTS */
-/* styles for the case that documents 
+/* styles for the case that documents
 open in a modal with the help of an iframe */
 .iframe-container {
     padding-bottom: 60%;
@@ -2450,13 +2450,13 @@ div.login-form .login-option-social .social-btn{
     color: white;
 }
 
-div.login-form .login-option-social .social-btn i.fa{
+div.login-form .login-option-social .social-btn span.fa{
     float: left;
     font-size: 1.6em;
     position: relative;
 }
 
-div.login-form .login-option-social .social-btn i.fa:after{
+div.login-form .login-option-social .social-btn span.fa:after{
     content: "";
     display: inline-block;
     position: absolute;
@@ -2625,7 +2625,7 @@ td.forum-response-column {
         border-bottom: 1px solid #ddd;
         margin: 10px 10px;
         padding-bottom: 10px;
-        h4, .h4 {
+        h4.h4, div.h4 {
             margin: 5px 0px;
         }
     }
@@ -2847,13 +2847,5 @@ div #treeModal div .modal-body {
     padding-left: 15px !important;
 }
 .h1, .h2, .h3, .h4, .h5, .h6{
-    display: inline;
-}
-
-.li-indented {
-    padding-left: 30px !important;
-    padding-left: 15px !important;
-}
-.h1, .h2, .h3, .h4, .h5{
     display: inline;
 }
