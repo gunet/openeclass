@@ -39,10 +39,26 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     $grade = $_POST['question_grade'];
     $question_id = $_POST['question_id'];
     $eurid = $_GET['eurId'];
-    Database::get()->query("UPDATE exercise_answer_record SET weight = ?d WHERE eurid = ?d AND question_id = ?d", $grade, $eurid, $question_id);
-    $ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL", $eurid)->count;
+    Database::get()->query("UPDATE exercise_answer_record
+        SET weight = ?d WHERE eurid = ?d AND question_id = ?d",
+        $grade, $eurid, $question_id);
+    $ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count
+        FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL",
+        $eurid)->count;
     if ($ungraded == 0) {
-        Database::get()->query("UPDATE exercise_user_record SET attempt_status = ?d, total_score = total_score + ?d WHERE eurid = ?d", ATTEMPT_COMPLETED, $grade, $eurid);
+        // if no more ungraded quastions, set attempt as complete and
+        // recalculate sum of grades
+        Database::get()->query("UPDATE exercise_user_record
+            SET attempt_status = ?d,
+                total_score = (SELECT SUM(weight) FROM exercise_answer_record
+                                    WHERE eurid = ?d)
+            WHERE eurid = ?d",
+            ATTEMPT_COMPLETED, $eurid, $eurid);
+    } else { 
+        // else increment total by just this grade
+        Database::get()->query("UPDATE exercise_user_record
+            SET total_score = total_score + ?d WHERE eurid = ?d",
+            $grade, $eurid);
     }
     exit();
 }

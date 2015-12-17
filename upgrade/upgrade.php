@@ -1439,7 +1439,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `max_grade` FLOAT DEFAULT NULL,
                             `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
                             `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
-                            `file_name` VARCHAR(200) DEFAULT '' NOT NULL)
+                            `file_name` VARCHAR(200) DEFAULT '' NOT NULL,
+                            `grading_method` TINYINT(2) DEFAULT '' NOT NULL)
                             $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -2472,8 +2473,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `id` int(11) NOT NULL AUTO_INCREMENT,
                                 `name` VARCHAR(300) NOT NULL,
                                 `styles` LONGTEXT NOT NULL,
-                                PRIMARY KEY (`id`)) $charset_spec");
-            
+                                PRIMARY KEY (`id`)) $charset_spec");          
+
         if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
             Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
         }
@@ -2635,6 +2636,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         @unlink("$webDir/template/default/img/eclass_classic2-1-1.png");
         @unlink("$webDir/template/default/img/eclass-new-logo_classic.png");
     }
+
     // -----------------------------------
     // upgrade queries for 3.2
     // -----------------------------------
@@ -2975,7 +2977,24 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE course SET home_layout = 1 WHERE home_layout = 2");
     }
 
+    // -----------------------------------
+    // upgrade queries for 3.3
+    // -----------------------------------
     if (version_compare($oldversion, '3.3', '<')) {
+        // Fix incorrect exercise answer grade totals
+        Database::get()->query('CREATE TEMPORARY TABLE exercise_answer_record_total AS
+            SELECT SUM(weight) AS TOTAL, exercise_answer_record.eurid AS eurid
+                FROM exercise_user_record, exercise_answer_record
+                WHERE exercise_user_record.eurid = exercise_answer_record.eurid AND
+                      attempt_status = ?d
+                GROUP BY eurid',
+                ATTEMPT_COMPLETED);
+        Database::get()->query('UPDATE exercise_user_record, exercise_answer_record_total
+            SET exercise_user_record.total_score = exercise_answer_record_total.total
+            WHERE exercise_user_record.eurid = exercise_answer_record_total.eurid AND
+                  exercise_user_record.total_score <> exercise_answer_record_total.total');
+        Database::get()->query('DROP TEMPORARY TABLE exercise_answer_record_total');
+
         // Fix duplicate link orders
         Database::get()->queryFunc('SELECT DISTINCT course_id, category FROM link
             GROUP BY course_id, category, `order` HAVING COUNT(*) > 1',
@@ -3007,11 +3026,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         Database::get()->query('UPDATE `poll_question` SET `q_position` = ?d
                                                     WHERE pqid = ?d', $order++, $poll_question->pqid);                        
                     }
-                });            
+                });                   
         if (!DBHelper::fieldExists('poll', 'public')) {
             Database::get()->query("ALTER TABLE `poll` ADD `public` TINYINT(1) NOT NULL DEFAULT 1 AFTER `active`");
             Database::get()->query("UPDATE `poll` SET `public` = 0");
-        }            
+        }        
     }
        
     if (version_compare($oldversion, '3.4', '<')) {
