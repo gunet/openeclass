@@ -409,8 +409,8 @@ $tool_content .=
 if ($allow_name_change) {
     $tool_content .= "<input type='text' class='form-control' name='givenname_form' id='givenname_form' value='$givenname_form'>";
 } else {
-    $tool_content .= "<label>$givenname_form</label>
-            <input type='hidden' name='givenname_form' value='$givenname_form' />";
+    $tool_content .= "
+            <p class='form-control-static'>$givenname_form</p>";
 }
 
 $tool_content .= "</div></div>";
@@ -419,7 +419,7 @@ $tool_content .= "<div class='col-sm-10'>";
 if ($allow_name_change) {
     $tool_content .= "<input type='text' class='form-control' name='surname_form' id='surname_form' value='$surname_form'>";
 } else {
-    $tool_content .= "<label>" . $surname_form . "</label><input type='hidden' name='surname_form' value='$surname_form' />";
+    $tool_content .= "<p class='form-control-static'>$surname_form</p>";
 }
 $tool_content .= "</div></div>";
 $tool_content .= "<div class='form-group'><label for='username_form' class='col-sm-2 control-label'>$langUsername:</label>";
@@ -428,8 +428,8 @@ if ($allow_username_change) {
     $tool_content .= "<input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='$username_form' />";
 } else {
     // means that it is external auth method, so the user cannot change this password
-    $tool_content .= "<label>$username_form</label> [$auth_text]
-            <input type='hidden' name='username_form' value='$username_form' />";
+    $tool_content .= " [$auth_text]
+            <p class='form-control-static'>$username_form</p>";
 }
 $tool_content .= "</div></div>";
 
