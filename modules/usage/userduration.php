@@ -61,7 +61,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
     $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);  
     
     $tool_content .= action_bar(array(
-        array('title' => $langStat,
+        array('title' => $langUsage,
             'url' => "index.php?course=$course_code",
             'icon' => 'fa-bar-chart',
             'level' => 'primary-label'),

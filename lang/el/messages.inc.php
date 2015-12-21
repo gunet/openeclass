@@ -488,7 +488,6 @@ $langVisitor = "Επισκέπτης";
 $langOther = "Άλλο";
 $langTotal = "Σύνολο";
 $langProperty = "Ιδιότητα";
-$langStat = "Στατιστικά";
 $langNoUserList = "Δεν υπάρχουν αποτελέσματα προς εμφάνιση";
 $langContactAdmin = "Αποστολή ενημερωτικού email στον Διαχειριστή";
 $langActivateAccount = "Παρακαλώ να ενεργοποιήσετε το λογαριασμό μου";

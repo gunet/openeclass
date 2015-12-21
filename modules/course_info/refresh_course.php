@@ -176,7 +176,7 @@ if (isset($_POST['submit'])) {
               <div class='col-sm-10 checkbox'><label><input type='checkbox' name='purgeexercises'>$langPurgeExercisesResults</label></div>
             </div>
             <div class='form-group'>
-              <label for='clearstats' class='col-sm-2 control-label'>$langStat</label>
+              <label for='clearstats' class='col-sm-2 control-label'>$langUsage</label>
               <div class='col-sm-10 checkbox'><label><input type='checkbox' name='clearstats'>$langClearStats</label></div>
             </div>";
             }

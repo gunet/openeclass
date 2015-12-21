@@ -340,7 +340,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'hide' => isDepartmentAdmin()
                 ),
                 array(
-                    'title' => $langStat,
+                    'title' => $langUsage,
                     'icon' => 'fa-pie-chart',
                     'url' => "../usage/?t=u&u=$logs->id"
                 ),
