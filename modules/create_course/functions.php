@@ -96,6 +96,7 @@ function create_course_dirs($code) {
     global $langDirectoryCreateError;
 
     $base = "courses/$code";
+    $old_umask = umask();
     umask(0);
     foreach (array($base, "$base/image", "$base/document", "$base/dropbox",
                    "$base/page", "$base/work", "$base/group", "$base/temp",
@@ -105,6 +106,7 @@ function create_course_dirs($code) {
             return false;
        } 
     }
+    umask($old_umask);
     return true;
 }
 
