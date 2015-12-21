@@ -3954,15 +3954,15 @@ function checkSecondFactorChallenge(){
     }
 }
 
-function trans($var_name) {
+function trans($var_name, $var_array = []) {
     if (preg_match("/\['.+'\]/", $var_name)) {
         preg_match_all("([^\['\]]+)", $var_name, $matches);
         global ${$matches[0][0]};
         
-        return ${$matches[0][0]}[$matches[0][1]];
+        return vsprintf(${$matches[0][0]}[$matches[0][1]], $var_array);
     } else {
         global ${$var_name};
         
-        return ${$var_name};
+        return vsprintf(${$var_name}, $var_array);
     }   
 }

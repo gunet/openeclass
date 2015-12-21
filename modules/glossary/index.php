@@ -31,7 +31,7 @@ require_once 'include/log.php';
 
 ModalBoxHelper::loadModalBox();
 
-$data['edit_url'] = $base_url = 'index.php?course=' . $course_code;
+$data['base_url'] = $base_url = 'index.php?course=' . $course_code;
 $cat_url = 'categories.php?course=' . $course_code;
 
 /*
@@ -43,7 +43,7 @@ $action->record(MODULE_ID_GLOSSARY);
 
 if ($is_editor) {
     load_js('tools.js');
-    $max_glossary_terms = get_config('max_glossary_terms');
+    $data['max_glossary_terms'] = get_config('max_glossary_terms');
 }
 
 $toolName = $langGlossary;
@@ -60,20 +60,20 @@ foreach ($categories as $k => $v) {
     $indirectcategories[getIndirectReference($k)] = $v;
 }
 if (isset($_GET['cat'])) {
-    $cat_id = intval(getDirectReference($_GET['cat']));
-    $data['edit_url'] .= "&amp;cat=$cat_id";
+    $data['cat_id'] = $cat_id = intval(getDirectReference($_GET['cat']));
+    $data['edit_url'] = $base_url."&amp;cat=$cat_id";
 } else {
-    $cat_id = false;
+    $data['cat_id'] = $cat_id = false;
 }
 if (isset($_GET['prefix'])) {
-    $data['edit_url'] .= '&amp;prefix=' . urlencode($_GET['prefix']);
+    $data['edit_url'] = $base_url.'&amp;prefix=' . urlencode($_GET['prefix']);
 }
 
 $glossary_data = Database::get()->querySingle("SELECT glossary_expand, glossary_index
                                          FROM course WHERE id = ?d", $course_id);
 if ($glossary_data) {
-    $expand_glossary = $glossary_data->glossary_expand;
-    $glossary_index = $glossary_data->glossary_index;
+    $data['expand_glossary'] = $expand_glossary = $glossary_data->glossary_expand;
+    $data['glossary_index'] = $glossary_index = $glossary_data->glossary_index;
     if ($glossary_index) {
         $prefixes = array();
         Database::get()->queryFunc("SELECT DISTINCT UPPER(LEFT(term, 1)) AS prefix
@@ -85,6 +85,7 @@ if ($glossary_data) {
             }
         }, $course_id);
     }
+    $data['prefixes'] = $prefixes;
 }
 
 
@@ -103,13 +104,13 @@ if ($is_editor) {
         if (isset($_GET['edit'])) {
             $pageName = $langEdit;
         }
-        $tool_content .= action_bar(array(
+        $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                       'url' => "$base_url",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
     } else {
-        $tool_content .= action_bar(array(
+        $data['action_bar'] = action_bar(array(
                 array('title' => $langAddGlossaryTerm,
                       'url' => "$base_url&amp;add=1",
                       'icon' => 'fa-plus-circle',
@@ -320,11 +321,8 @@ if ($is_editor) {
         echo view('modules.glossary.create', $data);
         exit;
     }
-    $total_glossary_terms = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
-                                                          WHERE course_id = ?d", $course_id)->count;    
-    if ($expand_glossary && $total_glossary_terms > $max_glossary_terms) {
-        $tool_content .= sprintf("<div class='alert alert-warning'>$langGlossaryOverLimit</div>", "<b>$max_glossary_terms</b>");
-    }        
+    $data['total_glossary_terms'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
+                                                          WHERE course_id = ?d", $course_id)->count;       
 } else {
     // Show categories link for students if needed
     if ($categories) {
@@ -360,28 +358,31 @@ if (isset($_GET['edit'])) {
 }
 
 if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
-    if ($glossary_index and count($prefixes) > 1) {
-        $tool_content .= "<div class='alphabetic_index'>";
-        $begin = true;
-        foreach ($prefixes as $letter) {
-            $active = (!isset($_GET['prefix']) && !$cat_id && $begin) ||
-                    (isset($_GET['prefix']) and $_GET['prefix'] == $letter);
-            $tool_content .= ($begin ? '' : ' | ') .
-                    ($active ? '<b>' : "<a href='$base_url&amp;prefix=" . urlencode($letter) . "'>") .
-                    q($letter) . ($active ? '</b>' : '</a>');
-            $begin = false;
-        }
-        $tool_content .= "</div>";
-    }    
     if ($cat_id) {
         $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
         $pageName = q($categories[$cat_id]);
         $where .= " AND category_id = $cat_id";
     }
-    $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
+    $data['glossary_terms'] = $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
                             FROM glossary WHERE course_id = ?d $where
                             GROUP BY term
-                            ORDER BY term", $course_id, $terms);
+                            ORDER BY term", $course_id, $terms);    
+//    if ($glossary_index && count($prefixes) > 1) {
+//        $tool_content .= "
+//            <nav>
+//                <ul class='pagination'>";
+//        foreach ($prefixes as $key => $letter) {
+//            $active = (!isset($_GET['prefix']) && !$cat_id && !$key) ||
+//                    (isset($_GET['prefix']) and $_GET['prefix'] == $letter);            
+//            $tool_content .= "<li".((!isset($_GET['prefix']) && !$cat_id && !$key) ||
+//                    (isset($_GET['prefix']) and $_GET['prefix'] == $letter) ? " class='active'" : "")."><a href='$base_url&amp;prefix=" . urlencode($letter) . "'>$letter</a></li>";
+//        }
+//        $tool_content .= "
+//                </ul>
+//            </nav>";
+//    }
+    echo view('modules.glossary.index', $data);
+    exit;        
     if (count($sql) > 0) {
         $tool_content .= "<div class='table-responsive glossary-categories'>";
         $tool_content .= "<table class='table-default'>";
@@ -427,10 +428,10 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
                         array('title' => $langEditChange,
-                              'url' => "$data[edit_url]&amp;edit=" . getIndirectReference($g->id),
+                              'url' => "$base_url&amp;edit=" . getIndirectReference($g->id),
                               'icon' => 'fa-edit'),
                         array('title' => $langDelete,
-                              'url' => "$data[edit_url]&amp;delete=" . getIndirectReference($g->id),
+                              'url' => "$base_url&amp;delete=" . getIndirectReference($g->id),
                               'icon' => 'fa-times',
                               'class' => 'delete',
                               'confirm' => $langConfirmDelete))
