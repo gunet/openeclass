@@ -64,6 +64,7 @@ if (isset($_GET['cat'])) {
     $data['edit_url'] = $base_url."&amp;cat=$cat_id";
 } else {
     $data['cat_id'] = $cat_id = false;
+    $data['edit_url'] = $base_url;
 }
 if (isset($_GET['prefix'])) {
     $data['edit_url'] = $base_url.'&amp;prefix=' . urlencode($_GET['prefix']);
@@ -257,7 +258,6 @@ if ($is_editor) {
                             )
                         ));
         echo view('modules.glossary.config', $data);
-        exit;
     }
 
     // display form for adding or editing a glossary term
@@ -319,7 +319,6 @@ if ($is_editor) {
                     )
                 ));
         echo view('modules.glossary.create', $data);
-        exit;
     }
     $data['total_glossary_terms'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
                                                           WHERE course_id = ?d", $course_id)->count;       
@@ -367,86 +366,8 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
                             FROM glossary WHERE course_id = ?d $where
                             GROUP BY term
                             ORDER BY term", $course_id, $terms);    
-//    if ($glossary_index && count($prefixes) > 1) {
-//        $tool_content .= "
-//            <nav>
-//                <ul class='pagination'>";
-//        foreach ($prefixes as $key => $letter) {
-//            $active = (!isset($_GET['prefix']) && !$cat_id && !$key) ||
-//                    (isset($_GET['prefix']) and $_GET['prefix'] == $letter);            
-//            $tool_content .= "<li".((!isset($_GET['prefix']) && !$cat_id && !$key) ||
-//                    (isset($_GET['prefix']) and $_GET['prefix'] == $letter) ? " class='active'" : "")."><a href='$base_url&amp;prefix=" . urlencode($letter) . "'>$letter</a></li>";
-//        }
-//        $tool_content .= "
-//                </ul>
-//            </nav>";
-//    }
-    echo view('modules.glossary.index', $data);
-    exit;        
-    if (count($sql) > 0) {
-        $tool_content .= "<div class='table-responsive glossary-categories'>";
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'>
-                     <th class='text-left'>$langGlossaryTerm</th>
-                     <th class='text-left'>$langGlossaryDefinition</th>";
-        if ($is_editor) {
-            $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
-        }
-        $tool_content .= "</tr>";    
-        foreach ($sql as $g) {
-            if (isset($_GET['id'])) {
-                $pageName = q($g->term);
-            }        
-            if (!empty($g->url)) {
-                $urllink = "<div><span class='term-url'><small><a href='" . q($g->url) .
-                        "' target='_blank'>" . q($g->url) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444;'></i></a></small></span></div>";
-            } else {
-                $urllink = '';
-            }
-
-            if (!empty($g->category_id)) {
-                $cat_descr = "<span class='text-muted'>$langCategory: <a href='$base_url&amp;cat=" . getIndirectReference($g->category_id) . "'>" . q($categories[$g->category_id]) . "</a></span>";
-            } else {
-                $cat_descr = '';
-            }
-
-            if (!empty($g->notes)) {
-                $urllink .= "<br><u>$langComments:</u><div class='text-muted'>". standard_text_escape($g->notes)."</div>";
-            }
-
-            if (!empty($g->definition)) {
-                $definition_data = q($g->definition);
-            } else {
-                $definition_data = '-';
-            }
-
-            $tool_content .= "<tr>
-                     <td width='150'><strong><a href='$base_url&amp;id=" . getIndirectReference($g->id) . "'>" . q($g->term) . "</a></strong><br><span><small>$cat_descr</small></span></td>
-                     <td><em>$definition_data</em>$urllink</td>";
-
-            if ($is_editor) {
-                $tool_content .= "<td class='option-btn-cell'>";
-                $tool_content .= action_button(array(
-                        array('title' => $langEditChange,
-                              'url' => "$base_url&amp;edit=" . getIndirectReference($g->id),
-                              'icon' => 'fa-edit'),
-                        array('title' => $langDelete,
-                              'url' => "$base_url&amp;delete=" . getIndirectReference($g->id),
-                              'icon' => 'fa-times',
-                              'class' => 'delete',
-                              'confirm' => $langConfirmDelete))
-                    );
-               $tool_content .= "</td>";
-            }                        
-            $tool_content .= "</tr>";        
-        }
-        $tool_content .= "</table></div>";
-    } else {
-        $tool_content .= "<br><div class='alert alert-warning'>$langNoResult</div>";
-    }
+    echo view('modules.glossary.index', $data);   
 }
-draw($tool_content, 2, null, $head_content);
-
 
 /**
  * @brief find glossary term order

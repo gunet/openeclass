@@ -19,6 +19,15 @@
     
     <!-- SlimScroll -->
     <script src="{{ $urlAppend }}js/jquery.slimscroll.min.js"></script>
+    <!-- BlockUI -->
+    <script src="{{ $urlAppend }}js/blockui-master/jquery.blockUI.js"></script>
+    <script>
+        $(function() {
+            $('.blockUI').click(function() { 
+                $.blockUI({ message: "<h4><span class='fa fa-refresh fa-spin'></span> {{ trans('langPleaseWait') }}</h4>" }); 
+            }); 
+        });     
+    </script>
     <script>
     bootbox.setDefaults({
       locale: "{{ $language }}"

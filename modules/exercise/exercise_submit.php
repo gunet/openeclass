@@ -234,7 +234,6 @@ $nbrQuestions = count($questionList);
 // either from a previews attempt meaning that user hasn't sumbited his answers permanantly  
 // 		and exerciseTimeConstrain hasn't yet passed,
 // either start a new attempt and count now() as begin time.
-
 if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || isset($paused_attempt)) {
     
     $eurid = isset($paused_attempt) ? $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $paused_attempt->eurid : $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
@@ -311,7 +310,6 @@ if (isset($_POST['formSent'])) {
     }
 
     // inserts user's answers in the database and adds them in the $exerciseResult array which is returned
-
     $action = isset($paused_attempt) ? 'update' : 'insert';
 
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
@@ -454,14 +452,14 @@ if (!$questionList) {
 } else {
     $tool_content .= "
         <br>
-        <div class='pull-right'><input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;<input class='btn btn-primary' type='submit' value='";
+        <div class='pull-right'><input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;<input class='btn btn-primary blockUI' type='submit' value='";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
         $tool_content .= "$langCont' />";
     } else {
         $tool_content .= $langNext . " &gt;" . "' />";
     }
     if ($exerciseTempSave && !($exerciseType == 2 && ($questionNum == $nbrQuestions))) {
-        $tool_content .= "&nbsp;<input class='btn btn-primary' type='submit' name='buttonSave' value='$langTemporarySave' />";   
+        $tool_content .= "&nbsp;<input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave' />";   
     }
     $tool_content .= "</div>";
 }
