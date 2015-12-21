@@ -36,7 +36,7 @@ $tool_content .= action_bar(array(
         'icon' => 'fa-user',
         'level' => 'primary-label'),
     array('title' => $langUserDuration,
-        'url' => "userduration?course=$course_code",
+        'url' => "userduration.php?course=$course_code",
         'icon' => 'fa-clock-o',
         'level' => 'primary-label'),
     array('title' => $langOldStats,
