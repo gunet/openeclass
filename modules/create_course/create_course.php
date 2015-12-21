@@ -464,10 +464,10 @@ if (!isset($_POST['create_course'])) {
         $view_type = $_POST['view_type'];        
     }
     if (empty($_POST['start_date'])) {
-        $_POST['start_date'] = '0000-00-00';
+        $_POST['start_date'] = NULL;
     }
     if (empty($_POST['finish_date'])) {
-        $_POST['finish_date'] = '0000-00-00';
+        $_POST['finish_date'] = NULL;
     }
 
     $description = purify($_POST['description']);
