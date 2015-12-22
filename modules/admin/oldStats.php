@@ -114,20 +114,20 @@ if (count($result) > 0) {
 }
 
 $tool_content .= '<div class="form-wrapper"><form class="form-horizontal" role="form" method="post">';
-$tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-2 control-label'>$langStartDate:</label>
+$tool_content .= "<div class='input-append date form-group' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+    <label class='col-sm-2 control-label' for='user_date_start'>$langStartDate:</label>
         <div class='col-xs-10 col-sm-9'>               
-            <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+            <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
         </div>
         <div class='col-xs-2 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>
         </div>
         </div>";        
-$tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-2 control-label'>$langEndDate:</label>
+$tool_content .= "<div class='input-append date form-group' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+        <label class='col-sm-2 control-label' for='user_date_end'>$langEndDate:</label>
             <div class='col-xs-10 col-sm-9'>
-                <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+                <input class='form-control' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
             </div>
         <div class='col-xs-2 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
