@@ -839,9 +839,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $exercise_map[0] = 0;
         $exercise_to_specific_map = restore_table($restoreThis, 'exercise_to_specific', array('map' => array('exercise_id' => $exercise_map),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);               
-        restore_table($restoreThis, 'exercise_user_record', array(
+        $exercise_user_record_map = restore_table($restoreThis, 'exercise_user_record', array(
             'delete' => array('eurid'),
-            'map' => array('eid' => $exercise_map, 'uid' => $userid_map)
+            'map' => array('eid' => $exercise_map, 'uid' => $userid_map),
+            'return_mapping' => 'eurid'
             ), $url_prefix_map, $backupData, $restoreHelper);
         $question_category_map = restore_table($restoreThis, 'exercise_question_cats', array(
             'set' => array('course_id' => $new_course_id),
@@ -861,7 +862,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         restore_table($restoreThis, 'exercise_answer_record', array(
             'delete' => array('answer_record_id'),
             'map' => array('question_id' => $question_map,
-                'eurid' => $userid_map)
+            'eurid' => $exercise_user_record_map)
             ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'exercise_with_questions', array(
             'map' => array('question_id' => $question_map, 'exercise_id' => $exercise_map)
