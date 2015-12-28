@@ -565,8 +565,8 @@ if (!class_exists('Question')):
                $answer_field = $objAnswerTmp->selectAnswer($nbrAnswers);
                //splits answer string from weighting string
                list($answer, $answerWeighting) = explode('::', $answer_field);
-               //getting all matched strings between [ and ] delimeters
-               preg_match_all('#(?<=\[)(?!/?m)[^\]]+#', $answer, $match);
+               //getting all matched strings between [ and ] delimeters ignoring [m][/m] math tags
+               preg_match_all('#(?<=\[)(?!/?m])[^\]]+#', $answer, $match);
                $i=1;
                $sql_binary_comparison = $type == FILL_IN_BLANKS ? 'BINARY ' : '';
                foreach ($match[0] as $answers){
