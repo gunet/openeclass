@@ -776,15 +776,15 @@ if (!class_exists('Exercise')) {
            } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS || $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT) {
                $objAnswersTmp = new Answer($key);
                $answer_field = $objAnswersTmp->selectAnswer(1);
-               //splits answer string from weighting string
+               // splits answer string from weighting string
                list($answer, $answerWeighting) = explode('::', $answer_field);
                // splits weightings that are joined with a comma
                $rightAnswerWeighting = explode(',', $answerWeighting);
-               //getting all matched strings between [ and ] delimeters
-               preg_match_all('#(?<=\[)(?!/?m)[^\]]+#', $answer, $match);
+               // get all matched strings between [ and ] delimeters ignoring [m][/m] math tags
+               preg_match_all('#(?<=\[)(?!/?m])[^\]]+#', $answer, $match);
                foreach ($value as $row_key => $row_choice) {
-                   //if user's choice is right assign rightAnswerWeight else 0
-                   //Some more coding should be done if blank can have multiple answers
+                   // if user's choice is right assign rightAnswerWeight else 0
+                   // Some more coding should be done if blank can have multiple answers
                        $canonical_choice = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice;
                        $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($match[0][$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $match[0][$row_key-1];
                        $right_answers = preg_split('/\s*\|\s*/', $canonical_match);
@@ -861,15 +861,14 @@ if (!class_exists('Exercise')) {
            } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
                $objAnswersTmp = new Answer($key);
                $answer_field = $objAnswersTmp->selectAnswer(1);
-               //splits answer string from weighting string
+               // splits answer string from weighting string
                list($answer, $answerWeighting) = explode('::', $answer_field);
                // splits weightings that are joined with a comma
                $rightAnswerWeighting = explode(',', $answerWeighting);
-               //getting all matched strings between [ and ] delimeters
-               //preg_match_all('#\[(?!/?m)(.*?)\]#', $answer, $match);
-               preg_match_all('#(?<=\[)(?!/?m)[^\]]+#', $answer, $match);
+               // get all matched strings between [ and ] delimeters ignoring [m][/m] math tags
+               preg_match_all('#(?<=\[)(?!/?m])[^\]]+#', $answer, $match);
                foreach ($value as $row_key => $row_choice) {
-                   //if user's choice is right assign rightAnswerWeight else 0
+                   // if user's choice is right assign rightAnswerWeight else 0
                        $canonical_choice = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice;
                        $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($match[0][$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $match[0][$row_key-1]; 
                        $right_answers = preg_split('/\s*\|\s*/', $canonical_match);
