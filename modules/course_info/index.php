@@ -176,7 +176,14 @@ $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
 
 if (isset($_POST['submit'])) {
+    $view_type = $_POST['view_type'];    
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    if (!$_POST['start_date']) {
+        $_POST['start_date'] = '0000-00-00';
+    }
+    if (!$_POST['finish_date']) {
+        $_POST['finish_date'] = '0000-00-00';
+    }
     if (empty($_POST['title'])) {
         $tool_content .= "<div class='alert alert-danger'>$langNoCourseTitle</div>
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
@@ -224,15 +231,11 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        //===================course format and start and finish date===============
-        // check if there is a start and finish date if weekly selected
-        if ($_POST['view_type'] || $_POST['start_date'] || $_POST['finish_date']) {
-            if (!$_POST['start_date']) {
-                // if no start date do not allow weekly view and show alert message
-                $view_type = 'units';
-                $_POST['start_date'] = '0000-00-00';
-                $_POST['finish_date'] = '0000-00-00';
-                $noWeeklyMessage = 1;
+        //===================course format and start and finish date===============        
+        if ($view_type == 'weekly') {            
+            if ($_POST['start_date'] == '0000-00-00') {
+                Session::Messages($langCourseWeeklyFormatNotice);
+                redirect_to_home_page("modules/course_info/index.php?course=$course_code");
             } else { // if there is start date create the weeks from that start date
                 // Number of the previous week records for this course
                 $previousWeeks = Database::get()->queryArray("SELECT id FROM course_weekly_view WHERE course_id = ?d", $course_id);
@@ -246,30 +249,22 @@ if (isset($_POST['submit'])) {
                 } else {
                     $countPreviousWeeks = 0;
                 }
-
                 // counter for the new records
                 $cnt = 1;
-
                 // counter for the old records
                 $cntOld = 0;
-
-                $noWeeklyMessage = 0;
-
-                $view_type = $_POST['view_type'];
+                                
                 $begin = new DateTime($_POST['start_date']);
 
                 // check if there is no end date
                 if ($_POST['finish_date'] == "" || $_POST['finish_date'] == '0000-00-00') {
-                    $end = new DateTime($begin->format("Y-m-d"));
-                    ;
+                    $end = new DateTime($begin->format("Y-m-d"));                    
                     $end->add(new DateInterval('P26W'));
                 } else {
                     $end = new DateTime($_POST['finish_date']);
                 }
 
                 $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
-
-
                 foreach ($daterange as $date) {
                     //===============================
                     // new weeks
@@ -323,7 +318,7 @@ if (isset($_POST['submit'])) {
         if ($deps_changed and !$deps_valid) {
             Session::Messages($langCreateCourseNotAllowedNode, 'alert-danger');
             redirect_to_home_page("modules/course_info/?course=$course_code");
-        } else {
+        } else {            
             Database::get()->query("UPDATE course
                             SET title = ?s,
                                 public_code = ?s,
@@ -363,13 +358,8 @@ if (isset($_POST['submit'])) {
             }
             if (isset($_POST['disable_log_course_user_requests'])) {
                 setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, $_POST['disable_log_course_user_requests'], $course_id);
-            }
-            if ($noWeeklyMessage) {
-                Session::Messages($langCourseWeeklyFormatNotice);
-            } else {
-                Session::Messages($langModifDone,'alert-success');
-            }
-            
+            }                                    
+            Session::Messages($langModifDone,'alert-success');            
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         }
     }
