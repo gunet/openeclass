@@ -74,14 +74,20 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 // Coming from the admin tool or stand-alone upgrade?
 $fromadmin = !isset($_POST['submit_upgrade']);
 
+if (!$command_line and !(isset($_SESSION['is_admin']) and $_SESSION['is_admin'])) {
+    redirect_to_home_page('upgrade/');
+}
+
 if (isset($_POST['login']) and isset($_POST['password'])) {
     if (!is_admin($_POST['login'], $_POST['password'])) {
         Session::Messages($langUpgAdminError, 'alert-warning');
         redirect_to_home_page('upgrade/');
+    }else{
+        $_SESSION['is_admin_authorizedupdate'] = true;
     }
 }
-
-if (!$command_line and !(isset($_SESSION['is_admin']) and $_SESSION['is_admin'])) {
+elseif (!(isset($_SESSION['is_admin_authorizedupdate'])) or $_SESSION['is_admin_authorizedupdate'] !== true){
+    Session::Messages($langUpgAdminError, 'alert-warning');
     redirect_to_home_page('upgrade/');
 }
 
