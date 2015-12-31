@@ -86,7 +86,7 @@ if (isset($_POST['login']) and isset($_POST['password'])) {
         $_SESSION['is_admin_authorizedupdate'] = true;
     }
 }
-elseif (!(isset($_SESSION['is_admin_authorizedupdate'])) or $_SESSION['is_admin_authorizedupdate'] !== true){
+elseif (!$command_line and (!(isset($_SESSION['is_admin_authorizedupdate'])) or $_SESSION['is_admin_authorizedupdate'] !== true)){
     Session::Messages($langUpgAdminError, 'alert-warning');
     redirect_to_home_page('upgrade/');
 }
