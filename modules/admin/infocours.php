@@ -54,7 +54,7 @@ $navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $la
 if (isset($_GET['c'])) {
     $tool_content .= action_bar(array(
      array('title' => $langBack,
-           'url' => "editcours.php?c=$_GET[c]",
+           'url' => "editcours.php?c=".q($_GET['c']),
            'icon' => 'fa-reply',
            'level' => 'primary-label')));
 } else {
@@ -64,10 +64,10 @@ if (isset($_GET['c'])) {
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
   }
-
-
 // Update course basic information
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
 
     // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
@@ -132,6 +132,8 @@ else {
 		<input type='text' class='form-control' name='titulary' id='titulary' value='" . q($row->prof_name) . "' size='60' />
 	    </div>
         </div>
+            ".showSecondFactorChallenge()."
+            ". generate_csrf_token_form_field() ."    
         <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-4'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>

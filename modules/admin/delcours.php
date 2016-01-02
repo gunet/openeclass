@@ -68,6 +68,11 @@ if (isset($_GET['c']) && !isset($_GET['delete'])) {
 
 // Delete course
 if (isset($_GET['delete']) && $course_id) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+    if(showSecondFactorChallenge()!=""){
+      $_POST['sfaanswer'] = $_GET['sfaanswer'];
+      checkSecondFactorChallenge();
+    }
     delete_course($course_id);
     $tool_content .= "<div class='alert alert-success'>" . $langCourseDelSuccess . "</div>";
 }
@@ -81,8 +86,11 @@ else {
     $tool_content .= "<div class='alert alert-danger'>" . $langCourseDelConfirm2 . " <em>" . q(course_id_to_title($course_id)) . "</em>;
 		<br><br><i>" . $langNoticeDel . "</i><br>
 		</div>";
+    if(showSecondFactorChallenge()!=""){
+        $asktotp = " onclick=\"var totp=prompt('Type 2FA:','');this.setAttribute('href', this.getAttribute('href')+'&sfaanswer='+escape(totp));\" ";
+    }
     $tool_content .= "<ul class='list-group'>
-                        <li class='list-group-item'><a href='" . $_SERVER['SCRIPT_NAME'] . "?c=" . getIndirectReference($course_id) . "&amp;delete=yes'><b>$langYes</b></a></li>
+                        <li class='list-group-item'><a href='" . $_SERVER['SCRIPT_NAME'] . "?c=" . getIndirectReference($course_id) . "&amp;delete=yes&" .generate_csrf_token_link_parameter() . "' $asktotp><b>$langYes</b></a></li>
                         <li class='list-group-item'><a href='listcours.php'><b>$langNo</b></a></li>
                     </ul>";
 }
