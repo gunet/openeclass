@@ -27,6 +27,7 @@ $toolName = $langMultiRegCourseUser;
 $navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 if (isset($_POST['submit'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        checkSecondFactorChallenge();
         $ok = array();
         $not_found = array();
         $course_not_found = array();
@@ -107,6 +108,7 @@ $tool_content .= "<div class='form-wrapper'>
            <div class='form-group'>
                 <div class='col-sm-7'>" . text_area('courses_codes', 10, 30, '') . "</div>
             </div>
+            ".showSecondFactorChallenge()."
             <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "'>
             </div>

@@ -57,6 +57,7 @@ $mail_ver_data[2] = $langMailVerificationNoU;
 
 if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     if ($old_mail_ver != $new_mail_ver) {
         $old_mail_ver = intval($old_mail_ver);
         $new_mail_ver = intval($new_mail_ver);
@@ -139,6 +140,7 @@ else {
         $tool_content .= selection($mail_ver_data, "new_mail_ver", $sub, "class='form-control'");
         $tool_content .= "</div>
 		</div>
+        ".showSecondFactorChallenge()."
 		<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langEdit'></div>
 		<input type='hidden' name='old_mail_ver' value='$sub'>		
 		</fieldset>

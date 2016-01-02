@@ -36,6 +36,7 @@ $user = new User();
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $requiredFields = array('auth_form', 'surname_form',
         'givenname_form', 'language_form', 'department', 'pstatus');        
     if (get_config('am_required') and @$_POST['pstatus'] == 5) {
@@ -388,6 +389,7 @@ if (isset($pstatus)) {
 $tool_content .= render_profile_fields_form($cpf_context, true);
 
 $tool_content .= "
+        ".showSecondFactorChallenge()."
         <div class='col-sm-offset-2 col-sm-10'>
           <input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>
         </div>        

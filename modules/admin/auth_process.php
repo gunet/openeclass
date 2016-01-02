@@ -64,6 +64,7 @@ if (empty($ldap_login_attr)) {
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     switch ($auth) {
         case 1:
             $settings = array();
@@ -229,6 +230,7 @@ if (isset($_POST['submit'])) {
             break;
     }
     $tool_content .= "
+                ".showSecondFactorChallenge()."
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>

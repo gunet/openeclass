@@ -79,6 +79,7 @@ if (!$command_line and !(isset($_SESSION['is_admin']) and $_SESSION['is_admin'])
 }
 
 if (isset($_POST['login']) and isset($_POST['password'])) {
+    checkSecondFactorChallenge();
     if (!is_admin($_POST['login'], $_POST['password'])) {
         Session::Messages($langUpgAdminError, 'alert-warning');
         redirect_to_home_page('upgrade/');

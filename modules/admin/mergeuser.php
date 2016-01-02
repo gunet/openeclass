@@ -80,6 +80,7 @@ if (isset($_REQUEST['u'])) {
             } else {
                 if ($_POST['submit'] == $langUserMerge) {
                     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+                    checkSecondFactorChallenge();
                     do_user_merge($info, $target);
                 }
                 $submit_button = $langUserMerge;
@@ -108,6 +109,7 @@ if (isset($_REQUEST['u'])) {
                     </div>                    
                      $target_field
                     <input type='hidden' name='u' value='" . getIndirectReference($u) . "'>
+                    ".showSecondFactorChallenge()."
                      <div class='col-sm-offset-3 col-sm-9'>                                                  
                            <input class='btn btn-primary' type='submit' name='submit' value='$submit_button'>
                     </div>                                                  

@@ -43,6 +43,7 @@ $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     register_posted_variables(array('email_public' => true,
         'am_public' => true,
         'phone_public' => true), 'all', 'intval');
@@ -243,6 +244,7 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
         <div class='form-group'>
+        ".showSecondFactorChallenge()."
             <div class='col-sm-9 col-sm-offset-3'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                 <a class='btn btn-default' href='index.php'>$langCancel</a>

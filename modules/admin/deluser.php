@@ -58,6 +58,7 @@ if (!isset($_POST['doit'])) {
                 $langConfirmDeleteQuestion3
               </div>
               <form method='post' action='$_SERVER[SCRIPT_NAME]?u=$iuid'>
+                ".showSecondFactorChallenge()."
                 <input class='btn btn-danger' type='submit' name='doit' value='$langDelete'>
                 ". generate_csrf_token_form_field() ."
               </form>";
@@ -67,6 +68,7 @@ if (!isset($_POST['doit'])) {
     }
 } else {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     if (get_admin_rights($user) > 0) {
         Session::Messages($langTryDeleteAdmin, 'alert-danger');
         redirect_to_home_page("modules/admin/deluser.php?u=$iuid");

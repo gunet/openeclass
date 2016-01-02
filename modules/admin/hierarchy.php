@@ -270,6 +270,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
               <input class='form-control' type='text' name='order_priority'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
           </div>
         </div>
+        ".showSecondFactorChallenge()."
         <div class='form-group'>
           <div class='col-sm-9 col-sm-offset-3'>".form_buttons(array(
                 array(
@@ -327,6 +328,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
 
     if (isset($_POST['edit'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        checkSecondFactorChallenge();
         // Check for empty fields
 
         $names = array();

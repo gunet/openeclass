@@ -44,7 +44,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<label for='catname' class='col-sm-2 control-label'>$langName</label>
                       <div class='col-sm-10'><input id='catname' type='text' name='cat_name'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit_cat' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>".showSecondFactorChallenge()."<input class='btn btn-primary' type='submit' name='submit_cat' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
@@ -91,7 +91,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<label for='catname' class='col-sm-2 control-label'>$langName</label>
                       <div class='col-sm-10'><input id='catname' type='text' name='cat_name' value='$cat_name'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit_cat' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>".showSecondFactorChallenge()."<input class='btn btn-primary' type='submit' name='submit_cat' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
@@ -180,7 +180,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<label for='visibility' class='col-sm-2 control-label'>$langCPFFieldVisibility</label>
                       <div class='col-sm-10'>".selection($visibility, 'visibility', 10, 'class="form-control"')."</div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit_field' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>".showSecondFactorChallenge()."<input class='btn btn-primary' type='submit' name='submit_field' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div>";
     
     $tool_content .='<script language="javaScript" type="text/javascript">
@@ -196,6 +196,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 
 } elseif (isset($_POST['submit_field'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $name = $_POST['field_name'];
     $shortname = $_POST['field_shortname'];
     $description = $_POST['fielddescr'];
@@ -381,6 +382,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     }
 } elseif (isset($_POST['submit_cat'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     if (isset($_POST['cat_id'])) { //save edited category
         $catid = intval(getDirectReference($_POST['cat_id']));
         Database::get()->query("UPDATE custom_profile_fields_category SET name = ?s WHERE id = ?d", $_POST['cat_name'], $catid);

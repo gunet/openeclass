@@ -32,6 +32,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_REQUEST['username'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $sql = "SELECT user.id, surname, username, password, givenname, status, email,
                    admin.user_id AS is_admin, lang
                 FROM user LEFT JOIN admin ON user.id = admin.user_id
@@ -78,6 +79,7 @@ $tool_content .= "<div class='form-wrapper'>
             </div>
             <div class='form-group'>
                 <div class='col-sm-9 col-sm-offset-3'>
+                    ".showSecondFactorChallenge()."
                     <input class='btn btn-primary' type='submit' value='$langSubmit'>
                 </div>
             </div>

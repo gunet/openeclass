@@ -77,6 +77,7 @@ if ($u) {
                          FROM user WHERE id = ?s", $u);
     if (isset($_POST['submit_editauth'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        checkSecondFactorChallenge();
         $auth = intval($_POST['auth']);
         $oldauth = array_search($info->password, $auth_ids);
         $tool_content .= "<div class='alert alert-success'>$langQuotaSuccess.";
@@ -93,6 +94,7 @@ if ($u) {
 
     if (isset($_POST['delete_ext_uid'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        checkSecondFactorChallenge();
         Database::get()->query('DELETE FROM user_ext_uid WHERE user_id = ?d AND auth_id = ?d',
             $u, $_POST['delete_ext_uid']);
         Session::Messages($langSuccessfulUpdate, 'alert-success');
@@ -120,6 +122,7 @@ if ($u) {
                             <label class='col-sm-2 control-label'>$langEditAuthMethod:</label>
                               <div class='col-sm-10'>" . selection($auth_names, 'auth', intval($current_auth), "class='form-control'") . "</div>
                             </div>
+                            ".showSecondFactorChallenge()."
                             <div class='col-sm-offset-2 col-sm-10'>
                                 <input class='btn btn-primary' type='submit' name='submit_editauth' value='$langModify'>
                               </div>
@@ -300,6 +303,7 @@ if ($u) {
         $tool_content .= "<input type='hidden' name='u' value='$u' />
         <input type='hidden' name='u_submitted' value='1' />
         <input type='hidden' name='registered_at' value='" . $info->registered_at . "' />
+        ".showSecondFactorChallenge()."
         <div class='col-sm-offset-2 col-sm-10'>
 	    <input class='btn btn-primary' type='submit' name='submit_edituser' value='$langModify' />
         </div>
@@ -430,6 +434,8 @@ if ($u) {
                 }
             }
         }
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        checkSecondFactorChallenge();
         $user->refresh(intval($u), $departments);
         user_hook($u);
         $qry = Database::get()->query("UPDATE user SET surname = ?s,

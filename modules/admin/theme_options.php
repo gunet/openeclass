@@ -59,7 +59,7 @@ if (isset($_GET['delete_image'])) {
         redirect_to_home_page('modules/admin/theme_options.php');
 }
 if (isset($_GET['export'])) {
-        require_once '/include/lib/forcedownload.php';
+        require_once 'include/lib/forcedownload.php';
         if (!$theme_id) redirect_to_home_page('modules/admin/theme_options.php'); // if default theme
         require_once 'include/lib/fileUploadLib.inc.php';
         if (!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
@@ -87,6 +87,7 @@ if (isset($_GET['export'])) {
 }
 if (isset($_POST['import'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     validateUploadedFile($_FILES['themeFile']['name'], 2);
     if (get_file_extension($_FILES['themeFile']['name']) == 'zip') {
         $file_name = $_FILES['themeFile']['name'];
@@ -123,6 +124,7 @@ if (isset($_POST['import'])) {
 }
 if (isset($_POST['optionsSave'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     upload_images();
     clear_default_settings();
     $serialized_data = serialize($_POST);
@@ -142,6 +144,7 @@ if (isset($_POST['optionsSave'])) {
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['themeOptionsName'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $theme_options_name = $_POST['themeOptionsName'];
     $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, '')", $theme_options_name)->lastInsertID;
     clear_default_settings();
@@ -154,6 +157,7 @@ if (isset($_POST['optionsSave'])) {
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['active_theme_options'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     if (isset($_POST['preview'])){
         if (getDirectReference($_POST['active_theme_options']) == $active_theme) {
             unset($_SESSION['theme_options_id']);
@@ -202,6 +206,7 @@ if (isset($_POST['optionsSave'])) {
                                         '<div class=\"col-sm-12\">'+
                                             '<input id=\"themeFile\" name=\"themeFile\" type=\"file\" class=\"form-control\">'+
                                             '<input name=\"import\" type=\"hidden\">'+
+                                            '".addslashes(str_replace(array("\n", "\r"), ' ', showSecondFactorChallenge()))."'+
                                         '</div>'+
                                         '</div>". addslashes(generate_csrf_token_form_field()) ."'+
                                     '</form>'+
@@ -392,6 +397,9 @@ if (isset($_POST['optionsSave'])) {
             'level' => 'primary-label')
         ),false);
     if (isset($preview_theme)) {
+        if(showSecondFactorChallenge()!=""){
+            $asktotp = " onclick=\"var totp=prompt('Type 2FA:',''); document.getElementById('theme_selection').elements['sfaanswer'].value=escape(totp);\" ";
+        }
         $tool_content .= "
                 <div class='alert alert-warning'>
                     <div class='row'>
@@ -399,7 +407,7 @@ if (isset($_POST['optionsSave'])) {
                             $langPreviewState &nbsp;".$themes_arr[getIndirectReference($preview_theme)].".
                         </div>
                         <div class='col-sm-3'>
-                            <a href='#' class='theme_enable btn btn-success btn-xs'>$langActivate</a> &nbsp; <a href='theme_options.php?reset_theme_options=true' class='btn btn-default btn-xs'>$langLeave</a>
+                            <a href='#' class='theme_enable btn btn-success btn-xs' $asktotp >$langActivate</a> &nbsp; <a href='theme_options.php?reset_theme_options=true' class='btn btn-default btn-xs'>$langLeave</a>
                         </div>
                     </div>
                 </div>    
@@ -418,8 +426,9 @@ if (isset($_POST['optionsSave'])) {
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' id='theme_selection'>
             <div class='form-group'>
                 <label for='bgColor' class='col-sm-3 control-label'>$langAvailableThemes:</label>
-                <div class='col-sm-9'>
+                <div class='col-sm-9'> 
                     ".  selection($themes_arr, 'active_theme_options', getIndirectReference($theme_id), 'class="form-control form-submit" id="theme_selection"')."
+                ".showSecondFactorChallenge()."
                 </div>
             </div>
             ". generate_csrf_token_form_field() ."
@@ -658,6 +667,7 @@ $tool_content .= "
   </div>
     <div class='form-group'>
         <div class='col-sm-9 col-sm-offset-3'>
+        ".showSecondFactorChallenge()."
             ".($theme_id ? "<input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>" : "")."
             <input class='btn btn-success' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
             ".($theme_id ? "<a class='btn btn-info' href='theme_options.php?export=true'>$langExport</a>" : "")."
