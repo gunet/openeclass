@@ -178,6 +178,7 @@ $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 if (isset($_POST['submit'])) {
     $view_type = $_POST['view_type'];    
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     if (!$_POST['start_date']) {
         $_POST['start_date'] = '0000-00-00';
     }
@@ -751,6 +752,7 @@ if (isset($_POST['submit'])) {
                     </div>                   
                 </div>                    
             </div>
+            ".showSecondFactorChallenge()."
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>

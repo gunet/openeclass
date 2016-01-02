@@ -67,6 +67,7 @@ if (isset($_POST['reg_flag'])) {
 }
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     if (!$from_user) {
         $url = "$_SERVER[SCRIPT_NAME]?course=$course_code";
     } else {
@@ -181,6 +182,7 @@ if (isset($_POST['submit'])) {
             </div>";
             }
         $tool_content .= "
+            ".showSecondFactorChallenge()."
             <div class='col-sm-offset-2 col-sm-10'>
             <input class='btn btn-primary' type='submit' value='$langSubmitActions' name='submit'>
             </div>
