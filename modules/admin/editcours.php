@@ -157,11 +157,11 @@ if (isset($c)) {
     // Users list
     $tool_content .= "
 	<tr>
-	  <td><a href='listusers.php?c=" . $cId . "'>" . $langListUsersActions . "</a></td>
+	  <td><a href='listusers.php?c=$cId'>$langListUsersActions</a></td>
 	</tr>";    
     // Backup course
     $tool_content .= "<tr>
-	  <td><a href='../course_info/archive_course.php?c=" . q($c). "&" .generate_csrf_token_link_parameter() . "'>" . $langTakeBackup . "</a></td>
+	  <td><a href='../course_info/archive_course.php?c=" . q($c). '&amp;' .generate_csrf_token_link_parameter() . "'>" . $langTakeBackup . "</a></td>
 	</tr>";
     // Course metadata 
     if (get_config('course_metadata')) {
