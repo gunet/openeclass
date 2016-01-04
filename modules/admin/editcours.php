@@ -62,16 +62,16 @@ $tool_content .= action_bar(array(
               'level' => 'primary-label')));
 
 // A course has been selected
-if (isset($c)) {    
+if (isset($c)) {
     // Get information about selected course
     $row = Database::get()->querySingle("SELECT course.code as code, course.title as title , course.prof_names as prof_names, course.visible as visible
 		  FROM course
-		 WHERE course.code = ?s", $_GET['c']);   
-    
+		 WHERE course.code = ?s", $_GET['c']);
+
     // Display course information and link to edit
     $tool_content .= "<table class='table-default'>
                 <th colspan='2'>" . $langCourseInfo . " ".icon('fa-gear',$langModify, "infocours.php?c=" . q($c) . "")."</th>";
-    
+
     $departments = $course->getDepartmentIds($cId);
     $i = 1;
     foreach ($departments as $dep) {
@@ -157,13 +157,13 @@ if (isset($c)) {
     // Users list
     $tool_content .= "
 	<tr>
-	  <td><a href='listusers.php?c=" . $cId . "'>" . $langListUsersActions . "</a></td>
-	</tr>";    
+	  <td><a href='listusers.php?c=$cId'>$langListUsersActions</a></td>
+	</tr>";
     // Backup course
     $tool_content .= "<tr>
-	  <td><a href='../course_info/archive_course.php?c=" . q($c). "&" .generate_csrf_token_link_parameter() . "'>" . $langTakeBackup . "</a></td>
+	  <td><a href='../course_info/archive_course.php?c=" . q($c). '&amp;' .generate_csrf_token_link_parameter() . "'>" . $langTakeBackup . "</a></td>
 	</tr>";
-    // Course metadata 
+    // Course metadata
     if (get_config('course_metadata')) {
         $tool_content .= "<tr>
           <td><a href='../course_metadata/index.php?course=" . q($c) . "'>" . $langCourseMetadata . "</a></td>
@@ -177,7 +177,7 @@ if (isset($c)) {
     // Delete course
     $tool_content .= "
 	<tr>
-	  <td><a href='delcours.php?c=" . $cId . "'>" . $langCourseDel . "</a></td>
+	  <td><a href='delcours.php?c=$cId'>$langCourseDel</a></td>
 	</tr>";
     $tool_content .= "</table>";
 }
