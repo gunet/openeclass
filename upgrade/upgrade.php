@@ -2431,6 +2431,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
     if (version_compare($oldversion, '3.0', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.0'));
         Database::get()->query("USE `$mysqlMainDb`");        
 
         if (!DBHelper::fieldExists('auth', 'auth_title')) {
@@ -2558,6 +2559,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // upgrade queries for 3.1
     // -----------------------------------
     if (version_compare($oldversion, '3.1', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.1'));
         if (!DBHelper::fieldExists('course_user', 'document_timestamp')) {
             Database::get()->query("ALTER TABLE `course_user` ADD document_timestamp DATETIME NOT NULL,
                 CHANGE `reg_date` `reg_date` DATETIME NOT NULL");
@@ -2646,6 +2648,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // upgrade queries for 3.2
     // -----------------------------------
     if (version_compare($oldversion, '3.2', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.2'));
         set_config('ext_bigbluebutton_enabled',
             Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count > 0? '1': '0');
         
@@ -2986,6 +2989,70 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // upgrade queries for 3.3
     // -----------------------------------
     if (version_compare($oldversion, '3.3', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.3'));
+        // Fix incorrectly-graded fill-in-blanks questions
+        Database::get()->queryFunc('SELECT question_id, answer, type
+            FROM exercise_question, exercise_answer 
+            WHERE question_id = exercise_question.id AND
+                  type in (?d, ?d) AND answer LIKE ?s',
+            function ($item) {
+                if (preg_match('#\[/?m[^]]#', $item->answer)) {
+                    Database::get()->queryFunc('SELECT answer_record_id, answer, answer_id, weight
+                        FROM exercise_user_record, exercise_answer_record
+                        WHERE exercise_user_record.eurid = exercise_answer_record.eurid AND
+                              exercise_answer_record.question_id = ?d AND
+                              attempt_status IN (?d, ?d)',
+                        function ($a) use ($item) {
+                            static $answers, $weights;
+                            $qid = $item->question_id;
+                            if (!isset($answers[$qid])) {
+                                // code from modules/exercise/exercise.class.php lines 865-878
+                                list($answer, $answerWeighting) = explode('::', $item->answer);
+                                $weights[$qid] = explode(',', $answerWeighting);
+                                preg_match_all('#(?<=\[)(?!/?m])[^\]]+#', $answer, $match);
+                                if ($item->type == FILL_IN_BLANKS_TOLERANT) {
+                                    $expected = array_map(function ($m) {
+                                           return strtr(mb_strtoupper($m, 'UTF-8'), 'ΆΈΉΊΌΎΏ', 'ΑΕΗΙΟΥΩ');
+                                        }, $match[0]);
+                                } else {
+                                    $expected = $match[0];
+                                }
+                                $answers[$qid] = array_map(function ($str) {
+                                        return preg_split('/\s*\|\s*/', $str);
+                                    }, $expected);
+                            }
+                            if ($item->type == FILL_IN_BLANKS_TOLERANT) {
+                                $choice = strtr(mb_strtoupper($a->answer, 'UTF-8'), 'ΆΈΉΊΌΎΏ', 'ΑΕΗΙΟΥΩ');
+                            } else {
+                                $choice = $a->answer;
+                            }
+                            $aid = $a->answer_id - 1;
+                            $weight = in_array($choice, $answers[$qid][$aid]) ? $weights[$qid][$aid] : 0;
+                            if ($weight != $a->weight) {
+                                Database::get()->query('UPDATE exercise_answer_record
+                                    SET weight = ?f WHERE answer_record_id = ?d',
+                                    $weight, $a->answer_record_id);
+                            }
+                        }, $item->question_id, ATTEMPT_COMPLETED, ATTEMPT_PAUSED);
+                }
+            }, FILL_IN_BLANKS, FILL_IN_BLANKS_TOLERANT, '%[m%');
+
+        // Fix duplicate exercise answer records
+        Database::get()->queryFunc('SELECT COUNT(*) AS cnt,
+                    MIN(answer_record_id) AS min_answer_record_id
+                FROM exercise_answer_record
+                GROUP BY eurid, question_id, answer, answer_id
+                HAVING cnt > 1',
+            function ($item) {
+                $details = Database::get()->querySingle('SELECT * FROM exercise_answer_record
+                    WHERE answer_record_id = ?d', $item->min_answer_record_id);
+                Database::get()->query('DELETE FROM exercise_answer_record
+                    WHERE eurid = ?d AND question_id = ?d AND answer = ?s AND answer_id = ?d AND
+                          answer_record_id > ?d',
+                    $details->eurid, $details->question_id, $details->answer, $details->answer_id,
+                    $item->min_answer_record_id);
+            });
+
         // Fix incorrect exercise answer grade totals
         Database::get()->query('CREATE TEMPORARY TABLE exercise_answer_record_total AS
             SELECT SUM(weight) AS TOTAL, exercise_answer_record.eurid AS eurid
@@ -2999,6 +3066,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             WHERE exercise_user_record.eurid = exercise_answer_record_total.eurid AND
                   exercise_user_record.total_score <> exercise_answer_record_total.total');
         Database::get()->query('DROP TEMPORARY TABLE exercise_answer_record_total');
+
+        // Use NULL for dates that can be unset
+        Database::get()->query('ALTER TABLE `course`
+            CHANGE `start_date` `start_date` DATE DEFAULT NULL,
+            CHANGE `finish_date` `finish_date` DATE DEFAULT NULL');
+        Database::get()->query('ALTER TABLE `announcement`
+            CHANGE `start_display` `start_display` DATE DEFAULT NULL,
+            CHANGE `stop_display` `stop_display` DATE DEFAULT NULL');
 
         // Fix duplicate link orders
         Database::get()->queryFunc('SELECT DISTINCT course_id, category FROM link

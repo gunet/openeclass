@@ -1848,6 +1848,7 @@ $langUpgMan = "upgrade instructions";
 $langUpgLastStep = "before continue.";
 $langUpgToSee = "To review all the new features and changes of eClass new version click ";
 $langUpgRead = "If you haven't done that, please read carefully";
+$langUpgForVersion = 'Version %s upgrades.';
 $langSuccessOk = "Success ";
 $langSuccessBad = "Error or not needed modification";
 $langUpgAdminError = "Wrong Admin username or/and password! Please try again.";
