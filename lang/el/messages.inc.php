@@ -3329,6 +3329,7 @@ $langUpgContact = "Στοιχεία Επικοινωνίας";
 $langUpgAddress = "Διεύθυνση Ιδρύματος:";
 $langUpgTel = "Τηλ. Επικοινωνίας:";
 $langUpgReg = "Εγγραφή Χρηστών";
+$langUpgForVersion = 'Αναβαθμίσεις έκδοσης %s.';
 $langTable = "Πίνακας";
 $langToTable = "στον πίνακα";
 $langAddField = "Προσθήκη πεδίου";

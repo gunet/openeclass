@@ -107,8 +107,8 @@ $db->query("CREATE TABLE `announcement` (
     `course_id` INT(11) NOT NULL DEFAULT 0,
     `order` MEDIUMINT(11) NOT NULL DEFAULT 0,
     `visible` TINYINT(4) NOT NULL DEFAULT 0,
-    `start_display` DATE NOT NULL DEFAULT '2014-01-01',
-    `stop_display` DATE NOT NULL DEFAULT '2094-12-31',
+    `start_display` DATE DEFAULT NULL,
+    `stop_display` DATE DEFAULT NULL,
     PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE `admin_announcement` (
@@ -154,8 +154,8 @@ $db->query("CREATE TABLE `course` (
   `glossary_expand` BOOL NOT NULL DEFAULT 0,
   `glossary_index` BOOL NOT NULL DEFAULT 1,
   `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
-  `start_date` DATE NOT NULL default '0000-00-00',
-  `finish_date` DATE NOT NULL default '0000-00-00',
+  `start_date` DATE DEFAULT NULL,
+  `finish_date` DATE DEFAULT NULL,
   `description` MEDIUMTEXT DEFAULT NULL,
   `home_layout` TINYINT(1) NOT NULL DEFAULT 1,
   `course_image` VARCHAR(400) NULL,
