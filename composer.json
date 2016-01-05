@@ -11,8 +11,17 @@
         "swiftmailer/swiftmailer": "@stable"
     },
     "autoload": {
+        "psr-0": {
+            "install\\Installer": ""
+        },
         "psr-4": {
             "Widgets\\": "Widgets"
         }
-    }      
+    },
+    "scripts": {
+    "post-install-cmd": ["install\\Installer::ensureHtaccess"],
+    "post-update-cmd":  ["install\\Installer::ensureHtaccess"],
+    "post-package-install": ["install\\Installer::vendorTestCodeCleanup"],
+    "post-package-update": ["install\\Installer::vendorTestCodeCleanup"]
+  }      
 }
