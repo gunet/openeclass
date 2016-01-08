@@ -1,0 +1,552 @@
+[2015-12-28 10:16:36] local.ERROR: exception 'Illuminate\Contracts\Container\BindingResolutionException' with message 'Target [Sorskod\Larasponse\Larasponse] is not instantiable.' in C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php:744
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('Sorskod\\Laraspo...', Array)
+#1 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('Sorskod\\Laraspo...', Array)
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(845): Illuminate\Foundation\Application->make('Sorskod\\Laraspo...')
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(800): Illuminate\Container\Container->resolveClass(Object(ReflectionParameter))
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(771): Illuminate\Container\Container->getDependencies(Array, Array)
+#5 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('App\\Http\\Contro...', Array)
+#6 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('App\\Http\\Contro...', Array)
+#7 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(67): Illuminate\Foundation\Application->make('App\\Http\\Contro...')
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(52): Illuminate\Routing\ControllerDispatcher->makeController('App\\Http\\Contro...')
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'index')
+#10 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#12 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#17 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#19 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#20 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#21 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#22 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#23 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#24 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#25 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#26 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#27 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#28 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#29 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#30 {main}  
+[2015-12-28 10:18:44] local.ERROR: exception 'Illuminate\Contracts\Container\BindingResolutionException' with message 'Target [Sorskod\Larasponse\Larasponse] is not instantiable.' in C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php:744
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('Sorskod\\Laraspo...', Array)
+#1 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('Sorskod\\Laraspo...', Array)
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(845): Illuminate\Foundation\Application->make('Sorskod\\Laraspo...')
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(800): Illuminate\Container\Container->resolveClass(Object(ReflectionParameter))
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(771): Illuminate\Container\Container->getDependencies(Array, Array)
+#5 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('App\\Http\\Contro...', Array)
+#6 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('App\\Http\\Contro...', Array)
+#7 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(67): Illuminate\Foundation\Application->make('App\\Http\\Contro...')
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(52): Illuminate\Routing\ControllerDispatcher->makeController('App\\Http\\Contro...')
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'index')
+#10 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#12 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#17 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#19 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#20 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#21 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#22 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#23 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#24 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#25 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#26 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#27 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#28 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#29 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#30 {main}  
+[2015-12-28 10:18:46] local.ERROR: exception 'Illuminate\Contracts\Container\BindingResolutionException' with message 'Target [Sorskod\Larasponse\Larasponse] is not instantiable.' in C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php:744
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('Sorskod\\Laraspo...', Array)
+#1 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('Sorskod\\Laraspo...', Array)
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(845): Illuminate\Foundation\Application->make('Sorskod\\Laraspo...')
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(800): Illuminate\Container\Container->resolveClass(Object(ReflectionParameter))
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(771): Illuminate\Container\Container->getDependencies(Array, Array)
+#5 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('App\\Http\\Contro...', Array)
+#6 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('App\\Http\\Contro...', Array)
+#7 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(67): Illuminate\Foundation\Application->make('App\\Http\\Contro...')
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(52): Illuminate\Routing\ControllerDispatcher->makeController('App\\Http\\Contro...')
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'index')
+#10 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#12 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#17 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#19 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#20 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#21 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#22 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#23 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#24 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#25 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#26 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#27 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#28 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#29 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#30 {main}  
+[2015-12-28 10:19:20] local.ERROR: exception 'Illuminate\Contracts\Container\BindingResolutionException' with message 'Target [Sorskod\Larasponse\Larasponse] is not instantiable.' in C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php:744
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('Sorskod\\Laraspo...', Array)
+#1 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('Sorskod\\Laraspo...', Array)
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(845): Illuminate\Foundation\Application->make('Sorskod\\Laraspo...')
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(800): Illuminate\Container\Container->resolveClass(Object(ReflectionParameter))
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(771): Illuminate\Container\Container->getDependencies(Array, Array)
+#5 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('App\\Http\\Contro...', Array)
+#6 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('App\\Http\\Contro...', Array)
+#7 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(67): Illuminate\Foundation\Application->make('App\\Http\\Contro...')
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(52): Illuminate\Routing\ControllerDispatcher->makeController('App\\Http\\Contro...')
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'index')
+#10 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#12 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#17 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#19 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#20 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#21 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#22 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#23 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#24 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#25 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#26 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#27 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#28 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#29 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#30 {main}  
+[2015-12-28 10:19:21] local.ERROR: exception 'Illuminate\Contracts\Container\BindingResolutionException' with message 'Target [Sorskod\Larasponse\Larasponse] is not instantiable.' in C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php:744
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('Sorskod\\Laraspo...', Array)
+#1 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('Sorskod\\Laraspo...', Array)
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(845): Illuminate\Foundation\Application->make('Sorskod\\Laraspo...')
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(800): Illuminate\Container\Container->resolveClass(Object(ReflectionParameter))
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(771): Illuminate\Container\Container->getDependencies(Array, Array)
+#5 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('App\\Http\\Contro...', Array)
+#6 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('App\\Http\\Contro...', Array)
+#7 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(67): Illuminate\Foundation\Application->make('App\\Http\\Contro...')
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(52): Illuminate\Routing\ControllerDispatcher->makeController('App\\Http\\Contro...')
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'index')
+#10 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#12 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#17 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#19 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#20 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#21 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#22 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#23 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#24 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#25 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#26 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#27 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#28 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#29 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#30 {main}  
+[2015-12-28 10:21:30] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Http\Controllers\Api\V1\Input' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\CourseController.php:34
+Stack trace:
+#0 {main}  
+[2015-12-28 10:21:52] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'Input' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\CourseController.php:34
+Stack trace:
+#0 {main}  
+[2015-12-28 10:24:08] local.ERROR: exception 'ErrorException' with message 'Undefined variable: request' in C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\CourseController.php:34
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\CourseController.php(34): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(8, 'Undefined varia...', 'C:\\xampp\\htdocs...', 34, Array)
+#1 [internal function]: App\Http\Controllers\Api\V1\CourseController->index()
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(76): call_user_func_array(Array, Array)
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('index', Array)
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(94): Illuminate\Routing\ControllerDispatcher->call(Object(App\Http\Controllers\Api\V1\CourseController), Object(Illuminate\Routing\Route), 'index')
+#5 [internal function]: Illuminate\Routing\ControllerDispatcher->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#6 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#7 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(96): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#10 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(54): Illuminate\Routing\ControllerDispatcher->callWithinStack(Object(App\Http\Controllers\Api\V1\CourseController), Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'index')
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'index')
+#12 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#14 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#16 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#17 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#19 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#20 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#21 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#22 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#23 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#24 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#25 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#26 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#27 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#28 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#29 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#30 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#31 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#32 {main}  
+[2015-12-28 10:27:56] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Repositories\CourseRepository.php:29
+Stack trace:
+#0 {main}  
+[2015-12-28 10:29:27] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Http\Controllers\Api\V1\CourseTransformer' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\CourseController.php:37
+Stack trace:
+#0 {main}  
+[2015-12-28 10:31:10] local.ERROR: exception 'ErrorException' with message 'Argument 1 passed to Sorskod\Larasponse\Providers\Fractal::paginatedCollection() must be an instance of Illuminate\Contracts\Pagination\LengthAwarePaginator, instance of Illuminate\Database\Eloquent\Collection given, called in C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\CourseController.php on line 37 and defined' in C:\xampp\htdocs\eclass-api\laravel\vendor\sorskod\larasponse\src\Sorskod\Larasponse\Providers\Fractal.php:54
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\vendor\sorskod\larasponse\src\Sorskod\Larasponse\Providers\Fractal.php(54): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(4096, 'Argument 1 pass...', 'C:\\xampp\\htdocs...', 54, Array)
+#1 C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\CourseController.php(37): Sorskod\Larasponse\Providers\Fractal->paginatedCollection(Object(Illuminate\Database\Eloquent\Collection), Object(App\Http\Controllers\Api\V1\Transformers\CourseTransformer))
+#2 [internal function]: App\Http\Controllers\Api\V1\CourseController->index(Object(Illuminate\Http\Request))
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(76): call_user_func_array(Array, Array)
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('index', Array)
+#5 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(94): Illuminate\Routing\ControllerDispatcher->call(Object(App\Http\Controllers\Api\V1\CourseController), Object(Illuminate\Routing\Route), 'index')
+#6 [internal function]: Illuminate\Routing\ControllerDispatcher->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#7 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#8 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#10 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(96): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(54): Illuminate\Routing\ControllerDispatcher->callWithinStack(Object(App\Http\Controllers\Api\V1\CourseController), Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'index')
+#12 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'index')
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#14 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#15 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#17 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#20 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#21 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#22 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#23 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#24 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#25 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#26 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#27 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#28 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#29 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#30 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#31 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#32 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#33 {main}  
+[2015-12-28 10:32:31] local.ERROR: exception 'ErrorException' with message 'Missing argument 1 for Illuminate\Support\Collection::get()' in C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Support\Collection.php:282
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Support\Collection.php(282): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'Missing argumen...', 'C:\\xampp\\htdocs...', 282, Array)
+#1 [internal function]: Illuminate\Support\Collection->get()
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pagination\AbstractPaginator.php(494): call_user_func_array(Array, Array)
+#3 C:\xampp\htdocs\eclass-api\laravel\app\Repositories\CourseRepository.php(29): Illuminate\Pagination\AbstractPaginator->__call('get', Array)
+#4 C:\xampp\htdocs\eclass-api\laravel\app\Repositories\CourseRepository.php(29): Illuminate\Pagination\LengthAwarePaginator->get()
+#5 C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\CourseController.php(36): App\Repositories\CourseRepository->getAllCourses(5)
+#6 [internal function]: App\Http\Controllers\Api\V1\CourseController->index(Object(Illuminate\Http\Request))
+#7 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(76): call_user_func_array(Array, Array)
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('index', Array)
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(94): Illuminate\Routing\ControllerDispatcher->call(Object(App\Http\Controllers\Api\V1\CourseController), Object(Illuminate\Routing\Route), 'index')
+#10 [internal function]: Illuminate\Routing\ControllerDispatcher->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#12 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(96): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(54): Illuminate\Routing\ControllerDispatcher->callWithinStack(Object(App\Http\Controllers\Api\V1\CourseController), Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'index')
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'index')
+#17 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#19 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#20 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#21 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#22 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#23 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#24 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#25 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#26 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#27 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#28 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(139): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#29 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#30 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#31 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#32 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#33 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#34 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#35 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#36 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#37 {main}  
+[2016-01-08 09:32:46] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:36
+Stack trace:
+#0 {main}  
+[2016-01-08 09:33:27] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:36
+Stack trace:
+#0 {main}  
+[2016-01-08 09:34:47] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:36
+Stack trace:
+#0 {main}  
+[2016-01-08 09:34:48] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:36
+Stack trace:
+#0 {main}  
+[2016-01-08 09:34:49] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:36
+Stack trace:
+#0 {main}  
+[2016-01-08 09:34:50] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:36
+Stack trace:
+#0 {main}  
+[2016-01-08 09:34:50] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:36
+Stack trace:
+#0 {main}  
+[2016-01-08 09:34:51] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:36
+Stack trace:
+#0 {main}  
+[2016-01-08 09:34:52] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:36
+Stack trace:
+#0 {main}  
+[2016-01-08 09:34:52] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:36
+Stack trace:
+#0 {main}  
+[2016-01-08 09:35:35] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:35
+Stack trace:
+#0 {main}  
+[2016-01-08 09:35:36] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:35
+Stack trace:
+#0 {main}  
+[2016-01-08 09:35:42] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:35
+Stack trace:
+#0 {main}  
+[2016-01-08 09:35:43] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:35
+Stack trace:
+#0 {main}  
+[2016-01-08 09:35:44] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Models\Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:35
+Stack trace:
+#0 {main}  
+[2016-01-08 09:35:51] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:35
+Stack trace:
+#0 {main}  
+[2016-01-08 09:35:52] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:35
+Stack trace:
+#0 {main}  
+[2016-01-08 09:35:53] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:35
+Stack trace:
+#0 {main}  
+[2016-01-08 10:11:28] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'Courses' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\routes.php:35
+Stack trace:
+#0 {main}  
+[2016-01-08 10:34:55] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Exceptions\ApiHelper' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Exceptions\Handler.php:51
+Stack trace:
+#0 {main}  
+[2016-01-08 13:05:02] local.ERROR: exception 'ReflectionException' with message 'Class App\Http\Controllers\Api\V1\AssignmentsController does not exist' in C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php:264
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(264): ReflectionMethod->__construct('App\\Http\\Contro...', 'index')
+#1 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(838): Illuminate\Routing\Route->signatureParameters('Illuminate\\Data...')
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(823): Illuminate\Routing\Router->substituteImplicitBindings(Object(Illuminate\Routing\Route))
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(806): Illuminate\Routing\Router->substituteBindings(Object(Illuminate\Routing\Route))
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(670): Illuminate\Routing\Router->findRoute(Object(Illuminate\Http\Request))
+#5 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#6 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#7 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#10 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#12 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#17 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#19 {main}  
+[2016-01-08 13:05:04] local.ERROR: exception 'ReflectionException' with message 'Class App\Http\Controllers\Api\V1\AssignmentsController does not exist' in C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php:264
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(264): ReflectionMethod->__construct('App\\Http\\Contro...', 'index')
+#1 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(838): Illuminate\Routing\Route->signatureParameters('Illuminate\\Data...')
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(823): Illuminate\Routing\Router->substituteImplicitBindings(Object(Illuminate\Routing\Route))
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(806): Illuminate\Routing\Router->substituteBindings(Object(Illuminate\Routing\Route))
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(670): Illuminate\Routing\Router->findRoute(Object(Illuminate\Http\Request))
+#5 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#6 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#7 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#10 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#12 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#17 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#19 {main}  
+[2016-01-08 13:05:38] local.ERROR: exception 'ReflectionException' with message 'Class App\Repositories\AssignmentRepository does not exist' in C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php:796
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(796): ReflectionParameter->getClass()
+#1 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(777): Illuminate\Container\Container->getDependencies(Array, Array)
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('App\\Http\\Contro...', Array)
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('App\\Http\\Contro...', Array)
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(67): Illuminate\Foundation\Application->make('App\\Http\\Contro...')
+#5 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(52): Illuminate\Routing\ControllerDispatcher->makeController('App\\Http\\Contro...')
+#6 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'index')
+#7 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#9 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#10 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#11 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#12 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#14 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#17 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#20 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#21 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#22 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#23 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#24 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#25 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#26 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#27 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#28 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#29 {main}  
+[2016-01-08 13:05:39] local.ERROR: exception 'ReflectionException' with message 'Class App\Repositories\AssignmentRepository does not exist' in C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php:796
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(796): ReflectionParameter->getClass()
+#1 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(777): Illuminate\Container\Container->getDependencies(Array, Array)
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Container\Container.php(631): Illuminate\Container\Container->build('App\\Http\\Contro...', Array)
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Application.php(674): Illuminate\Container\Container->make('App\\Http\\Contro...', Array)
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(67): Illuminate\Foundation\Application->make('App\\Http\\Contro...')
+#5 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(52): Illuminate\Routing\ControllerDispatcher->makeController('App\\Http\\Contro...')
+#6 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'index')
+#7 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#9 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#10 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#11 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#12 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#14 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#17 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#19 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#20 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#21 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#22 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#23 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#24 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#25 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#26 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#27 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#28 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#29 {main}  
+[2016-01-08 13:06:16] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Http\Controllers\Api\V1\Input' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\AssignmentController.php:33
+Stack trace:
+#0 {main}  
+[2016-01-08 13:06:47] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'Input' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\AssignmentController.php:33
+Stack trace:
+#0 {main}  
+[2016-01-08 13:06:50] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'Input' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\AssignmentController.php:33
+Stack trace:
+#0 {main}  
+[2016-01-08 13:07:32] local.ERROR: exception 'Symfony\Component\Debug\Exception\FatalErrorException' with message 'Class 'App\Http\Controllers\Api\V1\AssignmentTransformer' not found' in C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\AssignmentController.php:36
+Stack trace:
+#0 {main}  
+[2016-01-08 13:09:03] local.ERROR: exception 'ErrorException' with message 'Argument 1 passed to App\Http\Controllers\Api\V1\Transformers\AssignmentTransformer::transform() must be an instance of App\Models\Assignment, null given, called in C:\xampp\htdocs\eclass-api\laravel\vendor\league\fractal\src\Scope.php on line 338 and defined' in C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\Transformers\AssignmentTransformer.php:11
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\Transformers\AssignmentTransformer.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(4096, 'Argument 1 pass...', 'C:\\xampp\\htdocs...', 11, Array)
+#1 C:\xampp\htdocs\eclass-api\laravel\vendor\league\fractal\src\Scope.php(338): App\Http\Controllers\Api\V1\Transformers\AssignmentTransformer->transform(NULL)
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\league\fractal\src\Scope.php(278): League\Fractal\Scope->fireTransformer(Object(App\Http\Controllers\Api\V1\Transformers\AssignmentTransformer), NULL)
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\league\fractal\src\Scope.php(208): League\Fractal\Scope->executeResourceTransformers()
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\sorskod\larasponse\src\Sorskod\Larasponse\Providers\Fractal.php(50): League\Fractal\Scope->toArray()
+#5 C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\AssignmentController.php(53): Sorskod\Larasponse\Providers\Fractal->item(NULL, Object(App\Http\Controllers\Api\V1\Transformers\AssignmentTransformer))
+#6 [internal function]: App\Http\Controllers\Api\V1\AssignmentController->show(Object(App\Models\Course), '2435')
+#7 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(76): call_user_func_array(Array, Array)
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('show', Array)
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(94): Illuminate\Routing\ControllerDispatcher->call(Object(App\Http\Controllers\Api\V1\AssignmentController), Object(Illuminate\Routing\Route), 'show')
+#10 [internal function]: Illuminate\Routing\ControllerDispatcher->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#12 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(96): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(54): Illuminate\Routing\ControllerDispatcher->callWithinStack(Object(App\Http\Controllers\Api\V1\AssignmentController), Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'show')
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'show')
+#17 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#19 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#20 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#21 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#22 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#23 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#24 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#25 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#26 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#27 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#28 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#29 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#30 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#31 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#32 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#33 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#34 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#35 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#36 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#37 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#38 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#39 {main}  
+[2016-01-08 13:11:28] local.ERROR: exception 'ErrorException' with message 'Argument 1 passed to App\Http\Controllers\Api\V1\Transformers\AssignmentTransformer::transform() must be an instance of App\Models\Assignment, null given, called in C:\xampp\htdocs\eclass-api\laravel\vendor\league\fractal\src\Scope.php on line 338 and defined' in C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\Transformers\AssignmentTransformer.php:11
+Stack trace:
+#0 C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\Transformers\AssignmentTransformer.php(11): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(4096, 'Argument 1 pass...', 'C:\\xampp\\htdocs...', 11, Array)
+#1 C:\xampp\htdocs\eclass-api\laravel\vendor\league\fractal\src\Scope.php(338): App\Http\Controllers\Api\V1\Transformers\AssignmentTransformer->transform(NULL)
+#2 C:\xampp\htdocs\eclass-api\laravel\vendor\league\fractal\src\Scope.php(278): League\Fractal\Scope->fireTransformer(Object(App\Http\Controllers\Api\V1\Transformers\AssignmentTransformer), NULL)
+#3 C:\xampp\htdocs\eclass-api\laravel\vendor\league\fractal\src\Scope.php(208): League\Fractal\Scope->executeResourceTransformers()
+#4 C:\xampp\htdocs\eclass-api\laravel\vendor\sorskod\larasponse\src\Sorskod\Larasponse\Providers\Fractal.php(50): League\Fractal\Scope->toArray()
+#5 C:\xampp\htdocs\eclass-api\laravel\app\Http\Controllers\Api\V1\AssignmentController.php(53): Sorskod\Larasponse\Providers\Fractal->item(NULL, Object(App\Http\Controllers\Api\V1\Transformers\AssignmentTransformer))
+#6 [internal function]: App\Http\Controllers\Api\V1\AssignmentController->show(Object(App\Models\Course), '12')
+#7 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Controller.php(76): call_user_func_array(Array, Array)
+#8 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(146): Illuminate\Routing\Controller->callAction('show', Array)
+#9 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(94): Illuminate\Routing\ControllerDispatcher->call(Object(App\Http\Controllers\Api\V1\AssignmentController), Object(Illuminate\Routing\Route), 'show')
+#10 [internal function]: Illuminate\Routing\ControllerDispatcher->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#11 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#12 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#13 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#14 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(96): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#15 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\ControllerDispatcher.php(54): Illuminate\Routing\ControllerDispatcher->callWithinStack(Object(App\Http\Controllers\Api\V1\AssignmentController), Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'show')
+#16 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(174): Illuminate\Routing\ControllerDispatcher->dispatch(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request), 'App\\Http\\Contro...', 'show')
+#17 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Route.php(140): Illuminate\Routing\Route->runController(Object(Illuminate\Http\Request))
+#18 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(703): Illuminate\Routing\Route->run(Object(Illuminate\Http\Request))
+#19 [internal function]: Illuminate\Routing\Router->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#20 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#21 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#22 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#23 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(705): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#24 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(678): Illuminate\Routing\Router->runRouteWithinStack(Object(Illuminate\Routing\Route), Object(Illuminate\Http\Request))
+#25 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Router.php(654): Illuminate\Routing\Router->dispatchToRoute(Object(Illuminate\Http\Request))
+#26 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(246): Illuminate\Routing\Router->dispatch(Object(Illuminate\Http\Request))
+#27 [internal function]: Illuminate\Foundation\Http\Kernel->Illuminate\Foundation\Http\{closure}(Object(Illuminate\Http\Request))
+#28 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(52): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#29 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode.php(44): Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#30 [internal function]: Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode->handle(Object(Illuminate\Http\Request), Object(Closure))
+#31 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(124): call_user_func_array(Array, Array)
+#32 [internal function]: Illuminate\Pipeline\Pipeline->Illuminate\Pipeline\{closure}(Object(Illuminate\Http\Request))
+#33 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Routing\Pipeline.php(32): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#34 [internal function]: Illuminate\Routing\Pipeline->Illuminate\Routing\{closure}(Object(Illuminate\Http\Request))
+#35 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Pipeline\Pipeline.php(103): call_user_func(Object(Closure), Object(Illuminate\Http\Request))
+#36 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(132): Illuminate\Pipeline\Pipeline->then(Object(Closure))
+#37 C:\xampp\htdocs\eclass-api\laravel\vendor\laravel\framework\src\Illuminate\Foundation\Http\Kernel.php(99): Illuminate\Foundation\Http\Kernel->sendRequestThroughRouter(Object(Illuminate\Http\Request))
+#38 C:\xampp\htdocs\eclass-api\public\index.php(54): Illuminate\Foundation\Http\Kernel->handle(Object(Illuminate\Http\Request))
+#39 {main}  

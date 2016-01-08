@@ -11,6 +11,8 @@ syntax: regexp
 ^composer\.phar
 ^storage/views/
 ^vendor/
+^laravel/vendor/
+^laravel/.env
 
 ^nbproject/private/
 ^.sass-cache/
