@@ -150,7 +150,12 @@ foreach ($result as $row) {
             }
             if ($row2->attempt_status == ATTEMPT_COMPLETED) {
                 if ($showScore) {
-                    $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . q($row2->total_score) . "/" . q($row2->total_weighting) . "</a>";
+                    $answersCount = Database::get()->querySingle("SELECT count(*) AS answers_cnt FROM `exercise_answer_record` WHERE `eurid` = ?d", $row2->eurid)->answers_cnt;
+                    if ($answersCount) {
+                        $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . q($row2->total_score) . "/" . q($row2->total_weighting) . "</a>";
+                    } else {
+                        $results_link = q($row2->total_score) . "/" . q($row2->total_weighting);
+                    }
                 } else {
                     switch ($displayScore) {
                         case 2:
