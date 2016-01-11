@@ -3124,7 +3124,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `timestamp` INT(11) NOT NULL DEFAULT 0,
                         `pinned` TINYINT(1) NOT NULL DEFAULT 0,
                         INDEX `wall_post_index` (`course_id`)) $charset_spec");
-        Database::get()->query("CREATE TABLE `wall_post_resources` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `wall_post_resources` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `post_id` INT(11) NOT NULL,
                         `title` VARCHAR(255) NOT NULL DEFAULT '',
