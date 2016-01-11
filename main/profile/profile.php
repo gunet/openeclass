@@ -113,7 +113,7 @@ if (isset($_POST['submit'])) {
                     'email_form' => get_config('email_required'),
                     'surname_form' => !$is_admin,
                     'givenname_form' => true,
-                    'username_form' => true,
+                    'username_form' => $allow_username_change,
                     'email_public' => false,
                     'phone_public' => false,
                     'am_public' => false);
@@ -509,7 +509,6 @@ if (get_config('email_verification_required')) {
         <div class='col-sm-10 form-control-static'>$message</div>
       </div>";
 }
-
 if (!get_config('restrict_owndep')) {
     $tool_content .= "<div class='form-group'><label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>";
     $tool_content .= "<div class='col-sm-10 form-control-static'>";
