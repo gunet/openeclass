@@ -13,6 +13,8 @@ syntax: regexp
 ^vendor/
 ^laravel/vendor/
 ^laravel/.env
+^laravel/storage/
+^laravel/bootstrap/cache/
 
 ^nbproject/private/
 ^.sass-cache/
