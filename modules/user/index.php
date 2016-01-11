@@ -130,8 +130,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         // Create appropriate role control buttons
         // Admin right
 
-        if(showSecondFactorChallenge()!=""){
-          $asktotp = " onclick=\"var totp=prompt('Type 2FA:','');this.setAttribute('href', this.getAttribute('href')+'&sfaanswer='+escape(totp));\" ";
+        if (showSecondFactorChallenge() != ''){
+            $asktotp = " onclick=\"var totp=prompt('Type 2FA:','');this.setAttribute('href', this.getAttribute('href')+'&sfaanswer='+escape(totp));\" ";
+        } else {
+            $asktotp = '';
         }
         $user_role_controls = '';
         if ($myrow->id != $_SESSION["uid"] && $myrow->reviewer == '1') {
