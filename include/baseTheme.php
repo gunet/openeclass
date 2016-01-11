@@ -107,7 +107,7 @@ function view($view_file, $view_data = array()) {
         $section_title = trans('langAdmin');
     } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
         $section_title = trans('langUserPortfolio');
-    } elseif ($theme_options_styles['siteTitle']) {
+    } elseif (isset($theme_options_styles['siteTitle']) && $theme_options_styles['siteTitle']) {
         $section_title = $theme_options_styles['siteTitle'];
     } else {
         $section_title = trans('langEclass');
@@ -279,7 +279,7 @@ function view($view_file, $view_data = array()) {
             'messages', 'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
             'is_mobile', 'current_module_dir','search_action', 'require_current_course',
             'saved_is_editor', 'require_course_admin', 'require_editor', 'sidebar_courses',
-            'show_toggle_student_view');
+            'show_toggle_student_view', 'themeimg');
     $data = array_merge($global_data, $view_data);
     return $blade->view()->make($view_file, $data)->render();
 }
