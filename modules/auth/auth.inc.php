@@ -1097,7 +1097,7 @@ function shib_cas_login($type) {
                                         $surname, $givenname, $email, $status, $info->id);
 
             $userObj->refresh($info->id, $options['departments']);
-            user_hook($_SESSION['uid']);
+            user_hook($info->id);
 
             // check for admin privileges
             $admin_rights = get_admin_rights($info->id);
@@ -1116,11 +1116,7 @@ function shib_cas_login($type) {
                 $is_departmentmanage_user = 1;
             }
             $_SESSION['uid'] = $info->id;
-            if (isset($_SESSION['langswitch'])) {
-                $language = $_SESSION['langswitch'];
-            } else {
-                $language = $info->lang;
-            }
+            $language = $_SESSION['langswitch'] = $info->lang;
         }
     } elseif ($autoregister and !(get_config('am_required') and empty($am))) {
         // if user not found and autoregister enabled, create user
