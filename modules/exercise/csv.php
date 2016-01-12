@@ -62,7 +62,7 @@ if ($is_editor) {
             }
             $totalScore = $row2->total_score;
             $totalWeighting = $row2->total_weighting;
-            $output .= csv_escape("( $totalScore/$totalWeighting )") . "\t";
+            $output .= csv_escape("$totalScore/$totalWeighting") . "\t";
             $output .= "$crlf";
         }
     }
