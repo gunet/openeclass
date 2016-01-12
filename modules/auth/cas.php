@@ -32,7 +32,7 @@ if (phpCAS::checkAuthentication()) {
     $cas = get_auth_settings($auth);
     $_SESSION['cas_attributes'] = phpCAS::getAttributes();
     $attrs = get_cas_attrs($_SESSION['cas_attributes'], $cas);
-    $_SESSION['cas_uname'] = phpCAS::getUser();
+    $_SESSION['cas_uname'] = strtolower(phpCAS::getUser());
 
     if (!empty($_SESSION['cas_uname'])) {
         $_SESSION['uname'] = $_SESSION['cas_uname'];
