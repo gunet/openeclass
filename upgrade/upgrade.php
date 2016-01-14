@@ -2990,6 +2990,66 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // -----------------------------------
     if (version_compare($oldversion, '3.3', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.3'));
+
+        // Remove '0000-00-00' default dates and fix exercise weight fields
+        Database::get()->query('ALTER TABLE `agenda`
+            CHANGE `start` `start` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `course`
+            CHANGE `created` `created` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `course_weekly_view`
+            CHANGE `start_week` `start_week` DATE NOT NULL,
+            CHANGE `finish_week` `finish_week` DATE NOT NULL');
+        Database::get()->query('ALTER TABLE `course_weekly_view_activities`
+            CHANGE `date` `date` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `course_user_request`
+            CHANGE `ts` `ts` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `user`
+            CHANGE `registered_at` `registered_at` DATETIME NOT NULL,
+            CHANGE `expires_at` `expires_at` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `loginout`
+            CHANGE `when` `when` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `personal_calendar`
+            CHANGE `start` `start` datetime NOT NULL');
+        Database::get()->query('ALTER TABLE `admin_calendar`
+            CHANGE `start` `start` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `loginout_summary`
+            CHANGE `start_date` `start_date` DATETIME NOT NULL,
+            CHANGE `end_date` `end_date` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `document`
+            CHANGE `date` `date` DATETIME NOT NULL,
+            CHANGE `date_modified` `date_modified` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `wiki_pages`
+            CHANGE `ctime` `ctime` DATETIME NOT NULL,
+            CHANGE `last_mtime` `last_mtime` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `wiki_pages_content`
+            CHANGE `mtime` `mtime` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `wiki_locks`
+            CHANGE `ltime_created` `ltime_created` TIMESTAMP NOT NULL,
+            CHANGE `ltime_alive` `ltime_alive` TIMESTAMP NOT NULL');
+        Database::get()->query('ALTER TABLE `poll`
+            CHANGE `creation_date` `creation_date` DATETIME NOT NULL,
+            CHANGE `start_date` `start_date` DATETIME DEFAULT NULL,
+            CHANGE `end_date` `end_date` DATETIME DEFAULT NULL');
+        Database::get()->query('ALTER TABLE `poll_answer_record`
+            CHANGE `submit_date` `submit_date` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `assignment`
+            CHANGE `submission_date` `submission_date` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `assignment_submit`
+            CHANGE `submission_date` `submission_date` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `exercise_user_record`
+            CHANGE `record_start_date` `record_start_date` DATETIME NOT NULL,
+            CHANGE `total_score` `total_score` FLOAT(11,2) NOT NULL DEFAULT 0,
+            CHANGE `total_weighting` `total_weighting` FLOAT(11,2) DEFAULT 0');
+        Database::get()->query('ALTER TABLE `exercise_answer_record`
+            CHANGE `weight` `weight` float(11,2) DEFAULT NULL');
+        Database::get()->query('ALTER TABLE `unit_resources`
+            CHANGE `date` `date` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `actions_summary`
+            CHANGE `start_date` `start_date` DATETIME NOT NULL,
+            CHANGE `end_date` `end_date` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `logins`
+            CHANGE `date_time` `date_time` DATETIME NOT NULL');
+
         // Fix incorrectly-graded fill-in-blanks questions
         Database::get()->queryFunc('SELECT question_id, answer, type
             FROM exercise_question, exercise_answer 

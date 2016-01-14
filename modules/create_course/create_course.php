@@ -313,7 +313,7 @@ if (!isset($_POST['create_course'])) {
                       $langStartDate <input class='dateInForm form-control' type='text' name='start_date' value='' readonly>
                 </div>
                 <div class='col-sm-10 col-sm-offset-2'>
-                      $langDuration <input class='dateInForm form-control' type='text' name='finish_date' value='' readonly>
+                      $langEndDate <input class='dateInForm form-control' type='text' name='finish_date' value='' readonly>
                 </div>                
             </div>
             <div class='form-group'>
@@ -506,13 +506,13 @@ if (!isset($_POST['create_course'])) {
     //===================course format and start and finish date===============
     if ($view_type == "weekly") {
 
-        //get the last inserted id as the course id
+        // get the last inserted id as the course id
         $course_id = $new_course_id;
 
         $begin = new DateTime($_POST['start_date']);
 
-        //check if there is no end date
-        if ($_POST['finish_date'] == "" || $_POST['finish_date'] == '0000-00-00') {
+        // check if there is no end date
+        if (!isset($_POST['finish_date']) or empty($_POST['finish_date'])) {
             $end = new DateTime($begin->format("Y-m-d"));
             $end->add(new DateInterval('P26W'));
         } else {

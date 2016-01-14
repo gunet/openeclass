@@ -31,8 +31,8 @@ session_start();
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
 if (preg_match('|/courses/([a-zA-Z_-]*\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
 	$dbname = $matches[1];
+    @mkdir('courses/' . $dbname);
 	if (!@chdir('courses/' . $dbname)) {
-		header('HTTP/1.0 404 Not Found');
 		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
 <title>404 Not Found</title>

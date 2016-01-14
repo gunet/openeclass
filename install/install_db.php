@@ -127,7 +127,7 @@ $db->query("CREATE TABLE `agenda` (
     `course_id` INT(11) NOT NULL,
     `title` VARCHAR(200) NOT NULL,
     `content` TEXT NOT NULL,
-    `start` DATETIME NOT NULL DEFAULT '0000-00-00',
+    `start` DATETIME NOT NULL,
     `duration` VARCHAR(20) NOT NULL,
     `visible` TINYINT(4),
     `recursion_period` varchar(30) DEFAULT NULL,
@@ -145,7 +145,7 @@ $db->query("CREATE TABLE `course` (
   `visible` TINYINT(4) NOT NULL,
   `prof_names` VARCHAR(200) NOT NULL DEFAULT '',
   `public_code` VARCHAR(20) NOT NULL DEFAULT '',
-  `created` DATETIME NOT NULL default '0000-00-00 00:00:00',
+  `created` DATETIME NOT NULL,
   `doc_quota` FLOAT NOT NULL default '104857600',
   `video_quota` FLOAT NOT NULL default '104857600',
   `group_quota` FLOAT NOT NULL default '104857600',
@@ -166,8 +166,8 @@ $db->query("CREATE TABLE `course_weekly_view` (
   `course_id` INT(11) NOT NULL,
   `title` VARCHAR(255) NOT NULL DEFAULT '',
   `comments` MEDIUMTEXT,
-  `start_week` DATE NOT NULL default '0000-00-00',
-  `finish_week` DATE NOT NULL default '0000-00-00',
+  `start_week` DATE NOT NULL,
+  `finish_week` DATE NOT NULL,
   `visible` TINYINT(4) NOT NULL DEFAULT 1,
   `public` TINYINT(4) NOT NULL DEFAULT 1,
   `order` INT(11) NOT NULL DEFAULT 0,
@@ -182,7 +182,7 @@ $db->query("CREATE TABLE `course_weekly_view_activities` (
     `type` VARCHAR(255) NOT NULL DEFAULT '',
     `visible` TINYINT(4),
     `order` INT(11) NOT NULL DEFAULT 0,
-    `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
+    `date` DATETIME NOT NULL') $charset_spec");
 
 $db->query("CREATE TABLE `course_user` (
       `course_id` INT(11) NOT NULL DEFAULT 0,
@@ -202,7 +202,7 @@ $db->query("CREATE TABLE `course_user_request` (
     `course_id` int(11) NOT NULL,
     `comments` text,
     `status` int(11) NOT NULL,
-    `ts` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `ts` datetime NOT NULL,
     PRIMARY KEY (`id`))  $charset_spec");
 
 $db->query("CREATE TABLE `course_description_type` (
@@ -265,8 +265,8 @@ $db->query("CREATE TABLE `user` (
     status TINYINT(4) NOT NULL DEFAULT " . USER_STUDENT . ",
     phone VARCHAR(20) DEFAULT '',
     am VARCHAR(20) DEFAULT '',
-    registered_at DATETIME NOT NULL DEFAULT '0000-00-00',
-    expires_at DATETIME NOT NULL DEFAULT '0000-00-00',
+    registered_at DATETIME NOT NULL,
+    expires_at DATETIME NOT NULL,
     lang VARCHAR(16) NOT NULL DEFAULT 'el',
     description TEXT,
     has_icon TINYINT(1) NOT NULL DEFAULT 0,
@@ -293,7 +293,7 @@ $db->query("CREATE TABLE `loginout` (
     idLog mediumint(9) unsigned NOT NULL auto_increment,
     id_user mediumint(9) unsigned NOT NULL default 0,
     ip char(45) NOT NULL default '0.0.0.0',
-    loginout.when datetime NOT NULL default '0000-00-00 00:00:00',
+    loginout.when datetime NOT NULL,
     loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
     PRIMARY KEY (idLog), KEY `id_user` (`id_user`)) $charset_spec");
 
@@ -302,7 +302,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `personal_calendar` (
     `user_id` int(11) NOT NULL,
     `title` varchar(200) NOT NULL,
     `content` text NOT NULL,
-    `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `start` datetime NOT NULL,
     `duration` time NOT NULL,
     `recursion_period` varchar(30) DEFAULT NULL,
     `recursion_end` date DEFAULT NULL,
@@ -339,7 +339,7 @@ $db->query("CREATE TABLE `admin_calendar` (
     `user_id` int(11) NOT NULL,
     `title` varchar(200) NOT NULL,
     `content` text NOT NULL,
-    `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `start` datetime NOT NULL,
     `duration` time NOT NULL,
     `recursion_period` varchar(30) DEFAULT NULL,
     `recursion_end` date DEFAULT NULL,
@@ -355,8 +355,8 @@ $db->query("CREATE TABLE `admin_calendar` (
 $db->query("CREATE TABLE `loginout_summary` (
     id mediumint unsigned NOT NULL auto_increment,
     login_sum int(11) unsigned  NOT NULL default 0,
-    start_date datetime NOT NULL default '0000-00-00 00:00:00',
-    end_date datetime NOT NULL default '0000-00-00 00:00:00',
+    start_date datetime NOT NULL,
+    end_date datetime NOT NULL,
     PRIMARY KEY (id)) $charset_spec");
 
 // table keeping data for monthly reports
@@ -385,8 +385,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `document` (
     `category` TINYINT(4) NOT NULL DEFAULT 0,
     `title` TEXT,
     `creator` TEXT,
-    `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-    `date_modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `date` DATETIME NOT NULL,
+    `date_modified` DATETIME NOT NULL,
     `subject` TEXT,
     `description` TEXT,
     `author` VARCHAR(255) NOT NULL DEFAULT '',
@@ -710,15 +710,15 @@ $db->query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
     `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
     `owner_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
     `title` VARCHAR(255) NOT NULL DEFAULT '',
-    `ctime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `ctime` DATETIME NOT NULL,
     `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-    `last_mtime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )  $charset_spec");
+    `last_mtime` DATETIME NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wiki_pages_content` (
     `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
     `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-    `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
+    `mtime` DATETIME NOT NULL,
     `content` TEXT NOT NULL,
     `changelog` VARCHAR(200) )  $charset_spec");
 
@@ -726,8 +726,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
     `ptitle` VARCHAR(255) NOT NULL DEFAULT '',
     `wiki_id` INT(11) UNSIGNED NOT NULL,
     `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-    `ltime_created` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-    `ltime_alive` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `ltime_created` TIMESTAMP NOT NULL,
+    `ltime_alive` TIMESTAMP NOT NULL,
     PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `blog_post` (
@@ -836,9 +836,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `course_id` INT(11) NOT NULL,
     `creator_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
     `name` VARCHAR(255) NOT NULL DEFAULT '',
-    `creation_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-    `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-    `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `creation_date` DATETIME NOT NULL,
+    `start_date` DATETIME DEFAULT NULL,
+    `end_date` DATETIME DEFAULT NULL,
     `active` INT(11) NOT NULL DEFAULT 0,
     `public` TINYINT(1) NOT NULL DEFAULT 1,    
     `description` MEDIUMTEXT NULL DEFAULT NULL,
@@ -868,7 +868,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
     `qid` INT(11) NOT NULL DEFAULT 0,
     `aid` INT(11) NOT NULL DEFAULT 0,
     `answer_text` TEXT NOT NULL,
-    `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `submit_date` DATETIME NOT NULL,
     FOREIGN KEY (`poll_user_record_id`) 
     REFERENCES `poll_user_record` (`id`) 
     ON DELETE CASCADE) $charset_spec");
@@ -895,7 +895,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `submission_type` TINYINT NOT NULL DEFAULT '0',
     `deadline` DATETIME NULL DEFAULT NULL,
     `late_submission` TINYINT NOT NULL DEFAULT '0', 
-    `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `submission_date` DATETIME NOT NULL,
     `active` CHAR(1) NOT NULL DEFAULT '1',
     `secret_directory` VARCHAR(30) NOT NULL,
     `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
@@ -912,7 +912,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
     `assignment_id` INT(11) NOT NULL DEFAULT 0,
-    `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `submission_date` DATETIME NOT NULL,
     `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
     `file_path` VARCHAR(200) NOT NULL DEFAULT '',
     `file_name` VARCHAR(200) NOT NULL DEFAULT '',
@@ -969,10 +969,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
     `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `eid` INT(11) NOT NULL DEFAULT 0,
     `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-    `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `record_start_date` DATETIME NOT NULL,
     `record_end_date` DATETIME DEFAULT NULL,
-    `total_score` FLOAT(5,2) NOT NULL DEFAULT 0,
-    `total_weighting` FLOAT(5,2) DEFAULT 0,
+    `total_score` FLOAT(11,2) NOT NULL DEFAULT 0,
+    `total_weighting` FLOAT(11,2) DEFAULT 0,
     `attempt` INT(11) NOT NULL DEFAULT 0,
     `attempt_status` tinyint(4) NOT NULL DEFAULT 1,
     `secs_remaining` INT(11) NOT NULL DEFAULT '0') $charset_spec");
@@ -983,7 +983,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
     `question_id` int(11) NOT NULL,
     `answer` text,
     `answer_id` int(11) NOT NULL,
-    `weight` float(5,2) DEFAULT NULL,
+    `weight` float(11,2) DEFAULT NULL,
     `is_answered` TINYINT NOT NULL DEFAULT '1') $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
@@ -1397,7 +1397,7 @@ $db->query("CREATE TABLE `unit_resources` (
     `type` VARCHAR(255) NOT NULL DEFAULT '',
     `visible` TINYINT(4),
     `order` INT(11) NOT NULL DEFAULT 0,
-    `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
+    `date` DATETIME NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE `actions_daily` (
     `id` int(11) NOT NULL auto_increment,
@@ -1419,8 +1419,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `actions_summary` (
     `id` int(11) NOT NULL auto_increment,
     `module_id` int(11) NOT NULL,
     `visits` int(11) NOT NULL,
-    `start_date` datetime NOT NULL default '0000-00-00 00:00:00',
-    `end_date` datetime NOT NULL default '0000-00-00 00:00:00',
+    `start_date` datetime NOT NULL,
+    `end_date` datetime NOT NULL,
     `duration` int(11) NOT NULL,
     `course_id` INT(11) NOT NULL,
     PRIMARY KEY (`id`))");
@@ -1429,7 +1429,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `logins` (
     `id` int(11) NOT NULL auto_increment,
     `user_id` int(11) NOT NULL,
     `ip` char(45) NOT NULL default '0.0.0.0',
-    `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
+    `date_time` datetime NOT NULL,
     `course_id` INT(11) NOT NULL,
     PRIMARY KEY (`id`))");
 
