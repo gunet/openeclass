@@ -68,7 +68,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     $offset = intval($_GET['iDisplayStart']);
     $keyword = '%' . $_GET['sSearch'] . '%';
 
-    $student_sql = $is_editor? '': 'AND visible = 1 AND (start_display<=CURDATE() OR start_display = "0000-00-00") AND (stop_display>=CURDATE() OR stop_display = "0000-00-00")';
+    $student_sql = $is_editor? '': 'AND visible = 1 AND (start_display <= CURDATE() OR start_display IS NULL) AND (stop_display >= CURDATE() OR stop_display IS NULL")';
     $all_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d $student_sql", $course_id);
     $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql", $course_id, $keyword);
     if ($limit>0) {
@@ -259,7 +259,7 @@ $public_code = course_id_to_public_code($course_id);
 $toolName = $langAnnouncements;
 
 if (isset($_GET['an_id'])) {
-    (!$is_editor)? $student_sql = "AND visible = '1' AND (start_display<=CURDATE() OR start_display = '0000-00-00') AND (stop_display>=CURDATE() OR stop_display = '0000-00-00')" : $student_sql = "";    
+    (!$is_editor)? $student_sql = "AND visible = 1 AND (start_display <= CURDATE() OR start_display IS NULL) AND (stop_display >= CURDATE() OR stop_display IS NULL)" : $student_sql = "";    
     $row = Database::get()->querySingle("SELECT * FROM announcement WHERE course_id = ?d AND id = ". intval($_GET['an_id']) ." ".$student_sql, $course_id);
     if(empty($row)){
         redirect_to_home_page("modules/announcements/");
@@ -307,12 +307,12 @@ if ($is_editor) {
             $AnnouncementToModify = $announce->id;
             $contentToModify = $announce->content;
             $titleToModify = q($announce->title);            
-            if ($announce->start_display != '0000-00-00') {                
+            if (!$announce->start_display) {                
                 $startDate_obj = DateTime::createFromFormat('Y-m-d', $announce->start_display);
                 $startdate = $startDate_obj->format('d-m-Y');
                 $showFrom = q($startdate);
             }
-            if ($announce->stop_display != '0000-00-00') {
+            if (!$announce->stop_display) {
                 $endDate_obj = DateTime::createFromFormat('Y-m-d', $announce->stop_display);
                 $enddate = $endDate_obj->format('d-m-Y');            
                 $showUntil = q($enddate);            
@@ -334,13 +334,13 @@ if ($is_editor) {
             $startDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['startdate']);
             $start_display = $startDate_obj->format('Y-m-d');
         } else {
-            $start_display = "0000-00-00";
+            $start_display = null;
         }
         if (isset($_POST['enddate']) && !empty($_POST['enddate'])) {
             $endDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['enddate']);
             $stop_display = $endDate_obj->format('Y-m-d');            
         } else {
-            $stop_display = "0000-00-00";
+            $stop_display = null;
         }
         
         if (!empty($_POST['id'])) {

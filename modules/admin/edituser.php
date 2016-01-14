@@ -332,7 +332,7 @@ if ($u) {
                 }
                 $tool_content .= "<td><a href='{$urlServer}courses/$logs->code/'>" . q($logs->code) . "</a></td>
                         <td>" . q($logs->title) . "</td><td align='center'>";
-                if ($logs->reg_date == '0000-00-00') {
+                if (!$logs->reg_date) {
                     $tool_content .= $langUnknownDate;
                 } else {
                     $tool_content .= " " . nice_format($logs->reg_date) . " ";

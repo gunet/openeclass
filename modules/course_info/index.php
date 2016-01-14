@@ -198,11 +198,11 @@ $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 if (isset($_POST['submit'])) {
     $view_type = $_POST['view_type'];    
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    if (!$_POST['start_date']) {
-        $_POST['start_date'] = '0000-00-00';
+    if (!isset($_POST['start_date']) or !$_POST['start_date']) {
+        $_POST['start_date'] = null;
     }
-    if (!$_POST['finish_date']) {
-        $_POST['finish_date'] = '0000-00-00';
+    if (!isset($_POST['start_date']) or !$_POST['finish_date']) {
+        $_POST['finish_date'] = null;
     }
     if (empty($_POST['title'])) {
         $tool_content .= "<div class='alert alert-danger'>$langNoCourseTitle</div>
@@ -212,7 +212,7 @@ if (isset($_POST['submit'])) {
         if (isset($_POST['formvisible']) and ( $_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
             $password = $_POST['password'];
         } else {
-            $password = "";
+            $password = '';
         }
         // if it is opencourses certified keeep the current course_license
         if (isset($_POST['course_license'])) {
@@ -253,7 +253,7 @@ if (isset($_POST['submit'])) {
 
         //===================course format and start and finish date===============        
         if ($view_type == 'weekly') {            
-            if ($_POST['start_date'] == '0000-00-00') {
+            if (is_null($_POST['start_date'])) {
                 Session::Messages($langCourseWeeklyFormatNotice);
                 redirect_to_home_page("modules/course_info/index.php?course=$course_code");
             } else { // if there is start date create the weeks from that start date
@@ -277,7 +277,7 @@ if (isset($_POST['submit'])) {
                 $begin = new DateTime($_POST['start_date']);
 
                 // check if there is no end date
-                if ($_POST['finish_date'] == "" || $_POST['finish_date'] == '0000-00-00') {
+                if (is_null($_POST['finish_date'])) {
                     $end = new DateTime($begin->format("Y-m-d"));                    
                     $end->add(new DateInterval('P26W'));
                 } else {
@@ -592,9 +592,11 @@ if (isset($_POST['submit'])) {
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2' id='weeklyDates'>
                         $langStartDate 
-                        <input class='dateInForm form-control' type='text' name='start_date' value='".($c->start_date != "0000-00-00" ? $c->start_date : "")."' readonly>                       
+                        <input class='dateInForm form-control' type='text' name='start_date' value='" .
+                            ($c->start_date ? $c->start_date : '')."' readonly>                       
                         $langEndDate
-                        <input class='dateInForm form-control' type='text' name='finish_date' value='".($c->finish_date != "0000-00-00" ? $c->finish_date : "")."' readonly>
+                        <input class='dateInForm form-control' type='text' name='finish_date' value='" .
+                            ($c->finish_date ? $c->finish_date : '')."' readonly>
                 </div>
             </div>";
 

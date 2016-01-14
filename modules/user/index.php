@@ -124,7 +124,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
           }
           } */
         //create date field with unregister button
-        $date_field = ($myrow->reg_date == '0000-00-00') ? $langUnknownDate : nice_format($myrow->reg_date);
+        $date_field = $myrow->reg_date ? nice_format($myrow->reg_date) : $langUnknownDate;
 
         // Create appropriate role control buttons
         // Admin right

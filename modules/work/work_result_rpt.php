@@ -32,44 +32,41 @@ require_once 'modules/group/group_functions.php';
 $nameTools = $langAutoJudgeDetailedReport;
 
 if (isset($_GET['assignment']) && isset($_GET['submission'])) {
-    global $tool_content, $course_code, $m, $langAutoJudgeNotEnabledForReport;
     $as_id = intval($_GET['assignment']);
     $sub_id = intval($_GET['submission']);
     $assign = get_assignment_details($as_id);
     $sub = get_assignment_submit_details($sub_id);
 
-    if($sub==null || $assign==null)
-    {
+    if ($sub==null || $assign==null) {
         redirect_to_home_page('modules/work/index.php?course='.$course_code);
     }
 
-    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
-    $navigation[] = array("url" => "index.php?course=$course_code&amp;id=$as_id", "name" => q($assign->title));
+    $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langWorks);
+    $navigation[] = array('url' => "index.php?course=$course_code&amp;id=$as_id", 'name' => q($assign->title));
 
     if (count($sub)>0) {
-        if($assign->auto_judge){// auto_judge enable
+        if($assign->auto_judge){ // auto_judge enable
             $auto_judge_scenarios = unserialize($assign->auto_judge_scenarios);
             $auto_judge_scenarios_output = unserialize($sub->auto_judge_scenarios_output);
 
-            if(!isset($_GET['downloadpdf'])){
+            if (!isset($_GET['downloadpdf'])){
                 show_report($as_id, $sub_id, $assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output);
                 draw($tool_content, 2);
-            }else{
+            } else {
                 download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output);
             }
-         }
-         else{
-               Session::Messages($langAutoJudgeNotEnabledForReport, 'alert-danger');
-              draw($tool_content, 2);
-             }
-      } else {
-            Session::Messages($m['WorkNoSubmission'], 'alert-danger');
-            redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
-       }
-
-   } else {
-        redirect_to_home_page('modules/work/index.php?course='.$course_code);
+        } else {
+            Session::Messages($langAutoJudgeNotEnabledForReport, 'alert-danger');
+            draw($tool_content, 2);
+        }
+    } else {
+        Session::Messages($m['WorkNoSubmission'], 'alert-danger');
+        redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     }
+
+} else {
+    redirect_to_home_page('modules/work/index.php?course='.$course_code);
+}
 
 // Returns an array of the details of assignment $id
 function get_assignment_details($id) {
@@ -92,29 +89,29 @@ function get_submission_rank($assign_id,$grade, $submission_date) {
 }
 
 function show_report($id, $sid, $assign,$sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
-         global $m, $course_code,$tool_content, $langAutoJudgeInput, $langAutoJudgeOutput,
-                 $langAutoJudgeExpectedOutput, $langAutoJudgeOperator, $langAutoJudgeWeight,
-                 $langAutoJudgeResult, $langAutoJudgeResultsFor, $langAutoJudgeRank,
-                 $langAutoJudgeDownloadPdf, $langBack;
-               $tool_content = "
-                                <table  style=\"table-layout: fixed; width: 99%\" class='table-default'>
-                                <tr> <td> <b>$langAutoJudgeResultsFor</b>: ".  q(uid_to_name($sub->uid))."</td> </tr>
-                                <tr> <td> <b>".$m['grade']."</b>: $sub->grade /$assign->max_grade </td>
-                                     <td><b> $langAutoJudgeRank</b>: ".get_submission_rank($assign->id,$sub->grade, $sub->submission_date)." </td>
-                                </tr>
-                                  <tr> <td> <b>$langAutoJudgeInput</b> </td>
-                                       <td> <b>$langAutoJudgeOutput</b> </td>
-                                       <td> <b>$langAutoJudgeOperator</b> </td>
-                                       <td> <b>$langAutoJudgeExpectedOutput</b> </td>
-                                       <td> <b>$langAutoJudgeWeight</b> </td>
-                                       <td> <b>$langAutoJudgeResult</b> </td>
-                                </tr>
-                                ".get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, $assign->max_grade)."
-                                </table>
-                                <p align='left'><a href='work_result_rpt.php?course=".$course_code."&assignment=".$assign->id."&submission=".$sid."&downloadpdf=1'>$langAutoJudgeDownloadPdf</a></p>
-                                <p align='right'><a href='index.php?course=".$course_code."'>$langBack</a></p>
-                             <br>";
-  }
+    global $m, $course_code,$tool_content, $langAutoJudgeInput, $langAutoJudgeOutput,
+        $langAutoJudgeExpectedOutput, $langAutoJudgeOperator, $langAutoJudgeWeight,
+        $langAutoJudgeResult, $langAutoJudgeResultsFor, $langAutoJudgeRank,
+        $langAutoJudgeDownloadPdf, $langBack;
+    $tool_content = "
+        <table  style=\"table-layout: fixed; width: 99%\" class='table-default'>
+        <tr> <td> <b>$langAutoJudgeResultsFor</b>: ".  q(uid_to_name($sub->uid))."</td> </tr>
+        <tr> <td> <b>".$m['grade']."</b>: $sub->grade /$assign->max_grade </td>
+             <td><b> $langAutoJudgeRank</b>: ".get_submission_rank($assign->id,$sub->grade, $sub->submission_date)." </td>
+        </tr>
+          <tr> <td> <b>$langAutoJudgeInput</b> </td>
+               <td> <b>$langAutoJudgeOutput</b> </td>
+               <td> <b>$langAutoJudgeOperator</b> </td>
+               <td> <b>$langAutoJudgeExpectedOutput</b> </td>
+               <td> <b>$langAutoJudgeWeight</b> </td>
+               <td> <b>$langAutoJudgeResult</b> </td>
+        </tr>
+        ".get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, $assign->max_grade)."
+        </table>
+        <p align='left'><a href='work_result_rpt.php?course=".$course_code."&assignment=".$assign->id."&submission=".$sid."&downloadpdf=1'>$langAutoJudgeDownloadPdf</a></p>
+        <p align='right'><a href='index.php?course=".$course_code."'>$langBack</a></p>
+     <br>";
+}
 
 function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, $max_grade) {
     global $themeimg, $langAutoJudgeAssertions;
@@ -122,23 +119,22 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
     $i=0;
 
     foreach($auto_judge_scenarios as $cur_senarios){
-           if(!isset($cur_senarios['output']))// expected output disable
-               $cur_senarios['output'] = "-";
-           $icon = ($auto_judge_scenarios_output[$i]['passed']==1) ? 'tick.png' : 'delete.png';
-           $table_content.="
-                           <tr>
-                           <td style=\"word-break:break-all;\">".str_replace(' ', '&nbsp;', $cur_senarios['input'])."</td>
-                           <td style=\"word-break:break-all;\">".$auto_judge_scenarios_output[$i]['student_output']."</td>
-                           <td style=\"word-break:break-all;\">".$langAutoJudgeAssertions[$cur_senarios['assertion']]."</td>
-                           <td style=\"word-break:break-all;\">".str_replace(' ', '&nbsp;', $cur_senarios['output'])."</td>
-                           <td align=\"center\" style=\"word-break:break-all;\">".$cur_senarios['weight']."/".$max_grade."</td>
-                           <td align=\"center\"><img src=\"http://".$_SERVER['HTTP_HOST'].$themeimg."/" .$icon."\"></td></tr>";
-                     $i++;
-                }
-       return $table_content;
-  }
-
-
+        if (!isset($cur_senarios['output'])) { // expected output disable
+            $cur_senarios['output'] = '-';
+        }
+        $icon = ($auto_judge_scenarios_output[$i]['passed']==1) ? 'tick.png' : 'delete.png';
+        $table_content.="
+           <tr>
+               <td style=\"word-break:break-all;\">".str_replace(' ', '&nbsp;', $cur_senarios['input'])."</td>
+               <td style=\"word-break:break-all;\">".$auto_judge_scenarios_output[$i]['student_output']."</td>
+               <td style=\"word-break:break-all;\">".$langAutoJudgeAssertions[$cur_senarios['assertion']]."</td>
+               <td style=\"word-break:break-all;\">".str_replace(' ', '&nbsp;', $cur_senarios['output'])."</td>
+               <td align=\"center\" style=\"word-break:break-all;\">".$cur_senarios['weight']."/".$max_grade."</td>
+               <td align=\"center\"><img src=\"http://".$_SERVER['HTTP_HOST'].$themeimg."/" .$icon."\"></td></tr>";
+        $i++;
+    }
+    return $table_content;
+}
 
 function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
     global $langAutoJudgeInput, $langAutoJudgeOutput,
@@ -219,8 +215,7 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
      '. get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output,$assign->max_grade).'
     </table>';
 
-
- $report_details ='
+    $report_details ='
     <style>
     table.first{
         width: 100%;
