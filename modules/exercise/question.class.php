@@ -469,24 +469,26 @@ if (!class_exists('Question')):
             $type = $this->type;
             $question_id = $this->id;
             $answers = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $question_id);    
-            $i = 1;
-            foreach ($answers as $row) {
-                
-                if ($type == UNIQUE_ANSWER || $type == TRUE_FALSE) {
-                    $choice = $row->answer_id;
-                } elseif ($type == MULTIPLE_ANSWER) {
-                    $choice[$row->answer_id] = 1;
-                } elseif ($type == FREE_TEXT) {
-                    $choice = $row->answer;
-                } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT) {
-                    $choice[$row->answer_id] = $row->answer;
-                } elseif ($type == MATCHING) {
-                    $choice[$row->answer] = $row->answer_id;
+            if ($answers) {
+                $i = 1;
+                foreach ($answers as $row) {
+
+                    if ($type == UNIQUE_ANSWER || $type == TRUE_FALSE) {
+                        $choice = $row->answer_id;
+                    } elseif ($type == MULTIPLE_ANSWER) {
+                        $choice[$row->answer_id] = 1;
+                    } elseif ($type == FREE_TEXT) {
+                        $choice = $row->answer;
+                    } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT) {
+                        $choice[$row->answer_id] = $row->answer;
+                    } elseif ($type == MATCHING) {
+                        $choice[$row->answer] = $row->answer_id;
+                    }
+
+                    $i++;
                 }
-               
-                $i++;
+                return $choice;
             }
-            return $choice;
         }
         /**
          * duplicates the question
