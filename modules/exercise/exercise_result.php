@@ -214,7 +214,7 @@ if (count($exercise_question_ids)>0){
         // destruction of the Question object
         unset($objQuestionTmp); 
         //check if question has been graded
-        $question_weight = Database::get()->querySingle("SELECT weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
+        $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
         $question_graded = is_null($question_weight) ? FALSE : TRUE; 
         
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
@@ -231,11 +231,18 @@ if (count($exercise_question_ids)>0){
               <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
             </tr>
             <tr>
-              <td colspan='${colspan}'>
+              <td colspan='${colspan}'>";
+        if ($choice) {
+            $tool_content .= "              
                 <b>" . q_math($questionName) . "</b>
                 <br />" .
                 standard_text_escape($questionDescription_temp)
-                . "<br/><br/>
+                . "<br/><br/>";            
+        } else {
+            $tool_content .= "<div class='alert alert-warning'>Η ερώτηση έχει διαγραφεί</div>";
+        }      
+
+        $tool_content .= "         
               </td>
             </tr>";
         if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
@@ -246,7 +253,7 @@ if (count($exercise_question_ids)>0){
         }
         $questionScore = 0;
 
-        if ($showResults) {
+        if ($showResults && $choice) {
             if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                 $tool_content .= "
                             <tr class='even'>
@@ -439,22 +446,22 @@ if (count($exercise_question_ids)>0){
             }
         }        
         if ($showScore) {
-            if (intval($questionScore) == $questionScore) {
-                $questionScore = intval($questionScore);
-            }
-            if (intval($questionWeighting) == $questionWeighting) {
-                $questionWeighting = intval($questionWeighting);
-            }
-            if ($answerType == FREE_TEXT && $is_editor && isset($question_graded) && !$question_graded) {
-             //show input field
-             $tool_content .= "<span style='float:right;'>
-                               $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore[$row->question_id]'>
-                               <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>    
-                               <b>/$questionWeighting</b></span>";               
+            if ($choice) {
+                if ($answerType == FREE_TEXT && $is_editor && isset($question_graded) && !$question_graded) {
+                 //show input field
+                 $tool_content .= "<span style='float:right;'>
+                                   $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore[$row->question_id]'>
+                                   <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>    
+                                   <b>/$questionWeighting</b></span>";               
+                } else {
+                $tool_content .= "<span style='float:right;'>
+                                    $langQuestionScore: <b>$questionScore/$questionWeighting</b></span>";
+                }                
             } else {
-            $tool_content .= "<span style='float:right;'>
-                                $langQuestionScore: <b>$questionScore/$questionWeighting</b></span>";
+                $tool_content .= "<span style='float:right;'>
+                                    $langQuestionScore: <b>$question_weight</b></span>";                
             }
+
         }
         $tool_content .= "</th></tr></table>";
         // destruction of Answer
