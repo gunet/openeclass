@@ -1047,7 +1047,6 @@ $langWarnConfig1 = "File <strong>config.php</strong> exists";
 $langWarnConfig2 = "If you want to rerun installation, first delete config.php file";
 $langWarnConfig3 = "Installation cannot proceed";
 $langErrorConfig = "<br><strong>Error occured!</strong><br><br>Creation of file config.php is not possible.<br><br>Please check access rights in subdirectories of Open eClass and rerun installation.";
-$langErrorMysql = "MySQL is not working or username / password is wrong.<br/>Please check your settings:";
 $langBackStep3 = "Back to Step 3";
 $langBackStep3_2 = "Back to step 3.";
 $langNotNeedChange = "No need to change";
