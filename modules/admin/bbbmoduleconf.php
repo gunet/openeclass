@@ -273,19 +273,21 @@ else {
                 <tr><th class = 'text-center'>$langHost</th>
                     <th class = 'text-center'>IP</th>
                     <th class = 'text-center'>$langBBBEnabled</th>
-                    <th class = 'text-center'>$langBBBConnectedUsers</th>
+                    <th class = 'text-center'>$langOnlineUsers</th>
+                    <th class = 'text-center'>$langMaxRooms</th>
                     <th class = 'text-center'>$langBBBServerOrderP</th>
                     <th class = 'text-center'>".icon('fa-gears')."</th></tr>
                 </thead>";
             foreach ($q as $srv) {
                 $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
-                $connected_users = get_connected_users($srv->server_key, $srv->api_url, $srv->ip) . '/' . $srv->max_rooms;
+                $connected_users = get_connected_users($srv->server_key, $srv->api_url, $srv->ip);
                 $tool_content .= "<tr>" .
                     "<td>$srv->hostname</td>" .
                     "<td>$srv->ip</td>" .
-                    "<td>$enabled_bbb_server</td>" .
-                    "<td>$connected_users</td>" .
-                    "<td>$srv->weight</td>" .
+                    "<td class = 'text-center'>$enabled_bbb_server</td>" .
+                    "<td class = 'text-center'>$connected_users</td>" .
+                    "<td class = 'text-center'>$srv->max_rooms</td>" .
+                    "<td class = 'text-center'>$srv->weight</td>" .
                     "<td class='option-btn-cell'>" .
                     action_button(array(
                         array('title' => $langEditChange,

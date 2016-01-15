@@ -131,7 +131,7 @@ if ($is_editor) {
 }
 
 if (isset($_GET['add'])) {
-    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);
+    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);    
     new_bbb_session();
 }
 elseif(isset($_POST['update_bbb_session']))
@@ -168,27 +168,21 @@ elseif(isset($_GET['choice']))
                 $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";
                 break;
             }
-            if(bbb_session_running($_GET['meeting_id']) == false)
+            if (bbb_session_running($_GET['meeting_id']) == false)
             {
-                $mod_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;
+                $mod_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;                
                 create_meeting($_GET['title'],$_GET['meeting_id'],$mod_pw,$_GET['att_pw'],$_GET['record']);
             }
-            if(isset($_GET['mod_pw']))
-            {
+            if(isset($_GET['mod_pw'])) {
                 header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
-            }else
-            {
-                # Get session capacity
-                $c = Database::get()->querySingle("SELECT sessionUsers FROM bbb_session where meeting_id=?s",$_GET['meeting_id']);
+            } else {
+                # Get session capacity                
                 $sess = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id']);
-                $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);
-
-                if( ($c->sessionUsers > 0) && ($c->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$_GET['meeting_id'],$sess->mod_pw)))
-                {
+                $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);                                
+                if( ($sess->sessionUsers > 0) && ($sess->sessionUsers < get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw))) {
                     $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
                     break;
-                }
-                else {
+                } else {
                     header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
                 }
             }
@@ -198,11 +192,10 @@ elseif(isset($_GET['choice']))
             break;
     }
 
-} elseif(isset($_POST['new_bbb_session'])) {
+} elseif(isset($_POST['new_bbb_session'])) { // new bbb session
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
-    $start = $startDate_obj->format('Y-m-d H:i:s');
-    //add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $start, $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
+    $start = $startDate_obj->format('Y-m-d H:i:s');    
     add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $start, '0' ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/bbb/index.php?course=$course_code");

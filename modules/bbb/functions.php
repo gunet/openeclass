@@ -275,8 +275,16 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
             break;
     }
 
-    $q = Database::get()->query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users,participants,record,sessionUsers)"
-        . " VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)", $course_id, $title, $desc, $start_session, $type, $status, generateRandomString(), generateRandomString(), generateRandomString(), $minutes_before, $external_users,$r_group,$record,$sessionUsers);
+    $q = Database::get()->query("INSERT INTO bbb_session (course_id, title, description, start_date, 
+                                                            public, active, running_at, 
+                                                            meeting_id, mod_pw, att_pw, 
+                                                            unlock_interval, external_users, participants, record, 
+                                                            sessionUsers)
+                                                        VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)", 
+                                            $course_id, $title, $desc, $start_session, 
+                                            $type, $status, 
+                                            generateRandomString(), generateRandomString(), generateRandomString(), 
+                                            $minutes_before, $external_users,$r_group,$record,$sessionUsers);
 
     // if we have to notify users for new session
     if ($notifyUsers == "1") {
@@ -1427,6 +1435,8 @@ function publish_video_recordings($course_id, $id)
  * @brief get number of meeting users
  * @global type $langBBBGetUsersError
  * @global type $langBBBConnectionError
+ * @global type $tool_content
+ * @global type $course_code
  * @param type $salt
  * @param type $bbb_url
  * @param type $meeting_id
@@ -1435,7 +1445,7 @@ function publish_video_recordings($course_id, $id)
  */
 function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
 {
-    global $langBBBGetUsersError, $langBBBConnectionError;
+    global $langBBBGetUsersError, $langBBBConnectionError, $tool_content, $course_code;
 
     // Instatiate the BBB class:
     $bbb = new BigBlueButton($salt,$bbb_url);
@@ -1446,22 +1456,20 @@ function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
     );
 
     // Now get meeting info and display it:    
-    $result = $bbb->getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,$salt,$infoParams);
-    
+    $result = $bbb->getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,$salt,$infoParams);    
     // If it's all good, then we've interfaced with our BBB php api OK:
-    if ($result == null) {
+    if ($result == null) {    
         // If we get a null response, then we're not getting any XML back from BBB.
-        echo "<div class='alert-danger'>$langBBBConnectionError</div>";
-    }
-    else {
+        Session::Messages($langBBBConnectionError, 'alert-danger');
+        redirect("index.php?course=$course_code");        
+    } else {
         // We got an XML response, so let's see what it says:
-        if (!isset($result['messageKey'])) {
-
+        if (isset($result['messageKey'])) {
+            Session::Messages($langBBBGetUsersError, 'alert-danger');
+            redirect("index.php?course=$course_code");
         } else {
-            echo "<div class='alert alert-danger'>$langBBBGetUsersError.</div>";
-            exit;
+            return $result['participantCount'];
         }
     }
-
-    return (int)$result['participantCount'];
+    return $result['participantCount'];
 }
