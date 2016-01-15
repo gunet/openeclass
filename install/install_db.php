@@ -182,7 +182,7 @@ $db->query("CREATE TABLE `course_weekly_view_activities` (
     `type` VARCHAR(255) NOT NULL DEFAULT '',
     `visible` TINYINT(4),
     `order` INT(11) NOT NULL DEFAULT 0,
-    `date` DATETIME NOT NULL') $charset_spec");
+    `date` DATETIME NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE `course_user` (
       `course_id` INT(11) NOT NULL DEFAULT 0,

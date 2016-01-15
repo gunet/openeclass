@@ -406,24 +406,6 @@ elseif (isset($_POST['install6'])) {
     $langStepTitle = $langInstallEnd;
     $langStep = $langStep6;
     $_SESSION['step'] = 6;
-    if (mysql_errno() > 0) { // problem with server
-        $no = mysql_errno();
-        $msg = mysql_error();
-        $tool_content .= "[" . $no . "] - " . $msg . "
-		<div class='alert alert-warning'>$langErrorMysql</div>
-		<ul class='installBullet'>
-		<li>$langdbhost: $dbHostForm</li>
-		<li>$langDBLogin: $dbUsernameForm</li>
-		<li>$langDBPassword: " . q($dbPassForm) . "</li>
-		</ul>
-		<p>$langBackStep3_2</p><br />
-		<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-		<input class='btn btn-primary' type='submit' name='install3' value='&lt; $langBackStep3'>"
-                . hidden_vars($all_vars) .
-                "</form>";
-        draw($tool_content);
-        exit();
-    }
     $mysqlMainDb = $dbNameForm;
     //$active_ui_languages = implode(' ', active_subdirs('../lang', 'messages.inc.php'));
     $active_ui_languages = 'el en';
