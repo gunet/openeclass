@@ -239,7 +239,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     load_js('bootstrap-datetimepicker');   
     $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#startdatepicker, #enddatepicker').datetimepicker({
+            $('#PollStart, #PollEnd').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
                 pickerPosition: 'bottom-left', 
                 language: '".$language."',
