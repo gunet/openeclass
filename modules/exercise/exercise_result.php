@@ -239,7 +239,7 @@ if (count($exercise_question_ids)>0){
                 standard_text_escape($questionDescription_temp)
                 . "<br/><br/>";            
         } else {
-            $tool_content .= "<div class='alert alert-warning'>Η ερώτηση έχει διαγραφεί</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langQuestionAlreadyDeleted</div>";
         }      
 
         $tool_content .= "         
