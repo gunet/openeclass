@@ -1713,6 +1713,7 @@ $langQuestionScore = "Βαθμολογία ερώτησης";
 $langCorrespondsTo = "Αντιστοιχεί σε";
 $langExpectedChoice = "Αναμενόμενη Απάντηση";
 $langYourTotalScore = "Συνολική βαθμολογία άσκησης";
+$langQuestionAlreadyDeleted = "Η ερώτηση έχει διαγραφεί.";
 
 // exercise_submit.php
 $langDoAnEx = "Κάντε μια άσκηση";
