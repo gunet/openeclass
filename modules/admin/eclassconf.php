@@ -250,6 +250,15 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
         $('#formSMTPPassword').attr('type', 'password');
     })
 
+    $('#registration_link').change(function() {
+        var type = $(this).val();
+        if (type == 'show_text') {
+            $('#registration-info-block').show();
+        } else {
+            $('#registration-info-block').hide();
+        }
+    }).change();
+
 });
 
 /* ]]> */
@@ -294,6 +303,8 @@ $(document).ready(function() {
 </script>
 EOF;
 }
+
+$registration_link_options = array('show' => $langShow, 'hide' => $langHide, 'show_text' => $langRegistrationShowText);
 
 // Save new `config` table
 if (isset($_POST['submit'])) {
@@ -387,6 +398,17 @@ if (isset($_POST['submit'])) {
         'mydocs_teacher_enable' => true);
 
     register_posted_variables($config_vars, 'all', 'intval');
+
+    if (isset($_POST['registration_link']) and
+        isset($registration_link_options[$_POST['registration_link']])) {
+        set_config('registration_link', $_POST['registration_link']);
+    } else {
+        set_config('registration_link', 'show');
+    }
+
+    if (isset($_POST['registration_info'])) {
+        set_config('registration_info', purify($_POST['registration_info']));
+    }
 
     if ($_POST['email_transport'] == 1) {
         set_config('email_transport', 'smtp');
@@ -586,7 +608,19 @@ else {
                         <div class='form-group'>
                            <label for='user_registration' class='col-sm-3 control-label'>$langUserRegistration:</label>
                            <div class='col-sm-9'>
-                                ". selection(array('1' => $langActivate, '0' => $langDeactivate), 'user_registration', get_config('user_registration'), "class='form-control' id='user_registration'"). "
+                                " . selection(array('1' => $langActivate, '0' => $langDeactivate), 'user_registration', get_config('user_registration'), "class='form-control' id='user_registration'") . "
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='registration_link' class='col-sm-3 control-label'>$langRegistrationLink:</label>
+                           <div class='col-sm-9'>
+                                ". selection($registration_link_options, 'registration_link', get_config('registration_link', 'show'), "class='form-control' id='registration_link'"). "
+                           </div>
+                        </div>
+                        <div class='form-group' id='registration-info-block'>
+                           <label for='registration_info' class='col-sm-3 control-label'>$langRegistrationInfo:</label>
+                           <div class='col-sm-9'>
+                               " . rich_text_editor('registration_info', 4, 80, get_config('registration_info', '')) . "
                            </div>
                         </div>
                         <div class='form-group'>
