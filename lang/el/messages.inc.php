@@ -553,6 +553,11 @@ $langEnableSearch = "Ενεργοποίηση μηχανής αναζήτηση�
 $langConfirmEnableMobileAPITitle = "Επιβεβαίωση ενεργοποίησης επικοινωνίας με κινητές συσκευές";
 $langConfirmEnableMobileAPI = "Η επικοινωνία με κινητές συσκευές (smartphones/tablets) δεν υποστηρίζει αυθεντικοποίηση/ταυτοποίηση μέσω Shibboleth ή CAS.<br/><br/><em>Ακυρώστε</em> την επιλογή σας για την αποφυγή σύγχυσης των τελικών χρηστών.";
 $langUserRegistration = "Δυνατότητα εγγραφής χρηστών";
+$langRegistrationLink = 'Σύνδεσμος εγγραφής χρηστών';
+$langRegistrationShowText = 'Εμφάνιση οδηγιών αντί για συνδέσμους';
+$langRegistrationInfo = 'Οδηγίες εγγραφής';
+$langShow = 'Εμφάνιση';
+$langHide = 'Απόκρυψη';
 $langUserAccount = "Λογαριασμός $langOfStudent";
 $langProfAccount = "Λογαριασμός $langOfTeacher";
 $langReqRegUser = "Αίτηση εγγραφής $langsOfStudent";
@@ -766,7 +771,7 @@ $langViaSocialNetwork = "Πιστοποίηση μέσω κοινωνικού δ
 $langViaFacebook = "Πιστοποίηση μέσω Facebook";
 $langViaTwitter ="Πιστοποίηση μέσω Twitter";
 $langViaGoogle = "Πιστοποίηση μέσω Google";
-$langViaLive = "Πιστοποίηση μέσω Microsoft Live"; 
+$langViaLive = "Πιστοποίηση μέσω Microsoft Live";
 $langViaYahoo = "Πιστοποίηση μέσω Yahoo!";
 $langViaLinkedIn = "Πιστοποίηση μέσω Linked In";
 $langHasActivate = "O τρόπος πιστοποίησης που επιλέξατε έχει ενεργοποιηθεί";
@@ -3320,7 +3325,7 @@ $langUpgFileNotModify = "Το αρχείο δεν μπόρεσε να τροπο
 $langUpgNotChDir = "Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο αναβάθμισης! Ελέγξτε τα δικαιώματα πρόσβασης.";
 $langUpgIndex = "Τροποποίηση αρχείου index.php του μαθήματος";
 $langUpgIndexingNotice = "Λόγω του πλήθους των μαθημάτων, οι μηχανές αναζήτησης και ευρετηριοποίησης έχουν απενεργοποιηθεί. Παρακαλούμε ανατρέξτε στις ρυθμίσεις της πλατφόρμας για την επαναφορά τους και ακολουθήστε τις οδηγίες για την ευρετηριοποίηση.";
-$langIdxErrorPermissions = "Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί λόγω προβλήματος με τα δικαιώματα πρόσβασης στον κατάλογο (courses/idx/)";            
+$langIdxErrorPermissions = "Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί λόγω προβλήματος με τα δικαιώματα πρόσβασης στον κατάλογο (courses/idx/)";
 $langCheckPerm = "Ελέγξτε τα δικαιώματα πρόσβασης";
 $langUpgNotIndex = "Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο του μαθήματος";
 $langConfigFound = "Στο αρχείο ρυθμίσεων <tt>config.php</tt> βρέθηκαν τα παρακάτω στοιχεία επικοινωνίας.";
@@ -4696,7 +4701,7 @@ $langAbuseReportClosed = 'Κλειστή αναφορά';
 
 /* * ***********************************************************
  * Custom Profile Fields
- * ************************************************************ */ 
+ * ************************************************************ */
 $langCPFAdmin = 'Διαχείριση προσαρμοσμένων πεδίων προφίλ χρήστη';
 $langCPFCategoryNameAlert = 'Η συμπλήρώση του πεδίου για το όνομα της κατηγορίας είναι υποχρεωτική';
 $langCPFCatAddedSuccess = 'Η κατηγορία πεδίων προφίλ προστέθηκε επιτυχώς';
