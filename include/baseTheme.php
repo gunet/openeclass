@@ -98,17 +98,12 @@ function view($view_file, $view_data = array()) {
     }
     
     // set the text and icon on the third bar (header)
-    $active_theme = get_config('theme_options_id');
-    $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $active_theme);
-    $theme_options_styles = unserialize($theme_options->styles);
     if ($menuTypeID == 2) {
         $section_title = $currentCourseName;
     } elseif ($menuTypeID == 3) {
         $section_title = trans('langAdmin');
     } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
         $section_title = trans('langUserPortfolio');
-    } elseif (isset($theme_options_styles['siteTitle']) && $theme_options_styles['siteTitle']) {
-        $section_title = $theme_options_styles['siteTitle'];
     } else {
         $section_title = trans('langEclass');
     }
@@ -210,6 +205,11 @@ function view($view_file, $view_data = array()) {
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
+        
+        if (isset($theme_options_styles['siteTitle']) && $theme_options_styles['siteTitle']) {
+            $section_title = $theme_options_styles['siteTitle'];
+        }
+        
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         $styles_str = '';
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
