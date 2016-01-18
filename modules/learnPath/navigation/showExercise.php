@@ -148,12 +148,10 @@ $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $eid_temp = $objExercise->selectId();
 $recordStartDate = date("Y-m-d H:i:s", time());
 
-$temp_CurrentDate = date("Y-m-d H:i");
-$temp_StartDate = $objExercise->selectStartDate();
+$temp_CurrentDate = new DateTime();
+$temp_StartDate = new DateTime($objExercise->selectStartDate());
 $temp_EndDate = $objExercise->selectEndDate();
-$temp_StartDate = mktime(substr($temp_StartDate, 11, 2), substr($temp_StartDate, 14, 2), 0, substr($temp_StartDate, 5, 2), substr($temp_StartDate, 8, 2), substr($temp_StartDate, 0, 4));
-$temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
-$temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
+$temp_EndDate = isset($temp_EndDate) ? new DateTime($objExercise->selectEndDate()) : $temp_EndDate;
 
 if (!$is_editor) {
     $error = FALSE;
@@ -165,7 +163,7 @@ if (!$is_editor) {
         $message = $langExerciseMaxAttemptsReached;
         $error = TRUE;
     }
-    if (($temp_CurrentDate < $temp_StartDate) || ($temp_CurrentDate >= $temp_EndDate)) {
+    if (($temp_CurrentDate < $temp_StartDate) || isset($temp_EndDate) && ($temp_CurrentDate >= $temp_EndDate)) {
         $message = $langExerciseExpired;
         $error = TRUE;
     }
