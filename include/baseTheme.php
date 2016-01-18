@@ -68,7 +68,7 @@ require_once 'tools.php';
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
     global $session, $course_code, $course_id, $helpTopic,
-        $is_editor, $langActivate, $langNote,
+        $is_editor, $langActivate, $langNote,$langPleaseWait,
         $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
         $langChooseLang, $langDeactivate, $langProfileMenu,
         $langEclass, $langHelp, $langUsageTerms,
@@ -229,6 +229,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('SITE_NAME', $siteName);
     $t->set_var('FAVICON_PATH', $urlAppend . 'template/favicon/favicon.ico');
     $t->set_var('ICON_PATH', $urlAppend . 'template/favicon/openeclass_128x128.png');
+    $t->set_var('LANG_PLEASE_WAIT', $langPleaseWait);
 
     //If there is a message to display, show it (ex. Session timeout)
     if ($messages = Session::getMessages()) {

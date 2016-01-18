@@ -229,7 +229,7 @@ function printPollForm() {
         }
         $tool_content .= "<div class='text-center'>";
         if (!$is_editor) {
-            $tool_content .= "<input class='btn btn-primary' name='submit' type='submit' value='".q($langSubmit)."'> ";
+            $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='".q($langSubmit)."'> ";
         }
         $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>".(($is_editor) ? q($langBack) : q($langCancel) )."</a></div></form>";
     } else {

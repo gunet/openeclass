@@ -454,14 +454,14 @@ if (!$questionList) {
 } else {
     $tool_content .= "
         <br>
-        <div class='pull-right'><input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;<input class='btn btn-primary' type='submit' value='";
+        <div class='pull-right'><input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;<input class='btn btn-primary blockUI' type='submit' value='";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
         $tool_content .= "$langCont' />";
     } else {
         $tool_content .= $langNext . " &gt;" . "' />";
     }
     if ($exerciseTempSave && !($exerciseType == 2 && ($questionNum == $nbrQuestions))) {
-        $tool_content .= "&nbsp;<input class='btn btn-primary' type='submit' name='buttonSave' value='$langTemporarySave' />";   
+        $tool_content .= "&nbsp;<input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave' />";   
     }
     $tool_content .= "</div>";
 }

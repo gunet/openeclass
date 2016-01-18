@@ -19,6 +19,15 @@
     
     <!-- SlimScroll -->
     <script src="{%URL_PATH%}js/jquery.slimscroll.min.js"></script>
+    <!-- BlockUI -->
+    <script src="{%URL_PATH%}js/blockui-master/jquery.blockUI.js"></script>
+    <script>
+        $(function() {
+            $('.blockUI').click(function() { 
+                $.blockUI({ message: "<h4><span class='fa fa-refresh fa-spin'></span> {%LANG_PLEASE_WAIT%}</h4>" }); 
+            }); 
+        });     
+    </script>
     <script>
     bootbox.setDefaults({
       locale: "{%LANG%}"
