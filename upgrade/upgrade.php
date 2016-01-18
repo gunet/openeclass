@@ -3034,7 +3034,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             CHANGE `total_score` `total_score` FLOAT(11,2) NOT NULL DEFAULT 0,
             CHANGE `total_weighting` `total_weighting` FLOAT(11,2) DEFAULT 0');
         Database::get()->query('ALTER TABLE `exercise_answer_record`
-            CHANGE `weight` `weight` float(11,2) DEFAULT NULL');
+            CHANGE `weight` `weight` FLOAT(11,2) DEFAULT NULL');
         Database::get()->query('ALTER TABLE `unit_resources`
             CHANGE `date` `date` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `actions_summary`
@@ -3099,11 +3099,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             function ($item) {
                 $details = Database::get()->querySingle('SELECT * FROM exercise_answer_record
                     WHERE answer_record_id = ?d', $item->min_answer_record_id);
-                Database::get()->query('DELETE FROM exercise_answer_record
-                    WHERE eurid = ?d AND question_id = ?d AND answer = ?s AND answer_id = ?d AND
-                          answer_record_id > ?d',
-                    $details->eurid, $details->question_id, $details->answer, $details->answer_id,
-                    $item->min_answer_record_id);
+                if (is_null($details->answer)) {
+                    Database::get()->query('DELETE FROM exercise_answer_record
+                        WHERE eurid = ?d AND question_id = ?d AND answer IS NULL AND
+                              answer_id = ?d AND answer_record_id > ?d',
+                        $details->eurid, $details->question_id, $details->answer_id,
+                        $item->min_answer_record_id);
+                } else {
+                    Database::get()->query('DELETE FROM exercise_answer_record
+                        WHERE eurid = ?d AND question_id = ?d AND answer = ?s AND
+                              answer_id = ?d AND answer_record_id > ?d',
+                        $details->eurid, $details->question_id, $details->answer,
+                        $details->answer_id, $item->min_answer_record_id);
+                }
             });
 
         // Fix incorrect exercise answer grade totals
