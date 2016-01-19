@@ -108,7 +108,7 @@
                 @endif               
                 <div class='panel opencourses-national'>
                     <a href='http://opencourses.gr' target='_blank'>
-                        {{ trans(langNationalOpenCourses) }}
+                        {{ trans('langNationalOpenCourses') }}
                     </a>
                 </div>
             @endif            
