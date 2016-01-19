@@ -80,14 +80,8 @@ if (isset($_GET['stats_submit'])) {
         $tool_content .= "<table class='table-default'>";
         $course = Database::get()->querySingle("SELECT title, prof_names, code, visible FROM course WHERE id = ?d", $_GET['c']);
         $users = Database::get()->querySingle("SELECT COUNT(user_id) AS users FROM course_user WHERE course_id = ?d", $_GET['c'])->users;                
-        $tool_content .= "<tr><th class='col-xs-4'>$langTitle</th><td class='col-xs-8'>$course->title <small>($course->code)</small></td></tr>";        
-        switch ($course->visible) {
-                case COURSE_REGISTRATION: $message = "Ανοικτό με εγγραφή"; break;
-                case COURSE_OPEN: $message = "Ανοικτό"; break;
-                case COURSE_CLOSED: $message = "Κλειστό"; break;
-                case COURSE_INACTIVE: $message = "Ανενεργό μάθημα"; break;
-        }
-        $tool_content .= "<tr><th class='col-xs-4'>$langCourseVis</th><td class='col-xs-8'>$message</td></tr>";
+        $tool_content .= "<tr><th class='col-xs-4'>$langTitle</th><td class='col-xs-8'>$course->title <small>($course->code)</small></td></tr>";                
+        $tool_content .= "<tr><th class='col-xs-4'>$langCourseVis</th><td class='col-xs-8'>" . course_status_message($_GET['c']) . "</td></tr>";
         $tool_content .= "<tr><th class='col-xs-4'>$langTeacher</th><td class='col-xs-8'>$course->prof_names</td></tr>";
         $tool_content .= "<tr><th class='col-xs-4'>$langUsers</th><td class='col-xs-8'>$users</td></tr>";
         $tool_content .= "</table>";

@@ -3272,6 +3272,7 @@ $langTypeOpen = "Ανοικτό";
 $langTypesOpen = "Ανοικτά";
 $langTypeRegistration = "Ανοικτό με εγγραφή";
 $langTypesRegistration = "Ανοικτά με εγγραφή";
+$langTypeInactive = "Ανενεργό";
 $langAllTypes = "(όλοι οι τύποι πρόσβασης)";
 $langAllFacultes = "Σε όλες τις $langsFaculties";
 $langSuccess = "Η εγγραφή σας ως διαχειριστή έγινε με επιτυχία";

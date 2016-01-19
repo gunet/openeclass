@@ -2472,6 +2472,29 @@ function course_status($course_id) {
 }
 
 /**
+ * @brief return message concerning course visibility 
+ * @global type $langTypeOpen
+ * @global type $langTypeClosed
+ * @global type $langTypeInactive
+ * @global type $langTypeRegistration
+ * @param type $course_id
+ * @return type
+ */
+function course_status_message($course_id) {
+   
+    global $langTypeOpen, $langTypeClosed, $langTypeInactive, $langTypeRegistration;
+    
+    $status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $course_id)->visible;
+    switch ($status) {
+        case COURSE_REGISTRATION: $message = $langTypeRegistration; break;
+        case COURSE_OPEN: $message = $langTypeOpen; break;
+        case COURSE_CLOSED: $message = $langTypeClosed; break;
+        case COURSE_INACTIVE: $message = $langTypeInactive; break;
+    }
+    return $message;
+}
+
+/**
  * @brief get user email verification status
  * @param type $uid
  * @return verified mail or no
