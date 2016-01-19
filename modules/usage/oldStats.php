@@ -122,9 +122,7 @@ foreach ($usage_defaults as $key => $val) {
     }
 }
 
-$date_fmt = '%Y-%m-%d';
 $date_where = " (start_date BETWEEN '$u_date_start' AND '$u_date_end') ";
-
 
 if ($u_module_id != -1) {
     $mod_where = " (module_id = '$u_module_id') ";
