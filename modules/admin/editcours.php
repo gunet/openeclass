@@ -100,7 +100,7 @@ if (isset($c)) {
 	</table>";
     // Display course quota and link to edit
     $tool_content .= "<table class='table-default'>
-	<th colspan='2'>$langQuota ".icon('fa-gear', $langModify, "quotacours.php?c=" . getIndirectReference($c) . ""). "
+	<th colspan='2'>$langQuota ".icon('fa-gear', $langModify, "quotacours.php?c=" . getIndirectReference($c) . ""). "</th>
 	<tr>
 	  <td colspan='2'><div class='sub_title1'>$langTheCourse " . q($row->title) . " $langMaxQuota</div></td>
 	  </tr>";
@@ -135,23 +135,9 @@ if (isset($c)) {
     $tool_content .= "</table>";
     // Display course type and link to edit
     $tool_content .= "<table class='table-default'>
-                <th colspan='2'>$langCourseStatus ".icon('fa-gear', $langModify, "statuscours.php?c=" . q($c) . "")."";
-    $tool_content .= "<tr><th width='250'>" . $langCurrentStatus . ":</th><td>";
-    switch ($row->visible) {
-        case COURSE_CLOSED:
-            $tool_content .= $langClosedCourse;
-            break;
-        case COURSE_OPEN:
-            $tool_content .= $langOpenCourse;
-            break;
-        case COURSE_REGISTRATION:
-            $tool_content .= $langRegCourse;
-            break;
-        case COURSE_INACTIVE:
-            $tool_content .= $langCourseInactive;
-            break;
-    }
-    $tool_content .= "</td></tr></table>";
+                <th colspan='2'>$langCourseStatus ".icon('fa-gear', $langModify, "statuscours.php?c=" . q($c) . "")."</th>";
+    $tool_content .= "<tr><th width='250'>" . $langCurrentStatus . ":</th><td>" . course_status_message($cId) . "</td>";
+    $tool_content .= "</tr></table>";
     // Display other available choices
     $tool_content .= "<table class='table-default'><th colspan='2'>$langOtherActions</th>";
     // Users list
