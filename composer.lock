@@ -924,12 +924,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/valitron.git",
-                "reference": "d2b63c611980bb804d17468bf0b3c8d4e28afbf5"
+                "reference": "2c8e918ceda599136345527c67c7d1dff73e2e13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/valitron/zipball/d2b63c611980bb804d17468bf0b3c8d4e28afbf5",
-                "reference": "d2b63c611980bb804d17468bf0b3c8d4e28afbf5",
+                "url": "https://api.github.com/repos/vlucas/valitron/zipball/2c8e918ceda599136345527c67c7d1dff73e2e13",
+                "reference": "2c8e918ceda599136345527c67c7d1dff73e2e13",
                 "shasum": ""
             },
             "require": {
@@ -962,7 +962,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2015-12-15 20:10:29"
+            "time": "2016-01-15 19:53:20"
         }
     ],
     "packages-dev": [],
