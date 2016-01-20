@@ -42,16 +42,12 @@ hContent;
 
 $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#startdatecal').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+            $('#startdate, #enddate').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-left',
                 language: '".$language."',
                 autoclose: true
-            });
-            $('#enddatecal').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
-                language: '".$language."',
-                autoclose: true
-            });    
+            });            
         });
     </script>";
 
@@ -225,14 +221,12 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
             <div class='checkbox'>
-                <label><input type='checkbox' name='startdate_active' " .
-                    "$start_checkbox onClick=\"toggle(1,this,'startdate')\">&nbsp;" .
-                    "$langActivate
+                <label><input type='checkbox' name='startdate_active'>&nbsp;$langActivate
                 </label>
             </div>
             </div>
         </div>
-        <div class='input-append date form-group' id='startdatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+        <div class='input-append date form-group' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                 <label for='startdate' class='col-sm-2 control-label'>$langStartDate :</label>
                 <div class='col-xs-10 col-sm-9'>        
                     <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
@@ -245,13 +239,11 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     $tool_content .= "<div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>
                     <div class='checkbox'>
-                        <label><input type='checkbox' name='enddate_active' " .
-                        "$end_checkbox onClick=\"toggle(2,this,'enddate')\">&nbsp;" .
-                        "$langActivate</label>
+                        <label><input type='checkbox' name='enddate_active'>&nbsp;$langActivate</label>
                     </div>
                 </div>
                 </div>
-                <div class='input-append date form-group' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                <div class='input-append date form-group' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                     <label for='enddate' class='col-sm-2 control-label'>$langEndDate :</label>
                     <div class='col-xs-10 col-sm-9'>        
                         <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
