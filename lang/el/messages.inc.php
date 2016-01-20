@@ -1866,11 +1866,12 @@ $langInGroup = "στην ομάδα χρηστών";
 
 // Group Properties
 $langGroupProperties = "Ρυθμίσεις Ομάδων Χρηστών";
-$langGroupAllowStudentRegistration = "Οι " . $langsStudents . " επιτρέπεται να εγγραφούν και να απεγγραφούν";
+$langGroupAllowStudentRegistration = "Οι " . $langsStudents . " επιτρέπεται να εγγραφούν";
+$langGroupAllowStudentUnregister = "Οι " . $langsStudents . " επιτρέπεται να απεγγραφούν";
 $langGroupAllowMultipleRegistration = "Δυνατότητα εγγραφής χρηστών σε περισσότερες από μία ομάδες";
 $langGroupAllowStudentGroupDescription = "Δυνατότητα προσθήκης περιγραφής ομάδας από τα μέλη της ομάδας";
-$langGroupStudentRegistrationType = "Δυνατότητα εγγραφής - απεγγραφής";
-$langGroupAllowUnregister = "Δυνατότητα απεγγραφής από ομάδα";
+$langGroupStudentRegistrationType = "Δυνατότητα εγγραφής";
+$langGroupAllowUnregister = "Δυνατότητα απεγγραφής";
 $langGroupPrivatise = "Κλειστές περιοχές συζητήσεων ομάδων χρηστών";
 $langGroupForum = "Περιοχή συζητήσεων";
 $langGroupPropertiesModified = "Αλλάχτηκαν οι ρυθμίσεις της ομάδας χρηστών";
