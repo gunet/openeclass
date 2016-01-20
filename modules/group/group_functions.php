@@ -25,6 +25,7 @@ function initialize_group_id($param = 'group_id') {
  * @global type $course_id
  * @global type $status
  * @global type $self_reg
+ * @global type $allow_unreg
  * @global type $multi_reg
  * @global type $has_forum
  * @global type $private_forum
@@ -48,22 +49,23 @@ function initialize_group_id($param = 'group_id') {
  */
 function initialize_group_info($group_id) {
     
-    global $course_id, $is_editor, $status, $self_reg, $has_forum, $private_forum, $documents, $wiki,
+    global $course_id, $is_editor, $status, $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki,
     $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors, $group_category,
     $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code;
  
-    $grp_property_item = Database::get()->querySingle("SELECT self_registration, forum, private_forum, documents, wiki
+    $grp_property_item = Database::get()->querySingle("SELECT self_registration, allow_unregister, forum, private_forum, documents, wiki
                      FROM group_properties WHERE course_id = ?d AND group_id = ?d", $course_id, $group_id);
-    $self_reg = $grp_property_item->self_registration;        
+    $self_reg = $grp_property_item->self_registration;
+    $allow_unreg = $grp_property_item->allow_unregister;
     $has_forum = $grp_property_item->forum;
     $private_forum = $grp_property_item->private_forum;
     $documents = $grp_property_item->documents;
     $wiki = $grp_property_item->wiki;
     
    
-    // Guest users aren't allowed to register in a group
+    // Guest users aren't allowed to register / unregister
     if ($status == USER_GUEST) {
-        $self_reg = 0;
+        $self_reg = $allow_unreg = 0;
     }
     
     $res = Database::get()->querySingle("SELECT name, description, forum_id, max_members, secret_directory, category_id

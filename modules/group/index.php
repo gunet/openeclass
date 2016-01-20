@@ -96,7 +96,7 @@ if ($is_editor) {
             'group_max' => "$langTheField $langNewGroupMembers"
         ));
         
-        if($v->validate()) {            
+        if($v->validate()) {
             $group_max = $_POST['group_max'];            
             $group_quantity = $_POST['group_quantity'];
             $group_description = isset($_POST['description']) ? $_POST['description'] : '';  
@@ -104,20 +104,40 @@ if ($is_editor) {
             if (isset($_POST['group_name'])) {
                 $group_name = $_POST['group_name'];
             }
-            if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
-                    $has_forum = 1;
+                        
+            if (isset($_POST['all'])) { // default values if we create multiple groups
+                $self_reg = 1;
+                $allow_unreg = 0;
+            } else {
+                if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on') {
+                    $self_reg = 1;
+                } else {
+                    $self_reg = 0;
+                }
+
+                if (isset($_POST['allow_unreg']) and $_POST['allow_unreg'] == 'on') {
+                    $allow_unreg = 1;
+                } else {
+                    $allow_unreg = 0;
+                }
             }
-            else $has_forum = 0;
+            if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
+                $has_forum = 1;
+            } else {
+                $has_forum = 0;
+            }
 
             if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
-                    $documents = 1;
+                $documents = 1;
+            } else {
+                $documents = 0;
             }
-            else $documents = 0;
 
             if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
-                    $wiki = 1;
+                $wiki = 1;
+            } else {
+                $wiki = 0;
             }
-            else $wiki = 0;    
             $group_num = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `group` WHERE course_id = ?d", $course_id)->count;
 
             // Create a hidden category for group forums
@@ -184,7 +204,9 @@ if ($is_editor) {
                 
                 $query_vars = [
                     $course_id, 
-                    $id, 
+                    $id,
+                    $self_reg,
+                    $allow_unreg,
                     $has_forum,
                     $private_forum,
                     $documents, 
@@ -192,8 +214,8 @@ if ($is_editor) {
                 ];
                 
                 $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,
-                                                                    group_id = ?d, self_registration = 1, 
-                                                                    allow_unregister = 0, 
+                                                                    group_id = ?d, self_registration = ?d, 
+                                                                    allow_unregister = ?d, 
                                                                     forum = ?d, private_forum = ?d, 
                                                                     documents = ?d, wiki = ?d, 
                                                                     agenda = 0", $query_vars);                
@@ -243,6 +265,11 @@ if ($is_editor) {
 		$self_reg = 1;
 	}
 	else $self_reg = 0;
+        
+        if (isset($_POST['allow_unreg']) and $_POST['allow_unreg'] == 'on') {
+		$allow_unreg = 1;
+	}
+	else $allow_unreg = 0;
 			
 	if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
 		$has_forum = 1;
@@ -264,11 +291,12 @@ if ($is_editor) {
 	    
 	Database::get()->query("UPDATE group_properties SET
                                 self_registration = ?d,
+                                allow_unregister = ?d,
                                 forum = ?d,
                                 private_forum = ?d,
                                 documents = ?d,
                                 wiki = ?d WHERE course_id = ?d AND group_id = ?d",
-                     $self_reg, $has_forum, $private_forum, $documents, $wiki, $course_id, $group_id);
+                     $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki, $course_id, $group_id);
         $message = $langGroupPropertiesModified;
 
     } elseif (isset($_POST['submitCategory'])) {
@@ -597,7 +625,7 @@ if ($is_editor) {
             initialize_group_info($group_id);
             
             $tool_content .= "<td class='text-left'>";
-            // Allow student to enter group only if member
+            // Allow student to enter group only if he's a member
             if ($is_member) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
                         "</a> <span style='color:#900; weight:bold;'>($langMyGroup)</span>";
@@ -629,7 +657,11 @@ if ($is_editor) {
             } elseif (!$self_reg) {
                 $tool_content .= ' - ';
             } else {
-                $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
+                if (!$allow_unreg) {
+                    $tool_content .= ' - ';
+                } else {
+                   $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
+                }
             }
             $tool_content .= "</td></tr>";
             $totalRegistered += $member_count;

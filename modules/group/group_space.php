@@ -61,7 +61,7 @@ if (!$is_editor) {
         }
     }
     if (isset($_GET['selfUnReg']) and $_GET['selfUnReg'] == 1) {
-        if ($is_member and $status != USER_GUEST) { // if registration is possible
+        if ($is_member and $allow_unreg and $status != USER_GUEST) { // if registration is possible
             
             Database::get()->query("DELETE FROM group_members WHERE user_id = ?d AND group_id = ?d", $uid, $group_id);
             $group = gid_to_name($group_id);
