@@ -130,6 +130,8 @@
 .minimalist.is-ready.is-closeable .fp-unload{display:block}
 .minimalist.is-ready.is-closeable .fp-embed{right:90px}
 .minimalist.is-ready.is-closeable .fp-fullscreen{right:50px}
+.minimalist.is-ready.is-closeable.is-rtl .fp-embed{right:auto;left:90px}
+.minimalist.is-ready.is-closeable.is-rtl .fp-fullscreen{right:auto;left:50px}
 .minimalist.is-fullscreen .fp-fullscreen{display:block !important;}
 .minimalist.is-fullscreen .fp-fullscreen:before{content:"\e601"}
 .minimalist .fp-timeline{height:3px;position:relative;overflow:hidden;top:10px;height:10px;margin:0 225px 0 55px;}
@@ -183,7 +185,7 @@
 .minimalist.is-touch.is-mouseover .fp-progress:after{height:18px;width:18px;top:-4px;right:-10px;border:5px solid rgba(255,255,255,0.65);-webkit-box-shadow:1px 0 4px rgba(0,0,0,0.5);-moz-box-shadow:1px 0 4px rgba(0,0,0,0.5);box-shadow:1px 0 4px rgba(0,0,0,0.5)}
 .minimalist.is-touch.is-mouseover .fp-timeline.is-dragging .fp-progress:after{border:10px solid #fff;-webkit-border-radius:20px;-moz-border-radius:20px;border-radius:20px;-webkit-transition:inherit;-moz-transition:inherit;transition:inherit;top:-5px;right:-10px}
 .minimalist.is-touch.is-rtl.is-mouseover .fp-timeline.is-dragging .fp-progress:after{left:-15px;right:auto;border:10px solid #fff}
-.minimalist .fp-volume{position:absolute;top:12px;right:10px;}
+.minimalist .fp-volume{position:absolute;height:6px;bottom:12px;right:10px;}
 .has-menu.minimalist .fp-volume{right:37px}
 .is-rtl.minimalist .fp-volume{right:auto;left:10px}
 .is-rtl.has-menu.minimalist .fp-volume{left:37px}
@@ -216,7 +218,7 @@
 .is-rtl.minimalist .fp-remaining,.is-rtl.minimalist .fp-duration{right:auto;left:180px;}
 .no-brand.is-rtl.minimalist .fp-remaining,.no-brand.is-rtl.minimalist .fp-duration{left:115px;}
 .has-menu.no-brand.is-rtl.minimalist .fp-remaining,.has-menu.no-brand.is-rtl.minimalist .fp-duration{left:142px}
-.has-menu.is-rtl.minimalist .fp-remaining,.has-menu.is-rtl.minimalist .fp-duration{left:207px}
+.has-menu.is-rtl.minimalist .fp-remaining,.has-menu.is-rtl.minimalist .fp-duration{left:227px}
 .no-volume.is-rtl.minimalist .fp-remaining,.no-volume.is-rtl.minimalist .fp-duration{left:50px}
 .no-mute.is-rtl.minimalist .fp-remaining,.no-mute.is-rtl.minimalist .fp-duration{left:95px}
 .no-mute.no-volume.is-rtl.minimalist .fp-remaining,.no-mute.no-volume.is-rtl.minimalist .fp-duration{left:10px}
@@ -244,12 +246,12 @@
 .minimalist.is-error object,.minimalist.is-error video,.minimalist.is-error .fp-controls,.minimalist.is-error .fp-time,.minimalist.is-error .fp-subtitle{display:none}
 .minimalist.is-ready.is-muted .fp-mute{opacity:.7;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70)}
 .minimalist.is-ready.is-muted .fp-mute:before{content:"\e605"}
-.minimalist.is-mouseout .fp-controls,.minimalist.is-mouseout .fp-mute,.minimalist.is-mouseout .fp-title{height:0;-webkit-transition:height .15s .3s;-moz-transition:height .15s .3s;transition:height .15s .3s}
+.minimalist.is-mouseout .fp-controls{height:0;-webkit-transition:height .15s .3s;-moz-transition:height .15s .3s;transition:height .15s .3s}
 .is-fullscreen.minimalist.is-mouseout .fp-controls{height:3px;bottom:0}
 .minimalist.is-mouseout .fp-title{overflow:hidden}
 .minimalist.is-mouseout .fp-timeline{margin:0 !important}
-.minimalist.is-mouseout .fp-timeline,.minimalist.is-mouseout .fp-volume{-webkit-transition:height .15s .3s,top .15s .3s,margin .15s .3s;-moz-transition:height .15s .3s,top .15s .3s,margin .15s .3s;transition:height .15s .3s,top .15s .3s,margin .15s .3s;height:4px;top:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
-.minimalist.is-mouseout .fp-fullscreen,.minimalist.is-mouseout .fp-unload,.minimalist.is-mouseout .fp-elapsed,.minimalist.is-mouseout .fp-remaining,.minimalist.is-mouseout .fp-duration,.minimalist.is-mouseout .fp-embed,.minimalist.is-mouseout .fp-volume,.minimalist.is-mouseout .fp-play,.minimalist.is-mouseout .fp-menu,.minimalist.is-mouseout .fp-brand,.minimalist.is-mouseout .fp-timeline-tooltip,.minimalist.is-mouseout.aside-time .fp-time{opacity:0;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);-webkit-transition:opacity .15s .3s;-moz-transition:opacity .15s .3s;transition:opacity .15s .3s}
+.minimalist.is-mouseout .fp-timeline{-webkit-transition:height .15s .3s,top .15s .3s,margin .15s .3s;-moz-transition:height .15s .3s,top .15s .3s,margin .15s .3s;transition:height .15s .3s,top .15s .3s,margin .15s .3s;height:4px;top:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
+.minimalist.is-mouseout .fp-fullscreen,.minimalist.is-mouseout .fp-unload,.minimalist.is-mouseout .fp-elapsed,.minimalist.is-mouseout .fp-remaining,.minimalist.is-mouseout .fp-duration,.minimalist.is-mouseout .fp-embed,.minimalist.is-mouseout .fp-title,.minimalist.is-mouseout .fp-volume,.minimalist.is-mouseout .fp-play,.minimalist.is-mouseout .fp-menu,.minimalist.is-mouseout .fp-brand,.minimalist.is-mouseout .fp-timeline-tooltip,.minimalist.is-mouseout.aside-time .fp-time{opacity:0;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);-webkit-transition:opacity .15s .3s;-moz-transition:opacity .15s .3s;transition:opacity .15s .3s}
 .minimalist.is-mouseover .fp-controls,.minimalist.fixed-controls .fp-controls{height:30px}
 .minimalist.is-mouseover .fp-title,.minimalist.fixed-controls .fp-title{height:30px}
 .minimalist.is-mouseover .fp-fullscreen,.minimalist.fixed-controls .fp-fullscreen,.minimalist.is-mouseover .fp-unload,.minimalist.fixed-controls .fp-unload,.minimalist.is-mouseover .fp-elapsed,.minimalist.fixed-controls .fp-elapsed,.minimalist.is-mouseover .fp-remaining,.minimalist.fixed-controls .fp-remaining,.minimalist.is-mouseover .fp-duration,.minimalist.fixed-controls .fp-duration,.minimalist.is-mouseover .fp-embed,.minimalist.fixed-controls .fp-embed,.minimalist.is-mouseover .fp-logo,.minimalist.fixed-controls .fp-logo,.minimalist.is-mouseover .fp-volume,.minimalist.fixed-controls .fp-volume,.minimalist.is-mouseover .fp-play,.minimalist.fixed-controls .fp-play,.minimalist.is-mouseover .fp-menu,.minimalist.fixed-controls .fp-menu{opacity:1;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100)}
@@ -294,6 +296,7 @@
 }.minimalist.is-touch.is-mouseover .fp-progress:before{background-color:#00a7c8}
 .minimalist .fp-menu .fp-dropdown{right:-10px;left:auto;bottom:30px;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;}
 .minimalist .fp-menu .fp-dropdown:before{display:none}
+.is-rtl.minimalist .fp-menu .fp-dropdown{right:auto;left:-10px}
 .minimalist .fp-play{width:30px}
 .minimalist.aside-time .fp-time{top:0;left:0}
 .no-brand.minimalist .fp-remaining,.no-brand.minimalist .fp-duration{right:115px}
@@ -303,6 +306,8 @@
 .is-rtl.minimalist .fp-embed{right:auto;left:32px}
 .minimalist.is-closeable.is-ready .fp-fullscreen{right:32px}
 .minimalist.is-closeable.is-ready .fp-embed{right:64px}
+.is-rtl.minimalist.is-closeable.is-ready .fp-fullscreen{right:auto;left:32px}
+.is-rtl.minimalist.is-closeable.is-ready .fp-embed{right:auto;left:64px}
 .minimalist.play-button .fp-play{display:block}
 .minimalist.play-button .fp-elapsed{left:27px;}
 .is-rtl.minimalist.play-button .fp-elapsed{right:27px}
@@ -444,6 +449,8 @@
 .functional.is-ready.is-closeable .fp-unload{display:block}
 .functional.is-ready.is-closeable .fp-embed{right:90px}
 .functional.is-ready.is-closeable .fp-fullscreen{right:50px}
+.functional.is-ready.is-closeable.is-rtl .fp-embed{right:auto;left:90px}
+.functional.is-ready.is-closeable.is-rtl .fp-fullscreen{right:auto;left:50px}
 .functional.is-fullscreen .fp-fullscreen{display:block !important;}
 .functional.is-fullscreen .fp-fullscreen:before{content:"\e601"}
 .functional .fp-timeline{height:3px;position:relative;overflow:hidden;top:10px;height:10px;margin:0 225px 0 55px;}
@@ -497,7 +504,7 @@
 .functional.is-touch.is-mouseover .fp-progress:after{height:18px;width:18px;top:-4px;right:-10px;border:5px solid rgba(255,255,255,0.65);-webkit-box-shadow:1px 0 4px rgba(0,0,0,0.5);-moz-box-shadow:1px 0 4px rgba(0,0,0,0.5);box-shadow:1px 0 4px rgba(0,0,0,0.5)}
 .functional.is-touch.is-mouseover .fp-timeline.is-dragging .fp-progress:after{border:10px solid #fff;-webkit-border-radius:20px;-moz-border-radius:20px;border-radius:20px;-webkit-transition:inherit;-moz-transition:inherit;transition:inherit;top:-5px;right:-10px}
 .functional.is-touch.is-rtl.is-mouseover .fp-timeline.is-dragging .fp-progress:after{left:-15px;right:auto;border:10px solid #fff}
-.functional .fp-volume{position:absolute;top:12px;right:10px;}
+.functional .fp-volume{position:absolute;height:6px;bottom:12px;right:10px;}
 .has-menu.functional .fp-volume{right:37px}
 .is-rtl.functional .fp-volume{right:auto;left:10px}
 .is-rtl.has-menu.functional .fp-volume{left:37px}
@@ -530,7 +537,7 @@
 .is-rtl.functional .fp-remaining,.is-rtl.functional .fp-duration{right:auto;left:180px;}
 .no-brand.is-rtl.functional .fp-remaining,.no-brand.is-rtl.functional .fp-duration{left:115px;}
 .has-menu.no-brand.is-rtl.functional .fp-remaining,.has-menu.no-brand.is-rtl.functional .fp-duration{left:142px}
-.has-menu.is-rtl.functional .fp-remaining,.has-menu.is-rtl.functional .fp-duration{left:207px}
+.has-menu.is-rtl.functional .fp-remaining,.has-menu.is-rtl.functional .fp-duration{left:227px}
 .no-volume.is-rtl.functional .fp-remaining,.no-volume.is-rtl.functional .fp-duration{left:50px}
 .no-mute.is-rtl.functional .fp-remaining,.no-mute.is-rtl.functional .fp-duration{left:95px}
 .no-mute.no-volume.is-rtl.functional .fp-remaining,.no-mute.no-volume.is-rtl.functional .fp-duration{left:10px}
@@ -558,12 +565,12 @@
 .functional.is-error object,.functional.is-error video,.functional.is-error .fp-controls,.functional.is-error .fp-time,.functional.is-error .fp-subtitle{display:none}
 .functional.is-ready.is-muted .fp-mute{opacity:.7;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70)}
 .functional.is-ready.is-muted .fp-mute:before{content:"\e605"}
-.functional.is-mouseout .fp-controls,.functional.is-mouseout .fp-mute,.functional.is-mouseout .fp-title{height:0;-webkit-transition:height .15s .3s;-moz-transition:height .15s .3s;transition:height .15s .3s}
+.functional.is-mouseout .fp-controls{height:0;-webkit-transition:height .15s .3s;-moz-transition:height .15s .3s;transition:height .15s .3s}
 .is-fullscreen.functional.is-mouseout .fp-controls{height:3px;bottom:0}
 .functional.is-mouseout .fp-title{overflow:hidden}
 .functional.is-mouseout .fp-timeline{margin:0 !important}
-.functional.is-mouseout .fp-timeline,.functional.is-mouseout .fp-volume{-webkit-transition:height .15s .3s,top .15s .3s,margin .15s .3s;-moz-transition:height .15s .3s,top .15s .3s,margin .15s .3s;transition:height .15s .3s,top .15s .3s,margin .15s .3s;height:4px;top:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
-.functional.is-mouseout .fp-fullscreen,.functional.is-mouseout .fp-unload,.functional.is-mouseout .fp-elapsed,.functional.is-mouseout .fp-remaining,.functional.is-mouseout .fp-duration,.functional.is-mouseout .fp-embed,.functional.is-mouseout .fp-volume,.functional.is-mouseout .fp-play,.functional.is-mouseout .fp-menu,.functional.is-mouseout .fp-brand,.functional.is-mouseout .fp-timeline-tooltip,.functional.is-mouseout.aside-time .fp-time{opacity:0;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);-webkit-transition:opacity .15s .3s;-moz-transition:opacity .15s .3s;transition:opacity .15s .3s}
+.functional.is-mouseout .fp-timeline{-webkit-transition:height .15s .3s,top .15s .3s,margin .15s .3s;-moz-transition:height .15s .3s,top .15s .3s,margin .15s .3s;transition:height .15s .3s,top .15s .3s,margin .15s .3s;height:4px;top:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
+.functional.is-mouseout .fp-fullscreen,.functional.is-mouseout .fp-unload,.functional.is-mouseout .fp-elapsed,.functional.is-mouseout .fp-remaining,.functional.is-mouseout .fp-duration,.functional.is-mouseout .fp-embed,.functional.is-mouseout .fp-title,.functional.is-mouseout .fp-volume,.functional.is-mouseout .fp-play,.functional.is-mouseout .fp-menu,.functional.is-mouseout .fp-brand,.functional.is-mouseout .fp-timeline-tooltip,.functional.is-mouseout.aside-time .fp-time{opacity:0;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);-webkit-transition:opacity .15s .3s;-moz-transition:opacity .15s .3s;transition:opacity .15s .3s}
 .functional.is-mouseover .fp-controls,.functional.fixed-controls .fp-controls{height:30px}
 .functional.is-mouseover .fp-title,.functional.fixed-controls .fp-title{height:30px}
 .functional.is-mouseover .fp-fullscreen,.functional.fixed-controls .fp-fullscreen,.functional.is-mouseover .fp-unload,.functional.fixed-controls .fp-unload,.functional.is-mouseover .fp-elapsed,.functional.fixed-controls .fp-elapsed,.functional.is-mouseover .fp-remaining,.functional.fixed-controls .fp-remaining,.functional.is-mouseover .fp-duration,.functional.fixed-controls .fp-duration,.functional.is-mouseover .fp-embed,.functional.fixed-controls .fp-embed,.functional.is-mouseover .fp-logo,.functional.fixed-controls .fp-logo,.functional.is-mouseover .fp-volume,.functional.fixed-controls .fp-volume,.functional.is-mouseover .fp-play,.functional.fixed-controls .fp-play,.functional.is-mouseover .fp-menu,.functional.fixed-controls .fp-menu{opacity:1;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100)}
@@ -781,6 +788,8 @@
 .playful.is-ready.is-closeable .fp-unload{display:block}
 .playful.is-ready.is-closeable .fp-embed{right:106px}
 .playful.is-ready.is-closeable .fp-fullscreen{right:59px}
+.playful.is-ready.is-closeable.is-rtl .fp-embed{right:auto;left:106px}
+.playful.is-ready.is-closeable.is-rtl .fp-fullscreen{right:auto;left:59px}
 .playful.is-fullscreen .fp-fullscreen{display:block !important;}
 .playful.is-fullscreen .fp-fullscreen:before{content:"\e601"}
 .playful .fp-timeline{height:3px;position:relative;overflow:hidden;top:12px;height:11px;margin:0 238px 0 59px;}
@@ -834,7 +843,7 @@
 .playful.is-touch.is-mouseover .fp-progress:after{height:18px;width:18px;top:-4px;right:-10px;border:5px solid rgba(255,255,255,0.65);-webkit-box-shadow:1px 0 4px rgba(0,0,0,0.5);-moz-box-shadow:1px 0 4px rgba(0,0,0,0.5);box-shadow:1px 0 4px rgba(0,0,0,0.5)}
 .playful.is-touch.is-mouseover .fp-timeline.is-dragging .fp-progress:after{border:10px solid #fff;-webkit-border-radius:20px;-moz-border-radius:20px;border-radius:20px;-webkit-transition:inherit;-moz-transition:inherit;transition:inherit;top:-5px;right:-10px}
 .playful.is-touch.is-rtl.is-mouseover .fp-timeline.is-dragging .fp-progress:after{left:-15px;right:auto;border:10px solid #fff}
-.playful .fp-volume{position:absolute;top:12px;right:12px;}
+.playful .fp-volume{position:absolute;height:11px;bottom:12px;right:12px;}
 .has-menu.playful .fp-volume{right:39px}
 .is-rtl.playful .fp-volume{right:auto;left:12px}
 .is-rtl.has-menu.playful .fp-volume{left:39px}
@@ -867,7 +876,7 @@
 .is-rtl.playful .fp-remaining,.is-rtl.playful .fp-duration{right:auto;left:191px;}
 .no-brand.is-rtl.playful .fp-remaining,.no-brand.is-rtl.playful .fp-duration{left:124px;}
 .has-menu.no-brand.is-rtl.playful .fp-remaining,.has-menu.no-brand.is-rtl.playful .fp-duration{left:151px}
-.has-menu.is-rtl.playful .fp-remaining,.has-menu.is-rtl.playful .fp-duration{left:218px}
+.has-menu.is-rtl.playful .fp-remaining,.has-menu.is-rtl.playful .fp-duration{left:242px}
 .no-volume.is-rtl.playful .fp-remaining,.no-volume.is-rtl.playful .fp-duration{left:62px}
 .no-mute.is-rtl.playful .fp-remaining,.no-mute.is-rtl.playful .fp-duration{left:99px}
 .no-mute.no-volume.is-rtl.playful .fp-remaining,.no-mute.no-volume.is-rtl.playful .fp-duration{left:12px}
@@ -895,12 +904,12 @@
 .playful.is-error object,.playful.is-error video,.playful.is-error .fp-controls,.playful.is-error .fp-time,.playful.is-error .fp-subtitle{display:none}
 .playful.is-ready.is-muted .fp-mute{opacity:.7;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=70)}
 .playful.is-ready.is-muted .fp-mute:before{content:"\e605"}
-.playful.is-mouseout .fp-controls,.playful.is-mouseout .fp-mute,.playful.is-mouseout .fp-title{height:0;-webkit-transition:height .15s .3s;-moz-transition:height .15s .3s;transition:height .15s .3s}
+.playful.is-mouseout .fp-controls{height:0;-webkit-transition:height .15s .3s;-moz-transition:height .15s .3s;transition:height .15s .3s}
 .is-fullscreen.playful.is-mouseout .fp-controls{height:3px;bottom:0}
 .playful.is-mouseout .fp-title{overflow:hidden}
 .playful.is-mouseout .fp-timeline{margin:0 !important}
-.playful.is-mouseout .fp-timeline,.playful.is-mouseout .fp-volume{-webkit-transition:height .15s .3s,top .15s .3s,margin .15s .3s;-moz-transition:height .15s .3s,top .15s .3s,margin .15s .3s;transition:height .15s .3s,top .15s .3s,margin .15s .3s;height:4px;top:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
-.playful.is-mouseout .fp-fullscreen,.playful.is-mouseout .fp-unload,.playful.is-mouseout .fp-elapsed,.playful.is-mouseout .fp-remaining,.playful.is-mouseout .fp-duration,.playful.is-mouseout .fp-embed,.playful.is-mouseout .fp-volume,.playful.is-mouseout .fp-play,.playful.is-mouseout .fp-menu,.playful.is-mouseout .fp-brand,.playful.is-mouseout .fp-timeline-tooltip,.playful.is-mouseout.aside-time .fp-time{opacity:0;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);-webkit-transition:opacity .15s .3s;-moz-transition:opacity .15s .3s;transition:opacity .15s .3s}
+.playful.is-mouseout .fp-timeline{-webkit-transition:height .15s .3s,top .15s .3s,margin .15s .3s;-moz-transition:height .15s .3s,top .15s .3s,margin .15s .3s;transition:height .15s .3s,top .15s .3s,margin .15s .3s;height:4px;top:0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
+.playful.is-mouseout .fp-fullscreen,.playful.is-mouseout .fp-unload,.playful.is-mouseout .fp-elapsed,.playful.is-mouseout .fp-remaining,.playful.is-mouseout .fp-duration,.playful.is-mouseout .fp-embed,.playful.is-mouseout .fp-title,.playful.is-mouseout .fp-volume,.playful.is-mouseout .fp-play,.playful.is-mouseout .fp-menu,.playful.is-mouseout .fp-brand,.playful.is-mouseout .fp-timeline-tooltip,.playful.is-mouseout.aside-time .fp-time{opacity:0;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);-webkit-transition:opacity .15s .3s;-moz-transition:opacity .15s .3s;transition:opacity .15s .3s}
 .playful.is-mouseover .fp-controls,.playful.fixed-controls .fp-controls{height:35px}
 .playful.is-mouseover .fp-title,.playful.fixed-controls .fp-title{height:35px}
 .playful.is-mouseover .fp-fullscreen,.playful.fixed-controls .fp-fullscreen,.playful.is-mouseover .fp-unload,.playful.fixed-controls .fp-unload,.playful.is-mouseover .fp-elapsed,.playful.fixed-controls .fp-elapsed,.playful.is-mouseover .fp-remaining,.playful.fixed-controls .fp-remaining,.playful.is-mouseover .fp-duration,.playful.fixed-controls .fp-duration,.playful.is-mouseover .fp-embed,.playful.fixed-controls .fp-embed,.playful.is-mouseover .fp-logo,.playful.fixed-controls .fp-logo,.playful.is-mouseover .fp-volume,.playful.fixed-controls .fp-volume,.playful.is-mouseover .fp-play,.playful.fixed-controls .fp-play,.playful.is-mouseover .fp-menu,.playful.fixed-controls .fp-menu{opacity:1;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=100)}
