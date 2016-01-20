@@ -2578,6 +2578,14 @@ function active_subdirs($base, $filename) {
  */
 
 function removeDir($dirPath) {
+    global $webDir;
+
+    // Don't delete root directories
+    $dirPath = rtrim($dirPath, '/\\');
+    if ($dirPath == $webDir or $dirPath === '') {
+        return false;
+    }
+
     /* Try to remove the directory. If it can not manage to remove it,
      * it's probable the directory contains some files or other directories,
      * and that we must first delete them to remove the original directory.
