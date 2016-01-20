@@ -282,7 +282,7 @@ if (isset($_POST['submit'])) {
         $confirm = '';
     } else {
         $infoText = $langMultiDelUserInfo;
-        $monthsField = '';
+        $monthsField = "<input type='hidden' name='delete' value='true'>";
         $confirm = " onclick='return confirmation(\"" . q($langMultiDelUserConfirm) . "\");'";
     }
     $tool_content .= "
