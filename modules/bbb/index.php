@@ -54,13 +54,18 @@ load_js('validation.js');
 
 $head_content .= "
 <script type='text/javascript'>
+
+// Bootstrap datetimepicker Initialization
 $(function() {
-$('#start_session').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left',
+$('input#start_session').datetimepicker({
+        format: 'dd-mm-yyyy hh:ii',
+        pickerPosition: 'bottom-left',
         language: '".$language."',
-        autoclose: true
+        autoclose: true,
+        todayBtn: true
     });
 });
+
 </script>";
 load_js('select2');
 
