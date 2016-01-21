@@ -1,7 +1,5 @@
 syntax: regexp
 
-^\.htaccess$
-
 ^courses/
 ^video/
 ^secure/

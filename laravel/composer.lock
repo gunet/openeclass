@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "43ebd31548e51babe12c400a137852b7",
-    "content-hash": "90cf905635e7db91665f30cb1d7e5122",
+    "hash": "aba1bf0d9d7d4a195935e185785f4fec",
+    "content-hash": "e40c7d4d6afa195e61b6feb442bf75c7",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -162,6 +162,50 @@
             "time": "2015-11-06 14:35:42"
         },
         {
+            "name": "hautelook/phpass",
+            "version": "0.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hautelook/phpass.git",
+                "reference": "f0217d804225822f9bdb0d392839029b0fcb0914"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hautelook/phpass/zipball/f0217d804225822f9bdb0d392839029b0fcb0914",
+                "reference": "f0217d804225822f9bdb0d392839029b0fcb0914",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Hautelook": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Public Domain"
+            ],
+            "authors": [
+                {
+                    "name": "Solar Designer",
+                    "email": "solar@openwall.com",
+                    "homepage": "http://openwall.com/phpass/"
+                }
+            ],
+            "description": "Portable PHP password hashing framework",
+            "homepage": "http://github.com/hautelook/phpass/",
+            "keywords": [
+                "blowfish",
+                "crypt",
+                "password",
+                "security"
+            ],
+            "time": "2012-08-31 00:00:00"
+        },
+        {
             "name": "jakub-onderka/php-console-color",
             "version": "0.1",
             "source": {
@@ -305,6 +349,54 @@
                 "tokenizer"
             ],
             "time": "2015-12-05 17:17:57"
+        },
+        {
+            "name": "ksungcaya/phpass-laravel",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ksungcaya/phpass-laravel.git",
+                "reference": "ffa7f7a6e6657850e639b037c3e834c65dc9e1c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ksungcaya/phpass-laravel/zipball/ffa7f7a6e6657850e639b037c3e834c65dc9e1c1",
+                "reference": "ffa7f7a6e6657850e639b037c3e834c65dc9e1c1",
+                "shasum": ""
+            },
+            "require": {
+                "hautelook/phpass": "*",
+                "illuminate/contracts": "5.0.x|5.1.x|5.2.x",
+                "illuminate/support": "5.0.x|5.1.x|5.2.x",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpspec/phpspec": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sungcaya\\Phpass\\": "src/Sungcaya/Phpass"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kenneth Sungcaya",
+                    "email": "ksungcaya@gmail.com"
+                }
+            ],
+            "description": "PHPass Hashing integration to Laravel 5",
+            "keywords": [
+                "hashing",
+                "laravel",
+                "password",
+                "phpass"
+            ],
+            "time": "2016-01-21 10:12:28"
         },
         {
             "name": "laravel/framework",
@@ -3106,7 +3198,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "sorskod/larasponse": 20
+        "sorskod/larasponse": 20,
+        "ksungcaya/phpass-laravel": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
