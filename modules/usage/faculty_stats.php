@@ -141,15 +141,7 @@ if (isset($_GET['stats_submit'])) {
                                             AND hierarchy.id = course_department.department")->total;
         }
         $all = Database::get()->querySingle("SELECT COUNT(*) AS num_of_courses FROM course")->num_of_courses;
-        $tool_content .= "<h5 class='text-center'>$s $langCourses ($langFrom2 $all συνολικά στο $siteName)</h5>";
-        /*echo $query;
-        echo "<br>";
-        print_a($terms);
-        echo "<br>";
-        echo "SELECT * FROM course, course_department, hierarchy
-                                            WHERE course.id = course_department.course
-                                            AND hierarchy.id = course_department.department
-                                            $query, $terms";*/
+        $tool_content .= "<h5 class='text-center'>$s $langCourses ($langFrom2 $all συνολικά στο $siteName)</h5>";        
 
         // division info
         /*$tool_content .= "<table class='table table-striped table-bordered table-condensed'>";
@@ -179,19 +171,16 @@ if (isset($_GET['stats_submit'])) {
                                     AND hierarchy.id = course_department.department
                                     ORDER by creation_time DESC");
         }
-        foreach ($sql as $data) {
-            //$coursetype="(τομέας)";
-             $coursetype="";
-                /*switch ($data->visible) {
-                        case '': $coursetype = "Προπτυχιακό"; break;
-                        case 'post': $coursetype = "Μεταπτυχιακό"; break;
-                        case 'other': $coursetype = "Άλλο"; break;
-                }*/
-                $tool_content .= "<tr><td class='text-center'>" . icon('fa-file-excel-o', $langDumpUserDurationToFile, 'faculty_stats_csv.php?c=$data->id&amp;enc=w') . "</td>&nbsp;
-                <td><a href='$_SERVER[SCRIPT_NAME]?c=$data->id&amp;user_date_start=$user_date_start&amp;user_date_end=$user_date_end&amp;stats_submit=true'>$data->title</a>&nbsp;<small>$coursetype</small></td>
-                <td>$data->code</td>
-                <td>$data->prof_names</td>
-                <td>$data->creation_time</td></tr>";
+        foreach ($sql as $data) {            
+            $tool_content .= "<tr><td class='text-center'>" . 
+                                icon('fa-file-excel-o', "$langDumpUserDurationToFile ($langcsvenc1)", "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end&amp;enc=w") . 
+                                "&nbsp;&nbsp;" .
+                                icon('fa-file-excel-o', "$langDumpUserDurationToFile ($langcsvenc2)", "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end") . "
+                            </td>&nbsp;
+            <td><a href='$_SERVER[SCRIPT_NAME]?c=$data->id&amp;user_date_start=$user_date_start&amp;user_date_end=$user_date_end&amp;stats_submit=true'>$data->title</a></td>
+            <td>$data->code</td>
+            <td>$data->prof_names</td>
+            <td>$data->creation_time</td></tr>";
         }	
         $tool_content .= "</table>";
     }    
