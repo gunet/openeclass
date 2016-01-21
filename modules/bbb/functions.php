@@ -809,8 +809,7 @@ function bbb_session_details() {
                          <div class='table-responsive'>
                            <table class='table-default'>
                              <tr class='list-header'>
-                               <th style='width:25%'>$langTitle</th>
-                               <th class='text-center'>$langNewBBBSessionDesc</th>
+                               <th class='text-center'>$langTitle</th>
                                <th class='text-center'>$langNewBBBSessionStart</th>
                                <th class='text-center'>$langParticipants</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
@@ -860,11 +859,11 @@ function bbb_session_details() {
             if ($canJoin) {
                 if($is_editor)
                 {
-                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
+                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "&nbsp;&nbsp;<span class='fa fa-arrow-circle-right'></a>";
                 }else
                 {
                     //$joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
-                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
+                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>" . q($title) . "&nbsp;&nbsp;<span class='fa fa-arrow-circle-right'></span></a>";
                 }
             } else {
                 $joinLink = q($title);
@@ -876,10 +875,12 @@ function bbb_session_details() {
                     $headingsSent = true;
                 }
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
-                    <td class='text-left'>$joinLink</td>
-                    <td>$desc</td>
+                    <td class='text-left'>
+                        <div class='in_table_h'>$joinLink</div>
+                        <div class='trunk8'>$desc</div>
+                    </td>
                     <td class='text-center'>$timeLabel</td>
-                    <td style='width: 30%'>$participants</td>
+                    <td >$participants</td>
                     <td class='option-btn-cell'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
