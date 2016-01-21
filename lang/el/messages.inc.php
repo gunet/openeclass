@@ -3203,7 +3203,7 @@ $langCourseUserRegError = "Παρουσιάστηκε σφάλμα κατά τη
 /* * **********************************************************
  * restore_course.php
  * *********************************************************** */
-$langInvalidArchive "Μη έγκυρο αρχείο $langsOfCourse";
+$langInvalidArchive = "Μη έγκυρο αρχείο $langsOfCourse";
 $langFirstMethod = "1ος τρόπος";
 $langSecondMethod = "2ος τρόπος";
 $langRequest1 = "Κάντε κλικ στο Browse για να αναζητήσετε το αντίγραφο ασφαλείας του $langsOfCourse που θέλετε να επαναφέρετε. Μετά κάντε κλικ στο 'Αποστολή'.";
