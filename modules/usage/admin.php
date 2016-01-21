@@ -98,7 +98,7 @@ $tool_content .= "<div id='modulepref_pie_container' class='col-sm-6'>";
 $tool_content .= plot_placeholder("depuser_stats", $langUsers);
 $tool_content .= "</div>";
 $tool_content .= "<div id='module_container' class='col-sm-6'>";
-$tool_content .= plot_placeholder("depcourse_stats", $langCoursesHeader);
+$tool_content .= plot_placeholder("depcourse_stats", $langCourses);
 $tool_content .= "</div>";
 $tool_content .= "</div>";
 
@@ -108,7 +108,7 @@ $tool_content .= "<div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr>"
         . "<th rowspan='2'>$langCategory</th>"
         . "<th colspan='3'>$langUsers</th>"
-        . "<th colspan='4'>$langCoursesHeader</th>"
+        . "<th colspan='4'>$langCourses</th>"
         . "</tr><tr>";
 foreach($langStatsUserStatus as $us){
     $tschema .= "<th>$us</th>";

@@ -46,7 +46,7 @@ $a2 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE v
 $a3 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_CLOSED)->count;
 $tool_content .= "</div><div class='row'><div class='col-sm-6'>";
 $tool_content .= "<ul class='list-group'>
-    <li class='list-group-item'><label>$langCoursesHeader</label><span class='badge'>$a</span></li>
+    <li class='list-group-item'><label>$langCourses</label><span class='badge'>$a</span></li>
     <li class='list-group-item'>$langOpenCoursesShort<span class='badge'>$a1</span></li>
     <li class='list-group-item'>$langOpenCourseWithRegistration<span class='badge'>$a2</span></li>
     <li class='list-group-item'>$langClosedCourses<span class='badge'>$a3</span></li>
