@@ -11,7 +11,11 @@ syntax: regexp
 ^vendor/
 ^laravel/vendor/
 ^laravel/.env
-^laravel/storage/
+^laravel/storage/app/
+^laravel/storage/framework/cache/
+^laravel/storage/framework/sessions/
+^laravel/storage/framework/views/
+^laravel/storage/logs/
 
 ^nbproject/private/
 ^.sass-cache/

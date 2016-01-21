@@ -47,7 +47,7 @@ Route::bind('courses', function($value)
 */
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get('test', function () {
+    Route::get('test', function () {     
         return view('welcome');
     });    
 });
