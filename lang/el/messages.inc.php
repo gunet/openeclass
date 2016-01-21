@@ -725,7 +725,7 @@ $langEmailUnsubscribe = "Ειδοποιήσεις $langsOfCourse";
 $langInfoUnsubscribe = "Μπορείτε να ρυθμίσετε τη λήψη ειδοποιήσεων από τα παρακάτω $langsCourses. Αν δεν επιθυμείτε
         να δέχεστε e-mails από κάποιο $langsCourse, αποεπιλέξτε το και κάντε κλικ στο 'Ύποβολή'. <br />(Σημείωση: Δεν απεγγράφεστε από το $langsCourse).";
 $langEmailUnsubSuccess = "Δεν θα λαμβάνετε πλέον e-mails από το $langsCourse '%s'";
-$langEmailFromCourses = "Λήψη e-mails από τα μαθήματά μου";
+$langEmailFromCourses = "Λήψη e-mails από τα $langsCourses μου";
 $langEmailUnsubscribeWarning = "Έχετε απενεργοποιήσει τη λήψη μηνυμάτων από την πλατφόρμα.
 Δεν μπορείτε να ρυθμίσετε τη λήψη από συγκεκριμένα $langsCourses πριν την επανενεργοποιήσετε.";
 $langDisplay = "Εμφάνισε";
@@ -2340,7 +2340,7 @@ $langModuleOfMyCourseLabel = "Eτικέτας του $langsOfCourse";
 $langModuleOfMyCourseLabel_onom = "Eτικέτα του $langsOfCourse";
 $langModuleStillInPool = "Σημειώστε ότι οι ενότητες αυτής της γραμμής θα είναι ακόμα διαθέσιμες στο σύνολο των ενοτήτων";
 $langModulesPoolToolName = "Σύνολο ενοτήτων";
-$langMyCourses = "Τα μαθήματά μου";
+$langMyCourses = "Τα $langsCourses μου";
 $langNeverBrowsed = "Δεν έχει ολοκληρωθεί";
 $langNewLabel = "Δημιουργία νέου κεφαλαίου";
 $langLabel = "Eτικέτα";
