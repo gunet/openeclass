@@ -60,6 +60,16 @@ $langsstudent_acc = "εκπαιδευόμενο";
 $langGuest = "Χρήστης Επισκέπτης";
 $langGuests = "Χρήστες Επισκέπτες";
 
+$langCourse = "Μάθημα";
+$langCourses = "Μαθήματα";
+$langOfCourses = "Μαθημάτων";
+$langOfCourse = "Μαθήματος";
+
+$langsCourse = "μάθημα";
+$langsCourses = "μαθήματα";
+$langsOfCourse = "μαθήματος";
+$langsOfCourses = "μαθημάτων";        
+
 $langFaculty = "Σχολή - Τμήμα";
 $langOfFaculty = "Σχολής - Τμήματος";
 $langOfFaculties = "Σχολών - Τμημάτων";
