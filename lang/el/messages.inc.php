@@ -46,7 +46,6 @@ $langAboutCourses1 = "Αυτή τη στιγμή, η πλατφόρμα διαθ
 $langAboutUsers1 = "Οι εγγεγραμένοι χρήστες είναι ";
 $langLast30daysLogins1 = "και οι συνολικές προσβάσεις στην πλατφόρμα τις τελευταίες 30 μέρες είναι ";
 $langAnd = "και";
-$langCoursesHeader = "$langCourses";
 $langClosed = "κλειστά";
 $langOpen = "ανοικτά";
 $langOpenCourseWithRegistration = "Απαιτούν εγγραφή";
