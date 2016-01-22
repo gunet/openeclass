@@ -469,6 +469,9 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langCPFAdminSideMenuLink']);
         array_push($sideMenuLink, "../admin/custom_profile_fields.php");
         array_push($sideMenuImg, "fa-caret-right");
+        array_push($sideMenuText, $GLOBALS['langEPFAdminSideMenuLink']);
+        array_push($sideMenuLink, "../admin/eportfolio_fields.php");
+        array_push($sideMenuImg, "fa-caret-right");
     }
 
     array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
