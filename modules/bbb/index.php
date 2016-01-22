@@ -61,8 +61,7 @@ $('input#start_session').datetimepicker({
         format: 'dd-mm-yyyy hh:ii',
         pickerPosition: 'bottom-left',
         language: '".$language."',
-        autoclose: true,
-        todayBtn: true
+        autoclose: true
     });
 });
 
