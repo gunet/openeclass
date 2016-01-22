@@ -56,7 +56,7 @@ if (isset($_GET['user_date_end'])) {
 
 if (isset($_GET['stats_submit'])) {
     if (isset($_GET['formsearchfaculte'])) {
-        $searchfaculte = getDirectReference($_GET['formsearchfaculte']);
+        $searchfaculte = isset($_GET['formsearchfaculte']) ? intval($_GET['formsearchfaculte']) : '';
         if ($searchfaculte) {
             $subs = $tree->buildSubtrees(array($searchfaculte));
             $ids = 0;
