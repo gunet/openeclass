@@ -143,7 +143,7 @@ if ($appName) {
         $tool_content .= "<td style=\"width:90px; padding:0px;\">";
         $tool_content .= "<div class=\"text-center\" style=\"padding:10px;\"><a href=\"$urlAppend" . $app->getConfigUrl() . "\"'>";
         if ($app->getAppIcon() !== null) {
-            $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
+            $tool_content .= "<img width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
         }
         if ($app->isConfigured()){
             $app_active = $app->isEnabled() ? "<button $asktotp  type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"".getIndirectReference($app->getName()) . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button $asktotp type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . getIndirectReference($app->getName()) . "\"> <i class=\"fa fa-toggle-off\"></i></button>";
