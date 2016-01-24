@@ -405,14 +405,14 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $fields_counter = count($_POST['fields']);
     
     foreach ($_POST['cats'] as $cat) {
-        $cat_id = substr($cat, 4);
+        $cat_id = getDirectReference(substr($cat, 4));
         Database::get()->query("UPDATE custom_profile_fields_category SET sortorder = ?d WHERE id = ?d", $cats_counter, $cat_id);
         $cats_counter--;
     }
     
     foreach ($_POST['fields'] as $field) {
-        $field_id = substr($field, 6);
-        Database::get()->query("UPDATE custom_profile_fields SET sortorder = ?d WHERE id = ?d", $fields_counter, $field_id);
+        $field_id = getDirectReference(substr($field, 6));
+        Database::get()->query("UPDATE custom_profile_fields SET sortorder = ?d, categoryid=?d WHERE id = ?d", $fields_counter, getDirectReference(substr($_POST['fields_cat'][$field], 4)), $field_id);
         $fields_counter--;
     }
     
@@ -450,7 +450,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                                     cursor: move;
                                 }
                               </style>";
-            $tool_content .= "<div id='cat_".$res->id."' class='table-responsive tile' style='margin-bottom:30px;'><table class='table-default'>";
+            $tool_content .= "<div id='cat_".getIndirectReference($res->id)."' class='table-responsive tile' style='margin-bottom:30px;'><table class='table-default'>";
             $tool_content .= "<caption class='tile__name'><strong>$langCategory :</strong> $res->name<div class='pull-right'>";
             
             $dyntools = array(
