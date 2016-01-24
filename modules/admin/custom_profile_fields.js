@@ -94,6 +94,7 @@ function submitSortOrderForm() {
 	//fields
 	var field_tbodys = document.getElementsByClassName('tile__list');
 	for (var i=0; i<field_tbodys.length; i++) {
+		var cat = field_tbodys[i].parentElement.parentElement.id;
 		var trs = field_tbodys[i].childNodes;
 		for (var j=0; j<trs.length; j++) {
 			if (trs[j].className != 'ignore-item') {
@@ -101,6 +102,12 @@ function submitSortOrderForm() {
 				input.type = 'hidden';
 				input.name = 'fields[]';
 				input.value = trs[j].id;
+				form.appendChild(input);
+				
+				var input = document.createElement("input");
+				input.type = 'hidden';
+				input.name = 'fields_cat['+trs[j].id+']';
+				input.value = cat;
 				form.appendChild(input);
 			}
 		}
