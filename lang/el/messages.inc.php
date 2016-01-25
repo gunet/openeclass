@@ -3583,6 +3583,7 @@ $langCodeUTF = "κωδικοποίηση UTF-8";
 $langCodeWin = "κωδικοποίηση Windows-1253";
 $langNoUserSelected = "Δεν επιλέξατε χρήστη";
 $langRecordLog = "Καταγραφές ενεργειών";
+$langSumFrom = "συνολικά στο";
 
 /* * ***********************************************
  * log.php

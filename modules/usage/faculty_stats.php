@@ -104,29 +104,29 @@ if (isset($_GET['stats_submit'])) {
                           </div>";
 
         // user registrations per month
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='success'><th class='col-xs-8'>$langMonth</th><th class='col-xs-4'>$langMonthlyCourseRegistrations</th></tr>";
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>";
+        $tool_content .= "<tr class='list-header'><th class='col-xs-8'>$langMonth</th><th class='col-xs-4'>$langMonthlyCourseRegistrations</th></tr>";
         $q2 = Database::get()->queryArray("SELECT COUNT(*) AS registrations, MONTH(reg_date) AS month, YEAR(reg_date) AS year FROM course_user
                             WHERE course_id = ?d AND (reg_date BETWEEN '$u_date_start' AND '$u_date_end')
                                 AND status = " . USER_STUDENT . " GROUP BY month, year ORDER BY year, month ASC", $_GET['c']);
         foreach ($q2 as $data) {
             $tool_content .= "<tr><td>$data->month-$data->year</td><td>$data->registrations</td></tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
 
         // visits per month
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='success'><th class='col-xs-6'>$langMonth</th><th class='col-xs-2'>$langVisits</th><th class='col-xs-2'>$langUsers</th></tr>";
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>";
+        $tool_content .= "<tr class='list-header'><th class='col-xs-6'>$langMonth</th><th class='col-xs-2'>$langVisits</th><th class='col-xs-2'>$langUsers</th></tr>";
         $q1 = Database::get()->queryArray("SELECT MONTH(day) AS month, YEAR(day) AS year, COUNT(*) AS visits, COUNT(DISTINCT user_id) AS users FROM actions_daily
                         WHERE (day BETWEEN '$u_date_start' AND '$u_date_end') AND course_id = ?d GROUP BY month,year ORDER BY year, month ASC", $_GET['c']);
         foreach ($q1 as $data) {
             $tool_content .= "<tr><td>$data->month-$data->year</td><td>$data->visits</td><td>$data->users</td></tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
 
         // visits per module per month
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='success'><th class='col-xs-6'>$langModule</th><th class='col-xs-2'>$langVisits</th><th class='col-xs-2'>$langUsers</th></tr>";
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>";
+        $tool_content .= "<tr class='list-header'><th class='col-xs-6'>$langModule</th><th class='col-xs-2'>$langVisits</th><th class='col-xs-2'>$langUsers</th></tr>";
         $q3 = Database::get()->queryArray("SELECT COUNT(*) AS cnt, module_id, COUNT(DISTINCT user_id) AS users FROM actions_daily
                         WHERE (day BETWEEN '$u_date_start' AND '$u_date_end') AND course_id = ?d
                         GROUP BY module_id", $_GET['c']);
@@ -142,7 +142,7 @@ if (isset($_GET['stats_submit'])) {
                 $tool_content .= "</tr>";
             }
         }
-        $tool_content .= "</table></div>";
+        $tool_content .= "</table></div></div>";
     } else {
         // courses list
         $tool_content .= "<div class='table-responsive'>";
@@ -158,7 +158,7 @@ if (isset($_GET['stats_submit'])) {
                                             AND hierarchy.id = course_department.department")->total;
         }
         $all = Database::get()->querySingle("SELECT COUNT(*) AS num_of_courses FROM course")->num_of_courses;
-        $tool_content .= "<h5 class='text-center'>$s $langCourses ($langFrom2 $all συνολικά στο $siteName)</h5>";
+        $tool_content .= "<div class='panel'><div class='panel-body'><p class='text-center'>$s $langCourses ($langFrom2 $all $langSumFrom $siteName)</p></div></div>h";
 
         // division info
         /*$tool_content .= "<table class='table table-striped table-bordered table-condensed'>";
@@ -169,12 +169,11 @@ if (isset($_GET['stats_submit'])) {
                 $tool_content .= "<tr><td>$f[name]</td><td>$division</td></tr>";
         }
         $tool_content .= "</table>"; */
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='success'><th class='col-xs-1'>$langActions</th>
-                                              <th class='col-xs-6'>$langCourse</th>
-                                              <th class='col-xs-1'>$langCode</th>
-                                              <th class='col-xs-3'>$langTeacher</th>
-                                              <th class='col-xs-1'>$langCreationDate</th>";
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>";
+        $tool_content .= "<tr class='list-header'><th class='col-xs-3'>$langCourse - $langCode</th>
+                                              <th class='col-xs-4'>$langTeacher</th>
+                                              <th class='col-xs-3'>$langCreationDate</th>
+                                              <th class='col-xs-1'>$langActions</th>";
         if (!empty($query)) {
             $sql = Database::get()->queryArray("SELECT course.id, course.code, visible, title, prof_names, DATE_FORMAT(created, '%d-%m-%Y %h:%m') AS creation_time
                                             FROM course, course_department, hierarchy
@@ -189,17 +188,16 @@ if (isset($_GET['stats_submit'])) {
                                     ORDER by creation_time DESC");
         }
         foreach ($sql as $data) {
-            $tool_content .= "<tr><td class='text-center'>" .
+            $tool_content .= "<tr>
+            <td><a href='$_SERVER[SCRIPT_NAME]?c=$data->id&amp;user_date_start=$user_date_start&amp;user_date_end=$user_date_end&amp;stats_submit=true'>$data->title</a><br/><small>($data->code)</small></td>
+            <td>$data->prof_names</td>
+            <td>$data->creation_time</td><td class='text-center'>" .
                 icon('fa-file-excel-o', "$langDumpUserDurationToFile ($langcsvenc1)", "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end&amp;enc=w") .
                 "&nbsp;&nbsp;" .
                 icon('fa-file-excel-o', "$langDumpUserDurationToFile ($langcsvenc2)", "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end") . "
-                            </td>&nbsp;
-            <td><a href='$_SERVER[SCRIPT_NAME]?c=$data->id&amp;user_date_start=$user_date_start&amp;user_date_end=$user_date_end&amp;stats_submit=true'>$data->title</a></td>
-            <td>$data->code</td>
-            <td>$data->prof_names</td>
-            <td>$data->creation_time</td></tr>";
+                            </td></tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
     }
     $tool_content .= "</div>";
 } else { // display form
