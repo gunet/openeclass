@@ -430,7 +430,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 floatval($course_data['dropbox_quota']),
                 intval($course_data[$restoreHelper->getField('course', 'glossary_expand')])
             );
-            if (isset($course_data['home_layout']) and isset($course_data['course_image'])) {
+            if (!isset($course_data['course_image'])) {
+                $course_data['course_image'] = null;
+            }
+            if (isset($course_data['home_layout'])) {
                 $upd_course_sql .= ', home_layout = ?d, course_image = ?s ';
                 $upd_course_args[] = $course_data['home_layout'];
                 $upd_course_args[] = $course_data['course_image'];
@@ -441,6 +444,12 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             }
             // handle course weekly if exists
             if (isset($course_data['view_type']) && isset($course_data['start_date']) && isset($course_data['finish_date'])) {
+                if ($course_data['start_date'] == '0000-00-00') {
+                    $course_data['start_date'] = null;
+                }
+                if ($course_data['finish_date'] == '0000-00-00') {
+                    $course_data['finish_date'] = null;
+                }
                 $upd_course_sql .= " , view_type = ?s, start_date = ?t, finish_date = ?t ";
                 array_push($upd_course_args,
                     $course_data['view_type'],
@@ -450,7 +459,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             }
             $upd_course_sql .= " WHERE id = ?d ";
             array_push($upd_course_args, intval($new_course_id));
-
             Database::get()->query($upd_course_sql, $upd_course_args);
         }
 
@@ -491,6 +499,13 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $urlAppend . 'courses/' . $new_course_code,
             $course_data['code'] =>
             $new_course_code);
+
+        // Update course description URLs if needed
+        $fixed_course_desc = strtr($course_desc, $url_prefix_map);
+        if ($fixed_course_desc != $course_desc) {
+            Database::get()->query('UPDATE course SET description = ?s WHERE id = ?d',
+                $fixed_course_desc, $new_course_id);
+        }
 
         if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_3X) {
             restore_table($restoreThis, 'course_module', array('set' => array('course_id' => $new_course_id), 'delete' => array('id')), $url_prefix_map, $backupData, $restoreHelper);
