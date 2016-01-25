@@ -75,7 +75,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_module` (
   UNIQUE KEY `module_course` (`module_id`,`course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS module_disable (
-    module_id int(11) NOT NULL PRIMARY KEY)");
+    module_id int(11) NOT NULL PRIMARY KEY) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) NOT NULL auto_increment,
@@ -314,7 +314,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `personal_calendar` (
         'course_videolink') DEFAULT NULL,
     `reference_obj_id` int(11) DEFAULT NULL,
     `reference_obj_course` int(11) DEFAULT NULL,
-    PRIMARY KEY (`id`))");
+    PRIMARY KEY (`id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `personal_calendar_settings` (
     `user_id` int(11) NOT NULL,
@@ -327,7 +327,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `personal_calendar_settings` (
     `show_course` bit(1) DEFAULT b'1',
     `show_deadline` bit(1) DEFAULT b'1',
     `show_admin` bit(1) DEFAULT b'1',
-    PRIMARY KEY (`user_id`))");
+    PRIMARY KEY (`user_id`)) $charset_spec");
 
 //create triggers
 $db->query("CREATE TRIGGER personal_calendar_settings_init
@@ -348,7 +348,7 @@ $db->query("CREATE TABLE `admin_calendar` (
     `email_notification` time DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `user_events` (`user_id`),
-    KEY `admin_events_dates` (`start`))");
+    KEY `admin_events_dates` (`start`)) $charset_spec");
 
 // table for loginout rollups
 // only contains LOGIN events summed up by a period (typically weekly)
@@ -1029,7 +1029,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
     `allow_user` boolean NOT NULL default false,
     `order_priority` int(11) default null,
     KEY `lftindex` (`lft`),
-    KEY `rgtindex` (`rgt`) )");
+    KEY `rgtindex` (`rgt`) ) $charset_spec");
 
 $db->query("INSERT INTO `hierarchy` (code, name, lft, rgt)
     VALUES ('', ?s, 1, 68)", $institutionForm);
@@ -1051,7 +1051,7 @@ $db->query("CREATE TABLE `course_department` (
     `department` INT(11) NOT NULL,
     UNIQUE KEY `cdep_unique` (`course`,`department`),
     FOREIGN KEY (`course`) REFERENCES `course` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`department`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE)");
+    FOREIGN KEY (`department`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE) $charset_spec");
 
 $db->query("CREATE TABLE `user_department` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1059,7 +1059,7 @@ $db->query("CREATE TABLE `user_department` (
     `department` INT(11) NOT NULL,
     UNIQUE KEY `udep_unique` (`user`,`department`),
     FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`department`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE)"); 
+    FOREIGN KEY (`department`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE) $charset_spec"); 
 
 // hierarchy stored procedures
 $db->query("DROP PROCEDURE IF EXISTS `add_node`");
@@ -1306,7 +1306,7 @@ $teacher_upload_whitelist = 'htm, html, js, css, xml, xsl, cpp, c, java, m, h, t
 $db->query("CREATE TABLE `config` (
     `key` VARCHAR(32) NOT NULL,
     `value` TEXT NOT NULL,
-    PRIMARY KEY (`key`))");
+    PRIMARY KEY (`key`)) $charset_spec");
 
 $default_config = array(
     'base_url', $urlForm,
@@ -1413,7 +1413,7 @@ $db->query("CREATE TABLE `actions_daily` (
     KEY `actionsdailyuserindex` (`user_id`),
     KEY `actionsdailydayindex` (`day`),
     KEY `actionsdailymoduleindex` (`module_id`),
-    KEY `actionsdailycourseindex` (`course_id`) )");
+    KEY `actionsdailycourseindex` (`course_id`) ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `actions_summary` (
     `id` int(11) NOT NULL auto_increment,
@@ -1423,7 +1423,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `actions_summary` (
     `end_date` datetime NOT NULL,
     `duration` int(11) NOT NULL,
     `course_id` INT(11) NOT NULL,
-    PRIMARY KEY (`id`))");
+    PRIMARY KEY (`id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `logins` (
     `id` int(11) NOT NULL auto_increment,
@@ -1431,32 +1431,32 @@ $db->query("CREATE TABLE IF NOT EXISTS `logins` (
     `ip` char(45) NOT NULL default '0.0.0.0',
     `date_time` datetime NOT NULL,
     `course_id` INT(11) NOT NULL,
-    PRIMARY KEY (`id`))");
+    PRIMARY KEY (`id`)) $charset_spec");
 
 // bbb_servers table
-$db->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
+$db->query("CREATE TABLE IF NOT EXISTS `bbb_servers` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `hostname` varchar(255) DEFAULT NULL,
     `ip` varchar(255) NOT NULL,
-    `enabled` enum("true","false") DEFAULT NULL,
+    `enabled` enum('true','false') DEFAULT NULL,
     `server_key` varchar(255) DEFAULT NULL,
     `api_url` varchar(255) DEFAULT NULL,
     `max_rooms` int(11) DEFAULT NULL,
     `max_users` int(11) DEFAULT NULL,
-    `enable_recordings` enum("true","false") DEFAULT NULL,
+    `enable_recordings` enum('true','false') DEFAULT NULL,
     `weight` int(11) DEFAULT NULL,
     PRIMARY KEY (`id`),
-    KEY `idx_bbb_servers` (`hostname`))');
+    KEY `idx_bbb_servers` (`hostname`)) $charset_spec");
 
 // bbb_sessions tables
-$db->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
+$db->query("CREATE TABLE IF NOT EXISTS `bbb_session` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) DEFAULT NULL,
     `title` varchar(255) DEFAULT NULL,
     `description` text,
     `start_date` datetime DEFAULT NULL,
-    `public` enum("0","1") DEFAULT NULL,
-    `active` enum("0","1") DEFAULT NULL,
+    `public` enum('0','1') DEFAULT NULL,
+    `active` enum('0','1') DEFAULT NULL,
     `running_at` int(11) DEFAULT NULL,
     `meeting_id` varchar(255) DEFAULT NULL,
     `mod_pw` varchar(255) DEFAULT NULL,
@@ -1464,15 +1464,15 @@ $db->query('CREATE TABLE IF NOT EXISTS `bbb_session` (
     `unlock_interval` int(11) DEFAULT NULL,
     `external_users` varchar(255) DEFAULT NULL,
     `participants` varchar(1000) DEFAULT NULL,
-    `record` enum("true","false") DEFAULT "false",
+    `record` enum('true','false') DEFAULT 'false',
     `sessionUsers` int(11) DEFAULT 0,
-    PRIMARY KEY (`id`))');
+    PRIMARY KEY (`id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_settings` (
     `setting_id` INT(11) NOT NULL,
     `course_id` INT(11) NOT NULL,
     `value` INT(11) NOT NULL DEFAULT 0,
-    PRIMARY KEY (`setting_id`, `course_id`))");
+    PRIMARY KEY (`setting_id`, `course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `gradebook` (
     `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1525,7 +1525,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `oai_metadata` (
     `oai_record` int(11) NOT NULL references oai_record(id),
     `field` varchar(255) NOT NULL,
     `value` text,
-    INDEX `field_index` (`field`))");
+    INDEX `field_index` (`field`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `note` (
     `id` int(11) NOT NULL auto_increment,
@@ -1585,21 +1585,21 @@ $db->query("CREATE TABLE IF NOT EXISTS `recyclebin` (
 // Auto-enroll rules tables
 $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_rule` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `status` TINYINT(4) NOT NULL DEFAULT 0)");
+    `status` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_rule_department` (
     `rule` INT(11) NOT NULL,
     `department` INT(11) NOT NULL,
     PRIMARY KEY (rule, department),
     FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
-    FOREIGN KEY (department) REFERENCES hierarchy(id) ON DELETE CASCADE)");
+    FOREIGN KEY (department) REFERENCES hierarchy(id) ON DELETE CASCADE) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_course` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `rule` INT(11) NOT NULL DEFAULT 0,
     `course_id` INT(11) NOT NULL,
     FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
-    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE)");
+    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_department` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1632,17 +1632,17 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
   PRIMARY KEY (`conf_id`)) $charset_spec");
 
 // om_servers table
-$db->query('CREATE TABLE IF NOT EXISTS `om_servers` (
+$db->query("CREATE TABLE IF NOT EXISTS `om_servers` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `hostname` varchar(255) DEFAULT NULL,
     `port` varchar(255) DEFAULT NULL,
-    `enabled` enum("true","false") DEFAULT NULL,
+    `enabled` enum('true','false') DEFAULT NULL,
     `username` varchar(255) DEFAULT NULL,
     `password` varchar(255) DEFAULT NULL,
     `module_key` int(11) DEFAULT NULL,
     `webapp` int(11) DEFAULT NULL,
     PRIMARY KEY (`id`),
-    KEY `idx_om_servers` (`hostname`))');
+    KEY `idx_om_servers` (`hostname`)) $charset_spec");
 
 $_SESSION['theme'] = 'default';
 $webDir = '..';
