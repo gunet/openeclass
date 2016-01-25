@@ -809,9 +809,9 @@ function bbb_session_details() {
                          <div class='table-responsive'>
                            <table class='table-default'>
                              <tr class='list-header'>
-                               <th class='text-center'>$langTitle</th>
-                               <th class='text-center'>$langNewBBBSessionStart</th>
-                               <th class='text-center'>$langParticipants</th>
+                               <th class='col-xs-6 text-center'>$langTitle</th>
+                               <th class='col-xs-2 text-center'>$langNewBBBSessionStart</th>
+                               <th class='col-xs-4 text-center'>$langParticipants</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
 

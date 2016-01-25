@@ -300,7 +300,7 @@ if ($displayAnnouncementList == true) {
     $bottomAnnouncement = $announcementNumber = count($result);    
     if ($announcementNumber > 0) {
         $tool_content .= "<div class='table-responsive'><table class='table-default'>
-                        <tr><th>$langTitle</th>
+                        <tr class='list-header'><th>$langTitle</th>
                             <th>$langAnnouncement</th>
                             <th colspan='2'><div align='center'>" . icon('fa-gears') . "</th>";
         foreach ($result as $myrow) {
