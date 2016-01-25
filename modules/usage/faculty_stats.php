@@ -158,7 +158,7 @@ if (isset($_GET['stats_submit'])) {
                                             AND hierarchy.id = course_department.department")->total;
         }
         $all = Database::get()->querySingle("SELECT COUNT(*) AS num_of_courses FROM course")->num_of_courses;
-        $tool_content .= "<div class='panel'><div class='panel-body'><p class='text-center'>$s $langCourses ($langFrom2 $all $langSumFrom $siteName)</p></div></div>h";
+        $tool_content .= "<div class='panel'><div class='panel-body'><p class='text-center'>$s $langCourses ($langFrom2 $all $langSumFrom $siteName)</p></div></div>";
 
         // division info
         /*$tool_content .= "<table class='table table-striped table-bordered table-condensed'>";
@@ -191,10 +191,17 @@ if (isset($_GET['stats_submit'])) {
             $tool_content .= "<tr>
             <td><a href='$_SERVER[SCRIPT_NAME]?c=$data->id&amp;user_date_start=$user_date_start&amp;user_date_end=$user_date_end&amp;stats_submit=true'>$data->title</a><br/><small>($data->code)</small></td>
             <td>$data->prof_names</td>
-            <td>$data->creation_time</td><td class='text-center'>" .
-                icon('fa-file-excel-o', "$langDumpUserDurationToFile ($langcsvenc1)", "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end&amp;enc=w") .
-                "&nbsp;&nbsp;" .
-                icon('fa-file-excel-o', "$langDumpUserDurationToFile ($langcsvenc2)", "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end") . "
+            <td>$data->creation_time</td><td class='text-center'>". action_button(array(
+                    array('title' => $langcsvenc1,
+                        'url' => "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end&amp;enc=w",
+                        'icon' => 'fa-file-excel-o'),
+                    array('title' => $langcsvenc2,
+                        'url' => "faculty_stats_csv.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end",
+                        'icon' => 'fa-file-excel-o')
+                    ),
+
+                    array(
+                        'secondary_icon' => 'fa-download'))  ."
                             </td></tr>";
         }
         $tool_content .= "</table></div>";
