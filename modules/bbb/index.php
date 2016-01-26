@@ -167,15 +167,17 @@ elseif(isset($_GET['choice']))
             break;
         case 'do_join':
             #check if there is any record-capable bbb server. Otherwise notify users
-            if($_GET['record']=='true' && Database::get()->querySingle("SELECT count(*) count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
-            {
-                $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";
-                break;
-            }
-            if (bbb_session_running($_GET['meeting_id']) == false)
-            {
-                $mod_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;                
-                create_meeting($_GET['title'],$_GET['meeting_id'],$mod_pw,$_GET['att_pw'],$_GET['record']);
+            if (isset($_GET['record'])) {
+                if($_GET['record']=='true' && Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
+                {
+                    $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";
+                    break;
+                }            
+                if (bbb_session_running($_GET['meeting_id']) == false)
+                {
+                    $mod_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;                
+                    create_meeting($_GET['title'],$_GET['meeting_id'],$mod_pw,$_GET['att_pw'],$_GET['record']);
+                }
             }
             if(isset($_GET['mod_pw'])) {
                 header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
