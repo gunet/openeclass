@@ -283,6 +283,10 @@ class Log {
                 break;
             case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
                 break;
+            case MODULE_ID_GRADEBOOK: $content = $this->gradebook_action_details($details);
+                break;
+            case MODULE_ID_ATTENDANCE: $content = $this->attendance_action_details($details);
+                break;
             default: $content = $langUnknownModule;
                 break;
         }
@@ -947,7 +951,30 @@ class Log {
 
         return $content;
     }
+    
+    /**
+     * display action details in gradebooks
 
+     * @global type $langLinkName
+     * @param type $details
+     * @return string
+     */
+    private function gradebook_action_details($details){
+        $content = unserialize($details);
+        return $details;
+    }
+    
+
+
+   /**
+     * display action details in attendance module
+     * @param type $details
+     * @return string
+     */
+    private function attendance_action_details($details){
+        
+    }
+    
     /**
      * @global type $langInsert
      * @global type $langModify
@@ -959,7 +986,7 @@ class Log {
      * @param type $action_type
      * @return type (real action names)
      */
-    private function get_action_names($action_type) {
+    public function get_action_names($action_type) {
 
         global $langInsert, $langModify, $langDelete, $langModProfile, $langLoginFailures,
         $langFinalize, $langCourseDel, $langModifyInfo, $langUnregUsers, $langUnknownAction;
