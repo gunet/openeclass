@@ -4537,7 +4537,7 @@ $langBBBMinutesBefore = "λεπτά νωρίτερα από την προγρα�
 $langBBBScheduledSession = "Προγραμματισμός τηλεσυνεργασίας";
 $langBBBScheduleSessionInfo = "Η τηλεσυνεργασία με τίτλο ";
 $langBBBScheduleSessionInfo2 = "προγραμματίστηκε για τις ";
-$langBBBScheduleSessionInfoJoin = "Συνδεθείτε για να την παρακολουθήσετε κάνοντας κλικ εδώ ";
+$langBBBScheduleSessionInfoJoin = "Συνδεθείτε για να την παρακολουθήσετε κάνοντας κλικ παρακάτω ";
 
 $langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον εκπαιδευτή του $langsOfCourse.";
 $langBBBNotServerAvailableTeacher = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
