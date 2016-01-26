@@ -65,28 +65,39 @@ foreach (array('title', 'lang_admin_ann') as $var) {
     }
 }
 
-if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {    
-        if (isset($_GET['addAnnounce'])) {
-            $pageName = $langAdminAddAnn;
-        } else {
-            $pageName = $langAdminModifAnn;
-        }
-        $tool_content .= action_bar(array(
-                    array('title' => $langBack,
-                        'url' => $_SERVER['SCRIPT_NAME'],
-                        'icon' => 'fa-reply',
-                        'level' => 'primary-label')
-                    ));
+$sql_where = '';
+if (isset($_GET['aid'])) {
+    $sql_where = " WHERE id = $_GET[aid]";
+}
+
+if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
+    if (isset($_GET['addAnnounce'])) {
+        $pageName = $langAdminAddAnn;
     } else {
-        $tool_content .= action_bar(array(
-                array('title' => $langAdminAddAnn,
-                    'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
-                    'icon' => 'fa-plus-circle',
-                    'level' => 'primary-label',
-                    'button-class' => 'btn-success')
-                ));
-        
+        $pageName = $langAdminModifAnn;
     }
+    $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => $_SERVER['SCRIPT_NAME'],
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+                ));
+} elseif (!empty($sql_where)) {
+    $tool_content .= action_bar(array(
+        array('title' => $langAdminAn,
+            'url' => $_SERVER['SCRIPT_NAME'],            
+            'level' => 'primary-label',
+            'button-class' => 'btn-success')
+        ));        
+} else {
+    $tool_content .= action_bar(array(
+        array('title' => $langAdminAddAnn,
+            'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success')
+        ));
+}
 
 // modify visibility
 if (isset($_GET['vis'])) {
@@ -297,8 +308,8 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
 }
 
 // display admin announcements
-if ($displayAnnouncementList == true) {
-    $result = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");    
+if ($displayAnnouncementList == true) {    
+    $result = Database::get()->queryArray("SELECT * FROM admin_announcement $sql_where ORDER BY `order` DESC");
     $bottomAnnouncement = $announcementNumber = count($result);    
     if ($announcementNumber > 0) {
         $tool_content .= "<div class='table-responsive'><table class='table-default'>
@@ -314,10 +325,15 @@ if ($displayAnnouncementList == true) {
                 $classvis = 'not_visible';
             }
             $myrow->date = claro_format_locale_date($dateFormatLong, strtotime($myrow->date));
-            $tool_content .= "<tr class='$classvis'>
-                <td width='200'><b>" . q($myrow->title) . "</b><br><span class='smaller'>" . q($myrow->date) . "</span></td>
-                <td>" . standard_text_escape($myrow->body) . "</td>
-                <td width='6'>" .
+            $tool_content .= "<tr class='$classvis'>";
+            if (empty($sql_where)) {
+                $tool_content .= "<td width='200'><b><a href='$_SERVER[SCRIPT_NAME]?aid=$myrow->id'>" . q($myrow->title) . "</a></b><br><span class='smaller'>" . q($myrow->date) . "</span></td>
+                    <td>" . ellipsize_html(standard_text_escape($myrow->body), 100) . "</td>";
+            } else {
+                $tool_content .= "<td width='200'><b>" . q($myrow->title) . "</a></b><br><span class='smaller'>" . q($myrow->date) . "</span></td>
+                    <td>" . standard_text_escape($myrow->body) . "</td>";
+            }
+            $tool_content .= "<td width='6'>" .
                     action_button(array(
                         array('title' => $langEditChange,
                             'url' => "$_SERVER[SCRIPT_NAME]?modify=" . getIndirectReference($myrow->id),
