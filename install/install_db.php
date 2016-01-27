@@ -1044,8 +1044,8 @@ $db->query("CREATE TABLE `user_department` (
 
 // hierarchy stored procedures
 $db->query("DROP PROCEDURE IF EXISTS `add_node`");
-$db->query("CREATE PROCEDURE `add_node` (IN name TEXT, IN parentlft INT(11),
-            IN p_code VARCHAR(20), IN p_allow_course BOOLEAN,
+$db->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN parentlft INT(11),
+            IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
             IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
         LANGUAGE SQL
         BEGIN
@@ -1060,8 +1060,8 @@ $db->query("CREATE PROCEDURE `add_node` (IN name TEXT, IN parentlft INT(11),
         END");
 
 $db->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-$db->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT, IN parentlft INT(11),
-            IN p_code VARCHAR(20), IN p_number INT(11), IN p_generator INT(11),
+$db->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT CHARSET utf8, IN parentlft INT(11),
+            IN p_code VARCHAR(20) CHARSET utf8, IN p_number INT(11), IN p_generator INT(11),
             IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
         LANGUAGE SQL
         BEGIN
@@ -1076,9 +1076,9 @@ $db->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT, IN parentlft INT(11),
         END");
 
 $db->query("DROP PROCEDURE IF EXISTS `update_node`");
-$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT,
+$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8,
             IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-            IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+            IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
         LANGUAGE SQL
         BEGIN
             UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
