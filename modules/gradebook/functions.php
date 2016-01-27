@@ -451,7 +451,7 @@ function user_gradebook_settings() {
     $head_content .= "
     <script type='text/javascript'>
     $(function() {
-            $('#startdatepicker, #enddatepicker').datetimepicker({    
+            $('#UsersStart, #UsersEnd').datetimepicker({    
                 format: 'dd-mm-yyyy hh:ii', 
                 pickerPosition: 'bottom-left', 
                 language: '".$language."',
