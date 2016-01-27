@@ -151,23 +151,23 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
               'btn_class' => 'delete_btn btn-default'
             ),
             array(
-                'title' => $myrow->tutor == '0' ? $langGiveRightTutor : $langRemoveRightTutor,
+                'title' => $langGiveRightTutor,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->tutor == '0' ? "give" : "remove")."Tutor=". getIndirectReference($myrow->id),
-                'icon' => $myrow->tutor == '0' ? "fa-plus-square" : "fa-minus-square"
+                'icon' => $myrow->tutor == '0' ? "fa-square-o" : "fa-check-square-o"
             ),
             array(
-                'title' => $myrow->editor == '0' ? $langGiveRightEditor : $langRemoveRightEditor,
+                'title' => $langGiveRightEditor,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=". getIndirectReference($myrow->id),
-                'icon' => $myrow->editor == '0' ? "fa-plus-square" : "fa-minus-square"
+                'icon' => $myrow->editor == '0' ? "fa-square-o" : "fa-check-square-o"
             ),            
             array(
-                'title' => $myrow->status != '1' ? $langGiveRightAdmin : $langRemoveRightAdmin,
+                'title' => $langGiveRightAdmin,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->status == '1' ? "remove" : "give")."Admin=". getIndirectReference($myrow->id),
-                'icon' => $myrow->status != '1' ? "fa-plus-square" : "fa-minus-square",
+                'icon' => $myrow->status != '1' ? "fa-square-o" : "fa-check-square-o",
                 'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1')
             ),
             array(
-                'title' => $myrow->reviewer != '1' ? $langGiveRightReviewer : $langRemoveRightReviewer,
+                'title' => $langGiveRightReviewer,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->reviewer == '1' ? "remove" : "give")."Reviewer=". getIndirectReference($myrow->id),
                 'icon' => $myrow->reviewer != '1' ? "fa-square-o" : "fa-check-square-o",
                 'disabled' => $myrow->id == $_SESSION["uid"],
