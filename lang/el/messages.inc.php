@@ -4845,6 +4845,9 @@ $langEPFNoCats = 'Δεν υπάρχουν κατηγορίες πεδίων e-po
 $langEPFNewField = 'Προσθήκη πεδίου e-portfolio';
 $langEPFConfirmCatDelete = 'Διαγράφοντας αυτή την κατηγορία θα διαγραφούν και τα πεδία του e-portfolio που ανήκουν σε αυτή, καθώς και τα αντίστοιχα δεδομένα από το e-portfolio των χρηστών. Είστε σίγουροι ότι θέλετε να προχωρήσετε στη διαγραφή;';
 $langEPFConfirmFieldDelete = 'Διαγράφοντας αυτό το πεδίο θα διαγραφούν και τα αντίστοιχα δεδομένα από το e-portfolio των χρηστών. Είστε σίγουροι ότι θέλετε να προχωρήσετε στη διαγραφή;';
+$langMyePortfolio = 'Το e-portfolio μου';
+$langEditePortfolio = 'Επεξεργασία του e-portfolio';
+$langUserePortfolio = 'e-portfolio χρήστη';
 
 /* * ******************************************
   Widgets
