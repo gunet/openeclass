@@ -1542,7 +1542,13 @@ function add_gradebook_other_activity($gradebook_id) {
                             if ($modifyActivity) {
                                 $titleToModify = $modifyActivity->title;
                                 $contentToModify = $modifyActivity->description;
-                                $date = Session::has('date') ? Session::get('date') : $modifyActivity->date;
+                                if (is_null($modifyActivity->date) or strpos($modifyActivity->date, '0000-00-00') !== false) {
+                                    $oldDate = new DateTime();
+                                } else {
+                                    $oldDate = DateTime::createFromFormat('Y-m-d H:i:s', $modifyActivity->date);
+                                }
+                                $date = Session::has('date') ? Session::get('date') :
+                                    $oldDate->format('d-m-Y H:i:s');
                                 $module_auto_id = $modifyActivity->module_auto_id;
                                 $auto = $modifyActivity->auto;
                                 $weight = Session::has('weight') ? Session::get('title') : $modifyActivity->weight;
@@ -1553,9 +1559,9 @@ function add_gradebook_other_activity($gradebook_id) {
                             }
                             $gradebookActivityToModify = $id;
                         } else { //new activity
-                            $gradebookActivityToModify = "";
-                            $activity_type = "";
-                            $date = date("Y-n-j", time());
+                            $gradebookActivityToModify = '';
+                            $activity_type = '';
+                            $date = date('d-m-Y H:i:s', time());
                             $visible = 1;
                         }
 
