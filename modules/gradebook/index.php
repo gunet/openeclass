@@ -479,7 +479,8 @@ if ($is_editor) {
             $auto = isset($_POST['auto']) ? 1 : 0;
             $weight = $_POST['weight'];
             $type = $_POST['activity_type'];
-            $actDate = !empty($_POST['date']) ? $_POST['date'] : NULL;
+            $actDate = empty($_POST['date']) ? NULL :
+                DateTime::createFromFormat('d-m-Y H:i', $_POST['date'])->format('Y-m-d H:i');
             $visible = isset($_POST['visible']) ? 1 : 0;
 
             if ($_POST['id']) {               
