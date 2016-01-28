@@ -3195,10 +3195,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 update_shibboleth_endpoint($shib_config);
             }
         }
+    }
     
-       
+    // -----------------------------------
+    // upgrade queries for 3.4
+    // -----------------------------------
     if (version_compare($oldversion, '3.4', '<')) {
-        //wall tables
+        updateInfo(-1, sprintf($langUpgForVersion, '3.4'));
+
+        // wall tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `wall_post` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `course_id` INT(11) NOT NULL,
@@ -3262,7 +3267,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             SELECT ?d, 0, id FROM course', MODULE_ID_MINDMAP);
     
     }
-
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
