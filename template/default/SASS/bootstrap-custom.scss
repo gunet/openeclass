@@ -1438,15 +1438,12 @@ td.option-btn-cell{
 }
 .not_visible{
     color: rgba(3,3,3,0.3) !important;
-    font-style: italic;
 }
 tr.not_visible{
     td:not(:last-child){
         color: rgba(3,3,3,0.3);
-        font-style: italic;
         a{
             color: rgba(3,3,3,0.3);
-            font-style: italic;
         }
     }
 }
@@ -3153,4 +3150,18 @@ a.btn, button{
 }
 .in_table_sh{
     font-size: 14px;
+}
+.table_td{
+    padding: 5px;
+}
+.table_td_header{
+    font-family: Roboto, sans-serif;
+    font-size: larger;
+    padding-bottom: 10px;
+  /*white-space: nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;*/
+}
+.table_td_body{
+    padding-top: 5px;
 }

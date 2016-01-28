@@ -285,7 +285,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
             </div>
         </div>";
 
-    $announceArr = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
+    $announceArr = Database::get()->queryArray("SELECT `id`, `date`, `begin`, `title`, `body`, `order` FROM `admin_announcement`
                                                 WHERE `visible` = 1
                                                         AND lang=?s
                                                         AND (`begin` <= NOW() or `begin` IS null)
@@ -298,11 +298,16 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         $numOfAnnouncements = sizeof($announceArr);
         for ($i = 0; $i < $numOfAnnouncements; $i++) {
             $aid = $announceArr[$i]->id;
+            if (!is_null($announceArr[$i]->date) && ($announceArr[$i]->date <= $announceArr[$i]->begin) ) {
+                $ann_date = $announceArr[$i]->begin;
+            } else {
+                $ann_date = $announceArr[$i]->date;
+            }
             $ann_content .= "
                     <li>
                     <div><a class='announcement-title' href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a></div>
-                    <span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . " -</span>
-            " . standard_text_escape(ellipsize_html("<div class='announcement-main'>".$announceArr[$i]->body."</div>", 500, "<div class='announcements-more'><a href='modules/announcements/main_ann.php?aid=$aid'>$langMore &hellip;</a></div>"))."</li>";
+                    <span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($ann_date)) . " -</span>
+            " . standard_text_escape(ellipsize_html("<div class='announcement-main'>".$announceArr[$i]->body."</div>", 200, "<div class='announcements-more'><a href='modules/announcements/main_ann.php?aid=$aid'>$langMore &hellip;</a></div>"))."</li>";
         }
     }
 

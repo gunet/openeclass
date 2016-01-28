@@ -699,7 +699,7 @@ function bbb_session_details() {
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
                     <td class='text-left'>
                         <div class='in_table_h'>$joinLink</div>
-                        <div class='trunk8'>$desc</div>
+                        <span class='trunk8'>$desc</span>
                     </td>
                     <td class='text-center'>$timeLabel</td>
                     <td >$participants</td>
