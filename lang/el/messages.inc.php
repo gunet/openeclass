@@ -429,7 +429,7 @@ $langUserMoved = 'Ο λογαριασμός "%s" μεταφέρθηκε.';
 $langUserMoveError = 'Σφάλμα μεταφοράς λογαριασμού "%s".';
 $langActivateMonths = 'Μήνες επέκτασης διάρκειας λογαριασμών';
 $langMultiRegUser = 'Μαζική δημιουργία λογαριασμών χρηστών';
-$langMultiRegCourseUser = 'Μαζική εγγραφή χρηστών σε $langsCourses';
+$langMultiRegCourseUser = "Μαζική εγγραφή χρηστών σε $langsCourses";
 $langMultiMoveCourses = "Μαζική μεταφορά $langsOfCourses";
 $langConfirmMultiMoveCourses = "Επιβεβαίωση μεταφοράς $langsOfCourses σε άλλο τμήμα.";
 $langCourseCodes = "Κωδικοί $langsOfCourses";
@@ -455,7 +455,7 @@ e-mail είναι προαιρετικό - αν θέλετε να το παρα�
 χρήστη των χρηστών, θα πάρουν αυτόματα ονόματα χρήστη αποτελούμενα από το
 πρόθεμα που μπορείτε να ορίσετε παρακάτω και έναν αύξοντα αριθμό. Αν δεν ορίσετε
 το password, ορίζεται αυτόματα ένας τυχαίος κωδικός διαφορετικός για κάθε λογαριασμό</p>";
-$langMultiRegCourseInvalid = 'Χρήστης %s: μη έγκυρος κωδικός $langsOfCourse «%s»';
+$langMultiRegCourseInvalid = "Χρήστης %s: μη έγκυρος κωδικός $langsOfCourse «%s»";
 $langMultiRegFields = 'Ορισμός των πεδίων ή της σειράς τους';
 $langMultiRegFieldError = 'Σφάλμα! Μη επιτρεπτή ετικέτα πεδίου:';
 $langMultiRegUsernameError = 'Το όνομα χρήστη υπάρχει ήδη.';
@@ -867,8 +867,10 @@ $langCopyrightNotice = '
 href="http://download.eclass.gunet.gr" target="_blank">διανέμεται ελεύθερα</a>
 ως Λογισμικό Ανοικτού Κώδικα σύμφωνα με τη γενική δημόσια άδεια GNU General
 Public License (GNU GPL).<br><br>
-Το περιεχόμενο των ηλεκτρονικών $langsOfCourses που φιλοξενεί η πλατφόρμα ' . $siteName . ', καθώς και τα πνευματικά δικαιώματα του υλικού αυτού, ανήκουν στους συγγραφείς τους και το GUnet δεν διεκδικεί δικαιώματα σε αυτό. Για οποιαδήποτε χρήση ή αναδημοσίευση του περιεχομένου παρακαλούμε επικοινωνήστε με τους υπεύθυνους των αντίστοιχων $langsOfCourses.
-';
+Το περιεχόμενο των ηλεκτρονικών ' . $langsOfCourses . ' που φιλοξενεί η πλατφόρμα ' . $siteName . ', 
+καθώς και τα πνευματικά δικαιώματα του υλικού αυτού, ανήκουν στους συγγραφείς τους 
+και το GUnet δεν διεκδικεί δικαιώματα σε αυτό. Για οποιαδήποτε χρήση ή αναδημοσίευση του περιεχομένου 
+παρακαλούμε επικοινωνήστε με τους υπεύθυνους των αντίστοιχων ' . $langsOfCourses . '';
 $langUsageTerms = 'Όροι Χρήσης';
 
 /* * *****************************************************
@@ -916,10 +918,10 @@ $langRefernce = "Αναφορά";
 $langCitation = "Βιβλιογραφική αναφορά $langsOfCourse";
 $langAccessed = "Ανακτήθηκε την ";
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του $langsOfCourse μέσω email.";
-$langCourseInvalidDepartment = 'Το $langsCourse βρίσκεται σε τμήμα όπου δεν
-    επιτρέπεται πλέον η δημιουργία $langsOfCourses.';
-$langCourseInvalidDepartmentPrompt = 'Παρακαλούμε %sμεταφέρετέ το
-    μέσω των ρυθμίσεων $langsOfCourse%s.';
+$langCourseInvalidDepartment = "Το $langsCourse βρίσκεται σε τμήμα όπου δεν
+    επιτρέπεται πλέον η δημιουργία $langsOfCourses.";
+$langCourseInvalidDepartmentPrompt = "Παρακαλούμε %s μεταφέρετέ το
+    μέσω των ρυθμίσεων $langsOfCourse %s.";
 $langReadMore = "Περισσότερα";
 $langReadLess = "Λιγότερα";
 $langNoInfoAvailable = "Δεν υπάρχουν διαθέσιμες πληροφορίες";
