@@ -27,6 +27,7 @@ require_once 'include/lib/forcedownload.php';
 require_once 'include/course_settings.php';
 require_once 'modules/db/recycle.php';
 require_once 'modules/db/foreignkeys.php';
+require_once 'modules/auth/auth.inc.php';
 require_once 'upgradeHelper.php';
 
 stop_output_buffering();
@@ -3171,6 +3172,21 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('poll', 'public')) {
             Database::get()->query("ALTER TABLE `poll` ADD `public` TINYINT(1) NOT NULL DEFAULT 1 AFTER `active`");
             Database::get()->query("UPDATE `poll` SET `public` = 0");
+        }
+
+        // If Shibboleth auth is enabled, try reading current settings and
+        // regenerate secure index if successful
+        if (Database::get()->querySingle('SELECT auth_default FROM auth
+                WHERE auth_name = ?s', 'shibboleth')->auth_default) {
+            $secureIndexPath = $webDir . '/secure/index.php';
+            $shib_vars = get_shibboleth_vars($secureIndexPath);
+            if (count($shib_vars) and isset($shib_vars['uname'])) {
+                $shib_config = array();
+                foreach ($shib_vars as $shib_var => $shib_value) {
+                    $shib_config['shib_' . $shib_var] = $shib_value;
+                }
+                update_shibboleth_endpoint($shib_config);
+            }
         }
     }
 

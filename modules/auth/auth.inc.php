@@ -1043,6 +1043,12 @@ function shib_cas_login($type) {
         foreach ($_SESSION['cas_attributes'] as $name => $value) {
             $attributes[strtolower($name)] = $value;
         }
+        unset($_SESSION['cas_attributes']);
+    } elseif (isset($_SESSION['shib_attributes'])) {
+        foreach ($_SESSION['shib_attributes'] as $name => $value) {
+            $attributes[strtolower($name)] = $value;
+        }
+        unset($_SESSION['shib_attributes']);
     }
 
     // user is authenticated, now let's see if he is registered also in db
@@ -1318,6 +1324,7 @@ session_start();
         }
     }
     $filecontents .= '
+$_SESSION["shib_attributes"] = $_SERVER;
 if (isset($_GET["reg"])) {
     header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["p"]? "?p=1": ""));
 } else {
@@ -1343,4 +1350,26 @@ if (isset($_GET["reg"])) {
         Session::Messages("Warning: unable to delete obsolete $indexregfile", 'alert-warning');
     }
     return true;
+}
+
+function get_shibboleth_vars($file) {
+    $shib_vars = array(
+        'uname' => '',
+        'email' => '',
+        'cn' => '',
+        'surname' => '',
+        'givenname' => '',
+        'studentid' => '');
+
+    if (is_readable($file)) {
+        $shib_index = file_get_contents($file);
+        while (preg_match('/\[[^]]*shib_(\w+)[^=]+=\s*@?([^;]+)\s*;/', $shib_index, $matches)) {
+            $shib_vars[$matches[1]] = $matches[2];
+            $shib_index = substr($shib_index, strlen($matches[0]));
+        }
+    }
+    if (isset($shib_vars['shib_nom']) and !isset($shib_vars['shib_cn'])) {
+        $shib_vars['shib_cn'] = $shib_vars['shib_nom'];
+    }
+    return $shib_vars;
 }

@@ -123,7 +123,7 @@ if (!isset($_SESSION['was_validated']) or
             // try to authenticate user
             $auth_method_settings = get_auth_settings($auth);
             if ($auth == 6) {
-                redirect_to_home_page('secure/index_reg.php' . ($prof ? '?p=1' : ''));
+                redirect_to_home_page('secure/index.php?reg=1' . ($prof ? '&p=1' : ''));
             }
             $is_valid = auth_user_login($auth, $uname, $passwd, $auth_method_settings);
         }
