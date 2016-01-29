@@ -33,14 +33,14 @@ if (preg_match('|/courses/([a-zA-Z_-]*\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $m
 	$dbname = $matches[1];
     @mkdir('courses/' . $dbname);
 	if (!@chdir('courses/' . $dbname)) {
-		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-<html><head>
-<title>404 Not Found</title>
-</head><body>
-<h1>Not Found</h1>
-<p>The requested URL ',$_SERVER['REQUEST_URI'],' was not found on this server.</p>
-</body></html>
-';
+		echo '  <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+                <html><head>
+                <title>404 Not Found</title>
+                </head><body>
+                <h1>Not Found</h1>
+                <p>The requested URL ',$_SERVER['REQUEST_URI'],' was not found on this server.</p>
+                </body></html>
+                ';
 		exit;
 	}
 	$_SESSION['dbname'] = $dbname;
@@ -58,6 +58,8 @@ require_once 'include/sendMail.inc.php';
 
 // unset system that records visitor only once by course for statistics
 require_once 'include/action.php';
+
+load_js('trunk8');
 if (isset($dbname)) {
     $action = new action();
     $action->record('MODULE_ID_UNITS', 'exit');
@@ -150,6 +152,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     header("Location: {$urlServer}main/portfolio.php");
 } else {
     // check authentication methods
+    $aid = null;
     $hybridLinkId = null;
     $hybridProviders = array();
     $authLink = array();
@@ -221,6 +224,12 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
             }).mouseup(function () {
                 $('#pass').attr('type', 'password');
             })
+        });
+        $(document).ready(function(){
+            $('.announcement-main').trunk8({
+                lines: '2',
+                fill: '&hellip;<div class=\'announcements-more\'><a href=\'modules/announcements/main_ann.php?aid=\'>$langMore</a></div>'
+            });
         });
       </script>
       <link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='{$urlServer}rss.php'>";
@@ -298,7 +307,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         $numOfAnnouncements = sizeof($announceArr);
         for ($i = 0; $i < $numOfAnnouncements; $i++) {
             $aid = $announceArr[$i]->id;
-            if (!is_null($announceArr[$i]->date) && ($announceArr[$i]->date <= $announceArr[$i]->begin) ) {
+            if (!is_null($announceArr[$i]->begin) && ($announceArr[$i]->date <= $announceArr[$i]->begin) ) {
                 $ann_date = $announceArr[$i]->begin;
             } else {
                 $ann_date = $announceArr[$i]->date;
@@ -307,7 +316,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     <li>
                     <div><a class='announcement-title' href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a></div>
                     <span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($ann_date)) . " -</span>
-            " . standard_text_escape(ellipsize_html("<div class='announcement-main'>".$announceArr[$i]->body."</div>", 200, "<div class='announcements-more'><a href='modules/announcements/main_ann.php?aid=$aid'>$langMore &hellip;</a></div>"))."</li>";
+                    <div class='announcement-main' data-id='$aid'>".$announceArr[$i]->body."</div>";
         }
     }
 

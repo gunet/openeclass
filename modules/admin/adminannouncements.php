@@ -43,14 +43,41 @@ hContent;
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function () {
-            $('.input-group-addon input[type=checkbox]').on('click', function(){
-            var prop = $(this).parents('.input-group').children('input').prop('disabled');
-            if(prop){
-                $(this).parents('.input-group').children('input').prop('disabled', false);
-            } else {
-                $(this).parents('.input-group').children('input').prop('disabled', true);
-            }
+            $('.table_td_body').trunk8({
+                lines: '3',
+                fill: '&hellip;<div class=\'clearfix\'></div><div style=\'float:right;\'>Read More</div>'
             });
+
+            $('.table_td_header').trunk8({
+                lines: '2',
+                fill: '&hellip;'
+            });
+
+            if ( $('#submitAnnouncement').length > 0 ) {
+
+            $('input[type=checkbox]').eq(0).prop('checked') ? $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
+            $('input[type=checkbox]').eq(1).prop('checked') ? $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', true);
+
+                $('input[type=checkbox]').eq(0).on('click', function() {
+                    if ($('input[type=checkbox]').eq(0).prop('checked')) {
+                        $('input[type=checkbox]').eq(1).prop('disabled', false);
+                    } else {
+                        $('input[type=checkbox]').eq(1).prop('disabled', true);
+                        $('input[type=checkbox]').eq(1).prop('checked', false);
+                        $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', true);
+                    }
+                });
+
+
+                $('.input-group-addon input[type=checkbox]').on('click', function(){
+                var prop = $(this).parents('.input-group').children('input').prop('disabled');
+                    if(prop){
+                        $(this).parents('.input-group').children('input').prop('disabled', false);
+                    } else {
+                        $(this).parents('.input-group').children('input').prop('disabled', true);
+                    }
+                });
+            }
         });
         $(function() {
             $('#startdate, #enddate').datetimepicker({
@@ -243,7 +270,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                 <div class='col-sm-10'>
                     <div class='input-group'>
                         <span class='input-group-addon'>
-                            <input type='checkbox' name='startdate_active'>
+                            <input type='checkbox' name='startdate_active' $start_checkbox>
                         </span>
                         <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "' disabled>
                     </div>
@@ -254,7 +281,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                 <div class='col-sm-10'>
                     <div class='input-group'>
                         <span class='input-group-addon'>
-                            <input type='checkbox' name='enddate_active'>
+                            <input type='checkbox' name='enddate_active' $end_checkbox disabled>
                         </span>
                         <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "' disabled>
                     </div>
@@ -271,7 +298,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             </div>
             <div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>
-                    <input class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'>
+                    <input id='submitAnnouncement' class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'>
                 </div>
             </div>
             ". generate_csrf_token_form_field() ."
