@@ -53,8 +53,7 @@ function display_user_grades($gradebook_id) {
            $langGradebookAutoGrade, $langGradebookΝοAutoGrade, $langGradebookActAttend,
            $langGradebookOutRange, $langGradebookUpToDegree, $langGradeNoBookAlert, $langGradebookGrade;
 
-    $gradebook_range = get_gradebook_range($gradebook_id);
-
+    $gradebook_range = get_gradebook_range($gradebook_id);    
     if(weightleft($gradebook_id, 0) == 0) {
         $userID = intval($_GET['book']); //user
         //check if there are booking records for the user, otherwise alert message for first input
@@ -91,13 +90,13 @@ function display_user_grades($gradebook_id) {
                     } else {
                         $qusergrade = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $activity->id, $userID);
                         if ($qusergrade) {
-                            $userGrade = $qusergrade->grade;
+                            $userGrade = $qusergrade->grade * $gradebook_range;
                         }
                     }
                 } else {
                     $qusergrade = Database::get()->querySingle("SELECT grade FROM gradebook_book  WHERE gradebook_activity_id = ?d AND uid = ?d", $activity->id, $userID);
                     if ($qusergrade) {
-                        $userGrade = $qusergrade->grade;
+                        $userGrade = $qusergrade->grade * $gradebook_range;
                     }
                 }
 
@@ -130,12 +129,13 @@ function display_user_grades($gradebook_id) {
                 @$tool_content .= "<td class='text-center'>
                 <input style='width:30px' type='text' value='".$userGrade."' name='" . getIndirectReference($activity->id) . "'"; //SOS 4 the UI!!
                 $tool_content .= ">
+                <input type='hidden' value='" . $gradebook_range . "' name='degreerange'>
                 <input type='hidden' value='" . getIndirectReference($userID) . "' name='userID'>
                 </td>";
             } // end of while
         }
         $tool_content .= "</tr></table>";
-        $tool_content .= "<div class='pull-right'><input class='btn btn-primary' type='submit' name='bookUser' value='$langGradebookBooking'>".generate_csrf_token_form_field()."</div>";
+        $tool_content .= "<div class='pull-right'><input class='btn btn-primary' type='submit' name='bookUser' value='$langGradebookBooking'>".generate_csrf_token_form_field()."</div></form>";
 
         if(userGradeTotal($gradebook_id, $userID) > $gradebook_range){
             $tool_content .= "<br>" . $langGradebookOutRange;
@@ -661,8 +661,8 @@ function student_view_gradebook($gradebook_id) {
            $langGradebookTotalGradeNoInput, $langGradebookTotalGrade, $langGradebookSum,
            $langTitle, $langGradebookActivityDate2, $langGradebookNoTitle,
            $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack, $course_code, $langType,
-            $langAssignment, $langExercise, $langGradebookActivityAct, $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity;
-
+           $langAssignment, $langExercise, $langGradebookActivityAct, $langAttendanceActivity;
+    
     //check if there are grade records for the user, otherwise alert message that there is no input
     $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) AS count
                                             FROM gradebook_book, gradebook_activities
@@ -968,17 +968,15 @@ function display_gradebook($gradebook) {
  * @global type $tool_content
  * @global type $course_code
  * @global type $langDelete
- * @global type $langConfirmDelete
- * @global type $langDeactivate
- * @global type $langActivate
+ * @global type $langConfirmDelete 
  * @global type $langCreateDuplicate
  * @global type $langNoGradeBooks
  */
 function display_gradebooks() {
 
-    global $course_id, $tool_content, $gradebook_id, $course_code, $langEditChange,
-           $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
-           $langActivate, $langAvailableGradebooks, $langNoGradeBooks, $is_editor,
+    global $course_id, $tool_content, $course_code, $langEditChange,
+           $langDelete, $langConfirmDelete, $langCreateDuplicate,
+           $langAvailableGradebooks, $langNoGradeBooks, $is_editor,
            $langViewShow, $langViewHide, $langStart, $langEnd, $uid;
 
     if ($is_editor) {

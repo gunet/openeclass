@@ -518,14 +518,15 @@ if ($is_editor) {
     }
    
     //DISPLAY: list of users and form for each user
-    elseif(isset($_GET['gradebookBook']) or isset($_GET['book'])) {        
+    elseif(isset($_GET['gradebookBook']) or isset($_GET['book'])) {
         if (isset($_GET['update']) and $_GET['update']) {
             $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
         }
         //record booking
-        if(isset($_POST['bookUser'])) {
+        if(isset($_POST['bookUser'])) {            
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             $userID = intval(getDirectReference($_POST['userID'])); //user
+            $gradebook_range = $_POST['degreerange'];                        
             //get all the gradebook activies --> for each gradebook activity update or insert grade
             $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d", $gradebook_id);
             if ($result) {
@@ -535,7 +536,7 @@ if ($is_editor) {
                     $checkForBook = Database::get()->querySingle("SELECT id FROM gradebook_book  WHERE gradebook_activity_id = ?d AND uid = ?d", $activity->id, $userID);
                     if($checkForBook){
                         //update
-                        Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d ", $attend, $checkForBook->id);
+                        Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d ", $attend/$gradebook_range, $checkForBook->id);
                     } else {
                         //insert
                         Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $activity->id, $attend, '');
@@ -590,7 +591,7 @@ if (isset($display) and $display == TRUE) {
         if ($is_editor) {
             display_gradebook($gradebook);
         } else {
-            $pageName = $gradebook->title;
+            $pageName = $gradebook->title;            
             student_view_gradebook($gradebook_id); // student view
         }
     } else { // display all gradebooks
