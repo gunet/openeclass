@@ -78,7 +78,7 @@ $tool_content .= "
     </div>
 </div>";
 
-require_once('form.php');
+require_once 'modules/usage/form.php';
 /****   Plots   ****/
 $tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
 $tool_content .= plot_placeholder("generic_stats", "$langHits $langAnd $langDuration");

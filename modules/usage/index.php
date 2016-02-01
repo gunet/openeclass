@@ -41,7 +41,7 @@ else{ // expecting $_REQUEST['t'] == 'u'
 $helpTopic = 'Usage';
 $require_login = true;
 require_once '../../include/baseTheme.php';
-require_once 'usage.lib.php';
+require_once 'modules/usage/usage.lib.php';
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
@@ -119,7 +119,6 @@ $head_content .= "<style>
 
 $pageName = $langUsage;
 
-
 if (isset($_GET['per_course_dur'])) {
     $tool_content .= action_bar(array(
         array('title' => $langPersonalStats,
@@ -132,26 +131,23 @@ if (isset($_GET['per_course_dur'])) {
         ),false);    
     $tool_content .= user_duration_per_course();
 } else {
-    if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)){
-        require_once "course.php";
-    }
-    elseif($stats_type == 'admin' && $is_admin){
-        require_once "admin.php";
+    if ($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)) {
+        require_once 'modules/usage/course.php';
+    } elseif ($stats_type == 'admin' && $is_admin) {
+        require_once 'modules/usage/admin.php';
     } else {
-        require_once "user.php";
+        require_once 'modules/usage/user.php';
         $stats_type = 'user';
     }
 }
 
 add_units_navigation(true);
 
-if($stats_type == 'admin' || ($stats_type == 'user' && isset($_REQUEST['u']))){
+if ($stats_type == 'admin' || ($stats_type == 'user' && isset($_REQUEST['u']))) {
     $navigation[] = array('url' => '../admin/', 'name' => $langAdmin);
     draw($tool_content, 3, null, $head_content);
-}
-elseif($stats_type == 'course'){
+} elseif ($stats_type == 'course') {
     draw($tool_content, 2, null, $head_content);
-}
-else{
+} else {
     draw($tool_content, 1, null, $head_content);
 }
