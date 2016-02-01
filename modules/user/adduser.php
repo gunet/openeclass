@@ -164,6 +164,8 @@ if (isset($_GET['add'])) {
             $i = 1;
             if(showSecondFactorChallenge()!=""){
                 $asktotp = " onclick=\"var totp=prompt('Type 2FA:','');this.setAttribute('href', this.getAttribute('href')+'&sfaanswer='+escape(totp));\" ";
+            } else {
+                $asktotp = '';
             }
             foreach ($result as $myrow) {                
                 $tool_content .= "<td class='text-right'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
