@@ -186,6 +186,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     if (version_compare(PHP_VERSION, '5.4.0') < 0) {
         $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
     }
+
     $tool_content .= "<h5>$langRequiredPHP</h5>";
     $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('standard');
@@ -2993,6 +2994,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         updateInfo(-1, sprintf($langUpgForVersion, '3.3'));
 
         // Remove '0000-00-00' default dates and fix exercise weight fields
+        Database::get()->query('ALTER TABLE `announcement`
+            MODIFY `date` DATETIME NOT NULL,
+            MODIFY `start_display` DATETIME DEFAULT NULL,
+            MODIFY `stop_display` DATETIME DEFAULT NULL');
         Database::get()->query('ALTER TABLE `agenda`
             CHANGE `start` `start` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course`
