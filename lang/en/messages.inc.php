@@ -3798,6 +3798,7 @@ $langNoUnits = "No $langsCourse units";
 $langExternalTools = 'External tools';
 $langTeacherTutorials = "$langTeacher Tutorials";
 $langStudentTutorials = "$langStudent Tutorials";
+$langGeneralTutorials = "General Instructions";
 $langCourseInformationText = "Edit $langCourse Description";
 $langCourseDescriptionShort = "Description";
 $langCloudFile = "Cloud File";

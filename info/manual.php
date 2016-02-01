@@ -37,16 +37,16 @@ $tool_content .= action_bar(array(
                                       'button-class' => 'btn-default')
                             ),false);
 $tool_content .= "<div class='list-group'>
-  " . manlink($langFinalDesc, 'detail_descr', $language)
+    <li class='list-group-item list-group-item-info'>$langGeneralTutorials</li>
+   ". manlink($langFinalDesc, 'detail_descr', $language)
     . manlink($langShortDesc, 'short_descr', $language)
     . manlink($langManT, 'mant', $language)
     . manlink($langManS, 'mans', $language) . "
 </div>";
 
-$tool_content .= "<br><p class='tool_title'>$langTeacherTutorials$addon</p>";
-
-$tool_content .= "<div class='list-group'>"
-    . manlink($langCreateAccount, 'create_account', $language)
+$tool_content .= "<div class='list-group'>
+    <li class='list-group-item list-group-item-info'>$langTeacherTutorials</li>
+   ". manlink($langCreateAccount, 'create_account', $language)
     . manlink($langCourseCreate, 'create_course', $language)
     . manlink($langUserPortfolio, 'portfolio_management', $language)
     . manlink($langAdministratorCourse, 'course_management', $language)
@@ -54,9 +54,9 @@ $tool_content .= "<div class='list-group'>"
     . manlink($langAdministratorGroup, 'group_management', $language) . "
 </div>";
 
-$tool_content .= "<br /><p class='tool_title'>$langStudentTutorials$addon</p>
-<div class='list-group'>"
-    . manlink($langRegCourses, 'register_course', $language)
+$tool_content .= "<div class='list-group'>
+   <li class='list-group-item list-group-item-info'>$langStudentTutorials</li>
+   ". manlink($langRegCourses, 'register_course', $language)
     . manlink($langUserPortfolio, 'personal_portfolio', $language)
     . manlink($langIntroToCourse, 'ecourse', $language)
     . manlink($langForumParticipation, 'forum', $language) . "
