@@ -47,9 +47,9 @@ $a3 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE v
 $tool_content .= "</div><div class='row'><div class='col-sm-6'>";
 $tool_content .= "<ul class='list-group'>
     <li class='list-group-item'><label>$langCourses</label><span class='badge'>$a</span></li>
-    <li class='list-group-item'>$langOpenCoursesShort<span class='badge'>$a1</span></li>
-    <li class='list-group-item'>$langOpenCourseWithRegistration<span class='badge'>$a2</span></li>
-    <li class='list-group-item'>$langClosedCourses<span class='badge'>$a3</span></li>
+    <li class='list-group-item'>&nbsp;&nbsp;-&nbsp;&nbsp;$langOpenCoursesShort<span class='badge'>$a1</span></li>
+    <li class='list-group-item'>&nbsp;&nbsp;-&nbsp;&nbsp;$langOpenCourseWithRegistration<span class='badge'>$a2</span></li>
+    <li class='list-group-item'>&nbsp;&nbsp;-&nbsp;&nbsp;$langClosedCourses<span class='badge'>$a3</span></li>
   </ul>";
 $tool_content .= "</div>";
 
@@ -65,9 +65,9 @@ foreach ($userCounts as $item) {
 $tool_content .= "<div class='col-sm-6'>
       <ul class='list-group'>
           <li class='list-group-item'><label>$langUsers</label><span class='badge'>$total</span></li>
-          <li class='list-group-item'>$langTeachers<span class='badge'>{$count[USER_TEACHER]}</span></li>
-          <li class='list-group-item'>$langStudents<span class='badge'>{$count[USER_STUDENT]}</span></li>
-          <li class='list-group-item'>$langGuest<span class='badge'>{$count[USER_GUEST]}</span> </li>
+          <li class='list-group-item'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge'>{$count[USER_TEACHER]}</span></li>
+          <li class='list-group-item'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge'>{$count[USER_STUDENT]}</span></li>
+          <li class='list-group-item'>&nbsp;&nbsp;-&nbsp;&nbsp;$langGuest<span class='badge'>{$count[USER_GUEST]}</span> </li>
       </ul>
     </div></div>";
 
