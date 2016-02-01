@@ -103,12 +103,12 @@ $db->query("CREATE TABLE `announcement` (
     `id` MEDIUMINT(11) NOT NULL auto_increment,
     `title` VARCHAR(255) NOT NULL DEFAULT '',
     `content` TEXT,
-    `date` DATE DEFAULT NULL,
+    `date` DATETIME NOT NULL,
     `course_id` INT(11) NOT NULL DEFAULT 0,
     `order` MEDIUMINT(11) NOT NULL DEFAULT 0,
     `visible` TINYINT(4) NOT NULL DEFAULT 0,
-    `start_display` DATE DEFAULT NULL,
-    `stop_display` DATE DEFAULT NULL,
+    `start_display` DATETIME DEFAULT NULL,
+    `stop_display` DATETIME DEFAULT NULL,
     PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE `admin_announcement` (
