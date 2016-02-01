@@ -47,8 +47,10 @@ $langOfEditor = "Tutor Assistant";
 $langsEditor = "tutor assistant";
 $langsOfEditor = "tutor assistant";
 $langsOfGroupTutor = "group tutor";
-$langOfCourses = "Course";
+$langOfCourses = "Courses";
+$langOfCourse = "Course";
 $langsCourse = "course";
 $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
+
