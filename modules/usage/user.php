@@ -30,10 +30,8 @@ $tool_content .= action_bar(array(
         'level' => 'primary-label')
 ),false);
 
-
 $statsuser = (isset($_REQUEST['u']) && intval($_REQUEST['u'])>0)? intval($_REQUEST['u']):$uid;
-if($statsuser != $uid)
-{ 
+if ($statsuser != $uid) { 
     $toolName .= "$langUserStats: " . uid_to_name($statsuser)." (".uid_to_name($statsuser, 'username').")";
     $pageName = "$langUserStats: " . uid_to_name($statsuser)." (".uid_to_name($statsuser, 'username').")";
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
@@ -49,7 +47,8 @@ $head_content .=
         course = null;
         stats = 'u';
     </script>";
-require_once('form.php');
+
+require_once 'modules/usage/form.php';
 
 
 /****   Plots   ****/

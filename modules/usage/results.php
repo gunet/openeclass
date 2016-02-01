@@ -27,7 +27,7 @@
 $require_login = TRUE;
 
 require_once '../../include/init.php';
-require_once 'usage.lib.php';
+require_once 'modules/usage/usage.lib.php';
 
 $result = null;
 $intervals = array(1=>'day', 7=>'week', 30=>'month', 365=>'year');
