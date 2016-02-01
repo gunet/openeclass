@@ -43,7 +43,7 @@ $action_stats = new action();
 $action_stats->record(MODULE_ID_LINKS);
 
 //check if social bookmarking is enabled for this course
-$social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
+$social_bookmarks_enabled = $data['social_bookmarks_enabled'] = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
 
 $toolName = $langLinks;
 if (isset($_GET['action'])) {
@@ -66,14 +66,14 @@ if (isset($_GET['action'])) {
     }
 }
 
-$is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
+$is_in_tinymce = $data['is_in_tinymce'] = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
 $menuTypeID = ($is_in_tinymce) ? 5 : 2;
-$tinymce_params = '';
+$tinymce_params = $data['tinymce_params'] = '';
 
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter=' . $_REQUEST['docsfilter'] : '';
-    $tinymce_params = '&amp;embedtype=tinymce' . $docsfilter;
+    $tinymce_params = $data['tinymce_params'] = '&amp;embedtype=tinymce' . $docsfilter;
     load_js('jquery-' . JQUERY_VERSION . '.min');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
@@ -87,26 +87,26 @@ if (isset($_GET['category'])) {
 }
 
 if (isset($_GET['id'])) {
-    $id = intval(getDirectReference($_GET['id']));
+    $id = $data['id'] = intval(getDirectReference($_GET['id']));
 } else {
     unset($id);
 }
 
 if (isset($_GET['urlview'])) {
-    $urlview = urlencode($_GET['urlview']);
+    $urlview = $data['urlview'] = urlencode($_GET['urlview']);
 } else {
-    $urlview = '';
+    $urlview = $data['urlview'] = '';
 }
 
 if (isset($_GET['socialview'])) {
-    $socialview = true;
-    $socialview_param = '&amp;socialview';
+    $socialview = $data['socialview'] = true;
+    $socialview_param = $data['socialview_param'] = '&amp;socialview';
 } else {
-    $socialview = false;
-    $socialview_param = '';
+    $socialview = $data['socialview'] = false;
+    $socialview_param = $data['socialview_param'] = '';
 }
 
-$action = isset($_GET['action']) ? $_GET['action'] : '';
+$action = $data['action'] = isset($_GET['action']) ? $_GET['action'] : '';
 
 if ($is_editor) {
     if (isset($_POST['submitLink'])) {
@@ -147,7 +147,7 @@ if ($is_editor) {
 
     if (!$is_in_tinymce) {
         if (isset($_GET['action'])) {
-            $tool_content .= action_bar(array(
+            $tool_content .= $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
@@ -157,7 +157,7 @@ if ($is_editor) {
         } else {
             $ext = (isset($category)? "&amp;category=$category": '') .
                    (isset($urlview)? "&amp;urlview=$urlview": '');
-            $tool_content .= action_bar(array(
+            $tool_content .= $data['action_bar'] = action_bar(array(
                 array('title' => $langLinkAdd,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink$ext",
                       'icon' => 'fa-plus-circle',
@@ -281,41 +281,11 @@ if ($is_editor) {
                 </div>";
     } elseif ($action == 'settings') {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
-        if (setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id) == 1) {
-            $checkDis = "";
-            $checkEn = "checked ";
-        } else {
-            $checkDis = "checked ";
-            $checkEn = "";
-        }
-        $tool_content .= "<div class = 'form-wrapper'>";
-        $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
-        $tool_content .= "<fieldset>                               
-                              <div class='form-group'>
-                                  <label class='col-sm-3'>$langSocialBookmarksFunct</label>
-                                  <div class='col-sm-9'> 
-                                      <div class='radio'>
-                                          <label>
-                                              <input type='radio' value='1' name='settings_radio' $checkEn>$langActivate
-                                          </label>
-                                      </div>
-                                      <div class='radio'>
-                                          <label>
-                                              <input type='radio' value='0' name='settings_radio' $checkDis>$langDeactivate
-                                          </label>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div class='form-group'>
-                                  <div class='col-sm-9 col-sm-offset-3'>
-                                      <input type='submit' class='btn btn-primary' name='submitSettings' value='$langSubmit' />
-                                          <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
-                                  </div>
-                              </div>
-                          </fieldset>
-                       ". generate_csrf_token_form_field() ."
-                      </form>
-                  </div>";
+        
+        $data['social_enabled'] = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
+        
+        echo view('modules.link.settings', $data);
+        exit();        
     }
 } elseif ($social_bookmarks_enabled) {
     //check if user is course member
@@ -346,7 +316,7 @@ if ($is_editor) {
             }
             
             if (isset($_GET['action'])) {
-                $tool_content .= action_bar(array(
+                $tool_content .= $data['action_bar'] = action_bar(array(
                         array('title' => $langBack,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                               'icon' => 'fa-reply',
@@ -354,7 +324,7 @@ if ($is_editor) {
             
             } else {
                 $ext = (isset($urlview)? "&amp;urlview=$urlview": '');
-                $tool_content .= action_bar(array(
+                $tool_content .= $data['action_bar'] = action_bar(array(
                         array('title' => $langLinkAdd,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink$ext",
                               'icon' => 'fa-plus-circle',
@@ -365,53 +335,25 @@ if ($is_editor) {
             if (in_array($action, array('addlink', 'editlink'))) {
                 if ((isset($id) && is_link_creator($id)) || !isset($id)) {
                     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
-                    $tool_content .= "<div class = 'form-wrapper'>";
-                    $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview'>";
+
                     if ($action == 'editlink') {
-                        $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
-                        link_form_defaults($id);
-                        $form_legend = $langLinkModify;
-                        $submit_label = $langLinkModify;
+                        $myrow = Database::get()->querySingle("SELECT * FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
+                        if ($myrow) {
+                            $data['form_url'] = ' value="' . q($myrow->url) . '"';
+                            $data['form_title'] = ' value="' . q($myrow->title) . '"';
+                            $data['form_description'] = purify(trim($myrow->description));
+                            $data['category'] = $myrow->category;
+                        } else {
+                            $form_url = $form_title = $form_description = '';
+                        }                        
+                        $data['submit_label'] = $langLinkModify;
                     } else {
-                        $form_url = $form_title = $form_description = '';
-                        $form_legend = $langLinkAdd;
-                        $submit_label = $langAdd;
+                        $data['form_url'] = $data['form_title'] = $data['form_description'] = '';
+                        $data['submit_label'] = $langAdd;
                     }
-                    $tool_content .= "<fieldset>
-                                        <div class='form-group'>
-                                            <label for='urllink' class='col-sm-2 control-label'>URL:</label>
-                                            <div class='col-sm-10'>
-                                                <input class='form-control' type='text' id='urllink' name='urllink' $form_url >
-                                            </div>
-                                        </div>
-                                        <div class='form-group'>
-                                            <label for='title' class='col-sm-2 control-label'>$langLinkName:</label>
-                                            <div class='col-sm-10'>
-                                                <input class='form-control' type='text' id='title' name='title'$form_title >
-                                            </div>
-                                        </div>
-                                        <div class='form-group'>
-                                            <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
-                                            <div class='col-sm-10'>". rich_text_editor('description', 3, 30, $form_description) . "</div>
-                                        </div>
-                                        <div class='form-group'>
-                                            <label for='selectcategory' class='col-sm-2 control-label'>$langCategory:</label>
-                                            <div class='col-sm-3'>
-                                                <select class='form-control' name='selectcategory' id='selectcategory'>
-                                                    <option value='-2'>$langSocialCategory</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class='form-group'>
-                                            <div class='col-sm-10 col-sm-offset-2'>
-                                                <input type='submit' class='btn btn-primary' name='submitLink' value='$submit_label' />
-                                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
-                                            </div>
-                                        </div>
-                                      </fieldset>
-                                   ". generate_csrf_token_form_field() ."
-                                  </form>
-                              </div>";
+                    $data['description_textarea'] = rich_text_editor('description', 3, 30, $data['form_description']);
+                    echo view('modules.link.create', $data);
+                    exit();
                 }
             }
         }
@@ -427,184 +369,45 @@ if (isset($_GET['down'])) {
 } elseif (isset($_GET['cup'])) {
     move_order('link_category', 'id', intval(getDirectReference($_GET['cup'])), 'order', 'up', "course_id = $course_id");
 }
-$display_tools = $is_editor && !$is_in_tinymce;
+$data['display_tools'] = $display_tools = $is_editor && !$is_in_tinymce;
 if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory', 'settings'))) {
     if ($social_bookmarks_enabled == 1) {
-        $countlinks = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d", $course_id, -1)->cnt;
+        $data['countlinks'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d", $course_id, -1)->cnt;
     } else {
-        $countlinks = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d AND category <> ?d", $course_id, -1, -2)->cnt;
+        $data['countlinks'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d AND category <> ?d", $course_id, -1, -2)->cnt;
     }
-
-    if ($countlinks > 0) {
-        $numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND (category = 0 OR category IS NULL)", $course_id));
-        // making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
-        // number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
-        $resultcategories = Database::get()->queryArray("SELECT * FROM `link_category` WHERE course_id = ?d ORDER BY `order`", $course_id);
-        $aantalcategories = count($resultcategories);
-
-
-        $tool_content .= "
-            <div class='row'>
-                <div class='col-sm-12'>
-                <div class='table-responsive'>
-                <table class='table-default nocategory-links'>";
-        if ($numberofzerocategory !== 0) {
-            $tool_content .= "<tr class='list-header'><th class='text-left'>$langNoCategory</th>";
-            if ($display_tools) {
-                $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
-            }
-            $tool_content .= "</tr>";
-            showlinksofcategory(0);
-        } else {
-            $tool_content .= "<tr class='list-header'><th class='text-left list-header'>$langNoCategory</th>";
-            if ($display_tools) {
-                $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
-            }
-            $tool_content .= "</tr>";
-            $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkInCategory - </td>";
-            if ($display_tools) {
-                $tool_content .= "<td></td>";
-            }
-        }
-        $tool_content .= "</tr></table></div></div></div>";
-        
-        if ($social_bookmarks_enabled == 1) {
-            $numberofsocialcategory = count(Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, -2));
-            $tool_content .= "
-            <div class='row'>
-                <div class='col-sm-12'>
-                <div class='table-responsive'>
-                <table class='table-default nocategory-links'>";
-            if ($numberofsocialcategory !== 0) {
-                if (!$socialview) {
-                    $socialview_icon = "&nbsp;&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;socialview'>" . icon('fa-folder', $showall) ."</a>";
-                } else {
-                    $socialview_icon = "&nbsp;&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview'>" . icon('fa-folder-open', $shownone) ."</a>";
-                }
-                $tool_content .= "<tr class='list-header'><th class='text-left'>".$langSocialCategory.$socialview_icon."</th>";
-                if (isset($_SESSION['uid']) && !$is_in_tinymce) {
-                    $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
-                }
-                $tool_content .= "</tr>";
-                if ($socialview) {
-                    showlinksofcategory(-2);
-                }
-            } else {
-                $tool_content .= "<tr class='list-header'><th class='text-left list-header'>$langSocialCategory</th>";
-                if (isset($_SESSION['uid']) && !$is_in_tinymce) {
-                    $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
-                }
-                $tool_content .= "</tr>";
-                $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkInCategory - </td>";
-                if (isset($_SESSION['uid']) && !$is_in_tinymce) {
-                    $tool_content .= "<td></td>";
-                }
-            }
-            $tool_content .= "</tr></table></div></div></div>";
-        }
-        
-        $tool_content .= "
-            <div class='row'>
-                <div class='col-sm-12'>
-                <div class='table-responsive'>
-                <table class='table-default category-links'>";
-        if ($aantalcategories > 0) {
-           $tool_content .= "<tr class='list-header'><th>";
-
-            $tool_content .= "$langCategorisedLinks&nbsp;";
-            if (isset($urlview) and abs($urlview) == 0) {
-                    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
-            } else {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>" .icon('fa-folder-open', $shownone)."</a>";
-            }
-            $tool_content .= "</th>";
-            if ($display_tools) {
-                $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
-            }
-            $tool_content .= "</tr>";
-        } else {
-            $tool_content .= "<tr><th>";
-
-            $tool_content .= "$langCategorisedLinks&nbsp;";
-            if (isset($urlview) and abs($urlview) == 0) {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
-            } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
-            }$tool_content .= "</th>";
-            if ($display_tools) {
-                $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
-            }
-            $tool_content .= "</tr>";
-            $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkCategories - </td>" .
-                ($display_tools? '<td></td>': '') . "<tr>";
-        }
-        if ($urlview === '') {
-            $urlview = str_repeat('0', $aantalcategories);
-        }
-        $i = 0;
-        $catcounter = 0;
-        foreach ($resultcategories as $myrow) {
-            if (empty($urlview)) {
-                // No $view set in the url, thus for each category link it should be all zeros except it's own
-                $view = makedefaultviewcode($i);
-            } else {
-                $view = $urlview;
-                $view[$i] = '1';
-            }
-            // if the $urlview has a 1 for this categorie, this means it is expanded and should be displayed as a
-            // - instead of a +, the category is no longer clickable and all the links of this category are displayed
-            $description = standard_text_escape($myrow->description);
-            if ((isset($urlview[$i]) and $urlview[$i] == '1')) {
-                $newurlview = $urlview;
-                $newurlview[$i] = '0';
-                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-open-o', $shownone)."&nbsp;
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params$socialview_param' class='open-category'>" . q($myrow->name) . "</a>";
-                if (!empty($description)) {
-                    $tool_content .= "<br><span class='link-description'>$description</span></th>";
-                } else {
-                    $tool_content .= "</th>";
-                }
-
-                if ($display_tools) {
-                    $tool_content .= "<td class='option-btn-cell'>";
-                    showcategoryadmintools($myrow->id);
-                    $tool_content .= "</td>";
-                }
-
-                $tool_content .= "</tr>";
-
-                showlinksofcategory($myrow->id);
-                if ($links_num == 1) {
-                    $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkInCategory - </td>" .
-                        ($display_tools? '<td></td>': '') . "<tr>";
-                }
-
-            } else {
-                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-o', $showall)
-                    . "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
-                $tool_content .= is_array($view) ? implode('', $view) : $view;
-                $tool_content .= $tinymce_params . "' class='open-category'>" . q($myrow->name) . "</a>";
-                $description = standard_text_escape($myrow->description);
-                if (!empty($description)) {
-                    $tool_content .= "<br><span class='link-description'>$description</span</th>";
-                } else {
-                    $tool_content .= "</th>";
-                }
-
-                if ($display_tools) {
-                    $tool_content .= "<td class='option-btn-cell'>";
-                    showcategoryadmintools($myrow->id);
-                    $tool_content .= "</td>";
-                }
-
-                $tool_content .= "</tr>";
-            }
-            $i++;
-        }
-        $tool_content .= "</table></div></div></div>";
-    } else {   // no links
-        $tool_content .= "<div class='alert alert-warning'>$langNoLinksExist</div>";
-    }
+    
     add_units_navigation(true);
+    
+    $head_content .= abuse_report_add_js();
+
+    //Uncategorized Links
+    $general_links = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, 0);    
+    $data['general_category'] = (object) ['id' => 0, 'links' => $general_links];
+
+    //Social Links
+    $social_links = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, -2);      
+    $data['social_category'] = (object) ['id' => -2, 'links' => $social_links];
+
+    //Other Categories                
+    $data['categories'] = FALSE;
+    DataBase::get()->queryFunc("SELECT * FROM `link_category` WHERE course_id = ?d ORDER BY `order`", function($category) use (&$data) {
+        $links = Database::get()->queryArray("SELECT * FROM `link`
+                               WHERE course_id = ?d AND category = ?d
+                               ORDER BY `order`", $category->course_id, $category->id);
+        $category->links = $links;
+        $data['categories'][] = $category;
+
+    }, $course_id);        
+
+    // making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
+    // number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).         
+    if ($urlview === '') {
+        $urlview = $data['urlview'] = str_repeat('0', count($data['categories']));
+    }
+
+    echo view('modules.link.index', $data);
+    exit();
 }
+
 draw($tool_content, $menuTypeID, null, $head_content);

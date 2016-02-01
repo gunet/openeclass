@@ -28,6 +28,7 @@ function makedefaultviewcode($locatie) {
 
     $view = str_repeat('0', $aantalcategories);
     $view[$locatie] = '1';
+
     return $view;
 }
 
@@ -64,8 +65,9 @@ function showlinksofcategory($catid) {
     $urlServer, $course_code, $head_content,
     $langLinkDelconfirm, $langDelete, $langUp, $langDown,
     $langEditChange, $is_in_tinymce, $links_num, $langLinkSubmittedBy;
-
-    $tool_content .= "<tr>";
+    
+    $links = "";
+    $links .= "<tr>";
     $result = Database::get()->queryArray("SELECT * FROM `link`
                                    WHERE course_id = ?d AND category = ?d
                                    ORDER BY `order`", $course_id, $catid);
@@ -73,28 +75,28 @@ function showlinksofcategory($catid) {
     $links_num = 1;    
     foreach ($result as $myrow) {
         $title = empty($myrow->title) ? $myrow->url : $myrow->title;        
-        $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
-        $tool_content .= "<td class='nocategory-link'><a href='" . q($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
+        $aclass = $is_in_tinymce ? " class='fileURL' " : '';
+        $links .= "<td class='nocategory-link'><a href='" . q($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
         if ($catid == -2 && $myrow->user_id != 0) {
-            $tool_content .= "<small> - $langLinkSubmittedBy ".display_user($myrow->user_id, false, false)."</small>";
+            $links .= "<small> - $langLinkSubmittedBy ".display_user($myrow->user_id, false, false)."</small>";
         }
         if (!empty($myrow->description)) {
-            $tool_content .= "<br />" . standard_text_escape($myrow->description);
+            $links .= "<br />" . standard_text_escape($myrow->description);
         }
         if ($catid == -2) { //social bookmarks can be rated
             global $uid;
             $rating = new Rating('thumbs_up', 'link', $myrow->id);
-            $tool_content .= $rating->put($is_editor, $uid, $course_id);
+            $links .= $rating->put($is_editor, $uid, $course_id);
         }
-        $tool_content .= "</td>";
+        $links .="</td>";
         
         if ($is_editor && !$is_in_tinymce) {   
-            $tool_content .= "<td class='option-btn-cell'>";
+            $links .= "<td class='option-btn-cell'>";
             $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param;
             if (isset($category)) {
                 $editlink .= "&amp;category=" . getIndirectReference($category);
             }
-            $tool_content .= action_button(array(
+            $links .= action_button(array(
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
                       'url' => $editlink),
@@ -116,13 +118,13 @@ function showlinksofcategory($catid) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param,
                       'confirm' => $langLinkDelconfirm)
             ));
-            $tool_content .= "</td>";
+            $links .= "</td>";
         } elseif ($catid == -2 && !$is_in_tinymce) {
             if (isset($_SESSION['uid'])) {
                 if (is_link_creator($myrow->id)) {
-                    $tool_content .= "<td class='option-btn-cell'>";
+                    $links .= "<td class='option-btn-cell'>";
                     $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param;
-                    $tool_content .= action_button(array(
+                    $links .= action_button(array(
                             array('title' => $langEditChange,
                                     'icon' => 'fa-edit',
                                     'url' => $editlink),
@@ -132,23 +134,25 @@ function showlinksofcategory($catid) {
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param,
                                     'confirm' => $langLinkDelconfirm)
                     ));
-                    $tool_content .= "</td>";
+                    $links .= "</td>";
                 } else {
                     if (abuse_report_show_flag('link', $myrow->id , $course_id, $is_editor)) {
                         $head_content .= abuse_report_add_js();
                         $flag_arr = abuse_report_action_button_flag('link', $myrow->id, $course_id);
                     
-                        $tool_content .= "<td class='option-btn-cell'>".action_button(array($flag_arr[0])).$flag_arr[1]."</td>"; //action button option
+                        $links .= "<td class='option-btn-cell'>".action_button(array($flag_arr[0])).$flag_arr[1]."</td>"; //action button option
                     } else {
-                        $tool_content .= "<td>&nbsp;</td>";
+                        $links .= "<td>&nbsp;</td>";
                     }
                 }
             }
         }
         
-        $tool_content .= "</tr>";
+        $links .= "</tr>";
         $links_num++;
     }
+    $tool_content .= $links;
+    return $links;
 }
 
 /**
@@ -300,10 +304,10 @@ function link_form_defaults($id) {
 
     $myrow = Database::get()->querySingle("SELECT * FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     if ($myrow) {
-        $form_url = ' value="' . q($myrow->url) . '"';
-        $form_title = ' value="' . q($myrow->title) . '"';
-        $form_description = purify(trim($myrow->description));
-        $category = $myrow->category;
+        $form_url = $data['form_url'] = ' value="' . q($myrow->url) . '"';
+        $form_title = $data['form_title'] = ' value="' . q($myrow->title) . '"';
+        $form_description = $data['form_description'] = purify(trim($myrow->description));
+        $category = $data['category'] = $myrow->category;
     } else {
         $form_url = $form_title = $form_description = '';
     }
