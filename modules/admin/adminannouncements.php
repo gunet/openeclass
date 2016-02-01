@@ -43,14 +43,12 @@ hContent;
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function () {
-            $('.table_td_body').trunk8({
-                lines: '3',
-                fill: '&hellip;<div class=\'clearfix\'></div><div style=\'float:right;\'>Read More</div>'
-            });
-
-            $('.table_td_header').trunk8({
-                lines: '2',
-                fill: '&hellip;'
+            $('.table_td_body').each(function() {
+                $(this).trunk8({
+                    lines: '3',
+                    fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"adminannouncements_single.php?ann_id='
+                    + $(this).data('id')+'\">$langMore</div>'
+                })
             });
 
             if ( $('#submitAnnouncement').length > 0 ) {
@@ -377,7 +375,7 @@ if ($displayAnnouncementList == true) {
                 <td>
                     <div class='table_td'>
                         <div class='table_td_header clearfix'><a href='adminannouncements_single.php?ann_id=$myrow->id'>" . q($myrow->title) . "</a></div>
-                        <div class='table_td_body'>".standard_text_escape($myrow->body)."</div>
+                        <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->body)."</div>
                     </div>
                 </td>
                 <td>$myrow->date</td>
