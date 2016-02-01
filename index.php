@@ -226,10 +226,14 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
             })
         });
         $(document).ready(function(){
-            $('.announcement-main').trunk8({
-                lines: '2',
-                fill: '&hellip;<div class=\'announcements-more\'><a href=\'modules/announcements/main_ann.php?aid=\'>$langMore</a></div>'
-            });
+
+            $('.announcement-main').each(function() {
+                $(this).trunk8({
+                    lines: '5',
+                    fill: '&hellip;<div class=\"announcements-more\"><a href=\"modules/announcements/main_ann.php?aid=' +
+                        $(this).data('id') + '\">$langMore</a></div>'
+                });
+            })
         });
       </script>
       <link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='{$urlServer}rss.php'>";
