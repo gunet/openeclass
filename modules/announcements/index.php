@@ -89,10 +89,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             //checking visible status
             if ($myrow->visible == '0') {
                 $visible = 1;
+                $status_icon_list = '<li><span class="fa fa-eye-slash"></span> '.$langAdminAnNotVis.'</li>';
                 $vis_icon = 'fa-eye-slash';
                 $vis_class = 'not_visible';
             } else {
                 $visible = 0;
+                $status_icon_list = '<li><span class="fa fa-eye"></span> '.$langAdminAnVis.'</li>';
                 $vis_icon = 'fa-eye';
                 $vis_class = 'visible';
             }
@@ -101,8 +103,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
                 '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
-                '1' => date('d-m-Y', strtotime($myrow->date)),
-                '2' => action_button(array(
+                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date)),
+                '2' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
+                '3' => action_button(array(
                     array('title' => $langEditChange,
                           'icon' => 'fa-edit',
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id"),
@@ -131,7 +134,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         foreach ($result as $myrow) {
             $data['aaData'][] = array(
                 '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>',
-                '1' => date('d-m-Y', strtotime($myrow->date))
+                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date))
                 );
         }
     }
@@ -620,9 +623,9 @@ if (isset($_GET['an_id'])) {
                 </div>";
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
-        $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table-default'>";
+        $tool_content .= "<table id='ann_table{$course_id}' class='table-default'>";
         $tool_content .= "<thead>";
-        $tool_content .= "<tr class='list-header'><th>$langAnnouncement</th><th>$langDate</th>";
+        $tool_content .= "<tr class='list-header'><th>$langAnnouncement</th><th>$langDate</th><th>$langNewBBBSessionStatus</th>";
 
         if ($is_editor) {
             $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
