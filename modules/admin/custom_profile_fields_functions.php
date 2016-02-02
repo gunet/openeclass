@@ -240,7 +240,7 @@ function process_profile_fields_data($context) {
                 $field_name = substr($key, 4);
                 $result = Database::get()->querySingle("SELECT id, required FROM custom_profile_fields WHERE shortname = ?s", $field_name);
                 $field_id = $result->id;
-                $required = $result->id;
+                $required = $result->required;
                 if (isset($context['origin']) && ($context['origin'] == 'edit_profile' || $context['origin'] == 'admin_edit_profile')) { //delete old values if exist
                     if ($required == 1 && empty($value)) {
                         continue;
