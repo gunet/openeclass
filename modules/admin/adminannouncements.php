@@ -29,6 +29,7 @@ $toolName = $langAdminAn;
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
+load_js('trunk8');
 
 $head_content .= <<<hContent
 <script type='text/javascript'>
@@ -41,6 +42,41 @@ function toggle(id, checkbox, name)
 hContent;
 
 $head_content .= "<script type='text/javascript'>
+        $(document).ready(function () {
+            $('.table_td_body').each(function() {
+                $(this).trunk8({
+                    lines: '3',
+                    fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"adminannouncements_single.php?ann_id='
+                    + $(this).data('id')+'\">$langMore</div>'
+                })
+            });
+
+            if ( $('#submitAnnouncement').length > 0 ) {
+
+            $('input[type=checkbox]').eq(0).prop('checked') ? $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
+            $('input[type=checkbox]').eq(1).prop('checked') ? $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', true);
+
+                $('input[type=checkbox]').eq(0).on('click', function() {
+                    if ($('input[type=checkbox]').eq(0).prop('checked')) {
+                        $('input[type=checkbox]').eq(1).prop('disabled', false);
+                    } else {
+                        $('input[type=checkbox]').eq(1).prop('disabled', true);
+                        $('input[type=checkbox]').eq(1).prop('checked', false);
+                        $('input[type=checkbox]').eq(1).parents('.input-group').children('input').prop('disabled', true);
+                    }
+                });
+
+
+                $('.input-group-addon input[type=checkbox]').on('click', function(){
+                var prop = $(this).parents('.input-group').children('input').prop('disabled');
+                    if(prop){
+                        $(this).parents('.input-group').children('input').prop('disabled', false);
+                    } else {
+                        $(this).parents('.input-group').children('input').prop('disabled', true);
+                    }
+                });
+            }
+        });
         $(function() {
             $('#startdate, #enddate').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
@@ -65,56 +101,45 @@ foreach (array('title', 'lang_admin_ann') as $var) {
     }
 }
 
-$sql_where = '';
-if (isset($_GET['aid'])) {
-    $sql_where = " WHERE id = $_GET[aid]";
-}
-
 if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
-    if (isset($_GET['addAnnounce'])) {
-        $pageName = $langAdminAddAnn;
+        if (isset($_GET['addAnnounce'])) {
+            $pageName = $langAdminAddAnn;
+        } else {
+            $pageName = $langAdminModifAnn;
+        }
+        $tool_content .= action_bar(array(
+                    array('title' => $langBack,
+                        'url' => $_SERVER['SCRIPT_NAME'],
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label')
+                    ));
     } else {
-        $pageName = $langAdminModifAnn;
-    }
-    $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'url' => $_SERVER['SCRIPT_NAME'],
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')
+        $tool_content .= action_bar(array(
+                array('title' => $langAdminAddAnn,
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success')
                 ));
-} elseif (!empty($sql_where)) {
-    $tool_content .= action_bar(array(
-        array('title' => $langAdminAn,
-            'url' => $_SERVER['SCRIPT_NAME'],            
-            'level' => 'primary-label',
-            'button-class' => 'btn-success')
-        ));        
-} else {
-    $tool_content .= action_bar(array(
-        array('title' => $langAdminAddAnn,
-            'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
-            'icon' => 'fa-plus-circle',
-            'level' => 'primary-label',
-            'button-class' => 'btn-success')
-        ));
-}
+
+    }
 
 // modify visibility
 if (isset($_GET['vis'])) {
-    $id = q(getDirectReference($_GET['id']));
+    $id = q($_GET['id']);
     $vis = q($_GET['vis']);
     Database::get()->query("UPDATE admin_announcement SET visible = ?b WHERE id = ?d", $vis, $id);
 }
 
 if (isset($_GET['delete'])) {
     // delete announcement command
-    $id = intval(getDirectReference($_GET['delete']));
+    $id = intval($_GET['delete']);
     Database::get()->query("DELETE FROM admin_announcement WHERE id = ?d", $id)->affectedRows;
     $message = $langAdminAnnDel;
 } elseif (isset($_GET['modify'])) {
     // modify announcement command
-    $id = intval(getDirectReference($_GET['modify']));
-    $myrow = Database::get()->querySingle("SELECT id, title, body, `date`, `begin`,`end`, 
+    $id = intval($_GET['modify']);
+    $myrow = Database::get()->querySingle("SELECT id, title, body, `date`, `begin`,`end`,
                                                 lang, `order`, visible FROM admin_announcement WHERE id = ?d", $id);
     if ($myrow) {
         $titleToModify = q($myrow->title);
@@ -126,14 +151,18 @@ if (isset($_GET['delete'])) {
         }
         $d2 = DateTime::createFromFormat('Y-m-d H:i:s', $myrow->end);
         if ($d2) {
-            $enddate = $d2->format("d-m-Y H:i");        
+            $enddate = $d2->format("d-m-Y H:i");
         }
     }
 } elseif (isset($_POST['submitAnnouncement'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
     // submit announcement command
     $dates = array();
+    if (isset($_POST['show_public'])){
+        $show_public =  1;
+    } else {
+        $show_public =  0;
+    }
     if (isset($_POST['startdate_active']) and isset($_POST['startdate'])) {
         $start_sql = 'begin = ?s';
         $date_started = DateTime::createFromFormat("d-m-Y H:i", $_POST['startdate']);
@@ -151,11 +180,11 @@ if (isset($_GET['delete'])) {
     $newContent = purify($newContent);
     if (isset($_POST['id'])) {
         // modify announcement
-        $id = getDirectReference($_POST['id']);
+        $id = $_POST['id'];
         Database::get()->query("UPDATE admin_announcement
                         SET title = ?s, body = ?s, lang = ?s,
-                            `date` = " . DBHelper::timeAfter() . ", $start_sql, $end_sql
-                        WHERE id = ?d", $title, $newContent, $lang_admin_ann, $dates, $id);
+                            `date` = " . DBHelper::timeAfter() . ", $start_sql, $end_sql, `visible`=?d
+                        WHERE id = ?d", $title, $newContent, $lang_admin_ann, $dates, $show_public, $id);
         $message = $langAdminAnnModify;
     } else {
         // add new announcement
@@ -163,30 +192,30 @@ if (isset($_GET['delete'])) {
         $orderMax = Database::get()->querySingle("SELECT MAX(`order`) as max FROM admin_announcement")->max;
         $order = $orderMax + 1;
         Database::get()->query("INSERT INTO admin_announcement
-                        SET title = ?s, 
+                        SET title = ?s,
                             body = ?s,
-                            visible = 1, 
                             lang = ?s,
-                            `date` = " . DBHelper::timeAfter() . ", 
-                            `order` = ?d, 
-                            $start_sql, 
-                            $end_sql", $title, $newContent, $lang_admin_ann, $order, $dates);
+                            `date` = " . DBHelper::timeAfter() . ",
+                            `order` = ?d,
+                            $start_sql,
+                            $end_sql, `visible`=?d", $title, $newContent, $lang_admin_ann, $order, $dates, $show_public);
         $message = $langAdminAnnAdd;
     }
 }
 
 // action message
 if (isset($message) && !empty($message)) {
-    $tool_content .= "<div class='alert alert-success'>$message</div><br/>";
-    $displayAnnouncementList = true;
-    $displayForm = false; //do not show form
+    Session::Messages($message, 'alert-success');
+    redirect_to_home_page("/modules/admin/adminannouncements.php");
 }
 
 // display form
 if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     $displayAnnouncementList = false;
-    // display add announcement command    
+    // display add announcement command
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);
+
+    $checked_public = "checked";
 
     if (!isset($contentToModify)) {
         $contentToModify = '';
@@ -197,7 +226,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form role='form' class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>";
     if (isset($_GET['modify'])) {
-        $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
+        $tool_content .= "<input type='hidden' name='id' value='$id' />";
     }
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>
@@ -208,6 +237,11 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                     <div class='col-sm-10'>" . rich_text_editor('newContent', 5, 40, $contentToModify) . "</div></div>";
     $tool_content .= "<div class='form-group'><label class='col-sm-2 control-label'>$langLanguage:</label>";
     if (isset($_GET['modify'])) {
+        if ($myrow->visible == 1) {
+            $checked_public = "checked";
+        } else {
+            $checked_public = "";
+        }
         if (isset($begindate)) {
             $start_checkbox = 'checked';
             $startdate = $begindate;
@@ -216,7 +250,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             $startdate = date('d-m-Y H:i', strtotime('now'));
         }
         if (isset($enddate)) {
-            $end_checkbox = 'checked';            
+            $end_checkbox = 'checked';
         } else {
             $end_checkbox = '';
             $enddate = date('d-m-Y H:i', strtotime('now +1 month'));
@@ -225,62 +259,57 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     } else {
         $start_checkbox = $end_checkbox = '';
         $startdate = date('d-m-Y H:i', strtotime('now'));
-        $enddate = date('d-m-Y H:i', strtotime('now +1 month'));        
+        $enddate = date('d-m-Y H:i', strtotime('now +1 month'));
         $tool_content .= "<div class='col-sm-10'>" . lang_select_options('lang_admin_ann', "class='form-control'") . "</div>";
     }
     $tool_content .= "<small class='text-right'><span class='help-block'>$langTipLangAdminAnn</span></small></div>
         <div class='form-group'>
-            <div class='col-sm-offset-2 col-sm-10'>
-            <div class='checkbox'>
-                <label><input type='checkbox' name='startdate_active'>&nbsp;$langActivate
-                </label>
-            </div>
+            <label for='startdate' class='col-sm-2 control-label'>$langStartDate :</label>
+            <div class='col-sm-10'>
+                <div class='input-group'>
+                    <span class='input-group-addon'>
+                        <input type='checkbox' name='startdate_active' $start_checkbox>
+                    </span>
+                    <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "' disabled>
+                </div>
             </div>
         </div>
-        <div class='input-append date form-group' data-date='$langDate' data-date-format='dd-mm-yyyy'>
-                <label for='startdate' class='col-sm-2 control-label'>$langStartDate :</label>
-                <div class='col-xs-10 col-sm-9'>        
-                    <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
-                </div>
-                <div class='col-xs-2 col-sm-1'>  
-                    <span class='add-on'><i class='fa fa-times'></i></span>
-                    <span class='add-on'><i class='fa fa-calendar'></i></span>
-                </div>
-            </div>";
-    $tool_content .= "<div class='form-group'>
-                <div class='col-sm-offset-2 col-sm-10'>
-                    <div class='checkbox'>
-                        <label><input type='checkbox' name='enddate_active'>&nbsp;$langActivate</label>
-                    </div>
-                </div>
-                </div>
-                <div class='input-append date form-group' data-date='$langDate' data-date-format='dd-mm-yyyy'>
-                    <label for='enddate' class='col-sm-2 control-label'>$langEndDate :</label>
-                    <div class='col-xs-10 col-sm-9'>        
-                        <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
-                    </div>
-                    <div class='col-xs-2 col-sm-1'>  
-                        <span class='add-on'><i class='fa fa-times'></i></span>
-                        <span class='add-on'><i class='fa fa-calendar'></i></span>
-                    </div>
-                </div> 
-            ".showSecondFactorChallenge()."             
-             <div class='form-group'>
-                <div class='col-sm-offset-2 col-sm-10'>
-                    <input class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'>
+        <div class='form-group'>
+            <label for='enddate' class='col-sm-2 control-label'>$langEndDate :</label>
+            <div class='col-sm-10'>
+                <div class='input-group'>
+                    <span class='input-group-addon'>
+                        <input type='checkbox' name='enddate_active' $end_checkbox disabled>
+                    </span>
+                    <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "' disabled>
                 </div>
             </div>
-            ". generate_csrf_token_form_field() ."
-            </form>
-            </div>";
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <div class='checkbox'>
+                    <label>
+                        <input type='checkbox' name='show_public' $checked_public> $showall
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <input id='submitAnnouncement' class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'>
+            </div>
+        </div>
+        ". generate_csrf_token_form_field() ."
+        </form>
+    </div>";
 }
 
 if (isset($_GET['down'])) {
-    $thisAnnouncementId = q(getDirectReference($_GET['down']));
+    $thisAnnouncementId = q($_GET['down']);
     $sortDirection = "DESC";
 }
 if (isset($_GET['up'])) {
-    $thisAnnouncementId = q(getDirectReference($_GET['up']));
+    $thisAnnouncementId = q($_GET['up']);
     $sortDirection = "ASC";
 }
 
@@ -308,48 +337,66 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
 }
 
 // display admin announcements
-if ($displayAnnouncementList == true) {    
-    $result = Database::get()->queryArray("SELECT * FROM admin_announcement $sql_where ORDER BY `order` DESC");
-    $bottomAnnouncement = $announcementNumber = count($result);    
+if ($displayAnnouncementList == true) {
+    $result = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");
+    $bottomAnnouncement = $announcementNumber = count($result);
     if ($announcementNumber > 0) {
         $tool_content .= "<div class='table-responsive'><table class='table-default'>
-                        <tr><th>$langTitle</th>
-                            <th>$langAnnouncement</th>
-                            <th colspan='2'><div align='center'>" . icon('fa-gears') . "</th>";
+                        <tr class='list-header'>
+                            <th style='width: 70%;'>$langAnnouncement</th>
+                            <th>$langDate</th>
+                            <th>$langNewBBBSessionStatus</th>
+                            <th><div align='center'>" . icon('fa-gears') . "</th>
+                        </tr>";
         foreach ($result as $myrow) {
             if ($myrow->visible == 1) {
                 $visibility = 0;
                 $classvis = '';
+                $status_icon_list = "<li><span class='fa fa-eye'></span> $langAdminAnVis</li>";
             } else {
                 $visibility = 1;
                 $classvis = 'not_visible';
+                $status_icon_list = "<li><span class='fa fa-eye-slash'></span> $langAdminAnNotVis</li>";
             }
-            $myrow->date = claro_format_locale_date($dateFormatLong, strtotime($myrow->date));
-            $tool_content .= "<tr class='$classvis'>";
-            if (empty($sql_where)) {
-                $tool_content .= "<td width='200'><b><a href='$_SERVER[SCRIPT_NAME]?aid=$myrow->id'>" . q($myrow->title) . "</a></b><br><span class='smaller'>" . q($myrow->date) . "</span></td>
-                    <td>" . ellipsize_html(standard_text_escape($myrow->body), 100) . "</td>";
+
+            $now = date("Y-m-d H:i:s");
+            if (!is_null($myrow->end) && ($myrow->end <= $now )) {
+                $status_icon_list .= "<li class='text-danger'><span class='fa fa-clock-o'></span> $langAdminExpired</li>";
+                $classvis = 'not_visible';
+            } elseif ( !is_null($myrow->begin) && ($myrow->begin >= $now ) ) {
+                $status_icon_list .= "<li class='text-success'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
+                $classvis = 'not_visible';
             } else {
-                $tool_content .= "<td width='200'><b>" . q($myrow->title) . "</a></b><br><span class='smaller'>" . q($myrow->date) . "</span></td>
-                    <td>" . standard_text_escape($myrow->body) . "</td>";
+                $status_icon_list .= "";
             }
-            $tool_content .= "<td width='6'>" .
+
+            $myrow->date = claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->date));
+            $tool_content .= "<tr class='$classvis'>
+                <td>
+                    <div class='table_td'>
+                        <div class='table_td_header clearfix'><a href='adminannouncements_single.php?ann_id=$myrow->id'>" . q($myrow->title) . "</a></div>
+                        <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->body)."</div>
+                    </div>
+                </td>
+                <td>$myrow->date</td>
+                <td><div><ul class='list-unstyled'>$status_icon_list</ul></div></td>
+                <td>" .
                     action_button(array(
                         array('title' => $langEditChange,
-                            'url' => "$_SERVER[SCRIPT_NAME]?modify=" . getIndirectReference($myrow->id),
+                            'url' => "$_SERVER[SCRIPT_NAME]?modify=$myrow->id",
                             'icon' => 'fa-edit'),
                         array('title' => $visibility == 0 ? $langViewHide : $langViewShow,
-                            'url' => "$_SERVER[SCRIPT_NAME]?id=" . getIndirectReference($myrow->id) . "&amp;vis=$visibility",
+                            'url' => "$_SERVER[SCRIPT_NAME]?id=$myrow->id&amp;vis=$visibility",
                             'icon' => $visibility == 0 ? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $langUp,
-                            'url' => "$_SERVER[SCRIPT_NAME]?up=" . getIndirectReference($myrow->id),
+                            'url' => "$_SERVER[SCRIPT_NAME]?up=$myrow->id",
                             'icon' => 'fa-arrow-up'),
                         array('title' => $langDown,
-                            'url' => "$_SERVER[SCRIPT_NAME]?down=" . getIndirectReference($myrow->id),
+                            'url' => "$_SERVER[SCRIPT_NAME]?down=$myrow->id",
                             'icon' => 'fa-arrow-down'),
                         array('title' => $langDelete,
                             'class' => 'delete',
-                            'url' => "$_SERVER[SCRIPT_NAME]?delete=" . getIndirectReference($myrow->id),
+                            'url' => "$_SERVER[SCRIPT_NAME]?delete=$myrow->id",
                             'confirm' => $langConfirmDelete,
                             'icon' => 'fa-times')
                     )) . "

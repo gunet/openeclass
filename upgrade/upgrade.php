@@ -2995,8 +2995,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         // Remove '0000-00-00' default dates and fix exercise weight fields
         Database::get()->query('ALTER TABLE `announcement`
-            MODIFY `date` DATETIME NOT NULL,
-            MODIFY `start_display` DATETIME DEFAULT NULL,
+            MODIFY `date` DATETIME NOT NULL');
+        Database::get()->query('ALTER TABLE `announcement`
+            MODIFY `start_display` DATETIME DEFAULT NULL');
+        Database::get()->query('ALTER TABLE `announcement`
             MODIFY `stop_display` DATETIME DEFAULT NULL');
         Database::get()->query('ALTER TABLE `agenda`
             CHANGE `start` `start` DATETIME NOT NULL');
