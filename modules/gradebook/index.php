@@ -363,7 +363,7 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
-    } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
+    } elseif (isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         if (isset($_GET['addActivityAs'])) {
             $pageName = "$langAdd $langInsertWork";
@@ -523,12 +523,12 @@ if ($is_editor) {
             $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
         }
         //record booking
-        if(isset($_POST['bookUser'])) {            
+        if (isset($_POST['bookUser'])) {            
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             $userID = intval(getDirectReference($_POST['userID'])); //user
             $gradebook_range = $_POST['degreerange'];                        
-            //get all the gradebook activies --> for each gradebook activity update or insert grade
-            $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d", $gradebook_id);
+            // get all the gradebook activies --> for each gradebook activity update or insert grade
+            $result = Database::get()->queryArray("SELECT * FROM gradebook_activities WHERE gradebook_id = ?d", $gradebook_id);
             if ($result) {
                 foreach ($result as $activity) {
                     $attend = floatval($_POST[getIndirectReference($activity->id)]); //get the record from the teacher (input name is the activity id)
@@ -539,7 +539,7 @@ if ($is_editor) {
                         Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d ", $attend/$gradebook_range, $checkForBook->id);
                     } else {
                         //insert
-                        Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $activity->id, $attend, '');
+                        Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $activity->id, $attend/$gradebook_range, '');
                     }
                 }
                 $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
