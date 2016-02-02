@@ -265,41 +265,41 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     $tool_content .= "<small class='text-right'><span class='help-block'>$langTipLangAdminAnn</span></small></div>
         <div class='form-group'>
             <label for='startdate' class='col-sm-2 control-label'>$langStartDate :</label>
-                <div class='col-sm-10'>
-                    <div class='input-group'>
-                        <span class='input-group-addon'>
-                            <input type='checkbox' name='startdate_active' $start_checkbox>
-                        </span>
-                        <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "' disabled>
-                    </div>
+            <div class='col-sm-10'>
+                <div class='input-group'>
+                    <span class='input-group-addon'>
+                        <input type='checkbox' name='startdate_active' $start_checkbox>
+                    </span>
+                    <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "' disabled>
                 </div>
             </div>
-            <div class='form-group'>
-                <label for='enddate' class='col-sm-2 control-label'>$langEndDate :</label>
-                <div class='col-sm-10'>
-                    <div class='input-group'>
-                        <span class='input-group-addon'>
-                            <input type='checkbox' name='enddate_active' $end_checkbox disabled>
-                        </span>
-                        <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "' disabled>
-                    </div>
+        </div>
+        <div class='form-group'>
+            <label for='enddate' class='col-sm-2 control-label'>$langEndDate :</label>
+            <div class='col-sm-10'>
+                <div class='input-group'>
+                    <span class='input-group-addon'>
+                        <input type='checkbox' name='enddate_active' $end_checkbox disabled>
+                    </span>
+                    <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "' disabled>
                 </div>
             </div>
-            <div class='form-group'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                    <div class='checkbox'>
-                        <label>
-                            <input type='checkbox' name='show_public' $checked_public> $showall
-                        </label>
-                    </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <div class='checkbox'>
+                    <label>
+                        <input type='checkbox' name='show_public' $checked_public> $showall
+                    </label>
                 </div>
             </div>
-            <div class='form-group'>
-                <div class='col-sm-offset-2 col-sm-10'>
-                    <input id='submitAnnouncement' class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'>
-                </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <input id='submitAnnouncement' class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'>
             </div>
-            ". generate_csrf_token_form_field() ."
+        </div>
+        ". generate_csrf_token_form_field() ."
         </form>
     </div>";
 }

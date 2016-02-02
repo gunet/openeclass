@@ -625,10 +625,10 @@ if (isset($_GET['an_id'])) {
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
         $tool_content .= "<table id='ann_table{$course_id}' class='table-default'>";
         $tool_content .= "<thead>";
-        $tool_content .= "<tr class='list-header'><th>$langAnnouncement</th><th>$langDate</th><th>$langNewBBBSessionStatus</th>";
+        $tool_content .= "<tr class='list-header'><th>$langAnnouncement</th><th>$langDate</th>";
 
         if ($is_editor) {
-            $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
+            $tool_content .= "<th>$langNewBBBSessionStatus</th><th class='text-center'><i class='fa fa-cogs'></i></th>";
         }
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
