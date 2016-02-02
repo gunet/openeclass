@@ -2993,6 +2993,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             MODIFY `start_display` DATETIME DEFAULT NULL');
         Database::get()->query('ALTER TABLE `announcement`
             MODIFY `stop_display` DATETIME DEFAULT NULL');
+        Database::get()->query("UPDATE announcement SET start_display=null 
+                            WHERE start_display='0000-00-00 00:00:00'");
+        Database::get()->query("UPDATE announcement SET stop_display=null 
+                            WHERE stop_display='0000-00-00 00:00:00'");
         Database::get()->query('ALTER TABLE `agenda`
             CHANGE `start` `start` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course`
