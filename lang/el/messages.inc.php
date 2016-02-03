@@ -36,7 +36,7 @@ $langAboutCourses = "Η πλατφόρμα υποστηρίζει συνολικ
 $langAboutUsers = "H πλατφόρμα διαθέτει";
 $langOperation = "Λειτουργία";
 $langContactInfo = "Στοιχεία επικοινωνίας";
-$langInCourses = "Στο $langsCourse";
+$langInCourses = "στο $langsCourse";
 $langInCoursesL = "στο $langsCourse";
 $langOfSite = "της πλατφόρμας";
 $langResourceBrowser = 'Αναζήτηση πόρων';
@@ -1298,7 +1298,7 @@ $langMultiCourse = "Μαζική δημιουργία $langsOfCourses";
 $langMultiCourseInfo = 'Εισαγάγετε στην παρακάτω περιοχή μια λίστα με τους
 τίτλους των $langsOfCourses που επιθυμείτε να δημιουργηθούν, με τον κάθε
 τίτλο σε ξεχωριστή γραμμή. Αν επιθυμείτε να προστεθεί αυτόματα
-καθηγητής στο $langsCourse, σημπληρώστε το ονοματεπώνυμο ή το όνομα χρήστη
+καθηγητής στο '. $langsCourse . ', σημπληρώστε το ονοματεπώνυμο ή το όνομα χρήστη
 του μετά τον τίτλο, διαχωρισμένο με το χαρακτήρα "|".';
 $langMultiCourseTitles = "Τίτλοι / Καθηγητές $langOfCourses";
 $langMultiCourseData = "Στοιχεία $langOfCourses";
