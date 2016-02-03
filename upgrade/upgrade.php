@@ -2995,10 +2995,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         // Remove '0000-00-00' default dates and fix exercise weight fields
         Database::get()->query('ALTER TABLE `announcement`
-            MODIFY `date` DATETIME NOT NULL');
-        Database::get()->query('ALTER TABLE `announcement`
-            MODIFY `start_display` DATETIME DEFAULT NULL');
-        Database::get()->query('ALTER TABLE `announcement`
+            MODIFY `date` DATETIME DEFAULT NULL,
+            MODIFY `start_display` DATETIME DEFAULT NULL,
             MODIFY `stop_display` DATETIME DEFAULT NULL');
         Database::get()->query("UPDATE announcement SET start_display=null 
                             WHERE start_display='0000-00-00 00:00:00'");
@@ -3007,10 +3005,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query('ALTER TABLE `agenda`
             CHANGE `start` `start` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course`
-            CHANGE `created` `created` DATETIME NOT NULL');
+            MODIFY `created` DATETIME DEFAULT NULL,
+            MODIFY `start_date` DATE DEFAULT NULL,
+            MODIFY `finish_date` DATE DEFAULT NULL');
+        var_dump($la);echo "<br>";echo "<br>";
         Database::get()->query('ALTER TABLE `course_weekly_view`
-            CHANGE `start_week` `start_week` DATE NOT NULL,
-            CHANGE `finish_week` `finish_week` DATE NOT NULL');
+            MODIFY `start_week` DATE DEFAULT NULL,
+            MODIFY `finish_week` DATE DEFAULT NULL');
+        var_dump($la);echo "<br>";echo "<br>";
         Database::get()->query('ALTER TABLE `course_weekly_view_activities`
             CHANGE `date` `date` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course_user_request`
@@ -3036,8 +3038,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query('ALTER TABLE `wiki_pages_content`
             CHANGE `mtime` `mtime` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `wiki_locks`
-            CHANGE `ltime_created` `ltime_created` TIMESTAMP NOT NULL,
-            CHANGE `ltime_alive` `ltime_alive` TIMESTAMP NOT NULL');
+            CHANGE `ltime_created` `ltime_created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            CHANGE `ltime_alive` `ltime_alive` TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
         Database::get()->query('ALTER TABLE `poll`
             CHANGE `creation_date` `creation_date` DATETIME NOT NULL,
             CHANGE `start_date` `start_date` DATETIME DEFAULT NULL,
