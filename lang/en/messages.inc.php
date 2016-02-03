@@ -4330,6 +4330,7 @@ $langEPFConfirmFieldDelete = 'Deleting this field will result in the deletion of
 $langMyePortfolio = 'My e-portfolio';
 $langEditePortfolio = 'Edit e-portfolio';
 $langUserePortfolio = 'User e-portfolio';
+$langePortfolioChangeSucc = 'E-portfolio changes were processed succesfully'
 $langInCoursesL = "in course";
 $langOfCourse = "for course";
 $langCommentsUser = "User comments";

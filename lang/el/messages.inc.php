@@ -4848,6 +4848,7 @@ $langEPFConfirmFieldDelete = 'Διαγράφοντας αυτό το πεδίο 
 $langMyePortfolio = 'Το e-portfolio μου';
 $langEditePortfolio = 'Επεξεργασία του e-portfolio';
 $langUserePortfolio = 'e-portfolio χρήστη';
+$langePortfolioChangeSucc = 'Οι αλλαγές στο e-portfolio αποθηκεύθηκαν επιτυχώς'
 
 /* * ******************************************
   Widgets
