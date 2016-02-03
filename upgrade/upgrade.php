@@ -3139,7 +3139,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             WHERE exercise_user_record.eurid = exercise_answer_record_total.eurid AND
                   exercise_user_record.total_score <> exercise_answer_record_total.total');
         Database::get()->query('DROP TEMPORARY TABLE exercise_answer_record_total');
-        
+
         // Fix duplicate link orders
         Database::get()->queryFunc('SELECT DISTINCT course_id, category FROM link
             GROUP BY course_id, category, `order` HAVING COUNT(*) > 1',
