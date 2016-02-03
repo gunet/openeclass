@@ -2992,20 +2992,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             MODIFY `start_display` DATETIME DEFAULT NULL,
             MODIFY `stop_display` DATETIME DEFAULT NULL');
         Database::get()->query("UPDATE announcement SET start_display=null 
-                            WHERE start_display='0000-00-00 00:00:00'");
+            WHERE start_display='0000-00-00 00:00:00'");
         Database::get()->query("UPDATE announcement SET stop_display=null 
-                            WHERE stop_display='0000-00-00 00:00:00'");
+            WHERE stop_display='0000-00-00 00:00:00'");
         Database::get()->query('ALTER TABLE `agenda`
             CHANGE `start` `start` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course`
             MODIFY `created` DATETIME DEFAULT NULL,
             MODIFY `start_date` DATE DEFAULT NULL,
-            MODIFY `finish_date` DATE DEFAULT NULL');
-        var_dump($la);echo "<br>";echo "<br>";
+            MODIFY `finish_date` DATE DEFAULT NULL');        
         Database::get()->query('ALTER TABLE `course_weekly_view`
             MODIFY `start_week` DATE DEFAULT NULL,
-            MODIFY `finish_week` DATE DEFAULT NULL');
-        var_dump($la);echo "<br>";echo "<br>";
+            MODIFY `finish_week` DATE DEFAULT NULL');        
         Database::get()->query('ALTER TABLE `course_weekly_view_activities`
             CHANGE `date` `date` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course_user_request`
@@ -3141,15 +3139,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             WHERE exercise_user_record.eurid = exercise_answer_record_total.eurid AND
                   exercise_user_record.total_score <> exercise_answer_record_total.total');
         Database::get()->query('DROP TEMPORARY TABLE exercise_answer_record_total');
-
-        // Use NULL for dates that can be unset
-        Database::get()->query('ALTER TABLE `course`
-            CHANGE `start_date` `start_date` DATE DEFAULT NULL,
-            CHANGE `finish_date` `finish_date` DATE DEFAULT NULL');
-        Database::get()->query('ALTER TABLE `announcement`
-            CHANGE `start_display` `start_display` DATE DEFAULT NULL,
-            CHANGE `stop_display` `stop_display` DATE DEFAULT NULL');
-
+        
         // Fix duplicate link orders
         Database::get()->queryFunc('SELECT DISTINCT course_id, category FROM link
             GROUP BY course_id, category, `order` HAVING COUNT(*) > 1',
