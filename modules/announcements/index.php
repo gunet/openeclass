@@ -45,23 +45,23 @@ define_rss_link();
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['action']) && $is_editor) {
         if ($_POST['action']=='delete') {
-           /* delete announcement */
+            /* delete announcement */
             $row_id = intval($_POST['value']);
             $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
             $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
             Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
             Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
-                                                                          'title' => $announce->title,
-                                                                          'content' => $txt_content));
+                'title' => $announce->title,
+                'content' => $txt_content));
             exit();
         } elseif ($_POST['action']=='visible') {
-          /* modify visibility */
-           $row_id = intval($_POST['value']);
-           $visible = intval($_POST['visible']) ? 1 : 0;
-           Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", $visible, $row_id);
-           Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
-           exit();
+            /* modify visibility */
+            $row_id = intval($_POST['value']);
+            $visible = intval($_POST['visible']) ? 1 : 0;
+            Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", $visible, $row_id);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+            exit();
         }
     }
     $limit = intval($_GET['iDisplayLength']);
@@ -107,27 +107,27 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 '2' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
                 '3' => action_button(array(
                     array('title' => $langEditChange,
-                          'icon' => 'fa-edit',
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id"),
+                        'icon' => 'fa-edit',
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id"),
                     array('title' => !$myrow->visible == '0' ? $langViewHide : $langViewShow,
-                          'icon' => !$myrow->visible == '0' ? 'fa-eye-slash' : 'fa-eye',
-                          'icon-class' => 'vis_btn',
-                          'icon-extra' => "data-vis='$visible' data-id='$myrow->id'"),
+                        'icon' => !$myrow->visible == '0' ? 'fa-eye-slash' : 'fa-eye',
+                        'icon-class' => 'vis_btn',
+                        'icon-extra' => "data-vis='$visible' data-id='$myrow->id'"),
                     array('title' => $langDelete,
-                          'class' => 'delete',
-                          'icon' => 'fa-times',
-                          'icon-class' => 'delete_btn',
-                          'icon-extra' => "data-id='$myrow->id'"),
+                        'class' => 'delete',
+                        'icon' => 'fa-times',
+                        'icon-class' => 'delete_btn',
+                        'icon-extra' => "data-id='$myrow->id'"),
                     array('title' => $langMove,
-                          'level' => 'primary',
-                          'icon' => 'fa-arrow-up',
-                          'disabled' => !($iterator != 1 || $offset > 0),
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id"),
+                        'level' => 'primary',
+                        'icon' => 'fa-arrow-up',
+                        'disabled' => !($iterator != 1 || $offset > 0),
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id"),
                     array('title' => $langMove,
-                          'level' => 'primary',
-                          'disabled' => $offset + $iterator >= $all_announc->total,
-                          'icon' => 'fa-arrow-down',
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id"))));
+                        'level' => 'primary',
+                        'disabled' => $offset + $iterator >= $all_announc->total,
+                        'icon' => 'fa-arrow-down',
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id"))));
             $iterator++;
         }
     } else {
@@ -135,7 +135,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $data['aaData'][] = array(
                 '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>',
                 '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date))
-                );
+            );
         }
     }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -144,8 +144,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 load_js('tools.js');
 //check if Datables code is needed
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
-load_js('datatables');
-$head_content .= "<script type='text/javascript'>
+    load_js('datatables');
+    $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
            var oTable = $('#ann_table{$course_id}').DataTable ({
                 ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
@@ -269,38 +269,38 @@ if (isset($_GET['an_id'])) {
     }
 }
 if ($is_editor) {
-  $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' . $langEmptyAnTitle . '";</script>';
-  /* up and down commands */
-  if (isset($_GET['down'])) {
-    $thisAnnouncementId = $_GET['down'];
-    $sortDirection = "DESC";
-  }
-  if (isset($_GET['up'])) {
-    $thisAnnouncementId = $_GET['up'];
-    $sortDirection = "ASC";
-  }
+    $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' . $langEmptyAnTitle . '";</script>';
+    /* up and down commands */
+    if (isset($_GET['down'])) {
+        $thisAnnouncementId = $_GET['down'];
+        $sortDirection = "DESC";
+    }
+    if (isset($_GET['up'])) {
+        $thisAnnouncementId = $_GET['up'];
+        $sortDirection = "ASC";
+    }
 
-  $thisAnnouncementOrderFound = false;
-  if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
-            $ids = Database::get()->queryArray("SELECT id, `order` FROM announcement
+    $thisAnnouncementOrderFound = false;
+    if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
+        $ids = Database::get()->queryArray("SELECT id, `order` FROM announcement
                                            WHERE course_id = ?d
                                            ORDER BY `order` $sortDirection",$course_id );
-            foreach ($ids as $announcement) {
-                if ($thisAnnouncementOrderFound) {
-                    $nextAnnouncementId = $announcement->id;
-                    $nextAnnouncementOrder = $announcement->order;
-                    Database::get()->query("UPDATE announcement SET `order` = ?d WHERE id = ?d", $nextAnnouncementOrder, $thisAnnouncementId);
-                    Database::get()->query("UPDATE announcement SET `order` = ?d WHERE id = ?d", $thisAnnouncementOrder, $nextAnnouncementId);
-                    break;
-                }
-                // find the order
-                if ($announcement->id == $thisAnnouncementId) {
-                    $thisAnnouncementOrder = $announcement->order;
-                    $thisAnnouncementOrderFound = true;
-                }
-           }
-           redirect_to_home_page("modules/announcements/index.php?course=$course_code");
-  }
+        foreach ($ids as $announcement) {
+            if ($thisAnnouncementOrderFound) {
+                $nextAnnouncementId = $announcement->id;
+                $nextAnnouncementOrder = $announcement->order;
+                Database::get()->query("UPDATE announcement SET `order` = ?d WHERE id = ?d", $nextAnnouncementOrder, $thisAnnouncementId);
+                Database::get()->query("UPDATE announcement SET `order` = ?d WHERE id = ?d", $thisAnnouncementOrder, $nextAnnouncementId);
+                break;
+            }
+            // find the order
+            if ($announcement->id == $thisAnnouncementId) {
+                $thisAnnouncementOrder = $announcement->order;
+                $thisAnnouncementOrderFound = true;
+            }
+        }
+        redirect_to_home_page("modules/announcements/index.php?course=$course_code");
+    }
 
     /* modify */
     if (isset($_GET['modify'])) {
@@ -311,13 +311,13 @@ if ($is_editor) {
             $contentToModify = $announce->content;
             $titleToModify = q($announce->title);
             if ($announce->start_display) {
-                $startDate_obj = DateTime::createFromFormat('Y-m-d', $announce->start_display);
-                $startdate = $startDate_obj->format('d-m-Y');
+                $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $announce->start_display);
+                $startdate = $startDate_obj->format('d-m-Y H:i');
                 $showFrom = q($startdate);
             }
             if ($announce->stop_display) {
-                $endDate_obj = DateTime::createFromFormat('Y-m-d', $announce->stop_display);
-                $enddate = $endDate_obj->format('d-m-Y');
+                $endDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $announce->stop_display);
+                $enddate = $endDate_obj->format('d-m-Y H:i');
                 $showUntil = q($enddate);
             }
         }
@@ -334,14 +334,14 @@ if ($is_editor) {
         $newContent = purify($_POST['newContent']);
         $send_mail = isset($_POST['recipients']) && (count($_POST['recipients'])>0);
         if (isset($_POST['startdate']) && !empty($_POST['startdate'])) {
-            $startDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['startdate']);
-            $start_display = $startDate_obj->format('Y-m-d');
+            $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['startdate']);
+            $start_display = $startDate_obj->format('Y-m-d H:i:s');
         } else {
             $start_display = null;
         }
         if (isset($_POST['enddate']) && !empty($_POST['enddate'])) {
-            $endDate_obj = DateTime::createFromFormat('d-m-Y', $_POST['enddate']);
-            $stop_display = $endDate_obj->format('Y-m-d');
+            $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['enddate']);
+            $stop_display = $endDate_obj->format('Y-m-d H:i:s');
         } else {
             $stop_display = null;
         }
@@ -380,9 +380,9 @@ if ($is_editor) {
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
         Log::record($course_id, MODULE_ID_ANNOUNCE, $log_type, array('id' => $id,
-                                                                     'email' => $send_mail,
-                                                                     'title' => $_POST['antitle'],
-                                                                     'content' => $txt_content));
+            'email' => $send_mail,
+            'title' => $_POST['antitle'],
+            'content' => $txt_content));
 
         // send email
         if ($send_mail) {
@@ -449,7 +449,7 @@ if ($is_editor) {
                                                    FROM course_user, user
                                                    WHERE course_id = ?d AND user.id IN ($recipients_emaillist) AND
                                                          course_user.user_id = user.id", function ($person)
-                    use (&$countEmail, &$recipients, &$invalid, $course_id, $general_to, $emailSubject, $emailBody, $emailContent, $charset) {
+            use (&$countEmail, &$recipients, &$invalid, $course_id, $general_to, $emailSubject, $emailBody, $emailContent, $charset) {
                 $countEmail++;
                 $emailTo = $person->email;
                 $user_id = $person->id;
@@ -494,29 +494,31 @@ if ($is_editor) {
         if (!isset($showFrom)) $showFrom = "";
         if (!isset($showUntil)) $showUntil = "";
 
-        load_js('bootstrap-datepicker');
+        load_js('bootstrap-datetimepicker');
         $head_content .= "
             <script type='text/javascript'>
             $(function() {
-                $('#startdate').datepicker({
-                    format: 'dd-mm-yyyy',
-                    language: '$language',
+                $('#startdate').datetimepicker({
+                    format: 'dd-mm-yyyy hh:ii',
+                    pickerPosition: 'bottom-left',
+                    language: '".$language."',
                     autoclose: true
                 });
-                $('#enddate').datepicker({
-                    format: 'dd-mm-yyyy',
-                    language: '$language',
+                $('#enddate').datetimepicker({
+                    format: 'dd-mm-yyyy hh:ii',
+                    pickerPosition: 'bottom-left',
+                    language: '".$language."',
                     autoclose: true
                 });
             });"
-        . "</script>";
-    $tool_content .= action_bar(array(
-                array('title' => $langBack,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
-    $tool_content .= "<div class='form-wrapper'>";
-    $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
+            . "</script>";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')));
+        $tool_content .= "<div class='form-wrapper'>";
+        $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
         <div class='form-group'>
             <label for='AnnTitle' class='col-sm-2 control-label'>$langAnnTitle:</label>
@@ -528,27 +530,27 @@ if ($is_editor) {
           <label for='AnnBody' class='col-sm-2 control-label'>$langAnnBody:</label>
             <div class='col-sm-10'>".rich_text_editor('newContent', 4, 20, $contentToModify)."</div>
         </div>
-        <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel'>$langEmailOption:</label></div>
+        <div class='form-group'><label for='Email' class=' col-sm-12 control-panel'>$langEmailOption:</label></div>
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
                 <select class='form-control' name='recipients[]' multiple class='form-control' id='select-recipients'>";
-                $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email
+        $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email
                                                     FROM course_user cu
                                                         JOIN user u ON cu.user_id=u.id
                                                     WHERE cu.course_id = ?d
                                                     AND u.email<>''
                                                     AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
 
-                $tool_content .= "<option value='-1' selected><h2>$langAllUsers</h2></option>";
-                foreach($course_users as $cu) {
-                   $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->email) . ")</option>";
-                }
-                $tool_content .= "</select>
+        $tool_content .= "<option value='-1' selected><h2>$langAllUsers</h2></option>";
+        foreach($course_users as $cu) {
+            $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->email) . ")</option>";
+        }
+        $tool_content .= "</select>
                 <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
         </div>
         " . Tag::tagInput($AnnouncementToModify) . "
-        <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel'>$langAnnouncementActivePeriod:</label></div>
+        <div class='form-group'><label for='Email' class=' col-sm-12 control-panel'>$langAnnouncementActivePeriod:</label></div>
 
         <div class='form-group'>
             <label for='From' class='col-sm-2 control-label'>$langFrom:</label>
@@ -585,53 +587,53 @@ if (isset($_GET['an_id'])) {
     $pageName = $row->title;
     $tool_content .= action_bar(array(
         array('title' => $langModify,
-              'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;modify=$row->id",
-              'icon' => 'fa-edit',
-              'level' => 'primary-label',
-               'show' => $is_editor),
+            'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;modify=$row->id",
+            'icon' => 'fa-edit',
+            'level' => 'primary-label',
+            'show' => $is_editor),
         array('title' => $langBack,
-              'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
-              'icon' => 'fa-reply',
-              'level' => 'primary-label'),
+            'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'),
         array('title' => $langDelete,
-              'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
-              'icon' => 'fa-times',
-              'confirm' => $langSureToDelAnnounce,
-              'show' => $is_editor)));
-    } elseif (!isset($_GET['modify']) && !isset($_GET['addAnnounce'])) {
-        $tool_content .= action_bar(array(
-            array('title' => $langAddAnn,
-                  'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
-                  'icon' => 'fa-plus-circle',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success',
-                  'show' => $is_editor)));
-    }
-    /* display announcements */
-    if (isset($_GET['an_id'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
-        $tool_content .= "<div class='panel'>";
-        $tool_content .= "<div class='panel-body'>";
-        $tool_content .= "<div class='not_visible margin-bottom-thin'>$langDate: $row->date</div>";
-        $tool_content .= $row->content;
+            'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
+            'icon' => 'fa-times',
+            'confirm' => $langSureToDelAnnounce,
+            'show' => $is_editor)));
+} elseif (!isset($_GET['modify']) && !isset($_GET['addAnnounce'])) {
+    $tool_content .= action_bar(array(
+        array('title' => $langAddAnn,
+            'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success',
+            'show' => $is_editor)));
+}
+/* display announcements */
+if (isset($_GET['an_id'])) {
+    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
+    $tool_content .= "<div class='panel'>";
+    $tool_content .= "<div class='panel-body'>";
+    $tool_content .= "<div class='not_visible margin-bottom-thin'>$langDate: $row->date</div>";
+    $tool_content .= $row->content;
 
-        $moduleTag = new ModuleElement($row->id);
-        $tags_list = $moduleTag->showTags();
-        if ($tags_list) $tool_content .= "<div>$langTags: $tags_list</div>";
-        $tool_content .= "
+    $moduleTag = new ModuleElement($row->id);
+    $tags_list = $moduleTag->showTags();
+    if ($tags_list) $tool_content .= "<div>$langTags: $tags_list</div>";
+    $tool_content .= "
                     </div>
                 </div>";
-    }
-    if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
-        $tool_content .= "<table id='ann_table{$course_id}' class='table-default'>";
-        $tool_content .= "<thead>";
-        $tool_content .= "<tr class='list-header'><th>$langAnnouncement</th><th>$langDate</th>";
+}
+if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
+    $tool_content .= "<table id='ann_table{$course_id}' class='table-default'>";
+    $tool_content .= "<thead>";
+    $tool_content .= "<tr class='list-header'><th>$langAnnouncement</th><th>$langDate</th>";
 
-        if ($is_editor) {
-            $tool_content .= "<th>$langNewBBBSessionStatus</th><th class='text-center'><i class='fa fa-cogs'></i></th>";
-        }
-        $tool_content .= "</tr></thead><tbody></tbody></table>";
+    if ($is_editor) {
+        $tool_content .= "<th>$langNewBBBSessionStatus</th><th class='text-center'><i class='fa fa-cogs'></i></th>";
     }
+    $tool_content .= "</tr></thead><tbody></tbody></table>";
+}
 
 
 add_units_navigation(TRUE);
