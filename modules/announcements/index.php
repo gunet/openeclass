@@ -339,13 +339,13 @@ if ($is_editor) {
         $antitle = $_POST['antitle'];
         $newContent = purify($_POST['newContent']);
         $send_mail = isset($_POST['recipients']) && (count($_POST['recipients'])>0);
-        if (isset($_POST['startdate']) && !empty($_POST['startdate'])) {
+        if (isset($_POST['startdate_active']) && isset($_POST['startdate']) && !empty($_POST['startdate'])) {
             $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['startdate']);
             $start_display = $startDate_obj->format('Y-m-d H:i:s');
         } else {
             $start_display = null;
         }
-        if (isset($_POST['enddate']) && !empty($_POST['enddate'])) {
+        if (isset($_POST['enddate_active']) && isset($_POST['enddate']) && !empty($_POST['enddate'])) {
             $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['enddate']);
             $stop_display = $endDate_obj->format('Y-m-d H:i:s');
         } else {
@@ -490,9 +490,34 @@ if ($is_editor) {
         if (isset($_GET['modify'])) {
             $langAdd = $pageName = $langModifAnn;
             $announce->visible? $checked_public = "checked" : $checked_public = "";
+            if (!is_null($announce->start_display)) {
+                $start_checkbox = "checked";
+                $start_text_disabled = "";
+                $end_disabled = "";
+                if (!is_null($announce->stop_display)) {
+                    $end_checkbox = "checked";
+                    $end_text_disabled = "";
+                } else {
+                    $end_checkbox = "";
+                    $end_text_disabled = "disabled";
+                }
+            } else {
+                $start_checkbox = "";
+                $start_text_disabled = "disabled";
+                $end_checkbox = "";
+                $end_disabled = "disabled";
+                $end_text_disabled = "disabled";
+            }
+
+
         } else {
             $pageName = $langAddAnn;
             $checked_public = "checked";
+            $start_checkbox = "";
+            $end_checkbox = "";
+            $start_text_disabled = "disabled";
+            $end_disabled = "disabled";
+            $end_text_disabled = "disabled";
         }
         $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langAnnouncements);
 
@@ -560,14 +585,31 @@ if ($is_editor) {
         " . Tag::tagInput($AnnouncementToModify) . "
         <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langAnnouncementActivePeriod:</label></div>
 
+
         <div class='form-group'>
-            <label for='From' class='col-sm-2 control-label'>$langFrom:</label>
-            <div class='col-sm-10'><input class='form-control' type='text' name='startdate' id='startdate' value='$showFrom'></div>
+            <label for='startdate' class='col-sm-2 control-label'>$langStartDate :</label>
+            <div class='col-sm-10'>
+                <div class='input-group'>
+                    <span class='input-group-addon'>
+                        <input type='checkbox' name='startdate_active' $start_checkbox>
+                    </span>
+                    <input class='form-control' name='startdate' id='startdate' type='text' value = '$showFrom' $start_text_disabled>
+                </div>
+            </div>
         </div>
         <div class='form-group'>
-            <label for='From' class='col-sm-2 control-label'>$langUntil:</label>
-            <div class='col-sm-10'><input class='form-control' type='text' name='enddate' id='enddate' value='$showUntil'></div>
+            <label for='enddate' class='col-sm-2 control-label'>$langEndDate :</label>
+            <div class='col-sm-10'>
+                <div class='input-group'>
+                    <span class='input-group-addon'>
+                        <input type='checkbox' name='enddate_active' $end_checkbox $end_disabled>
+                    </span>
+                    <input class='form-control' name='enddate' id='enddate' type='text' value = '$showUntil' $end_text_disabled>
+                </div>
+            </div>
         </div>
+
+
         <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
@@ -657,6 +699,33 @@ add_units_navigation(TRUE);
 load_js('select2');
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
+
+
+
+            $('input[name=startdate_active]').prop('checked') ? $('input[name=startdate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
+            $('input[name=enddate_active]').prop('checked') ? $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
+
+                $('input[name=startdate_active]').on('click', function() {
+                    if ($('input[name=startdate_active]').prop('checked')) {
+                        $('input[name=enddate_active]').prop('disabled', false);
+                    } else {
+                        $('input[name=enddate_active]').prop('disabled', true);
+                        $('input[name=enddate_active]').prop('checked', false);
+                        $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
+                    }
+                });
+
+
+                $('.input-group-addon input[type=checkbox]').on('click', function(){
+                var prop = $(this).parents('.input-group').children('input').prop('disabled');
+                    if(prop){
+                        $(this).parents('.input-group').children('input').prop('disabled', false);
+                    } else {
+                        $(this).parents('.input-group').children('input').prop('disabled', true);
+                    }
+                });
+
+
         $('#select-recipients').select2();
         $('#selectAll').click(function(e) {
             e.preventDefault();
