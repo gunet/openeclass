@@ -243,23 +243,40 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             $checked_public = "";
         }
         if (isset($begindate)) {
-            $start_checkbox = 'checked';
+            $start_checkbox = "checked";
+            $start_text_disabled = "";
+            $end_disabled = "";
             $startdate = $begindate;
+            if (isset($enddate)) {
+                $end_checkbox = "checked";
+                $end_text_disabled = "";
+            } else {
+                $end_checkbox = "";
+                $end_text_disabled = "disabled";
+            }
         } else {
-            $start_checkbox = '';
+            $start_checkbox = "";
+            $start_text_disabled = "disabled";
+            $end_checkbox = "";
+            $end_disabled = "disabled";
+            $end_text_disabled = "disabled";
             $startdate = date('d-m-Y H:i', strtotime('now'));
         }
         if (isset($enddate)) {
             $end_checkbox = 'checked';
         } else {
             $end_checkbox = '';
-            $enddate = date('d-m-Y H:i', strtotime('now +1 month'));
+            $enddate = '';
         }
         $tool_content .= "<div class='col-sm-10'>" . lang_select_options('lang_admin_ann', "class='form-control'", $myrow->lang) . "</div>";
     } else {
         $start_checkbox = $end_checkbox = '';
-        $startdate = date('d-m-Y H:i', strtotime('now'));
-        $enddate = date('d-m-Y H:i', strtotime('now +1 month'));
+        $start_text_disabled = "disabled";
+        $end_disabled = "disabled";
+        $end_text_disabled = "disabled";
+
+        $startdate = '';
+        $enddate = '';
         $tool_content .= "<div class='col-sm-10'>" . lang_select_options('lang_admin_ann', "class='form-control'") . "</div>";
     }
     $tool_content .= "<small class='text-right'><span class='help-block'>$langTipLangAdminAnn</span></small></div>
@@ -270,7 +287,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                     <span class='input-group-addon'>
                         <input type='checkbox' name='startdate_active' $start_checkbox>
                     </span>
-                    <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "' disabled>
+                    <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "' $start_text_disabled>
                 </div>
             </div>
         </div>
@@ -279,9 +296,9 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             <div class='col-sm-10'>
                 <div class='input-group'>
                     <span class='input-group-addon'>
-                        <input type='checkbox' name='enddate_active' $end_checkbox disabled>
+                        <input type='checkbox' name='enddate_active' $end_checkbox $end_disabled>
                     </span>
-                    <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "' disabled>
+                    <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "' $end_text_disabled>
                 </div>
             </div>
         </div>
