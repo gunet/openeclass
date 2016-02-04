@@ -49,20 +49,19 @@ if (isset($_POST['submit'])) {
         Session::Messages($langFieldsMissing);
         redirect_to_home_page("main/profile/profile.php");
     }
-    
-    //check for validation errors in custom profile fields
-    $cpf_check = cpf_validate_format();
-    if ($cpf_check[0] === false) {
-        $cpf_error_str = '';
-        unset($cpf_check[0]);
-        foreach ($cpf_check as $cpf_error) {
-            $cpf_error_str .= $cpf_error;
+    */
+    //check for validation errors in eportfolio fields
+    $epf_check = epf_validate();
+    if ($epf_check[0] === false) {
+        $epf_error_str = '';
+        unset($epf_check[0]);
+        foreach ($epf_check as $epf_error) {
+            $epf_error_str .= $epf_error;
         }
-        Session::Messages($cpf_error_str);
-        redirect_to_home_page("main/profile/profile.php");
+        Session::Messages($epf_error_str);
+        redirect_to_home_page("main/eportfolio/edit_eportfolio.php");
     }
 
-    */
     process_eportfolio_fields_data();
 
     Session::Messages($langePortfolioChangeSucc, 'alert-success');
