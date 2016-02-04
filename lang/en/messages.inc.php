@@ -4331,7 +4331,6 @@ $langMyePortfolio = 'My e-portfolio';
 $langEditePortfolio = 'Edit e-portfolio';
 $langUserePortfolio = 'User e-portfolio';
 $langePortfolioChangeSucc = 'E-portfolio changes were processed succesfully';
-$langEPFReqAlert = '%s is a required field';
 $langInCoursesL = "in course";
 $langOfCourse = "for course";
 $langCommentsUser = "User comments";
