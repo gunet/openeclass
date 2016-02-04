@@ -50,15 +50,11 @@ if (isset($_POST['submit'])) {
         redirect_to_home_page("main/profile/profile.php");
     }
     */
-    //check for validation errors in eportfolio fields
+    //check for validation errors in e-portfolio fields
     $epf_check = epf_validate();
     if ($epf_check[0] === false) {
-        $epf_error_str = '';
         unset($epf_check[0]);
-        foreach ($epf_check as $epf_error) {
-            $epf_error_str .= $epf_error;
-        }
-        Session::Messages($epf_error_str);
+        Session::Messages($epf_check);
         redirect_to_home_page("main/eportfolio/edit_eportfolio.php");
     }
 

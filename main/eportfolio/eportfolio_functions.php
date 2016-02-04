@@ -260,9 +260,9 @@ function epf_validate() {
     global $langCPFLinkValidFail, $langCPFDateValidFail, $langEPFReqAlert;
     $ret = array(0 => true);
     foreach ($_POST as $key => $value) {
-        if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
+        if (substr($key, 0, 4) == 'epf_') { //e-portfolio fields input names start with epf_
             $field_name = substr($key, 4);
-            $result = Database::get()->querySingle("SELECT name, datatype, required FROM custom_profile_fields WHERE shortname = ?s", $field_name);
+            $result = Database::get()->querySingle("SELECT name, datatype, required FROM eportfolio_fields WHERE shortname = ?s", $field_name);
             $datatype = $result->datatype;
             $field_name = $result->name;
             $required = $result->required;
@@ -270,12 +270,12 @@ function epf_validate() {
                 $ret[0] = false;
                 $ret[] .= sprintf($langEPFReqAlert, q($field_name));
             }
-            if ($datatype == CPF_LINK) {
+            if ($datatype == EPF_LINK) {
                 if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i",$value)) {
                     $ret[0] = false;
                     $ret[] .= sprintf($langCPFLinkValidFail, q($field_name));
                 }
-            } elseif ($datatype == CPF_DATE) {
+            } elseif ($datatype == EPF_DATE) {
                 $d = explode("-", $value);
                 if (sizeof($d) == 3) {
                     if (!checkdate($d[1], $d[0], $d[2])) {
