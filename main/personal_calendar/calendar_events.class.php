@@ -172,74 +172,73 @@ class Calendar_Events {
         if (!is_null($enddate)) {
            $q_args_templ[] = $enddate;
         }
-        Calendar_Events::get_calendar_settings();
-        if (Calendar_Events::$calsettings->show_personal == 1) {
-            $dc = str_replace('start', 'pc.start', $datecond);
-            $q .= "SELECT id, title, start, date_format(start,'%Y-%m-%d') startdate, duration, date_format(start + time(duration), '%Y-%m-%d %H:%i') `end`, content, 'personal' event_group, 'event-special' class, 'personal' event_type, null as course FROM personal_calendar pc "
-                    . "WHERE user_id = ?d " . $dc;
-            $q_args = array_merge($q_args, $q_args_templ);
-        }
-        $st = ($is_admin)? 0: $_SESSION['status'];
-        if (Calendar_Events::$calsettings->show_admin == 1) {
-            //admin
-            if (!empty($q)) {
-                $q .= " UNION ";
+        if (isset($uid)) {
+            Calendar_Events::get_calendar_settings();
+            if (Calendar_Events::$calsettings->show_personal == 1) {
+                $dc = str_replace('start', 'pc.start', $datecond);
+                $q .= "SELECT id, title, start, date_format(start,'%Y-%m-%d') startdate, duration, date_format(start + time(duration), '%Y-%m-%d %H:%i') `end`, content, 'personal' event_group, 'event-special' class, 'personal' event_type, null as course FROM personal_calendar pc "
+                        . "WHERE user_id = ?d " . $dc;
+                $q_args = array_merge($q_args, $q_args_templ);
             }
-            $dc = str_replace('start', 'adm.start', $datecond);
-            $q .= "SELECT id, title, start, date_format(start, '%Y-%m-%d') startdate, duration, date_format(start + time(duration), '%Y-%m-%d %H:%i') `end`, content, 'admin' event_group, 'event-success' class, 'admin' event_type, null as course FROM admin_calendar adm "
-                    . "WHERE (visibility_level>=$st OR user_id = ?d) " . $dc;
-            $q_args = array_merge($q_args, $q_args_templ);
-        }
-        if (Calendar_Events::$calsettings->show_course == 1) {
-            // agenda
-            if (!empty($q)) {
-                $q .= " UNION ";
+            $st = ($is_admin)? 0: $_SESSION['status'];
+            if (Calendar_Events::$calsettings->show_admin == 1) {
+                //admin
+                if (!empty($q)) {
+                    $q .= " UNION ";
+                }
+                $dc = str_replace('start', 'adm.start', $datecond);
+                $q .= "SELECT id, title, start, date_format(start, '%Y-%m-%d') startdate, duration, date_format(start + time(duration), '%Y-%m-%d %H:%i') `end`, content, 'admin' event_group, 'event-success' class, 'admin' event_type, null as course FROM admin_calendar adm "
+                        . "WHERE (visibility_level>=$st OR user_id = ?d) " . $dc;
+                $q_args = array_merge($q_args, $q_args_templ);
             }
-            $dc = str_replace('start', 'ag.start', $datecond);
-            $q .= "SELECT ag.id, CONCAT(c.title,': ',ag.title), ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + time(ag.duration), '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
-                    . "FROM agenda ag JOIN course_user cu ON ag.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
-                    . "WHERE cu.user_id =?d AND (ag.visible = 1 OR cu.status = 1) AND ag.visible = 1 "
-                    . $dc;
-            $q_args = array_merge($q_args, $q_args_templ);
+            if (Calendar_Events::$calsettings->show_course == 1) {
+                // agenda
+                if (!empty($q)) {
+                    $q .= " UNION ";
+                }
+                $dc = str_replace('start', 'ag.start', $datecond);
+                $q .= "SELECT ag.id, CONCAT(c.title,': ',ag.title), ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + time(ag.duration), '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
+                        . "FROM agenda ag JOIN course_user cu ON ag.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
+                        . "WHERE cu.user_id =?d AND (ag.visible = 1 OR cu.status = 1) AND ag.visible = 1 "
+                        . $dc;
+                $q_args = array_merge($q_args, $q_args_templ);
 
-            // BigBlueButton
-            if (!empty($q)) {
-                $q .= " UNION ";
-            }
-            $dc = str_replace('start', 'bbb.start_date', $datecond);
-            $q .= "SELECT bbb.id, CONCAT(c.title,': ',bbb.title), bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(bbb.start_date, interval 1 hour), '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
-                    . "FROM bbb_session bbb JOIN course_user cu ON bbb.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
-                    . "WHERE cu.user_id =?d AND bbb.active='1' "
-                    . $dc;
-            $q_args = array_merge($q_args, $q_args_templ);
+                // BigBlueButton
+                if (!empty($q)) {
+                    $q .= " UNION ";
+                }
+                $dc = str_replace('start', 'bbb.start_date', $datecond);
+                $q .= "SELECT bbb.id, CONCAT(c.title,': ',bbb.title), bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(bbb.start_date, interval 1 hour), '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
+                        . "FROM bbb_session bbb JOIN course_user cu ON bbb.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
+                        . "WHERE cu.user_id =?d AND bbb.active='1' "
+                        . $dc;
+                $q_args = array_merge($q_args, $q_args_templ);
 
-        }
-        if (Calendar_Events::$calsettings->show_deadline == 1) {
-            // assignments
-            if (!empty($q)) {
-                $q .= " UNION ";
             }
-            $dc = str_replace('start', 'ass.deadline', $datecond);
-            $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
-                    . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id "
-                    . "JOIN course c ON cu.course_id=c.id "
-                    . "LEFT JOIN (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d OR group_id IN (SELECT group_id FROM group_members WHERE user_id = ?d)) ass_sp ON ass.id=ass_sp.assignment_id "
-                    . "WHERE cu.user_id =?d AND (cu.status = 1 OR ass.assign_to_specific = '0' OR (ass.assign_to_specific = 1 AND ass_sp.assignment_id IS NOT NULL)) AND ass.active = 1"
-                    . $dc;
-            $q_args = array_merge($q_args, array($user_id, $user_id), $q_args_templ);
+            if (Calendar_Events::$calsettings->show_deadline == 1) {
+                // assignments
+                if (!empty($q)) {
+                    $q .= " UNION ";
+                }
+                $dc = str_replace('start', 'ass.deadline', $datecond);
+                $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(ass.deadline, interval 1 hour), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+                        . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
+                        . "WHERE cu.user_id =?d AND (assign_to_specific = '0' OR  ass_sp.user_id = ?d OR cu.status = 1) AND ass.active = 1"
+                        . $dc;
+                $q_args = array_merge($q_args, array($user_id));
+                $q_args = array_merge($q_args, $q_args_templ);
 
-            // exercises
-            if (!empty($q)) {
-                $q .= " UNION ";
+                // exercises
+                if (!empty($q)) {
+                    $q .= " UNION ";
+                }
+                $dc = str_replace('start', 'ex.end_date', $datecond);
+                $q .= "SELECT ex.id, CONCAT(c.title,': ',ex.title), ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
+                        . "FROM exercise ex JOIN course_user cu ON ex.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id "
+                        . "WHERE cu.user_id =?d AND (ex.public = 1 OR cu.status = 1) AND ex.active = 1"
+                        . $dc;
+                $q_args = array_merge($q_args, $q_args_templ);
             }
-            $dc = str_replace('start', 'ex.end_date', $datecond);
-            $q .= "SELECT ex.id, CONCAT(c.title,': ',ex.title), ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
-                    . "FROM exercise ex JOIN course_user cu ON ex.course_id=cu.course_id  "
-                    . "JOIN course c ON cu.course_id=c.id "
-                    . "LEFT JOIN (SELECT exercise_id from exercise_to_specific WHERE user_id = ?d OR group_id IN (SELECT group_id FROM group_members WHERE user_id = ?d)) ets ON ex.id = ets.exercise_id "
-                    . "WHERE cu.user_id =?d AND (cu.status = 1 OR ex.assign_to_specific = 0 OR (ex.assign_to_specific = 1 AND ets.exercise_id IS NOT NULL)) AND ex.active = 1"
-                    . $dc;
-            $q_args = array_merge($q_args, array($user_id, $user_id), $q_args_templ);
         }
         if (empty($q)) {
             return null;
@@ -1347,21 +1346,23 @@ class Calendar_Events {
        }
        
        $events = array();
-       foreach ($eventlist as $event) {
-           $event->title = q($event->title);
-           $event->content = q($event->content);
-           $event->course = q($event->course);
-           $startdatetime = new DateTime($event->start);
-           $event->start = $startdatetime->getTimestamp()*1000;
-           $event->start_hour = $startdatetime->format("H:i");
-           $enddatetime = new DateTime($event->end);
-           $event->end = $enddatetime->getTimestamp()*1000;
-           $event->end_hour = $enddatetime->format("H:i");
-           $event->url = str_replace('thisid', $event->id, $urlServer.Calendar_Events::$event_type_url[$event->event_type]);
-           if ($event->event_type != 'personal' && $event->event_type != 'admin') {
-               $event->url = str_replace('thiscourse', $event->course, $event->url);
-           }
-           array_push($events, $event);
+       if (count($eventlist > 0)) {
+            foreach ($eventlist as $event) { 
+                $event->title = q($event->title);
+                $event->content = q($event->content);
+                $event->course = q($event->course);
+                $startdatetime = new DateTime($event->start);
+                $event->start = $startdatetime->getTimestamp()*1000;
+                $event->start_hour = $startdatetime->format("H:i");
+                $enddatetime = new DateTime($event->end);
+                $event->end = $enddatetime->getTimestamp()*1000;
+                $event->end_hour = $enddatetime->format("H:i");
+                $event->url = str_replace('thisid', $event->id, $urlServer.Calendar_Events::$event_type_url[$event->event_type]);
+                if ($event->event_type != 'personal' && $event->event_type != 'admin') {
+                    $event->url = str_replace('thiscourse', $event->course, $event->url);
+                }
+                array_push($events, $event);
+            }
        }
        return json_encode(array('success'=>1, 'result'=>$events, 'cid'=>$course_id));
    }
@@ -1370,9 +1371,9 @@ class Calendar_Events {
        global $langNextMonth, $langPreviousMonth;
 
        $calendar = "<div id='cal-header' class='btn-group btn-group-justified btn-group-sm'>
-                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='prev'><span class='fa fa-caret-left'></span><span class='sr-only'>$langPreviousMonth</span></button></div>
+                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='prev'><i class='fa fa-caret-left'></i><span class='sr-only'>$langPreviousMonth</span></button></div>
                             <div class='btn-group btn-group-sm' style='width:60%;'><button id='current-month' type='button' class='btn btn-default' disabled='disabled'>&nbsp;</button></div>
-                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='next'><span class='fa fa-caret-right'></span><span class='sr-only'>$langNextMonth</span></button></div>
+                            <div class='btn-group btn-group-sm' style='width:20%;'><button type='button' class='btn btn-default' data-calendar-nav='next'><i class='fa fa-caret-right'></i><span class='sr-only'>$langNextMonth</span></button></div>
                     </div>";
 
        $calendar .= '<div id="bootstrapcalendar"></div><div class="clearfix"></div>';
