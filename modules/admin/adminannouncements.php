@@ -260,7 +260,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             $end_checkbox = "";
             $end_disabled = "disabled";
             $end_text_disabled = "disabled";
-            $startdate = date('d-m-Y H:i', strtotime('now'));
+            $startdate = '';
         }
         if (isset($enddate)) {
             $end_checkbox = 'checked';
