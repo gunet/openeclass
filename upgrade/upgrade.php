@@ -2988,22 +2988,26 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         // Remove '0000-00-00' default dates and fix exercise weight fields
         Database::get()->query('ALTER TABLE `announcement`
-            MODIFY `date` DATETIME DEFAULT NULL,
+            MODIFY `date` DATETIME NOT NULL,
             MODIFY `start_display` DATETIME DEFAULT NULL,
             MODIFY `stop_display` DATETIME DEFAULT NULL');
-        Database::get()->query("UPDATE announcement SET start_display=null 
-            WHERE start_display='0000-00-00 00:00:00'");
-        Database::get()->query("UPDATE announcement SET stop_display=null 
-            WHERE stop_display='0000-00-00 00:00:00'");
+        Database::get()->query("UPDATE IGNORE announcement SET start_display=null
+                            WHERE start_display='0000-00-00 00:00:00'");
+        Database::get()->query("UPDATE IGNORE announcement SET stop_display=null
+                            WHERE stop_display='0000-00-00 00:00:00'");
         Database::get()->query('ALTER TABLE `agenda`
             CHANGE `start` `start` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course`
             MODIFY `created` DATETIME DEFAULT NULL,
             MODIFY `start_date` DATE DEFAULT NULL,
-            MODIFY `finish_date` DATE DEFAULT NULL');        
+            MODIFY `finish_date` DATE DEFAULT NULL');
+        Database::get()->query("UPDATE IGNORE course SET start_date=null
+                            WHERE start_date='0000-00-00 00:00:00'");
+        Database::get()->query("UPDATE IGNORE course SET finish_date=null
+                            WHERE finish_date='0000-00-00 00:00:00'");
         Database::get()->query('ALTER TABLE `course_weekly_view`
             MODIFY `start_week` DATE DEFAULT NULL,
-            MODIFY `finish_week` DATE DEFAULT NULL');        
+            MODIFY `finish_week` DATE DEFAULT NULL');
         Database::get()->query('ALTER TABLE `course_weekly_view_activities`
             CHANGE `date` `date` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course_user_request`
