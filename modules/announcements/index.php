@@ -330,7 +330,7 @@ if ($is_editor) {
         } else {
             $datetime = date('l jS \of F Y h:i A');
         }
-        if (isset($_POST[show_public])) {
+        if (isset($_POST['show_public'])) {
             $is_visible = 1;
         } else {
             $is_visible = 0;
@@ -372,7 +372,6 @@ if ($is_editor) {
                                          SET content = ?s,
                                              title = ?s, `date` = " . DBHelper::timeAfter() . ",
                                              course_id = ?d, `order` = ?d,
-                                             visible = 1,
                                              start_display = ?t,
                                              stop_display = ?t,
                                              visible = ?d", $newContent, $antitle, $course_id, $order, $start_display, $stop_display, $is_visible)->lastInsertID;
