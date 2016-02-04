@@ -330,6 +330,12 @@ if ($is_editor) {
         } else {
             $datetime = date('l jS \of F Y h:i A');
         }
+        if (isset($_POST[show_public])) {
+            $is_visible = 1;
+        } else {
+            $is_visible = 0;
+        }
+
         $antitle = $_POST['antitle'];
         $newContent = purify($_POST['newContent']);
         $send_mail = isset($_POST['recipients']) && (count($_POST['recipients'])>0);
@@ -348,7 +354,7 @@ if ($is_editor) {
 
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
-            Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = " . DBHelper::timeAfter() . ", start_display = ?t, stop_display = ?t  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $id);
+            Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = " . DBHelper::timeAfter() . ", start_display = ?t, stop_display = ?t, visible = ?d  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $is_visible, $id);
             $log_type = LOG_MODIFY;
             $message = "<div class='alert alert-success'>$langAnnModify</div>";
 
@@ -368,7 +374,8 @@ if ($is_editor) {
                                              course_id = ?d, `order` = ?d,
                                              visible = 1,
                                              start_display = ?t,
-                                             stop_display = ?t", $newContent, $antitle, $course_id, $order, $start_display, $stop_display)->lastInsertID;
+                                             stop_display = ?t,
+                                             visible = ?d", $newContent, $antitle, $course_id, $order, $start_display, $stop_display, $is_visible)->lastInsertID;
             $log_type = LOG_INSERT;
 
             if (isset($_POST['tags'])) {
@@ -483,8 +490,10 @@ if ($is_editor) {
 
         if (isset($_GET['modify'])) {
             $langAdd = $pageName = $langModifAnn;
+            $announce->visible? $checked_public = "checked" : $checked_public = "";
         } else {
             $pageName = $langAddAnn;
+            $checked_public = "checked";
         }
         $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langAnnouncements);
 
@@ -530,7 +539,7 @@ if ($is_editor) {
           <label for='AnnBody' class='col-sm-2 control-label'>$langAnnBody:</label>
             <div class='col-sm-10'>".rich_text_editor('newContent', 4, 20, $contentToModify)."</div>
         </div>
-        <div class='form-group'><label for='Email' class=' col-sm-12 control-panel'>$langEmailOption:</label></div>
+        <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langEmailOption:</label></div>
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
                 <select class='form-control' name='recipients[]' multiple class='form-control' id='select-recipients'>";
@@ -550,7 +559,7 @@ if ($is_editor) {
             </div>
         </div>
         " . Tag::tagInput($AnnouncementToModify) . "
-        <div class='form-group'><label for='Email' class=' col-sm-12 control-panel'>$langAnnouncementActivePeriod:</label></div>
+        <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langAnnouncementActivePeriod:</label></div>
 
         <div class='form-group'>
             <label for='From' class='col-sm-2 control-label'>$langFrom:</label>
@@ -559,6 +568,15 @@ if ($is_editor) {
         <div class='form-group'>
             <label for='From' class='col-sm-2 control-label'>$langUntil:</label>
             <div class='col-sm-10'><input class='form-control' type='text' name='enddate' id='enddate' value='$showUntil'></div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <div class='checkbox'>
+                    <label>
+                        <input type='checkbox' name='show_public' $checked_public> $showall
+                    </label>
+                </div>
+            </div>
         </div>
         <div class='form-group'>
         <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
