@@ -366,28 +366,31 @@ if ($displayAnnouncementList == true) {
                             <th><div align='center'>" . icon('fa-gears') . "</th>
                         </tr>";
         foreach ($result as $myrow) {
+
+            $myrow->date = claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->date));
+
             if ($myrow->visible == 1) {
                 $visibility = 0;
                 $classvis = '';
-                $status_icon_list = "<li><span class='fa fa-eye'></span> $langAdminAnVis</li>";
+                $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
             } else {
                 $visibility = 1;
                 $classvis = 'not_visible';
-                $status_icon_list = "<li><span class='fa fa-eye-slash'></span> $langAdminAnNotVis</li>";
+                $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsNotVis'><span class='fa fa-eye-slash'></span> $langAdminAnNotVis</li>";
             }
 
             $now = date("Y-m-d H:i:s");
+
             if (!is_null($myrow->end) && ($myrow->end <= $now )) {
-                $status_icon_list .= "<li class='text-danger'><span class='fa fa-clock-o'></span> $langAdminExpired</li>";
+                $status_icon_list .= "<li class='text-danger'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillNotBeVis$myrow->end'><span class='fa fa-clock-o'></span> $langAdminExpired</li>";
                 $classvis = 'not_visible';
             } elseif ( !is_null($myrow->begin) && ($myrow->begin >= $now ) ) {
-                $status_icon_list .= "<li class='text-success'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
+                $status_icon_list .= "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->begin'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
                 $classvis = 'not_visible';
             } else {
                 $status_icon_list .= "";
             }
 
-            $myrow->date = claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->date));
             $tool_content .= "<tr class='$classvis'>
                 <td>
                     <div class='table_td'>

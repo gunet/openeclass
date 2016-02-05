@@ -592,6 +592,10 @@ $langAdminAnnMes = "τοποθετήθηκε την";
 $langAdminAnnTitleEn = "Τίτλος (Αγγλικά)";
 $langAdminAnnBodyEn = "Ανακοίνωση (Αγγλικά)";
 $langAdminAnnCommEn = "Σχόλια (Αγγλικά)";
+$langAnnouncementIsVis = "Είναι δημόσια ορατή";
+$langAnnouncementIsNotVis = "Δεν είναι δημόσια ορατή";
+$langAnnouncementWillBeVis = "Θα ενεργοποιηθεί στις: ";
+$langAnnouncementWillNotBeVis = "Απενεργοποιήθηκε στις: ";
 
 // cleanup.php
 $langCleanupOldFiles = 'Εκκαθάριση παλαιών αρχείων';
