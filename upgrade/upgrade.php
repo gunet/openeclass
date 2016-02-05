@@ -3032,9 +3032,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             CHANGE `last_mtime` `last_mtime` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `wiki_pages_content`
             CHANGE `mtime` `mtime` DATETIME NOT NULL');
-        Database::get()->query('ALTER TABLE `wiki_locks`
-            CHANGE `ltime_created` `ltime_created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            CHANGE `ltime_alive` `ltime_alive` TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
+        Database::get()->query('ALTER TABLE `wiki_locks` 
+            MODIFY `ltime_created` DATETIME DEFAULT NULL, 
+            MODIFY `ltime_alive` DATETIME DEFAULT NULL;');
         Database::get()->query('ALTER TABLE `poll`
             CHANGE `creation_date` `creation_date` DATETIME NOT NULL,
             CHANGE `start_date` `start_date` DATETIME DEFAULT NULL,
