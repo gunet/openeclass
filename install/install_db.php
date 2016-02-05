@@ -726,8 +726,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
     `ptitle` VARCHAR(255) NOT NULL DEFAULT '',
     `wiki_id` INT(11) UNSIGNED NOT NULL,
     `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-    `ltime_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `ltime_alive` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `ltime_created` DATETIME DEFAULT NULL,
+    `ltime_alive` DATETIME DEFAULT NULL,
     PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `blog_post` (
