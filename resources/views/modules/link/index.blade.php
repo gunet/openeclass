@@ -131,7 +131,7 @@
 
                                 @include('modules.link.common.linkList')
 
-                                @if (count($category->links) == 1)
+                                @if (count($category->links) == 0)
                                 <tr>
                                     <td class='text-left not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                                     @if ($display_tools)

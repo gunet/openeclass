@@ -11,14 +11,14 @@
                 <div class='form-group{{ $categoryNameError ? ' has-error' : ''}}'>
                    <label for='CatName' class='col-sm-2 control-label'>{{ trans('langCategoryName') }}:</label>
                    <div class='col-sm-10'>
-                       <input class='form-control' type='text' name='categoryname' size='53' placeholder='{{ trans('langCategoryName') }}' value='{{ $category ? $category->name : "" }}'>
+                       <input class='form-control' type='text' name='categoryname' size='53' placeholder='{{ trans('langCategoryName') }}' value='{{ isset($category) ? $category->name : "" }}'>
                        {!! Session::getError('categoryname', "<span class='help-block'>:message</span>") !!}
                    </div>
                 </div>
                 <div class='form-group'>
                     <label for='CatDesc' class='col-sm-2 control-label'>{{ trans('langDescription') }}:</label>
                     <div class='col-sm-10'>
-                        <textarea class='form-control' rows='5' name='description'>{{ $category ? $category->description : "" }}</textarea>
+                        <textarea class='form-control' rows='5' name='description'>{{ isset($category) ? $category->description : "" }}</textarea>
                     </div>
                 </div>
                 <div class='form-group'>
