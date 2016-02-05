@@ -306,14 +306,11 @@ if ($u) {
         </fieldset>
         ". generate_csrf_token_form_field() ."
         </form>
-        </div>";
+        </div>";        
         $sql = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, DATE(b.reg_date) AS reg_date, b.status
-                            FROM course AS a
-                            JOIN course_department ON a.id = course_department.course
-                            JOIN hierarchy ON course_department.department = hierarchy.id
+                            FROM course AS a                            
                             LEFT JOIN course_user AS b ON a.id = b.course_id
-                            WHERE b.user_id = ?s ORDER BY b.status, hierarchy.name", $u);
-
+                            WHERE b.user_id = ?s ORDER BY b.status", $u);
         // user is registered to courses
         if (count($sql) > 0) {
             $tool_content .= "<h4>$langStudentParticipation</h4>
