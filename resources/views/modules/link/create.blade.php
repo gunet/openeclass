@@ -8,16 +8,17 @@
                     <input type='hidden' name='id' value='{{ getIndirectReference($id) }}'>
                 @endif
                 <fieldset>
-                    <div class='form-group'>
+                    <div class='form-group{{ $urlLinkError ? " has-error" : "" }}'>
                         <label for='urllink' class='col-sm-2 control-label'>URL:</label>
                             <div class='col-sm-10'>
-                                <input class='form-control' type='text' id='urllink' name='urllink' {{ $form_url }} >
+                                <input class='form-control' type='text' id='urllink' name='urllink' value="{{ isset($link) ? $link->url : "" }}">
+                                {!! Session::getError('urllink', "<span class='help-block'>:message</span>") !!}
                             </div>
                         </div>
                         <div class='form-group'>
                             <label for='title' class='col-sm-2 control-label'>{{ trans('langLinkName') }}:</label>
                             <div class='col-sm-10'>
-                                <input class='form-control' type='text' id='title' name='title'{{ $form_title }} >
+                                <input class='form-control' type='text' id='title' name='title' value="{{ isset($link) ? $link->title : "" }}">
                             </div>
                         </div>
                         <div class='form-group'>
@@ -28,7 +29,17 @@
                             <label for='selectcategory' class='col-sm-2 control-label'>{{ trans('langCategory') }}:</label>
                             <div class='col-sm-3'>
                                 <select class='form-control' name='selectcategory' id='selectcategory'>
-                                    <option value='-2'>{{ trans('langSocialCategory') }}</option>
+                                    @if ($is_editor)
+                                        <option value='{{ getIndirectReference(0) }}'>--</option>
+                                    @endif
+                                    @if ($social_bookmarks_enabled)
+                                        <option value='{{ getIndirectReference(-2) }}'{{ isset($category) && $category == -2 ? " selected": "" }}>{{ trans('langSocialCategory') }}</option>
+                                    @endif
+                                    @if ($is_editor)
+                                        @foreach ($categories as $row)
+                                            <option value='{{ getIndirectReference($row->id) }}'{{ isset($category) && $category == $row->id ? " selected": "" }}>{{ $row->name }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                         </div>

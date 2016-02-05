@@ -81,9 +81,10 @@ if ($is_in_tinymce) {
 ModalBoxHelper::loadModalBox();
 
 if (isset($_GET['category'])) {
-    $category = intval(getDirectReference($_GET['category']));
+    $category = $data['category'] = getDirectReference($_GET['category']);
 } else {
     unset($category);
+    unset($data['category']);
 }
 
 if (isset($_GET['id'])) {
@@ -109,6 +110,7 @@ if (isset($_GET['socialview'])) {
 $action = $data['action'] = isset($_GET['action']) ? $_GET['action'] : '';
 
 if ($is_editor) {
+    //Link Submission
     if (isset($_POST['submitLink'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_link();
@@ -116,6 +118,7 @@ if ($is_editor) {
         Session::Messages($message, 'alert-success');
         redirect_to_home_page("modules/link/index.php");
     }
+    //Category Submission
     if (isset($_POST['submitCategory'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_category();
@@ -123,6 +126,7 @@ if ($is_editor) {
         Session::Messages($messsage, 'alert-success');
         redirect_to_home_page("modules/link/index.php");
     }
+    // Settings Submission
     if (isset($_POST['submitSettings'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (isset($_POST['settings_radio'])) {
@@ -131,6 +135,17 @@ if ($is_editor) {
         }
         redirect_to_home_page("modules/link/index.php?course=$course_code");
     }
+    // Link and Category Ordering
+    if (isset($_GET['down'])) {
+        move_order('link', 'id', intval(getDirectReference($_GET['down'])), 'order', 'down', "course_id = $course_id");
+    } elseif (isset($_GET['up'])) {
+        move_order('link', 'id', intval(getDirectReference($_GET['up'])), 'order', 'up', "course_id = $course_id");
+    } elseif (isset($_GET['cdown'])) {
+        move_order('link_category', 'id', intval(getDirectReference($_GET['cdown'])), 'order', 'down', "course_id = $course_id");
+    } elseif (isset($_GET['cup'])) {
+        move_order('link_category', 'id', intval(getDirectReference($_GET['cup'])), 'order', 'up', "course_id = $course_id");
+    }
+    
     switch ($action) {
         case 'deletelink':
             delete_link($id);
@@ -175,110 +190,38 @@ if ($is_editor) {
         }
     }
 
-    // Display the correct title and form for adding or modifying a category or link.
-    if (in_array($action, array('addlink', 'editlink'))) {
+    // Add or Edit Link
+    if (in_array($action, ['addlink', 'editlink'])) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
-        $tool_content .= "<div class = 'form-wrapper'>";
-        $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview'>";
         if ($action == 'editlink') {
-            $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
-            link_form_defaults($id);
-            $form_legend = $langLinkModify;
-            $submit_label = $langLinkModify;
+            $data['link'] = Database::get()->querySingle("SELECT * FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
+            $form_description = $data['link'] ? purify($data['link']->description) : "" ;
+            $data['submit_label'] = $langLinkModify;
         } else {
-            $form_url = $form_title = $form_description = '';
-            $form_legend = $langLinkAdd;
-            $submit_label = $langAdd;
+            $form_description = '';
+            $data['submit_label'] = $langAdd;
         }
-        $tool_content .= "
-        <fieldset>
-        <div class='form-group".(Session::getError('urllink') ? " has-error" : "")."'>
-            <label for='urllink' class='col-sm-2 control-label'>URL:</label>
-            <div class='col-sm-10'>
-                <input class='form-control' type='text' id='urllink' name='urllink' $form_url >
-				<span class='help-block'>".Session::getError('urllink')."</span>
-            </div>
-        </div>
-        <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langLinkName:</label>
-            <div class='col-sm-10'>
-                <input class='form-control' type='text' id='title' name='title'$form_title >
-            </div>
-         </div>
-        <div class='form-group'>
-            <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
-            <div class='col-sm-10'>". rich_text_editor('description', 3, 30, $form_description) . "</div>
-        </div>
-        <div class='form-group'>
-            <label for='selectcategory' class='col-sm-2 control-label'>$langCategory:</label>
-            <div class='col-sm-3'>
-                <select class='form-control' name='selectcategory' id='selectcategory'>
-                <option value='" . getIndirectReference(0) . "'>--</option>";
-        if ($social_bookmarks_enabled) {
-            $tool_content .= "<option value='" . getIndirectReference(-2) . "'";
-            if (isset($category) and -2 == $category) {
-                $tool_content .= " selected='selected'";
-            }
-            $tool_content .= ">$langSocialCategory</option>";
-        }
-        $resultcategories = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d ORDER BY `order`", $course_id);
-        foreach ($resultcategories as $myrow) {
-            $tool_content .= "<option value='" . getIndirectReference($myrow->id) . "'";
-            if (isset($category) and $myrow->id == $category) {
-                $tool_content .= " selected='selected'";
-            }
-            $tool_content .= '>' . q($myrow->name) . "</option>";
-        }
-        $tool_content .= "
-            </select>
-            </div>
-        </div>
-        <div class='form-group'>
-        <div class='col-sm-10 col-sm-offset-2'>
-            <input type='submit' class='btn btn-primary' name='submitLink' value='$submit_label' />
-            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
-        </div>
-        </div>
-        </fieldset>
-         ". generate_csrf_token_form_field() ."
-        </form>
-        </div>";
+        $data['urlLinkError'] = Session::getError('urllink') ? " has-error" : "";
+        $data['description_textarea'] = rich_text_editor('description', 3, 30, $form_description);
+
+        $data['categories'] = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d ORDER BY `order`", $course_id);
+
+        echo view('modules.link.create', $data);
+        exit();
+    // Add or Edit Category
     } elseif (in_array($action, array('addcategory', 'editcategory'))) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
-        $tool_content .= "<div class = 'form-wrapper'>";
-        $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview'>";
+        $data['categoryNameError'] = Session::getError('categoryname') ? " has-error" : "";
         if ($action == 'editcategory') {
-            $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
-            category_form_defaults($id);
-            $form_legend = $langCategoryMod;
+            $data['category'] = Database::get()->querySingle("SELECT name, description  FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $id);
+            $data['form_legend'] = trans('langCategoryMod');
         } else {
-            $form_name = $form_description = '';
-            $form_legend = $langCategoryAdd;
+            $data['form_legend'] = trans('langCategoryAdd');
         }
-        $tool_content .= "<fieldset>
-                         <div class='form-group".(Session::getError('categoryname') ? " has-error" : "")."'>
-                            <label for='CatName' class='col-sm-2 control-label'>$langCategoryName:</label>
-                            <div class='col-sm-10'>
-                                <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName' $form_name>
-								<span class='help-block'>".Session::getError('categoryname')."</span>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
-                            <div class='col-sm-10'>
-                                <textarea class='form-control' rows='5' name='description'>$form_description</textarea>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <div class='col-sm-10 col-sm-offset-2'>
-                                <input type='submit' class='btn btn-primary' name='submitCategory' value='$form_legend' />
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
-                            </div>
-                        </div>
-                        </fieldset>
-                     ". generate_csrf_token_form_field() ."
-                    </form>
-                </div>";
+
+        echo view('modules.link.createCategory', $data);
+        exit();
+    // Edit Settings
     } elseif ($action == 'settings') {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
         
@@ -287,9 +230,10 @@ if ($is_editor) {
         echo view('modules.link.settings', $data);
         exit();        
     }
+// If the user !$is_editor and social bookmarks are enabled    
 } elseif ($social_bookmarks_enabled) {
-    //check if user is course member
     if (isset($_SESSION['uid'])) {
+        //check if user is course member
         $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM course_user WHERE course_id = ?d AND user_id = ?d", $course_id, $uid);
         if ($result->c > 0) {
             if (isset($_POST['submitLink'])) {
@@ -316,7 +260,7 @@ if ($is_editor) {
             }
             
             if (isset($_GET['action'])) {
-                $tool_content .= $data['action_bar'] = action_bar(array(
+                $data['action_bar'] = action_bar(array(
                         array('title' => $langBack,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                               'icon' => 'fa-reply',
@@ -324,7 +268,7 @@ if ($is_editor) {
             
             } else {
                 $ext = (isset($urlview)? "&amp;urlview=$urlview": '');
-                $tool_content .= $data['action_bar'] = action_bar(array(
+                $data['action_bar'] = action_bar(array(
                         array('title' => $langLinkAdd,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink$ext",
                               'icon' => 'fa-plus-circle',
@@ -337,21 +281,20 @@ if ($is_editor) {
                     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
 
                     if ($action == 'editlink') {
-                        $myrow = Database::get()->querySingle("SELECT * FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
-                        if ($myrow) {
-                            $data['form_url'] = ' value="' . q($myrow->url) . '"';
-                            $data['form_title'] = ' value="' . q($myrow->title) . '"';
-                            $data['form_description'] = purify(trim($myrow->description));
-                            $data['category'] = $myrow->category;
+                        $data['link'] = Database::get()->querySingle("SELECT * FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
+                        if ($data['link']) {
+                            $description = purify(trim($data['link']->description));
                         } else {
-                            $form_url = $form_title = $form_description = '';
+                            $description = '';
                         }                        
                         $data['submit_label'] = $langLinkModify;
                     } else {
-                        $data['form_url'] = $data['form_title'] = $data['form_description'] = '';
+                        $description = '';
                         $data['submit_label'] = $langAdd;
                     }
-                    $data['description_textarea'] = rich_text_editor('description', 3, 30, $data['form_description']);
+                    $data['urlLinkError'] = Session::getError('urllink') ? " has-error" : "";
+                    $data['description_textarea'] = rich_text_editor('description', 3, 30, $description);
+                    
                     echo view('modules.link.create', $data);
                     exit();
                 }
@@ -360,17 +303,12 @@ if ($is_editor) {
     }
 }
 
-if (isset($_GET['down'])) {
-    move_order('link', 'id', intval(getDirectReference($_GET['down'])), 'order', 'down', "course_id = $course_id");
-} elseif (isset($_GET['up'])) {
-    move_order('link', 'id', intval(getDirectReference($_GET['up'])), 'order', 'up', "course_id = $course_id");
-} elseif (isset($_GET['cdown'])) {
-    move_order('link_category', 'id', intval(getDirectReference($_GET['cdown'])), 'order', 'down', "course_id = $course_id");
-} elseif (isset($_GET['cup'])) {
-    move_order('link_category', 'id', intval(getDirectReference($_GET['cup'])), 'order', 'up', "course_id = $course_id");
-}
+
+
 $data['display_tools'] = $display_tools = $is_editor && !$is_in_tinymce;
+
 if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory', 'settings'))) {
+    
     if ($social_bookmarks_enabled == 1) {
         $data['countlinks'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d", $course_id, -1)->cnt;
     } else {
@@ -409,5 +347,3 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
     echo view('modules.link.index', $data);
     exit();
 }
-
-draw($tool_content, $menuTypeID, null, $head_content);
