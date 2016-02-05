@@ -33,6 +33,7 @@ header('Content-Type: text/html; charset=UTF-8');
 require_once '../vendor/autoload.php';
 require_once '../include/main_lib.php';
 require_once '../include/lib/pwgen.inc.php';
+require_once '../include/mailconfig.php';
 require_once '../modules/db/database.php';
 require_once '../upgrade/functions.php';
 require_once 'functions.php';
@@ -141,7 +142,17 @@ if (isset($_POST['welcomeScreen'])) {
         'emailForm' => true,
         'lang' => true,
         'institutionForm' => true,
-        'institutionUrlForm' => true));   
+        'institutionUrlForm' => true,
+        'dont_mail_unverified_mails' => true,
+        'email_from' => true,
+        'email_announce' => true,
+        'email_transport' => true,
+        'smtp_server' => true,
+        'smtp_port' => true,
+        'smtp_encryption' => true,
+        'smtp_username' => true,
+        'smtp_password' => true,
+        'sendmail_command' => true));
 }
 
 function hidden_vars($names) {
@@ -149,7 +160,7 @@ function hidden_vars($names) {
     foreach ($names as $name) {
         if (isset($GLOBALS[$name]) and
                 !isset($GLOBALS['input_fields'][$name])) {
-            $out .= "<input type='hidden' name='$name' value='" . q($GLOBALS[$name]) . "' />\n";
+            $out .= "<input type='hidden' name='$name' value='" . q($GLOBALS[$name]) . "'>\n";
         }
     }
     return $out;
@@ -158,13 +169,13 @@ function hidden_vars($names) {
 function checkbox_input($name) {
     $GLOBALS['input_fields'][$name] = true;
     return "<input type='checkbox' name='$name' value='1'" .
-            ($GLOBALS[$name] ? ' checked="1"' : '') . " />";
+            ($GLOBALS[$name] ? ' checked="1"' : '') . ">";
 }
 
 function text_input($name, $size) {
     $GLOBALS['input_fields'][$name] = true;
     return "<input class='form-control' type='text' size='$size' name='$name' value='" .
-            q($GLOBALS[$name]) . "' />";
+            q($GLOBALS[$name]) . "'>";
 }
 
 function textarea_input($name, $rows, $cols) {
@@ -180,8 +191,12 @@ function selection_input($entries, $name) {
 
 $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
     'dbPassForm', 'urlForm', 'nameForm', 'emailForm', 'loginForm', 'lang',
-    'passForm', 'campusForm', 'helpdeskForm', 'helpdeskmail', 'eclass_stud_reg', 'eclass_prof_reg',
-    'institutionForm', 'institutionUrlForm', 'faxForm', 'postaddressForm');
+    'passForm', 'campusForm', 'helpdeskForm', 'helpdeskmail',
+    'eclass_stud_reg', 'eclass_prof_reg', 'institutionForm',
+    'institutionUrlForm', 'faxForm', 'postaddressForm',
+    'dont_mail_unverified_mails', 'email_from', 'email_announce',
+    'email_transport', 'smtp_server', 'smtp_port', 'smtp_encryption',
+    'smtp_username', 'smtp_password', 'sendmail_command');
 
 // Check for db connection after settings submission
 $GLOBALS['mysqlServer'] = $dbHostForm;
@@ -218,7 +233,7 @@ if (isset($_POST['install4'])) {
 // step 2 license
 if (isset($_POST['install2'])) {
     $langStepTitle = $langLicense;
-    $langStep = $langStep2;
+    $langStep = sprintf($langStep1, 2, 7);
     $_SESSION['step'] = 2;
     $gpl_link = '../info/license/gpl_print.txt';
     $tool_content .= "
@@ -245,7 +260,7 @@ if (isset($_POST['install2'])) {
 // step 3 mysql database settings
 elseif (isset($_POST['install3'])) {
     $langStepTitle = $langDBSetting;
-    $langStep = $langStep3;
+    $langStep = sprintf($langStep1, 3, 7);
     $_SESSION['step'] = 3;
     $tool_content .= "
        <div class='alert alert-info'>$langWillWrite $langDBSettingIntro</div>
@@ -290,7 +305,7 @@ elseif (isset($_POST['install3'])) {
 // step 4 basic config settings
 elseif (isset($_POST['install4'])) {
     $langStepTitle = $langBasicCfgSetting;
-    $langStep = $langStep4;
+    $langStep = sprintf($langStep1, 4, 7);
     $_SESSION['step'] = 4;
     if (empty($helpdeskmail)) {
         $helpdeskmail = '';
@@ -333,11 +348,39 @@ elseif (isset($_POST['install4'])) {
     draw($tool_content);
 }
 
-// step 5 last check before install
+// step 5 email settings
 elseif (isset($_POST['install5'])) {
-    $langStepTitle = $langLastCheck;
-    $langStep = $langStep5;
+    $langStepTitle = $langEmailSettings;
+    $langStep = sprintf($langStep1, 5, 7);
     $_SESSION['step'] = 5;
+    foreach (array('dont_mail_unverified_mails', 'email_from', 'email_announce',
+                   'email_transport', 'smtp_server', 'smtp_port', 'smtp_encryption',
+                   'smtp_username', 'smtp_password', 'sendmail_command') as $name) {
+       $GLOBALS['input_fields'][$name] = true;
+    }
+    $tool_content .= "<div class='form-wrapper'>
+       <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+         <fieldset>";
+    mail_settings_form();
+    $tool_content .= "
+           <div class='form-group'>
+             <div class='col-sm-12'>
+               <input type='submit' class='btn btn-default' name='install4' value='&laquo; $langPreviousStep'>
+               <input type='submit' class='btn btn-primary' name='install6' value='$langNextStep &raquo;'>
+             </div>
+           </div>
+         </fieldset>" .
+         hidden_vars($all_vars) . "
+       </form></div>
+       <script>$(function () {" . $mail_form_js . '});</script>';
+    draw($tool_content);
+}
+
+// step 6 last check before install
+elseif (isset($_POST['install6'])) {
+    $langStepTitle = $langLastCheck;
+    $langStep = sprintf($langStep1, 6, 7);
+    $_SESSION['step'] = 6;
 
     switch ($eclass_stud_reg) {
         case '0': $disable_eclass_stud_reg_info = $langDisableEclassStudRegYes;
@@ -392,8 +435,8 @@ elseif (isset($_POST['install5'])) {
            display_entry(q($disable_eclass_stud_reg_info), $langDisableEclassStudRegType) .
            display_entry(q($disable_eclass_prof_reg_info), $langDisableEclassProfRegType) . "
            <div class='form-group'>
-             <input type='submit' class='btn btn-default' name='install4' value='&laquo; $langPreviousStep'>
-		     <input type='submit' class='btn btn-primary' name='install6' id='install6' value='$langInstall &raquo;'>
+             <input type='submit' class='btn btn-default' name='install5' value='&laquo; $langPreviousStep'>
+		     <input type='submit' class='btn btn-primary' name='install7' id='install7' value='$langInstall &raquo;'>
            </div>
          </fieldset>" . hidden_vars($all_vars) . "</form>";
 
@@ -401,11 +444,11 @@ elseif (isset($_POST['install5'])) {
 }
 
 // step 6 installation successful
-elseif (isset($_POST['install6'])) {
+elseif (isset($_POST['install7'])) {
     // database creation
     $langStepTitle = $langInstallEnd;
-    $langStep = $langStep6;
-    $_SESSION['step'] = 6;
+    $langStep = sprintf($langStep1, 7, 7);
+    $_SESSION['step'] = 7;
     $mysqlMainDb = $dbNameForm;
     //$active_ui_languages = implode(' ', active_subdirs('../lang', 'messages.inc.php'));
     $active_ui_languages = 'el en';
@@ -450,7 +493,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 // step 1 requirements
 elseif (isset($_POST['install1'])) {
     $langStepTitle = $langRequirements;
-    $langStep = $langStep1;
+    $langStep = sprintf($langStep1, 1, 7);
     $_SESSION['step'] = 1;
     $configErrorExists = false;
 

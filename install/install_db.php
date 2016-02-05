@@ -1353,6 +1353,8 @@ $default_config = array(
 $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .
         implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')), $default_config);
 
+store_mail_config();
+
 // table for cron parameters
 $db->query("CREATE TABLE `cron_params` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
