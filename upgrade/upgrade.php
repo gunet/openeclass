@@ -25,6 +25,7 @@ require '../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/course_settings.php';
+require_once 'include/mailconfig.php';
 require_once 'modules/db/recycle.php';
 require_once 'modules/db/foreignkeys.php';
 require_once 'modules/auth/auth.inc.php';
@@ -176,7 +177,7 @@ touch_or_error($webDir . '/video/index.php');
 $default_student_upload_whitelist = 'pdf, ps, eps, tex, latex, dvi, texinfo, texi, zip, rar, tar, bz2, gz, 7z, xz, lha, lzh, z, Z, doc, docx, odt, ott, sxw, stw, fodt, txt, rtf, dot, mcw, wps, xls, xlsx, xlt, ods, ots, sxc, stc, fods, uos, csv, ppt, pps, pot, pptx, ppsx, odp, otp, sxi, sti, fodp, uop, potm, odg, otg, sxd, std, fodg, odb, mdb, ttf, otf, jpg, jpeg, png, gif, bmp, tif, tiff, psd, dia, svg, ppm, xbm, xpm, ico, avi, asf, asx, wm, wmv, wma, dv, mov, moov, movie, mp4, mpg, mpeg, 3gp, 3g2, m2v, aac, m4a, flv, f4v, m4v, mp3, swf, webm, ogv, ogg, mid, midi, aif, rm, rpm, ram, wav, mp2, m3u, qt, vsd, vss, vst';
 $default_teacher_upload_whitelist = 'html, js, css, xml, xsl, cpp, c, java, m, h, tcl, py, sgml, sgm, ini, ds_store';
 
-if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['is_admin'] == true) and ! $command_line) {
+if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is_admin'] and !$command_line) {
     if (ini_get('register_globals')) { // check if register globals is Off
         $tool_content .= "<div class='alert alert-danger'>$langWarningInstall1</div>";
     }
@@ -185,6 +186,10 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     }
     if (version_compare(PHP_VERSION, '5.4.0') < 0) {
         $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
+    }
+    if (!in_array(get_config('email_transport'), array('smtp', 'sendmail')) and
+            !get_config('email_announce')) {
+        $tool_content .= "<div class='alert alert-info'>$langEmailSendWarn</div>";
     }
 
     $tool_content .= "<h5>$langRequiredPHP</h5>";
@@ -205,42 +210,59 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     warnIfExtNotLoaded('ldap');
     $tool_content .= "</ul>";
 
-    setGlobalContactInfo();
-    $tool_content .= "<div class='alert alert-info'>$langConfigFound<br>$langConfigMod</div>
+    $tool_content .= "
       <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+ 
+    if (get_config('email_transport', 'mail') == 'mail' and
+            !get_config('email_announce')) {
+        $head_content .= '<script>$(function () {' . $mail_form_js . '});</script>';
+        mail_settings_form();
+    }
+
+    setGlobalContactInfo();
+    $tool_content .= "
+        <div class='panel panel-default'>
+          <div class='panel-heading'>
+            <h2 class='panel-title'>$langUpgContact</h2>
+          </div>
+          <div class='panel-body'>
+            <fieldset>
           <div class='form-group'>
-            <label class='col-md-3 control-label' for='id_Institution'>$langInstituteShortName:</label>
-            <div class='col-md-9'>
+                <label class='col-sm-2 control-label' for='id_Institution'>$langInstituteShortName:</label>
+                <div class='col-sm-10'>
               <input class='form-control' type='text' name='Institution' id='id_Institution' value='" . q($Institution) . "'>
             </div>
           </div>
           <div class='form-group'>
-            <label class='col-md-3 control-label' for='id_postaddress'>$langUpgAddress</label>
-            <div class='col-md-9'>
+                <label class='col-sm-2 control-label' for='id_postaddress'>$langUpgAddress</label>
+                <div class='col-sm-10'>
               <textarea class='form-control' rows='3' name='postaddress' id='id_postaddress'>" . q($postaddress) . "</textarea>
             </div>
           </div>
           <div class='form-group'>
-            <label class='col-md-3 control-label' for='id_telephone'>$langUpgTel</label>
-            <div class='col-md-9'>
+                <label class='col-sm-2 control-label' for='id_telephone'>$langUpgTel</label>
+                <div class='col-sm-10'>
               <input class='form-control' type='text' name='telephone' id='id_telephone' value='" . q($telephone) . "'>
             </div>
           </div>
           <div class='form-group'>
-            <label class='col-md-3 control-label' for='id_fax'>Fax:</label>
-            <div class='col-md-9'>
+                <label class='col-sm-2 control-label' for='id_fax'>Fax:</label>
+                <div class='col-sm-10'>
               <input class='form-control' type='text' name='fax' id='id_fax' value='" . q($fax) . "'>
             </div>
           </div>
           <div class='form-group'>
             <div class='col-md-12'>
               <input class='pull-right btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'>
+                </div>
+              </div>
+            </fieldset>
             </div>
           </div>
         </form>
       </div>";
-    draw($tool_content, 0);
+    draw($tool_content, 0, null, $head_content);
 } else {
     // Main part of upgrade starts here
     if ($command_line) {
@@ -254,6 +276,9 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         }
     }
 
+    if (isset($_POST['email_transport'])) {
+        store_mail_config();
+    }
     $logdate = date("Y-m-d_G.i:s");
     $logfile = "log-$logdate.html";
     if (!($logfile_handle = @fopen("$webDir/courses/$logfile", 'w'))) {
@@ -2995,22 +3020,26 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         // Remove '0000-00-00' default dates and fix exercise weight fields
         Database::get()->query('ALTER TABLE `announcement`
-            MODIFY `date` DATETIME DEFAULT NULL,
+            MODIFY `date` DATETIME NOT NULL,
             MODIFY `start_display` DATETIME DEFAULT NULL,
             MODIFY `stop_display` DATETIME DEFAULT NULL');
-        Database::get()->query("UPDATE announcement SET start_display=null 
-            WHERE start_display='0000-00-00 00:00:00'");
-        Database::get()->query("UPDATE announcement SET stop_display=null 
-            WHERE stop_display='0000-00-00 00:00:00'");
+        Database::get()->query("UPDATE IGNORE announcement SET start_display=null
+                            WHERE start_display='0000-00-00 00:00:00'");
+        Database::get()->query("UPDATE IGNORE announcement SET stop_display=null
+                            WHERE stop_display='0000-00-00 00:00:00'");
         Database::get()->query('ALTER TABLE `agenda`
             CHANGE `start` `start` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course`
             MODIFY `created` DATETIME DEFAULT NULL,
             MODIFY `start_date` DATE DEFAULT NULL,
-            MODIFY `finish_date` DATE DEFAULT NULL');        
+            MODIFY `finish_date` DATE DEFAULT NULL');
+        Database::get()->query("UPDATE IGNORE course SET start_date=null
+                            WHERE start_date='0000-00-00 00:00:00'");
+        Database::get()->query("UPDATE IGNORE course SET finish_date=null
+                            WHERE finish_date='0000-00-00 00:00:00'");
         Database::get()->query('ALTER TABLE `course_weekly_view`
             MODIFY `start_week` DATE DEFAULT NULL,
-            MODIFY `finish_week` DATE DEFAULT NULL');        
+            MODIFY `finish_week` DATE DEFAULT NULL');
         Database::get()->query('ALTER TABLE `course_weekly_view_activities`
             CHANGE `date` `date` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course_user_request`
@@ -3146,7 +3175,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             WHERE exercise_user_record.eurid = exercise_answer_record_total.eurid AND
                   exercise_user_record.total_score <> exercise_answer_record_total.total');
         Database::get()->query('DROP TEMPORARY TABLE exercise_answer_record_total');
-        
+
         // Fix duplicate link orders
         Database::get()->queryFunc('SELECT DISTINCT course_id, category FROM link
             GROUP BY course_id, category, `order` HAVING COUNT(*) > 1',

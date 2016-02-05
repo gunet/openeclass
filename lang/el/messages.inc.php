@@ -2098,12 +2098,7 @@ $langInstituteName = "Website Ιδρύματος - Οργανισμού";
 $langInstitutePostAddress = "Ταχ. Διεύθυνση Ιδρύματος - Οργανισμού";
 $langWarnHelpDesk = "Προσοχή: στο \"Email Helpdesk\" στέλνονται οι αιτήσεις καθηγητών για λογαριασμό στην πλατφόρμα";
 $langDBSettingIntro = "Το πρόγραμμα εγκατάστασης θα δημιουργήσει την βάση δεδομένων της πλατφόρμας αν δεν υπάρχει.";
-$langStep1 = "Βήμα 1 από 6";
-$langStep2 = "Βήμα 2 από 6";
-$langStep3 = "Βήμα 3 από 6";
-$langStep4 = "Βήμα 4 από 6";
-$langStep5 = "Βήμα 5 από 6";
-$langStep6 = "Βήμα 6 από 6";
+$langStep1 = "Βήμα %d από %d";
 $langBasicCfgSetting = "Βασικές ρυθμίσεις";
 $langOptionalCfgSetting = "Προαιρετικές ρυθμίσεις";
 $langDBSetting = "Ρυθμίσεις της MySQL";
@@ -2194,6 +2189,9 @@ $lang_opencourses_enable = "Υποστήριξη GUnet Open Courses";
 $langHierarchyTestDepartment = 'Δοκιμαστικό Τμήμα';
 $langHierarchyTestCategory = 'Δοκιμαστική Κατηγορία';
 $langHierarchyTestSubCategory = 'Υποκατηγορία';
+$langEmailSendWarn = 'Προσοχή: Για την επιτυχή αποστολή ανακοινώσεων μέσω e-mail
+    από την πλατφόρμα, θα πρέπει είτε να επιλέξετε μέθοδο αποστολής μηνυμάτων
+    SMTP ή sendmail, είτε να ορίσετε τη διεύθυνση κοινοποίησης ανακοινώσεων.';
 
 /* * ******************************************************
  * learnpath.php
@@ -3390,8 +3388,6 @@ $langUpgIndexingNotice = "Λόγω του πλήθους των $langsOfCourses,
 $langIdxErrorPermissions = "Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί λόγω προβλήματος με τα δικαιώματα πρόσβασης στον κατάλογο (courses/idx/)";
 $langCheckPerm = "Ελέγξτε τα δικαιώματα πρόσβασης";
 $langUpgNotIndex = "Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο του $langsOfCourse";
-$langConfigFound = "Στο αρχείο ρυθμίσεων <tt>config.php</tt> βρέθηκαν τα παρακάτω στοιχεία επικοινωνίας.";
-$langConfigMod = "Μπορείτε να τα αλλάξετε / συμπληρώσετε.";
 $langUpgContact = "Στοιχεία Επικοινωνίας";
 $langUpgAddress = "Διεύθυνση Ιδρύματος:";
 $langUpgTel = "Τηλ. Επικοινωνίας:";
