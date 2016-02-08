@@ -68,7 +68,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     $offset = intval($_GET['iDisplayStart']);
     $keyword = '%' . $_GET['sSearch'] . '%';
 
-    $student_sql = $is_editor? '': 'AND visible = 1 AND (start_display <= CURDATE() OR start_display IS NULL) AND (stop_display >= CURDATE() OR stop_display IS NULL)';
+    $student_sql = $is_editor? '': 'AND visible = 1 AND (start_display <= NOW() OR start_display IS NULL) AND (stop_display >= NOW() OR stop_display IS NULL)';
     $all_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d $student_sql", $course_id);
     $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql", $course_id, $keyword);
     if ($limit>0) {
@@ -496,6 +496,7 @@ if ($is_editor) {
 
     /* display form */
     if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
+        $require_editor = true;
 
         if (isset($_GET['modify'])) {
             $langAdd = $pageName = $langModifAnn;
