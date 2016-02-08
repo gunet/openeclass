@@ -172,6 +172,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                ],
                 'fnDrawCallback': function( oSettings ) {
                     popover_init();
+                    tooltip_init();
                     $('#ann_table{$course_id}_filter label input').attr({
                           class : 'form-control input-sm',
                           placeholder : '$langSearch...'
