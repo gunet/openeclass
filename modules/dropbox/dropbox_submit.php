@@ -176,7 +176,7 @@ if (isset($_POST['submit'])) {
                         $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
                         $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $c);
                         $datetime = date('l jS \of F Y h:i:s A');
-
+                        $course_code = course_id_to_code($cid);
                         $header_dropbox_message = "
                             <!-- Header Section -->
                             <div id='mail-header'>
