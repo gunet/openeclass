@@ -206,8 +206,7 @@ if ($is_editor) {
 
         $data['categories'] = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d ORDER BY `order`", $course_id);
 
-        echo view('modules.link.create', $data);
-        exit();
+        view('modules.link.create', $data);
     // Add or Edit Category
     } elseif (in_array($action, array('addcategory', 'editcategory'))) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
@@ -219,16 +218,14 @@ if ($is_editor) {
             $data['form_legend'] = trans('langCategoryAdd');
         }
 
-        echo view('modules.link.createCategory', $data);
-        exit();
+        view('modules.link.createCategory', $data);
     // Edit Settings
     } elseif ($action == 'settings') {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
         
         $data['social_enabled'] = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
         
-        echo view('modules.link.settings', $data);
-        exit();        
+        view('modules.link.settings', $data);       
     }
 // If the user !$is_editor and social bookmarks are enabled    
 } elseif ($social_bookmarks_enabled) {
@@ -295,8 +292,7 @@ if ($is_editor) {
                     $data['urlLinkError'] = Session::getError('urllink') ? " has-error" : "";
                     $data['description_textarea'] = rich_text_editor('description', 3, 30, $description);
                     
-                    echo view('modules.link.create', $data);
-                    exit();
+                    view('modules.link.create', $data);
                 }
             }
         }
@@ -344,6 +340,5 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
         $urlview = $data['urlview'] = str_repeat('0', count($data['categories']));
     }
 
-    echo view('modules.link.index', $data);
-    exit();
+    view('modules.link.index', $data);
 }

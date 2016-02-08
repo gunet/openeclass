@@ -281,7 +281,7 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg');
     $data = array_merge($global_data, $view_data);
-    return $blade->view()->make($view_file, $data)->render();
+    echo $blade->view()->make($view_file, $data)->render();
 }
 function widget_view($view_file, $view_data = array()) {
     global $webDir, $is_editor, $course_code, $course_id, $language, $siteName,
@@ -330,9 +330,9 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);    
     if ($is_embedonce) {
         unset($_SESSION['embedonce']);
-        echo view('layouts.embed', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
+        view('layouts.embed', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
     } else {
-        echo view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
+        view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
     }
     // FOR REFERENCE ONLY (SHOULD BE REMOVED)
     
