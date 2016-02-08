@@ -394,7 +394,7 @@ if ($displayAnnouncementList == true) {
             $tool_content .= "<tr class='$classvis'>
                 <td>
                     <div class='table_td'>
-                        <div class='table_td_header clearfix'><a href='adminannouncements_single.php?ann_id=$myrow->id'>" . q($myrow->title) . "</a></div>
+                        <div class='table_td_header clearfix'><a href='adminannouncements_single.php?ann_id=$myrow->id'>$myrow->title</a></div>
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->body)."</div>
                     </div>
                 </td>
