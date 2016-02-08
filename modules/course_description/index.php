@@ -40,15 +40,12 @@ $toolName = $langCourseDescription;
 ModalBoxHelper::loadModalBox();
 if ($is_editor) {
     load_js('tools.js');
-    $tool_content .= "
-	<div id='operations_container'>" .
-            action_bar(array(
+    $data['action_bar'] = action_bar(array(
                 array('title' => $langEditCourseProgram,
                     'url' => "edit.php?course=$course_code",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success'))) .
-            "</div>";
+                    'button-class' => 'btn-success')));
 
     processActions();
 
@@ -77,61 +74,11 @@ if ($is_editor) {
     }
 }
 
-$q = Database::get()->queryArray("SELECT id, title, comments, type, visible FROM course_description WHERE course_id = ?d ORDER BY `order`", $course_id);
-if ($q && count($q) > 0) {
-    $i = 0;
-    foreach ($q as $row) {
-        $tool_content .= "            
-            <div class='panel panel-action-btn-default'>
-              <div class='panel-heading'>";
-        if ($is_editor) {
-        $tool_content .= "      
-                <div class='pull-right'>".
-                action_button(
-                        array(
-                            array(
-                                'title' => $langEditChange,
-                                'url' => "edit.php?course=$course_code&amp;id=" . getIndirectReference($row->id),
-                                'icon' => 'fa-edit'
-                            ),
-                            array('title' => $row->visible ? $langRemoveFromCourseHome : $langAddToCourseHome,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=" . getIndirectReference($row->id),
-                                'icon' => $row->visible ? 'fa-eye-slash' : 'fa-eye'
-                            ),
-                            array('title' => q($langUp),
-                                'level' => 'primary',
-                                'icon' => 'fa-arrow-up',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=" . getIndirectReference($row->id),
-                                'disabled' => $i <= 0),
-                            array('title' => q($langDown),
-                                'level' => 'primary',
-                                'icon' => 'fa-arrow-down',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=" . getIndirectReference($row->id),
-                                'disabled' => $i + 1 >= count($q)),
-                            array('title' => q($langDelete),
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=" . getIndirectReference($row->id),
-                                'icon' => 'fa-times',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmDelete)                            
-                        )
-                ) ."</div>";
-        }
-        $tool_content .= "  
-              <h3 class='panel-title'>".q($row->title)." ".($row->visible && $is_editor ? "&nbsp;<span data-original-title='$langSeenToCourseHome' data-toggle='tooltip' data-placement='bottom' class='label label-primary'><i class='fa fa-eye'></i></span>" : "")."</h3>      
-              </div>
-              <div class='panel-body'>"
-                .handleType($row->type)."<br><br>"
-               . standard_text_escape($row->comments) . 
-              "</div>
-            </div>";
-        $i++;
-    }
-} else {
-    $tool_content .= "<div class='alert alert-warning'>$langThisCourseDescriptionIsEmpty</div>";
-}
+$data['course_descs'] = Database::get()->queryArray("SELECT id, title, comments, type, visible FROM course_description WHERE course_id = ?d ORDER BY `order`", $course_id);
+
 
 add_units_navigation(true);
-draw($tool_content, 2, null, $head_content);
+view('modules.course.description.index', $data);
 
 // Helper Functions
 
