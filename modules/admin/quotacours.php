@@ -26,15 +26,14 @@
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
-
-if (!isset($_GET['c'])) {
-    die();
-}
-
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
+
+if (!isset($_GET['c'])) {
+    redirect_to_home_page();
+}
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -90,10 +89,10 @@ if (isset($_POST['submit'])) {
 else {        
     $q = Database::get()->querySingle("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota FROM course WHERE code = ?s", $_GET['c']);
     $quota_info .= $langTheCourse . " <b>" . q($q->title) . "</b> " . $langMaxQuota;
-    $dq = $q->doc_quota / MB;
-    $vq = $q->video_quota / MB;
-    $gq = $q->group_quota / MB;
-    $drq = $q->dropbox_quota / MB;
+    $dq = round($q->doc_quota / MB);
+    $vq = round($q->video_quota / MB);
+    $gq = round($q->group_quota / MB);
+    $drq = round($q->dropbox_quota / MB);
 
     $tool_content .= "<div class='form-wrapper'>
             <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?c=" . q($_GET['c']) . "' method='post'>
@@ -101,19 +100,19 @@ else {
                 <div class='alert alert-info'>$quota_info</div>
                 <div class='form-group'>
                     <label class='col-sm-4 control-label'>$langLegend $langDoc:</label>
-                        <div class='col-sm-6'><input type='text' name='dq' value='$dq' size='4' maxlength='4'> Mb.</div>
+                        <div class='col-sm-6'><input type='text' name='dq' value='$dq' size='4' maxlength='4'> MB</div>
                 </div>
                 <div class='form-group'>
                     <label class='col-sm-4 control-label'>$langLegend $langVideo:</label>
-                        <div class='col-sm-6'><input type='text' name='vq' value='$vq' size='4' maxlength='4'> Mb.</div>
+                        <div class='col-sm-6'><input type='text' name='vq' value='$vq' size='4' maxlength='4'> MB</div>
                 </div>
                 <div class='form-group'>
                     <label class='col-sm-4 control-label'>$langLegend <b>$langGroups</b>:</label>
-                        <div class='col-sm-6'><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</div>
+                        <div class='col-sm-6'><input type='text' name='gq' value='$gq' size='4' maxlength='4'> MB</div>
                 </div>
                 <div class='form-group'>
                     <label class='col-sm-4 control-label'>$langLegend <b>$langDropBox</b>:</label>
-                        <div class='col-sm-6'><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</div>
+                        <div class='col-sm-6'><input type='text' name='drq' value='$drq' size='4' maxlength='4'> MB</div>
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-4'>
