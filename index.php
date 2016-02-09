@@ -268,5 +268,5 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     }  
     $data['menuTypeID'] = 0;
     
-    echo view('home.index', $data);
+    view('home.index', $data);
 }

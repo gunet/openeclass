@@ -257,7 +257,7 @@ if ($is_editor) {
                                 'href' => $base_url
                             )
                         ));
-        echo view('modules.glossary.config', $data);
+        view('modules.glossary.config', $data);
     }
 
     // display form for adding or editing a glossary term
@@ -318,7 +318,7 @@ if ($is_editor) {
                         'href' => $base_url,
                     )
                 ));
-        echo view('modules.glossary.create', $data);
+        view('modules.glossary.create', $data);
     }
     $data['total_glossary_terms'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
                                                           WHERE course_id = ?d", $course_id)->count;       
@@ -366,7 +366,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
                             FROM glossary WHERE course_id = ?d $where
                             GROUP BY term
                             ORDER BY term", $course_id, $terms);    
-    echo view('modules.glossary.index', $data);   
+    view('modules.glossary.index', $data);   
 }
 
 /**

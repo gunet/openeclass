@@ -36,7 +36,7 @@ $langAboutCourses = "Η πλατφόρμα υποστηρίζει συνολικ
 $langAboutUsers = "H πλατφόρμα διαθέτει";
 $langOperation = "Λειτουργία";
 $langContactInfo = "Στοιχεία επικοινωνίας";
-$langInCourses = "Στο $langsCourse";
+$langInCourses = "στο $langsCourse";
 $langInCoursesL = "στο $langsCourse";
 $langOfSite = "της πλατφόρμας";
 $langResourceBrowser = 'Αναζήτηση πόρων';
@@ -60,7 +60,6 @@ $langOfUser = "χρήστη";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
 $langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
-$langOfCourse = "$langsOfCourse";
 
 /* * ******************************************
  * addadmin.php
@@ -430,7 +429,7 @@ $langUserMoved = 'Ο λογαριασμός "%s" μεταφέρθηκε.';
 $langUserMoveError = 'Σφάλμα μεταφοράς λογαριασμού "%s".';
 $langActivateMonths = 'Μήνες επέκτασης διάρκειας λογαριασμών';
 $langMultiRegUser = 'Μαζική δημιουργία λογαριασμών χρηστών';
-$langMultiRegCourseUser = 'Μαζική εγγραφή χρηστών σε $langsCourses';
+$langMultiRegCourseUser = "Μαζική εγγραφή χρηστών σε $langsCourses";
 $langMultiMoveCourses = "Μαζική μεταφορά $langsOfCourses";
 $langConfirmMultiMoveCourses = "Επιβεβαίωση μεταφοράς $langsOfCourses σε άλλο τμήμα.";
 $langCourseCodes = "Κωδικοί $langsOfCourses";
@@ -456,7 +455,7 @@ e-mail είναι προαιρετικό - αν θέλετε να το παρα�
 χρήστη των χρηστών, θα πάρουν αυτόματα ονόματα χρήστη αποτελούμενα από το
 πρόθεμα που μπορείτε να ορίσετε παρακάτω και έναν αύξοντα αριθμό. Αν δεν ορίσετε
 το password, ορίζεται αυτόματα ένας τυχαίος κωδικός διαφορετικός για κάθε λογαριασμό</p>";
-$langMultiRegCourseInvalid = 'Χρήστης %s: μη έγκυρος κωδικός $langsOfCourse «%s»';
+$langMultiRegCourseInvalid = "Χρήστης %s: μη έγκυρος κωδικός $langsOfCourse «%s»";
 $langMultiRegFields = 'Ορισμός των πεδίων ή της σειράς τους';
 $langMultiRegFieldError = 'Σφάλμα! Μη επιτρεπτή ετικέτα πεδίου:';
 $langMultiRegUsernameError = 'Το όνομα χρήστη υπάρχει ήδη.';
@@ -868,8 +867,10 @@ $langCopyrightNotice = '
 href="http://download.eclass.gunet.gr" target="_blank">διανέμεται ελεύθερα</a>
 ως Λογισμικό Ανοικτού Κώδικα σύμφωνα με τη γενική δημόσια άδεια GNU General
 Public License (GNU GPL).<br><br>
-Το περιεχόμενο των ηλεκτρονικών $langsOfCourses που φιλοξενεί η πλατφόρμα ' . $siteName . ', καθώς και τα πνευματικά δικαιώματα του υλικού αυτού, ανήκουν στους συγγραφείς τους και το GUnet δεν διεκδικεί δικαιώματα σε αυτό. Για οποιαδήποτε χρήση ή αναδημοσίευση του περιεχομένου παρακαλούμε επικοινωνήστε με τους υπεύθυνους των αντίστοιχων $langsOfCourses.
-';
+Το περιεχόμενο των ηλεκτρονικών ' . $langsOfCourses . ' που φιλοξενεί η πλατφόρμα ' . $siteName . ', 
+καθώς και τα πνευματικά δικαιώματα του υλικού αυτού, ανήκουν στους συγγραφείς τους 
+και το GUnet δεν διεκδικεί δικαιώματα σε αυτό. Για οποιαδήποτε χρήση ή αναδημοσίευση του περιεχομένου 
+παρακαλούμε επικοινωνήστε με τους υπεύθυνους των αντίστοιχων ' . $langsOfCourses . '';
 $langUsageTerms = 'Όροι Χρήσης';
 
 /* * *****************************************************
@@ -917,10 +918,10 @@ $langRefernce = "Αναφορά";
 $langCitation = "Βιβλιογραφική αναφορά $langsOfCourse";
 $langAccessed = "Ανακτήθηκε την ";
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του $langsOfCourse μέσω email.";
-$langCourseInvalidDepartment = 'Το $langsCourse βρίσκεται σε τμήμα όπου δεν
-    επιτρέπεται πλέον η δημιουργία $langsOfCourses.';
-$langCourseInvalidDepartmentPrompt = 'Παρακαλούμε %sμεταφέρετέ το
-    μέσω των ρυθμίσεων $langsOfCourse%s.';
+$langCourseInvalidDepartment = "Το $langsCourse βρίσκεται σε τμήμα όπου δεν
+    επιτρέπεται πλέον η δημιουργία $langsOfCourses.";
+$langCourseInvalidDepartmentPrompt = "Παρακαλούμε %s μεταφέρετέ το
+    μέσω των ρυθμίσεων $langsOfCourse %s.";
 $langReadMore = "Περισσότερα";
 $langReadLess = "Λιγότερα";
 $langNoInfoAvailable = "Δεν υπάρχουν διαθέσιμες πληροφορίες";
@@ -1274,7 +1275,6 @@ $langNoGroupInCategory = "Δεν υπάρχουν ομάδες χρηστών σ
 $langGroupCatDel = "Οταν διαγράψετε μια κατηγορία, θα διαγραφούν όλες οι ομάδες χρηστών της κατηγορίας. Είστε βέβαιος ότι θέλετε να διαγράψετε την κατηγορία;";
 $langGroupCategoryDeleted = "Η κατηγορία διαγράφηκε μαζί με όλες τις ομάδες χρηστών της";
 $langGroupDeleted = "Η ομάδα χρηστών διαγράφηκε";
-$langGroupTutor = "Υπεύθυνος ομάδας";
 $langGroupTeam = "Γενικές Ομάδες Χρηστών";
 $langInvalidNumericValue = "άκυρη τιμή πεδίου";
 
@@ -1306,7 +1306,7 @@ $langMultiCourse = "Μαζική δημιουργία $langsOfCourses";
 $langMultiCourseInfo = 'Εισαγάγετε στην παρακάτω περιοχή μια λίστα με τους
 τίτλους των $langsOfCourses που επιθυμείτε να δημιουργηθούν, με τον κάθε
 τίτλο σε ξεχωριστή γραμμή. Αν επιθυμείτε να προστεθεί αυτόματα
-καθηγητής στο $langsCourse, σημπληρώστε το ονοματεπώνυμο ή το όνομα χρήστη
+καθηγητής στο '. $langsCourse . ', σημπληρώστε το ονοματεπώνυμο ή το όνομα χρήστη
 του μετά τον τίτλο, διαχωρισμένο με το χαρακτήρα "|".';
 $langMultiCourseTitles = "Τίτλοι / Καθηγητές $langOfCourses";
 $langMultiCourseData = "Στοιχεία $langOfCourses";
@@ -2106,12 +2106,7 @@ $langInstituteName = "Website Ιδρύματος - Οργανισμού";
 $langInstitutePostAddress = "Ταχ. Διεύθυνση Ιδρύματος - Οργανισμού";
 $langWarnHelpDesk = "Προσοχή: στο \"Email Helpdesk\" στέλνονται οι αιτήσεις καθηγητών για λογαριασμό στην πλατφόρμα";
 $langDBSettingIntro = "Το πρόγραμμα εγκατάστασης θα δημιουργήσει την βάση δεδομένων της πλατφόρμας αν δεν υπάρχει.";
-$langStep1 = "Βήμα 1 από 6";
-$langStep2 = "Βήμα 2 από 6";
-$langStep3 = "Βήμα 3 από 6";
-$langStep4 = "Βήμα 4 από 6";
-$langStep5 = "Βήμα 5 από 6";
-$langStep6 = "Βήμα 6 από 6";
+$langStep1 = "Βήμα %d από %d";
 $langBasicCfgSetting = "Βασικές ρυθμίσεις";
 $langOptionalCfgSetting = "Προαιρετικές ρυθμίσεις";
 $langDBSetting = "Ρυθμίσεις της MySQL";
@@ -2202,6 +2197,9 @@ $lang_opencourses_enable = "Υποστήριξη GUnet Open Courses";
 $langHierarchyTestDepartment = 'Δοκιμαστικό Τμήμα';
 $langHierarchyTestCategory = 'Δοκιμαστική Κατηγορία';
 $langHierarchyTestSubCategory = 'Υποκατηγορία';
+$langEmailSendWarn = 'Προσοχή: Για την επιτυχή αποστολή ανακοινώσεων μέσω e-mail
+    από την πλατφόρμα, θα πρέπει είτε να επιλέξετε μέθοδο αποστολής μηνυμάτων
+    SMTP ή sendmail, είτε να ορίσετε τη διεύθυνση κοινοποίησης ανακοινώσεων.';
 
 /* * ******************************************************
  * learnpath.php
@@ -2986,9 +2984,9 @@ $langAddHereSomeCourses = "<p>Για να εγγραφείτε / απεγγρα�
 $langDeleteUser = "Επιβεβαίωση απεγγραφής χρήστη";
 $langDeleteUser2 = "από το $langsCourse";
 $langSurnameName = "Ονοματεπώνυμο";
-$langAskUser = "Αναζητήστε τον χρήστη που θέλετε να προστεθεί. Ο χρήστης θα πρέπει να έχει ήδη λογαριασμό στην πλατφόρμα για να εγγραφεί στο μάθημά σας.";
+$langAskUser = "Αναζητήστε τον χρήστη που θέλετε να προστεθεί. Ο χρήστης θα πρέπει να έχει ενεργό λογαριασμό στην πλατφόρμα για να εγγραφεί στο $langsCourse.";
 $langAskManyUsers = "<strong>Σημείωση</strong>:<br /> Οι χρήστες θα πρέπει να
-                έχουν ήδη λογαριασμό στην πλατφόρμα για να γραφτούν στο μάθημά σας.
+                έχουν ήδη λογαριασμό στην πλατφόρμα για να γραφτούν στο $langsCourse.
                 Εισάγετε τα ονόματα χρήστη (usernames) ή τους αριθμούς μητρώου σε ξεχωριστές γραμμές.";
 $langAddUser = "Προσθήκη ενός χρήστη";
 $langAddManyUsers = "Προσθήκη πολλών χρηστών";
@@ -2996,17 +2994,17 @@ $langOneUser = "ενός χρήστη";
 $langManyUsers = "πολλών χρηστών";
 $langGUser = "χρήστη επισκέπτη";
 $langAddGUser = "Προσθήκη χρήστη επισκέπτη";
-$langNoUsersFound = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε ή ο χρήστης υπάρχει ήδη στο μάθημά σας.";
+$langNoUsersFound = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε ή ο χρήστης υπάρχει ήδη στο $langsCourse.";
 $langNoUsersFound2 = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε";
 $langRegister = "Εγγραφή";
 $langUnRegister = "Απεγγραφή";
-$langAdded = " προστέθηκε στο μάθημά σας.";
+$langAdded = " προστέθηκε στο $langsCourse.";
 $langAddError = "Σφάλμα! Ο χρήστης δεν προστέθηκε στο $langsCourse. Παρακαλούμε προσπαθήστε ξανά ή επικοινωνήστε με το διαχειριστή του συστήματος.";
 $langAddBack = "Επιστροφή στη σελίδα εγγραφής χρηστών";
 $langUsersNotExist = "Οι χρήστες με τα παρακάτω στοιχεία δεν βρέθηκαν:";
 $langCourseNotExist = "Ο κωδικός $langsOfCourse δεν υπάρχει.";
-$langUsersAlreadyRegistered = "Οι παρακάτω χρήστες είναι ήδη γραμμένοι στο μάθημά σας:";
-$langUsersRegistered = "Οι παρακάτω χρήστες προστέθηκαν στο μάθημά σας:";
+$langUsersAlreadyRegistered = "Οι παρακάτω χρήστες είναι ήδη γραμμένοι στο $langsCourse:";
+$langUsersRegistered = "Οι παρακάτω χρήστες προστέθηκαν στο $langsCourse:";
 $langNotifyRegUser1 = "Πραγματοποιήθηκε η εγγραφή σας στο $langsCourse ";
 $langNotifyRegUser2 = " από τον διαχειριστή του $langsOfCourse.";
 $langToUser = "στον χρήστη";
@@ -3055,7 +3053,6 @@ $langCoursesRegistered = "Η εγγραφή σας στα $langsCourses που �
 $langNoCoursesRegistered = "<p>Δεν επιλέξατε $langsCourse για εγγραφή.</p><p> Μπορείτε να εγγραφείτε σε $langsCourse, την
 επόμενη φορά που θα μπείτε στην πλατφόρμα.</p>";
 $langIfYouWantToAddManyUsers = "Αν θέλετε να προσθέσετε ένα κατάλογο με χρήστες στο μάθημά σας, παρακαλώ συμβουλευτείτε τον διαχειριστή συστήματος.";
-$langCourse = "$langCourse";
 $langLastVisits = "Οι τελευταίες μου επισκέψεις";
 $langLastUserVisits = "Οι τελευταίες επισκέψεις του χρήστη ";
 $langDumpUser = "Εξαγωγή σε Excel";
@@ -3399,8 +3396,6 @@ $langUpgIndexingNotice = "Λόγω του πλήθους των $langsOfCourses,
 $langIdxErrorPermissions = "Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης Open eClass δεν λειτουργεί λόγω προβλήματος με τα δικαιώματα πρόσβασης στον κατάλογο (courses/idx/)";
 $langCheckPerm = "Ελέγξτε τα δικαιώματα πρόσβασης";
 $langUpgNotIndex = "Δεν πραγματοποιήθηκε η αλλαγή στον κατάλογο του $langsOfCourse";
-$langConfigFound = "Στο αρχείο ρυθμίσεων <tt>config.php</tt> βρέθηκαν τα παρακάτω στοιχεία επικοινωνίας.";
-$langConfigMod = "Μπορείτε να τα αλλάξετε / συμπληρώσετε.";
 $langUpgContact = "Στοιχεία Επικοινωνίας";
 $langUpgAddress = "Διεύθυνση Ιδρύματος:";
 $langUpgTel = "Τηλ. Επικοινωνίας:";

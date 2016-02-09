@@ -19,25 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$shib_vars = array(
-    'uname' => '',
-    'email' => '',
-    'cn' => '',
-    'surname' => '',
-    'givenname' => '',
-    'studentid' => '');
-
 $secureIndexPath = $webDir . '/secure/index.php';
-if (is_readable($secureIndexPath)) {
-    $shib_index = file_get_contents($secureIndexPath);
-    while (preg_match('/\[[^]]*shib_(\w+)[^=]+=\s*@?([^;]+)\s*;/', $shib_index, $matches)) {
-        $shib_vars[$matches[1]] = $matches[2];
-        $shib_index = substr($shib_index, strlen($matches[0]));
-    }
-}
-if (isset($shib_vars['shib_nom']) and !isset($shib_vars['shib_cn'])) {
-    $shib_vars['shib_cn'] = $shib_vars['shib_nom'];
-}
+$shib_vars = get_shibboleth_vars($secureIndexPath);
 
 $r = Database::get()->querySingle("SELECT auth_settings, auth_instructions, auth_title FROM auth WHERE auth_id = 6");
 $shibsettings = $r->auth_settings;

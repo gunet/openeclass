@@ -150,7 +150,7 @@ if (isset($_GET['add'])) {
                     SELECT user_id FROM course_user WHERE course_id = ?d", $course_id);
         $result = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.username, u.am FROM
                                                 user u LEFT JOIN lala c ON u.id = c.user_id WHERE
-                                                c.user_id IS NULL AND $query", $values);
+                                                c.user_id IS NULL AND u.expires_at >= CURRENT_DATE() AND $query", $values);
         if ($result) {
             $tool_content .= "<table class='table-default'>
                                 <tr>
@@ -164,6 +164,8 @@ if (isset($_GET['add'])) {
             $i = 1;
             if(showSecondFactorChallenge()!=""){
                 $asktotp = " onclick=\"var totp=prompt('Type 2FA:','');this.setAttribute('href', this.getAttribute('href')+'&sfaanswer='+escape(totp));\" ";
+            } else {
+                $asktotp = '';
             }
             foreach ($result as $myrow) {                
                 $tool_content .= "<td class='text-right'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .

@@ -68,7 +68,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     $localtitle = ( $title === '__MainPage__' ) ? $langWikiMainPage : $title;
 
     $out = "
-            <h1>$localtitle</h1>
+            <h4>$localtitle</h4>
             <br>
             <div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='POST' action='$script' name='editform' id='editform'>";
@@ -141,7 +141,7 @@ function claro_disp_wiki_preview(&$wikiRenderer, $title, $content = '') {
     }
 
     $out = "<div id='preview' class='wikiTitle'>
-                <h1 class='wikiTitle'>$langWikiPreviewTitle$title</h1>
+                <h4 class='wikiTitle'>$langWikiPreviewTitle$title</h4>
             </div>
             <div class='alert alert-danger'>$langWikiPreviewWarning</div><br>
             <div class='wiki2xhtml'>";

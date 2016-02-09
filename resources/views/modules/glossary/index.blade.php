@@ -2,7 +2,7 @@
 
 @section('content')
     {!! isset($action_bar) ?  $action_bar : '' !!}
-    @if ($expand_glossary && $total_glossary_terms > $max_glossary_terms)
+    @if ($is_editor && $expand_glossary && $total_glossary_terms > $max_glossary_terms)
         <div class='alert alert-warning'>{!! trans('langGlossaryOverLimit',["<b>$max_glossary_terms</b>"]) !!}</div>
     @endif        
     @if ($glossary_index && count($prefixes) > 1)

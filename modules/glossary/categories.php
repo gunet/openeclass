@@ -169,7 +169,7 @@ if ($is_editor) {
                                         'href' => $cat_url
                                     )
                                 ));
-        echo view('modules.glossary.createCategory', $data);                
+        view('modules.glossary.createCategory', $data);                
     }
 }
 
@@ -177,7 +177,7 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
     $data['categories'] = Database::get()->queryArray("SELECT id, name, description
                           FROM glossary_category WHERE course_id = ?d
                           ORDER BY name", $course_id);
-    echo view('modules.glossary.indexCategory', $data);
+    view('modules.glossary.indexCategory', $data);
 }
 
 //draw($tool_content, 2, null, $head_content);

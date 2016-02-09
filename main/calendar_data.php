@@ -34,8 +34,10 @@ if (isset($_GET['course'])){
 require_once '../include/init.php';
 require_once 'personal_calendar/calendar_events.class.php';
 
-Calendar_Events::get_calendar_settings();
-if(isset($_GET['from']) && isset($_GET['to'])){
+if (isset($uid)) {
+    Calendar_Events::get_calendar_settings();
+}
+if(isset($_GET['from']) && isset($_GET['to'])){        
     echo Calendar_Events::bootstrap_events($_GET['from'], $_GET['to']);
 }
 elseif(isset($_GET['caltype']) && $_GET['caltype'] == 'small'){

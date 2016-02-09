@@ -396,7 +396,7 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
-    } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
+    } elseif (isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         if (isset($_GET['addActivityAs'])) {
             $pageName = "$langAdd $langInsertWork";
@@ -516,7 +516,8 @@ if ($is_editor) {
             $auto = isset($_POST['auto']) ? 1 : 0;
             $weight = $_POST['weight'];
             $type = $_POST['activity_type'];
-            $actDate = !empty($_POST['date']) ? $_POST['date'] : NULL;
+            $actDate = empty($_POST['date']) ? NULL :
+                DateTime::createFromFormat('d-m-Y H:i', $_POST['date'])->format('Y-m-d H:i');
             $visible = isset($_POST['visible']) ? 1 : 0;
 
             if ($_POST['id']) {               
@@ -563,16 +564,17 @@ if ($is_editor) {
     }
    
     //DISPLAY: list of users and form for each user
-    elseif(isset($_GET['gradebookBook']) or isset($_GET['book'])) {        
+    elseif(isset($_GET['gradebookBook']) or isset($_GET['book'])) {
         if (isset($_GET['update']) and $_GET['update']) {
             $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
         }
         //record booking
-        if(isset($_POST['bookUser'])) {
+        if (isset($_POST['bookUser'])) {            
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             $userID = intval(getDirectReference($_POST['userID'])); //user
-            //get all the gradebook activies --> for each gradebook activity update or insert grade
-            $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d", $gradebook_id);
+            $gradebook_range = $_POST['degreerange'];                        
+            // get all the gradebook activies --> for each gradebook activity update or insert grade
+            $result = Database::get()->queryArray("SELECT * FROM gradebook_activities WHERE gradebook_id = ?d", $gradebook_id);
             if ($result) {
                 foreach ($result as $activity) {
                     $attend = floatval($_POST[getIndirectReference($activity->id)]); //get the record from the teacher (input name is the activity id)
@@ -580,10 +582,10 @@ if ($is_editor) {
                     $checkForBook = Database::get()->querySingle("SELECT id FROM gradebook_book  WHERE gradebook_activity_id = ?d AND uid = ?d", $activity->id, $userID);
                     if($checkForBook){
                         //update
-                        Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d ", $attend, $checkForBook->id);
+                        Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d ", $attend/$gradebook_range, $checkForBook->id);
                     } else {
                         //insert
-                        Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $activity->id, $attend, '');
+                        Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $activity->id, $attend/$gradebook_range, '');
                     }
                 }
                 $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
@@ -635,7 +637,7 @@ if (isset($display) and $display == TRUE) {
         if ($is_editor) {
             display_gradebook($gradebook);
         } else {
-            $pageName = $gradebook->title;
+            $pageName = $gradebook->title;            
             student_view_gradebook($gradebook_id); // student view
         }
     } else { // display all gradebooks

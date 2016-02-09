@@ -862,7 +862,7 @@ switch ($action) {
                                           $htmltitle.'</title>'.
                                           $style.'</head><body>';
                     
-                    $printable_content .= '<h1>'.$htmltitle. '</h1>'."\n";
+                    $printable_content .= '<h2>'.$htmltitle. '</h2>'."\n";
                     
                     $printable_content .= '<h3>'.$toolTitle['mainTitle'].'</h3><hr/>'."\n";
                     //remove the toc script (if it exists) with preg_replace

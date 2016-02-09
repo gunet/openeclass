@@ -103,12 +103,12 @@ $db->query("CREATE TABLE `announcement` (
     `id` MEDIUMINT(11) NOT NULL auto_increment,
     `title` VARCHAR(255) NOT NULL DEFAULT '',
     `content` TEXT,
-    `date` DATE DEFAULT NULL,
+    `date` DATETIME NOT NULL,
     `course_id` INT(11) NOT NULL DEFAULT 0,
     `order` MEDIUMINT(11) NOT NULL DEFAULT 0,
     `visible` TINYINT(4) NOT NULL DEFAULT 0,
-    `start_display` DATE DEFAULT NULL,
-    `stop_display` DATE DEFAULT NULL,
+    `start_display` DATETIME DEFAULT NULL,
+    `stop_display` DATETIME DEFAULT NULL,
     PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE `admin_announcement` (
@@ -726,8 +726,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
     `ptitle` VARCHAR(255) NOT NULL DEFAULT '',
     `wiki_id` INT(11) UNSIGNED NOT NULL,
     `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-    `ltime_created` TIMESTAMP NOT NULL,
-    `ltime_alive` TIMESTAMP NOT NULL,
+    `ltime_created` DATETIME DEFAULT NULL,
+    `ltime_alive` DATETIME DEFAULT NULL,
     PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `blog_post` (
@@ -813,24 +813,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
                 `name` MEDIUMTEXT NOT NULL,
                 `sortorder`  INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
-$db->query("CREATE TABLE IF NOT EXISTS `wall_post` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `content` TEXT,
-                `youtube` VARCHAR(250) DEFAULT '',
-                `timestamp` INT(11) NOT NULL DEFAULT 0,
-                `pinned` TINYINT(1) NOT NULL DEFAULT 0,
-                INDEX `wall_post_index` (`course_id`)) $charset_spec");
-
-$db->query("CREATE TABLE `wall_post_resources` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `post_id` INT(11) NOT NULL,
-                `title` VARCHAR(255) NOT NULL DEFAULT '',
-                `res_id` INT(11) NOT NULL,
-                `type` VARCHAR(255) NOT NULL DEFAULT '',
-                INDEX `wall_post_resources_index` (`post_id`)) $charset_spec");
-
 $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `course_id` INT(11) NOT NULL,
@@ -840,12 +822,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `start_date` DATETIME DEFAULT NULL,
     `end_date` DATETIME DEFAULT NULL,
     `active` INT(11) NOT NULL DEFAULT 0,
-    `public` TINYINT(1) NOT NULL DEFAULT 1,    
+    `public` TINYINT(1) NOT NULL DEFAULT 1,
     `description` MEDIUMTEXT NULL DEFAULT NULL,
     `end_message` MEDIUMTEXT NULL DEFAULT NULL,
     `anonymized` INT(1) NOT NULL DEFAULT 0,
     `show_results` INT(1) NOT NULL DEFAULT 0,
-    `type` TINYINT NOT NULL DEFAULT 0,
     `assign_to_specific` TINYINT NOT NULL DEFAULT '0' ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
@@ -1063,8 +1044,8 @@ $db->query("CREATE TABLE `user_department` (
 
 // hierarchy stored procedures
 $db->query("DROP PROCEDURE IF EXISTS `add_node`");
-$db->query("CREATE PROCEDURE `add_node` (IN name TEXT, IN parentlft INT(11),
-            IN p_code VARCHAR(20), IN p_allow_course BOOLEAN,
+$db->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN parentlft INT(11),
+            IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
             IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
         LANGUAGE SQL
         BEGIN
@@ -1079,8 +1060,8 @@ $db->query("CREATE PROCEDURE `add_node` (IN name TEXT, IN parentlft INT(11),
         END");
 
 $db->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-$db->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT, IN parentlft INT(11),
-            IN p_code VARCHAR(20), IN p_number INT(11), IN p_generator INT(11),
+$db->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT CHARSET utf8, IN parentlft INT(11),
+            IN p_code VARCHAR(20) CHARSET utf8, IN p_number INT(11), IN p_generator INT(11),
             IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
         LANGUAGE SQL
         BEGIN
@@ -1095,9 +1076,9 @@ $db->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT, IN parentlft INT(11),
         END");
 
 $db->query("DROP PROCEDURE IF EXISTS `update_node`");
-$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT,
+$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8,
             IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-            IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+            IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
         LANGUAGE SQL
         BEGIN
             UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
@@ -1372,6 +1353,8 @@ $default_config = array(
 $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .
         implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')), $default_config);
 
+store_mail_config();
+
 // table for cron parameters
 $db->query("CREATE TABLE `cron_params` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1413,7 +1396,7 @@ $db->query("CREATE TABLE `actions_daily` (
     KEY `actionsdailyuserindex` (`user_id`),
     KEY `actionsdailydayindex` (`day`),
     KEY `actionsdailymoduleindex` (`module_id`),
-    KEY `actionsdailycourseindex` (`course_id`) ) $charset_spec");
+    KEY `actionsdailycourseindex` (`course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `actions_summary` (
     `id` int(11) NOT NULL auto_increment,
@@ -1606,43 +1589,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_department` (
     `rule` INT(11) NOT NULL DEFAULT 0,
     `department_id` INT(11) NOT NULL,
     FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
-    FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE)");
-$db->query("CREATE TABLE IF NOT EXISTS `widget` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `class` varchar(400) NOT NULL) $charset_spec"); 
-$db->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `widget_id` int(11) unsigned NOT NULL,
-                `widget_area_id` int(11) NOT NULL,
-                `options` text NOT NULL,
-                `position` int(3) NOT NULL,
-                `user_id` int(11) NULL,
-                `course_id` int(11) NULL,
-                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
-                 FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-                 FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");
-
-// Conference table
-$db->query("CREATE TABLE IF NOT EXISTS `conference` (
-  `conf_id` int(11) NOT NULL AUTO_INCREMENT,
-  `course_id` int(11) NOT NULL,
-  `conf_description` text NOT NULL,
-  `status` enum('active','inactive') DEFAULT NULL,
-  `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`conf_id`)) $charset_spec");
-
-// om_servers table
-$db->query("CREATE TABLE IF NOT EXISTS `om_servers` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `hostname` varchar(255) DEFAULT NULL,
-    `port` varchar(255) DEFAULT NULL,
-    `enabled` enum('true','false') DEFAULT NULL,
-    `username` varchar(255) DEFAULT NULL,
-    `password` varchar(255) DEFAULT NULL,
-    `module_key` int(11) DEFAULT NULL,
-    `webapp` int(11) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `idx_om_servers` (`hostname`)) $charset_spec");
+    FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE) $charset_spec");
 
 $_SESSION['theme'] = 'default';
 $webDir = '..';

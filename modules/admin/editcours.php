@@ -100,7 +100,7 @@ if (isset($c)) {
 	</table>";
     // Display course quota and link to edit
     $tool_content .= "<table class='table-default'>
-	<th colspan='2'>$langQuota ".icon('fa-gear', $langModify, "quotacours.php?c=" . getIndirectReference($c) . ""). "</th>
+	<th colspan='2'>$langQuota ".icon('fa-gear', $langModify, "quotacours.php?c=" . q($c) . ""). "</th>
 	<tr>
 	  <td colspan='2'><div class='sub_title1'>$langTheCourse " . q($row->title) . " $langMaxQuota</div></td>
 	  </tr>";
