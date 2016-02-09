@@ -20,8 +20,8 @@
  * ======================================================================== 
  */
 
-//$require_mlogin = true;
-//$require_noerrors = true;
+$require_mlogin = true;
+$require_noerrors = true;
 require_once('minit.php');
 
 define('M_NOTERMINATE', 1);
