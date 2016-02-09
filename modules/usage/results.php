@@ -27,7 +27,7 @@
 $require_login = TRUE;
 
 require_once '../../include/init.php';
-require_once 'usage.lib.php';
+require_once(dirname(__FILE__) . '/usage.lib.php');
 
 $result = null;
 $intervals = array(1=>'day', 7=>'week', 30=>'month', 365=>'year');
@@ -95,8 +95,14 @@ if(isset($_REQUEST['t'])){
         case 'crd':
             $result = get_course_registration_details($startdate, $enddate, $plotcourse);
             break;        
+        case 'cad':
+            $result = get_course_activity_details($startdate, $enddate, $plotuser, $plotcourse, $plotmodule);
+            break;
         case 'crs':
             $result = get_course_registration_stats($startdate, $enddate, $interval, $plotcourse);
+            break;
+        case 'ocs':
+            $result = get_course_old_stats($startdate, $enddate, $plotcourse, $plotmodule);
             break;
     }
     

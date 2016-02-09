@@ -32,20 +32,68 @@ $require_login = true;
 
 include '../../include/baseTheme.php';
 require_once 'include/action.php';
+require_once(dirname(__FILE__) . '/usage.lib.php');
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
+$head_content .= "
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+load_js('d3/d3.min.js');
+load_js('c3-0.4.10/c3.min.js');
+load_js('bootstrap-datepicker');
 
 $head_content .= "<script type='text/javascript'>
-        $(function() {
-            $('#user_date_start, #user_date_end').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-left',
-                language: '".$language."',
-                autoclose: true    
-            });            
-        });
-    </script>";
+        $(document).ready(function(){
+            $('#user_date_start').datepicker({
+            format: 'dd-mm-yyyy',
+            pickerPosition: 'bottom-left',
+            language: '$language',
+            autoclose: true    
+        }); 
+        
+        $('#user_date_end').datepicker({
+            format: 'dd-mm-yyyy',
+            pickerPosition: 'bottom-left',
+            language: '$language',
+            autoclose: true
+        }); 
+        
+        sdate = $('#user_date_start').datepicker('getDate');
+        startdate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();
+        edate = $('#user_date_end').datepicker('getDate');
+        enddate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();
+        module = $('#u_module_id option:selected').val();
+        refresh_oldstats_course_plot(startdate, enddate, $course_id, module);
+    });
+    
+function refresh_oldstats_course_plot(startdate, enddate, course, module){
+    $.getJSON('results.php',{t:'ocs', s:startdate, e:enddate, c:course, m:module},function(data){
+        var options = {
+            data: {
+                json: data,
+                x: 'time',
+                xFormat: '%Y-%m-%d',
+                axes: {
+                    hits: 'y',
+                    duration: 'y2'
+                },
+                types:{
+                    hits: 'bar',
+                    duration: 'spline'
+                },
+                names:{
+                    hits: '$langVisits',
+                    duration: '$langDuration'
+                }
+            },
+            axis:{ x: {type:'timeseries', tick:{format: '%m-%Y', fit:false}, label: '$langMonth'}, y:{label:'$langVisits', min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label: '$langHours', min: 0, padding:{top:0, bottom:0}}},
+            bar:{width:{ratio:0.3}},
+            bindto: '#old_stats'
+        };
+        
+    });
+}"
+. " </script>";
 
 $toolName = $langUsage;
 $pageName = $langOldStats;
@@ -59,9 +107,15 @@ $tool_content .= action_bar(array(
                     'level' => 'primary-label')
             ),false);
 
+/****   C3 plot   ****/
+$tool_content .= "<div class='row plotscontainer'>";
+$tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
+$tool_content .= plot_placeholder("old_stats", $langOldStats);
+$tool_content .= "</div></div>";
 
 if (isset($_POST['user_date_start'])) {
     $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
+    error_log(serialize($uds));
     $u_date_start = $uds->format('Y-m-d H:i');
     $user_date_start = $uds->format('d-m-Y H:i');
 } else {
@@ -122,57 +176,6 @@ foreach ($usage_defaults as $key => $val) {
     }
 }
 
-$date_where = " (start_date BETWEEN '$u_date_start' AND '$u_date_end') ";
-
-if ($u_module_id != -1) {
-    $mod_where = " (module_id = '$u_module_id') ";
-} else {
-    $mod_where = " (1) ";
-}
-
-$chart = new Plotter(600, 300);
-$chart->setTitle("$langOldStats");
-switch ($u_stats_value) {
-    case "visits":
-        $result = Database::get()->queryArray("SELECT module_id, MONTH(start_date) AS month,
-                        YEAR(start_date) AS year,
-                        SUM(visits) AS visits
-                        FROM actions_summary
-                        WHERE $date_where
-                        AND $mod_where
-                        AND course_id = ?d
-                        GROUP BY MONTH(start_date)", $course_id);
-
-        foreach ($result as $row) {
-            $mont = $langMonths[$row->month];
-            $chart->growWithPoint($mont . " - " . $row->year, $row->visits);
-        }
-        break;
-
-    case "duration":
-        $result = Database::get()->queryArray("SELECT module_id, MONTH(start_date) AS month,
-                        YEAR(start_date) AS year,
-                        SUM(duration) AS tot_dur FROM actions_summary
-                        WHERE $date_where
-                        AND $mod_where
-                        AND course_id = ?d
-                        GROUP BY MONTH(start_date)", $course_id);
-
-        foreach ($result as $row) {
-            $mont = $langMonths[$row->month];
-            $chart->growWithPoint($mont . " - " . $row->year, $row->tot_dur);
-        }
-        $tool_content .= "<div class='alert alert-info'>$langDurationExpl</div>";
-        break;
-}
-
-$chart_path = 'courses/' . $course_code . '/temp/chart_' . md5(serialize($chart)) . '.png';
-
-if (!$chart->isEmpty()) {
-    $tool_content .= "<div class='alert alert-info'>" . sprintf($langOldStatsExpl, get_config('actions_expire_interval')) . "</div>";
-    $tool_content .= $chart->plot($langNoStatistics);
-}
-
 $mod_opts = '<option value="-1">' . $langAllModules . "</option>";
 $result = Database::get()->queryArray("SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ?d", $course_id);
 foreach ($result as $row) {
@@ -197,7 +200,7 @@ $tool_content .= '<div class="form-group">
 $tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     <label class='col-sm-2 control-label'>$langStartDate:</label>
         <div class='col-xs-10 col-sm-9'>               
-            <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+            <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
         </div>
         <div class='col-xs-2 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
@@ -216,7 +219,7 @@ $tool_content .= "<div class='input-append date form-group' id='user_date_end' d
         </div>";
 $tool_content .= '<div class="form-group">
         <label class="col-sm-2 control-label">' . $langModule . ':</label>
-        <div class="col-sm-10"><select name="u_module_id" class="form-control">' . $mod_opts . '</select></div>
+        <div class="col-sm-10"><select name="u_module_id" id="u_module_id" class="form-control">' . $mod_opts . '</select></div>
   </div>
   <div class="col-sm-offset-2 col-sm-10">
     <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
