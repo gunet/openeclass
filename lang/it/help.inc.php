@@ -34,10 +34,10 @@ La linea deve iniziare con <code>*</code> (lista non ordinata) o <code>#</code> 
 Separa i paragrafi separati con una o più linee
 </ul>
 
-<h4>Sintassi avanzata</​​h4>
+<h4>Sintassi avanzata</h4>
 <ul>
-<li>Nota a piè</​​li>
-<code>Testo della nota</​​code>&nbsp;
+<li>Nota a piè</li>
+<code>Testo della nota</code>&nbsp;
 <li>Testo in formato pronto</li>
 Inizia ogni riga con uno spazio &nbsp;
 <li>Blocco  di riferimento</li>
@@ -384,7 +384,7 @@ $langGroupContent = "<p>Il modulo 'Gruppi di utenti'  favorisce la collaborazion
 <ul>
 <li>Modificare un gruppo di utenti. Si tratta proprio di un link alla  gestione dei dati del gruppo. </li>
 <li>Forum. Puoi creare un nuovo argomento da discutere che riguarda il gruppo attuale. Le operazioni supportate sono le seguenti: 'Nuovo Argomento', 'Eliminare Argomento' e la 'Notificare via e-mail per, le eventuali risposte inviate'. In questo punto va sottolineato che il post di un argomento sarà visualizzato anche dal modulo 'Forum' della Home Page della piattaforma. </li>
-<li>Documenti del Gruppo. Puoi aggiungere o rimuovere,  attraverso i link rispettivi, i documenti che si riferiscono al gruppo attuale. Anche in questo punto, va sottolineato che i documenti caricati riguardano il ​​gruppo attuale e non hanno rapporto con il modulo 'Documenti' della Home Page della piattaforma. È inoltre possibile creare delle cartelle in cui puoi sistemare i documenti del gruppo caricati,  facendo clic sul link 'Creare Cartella'. Una caratteristica molto utile che riguarda lo spazio al server che hai alla tua disposizione, è raggiungibile tramite il link 'Visualizzare lo spazio al server'. </li>
+<li>Documenti del Gruppo. Puoi aggiungere o rimuovere,  attraverso i link rispettivi, i documenti che si riferiscono al gruppo attuale. Anche in questo punto, va sottolineato che i documenti caricati riguardano il gruppo attuale e non hanno rapporto con il modulo 'Documenti' della Home Page della piattaforma. È inoltre possibile creare delle cartelle in cui puoi sistemare i documenti del gruppo caricati,  facendo clic sul link 'Creare Cartella'. Una caratteristica molto utile che riguarda lo spazio al server che hai alla tua disposizione, è raggiungibile tramite il link 'Visualizzare lo spazio al server'. </li>
 </ul>
 <p><b>b) Gestione della lista degli utenti.</b> In questo modulo è possibile gestire la lista degli utenti nel corso. È possibile aggiungere uno o più utenti attraverso il link 'Aggiungere un utente' e 'Aggiungere molti utenti'. Puoi anche aggiungere un utente ospite, cliccando sul link 'Aggiungere un utente ospite'. Per cercare un utente fai clic su 'Cercare utente' e compila il suo nome e cognome o il username. Per cancellare un utente basta premere il pulsante (<img src='$themeimg/delete.png' width=16 height=16>) che si trova sul lato destro dei dati dell'utente. </p>";
 $langGroup_studentContent = "<p>Un gruppo di utenti è una <b>collezione</b> di utenti registrati che condividono lo stesso forum e lo stesso spazio sul server di file e compiti caricati. Il modulo 'Gruppi di utenti' permette la collaborazione e l'interazione degli studenti attraverso la loro organizzazione in gruppi. In questo modo si rinforza l' apprendimento collaborativo, si sono risposte varie domande e scambiate delle opinioni su certe questioni del corso. I dati di un gruppo come: il manager del gruppo, il numero degli utenti registrati, il numero massimo degli utenti autorizzati nel gruppo è alla tua disposizione, per il tuo migliore aggiornamento riguardante al gruppo.</p>.";
@@ -589,7 +589,7 @@ Si propone inoltre di fornire nuovi titoli sui link se loro hanno un nome lungo.
 <br>
 <hr>
 <p><b>Che cosa significa il percorso di apprendimento secondo il modello SCORM o IMS e come si può inserire?</b></p>
-<p>Lo strumento del percorso di ​​apprendimento ti consente di caricare ed inserire
+<p>Lo strumento del percorso di apprendimento ti consente di caricare ed inserire
 del contenuto educativo, compatibile con il modello SCORM ed IMS.</p>
 <p>Lo SCORM (<i>Sharable Content Object Reference Model</i>) è un modello internazionale, 
 il quale hanno adottato molte ditte preminenti e orientate alla formazione a distanza asincrona (e-Learning), 
@@ -789,7 +789,7 @@ $langEBookContent = "<p>L' e-book è un insieme di <b>hypertext</b> (ipertesto) 
       <li><strong>associare</strong> ogni file che hai caricato alle sezioni create poco fa.</li>
       <li><strong>indicare</strong> il numero di serie che la sottosezione attuale ha nella sezione che appartiene. <br/>
 
-      <em><u>Nota</​​u>: la piattaforma suggerisce automaticamente come  titoli delle sottosezioni, i nomi dei rispettivi file (li puoi cambiare dopo).</em></li>
+      <em><u>Nota</u>: la piattaforma suggerisce automaticamente come  titoli delle sottosezioni, i nomi dei rispettivi file (li puoi cambiare dopo).</em></li>
     </ul>
 </li>
   <li> Appena concluso l' associazione dei file a sezioni e sottosezioni, clicca su<strong>'Inviare'</strong>.</li>

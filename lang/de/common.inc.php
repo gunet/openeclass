@@ -1,8 +1,9 @@
 <?php
 
 // Message file for language de
-// Generated 2015-02-12 11:04:32
+// Generated 2016-02-09 19:07:12
 
+$langCourse = "Kurs";
 $langEclass = "Open eClass - die asynchrone E-Learning Plattform";
 $langYes = "Ja";
 $langNo = "Nein";
@@ -56,9 +57,16 @@ alternativen Kanal zur individuellen Bildung zur Verfügung, welcher unabhängig
 und räumlichen Zwängen ist.";
 $langExtrasLeft = '';
 $langExtrasRight = '';
-$langGroupTutor = "Υπεύθυνος ομάδας";
+$langCourses = "Kurse";
+$langGroupTutor = "Group Tutor";
 $langEditor = "Assistent des Dozenten";
-$langOfEditor = "Βοηθού εκπαιδευτή";
-$langsEditor = "βοηθός εκπαιδευτή";
-$langsOfEditor = "βοηθού εκπαιδευτή";
-$langsOfGroupTutor = "υπεύθυνου ομάδας";
+$langOfEditor = "Tutor Assistant";
+$langsEditor = "tutor assistant";
+$langsOfEditor = "tutor assistant";
+$langsOfGroupTutor = "group tutor";
+$langOfCourse = "Course";
+$langOfCourses = "Courses";
+$langsCourse = "course";
+$langsCourses = "courses";
+$langsOfCourse = "course";
+$langsOfCourses = "courses";

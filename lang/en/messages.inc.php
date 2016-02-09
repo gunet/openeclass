@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2016-01-25 15:39:15
+// Generated 2016-02-09 19:07:10
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -21,7 +21,6 @@ $langAboutCourses1 = "At this moment, the platform hosts";
 $langAboutUsers1 = "The number of registered users is ";
 $langLast30daysLogins1 = "and the total number of logins on the platform during the last 30 days is ";
 $langAnd = "and";
-$langCourses = "$langsCourses";
 $langCoursesHeader = "$langCourses";
 $langClosed = "closed";
 $langOpen = "open";
@@ -104,10 +103,6 @@ $langToday = "Today";
 $langLast7Days = "Last 7 days";
 $langLast30Days = "Last 30 days";
 $langNbAnnoucement = "Number of announcements";
-$langAnnouncementIsVis = "Is publicly visible";
-$langAnnouncementIsNotVis = "Is not publicly visible";
-$langAnnouncementWillBeVis = "Will be activated on: ";
-$langAnnouncementWillNotBeVis = "Has been deactivated since: ";
 $langNbUsers = "Number of users";
 $langCoursVisible = "Visibility";
 $langOthers = "Other sets";
@@ -775,7 +770,6 @@ $langQuestionScore = "Question Score";
 $langCorrespondsTo = "Corresponds to";
 $langExpectedChoice = "Expected Choice";
 $langYourTotalScore = "Your total score is";
-$langQuestionAlreadyDeleted = "Question has been deleted!";
 $langDoAnEx = "Do an exercise";
 $langCorrect = "True";
 $langExerciseNotFound = "The exercise was not found";
@@ -1581,8 +1575,9 @@ choose the faculty and then select / unselect the desired $langsCourse.</p>
 $langDeleteUser = "Are you sure you want to delete the user";
 $langDeleteUser2 = "from $langsCourse";
 $langSurnameName = "Full Name";
-$langAskUser = "First you must search for the user. User must already have an account in the platform.";
-$langAskManyUsers = "Type the filename or click in \"Browse\"to browse for it.";
+$langAskUser = "Find the user you want to add. In order to be added to the $langsCourse, the user must have an active account on the platform.";
+$langAskManyUsers = "<strong>Note</strong>:<br /> To be added to the $langsCourse, users need to already have an account on the platform.
+Enter their usernames or student IDs on separate lines.";
 $langAddUser = "Add User";
 $langAddManyUsers = "Add many users";
 $langOneUser = "one user";
@@ -3794,7 +3789,6 @@ $langNoUnits = "No $langsCourse units";
 $langExternalTools = 'External tools';
 $langTeacherTutorials = "$langTeacher Tutorials";
 $langStudentTutorials = "$langStudent Tutorials";
-$langGeneralTutorials = "Guides";
 $langCourseInformationText = "Edit $langCourse Description";
 $langCourseDescriptionShort = "Description";
 $langCloudFile = "Cloud File";
@@ -3821,7 +3815,7 @@ $langNoLinkInCategory = "There are no links in this category";
 $langNoLinkCategories = "There are no link categories";
 $langResourceBrowser = 'Resource Browser';
 $langAuthTitle = "Authentication Method Name";
-$langEmailAnnounce = "email address for announces";
+$langEmailAnnounce = "Announcement notification (CC) address";
 $langListCalendar = "Calendar view";
 $langAttendances = "Attendances";
 $langNewAttendance = "New attendance";
@@ -4239,7 +4233,6 @@ $langCPFAdminSideMenuLink = 'User profile fields';
 $langCPFLinkValidFail = 'Field %s is not a valid url. ';
 $langCPFDateValidFail = 'Field %s is not a valid date. ';
 $langInCoursesL = "in $langsCourse";
-$langOfCourse = "for $langsCourse";
 $langCommentsUser = "User comments";
 $langUserRequests = "User requests";
 $langsUserRequests = "user requests";
@@ -4399,3 +4392,15 @@ $langPortfolioMainContent = "Portfolio main content";
 $langPortfolioSidebarContent = "Portofolio slidebar content";
 $langCourseHomeMainContent = "Home page main content of $langOfCourse";
 $langCourseHomeSidebarContent = "Home page slidebar content of $langOfCourse";
+$langAnnouncementIsVis = "Is publicly visible";
+$langAnnouncementIsNotVis = "Is not publicly visible";
+$langAnnouncementWillBeVis = "Will be activated on: ";
+$langAnnouncementWillNotBeVis = "Has been deactivated since: ";
+$langGeneralTutorials = "Guides";
+$langAdminAnNotVis = "Not visible";
+$langAdminExpired = "Expired";
+$langAdminWaiting = "Pending";
+$langEmailSendWarn = 'Warning: For the platform to be able to successfully send announcements via e-mail,
+you should either select the SMTP or sendmail sending method or enter an announcement
+CC mail address.';
+$langSumFrom = "total in";

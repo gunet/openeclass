@@ -1,8 +1,9 @@
 <?php
 
 // Message file for language fr
-// Generated 2015-02-12 11:04:33
+// Generated 2016-02-09 19:07:13
 
+$langCourse = "Cours";
 $langEclass = "Open eClass - Plateforme de Télé-enseignement Asynchrone"
 ;
 $langYes = "Oui";
@@ -57,9 +58,16 @@ $langInfoAbout = "La plateforme <strong>$siteName</strong> est un Système compl
 ;
 $langExtrasLeft = '';
 $langExtrasRight = '';
-$langGroupTutor = "Υπεύθυνος ομάδας";
+$langCourses = "cours";
+$langGroupTutor = "Group Tutor";
 $langEditor = "Enseignant assistant";
-$langOfEditor = "Βοηθού εκπαιδευτή";
-$langsEditor = "βοηθός εκπαιδευτή";
-$langsOfEditor = "βοηθού εκπαιδευτή";
-$langsOfGroupTutor = "υπεύθυνου ομάδας";
+$langOfEditor = "Tutor Assistant";
+$langsEditor = "tutor assistant";
+$langsOfEditor = "tutor assistant";
+$langsOfGroupTutor = "group tutor";
+$langOfCourse = "Course";
+$langOfCourses = "Courses";
+$langsCourse = "course";
+$langsCourses = "courses";
+$langsOfCourse = "course";
+$langsOfCourses = "courses";
