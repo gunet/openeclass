@@ -20,8 +20,8 @@
  * ======================================================================== 
  */
 
-$require_mlogin = true;
-$require_noerrors = true;
+//$require_mlogin = true;
+//$require_noerrors = true;
 require_once('minit.php');
 
 define('M_NOTERMINATE', 1);
@@ -60,11 +60,11 @@ function appendToolArray($toolsArr, $elementName, $dom, $domRoot) {
 function appendToolElement($root, $dom, $tool) {
     $t = $root->appendChild($dom->createElement('tool'));
     
-    $t->appendChild(new DOMAttr('name', q($tool->name)));
-    $t->appendChild(new DOMAttr('link', q($tool->link)));
-    $t->appendChild(new DOMAttr('redirect', q($tool->redirect)));
-    $t->appendChild(new DOMAttr('type', q($tool->type)));
-    $t->appendChild(new DOMAttr('active', q($tool->active)));
+    $t->appendChild(new DOMAttr('name', $tool->name));
+    $t->appendChild(new DOMAttr('link', $tool->link));
+    $t->appendChild(new DOMAttr('redirect', $tool->redirect));
+    $t->appendChild(new DOMAttr('type', $tool->type));
+    $t->appendChild(new DOMAttr('active', $tool->active));
 }
 
 function populateTools($baseurl) {
