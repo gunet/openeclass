@@ -5,10 +5,10 @@
 
 $langCourseAccessHelp = "
 <ul>
-<li><b><img src='$themeimg/lock_open.png' width=16 height=16> Open Course</b>. The course is publicly accessible without need of user authentication or login.</li>
-<li><b><img src='$themeimg/lock_registration.png' width=16 height=16> Registration required</b>.  Users with an account in the platform can register to the course. It is possible to specify a course password to further limit access to only users who have this extra password.</li>
-<li><b><img src='$themeimg/lock_closed.png' width=16 height=16> Closed Course</b>. The course is accessible only to users already registered to it. The course administrator can add or remove users from the course.</li>
-<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16> Inactive course</b>. Access is allowed <b>only</b> to course teachers - administrators.</li>
+<li>".$course_access_icons[COURSE_OPEN]."<b> Open Course</b>. The course is publicly accessible without need of user authentication or login.</li>
+<li>".$course_access_icons[COURSE_REGISTRATION]."<b> Registration required</b>.  Users with an account in the platform can register to the course. It is possible to specify a course password to further limit access to only users who have this extra password.</li>
+<li>".$course_access_icons[COURSE_CLOSED]."<b> Closed Course</b>. The course is accessible only to users already registered to it. The course administrator can add or remove users from the course.</li>
+<li>".$course_access_icons[COURSE_INACTIVE]."<b> Inactive course</b>. Access is allowed <b>only</b> to course teachers - administrators.</li>
 </ul>
 ";
 $langWikiSyntaxHelp = "

@@ -396,14 +396,14 @@ $langcourseToolsContent = "<p>Μπορείτε να ενεργοποιήσετε
 
 $langCourseAccessHelp = "
 <ul>
-<li><b><img src='$themeimg/lock_open.png' width=16 height=16> Ανοικτό Μάθημα</b>.
+<li>".$course_access_icons[COURSE_OPEN]."<b> Ανοικτό Μάθημα</b>.
         Επιτρέπεται η ελεύθερη πρόσβαση δηλαδή χωρίς εγγραφή σε αυτό ή τη δημιουργία λογαριασμού στην πλατφόρμα.</li>
-<li><b><img src='$themeimg/lock_registration.png' width=16 height=16> Απαιτείται εγγραφή</b>. 
+<li>".$course_access_icons[COURSE_REGISTRATION]."<b> Απαιτείται εγγραφή</b>.
         Επιτρέπεται η πρόσβαση σε όσους διαθέτουν λογαριασμό στην πλατφόρμα. 
         Υπάρχει η δυνατότητα ορισμού προαιρετικού συνθηματικού.</li>
-<li><b><img src='$themeimg/lock_closed.png' width=16 height=16> Κλειστό μάθημα</b>. 
+<li>".$course_access_icons[COURSE_CLOSED]."<b> Κλειστό μάθημα</b>.
         Επιτρέπεται η πρόσβαση στο μάθημα (για εγγραφή) μόνο σε όσους βρίσκονται στη Λίστα Χρηστών του μαθήματος.</li>
-<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16> Ανενεργό μάθημα</b>.
+<li>".$course_access_icons[COURSE_INACTIVE]."<b> Ανενεργό μάθημα</b>.
         Επιτρέπεται η πρόσβαση στο μάθημα μόνο από τους εκπαιδευτές του μαθήματος.</li>
 </ul>";
 

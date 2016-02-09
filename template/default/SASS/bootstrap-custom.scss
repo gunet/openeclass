@@ -2257,14 +2257,35 @@ ul.course-title-actions{
         border-left: 2px solid #eeeeee;
     }
 }
+
 .access{
     &.access-edit{
         margin-left: 10px;
         padding-left: 10px;
     }
-    font-size: 20px;
+    font-size: 20px !important;
     a:hover{
         text-decoration: none;
+    }
+    .fa-custom-lock{
+        position: absolute;
+        top: 27px;
+        right: 92px;
+        font-size: 11px;
+    }
+}
+.course_status_container{
+    display: inline-block;
+    width: 26px;
+    position: relative;
+    .access{
+        font-size: 20px !important;
+        .fa-custom-lock{
+            position: absolute;
+            font-size: 12px;
+            top: 5px;
+            left: 15px;
+        }
     }
 }
 .panel-footer .rating{

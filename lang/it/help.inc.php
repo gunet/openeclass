@@ -4,10 +4,10 @@
 // Generated 2015-02-12 11:04:34
 
 $langCourseAccessHelp = "<ul> 
-<li><b><img src='$themeimg/lock_open.png' width=16 height=16>Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li> 
-<li><b><img src='$themeimg/lock_registration.png' width=16 height=16>Occorre registrazione</b>. Questo modo di accesso, consente l' accesso libero (con registrazione) per coloro che hanno già un conto sulla piattaforma. Qui si può digitare una password, ma è facoltativo.</li> 
-<li><b><img src='$themeimg/lock_closed.png' width=16 height=16>Corso chiuso</b>. Questo modo di accesso consente l'accesso al corso (autorizzazione di scrivere) per coloro che sono nella lista degli utenti del corso.</li> 
-<li><b><img src='$themeimg/lock_inactive.png' width=16 height=16>Corso inattivo</b>. Questo modo di accesso consente l'accesso al corso <b>solo</b> agli insegnanti del corso.</li> 
+<li>".$course_access_icons[COURSE_OPEN]."<b> Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li>
+<li>".$course_access_icons[COURSE_REGISTRATION]."<b> Occorre registrazione</b>. Questo modo di accesso, consente l' accesso libero (con registrazione) per coloro che hanno già un conto sulla piattaforma. Qui si può digitare una password, ma è facoltativo.</li>
+<li>".$course_access_icons[COURSE_CLOSED]."<b> Corso chiuso</b>. Questo modo di accesso consente l'accesso al corso (autorizzazione di scrivere) per coloro che sono nella lista degli utenti del corso.</li>
+<li>".$course_access_icons[COURSE_INACTIVE]."<b> </b>. Questo modo di accesso consente l'accesso al corso <b>solo</b> agli insegnanti del corso.</li>
 </ul>
 ";
 $langWikiSyntaxHelp = "<h4>Sintassi dei comandi</h4>

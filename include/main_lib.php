@@ -1222,6 +1222,20 @@ $language_codes = array(
     'xx' => 'variables',
 );
 
+// Html for course access icons
+global $langPublic, $langPrivOpen, $langClosedCourseShort, $langCourseInactiveShort;
+
+$course_access_icons = array(
+    COURSE_OPEN => "<div class='course_status_container'><span class='fa fa-unlock fa-fw access' data-toggle='tooltip' data-placement='top' title='$langPublic'></span><span class='sr-only'>.</span></div>",
+    COURSE_REGISTRATION => "<div class='course_status_container'><span class='fa fa-lock fa-fw access' data-toggle='tooltip' data-placement='top' title='$langPrivOpen'>
+                                <span class='fa fa-pencil text-danger fa-custom-lock'></span>
+                            </span><span class='sr-only'>$langPrivOpen</span></div>",
+    COURSE_CLOSED => "<div class='course_status_container'><span class='fa fa-lock fa-fw access' data-toggle='tooltip' data-placement='top' title='$langClosedCourseShort'></span><span class='sr-only'>$langClosedCourseShort</span></div>",
+    COURSE_INACTIVE => "<div class='course_status_container'><span class='fa fa-lock fa-fw access' data-toggle='tooltip' data-placement='top' title='$langCourseInactiveShort'>
+                                <span class='fa fa-times text-danger fa-custom-lock'></span>
+                             </span><span class='sr-only'>$langCourseInactiveShort</span></div>"
+);
+
 // Convert language code to language name in English lowercase (for message files etc.)
 // Returns 'english' if code is not in array
 function langcode_to_name($langcode) {

@@ -64,14 +64,6 @@ if (!($fac = $fac[0])) {
     die("ERROR: no faculty with id $fc");
 }
 
-
-// use the following array for the legend icons
-$icons = array(
-    2 => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' width='16' height='16' />",
-    1 => "<img src='$themeimg/lock_registration.png' alt='" . $langRegCourse . "' title='" . $langRegCourse . "' width='16' height='16' />",
-    0 => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
-);
-
 $tool_content .= action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
@@ -212,7 +204,7 @@ if (count($courses) > 0) {
             $tool_content .= "<a href='javascript:showMetadata(\"" . $mycours->k . "\");'><img src='${themeimg}/lom.png'/></a>";
         } else {
             // show the necessary access icon
-            foreach ($icons as $visible => $image) {
+            foreach ($course_access_icons as $visible => $image) {
                 if ($visible == $mycours->visible) {
                     $tool_content .= $image;
                 }

@@ -117,13 +117,7 @@ $tool_content .= "<th class='text-left'>" . $langCourse . " ($langCode)</th>
       <th class='text-left'>$langKeywords</th>
       <th class='text-left'>$langType</th>
     </tr>";
-// use the following array for the legend icons
-$icons = array(
-    COURSE_INACTIVE => "<img src='$themeimg/lock_inactive.png' alt='" . $langInactiveCourse . "' title='" . $langInactiveCourse . "' width='16' height='16' />",
-    COURSE_OPEN => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' width='16' height='16' />",
-    COURSE_REGISTRATION => "<img src='$themeimg/lock_registration.png' alt='" . $langRegCourse . "' title='" . $langRegCourse . "' width='16' height='16' />",
-    COURSE_CLOSED => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
-);
+
 
 foreach ($courses as $course) {    
     $courseHref = "../../courses/" . q($course->code) . "/";
@@ -179,7 +173,7 @@ foreach ($courses as $course) {
                       <td>" . q($course->prof_names) . "</td>
                       <td>" . q($course->keywords) . "</td>
                       <td>";
-    foreach ($icons as $visible => $image) {
+    foreach ($course_access_icons as $visible => $image) {
         if ($visible == $course->visible) {
             $tool_content .= $image;
         }
