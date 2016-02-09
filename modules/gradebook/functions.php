@@ -295,7 +295,8 @@ function delete_gradebook($gradebook_id) {
 function delete_gradebook_activity($gradebook_id, $activity_id) {
 
     global $langGradebookDel, $langGradebookDelFailure;
-
+    
+    $actTitle = Database::get()->querySingle("SELECT title FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $activity_id, $gradebook_id)->title;
     $delAct = Database::get()->query("DELETE FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $activity_id, $gradebook_id)->affectedRows;
     Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d", $activity_id);
     if ($delAct) {
@@ -1424,6 +1425,7 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
             }
         }
     }
+    return array('act_title' => $actTitle, 'act_date' => $actDate, 'act_descr' => $actDesc);
 }
 function update_user_gradebook_activities($gradebook_id, $uid) { 
     require_once 'include/lib/learnPathLib.inc.php';
