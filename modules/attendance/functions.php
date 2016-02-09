@@ -592,7 +592,7 @@ function add_attendance_other_activity($attendance_id) {
 function add_attendance_activity($attendance_id, $id, $type) {
     
     global $course_id;
-    
+    $actTitle = "";
     if ($type == GRADEBOOK_ACTIVITY_ASSIGNMENT) { //  add  assignments
         //checking if it's new or not
         $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d 
@@ -652,7 +652,8 @@ function add_attendance_activity($attendance_id, $id, $type) {
                 }
             }
         }
-    }        
+    }
+    return $actTitle;
 }
 function update_user_attendance_activities($attendance_id, $uid) { 
     $attendanceActivities = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d AND auto = 1", $attendance_id);
@@ -1461,7 +1462,7 @@ function update_attendance_book($uid, $id, $activity, $attendance_id = 0) {
 function delete_attendance($attendance_id) {
     
     global $course_id, $langAttendanceDeleted;
-    
+    $attTitle = get_attendance_title($attendance_id);
     $r = Database::get()->queryArray("SELECT id FROM attendance_activities WHERE attendance_id = ?d", $attendance_id);
     foreach ($r as $act) {
         delete_attendance_activity($attendance_id, $act->id);
@@ -1471,6 +1472,7 @@ function delete_attendance($attendance_id) {
     if ($action) {
         Session::Messages("$langAttendanceDeleted", "alert-success");
     }
+    return $attTitle;
 }
 
 /**
@@ -1484,6 +1486,7 @@ function delete_attendance_activity($attendance_id, $activity_id) {
     
     global $langAttendanceDel, $langAttendanceDelFailure;
 
+    $delActTitle = Database::get()->querySingle("SELECT title FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $activity_id, $attendance_id)->title; 
     $delAct = Database::get()->query("DELETE FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $activity_id, $attendance_id)->affectedRows;
     Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $activity_id)->affectedRows;
     if($delAct) {
@@ -1491,6 +1494,7 @@ function delete_attendance_activity($attendance_id, $activity_id) {
     } else {
         Session::Messages("$langAttendanceDelFailure", "alert-danger");
     }
+    return $delActTitle;
 }
 
 
