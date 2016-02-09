@@ -88,7 +88,7 @@ function populateProfileTools($baseurl) {
     $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyAgenda'], 'main/personal_calendar/index.php', 'myagenda');
     $toolsArr[] = createNewTool($baseurl, $GLOBALS['langNotes'], 'main/notes/index.php', 'mynotes');
     $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyProfile'], 'main/profile/display_profile.php', 'myprofile');
-    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyStats'], 'main/profile/personal_stats.php', 'mystats');
+    $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyStats'], 'modules/usage/?t=u', 'mystats');
     
     return $toolsArr;
 }
