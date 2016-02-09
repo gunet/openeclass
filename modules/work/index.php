@@ -571,7 +571,7 @@ function add_assignment() {
         $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
         $auto_judge           = isset($_POST['auto_judge']) ? filter_input(INPUT_POST, 'auto_judge', FILTER_VALIDATE_INT) : 0;
         $auto_judge_scenarios = isset($_POST['auto_judge_scenarios']) ? serialize($_POST['auto_judge_scenarios']) : "";
-        $lang                 = isset($_POST['lang']) ? filter_input(INPUT_POST, 'lang') : '';        
+        $lang                 = isset($_POST['lang']) ? filter_input(INPUT_POST, 'lang') : '';
         $secret = uniqid('');
 
         if ($assign_to_specific == 1 && empty($assigned_to)) {
@@ -930,7 +930,7 @@ function submit_work($id, $on_behalf_of = null) {
                     update_attendance_book($user_id, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                     update_gradebook_book($user_id, $row->id, $grade/$row->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                 }
-            } else {   
+            } else {
                 $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
                 // update attendance book as well
                 update_attendance_book($quserid, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
@@ -1028,7 +1028,7 @@ function submit_work($id, $on_behalf_of = null) {
         }
         // End Auto-judge
 
-        Session::Messages($success_msgs, 'alert-success');        
+        Session::Messages($success_msgs, 'alert-success');
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else { // not submit_ok
         Session::Messages($langExerciseNotPermit);
@@ -2537,11 +2537,23 @@ function show_assignment($id, $display_graph_results = false) {
                 if ($assign->submission_type) {
                     $filelink = "<a href='#' class='onlineText btn btn-xs btn-default' data-id='$row->id'>$langQuestionView</a>";
                 } else {
-                    $filelink = empty($row->file_name) ? '&nbsp;' :
-                            ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
-                            q($row->file_name) . "</a>");
+                    if (empty($row->file_name)) {
+                        $filelink = '&nbsp;';
+                    } else {
+                        $namelen = strlen($row->file_name);
+                        if ($namelen > 30) {
+                            $extlen = strlen(get_file_extension($row->file_name));
+                            $basename = substr($row->file_name, 0, $namelen - $extlen - 3);
+                            $ext = substr($row->file_name, $namelen - $extlen - 3);
+                            $filename = ellipsize($basename, 30, '...' . $ext);
+                        } else {
+                            $filename = $row->file_name;
+                        }
+                        $filelink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
+                            q($filename) . "</a>";
+                    }
                 }
-                if(Session::has("grades")) {
+                if (Session::has("grades")) {
                     $grades = Session::get('grades');
                     $grade = $grades[$row->id]['grade'];
                 } else {
@@ -2573,7 +2585,7 @@ function show_assignment($id, $display_graph_results = false) {
                 if (trim($row->comments != '')) {
                     $tool_content .= "<div style='margin-top: .5em;'><small>" .
                             q($row->comments) . '</small></div>';
-                }                
+                }
                 $tool_content .= "</td>
                                 <td width='85'>" . q($stud_am) . "</td>
                                 <td class='text-center' width='180'>
@@ -2851,7 +2863,7 @@ function show_assignments() {
 
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-              FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);    
+              FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
  $tool_content .= action_bar(array(
             array('title' => $langNewAssign,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
@@ -2936,7 +2948,7 @@ function show_assignments() {
 function submit_grade_comments($args) {
     global $tool_content, $langGrades, $langWorkWrongInput, $course_id,
            $langTheField, $m, $course_code, $langFormErrors;
-    
+
     $id = $args['assignment'];
     $sid = $args['submission'];
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
@@ -2977,7 +2989,7 @@ function submit_grade_comments($args) {
             } else {
                 //update gradebook if needed
                 $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                update_gradebook_book($quserid, $id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);                
+                update_gradebook_book($quserid, $id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
             }
         }
         if (isset($args['email'])) {
@@ -3037,7 +3049,7 @@ function submit_grades($grades_id, $grades, $email = false) {
                         foreach ($user_ids as $user_id) {
                             update_gradebook_book($user_id, $assignment->id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                         }
-                    } else {                    
+                    } else {
                         $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
                         update_gradebook_book($quserid, $assignment->id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                     }
