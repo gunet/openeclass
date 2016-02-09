@@ -60,7 +60,6 @@ $langOfUser = "χρήστη";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
 $langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
-$langOfCourse = "$langsOfCourse";
 
 /* * ******************************************
  * addadmin.php
@@ -1270,7 +1269,6 @@ $langNoGroupInCategory = "Δεν υπάρχουν ομάδες χρηστών σ
 $langGroupCatDel = "Οταν διαγράψετε μια κατηγορία, θα διαγραφούν όλες οι ομάδες χρηστών της κατηγορίας. Είστε βέβαιος ότι θέλετε να διαγράψετε την κατηγορία;";
 $langGroupCategoryDeleted = "Η κατηγορία διαγράφηκε μαζί με όλες τις ομάδες χρηστών της";
 $langGroupDeleted = "Η ομάδα χρηστών διαγράφηκε";
-$langGroupTutor = "Υπεύθυνος ομάδας";
 $langGroupTeam = "Γενικές Ομάδες Χρηστών";
 $langInvalidNumericValue = "άκυρη τιμή πεδίου";
 
@@ -2992,7 +2990,6 @@ $langCoursesRegistered = "Η εγγραφή σας στα $langsCourses που �
 $langNoCoursesRegistered = "<p>Δεν επιλέξατε $langsCourse για εγγραφή.</p><p> Μπορείτε να εγγραφείτε σε $langsCourse, την
 επόμενη φορά που θα μπείτε στην πλατφόρμα.</p>";
 $langIfYouWantToAddManyUsers = "Αν θέλετε να προσθέσετε ένα κατάλογο με χρήστες στο μάθημά σας, παρακαλώ συμβουλευτείτε τον διαχειριστή συστήματος.";
-$langCourse = "$langCourse";
 $langLastVisits = "Οι τελευταίες μου επισκέψεις";
 $langLastUserVisits = "Οι τελευταίες επισκέψεις του χρήστη ";
 $langDumpUser = "Εξαγωγή σε Excel";
