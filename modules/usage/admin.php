@@ -81,7 +81,7 @@ $tool_content .= "
 
 
 /****   Form   ****/
-require_once('form.php');
+require_once(dirname(__FILE__) . '/form.php');
 
 /****   Plots   ****/
 $tool_content .= "<div class='row plotscontainer'>";

@@ -42,7 +42,6 @@ $helpTopic = 'Usage';
 $require_login = true;
 require_once '../../include/baseTheme.php';
 require_once 'usage.lib.php';
-
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 $head_content .= "
@@ -119,7 +118,6 @@ $head_content .= "<style>
 
 $pageName = $langUsage;
 
-
 if (isset($_GET['per_course_dur'])) {
     $tool_content .= action_bar(array(
         array('title' => $langPersonalStats,
@@ -133,12 +131,12 @@ if (isset($_GET['per_course_dur'])) {
     $tool_content .= user_duration_per_course();
 } else {
     if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)){
-        require_once "course.php";
+        require_once dirname(__FILE__) . "/course.php";
     }
     elseif($stats_type == 'admin' && $is_admin){
-        require_once "admin.php";
+        require_once dirname(__FILE__) . "/admin.php";
     } else {
-        require_once "user.php";
+        require_once dirname(__FILE__) . "/user.php";
         $stats_type = 'user';
     }
 }

@@ -49,7 +49,7 @@ $head_content .=
         course = null;
         stats = 'u';
     </script>";
-require_once('form.php');
+require_once(dirname(__FILE__) . '/form.php');
 
 
 /****   Plots   ****/

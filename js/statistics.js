@@ -50,9 +50,12 @@ var tableOptions = {
     'c':{
         1:{'pageLength': 5, sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;}}, {'targets':2, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[6], row[5]);} }, {"visible": false, "targets": 5}, {"visible": false, "targets": 6}]},
         2:{'pageLength': 5, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[4], row[3]);} }, {"visible": false, "targets": 3}, {"visible": false, "targets": 4}]},
-        3:{'pageLength': 50, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {'targets':3, 'render': function ( data, type, row ) {return actionWithDetails(data, row[4]);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}, {"visible": false, "targets": 4}]}
+        3:{'pageLength': 50, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {'targets':3, 'className':'action', 'render': function ( data, type, row ) {return actionWithDetails(data, row[4]);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}, {"visible": false, "targets": 4}]}
     }
 };
+
+    //3:{'pageLength': 50, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {'targets':3, 'className':'action', 'render': function ( data, type, row ) {return actionWithDetails(data, row, 4);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}, {"visible": false, "targets": 4}]}
+    
 charts = new Object();
 piecourse = -1;
 piemodule = -1;
@@ -82,10 +85,13 @@ $(document).ready(function(){
     $('#enddate').change(function(){
         edate = $(this).datepicker("getDate");
         enddate = edate.getFullYear()+"-"+(edate.getMonth()+1)+"-"+edate.getDate();
-    });
-    $('#enddate').blur(function(){
         adjust_interval_options();
         refresh_plots();
+    });
+    $('#enddate').blur(function(){
+        setTimeout(function(){
+            adjust_interval_options();
+            refresh_plots();}, 1);
     });
    $('#plots-view').click(function(){
         if(selectedview != 'plots'){
@@ -93,6 +99,8 @@ $(document).ready(function(){
             $('#logs-view').removeClass("active");
             $(this).addClass("active");
             selectedview = 'plots';
+            $('#module').parent().hide();
+            $('#interval').parent().show();
             $('#interval').prop('disabled', false);
             $('.plotscontainer').show();
             for(var c in charts){
@@ -108,6 +116,8 @@ $(document).ready(function(){
             $('#logs-view').removeClass("active");
             $(this).addClass("active");
             selectedview = 'list';
+            $('#module').parent().hide();
+            $('#interval').parent().show();
             $('#interval').prop('disabled', true);
             $('.detailscontainer').show();            
             $('.logscontainer').hide();
@@ -122,6 +132,8 @@ $(document).ready(function(){
             $(this).addClass("active");
             selectedview = 'logs';
             $('#interval').prop('disabled', true);
+            $('#interval').parent().hide();
+            $('#module').parent().show();
             $('.logscontainer').show();
             $('.detailscontainer').hide();
             $('.plotscontainer').hide();
@@ -169,6 +181,13 @@ $(document).ready(function(){
         department = $('#department option:selected').val();
         $('#department').change(function(){
             department = $('#department option:selected').val();
+            refresh_plots();
+        });
+    }
+    if($('#module').length){
+        module = $('#module option:selected').val();
+        $('#module').change(function(){
+            module = $('#module option:selected').val();
             refresh_plots();
         });
     }
@@ -226,13 +245,43 @@ $(document).ready(function(){
     $('.detailscontainer').hide();    
     $('.logscontainer').hide();
     refresh_plots();
+    $('#cdetails3 tbody').on('mouseover', 'td.action', function(){ 
+        var tr = $(this).closest('tr');
+        var row =  detailsTables['cdetails3'].row( tr );
+        $(this).css('cursor','pointer');
+    });
+    $('#cdetails3 tbody').on('click', 'td.action', function () {
+        var tr = $(this).closest('tr');
+        var row =  detailsTables['cdetails3'].row( tr );
+        if ( row.child.isShown() ) {
+            row.child.hide();
+            tr.removeClass('shown');
+            $(this).find('span').removeClass('fa-caret-down');
+            $(this).find('span').addClass('fa-caret-right');
+        }
+        else {
+            row.child( cellHover(row.data()[4]), tr.attr('class') ).show();
+            tr.addClass('shown');
+            $(this).find('span').removeClass('fa-caret-right');
+            $(this).find('span').addClass('fa-caret-down');
+        }
+    } );
     
+    /*$('#cdetails3 tbody').on('mouseout', 'td.action', function () {
+        var tr = $(this).closest('tr');
+        var row =  detailsTables['cdetails3'].row( tr );
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+    } );*/
     
 });//document ready   
 
 function refresh_plots(){
     xAxisTicksAdjust();    
-    console.log('refresh: selectedview='+selectedview+', stats = '+stats);
+    console.log('refresh: selectedview='+selectedview+', stats = '+stats+', enddate = '+enddate);
     if(stats === 'c'){
         logs_refresh_required = true;
         if(selectedview == 'logs'){
@@ -744,10 +793,10 @@ function userEmailLink(user, email, username){
     return "<a href='mailto:"+email+"' title='"+username+"'>"+user+"</a>";
 }
 
-function actionWithDetails(action, details){
-    return "<a href='#' onmouseover='cellHover(\""+details+"\")'>"+action+"</a>";
+function actionWithDetails(action, row, indexWithDetails){
+    return "<a>"+action+" <span class='fa fa-caret-right'></span> </a>";
 }
 
 function cellHover(text){
-    console.log(text);
+    return text;
 }

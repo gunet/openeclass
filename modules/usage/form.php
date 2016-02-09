@@ -25,9 +25,6 @@
  */
 $require_login = true;
 
-$mod_opts = '<option value="-1">' . $langAllModules . "</option>";
-$result = Database::get()->queryArray("SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ?d", $course_id);
-
 $statsIntervalOptions = '<option value="1" >' . $langPerDay . "</option>" .
         '<option value="7">' . $langPerWeek . "</option>" .
         '<option value="30" selected>' . $langPerMonth . "</option>" .
@@ -39,6 +36,11 @@ if($stats_type == 'course'){
     $statsUserOptions = '<option value="0" >' . $langAllUsers . "</option>";
     foreach($result as $u){
        $statsUserOptions .= '<option value="'.$u->id.'" >' . $u->name . "</option>";
+    }
+    $mod_opts = '<option value="-1">' . $langAllModules . "</option>";
+    $result = Database::get()->queryArray("SELECT module_id id FROM course_module WHERE visible = 1 AND course_id = ?d", $course_id);
+    foreach($result as $m){
+       $mod_opts .= '<option value="'.$m->id.'" >' . which_module($m->id) . "</option>";
     }
 }
 elseif($stats_type == 'admin'){
@@ -78,11 +80,11 @@ $startDate_obj = $endDate_obj->sub(new DateInterval('P6M'));
 $startdate = $startDate_obj->format('d-m-Y');
 $showFrom = q($startdate);
 
-$tool_content .= "<label class='pull-left control-label'>$langFrom:</label>
+$tool_content .= "<!--label class='pull-left control-label'>$langFrom:</label-->
         <div class='col-xs-2 col-sm-2'>               
             <input class='form-control' name='startdate' id='startdate' type='text' value = '$showFrom'>
         </div>";        
-$tool_content .= "<label class='pull-left control-label'>$langUntil:</label>
+$tool_content .= "<label class='pull-left control-label'>$langUntil</label>
             <div class='col-xs-2 col-sm-2'>
                 <input class='form-control' name='enddate' id='enddate' type='text' value = '$showUntil'>
             </div>";
@@ -91,6 +93,10 @@ $tool_content .= '<div class="col-sm-2 col-xs-2"><select name="interval" id="int
 //$tool_content .= "<a id='toggle-view'><i class='fa fa-list' data-toggle='tooltip' data-placement='top' title data-original-title='lala'></i></a>";
 
 if($stats_type == 'course'){
+    
+    $tool_content .= '
+    <div class="col-sm-3 col-xs-3" style="display:none;"><select name="module" id="module" class="form-control">' . $mod_opts . '</select></div>';
+    
     $tool_content .= '
     <div class="col-sm-3 col-xs-3"><select name="user" id="user" class="form-control">' . $statsUserOptions . '</select></div>';
 }
@@ -108,7 +114,7 @@ $tool_content .= '<div class="pull-right">
     <div id="toggle-view" class="btn-group">
     	<a id="plots-view" class="btn btn-info active"  data-placement="top" title="'.$langPlots.'" data-toggle="tooltip" data-original-title="'.$langPlots.'"><span class="fa fa-bar-chart"  data-toggle="tooltip" data-placement="top"></span></a>
         <a id="list-view" class="btn btn-info"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-toggle="tooltip" data-placement="top"></span></a>';
-//$tool_content .= ($stats_type == 'course')? '<a id="logs-view" class="btn btn-primary"  data-placement="top" title="'.$langUsersLog.'" data-toggle="tooltip" data-original-title="'.$langUsersLog.'"><span class="fa fa-list-alt"  data-toggle="tooltip" data-placement="top"></span></a>':'';
+$tool_content .= ($stats_type == 'course')? '<a id="logs-view" class="btn btn-primary"  data-placement="top" title="'.$langUsersLog.'" data-toggle="tooltip" data-original-title="'.$langUsersLog.'"><span class="fa fa-list-alt"  data-toggle="tooltip" data-placement="top"></span></a>':'';
 
 $tool_content .= '</div>
 </div>';
