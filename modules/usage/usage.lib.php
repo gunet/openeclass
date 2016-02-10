@@ -859,11 +859,11 @@ function get_course_old_stats($start = null, $end = null, $cid, $mid)
         $groupby = $g['groupby'];
         $date_components = $g['select'];
         if(is_numeric($mid) && $mid>0){
-            $q = "SELECT $date_components, sum(visits) visits, round(sum(duration)/3600,1) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t AND mid=?d $groupby";
+            $q = "SELECT $date_components, sum(visits) visits, round(sum(duration)/3600) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t AND mid=?d $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end, $mid);    
         }
         else{
-            $q = "SELECT $date_components, sum(visits) visits, round(sum(duration)/3600,1) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t $groupby";
+            $q = "SELECT $date_components, sum(visits) visits, round(sum(duration)/3600) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end);
         }
         foreach($r as $record){

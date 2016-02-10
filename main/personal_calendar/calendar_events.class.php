@@ -58,15 +58,39 @@ class Calendar_Events {
     private static $calsettings;
 
     public static function get_calendar_settings() {
-        global $uid;
-        Calendar_Events::$calsettings = Database::get()->querySingle("SELECT
+        global $uid;        
+        
+        Calendar_Events::$calsettings = new stdClass();    
+        $q = Database::get()->querySingle("SELECT
                             user_id, view_type,
                             personal_color, course_color, deadline_color, admin_color,
                             CAST(show_personal AS UNSIGNED INTEGER) AS show_personal,
                             CAST(show_course AS UNSIGNED INTEGER) AS show_course,
                             CAST(show_deadline AS UNSIGNED INTEGER) AS show_deadline,
                             CAST(show_admin AS UNSIGNED INTEGER) AS show_admin
-                        FROM personal_calendar_settings WHERE user_id = ?d", $uid);
+                        FROM personal_calendar_settings WHERE user_id = ?d", $uid);        
+        if ($q) {
+            Calendar_Events::$calsettings->user_id = $q->user_id;
+            Calendar_Events::$calsettings->view_type = $q->view_type;
+            Calendar_Events::$calsettings->personal_color = $q->personal_color;
+            Calendar_Events::$calsettings->course_color = $q->course_color;
+            Calendar_Events::$calsettings->deadline_color = $q->deadline_color;
+            Calendar_Events::$calsettings->admin_color = $q->admin_color;
+            Calendar_Events::$calsettings->show_personal = $q->show_personal;
+            Calendar_Events::$calsettings->show_course = $q->show_course;
+            Calendar_Events::$calsettings->show_deadline = $q->show_deadline;
+            Calendar_Events::$calsettings->show_admin = $q->show_admin;
+        } else {
+            Calendar_Events::$calsettings->view_type = 'month';
+            Calendar_Events::$calsettings->personal_color = '#5882fa';
+            Calendar_Events::$calsettings->course_color = '#5882fa';
+            Calendar_Events::$calsettings->deadline_color = '#fa5882';
+            Calendar_Events::$calsettings->admin_color = '#eeeeee';
+            Calendar_Events::$calsettings->show_personal = 1;
+            Calendar_Events::$calsettings->show_course = 1;
+            Calendar_Events::$calsettings->show_deadline = 1;
+            Calendar_Events::$calsettings->show_admin = 1;
+        }        
     }
 
     public static function set_calendar_settings($show_personal, $show_course, $show_seadline, $show_admin) {

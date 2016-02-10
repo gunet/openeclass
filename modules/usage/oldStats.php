@@ -43,6 +43,12 @@ load_js('c3-0.4.10/c3.min.js');
 load_js('bootstrap-datepicker');
 
 $head_content .= "<script type='text/javascript'>
+        var xMinVal = null;
+        var xMaxVal = null;
+        var xTicks = null;
+        var interval = 30; //per month
+        oldStatsChart = null;
+        
         $(document).ready(function(){
             $('#user_date_start').datepicker({
             format: 'dd-mm-yyyy',
@@ -58,15 +64,20 @@ $head_content .= "<script type='text/javascript'>
             autoclose: true
         }); 
         
+
         sdate = $('#user_date_start').datepicker('getDate');
         startdate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();
+        console.log('start   '+sdate+'  '+startdate);
         edate = $('#user_date_end').datepicker('getDate');
-        enddate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();
+        enddate = edate.getFullYear()+'-'+(edate.getMonth()+1)+'-'+edate.getDate();
+        console.log('end   '+edate+'    '+enddate);
         module = $('#u_module_id option:selected').val();
+        console.log('refresh_oldstats_course_plot('+startdate+', '+enddate+', $course_id, '+module);
         refresh_oldstats_course_plot(startdate, enddate, $course_id, module);
     });
     
 function refresh_oldstats_course_plot(startdate, enddate, course, module){
+    xAxisTicksAdjust();    
     $.getJSON('results.php',{t:'ocs', s:startdate, e:enddate, c:course, m:module},function(data){
         var options = {
             data: {
@@ -86,13 +97,46 @@ function refresh_oldstats_course_plot(startdate, enddate, course, module){
                     duration: '$langDuration'
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: '%m-%Y', fit:false}, label: '$langMonth'}, y:{label:'$langVisits', min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label: '$langHours', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: '%m-%Y', values:xTicks, rotate:60}, label: '$langMonth', min: xMinVal}, y:{label:'$langVisits', min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label: '$langHours', min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#old_stats'
         };
-        
+        c3.generate(options);
     });
-}"
+}
+
+function xAxisTicksAdjust()
+{
+	var xmin = sdate;
+	var xmax = edate;
+	xMinVal = xmin.getFullYear()+'-'+(xmin.getMonth()+1)+'-'+1;
+	xMaxVal = xmax.getFullYear()+'-'+(xmax.getMonth()+1)+'-'+xmax.getDate();
+	dayMilliseconds = 24*60*60*1000;
+        diffInDays = (edate-sdate)/dayMilliseconds;
+        xTicks = [xMinVal];
+	var tick = new Date(xmin);
+        i = 0;
+        cur = xmin.getMonth();
+        if(interval == 30){
+            while(tick < xmax)
+            {
+                    tick.setMonth(tick.getMonth() + 1);
+                    tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-'+tick.getDate();
+                    xTicks.push(tickval);
+            } 
+        }
+        else if(interval == 365){
+            while(tick < xmax)
+            {
+                    tick.setFullYear(tick.getFullYear() + 1);
+                    tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-'+tick.getDate();
+                    xTicks.push(tickval);
+            }     
+        }
+	xTicks.push(xMaxVal);
+}
+"
+        . ""
 . " </script>";
 
 $toolName = $langUsage;
@@ -113,27 +157,27 @@ $tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
 $tool_content .= plot_placeholder("old_stats", $langOldStats);
 $tool_content .= "</div></div>";
 
-if (isset($_POST['user_date_start'])) {
-    $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
-    error_log(serialize($uds));
-    $u_date_start = $uds->format('Y-m-d H:i');
-    $user_date_start = $uds->format('d-m-Y H:i');
-} else {
-    $date_start = new DateTime();
-    $date_start->sub(new DateInterval('P2Y'));
-    $u_date_start = $date_start->format('Y-m-d H:i');
-    $user_date_start = $date_start->format('d-m-Y H:i');       
-}
-if (isset($_POST['user_date_end'])) {
-    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);
-    $u_date_end = $ude->format('Y-m-d H:i');
-    $user_date_end = $ude->format('d-m-Y H:i');
+
+$endDate_obj = new DateTime();
+$user_date_start = $endDate_obj->format('d-m-Y');
+$startDate_obj = $endDate_obj->sub(new DateInterval('P2Y'));
+$user_date_start = $startDate_obj->format('d-m-Y');
+
+
+if (isset($_POST['user_date_start']) && isset($_POST['user_date_end'])) {
+    $uds = DateTime::createFromFormat('d-m-Y', $_POST['user_date_start']);
+    $u_date_start = $uds->format('Y-m-d');
+    $user_date_start = $uds->format('d-m-Y');
+
+    $ude = DateTime::createFromFormat('d-m-Y', $_POST['user_date_end']);
+    $u_date_end = $ude->format('Y-m-d');
+    $user_date_end = $ude->format('d-m-Y');
 } else {
     $last_month = "P" . get_config('actions_expire_interval') . "M";
     $date_end = new DateTime();
     $date_end->sub(new DateInterval($last_month));
-    $u_date_end = $date_end->format('Y-m-d H:i');
-    $user_date_end = $date_end->format('d-m-Y H:i');        
+    $u_date_end = $date_end->format('Y-m-d');
+    $user_date_end = $date_end->format('d-m-Y');        
 }
 
 
