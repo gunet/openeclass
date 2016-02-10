@@ -156,50 +156,58 @@ if (isset($_GET['delete'])) {
     }
 } elseif (isset($_POST['submitAnnouncement'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    // submit announcement command
-    $dates = array();
-    if (isset($_POST['show_public'])){
-        $show_public =  1;
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', array('title'));
+    $v->labels(array('title' => "$langTheField $langAnnTitle"));
+    if($v->validate()) {
+        // submit announcement command
+        $dates = array();
+        if (isset($_POST['show_public'])){
+            $show_public =  1;
+        } else {
+            $show_public =  0;
+        }
+        if (isset($_POST['startdate_active']) and isset($_POST['startdate'])) {
+            $start_sql = 'begin = ?s';
+            $date_started = DateTime::createFromFormat("d-m-Y H:i", $_POST['startdate']);
+            $dates[] = $date_started->format("Y-m-d H:i:s");
+        } else {
+            $start_sql = 'begin = NULL';
+        }
+        if (isset($_POST['enddate_active']) and isset($_POST['enddate'])) {
+            $end_sql = 'end = ?s';
+            $date_ended = DateTime::createFromFormat("d-m-Y H:i", $_POST['enddate']);
+            $dates[] = $date_ended->format("Y-m-d H:i:s");
+        } else {
+            $end_sql = 'end = NULL';
+        }
+        $newContent = purify($newContent);
+        if (isset($_POST['id'])) {
+            // modify announcement
+            $id = $_POST['id'];
+            Database::get()->query("UPDATE admin_announcement
+                            SET title = ?s, body = ?s, lang = ?s,
+                                `date` = " . DBHelper::timeAfter() . ", $start_sql, $end_sql, `visible`=?d
+                            WHERE id = ?d", $title, $newContent, $lang_admin_ann, $dates, $show_public, $id);
+            $message = $langAdminAnnModify;
+        } else {
+            // add new announcement
+            // order
+            $orderMax = Database::get()->querySingle("SELECT MAX(`order`) as max FROM admin_announcement")->max;
+            $order = $orderMax + 1;
+            Database::get()->query("INSERT INTO admin_announcement
+                            SET title = ?s,
+                                body = ?s,
+                                lang = ?s,
+                                `date` = " . DBHelper::timeAfter() . ",
+                                `order` = ?d,
+                                $start_sql,
+                                $end_sql, `visible`=?d", $title, $newContent, $lang_admin_ann, $order, $dates, $show_public);
+            $message = $langAdminAnnAdd;
+        }
     } else {
-        $show_public =  0;
-    }
-    if (isset($_POST['startdate_active']) and isset($_POST['startdate'])) {
-        $start_sql = 'begin = ?s';
-        $date_started = DateTime::createFromFormat("d-m-Y H:i", $_POST['startdate']);
-        $dates[] = $date_started->format("Y-m-d H:i:s");
-    } else {
-        $start_sql = 'begin = NULL';
-    }
-    if (isset($_POST['enddate_active']) and isset($_POST['enddate'])) {
-        $end_sql = 'end = ?s';
-        $date_ended = DateTime::createFromFormat("d-m-Y H:i", $_POST['enddate']);
-        $dates[] = $date_ended->format("Y-m-d H:i:s");
-    } else {
-        $end_sql = 'end = NULL';
-    }
-    $newContent = purify($newContent);
-    if (isset($_POST['id'])) {
-        // modify announcement
-        $id = $_POST['id'];
-        Database::get()->query("UPDATE admin_announcement
-                        SET title = ?s, body = ?s, lang = ?s,
-                            `date` = " . DBHelper::timeAfter() . ", $start_sql, $end_sql, `visible`=?d
-                        WHERE id = ?d", $title, $newContent, $lang_admin_ann, $dates, $show_public, $id);
-        $message = $langAdminAnnModify;
-    } else {
-        // add new announcement
-        // order
-        $orderMax = Database::get()->querySingle("SELECT MAX(`order`) as max FROM admin_announcement")->max;
-        $order = $orderMax + 1;
-        Database::get()->query("INSERT INTO admin_announcement
-                        SET title = ?s,
-                            body = ?s,
-                            lang = ?s,
-                            `date` = " . DBHelper::timeAfter() . ",
-                            `order` = ?d,
-                            $start_sql,
-                            $end_sql, `visible`=?d", $title, $newContent, $lang_admin_ann, $order, $dates, $show_public);
-        $message = $langAdminAnnAdd;
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("modules/admin/adminannouncements.php?addAnnounce=1");
     }
 }
 
@@ -228,7 +236,8 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     if (isset($_GET['modify'])) {
         $tool_content .= "<input type='hidden' name='id' value='$id' />";
     }
-    $tool_content .= "<div class='form-group'>";
+    $antitle_error = Session::getError('title', "<span class='help-block'>:message</span>");
+    $tool_content .= "<div class='form-group".($antitle_error ? " has-error" : "")."'>";
     $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>
                         <div class='col-sm-10'><input class='form-control' type='text' name='title' value='$titleToModify' size='50' /></div>
                     </div>
@@ -278,7 +287,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $startdate = '';
         $enddate = '';
         $tool_content .= "<div class='col-sm-10'>" . lang_select_options('lang_admin_ann', "class='form-control'") . "</div>";
-    }
+    }    
     $tool_content .= "<small class='text-right'><span class='help-block'>$langTipLangAdminAnn</span></small></div>
         <div class='form-group'>
             <label for='startdate' class='col-sm-2 control-label'>$langStartDate :</label>
