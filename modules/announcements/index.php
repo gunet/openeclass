@@ -583,21 +583,11 @@ if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $cours
 }
 if (isset($_GET['an_id'])) {
     $pageName = $row->title;
-    $tool_content .= action_bar(array(
-        array('title' => $langModify,
-              'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;modify=$row->id",
-              'icon' => 'fa-edit',
-              'level' => 'primary-label',
-               'show' => $is_editor),
+    $tool_content .= action_bar(array(        
         array('title' => $langBack,
               'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
               'icon' => 'fa-reply',
-              'level' => 'primary-label'),
-        array('title' => $langDelete,
-              'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
-              'icon' => 'fa-times',
-              'confirm' => $langSureToDelAnnounce,
-              'show' => $is_editor)));
+              'level' => 'primary-label')));
     } elseif (!isset($_GET['modify']) && !isset($_GET['addAnnounce'])) {
         $tool_content .= action_bar(array(
             array('title' => $langAddAnn,
