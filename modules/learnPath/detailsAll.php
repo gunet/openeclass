@@ -48,7 +48,6 @@ $require_editor = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
-require_once 'modules/usage/statistics_tools_bar.php';
 
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
     $toolName = $langUsage;

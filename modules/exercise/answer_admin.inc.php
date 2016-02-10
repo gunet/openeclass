@@ -528,7 +528,7 @@ if (isset($_GET['modifyAnswers'])) {
                     $tool_content .= "
                                             <tr>
                                               <td class='text-right'><b>[" . q($blank) . "] :</b></td>" . "
-                                              <td><input class='form-control' type='text' name='weighting[".($i-1)."]' value='" . (isset($weighting[$i-1]) ? intval($weighting[$i-1]) : 0) . "'></td>
+                                              <td><input class='form-control' type='text' name='weighting[".($i-1)."]' value='" . (isset($weighting[$i-1]) ? $weighting[$i-1] : 0) . "'></td>
                                             </tr>";
                 }
                 $tool_content .= "</table>";
