@@ -68,13 +68,14 @@ function appendToolElement($root, $dom, $tool) {
 }
 
 function populateTools($baseurl) {
-    global $langMyAnnouncements, $langMyPersoDeadlines, $langMyProfile, $langRegCourses, $langMyAgenda;
+//    global $langMyAnnouncements, $langMyPersoDeadlines, $langMyProfile, $langRegCourses, $langMyAgenda;
+    global $langRegCourses;
 
     $toolsArr = array();
-    $toolsArr[] = createNewTool($baseurl, $langMyAnnouncements, 'modules/announcements/myannouncements.php', 'myannouncements');
-    $toolsArr[] = createNewTool($baseurl, $langMyPersoDeadlines, 'modules/work/mydeadlines.php', 'mydeadlines');
-    $toolsArr[] = createNewTool($baseurl, $langMyAgenda, 'main/personal_calendar/index.php', 'myagenda');
-    $toolsArr[] = createNewTool($baseurl, $langMyProfile, 'main/profile/display_profile.php', 'myprofile');
+//    $toolsArr[] = createNewTool($baseurl, $langMyAnnouncements, 'modules/announcements/myannouncements.php', 'myannouncements');
+//    $toolsArr[] = createNewTool($baseurl, $langMyPersoDeadlines, 'modules/work/mydeadlines.php', 'mydeadlines');
+//    $toolsArr[] = createNewTool($baseurl, $langMyAgenda, 'main/personal_calendar/index.php', 'myagenda');
+//    $toolsArr[] = createNewTool($baseurl, $langMyProfile, 'main/profile/display_profile.php', 'myprofile');
     $toolsArr[] = createNewTool($baseurl, $langRegCourses, 'modules/auth/courses.php', 'coursesubscribe');
 
     return $toolsArr;
