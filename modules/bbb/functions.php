@@ -464,12 +464,13 @@ function edit_bbb_session($session_id) {
                             }
                         }
                         //select all users from this course except yourself
-                        $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
+                        $sql = "SELECT u.id AS user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
                                     FROM user u, course_user cu
                                                 WHERE cu.course_id = ?d
                                     AND cu.user_id = u.id
                                     AND cu.status != ?d
                                     AND u.id != ?d
+                                    GROUP BY u.id
                                     ORDER BY UPPER(u.surname), UPPER(u.givenname)";
                         $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
                         $tool_content .= "<option value='-1' selected><h2>$langAllUsers</h2></option>";
