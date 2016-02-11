@@ -244,19 +244,15 @@ class Calendar_Events {
                     . "FROM bbb_session bbb JOIN course_user cu ON bbb.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
                     . "WHERE cu.user_id =?d AND bbb.active='1' "
                     . $dc;
-            $q_args = array_merge($q_args, $q_args_templ);
-
-                // exercises
-                if (!empty($q)) {
-                    $q .= " UNION ";
-                }
-                $dc = str_replace('start', 'ex.end_date', $datecond);
-                $q .= "SELECT ex.id, CONCAT(c.title,': ',ex.title), ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
-                        . "FROM exercise ex JOIN course_user cu ON ex.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id "
-                        . "WHERE cu.user_id =?d AND (ex.public = 1 OR cu.status = 1) AND ex.active = 1"
-                        . $dc;
-                $q_args = array_merge($q_args, $q_args_templ);
+            $q_args = array_merge($q_args, $q_args_templ);               
             }
+            
+            if (Calendar_Events::$calsettings->show_deadline == 1) {
+                // assignments 
+                if (!empty($q)) {
+                $q .= " UNION ";
+            }
+                
             $dc = str_replace('start', 'ass.deadline', $datecond);
             $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + time('00:00:01'), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                     . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id "
