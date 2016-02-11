@@ -106,7 +106,7 @@ function new_bbb_session() {
                         GROUP BY user_id
                         ORDER BY UPPER(u.surname), UPPER(u.givenname)";
             $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
-            
+
             $tool_content .= "<option value='-1' selected><h2>$langAllUsers</h2></option>";
             foreach ($res as $r) {
                 if (isset($r->user_id)) {
@@ -138,7 +138,7 @@ function new_bbb_session() {
                       </label>
                     </div>
             </div>
-        </div>";        
+        </div>";
         $tool_content .= "<div class='form-group'>
             <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
             <div class='col-sm-10'>
@@ -227,12 +227,13 @@ function new_bbb_session() {
  */
 function add_update_bbb_session($title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record, $sessionUsers, $update = 'false', $session_id = '')
 {
-    global $langBBBScheduledSession, $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2, 
-                        $langBBBScheduleSessionInfoJoin, $langDescr, $course_code, $course_id;
+    global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
+        $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
+        $langDescr, $course_code, $course_id, $urlServer;
 
     // Groups of participants per session
     $r_group = '';
-            
+
     // Enable recording or not
     switch($record)
     {
@@ -243,43 +244,43 @@ function add_update_bbb_session($title,$desc,$start_session,$type,$status,$notif
             $record="true";
             break;
     }
-    
-    if ($update == 'true') {        
-        Database::get()->querySingle("UPDATE bbb_session SET title=?s, description=?s, start_date=?t, 
-                                        public=?s, active=?s, unlock_interval=?d, external_users=?s, 
-                                        participants=?s, record=?s, sessionUsers=?d WHERE id=?d", 
-                                $title, $desc, $start_session, $type, $status, $minutes_before, 
+
+    if ($update == 'true') {
+        Database::get()->querySingle("UPDATE bbb_session SET title=?s, description=?s, start_date=?t,
+                                        public=?s, active=?s, unlock_interval=?d, external_users=?s,
+                                        participants=?s, record=?s, sessionUsers=?d WHERE id=?d",
+                                $title, $desc, $start_session, $type, $status, $minutes_before,
                                 $external_users, $r_group, $record, $sessionUsers, $session_id);
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM bbb_session WHERE id = ?d", $session_id);
-    } else {        
-        $q = Database::get()->query("INSERT INTO bbb_session (course_id, title, description, start_date, 
-                                                            public, active, running_at, 
-                                                            meeting_id, mod_pw, att_pw, 
-                                                            unlock_interval, external_users, participants, record, 
+    } else {
+        $q = Database::get()->query("INSERT INTO bbb_session (course_id, title, description, start_date,
+                                                            public, active, running_at,
+                                                            meeting_id, mod_pw, att_pw,
+                                                            unlock_interval, external_users, participants, record,
                                                             sessionUsers)
-                                                        VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)", 
-                                            $course_id, $title, $desc, $start_session, 
-                                            $type, $status, 
-                                            generateRandomString(), generateRandomString(), generateRandomString(), 
+                                                        VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)",
+                                            $course_id, $title, $desc, $start_session,
+                                            $type, $status,
+                                            generateRandomString(), generateRandomString(), generateRandomString(),
                                             $minutes_before, $external_users,$r_group,$record,$sessionUsers);
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM bbb_session WHERE id = ?d", $q->lastInsertID);
-    }    
+    }
     $new_meeting_id = $q->meeting_id;
     $new_title = $q->title;
     $new_mod_pw = $q->mod_pw;
-    $new_att_pw = $q->att_pw;    
+    $new_att_pw = $q->att_pw;
     // if we have to notify users for new session
     if ($notifyUsers == "1") {
-                        
+
         if (isset($_POST['groups']) and count($_POST['groups'] > 0)) {
             $recipients = array();
-            if ($_POST['groups'][0] == -1) { // all users                
+            if ($_POST['groups'][0] == -1) { // all users
                 $result = Database::get()->queryArray("SELECT cu.user_id, u.email FROM course_user cu
                                                         JOIN user u ON cu.user_id=u.id
                                                     WHERE cu.course_id = ?d
                                                     AND u.email <> ''
                                                     AND u.email IS NOT NULL", $course_id);
-                    
+
             } else {
                 foreach ($_POST['groups'] as $group) {
                     if (preg_match('/^_/', $group)) { // find group users (if any)
@@ -294,7 +295,7 @@ function add_update_bbb_session($title,$desc,$start_session,$type,$status,$notif
                         $r_group .= "'$group'" .',';
                     }
                 }
-                $r_group = rtrim($r_group,',');                            
+                $r_group = rtrim($r_group,',');
                 $result = Database::get()->queryArray("SELECT course_user.user_id, user.email
                                                             FROM course_user, user
                                                        WHERE course_id = ?d AND user.id IN ($r_group) AND
@@ -309,14 +310,12 @@ function add_update_bbb_session($title,$desc,$start_session,$type,$status,$notif
                     //and add user to recipients
                     array_push($recipients, $emailTo);
                 }
-            }            
+            }
             if (count($recipients) > 0) {
                 $emailsubject = $langBBBScheduledSession;
-                $bbblink = get_config('base_url')."modules/bbb/index.php?course=$course_code&choice=do_join&meeting_id=$new_meeting_id&title=" . urlencode($new_title) . "&mod_pw=$new_mod_pw&att_pw=$new_att_pw";
+                $bbblink = $urlServer . "modules/bbb/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;mod_pw=$new_mod_pw&amp;att_pw=$new_att_pw";
                 $emailheader = "
-                <!-- Header Section -->
                     <div id='mail-header'>
-                        <br>
                         <div>
                             <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q($start_session). "</div>
                         </div>
@@ -324,53 +323,46 @@ function add_update_bbb_session($title,$desc,$start_session,$type,$status,$notif
                 ";
 
                 $emailmain = "
-                <!-- Body Section -->
                 <div id='mail-body'>
-                    <br>
                     <div><b>$langDescr:</b></div>
                     <div id='mail-body-inner'>
                         $desc
-                        <br><br>$langBBBScheduleSessionInfoJoin:<br>$bbblink
+                        <br><br>$langBBBScheduleSessionInfoJoin:<br><a href='$bbblink'>$bbblink</a>
                     </div>
                 </div>
                 ";
 
-                $emailcontent = $emailheader.$emailmain;
-
-                $emailbody = html2text($emailcontent);                
-                //Notify course users for new bbb session
+                $emailcontent = $emailheader . $emailmain;
+                $emailbody = html2text($emailcontent);
+                // Notify course users for new bbb session
                 send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
             }
-        }        
-                
-        //Notify external users for new bbb session
+        }
+
+        // Notify external users for new bbb session
         if (isset($external_users)) {
-            $recipients = explode(',', $external_users);            
-            foreach ($recipients as $row) {                
-                $bbblink = get_config('base_url')."modules/bbb/index.php?course=$course_code&choice=do_join&meeting_id=$new_meeting_id&title=" . urlencode($new_title) . "&mod_pw=$new_mod_pw&att_pw=$new_att_pw";
-                $emailsubject = $langBBBScheduledSession;
-                $emailheader = "
-                <!-- Header Section -->
+            $recipients = explode(',', $external_users);
+            $emailsubject = $langBBBScheduledSession;
+            $emailheader = "
                     <div id='mail-header'>
-                        <br>
                         <div>
                             <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q($start_session)."</div>
                         </div>
                     </div>
                 ";
+            foreach ($recipients as $row) {
+                $bbblink = $urlServer . "modules/bbb/ext.php?course=$course_code&amp;meeting_id=$new_meeting_id&amp;username=" . urlencode($row);
 
                 $emailmain = "
-                <!-- Body Section -->
                 <div id='mail-body'>
-                    <br>
                     <div><b>$langDescr:</b></div>
                     <div id='mail-body-inner'>
                         $desc
-                        <br><br>$langBBBScheduleSessionInfoJoin:<br>$bbblink
+                        <br><br>$langBBBScheduleSessionInfoJoin:<br><a href='$bbblink'>$bbblink</a>
                     </div>
                 </div>
-                ";                
-                $emailcontent = $emailheader.$emailmain;
+                ";
+                $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
                 send_mail_multipart('', '', '', $row, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
             }
@@ -379,7 +371,7 @@ function add_update_bbb_session($title,$desc,$start_session,$type,$status,$notif
     $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
                                                    WHERE course_id = ?d", $course_id)->maxorder;
     $order = $orderMax + 1;
-    Database::get()->querySingle("INSERT INTO announcement (content,title,`date`,course_id,`order`,visible) 
+    Database::get()->querySingle("INSERT INTO announcement (content,title,`date`,course_id,`order`,visible)
                                     VALUES ('".$langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session."',
                                              '$langBBBScheduledSession', " . DBHelper::timeAfter() . ", ?d, ?d, '1')", $course_id, $order);
 }
@@ -390,7 +382,7 @@ function add_update_bbb_session($title,$desc,$start_session,$type,$status,$notif
  * @global type $langModify
  * @global type $course_code
  * @global type $langNewBBBSessionDesc
- * @global type $langNewBBBSessionStart 
+ * @global type $langNewBBBSessionStart
  * @global type $langNewBBBSessionStatus
  * @global type $langNewBBBSessionActive
  * @global type $langNewBBBSessionInActive
@@ -402,7 +394,7 @@ function add_update_bbb_session($title,$desc,$start_session,$type,$status,$notif
  */
 function edit_bbb_session($session_id) {
     global $tool_content, $langModify, $course_code, $course_id, $uid;
-    global $langNewBBBSessionDesc, $langNewBBBSessionStart;    
+    global $langNewBBBSessionDesc, $langNewBBBSessionStart;
     global $langNewBBBSessionStatus, $langNewBBBSessionActive, $langNewBBBSessionInActive,$langBBBSessionAvailable,$langBBBMinutesBefore;
     global $langTitle, $langBBBNotifyExternalUsersHelpBlock;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
@@ -415,7 +407,7 @@ function edit_bbb_session($session_id) {
 
     $type = ($row->public == 1 ? 1 : 0);
     $status = ($row->active == 1 ? 1 : 0);
-    $record = ($row->record == "true" ? 1 : 0);   
+    $record = ($row->record == "true" ? 1 : 0);
     $r_group = explode(",",$row->participants);
 
     $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date);
@@ -510,7 +502,7 @@ function edit_bbb_session($session_id) {
                                   </label>
                                 </div>
                         </div>
-                    </div>";            
+                    </div>";
                     $tool_content .= "<div class='form-group'>
                         <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
                         <div class='col-sm-10'>
@@ -1186,9 +1178,9 @@ function publish_video_recordings($course_id, $id)
             . "bbb_session.meeting_id,course.prof_names FROM bbb_session LEFT JOIN course ON bbb_session.course_id=course.id WHERE course.code=?s AND bbb_session.id=?d", $course_id, $id);
 
     $servers = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY id DESC");
-    
+
     $perServerResult = array(); /*AYTO THA EINAI TO ID THS KATASTASHS GIA KATHE SERVER*/
-    
+
     if (($sessions) && ($servers)) {
         $msgID = array();
         foreach ($servers as $server) {
@@ -1213,7 +1205,7 @@ function publish_video_recordings($course_id, $id)
                 // If not set it means that there is no video recording.
                 // Skip and search for next one
                 if (isset($xml->recordings->recording/*->playback->format->url*/)) {//echo "<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>";
-                   foreach($xml->recordings->recording as $recording) {					
+                   foreach($xml->recordings->recording as $recording) {
                         $url = (string) $recording->playback->format->url;
                         // Check if recording already in videolinks and if not insert
                         $c = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE url = ?s",$url);
@@ -1230,9 +1222,9 @@ function publish_video_recordings($course_id, $id)
                             }
                             else  $msgID[$sessionsCounter] = 1;
                         }
-                    }                    
-                } else {                    
-                    $msgID[$sessionsCounter] = 0;  /*AN DEN YPARXOUN KAN RECORDINGS PAIRNEI 0*/                    
+                    }
+                } else {
+                    $msgID[$sessionsCounter] = 0;  /*AN DEN YPARXOUN KAN RECORDINGS PAIRNEI 0*/
                 }
                 $sessionsCounter++;
             }
@@ -1280,13 +1272,13 @@ function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
         'password' => $pw,  // REQUIRED - Must match moderator pass for meeting.
     );
 
-    // Now get meeting info and display it:    
-    $result = $bbb->getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,$salt,$infoParams);    
+    // Now get meeting info and display it:
+    $result = $bbb->getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,$salt,$infoParams);
     // If it's all good, then we've interfaced with our BBB php api OK:
-    if ($result == null) {    
+    if ($result == null) {
         // If we get a null response, then we're not getting any XML back from BBB.
         Session::Messages($langBBBConnectionError, 'alert-danger');
-        redirect("index.php?course=$course_code");        
+        redirect("index.php?course=$course_code");
     } else {
         // We got an XML response, so let's see what it says:
         if (isset($result['messageKey'])) {
