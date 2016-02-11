@@ -57,22 +57,22 @@ elseif($stats_type == 'admin'){
            $indentation .= "&nbsp;&nbsp;";
        }
        $statsDepOptions .= '<option value="'.$d->id.'" >' . $indentation.hierarchy::unserializeLangField($d->name) . "</option>\n";
-    }    
+    }
 }
 else{
     /**Get courses of user**/
     $result = Database::get()->queryArray("SELECT c.id, c.code, c.title FROM course_user cu JOIN course c ON cu.course_id=c.id WHERE user_id=?d", $uid);
     $statsCourseOptions = '<option value="0" >' . $langAllCourses . "</option>\n";
     foreach($result as $c){
-       $statsCourseOptions .= '<option value="'.$c->id.'" >' . $c->title . "</option>\n"; 
+       $statsCourseOptions .= '<option value="'.$c->id.'" >' . $c->title . "</option>\n";
     }
 }
 
 
 
 $tool_content .= '<div class="form-wrapper" data-placement="top">';
-$tool_content .= '<div class="form-group" data-placement="top">';  
-        
+$tool_content .= '<div class="form-group" data-placement="top">';
+
 $endDate_obj = new DateTime();
 $enddate = $endDate_obj->format('d-m-Y');
 $showUntil = q($enddate);
@@ -81,9 +81,9 @@ $startdate = $startDate_obj->format('d-m-Y');
 $showFrom = q($startdate);
 
 $tool_content .= "<!--label class='pull-left control-label'>$langFrom:</label-->
-        <div class='col-xs-2 col-sm-2'>               
+        <div class='col-xs-2 col-sm-2'>
             <input class='form-control' name='startdate' id='startdate' type='text' value = '$showFrom'>
-        </div>";        
+        </div>";
 $tool_content .= "<label class='pull-left control-label'>$langUntil</label>
             <div class='col-xs-2 col-sm-2'>
                 <input class='form-control' name='enddate' id='enddate' type='text' value = '$showUntil'>
@@ -93,10 +93,10 @@ $tool_content .= '<div class="col-sm-2 col-xs-2"><select name="interval" id="int
 //$tool_content .= "<a id='toggle-view'><i class='fa fa-list' data-toggle='tooltip' data-placement='top' title data-original-title='lala'></i></a>";
 
 if($stats_type == 'course'){
-    
+
     $tool_content .= '
     <div class="col-sm-3 col-xs-3" style="display:none;"><select name="module" id="module" class="form-control">' . $mod_opts . '</select></div>';
-    
+
     $tool_content .= '
     <div class="col-sm-3 col-xs-3"><select name="user" id="user" class="form-control">' . $statsUserOptions . '</select></div>';
 }
@@ -109,7 +109,7 @@ elseif($stats_type == 'user'){
     <div class="col-sm-3 col-xs-3"><select name="course" id="course" class="form-control">' . $statsCourseOptions . '</select></div>';
 }
 //<a id="list-view" class="btn btn-default"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-toggle="tooltip" data-placement="top"></span></a>
-        
+
 $tool_content .= '<div class="pull-right">
     <div id="toggle-view" class="btn-group">
     	<a id="plots-view" class="btn btn-info active"  data-placement="top" title="'.$langPlots.'" data-toggle="tooltip" data-original-title="'.$langPlots.'"><span class="fa fa-bar-chart"  data-toggle="tooltip" data-placement="top"></span></a>

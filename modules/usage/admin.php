@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,11 +17,11 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 
-$head_content .= 
+$head_content .=
     "<script type='text/javascript'>
         startdate = null;
         interval = 1;
@@ -81,7 +81,7 @@ $tool_content .= "
 
 
 /****   Form   ****/
-require_once(dirname(__FILE__) . '/form.php');
+require_once 'modules/usage/form.php';
 
 /****   Plots   ****/
 $tool_content .= "<div class='row plotscontainer'>";

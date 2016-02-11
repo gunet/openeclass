@@ -27,7 +27,7 @@
 $require_login = TRUE;
 
 require_once '../../include/init.php';
-require_once(dirname(__FILE__) . '/usage.lib.php');
+require_once 'modules/usage/usage.lib.php';
 
 $result = null;
 $intervals = array(1=>'day', 7=>'week', 30=>'month', 365=>'year');
@@ -42,7 +42,7 @@ $ds = DateTime::createFromFormat('Y-n-j', $_REQUEST['s']);
 $de = DateTime::createFromFormat('Y-n-j', $_REQUEST['e']);
 if(($ds && $ds->format('Y-n-j') == $_REQUEST['s']) && ($de && $de->format('Y-n-j') == $_REQUEST['e'])){
     $enddate = $_REQUEST['e'];
-    $startdate = $_REQUEST['s'];    
+    $startdate = $_REQUEST['s'];
 }
 else{
     $endDate_obj = new DateTime();
@@ -94,7 +94,7 @@ if(isset($_REQUEST['t'])){
             break;
         case 'crd':
             $result = get_course_registration_details($startdate, $enddate, $plotcourse);
-            break;        
+            break;
         case 'cad':
             $result = get_course_activity_details($startdate, $enddate, $plotuser, $plotcourse, $plotmodule);
             break;
@@ -105,6 +105,6 @@ if(isset($_REQUEST['t'])){
             $result = get_course_old_stats($startdate, $enddate, $plotcourse, $plotmodule);
             break;
     }
-    
+
 }
 echo json_encode($result);

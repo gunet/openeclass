@@ -15,8 +15,8 @@ $head_content .= "<script type='text/javascript'>
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-left',
                 language: '".$language."',
-                autoclose: true    
-            });            
+                autoclose: true
+            });
         });
     </script>";
 
@@ -243,7 +243,7 @@ if (isset($_GET['stats_submit'])) {
     $tool_content .= "<div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>
                             <input class='btn btn-primary' type='submit' name='stats_submit' value='$langSubmit'>
-                            <a href='index.php' class='btn btn-default'>$langCancel</a>        
+                            <a href='index.php' class='btn btn-default'>$langCancel</a>
                         </div>
           </div>";
     $tool_content .= "</fieldset></form></div>";

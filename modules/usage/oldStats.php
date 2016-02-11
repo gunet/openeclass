@@ -32,7 +32,7 @@ $require_login = true;
 
 include '../../include/baseTheme.php';
 require_once 'include/action.php';
-require_once(dirname(__FILE__) . '/usage.lib.php');
+require_once 'modules/usage/usage.lib.php';
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
@@ -48,22 +48,22 @@ $head_content .= "<script type='text/javascript'>
         var xTicks = null;
         var interval = 30; //per month
         oldStatsChart = null;
-        
+
         $(document).ready(function(){
             $('#user_date_start').datepicker({
             format: 'dd-mm-yyyy',
             pickerPosition: 'bottom-left',
             language: '$language',
-            autoclose: true    
-        }); 
-        
+            autoclose: true
+        });
+
         $('#user_date_end').datepicker({
             format: 'dd-mm-yyyy',
             pickerPosition: 'bottom-left',
             language: '$language',
             autoclose: true
-        }); 
-        
+        });
+
 
         sdate = $('#user_date_start').datepicker('getDate');
         startdate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();
@@ -75,9 +75,9 @@ $head_content .= "<script type='text/javascript'>
         console.log('refresh_oldstats_course_plot('+startdate+', '+enddate+', $course_id, '+module);
         refresh_oldstats_course_plot(startdate, enddate, $course_id, module);
     });
-    
+
 function refresh_oldstats_course_plot(startdate, enddate, course, module){
-    xAxisTicksAdjust();    
+    xAxisTicksAdjust();
     $.getJSON('results.php',{t:'ocs', s:startdate, e:enddate, c:course, m:module},function(data){
         var options = {
             data: {
@@ -123,7 +123,7 @@ function xAxisTicksAdjust()
                     tick.setMonth(tick.getMonth() + 1);
                     tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-'+tick.getDate();
                     xTicks.push(tickval);
-            } 
+            }
         }
         else if(interval == 365){
             while(tick < xmax)
@@ -131,7 +131,7 @@ function xAxisTicksAdjust()
                     tick.setFullYear(tick.getFullYear() + 1);
                     tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-'+tick.getDate();
                     xTicks.push(tickval);
-            }     
+            }
         }
 	xTicks.push(xMaxVal);
 }
@@ -177,7 +177,7 @@ if (isset($_POST['user_date_start']) && isset($_POST['user_date_end'])) {
     $date_end = new DateTime();
     $date_end->sub(new DateInterval($last_month));
     $u_date_end = $date_end->format('Y-m-d');
-    $user_date_end = $date_end->format('d-m-Y');        
+    $user_date_end = $date_end->format('d-m-Y');
 }
 
 
@@ -209,7 +209,7 @@ $made_chart = true;
 require_once 'modules/graphics/plotter.php';
 $usage_defaults = array(
     'u_stats_value' => 'visits',
-    'u_module_id' => -1  
+    'u_module_id' => -1
 );
 
 foreach ($usage_defaults as $key => $val) {
@@ -237,20 +237,20 @@ $statsValueOptions = '<option value="visits" ' . (($u_stats_value == 'visits') ?
 
 $tool_content .= '<div class="form-wrapper">';
 $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
-$tool_content .= '<div class="form-group">  
+$tool_content .= '<div class="form-group">
                     <label class="col-sm-2 control-label">' . $langValueType . ':</label>
                     <div class="col-sm-10"><select name="u_stats_value" class="form-control">' . $statsValueOptions . '</select></div>
                   </div>';
 $tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     <label class='col-sm-2 control-label'>$langStartDate:</label>
-        <div class='col-xs-10 col-sm-9'>               
+        <div class='col-xs-10 col-sm-9'>
             <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
         </div>
         <div class='col-xs-2 col-sm-1'>
             <span class='add-on'><i class='fa fa-times'></i></span>
             <span class='add-on'><i class='fa fa-calendar'></i></span>
         </div>
-        </div>";        
+        </div>";
 $tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
         <label class='col-sm-2 control-label'>$langEndDate:</label>
             <div class='col-xs-10 col-sm-9'>
