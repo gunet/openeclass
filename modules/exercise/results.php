@@ -184,7 +184,9 @@ foreach ($result as $row) {
                         if ($now > $estimatedEndTime) {
                             $row_class = " class='warning' data-toggle='tooltip' title='$langAttemptActiveButDeadMsg'";
                         } else {
-                            $action_btn_state = false;
+                            if ($exerciseTimeConstraint) {
+                                $action_btn_state = false;
+                            }
                             $row_class = " class='success' data-toggle='tooltip' title='$langAttemptActiveMsg'";                        
                         }
                     }
