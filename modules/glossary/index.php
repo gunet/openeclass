@@ -54,6 +54,7 @@ Database::get()->queryFunc("SELECT id, name, description, `order`
                       ORDER BY name", function ($cat) use (&$categories) {
     $categories[intval($cat->id)] = $cat->name;
 }, $course_id);
+$data['categories'] = $categories;
 
 $indirectcategories = array();
 foreach ($categories as $k => $v) {
@@ -293,6 +294,7 @@ if ($is_editor) {
         $data['definition'] = Session::has('definition') ? Session::get('definition') : (isset($_GET['add']) ? "" : $glossary_item->definition );
         $notes = Session::has('notes') ? Session::get('notes') : (isset($_GET['add']) ? "" : $glossary_item->notes );
         $data['category_selection'] = '';
+
         if ($categories) {
             $categories[0] = '-';
             array_unshift($indirectcategories, "-");
