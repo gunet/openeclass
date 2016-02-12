@@ -4849,6 +4849,33 @@ $langMyePortfolio = 'Το e-portfolio μου';
 $langEditePortfolio = 'Επεξεργασία του e-portfolio';
 $langUserePortfolio = 'e-portfolio χρήστη';
 $langePortfolioChangeSucc = 'Οι αλλαγές στο e-portfolio αποθηκεύθηκαν επιτυχώς';
+$langPersInfo = 'Προσωπικά στοιχεία';
+$langEduEmpl = 'Εκπαίδευση και εργασία';
+$langAchievements = 'Διακρίσεις - επιτεύγματα';
+$langGoalsSkills = 'Στόχοι και δεξιότητες';
+$langContactInfo = 'Στοιχεία επικοινωνίας';
+$langBirthDate = 'Ημερομηνία γέννησης';
+$langBirthPlace = 'Τόπος γέννησης';
+$langGender = 'Φύλο';
+$langMale = 'Άνδρας';
+$langFemale = 'Γυναίκα';
+$langAboutMe = 'Σχετικά με μένα';
+$langAboutMeDescr = '<p>Λίγα λόγια για τον εαυτό σας</p>';
+$langPersWebsite = 'Προσωπική σελίδα';
+$langEducation = 'Εκπαίδευση';
+$langEducationDescr = '<p>Σπουδές, ακαδημαϊκά προσόντα κ.λπ.</p>';
+$langEmployment = 'Επαγγελματική εμπειρία';
+$langCertAwards = 'Πιστοποιήσεις και βραβεία';
+$langPublications = 'Δημοσιεύσεις';
+$langPersGoals = 'Προσωπικοί στόχοι';
+$langAcademicGoals = 'Ακαδημαϊκοί στόχοι';
+$langCareerGoals = 'Επαγγελματικοί στόχοι';
+$langPersSkills = 'Προσωπικές δεξιότητες';
+$langAcademicSkills = 'Ακαδημαϊκές δεξιότητες';
+$langCareerSkills = 'Επαγγελματικές δεξιότητες';
+$langFBProfile = 'Facebook προφίλ';
+$langTwitterAccount = 'Twitter λογαριασμός';
+$langLinkedInProfile = 'LinkedIn προφίλ';
 
 /* * ******************************************
   Widgets
