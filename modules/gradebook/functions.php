@@ -296,7 +296,6 @@ function delete_gradebook_activity($gradebook_id, $activity_id) {
 
     global $langGradebookDel, $langGradebookDelFailure;
     
-    $actTitle = Database::get()->querySingle("SELECT title FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $activity_id, $gradebook_id)->title;
     $delAct = Database::get()->query("DELETE FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $activity_id, $gradebook_id)->affectedRows;
     Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d", $activity_id);
     if ($delAct) {
@@ -1979,4 +1978,18 @@ function get_gradebook_title($gradebook_id) {
     $gd_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d", $gradebook_id)->title;
 
     return $gd_title;
+}
+
+/**
+ * @brief get activity title from given gradebook and activity
+ * @param type $gradebook_id
+ * @param type $activity_id
+ * @return type
+ */
+function get_gradebook_activity_title($gradebook_id, $activity_id) {
+
+    $act_title = Database::get()->querySingle("SELECT title FROM gradebook_activities WHERE id = ?d 
+                                                AND gradebook_id = ?d", $activity_id, $gradebook_id)->title;
+    
+    return $act_title;
 }

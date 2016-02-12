@@ -203,7 +203,7 @@ if ($is_editor) {
             $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
             $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');
             $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, `range` = ?d, active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $gradebook_range, $newTitle, $start_date, $end_date)->lastInsertID;
-            $log_details = array('id' => $gradebook_id, 'range' => $gradebook_range, 'title' => $newTitle, 'start_date' => $start_date, 'end_date' => $end_date);
+            $log_details = array('id' => $gradebook_id, 'gradebook_range' => $gradebook_range, 'title' => $newTitle, 'start_date' => $start_date, 'end_date' => $end_date);
             Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_INSERT, $log_details);
             Session::Messages($langCreateGradebookSuccess, 'alert-success');
             redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
@@ -265,7 +265,7 @@ if ($is_editor) {
             foreach ($gu as $u) {
                 delete_gradebook_user($gradebook_id, $u);
             }
-            $log_details = array('id' => $gradebook_id, 'title' => get_attendance_title($gradebook_id), 'action' => 'delete users', 'user_count' => count($gu),'users' => $gu);
+            $log_details = array('id' => $gradebook_id, 'title' => get_gradebook_title($gradebook_id), 'action' => 'delete users', 'user_count' => count($gu),'users' => $gu);
             Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
             
             $already_inserted_users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d
@@ -548,17 +548,21 @@ if ($is_editor) {
     }
 
     //delete gradebook activity
-    elseif (isset($_GET['delete'])) {        
-        $gat = delete_gradebook_activity($gradebook_id, getDirectReference($_GET['delete']));
-        $log_details = array('action' => 'delete activity','id' => $gradebook_id,  'title' => get_gradebook_title($gradebook_id), 'activity_id' => getDirectReference($_GET['delete']),  'activity_title' => $gat);
+    elseif (isset($_GET['delete'])) {
+        $log_details = array('action' => 'delete activity',
+                             'id' => $gradebook_id,  
+                             'title' => get_gradebook_title($gradebook_id), 
+                             'activity_id' => getDirectReference($_GET['delete']), 
+                             'activity_title' => get_gradebook_activity_title($gradebook_id, getDirectReference($_GET['delete'])));
+        delete_gradebook_activity($gradebook_id, getDirectReference($_GET['delete']));        
         Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
     
     // delete gradebook
-    } elseif (isset($_GET['delete_gb'])) {        
-        $gbtitle = get_gradebook_title($_GET['delete_gb']);
-        delete_gradebook(getDirectReference($_GET['delete_gb']));
-        $log_details = array('id' => getDirectReference($_GET['delete_gb']), 'title' => $gbtitle);
+    } elseif (isset($_GET['delete_gb'])) {                
+        $log_details = array('id' => getDirectReference($_GET['delete_gb']), 
+                             'title' => get_gradebook_title(getDirectReference($_GET['delete_gb'])));
+        delete_gradebook(getDirectReference($_GET['delete_gb']));        
         Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_DELETE, $log_details);
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
     }

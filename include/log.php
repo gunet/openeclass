@@ -953,28 +953,59 @@ class Log {
     }
     
     /**
-     * display action details in gradebooks
-
-     * @global type $langLinkName
+     * 
+     * @brief display action details in gradebooks    
+     * @global type $langTitle
+     * @global type $langType
+     * @global type $langDate
+     * @global type $langStart
+     * @global type $langEnd
+     * @global type $langDelete
+     * @global type $langGradebookWeight
+     * @global type $langVisibility
+     * @global type $langGradebookRange
+     * @global type $langOfGradebookActivity
+     * @global type $langOfGradebookUser
+     * @global type $langOfGradebookUsers
+     * @global type $langAdd
+     * @global type $langDelete
+     * @global type $langGroups
+     * @global type $langUsers
+     * @global type $langUser
+     * @global type $langGradebookDateOutOf
+     * @global type $langGradebookDateIn
+     * @global type $langModify
+     * @global type $langOfGradebookVisibility
+     * @global type $langOfUsers
+     * @global type $langAction
+     * @global type $langGradebookDateRange
+     * @global type $langGradebookRegistrationDateRange
+     * @global type $langGradebookLabs
+     * @global type $langGradebookOral
+     * @global type $langGradebookProgress
+     * @global type $langGradebookOtherType
+     * @global type $langGradebookExams
+     * @global type $langVisibleVals
+     * @global type $langRefreshList
      * @param type $details
      * @return string
      */
     private function gradebook_action_details($details){
-        global $langTitle, $langType, $langDate, $langStart, $langEnd, $langGradebookWeight, $langVisibility, $langGradebookRange, $langOfGradebookActivity, 
-                $langOfGradebookUser, $langOfGradebookUsers, $langOfGradebookGroups, $langAdd, $langDelete, $langGroups, $langUsers, $langUser, $langGradebookDateOutOf, $langGradebookDateIn,
-                $langModify, $langOfGradebookVisibility, $langOfGradebookSettings, $langAction, $langGradebookDateRange, $langGradebookRegistrationDateRange,
+        global $langTitle, $langType, $langDate, $langStart, $langEnd, $langDelete, $langGradebookWeight, $langVisibility, $langGradebookRange, $langOfGradebookActivity, 
+                $langOfGradebookUser, $langOfGradebookUsers, $langAdd, $langDelete, $langGroups, $langUsers, $langUser, $langGradebookDateOutOf, $langGradebookDateIn,
+                $langModify, $langOfGradebookVisibility, $langOfUsers, $langAction, $langGradebookDateRange, $langGradebookRegistrationDateRange,
                 $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType, $langGradebookExams, $langVisibleVals, $langRefreshList;
         
         $langActivityType = array('', $langGradebookOral, $langGradebookLabs, $langGradebookProgress, $langGradebookExams, $langGradebookOtherType);
         
-        $d = unserialize($details);
+        $d = unserialize($details);        
         $content = "";
         $separator = function() use(&$content) {return empty($content)? "":", ";};
         //Gradebook basic info
         if(isset($d['title'])){
             $content .= "$langTitle: {$d['title']}";
         }
-        if(isset($d['range'])){
+        if(isset($d['gradebook_range'])){
             $content .= $separator()."$langGradebookRange: ".$d['gradebook_range'];
         }
         if(isset($d['start_date'])){
@@ -988,11 +1019,10 @@ class Log {
             $content .= $separator()."$langAction: ";
             if($d['action'] == 'change gradebook visibility'){
                 $content .= "$langModify $langOfGradebookVisibility";
-                $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visibility']]}";
-                
+                $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visibility']]}";                
             }
             //Gradebook activities
-            elseif($d['action'] == 'add activity' || 'modify activity'){
+            elseif($d['action'] == 'add activity' or $d['action'] == 'modify activity'){
                 $content .= ($d['action'] == 'add activity')? "$langAdd $langOfGradebookActivity":"$langModify $langOfGradebookActivity";
                 if(isset($d['activity_type']) && isset($langActivityType[$d['activity_type']])){
                     $content .= $separator()."$langType: {$langActivityType[$d['activity_type']]}";
@@ -1010,8 +1040,8 @@ class Log {
                     $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visible']]}";
                 }
             }
-            elseif($d['action'] == 'delete activity'){
-                $content .= "$langAdd $langOfGradebookActivity";
+            elseif($d['action'] == 'delete activity'){             
+                $content .= "$langDelete $langOfGradebookActivity";
                 if(isset($d['activity_title'])){
                     $content .= $separator()."$langTitle: {$d['activity_title']}";
                 }
@@ -1021,10 +1051,9 @@ class Log {
                 $content .= "$langAdd $langOfUsers";
                 if(isset($d['user_count'])){
                     $content .= $separator()."$langUsers: {$d['user_count']}";
-                }
-                
+                }                
             }
-            elseif($d['action'] == 'delete user' || $d['action'] == 'delete user'){
+            elseif($d['action'] == 'delete users'){
                 $content .= ($d['action'] == 'delete user')? "$langDelete $langOfGradebookUser":"$langDelete $langOfGradebookUsers";
                 if(isset($d['user_name'])){
                     $content .= $separator()."$langUser: {$d['user_name']}";
@@ -1043,7 +1072,7 @@ class Log {
                     $content .= $separator()."$langUsers: {$d['user_count']}";
                 }
             }
-            elseif($d['action'] == 'add users in date range' || $d['action'] == 'delete users in date range'){
+            elseif($d['action'] == 'add users in date range' || $d['action'] == 'delete users out of date range'){
                 $content .= ($d['action'] == 'add users in date range')? "$langAdd $langOfUsers $langGradebookDateIn $langGradebookDateRange":"$langDelete $langOfUsers $langGradebookDateOutOf $langGradebookDateRange";
                 if(isset($d['user_count'])){
                     $content .= $separator()."$langUsers: {$d['user_count']}";
