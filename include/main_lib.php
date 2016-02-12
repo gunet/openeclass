@@ -129,6 +129,7 @@ define('FREE_TEXT', 6);
 define('FILL_IN_BLANKS_TOLERANT', 7);
 
 // exercise attempt types
+define('ATTEMPT_ACTIVE', 0);
 define('ATTEMPT_COMPLETED', 1);
 define('ATTEMPT_PENDING', 2);
 define('ATTEMPT_PAUSED', 3);
