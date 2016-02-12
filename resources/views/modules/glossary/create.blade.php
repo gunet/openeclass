@@ -34,7 +34,7 @@
                          {!! $notes_rich !!}
                      </div>
                 </div>
-
+                {!! isset($category_selection) ? $category_selection : "" !!}
                <div class='form-group'>    
                    <div class='col-sm-10 col-sm-offset-2'>
                        {!! $form_buttons !!}

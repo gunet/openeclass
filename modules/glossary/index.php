@@ -295,7 +295,7 @@ if ($is_editor) {
         $data['category_selection'] = '';
         if ($categories) {
             $categories[0] = '-';
-            $indirectcategories[0] = '-';
+            array_unshift($indirectcategories, "-");
             $data['category_selection'] = "
                         <div class='form-group'>
                              <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
