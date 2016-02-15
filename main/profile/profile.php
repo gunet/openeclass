@@ -121,8 +121,7 @@ if (isset($_POST['submit'])) {
     //add custom profile fields required variables
     augment_registered_posted_variables_arr($var_arr);
     
-    $all_ok = register_posted_variables($var_arr, 'all');
-
+    $all_ok = register_posted_variables($var_arr, 'all');    
     $departments = null;
     if (!get_config('restrict_owndep')) {
         if (!isset($_POST['department']) and !$is_admin) {
@@ -409,8 +408,8 @@ $tool_content .=
 if ($allow_name_change) {
     $tool_content .= "<input type='text' class='form-control' name='givenname_form' id='givenname_form' value='$givenname_form'>";
 } else {
-    $tool_content .= "
-            <p class='form-control-static'>$givenname_form</p>";
+    $tool_content .= "<p class='form-control-static'>$givenname_form</p>";
+    $tool_content .= "<input type='hidden' name='givenname_form' value='$givenname_form'>";
 }
 
 $tool_content .= "</div></div>";
@@ -420,6 +419,7 @@ if ($allow_name_change) {
     $tool_content .= "<input type='text' class='form-control' name='surname_form' id='surname_form' value='$surname_form'>";
 } else {
     $tool_content .= "<p class='form-control-static'>$surname_form</p>";
+    $tool_content .= "<input type='hidden' name='surname_form' value='$surname_form'>";
 }
 $tool_content .= "</div></div>";
 $tool_content .= "<div class='form-group'><label for='username_form' class='col-sm-2 control-label'>$langUsername:</label>";
