@@ -208,10 +208,8 @@ foreach ($result as $row) {
             } else {
                 $tool_content .= "<td class='text-center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
-
-            $tool_content .= "<td class='text-center'>$results_link</td>";
-
             $tool_content .= "
+                    <td class='text-center'>$results_link</td>
                     <td class='text-center'>$status</td>";
             if ($is_editor) {
             $tool_content .= "
