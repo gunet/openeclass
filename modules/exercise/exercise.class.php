@@ -62,8 +62,7 @@ if (!class_exists('Exercise')) {
          *
          * @author - Olivier Brouckaert
          */
-
-        function Exercise() {
+        public function __construct() {
             $this->id = 0;
             $this->exercise = '';
             $this->description = '';

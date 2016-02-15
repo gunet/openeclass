@@ -45,8 +45,7 @@ if (!class_exists('Question')):
          *
          * @author - Olivier Brouckaert
          */
-
-        function Question() {
+        public function __construct() {
             $this->id = 0;
             $this->question = '';
             $this->description = '';
@@ -57,7 +56,7 @@ if (!class_exists('Question')):
             $this->category = 0;
             $this->exerciseList = array();
         }
-
+        
         /**
          * reads question informations from the data base
          *
