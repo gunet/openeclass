@@ -937,18 +937,6 @@ function print_a($TheArray) {
 }
 
 /**
- * Function print_html_r
- *
- * Used for debugging purposes. Dumps array to browser
- *
- * @param array $arr
- */
-function print_html_r($TheArray) {
-    echo nl2br(eregi_replace(" ", " ", print_r($TheArray, TRUE)));
-    echo "<br /><br />";
-}
-
-/**
  * Function array2html
  *
  * Used for debugging purposes. Returns an html string with array keys and values
