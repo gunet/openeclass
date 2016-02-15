@@ -33,7 +33,7 @@ $base_url = 'index.php?course=' . $course_code;
 $cat_url = 'categories.php?course=' . $course_code;
 
 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
-$toolName = $langGlossary;
+$toolName = $langCategories;
 
 $categories = array();
 $q = Database::get()->queryArray("SELECT id, name, description, `order`
