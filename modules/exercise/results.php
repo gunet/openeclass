@@ -91,13 +91,14 @@ if($exerciseDescription_temp) {
 }
 $tool_content .= "</table>
 </div><br>";
-$status = (isset($_GET['status'])) ? intval($_GET['status']) : 0; 
+$status = (isset($_GET['status'])) ? intval($_GET['status']) : ''; 
 $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId' ".(($status == 0)? 'selected' : '').">--- $langCurrentStatus ---</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_COMPLETED."' ".(($status == 1)? 'selected' : '').">$langAttemptCompleted</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PENDING."' ".(($status == 2)? 'selected' : '').">$langAttemptPending</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PAUSED."' ".(($status == 3)? 'selected' : '').">$langAttemptPaused</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_CANCELED."' ".(($status == 4)? 'selected' : '').">$langAttemptCanceled</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId'>--- $langCurrentStatus ---</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_ACTIVE."' ".(($status === 0)? 'selected' : '').">$langAttemptActive</option>               
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_COMPLETED."' ".(($status === 1)? 'selected' : '').">$langAttemptCompleted</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PENDING."' ".(($status === 2)? 'selected' : '').">$langAttemptPending</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PAUSED."' ".(($status === 3)? 'selected' : '').">$langAttemptPaused</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_CANCELED."' ".(($status === 4)? 'selected' : '').">$langAttemptCanceled</option>
         </select>";
 //This part of the code could be improved
 if ($is_editor) {
@@ -105,7 +106,7 @@ if ($is_editor) {
 } else {
     $result[] = (object) array('uid' => $uid);
 }
-$extra_sql = ($status != 0 ) ? ' AND attempt_status = '.$status : '';
+$extra_sql = ($status != '' ) ? ' AND attempt_status = '.$status : '';
 
 foreach ($result as $row) {
     $sid = $row->uid;
