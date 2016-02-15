@@ -2,9 +2,9 @@
 
 /*
  * ========================================================================
- * Open eClass 3.2 - E-learning and Course Management System
+ * Open eClass 3.3 - E-learning and Course Management System
  * ========================================================================
-  Copyright(c) 2003-2015  Greek Universities Network - GUnet
+  Copyright(c) 2003-2016  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
 
   Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -2547,12 +2547,13 @@ function check_username_sensitivity($posted, $dbuser) {
  * @return boolean
  */
 function get_user_email_notification($user_id, $course_id = null) {
-
+    // check if user is active
+    if (!Database::get()->querySingle('SELECT expires_at < NOW() FROM user WHERE id = ?d', $user_id)) {
+        return false;
+    }
     // checks if a course is active or not
-    if (isset($course_id)) {
-        if (course_status($course_id) == COURSE_INACTIVE) {
-            return false;
-        }
+    if (isset($course_id) and course_status($course_id) == COURSE_INACTIVE) {
+        return false;
     }
     // checks if user has verified his email address
     if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
