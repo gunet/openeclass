@@ -91,7 +91,7 @@ if($exerciseDescription_temp) {
 }
 $tool_content .= "</table>
 </div><br>";
-$status = (isset($_GET['status'])) ? intval($_GET['status']) : 0; 
+$status = (isset($_GET['status'])) ? intval($_GET['status']) : ''; 
 $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId'>--- $langCurrentStatus ---</option>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_ACTIVE."' ".(($status === 0)? 'selected' : '').">$langAttemptActive</option>            
