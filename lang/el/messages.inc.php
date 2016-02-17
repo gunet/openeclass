@@ -1023,7 +1023,7 @@ $langSendMessage = "Αποστολή μηνύματος";
 $langContactMessage = "Πληκτρολογήστε το κείμενο του μηνύματός σας. Αυτό θα σταλεί μεσω email στους υπεύθυνους $langsTeachers του $langsOfCourse.";
 $langSendingMessage = "Η αίτηση στάλθηκε στους $langsTeachers του $langsOfCourse:";
 $langErrorSendingMessage = "Σφάλμα αποστολής! Η αίτηση δε στάλθηκε.";
-$langContactIntro = "Ο χρήστης της πλατφόρμας $siteName με όνομα %s (<%s>) σας έστειλε την παρακάτω αίτηση εγγραφής.";
+$langContactIntro = "Ο χρήστης της πλατφόρμας $siteName με όνομα %s (%s <%s>) σας έστειλε την παρακάτω αίτηση εγγραφής.";
 $langContactIntroFooter = "Για να διαχειριστείτε τις αιτήσεις εγγραφής στο $langsCourse κάντε κλικ ";
 
 $langNonUserContact = "Για να επικοινωνήσετε με τους υπεύθυνους $langsTeachers
