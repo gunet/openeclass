@@ -166,8 +166,8 @@ $langDisableModulesHelp = 'Μπορείτε να επιλέξετε ποια α�
 $langAutoEnroll = 'Αυτόματη εγγραφή';
 $langAutoEnrollNew = 'Προσθήκη κανόνα';
 $langAutoEnrollAdded = 'Ο κανόνας προστέθηκε';
-$langAutoEnrollCourse = 'Αυτόματη εγγραφή στα $langsCourses';
-$langAutoEnrollDepartment = 'Αυτόματη εγγραφή σε όλα τα $langsCourses των τμημάτων';
+$langAutoEnrollCourse = "Αυτόματη εγγραφή στα $langsCourses";
+$langAutoEnrollDepartment = "Αυτόματη εγγραφή σε όλα τα $langsCourses των τμημάτων";
 $langAutoEnrollRule = 'Κανόνας';
 $langAutoEnrollDeleted = 'Ο κανόνας διαγράφτηκε';
 $langApplyTo = 'Όταν χρήστες';
@@ -874,7 +874,7 @@ Public License (GNU GPL).<br><br>
 Το περιεχόμενο των ηλεκτρονικών ' . $langsOfCourses . ' που φιλοξενεί η πλατφόρμα ' . $siteName . ', 
 καθώς και τα πνευματικά δικαιώματα του υλικού αυτού, ανήκουν στους συγγραφείς τους 
 και το GUnet δεν διεκδικεί δικαιώματα σε αυτό. Για οποιαδήποτε χρήση ή αναδημοσίευση του περιεχομένου 
-παρακαλούμε επικοινωνήστε με τους υπεύθυνους των αντίστοιχων ' . $langsOfCourses . '';
+παρακαλούμε επικοινωνήστε με τους υπεύθυνους των αντίστοιχων ' . $langsOfCourses;
 $langUsageTerms = 'Όροι Χρήσης';
 
 /* * *****************************************************
@@ -891,7 +891,7 @@ $langBlockDeleted = "Η περιγραφή διαγράφηκε!";
 $langCourseDescriptionShort = "Περιγραφή";
 
 $titreBloc = array(
-    'Περιεχόμενο $langsOfCourse',
+    "Περιεχόμενο $langsOfCourse",
     'Μαθησιακοί στόχοι',
     'Βιβλιογραφία',
     'Μέθοδοι διδασκαλίας',
@@ -916,7 +916,7 @@ $langIcon = "Εικονίδιο";
 $langRegistered = "εγγεγραμμένοι";
 $langOneRegistered = "εγγεγραμμένος";
 $langIdentity = "Ταυτότητα $langOfCourse";
-$langCourseS = "$langsCourse";
+$langCourseS = $langsCourse;
 $langRSSFeed = 'Ροή RSS';
 $langRefernce = "Αναφορά";
 $langCitation = "Βιβλιογραφική αναφορά $langsOfCourse";
@@ -4236,7 +4236,7 @@ $langOpenCoursesType = "$langCourse τύπου";
 $langOpenCoursesWasNotSet = "Το $langsCourse δεν έχει χαρακτηριστεί ως τύπου Open Courses";
 $langOpenCoursesWasSet = "Το $langsCourse έχει χαρακτηριστεί";
 $langLastSubmission = "Τελευταία Υποβολή";
-$langCMeta['courseGroup'] = "$langCourse";
+$langCMeta['courseGroup'] = $langCourse;
 $langCMeta['instructorGroup'] = "Διδάσκοντες";
 $langCMeta['curriculumGroup'] = "Προγράμματα Σπουδών";
 $langCMeta['unitsGroup'] = "Θεματικές Ενότητες";
