@@ -292,10 +292,15 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                               WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d";
                     $result_g = Database::get()->queryArray($sql_g, $course_id, $uid);            
                 }
-                
+                                    
                 foreach ($result_g as $res_g)
                 {
-                    $tool_content .= "<option value = '_$res_g->id'>".q($res_g->name)."</option>";
+                    if (isset($_GET['group_id']) and $_GET['group_id'] == $res_g->id) {
+                        $selected_group = " selected";
+                    } else {
+                        $selected_group = "";
+                    }
+                    $tool_content .= "<option value = '_$res_g->id' $selected_group>".q($res_g->name)."</option>";
                 }
             } else {
                 //if user is student and student-student messages not allowed for course messages show teachers
