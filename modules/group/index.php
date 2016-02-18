@@ -609,7 +609,7 @@ if ($is_editor) {
                 </tr>
                 <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
                 </tr></table></div></div></div>";
-    } else {
+    } else {        
         $tool_content .= "<div class='table-responsive'>
             <table class='table-default'>
                 <tr class='list-header'>
@@ -618,7 +618,7 @@ if ($is_editor) {
                   <th width='50'>$langGroupMembersNum</th>
                   <th width='50'>$langMax</th>
                   <th class='text-center' style='width:45px;'>".icon('fa-gears', $langActions)."</th>
-                </tr>";
+                </tr>";        
         foreach ($q as $row) {
             $group_id = $row->id;
             
@@ -626,7 +626,7 @@ if ($is_editor) {
             
             $tool_content .= "<td class='text-left'>";
             // Allow student to enter group only if he's a member
-            if ($is_member) {
+            if ($is_member or $is_tutor) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
                         "</a> <span style='color:#900; weight:bold;'>($langMyGroup)</span>";
             } else {
