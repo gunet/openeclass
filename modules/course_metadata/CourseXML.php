@@ -79,7 +79,7 @@ class CourseXMLElement extends SimpleXMLElement {
         global $course_code, $langSubmit, $langRequiredFields, $langBack;;
         $out = action_bar(array(
         array('title' => $langBack,
-            'url' => "index.php",
+            'url' => "../course_info/index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')),false);
         $out .= "<div class='right smaller'>$langRequiredFields</div>";
