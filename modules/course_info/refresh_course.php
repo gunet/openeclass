@@ -327,5 +327,5 @@ function clear_stats() {
     $action = new action();
     $action->summarizeAll();
 
-    return "<div class='alert alert-info'>$langStatsCleared</div>";
+    return "<p>$langStatsCleared</p>";
 }
