@@ -3991,11 +3991,19 @@ function trans($var_name, $var_array = []) {
     if (preg_match("/\['.+'\]/", $var_name)) {
         preg_match_all("([^\['\]]+)", $var_name, $matches);
         global ${$matches[0][0]};
-        
-        return vsprintf(${$matches[0][0]}[$matches[0][1]], $var_array);
+
+        if ($var_array) {
+            return vsprintf(${$matches[0][0]}[$matches[0][1]], $var_array);
+        } else {
+            return ${$matches[0][0]}[$matches[0][1]];
+        }        
     } else {
         global ${$var_name};
-        
-        return vsprintf(${$var_name}, $var_array);
+
+        if ($var_array) {
+            return vsprintf(${$var_name}, $var_array);
+        } else {
+            return ${$var_name};
+        }
     }   
 }

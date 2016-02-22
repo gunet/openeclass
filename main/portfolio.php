@@ -123,8 +123,7 @@ jQuery(document).ready(function() {
 </script>';
 
 require_once 'perso.php';
-
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
         array('title' => $langRegCourses, 
               'url' => $urlAppend . 'modules/auth/courses.php',
               'icon' => 'fa-check',
@@ -137,162 +136,31 @@ $tool_content .= action_bar(array(
               'level' => 'primary-label',
               'button-class' => 'btn-success')));
 
-$tool_content .= "
-    <div class='row'>
-        <div id='my-courses' class='col-md-7'>
-            <div class='row'>
-                <div class='col-md-12'>
-                    <div class='content-title h2'>".trans('langMyCourses')."</div>
-                    <div class='panel'>
-                        <div class='panel-body'>
-                            $perso_tool_content[lessons_content]                       
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class='row'>
-                <div class='col-md-12 my-announcement-list'>
-                    <div class='content-title h2'>".trans('langMyPersoAnnouncements')."</div>
-                    <div class='panel'>
-                        <div class='panel-body'>
-                            <ul class='tablelist'>";
-                                if(!empty($user_announcements)){
-                                    $tool_content.=$user_announcements;
-                                }else{
-                                    $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langNoRecentAnnounce - </div></li>";
-                                }
-                                $tool_content.="</ul>
-                        </div>
-                        <div class='panel-footer clearfix'>
-                            <div class='pull-right'><a href='../modules/announcements/myannouncements.php'><small>$langMore&hellip;</small></a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>";
-        $portfolio_page_main = new \Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
-        foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
-            $tool_content .= $widget->run($key);
-        }        
-$tool_content .= "            
-        </div>
-    <div class='col-md-5'>
-        <div class='row'>
-            <div class='col-md-12'>
-                <div class='content-title h2'>".trans('langMyAgenda')."</div>
-                <div class='panel'>
-                    <div class='panel-body'>
-                        $perso_tool_content[personal_calendar_content]
-                    </div>
-                    <div class='panel-footer'>
-                        <div class='row'>
-                            <div class='col-sm-6 event-legend'>
-                                <div>
-                                    <span class='event event-important'></span><span>".trans('langAgendaDueDay')."</span>
-                                </div>
-                                <div>
-                                    <span class='event event-info'></span><span>".trans('langAgendaCourseEvent')."</span>
-                                </div>
-                            </div>
-                            <div class='col-sm-6 event-legend'>
-                                <div>
-                                    <span class='event event-success'></span><span>".trans('langAgendaSystemEvent')."</span>
-                                </div>
-                                <div>
-                                    <span class='event event-special'></span><span>".trans('langAgendaPersonalEvent')."</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col-md-12 my-messages-list'>
-                <div class='content-title h2'>$langMyPersoMessages</div>
-                <div class='panel'>
-                    <div class='panel-body'>
-                        <ul class='tablelist'>";
-                        if(!empty($user_messages)){
-                            $tool_content.=$user_messages;
-                        }else{
-                            $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langDropboxNoMessage- </div></li>";
-                        }
-                        $tool_content.="</ul>
-                    </div>
-                    <div class='panel-footer clearfix'>
-                        <div class='pull-right'><a href='{$urlAppend}modules/dropbox/'><small>$langMore&hellip;</small></a></div>
-                    </div>
-                </div>
-            </div>
-        </div>";
-        $portfolio_page_sidebar = new \Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
-        foreach ($portfolio_page_sidebar->getUserAndAdminWidgets($uid) as $key => $widget) {
-            $tool_content .= $widget->run($key);
-        }
-$tool_content .= "        
-    </div>";
+$data['perso_tool_content'] = $perso_tool_content;
+$data['user_announcements'] = $user_announcements;
 
-$userdata = Database::get()->querySingle("SELECT surname, givenname, username, email, status, phone, am, registered_at,
-                has_icon, description, password,
-                email_public, phone_public, am_public
-            FROM user
-            WHERE id = ?d", $uid);
-$numUsersRegistered = Database::get()->querySingle("SELECT COUNT(*) AS numUsers
-        FROM course_user cu1, course_user cu2
-        WHERE cu1.course_id = cu2.course_id AND cu1.user_id = ?d AND cu1.status = ?d AND cu2.status <> ?d;", $uid, USER_TEACHER, USER_TEACHER)->numUsers;
-$lastVisit = Database::get()->querySingle("SELECT * FROM loginout
+$portfolio_page_main = new \Widgets\WidgetArea(PORTFOLIO_PAGE_MAIN);
+$data['portfolio_page_main_widgets'] = '';
+foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
+    $data['portfolio_page_main_widgets'] .= $widget->run($key);
+}      
+$portfolio_page_sidebar = new \Widgets\WidgetArea(PORTFOLIO_PAGE_SIDEBAR);
+$data['portfolio_page_sidebar_widgets'] = "";
+foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
+    $data['portfolio_page_sidebar_widgets'] .= $widget->run($key);
+} 
+$data['departments'] = $user->getDepartmentIds($uid);
+
+$data['lastVisit'] = Database::get()->querySingle("SELECT * FROM loginout
                         WHERE id_user = ?d ORDER by idLog DESC LIMIT 1", $uid);
-if ($lastVisit) {
-    $lastVisitLabel = "<br><span class='tag'>$langProfileLastVisit : </span><span class='tag-value text-muted'>" .
-        claro_format_locale_date($dateFormatLong, strtotime($lastVisit->when)) . "</span>";
-} else {
-    $lastVisitLabel = '';
-}
 
-$tool_content .= "
-</div>
-<div id='profile_box' class='row'>
-    <div class='col-md-12'>
-        <div class='content-title h2'>$langCompactProfile</div>
-        <div class='panel'>
-            <div class='panel-body'>
-                <div class='row'>
-                    <div class='col-xs-4 col-sm-2'>
-                        <img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:80px;' class='img-circle center-block img-responsive' alt='$langProfileImage'><br>
-                        <div class='not_visible text-center' style='margin:0px;'>".q($_SESSION['uname'])."</div>
-                    </div>
-                    <div class='col-xs-8 col-sm-5'>
-                    <div class='h3' style='font-size: 18px; margin: 10px 0 10px 0;'><a href='".$urlServer."main/profile/display_profile.php'>".q("$_SESSION[givenname] $_SESSION[surname]")."</a></div>
-                    <div><div class='h5'><span class='tag'>$langHierarchyNode: </span></div><span class='tag-value text-muted'>";
-                    $departments = $user->getDepartmentIds($uid);
-                        $i = 1;
-                        foreach ($departments as $dep) {
-                            $br = ($i < count($departments)) ? '<br>' : '';
-                            $tool_content .= $tree->getFullPath($dep) . $br;
-                            $i++;
-                        }
-                    $tool_content .= "</span></div>$lastVisitLabel</div>
-                    <div class='col-xs-12 col-sm-5'>
-                        <ul class='list-group'>
-                            <li class='list-group-item'>
-                              <span class='badge'>$student_courses_count</span>
-                              <span class='text-muted'>$langSumCoursesEnrolled</span>
-                            </li>
-                            ";
-                            if( !$is_editor && $teacher_courses_count>0 ) {
-                                $tool_content .= "<li class='list-group-item'>
-                                                    <span class='badge'>$teacher_courses_count</span>
-                                                    <span class='text-muted'>$langSumCoursesSupport</span>
-                                                    </li>";
-                            }
-                            $tool_content .= "
-                        </ul>
-                        <div class='pull-right'><a href='".$urlServer."main/profile/password.php'><small>$langProfileQuickPassword</small></a></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-";
-draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);
+$data['teacher_courses_count'] = $teacher_courses_count;
+$data['student_courses_count'] = $student_courses_count;
+
+$data['menuTypeID'] = 1;
+view('portfolio.index', $data);
+
+
+
+
+//draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);
