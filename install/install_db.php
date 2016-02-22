@@ -1591,6 +1591,15 @@ $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_department` (
     FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
     FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE) $charset_spec");
 
+// Conference table
+$db->query("CREATE TABLE IF NOT EXISTS `conference` (
+    `conf_id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) NOT NULL,
+    `conf_description` text NOT NULL,
+    `status` enum('active','inactive') DEFAULT NULL,
+    `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`conf_id`)) $charset_spec");
+
 $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();
