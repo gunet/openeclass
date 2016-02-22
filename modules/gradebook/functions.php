@@ -735,13 +735,13 @@ function student_view_gradebook($gradebook_id) {
                                                             WHERE gradebook_activity_id = ?d
                                                                 AND uid = ?d", $details->id, $uid);
             if ($sql) {
-                $tool_content .= $sql->grade * $range. ' / '.$range;
+                $tool_content .= round($sql->grade * $range, 2) . ' / '.$range;
             } else {
                 $tool_content .= "&mdash;";
             }
             $tool_content .= "</td>";
             $tool_content .= "<td width='70' class='text-center'>";
-            $tool_content .= $sql ? ($sql->grade * $range * $details->weight / 100)." / $range</td>" : "&mdash;";
+            $tool_content .= $sql ? round($sql->grade * $range * $details->weight / 100, 2)." / $range</td>" : "&mdash;";
             $tool_content .= "</td>
             </tr>";
         } // end of while
