@@ -33,7 +33,7 @@ if ($is_editor) {
     $bom = "\357\273\277";
 
     $crlf = "\r\n";
-    $output = "$bom$langSurname\t$langName\t$langAm\t$langStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
+    $output = "$bom$langSurname\t$langName\t$langAm\t$langStart\t$langExerciseDuration\t$langStudentTotalScore\t$langTotalScore$crlf";
     $output .= "$crlf";
 
     $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ?d", $exerciseId);
@@ -62,7 +62,8 @@ if ($is_editor) {
             }
             $totalScore = $row2->total_score;
             $totalWeighting = $row2->total_weighting;
-            $output .= csv_escape("$totalScore/$totalWeighting") . "\t";
+            $output .= csv_escape("$totalScore") . "\t";
+            $output .= csv_escape("$totalWeighting") . "\t";
             $output .= "$crlf";
         }
     }

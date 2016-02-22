@@ -134,7 +134,7 @@ foreach ($result as $row) {
                 <tr>
                   <th class='text-center'>" . $langStart . "</td>
                   <th class='text-center'>" . $langExerciseDuration . "</td>
-                  <th class='text-center'>" . $langYourTotalScore2 . "</td>
+                  <th class='text-center'>" . $langTotalScore . "</td>
                   <th class='text-center'>" . $langCurrentStatus. "</th>
                   ". ($is_editor ? "<th class='text-center'>" . icon('fa-gears'). "</th>" : "") ."
                 </tr>";
