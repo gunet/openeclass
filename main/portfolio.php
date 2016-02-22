@@ -34,7 +34,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 
-$tree = new Hierarchy();
+$data['tree'] = new Hierarchy();
 $user = new User();
 
 //ModalBoxHelper::loadModalBox();
