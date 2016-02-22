@@ -1946,8 +1946,8 @@ function userGradebookTotalActivityStats ($activity, $gradebook) {
     if ($participantsNumber) {
         $mean = round($sumGrade * $gradebook->range / $participantsNumber, 2);
         return "<i>$langUsers:</i> $participantsNumber<br>"
-             . "$langMinValue: $userGradebookTotalActivityMin/$total_score<br> "
-             . "$langMaxValue: $userGradebookTotalActivityMax/$total_score<br> "
+             . "$langMinValue: " . round($userGradebookTotalActivityMin, 2) . "/$total_score<br> "
+             . "$langMaxValue: " . round($userGradebookTotalActivityMax, 2) . "/$total_score<br> "
              . "<i>$langMeanValue:</i> $mean/$total_score";
     } else {
         return "-";
