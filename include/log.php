@@ -1040,7 +1040,7 @@ class Log {
                     $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visible']]}";
                 }
             }
-            elseif($d['action'] == 'delete activity'){             
+            elseif($d['action'] == 'delete activity'){
                 $content .= "$langDelete $langOfGradebookActivity";
                 if(isset($d['activity_title'])){
                     $content .= $separator()."$langTitle: {$d['activity_title']}";
@@ -1087,18 +1087,39 @@ class Log {
         return $content;
     }
     
-
-
    /**
-     * display action details in attendance module
-     * @param type $details
-     * @return string
-     */
+    * @brief display action details in attendance module
+    * @global type $langTitle
+    * @global type $langDate
+    * @global type $langStart
+    * @global type $langEnd
+    * @global type $langAttendanceLimit
+    * @global type $langVisibility
+    * @global type $langOfGradebookActivity
+    * @global type $langOfGradebookUser
+    * @global type $langOfGradebookUsers
+    * @global type $langAdd
+    * @global type $langDelete
+    * @global type $langGroups
+    * @global type $langUsers
+    * @global type $langUser
+    * @global type $langGradebookDateOutOf
+    * @global type $langGradebookDateIn
+    * @global type $langOfGradebookVisibility
+    * @global type $langAction
+    * @global type $langGradebookDateRange
+    * @global type $langGradebookRegistrationDateRange
+    * @global type $langModify
+    * @global type $langVisibleVals
+    * @global type $langRefreshList
+    * @param type $details
+    * @return string
+    */
     private function attendance_action_details($details){
-        global $langTitle, $langType, $langDate, $langStart, $langEnd, $langAttendanceLimit, $langVisibility, $langOfGradebookActivity, 
-                $langOfGradebookUser, $langOfGradebookUsers, $langOfGradebookGroups, $langAdd, $langDelete, $langGroups, $langUsers, $langUser, $langGradebookDateOutOf, $langGradebookDateIn,
-                $langModify, $langOfGradebookVisibility, $langOfGradebookSettings, $langAction, $langGradebookDateRange, $langGradebookRegistrationDateRange,
-                $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType, $langGradebookExams, $langVisibleVals, $langRefreshList;
+        global $langTitle, $langDate, $langStart, $langEnd, $langAttendanceLimit, $langVisibility, $langOfGradebookActivity, 
+                $langOfGradebookUser, $langOfGradebookUsers, $langAdd, $langDelete, $langGroups, $langUsers, $langUser, $langGradebookDateOutOf, 
+                $langGradebookDateIn, $langOfGradebookVisibility, $langAction, $langGradebookDateRange, $langGradebookRegistrationDateRange,
+                $langModify, $langVisibleVals, $langRefreshList, $langOfUsers;
         
         $d = unserialize($details);
         $content = "";
@@ -1107,8 +1128,8 @@ class Log {
         if(isset($d['title'])){
             $content .= "$langTitle: {$d['title']}";
         }
-        if(isset($d['limit'])){
-            $content .= $separator()."$langAttendanceLimit: ".$d['gradebook_range'];
+        if(isset($d['attendance_limit'])){
+            $content .= $separator()."$langAttendanceLimit: ".$d['attendance_limit'];
         }
         if(isset($d['start_date'])){
             $content .= $separator()."$langStart: ".$d['start_date'];
@@ -1124,7 +1145,7 @@ class Log {
                 
             }
             //Attendance activities
-            elseif($d['action'] == 'add activity' || 'modify activity'){
+            elseif($d['action'] == 'add activity' or $d['action'] == 'modify activity'){
                 $content .= ($d['action'] == 'add activity')? "$langAdd $langOfGradebookActivity":"$langModify $langOfGradebookActivity";
                 if(isset($d['activity_title'])){
                     $content .= $separator()."$langTitle:</label> {$d['activity_title']}";
@@ -1136,8 +1157,8 @@ class Log {
                     $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visible']]}";
                 }
             }
-            elseif($d['action'] == 'delete activity'){
-                $content .= "$langAdd $langOfGradebookActivity";
+            elseif($d['action'] == 'delete activity'){             
+                $content .= "$langDelete $langOfGradebookActivity";
                 if(isset($d['activity_title'])){
                     $content .= $separator()."$langTitle: {$d['activity_title']}";
                 }
@@ -1150,7 +1171,7 @@ class Log {
                 }
                 
             }
-            elseif($d['action'] == 'delete user' || $d['action'] == 'delete user'){
+            elseif($d['action'] == 'delete user'){
                 $content .= ($d['action'] == 'delete user')? "$langDelete $langOfGradebookUser":"$langDelete $langOfGradebookUsers";
                 if(isset($d['user_name'])){
                     $content .= $separator()."$langUser: {$d['user_name']}";
@@ -1179,8 +1200,7 @@ class Log {
                 }
                 
             }
-        }
-        
+        }        
         return $content;
     }
     

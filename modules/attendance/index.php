@@ -59,18 +59,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 //Datepicker
 load_js('tools.js');
 load_js('jquery');
-load_js('bootstrap-datetimepicker');
 load_js('datatables');
 
 @$head_content .= "
 <script type='text/javascript'>
 $(function() {
-    $('#startdatepicker, #enddatepicker').datetimepicker({    
-            format: 'dd-mm-yyyy', 
-            pickerPosition: 'bottom-left', 
-            language: '".$language."',
-            autoclose: true 
-        });
     var oTable = $('#users_table{$course_id}').DataTable ({
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -466,7 +459,7 @@ if ($is_editor) {
             $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
             $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');             
             Database::get()->querySingle("UPDATE attendance SET `title` = ?s, `limit` = ?d, `start_date` = ?t, `end_date` = ?t WHERE id = ?d ", $attendance_title, $attendance_limit, $start_date, $end_date, $attendance_id);
-            $log_details = array('id' => $attendance_id, 'title' => $attendance_title, 'limit' => $attendance_limit, 'star_tdate' => $start_date, 'end_date' => $end_date);
+            $log_details = array('id' => $attendance_id, 'title' => $attendance_title, 'attendance_limit' => $attendance_limit, 'start_date' => $start_date, 'end_date' => $end_date);
             Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
             Session::Messages($langGradebookEdit,"alert-success");
             redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
@@ -533,15 +526,18 @@ if ($is_editor) {
     }
     
     elseif (isset($_GET['delete'])) {
-        $actt = delete_attendance_activity($attendance_id, getDirectReference($_GET['delete']));
-        $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'delete activity', 'act_title' => $actTitle);
+        $log_details = array('id' => $attendance_id, 
+                             'title' => get_attendance_title($attendance_id), 
+                             'action' => 'delete activity', 
+                             'activity_title' => get_attendance_activity_title($attendance_id, getDirectReference($_GET['delete'])));
+        delete_attendance_activity($attendance_id, getDirectReference($_GET['delete']));
         Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
         redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
     
     // delete attendance
-    } elseif (isset($_GET['delete_at'])) {        
-        $attt = delete_attendance($_GET['delete_at']);
-        $log_details = array('id' => $attendance_id, 'title' => $att);
+    } elseif (isset($_GET['delete_at'])) {
+        $log_details = array('id' => $_GET['delete_at'], 'title' => get_attendance_title($_GET['delete_at']));
+        delete_attendance($_GET['delete_at']);        
         Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_DELETE, $log_details);
         redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
