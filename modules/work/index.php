@@ -2266,19 +2266,12 @@ function assignment_details($id, $row) {
     $tool_content .= "
     <div class='panel panel-action-btn-primary'>
         <div class='panel-heading'>
-            <div class='pull-right'>
-            ". (($is_editor) ?
-                    action_button(array(
-                        array(
-                            'title' => $langEditChange,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
-                            'level' => 'primary-label',
-                            'icon' => 'fa-edit'
-                        )
-                    )) : "")."
-            </div>
             <h3 class='panel-title'>
-                $m[WorkInfo]
+                $m[WorkInfo] &nbsp;
+                ". (($is_editor) ?    
+                "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit'>
+                    <span class='fa fa-edit' title='' data-toggle='tooltip' data-original-title='$langEditChange'></span>
+                </a>" : "")."                    
             </h3>
         </div>
         <div class='panel-body'>
