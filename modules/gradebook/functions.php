@@ -295,7 +295,7 @@ function delete_gradebook($gradebook_id) {
 function delete_gradebook_activity($gradebook_id, $activity_id) {
 
     global $langGradebookDel, $langGradebookDelFailure;
-
+    
     $delAct = Database::get()->query("DELETE FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $activity_id, $gradebook_id)->affectedRows;
     Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d", $activity_id);
     if ($delAct) {
@@ -735,13 +735,13 @@ function student_view_gradebook($gradebook_id) {
                                                             WHERE gradebook_activity_id = ?d
                                                                 AND uid = ?d", $details->id, $uid);
             if ($sql) {
-                $tool_content .= $sql->grade * $range. ' / '.$range;
+                $tool_content .= round($sql->grade * $range, 2) . ' / '.$range;
             } else {
                 $tool_content .= "&mdash;";
             }
             $tool_content .= "</td>";
             $tool_content .= "<td width='70' class='text-center'>";
-            $tool_content .= $sql ? ($sql->grade * $range * $details->weight / 100)." / $range</td>" : "&mdash;";
+            $tool_content .= $sql ? round($sql->grade * $range * $details->weight / 100, 2)." / $range</td>" : "&mdash;";
             $tool_content .= "</td>
             </tr>";
         } // end of while
@@ -1422,6 +1422,7 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
             }
         }
     }
+    return array('act_title' => $actTitle, 'act_date' => $actDate, 'act_descr' => $actDesc);
 }
 function update_user_gradebook_activities($gradebook_id, $uid) { 
     require_once 'include/lib/learnPathLib.inc.php';
@@ -1945,8 +1946,8 @@ function userGradebookTotalActivityStats ($activity, $gradebook) {
     if ($participantsNumber) {
         $mean = round($sumGrade * $gradebook->range / $participantsNumber, 2);
         return "<i>$langUsers:</i> $participantsNumber<br>"
-             . "$langMinValue: $userGradebookTotalActivityMin/$total_score<br> "
-             . "$langMaxValue: $userGradebookTotalActivityMax/$total_score<br> "
+             . "$langMinValue: " . round($userGradebookTotalActivityMin, 2) . "/$total_score<br> "
+             . "$langMaxValue: " . round($userGradebookTotalActivityMax, 2) . "/$total_score<br> "
              . "<i>$langMeanValue:</i> $mean/$total_score";
     } else {
         return "-";
@@ -1977,4 +1978,18 @@ function get_gradebook_title($gradebook_id) {
     $gd_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d", $gradebook_id)->title;
 
     return $gd_title;
+}
+
+/**
+ * @brief get activity title from given gradebook and activity
+ * @param type $gradebook_id
+ * @param type $activity_id
+ * @return type
+ */
+function get_gradebook_activity_title($gradebook_id, $activity_id) {
+
+    $act_title = Database::get()->querySingle("SELECT title FROM gradebook_activities WHERE id = ?d 
+                                                AND gradebook_id = ?d", $activity_id, $gradebook_id)->title;
+    
+    return $act_title;
 }

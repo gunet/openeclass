@@ -73,7 +73,7 @@ function display_attendances() {
             $tool_content .= "
                     <tr $row_class>
                         <td>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>".$a->title."</a>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>".q($a->title)."</a>
                         </td>
                         <td>$start_date</td>
                         <td>$end_date</td>";
@@ -127,7 +127,7 @@ function register_user_presences($attendance_id, $actID) {
            $langAm, $langAttendanceBooking, $langID, $langAttendanceEdit, $langCancel;
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
-    $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
+    $tool_content .= "<div class='alert alert-info'>" . q($result->title) . "</div>";
     //record booking
     if(isset($_POST['bookUsersToAct'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -592,7 +592,7 @@ function add_attendance_other_activity($attendance_id) {
 function add_attendance_activity($attendance_id, $id, $type) {
     
     global $course_id;
-    
+    $actTitle = "";
     if ($type == GRADEBOOK_ACTIVITY_ASSIGNMENT) { //  add  assignments
         //checking if it's new or not
         $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d 
@@ -652,7 +652,8 @@ function add_attendance_activity($attendance_id, $id, $type) {
                 }
             }
         }
-    }        
+    }
+    return $actTitle;
 }
 function update_user_attendance_activities($attendance_id, $uid) { 
     $attendanceActivities = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d AND auto = 1", $attendance_id);
@@ -999,7 +1000,7 @@ function attendance_settings($attendance_id) {
                     <div class='form-group".($title_error ? " has-error" : "")."'>
                         <label class='col-xs-12'>$langTitle</label>                           
                         <div class='col-xs-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
+                            <input class='form-control' type='text' placeholder='$langTitle' name='title' value='".q($title)."'>
                             <span class='help-block'>$title_error</span>
                         </div>
                     </div>
@@ -1073,7 +1074,7 @@ function user_attendance_settings($attendance_id) {
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
            $langUserDuration, $langAll, $langSpecificUsers, $head_content,
            $langStudents, $langMove, $langParticipate, $attendance;
-
+                       
     load_js('bootstrap-datetimepicker');
     $head_content .= "    
     <script type='text/javascript'>
@@ -1090,7 +1091,7 @@ function user_attendance_settings($attendance_id) {
     // default values
     $UsersStart = date('d-m-Y', strtotime('now -6 month'));
     $UsersEnd = date('d-m-Y', strtotime('now'));
-            
+
     $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $attendance->start_date)->format('d-m-Y H:i');
     $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $attendance->end_date)->format('d-m-Y H:i');
     $tool_content .= "
@@ -1475,7 +1476,7 @@ function update_attendance_book($uid, $id, $activity, $attendance_id = 0) {
  */
 function delete_attendance($attendance_id) {
     
-    global $course_id, $langAttendanceDeleted;
+    global $course_id, $langAttendanceDeleted, $langAttendanceDelFailure;
     
     $r = Database::get()->queryArray("SELECT id FROM attendance_activities WHERE attendance_id = ?d", $attendance_id);
     foreach ($r as $act) {
@@ -1485,7 +1486,9 @@ function delete_attendance($attendance_id) {
     $action = Database::get()->query("DELETE FROM attendance WHERE id = ?d AND course_id = ?d", $attendance_id, $course_id);
     if ($action) {
         Session::Messages("$langAttendanceDeleted", "alert-success");
-    }
+    } else {
+        Session::Messages("$langAttendanceDelFailure", "alert-danger");
+    }    
 }
 
 /**
@@ -1498,7 +1501,7 @@ function delete_attendance($attendance_id) {
 function delete_attendance_activity($attendance_id, $activity_id) {
     
     global $langAttendanceDel, $langAttendanceDelFailure;
-
+    
     $delAct = Database::get()->query("DELETE FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $activity_id, $attendance_id)->affectedRows;
     Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $activity_id)->affectedRows;
     if($delAct) {
@@ -1556,6 +1559,20 @@ function get_attendance_title($attendance_id) {
     return $at_title;
 }
 
+
+/**
+ * @brief get activity title from an attendance
+ * @param type $attendance_id
+ * @param type $activity_id
+ * @return type
+ */
+function get_attendance_activity_title($attendance_id, $activity_id) {
+    
+    $at_act_title = Database::get()->querySingle("SELECT title FROM attendance_activities 
+                    WHERE id = ?d AND attendance_id = ?d", $activity_id, $attendance_id)->title;
+    
+    return $at_act_title;
+}
 
 /**
  * @brief get attendance limit
