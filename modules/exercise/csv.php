@@ -25,10 +25,10 @@ require_once '../../include/init.php';
 
 if ($is_editor) {
     $exerciseId = filter_input(INPUT_GET, 'exerciseId', FILTER_SANITIZE_NUMBER_INT);
-    header("Content-disposition: filename=" . $course_code . "_" . $exerciseId . "_" . date("Y-m-d") . ".xls");
-    header("Content-type: text/csv; charset=UTF-16");
-    header("Pragma: no-cache");
-    header("Expires: 0");
+    header('Content-disposition: filename=' . $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv');
+    header('Content-type: text/csv; charset=UTF-16');
+    header('Pragma: no-cache');
+    header('Expires: 0');
 
     $bom = "\357\273\277";
 
