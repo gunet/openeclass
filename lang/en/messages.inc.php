@@ -182,7 +182,7 @@ $langCourseDelConfirm = "$langCourse Deletion Confirmation";
 $langCourseDelConfirm2 = "are you sure you want to delete $langsCourse with code";
 $langNoticeDel = "NOTE: $langCourse deletion will also unregister " . $langsStudents . "from this $langsCourse, along with $langsCourse faculty correspondence snd $langsCourse material.";
 $langCourseEdit = "$langOfCourse Edit";
-$langCourseInfo = "$langCourse Information";
+$langCourseInfo = "Settings";
 $langQuota = "$langCourse Quota Boundaries";
 $langCourseStatus = "$langCourse Status";
 $langCurrentStatus = "Current state";
@@ -4140,7 +4140,7 @@ $langAutoJudgeNotEnabledForReport = 'Autojudge is not enabled for this assignmen
 $langAutoJudgeDownloadPdf = 'Download in PDF format';
 $langAutojudgeDescription = '<p>The Auto Judge is a tool to automate grading and correction of programming assignments. More specifically, the $langsCourse administrator can define scenarios that include input and output based on which the posted assignments are automatically graded.</p><p>This module contacts third-party compilation services which can be selected in <a href="autojudgemoduleconf.php">Settings</a>.</p>';
 $langCourseInvalidDepartment = "The $langsCourse belongs to a department where $langsCourse creation is no longer permitted.";
-$langCourseInvalidDepartmentPrompt = 'Please %smove it from $langsCourse settings%s.';
+$langCourseInvalidDepartmentPrompt = 'Please %smove it from "Settings"%s.';
 $langActivateUserInfo = 'Enter below the usernames, one per line, of the accounts you wish to extend. Lines starting with # are ignored.';
 $langUserDurationExtended = 'The expiration date of user "%s" was extended by %d months.';
 $langUserDurationError = 'Error extending duration of account "%s".';
