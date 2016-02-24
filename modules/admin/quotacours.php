@@ -40,18 +40,18 @@ $course = new Course();
 $user = new User();
 
 // validate course Id
-$cId = course_code_to_id(getDirectReference($_GET['c']));
+$cId = course_code_to_id($_GET['c']);
 validateCourseNodes($cId, isDepartmentAdmin());
 
 $toolName = $langQuota;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourse);
-$navigation[] = array('url' => 'editcours.php?c=' . q(getDirectReference($_GET['c'])), 'name' => $langCourseEdit);
+$navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);
 
 if (isset($_GET['c'])) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "editcours.php?c=" . q(getDirectReference($_GET['c'])),
+                  'url' => "editcours.php?c=$_GET[c]",
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')));
     } else {
@@ -75,7 +75,7 @@ if (isset($_POST['submit'])) {
     $drq = $_POST['drq'] * MB;
     // Update query
     $sql = Database::get()->query("UPDATE course SET doc_quota=?f, video_quota=?f, group_quota=?f, dropbox_quota=?f
-			WHERE code = ?s", $dq, $vq, $gq, $drq, getDirectReference($_GET['c']));
+			WHERE code = ?s", $dq, $vq, $gq, $drq, $_GET['c']);
     // Some changes occured
     if ($sql->affectedRows > 0) {
         $tool_content .= "<div class='alert alert-info'>$langQuotaSuccess</div>";
@@ -87,7 +87,7 @@ if (isset($_POST['submit'])) {
 }
 // Display edit form for course quota
 else {        
-    $q = Database::get()->querySingle("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota FROM course WHERE code = ?s", getDirectReference($_GET['c']));
+    $q = Database::get()->querySingle("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota FROM course WHERE code = ?s", $_GET['c']);
     $quota_info .= $langTheCourse . " <b>" . q($q->title) . "</b> " . $langMaxQuota;
     $dq = round($q->doc_quota / MB);
     $vq = round($q->video_quota / MB);
@@ -95,7 +95,7 @@ else {
     $drq = round($q->dropbox_quota / MB);
 
     $tool_content .= "<div class='form-wrapper'>
-            <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?c=" . getIndirectReference(getDirectReference($_GET['c'])) . "' method='post'>
+            <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?c=" . q($_GET['c']) . "' method='post'>
             <fieldset>                    
                 <div class='alert alert-info'>$quota_info</div>
                 <div class='form-group'>
