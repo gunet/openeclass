@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.3');
+define('ECLASS_VERSION', '3.3.1');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
@@ -3367,6 +3367,7 @@ function action_button($options, $secondary_menu_options = array()) {
                 $action_button
           </div>" . $primary_form_end;
 }
+
 /**
  * Removes spcific get variable from Query String
  *
@@ -3378,9 +3379,10 @@ function removeGetVar($url, $varname) {
     $newqs = http_build_query($qsvars);
     return $urlpart . '?' . $newqs;
 }
-function recurse_copy($src,$dst) {
+
+function recurse_copy($src, $dst) {
     $dir = opendir($src);
-    @mkdir($dst);
+    make_dir($dst);
     while(false !== ( $file = readdir($dir)) ) {
         if (( $file != '.' ) && ( $file != '..' )) {
             if ( is_dir($src . '/' . $file) ) {
@@ -3392,6 +3394,11 @@ function recurse_copy($src,$dst) {
         }
     }
     closedir($dir);
+}
+
+// Shortcut function to create directories consistently
+function make_dir($dir) {
+    return @mkdir($dir, 0775, true);
 }
 
 function setOpenCoursesExtraHTML() {
