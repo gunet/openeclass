@@ -201,7 +201,7 @@ if (count($exercise_question_ids)>0){
 
         // creates a temporary Question object
         $objQuestionTmp = new Question();
-        $objQuestionTmp->read($row->question_id);
+        $is_question = $objQuestionTmp->read($row->question_id);
         // gets the student choice for this question
         $choice = $objQuestionTmp->get_answers_record($eurid);
         $questionName = $objQuestionTmp->selectTitle();
@@ -232,7 +232,7 @@ if (count($exercise_question_ids)>0){
             </tr>
             <tr>
               <td colspan='${colspan}'>";
-        if ($choice) {
+        if ($is_question) {
             $tool_content .= "              
                 <b>" . q_math($questionName) . "</b>
                 <br />" .

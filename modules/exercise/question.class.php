@@ -454,7 +454,7 @@ if (!class_exists('Question')):
                 Database::get()->query("DELETE FROM `exercise_answer` WHERE question_id = ?d", $id);
                 $this->removePicture();
                 // resets the object
-                $this->Question();
+                $this->__construct();
             }
             // just removes the exercise from the list
             else {
