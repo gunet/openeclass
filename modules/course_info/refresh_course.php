@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['hideworks'])) {
         $output[] = hide_work();
     }
-    if (isset($_POST['delworkssubs'])) {
+    if (isset($_POST['delworkssubs'])) {        
 	$output[] = del_work_subs();
     }            
     if (isset($_POST['purgeexercises'])) {
@@ -283,19 +283,26 @@ function hide_work() {
  * @return type
  */
 function del_work_subs()  {
-	global $langAllAssignmentSubsDeleted, $webDir, $course_id, $course_code;
-        
-        $workPath = $webDir."/courses/".$course_code."/work";
+    global $langAllAssignmentSubsDeleted, $webDir, $course_id, $course_code;
 
-        $result = Database::get()->queryArray("SELECT id FROM assignment WHERE course_id = ?d", $course_id);
-        
-        foreach ($result as $row) {  
-            $secret = work_secret($row->id);
+    $workPath = $webDir."/courses/".$course_code."/work";
+
+    $result = Database::get()->queryArray("SELECT id FROM assignment WHERE course_id = ?d", $course_id);
+
+    foreach ($result as $row) {
+        $secret =  Database::get()->querySingle("SELECT secret_directory FROM assignment 
+                            WHERE course_id = ?d AND id = ?d", $course_id, $row->id);
+        if ($secret) {
+            if (is_dir("$workPath/$secret->secret_directory")) { // if exists secret directory
+                if (count(scandir("$workPath/$secret->secret_directory")) > 2) { // and is not empty
+                    move_dir("$workPath/$secret->secret_directory",
+                       "$webDir/courses/garbage/${course_code}_work_".$row->id."_$secret->secret_directory");
+                }
+            }
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $row->id);
-            move_dir("$workPath/$secret",
-            "$webDir/courses/garbage/${course_code}_work_".$row->id."_$secret");
         }
-	return "<p>$langAllAssignmentSubsDeleted</p>";
+    }
+    return "<p>$langAllAssignmentSubsDeleted</p>";
 }
 
 /**
