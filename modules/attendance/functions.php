@@ -697,7 +697,7 @@ function new_attendance() {
         $(function() {
             $('#start_date, #end_date').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true    
             });
@@ -978,7 +978,7 @@ function attendance_settings($attendance_id) {
         $(function() {
             $('#start_date, #end_date').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true    
             });
@@ -1081,7 +1081,7 @@ function user_attendance_settings($attendance_id) {
         $(function() {
             $('#UsersStart, #UsersEnd').datetimepicker({    
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true 
             });

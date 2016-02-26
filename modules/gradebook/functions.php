@@ -169,7 +169,7 @@ function new_gradebook() {
             $(function() {
                 $('#start_date, #end_date').datetimepicker({
                     format: 'dd-mm-yyyy hh:ii', 
-                    pickerPosition: 'bottom-left', 
+                    pickerPosition: 'bottom-right',
                     language: '".$language."',
                     autoclose: true    
                 });
@@ -344,7 +344,7 @@ function gradebook_settings($gradebook_id) {
         $(function() {
             $('#start_date, #end_date').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true    
             });
@@ -453,7 +453,7 @@ function user_gradebook_settings() {
     $(function() {
             $('#UsersStart, #UsersEnd').datetimepicker({    
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true 
             });
@@ -1519,7 +1519,7 @@ function add_gradebook_other_activity($gradebook_id) {
     $(function() {
             $('#date').datetimepicker({    
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true 
             });

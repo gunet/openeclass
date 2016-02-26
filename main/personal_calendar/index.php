@@ -68,19 +68,19 @@ $head_content .= "
 $(function() {
     $('#startdate').datetimepicker({
         format: 'dd-mm-yyyy hh:ii', 
-        pickerPosition: 'bottom-left', 
+        pickerPosition: 'bottom-right',
         language: '".$language."',
         autoclose: true
     });
     $('#enddatecal').datepicker({
         format: 'dd-mm-yyyy', 
-        pickerPosition: 'bottom-left', 
+        pickerPosition: 'bottom-right',
         language: '".$language."',
         autoclose: true
     });
     $('#duration').timepicker({
         showMeridian: false,
-        pickerPosition: 'bottom-left',
+        pickerPosition: 'bottom-right',
         minuteStep: 1, 
         defaultTime: false,
         autoclose: true});

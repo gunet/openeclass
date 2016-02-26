@@ -40,7 +40,7 @@ $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#user_date_start, #user_date_end').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-left',
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true    
             });            

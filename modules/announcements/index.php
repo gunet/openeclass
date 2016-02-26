@@ -568,13 +568,13 @@ if ($is_editor) {
             $(function() {
                 $('#startdate').datetimepicker({
                     format: 'dd-mm-yyyy hh:ii',
-                    pickerPosition: 'bottom-left',
+                    pickerPosition: 'bottom-right',
                     language: '".$language."',
                     autoclose: true
                 });
                 $('#enddate').datetimepicker({
                     format: 'dd-mm-yyyy hh:ii',
-                    pickerPosition: 'bottom-left',
+                    pickerPosition: 'bottom-right',
                     language: '".$language."',
                     autoclose: true
                 });

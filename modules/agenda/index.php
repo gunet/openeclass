@@ -138,12 +138,12 @@ function checkenableenddate(){
 }
 $(function() {
     $('#startdate').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-right',
         language: '".$language."',
         autoclose: true
     });
     $('#enddate').datepicker({
-        format: 'dd-mm-yyyy', pickerPosition: 'bottom-left', 
+        format: 'dd-mm-yyyy', pickerPosition: 'bottom-right',
         language: '".$language."',
         autoclose: true
     });

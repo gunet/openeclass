@@ -63,13 +63,13 @@ $(document).ready(function(){
     
     $('#startdate').datepicker({
         format: 'dd-mm-yyyy',
-        pickerPosition: 'bottom-left',
+        pickerPosition: 'bottom-right',
         language: lang,
         autoclose: true    
     }); 
     $('#enddate').datepicker({
         format: 'dd-mm-yyyy',
-        pickerPosition: 'bottom-left',
+        pickerPosition: 'bottom-right',
         language: lang,
         autoclose: true
     });

@@ -53,7 +53,7 @@ $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#user_date_expires_at').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-left',
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 minuteStep: 10,
                 autoclose: true
