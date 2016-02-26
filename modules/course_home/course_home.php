@@ -57,6 +57,26 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 
+$course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
+                                               view_type, start_date, finish_date, description, home_layout, course_image, password
+                                          FROM course WHERE id = ?d", $course_id);
+
+if (isset($_REQUEST['register'])) {
+    if ($course_info) {
+        $allow_reg = $course_info->visible == COURSE_REGISTRATION
+                     || $course_info->visible == COURSE_OPEN;
+        if ($allow_reg) {
+            if (empty($course_info->password) || $course_info->password == $_POST['password']) {
+                Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
+                                    VALUES (?d, ?d, ?d, NOW())", $course_id, $uid, USER_STUDENT);
+                Session::Messages($langNotifyRegUser1, 'alert-success');                
+            } else {
+                Session::Messages($langInvalidCode, 'alert-warning');
+            }
+        }
+        redirect_to_home_page("courses/$course_code");
+    }
+}
 if(!empty($langLanguageCode)){
     load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
 }
@@ -99,7 +119,47 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
 
     ."})
     </script>";
-
+if (!empty($course_info->password)) {
+    $head_content .= "
+        <script type='text/javascript'>
+            $(function() {
+                $('#passwordModal').on('click', function(e){
+                    e.preventDefault();
+                    bootbox.dialog({
+                        title: '$langLessonCode',
+                        message: '<form class=\"form-horizontal\" role=\"form\" action=\"\" method=\"POST\" id=\"password_form\">'+
+                                    '<div class=\"form-group\">'+
+                                        '<div class=\"col-sm-12\">'+                
+                                            '<input type=\"text\" class=\"form-control\" id=\"password\" name=\"password\">'+
+                                            '<input type=\"hidden\" class=\"form-control\" id=\"register\" name=\"register\">'+
+                                        '</div>'+
+                                    '</div>'+                                
+                                  '</form>',
+                        buttons: {
+                            cancel: {
+                                label: '$langCancel',
+                                className: 'btn-default'
+                            },
+                            success: {
+                                label: '$langSubmit',
+                                className: 'btn-success',
+                                callback: function (d) {
+                                    var password = $('#password').val();
+                                    if(password != '') {
+                                        $('#password_form').submit();
+                                    } else {
+                                        $('#password').closest('.form-group').addClass('has-error');
+                                        $('#password').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
+                                        return false;                            
+                                    }
+                                }
+                            }                    
+                        }                          
+                    });                    
+                })
+            });
+        </script>";
+}
 // For statistics: record login
 Database::get()->query("INSERT INTO logins
     SET user_id = ?d, course_id = ?d, ip = ?s, date_time = " . DBHelper::timeAfter(),
@@ -130,10 +190,6 @@ $action->record(MODULE_ID_UNITS);
 if (isset($_GET['from_search'])) { // if we come from home page search
     header("Location: {$urlServer}modules/search/search_incourse.php?all=true&search_terms=$_GET[from_search]");
 }
-
-$course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
-                                               view_type, start_date, finish_date, description, home_layout, course_image
-                                          FROM course WHERE id = ?d", $course_id);
 
 $keywords = q(trim($course_info->keywords));
 $visible = $course_info->visible;
@@ -525,15 +581,36 @@ if ($course_info->home_layout == 3) {
    $main_content_cols = 'col-sm-7';
 }
 $edit_link = "";
+$action_bar = "";
 if ($is_editor) {
     warnCourseInvalidDepartment(true);
     $edit_link = "
         <div class='access access-edit pull-left'><a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code'><span class='fa fa-pencil' style='line-height: 30px;' data-toggle='tooltip' data-placement='top' title='Επεξεργασία πληροφοριών'></span><span class='hidden'>.</span></a></div>";
-} else {
+} elseif ($uid) {
+    $myCourses = [];
+    Database::get()->queryFunc("SELECT course.code course_code, course.public_code public_code,
+                                   course.id course_id, status
+                              FROM course_user, course
+                             WHERE course_user.course_id = course.id
+                               AND user_id = ?d", function ($course) use (&$myCourses) {
+        $myCourses[$course->course_id] = $course;
+    }, $uid);
+    if (!in_array($course_id, array_keys($myCourses))) {
+        $action_bar = action_bar(array(
+            array('title' => $langRegister, 
+                  'url' => "/courses/$course_code?register",
+                  'icon' => 'fa-check',
+                  'link-attrs' => !empty($course_info->password) ? "id='passwordModal'" : "",
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success')));          
+    }
+
     $edit_link = " ";
 }
 $course_info_popover = "<div  class='list-group'>$course_info_extra</div>";
+
 $tool_content .= "
+$action_bar
 <div class='row margin-top-thin margin-bottom-fat'>
     <div class='col-md-12'>
         <div class='panel panel-default'>
