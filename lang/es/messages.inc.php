@@ -931,7 +931,7 @@ $introcontact = "Puedes contactar con el grupo Asincrónico de eLeargning de <b>
  caminos siguientes:";
 $langPostMail = "<b>Dirección de Correo:</b>";
 $langPhone = "Telefono";
-$langFax = "<b>Fax:</b>";
+$langFax = "Fax:";
 $langForm = "Formulario completado";
 $langReturn = "Retorno";
 $langAddPage = "Añade una página";

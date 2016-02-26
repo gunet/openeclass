@@ -994,9 +994,9 @@ $logo = "Plateforme de Télé-enseignement Asynchrone $siteName"
 $gunet = "Équipe de Télé-enseignement Asynchrone $siteName"
 ;
 $introcontact = "Vous pouvez contacter l'Équipe de Soutien de la plateforme <b>".$siteName."</b> par les moyens suivants :";
-$langPostMail = "<b>Adresse postale :</b>";
+$langPostMail = "Adresse postale :";
 $langPhone = "Téléphone";
-$langFax = "<b>Fax:</b>";
+$langFax = "Fax:";
 $langForm = "Remplir le formulaire";
 $langReturn = "Retour";
 $langAddPage = "Ajouter une page";

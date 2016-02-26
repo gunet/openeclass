@@ -1984,9 +1984,9 @@ $langAdminMessage = "Μήνυμα Διαχειριστή $siteName";
 
 // contact.php
 $introcontact = "Μπορείτε να επικοινωνείτε με την Ομάδα Υποστήριξης της πλατφόρμας <strong>" . $siteName . "</strong> με τους παρακάτω τρόπους:";
-$langPostMail = "<strong>Ταχυδρομική Διεύθυνση:</strong>";
+$langPostMail = "Ταχυδρομική Διεύθυνση:";
 $langPhone = "Τηλέφωνο";
-$langFax = "<strong>Fax:</strong>";
+$langFax = "Fax:";
 $langForm = "Συμπλήρωση Φόρμας";
 $langReturn = "Eπιστροφή";
 

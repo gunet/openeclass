@@ -936,9 +936,9 @@ $logo = "Asynchronous eLearning Platform $siteName";
 $gunet = "$siteName Asynchronous eLearning Group";
 $introcontact = "You can contact with the Asynchronous eLearning Group of <strong>" . $siteName . "</strong> using the
  following ways:";
-$langPostMail = "<strong>Post Office Address:</strong>";
+$langPostMail = "Post Office Address:";
 $langPhone = "Telephone";
-$langFax = "<strong>Fax:</strong>";
+$langFax = "Fax:";
 $langForm = "Completion Form";
 $langReturn = "Back";
 $langAddPage = "Add a page";
