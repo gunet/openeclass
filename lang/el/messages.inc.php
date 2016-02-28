@@ -4579,6 +4579,7 @@ $langBBB = "Τηλεσυνεργασία";
 $langNewBBBSession = "Νέα Τηλεσυνεργασία";
 $langNewBBBSessionInfo = "Στοιχεία νέας τηλεσυνεργασίας";
 $langNewBBBSessionStart = "Έναρξη";
+$langNewBBBSessionEnd = "Λήξη";
 $langNewBBBSessionDesc = "Σύντομη περιγραφή";
 $langNewBBBSessionType = "Είδος τηλεσυνεργασίας";
 $langNewBBBSessionPublic = "Συμμετέχουν <strong>όλοι</strong> οι εγγεγραμμένοι χρήστες <strong>της πλατφόρμας</strong>";

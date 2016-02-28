@@ -1740,6 +1740,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       `title` varchar(255) DEFAULT NULL,
                       `description` text,
                       `start_date` datetime DEFAULT NULL,
+                      `end_date` datetime DEFAULT NULL,                      
                       `public` enum("0","1") DEFAULT NULL,
                       `active` enum("0","1") DEFAULT NULL,
                       `running_at` int(11) DEFAULT NULL,
@@ -2112,6 +2113,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("ALTER TABLE unit_resources DROP INDEX unit_resources_title");
     }
 
+    if (!DBHelper::fieldExists('bbb_session', 'end_date')) {
+        Database::get()->query('ALTER TABLE bbb_session ADD end_date datetime NULL AFTER start_date');
+        $t = Database::get()->queryArray("SELECT cours_id, code FROM cours");
+    }
 
     // // ----------------------------------
     // creation of indices

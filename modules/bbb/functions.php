@@ -37,6 +37,7 @@ require_once 'bbb-api.php';
  * @global type $langBBBSessionAvailable
  * @global type $langBBBMinutesBefore
  * @global type $start_session
+ * @global type $end_session
  * @global type $langBBBNotifyUsers
  * @global type $langBBBNotifyExternalUsers
  */
@@ -47,16 +48,19 @@ function new_bbb_session() {
     global $langNewBBBSessionDesc, $langNewBBBSessionStart;
     global $langNewBBBSessionActive, $langNewBBBSessionInActive;
     global $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore;
-    global $start_session;
+    global $start_session,$end_session;
     global $langTitle, $langBBBNotifyExternalUsersHelpBlock;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
     global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue, $langBBBRecordFalse,$langBBBSessionMaxUsers;
     global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
     global $langBBBAlertTitle,$langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
+    global $langEnd,$langBBBEndHelpBlock;
 
     $textarea = rich_text_editor('desc', 4, 20, '');
     $start_date = new DateTime;
     $start_session = $start_date->format('d-m-Y H:i');
+    $end_date = new DateTime;
+    $end_session = $end_date->format('d-m-Y H:i');
     $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
     if ($c>20) {
         $c = $c/2;
@@ -84,6 +88,18 @@ function new_bbb_session() {
                 <input class='form-control' type='text' name='start_session' id='start_session' value='$start_session'>
             </div>
         </div>
+        <div class='input-append date form-group".(Session::getError('BBBEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$BBBEndDate' data-date-format='dd-mm-yyyy'>
+            <label for='BBBEndDate' class='col-sm-2 control-label'>$langEnd:</label>
+            <div class='col-sm-10'>
+                <div class='input-group'>
+                    <span class='input-group-addon'>
+                        <input style='cursor:pointer;' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
+                    </span>                           
+                    <input class='form-control' name='BBBEndDate' id='BBBEndDate' type='text' value='$BBBEndDate'".($enableEndDate ? '' : ' disabled').">                                                         
+                </div>
+                <span class='help-block'>".(Session::hasError('BBBEndDate') ? Session::getError('BBBEndDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBEndHelpBlock")."</span>
+            </div>
+        </div>          
         <div class='form-group'>
             <label for='select-groups' class='col-sm-2 control-label'>$langParticipants:</label>
             <div class='col-sm-10'>
@@ -217,6 +233,7 @@ function new_bbb_session() {
  * @param type $title
  * @param type $desc
  * @param type $start_session
+ * @param type $end_session
  * @param type $type
  * @param type $status
  * @param type $notifyUsers
@@ -225,7 +242,7 @@ function new_bbb_session() {
  * @param type $update // true == add, false == update
  * @param type $session
  */
-function add_update_bbb_session($title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record, $sessionUsers, $update = 'false', $session_id = '')
+function add_update_bbb_session($title,$desc,$start_session,$end_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record, $sessionUsers, $update = 'false', $session_id = '')
 {
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
         $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
@@ -246,20 +263,20 @@ function add_update_bbb_session($title,$desc,$start_session,$type,$status,$notif
     }
 
     if ($update == 'true') {
-        Database::get()->querySingle("UPDATE bbb_session SET title=?s, description=?s, start_date=?t,
+        Database::get()->querySingle("UPDATE bbb_session SET title=?s, description=?s, start_date=?t, end_date=?t,
                                         public=?s, active=?s, unlock_interval=?d, external_users=?s,
                                         participants=?s, record=?s, sessionUsers=?d WHERE id=?d",
-                                $title, $desc, $start_session, $type, $status, $minutes_before,
+                                $title, $desc, $start_session, $end_session, $type, $status, $minutes_before,
                                 $external_users, $r_group, $record, $sessionUsers, $session_id);
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM bbb_session WHERE id = ?d", $session_id);
     } else {
-        $q = Database::get()->query("INSERT INTO bbb_session (course_id, title, description, start_date,
+        $q = Database::get()->query("INSERT INTO bbb_session (course_id, title, description, start_date, end_date,
                                                             public, active, running_at,
                                                             meeting_id, mod_pw, att_pw,
                                                             unlock_interval, external_users, participants, record,
                                                             sessionUsers)
-                                                        VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)",
-                                            $course_id, $title, $desc, $start_session,
+                                                        VALUES (?d,?s,?s,?t,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)",
+                                            $course_id, $title, $desc, $start_session, $end_session,
                                             $type, $status,
                                             generateRandomString(), generateRandomString(), generateRandomString(),
                                             $minutes_before, $external_users,$r_group,$record,$sessionUsers);
@@ -401,6 +418,7 @@ function edit_bbb_session($session_id) {
     global $langAllUsers,$langParticipants,$langBBBRecord,$langBBBRecordTrue,$langBBBRecordFalse,$langBBBSessionMaxUsers;
     global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
     global $langBBBAlertTitle, $langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
+    global $langBBBEndHelpBlock, $langEnd;
 
 
     $row = Database::get()->querySingle("SELECT * FROM bbb_session WHERE id = ?d ", $session_id);
@@ -412,6 +430,10 @@ function edit_bbb_session($session_id) {
 
     $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date);
     $start = $startDate_obj->format('d-m-Y H:i');
+    $endDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date);   
+    if(isset($row->end_date)) { $BBBEndDate = $endDate_obj->format('d-m-Y H:i'); }
+    $enableEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : ($BBBEndDate ? 1 : 0);
+
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
     $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
     if ($c>80) {
@@ -439,6 +461,18 @@ function edit_bbb_session($session_id) {
                             <input class='form-control' type='text' name='start_session' id='start_session' value='".q($start)."'>
                         </div>
                     </div>
+                    <div class='input-append date form-group".(Session::getError('BBBEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$BBBEndDate' data-date-format='dd-mm-yyyy'>
+                        <label for='BBBEndDate' class='col-sm-2 control-label'>$langEnd:</label>
+                        <div class='col-sm-10'>
+                            <div class='input-group'>
+                                <span class='input-group-addon'>
+                                <input style='cursor:pointer;' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
+                                </span>                           
+                                <input class='form-control' name='BBBEndDate' id='BBBEndDate' type='text' value='$BBBEndDate'".($enableEndDate ? '' : ' disabled').">                                                         
+                            </div>
+                        <span class='help-block'>".(Session::hasError('BBBEndDate') ? Session::getError('BBBEndDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBEndHelpBlock")."</span>
+                     </div>
+                    </div>         
                     <div class='form-group'>
                         <label for='select-groups' class='col-sm-2 control-label'>$langParticipants:</label>
                         <div class='col-sm-10'>
@@ -593,7 +627,7 @@ function edit_bbb_session($session_id) {
  */
 function bbb_session_details() {
     global $course_id, $tool_content, $is_editor, $course_code, $head_content,
-        $langNewBBBSessionStart, $langNewBBBSessionType, $langParticipants,
+        $langNewBBBSessionStart, $langNewBBBSessionEnd, $langNewBBBSessionType, $langParticipants,
         $langConfirmDelete, $langNewBBBSessionPublic, $langNewBBBSessionPrivate,
         $langBBBSessionJoin, $langNewBBBSessionDesc, $langNote,
         $langBBBNoteEnableJoin, $langTitle,$langActivate, $langDeactivate,
@@ -627,6 +661,7 @@ function bbb_session_details() {
                                <th style='width:25%'>$langTitle</th>
                                <th class='text-center'>$langNewBBBSessionDesc</th>
                                <th class='text-center'>$langNewBBBSessionStart</th>
+                               <th class='text-center'>$langNewBBBSessionEnd</th>
                                <th class='text-center'>$langParticipants</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
@@ -651,8 +686,19 @@ function bbb_session_details() {
             $id = $row->id;
             $title = $row->title;
             $start_date = $row->start_date;
-            $timeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
-            $timeLabel = $start_date;
+            $end_date = $row->end_date;
+            if($end_date)
+            {
+                $timeLeft = date_diff_in_minutes($end_date, date('Y-m-d H:i:s'));
+                $timeLabel = $end_date;
+            }
+            else
+            {
+                $timeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
+                $timeLabel = '';
+            }
+            //$timeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
+            //$timeLabel = $end_date;
             if ($timeLeft > 0) {
                 $timeLabel .= "<br><span class='label label-warning'><small>$langDaysLeft " .
                     format_time_duration($timeLeft * 60) .
@@ -669,7 +715,7 @@ function bbb_session_details() {
             $desc = isset($row->description)? $row->description: '';
 
             $canJoin = $row->active == '1' &&
-                $timeLeft < $row->unlock_interval &&
+                date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < $row->unlock_interval &&
                 -$timeLeft < DAY_MINUTES &&
                 get_total_bbb_servers() <> '0';
             if ($canJoin) {
@@ -693,6 +739,7 @@ function bbb_session_details() {
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
                     <td class='text-left'>$joinLink</td>
                     <td>$desc</td>
+                    <td class='text-center'>$start_date</td>
                     <td class='text-center'>$timeLabel</td>
                     <td style='width: 30%'>$participants</td>
                     <td class='option-btn-cell'>".

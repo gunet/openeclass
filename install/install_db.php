@@ -1438,6 +1438,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `bbb_session` (
     `title` varchar(255) DEFAULT NULL,
     `description` text,
     `start_date` datetime DEFAULT NULL,
+    `end_date` datetime DEFAULT NULL,
     `public` enum('0','1') DEFAULT NULL,
     `active` enum('0','1') DEFAULT NULL,
     `running_at` int(11) DEFAULT NULL,
