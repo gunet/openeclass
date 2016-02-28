@@ -72,7 +72,16 @@ if (isset($_GET['add_server'])) {
     $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langOpenMeetingsWebApp:</label>
             <div class='col-sm-9'><input class='form-control' type='text' name='webapp_form'></div>";
     $tool_content .= "</div>";
-    
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBEnableRecordings:</label>
+            <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' checked='true' value='false'>$langNo</label></div>
+            <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true'>$langYes</label></div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langActivate:</label>
+            <div class='col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' checked='false' value='false'>$langNo</label></div>
+            <div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' checked='true' value='true'>$langYes</label></div>
+        </div>";
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
     $tool_content .= "</fieldset></form></div>";
 /*
@@ -89,7 +98,7 @@ if (isset($_GET['add_server'])) {
   */  
 } else if (isset($_GET['delete_server'])) {
     $id = $_GET['delete_server'];
-    Database::get()->querySingle("DELETE FROpenMeetings om_servers WHERE id=?d", $id);
+    Database::get()->querySingle("DELETE FROM om_servers WHERE id=?d", $id);
     // Display result message
     $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";    
     $tool_content .= action_bar(array(
@@ -106,7 +115,13 @@ else if (isset($_POST['submit'])) {
     $password = $_POST['password_form'];
     $module = $_POST['module_form'];
     $webapp = $_POST['webapp_form'];
-
+    $max_rooms = $_POST['max_rooms_form'];
+    $max_users = $_POST['max_users_form'];
+    $enable_recordings = $_POST['enable_recordings'];
+    $enabled = $_POST['enabled'];
+    $weight = $_POST['weight'];
+//print_r($_POST);die();
+    
     if (isset($_POST['id_form'])) {
         $id = $_POST['id_form'];
         Database::get()->querySingle("UPDATE om_servers SET hostname = ?s,
@@ -114,11 +129,15 @@ else if (isset($_POST['submit'])) {
                 username = ?s,
                 password = ?s,
                 module_key =?s,
-                webapp =?s
-                WHERE id =?d", $hostname, $port, $username, $password, $module, $webapp, $id);
+                webapp =?s,
+                enabled=?s,
+                max_rooms=?d,
+                max_users=?d,
+                enable_recordings=?s 
+                WHERE id =?d", $hostname, $port, $username, $password, $module, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $id);
     } else {
-        Database::get()->querySingle("INSERT INTO om_servers (hostname,port,username,password,module_key,webapp) VALUES
-        (?s,?s,?s,?s,?s,?s)", $hostname, $port, $username, $password, $module, $webapp);
+        Database::get()->querySingle("INSERT INTO om_servers (hostname,port,username,password,module_key,webapp,enabled,max_rooms,max_users,enable_recordings) VALUES
+        (?s,?s,?s,?s,?s,?s,?s,?d,?d,?s)", $hostname, $port, $username, $password, $module, $webapp,$enabled,$max_rooms,$max_users,$enable_recordings);
     }    
     // Display result message
     $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
@@ -160,14 +179,47 @@ else {
                 <div class='col-sm-9'><input class='form-control' type='text' name='password_form' value='$server->password'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langOpenMeetingsModuleKey:</label>
+        $tool_content .= "<label for='module_key_form' class='col-sm-3 control-label'>$langOpenMeetingsModuleKey:</label>
                 <div class='col-sm-9'><input class='form-control' type='text' name='module_form' value='$server->module_key'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langOpenMeetingsWebApp:</label>
+        $tool_content .= "<label for='webapp_form' class='col-sm-3 control-label'>$langOpenMeetingsWebApp:</label>
                 <div class='col-sm-9'><input class='form-control' type='text' name='webapp_form' value='$server->webapp'></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<input class='form-control' type = 'hidden' name = 'id_form' value='$om_server'>";
+          $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label class='col-sm-3 control-label'>$langBBBEnableRecordings:</label>";
+        if ($server->enable_recordings == "false") {
+            $checkedfalse = " checked='true' ";
+        } else $checkedfalse = '';
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' value='false' $checkedfalse>$langNo</label></div>";
+        if ($server->enable_recordings == "true") {
+            $checkedtrue = " checked='true' ";
+        } else $checkedtrue = '';
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true' $checkedtrue>$langYes</label></div>";
+        $tool_content .= "</div>";
+     $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langMaxRooms:</label>
+                <div class='col-sm-9'><input class='form-control' type='text' id='max_rooms_for' name='max_rooms_form' value='$server->max_rooms'></div>";
+        $tool_content .= "</div>";
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langMaxUsers:</label>
+                <div class='col-sm-9'><input class='form-control' type='text' id='max_users_form' name='max_users_form' value='$server->max_users'></div>";
+        $tool_content .= "</div>";
+        $tool_content .= "<div class='form-group'>";
+
+        $tool_content .= "<label class='col-sm-3 control-label'>$langActivate:</label>";
+        if ($server->enabled == "false") {
+            $checkedfalse2 = " checked='false' ";
+        } else $checkedfalse2 = '';
+        
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' $checkedfalse2 value='false'>$langNo</label></div>";
+        
+        if ($server->enabled == "true") {
+            $checkedtrue2 = " checked='false' ";
+        } else $checkedtrue2 = '';
+        
+         $tool_content .= "<div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' $checkedtrue2 value='true'>$langYes</label></div>
+            </div>";      $tool_content .= "<input class='form-control' type = 'hidden' name = 'id_form' value='$om_server'>";
         $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
         $tool_content .= "</fieldset></form></div>";
 /*        
@@ -188,7 +240,7 @@ else {
                 //]]></script>';
   */                  
     } else {
-        //display available BBB servers
+        //display available OpenMeetings servers
         $tool_content .= action_bar(array(
             array('title' => $langAddOpenMeetingsServer,
                 'url' => "openmeetingsconf.php?add_server",
