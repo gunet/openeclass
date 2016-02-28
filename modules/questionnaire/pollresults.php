@@ -26,7 +26,13 @@ $helpTopic = 'Questionnaire';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
-require_once 'modules/graphics/plotter.php';
+require_once 'modules/usage/usage.lib.php';
+
+$head_content .= "
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+load_js('d3/d3.min.js');
+load_js('c3-0.4.10/c3.min.js');
+
 
 $toolName = $langQuestionnaire;
 $pageName = $langPollCharts;
@@ -62,6 +68,40 @@ $head_content .= "<script type = 'text/javascript'>
       });
     });  
 </script>";
+
+$head_content .= "<script type='text/javascript'>
+        pollChartData = new Array();
+
+        $(document).ready(function(){
+            draw_plots();
+        });
+
+    function draw_plots(){
+        var options = null;
+        console.log(pollChartData[0]);
+        for(var i=0;i<pollChartData.length;i++){
+            options = {
+                data: {
+                    json: pollChartData[i],
+                    x: 'answer',
+                    types:{
+                        percentage: 'bar'
+                    },
+                    axes: {percentage: 'y'},
+                    names:{percentage:'%'},
+                    colors:{percentage:'#e9d460'}
+                },
+                legend:{show:false},
+                bar:{width:{ratio:0.8}},
+                axis:{ x: {type:'category'}, y:{max: 100, padding:{top:0, bottom:0}}},
+                bindto: '#poll_chart'+i
+            };
+            c3.generate(options);
+        }
+}
+
+</script>";
+
 
 if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
     redirect_to_home_page();
@@ -148,8 +188,11 @@ $export_box
 </div>";
 
 $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position ASC", $pid);
-$j=1;                                                                  
+$j=1; 
+$chart_data = array();
+$chart_counter = 0;
 foreach ($questions as $theQuestion) {
+    $this_chart_data = array();
     if ($theQuestion->qtype == QTYPE_LABEL) {
         $tool_content .= "<div class='alert alert-info'>$theQuestion->question_text</div>"; 
     } else {
@@ -159,18 +202,19 @@ foreach ($questions as $theQuestion) {
                 <h3 class='panel-title'>$langQuestion $j</h3>
             </div>
             <div class='panel-body'>
-                <h4>".q($theQuestion->question_text)."</h4>";
+                <!--h4>".q($theQuestion->question_text)."</h4-->";
 
         $j++;
 
         if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {
             $all_answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theQuestion->pqid);
-            $chart = new Plotter(800, 300);
             foreach ($all_answers as $row) {
-                $chart->addPoint(q($row->answer_text), 0);
+                $this_chart_data['answer'][] = q($row->answer_text);
+                $this_chart_data['percentage'][] = 0;
             }
             if ($theQuestion->qtype == QTYPE_SINGLE) {
-                $chart->addPoint($langPollUnknown, 0);
+                $this_chart_data['answer'][] = $langPollUnknown;
+                $this_chart_data['percentage'][] = 0;
             }          
             $answers = Database::get()->queryArray("SELECT a.aid AS aid, b.answer_text AS answer_text, count(a.aid) AS count
                         FROM poll_user_record c, poll_answer_record a
@@ -195,7 +239,7 @@ foreach ($questions as $theQuestion) {
                     $q_answer = $langPollUnknown;
                     $aid = -1;
                 }
-                $chart->addPoint($q_answer, $percentage);
+                $this_chart_data['percentage'][array_search($q_answer,$this_chart_data['answer'])] = $percentage;
                 if ($thePoll->anonymized != 1) {
                     $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
                             FROM poll_user_record AS a, user AS b
@@ -225,13 +269,18 @@ foreach ($questions as $theQuestion) {
                 unset($names_array);
             }
             $answers_table .= "</table><br>";
-            $chart->normalize();
-            $tool_content .= $chart->plot();                
+            $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
+            /****   C3 plot   ****/
+            $tool_content .= "<div class='row plotscontainer'>";
+            $tool_content .= "<div class='col-lg-12'>";
+            $tool_content .= plot_placeholder("poll_chart$chart_counter", q($theQuestion->question_text));
+            $tool_content .= "</div></div>";
             $tool_content .= $answers_table;
+            $chart_counter++;
         } elseif ($theQuestion->qtype == QTYPE_SCALE) {
-            $chart = new Plotter(800, 300);
             for ($i=1;$i<=$theQuestion->q_scale;$i++) {
-                $chart->addPoint($i, 0);
+                $this_chart_data['answer'][] = "$i";
+                $this_chart_data['percentage'][] = 0;
             }
 
             $answers = Database::get()->queryArray("SELECT a.answer_text, count(a.answer_text) as count 
@@ -251,7 +300,8 @@ foreach ($questions as $theQuestion) {
                         <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
             foreach ($answers as $answer) {
                 $percentage = round(100 * ($answer->count / $answer_total),2);
-                $chart->addPoint(q($answer->answer_text), $percentage);
+                $this_chart_data['percentage'][array_search($answer->answer_text,$this_chart_data['answer'])] = $percentage;
+                
                 if ($thePoll->anonymized != 1) {
                     // Gets names for registered users and emails for unregistered
                     $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
@@ -293,9 +343,15 @@ foreach ($questions as $theQuestion) {
                 unset($names_array);                
             }
             $answers_table .= "</table>";
-            $chart->normalize();
-            $tool_content .= $chart->plot();            
+            /****   C3 plot   ****/
+            $chart_data[] = $this_chart_data;
+            $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
+            $tool_content .= "<div class='row plotscontainer'>";
+            $tool_content .= "<div class='col-lg-12'>";
+            $tool_content .= plot_placeholder("poll_chart$chart_counter", q($theQuestion->question_text));
+            $tool_content .= "</div></div>";
             $tool_content .= $answers_table;
+            $chart_counter++;
         } elseif ($theQuestion->qtype == QTYPE_FILL) {            
             $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text 
                                         FROM poll_answer_record a, poll_user_record b
