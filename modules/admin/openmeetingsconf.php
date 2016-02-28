@@ -35,7 +35,7 @@ load_js('validation.js');
 
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
-$om_server = isset($_GET['edit_server']) ?  intval(getDirectReference($_GET['edit_server'])) : '';
+$om_server = isset($_GET['edit_server']) ?  $_GET['edit_server'] : '';
 
 if (isset($_GET['add_server'])) {
     $pageName = $$langAddOpenMeetingsServer;

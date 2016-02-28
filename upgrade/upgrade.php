@@ -970,7 +970,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             'poll_question_answer', 'assignment', 'assignment_submit',
             'exercise', 'exercise_user_record', 'exercise_question',
             'exercise_answer', 'exercise_with_questions', 'course_module',
-            'actions', 'actions_summary', 'logins', 'wiki_locks', 'bbb_servers', 'bbb_session',
+            'actions', 'actions_summary', 'logins', 'wiki_locks', 'bbb_servers', 'bbb_session','om_servers',
             'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats');
         foreach ($new_tables as $table_name) {
             if (DBHelper::tableExists($table_name)) {
@@ -3291,7 +3291,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `username` varchar(255) DEFAULT NULL,
                         `password` varchar(255) DEFAULT NULL,
                         `module_key` int(11) DEFAULT NULL,
-                        `webapp` int(11) DEFAULT NULL,
+                        `webapp` varchar(255) DEFAULT NULL,
+                        `max_rooms` int(11) DEFAULT NULL,
+                        `max_users` int(11) DEFAULT NULL,
+                        `enable_recordings` enum("true","false") DEFAULT NULL,
                         PRIMARY KEY (`id`),
                         KEY `idx_om_servers` (`hostname`))');
 						
