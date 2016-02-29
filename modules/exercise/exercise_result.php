@@ -73,7 +73,7 @@ if (isset($_GET['eurId'])) {
     $eurid = $_GET['eurId'];
     $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
     $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-
+    $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
     if (!$exercise_user_record) {
         //No record matches with thiw exercise user record id
         Session::Messages($langExerciseNotFound);
@@ -182,15 +182,67 @@ $tool_content .= "<div class='panel panel-primary'>
     <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
   </div>";
 if (!empty($exerciseDescription_temp)) {
-    $tool_content .= "<div class='panel-body'>
-        $exerciseDescription_temp
-      </div>";
+    $tool_content .= "<div class='panel-body'>";
+        if ($exerciseDescription_temp) {
+             $tool_content .= $exerciseDescription_temp."<hr>";
+        }
 }
+        $tool_content .= "
+            <div class='row'>
+                <div class='col-xs-6 col-md-3 text-right'>
+                    <strong>$langSurname:</strong>
+                </div>
+                <div class='col-xs-6 col-md-3'>
+                    $user->surname
+                </div>            
+                <div class='col-xs-6 col-md-3 text-right'>
+                    <strong>$langName:</strong>
+                </div>
+                <div class='col-xs-6 col-md-3'>
+                    $user->givenname
+                </div>";
+                if ($user->am) {
+                    $tool_content .= "
+                        <div class='col-xs-6 col-md-3 text-right'>
+                            <strong>$langAm:</strong>
+                        </div>
+                        <div class='col-xs-6 col-md-3'>
+                            $user->am
+                        </div>";            
+                }
+                if ($user->phone) {                
+                    $tool_content .= "                
+                        <div class='col-xs-6 col-md-3 text-right'>
+                            <strong>$langPhone:</strong>
+                        </div>
+                        <div class='col-xs-6 col-md-3'>
+                            $user->phone
+                        </div>";
+                }
+                if ($user->email) {                
+                    $tool_content .= "                     
+                        <div class='col-xs-6 col-md-3 text-right'>
+                            <strong>Email:</strong>
+                        </div>
+                        <div class='col-xs-6 col-md-3'>
+                            $user->email
+                        </div>";
+                }
+$tool_content .= "                
+            </div>
+        </div>";
 $tool_content .= "</div>";
 $tool_content .= "
   <div class='row margin-bottom-fat'>
-    <div class='col-md-5 col-md-offset-7'>
-        ".(($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ? "<div class='btn-group btn-group-sm' style='float:right;'><a class='btn btn-primary' id='all'>Όλες οι ερωτήσεις</a><a class='btn btn-default' id='ungraded'>Ερωτήσεις προς Βαθμολόγηση</a></div>" : "")."
+    <div class='col-md-5 col-md-offset-7'>";
+    if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
+        $tool_content .= "
+            <div class='btn-group btn-group-sm' style='float:right;'>
+                <a class='btn btn-primary' id='all'>$langAllExercises</a>
+                <a class='btn btn-default' id='ungraded'>$langAttemptPending</a>
+            </div>";
+    }
+$tool_content .= "                
     </div>    
   </div>";
 $i = 0;
