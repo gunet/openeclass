@@ -57,7 +57,7 @@ $langUser = "Χρήστης";
 $langUserHeader = "Χρήστης:";
 $langUserS = "χρήστης";
 $langOfUser = "χρήστη";
-$langSupportUser = "Υπεύθυνος Υποστήριξης:";
+$langSupportUser = "Υπεύθυνος Υποστήριξης";
 $langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
 

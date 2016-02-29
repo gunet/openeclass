@@ -34,7 +34,7 @@ $langUsersS = "utilisateurs";
 $langUser = "Utilisateur";
 $langUserHeader = "Utilisateur :";
 $langUserS = "utilisateur";
-$langSupportUser = "Responsable de Soutien technique :"
+$langSupportUser = "Responsable de Soutien technique"
 ;
 $langAdminUsers = "Gestion des Utilisateurs";
 $langDeleteAdmin = "La suppression de l'administrateur avec id :";
