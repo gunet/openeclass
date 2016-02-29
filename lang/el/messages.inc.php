@@ -160,9 +160,9 @@ $langCronName = "Όνομα εργασίας";
 $langCronLastRun = "Τελευταία Εκτέλεση";
 $langExternalTools = 'Εξωτερικά εργαλεία';
 $langDisableModules = 'Υποσυστήματα';
-$langDisableModulesHelp = 'Μπορείτε να επιλέξετε ποια από τα παρακάτω
+$langDisableModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω
     υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλα τα $langsCourses της
-    πλατφόρμας.';
+    πλατφόρμας.";
 $langAutoEnroll = 'Αυτόματη εγγραφή';
 $langAutoEnrollNew = 'Προσθήκη κανόνα';
 $langAutoEnrollAdded = 'Ο κανόνας προστέθηκε';
