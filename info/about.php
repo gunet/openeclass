@@ -36,13 +36,15 @@ $data['a3'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course
 
 $total = 0;
 $userCounts = Database::get()->queryArray("SELECT status, COUNT(*) as count FROM user WHERE expires_at > NOW() GROUP BY status");
+$count = [USER_TEACHER => 0, USER_STUDENT => 0, USER_GUEST => 0];
 
 foreach ($userCounts as $item) {
-    $total += $count[$item->status] = $item->count;
+    $count[$item->status] = $item->count;
+    $total += $item->count;
 }
 
 $data['total'] = $total;
-$data['count'] = [USER_TEACHER => 0, USER_STUDENT => 0, USER_GUEST => 0];
+$data['count'] = $count;
 $data['institution'] = $Institution;
 $data['institution_url'] = $InstitutionUrl;
 $data['siteName'] = $siteName;
