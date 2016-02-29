@@ -904,7 +904,7 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
             $active_rooms = get_active_rooms($row->server_key,$row->api_url);
 
             if ($connected_users<$min_users) {
-                $run_to=$row->id;
+                $run_to='999'.$row->id;
                 $min_users = $connected_users;
             }
 
@@ -916,7 +916,7 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
             if (($max_rooms == 0 && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $active_rooms < $max_rooms) || ($active_rooms < $max_rooms && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $max_rooms == 0)) // YOU FOUND THE SERVER
             {
                 $run_to = $row->id;
-                Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",$row->id, $meeting_id);
+                Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",'999'.$row->id, $meeting_id);
                 break;
             }
         }
@@ -939,7 +939,7 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
                 }
             }
         }
-        Database::get()->querySingle("UPDATE bbb_session SET running_at=?d WHERE meeting_id=?s",$run_to,$meeting_id);
+        Database::get()->querySingle("UPDATE bbb_session SET running_at=?d WHERE meeting_id=?s",'999'.$run_to,$meeting_id);
     }
 
     // we find the bbb server that will serve the session
@@ -1001,7 +1001,7 @@ function bbb_join_moderator($meeting_id, $mod_pw, $att_pw, $surname, $name) {
 
     $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
     if ($res) {
-        $running_server = $res->running_at;
+        $running_server = str_replace('999','',$res->running_at);
     }
 
     $res = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?s", $running_server);
@@ -1050,7 +1050,7 @@ function bbb_join_user($meeting_id, $att_pw, $surname, $name) {
 
     $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
     if ($res) {
-        $running_server = $res->running_at;
+        $running_server = str_replace('999','',$res->running_at);
     }
 
     $res = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id = ?d", $running_server);
