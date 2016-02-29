@@ -30,6 +30,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 // For creating bbb urls & params
 require_once 'bbb-api.php';
+require_once 'om-api.php';
 require_once 'functions.php';
 
 require_once 'include/lib/modalboxhelper.class.php';
@@ -42,6 +43,10 @@ $action->record(MODULE_ID_BBB);
 /* * *********************************** */
 
 $toolName = $langBBB;
+
+//Here we check if we use BBB,OpenMeetings or WebConf
+//Algo to be implemented later
+$server_type='bbb';
 
 // guest user not allowed
 if (check_guest()) {
@@ -222,14 +227,28 @@ elseif(isset($_GET['choice']))
                     $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";
                     break;
                 }            
-                if (bbb_session_running($_GET['meeting_id']) == false)
+                switch($server_type)
                 {
-                    $mod_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;                
-                    create_meeting($_GET['title'],$_GET['meeting_id'],$mod_pw,$_GET['att_pw'],$_GET['record']);
+                    case 'bbb':
+                        if (bbb_session_running($_GET['meeting_id']) == false)                        
+                        {
+                            $mod_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;                
+                            create_meeting($_GET['title'],$_GET['meeting_id'],$mod_pw,$_GET['att_pw'],$_GET['record']);
+                        }
+                    case 'om':
+                        print "OpenMeetings";
+                    break;
                 }
             }
             if(isset($_GET['mod_pw'])) {
-                header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                switch($server_type)
+                {
+                    case 'bbb':
+                        header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                    case 'om':
+                        print "OpenMeetings";
+                    break;
+                }
             } else {
                 # Get session capacity                
                 $sess = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id']);
@@ -238,7 +257,13 @@ elseif(isset($_GET['choice']))
                     $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
                     break;
                 } else {
-                    header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                    switch($server_type)
+                    {
+                        case 'bbb': header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                        case 'om':
+                            print "OpenMeetings";
+                        break;
+                    }
                 }
             }
             break;

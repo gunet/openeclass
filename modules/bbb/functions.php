@@ -666,7 +666,7 @@ function bbb_session_details() {
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
 
-        define('DAY_MINUTES', 24 * 40);
+        define('DAY_MINUTES', 24 * 60);
         foreach ($result as $row) {
             $participants = '';
             // Get participants
