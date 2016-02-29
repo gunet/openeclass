@@ -915,7 +915,7 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
             // active_users < max_users && max_rooms = 0 (UNLIMITED)
             if (($max_rooms == 0 && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $active_rooms < $max_rooms) || ($active_rooms < $max_rooms && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $max_rooms == 0)) // YOU FOUND THE SERVER
             {
-                $run_to = $row->id;
+                $run_to = str_replace('999','',$row->id);
                 Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",'999'.$row->id, $meeting_id);
                 break;
             }
@@ -934,7 +934,7 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
                 $connected_users = get_connected_users($row->server_key, $row->api_url, $row->ip);
 
                 if ($connected_users<$temp_conn) {
-                    $run_to=$row->id;
+                    $run_to=str_replace('999','',$row->id);
                     $temp_conn = $connected_users;
                 }
             }
