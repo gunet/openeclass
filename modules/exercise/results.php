@@ -106,7 +106,7 @@ if ($is_editor) {
 } else {
     $result[] = (object) array('uid' => $uid);
 }
-$extra_sql = ($status != '' ) ? ' AND attempt_status = '.$status : '';
+$extra_sql = ($status !== '' ) ? ' AND attempt_status = '.$status : '';
 
 foreach ($result as $row) {
     $sid = $row->uid;
