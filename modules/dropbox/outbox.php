@@ -269,8 +269,8 @@ if (isset($_GET['mid'])) {
                                   cache: false,
                                   success: function(){
                                     var num_page_records = oTable2.fnGetData().length;
-                                    var per_page = oTable2.fnPagingInfo().iLength;
-                                    var page_number = oTable2.fnPagingInfo().iPage;
+                                    var per_page = $('#outbox_table').DataTable().page.info().length;
+                                    var page_number = $('#outbox_table').DataTable().page.info().page;
                                     if(num_page_records==1){
                                         if(page_number!=0) {
                                             page_number--;
@@ -297,8 +297,8 @@ if (isset($_GET['mid'])) {
                               cache: false,
                               success: function(){
                                 var num_page_records = oTable2.fnGetData().length;
-                                var per_page = oTable2.fnPagingInfo().iLength;
-                                var page_number = oTable2.fnPagingInfo().iPage;
+                                var per_page = $('#outbox_table').DataTable().page.info().length;
+                                var page_number = $('#outbox_table').DataTable().page.info().page;
                                 if(num_page_records==1){
                                   if(page_number!=0) {
                                     page_number--;
