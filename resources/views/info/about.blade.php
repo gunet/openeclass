@@ -18,18 +18,18 @@
     <div class='row'>
         <div class='col-sm-6'>
             <ul class='list-group'>
-                <li class='list-group-item'><strong>{{ trans('langCourses') }}</strong><span class='badge'>{{ $a }}</span></li>
-                <li class='list-group-item'>{{ trans('langOpenCoursesShort') }}<span class='badge'>{{ $a1 }}</span></li>
-                <li class='list-group-item'>{{ trans('langOpenCourseWithRegistration') }}<span class='badge'>{{ $a2 }}</span></li>
-                <li class='list-group-item'>{{ trans('langClosedCourses') }}<span class='badge'>{{ $a3 }}</span></li>
+                <li class='list-group-item'><strong>{{ trans('langCourses') }}</strong><span class='badge'>{{ $course_inactive }}</span></li>
+                <li class='list-group-item'>{{ trans('langOpenCoursesShort') }}<span class='badge'>{{ $course_open }}</span></li>
+                <li class='list-group-item'>{{ trans('langOpenCourseWithRegistration') }}<span class='badge'>{{ $course_registration }}</span></li>
+                <li class='list-group-item'>{{ trans('langClosedCourses') }}<span class='badge'>{{ $course_closed }}</span></li>
             </ul>
         </div>
         <div class='col-sm-6'>
             <ul class='list-group'>
-                <li class='list-group-item'><label>{{ trans('langUsers') }}</label><span class='badge'>{{ $total }}</span></li>
-                <li class='list-group-item'>{{ trans('langTeachers') }}<span class='badge'>{{ $count[USER_TEACHER] }}</span></li>
-                <li class='list-group-item'>{{ trans('langStudents') }}<span class='badge'>{{ $count[USER_STUDENT] }}</span></li>
-                <li class='list-group-item'>{{ trans('langGuest') }}<span class='badge'>{{ $count[USER_GUEST] }}</span> </li>
+                <li class='list-group-item'><label>{{ trans('langUsers') }}</label><span class='badge'>{{ $count_total }}</span></li>
+                <li class='list-group-item'>{{ trans('langTeachers') }}<span class='badge'>{{ $count_status[USER_TEACHER] }}</span></li>
+                <li class='list-group-item'>{{ trans('langStudents') }}<span class='badge'>{{ $count_status[USER_STUDENT] }}</span></li>
+                <li class='list-group-item'>{{ trans('langGuest') }}<span class='badge'>{{ $count_status[USER_GUEST] }}</span> </li>
             </ul>
         </div>
     </div>

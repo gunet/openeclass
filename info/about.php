@@ -28,23 +28,23 @@
 require_once '../include/baseTheme.php';
 $pageName = $langInfo;
 
-$data['a'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count;
-$data['a1'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_OPEN)->count;
-$data['a2'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_REGISTRATION)->count;
-$data['a3'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_CLOSED)->count;
+$data['course_inactive'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count;
+$data['course_open'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_OPEN)->count;
+$data['course_registration'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_REGISTRATION)->count;
+$data['course_closed'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_CLOSED)->count;
 
 
-$total = 0;
+$count_total = 0;
 $userCounts = Database::get()->queryArray("SELECT status, COUNT(*) as count FROM user WHERE expires_at > NOW() GROUP BY status");
-$count = [USER_TEACHER => 0, USER_STUDENT => 0, USER_GUEST => 0];
+$count_status = [USER_TEACHER => 0, USER_STUDENT => 0, USER_GUEST => 0];
 
 foreach ($userCounts as $item) {
-    $count[$item->status] = $item->count;
-    $total += $item->count;
+    $count_status[$item->status] = $item->count;
+    $count_total += $item->count;
 }
 
-$data['total'] = $total;
-$data['count'] = $count;
+$data['count_total'] = $count_total;
+$data['count_status'] = $count_status;
 $data['institution'] = $Institution;
 $data['institution_url'] = $InstitutionUrl;
 $data['siteName'] = $siteName;
