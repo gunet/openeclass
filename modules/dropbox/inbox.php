@@ -400,8 +400,8 @@ $out .=         "
                           data: string,
                           success: function(data){
                              var num_page_records = oTable.fnGetData().length;
-                             var per_page = oTable.fnPagingInfo().iLength;
-                             var page_number = oTable.fnPagingInfo().iPage;
+                             var per_page = $('#inbox_table').DataTable().page.info().length;
+                             var page_number = $('#inbox_table').DataTable().page.info().page;
                              if(num_page_records==1){
                                  if(page_number!=0) {
                                      page_number--;
@@ -433,8 +433,8 @@ $out .=         "
                                  cache: false,
                                  success: function(){
                                      var num_page_records = oTable.fnGetData().length;
-                                     var per_page = oTable.fnPagingInfo().iLength;
-                                     var page_number = oTable.fnPagingInfo().iPage;
+                                     var per_page = $('#inbox_table').DataTable().page.info().length;
+                                     var page_number = $('#inbox_table').DataTable().page.info().page;
                                      if(num_page_records==1){
                                          if(page_number!=0) {
                                              page_number--;
