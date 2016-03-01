@@ -37,91 +37,101 @@ $data['action_bar'] = action_bar([[
     'icon' => 'fa-reply',
     'level' => 'primary-label',
     'button-class' => 'btn-default'
-]],false);
+]], false);
 
 $data['general_tutorials'] = [
-    'detail_descr' =>
+    'title' => $langGeneralTutorials,
+    'links' =>
         [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langFinalDesc,
-            'url' => "$url/$language:detail_descr"
-        ],
-    'short_descr' =>
-        [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langShortDesc,
-            'url' => "$url/$language:short_descr"
-        ],
-    'mant' =>
-        [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langManT,
-            'url' => "$url/$language:mant"
-        ],
-    'mans' =>
-        [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langManS,
-            'url' => "$url/$language:mans"
+            'detail_descr' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langFinalDesc,
+                    'url' => "$url/$language:detail_descr"
+                ],
+            'short_descr' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langShortDesc,
+                    'url' => "$url/$language:short_descr"
+                ],
+            'mant' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langManT,
+                    'url' => "$url/$language:mant"
+                ],
+            'mans' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langManS,
+                    'url' => "$url/$language:mans"
+                ]
         ]
 ];
 
 $data['teacher_tutorials'] = [
-    'title' => $langTeacherTutorials.$addon,
-    'create_account' =>
+    'title' => $langTeacherTutorials . $addon,
+    'links' =>
         [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langCreateAccount,
-            'url' => "$url/$language:create_account"
-        ],
-    'create_course' =>
-        [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langCourseCreate,
-            'url' => "$url/$language:create_course"
-        ],
-    'portfolio_management' =>
-        [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langUserPortfolio,
-            'url' => "$url/$language:portfolio_management"
-        ],
-    'course_management' =>
-        [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langAdministratorCourse,
-            'url' => "$url/$language:course_management"
-        ],
-    'forum_management' =>
-        [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langAdministratorForum,
-            'url' => "$url/$language:forum_management"
-        ],
-    'group_management' =>
-        [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langAdministratorGroup,
-            'url' => "$url/$language:group_management"
+            'create_account' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langCreateAccount,
+                    'url' => "$url/$language:create_account"
+                ],
+            'create_course' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langCourseCreate,
+                    'url' => "$url/$language:create_course"
+                ],
+            'portfolio_management' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langUserPortfolio,
+                    'url' => "$url/$language:portfolio_management"
+                ],
+            'course_management' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langAdministratorCourse,
+                    'url' => "$url/$language:course_management"
+                ],
+            'forum_management' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langAdministratorForum,
+                    'url' => "$url/$language:forum_management"
+                ],
+            'group_management' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langAdministratorGroup,
+                    'url' => "$url/$language:group_management"
+                ]
         ]
 ];
 
 
 $data['student_tutorials'] = [
-    'title' => $langStudentTutorials.$addon,
-    'register_course' =>
+    'title' => $langStudentTutorials . $addon,
+    'links' =>
         [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langRegCourses,
-            'url' => "$url/$language:register_course"
-        ],
-    'personal_portfolio' =>
-        [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langUserPortfolio,
-            'url' => "$url/$language:personal_portfolio"
-        ],
-    'ecourse' =>
-        [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langIntroToCourse,
-            'url' => "$url/$language:ecourse"
-        ],
-    'forum' =>
-        [
-            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langForumParticipation,
-            'url' => "$url/$language:forum"
+            'register_course' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langRegCourses,
+                    'url' => "$url/$language:register_course"
+                ],
+            'personal_portfolio' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langUserPortfolio,
+                    'url' => "$url/$language:personal_portfolio"
+                ],
+            'ecourse' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langIntroToCourse,
+                    'url' => "$url/$language:ecourse"
+                ],
+            'forum' =>
+                [
+                    'desc' => icon('fa-globe') . "&nbsp;&nbsp;-&nbsp;&nbsp;" . $langForumParticipation,
+                    'url' => "$url/$language:forum"
+                ]
         ]
 ];
 
 
-$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
+$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
 
 view('info.manual', $data);
