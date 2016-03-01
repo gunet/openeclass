@@ -95,6 +95,7 @@ $langAfterLastLogin = "After your last login, there have been registered:";
 $langAfterLastLoginInfo = "Data after your last login";
 $langOtherActions = "Other Actions";
 $langTutorialDesc = "Also, in the link below, you will find useful tutorials for using and administrating the Open eClass platform with practical examples. These tutorials are available in three different formats: a) tutorials with pictures, b) video presentations and c) SCORM Packages.";
+$langGeneralTutorials = "Guides";
 $langNbProf = "Number of " . $langsTeachers . "";
 $langNbStudents = "Number of " . $langsStudents . "";
 $langNbLogin = "Number of logins";
