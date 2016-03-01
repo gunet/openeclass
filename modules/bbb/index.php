@@ -46,7 +46,7 @@ $toolName = $langBBB;
 
 //Here we check if we use BBB,OpenMeetings or WebConf
 //Algo to be implemented later
-$server_type='om';
+$server_type='bbb';
 
 // guest user not allowed
 if (check_guest()) {
