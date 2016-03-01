@@ -43,7 +43,7 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
     $url = $res->hostname.':'.$res->port;
 
     $soapUsers = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/UserService?wsdl');
-    $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/openmeetings/services/RoomService?wsdl');
+    $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/RoomService?wsdl');
 
     $rs = array();
     $rs = $soapUsers->getSession();
@@ -76,7 +76,7 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
     $rs = array();
     $rs = $soapUsers->setUserObjectAndGenerateRoomHash($params);
     
-    return "http://$url/'.$res->webapp.'/?secureHash=".$rs->return;
+    return 'http://'.$url.'/'.$res->webapp.'/?secureHash='.$rs->return;
 }
 
 function om_session_running($meeting_id)
@@ -101,12 +101,21 @@ function om_session_running($meeting_id)
     $url = $res->hostname.':'.$res->port;
 
     $soapUsers = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/UserService?wsdl');
-    $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/openmeetings/services/RoomService?wsdl');
+    $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/RoomService?wsdl');
 
     $rs = array();
     $rs = $soapUsers->getSession();
 
     $session_id = $rs->return->session_id;
+    
+    $params = array(
+	'SID' => $session_id,
+	'username' => utf8_encode($res->username),
+	'userpass' => utf8_encode($res->password)
+    );
+
+    $l = array();
+    $l = $soapUsers->loginUser($params);
     
     $params = array(
 	'SID' => $session_id,
@@ -211,12 +220,21 @@ function create_om_meeting($title, $meeting_id,$record)
         $url = $res->hostname.':'.$res->port;
 
         $soapUsers = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/UserService?wsdl');
-        $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/openmeetings/services/RoomService?wsdl');
+        $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/RoomService?wsdl');
 
         $rs = array();
         $rs = $soapUsers->getSession();
 
         $session_id = $rs->return->session_id;
+
+        $params = array(
+            'SID' => $session_id,
+            'username' => utf8_encode($res->username),
+            'userpass' => utf8_encode($res->password)
+        );
+
+        $l = array();
+        $l = $soapUsers->loginUser($params);
 
         $params = array(
             'SID' => $session_id,
@@ -234,9 +252,11 @@ function create_om_meeting($title, $meeting_id,$record)
 
         $l = $roomService->addRoomWithModeration($params);
 
-        $room_id = $l->return;
-        if(!$room_id)
+        if(!isset($room_id))
             echo "<div class='alert alert-danger'>$langBBBCreationRoomError.</div>";
+    
+        //TO REMOVE!!!
+        Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",'8884', $meeting_id);
 
     }
 }
