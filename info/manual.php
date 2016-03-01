@@ -24,59 +24,104 @@ require_once '../include/baseTheme.php';
 $pageName = $langManuals;
 
 $addon = '';
+$url = 'http://docs.openeclass.org/3.3';
 
 if (!in_array($language, array('el', 'en'))) {
     $language = 'en';
     $addon = " ($langOnlyInEnglish)";
 }
-$tool_content .= action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
-                            ),false);
-$tool_content .= "<div class='list-group'>
-  " . manlink($langFinalDesc, 'detail_descr', $language)
-    . manlink($langShortDesc, 'short_descr', $language)
-    . manlink($langManT, 'mant', $language)
-    . manlink($langManS, 'mans', $language) . "
-</div>";
 
-$tool_content .= "<br><p class='tool_title'>$langTeacherTutorials$addon</p>";
+$data['action_bar'] = action_bar([[
+    'title' => $langBack,
+    'url' => $urlServer,
+    'icon' => 'fa-reply',
+    'level' => 'primary-label',
+    'button-class' => 'btn-default'
+]],false);
 
-$tool_content .= "<div class='list-group'>"
-    . manlink($langCreateAccount, 'create_account', $language)
-    . manlink($langCourseCreate, 'create_course', $language)
-    . manlink($langUserPortfolio, 'portfolio_management', $language)
-    . manlink($langAdministratorCourse, 'course_management', $language)
-    . manlink($langAdministratorForum, 'forum_management', $language)
-    . manlink($langAdministratorGroup, 'group_management', $language) . "
-</div>";
+$data['general_tutorials'] = [
+    'detail_descr' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langFinalDesc,
+            'url' => "$url/$language:detail_descr"
+        ],
+    'short_descr' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langShortDesc,
+            'url' => "$url/$language:short_descr"
+        ],
+    'mant' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langManT,
+            'url' => "$url/$language:mant"
+        ],
+    'mans' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langManS,
+            'url' => "$url/$language:mans"
+        ]
+];
 
-$tool_content .= "<br /><p class='tool_title'>$langStudentTutorials$addon</p>
-<div class='list-group'>"
-    . manlink($langRegCourses, 'register_course', $language)
-    . manlink($langUserPortfolio, 'personal_portfolio', $language)
-    . manlink($langIntroToCourse, 'ecourse', $language)
-    . manlink($langForumParticipation, 'forum', $language) . "
-</div>";
+$data['teacher_tutorials'] = [
+    'title' => $langTeacherTutorials.$addon,
+    'create_account' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langCreateAccount,
+            'url' => "$url/$language:create_account"
+        ],
+    'create_course' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langCourseCreate,
+            'url' => "$url/$language:create_course"
+        ],
+    'portfolio_management' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langUserPortfolio,
+            'url' => "$url/$language:portfolio_management"
+        ],
+    'course_management' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langAdministratorCourse,
+            'url' => "$url/$language:course_management"
+        ],
+    'forum_management' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langAdministratorForum,
+            'url' => "$url/$language:forum_management"
+        ],
+    'group_management' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langAdministratorGroup,
+            'url' => "$url/$language:group_management"
+        ]
+];
 
 
-if (isset($uid) and $uid) {
-    draw($tool_content, 1);
-} else {
-    draw($tool_content, 0);
-}
+$data['student_tutorials'] = [
+    'title' => $langStudentTutorials.$addon,
+    'register_course' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langRegCourses,
+            'url' => "$url/$language:register_course"
+        ],
+    'personal_portfolio' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langUserPortfolio,
+            'url' => "$url/$language:personal_portfolio"
+        ],
+    'ecourse' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langIntroToCourse,
+            'url' => "$url/$language:ecourse"
+        ],
+    'forum' =>
+        [
+            'desc' => icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;".$langForumParticipation,
+            'url' => "$url/$language:forum"
+        ]
+];
 
-/**
- * @brief create link to manuals
- * @param type $desc
- * @param type $link
- * @param type $language
- * @return type
- */
-function manlink($desc, $link, $language) {
-    $url = 'http://docs.openeclass.org/3.2';
-    return "<a href='$url/$language:$link' target='_blank' class='mainpage list-group-item'>" .icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;$desc</a>";
-}
+
+$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
+
+view('info.manual', $data);
