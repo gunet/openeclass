@@ -46,7 +46,7 @@ $toolName = $langBBB;
 
 //Here we check if we use BBB,OpenMeetings or WebConf
 //Algo to be implemented later
-$server_type='bbb';
+$server_type='om';
 
 // guest user not allowed
 if (check_guest()) {
@@ -220,14 +220,15 @@ elseif(isset($_GET['choice']))
             enable_bbb_session(getDirectReference($_GET['id']));
             break;
         case 'do_join':
-            #check if there is any record-capable bbb server. Otherwise notify users
+            #check if there is any record-capable server. Otherwise notify users
             if (isset($_GET['record'])) {
                 if($_GET['record']=='true' && Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0 && Database::get()->querySingle("SELECT COUNT(*) AS count FROM om_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
                 {
                     $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";
                     break;
                 }            
-                switch($server_type)
+            }
+            switch($server_type)
                 {
                     case 'bbb':
                         if (bbb_session_running($_GET['meeting_id']) == false)                        
@@ -238,11 +239,10 @@ elseif(isset($_GET['choice']))
                     case 'om':
                         if (om_session_running($_GET['meeting_id']) == false)                        
                         {
-                            //create_om_meeting();
+                            create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
                         }
                     break;
-                }
-            }
+                }            
             if(isset($_GET['mod_pw'])) {
                 switch($server_type)
                 {

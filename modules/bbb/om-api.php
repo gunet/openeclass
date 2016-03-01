@@ -126,3 +126,117 @@ function om_session_running($meeting_id)
     
     return false;
 }
+
+/**
+ *
+ * @global type $course_id
+ * @global type $langBBBCreationRoomError
+ * @global type $langBBBConnectionError
+ * @param type $title
+ * @param type $meeting_id
+ * @param type $mod_pw
+ * @param type $att_pw
+ * @param type $record
+ */
+function create_om_meeting($title, $meeting_id,$record)
+{
+    $run_to = -1;
+    $min_users  = 10000000;
+
+    //Get all course participants
+    $users_to_join = Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_user, user
+                                WHERE course_user.course_id = ?d AND course_user.user_id = user.id", $course_id)->count;
+    //Algorithm to select BBB server GOES HERE ...
+    if ($record == 'true') {
+        $query = Database::get()->queryArray("SELECT * FROM om_servers WHERE enabled='true' AND enable_recordings=?s ",$record);
+    } else {
+        $query = Database::get()->queryArray("SELECT * FROM om_servers WHERE enabled='true'");
+    }
+
+    /*
+
+    if ($query) {
+        foreach ($query as $row) {
+            $max_rooms = $row->max_rooms;
+            $max_users = $row->max_users;
+            // GET connected Participants
+            $connected_users = get_om_connected_users($row->server_key, $row->api_url, $row->ip);
+            $active_rooms = get_om_active_rooms($row->server_key,$row->api_url);
+
+            if ($connected_users<$min_users) {
+                $run_to='888'.$row->id;
+                $min_users = $connected_users;
+            }
+
+            //cases
+            // max_users = 0 && max_rooms = 0 - UNLIMITED
+            // active_rooms < max_rooms && active_users < max_users
+            // active_rooms < max_rooms && max_users = 0 (UNLIMITED)
+            // active_users < max_users && max_rooms = 0 (UNLIMITED)
+            if (($max_rooms == 0 && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $active_rooms < $max_rooms) || ($active_rooms < $max_rooms && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $max_rooms == 0)) // YOU FOUND THE SERVER
+            {
+                $run_to = str_replace('999','',$row->id);
+                Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",'888'.$row->id, $meeting_id);
+                break;
+            }
+        }
+    }
+
+    if ($run_to == -1) {
+        // WE SHOULD TAKE ACTION IF NO SERVER AVAILABLE DUE TO CAPACITY PROBLEMS
+        // If no server available we select server with min connected users
+        $temp_conn = 10000000;
+        $query = Database::get()->queryArray("SELECT * FROM om_servers WHERE enabled='true' AND enable_recordings=?s ORDER BY weight ASC",$record);
+
+        if ($query) {
+            foreach ($query as $row) {
+                // GET connected Participants
+                $connected_users = get_om_connected_users($row->server_key, $row->api_url, $row->ip);
+
+                if ($connected_users<$temp_conn) {
+                    $run_to=str_replace('888','',$row->id);
+                    $temp_conn = $connected_users;
+                }
+            }
+        }
+        Database::get()->querySingle("UPDATE bbb_session SET running_at=?d WHERE meeting_id=?s",'888'.$run_to,$meeting_id);
+    }
+     */
+
+    // we find the om server that will serve the session
+    $run_to=4; // To disable after tests
+    $res = Database::get()->querySingle("SELECT * FROM om_servers WHERE id=?d", $run_to);
+
+    if ($res) {
+        $url = $res->hostname.':'.$res->port;
+
+        $soapUsers = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/UserService?wsdl');
+        $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/openmeetings/services/RoomService?wsdl');
+
+        $rs = array();
+        $rs = $soapUsers->getSession();
+
+        $session_id = $rs->return->session_id;
+
+        $params = array(
+            'SID' => $session_id,
+            'name' => utf8_encode($meeting_id),
+            'roomtypes_id' => 1,
+            'comment' => utf8_encode($title),
+            'numberOfPartizipants' => $users_to_join+20,
+            'ispublic' => true,
+            'appointment' => false,
+            'isDemoRoom' => false,
+            'isDemoRoom' => false,
+            'demoTime' => '',
+            'isModeratedRoom' => true
+        );
+
+        $l = $roomService->addRoomWithModeration($params);
+
+        $room_id = $l->return;
+        if(!$room_id)
+            echo "<div class='alert alert-danger'>$langBBBCreationRoomError.</div>";
+
+    }
+}
