@@ -236,7 +236,10 @@ elseif(isset($_GET['choice']))
                             create_meeting($_GET['title'],$_GET['meeting_id'],$mod_pw,$_GET['att_pw'],$_GET['record']);
                         }
                     case 'om':
-                        print "OpenMeetings";
+                        if (om_session_running($_GET['meeting_id']) == false)                        
+                        {
+                            //create_om_meeting();
+                        }
                     break;
                 }
             }
@@ -246,7 +249,7 @@ elseif(isset($_GET['choice']))
                     case 'bbb':
                         header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
                     case 'om':
-                        print "OpenMeetings";
+                        header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1) );
                     break;
                 }
             } else {
@@ -259,9 +262,10 @@ elseif(isset($_GET['choice']))
                 } else {
                     switch($server_type)
                     {
-                        case 'bbb': header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                        case 'bbb':
+                            header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
                         case 'om':
-                            print "OpenMeetings";
+                            header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0) );
                         break;
                     }
                 }

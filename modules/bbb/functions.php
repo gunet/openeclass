@@ -1092,7 +1092,7 @@ function bbb_session_running($meeting_id)
     if (!isset($res->running_at)) {
         return false;
     }
-    $running_server = $res->running_at;
+    $running_server = str_replace('999','',$res->running_at);
 
     if (Database::get()->querySingle("SELECT count(*) as count FROM bbb_servers
             WHERE id=?d AND enabled='true'", $running_server)->count == 0) {
