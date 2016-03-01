@@ -236,21 +236,23 @@ elseif(isset($_GET['choice']))
                             $mod_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;                
                             create_meeting($_GET['title'],$_GET['meeting_id'],$mod_pw,$_GET['att_pw'],$_GET['record']);
                         }
+                        break;
                     case 'om':
                         if (om_session_running($_GET['meeting_id']) == false)                        
                         {
                             create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
                         }
-                    break;
+                        break;
                 }            
             if(isset($_GET['mod_pw'])) {
                 switch($server_type)
                 {
                     case 'bbb':
                         header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                        break;
                     case 'om':
                         header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1) );
-                    break;
+                        break;
                 }
             } else {
                 # Get session capacity                
@@ -264,9 +266,10 @@ elseif(isset($_GET['choice']))
                     {
                         case 'bbb':
                             header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                            break;
                         case 'om':
                             header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0) );
-                        break;
+                            break;
                     }
                 }
             }
