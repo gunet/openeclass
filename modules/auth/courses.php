@@ -31,12 +31,9 @@ $toolName = $langChoiceLesson;
 
 if (isset($_REQUEST['fc'])) {
     $fc = intval($_REQUEST['fc']);
-} elseif (isset($_SESSION['fc_memo'])) {
-    $fc = $_SESSION['fc_memo'];
 } else {
     $fc = getfcfromuid($uid);
 }
-$_SESSION['fc_memo'] = $fc;
 
 $courses_list = array();
 $restrictedCourses = array();
