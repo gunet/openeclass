@@ -37,15 +37,13 @@ $icons = array(
 
 if (isset($_REQUEST['fc'])) {
     $fc = intval($_REQUEST['fc']);
-} elseif (isset($_SESSION['fc_memo'])) {
-    $fc = $_SESSION['fc_memo'];
 } else {
     $fc = getfcfromuid($uid);
 }
-$_SESSION['fc_memo'] = $fc;
 
 $courses_list = array();
 $restrictedCourses = array();
+
 if (isset($_POST['changeCourse']) and is_array($_POST['changeCourse'])) {
     $changeCourse = $_POST['changeCourse'];
 } else {
@@ -117,51 +115,62 @@ if (isset($_POST['submit'])) {
     } else {
         // department exists
         $numofcourses = getdepnumcourses($fc);
-        $tool_content .= action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
-                            ),false);
+
+        $data['action_bar']= action_bar([
+            ['title' => $langBack,
+                'url' => $urlServer,
+                'icon' => 'fa-reply',
+                'level' => 'primary-label',
+                'button-class' => 'btn-default']
+        ],false);
         if (count($roots) > 1) {
-            $tool_content .= $tree->buildRootsSelectForm($fc);
+            //---$tool_content .= $tree->buildRootsSelectForm($fc);
+            $data['roots'] = $tree->buildRootsSelectForm($fc);
         }
-        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
-        $tool_content .= "<ul class='list-group'>
-                                  <li class='list-group-item list-header'><a name='top'></a>$langFaculty: " .
-                $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
-                                  </li>";
+        $data['form_action'] = $_SERVER['SCRIPT_NAME'];
+        $data['fc_fullpath'] = $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=');
         list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
-        $tool_content .= $childHTML;
+        $data['childCount'] = $childCount;
+        $data['fc_courses'] = $childHTML;
+        //--$tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
+        //--$tool_content .= "<ul class='list-group'>
+                                  //--<li class='list-group-item list-header'><a name='top'></a>$langFaculty: " .
+                //--$tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
+                                  //--</li>";
+        //--list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
+        //--$tool_content .= $childHTML;
         $subTrees = $tree->buildSubtrees(array($fc));
-        $tool_content .= "</ul></form>";
+        //--$tool_content .= "</ul></form>";
 
         if ($numofcourses > 0) {
-            $tool_content .= expanded_faculte($fc, $uid);
-            $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
+            //---$tool_content .= expanded_faculte($fc, $uid);
+            $data['expanded_fc'] = expanded_faculte($fc, $uid);
+            //---$tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
         } else if ($childCount <= 0) {
-            $tool_content .= "<div class='alert alert-warning text-center'>- $langNoCourses -</div>\n";
+            //--$tool_content .= "<div class='alert alert-warning text-center'>- $langNoCourses -</div>\n";
         }
     } // end of else (department exists)
 }
-$tool_content .= "<script type='text/javascript'>$(course_list_init);
-var themeimg = '" . js_escape($themeimg) . "';
-var urlAppend = '".js_escape($urlAppend)."';
-var lang = {
-        unCourse: '" . js_escape($langUnCourse) . "',
-        cancel: '" . js_escape($langCancel) . "',
-        close: '" . js_escape($langClose) . "',
-        unregCourse: '" . js_escape($langUnregCourse) . "',
-        reregisterImpossible: '" . js_escape("$langConfirmUnregCours $m[unsub]") . "',
-        invalidCode: '" . js_escape($langInvalidCode) . "',
-};
-var courses = ".(json_encode($courses_list)).";
-</script>";
+$tool_content .=
+    "<script type='text/javascript'>$(course_list_init);
+        var themeimg = '" . js_escape($themeimg) . "';
+        var urlAppend = '".js_escape($urlAppend)."';
+        var lang = {
+            unCourse: '" . js_escape($langUnCourse) . "',
+            cancel: '" . js_escape($langCancel) . "',
+            close: '" . js_escape($langClose) . "',
+            unregCourse: '" . js_escape($langUnregCourse) . "',
+            reregisterImpossible: '" . js_escape("$langConfirmUnregCours $m[unsub]") . "',
+            invalidCode: '" . js_escape($langInvalidCode) . "',
+        };
+        var courses = ".(json_encode($courses_list)).";
+    </script>";
 
 load_js('tools.js');
 
-draw($tool_content, 1, null, $head_content);
+$data['menuTypeID'] = 1;
+
+view('modules.auth.courses', $data);
 
 function getfacfromfc($dep_id) {
     $fac = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?d", intval($dep_id));
