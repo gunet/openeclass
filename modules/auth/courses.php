@@ -29,12 +29,6 @@ $tree = new Hierarchy();
 
 $toolName = $langChoiceLesson;
 
-$icons = array(
-    COURSE_OPEN => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' />",
-    COURSE_REGISTRATION => "<img src='$themeimg/lock_registration.png' alt='" . $langRegCourse . "' title='" . $langRegCourse . "' />",
-    COURSE_CLOSED => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' />"
-);
-
 if (isset($_REQUEST['fc'])) {
     $fc = intval($_REQUEST['fc']);
 } else {
@@ -198,7 +192,7 @@ function getdepnumcourses($fac) {
 /**
  * @brief display courses list
  * @global type $m
- * @global array $icons
+ * @global array $course_access_icons
  * @global type $langTutor
  * @global type $langRegistration
  * @global type $langRegistration
@@ -213,7 +207,7 @@ function getdepnumcourses($fac) {
  * @return string
  */
 function expanded_faculte($facid, $uid) {
-    global $m, $icons, $langTutor, $langRegistration,
+    global $m, $course_access_icons, $langTutor, $langRegistration,
     $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
     $themeimg, $tree;
 
@@ -249,7 +243,7 @@ function expanded_faculte($facid, $uid) {
                       WHERE course.id = course_department.course
                         AND course_department.department = ?d
                         AND course.visible != ?d
-                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $icons) {
+                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $course_access_icons) {
         global $urlAppend, $courses_list;
         $cid = $mycours->cid;
         $course_title = q($mycours->i);
@@ -301,7 +295,7 @@ function expanded_faculte($facid, $uid) {
                    <td align='center'>";
 
         // show the necessary access icon
-        foreach ($icons as $visible => $image) {
+        foreach ($course_access_icons as $visible => $image) {
             if ($visible == $mycours->visible) {
                 $retString .= $image;
             }
