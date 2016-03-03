@@ -1613,7 +1613,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_department` (
 $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `conf_id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) NOT NULL,
-    `conf_description` text NOT NULL,
+    `conf_title` text NOT NULL,
+    `conf_description` text DEFAULT NULL,
     `status` enum('active','inactive') DEFAULT NULL,
     `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`conf_id`)) $charset_spec");
