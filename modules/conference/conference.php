@@ -31,6 +31,9 @@ $helpTopic = 'Conference';
 require_once '../../include/baseTheme.php';
 $coursePath = $webDir . '/courses/';
 $conference_id = $_GET['conference_id'];
+if(Database::get()->querySingle("SELECT count(*) as count FROM conference WHERE conf_id=?d AND status='active'", $conference_id)->count == 0)
+    redirect_to_home_page("modules/conference/index.php?course=$course_code");
+        
     $fileChatName = $coursePath . $course_code . '/'. $conference_id. '_chat.txt';
     $tmpArchiveFile = $coursePath . $course_code . '/'. $conference_id. '_tmpChatArchive.txt';
 
