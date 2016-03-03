@@ -136,17 +136,6 @@ function om_session_running($meeting_id)
     return false;
 }
 
-/**
- *
- * @global type $course_id
- * @global type $langBBBCreationRoomError
- * @global type $langBBBConnectionError
- * @param type $title
- * @param type $meeting_id
- * @param type $mod_pw
- * @param type $att_pw
- * @param type $record
- */
 function create_om_meeting($title, $meeting_id,$record)
 {
     $run_to = -1;
@@ -162,15 +151,14 @@ function create_om_meeting($title, $meeting_id,$record)
         $query = Database::get()->queryArray("SELECT * FROM om_servers WHERE enabled='true'");
     }
 
-    /*
 
     if ($query) {
         foreach ($query as $row) {
             $max_rooms = $row->max_rooms;
             $max_users = $row->max_users;
             // GET connected Participants
-            $connected_users = get_om_connected_users($row->server_key, $row->api_url, $row->ip);
-            $active_rooms = get_om_active_rooms($row->server_key,$row->api_url);
+            $connected_users = get_om_connected_users($row->id);
+            $active_rooms = get_om_active_rooms($row->id);
 
             if ($connected_users<$min_users) {
                 $run_to='888'.$row->id;
@@ -184,7 +172,7 @@ function create_om_meeting($title, $meeting_id,$record)
             // active_users < max_users && max_rooms = 0 (UNLIMITED)
             if (($max_rooms == 0 && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $active_rooms < $max_rooms) || ($active_rooms < $max_rooms && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $max_rooms == 0)) // YOU FOUND THE SERVER
             {
-                $run_to = str_replace('999','',$row->id);
+                $run_to = str_replace('888','',$row->id);
                 Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",'888'.$row->id, $meeting_id);
                 break;
             }
@@ -195,12 +183,12 @@ function create_om_meeting($title, $meeting_id,$record)
         // WE SHOULD TAKE ACTION IF NO SERVER AVAILABLE DUE TO CAPACITY PROBLEMS
         // If no server available we select server with min connected users
         $temp_conn = 10000000;
-        $query = Database::get()->queryArray("SELECT * FROM om_servers WHERE enabled='true' AND enable_recordings=?s ORDER BY weight ASC",$record);
+        $query = Database::get()->queryArray("SELECT * FROM om_servers WHERE enabled='true' AND enable_recordings=?s",$record);
 
         if ($query) {
             foreach ($query as $row) {
                 // GET connected Participants
-                $connected_users = get_om_connected_users($row->server_key, $row->api_url, $row->ip);
+                $connected_users = get_om_connected_users($row->id);
 
                 if ($connected_users<$temp_conn) {
                     $run_to=str_replace('888','',$row->id);
@@ -210,10 +198,8 @@ function create_om_meeting($title, $meeting_id,$record)
         }
         Database::get()->querySingle("UPDATE bbb_session SET running_at=?d WHERE meeting_id=?s",'888'.$run_to,$meeting_id);
     }
-     */
 
     // we find the om server that will serve the session
-    $run_to=4; // To disable after tests
     $res = Database::get()->querySingle("SELECT * FROM om_servers WHERE id=?d", $run_to);
 
     if ($res) {
@@ -256,7 +242,102 @@ function create_om_meeting($title, $meeting_id,$record)
             echo "<div class='alert alert-danger'>$langBBBCreationRoomError.</div>";
     
         //TO REMOVE!!!
-        Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",'8884', $meeting_id);
+        Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",'888'.$run_to, $meeting_id);
 
     }
+}
+
+function get_om_active_rooms($om_server)
+{
+    $active_rooms = 0;
+    $res = Database::get()->querySingle("SELECT *
+                                    FROM om_servers
+                                    WHERE id=?d", $om_server);
+    
+    $url = $res->hostname.':'.$res->port;
+
+    $soapUsers = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/UserService?wsdl');
+    $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/RoomService?wsdl');
+
+    $rs = array();
+    $rs = $soapUsers->getSession();
+
+    $session_id = $rs->return->session_id;
+    
+    $params = array(
+	'SID' => $session_id,
+	'username' => utf8_encode($res->username),
+	'userpass' => utf8_encode($res->password)
+    );
+
+    $l = array();
+    $l = $soapUsers->loginUser($params);
+    
+    $params = array(
+	'SID' => $session_id,
+	'start' => 0,
+	'max' => 10000,
+	'orderby' => 'name',
+	'asc' => true
+    );
+    
+    $rs = $roomService->getRooms($params);
+    
+    foreach ($rs->return->result as $rr)
+    {
+        $active_rooms += 1;
+    }
+    
+    return $active_rooms;
+}
+
+function get_om_connected_users($om_server)
+{
+    $connected_users = 0;
+    $res = Database::get()->querySingle("SELECT *
+                                    FROM om_servers
+                                    WHERE id=?d", $om_server);
+    
+    $url = $res->hostname.':'.$res->port;
+
+    $soapUsers = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/UserService?wsdl');
+    $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/RoomService?wsdl');
+
+    $rs = array();
+    $rs = $soapUsers->getSession();
+
+    $session_id = $rs->return->session_id;
+    
+    $params = array(
+	'SID' => $session_id,
+	'username' => utf8_encode($res->username),
+	'userpass' => utf8_encode($res->password)
+    );
+
+    $l = array();
+    $l = $soapUsers->loginUser($params);
+    
+    $params = array(
+	'SID' => $session_id,
+	'start' => 0,
+	'max' => 10000,
+	'orderby' => 'name',
+	'asc' => true
+    );
+    
+    $rs = $roomService->getRooms($params);
+    
+    foreach ($rs->return->result as $rr)
+    {
+        $params = array(
+            'SID' => $session_id,
+            'roomId' => $rr->id
+        );
+
+        $cu = $roomService->getRoomCounters($params);
+
+        $connected_users += $cu;
+    }
+    
+    return $connected_users;
 }

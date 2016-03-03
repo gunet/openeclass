@@ -46,7 +46,7 @@ $toolName = $langBBB;
 
 //Here we check if we use BBB,OpenMeetings or WebConf
 //Algo to be implemented later
-$server_type='bbb';
+$server_type='om';
 
 // guest user not allowed
 if (check_guest()) {
@@ -258,7 +258,16 @@ elseif(isset($_GET['choice']))
                 # Get session capacity                
                 $sess = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id']);
                 $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);                                
-                if( ($sess->sessionUsers > 0) && ($sess->sessionUsers < get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw))) {
+                
+                if(substr($sess->running_at,0,3) == '999')
+                {
+                    $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw);
+                }
+                if(substr($sess->running_at,0,3) == '888')
+                {
+                    $ssUsers = 0;
+                }
+                if( ($sess->sessionUsers > 0) && ($sess->sessionUsers < $ssUsers)) {
                     $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
                     break;
                 } else {
