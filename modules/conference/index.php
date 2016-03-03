@@ -46,6 +46,12 @@ if (isset($_GET['add_conference'])) {
     $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>";
+    $tool_content .= "<div class='col-sm-10'>";
+    $tool_content .= "<input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='description' class='col-sm-2 control-label'>$langDescr:</label>";
     $tool_content .= "<div class='col-sm-10'>";
     $tool_content .= "$textarea";
@@ -60,6 +66,11 @@ if (isset($_GET['add_conference'])) {
 
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
     $tool_content .= "</fieldset></form></div>";
+    $tool_content .='<script language="javaScript" type="text/javascript">
+        //<![CDATA[
+            var chkValidator  = new Validator("confForm");
+            chkValidator.addValidation("title","req","'.$langChatTitleError.'");
+        //]]></script>';
 
 } else if (isset($_GET['delete_conference'])) {
     $id = $_GET['delete_conference'];
@@ -81,17 +92,18 @@ if (isset($_GET['add_conference'])) {
             'level' => 'primary-label')));
 }
 else if (isset($_POST['submit'])) {
+    $title = $_POST['title'];
     $description = $_POST['description'];
     $status = $_POST['status'];
     if (isset($_POST['conference_id'])) {
     $conf_id = $_POST['conference_id'];
-        Database::get()->querySingle("UPDATE conference SET conf_description = ?s,
+        Database::get()->querySingle("UPDATE conference SET conf_title= ?s,conf_description = ?s,
                 status = ?s
-                WHERE conf_id =?d", $description, $status, $conf_id);
+                WHERE conf_id =?d", $title, $description, $status, $conf_id);
     } else {
         $course_id = $_POST['course_id'];
-        Database::get()->querySingle("INSERT INTO conference (course_id,conf_description,status) VALUES
-        (?d,?s,?s)", $course_id,$description,$status);
+        Database::get()->querySingle("INSERT INTO conference (course_id,conf_title,conf_description,status) VALUES
+        (?d,?s,?s,?s)", $course_id,$title,$description,$status);
     }    
     // Display result message
     $tool_content .= "<div class='alert alert-success'>$langNoteSaved</div>";
@@ -119,6 +131,12 @@ else {
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<fieldset>";        
         $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>";
+        $tool_content .= "<div class='col-sm-10'>";
+        $tool_content .= "<input class='form-control' type='text' name='title' id='title' value='$conf->conf_title' size='50' />";
+        $tool_content .= "</div>";        
+        $tool_content .= "</div>";        
+        $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='desc' class='col-sm-2 control-label'>$langDescr:</label>";
         $tool_content .= "<div class='col-sm-10'>";
         $tool_content .= "$textarea";
@@ -144,7 +162,7 @@ else {
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[
                     var chkValidator  = new Validator("confForm");
-                    //chkValidator.addValidation("description","req","' . $langBBBServerAlertHostname . '");
+                    chkValidator.addValidation("title","req","'.$langChatTitleError.'");
                 //]]></script>';
                     
     } else {
@@ -163,7 +181,8 @@ else {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
                 <thead>
-                <tr><th class = 'text-center'>$langDescr</th>
+                <tr><th class = 'text-center'>".$m['title']."</th>
+                    <th class = 'text-center'>$langDescr</th>
                     <th class = 'text-center'>$langChatActive</th>
                     <th class = 'text-center'>$langStartDate</th>";
                     
@@ -175,8 +194,9 @@ else {
                 $enabled_conference = ($conf->status == 'active')? $langYes : $langNo;
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>";
-                ($conf->status == 'active')? $tool_content .= "<a href='./conference.php?conference_id=$conf->conf_id'>$conf->conf_description</a>" : $tool_content .= $conf->conf_description;
+                ($conf->status == 'active')? $tool_content .= "<a href='./conference.php?conference_id=$conf->conf_id'>$conf->conf_title</a>" : $tool_content .= $conf->conf_description;
                 $tool_content .= "</td>";
+                $tool_content .= "<td>$conf->conf_description</td>";
                 $tool_content .= "<td>$enabled_conference</td>";
                 $tool_content .= "<td>$conf->start</td>";
                 if($is_editor)
