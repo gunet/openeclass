@@ -67,8 +67,10 @@ if (isset($_GET['add_conference'])) {
     $fileChatName = $coursePath . $course_code . '/'.$id.'_chat.txt';
     $tmpArchiveFile = $coursePath . $course_code . '/'.$id.'_tmpChatArchive.txt';
 
-    unlink($fileChatName);
-    unlink($tmpArchiveFile);
+    if(file_exists($fileChatName))
+       unlink($fileChatName);
+    if(file_exists($tmpArchiveFile))
+        unlink($tmpArchiveFile);
     
     // Display result message
     $tool_content .= "<div class='alert alert-success'>$langChatDeleted</div>";    
@@ -147,13 +149,15 @@ else {
                     
     } else {
         //display available conferences
-        $tool_content .= action_bar(array(
-            array('title' => $langAdd,
-                'url' => "index.php?add_conference",
-                'icon' => 'fa-plus-circle',
-                'level' => 'primary-label',
-                'button-class' => 'btn-success')));
-
+        if($is_editor)
+        {
+            $tool_content .= action_bar(array(
+                array('title' => $langAdd,
+                    'url' => "index.php?add_conference",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success')));
+        }
         $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d ORDER BY conf_id DESC",$course_id);
         if (count($q)>0) {
             $tool_content .= "<div class='table-responsive'>";
