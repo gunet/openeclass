@@ -642,7 +642,7 @@ function bbb_session_details() {
     $activeClause = $is_editor? '': "AND active = '1'";
     $result = Database::get()->queryArray("SELECT * FROM bbb_session
         WHERE course_id = ?s $activeClause ORDER BY start_date DESC", $course_id);
-    if (get_total_bbb_servers() == '0') {
+    if (get_total_bbb_servers() == '0' && get_total_om_servers() == '0') {
         if ($is_editor) {
             $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";
         } else {
@@ -717,7 +717,7 @@ function bbb_session_details() {
             $canJoin = $row->active == '1' &&
                 date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < $row->unlock_interval &&
                 -$timeLeft < DAY_MINUTES &&
-                get_total_bbb_servers() <> '0';
+                (get_total_bbb_servers() <> '0' || get_total_om_servers() <> '0');
             if ($canJoin) {
                 if($is_editor)
                 {
@@ -803,7 +803,7 @@ function bbb_session_details() {
             $tool_content .= "</table></div></div></div>";
         }
 
-        if (get_total_bbb_servers() == '0') {
+        if (get_total_bbb_servers() == '0' && get_total_om_servers() == '0') {
             if ($is_editor) {
                 $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";
             } else {

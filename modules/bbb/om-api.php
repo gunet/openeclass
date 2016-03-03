@@ -341,3 +341,14 @@ function get_om_connected_users($om_server)
     
     return $connected_users;
 }
+
+function get_total_om_servers()
+{
+    $total = 0;
+
+    if (get_config('ext_openmeetings_enabled')) {
+        $total = Database::get()->querySingle("SELECT COUNT(*) AS count FROM om_servers WHERE enabled='true'")->count;
+    }
+
+    return $total;
+}
