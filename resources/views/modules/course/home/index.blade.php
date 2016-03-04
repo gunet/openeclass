@@ -137,7 +137,7 @@
                 <div class='row boxlist no-list'>
                     @if ($course_units)
                         <?php $count_index = 0;?>
-                        @foreach ($course_units as $course_unit)
+                        @foreach ($course_units as $key => $course_unit)
                             @if ($course_unit->visible == 1)
                                <?php $count_index++; ?>
                             @endif                    
@@ -197,14 +197,14 @@
                                                                     'level' => 'primary',
                                                                     'url' => "$_SERVER[SCRIPT_NAME]?down=". getIndirectReference($course_unit->id),
                                                                     'icon' => 'fa-arrow-down',
-                                                                    'disabled' => $course_unit->id == $last_id
+                                                                    'disabled' => $key + 1 == count($course_units)
                                                                 ],
                                                                 [
                                                                     'title' => trans('langUp'),
                                                                     'level' => 'primary',
                                                                     'url' => "$_SERVER[SCRIPT_NAME]?up=". getIndirectReference($course_unit->id),
                                                                     'icon' => 'fa-arrow-up',
-                                                                    'disabled' => $count_index == 1
+                                                                    'disabled' => $key == 0
                                                                 ],
                                                                 [
                                                                     'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
