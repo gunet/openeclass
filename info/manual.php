@@ -40,7 +40,7 @@ $data['action_bar'] = action_bar([[
 ]], false);
 
 $data['general_tutorials'] = [
-    'title' => $langGeneralTutorials,
+    'title' => $langGeneralTutorials . $addon,
     'links' =>
         [
             'detail_descr' =>
