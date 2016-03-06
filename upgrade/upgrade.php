@@ -2683,6 +2683,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         updateInfo(-1, sprintf($langUpgForVersion, '3.2'));
         set_config('ext_bigbluebutton_enabled',
             Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count > 0? '1': '0');
+        set_config('ext_openmeetings_enabled',
+            Database::get()->querySingle("SELECT COUNT(*) AS count FROM om_servers WHERE enabled='true'")->count > 0? '1': '0');
+        set_config('ext_webconf_enabled',
+            Database::get()->querySingle("SELECT COUNT(*) AS count FROM wc_servers WHERE enabled='true'")->count > 0? '1': '0');
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

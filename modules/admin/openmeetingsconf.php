@@ -262,10 +262,11 @@ else {
                     <th class = 'text-center'>$langOpenMeetingsAdminUser</th>
                     <th class = 'text-center'>$langOpenMeetingsModuleKey</th>
                     <th class = 'text-center'>$langOpenMeetingsWebApp</th>
+                    <th class = 'text-center'>$langBBBEnabled</th>
                     <th class = 'text-center'>".icon('fa-gears')."</th></tr>
                 </thead>";
             foreach ($q as $srv) {
-                $enabled_bbb_server = ($srv->enabled)? $langYes : $langNo;
+                $enabled_bbb_server = ($srv->enabled=='true')? $langYes : $langNo;
 
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>$srv->hostname</td>";
@@ -273,6 +274,9 @@ else {
                 $tool_content .= "<td>$srv->username</td>";
                 $tool_content .= "<td>$srv->module_key</td>";
                 $tool_content .= "<td>$srv->webapp</td>";
+                $tool_content .= "<td class = 'text-center'>$enabled_bbb_server</td>";
+
+
                 $tool_content .= "<td class='option-btn-cell'>".action_button(array(
                                                     array('title' => $langEditChange,
                                                           'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
