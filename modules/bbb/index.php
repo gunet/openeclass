@@ -181,7 +181,7 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
-                      'show' => get_total_bbb_servers())));
+                      'show' => max(get_total_bbb_servers(),  get_total_om_servers(),  get_total_webconf_servers()))));
         }
     }
 }

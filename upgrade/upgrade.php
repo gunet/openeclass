@@ -971,7 +971,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             'exercise', 'exercise_user_record', 'exercise_question',
             'exercise_answer', 'exercise_with_questions', 'course_module',
             'actions', 'actions_summary', 'logins', 'wiki_locks', 'bbb_servers', 'bbb_session','om_servers','wc_servers',
-            'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats');
+            'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats', 'lti_apps');
         foreach ($new_tables as $table_name) {
             if (DBHelper::tableExists($table_name)) {
                 if (Database::get()->querySingle("SELECT COUNT(*) AS c FROM `$table_name`")->c > 0) {
@@ -1754,6 +1754,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                        `sessionUsers` int(11) DEFAULT 0,
                       PRIMARY KEY (`id`))');
 
+        //bbb_servers table
         Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `hostname` varchar(255) DEFAULT NULL,
@@ -3310,6 +3311,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `enabled` enum('true','false') DEFAULT NULL,
                         PRIMARY KEY (`id`),
                         KEY `idx_wc_servers` (`hostname`)) $charset_spec");
+
+        // lti_apps tables
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `lti_apps` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `course_id` int(11) DEFAULT NULL,
+            `title` varchar(255) DEFAULT NULL,
+            `description` text,
+            `lti_provider_url` varchar(255) DEFAULT NULL,
+            `lti_provider_key` varchar(255) DEFAULT NULL,
+            `lti_provider_secret` varchar(255) DEFAULT NULL,
+            `enabled` enum('0','1') DEFAULT NULL,
+            PRIMARY KEY (`id`)) $charset_spec");
+
 						
         if (!DBHelper::fieldExists('poll', 'type')) {
             Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");

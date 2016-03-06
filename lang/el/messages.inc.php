@@ -5091,3 +5091,20 @@ $langUpdateWebConfServer = "Στοιχεία εξυπηρετητή WebConf";
 $langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές WebConf";
 $langWebConfServer = "WebConf url";
 $langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το url της WebConf εγκατάστασης";
+
+// Messages for Lti Consumer
+$langLtiConsumer = "Εξωτερικές εφαρμογές LTI";
+$langNewLTITool= "Προσθήκη νέας εφαρμογής LTI";
+$langLTIProviderUrl = "LTI Provider URL";
+$langLTIProviderKey = "LTI Provider Key";
+$langLTIProviderSecret = "LTI Provider Secret";
+$langNewLTIAppStatus = "Κατάσταση";
+$langNewLTIAppActive = "Ενεργή";
+$langNewLTIAppInActive = "Μη ενεργή";
+$langNoLTIApps = "Δεν υπάρχουν Εξωτερικές Εφαρμογές LTI προς χρήση";
+$langLTIAPPlertTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της Εφαρμογής LTI";
+$langLTIAPPlertURL = "Παρακαλώ πληκτρολογήστε το URL του LTI Provider";
+$langLTIAppAddSuccessful = "Η καταχώρηση της Εξωτερικής Εφαρμογής LTI ολοκληρώθηκε επιτυχώς";
+$langLTIAppUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε με επιτυχία";
+$langLTIAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
+$langNewLTIAppSessionDesc = "Σύντομη περιγραφή";

@@ -63,6 +63,7 @@ $db->query("DROP TABLE IF EXISTS bbb_servers");
 $db->query("DROP TABLE IF EXISTS om_servers");
 $db->query("DROP TABLE IF EXISTS wc_servers");
 $db->query("DROP TABLE IF EXISTS bbb_session");
+$db->query("DROP TABLE IF EXISTS lti_apps");
 
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
@@ -1475,6 +1476,18 @@ $db->query("CREATE TABLE IF NOT EXISTS `bbb_session` (
     `participants` varchar(1000) DEFAULT NULL,
     `record` enum('true','false') DEFAULT 'false',
     `sessionUsers` int(11) DEFAULT 0,
+    PRIMARY KEY (`id`)) $charset_spec");
+
+// lti_apps tables
+$db->query("CREATE TABLE IF NOT EXISTS `lti_apps` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) DEFAULT NULL,
+    `title` varchar(255) DEFAULT NULL,
+    `description` text,
+    `lti_provider_url` varchar(255) DEFAULT NULL,
+    `lti_provider_key` varchar(255) DEFAULT NULL,
+    `lti_provider_secret` varchar(255) DEFAULT NULL,
+    `enabled` enum('0','1') DEFAULT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_settings` (
