@@ -32,6 +32,7 @@
 
 require_once 'modules/bbb/functions.php';
 require_once 'modules/bbb/om-api.php';
+require_once 'modules/bbb/webconf-api.php';
 require_once 'modules/dropbox/class.mailbox.php';
 
 /*
@@ -750,8 +751,8 @@ function lessonToolsMenu($rich=true) {
                 continue;
             }
 
-            // hide teleconference when no BBB or OpenMeetings servers are enabled
-            if ($mid == MODULE_ID_BBB and !get_total_bbb_servers() and !get_total_om_servers()) {
+            // hide teleconference when no BBB, OpenMeetings or WebConf servers are enabled
+            if ($mid == MODULE_ID_BBB and !get_total_bbb_servers() and !get_total_om_servers() and !get_total_webconf_servers()) {
                 continue;
             }
 

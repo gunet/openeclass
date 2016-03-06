@@ -31,6 +31,7 @@ require_once 'include/sendMail.inc.php';
 // For creating bbb urls & params
 require_once 'bbb-api.php';
 require_once 'om-api.php';
+require_once 'webconf-api.php';
 require_once 'functions.php';
 
 require_once 'include/lib/modalboxhelper.class.php';
@@ -50,6 +51,8 @@ if(get_total_bbb_servers() == '0' && get_total_om_servers() <> '0')
     $server_type='om';
 if(get_total_bbb_servers() <> '0' /*&& get_total_om_servers() == '0'*/)
     $server_type='bbb';
+if(get_total_webconf_servers() <> '0' /*&& get_total_om_servers() == '0'*/)
+    $server_type='webconf';
 
 // guest user not allowed
 if (check_guest()) {
@@ -225,7 +228,7 @@ elseif(isset($_GET['choice']))
         case 'do_join':
             #check if there is any record-capable server. Otherwise notify users
             if (isset($_GET['record'])) {
-                if($_GET['record']=='true' && Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0 && Database::get()->querySingle("SELECT COUNT(*) AS count FROM om_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
+                if($_GET['record']=='true' && ((Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0 && Database::get()->querySingle("SELECT COUNT(*) AS count FROM om_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0) || $server_type='webconf'))
                 {
                     $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";
                     break;
