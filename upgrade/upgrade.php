@@ -970,7 +970,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             'poll_question_answer', 'assignment', 'assignment_submit',
             'exercise', 'exercise_user_record', 'exercise_question',
             'exercise_answer', 'exercise_with_questions', 'course_module',
-            'actions', 'actions_summary', 'logins', 'wiki_locks', 'bbb_servers', 'bbb_session','om_servers',
+            'actions', 'actions_summary', 'logins', 'wiki_locks', 'bbb_servers', 'bbb_session','om_servers','wc_servers',
             'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats');
         foreach ($new_tables as $table_name) {
             if (DBHelper::tableExists($table_name)) {
@@ -3298,6 +3298,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `enable_recordings` enum("true","false") DEFAULT NULL,
                         PRIMARY KEY (`id`),
                         KEY `idx_om_servers` (`hostname`))');
+        
+        // wc_servers table
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `wc_servers` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `hostname` varchar(255) DEFAULT NULL,
+                        `enabled` enum('true','false') DEFAULT NULL,
+                        PRIMARY KEY (`id`),
+                        KEY `idx_wc_servers` (`hostname`)) $charset_spec");
 						
         if (!DBHelper::fieldExists('poll', 'type')) {
             Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");

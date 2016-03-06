@@ -61,6 +61,7 @@ $db->query("DROP TABLE IF EXISTS oai_record");
 $db->query("DROP TABLE IF EXISTS oai_metadata");
 $db->query("DROP TABLE IF EXISTS bbb_servers");
 $db->query("DROP TABLE IF EXISTS om_servers");
+$db->query("DROP TABLE IF EXISTS wc_servers");
 $db->query("DROP TABLE IF EXISTS bbb_session");
 
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
@@ -1447,6 +1448,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `om_servers` (
                         `enable_recordings` enum('true','false') DEFAULT NULL,
                         PRIMARY KEY (`id`),
                         KEY `idx_om_servers` (`hostname`)) $charset_spec");
+// wc_servers table
+$db->query("CREATE TABLE IF NOT EXISTS `wc_servers` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `hostname` varchar(255) DEFAULT NULL,
+                        `enabled` enum('true','false') DEFAULT NULL,
+                        PRIMARY KEY (`id`),
+                        KEY `idx_wc_servers` (`hostname`)) $charset_spec");
 
 // bbb_sessions tables
 $db->query("CREATE TABLE IF NOT EXISTS `bbb_session` (
