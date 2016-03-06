@@ -130,7 +130,8 @@ else {
             $checkedtrue2 = " checked='false' ";
         } else $checkedtrue2 = '';
         
-        $tool_content .= "<div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' $checkedtrue2 value='true'>$langYes</label></div>";      $tool_content .= "<input class='form-control' type = 'hidden' name = 'id_form' value='$wc_server'>";
+        $tool_content .= "<div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' $checkedtrue2 value='true'>$langYes</label></div>";
+        $tool_content .= "<input class='form-control' type = 'hidden' name = 'id_form' value='$wc_server'>";
         $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
         $tool_content .= "</fieldset></form></div>";
 
