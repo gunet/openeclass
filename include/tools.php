@@ -750,7 +750,7 @@ function lessonToolsMenu($rich=true) {
             }
 
             // hide teleconference when no BBB servers are enabled
-            if ($mid == MODULE_ID_BBB and !get_total_bbb_servers()) {
+            if ($mid == MODULE_ID_BBB and !get_total_bbb_servers() and !get_total_om_servers()) {
                 continue;
             }
 

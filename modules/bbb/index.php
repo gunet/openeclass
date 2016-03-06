@@ -262,11 +262,11 @@ elseif(isset($_GET['choice']))
                 $sess = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id']);
                 $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);                                
                 
-                if(substr($sess->running_at,0,3) == '999')
+                if($server_type=='bbb')
                 {
                     $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw);
                 }
-                if(substr($sess->running_at,0,3) == '888')
+                if($server_type == 'om')
                 {
                     $ssUsers = 0;
                 }
