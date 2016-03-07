@@ -228,11 +228,11 @@ elseif(isset($_GET['choice']))
         case 'do_join':
             #check if there is any record-capable server. Otherwise notify users
             if (isset($_GET['record'])) {
-                if($_GET['record']=='true' && ((Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0 && Database::get()->querySingle("SELECT COUNT(*) AS count FROM om_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0) || $server_type='webconf'))
+                if(($_GET['record']=='true' && $server_type=='webconf') || ($_GET['record']=='true' && Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0 &&  Database::get()->querySingle("SELECT COUNT(*) AS count FROM om_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0))
                 {
                     $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";
                     break;
-                }            
+                }
             }
             switch($server_type)
                 {
