@@ -25,6 +25,8 @@ require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
 require_once 'include/log.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+
 $tree = new Hierarchy();
 
 $toolName = $langChoiceLesson;
@@ -209,9 +211,17 @@ function getdepnumcourses($fac) {
 function expanded_faculte($facid, $uid) {
     global $m, $course_access_icons, $langTutor, $langRegistration,
     $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
-    $themeimg, $tree;
+    $themeimg, $tree, $is_power_user, $is_departmentmanage_user;
 
     $retString = '';
+
+    if ($is_departmentmanage_user) {
+        $user = new User();
+        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+        $unlock_all_courses = in_array($facid, $subtrees);
+    } else {
+        $unlock_all_courses = $is_power_user;
+    }
 
     // build a list of course followed by user.
     $myCourses = array();
@@ -243,14 +253,14 @@ function expanded_faculte($facid, $uid) {
                       WHERE course.id = course_department.course
                         AND course_department.department = ?d
                         AND course.visible != ?d
-                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $course_access_icons) {
+                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $course_access_icons, $unlock_all_courses) {
         global $urlAppend, $courses_list;
         $cid = $mycours->cid;
         $course_title = q($mycours->i);
         $password = q($mycours->password);
         $courses_list[$cid] = array($mycours->k, $mycours->visible);
         // link creation
-        if ($mycours->visible == COURSE_OPEN or $GLOBALS['is_power_user'] or isset($myCourses[$cid])) {
+        if ($mycours->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$cid])) {
             // open course, registered to course, or power user who can see all
             $codelink = "<a href='{$urlAppend}courses/" . $mycours->k . "/'>$course_title</a>";
         } elseif ($mycours->visible == COURSE_CLOSED) { // closed course            
