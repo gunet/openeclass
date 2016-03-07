@@ -150,8 +150,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($dep) {
             $subs = $tree->buildSubtrees(array($dep));
             add_param('department', $dep);
-        } else if (isDepartmentAdmin())
+        } else if (isDepartmentAdmin()) {
             $subs = $user->getDepartmentIds($uid);
+        }
 
         $ids = '';
         foreach ($subs as $key => $id) {

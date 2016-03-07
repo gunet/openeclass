@@ -87,7 +87,21 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $filter_query = '';
     }
 
-    $query .= (isDepartmentAdmin()) ? ' AND course_department.department IN (' . implode(', ', $user->getDepartmentIds($uid)) . ') ' : '';
+    // Limit department admin search only to subtrees of own departments
+    if (isDepartmentAdmin()) {
+        $begin = true;
+        foreach ($user->getDepartmentIds($uid) as $department) {
+            if ($begin) {
+                $query .= ' AND (';
+                $begin = false;
+            } else {
+                $query .= ' OR ';
+            }
+            $nodeLftRgt = $tree->getNodeLftRgt($department);
+            $query .= 'hierarchy.lft BETWEEN ' . $nodeLftRgt->lft . ' AND ' . $nodeLftRgt->rgt;
+        }
+        $query .= ')';
+    }
 
     // sorting
     $extra_query = "ORDER BY course.title " .
