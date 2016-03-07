@@ -105,7 +105,8 @@ function mail_settings_form() {
         $langEmailSendmail, $langEmailTransport, $langEmailSMTPServer,
         $langEmailSMTPPort, $langEmailEncryption, $langEmailSendWarn,
         $langPreviousStep, $langNextStep, $tool_content;
-
+    
+    $mail_form = "";
     // True if running initial install
     $install = isset($GLOBALS['input_fields']);
 
@@ -132,7 +133,7 @@ function mail_settings_form() {
     $cbox_dont_mail_unverified_mails = get_var('dont_mail_unverified_mails') ? 'checked' : '';
     $cbox_email_from = get_var('email_from') ? 'checked' : '';
     if (!$install) {
-        $tool_content .= "
+        $mail_form .= "
             <div class='panel panel-default' id='four'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langEmailSettings</h2>
@@ -140,7 +141,7 @@ function mail_settings_form() {
                 <div class='panel-body'>
                     <fieldset>";
     }
-    $tool_content .= "
+        $mail_form .= "
                         <div class='form-group'>
                            <div class='col-sm-12'>
                                 <div class='checkbox'>
@@ -211,9 +212,11 @@ function mail_settings_form() {
                            </div>
                         </div>";
     if (!$install) {
-        $tool_content .= "
+        $mail_form .= "
                     </fieldset>
                 </div>
             </div>";
     }
+    $tool_content .= $mail_form;
+    return $tool_content;
 }
