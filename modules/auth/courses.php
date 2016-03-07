@@ -289,18 +289,10 @@ function expanded_faculte($facid, $uid) {
             $disabled = ($mycours->visible == 0) ? 'disabled' : '';
             $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class />";
         }
-        $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />
+        $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
                    <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$requirepassword</td>
                    <td>" . q($mycours->t) . "</td>
-                   <td align='center'>";
-
-        // show the necessary access icon
-        foreach ($course_access_icons as $visible => $image) {
-            if ($visible == $mycours->visible) {
-                $retString .= $image;
-            }
-        }
-        $retString .= "</td></tr>";        
+                   <td class='text-center'>" . $course_access_icons[$mycours->visible] . "</td></tr>";        
     }, intval($facid), COURSE_INACTIVE);
     $retString .= "</table></div>";
 
