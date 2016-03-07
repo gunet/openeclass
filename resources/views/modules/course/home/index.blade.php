@@ -148,7 +148,7 @@
                                             <div class='item-header clearfix'>
                                                 <div class='item-title h4'>
                                                     @if ($course_info->view_type == 'weekly')             
-                                                        <a {{ $course_unit->visible ? " class='not_visible'" : "" }} href='{{ $urlServer }}modules/weeks/?course={{ $course_code }}&amp;id={{ $course_unit->id }}&amp;cnt={{ $count_index }}'>
+                                                        <a {!! !$course_unit->visible ? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/weeks/?course={{ $course_code }}&amp;id={{ $course_unit->id }}&amp;cnt={{ $count_index }}'>
                                                             @if(!empty($course_unit->title))
                                                                 {{ $course_unit->title }}                    
                                                             @else
@@ -157,7 +157,7 @@
                                                             ({{ trans('langFrom2') }} {{ nice_format($course_unit->start_week) }} {{ trans('langTill') }} {{ nice_format($course_unit->finish_week) }}) 
                                                         </a>
                                                     @else
-                                                        <a{{ $course_unit->visible ? " class='not_visible'" : "" }} href='{{ $urlServer }}modules/units/?course={{ $course_code }}&amp;id={{ $course_unit->id }}'>
+                                                        <a{!! !$course_unit->visible ? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/units/?course={{ $course_code }}&amp;id={{ $course_unit->id }}'>
                                                             {{ $course_unit->title }}
                                                         </a>
                                                     @endif                                                  
@@ -178,7 +178,7 @@
                                                                     'icon' => $course_unit->visible == 1? 'fa-eye-slash' : 'fa-eye'
                                                                 ],
                                                                 [
-                                                                  'title' => $course_unit->public == 1? $langResourceAccessLock : $langResourceAccessUnlock,
+                                                                  'title' => $course_unit->public == 1? trans('langResourceAccessLock') : trans('langResourceAccessUnlock'),
                                                                   'url' => "$_SERVER[SCRIPT_NAME]?access=". getIndirectReference($course_unit->id),
                                                                   'icon' => $course_unit->public == 1? 'fa-lock' : 'fa-unlock',
                                                                   'show' => $course_info->visible == COURSE_OPEN

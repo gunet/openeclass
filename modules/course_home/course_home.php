@@ -72,7 +72,8 @@ if ($is_editor) {
                 Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
                 CourseXMLElement::refreshCourse($course_id, $course_code);
-                $tool_content .= "<div class='alert alert-success'>$langResourceCourseUnitDeleted</div>";
+                Session::Messages($langResourceCourseUnitDeleted, 'alert-success');
+                redirect_to_home_page("courses/$course_code/");                
             }
         }
     } elseif (isset($_REQUEST['vis'])) { // modify visibility
@@ -83,8 +84,15 @@ if ($is_editor) {
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $id);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
         CourseXMLElement::refreshCourse($course_id, $course_code);
+        redirect_to_home_page("courses/$course_code/");
+    } elseif (isset($_REQUEST['visW'])) { // modify visibility of the Week
+        $id = intval(getDirectReference($_REQUEST['visW']));
+        $vis = Database::get()->querySingle("SELECT `visible` FROM course_weekly_view WHERE id = ?d", $id)->visible;
+        $newvis = ($vis == 1) ? 0 : 1;
+        Database::get()->query("UPDATE course_weekly_view SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
+        redirect_to_home_page("courses/$course_code/");
     } elseif (isset($_REQUEST['access'])) {
-        if ($course_viewType == 'weekly') {
+        if ($course_info->view_type == 'weekly') {
             $id = intval(getDirectReference($_REQUEST['access']));
             $access = Database::get()->querySingle("SELECT `public` FROM course_weekly_view WHERE id = ?d", $id);
             $newaccess = ($access->public == '1') ? '0' : '1';
@@ -95,6 +103,7 @@ if ($is_editor) {
             $newaccess = ($access->public == '1') ? '0' : '1';
             Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
         }
+        redirect_to_home_page("courses/$course_code/");
     } elseif (isset($_REQUEST['down'])) {
         $id = intval(getDirectReference($_REQUEST['down'])); // change order down
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
@@ -118,15 +127,6 @@ if ($is_editor) {
         }
         redirect_to_home_page("courses/$course_code/");
     }
-
-    if (isset($_REQUEST['visW'])) { // modify visibility of the Week
-        $id = intval(getDirectReference($_REQUEST['visW']));
-        $vis = Database::get()->querySingle("SELECT `visible` FROM course_weekly_view WHERE id = ?d", $id)->visible;
-        $newvis = ($vis == 1) ? 0 : 1;
-        Database::get()->query("UPDATE course_weekly_view SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
-    }
-
-
 }
 // Student Register to course
 if (isset($_REQUEST['register'])) {
@@ -153,15 +153,9 @@ $pageName = ''; // delete $pageName set in doc_init.php
 $require_help = TRUE;
 $helpTopic = 'course_home';
 
-$data['cunits_content'] = $course_info_extra = "";
-
 add_units_navigation(TRUE);
 
 load_js('tools.js');
-
-
-
-
 if(!empty($langLanguageCode)){
     load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
 }
@@ -311,7 +305,8 @@ $course_descriptions = Database::get()->queryArray("SELECT cd.id, cd.title, cd.c
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 $course_descriptions_modals = "";
 
-if(count($course_descriptions)>0){   
+if(count($course_descriptions)>0){
+    $course_info_extra = "";
     foreach ($course_descriptions as $key => $course_description) {
         $hidden_id = "hidden_" . $key;
         $next_id = '';
@@ -440,26 +435,26 @@ if (isset($level) && !empty($level)) {
 
 /* ]]> */
 </script>";
-    $opencourses_level = "
-    <div class='row'>
-        <div class='col-xs-4'>
-            <img class='img-responsive center-block' src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
-        </div>
-        <div class='col-xs-8'>
-            <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>${langOpenCoursesLevel}: $level</div>
-            <p class='not_visible'>
-            <small>$langVisitsShort : &nbsp;$visitsopencourses</small>
-            <br />
-            <small>$langHitsShort : &nbsp;$hitsopencourses</small>
-            </p>
-        </div>
-    </div>
-";
-    $opencourses_level_footer = "<div class='row'>
-        <div class='col-xs-12 text-right'>
-            <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata</a>".icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");")."</small>
-        </div>
-    </div>";
+    $data['opencourses_level'] = "
+        <div class='row'>
+            <div class='col-xs-4'>
+                <img class='img-responsive center-block' src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
+            </div>
+            <div class='col-xs-8'>
+                <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>${langOpenCoursesLevel}: $level</div>
+                <p class='not_visible'>
+                <small>$langVisitsShort : &nbsp;$visitsopencourses</small>
+                <br />
+                <small>$langHitsShort : &nbsp;$hitsopencourses</small>
+                </p>
+            </div>
+        </div>";
+    $data['opencourses_level_footer'] = "
+        <div class='row'>
+            <div class='col-xs-12 text-right'>
+                <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata</a>".icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");")."</small>
+            </div>
+        </div>";
 }
 
 if ($is_editor) {
