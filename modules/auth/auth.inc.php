@@ -1155,6 +1155,9 @@ function shib_cas_login($type) {
                         whitelist = ''",
                 $surname, $givenname, $type, $uname, $email, $status,
                 $language, $options['am'], $verified_mail)->lastInsertID;
+        // update personal calendar info table
+        // we don't check if trigger exists since it requires `super` privilege
+        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $_SESSION['uid']);
         $userObj = new User();
         $userObj->refresh($_SESSION['uid'], $options['departments']);
         user_hook($_SESSION['uid']);

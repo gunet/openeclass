@@ -264,6 +264,9 @@ if ($is_valid) {
                           whitelist='',
                           description = ''", $surname_form, $givenname_form, $uname, $password, $email, $am, $language, $verified_mail);
         $last_id = $q1->lastInsertID;
+        // update personal calendar info table
+        // we don't check if trigger exists since it requires `super` privilege
+        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $last_id);
         $userObj->refresh($last_id, array(intval($depid)));
         user_hook($last_id);
 

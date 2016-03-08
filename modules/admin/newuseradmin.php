@@ -96,6 +96,9 @@ if (isset($_POST['submit'])) {
                 VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", " .
                         DBHelper::timeAfter(get_config('account_duration')) . ", ?s, '', ?s, '')",
              $surname_form, $givenname_form, $uname_form, $password_encrypted, $email_form, $pstatus, $phone_form, $am_form, $language_form, $verified_mail)->lastInsertID;
+        // update personal calendar info table
+        // we don't check if trigger exists since it requires `super` privilege
+        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $uid);
         $user->refresh($uid, array(intval($depid)));
         user_hook($uid);
         //process custom profile fields values

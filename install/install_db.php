@@ -332,11 +332,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `personal_calendar_settings` (
     `show_admin` bit(1) DEFAULT b'1',
     PRIMARY KEY (`user_id`)) $charset_spec");
 
-//create triggers
-$db->query("CREATE TRIGGER personal_calendar_settings_init
-    AFTER INSERT ON `user` FOR EACH ROW 
-    INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
-
 $db->query("CREATE TABLE `admin_calendar` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `user_id` int(11) NOT NULL,

@@ -3337,6 +3337,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query('INSERT IGNORE INTO course_module
             (module_id, visible, course_id)
             SELECT ?d, 0, id FROM course', MODULE_ID_MINDMAP);
+        
+        // drop trigger
+        Database:get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
     
     }
 
