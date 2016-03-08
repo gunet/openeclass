@@ -46,6 +46,10 @@ if ($userdata) {
                 array('title' => $langEditePortfolio,
                     'url' => "edit_eportfolio.php",
                     'icon' => 'fa-edit',
+                    'level' => 'primary-label'),
+                array('title' => $langUploadBio,
+                    'url' => "bio_upload.php",
+                    'icon' => 'fa-upload',
                     'level' => 'primary-label')
                 ));    
     }

@@ -4876,6 +4876,8 @@ $langCareerSkills = 'Επαγγελματικές δεξιότητες';
 $langFBProfile = 'Facebook προφίλ';
 $langTwitterAccount = 'Twitter λογαριασμός';
 $langLinkedInProfile = 'LinkedIn προφίλ';
+$langBio = 'Βιογραφικό';
+$langUploadBio = 'Ανέβασμα Βιογραφικού';
 
 /* * ******************************************
   Widgets
