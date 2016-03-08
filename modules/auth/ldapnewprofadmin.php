@@ -100,8 +100,10 @@ if ($submit) {
                                 " . DBHelper::timeAfter() . ",
                                 " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, ?d, '', '')", 
                     $ps, $pn, $pu, $password, $pe, $phone, $comment, $lang, $verified_mail);
-
     $last_id = $sql->lastInsertID;
+    // update personal calendar info table
+    // we don't check if trigger exists since it requires `super` privilege
+    Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $last_id);    
     $userObj->refresh($last_id, array(intval($department)));
     user_hook($last_id);
     

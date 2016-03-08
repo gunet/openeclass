@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.2
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -1155,6 +1155,9 @@ function shib_cas_login($type) {
                         whitelist = ''",
                 $surname, $givenname, $type, $uname, $email, $status,
                 $language, $options['am'], $verified_mail)->lastInsertID;
+        // update personal calendar info table
+        // we don't check if trigger exists since it requires `super` privilege
+        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $_SESSION['uid']);
         $userObj = new User();
         $userObj->refresh($_SESSION['uid'], $options['departments']);
         user_hook($_SESSION['uid']);

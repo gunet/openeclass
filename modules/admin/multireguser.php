@@ -299,6 +299,9 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                  email_public, phone_public, am_public, description, verified_mail, whitelist)
                 VALUES (?s,?s,?s,?s,?s,?d," . DBHelper::timeAfter() . "," . DBHelper::timeAfter(get_config('account_duration')) . ",?s,?s,?s,?d,?d,?d,'',".EMAIL_VERIFIED.",'')"
                     , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
+    // update personal calendar info table
+    // we don't check if trigger exists since it requires `super` privilege
+    Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $id);
     $user->refresh($id, $departments);
     user_hook($id);
     $telephone = get_config('phone');

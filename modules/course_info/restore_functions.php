@@ -1098,6 +1098,9 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
                 $now,
                 date('Y-m-d H:i:s', time() + get_config('account_duration')))->lastInsertID;
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $user_id;
+            // update personal calendar info table
+            // we don't check if trigger exists since it requires `super` privilege
+            Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $user_id);
             $user = new User();
             $user->refresh($user_id, $departments);
             user_hook($user_id);
