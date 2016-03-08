@@ -163,7 +163,11 @@ function render_eportfolio_fields_form() {
                             $val = $_REQUEST['epf_'.$f->shortname];
                         }
                         $return_string .= rich_text_editor('epf_'.$f->shortname, 8, 20, $val);
-                        $req_label = $langCompulsory;
+                        if ($f->required == 0) {
+                            $req_label = $langOptional;
+                        } else {
+                            $req_label = $langCompulsory;
+                        }
                         break;
                     case EPF_DATE:
                         if (isset($fdata) && $fdata != '') {
@@ -192,7 +196,11 @@ function render_eportfolio_fields_form() {
                         $options[0] = "";
                         ksort($options);
                         $return_string .= selection($options, 'epf_'.$f->shortname, $def_selection);
-                        $req_label = $langCompulsory;
+                        if ($f->required == 0) {
+                            $req_label = $langOptional;
+                        } else {
+                            $req_label = $langCompulsory;
+                        }
                         break;
                     case EPF_LINK:
                         if (isset($fdata) && $fdata != '') {
@@ -269,14 +277,16 @@ function epf_validate(&$valitron_object) {
                 if ($required == 1) {
                     $valitron_object->rule('required', $key)->message($langTheFieldIsRequired)->label($field_name);
                 }
+            } else {
+                if ($required == 1) {
+                    $valitron_object->rule('notIn', $key, array(0))->message($langTheFieldIsRequired)->label($field_name);
+                }
             }
             
             if ($datatype == EPF_LINK) {
                 $valitron_object->rule('url', $key)->message(sprintf($langCPFLinkValidFail, q($field_name)))->label($field_name);
             } elseif ($datatype == EPF_DATE) {
                 $valitron_object->rule('date', $key)->message(sprintf($langCPFDateValidFail, q($field_name)))->label($field_name);
-            } elseif ($datatype == EPF_MENU) {
-                $valitron_object->rule('notIn', $key, array(0))->message($langTheFieldIsRequired)->label($field_name);
             }
         }
     }

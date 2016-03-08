@@ -30,7 +30,7 @@ check_guest();
 
 $toolName = $langMyePortfolio;
 $pageName = $langEditePortfolio;
-$navigation[] = array('url' => 'display_portfolio.php', 'name' => $langMyePortfolio);
+$navigation[] = array('url' => 'eportfolio.php', 'name' => $langMyePortfolio);
 
 load_js('tools.js');
 
@@ -63,7 +63,7 @@ $tool_content .=
                 'level' => 'primary-label')));
         $tool_content .=
             "<div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>
+                <form class='form-horizontal' role='form' method='post' action='$sec'>
                 <fieldset>";
                     
 
