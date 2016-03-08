@@ -58,7 +58,7 @@ $sec = $urlServer . 'main/eportfolio/edit_eportfolio.php';
 $tool_content .=
         action_bar(array(
             array('title' => $langBack,
-                'url' => "display_portfolio.php",
+                'url' => "eportfolio.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
         $tool_content .=
