@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2016-02-09 19:07:13
+// Generated 2016-03-09 14:16:39
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -775,7 +775,7 @@ $langExerciseExpiredTime = "Hai superato il limite di tempo consentito di esecuz
 $langExerciseLis = "Lista di esercizi";
 $langResults = "Risultati";
 $langResultsFailed = "Insuccesso";
-$langTotalScore = "Punteggio totale";
+$langYourTotalScore2 = "Punteggio totale";
 $langExerciseScores1 = "HTML";
 $langExerciseScores2 = "Percentuale";
 $langExerciseScores3 = "CSV";
@@ -3173,7 +3173,7 @@ $langFreeText = "Free Text";
 $langResults2 = "results";
 $m['max_grade'] = 'Max grade';
 $langUserDeleted = "User unregistered from $langsCourse";
-$langGiveRightEditor = "Co-admin right";
+$langGiveRightEditor = "$langEditor right";
 $langWikiLockInfo = "<p>The page you try to save is locked, as it is been processed by some other user. Please try again later.</p>";
 $langWikiLockTimeRemaining = "Remaining edit lock time: ";
 $langWikiLockTimeEnd = "The edit lock for this wiki page has expired. You can continue editing, however you may not be able to save your changes immediately";
@@ -4100,7 +4100,7 @@ $langAutoJudgeNotEnabledForReport = 'Autojudge is not enabled for this assignmen
 $langAutoJudgeDownloadPdf = 'Download in PDF format';
 $langAutojudgeDescription = '<p>The Auto Judge is a tool to automate grading and correction of programming assignments. More specifically, the $langsCourse administrator can define scenarios that include input and output based on which the posted assignments are automatically graded.</p><p>This module contacts third-party compilation services which can be selected in <a href="autojudgemoduleconf.php">Settings</a>.</p>';
 $langCourseInvalidDepartment = "The $langsCourse belongs to a department where $langsCourse creation is no longer permitted.";
-$langCourseInvalidDepartmentPrompt = 'Please %smove it from $langsCourse settings%s.';
+$langCourseInvalidDepartmentPrompt = 'Please %smove it from "Settings"%s.';
 $langActivateUserInfo = 'Enter below the usernames, one per line, of the accounts you wish to extend. Lines starting with # are ignored.';
 $langUserDurationExtended = 'The expiration date of user "%s" was extended by %d months.';
 $langUserDurationError = 'Error extending duration of account "%s".';
@@ -4380,3 +4380,21 @@ $langEmailSendWarn = 'Warning: For the platform to be able to successfully send 
 you should either select the SMTP or sendmail sending method or enter an announcement
 CC mail address.';
 $langSumFrom = "total in";
+$langVisibleVals = array('Invisible', 'Visible');
+$langStudentTotalScore = "Student score";
+$langTotalScore = "Total score";
+$langOfGradebookActivity = "of activity";
+$langOfGradebookUsers = "of user";
+$langOfGradebookGroups = "of groups";
+$langOfGradebookVisibility = "of visibilty";
+$langOfGradebookSettings = "of gradebook settings";
+$langGradebookDateRange = "date range";
+$langGradebookDateOutOf = "out of";
+$langGradebookDateIn = "in";
+$langGradebookRegistrationDateRange = "Registration date range";
+$langAttemptActive = "Not Completed";
+$langAttemptActiveButDeadMsg = "Time constraint of this exercise has surpassed. It can be safely deleted.";
+$langAttemptActiveMsg = "The attempt is still active";
+$langOfGradebookUser = "user";
+$langMessageNoSent = "The message was not sent because the attachment exceeds storage limit.
+                    For more information, contact your system administrator.";

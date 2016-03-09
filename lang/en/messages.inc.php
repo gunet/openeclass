@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2016-02-09 19:07:10
+// Generated 2016-03-09 14:16:36
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -474,7 +474,7 @@ $langConfidentiality = "Access Type";
 $langPrivOpen = "Private access, registration open";
 $langForbidden = "Not allowed";
 $langConfTip = "Select users $langsCourse access.";
-$langOptPassword = "Optional Password: ";
+$langOptPassword = "Optional Password";
 $langNoCourseTitle = "You didn't type $langOfCourse title";
 $langModifGroups = "Groups";
 $langTheCourse = "$langCourse";
@@ -595,7 +595,6 @@ $langMoveFrom = "Move";
 $langRename = "Rename";
 $langOkComment = "Add / Modify Comment";
 $langVisible = "Visible/invisible";
-$langVisibleVals = array('Invisible', 'Visible');
 $langCopy = "Copy";
 $langNoSpace = "Upload failed. You have exceeded the maximum available disk space. For more information, please contact the system administrator.";
 $langUnwantedFiletype = 'Unacceptable file type';
@@ -790,8 +789,7 @@ $langExerciseExpiredTime = "You have exceeded the time limit for this exercise."
 $langExerciseLis = "List of exercises";
 $langResults = "Results";
 $langResultsFailed = "Failure";
-$langStudentTotalScore = "Student score";
-$langTotalScore = "Total score";
+$langYourTotalScore2 = "Total score";
 $langExerciseScores1 = "HTML";
 $langExerciseScores2 = "Percentages";
 $langExerciseScores3 = "CSV";
@@ -2641,7 +2639,7 @@ $langMediaInsertedAsModule = "added as learning path module";
 $langMediaTypeDesc = "Multimedia";
 $langAddRole = "Add Role";
 $langGiveRightTutor = "Group tutor right";
-$langGiveRightAdmin = "Admin right";
+$langGiveRightAdmin = "$langTeacher right";
 $langRemoveRightTutor = "Remove tutor group right";
 $langRemoveRightEditor = "Remove co-admin right";
 $langRemoveRightAdmin = "Remove admin right";
@@ -3123,12 +3121,6 @@ $langAttendanceAutoBook = "Record attendance automatically";
 $langGradebook = "Gradebook";
 $langGradebookManagement = "Gradebook management";
 $langGradebookAddActivity = "New activity";
-$langOfGradebookActivity = "of activity";
-$langOfGradebookUsers = "of users";
-$langOfGradebookUsers = "of user";
-$langOfGradebookGroups = "of groups";
-$langOfGradebookVisibility = "of visibilty";
-$langOfGradebookSettings = "of gradebook settings";
 $langGradebookActivityDescription = "Description";
 $langGradebookActivityDate = "Activity date";
 $langGradebookActivityDate2 = "Date";
@@ -3165,10 +3157,6 @@ $langGradebookMEANS = "Values";
 $langGradebookActiveUsers = "Gradebook users";
 $langGradebookActiveUsersSemester = "Students registerd in the last six months";
 $langGradebookRange = "Gradebook range";
-$langGradebookDateRange = "date range";
-$langGradebookDateOutOf = "out of";
-$langGradebookDateIn = "in";
-$langGradebookRegistrationDateRange = "Registration date range";
 $langGradebookWeightAlert = "The weight you have entered for the activity is larger than allowed.";
 $langGradeNoBookAlert = "You cannot enter grades. Weight you have not assigned to an activity:";
 $langGradebookNewUser = "You should click on 'Submit' to create a gradebook record for the user";
@@ -3201,9 +3189,6 @@ $langParticipants = "Participants";
 $langLoading = "Loading";
 $langRemainingTime = "Remaining time";
 $langAnswerUngraded = "The answer haven't been graded yet.";
-$langAttemptActive = "Not Completed";
-$langAttemptActiveButDeadMsg = "Time constraint of this exercise has surpassed. It can be safely deleted.";
-$langAttemptActiveMsg = "The attempt is still active";
 $langAttemptCompleted = "Completed";
 $langAttemptPending = "Pending Grading";
 $langAttemptCanceled = "Canceled";
@@ -3212,7 +3197,7 @@ $langFreeText = "Free Text";
 $langResults2 = "results";
 $m['max_grade'] = 'Max grade';
 $langUserDeleted = "User unregistered from $langsCourse";
-$langGiveRightEditor = "Co-admin right";
+$langGiveRightEditor = "$langEditor right";
 $langWikiLockInfo = "<p>The page you try to save is locked, as it is been processed by some other user. Please try again later.</p>";
 $langWikiLockTimeRemaining = "Remaining edit lock time: ";
 $langWikiLockTimeEnd = "The edit lock for this wiki page has expired. You can continue editing, however you may not be able to save your changes immediately";
@@ -4419,3 +4404,21 @@ $langEmailSendWarn = 'Warning: For the platform to be able to successfully send 
 you should either select the SMTP or sendmail sending method or enter an announcement
 CC mail address.';
 $langSumFrom = "total in";
+$langVisibleVals = array('Invisible', 'Visible');
+$langStudentTotalScore = "Student score";
+$langTotalScore = "Total score";
+$langOfGradebookActivity = "of activity";
+$langOfGradebookUsers = "of user";
+$langOfGradebookGroups = "of groups";
+$langOfGradebookVisibility = "of visibilty";
+$langOfGradebookSettings = "of gradebook settings";
+$langGradebookDateRange = "date range";
+$langGradebookDateOutOf = "out of";
+$langGradebookDateIn = "in";
+$langGradebookRegistrationDateRange = "Registration date range";
+$langAttemptActive = "Not Completed";
+$langAttemptActiveButDeadMsg = "Time constraint of this exercise has surpassed. It can be safely deleted.";
+$langAttemptActiveMsg = "The attempt is still active";
+$langOfGradebookUser = "user";
+$langMessageNoSent = "The message was not sent because the attachment exceeds storage limit.
+                    For more information, contact your system administrator.";
