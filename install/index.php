@@ -469,6 +469,8 @@ elseif (isset($_POST['install1'])) {
     touch_try('video/index.php');
     mkdir_try('storage');
     mkdir_try('storage/views');
+    mkdir_try('courses/userbios');
+    touch_try('courses/userbios/index.php');
     
     if ($configErrorExists) {
         $tool_content .= "<div class='alert alert-danger'>" . implode('', $errorContent) . "</div>" .
