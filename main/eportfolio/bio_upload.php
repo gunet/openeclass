@@ -35,7 +35,7 @@ $navigation[] = array('url' => 'eportfolio.php', 'name' => $langMyePortfolio);
 
 if (isset($_GET['delete_bio'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
-    unlink("$webDir/courses/userbios/$uid"."_bio.pdf");
+    @unlink("$webDir/courses/userbios/$uid"."_bio.pdf");
     redirect_to_home_page('main/eportfolio/bio_upload.php');
 }
 elseif (isset($_POST['submit'])) {
@@ -46,7 +46,7 @@ elseif (isset($_POST['submit'])) {
     }
     if (isset($_FILES['bio']) && is_uploaded_file($_FILES['bio']['tmp_name'])) {
         if ($_FILES['bio']['type'] == 'application/pdf') {
-            unlink("$webDir/courses/userbios/$uid"."_bio.pdf");
+            @unlink("$webDir/courses/userbios/$uid"."_bio.pdf");
             move_uploaded_file($_FILES['bio']['tmp_name'], "$webDir/courses/userbios/$uid"."_bio.pdf");
         }
     }
