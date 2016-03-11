@@ -201,7 +201,7 @@ function edit_lti_app($session_id) {
 function lti_app_details() {
     global $course_id, $tool_content, $is_editor, $course_code, $head_content,
         $langConfirmDelete, $langNewLTIAppSessionDesc, $langNote,
-        $langTitle,$langActivate, $langDeactivate,
+        $langTitle,$langActivate, $langDeactivate, $langLTIAppActions,
         $langEditChange, $langDelete, $langNoLTIApps, $m;
 
     load_js('trunk8');
@@ -218,6 +218,7 @@ function lti_app_details() {
                              <tr class='list-header'>
                                <th style='width:30%'>$langTitle</th>
                                <th class='text-center'>$langNewLTIAppSessionDesc</th>
+                               <th class='text-center'>$langLTIAppActions</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
 
@@ -246,8 +247,9 @@ function lti_app_details() {
                     $headingsSent = true;
                 }
                 $tool_content .= '<tr' . ($row->enabled? '': " class='not_visible'") . ">
-                    <td class='text-left'>$joinLink</td>
+                    <td class='text-left'>$title</td>
                     <td>$desc</td>
+                    <td class='text-center'>$joinLink</td>
                     <td class='option-btn-cell'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
@@ -270,8 +272,9 @@ function lti_app_details() {
                     $headingsSent = true;
                 }
                 $tool_content .= "<tr>
-                    <td class='text-center'>$joinLink</td>
+                    <td class='text-center'>$title</td>
                     <td>$desc</td>
+                    <td class='text-center'>$joinLink</td>
                     <td class='text-center'>";
 
                     if ($canJoin) {

@@ -5108,3 +5108,4 @@ $langLTIAppAddSuccessful = "Η καταχώρηση της Εξωτερικής 
 $langLTIAppUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε με επιτυχία";
 $langLTIAppDeleteSuccessful = "Η διαγραφή ολοκληρώθηκε με επιτυχία";
 $langNewLTIAppSessionDesc = "Σύντομη περιγραφή";
+$langLTIAppActions = "Ενέργειες";
