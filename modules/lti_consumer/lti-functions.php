@@ -230,17 +230,10 @@ function lti_app_details() {
 
             $canJoin = $row->enabled == '1';
             if ($canJoin) {
-                if($is_editor)
-                {
-                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
-                }else
-                {
-                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
-                }
+                $joinLink = $joinLink=create_join_button();;
             } else {
                 $joinLink = q($title);
             }
-
             if ($is_editor) {
                 if (!$headingsSent) {
                     $tool_content .= $headings;
@@ -325,3 +318,58 @@ function delete_lti_app($id)
     redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
 }
 
+function create_join_button($launch_url,$key,$secret,$uid,$role,$resource_link_id,$resource_link_title,$resource_link_description,$email,$lis_person_sourcedid,$context_id,$context_title,$context_label,$tool_consumer_instance_guid)
+{
+    $launch_data = array(
+            "user_id" => $uid,
+            "roles" => $role,
+            "resource_link_id" => $resource_link_id,
+            "resource_link_title" => $resource_link_title,
+            "resource_link_description" => $resource_link_description,
+            "lis_person_name_full" => "",
+//            "lis_person_name_family" => "",
+            "lis_person_name_given" => "",
+            "lis_person_contact_email_primary" => $email,
+            "lis_person_sourcedid" => $lis_person_sourcedid,
+            "context_id" => $context_id,
+            "context_title" => $context_title,
+            "context_label" => $context_label,
+            "tool_consumer_instance_guid" => $tool_consumer_instance_guid,
+            "tool_consumer_instance_description" => "OpenEclass"
+    );
+
+    $now = new DateTime();
+
+    $launch_data["lti_version"] = "LTI-1p0";
+    $launch_data["lti_message_type"] = "basic-lti-launch-request";
+
+    $launch_data["oauth_callback"] = "about:blank";
+    $launch_data["oauth_consumer_key"] = $key;
+    $launch_data["oauth_version"] = "1.0";
+    $launch_data["oauth_nonce"] = uniqid('', true);
+    $launch_data["oauth_timestamp"] = $now->getTimestamp();
+    $launch_data["oauth_signature_method"] = "HMAC-SHA1";
+
+    $launch_data_keys = array_keys($launch_data);
+    sort($launch_data_keys);
+
+    $launch_params = array();
+    foreach ($launch_data_keys as $key) {
+      array_push($launch_params, $key . "=" . rawurlencode($launch_data[$key]));
+    }
+
+    $base_string = "POST&" . urlencode($launch_url) . "&" . rawurlencode(implode("&", $launch_params));
+    $secret = urlencode($secret) . "&";
+    $signature = base64_encode(hash_hmac("sha1", $base_string, $secret, true));
+
+    $button ='<form id="ltiLaunchForm" name="ltiLaunchForm" method="POST" action="'.$launch_url.'">';
+        foreach ($launch_data as $k => $v )
+        {
+            $button .='<input type="hidden" name="'.$k.'" value="'.$v.'">';
+        }
+    $button .='<input type="hidden" name="oauth_signature" value="'.$signature.'">';
+    $button .='<button type="submit">Launch</button>';
+    $button .='</form>';
+
+    return $button;  
+}
