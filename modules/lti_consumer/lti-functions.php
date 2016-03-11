@@ -230,7 +230,8 @@ function lti_app_details() {
 
             $canJoin = $row->enabled == '1';
             if ($canJoin) {
-                $joinLink = $joinLink=create_join_button();;
+                //print_r($_SESSION);die();
+                $joinLink = create_join_button($row->lti_provider_url,$row->lti_provider_key,$row->lti_provider_secret,$_SESSION['uid'],($is_editor==1) ? 'Instructor' : 'false',$row->id,$row->title,$row->description,$_SESSION['givenname'],$_SESSION['email'],$lis_person_sourcedid,$course_id,course_id_to_title($course_id),$course_code,$tool_consumer_instance_guid);
             } else {
                 $joinLink = q($title);
             }
@@ -318,17 +319,18 @@ function delete_lti_app($id)
     redirect_to_home_page("modules/lti_consumer/index.php?course=$course_code");
 }
 
-function create_join_button($launch_url,$key,$secret,$uid,$role,$resource_link_id,$resource_link_title,$resource_link_description,$email,$lis_person_sourcedid,$context_id,$context_title,$context_label,$tool_consumer_instance_guid)
+function create_join_button($launch_url,$key,$secret,$uid,$role,$resource_link_id,$resource_link_title,$resource_link_description,$fullName,$email,$lis_person_sourcedid,$context_id,$context_title,$context_label,$tool_consumer_instance_guid)
 {
+    global $langLogIn;
     $launch_data = array(
             "user_id" => $uid,
             "roles" => $role,
             "resource_link_id" => $resource_link_id,
             "resource_link_title" => $resource_link_title,
             "resource_link_description" => $resource_link_description,
-            "lis_person_name_full" => "",
+            "lis_person_name_full" => $fullName,
 //            "lis_person_name_family" => "",
-            "lis_person_name_given" => "",
+//            "lis_person_name_given" => $givenName,
             "lis_person_contact_email_primary" => $email,
             "lis_person_sourcedid" => $lis_person_sourcedid,
             "context_id" => $context_id,
@@ -368,7 +370,7 @@ function create_join_button($launch_url,$key,$secret,$uid,$role,$resource_link_i
             $button .='<input type="hidden" name="'.$k.'" value="'.$v.'">';
         }
     $button .='<input type="hidden" name="oauth_signature" value="'.$signature.'">';
-    $button .='<button type="submit">Launch</button>';
+    $button .='<button class="btn btn-primary" type="submit">'.$langLogIn.'</button>';
     $button .='</form>';
 
     return $button;  
