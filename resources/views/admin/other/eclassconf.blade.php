@@ -121,7 +121,7 @@
                         <div class='form-group' id='registration-info-block'>
                            <label for='registration_info' class='col-sm-3 control-label'>{{ trans('langRegistrationInfo') }}:</label>
                            <div class='col-sm-9'>
-                               {!! rich_text_editor('registration_info', 4, 80, get_config('registration_info', '')) !!}
+                               {!! $registration_info_textarea !!}
                            </div>
                         </div>
                         <div class='form-group'>

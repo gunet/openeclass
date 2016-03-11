@@ -479,7 +479,7 @@ else {
                             'level' => 'primary-label'
                         ]
                     ]);
-
+    $data['registration_info_textarea'] = rich_text_editor('registration_info', 4, 80, get_config('registration_info', ''));
     if (function_exists('imagettfbbox')) {
         $data['cbox_display_captcha'] = get_config('display_captcha') ? 'checked' : '';
         $data['message_display_captcha'] = $data['disable_display_captcha'] = '';
