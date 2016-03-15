@@ -529,20 +529,21 @@ function add_assignment() {
         if ($assign_to_specific == 1 && empty($assigned_to)) {
             $assign_to_specific = 0;
         }
-        if (@mkdir("$workPath/$secret", 0777) && @mkdir("$workPath/admin_files/$secret", 0777, true)) {
+        if (make_dir("$workPath/$secret") and make_dir("$workPath/admin_files/$secret")) {
             $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_type, submission_date, secret_directory, group_submissions, max_grade, grading_scale_id, assign_to_specific, auto_judge, auto_judge_scenarios, lang) "
                     . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?f, ?d, ?d, ?d, ?s, ?s)", $course_id, $title, $desc, $deadline, $late_submission, '', $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $grading_scale_id, $assign_to_specific, $auto_judge, $auto_judge_scenarios, $lang)->lastInsertID;
 
-            // tags
-            if (isset($_POST['tags'])) {
-                $tagsArray = explode(',', $_POST['tags']);
-                $moduleTag = new ModuleElement($id);
-                $moduleTag->attachTags($tagsArray);
-            }
-
-            $secret = work_secret($id);
             if ($id) {
-                $student_name = trim(uid_to_name($uid));
+                // tags
+                if (isset($_POST['tags'])) {
+                    $tagsArray = explode(',', $_POST['tags']);
+                    $moduleTag = new ModuleElement($id);
+                    $moduleTag->attachTags($tagsArray);
+                }
+
+                $secret = work_secret($id);
+
+                $student_name = canonicalize_whitespace(uid_to_name($uid));
                 $local_name = !empty($student_name)? $student_name : uid_to_name($uid, 'username');
                 $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
                 if (!empty($am)) {
@@ -586,18 +587,23 @@ function add_assignment() {
                     'deadline' => $deadline,
                     'secret' => $secret,
                     'group' => $group_submissions));
-                Session::Messages($langNewAssignSuccess,'alert-success');
+                Session::Messages($langNewAssignSuccess, 'alert-success');
                 redirect_to_home_page("modules/work/index.php?course=$course_code");
             } else {
                 @rmdir("$workPath/$secret");
-                die('Error creating directories');
+                Session::Mesages($langGeneralError, 'alert-danger');
+                redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
             }
+        } else {
+            Session::Mesages($langErrorCreatingDirectory);
+            redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
         }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
     }
 }
+
 // edit assignment
 function edit_assignment($id) {
 
@@ -2451,11 +2457,11 @@ function show_assignment($id, $display_graph_results = false) {
                     if (empty($row->file_name)) {
                         $filelink = '&nbsp;';
                     } else {
-                        $namelen = strlen($row->file_name);
+                        $namelen = mb_strlen($row->file_name);
                         if ($namelen > 30) {
-                            $extlen = strlen(get_file_extension($row->file_name));
-                            $basename = substr($row->file_name, 0, $namelen - $extlen - 3);
-                            $ext = substr($row->file_name, $namelen - $extlen - 3);
+                            $extlen = mb_strlen(get_file_extension($row->file_name));
+                            $basename = mb_substr($row->file_name, 0, $namelen - $extlen - 3);
+                            $ext = mb_substr($row->file_name, $namelen - $extlen - 3);
                             $filename = ellipsize($basename, 30, '...' . $ext);
                         } else {
                             $filename = $row->file_name;
