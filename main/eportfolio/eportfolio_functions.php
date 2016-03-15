@@ -34,63 +34,79 @@ define('EPF_LINK', 5);
 function render_eportfolio_fields_content($uid) {
     global $langProfileNotAvailable;
     
-    $return_str = '';
+    $pills_items = '<div class="tab-content">';
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
-
+    
+    $pills_menu = '<ul class="nav nav-pills">';
+    $i = 0;
+    
     foreach ($result as $cat) {
+        if ($i==0) {
+            $active_class = ' class="active"';
+            $active = ' active';
+            $i++;
+        } else {
+            $active_class = $active = '';
+            $i++;
+        }
+        
+        $pills_menu .= '<li'.$active_class.'><a href="#cat'.$cat->id.'" data-toggle="tab">'.$cat->name.'</a></li>';
+        
         $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM eportfolio_fields
                WHERE categoryid = ?d ORDER BY sortorder DESC", $cat->id);
-
+        
         if (count($res) > 0) { //category start
-        $return_str .= "<div class='row'>
+        $pills_items .= "<div class='tab-pane$active' id='cat".$cat->id."'><div class='row'>
         <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
         <h4>".$cat->name."</h4>";
         }
 
         foreach ($res as $f) { //get user data for each field
-            $return_str .= "<div class='profile-pers-info-data'>";
+            $pills_items .= "<div class='profile-pers-info-data'>";
 
             $fdata_res = Database::get()->querySingle("SELECT data FROM eportfolio_fields_data
             WHERE user_id = ?d AND field_id = ?d", $uid, $f->id);
 
-            $return_str .= "<span class='tag'>".$f->name." : </span>";
+            $pills_items .= "<span class='tag'>".$f->name." : </span>";
 
             if (!$fdata_res || $fdata_res->data == '') {
-                $return_str .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+                $pills_items .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
             } else {
-                $return_str .= "";
                 switch ($f->datatype) {
                     case EPF_TEXTBOX:
-                        $return_str .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
+                        $pills_items .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
                         break;
                     case EPF_TEXTAREA:
-                        $return_str .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
+                        $pills_itemsr .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
                         break;
                     case EPF_DATE:
-                        $return_str .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
+                        $pills_items .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
                         break;
                     case EPF_MENU:
                         $options = unserialize($f->data);
                         $options = array_combine(range(1, count($options)), array_values($options));
                         $options[0] = "";
                         ksort($options);
-                        $return_str .= "<span class='tag-value'>".q($options[$fdata_res->data])."</span>";
+                        $pills_items .= "<span class='tag-value'>".q($options[$fdata_res->data])."</span>";
                         break;
                     case EPF_LINK:
-                        $return_str .= "<span class='tag-value'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></span>";
+                        $pills_items .= "<span class='tag-value'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></span>";
                         break;
                 }
             }
-            $return_str .= "</div>";
+            $pills_items .= "</div>";
         }
 
         if (count($res) > 0) { //category end
-            $return_str .= "</div></div>";
+            $pills_items .= "</div></div></div>";
         }
 
     }
-    return $return_str;
+    $pills_items .= "</div>";
+    $pills_menu .= "</ul>";
+    
+    return $pills_menu.$pills_items;
 }
 
 /**
