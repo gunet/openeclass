@@ -3339,7 +3339,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             SELECT ?d, 0, id FROM course', MODULE_ID_MINDMAP);
         
         // drop trigger
-        Database:get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
+        Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
     
     }
 
