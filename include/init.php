@@ -27,7 +27,7 @@
 
 // set default time zone
 date_default_timezone_set("Europe/Athens");
-
+mb_internal_encoding('UTF-8');
 $webDir = dirname(dirname(__FILE__));
 chdir($webDir);
 require 'vendor/autoload.php';
