@@ -215,12 +215,14 @@ function expanded_faculte($facid, $uid) {
 
     $retString = '';
 
-    if ($is_departmentmanage_user) {
+    if ($is_power_user) {
+        $unlock_all_courses = true;
+    } elseif ($is_departmentmanage_user) {
         $user = new User();
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
         $unlock_all_courses = in_array($facid, $subtrees);
     } else {
-        $unlock_all_courses = $is_power_user;
+        $unlock_all_courses = false;
     }
 
     // build a list of course followed by user.
