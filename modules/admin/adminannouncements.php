@@ -373,36 +373,34 @@ if ($displayAnnouncementList == true) {
                             <th>$langNewBBBSessionStatus</th>
                             <th><div align='center'>" . icon('fa-gears') . "</th>
                         </tr>";
+        $now = date("Y-m-d H:i:s");
         foreach ($result as $myrow) {
 
-            $myrow->date = claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->date));
-
-            if ($myrow->visible == 1) {
-                $visibility = 0;
-                $classvis = '';
-                $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
-            } else {
+            if ($myrow->visible == '0') {
                 $visibility = 1;
-                $classvis = 'not_visible';
                 $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsNotVis'><span class='fa fa-eye-slash'></span> $langAdminAnNotVis</li>";
-            }
-
-            $now = date("Y-m-d H:i:s");
-
-            if (!is_null($myrow->end) && ($myrow->end <= $now )) {
-                $status_icon_list .= "<li class='text-danger'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillNotBeVis$myrow->end'><span class='fa fa-clock-o'></span> $langAdminExpired</li>";
-                $classvis = 'not_visible';
-            } elseif ( !is_null($myrow->begin) && ($myrow->begin >= $now ) ) {
-                $status_icon_list .= "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->begin'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
                 $classvis = 'not_visible';
             } else {
-                $status_icon_list .= "";
+                $visibility = 0;
+                if (isset($myrow->begin)) {
+                    if (isset($myrow->end) && $myrow->end < $now) {
+                        $classvis = 'not_visible';
+                        $status_icon_list = "<li class='text-danger'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillNotBeVis$myrow->end'><span class='fa fa-clock-o'></span> $langAdminExpired</li>";
+                    } elseif ($myrow->begin > $now) {
+                        $classvis = 'not_visible';
+                        $status_icon_list = "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->begin'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
+                    }
+                }else{
+                    $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
+                    $classvis = 'visible';}
             }
+
+            $myrow->date = claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->date));
 
             $tool_content .= "<tr class='$classvis'>
                 <td>
                     <div class='table_td'>
-                        <div class='table_td_header clearfix'><a href='adminannouncements_single.php?ann_id=$myrow->id'>$myrow->title</a></div>
+                        <div class='table_td_header clearfix'><a href='adminannouncements_single.php?ann_id=$myrow->id'>".standard_text_escape($myrow->title)."</a></div>
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->body)."</div>
                     </div>
                 </td>
