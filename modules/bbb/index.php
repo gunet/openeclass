@@ -294,7 +294,7 @@ elseif(isset($_GET['choice']))
             break;
     }
 
-} elseif(isset($_POST['new_bbb_session'])) { // new bbb session
+} elseif (isset($_POST['new_bbb_session'])) { // new bbb session
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
     $start = $startDate_obj->format('Y-m-d H:i:s');   
@@ -308,8 +308,8 @@ elseif(isset($_GET['choice']))
         $end=NULL;
     }
     add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, '0' ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
-    //Session::Messages($langBBBAddSuccessful, 'alert-success');
-    //redirect_to_home_page("modules/bbb/index.php?course=$course_code");
+    Session::Messages($langBBBAddSuccessful, 'alert-success');
+    redirect_to_home_page("modules/bbb/index.php?course=$course_code");
 }
 else {
     bbb_session_details();
