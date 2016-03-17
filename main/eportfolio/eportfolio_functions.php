@@ -78,7 +78,7 @@ function render_eportfolio_fields_content($uid) {
                         $pills_items .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
                         break;
                     case EPF_TEXTAREA:
-                        $pills_itemsr .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
+                        $pills_items .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
                         break;
                     case EPF_DATE:
                         $pills_items .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
