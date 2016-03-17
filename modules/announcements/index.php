@@ -91,23 +91,22 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             if ($myrow->visible == '0') {
                 $visible = 1;
                 $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsNotVis'><span class='fa fa-eye-slash'></span> $langAdminAnNotVis</li>";
-                $vis_icon = 'fa-eye-slash';
                 $vis_class = 'not_visible';
             } else {
                 $visible = 0;
-                $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
-                $vis_icon = 'fa-eye';
-                $vis_class = 'visible';
+                if (isset($myrow->start_display)) {
+                    if (isset($myrow->stop_display) && $myrow->stop_display < $now) {
+                        $vis_class = 'not_visible';
+                        $status_icon_list = "<li class='text-danger'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillNotBeVis$myrow->stop_display'><span class='fa fa-clock-o'></span> $langAdminExpired</li>";
+                    } elseif ($myrow->start_display > $now) {
+                        $vis_class = 'not_visible';
+                        $status_icon_list = "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->start_display'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
+                    }
+                }else{
+                    $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
+                    $vis_class = 'visible';}
             }
-            if (isset($myrow->start_display)) {
-                if (isset($myrow->stop_display) && $myrow->stop_display < $now) {
-                    $vis_class = 'not_visible';
-                    $status_icon_list .= "<li class='text-danger'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillNotBeVis$myrow->stop_display'><span class='fa fa-clock-o'></span> $langAdminExpired</li>";
-                } elseif ($myrow->start_display > $now) {
-                    $vis_class = 'not_visible';
-                    $status_icon_list .= "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->start_display'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
-                }
-            }
+
             //setting datables column data
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
