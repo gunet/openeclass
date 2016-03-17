@@ -105,6 +105,7 @@ function create_course_dirs($code) {
             Session::Messages(sprintf($langDirectoryCreateError, $dir));
             return false;
        } 
+       chmod($dir, 0755);
     }
     umask($old_umask);
     return true;
