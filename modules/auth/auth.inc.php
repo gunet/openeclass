@@ -133,13 +133,11 @@ function check_auth_configured($auth_id) {
 
 function count_auth_users($auth) {
     global $auth_ids;
+    
     $auth = intval($auth);
-
-    if ($auth === 1) {
-        for ($i = 2; $i <= count($auth_ids); $i++) {
-            $extra = " AND password != '{$auth_ids[$i]}'";
-        }
-        $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user WHERE password != '{$auth_ids[1]}' $extra");
+    if ($auth === 1) {        
+        $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user 
+                                                    WHERE password NOT IN (SELECT auth_name FROM auth WHERE id > 1)");
     } else {
         $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user WHERE password = '" . $auth_ids[$auth] . "'");
     }
