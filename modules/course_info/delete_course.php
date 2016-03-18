@@ -42,7 +42,7 @@ if (isset($_POST['delete'])) {
     
     $garbage = "$webDir/courses/garbage";
     if (!is_dir($garbage)) {
-        mkdir($garbage, 0775);
+        make_dir($garbage);
     }
     rename("$webDir/courses/archive/$course_code", "$garbage/$course_code");
      

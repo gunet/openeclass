@@ -72,9 +72,9 @@ function php2phps($fileName) {
  * @param  - dirPath (string) of the destination folder
  */
 
-function recurse_php2phps_copy($src,$dst) {
+function recurse_php2phps_copy($src, $dst) {
     $dir = opendir($src);
-    @mkdir($dst);
+    make_dir($dst);
     while(false !== ( $file = readdir($dir)) ) {
         if (( $file != '.' ) && ( $file != '..' )) {
             if ( is_dir($src . '/' . $file) ) {
@@ -612,7 +612,7 @@ function make_path($path, $path_components) {
         } else {
             // Path component must be created
             $path .= '/' . safe_filename();
-            mkdir($basedir . $path, 0775);
+            make_dir($basedir . $path);
             $id = Database::get()->query("INSERT INTO document SET
                                           course_id = ?d,
 					  subsystem = ?d,

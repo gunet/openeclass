@@ -3398,7 +3398,7 @@ function recurse_copy($src, $dst) {
 
 // Shortcut function to create directories consistently
 function make_dir($dir) {
-    return @mkdir($dir, 0775, true);
+    return @mkdir($dir, 0755, true);
 }
 
 function setOpenCoursesExtraHTML() {

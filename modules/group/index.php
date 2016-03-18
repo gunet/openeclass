@@ -166,7 +166,7 @@ if ($is_editor) {
                 // Create a unique path to group documents to try (!)
                 // avoiding groups entering other groups area
                 $secretDirectory = uniqid('');
-                mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
+                make_dir("courses/$course_code/group/$secretDirectory");
                 touch("courses/$course_code/group/index.php");
                 touch("courses/$course_code/group/$secretDirectory/index.php");
                 
@@ -347,10 +347,10 @@ if ($is_editor) {
         // Move all groups to garbage collector and re-create an empty work directory
         $groupGarbage = $course_code . '_groups_' . uniqid(20);
 
-        @mkdir("courses/garbage");
+        make_dir("courses/garbage");
         @touch("courses/garbage/index.php");
         rename("courses/$course_code/group", "courses/garbage/$groupGarbage");
-        mkdir("courses/$course_code/group", 0777);
+        make_dir("courses/$course_code/group");
         touch("courses/$course_code/group/index.php");
 
         $message = $langGroupsDeleted;
@@ -359,7 +359,7 @@ if ($is_editor) {
 
         // move group directory to garbage collector
         if (!file_exists("courses/garbage")) {
-            mkdir("courses/garbage", 0777);
+            make_dir("courses/garbage");
         }
         $groupGarbage = "courses/garbage/{$course_code}_group_{$id}_" . uniqid(20);
         $myDir = Database::get()->querySingle("SELECT secret_directory, forum_id, name FROM `group` WHERE id = ?d", $id);

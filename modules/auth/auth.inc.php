@@ -1307,7 +1307,7 @@ function update_shibboleth_endpoint($settings) {
 
     $path = $webDir . '/secure';
     if (!file_exists($path)) {
-        if (!mkdir($path, 0700, true)) {
+        if (!make_dir($path)) {
             Session::Messages("Error: mkdir($path)", 'alert-danger');
             return false;
         }

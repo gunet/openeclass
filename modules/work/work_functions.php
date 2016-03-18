@@ -53,11 +53,7 @@ function work_secret($id) {
             $s = $id;
         }
         if (!is_dir("$workPath/$s")) {
-            if (!file_exists($coursePath)) {
-                @mkdir("$coursePath", 0777);
-            }
-            @mkdir("$workPath", 0777);
-            mkdir("$workPath/$s", 0777);
+            make_dir("$workPath/$s");
         }
         return $s;
     } else {

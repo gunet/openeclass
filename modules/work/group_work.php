@@ -33,11 +33,14 @@ $group_id = intval($_REQUEST['group_id']);
 require_once 'modules/document/doc_init.php';
 
 $coursePath = $webDir . '/courses/' . $course_code;
-if (!file_exists($coursePath))
-    mkdir($coursePath, 0777);
-
 $workPath = $coursePath . '/work';
 $groupPath = $coursePath . '/group/' . group_secret($group_id);
+if (!file_exists($workPath)) {
+    make_dir($workPath);
+}
+if (!file_exists($groupPath)) {
+    make_dir($groupPath);
+}
 
 $pageName = $langGroupSubmit;
 
