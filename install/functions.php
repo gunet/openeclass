@@ -174,7 +174,7 @@ function mkdir_try($dirname) {
     global $errorContent, $configErrorExists, $langWarningInstall3;
     
     if (!is_dir('../' . $dirname)) {
-        if (!@mkdir('../' . $dirname, 0775)) {
+        if (!make_dir('../' . $dirname)) {
             $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $dirname);
             $configErrorExists = true;
         }

@@ -2,9 +2,9 @@
 
 /*
  * ========================================================================
- * Open eClass 3.2 - E-learning and Course Management System
+ * Open eClass 3.3 - E-learning and Course Management System
  * ========================================================================
-  Copyright(c) 2003-2015  Greek Universities Network - GUnet
+  Copyright(c) 2003-2016  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
 
   Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.2.99');
+define('ECLASS_VERSION', '3.3.99');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
@@ -229,114 +229,115 @@ function load_js($file, $init='') {
 
     // Load file only if not provided by template
 
-    if ($file == 'jstree') {
-        $head_content .= js_link('jstree/jquery.cookie.min.js');
-        $file = 'jstree/jquery.jstree.min.js';
-    } elseif ($file == 'jstree3') {
-        $head_content .= css_link('jstree3/themes/proton/style.min.css');
-        $file = 'jstree3/jstree.min.js';
-    } elseif ($file == 'jstree3d') {
-        $head_content .= css_link('jstree3/themes/default/style.min.css');
-        $file = 'jstree3/jstree.min.js';
-    } elseif ($file == 'shadowbox') {
-        $head_content .= css_link('shadowbox/shadowbox.css');
-        $file = 'shadowbox/shadowbox.js';
-    } elseif ($file == 'fancybox2') {
-        $head_content .= css_link('fancybox2/jquery.fancybox.css');
-        $file = 'fancybox2/jquery.fancybox.pack.js';
-    } elseif ($file == 'colorbox') {
-        $head_content .= css_link('colorbox/colorbox.css');
-        $file = 'colorbox/jquery.colorbox.min.js';
-    } elseif ($file == 'flot') {
-        $head_content .= css_link('flot/flot.css') .
-            "<!--[if lte IE 8]><script language='javascript' type='text/javascript' src='{$urlAppend}js/flot/excanvas.min.js'></script><![endif]-->\n" .
-            js_link('jquery-migrate-1.2.1.min.js') .
-            js_link('flot/jquery.flot.min.js');
-        $file = 'flot/jquery.flot.categories.min.js';
-    } elseif ($file == 'slick') {
-        $head_content .= css_link('slick-master/slick/slick.css');
-        $file = 'slick-master/slick/slick.min.js';
-    } elseif ($file == 'datatables') {
-        $head_content .= css_link('datatables/media/css/jquery.dataTables.css');
-        $file = 'datatables/media/js/jquery.dataTables.min.js';
-    } elseif ($file == 'datatables_bootstrap') {
-        $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
-        $file = 'datatables/media/js/dataTables.bootstrap.js';
+        if ($file == 'jstree') {
+            $head_content .= js_link('jstree/jquery.cookie.min.js');
+            $file = 'jstree/jquery.jstree.min.js';
+        } elseif ($file == 'jstree3') {
+            $head_content .= css_link('jstree3/themes/proton/style.min.css');
+            $file = 'jstree3/jstree.min.js';
+        } elseif ($file == 'jstree3d') {
+            $head_content .= css_link('jstree3/themes/default/style.min.css');
+            $file = 'jstree3/jstree.min.js';
+        } elseif ($file == 'shadowbox') {
+            $head_content .= css_link('shadowbox/shadowbox.css');
+            $file = 'shadowbox/shadowbox.js';
+        } elseif ($file == 'fancybox2') {
+            $head_content .= css_link('fancybox2/jquery.fancybox.css');
+            $file = 'fancybox2/jquery.fancybox.pack.js';
+        } elseif ($file == 'colorbox') {
+            $head_content .= css_link('colorbox/colorbox.css');
+            $file = 'colorbox/jquery.colorbox.min.js';
+        } elseif ($file == 'flot') {
+            $head_content .= css_link('flot/flot.css') .
+                "<!--[if lte IE 8]><script language='javascript' type='text/javascript' src='{$urlAppend}js/flot/excanvas.min.js'></script><![endif]-->\n" .
+                js_link('jquery-migrate-1.2.1.min.js') .
+                js_link('flot/jquery.flot.min.js');
+            $file = 'flot/jquery.flot.categories.min.js';
+        } elseif ($file == 'slick') {
+            $head_content .= css_link('slick-master/slick/slick.css');
+            $file = 'slick-master/slick/slick.min.js';
+        } elseif ($file == 'datatables') {
+            $head_content .= css_link('datatables/media/css/jquery.dataTables.css');
+            $file = 'datatables/media/js/jquery.dataTables.min.js';
+        } elseif ($file == 'datatables_bootstrap') {
+            $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
+            $file = 'datatables/media/js/dataTables.bootstrap.js';
     } elseif ($file == 'datatables_tabletools') {
        $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
        $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
-    } elseif ($file == 'jszip') {
-        $file = 'jszip/dist/jszip.js';
-    } elseif ($file == 'pdfmake') {
-        $file = 'pdfmake/build/pdfmake.js';
-    } elseif ($file == 'vfs_fonts') {
-        $file = 'pdfmake/build/vfs_fonts.js';
-    } elseif ($file == 'datatables_buttons') {
-        $file = 'datatables/extensions/Buttons/js/dataTables.buttons.js';
-        $head_content .= css_link('datatables/extensions/Buttons/css/buttons.dataTables.css');
-    } elseif ($file == 'datatables_buttons_jqueryui') {
-        $file = 'datatables/extensions/Buttons/js/buttons.jqueryui.js';
-        $head_content .= css_link('datatables/extensions/Buttons/css/buttons.jqueryui.css');
-    } elseif ($file == 'datatables_buttons_bootstrap') {
-        $file = 'datatables/extensions/Buttons/js/buttons.bootstrap.js';
-        $head_content .= css_link('datatables/extensions/Buttons/css/buttons.bootstrap.css');
-    } elseif ($file == 'datatables_buttons_print') {
-        $file = 'datatables/extensions/Buttons/js/buttons.print.js';
-    } elseif ($file == 'datatables_buttons_flash') {
-        $file = 'datatables/extensions/Buttons/js/buttons.flash.js';
-    } elseif ($file == 'datatables_buttons_html5') {
-        $file = 'datatables/extensions/Buttons/js/buttons.html5.js';
-    } elseif ($file == 'datatables_buttons_colVis') {
-        $file = 'datatables/extensions/Buttons/js/buttons.colVis.js';
-    } elseif ($file == 'datatables_buttons_foundation') {
-        $file = 'datatables/extensions/Buttons/js/buttons.foundation.js';
-        $head_content .= css_link('datatables/extensions/Buttons/css/buttons.foundation.css');
-    } elseif ($file == 'RateIt') {
-        $file = 'jquery.rateit.min.js';
+        } elseif ($file == 'jszip') {
+            $file = 'jszip/dist/jszip.js';
+        } elseif ($file == 'pdfmake') {
+            $file = 'pdfmake/build/pdfmake.js';
+        } elseif ($file == 'vfs_fonts') {
+            $file = 'pdfmake/build/vfs_fonts.js';
+        } elseif ($file == 'datatables_buttons') {
+            $file = 'datatables/extensions/Buttons/js/dataTables.buttons.js';
+            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.dataTables.css');
+        } elseif ($file == 'datatables_buttons_jqueryui') {
+            $file = 'datatables/extensions/Buttons/js/buttons.jqueryui.js';
+            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.jqueryui.css');
+        } elseif ($file == 'datatables_buttons_bootstrap') {
+            $file = 'datatables/extensions/Buttons/js/buttons.bootstrap.js';
+            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.bootstrap.css');
+        } elseif ($file == 'datatables_buttons_print') {
+            $file = 'datatables/extensions/Buttons/js/buttons.print.js';
+        } elseif ($file == 'datatables_buttons_flash') {
+            $file = 'datatables/extensions/Buttons/js/buttons.flash.js';
+        } elseif ($file == 'datatables_buttons_html5') {
+            $file = 'datatables/extensions/Buttons/js/buttons.html5.js';
+        } elseif ($file == 'datatables_buttons_colVis') {
+            $file = 'datatables/extensions/Buttons/js/buttons.colVis.js';
+        } elseif ($file == 'datatables_buttons_foundation') {
+            $file = 'datatables/extensions/Buttons/js/buttons.foundation.js';
+            $head_content .= css_link('datatables/extensions/Buttons/css/buttons.foundation.css');
+        } elseif ($file == 'RateIt') {
+            $file = 'jquery.rateit.min.js';
     } elseif ($file == 'waypoints-infinite') {
         $head_content .= js_link('waypoints/jquery.waypoints.min.js');
         $file = 'waypoints/shortcuts/infinite.min.js';
-    } elseif ($file == 'select2') {
-        $head_content .= css_link('select2-3.5.1/select2.css') .
-            css_link('select2-3.5.1/select2-bootstrap.css') .
-            js_link('select2-3.5.1/select2.min.js');
-        $file = "select2-3.5.1/select2_locale_$language.js";
-    } elseif ($file == 'bootstrap-datetimepicker') {
+        } elseif ($file == 'select2') {
+            $head_content .= css_link('select2-3.5.1/select2.css') .
+                css_link('select2-3.5.1/select2-bootstrap.css') .
+                js_link('select2-3.5.1/select2.min.js');
+            $file = "select2-3.5.1/select2_locale_$language.js";
+        } elseif ($file == 'bootstrap-datetimepicker') {
         $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') .
         js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');        
-        $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
-    } elseif ($file == 'bootstrap-timepicker') {
-        $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
-        $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
-    } elseif ($file == 'bootstrap-datepicker') {
+            $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
+        } elseif ($file == 'bootstrap-timepicker') {
+            $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
+            $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
+        } elseif ($file == 'bootstrap-datepicker') {
             $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.min.css') .
-        js_link('bootstrap-datepicker/js/bootstrap-datepicker.min.js');        
-        $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.min.js";    
-    } elseif ($file == 'bootstrap-validator') {
-        $file = "bootstrap-validator/validator.js";
-    } elseif ($file == 'bootstrap-slider') {
-        $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
-        $file = 'bootstrap-slider/js/bootstrap-slider.min.js';
-    } elseif ($file == 'bootstrap-colorpicker') {
-        $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
-        $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
-    }   elseif ($file == 'spectrum') {
-        $head_content .= css_link('spectrum/spectrum.css');
-        $file = 'spectrum/spectrum.js';
-    } elseif ($file == 'sortable') {
-        $file = "sortable/Sortable.min.js";
-    } elseif ($file == 'filetree') {
-        $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
-        $file = 'jquery_filetree/jqueryFileTree.js';            
-    } elseif ($file == 'trunk8') {
-        $head_content .= "
-            <script>
-                var readMore = '".js_escape($langReadMore)."';
-                var readLess = '".js_escape($langReadLess)."';
-                $(function () { $('.trunk8').trunk8({
-                    lines: 3,
-                    fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',
-                });
+                js_link('bootstrap-datepicker/js/bootstrap-datepicker.min.js');
+            $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.min.js";
+        } elseif ($file == 'bootstrap-validator') {
+            $file = "bootstrap-validator/validator.js";
+        } elseif ($file == 'bootstrap-slider') {
+            $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
+            $file = 'bootstrap-slider/js/bootstrap-slider.min.js';
+        } elseif ($file == 'bootstrap-colorpicker') {
+            $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
+            $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
+        }   elseif ($file == 'spectrum') {
+            $head_content .= css_link('spectrum/spectrum.css');
+            $file = 'spectrum/spectrum.js';
+        } elseif ($file == 'sortable') {
+            $file = "sortable/Sortable.min.js";
+        } elseif ($file == 'filetree') {
+            $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
+            $file = 'jquery_filetree/jqueryFileTree.js';            
+        } elseif ($file == 'trunk8') {
+            $head_content .= "
+<script>
+    var readMore = '".js_escape($langReadMore)."';
+    var readLess = '".js_escape($langReadLess)."';
+    $(function () { $('.trunk8').trunk8({
+        lines: 3,
+        fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',
+    });
+
     $(document).on('click', '.read-more', function (event) {
         $(this).parent().trunk8('revert').append(' <a class=\"read-less\" href=\"#\">" . js_escape($GLOBALS['shownone']) . "</a>');
         event.preventDefault();
@@ -348,12 +349,12 @@ console.log('aaa');
         event.preventDefault();
     });
 
-            });
-            </script>";
-        $file = 'trunk8.js';
-    }
+});
+</script>";
+            $file = 'trunk8.js';
+        }
 
-    $head_content .= js_link($file);
+        $head_content .= js_link($file);
 
     if (strlen($init) > 0) {
         $head_content .= $init;
@@ -1071,7 +1072,7 @@ function current_module_id() {
             define('STATIC_MODULE', true);
             return $module_id;
         }
-    }    
+    }
 
     foreach ($modules as $mid => $info) {
         if ($info['link'] == $link) {
@@ -2585,12 +2586,13 @@ function check_username_sensitivity($posted, $dbuser) {
  * @return boolean
  */
 function get_user_email_notification($user_id, $course_id = null) {
-
+    // check if user is active
+    if (!Database::get()->querySingle('SELECT expires_at < NOW() FROM user WHERE id = ?d', $user_id)) {
+        return false;
+    }
     // checks if a course is active or not
-    if (isset($course_id)) {
-        if (course_status($course_id) == COURSE_INACTIVE) {
-            return false;
-        }
+    if (isset($course_id) and course_status($course_id) == COURSE_INACTIVE) {
+        return false;
     }
     // checks if user has verified his email address
     if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
@@ -3441,6 +3443,7 @@ function action_button($options, $secondary_menu_options = array()) {
                 $action_button
           </div>" . $primary_form_end;
 }
+
 /**
  * Removes spcific get variable from Query String
  *
@@ -3452,9 +3455,10 @@ function removeGetVar($url, $varname) {
     $newqs = http_build_query($qsvars);
     return $urlpart . '?' . $newqs;
 }
-function recurse_copy($src,$dst) {
+
+function recurse_copy($src, $dst) {
     $dir = opendir($src);
-    @mkdir($dst);
+    make_dir($dst);
     while(false !== ( $file = readdir($dir)) ) {
         if (( $file != '.' ) && ( $file != '..' )) {
             if ( is_dir($src . '/' . $file) ) {
@@ -3466,6 +3470,11 @@ function recurse_copy($src,$dst) {
         }
     }
     closedir($dir);
+}
+
+// Shortcut function to create directories consistently
+function make_dir($dir) {
+    return @mkdir($dir, 0775, true);
 }
 
 function setOpenCoursesExtraHTML() {

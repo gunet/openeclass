@@ -168,7 +168,7 @@ function doArchive($course_id, $course_code) {
     global $webDir, $urlServer, $urlAppend, $siteName, $tool_content;
     
     $basedir = "$webDir/courses/archive/$course_code";
-    file_exists($basedir) or mkdir($basedir, 0755, true);
+    file_exists($basedir) or make_dir($basedir);
 
     // Remove previous back-ups older than 10 minutes
     cleanup("$webDir/courses/archive", 600);
@@ -177,7 +177,7 @@ function doArchive($course_id, $course_code) {
     $backup_date_short = date('Ymd');
 
     $archivedir = $basedir . '/' . $backup_date;
-    file_exists($archivedir) or mkdir($archivedir, 0755, true);
+    file_exists($archivedir) or make_dir($archivedir);
 
     archiveTables($course_id, $course_code, $archivedir);
 

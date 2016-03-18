@@ -47,8 +47,6 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = "Path";
 
-define('CLARO_FILE_PERMISSIONS', 0777);
-
 include "../../include/baseTheme.php";
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';

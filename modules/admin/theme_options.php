@@ -62,7 +62,7 @@ if (isset($_GET['export'])) {
         require_once 'include/lib/forcedownload.php';
         if (!$theme_id) redirect_to_home_page('modules/admin/theme_options.php'); // if default theme
         require_once 'include/lib/fileUploadLib.inc.php';
-        if (!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
+        if (!is_dir("courses/theme_data")) make_dir('courses/theme_data');
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);        
         $theme_name = str_replace(' ', '', $theme_options->name);
 
@@ -92,7 +92,7 @@ if (isset($_POST['import'])) {
     if (get_file_extension($_FILES['themeFile']['name']) == 'zip') {
         $file_name = $_FILES['themeFile']['name'];
         $file_name = php2phps($file_name);
-        if(!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
+        if(!is_dir('courses/theme_data')) make_dir('courses/theme_data');
         if (move_uploaded_file($_FILES['themeFile']['tmp_name'], "courses/theme_data/$file_name")) {
             require_once 'modules/admin/extconfig/externals.php';
             $connector = AntivirusApp::getAntivirus();
@@ -699,8 +699,8 @@ function initialize_settings() {
 }
 function clone_images($new_theme_id = null) {
     global $webDir, $theme, $theme_id;
-    if(!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
-        mkdir("$webDir/courses/theme_data/$new_theme_id", 0755);
+    if (!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
+        make_dir("$webDir/courses/theme_data/$new_theme_id");
     }     
     $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
     foreach($images as $image) {
@@ -715,8 +715,8 @@ function clone_images($new_theme_id = null) {
 function upload_images($new_theme_id = null) {
     global $webDir, $theme, $theme_id;
     if (isset($new_theme_id)) $theme_id = $new_theme_id;
-    if(!is_dir("$webDir/courses/theme_data/$theme_id")) {
-        mkdir("$webDir/courses/theme_data/$theme_id", 0755);
+    if (!is_dir("$webDir/courses/theme_data/$theme_id")) {
+        make_dir("$webDir/courses/theme_data/$theme_id", 0755);
     }
     $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
     foreach($images as $image) {

@@ -616,7 +616,7 @@ if (!class_exists('ScormExport')):
 
             claro_delete_file($this->destDir);
             if (
-                    !claro_mkdir($this->destDir, CLARO_FILE_PERMISSIONS, true) || !claro_mkdir($this->destDir . "/common", CLARO_FILE_PERMISSIONS, true) || !claro_mkdir($this->destDir . "/extend", CLARO_FILE_PERMISSIONS, true) || !claro_mkdir($this->destDir . "/unique", CLARO_FILE_PERMISSIONS, true) || !claro_mkdir($this->destDir . "/vocab", CLARO_FILE_PERMISSIONS, true)
+                    !make_dir($this->destDir) || !make_dir($this->destDir . "/common") || !make_dir($this->destDir . "/extend") || !make_dir($this->destDir . "/unique") || !make_dir($this->destDir . "/vocab")
             ) {
                 $this->error[] = $langErrorCreatingDirectory . $this->destDir;
                 return false;
@@ -642,10 +642,10 @@ if (!class_exists('ScormExport')):
             }
 
             // Create destination directory for "pure" documents
-            claro_mkdir($this->destDir . '/Documents', CLARO_FILE_PERMISSIONS, true);
+            make_dir($this->destDir . '/Documents');
 
             // And for exercises
-            claro_mkdir($this->destDir . '/Exercises', CLARO_FILE_PERMISSIONS, true);
+            make_dir($this->destDir . '/Exercises');
 
             // Copy documents into the created directory
             foreach ($this->resourceMap as $module) {
@@ -657,7 +657,7 @@ if (!class_exists('ScormExport')):
                         $destinationDir = $this->destDir . '/Documents/';
                     }
                     if (!is_dir($destinationDir)) {
-                        claro_mkdir($destinationDir, CLARO_FILE_PERMISSIONS, true);
+                        make_dir($destinationDir);
                     }
                     @copy($this->srcDirDocument . $module['path'], $destinationDir . $documentName);
                 } elseif ($module['contentType'] == 'EXERCISE') {
@@ -668,7 +668,7 @@ if (!class_exists('ScormExport')):
                     $documentName = basename($module['path']);
                     $destinationDir = $this->destDir . '/Documents/';
                     if (!is_dir($destinationDir)) {
-                        claro_mkdir($destinationDir, CLARO_FILE_PERMISSIONS, true);
+                        make_dir($destinationDir);
                     }
                     @copy($this->srcDirVideo . $module['path'], $destinationDir . $documentName);
                 }

@@ -47,7 +47,7 @@ $dirimg = $webDir."/courses/mathimg";
 // or $dirimg=dirname(__FILE__)."/phpmathpublisher/img";
 
 if (!file_exists($dirimg)) {
-        mkdir($dirimg) or die("Unable to create directory $dirimg");
+        make_dir($dirimg) or die("Unable to create directory $dirimg");
 }
 
 //******************************************************************

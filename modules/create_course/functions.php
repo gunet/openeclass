@@ -101,7 +101,7 @@ function create_course_dirs($code) {
     foreach (array($base, "$base/image", "$base/document", "$base/dropbox",
                    "$base/page", "$base/work", "$base/group", "$base/temp",
                    "$base/scormPackages", "video/$code") as $dir) {
-       if (!(mkdir($dir))) {
+       if (!make_dir($dir)) {
             Session::Messages(sprintf($langDirectoryCreateError, $dir));
             return false;
        } 

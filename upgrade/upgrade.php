@@ -155,7 +155,7 @@ if (!DBHelper::fieldExists('user', 'id')) {
 // Make sure 'video' subdirectory exists and is writable
 $videoDir = $webDir . '/video';
 if (!file_exists($videoDir)) {
-    if (!mkdir($videoDir)) {
+    if (!make_dir($videoDir)) {
         die($langUpgNoVideoDir);
     }
 } elseif (!is_dir($videoDir)) {

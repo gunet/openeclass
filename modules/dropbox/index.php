@@ -46,7 +46,7 @@ if (!isset($course_id)) {
 if ($course_id != 0) {
     $dropbox_dir = $webDir . "/courses/" . $course_code . "/dropbox";
     if (!is_dir($dropbox_dir)) {
-        mkdir($dropbox_dir);
+        make_dir($dropbox_dir);
     }
     
     // get dropbox quotas from database
