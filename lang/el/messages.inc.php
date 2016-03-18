@@ -583,6 +583,7 @@ $langAdminAddAnn = "Προσθήκη ανακοίνωσης διαχειριστ
 $langAdminModifAnn = "Τροποποίηση ανακοίνωσης διαχειριστή";
 $langAdminAnnModify = "Η ανακοίνωση διαχειριστή τροποποιήθηκε";
 $langAdminAnVis = "Ορατή";
+$langAdminAnNotVis = "Μη ορατή";
 $langAdminAnnAdd = "Η ανακοίνωση διαχειριστή προστέθηκε";
 $langAdminAnnDel = "Η ανακοίνωση διαχειριστή διαγράφηκε";
 $langAdminAnnMes = "τοποθετήθηκε την";
