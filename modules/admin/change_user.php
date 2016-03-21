@@ -27,8 +27,6 @@
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
-$pageName = $langChangeUser;
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_REQUEST['username'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -58,32 +56,20 @@ if (isset($_REQUEST['username'])) {
         $_SESSION['langswitch'] = $myrow->lang;
         redirect_to_home_page();
     } else {
-        $tool_content = "<div class='alert alert-danger'>" . sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username']))) . "</div>";
+        $message = sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username'])));
+        Session::Messages($message, 'alert-danger');
+        redirect_to_home_page('modules/admin/change_user.php');
     }
 }
-
-$tool_content .= action_bar(array(
+$pageName = $langChangeUser;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                     'url' => "index.php",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
                 ),false);
 
-$tool_content .= "<div class='form-wrapper'>
-            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-            <div class='form-group'>
-            <label for = 'username' class='col-sm-3 control-label'>$langUsername:</label>
-                <div class='col-sm-9'>
-                    <input id='username' class='form-control' type='text' name='username' placeholder='$langUsername'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <div class='col-sm-9 col-sm-offset-3'>
-                    ".showSecondFactorChallenge()."
-                    <input class='btn btn-primary' type='submit' value='$langSubmit'>
-                </div>
-            </div>
-            ". generate_csrf_token_form_field() ."            
-        </form>
-        </div>";
-draw($tool_content, 3);
+$data['menuTypeID'] = 3;
+
+view('admin.users.change_user', $data);
