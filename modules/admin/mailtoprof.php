@@ -132,5 +132,5 @@ $data['action_bar'] = action_bar(array(
 
 $data['body_mail_rich_text'] = rich_text_editor('body_mail', 10, 20, '');
 $data['menuTypeID'] = 3;
+
 view('admin.users.mailtoprof', $data);
-//draw($tool_content, 3, null, $head_content);
