@@ -160,7 +160,7 @@ if (isset($_GET['mid'])) {
                     $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
                 }
             }
-            $out .= "
+            $out .= generate_csrf_token_form_field() . "
                 <fieldset>
                 <legend>$langReply</legend>
                     <div class='form-group'>
