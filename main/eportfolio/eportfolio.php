@@ -52,6 +52,16 @@ if ($userdata) {
                     'icon' => 'fa-upload',
                     'level' => 'primary-label')
                 ));    
+    } else {
+        if (file_exists("$webDir/courses/userbios/$id"."_bio.pdf")) {
+            $tool_content .=
+                action_bar(array(
+                    array('title' => $langBio,
+                    'url' => "{$urlAppend}courses/userbios/$id"."_bio.pdf",
+                    'icon' => 'fa-download',
+                    'level' => 'primary-label')
+                ));
+        }
     }
     
     $tool_content .= "
@@ -71,7 +81,7 @@ if ($userdata) {
                                 </div>
                             </div>
                         </div>";
-
+    
     $tool_content .= render_eportfolio_fields_content($id);
     $tool_content .= "</div>
             </div>
