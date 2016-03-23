@@ -86,7 +86,7 @@ require_once 'modules/usage/form.php';
 /****   Plots   ****/
 $tool_content .= "<div class='row plotscontainer'>";
 $tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
-$tool_content .= plot_placeholder("userlogins_stats", $langNbLogin);
+$tool_content .= plot_placeholder("userlogins_stats", $langNbLogin.' '.$langAndTotalCourseVisits);
 $tool_content .= "</div>";
 $tool_content .= "<div id='favcourses_container' class='col-lg-12'>";
 $tool_content .= plot_placeholder("popular_courses", $langFavouriteCourses);

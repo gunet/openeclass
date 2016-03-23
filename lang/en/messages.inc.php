@@ -1959,6 +1959,7 @@ $langVisits = "Number of visits";
 $langFirstLetterUser = "First letter of last name";
 $langFirstLetterCourse = "First letter of $langsCourse name";
 $langUsageVisits = "$langCourse Visits";
+$langAndTotalCourseVisits = " and total course visits";
 $langFavourite = "Module Preferences";
 $langFavouriteExpl = "One user or all users preference for modules in a certain time period.";
 $langOldStats = "Show Old Statistics";

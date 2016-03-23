@@ -3576,6 +3576,7 @@ $langVisitsShort = "Αρ. Επισκέψεων";
 $langHitsShort = "Αρ. Προβολών";
 $langFirstLetterUser = "Πρώτο Γράμμα Επωνύμου";
 $langFirstLetterCourse = "Πρώτο Γράμμα Τίτλου";
+$langAndTotalCourseVisits = "και συνολικών επισκέψεων σε μαθήματα";
 $langUsageVisits = "Στατιστικά Επισκεψιμότητας";
 $langFavourite = "Προτίμηση Υποσυστημάτων";
 $langFavouriteCourse = "Προτίμηση $langOfCourses";

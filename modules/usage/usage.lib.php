@@ -396,19 +396,36 @@ function get_user_details($start = null, $end = null, $interval, $user, $course 
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
 function get_user_login_stats($start = null, $end = null, $interval, $user, $root_department = 1){
+    $temp = array();
     $g = build_group_selector_cond($interval, 'date_time');
     $groupby = $g['groupby'];
     $date_components = $g['select'];
     $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
-    $q = "SELECT $date_components, COUNT(*) c FROM logins WHERE "
+    $q1 = "SELECT $date_components, COUNT(*) c FROM logins WHERE "
             . "course_id IN (SELECT course FROM course_department cd JOIN hierarchy h ON cd.department=h.id where h.lft>=@rootlft and h.rgt<=@rootrgt) "
             . "AND date_time BETWEEN ?t AND ?t $groupby";
-    $r = Database::get()->queryArray($q, $start, $end);
+    $r1 = Database::get()->queryArray($q1, $start, $end);
+    foreach($r1 as $record){
+        $temp[$record->cat_title]['logins'] = $record->c;
+    }
+    
+    $g = build_group_selector_cond($interval, 'day');
+    $groupby = $g['groupby'];
+    $date_components = $g['select'];
+    $q2 = "SELECT $date_components, sum(hits) hits FROM actions_daily WHERE "
+            . "course_id IN (SELECT course FROM course_department cd JOIN hierarchy h ON cd.department=h.id where h.lft>=@rootlft and h.rgt<=@rootrgt) "
+            . "AND day BETWEEN ?t AND ?t $groupby";
+    $r2 = Database::get()->queryArray($q2, $start, $end);
+    foreach($r2 as $record){
+        $temp[$record->cat_title]['visits'] = $record->hits;
+    }
+    
     $formattedr = array('time'=>array(),'logins'=>array());
-    foreach($r as $record){
-        $formattedr['time'][] = $record->cat_title;
-        $formattedr['logins'][] = $record->c;
+    foreach($temp as $k=>$v){
+        $formattedr['time'][] = $k;
+        $formattedr['logins'][] = (isset($v['logins']))? $v['logins']:0;
+        $formattedr['visits'][] = (isset($v['visits']))? $v['visits']:0;
     }
     return $formattedr;
 }
@@ -422,7 +439,7 @@ function get_user_login_stats($start = null, $end = null, $interval, $user, $roo
  * @param int $k the k parameter of top-k
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
-function get_popular_courses_stats($start = null, $end = null, $root_department = 1, $k = 10){
+function get_popular_courses_stats($start = null, $end = null, $root_department = 1, $k = 20){
     $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
     $q = "SELECT c.id cid, c.title, s.hits FROM (SELECT course_id cid, sum(hits) hits "
@@ -596,11 +613,11 @@ function build_group_selector_cond($interval = 'month', $date_field = 'day')
     $select = "";
     switch($interval){
         case 'year':
-            $select = "DATE_FORMAT($date_field, '%Y-01-01') cat_title, DATE_FORMAT($date_field, '%Y') y";
+            $select = "DATE_FORMAT($date_field, '%Y-06-30') cat_title, DATE_FORMAT($date_field, '%Y') y";
             $groupby = "GROUP BY y";
             break;
         case 'month':
-            $select = "DATE_FORMAT($date_field, '%Y-%m-01') cat_title, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
+            $select = "DATE_FORMAT($date_field, '%Y-%m-15') cat_title, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
             $groupby = "GROUP BY y, m";
             break;
         case 'week':
@@ -842,8 +859,7 @@ function user_duration_per_course() {
 }
 
 /**
- * Get old statistics of visits and visit duration to a course. The results are
- * depicted in te first plot of course statistics
+ * Get old statistics of visits and visit duration to a course. 
  * @param date $start the start of period to retrieve statistics for
  * @param date $end the end of period to retrieve statistics for
  * @param int $cid the id of the course
@@ -870,6 +886,32 @@ function get_course_old_stats($start = null, $end = null, $cid, $mid)
            $formattedr['time'][] = $record->cat_title;
            $formattedr['hits'][] = $record->visits;
            $formattedr['duration'][] = $record->dur;
+        }
+    }
+    return $formattedr;
+}
+
+/**
+ * Get old statistics of logins/logouts to the platform. 
+ * @param date $start the start of period to retrieve statistics for
+ * @param date $end the end of period to retrieve statistics for
+ * @return array an array appropriate for displaying in a c3 plot when json encoded
+*/
+function get_login_old_stats($start = null, $end = null)
+{
+    global $langHits,$langDuration;
+    $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
+    if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
+        $g = build_group_selector_cond('month', 'start_date');
+        $groupby = $g['groupby'];
+        $date_components = $g['select'];
+        
+        $q = "SELECT $date_components, sum(login_sum) visits FROM loginout_summary WHERE start_date BETWEEN ?t AND ?t $groupby";
+        $r = Database::get()->queryArray($q, $start, $end);
+        
+        foreach($r as $record){
+           $formattedr['time'][] = $record->cat_title;
+           $formattedr['hits'][] = $record->visits;
         }
     }
     return $formattedr;

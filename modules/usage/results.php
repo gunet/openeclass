@@ -104,6 +104,9 @@ if(isset($_REQUEST['t'])){
         case 'ocs':
             $result = get_course_old_stats($startdate, $enddate, $plotcourse, $plotmodule);
             break;
+        case 'ols':
+            $result = get_login_old_stats($startdate, $enddate);
+            break;
     }
 
 }
