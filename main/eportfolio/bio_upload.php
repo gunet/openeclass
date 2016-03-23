@@ -23,7 +23,6 @@ $require_login = true;
 $require_valid_uid = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/fileUploadLib.inc.php';
 
 check_uid();
 check_guest();
@@ -41,7 +40,7 @@ if (isset($_GET['delete_bio'])) {
 elseif (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (!file_exists($webDir . '/courses/userbios/')) {
-        mkdir($webDir . '/courses/userbios/', 0775);
+        make_dir($webDir . '/courses/userbios/');
         touch($webDir."/courses/userbios/index.php");
     }
     if (isset($_FILES['bio']) && is_uploaded_file($_FILES['bio']['tmp_name'])) {
