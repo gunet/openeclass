@@ -25,15 +25,16 @@ $require_login = false;
 include '../../include/baseTheme.php';
 include 'main/eportfolio/eportfolio_functions.php';
 
-$toolName = $langMyePortfolio;
+
 
 $userdata = array();
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    $pageName = $langUserePortfolio;
+    $toolName = $langUserePortfolio;
 } else {
     $id = $uid;
+    $toolName = $langMyePortfolio;
 }
 
 $userdata = Database::get()->querySingle("SELECT surname, givenname, username, has_icon
