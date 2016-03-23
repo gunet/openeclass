@@ -1306,11 +1306,11 @@ $langAlertProf = "Παρακαλώ συμπληρώστε τον διδάσκο�
 
 // Admin mutiple course creation
 $langMultiCourse = "Μαζική δημιουργία $langsOfCourses";
-$langMultiCourseInfo = 'Εισαγάγετε στην παρακάτω περιοχή μια λίστα με τους
+$langMultiCourseInfo = "Εισαγάγετε στην παρακάτω περιοχή μια λίστα με τους
 τίτλους των $langsOfCourses που επιθυμείτε να δημιουργηθούν, με τον κάθε
 τίτλο σε ξεχωριστή γραμμή. Αν επιθυμείτε να προστεθεί αυτόματα
-καθηγητής στο '. $langsCourse . ', σημπληρώστε το ονοματεπώνυμο ή το όνομα χρήστη
-του μετά τον τίτλο, διαχωρισμένο με το χαρακτήρα "|".';
+καθηγητής στο $langsCourse, σημπληρώστε το ονοματεπώνυμο ή το όνομα χρήστη
+του μετά τον τίτλο, διαχωρισμένο με το χαρακτήρα \"|\".";
 $langMultiCourseTitles = "Τίτλοι / Καθηγητές $langOfCourses";
 $langMultiCourseData = "Στοιχεία $langOfCourses";
 $langMultiCourseCreated = "το $langsCourse δημιουργήθηκε";
