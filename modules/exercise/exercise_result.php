@@ -54,7 +54,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                                     WHERE eurid = ?d)
             WHERE eurid = ?d",
             ATTEMPT_COMPLETED, $eurid, $eurid);
-    } else { 
+    } else {
         // else increment total by just this grade
         Database::get()->query("UPDATE exercise_user_record
             SET total_score = total_score + ?d WHERE eurid = ?d",
@@ -91,7 +91,7 @@ if (isset($_GET['eurId'])) {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
-$head_content .= "<script type='text/javascript'>                             
+$head_content .= "<script type='text/javascript'>
     		$(document).ready(function(){
                     function save_grade(elem){
                         var grade = parseInt($(elem).val());
@@ -117,7 +117,7 @@ $head_content .= "<script type='text/javascript'>
                             var updated_grade = prev_grade + grade;
                             $('span#total_score').html(updated_grade);
                             return true;
-                        }                    
+                        }
                     }
                     $('.questionGradeBox').keyup(function (e) {
                         if (e.keyCode == 13) {
@@ -128,7 +128,7 @@ $head_content .= "<script type='text/javascript'>
                                 $('a#all').hide();
                                 $('a#ungraded').hide();
                                 $('table.graded').show('slow');
-                            }                        
+                            }
                         }
                     });
                     $('a#submitButton').click(function(e){
@@ -140,7 +140,7 @@ $head_content .= "<script type='text/javascript'>
                         if (success) {
                          $(this).parent().hide();
                         }
-                    });                    
+                    });
                     $('a#ungraded').click(function(e){
                         e.preventDefault();
                         $('a#all').removeClass('btn-primary').addClass('btn-default');
@@ -152,7 +152,7 @@ $head_content .= "<script type='text/javascript'>
                         $('a#ungraded').removeClass('btn-primary').addClass('btn-default');
                         $(this).removeClass('btn-default').addClass('btn-primary');
                         $('table.graded').show('slow');
-                    });        
+                    });
                 });
                 </script>";
 }
@@ -168,82 +168,83 @@ $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exer
 $cur_date = new DateTime("now");
 $end_date = new DateTime($objExercise->selectEndDate());
 
-$showResults = $displayResults == 1 
-               || $is_editor 
-               || $displayResults == 3 && $exerciseAttemptsAllowed == $userAttempts 
+$showResults = $displayResults == 1
+               || $is_editor
+               || $displayResults == 3 && $exerciseAttemptsAllowed == $userAttempts
                || $displayResults == 4 && $end_date < $cur_date;
 
-$showScore = $displayScore == 1 
+$showScore = $displayScore == 1
             || $is_editor
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
             || $displayScore == 4 && $end_date < $cur_date;
+
 $tool_content .= "<div class='panel panel-primary'>
   <div class='panel-heading'>
     <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
-  </div>";
+  </div>
+  <div class='panel-body'>";
+
 if (!empty($exerciseDescription_temp)) {
-    $tool_content .= "<div class='panel-body'>";
-        if ($exerciseDescription_temp) {
-             $tool_content .= $exerciseDescription_temp."<hr>";
-        }
+    if ($exerciseDescription_temp) {
+        $tool_content .= $exerciseDescription_temp."<hr>";
+    }
 }
-        $tool_content .= "
-            <div class='row'>
-                <div class='col-xs-6 col-md-3 text-right'>
-                    <strong>$langSurname:</strong>
-                </div>
-                <div class='col-xs-6 col-md-3'>
-                    $user->surname
-                </div>            
-                <div class='col-xs-6 col-md-3 text-right'>
-                    <strong>$langName:</strong>
-                </div>
-                <div class='col-xs-6 col-md-3'>
-                    $user->givenname
-                </div>";
-                if ($user->am) {
-                    $tool_content .= "
-                        <div class='col-xs-6 col-md-3 text-right'>
-                            <strong>$langAm:</strong>
-                        </div>
-                        <div class='col-xs-6 col-md-3'>
-                            $user->am
-                        </div>";            
-                }
-                if ($user->phone) {                
-                    $tool_content .= "                
-                        <div class='col-xs-6 col-md-3 text-right'>
-                            <strong>$langPhone:</strong>
-                        </div>
-                        <div class='col-xs-6 col-md-3'>
-                            $user->phone
-                        </div>";
-                }
-                if ($user->email) {                
-                    $tool_content .= "                     
-                        <div class='col-xs-6 col-md-3 text-right'>
-                            <strong>Email:</strong>
-                        </div>
-                        <div class='col-xs-6 col-md-3'>
-                            $user->email
-                        </div>";
-                }
-$tool_content .= "                
-            </div>
-        </div>";
-$tool_content .= "</div>";
 $tool_content .= "
+    <div class='row'>
+        <div class='col-xs-6 col-md-3 text-right'>
+            <strong>$langSurname:</strong>
+        </div>
+        <div class='col-xs-6 col-md-3'>
+            " . q($user->surname) . "
+        </div>
+        <div class='col-xs-6 col-md-3 text-right'>
+            <strong>$langName:</strong>
+        </div>
+        <div class='col-xs-6 col-md-3'>
+            " . q($user->givenname) . "
+        </div>";
+        if ($user->am) {
+            $tool_content .= "
+        <div class='col-xs-6 col-md-3 text-right'>
+            <strong>$langAm:</strong>
+        </div>
+        <div class='col-xs-6 col-md-3'>
+            " . q($user->am) . "
+        </div>";
+        }
+        if ($user->phone) {
+            $tool_content .= "
+        <div class='col-xs-6 col-md-3 text-right'>
+            <strong>$langPhone:</strong>
+        </div>
+        <div class='col-xs-6 col-md-3'>
+            " . q($user->phone) . "
+        </div>";
+        }
+        if ($user->email) {
+            $tool_content .= "
+        <div class='col-xs-6 col-md-3 text-right'>
+            <strong>Email:</strong>
+        </div>
+        <div class='col-xs-6 col-md-3'>
+            " . q($user->email) . "
+        </div>";
+        }
+$tool_content .= "
+      </div>
+    </div>
+  </div>
   <div class='row margin-bottom-fat'>
     <div class='col-md-5 col-md-offset-7'>";
-    if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
-        $tool_content .= "
+if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
+    $tool_content .= "
             <div class='btn-group btn-group-sm' style='float:right;'>
                 <a class='btn btn-primary' id='all'>$langAllExercises</a>
                 <a class='btn btn-default' id='ungraded'>$langAttemptPending</a>
             </div>";
-    }
-$tool_content .= "                
-    </div>    
+}
+$tool_content .= "
+    </div>
   </div>";
 $i = 0;
 
@@ -262,13 +263,13 @@ if (count($exercise_question_ids)>0){
         $questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
         $questionWeighting = $objQuestionTmp->selectWeighting();
         $answerType = $objQuestionTmp->selectType();
- 
+
         // destruction of the Question object
-        unset($objQuestionTmp); 
+        unset($objQuestionTmp);
         //check if question has been graded
         $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
-        $question_graded = is_null($question_weight) ? FALSE : TRUE; 
-        
+        $question_graded = is_null($question_weight) ? FALSE : TRUE;
+
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
             $colspan = 4;
         } elseif ($answerType == MATCHING) {
@@ -285,22 +286,22 @@ if (count($exercise_question_ids)>0){
             <tr>
               <td colspan='${colspan}'>";
         if ($is_question) {
-            $tool_content .= "              
+            $tool_content .= "
                 <b>" . q_math($questionName) . "</b>
-                <br />" .
+                <br>" .
                 standard_text_escape($questionDescription_temp)
-                . "<br/><br/>";            
+                . "<br><br>";
         } else {
             $tool_content .= "<div class='alert alert-warning'>$langQuestionAlreadyDeleted</div>";
-        }      
+        }
 
-        $tool_content .= "         
+        $tool_content .= "
               </td>
             </tr>";
         if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
             $tool_content .= "
                       <tr class='even'>
-                        <td class='text-center' colspan='${colspan}'><img src='../../" . ${'picturePath'} . "/quiz-" . $row->question_id . "'></td>
+                        <td class='text-center' colspan='${colspan}'><img src='../../$picturePath/quiz-" . $row->question_id . "'></td>
                       </tr>";
         }
         $questionScore = 0;
@@ -318,7 +319,7 @@ if (count($exercise_question_ids)>0){
                 $tool_content .= "
                             <tr class='active'>
                               <td><b>$langAnswer</b></td>
-                            </tr>";       
+                            </tr>";
             } else {
                 $tool_content .= "
                             <tr class='even'>
@@ -327,7 +328,7 @@ if (count($exercise_question_ids)>0){
                             </tr>";
             }
         }
-        if ($answerType != FREE_TEXT) { // if NOT FREE TEXT (i.e. question has answers) 
+        if ($answerType != FREE_TEXT) { // if NOT FREE TEXT (i.e. question has answers)
             // construction of the Answer object
             $objAnswerTmp = new Answer($row->question_id);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
@@ -339,27 +340,26 @@ if (count($exercise_question_ids)>0){
                 $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
 
                 // support for math symbols
-                $answer = mathfilter($answer, 12, "../../courses/mathimg/");
-                $answerComment = mathfilter($answerComment, 12, "../../courses/mathimg/");
+                $answer = mathfilter($answer, 12, '../../courses/mathimg/');
+                $answerComment = mathfilter($answerComment, 12, '../../courses/mathimg/');
 
                 switch ($answerType) {
                     // for unique answer
                     case UNIQUE_ANSWER : $studentChoice = ($choice == $answerId) ? 1 : 0;
                         if ($studentChoice) {
-                            $questionScore+=$answerWeighting;
+                            $questionScore += $answerWeighting;
                         }
                         break;
                     // for multiple answers
                     case MULTIPLE_ANSWER : $studentChoice = @$choice[$answerId];
                         if ($studentChoice) {
-                            $questionScore+=$answerWeighting;
+                            $questionScore += $answerWeighting;
                         }
                         break;
                     // for fill in the blanks
                     case FILL_IN_BLANKS :
-                    case FILL_IN_BLANKS_TOLERANT :    
-                        // splits text and weightings that are joined with the char '::'
-                        list($answer, $answerWeighting) = explode('::', $answer);
+                    case FILL_IN_BLANKS_TOLERANT :
+                        list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);
                         // splits weightings that are joined with a comma
                         $answerWeighting = explode(',', $answerWeighting);
                         // we save the answer because it will be modified
@@ -371,40 +371,42 @@ if (count($exercise_question_ids)>0){
                             // quits the loop if there are no more blanks
                             if (($pos = strpos($temp, '[')) === false) {
                                 // adds the end of the text
-                                $answer.=$temp;
+                                $answer .= q($temp);
                                 break;
                             }
                             // adds the piece of text that is before the blank and ended by [
-                            $answer.=substr($temp, 0, $pos + 1);
+                            $answer .= substr($temp, 0, $pos + 1);
                             $temp = substr($temp, $pos + 1);
                             // quits the loop if there are no more blanks
                             if (($pos = strpos($temp, ']')) === false) {
                                 // adds the end of the text
-                                $answer.=$temp;
+                                $answer .= q($temp);
                                 break;
                             }
-                            $choice[$j] = trim(stripslashes($choice[$j]));
+                            $choice[$j] = trim($choice[$j]);
                             // if the word entered is the same as the one defined by the professor
                             $canonical_choice = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($choice[$j], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $choice[$j];
-                            $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper(substr($temp, 0, $pos), 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : substr($temp, 0, $pos);   
+                            $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper(substr($temp, 0, $pos), 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : substr($temp, 0, $pos);
                             $right_answers = preg_split('/\s*\|\s*/', $canonical_match);
                             if (in_array($canonical_choice, $right_answers)) {
                                 // gives the related weighting to the student
-                                $questionScore+=$answerWeighting[$j-1];
+                                $questionScore += $answerWeighting[$j-1];
                                 // increments total score
                                 // adds the word in green at the end of the string
-                                $answer.='<b>'.$choice[$j].'</b>';
+                                $answer .= '<b>' . q($choice[$j]) . '</b>';
                             }
                             // else if the word entered is not the same as the one defined by the professor
                             elseif (!empty($choice[$j])) {
                                 // adds the word in red at the end of the string, and strikes it
-                                $answer.='<font color="red"><s>' . q($choice[$j]) . '</s></font>';
+                                $answer.='<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
                             } else {
                                 // adds a tabulation if no word has been typed by the student
                                 $answer.='&nbsp;&nbsp;&nbsp;';
                             }
                             // adds the correct word, followed by ] to close the blank
-                            $answer.=' / <font color="green"><b>' . q(preg_replace('/\s*,\s*/', " $langOr ", substr($temp, 0, $pos))) . '</b></font>]';
+                            $answer .= ' / <span class="text-success"><b>' .
+                                q(preg_replace('/\s*,\s*/', " $langOr ", substr($temp, 0, $pos))) .
+                                '</b></span>]';
                             $j++;
                             $temp = substr($temp, $pos + 1);
                         }
@@ -417,8 +419,8 @@ if (count($exercise_question_ids)>0){
                             } elseif (!$choice[$answerId]) {
                                 $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
                             } else {
-                                $choice[$answerId] = "<span style='color:red;'>
-                                                                <del>" . $matching[$choice[$answerId]] . "</del>
+                                $choice[$answerId] = "<span class='text-danger'>
+                                                                <del>" . q($matching[$choice[$answerId]]) . "</del>
                                                                 </span>";
                             }
                         } else {
@@ -445,7 +447,7 @@ if (count($exercise_question_ids)>0){
                                 $icon_choice = "fa-square-o";
                             }
 
-                            $tool_content .= icon($icon_choice)."</div>
+                            $tool_content .= icon($icon_choice) . "</div>
                                                 </td>
                                                 <td><div align='center'>";
 
@@ -469,49 +471,49 @@ if (count($exercise_question_ids)>0){
                             $tool_content .= "
                                                 <tr class='even'>
                                                   <td>" . standard_text_escape(nl2br($answer)) . "</td>
-                                                </tr>";          
+                                                </tr>";
                         } else {
                             $tool_content .= "
                                                 <tr class='even'>
                                                   <td>" . standard_text_escape($answer) . "</td>
-                                                  <td>" .$choice[$answerId] ." / <font color='green'><b>" . q($matching[$answerCorrect]) . "</b></font></td>
+                                                  <td>" . q($choice[$answerId]) ." / <span class='text-success'><b>" . q($matching[$answerCorrect]) . "</b></span></td>
                                                 </tr>";
                         }
                     }
                 } // end of if
             } // end for()
-        } else { // If FREE TEXT type           
+        } else { // If FREE TEXT type
             $tool_content .= "<tr class='even'>
                                  <td>" . purify($choice) . "</td>
                               </tr>";
         }
         $tool_content .= "<tr class='active'>
-                            <th colspan='$colspan'>";        
+                            <th colspan='$colspan'>";
         if ($answerType == FREE_TEXT) {
             $choice = purify($choice);
             if (!empty($choice)) {
                 if (!$question_graded) {
-                    $tool_content .= "<span class='text-danger'>$langAnswerUngraded</span>";   
+                    $tool_content .= "<span class='text-danger'>$langAnswerUngraded</span>";
                 } else {
                     $questionScore = $question_weight;
                 }
             }
-        }        
+        }
         if ($showScore) {
             if ($choice) {
                 if ($answerType == FREE_TEXT && $is_editor && isset($question_graded) && !$question_graded) {
                  //show input field
                  $tool_content .= "<span style='float:right;'>
                                    $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore[$row->question_id]'>
-                                   <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>    
-                                   <b>/$questionWeighting</b></span>";               
+                                   <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>
+                                   <b>/$questionWeighting</b></span>";
                 } else {
                 $tool_content .= "<span style='float:right;'>
                                     $langQuestionScore: <b>$questionScore/$questionWeighting</b></span>";
-                }                
+                }
             } else {
                 $tool_content .= "<span style='float:right;'>
-                                    $langQuestionScore: <b>$question_weight</b></span>";                
+                                    $langQuestionScore: <b>$question_weight</b></span>";
             }
 
         }
@@ -536,9 +538,9 @@ if ($showScore) {
 }
 $tool_content .= "
   <br/>
-  <div align='center'>".(($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ?
+  <div align='center'>" . (($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ?
   "<a class='btn btn-primary' href='index.php' id='submitButton'>$langSubmit</a>" : '')."
-  <a class='btn btn-default' href='index.php?course=$course_code'>$langReturn</a>   
+  <a class='btn btn-default' href='index.php?course=$course_code'>$langReturn</a>
   </div>";
 
 draw($tool_content, 2, null, $head_content);
