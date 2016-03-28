@@ -775,17 +775,15 @@ if (!class_exists('Exercise')) {
            } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS || $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT) {
                $objAnswersTmp = new Answer($key);
                $answer_field = $objAnswersTmp->selectAnswer(1);
-               // splits answer string from weighting string
-               list($answer, $answerWeighting) = explode('::', $answer_field);
+               list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer_field);
                // splits weightings that are joined with a comma
                $rightAnswerWeighting = explode(',', $answerWeighting);
-               // get all matched strings between [ and ] delimeters ignoring [m][/m] math tags
-               preg_match_all('#(?<=\[)(?!/?m])[^\]]+#', $answer, $match);
+               $blanks = Question::getBlanks($answer);
                foreach ($value as $row_key => $row_choice) {
                    // if user's choice is right assign rightAnswerWeight else 0
                    // Some more coding should be done if blank can have multiple answers
                        $canonical_choice = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice;
-                       $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($match[0][$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $match[0][$row_key-1];
+                       $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($blanks[$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $blanks[$row_key-1];
                        $right_answers = preg_split('/\s*\|\s*/', $canonical_match);
                        $weight = in_array($canonical_choice, $right_answers) ? $rightAnswerWeighting[$row_key-1] : 0;
                        Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
@@ -860,16 +858,14 @@ if (!class_exists('Exercise')) {
            } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
                $objAnswersTmp = new Answer($key);
                $answer_field = $objAnswersTmp->selectAnswer(1);
-               // splits answer string from weighting string
-               list($answer, $answerWeighting) = explode('::', $answer_field);
+               list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer_field);
                // splits weightings that are joined with a comma
                $rightAnswerWeighting = explode(',', $answerWeighting);
-               // get all matched strings between [ and ] delimeters ignoring [m][/m] math tags
-               preg_match_all('#(?<=\[)(?!/?m])[^\]]+#', $answer, $match);
+               $blanks = Question::getBlanks($answer);
                foreach ($value as $row_key => $row_choice) {
                    // if user's choice is right assign rightAnswerWeight else 0
                        $canonical_choice = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice;
-                       $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($match[0][$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $match[0][$row_key-1]; 
+                       $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($blanks[$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $match[0][$row_key-1]; 
                        $right_answers = preg_split('/\s*\|\s*/', $canonical_match);
                        $weight = in_array($canonical_choice, $right_answers) ? $rightAnswerWeighting[$row_key-1] : 0;
                        Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, weight = ?f, is_answered = 1 

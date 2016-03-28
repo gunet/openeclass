@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.3
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -95,14 +95,14 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             if ($setWeighting) {
                 @$blanks = unserialize($blanks);
                 // separates text and weightings by '::'
-                $reponse.='::';
+                $reponse .= '::';
                 $questionWeighting = 0;
                 foreach ($weighting as $val) {
                     // a blank can't have a negative weighting
                     $val = abs($val);
-                    $questionWeighting+=$val;
+                    $questionWeighting += $val;
                     // adds blank weighting at the end of the text
-                    $reponse.=$val . ',';
+                    $reponse .= $val . ',';
                 }
                 $reponse = substr($reponse, 0, -1);
                 $objAnswer->createAnswer($reponse, 0, '', 0, 0);
@@ -126,33 +126,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 // now we're going to give a weighting to each blank
                 $setWeighting = 1;
                 unset($submitAnswers);
-                // removes character '::' possibly inserted by the user in the text
-                $reponse = str_replace('::', '', $reponse);
-                // we save the answer because it will be modified
-                $temp = $reponse;
-                // blanks will be put into an array
-                $blanks = Array();
-                $i = 1;
-                // the loop will stop at the end of the text
-                while (1) {
-                    if (($pos = strpos($temp, '[')) === false) {
-                        break;
-                    }
-                    // removes characters till '['
-                    $temp = substr($temp, $pos + 1);
-                    // quits the loop if there are no more blanks
-                    if (($pos = strpos($temp, ']')) === false) {
-                        break;
-                    }
-                    // stores the found blank into the array
-                    $blank = substr($temp, 0, $pos);
-                    // skip blanks containing math tags [m]...[/m]
-                    if ($blank != 'm' and $blank != '/m') {
-                        $blanks[$i++] = substr($temp, 0, $pos);
-                    }
-                    // removes the character ']'
-                    $temp = substr($temp, $pos + 1);
-                }
+                $blanks = Question::getBlanks($reponse);
             }
         } else {
             if (isset($exerciseId)) {
