@@ -116,9 +116,8 @@ if (isset($_GET['stats'])) {
     }
 }
 
-
+$data['menuTypeID'] = 3;
 view('admin.other.otheractions', $data);
-//draw($tool_content, 3, null, $head_content);
 
 /**
  * @brief output a <tr> with an array 
