@@ -91,24 +91,24 @@
                         </div>
                     </div>
                 </div>
-                @if(isset($rating_content) || isset($social_content) || isset($comment_content)) {
+                @if(isset($rating_content) || isset($social_content) || isset($comment_content))
                     <div class='panel-footer'>
                         <div class='row'>
-                        @if(isset($rating_content)){
+                        @if(isset($rating_content))
                             <div class='col-sm-6'>
-                                {{ $rating_content }}
+                                {!! $rating_content !!}
                             </div>       
                         @endif
-                        @if(isset($social_content) || isset($comment_content)){
+                        @if(isset($social_content) || isset($comment_content))
                            <div class='text-right{{ isset($rating_content) ? " col-xs-6" : " col-xs-12" }}'>
-                                @if(isset($comment_content)){
-                                    {{ $comment_content }}
+                                @if(isset($comment_content))
+                                    {!! $comment_content !!}
                                 @endif
-                                @if(isset($social_content) && isset($comment_content)){
+                                @if(isset($social_content) && isset($comment_content))
                                     &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp; 
                                 @endif
-                                @if(isset($social_content)){
-                                    {{ $social_content }}
+                                @if(isset($social_content))
+                                    {!! $social_content !!}
                                 @endif
                             </div>
                         @endif         
