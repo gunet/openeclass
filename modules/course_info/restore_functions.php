@@ -841,10 +841,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $exercise_map[0] = 0;
         $exercise_to_specific_map = restore_table($restoreThis, 'exercise_to_specific', array('map' => array('exercise_id' => $exercise_map),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);               
-        restore_table($restoreThis, 'exercise_user_record', array(
-            'delete' => array('eurid'),
-            'map' => array('eid' => $exercise_map, 'uid' => $userid_map)
-            ), $url_prefix_map, $backupData, $restoreHelper);
         $question_category_map = restore_table($restoreThis, 'exercise_question_cats', array(
             'set' => array('course_id' => $new_course_id),
             'return_mapping' => 'question_cat_id'
@@ -858,15 +854,20 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'exercise_answer', array(
             'delete' => array('id'),
-            'map' => array('question_id' => $question_map)
+            'map' => array('question_id' => $question_map),
+            'return_mapping' => 'id'
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'exercise_with_questions', array(
+            'map' => array('question_id' => $question_map, 'exercise_id' => $exercise_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        $eurid_map = restore_table($restoreThis, 'exercise_user_record', array(
+            'return_mapping' => 'eurid',
+            'map' => array('eid' => $exercise_map, 'uid' => $userid_map)
             ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'exercise_answer_record', array(
             'delete' => array('answer_record_id'),
             'map' => array('question_id' => $question_map,
-                'eurid' => $userid_map)
-            ), $url_prefix_map, $backupData, $restoreHelper);
-        restore_table($restoreThis, 'exercise_with_questions', array(
-            'map' => array('question_id' => $question_map, 'exercise_id' => $exercise_map)
+                'eurid' => $eurid_map)
             ), $url_prefix_map, $backupData, $restoreHelper);
 
         $sql = "SELECT asset.asset_id, asset.path FROM `lp_module` AS module, `lp_asset` AS asset
