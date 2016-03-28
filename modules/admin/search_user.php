@@ -107,5 +107,4 @@ $data['html'] = $html;
 
 $data['menuTypeID'] = 3;
 view('admin.users.search_user', $data);
-// display administrator menu
-//draw($tool_content, 3, null, $head_content);
+
