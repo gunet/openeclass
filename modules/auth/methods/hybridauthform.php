@@ -36,7 +36,7 @@ function hybridAuthForm($auth) {
             $auth_settings['key'] = $auth_settings['id'];
         }
     } else {
-        $auth_settings['id'] = $auth_settings['secret'] = '';
+        $auth_settings['id'] = $auth_settings['key'] = $auth_settings['secret'] = '';
     }
     $auth_instructions = $r->auth_instructions;
     $authName = q(ucfirst($r->auth_name));
