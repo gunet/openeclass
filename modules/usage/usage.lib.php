@@ -878,7 +878,7 @@ function get_course_old_stats($start = null, $end = null, $cid, $mid)
             $r = Database::get()->queryArray($q, $cid, $start, $end, $mid);
         }
         else{
-            $q = "SELECT $date_components, sum(visits) visits, ROUND(SUM(duration)/3600) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t $groupby";
+            $q = "SELECT $date_components, SUM(visits) visits, ROUND(SUM(duration)/3600) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end);
         }
         foreach($r as $record){
@@ -898,14 +898,14 @@ function get_course_old_stats($start = null, $end = null, $cid, $mid)
 */
 function get_login_old_stats($start = null, $end = null)
 {
-    global $langHits,$langDuration;
+    
     $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
     if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
         $g = build_group_selector_cond('month', 'start_date');
         $groupby = $g['groupby'];
         $date_components = $g['select'];
         
-        $q = "SELECT $date_components, sum(login_sum) visits FROM loginout_summary WHERE start_date BETWEEN ?t AND ?t $groupby";
+        $q = "SELECT $date_components, SUM(login_sum) visits FROM loginout_summary WHERE start_date BETWEEN ?t AND ?t $groupby";
         $r = Database::get()->queryArray($q, $start, $end);
         
         foreach($r as $record){

@@ -33,7 +33,7 @@ $statsIntervalOptions = '<option value="1" >' . $langPerDay . "</option>" .
 if($stats_type == 'course'){
     /**Get users of course**/
     $result = Database::get()->queryArray("SELECT u.id, concat(givenname,' ',surname,' (',username,')') name FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE course_id=?d", $course_id);
-    $statsUserOptions = '<option value="0" >' . $langAllUsers . "</option>";
+    $statsUserOptions = '<option value="0" >' . $langUsers . "</option>";
     foreach($result as $u){
        $statsUserOptions .= '<option value="'.$u->id.'" >' . $u->name . "</option>";
     }
@@ -80,7 +80,7 @@ $startDate_obj = $endDate_obj->sub(new DateInterval('P6M'));
 $startdate = $startDate_obj->format('d-m-Y');
 $showFrom = q($startdate);
 
-$tool_content .= "<!--label class='pull-left control-label'>$langFrom:</label-->
+$tool_content .= "<label class='pull-left control-label'>$langFrom</label>
         <div class='col-xs-2 col-sm-2'>
             <input class='form-control' name='startdate' id='startdate' type='text' value = '$showFrom'>
         </div>";
@@ -98,7 +98,7 @@ if($stats_type == 'course'){
     <div class="col-sm-3 col-xs-3" style="display:none;"><select name="module" id="module" class="form-control">' . $mod_opts . '</select></div>';
 
     $tool_content .= '
-    <div class="col-sm-3 col-xs-3"><select name="user" id="user" class="form-control">' . $statsUserOptions . '</select></div>';
+    <div class="col-sm-2 col-xs-2"><select name="user" id="user" class="form-control">' . $statsUserOptions . '</select></div>';
 }
 elseif($stats_type == 'admin'){
     $tool_content .= '
