@@ -38,7 +38,6 @@ require_once 'modules/attendance/functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/sendMail.inc.php';
-require_once 'modules/graphics/plotter.php';
 require_once 'include/log.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'modules/admin/extconfig/externals.php';
@@ -53,6 +52,11 @@ $action = new action();
 $action->record(MODULE_ID_ASSIGN);
 /* * *********************************** */
 
+require_once 'modules/usage/usage.lib.php';
+$head_content .= "
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+load_js('d3/d3.min.js');
+load_js('c3-0.4.10/c3.min.js');
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
 $works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWorks);
@@ -356,6 +360,39 @@ if ($is_editor) {
 
     </script>";
 
+    $head_content .= "<script type='text/javascript'>
+            var gradesChartData = null;
+
+            $(document).ready(function(){
+                if(gradesChartData != null){
+                    draw_plots();
+                }
+            });
+
+        function draw_plots(){
+            var options = null;
+            options = {
+                data: {
+                    json: gradesChartData,
+                    x: 'grade',
+                    types:{
+                        percentage: 'bar'
+                    },
+                    axes: {percentage: 'y'},
+                    names:{percentage:'%'},
+                    colors:{percentage:'#e9d460'}
+                },
+                legend:{show:false},
+                bar:{width:{ratio:0.8}},
+                axis:{ x: {type:'category'}, y:{max: 100, padding:{top:0, bottom:0}}},
+                bindto: '#grades_chart'
+            };
+            c3.generate(options);
+    }
+
+    </script>";
+        
+        
     $email_notify = (isset($_POST['email']) && $_POST['email']);
     if (isset($_POST['grade_comments'])) {
         $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
@@ -2585,8 +2622,6 @@ function show_assignment($id, $display_graph_results = false) {
                 $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign, user
                                                              WHERE assign.assignment_id = ?d AND user.id = assign.uid AND
                                                              assign.grade <> ''", $id)->count;
-                $chart = new Plotter();
-                $chart->setTitle("$langGraphResults");
                 if ($assign->grading_scale_id) {
                     $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
                     $scales = unserialize($serialized_scale_data);
@@ -2598,9 +2633,16 @@ function show_assignment($id, $display_graph_results = false) {
                         $key = closest($gradeValue, $scale_values, true)['key'];
                         $gradeValue = $scales[$key]['scale_item_name'];
                     }
-                    $chart->growWithPoint("$gradeValue ($percentage%)", $percentage);
+                    $this_chart_data['grade'][] = "$gradeValue";
+                    $this_chart_data['percentage'][] = $percentage;
                 }
-                $tool_content .= $chart->plot();
+                
+                $tool_content .= "<script type = 'text/javascript'>gradesChartData = ".json_encode($this_chart_data).";</script>";
+                /****   C3 plot   ****/
+                $tool_content .= "<div class='row plotscontainer'>";
+                $tool_content .= "<div class='col-lg-12'>";
+                $tool_content .= plot_placeholder("grades_chart", $langGraphResults);
+                $tool_content .= "</div></div>";
             }
         }
     } else {
