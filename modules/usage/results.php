@@ -42,7 +42,7 @@ $ds = DateTime::createFromFormat('Y-n-j', $_REQUEST['s']);
 $de = DateTime::createFromFormat('Y-n-j', $_REQUEST['e']);
 if(($ds && $ds->format('Y-n-j') == $_REQUEST['s']) && ($de && $de->format('Y-n-j') == $_REQUEST['e'])){
     $enddate = $_REQUEST['e'];
-    $startdate = $_REQUEST['s'];    
+    $startdate = $_REQUEST['s'];
 }
 else{
     $endDate_obj = new DateTime();
@@ -94,11 +94,20 @@ if(isset($_REQUEST['t'])){
             break;
         case 'crd':
             $result = get_course_registration_details($startdate, $enddate, $plotcourse);
-            break;        
+            break;
+        case 'cad':
+            $result = get_course_activity_details($startdate, $enddate, $plotuser, $plotcourse, $plotmodule);
+            break;
         case 'crs':
             $result = get_course_registration_stats($startdate, $enddate, $interval, $plotcourse);
             break;
+        case 'ocs':
+            $result = get_course_old_stats($startdate, $enddate, $plotcourse, $plotmodule);
+            break;
+        case 'ols':
+            $result = get_login_old_stats($startdate, $enddate);
+            break;
     }
-    
+
 }
 echo json_encode($result);

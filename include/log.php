@@ -89,8 +89,8 @@ class Log {
 
         global $tool_content, $modules;
         global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
-            $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo, 
-            $langModifyInfo, $langAbuseReport;
+            $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo,
+            $langModifyInfo, $langAbuseReport, $langWall;
 
         $q1 = $q2 = $q3 = $q4 = '';
 
@@ -140,8 +140,8 @@ class Log {
                 } else {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
                 }
-            }            
-            $tool_content .= "<div class='table-responsive'> <table id = 'log_results_table' class='table table-default'>";
+            }
+            $tool_content .= "<table id = 'log_results_table' class='table-default'>";
             $tool_content .= "<thead>";
             // log header
             $tool_content .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
@@ -192,7 +192,7 @@ class Log {
                 $tool_content .= "</tr>";
             }
             $tool_content .= "</tbody>";
-            $tool_content .= "</table></div>";
+            $tool_content .= "</table>";
         } else {
             $tool_content .= "<div class='alert alert-warning'>$langNoUsersLog</div>";
         }
@@ -238,7 +238,7 @@ class Log {
      * @return type
      * drive to appropriate subsystem for displaying details
      */
-    private function course_action_details($module_id, $details) {
+    public function course_action_details($module_id, $details) {
 
         global $langUnknownModule;
 
@@ -274,11 +274,11 @@ class Log {
             case MODULE_ID_TOOLADMIN: $content = $this->external_link_action_details($details);
                 break;
             case MODULE_ID_ABUSE_REPORT: $content = $this->abuse_report_action_details($details);
-                break;
-            case MODULE_ID_COURSEINFO: $content = $this->modify_course_action_details($details);            
                 break;            
-            case MODULE_ID_SETTINGS: $content = $this->modify_course_action_details($details); // <-- for backward compatibility only !!!
+            case MODULE_ID_COURSEINFO: $content = $this->modify_course_action_details($details);
                 break;
+            case MODULE_ID_SETTINGS: $content = $this->modify_course_action_details($details); // <-- for backward compatibility only !!!
+                break;            
             case MODULE_ID_GRADEBOOK: $content = $this->gradebook_action_details($details);
                 break;
             case MODULE_ID_ATTENDANCE: $content = $this->attendance_action_details($details);
@@ -566,7 +566,7 @@ class Log {
 
         global $langTitle, $langContent;
 
-        $details = unserialize($details);        
+        $details = unserialize($details);
         $content = "$langTitle &laquo" . q($details['title']) .
                 "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo" . $details['content'] . "&raquo";
         return $content;
@@ -632,7 +632,7 @@ class Log {
      * @global type $langTo
      * @global type $langIn
      * @param type $details
-     * @return string         
+     * @return string
      */
     private function document_action_details($details) {
 
@@ -893,16 +893,17 @@ class Log {
 
         global $langcreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
                $langComment, $langForumPost, $langAbuseResourceType, $langContent, $langAbuseReportStatus,
-               $langAbuseReportOpen, $langAbuseReportClosed, $langLinks; 
-        
+               $langAbuseReportOpen, $langAbuseReportClosed, $langLinks, $langWallPost; 
+
         $reports_cats = array('rudeness' => $langRudeness,
                               'spam' => $langSpam,
                               'other' => $langOther);
 
         $resource_types = array('comment' => $langComment,
                                 'forum_post' => $langForumPost,
-                                'link' => $langLinks);
-                    
+                                'link' => $langLinks,
+                                'wallpost' => $langWallPost);
+
         $details = unserialize($details);
 
         $content = "$langcreator: ". display_user($details['user_id'], false, false)."<br/>";
@@ -922,7 +923,7 @@ class Log {
         
         return $content;
     }
-    
+            
     /**
      * 
      * @brief display action details in gradebooks    
@@ -1186,7 +1187,7 @@ class Log {
      * @param type $action_type
      * @return type (real action names)
      */
-    private function get_action_names($action_type) {
+    public function get_action_names($action_type) {
 
         global $langInsert, $langModify, $langDelete, $langModProfile, $langLoginFailures,
         $langFinalize, $langCourseDel, $langModifyInfo, $langUnregUsers, $langUnknownAction;

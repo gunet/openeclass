@@ -74,11 +74,11 @@ $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#user_date_start, #user_date_end').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-right',
+                pickerPosition: 'bottom-left',
                 language: '".$language."',
                 autoclose: true,
                 minuteStep: 20
-            });            
+            });
         });
     </script>";
 
@@ -87,7 +87,7 @@ if (!isset($_REQUEST['course_code'])) {
 }
 
 
-if (isset($_GET['from_other'])) {    
+if (isset($_GET['from_other'])) {
     $toolName = $langSystemActions;
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
     $navigation[] = array('url' => '../admin/otheractions.php', 'name' => $langRecordLog);
@@ -115,28 +115,28 @@ $logtype = isset($_REQUEST['logtype']) ? intval($_REQUEST['logtype']) : '0';
 $u_user_id = isset($_REQUEST['u_user_id']) ? intval($_REQUEST['u_user_id']) : '-1';
 $u_module_id = isset($_REQUEST['u_module_id']) ? intval($_REQUEST['u_module_id']) : '-1';
 
-if (isset($_POST['user_date_start'])) {    
+if (isset($_POST['user_date_start'])) {
     $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
-    $u_date_start = $uds->format('Y-m-d H:i');    
+    $u_date_start = $uds->format('Y-m-d H:i');
     $user_date_start = $uds->format('d-m-Y H:i');
 } else {
     $date_start = new DateTime();
-    $date_start->sub(new DateInterval('P30D'));    
+    $date_start->sub(new DateInterval('P30D'));
     $u_date_start = $date_start->format('Y-m-d H:i');
-    $user_date_start = $date_start->format('d-m-Y H:i');       
+    $user_date_start = $date_start->format('d-m-Y H:i');
 }
 if (isset($_POST['user_date_end'])) {
-    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);    
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);
     $u_date_end = $ude->format('Y-m-d H:i');
-    $user_date_end = $ude->format('d-m-Y H:i');        
+    $user_date_end = $ude->format('d-m-Y H:i');
 } else {
     $date_end = new DateTime();
     $u_date_end = $date_end->format('Y-m-d H:i');
     $date_end->add(new DateInterval('P1D'));
-    $user_date_end = $date_end->format('d-m-Y H:i');        
+    $user_date_end = $date_end->format('d-m-Y H:i');
 }
 
-if (isset($_REQUEST['submit'])) {   
+if (isset($_REQUEST['submit'])) {
     $log = new Log();
     $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
     if (isset($_GET['from_admin']) or isset($_GET['from_other'])) {
