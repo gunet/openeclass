@@ -66,13 +66,10 @@ $head_content .= "<script type='text/javascript'>
 
 
         sdate = $('#user_date_start').datepicker('getDate');
-        startdate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();
-        console.log('start   '+sdate+'  '+startdate);
+        startdate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();        
         edate = $('#user_date_end').datepicker('getDate');
-        enddate = edate.getFullYear()+'-'+(edate.getMonth()+1)+'-'+edate.getDate();
-        console.log('end   '+edate+'    '+enddate);
-        module = $('#u_module_id option:selected').val();
-        console.log('refresh_oldstats_course_plot('+startdate+', '+enddate+', $course_id, '+module);
+        enddate = edate.getFullYear()+'-'+(edate.getMonth()+1)+'-'+edate.getDate();        
+        module = $('#u_module_id option:selected').val();        
         refresh_oldstats_course_plot(startdate, enddate, $course_id, module);
     });
 
@@ -243,8 +240,7 @@ foreach ($result as $row) {
 $min_t = date("d-m-Y", $min_time);
 
 $made_chart = true;
-$usage_defaults = array(
-    'u_stats_value' => 'visits',
+$usage_defaults = array(    
     'u_module_id' => -1
 );
 
@@ -267,16 +263,8 @@ foreach ($result as $row) {
     $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
 }
 
-$statsValueOptions = '<option value="visits" ' . (($u_stats_value == 'visits') ? ('selected') : ('')) . '>' . $langVisits . "</option>\n" .
-        '<option value="duration" ' . (($u_stats_value == 'duration') ? ('selected') : ('')) . '>' . $langDuration . "</option>\n";
-
-
 $tool_content .= '<div class="form-wrapper">';
 $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
-$tool_content .= '<div class="form-group">
-                    <label class="col-sm-2 control-label">' . $langValueType . ':</label>
-                    <div class="col-sm-10"><select name="u_stats_value" class="form-control">' . $statsValueOptions . '</select></div>
-                  </div>';
 $tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
     <label class='col-sm-2 control-label'>$langStartDate:</label>
         <div class='col-xs-10 col-sm-9'>

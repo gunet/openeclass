@@ -867,19 +867,18 @@ function user_duration_per_course() {
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
 function get_course_old_stats($start = null, $end = null, $cid, $mid)
-{
-    global $langHits,$langDuration;
+{    
     $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
     if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
         $g = build_group_selector_cond('month', 'start_date');
         $groupby = $g['groupby'];
         $date_components = $g['select'];
         if(is_numeric($mid) && $mid>0){
-            $q = "SELECT $date_components, sum(visits) visits, round(sum(duration)/3600) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t AND mid=?d $groupby";
+            $q = "SELECT $date_components, SUM(visits) visits, ROUND(SUM(duration)/3600) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t AND module_id=?d $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end, $mid);
         }
         else{
-            $q = "SELECT $date_components, sum(visits) visits, round(sum(duration)/3600) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t $groupby";
+            $q = "SELECT $date_components, sum(visits) visits, ROUND(SUM(duration)/3600) dur FROM actions_summary WHERE course_id=?d AND start_date BETWEEN ?t AND ?t $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end);
         }
         foreach($r as $record){
