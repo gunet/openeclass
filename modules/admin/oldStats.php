@@ -63,13 +63,9 @@ $head_content .= "<script type='text/javascript'>
 
 
         sdate = $('#user_date_start').datepicker('getDate');
-        startdate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();
-        console.log('start   '+sdate+'  '+startdate);
+        startdate = sdate.getFullYear()+'-'+(sdate.getMonth()+1)+'-'+sdate.getDate();        
         edate = $('#user_date_end').datepicker('getDate');
-        enddate = edate.getFullYear()+'-'+(edate.getMonth()+1)+'-'+edate.getDate();
-        console.log('end   '+edate+'    '+enddate);
-        module = $('#u_module_id option:selected').val();
-        console.log('refresh_oldstats_plot('+startdate+', '+enddate+', $course_id, '+module);
+        enddate = edate.getFullYear()+'-'+(edate.getMonth()+1)+'-'+edate.getDate();                
         refresh_oldstats_plot(startdate, enddate);
     });
 
