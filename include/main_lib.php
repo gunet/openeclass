@@ -1197,6 +1197,8 @@ $native_language_names_init = array(
     'ru' => 'Русский',
     'tr' => 'Türkçe',
     'sv' => 'Svenska',
+    'sl' => 'Slovenščina',
+    'sk' => 'Slovenčina',
     'xx' => 'Variable Names',
 );
 
@@ -1220,6 +1222,8 @@ $language_codes = array(
     'ru' => 'russian',
     'tr' => 'turkish',
     'sv' => 'swedish',
+    'sl' => 'slovene',
+    'sk' => 'slovak',
     'xx' => 'variables',
 );
 
