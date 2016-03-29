@@ -522,6 +522,8 @@ class CourseXMLElement extends SimpleXMLElement {
 
     /**
      * Populate a single simple xml node (leaf).
+     * For setting text values of SimpleXMLElement(s), see also: http://stackoverflow.com/questions/3153477/how-can-i-set-text-value-of-simplexmlelement-without-using-its-parent
+     * If setting the zero-offset node re-fails, we can use: dom_import_simplexml($this)->nodeValue = 'foo';
      * 
      * @param array            $data
      * @param string           $fullKey
@@ -532,15 +534,15 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($this->getAttribute('lang')) {
             $fullKey .= '_' . $this->getAttribute('lang');
         }
-
+        
         if (isset($data[$fullKey])) {
             if (!is_array($data[$fullKey])) {
                 if (in_array($fullKeyNoLang, CourseXMLConfig::$integerFields)) {
-                    $this->{0} = intval($data[$fullKey]);
+                    $this[0] = intval($data[$fullKey]);
                 } else if (in_array($fullKeyNoLang, CourseXMLConfig::$floatFields)) {
-                    $this->{0} = CourseXMLConfig::getFloat($data[$fullKey]);
+                    $this[0] = CourseXMLConfig::getFloat($data[$fullKey]);
                 } else {
-                    $this->{0} = $data[$fullKey];
+                    $this[0] = $data[$fullKey];
                 }
 
                 // mime attribute for mime fields
@@ -551,7 +553,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 // multiple entities (multiEnum, multiFields and units) use associative indexed arrays
                 if (in_array($fullKeyNoLang, CourseXMLConfig::$multiEnumerationFields)) {
                     // multiEnums are just comma separated
-                    $this->{0} = implode(',', $data[$fullKey]);
+                    $this[0] = implode(',', $data[$fullKey]);
                 } else if (in_array($fullKeyNoLang, CourseXMLConfig::$multipleFields)) {
                     // multiplicity fields
                     if ($parent !== null) {
@@ -593,11 +595,11 @@ class CourseXMLElement extends SimpleXMLElement {
                         // and assign the next array value to the (next) proper parent element
                         if ($j < count($data[$fullKey])) {
                             if (in_array($fullKeyNoLang, CourseXMLConfig::$integerFields)) {
-                                $this->{0} = intval($data[$fullKey][$j]);
+                                $this[0] = intval($data[$fullKey][$j]);
                             } else if (in_array($fullKeyNoLang, CourseXMLConfig::$floatFields)) {
-                                $this->{0} = CourseXMLConfig::getFloat($data[$fullKey][$j]);
+                                $this[0] = CourseXMLConfig::getFloat($data[$fullKey][$j]);
                             } else {
-                                $this->{0} = $data[$fullKey][$j];
+                                $this[0] = $data[$fullKey][$j];
                             }
                             // mime attribute for mime fields 
                             if (in_array($fullKeyNoLang, CourseXMLConfig::$binaryFields)) {
@@ -610,7 +612,7 @@ class CourseXMLElement extends SimpleXMLElement {
                 } else { // units
                     $index = intval($this->getAttribute('index')) - 1;
                     if ($index >= 0 && isset($data[$fullKey][$index])) {
-                        $this->{0} = $data[$fullKey][$index];
+                        $this[0] = $data[$fullKey][$index];
                         unset($this['index']); // remove attribute
                     }
                 }
@@ -935,7 +937,7 @@ class CourseXMLElement extends SimpleXMLElement {
             }
             foreach ($instructor->fullName as $name) {
                 $nameLang = (string) $name->getAttribute('lang');
-                $name->{0} = $instrFirst[$nameLang] . " " . $instrLast[$nameLang];
+                $name[0] = $instrFirst[$nameLang] . " " . $instrLast[$nameLang];
             }
         }
 
