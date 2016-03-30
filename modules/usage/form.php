@@ -61,8 +61,12 @@ elseif($stats_type == 'admin'){
 }
 else{    
     /**Get courses of user**/
-    $result = Database::get()->queryArray("SELECT c.id, c.code, c.title FROM course_user cu JOIN course c ON cu.course_id=c.id WHERE user_id=?d", $_GET['u']);
-        $statsCourseOptions = '<option value="0" >' . $langAllCourses . "</option>\n";
+    if (isset($_GET['u'])) {
+        $result = Database::get()->queryArray("SELECT c.id, c.code, c.title FROM course_user cu JOIN course c ON cu.course_id=c.id WHERE user_id=?d", $_GET['u']);
+    } else {
+        $result = Database::get()->queryArray("SELECT c.id, c.code, c.title FROM course_user cu JOIN course c ON cu.course_id=c.id WHERE user_id=?d", $uid);
+    }    
+    $statsCourseOptions = '<option value="0" >' . $langAllCourses . "</option>\n";
     foreach($result as $c){
        $statsCourseOptions .= '<option value="'.$c->id.'" >' . $c->title . "</option>\n";
     }
