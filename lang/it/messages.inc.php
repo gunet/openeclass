@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2016-03-09 14:16:39
+// Generated 2016-03-30 15:03:05
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -2799,7 +2799,7 @@ $langPurgeExerciseResults = "Clear results";
 $langClearStats = "Clear Statistics";
 $langStatsCleared = "Statistics cleared";
 $langMultiCourse = "Multiple $langsCourse creation";
-$langMultiCourseInfo = "Enter $langsCourse titles (one title per line). If you wish to add a $langsCourse administrator, too then enter his username or name / surname, separated with character '|'.";
+$langMultiCourseInfo = "Enter $langsCourse titles (one title per line). If you wish to add a $langsCourse administrator, too then enter his username or name / surname, separated with character \"|\".";
 $langMultiCourseTitles = "$langCourses Titles";
 $langMultiCourseData = "$langCourse Data";
 $langResourceAccess = "Resource Access";
@@ -4398,3 +4398,4 @@ $langAttemptActiveMsg = "The attempt is still active";
 $langOfGradebookUser = "user";
 $langMessageNoSent = "The message was not sent because the attachment exceeds storage limit.
                     For more information, contact your system administrator.";
+$langAndTotalCourseVisits = "and total visits to $langsCourses";
