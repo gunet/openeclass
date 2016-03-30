@@ -225,12 +225,6 @@ function load_js($file, $init='') {
         } elseif ($file == 'colorbox') {
             $head_content .= css_link('colorbox/colorbox.css');
             $file = 'colorbox/jquery.colorbox.min.js';
-        } elseif ($file == 'flot') {
-            $head_content .= css_link('flot/flot.css') .
-                "<!--[if lte IE 8]><script language='javascript' type='text/javascript' src='{$urlAppend}js/flot/excanvas.min.js'></script><![endif]-->\n" .
-                js_link('jquery-migrate-1.2.1.min.js') .
-                js_link('flot/jquery.flot.min.js');
-            $file = 'flot/jquery.flot.categories.min.js';
         } elseif ($file == 'slick') {
             $head_content .= css_link('slick-master/slick/slick.css');
             $file = 'slick-master/slick/slick.min.js';

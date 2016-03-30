@@ -32,9 +32,13 @@ require_once '../../include/baseTheme.php';
 
 $toolName = $langMonthlyReport;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
-require_once 'admin_statistics_tools_bar.php';
-admin_statistics_tools("monthlyReport");
+$tool_content .= action_bar(array(                
+                array('title' => $langBack,
+                    'url' => "../usage/index.php?t=a",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')));
 
 $months = "";
 for ($i = 0; $i < 12; $i++) {
