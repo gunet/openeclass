@@ -215,7 +215,7 @@ if ($can_upload) {
         } else {
             $uploaded = true;
         }
-        $components = explode('/', $extra_path);
+        $components = explode('/', trim($extra_path, '/'));
         $fileName = end($components);
     } elseif (isset($_POST['file_content'])) {
         if ($diskUsed + strlen($_POST['file_content']) > $diskQuotaDocument) {
@@ -228,11 +228,18 @@ if ($can_upload) {
     }
     if ($uploaded and !isset($_POST['editPath'])) {
         // Check if file already exists
+        if (isset($fileURL)) {
+            $checkFileSQL = 'extra_path = ?s';
+            $checkFileName = $extra_path;
+        } else {
+            $checkFileSQL = 'filename = ?s';
+            $checkFileName = $fileName;
+        }
         $result = Database::get()->querySingle("SELECT path, visible FROM document WHERE
                                            $group_sql AND
                                            path REGEXP ?s AND
-                                           filename = ?s LIMIT 1",
-                                        "^$uploadPath/[^/]+$", $fileName);
+                                           $checkFileSQL LIMIT 1",
+                                        "^$uploadPath/[^/]+$", $checkFileName);
         if ($result) {
             if (isset($_POST['replace'])) {
                 // Delete old file record when replacing file
