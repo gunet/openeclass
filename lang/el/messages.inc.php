@@ -3604,6 +3604,7 @@ $langHits = "Επισκέψεις";
 $langRegisterActions = "Εγγραφές";
 $langUnregisterActions = "Απεγγραφές";
 $langMonthlyCourseRegistrations = "Εγγραφές χρηστών στο $langsCourse";
+$langMonthlyCourseRegistration = "Εγγραφή χρήστη στο $langsCourse";
 $langDurationOfVisits = "διάρκεια επισκέψεων";
 $langDurationVisits = "Χρονική Διάρκεια Επισκέψεων";
 $langDurationExpl = "Η χρονική διάρκεια των επισκέψεων σε κάθε υποσύστημα είναι σε λεπτά της ώρας και υπολογίζεται κατά προσέγγιση.";

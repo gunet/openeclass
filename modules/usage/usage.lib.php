@@ -732,10 +732,15 @@ function count_course_groups($cid){
 /**
  * Get the sum of visits with their duration for a course
  * @param int cid the course id
+ * @param int userid the user id
  * @return array(int, string) an array with the number of visits and their duration formatted as h:mm:ss
 */
-function course_visits($cid){
-    $r = Database::get()->querySingle("SELECT sum(hits) hits, sum(duration) dur FROM actions_daily WHERE course_id=?d", $cid);
+function course_visits($cid, $userid = 0){
+    $r = Database::get()->querySingle("SELECT SUM(hits) hits, SUM(duration) dur FROM actions_daily WHERE course_id=?d", $cid);
+    if ($userid > 0) {
+        $r = Database::get()->querySingle("SELECT SUM(hits) hits, SUM(duration) dur FROM actions_daily
+                            WHERE course_id = ?d AND user_id = ?d", $cid, $userid);
+    }
     return array('hits' => $r->hits, 'duration' => user_friendly_seconds($r->dur));
 }
 
