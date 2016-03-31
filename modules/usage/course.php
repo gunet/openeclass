@@ -69,15 +69,19 @@ if (isset($_GET['id'])) {
     $visits = course_visits($course_id);
 }
 if (isset($_GET['id'])) {
+    $regdate = Database::get()->querySingle("SELECT DATE(reg_date) AS reg_date
+                                FROM course_user
+                                WHERE course_id = ?d AND user_id = ?d ORDER BY reg_date ASC LIMIT 1", $course_id, $_GET['id'])->reg_date;
     $tool_content .= "
     <div class='row'>
         <div class='col-xs-12'>
             <div class='panel panel-default'>
                 <div class='panel-body'>
-                    <div class='inner-heading'><strong>$langPlatformGenStats</strong></div>
+                    <div class='inner-heading'><strong>$langUserStats: ". uid_to_name($_GET['id'], 'fullname') ."</strong></div>
                     <div class='row'>
                     <div class='col-sm-6'>
                         <ul class='list-group'>
+                            <li class='list-group-item'><strong>$langCourseRegistrationDate</strong><span class='badge'>".$regdate."</span></li>
                             <li class='list-group-item'><strong>$langHits</strong><span class='badge'>".$visits['hits']."</span></li>
                         </ul>
                         </div>
@@ -135,14 +139,11 @@ $tool_content .= plot_placeholder("module_stats", $langModule);
 $tool_content .= "</div>"
               . "</div></div>";
 
-if (isset($_GET['id'])) {
-    $montly_course_reg_message = $langMonthlyCourseRegistration;
-} else {
-    $montly_course_reg_message = $langMonthlyCourseRegistrations;
+if (!isset($_GET['id'])) {
+    $tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
+    $tool_content .= plot_placeholder("coursereg_stats", $langMonthlyCourseRegistrations);
+    $tool_content .= "</div></div>";
 }
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
-$tool_content .= plot_placeholder("coursereg_stats", $montly_course_reg_message);
-$tool_content .= "</div></div>";
 
 /****   Datatables   ****/
 $tool_content .= "<div class='panel panel-default detailscontainer'>";
@@ -160,17 +161,19 @@ $tschema = "<thead><tr>"
 $tool_content .= table_placeholder("cdetails1", "table table-striped table-bordered", $tschema, "$langHits $langAnd $langDuration");
 $tool_content .= "</div>";
 
-$tool_content .= "<div class='panel panel-default detailscontainer'>";
-$tschema = "<thead><tr>"
-        . "<th>$langDate</th>"
-        . "<th>$langUser</th>"
-        . "<th>$langAction</th>"
-        . "<th>$langUsername</th>"
-        . "<th>$langEmail</th>"
-        . "</tr></thead>"
-        . "<tbody></tbody>";
-$tool_content .= table_placeholder("cdetails2", "table table-striped table-bordered", $tschema, $montly_course_reg_message);
-$tool_content .= "</div>";
+if (!isset($_GET['id'])) {
+    $tool_content .= "<div class='panel panel-default detailscontainer'>";
+    $tschema = "<thead><tr>"
+            . "<th>$langDate</th>"
+            . "<th>$langUser</th>"
+            . "<th>$langAction</th>"
+            . "<th>$langUsername</th>"
+            . "<th>$langEmail</th>"
+            . "</tr></thead>"
+            . "<tbody></tbody>";
+    $tool_content .= table_placeholder("cdetails2", "table table-striped table-bordered", $tschema, $langMonthlyCourseRegistrations);
+    $tool_content .= "</div>";
+}
 
 $tool_content .= "<div class='panel panel-default logscontainer'>";
 $tschema = "<thead><tr>"
