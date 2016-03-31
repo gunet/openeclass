@@ -28,6 +28,7 @@ $helpTopic = 'User';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 require_once 'include/course_settings.php';
+require_once 'include/lib/textLib.inc.php';
 
 //Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
@@ -112,7 +113,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['aaData'] = array();
     foreach ($result as $myrow) {
         $full_name = $myrow->givenname . " " . $myrow->surname;
-        $am_message = empty($myrow->am) ? '' : ("<div class='right'>($langAmShort: " . q($myrow->am) . ")</div>");
+        $am_message = empty($myrow->am) ? '' : ("<div class='right'>$langAmShort: " . q($myrow->am) . "</div>");
         $stats_icon = icon('fa-bar-chart', $langUserStats, "../usage/index.php?course=$course_code&amp;id=$myrow->id");
         /* $link_parent_email = "";
           if (get_config('enable_secondary_email')) {
@@ -125,7 +126,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
           }
           } */
         //create date field with unregister button
-        $date_field = $myrow->reg_date ? nice_format($myrow->reg_date) : $langUnknownDate;
+        $date_field = $myrow->reg_date ? claro_format_locale_date( $dateFormatMiddle, strtotime($myrow->reg_date)) : $langUnknownDate;
 
         // Create appropriate role control buttons
         // Admin right
@@ -184,14 +185,29 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($myrow->tutor == '1') array_push($user_roles, $langTutor);
         if ($myrow->editor == '1') array_push($user_roles, $langEditor);        
         if ($myrow->reviewer == '1') array_push($user_roles, $langOpenCoursesReviewer);
+
+        $user_role_string = implode(', ', $user_roles);
+
+        $nameColumn = "
+                        <div class='pull-left' style='width: 32px ; margin-right: 10px;'>
+                            <img class='img-circle' src='".user_icon($myrow->id) . "' />
+                            <div style='padding-left:8px; padding-top: 5px;'>$stats_icon</div>
+                        </div>
+                        <div class='pull-left'>
+                            <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false)."</div>
+                            <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a></small></div>
+                            <div class='text-muted'><small>$am_message</small></div>
+                        </div>";
+        $roleColumn = "<div class='text-muted'>".str_replace(', ', ',<br>', $user_role_string)."</div>";
+
         //setting datables column data
         $data['aaData'][] = array(
             'DT_RowId' => getIndirectReference($myrow->id),
             'DT_RowClass' => 'smaller',
-            '0' => display_user($myrow->id) . "&nbsp<span>(<a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>) $am_message $stats_icon</span>",
-            '1' => "<small>".implode(', ', $user_roles)."</small>",
+            '0' => $nameColumn,
+            '1' => $roleColumn,
             '2' => user_groups($course_id, $myrow->id),
-            '3' => $date_field,
+            '3' => "<div class='text-center text-muted'>$date_field</div>",
             '4' => $user_role_controls
         );
     }

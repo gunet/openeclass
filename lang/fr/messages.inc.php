@@ -2036,6 +2036,7 @@ $langNameOfLang['english'] = "Anglais";
 $langNameOfLang['french'] = "Français";
 $charset = 'UTF-8';
 $dateFormatShort = "%b %d, %y";
+$dateFormatMiddle = "%d %b, %Y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';

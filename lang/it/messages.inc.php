@@ -1871,6 +1871,7 @@ $langNameOfLang['english'] = "Inglese";
 $langNameOfLang['french'] = "Francese";
 $charset = "UTF-8";
 $dateFormatShort = "%b %d, %y";
+$dateFormatMiddle = "%d %b, %Y";
 $dateFormatLong = '%A, %d %B %Y';
 $dateTimeFormatLong = '%d %B %Y / Ore: %R';
 $timeNoSecFormat = '%R';
