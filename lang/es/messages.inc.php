@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2016-03-30 15:03:03
+// Generated 2016-03-31 17:13:20
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -1894,7 +1894,6 @@ $langNameOfLang['english'] = "Inglés";
 $langNameOfLang['french'] = "Francés";
 $charset = 'UTF-8';
 $dateFormatShort = "%b %d, %y";
-$dateFormatMiddle = "%d %b, %Y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y de %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
@@ -4413,3 +4412,6 @@ $langOfGradebookUser = "user";
 $langMessageNoSent = "The message was not sent because the attachment exceeds storage limit.
                     For more information, contact your system administrator.";
 $langAndTotalCourseVisits = "and total visits to $langsCourses";
+$dateFormatMiddle = "%d %b, %Y";
+$langAmShort = "Student ID";
+$langMonthlyCourseRegistration = "Registration to $langsCourse";
