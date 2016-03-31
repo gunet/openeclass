@@ -113,7 +113,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['aaData'] = array();
     foreach ($result as $myrow) {
         $full_name = $myrow->givenname . " " . $myrow->surname;
-        $am_message = empty($myrow->am) ? '' : ("<div class='right'>($langAm: " . q($myrow->am) . ")</div>");
+        $am_message = empty($myrow->am) ? '' : ("<div class='right'>($langAmShort: " . q($myrow->am) . ")</div>");
+        $stats_icon = icon('fa-bar-chart', $langUserStats, "../usage/index.php?course=$course_code&amp;id=$myrow->id");
         /* $link_parent_email = "";
           if (get_config('enable_secondary_email')) {
           if ($myrow->editor == 1 or $myrow->tutor == 1 or $myrow->status == 1 or empty($myrow['parent_email'])) {
@@ -199,7 +200,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $data['aaData'][] = array(
             'DT_RowId' => getIndirectReference($myrow->id),
             'DT_RowClass' => 'smaller',
-            '0' => display_user($myrow->id) . "&nbsp<span>(<a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>) $am_message</span>",
+            '0' => display_user($myrow->id) . "&nbsp<span>(<a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>) $am_message $stats_icon</span>",
             '1' => "<small>".implode(', ', $user_roles)."</small>",
             '2' => user_groups($course_id, $myrow->id),
             '3' => $date_field,
