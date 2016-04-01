@@ -69,7 +69,7 @@ if (isset($_GET['id'])) {
     $visits = course_visits($course_id);
 }
 if (isset($_GET['id'])) {
-    $regdate = Database::get()->querySingle("SELECT DATE(reg_date) AS reg_date
+    $regdate = Database::get()->querySingle("SELECT DATE_FORMAT(DATE(reg_date),'%e-%c-%Y') AS reg_date
                                 FROM course_user
                                 WHERE course_id = ?d AND user_id = ?d ORDER BY reg_date ASC LIMIT 1", $course_id, $_GET['id'])->reg_date;
     $tool_content .= "
