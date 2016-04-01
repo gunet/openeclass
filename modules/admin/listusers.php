@@ -447,7 +447,7 @@ $navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
 $toolName = $langListUsersActions;
 
 // Display Actions Toolbar
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
             array('title' => $langAllUsers,
                 'url' => "$_SERVER[SCRIPT_NAME]",
                 'icon' => 'fa-search',
@@ -468,50 +468,11 @@ $tool_content .= action_bar(array(
                 'level' => 'primary')
                 ));
 
+$data['menuTypeID'] = 3;
 // display search results
-$tool_content .= "<table id='search_results_table' class='display'>
-            <thead>
-                <tr>
-                  <th width='150'>$langSurname</th>
-                  <th width='100' class='left'>$langName</th>
-                  <th width='170' class='left'>$langUsername</th>
-                  <th>$langEmail</th>
-                  <th>$langProperty</th>
-                  <th width='130' class='centertext-center'>" . icon('fa-gears') . "</th>
-                </tr>
-            </thead>
-            <!-- DO NOT DELETE THESE EMPTY COLUMNS -->
-            <tfoot>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </tfoot>";
-$tool_content .= "<tbody></tbody></table>";
+view('admin.users.list_users', $data);
 
-$tool_content .= "<div align='right' style='margin-top: 60px; margin-bottom:10px;'>";
-
-// Edit all function
-$tool_content .= " <form action='multiedituser.php' method='post'>";
-// redirect all request vars towards delete all action
-foreach ($_REQUEST as $key => $value) {
-    $tool_content .= "<input type='hidden' name='$key' value='$value' />";
-}
-
-if (isset($_GET['department']) and $_GET['department'] and is_numeric($_GET['department'])) {
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='move_submit' value='$langChangeDepartment'> ";
-}
-
-$tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'>
-    <input class='btn btn-primary' type='submit' name='activate_submit' value='$langAddSixMonths'>
-    ". generate_csrf_token_form_field() ."
-  </form></div>";
-
-draw($tool_content, 3, null, $head_content);
+//draw($tool_content, 3, null, $head_content);
 
 /**
  * make links from one page to another during search results
