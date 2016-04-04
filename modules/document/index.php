@@ -1005,7 +1005,7 @@ if (!isset($curDirPath)) {
 $curDirName = my_basename($curDirPath);
 $parentDir = my_dirname($curDirPath);
 if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
-    $tool_content .= $langInvalidDir;
+    Session::Messages($langInvalidDir, 'alert-danger');
     draw($tool_content, $menuTypeID);
     exit;
 }
@@ -1033,6 +1033,29 @@ if (!$is_in_tinymce) {
     $document_timestamp = $session->getDocumentTimestamp($course_id);
 } else {
     $document_timestamp = false;
+}
+
+
+// Check directory access if in subfolder
+if ($curDirPath) {
+    $dirInfo = Database::get()->querySingle("SELECT visible, public
+        FROM document WHERE $group_sql AND path = ?s", $curDirPath);
+    if (!$dirInfo) {
+        Session::Messages($langInvalidDir);
+        draw($tool_content, $menuTypeID);
+        exit;
+    } elseif (!$can_upload and !resource_access($dirInfo->visible, $dirInfo->public)) {
+        if (!$uid) {
+            // If not logged in, try to log in first
+            $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+            header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
+        } else {
+            // Logged in but access forbidden
+            Session::Messages($langInvalidDir);
+            draw($tool_content, $menuTypeID);
+        }
+        exit;
+    }
 }
 
 /* * * Retrieve file info for current directory from database and disk ** */
