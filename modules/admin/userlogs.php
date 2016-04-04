@@ -162,4 +162,3 @@ $data['log_types'] = [
 
 $data['menuTypeID'] = 3;
 view('admin.users.userlogs', $data);
-//draw($tool_content, 3, null, $head_content);
