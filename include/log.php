@@ -126,77 +126,79 @@ class Log {
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
                                 ORDER BY ts DESC");
+        $users_login_data = "";
         if ($num_of_logs > 0) {
             if ($course_id > 0) {
-                $tool_content .= "<div class='alert alert-info'>$langCourse: " . q(course_id_to_title($course_id)) . "</div>";
+                $users_login_data .= "<div class='alert alert-info'>$langCourse: " . q(course_id_to_title($course_id)) . "</div>";
             }
             if ($module_id > 0) {
                 if ($module_id == MODULE_ID_USERS) {
-                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAdminUsers . "</div>";
+                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $langAdminUsers . "</div>";
                 } elseif ($module_id == MODULE_ID_TOOLADMIN) {
-                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langExternalLinks . "</div>";
+                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $langExternalLinks . "</div>";
                 } elseif ($module_id == MODULE_ID_ABUSE_REPORT) {
-                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAbuseReport . "</div>";
+                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $langAbuseReport . "</div>";
                 } else {
-                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
+                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
                 }
             }
-            $tool_content .= "<table id = 'log_results_table' class='table-default'>";
-            $tool_content .= "<thead>";
+            $users_login_data .= "<table id = 'log_results_table' class='table-default'>";
+            $users_login_data .= "<thead>";
             // log header
-            $tool_content .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
+            $users_login_data .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
             if ($course_id == -1) {
-                $tool_content .= "<th>$langCourse</th>";
+                $users_login_data .= "<th>$langCourse</th>";
             }
             if ($module_id == -1) {
-                $tool_content .= "<th>$langModule</th>";
+                $users_login_data .= "<th>$langModule</th>";
             }
-            $tool_content .= "<th>$langAction</th><th>$langDetail</th>";
-            $tool_content .= "</tr>";
-            $tool_content .= "</thead>";
-            $tool_content .= "<tbody>";
+            $users_login_data .= "<th>$langAction</th><th>$langDetail</th>";
+            $users_login_data .= "</tr>";
+            $users_login_data .= "</thead>";
+            $users_login_data .= "<tbody>";
             // display logs
             foreach ($sql as $r) {
-                $tool_content .= "<tr>";
-                $tool_content .= "<td>" . nice_format($r->ts, true) . "</td>";
+                $users_login_data .= "<tr>";
+                $users_login_data .= "<td>" . nice_format($r->ts, true) . "</td>";
                 if (($r->user_id == 0) or ($logtype == LOG_DELETE_USER)) { // login failures or delete user
-                    $tool_content .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
+                    $users_login_data .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
                 } else {
-                    $tool_content .= "<td>" . display_user($r->user_id, false, false) . "</td>";
+                    $users_login_data .= "<td>" . display_user($r->user_id, false, false) . "</td>";
                 }
                 if ($course_id == -1) { // all courses
-                    $tool_content .= "<td>" .  q(course_id_to_title($r->course_id)) . "</td>";
+                    $users_login_data .= "<td>" .  q(course_id_to_title($r->course_id)) . "</td>";
                 }
                 if ($module_id == -1) { // all modules
                     $mid = $r->module_id;
                     if ($mid == MODULE_ID_USERS) {
-                        $tool_content .= "<td>" . $langAdminUsers . "</td>";
+                        $users_login_data .= "<td>" . $langAdminUsers . "</td>";
                     } elseif ($mid == MODULE_ID_TOOLADMIN) {
-                        $tool_content .= "<td>" . $langExternalLinks . "</td>";
+                        $users_login_data .= "<td>" . $langExternalLinks . "</td>";
                     } elseif ($mid == MODULE_ID_SETTINGS) {
-                        $tool_content .= "<td>" . $langCourseInfo . "</td>";
+                        $users_login_data .= "<td>" . $langCourseInfo . "</td>";
                     } elseif ($mid == MODULE_ID_ABUSE_REPORT) {
-                        $tool_content .= "<td>" . $langAbuseReport . "</td>";
+                        $users_login_data .= "<td>" . $langAbuseReport . "</td>";
                     } elseif ($mid == MODULE_ID_COURSEINFO) {
-                        $tool_content .= "<td>" . $langModifyInfo . "</td>";
+                        $users_login_data .= "<td>" . $langModifyInfo . "</td>";
                     } else {
-                        $tool_content .= "<td>" . $modules[$mid]['title'] . "</td>";
+                        $users_login_data .= "<td>" . $modules[$mid]['title'] . "</td>";
                     }
                 }
-                $tool_content .= "<td>" . $this->get_action_names($r->action_type) . "</td>";
+                $users_login_data .= "<td>" . $this->get_action_names($r->action_type) . "</td>";
                 if ($course_id == 0 or $module_id == 0) { // system logging
-                    $tool_content .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
+                    $users_login_data .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
                 } else { // course logging
-                    $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
+                    $users_login_data .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
                 }
-                $tool_content .= "</tr>";
+                $users_login_data .= "</tr>";
             }
-            $tool_content .= "</tbody>";
-            $tool_content .= "</table>";
+            $users_login_data .= "</tbody>";
+            $users_login_data .= "</table>";
         } else {
-            $tool_content .= "<div class='alert alert-warning'>$langNoUsersLog</div>";
+            $users_login_data .= "<div class='alert alert-warning'>$langNoUsersLog</div>";
         }
-        return;
+        $tool_content .= $users_login_data;
+        return $users_login_data;
     }
 
     /**
