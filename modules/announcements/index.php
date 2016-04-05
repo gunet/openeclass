@@ -704,7 +704,7 @@ if (isset($_GET['an_id'])) {
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
     $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'>";
     $tool_content .= "<div class='panel-body'>";
-    $tool_content .= "<div class='text-muted margin-bottom-thin'>".claro_format_locale_date($dateFormatLong, strtotime($row->date))."</div></div>";
+    $tool_content .= "<div class='text-muted margin-bottom-thin'>".claro_format_locale_date($dateFormatLong, strtotime($row->date))."</div>";
     $tool_content .= $row->content;
 
     $moduleTag = new ModuleElement($row->id);
