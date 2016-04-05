@@ -142,8 +142,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     } else {
         foreach ($result as $myrow) {
             $data['aaData'][] = array(
-                '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>',
-                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date))
+                '0' => '<div>
+                            <a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>
+                        </div>
+                        <div class="text-muted">
+                            <small>'.claro_format_locale_date($dateFormatLong, strtotime($myrow->date)).'</small>
+                        </div>'
             );
         }
     }
@@ -698,9 +702,9 @@ if (isset($_GET['an_id'])) {
 /* display announcements */
 if (isset($_GET['an_id'])) {
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
-    $tool_content .= "<div class='panel'>";
+    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'>";
     $tool_content .= "<div class='panel-body'>";
-    $tool_content .= "<div class='not_visible margin-bottom-thin'>$langDate: $row->date</div>";
+    $tool_content .= "<div class='text-muted margin-bottom-thin'>".claro_format_locale_date($dateFormatLong, strtotime($row->date))."</div></div>";
     $tool_content .= $row->content;
 
     $moduleTag = new ModuleElement($row->id);
@@ -708,15 +712,20 @@ if (isset($_GET['an_id'])) {
     if ($tags_list) $tool_content .= "<div>$langTags: $tags_list</div>";
     $tool_content .= "
                     </div>
-                </div>";
+                </div></div></div>";
 }
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
     $tool_content .= "<table id='ann_table{$course_id}' class='table-default'>";
-    $tool_content .= "<thead>";
-    $tool_content .= "<tr class='list-header'><th style='width: 45%;'>$langAnnouncement</th><th>$langDate</th>";
+
+    if (!$is_editor) {
+        $tool_content .= "<thead>";
+        $tool_content .= "<tr class='list-header'><th>$langAnnouncement</th>";
+    }
 
     if ($is_editor) {
-        $tool_content .= "<th>$langNewBBBSessionStatus</th><th class='text-center'><i class='fa fa-cogs'></i></th>";
+        $tool_content .= "<thead>";
+        $tool_content .= "<tr class='list-header'><th style='width: 45%;'>$langAnnouncement</th>";
+        $tool_content .= "<th>$langDate</th><th>$langNewBBBSessionStatus</th><th class='text-center'><i class='fa fa-cogs'></i></th>";
     }
     $tool_content .= "</tr></thead><tbody></tbody></table>";
 }
