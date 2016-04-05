@@ -684,12 +684,11 @@ if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $cours
         (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
 }
 if (isset($_GET['an_id'])) {
-    $pageName = $row->title;
     $tool_content .= action_bar(array(        
         array('title' => $langBack,
             'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
             'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+            'level' => 'primary-label')),false);
 } elseif (!isset($_GET['modify']) && !isset($_GET['addAnnounce'])) {
     $tool_content .= action_bar(array(
         array('title' => $langAddAnn,
@@ -704,12 +703,22 @@ if (isset($_GET['an_id'])) {
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
     $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'>";
     $tool_content .= "<div class='panel-body'>";
-    $tool_content .= "<div class='text-muted margin-bottom-thin'>".claro_format_locale_date($dateFormatLong, strtotime($row->date))."</div>";
-    $tool_content .= $row->content;
+    $tool_content .= "
+                        <div class='single_announcement'>
+                            <div class='announcement-title'>
+                                ".standard_text_escape($row->title)."
+                            </div>
+                            <span class='announcement-date'>
+                                - ".claro_format_locale_date($dateFormatLong, strtotime($row->date))." -
+                            </span>
+                            <div class='announcement-main'>
+                                ".standard_text_escape($row->content)."
+                            </div>
+                        </div>";
 
     $moduleTag = new ModuleElement($row->id);
     $tags_list = $moduleTag->showTags();
-    if ($tags_list) $tool_content .= "<div>$langTags: $tags_list</div>";
+    if ($tags_list) $tool_content .= "<hr><div>$langTags: $tags_list</div>";
     $tool_content .= "
                     </div>
                 </div></div></div>";
