@@ -46,7 +46,7 @@ if(isset($ann_id)){
                                 <div class='panel-body'>
                                     <div class='single_announcement'>
                                         <div class='announcement-title'>
-                                            ".q($announcement->title)."
+                                            ".standard_text_escape($announcement->title)."
                                         </div>
                                         <span class='announcement-date'>
                                          - " . claro_format_locale_date($dateFormatLong, strtotime($announcement->date)) . " -
