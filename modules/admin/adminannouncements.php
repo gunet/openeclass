@@ -368,7 +368,7 @@ if ($displayAnnouncementList == true) {
     if ($announcementNumber > 0) {
         $tool_content .= "<div class='table-responsive'><table class='table-default'>
                         <tr class='list-header'>
-                            <th style='width: 70%;'>$langAnnouncement</th>
+                            <th style='width: 55%;'>$langAnnouncement</th>
                             <th>$langDate</th>
                             <th>$langNewBBBSessionStatus</th>
                             <th><div align='center'>" . icon('fa-gears') . "</th>
@@ -395,7 +395,7 @@ if ($displayAnnouncementList == true) {
                     $classvis = 'visible';}
             }
 
-            $myrow->date = claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->date));
+            $myrow->date = claro_format_locale_date($dateFormatLong, strtotime($myrow->date));
 
             $tool_content .= "<tr class='$classvis'>
                 <td>

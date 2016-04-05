@@ -111,7 +111,13 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
-                '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
+                '0' => "<div class='table_td'>
+                        <div class='table_td_header clearfix'>
+                            <a href='".$_SERVER['SCRIPT_NAME']."?course=".$course_code."&an_id=".$myrow->id."'>".standard_text_escape($myrow->title)."</a>
+                        </div>
+                        <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->content)."</div>
+                        </div>",
+                //'0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
                 '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date)),
                 '2' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
                 '3' => action_button(array(
@@ -142,12 +148,13 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     } else {
         foreach ($result as $myrow) {
             $data['aaData'][] = array(
-                '0' => '<div>
-                            <a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>
+                '0' => "<div class='table_td'>
+                        <div class='table_td_header clearfix'>
+                            <a href='".$_SERVER['SCRIPT_NAME']."?course=".$course_code."&an_id=".$myrow->id."'>".standard_text_escape($myrow->title)."</a>
                         </div>
-                        <div class="text-muted">
-                            <small>'.claro_format_locale_date($dateFormatLong, strtotime($myrow->date)).'</small>
-                        </div>'
+                        <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->content)."</div>
+                        </div>",
+                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date))
             );
         }
     }
@@ -160,6 +167,15 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
     load_js('datatables');
     $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
+        
+        $('.table_td_body').each(function() {
+                $(this).trunk8({
+                    lines: '3',
+                    fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"adminannouncements_single . php ? ann_id = '
+                    + $(this).data('id')+'\">$langMore</div>'
+                })
+            });
+        
            var oTable = $('#ann_table{$course_id}').DataTable ({
                 ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
                 'bStateSave': true,
@@ -176,6 +192,13 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                 'fnDrawCallback': function( oSettings ) {
                     popover_init();
                     tooltip_init();
+                    $('.table_td_body').each(function() {
+                $(this).trunk8({
+                    lines: '3',
+                    fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"adminannouncements_single . php ? ann_id = '
+                    + $(this).data('id')+'\">$langMore</div>'
+                })
+            });
                     $('#ann_table{$course_id}_filter label input').attr({
                           class : 'form-control input-sm',
                           placeholder : '$langSearch...'
@@ -200,6 +223,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                        }
                    }
             });
+            
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
                 var row_id = $(this).data('id');
@@ -728,12 +752,12 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
 
     if (!$is_editor) {
         $tool_content .= "<thead>";
-        $tool_content .= "<tr class='list-header'><th>$langAnnouncement</th>";
+        $tool_content .= "<tr class='list-header'><th style='width:70%;'>$langAnnouncement</th><th>$langDate</th>";
     }
 
     if ($is_editor) {
         $tool_content .= "<thead>";
-        $tool_content .= "<tr class='list-header'><th style='width: 45%;'>$langAnnouncement</th>";
+        $tool_content .= "<tr class='list-header'><th style='width: 55%;'>$langAnnouncement</th>";
         $tool_content .= "<th>$langDate</th><th>$langNewBBBSessionStatus</th><th class='text-center'><i class='fa fa-cogs'></i></th>";
     }
     $tool_content .= "</tr></thead><tbody></tbody></table>";
@@ -742,10 +766,10 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
 
 add_units_navigation(TRUE);
 load_js('select2');
+load_js('trunk8');
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
-
-
+    
 
             $('input[name=startdate_active]').prop('checked') ? $('input[name=startdate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
             $('input[name=enddate_active]').prop('checked') ? $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);

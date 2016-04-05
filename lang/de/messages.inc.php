@@ -4326,6 +4326,6 @@ $langOfGradebookUser = "user";
 $langMessageNoSent = "The message was not sent because the attachment exceeds storage limit.
                     For more information, contact your system administrator.";
 $langAndTotalCourseVisits = "and total visits to $langsCourses";
-$dateFormatMiddle = "%d %b, %Y";
+$dateFormatMiddle = "%d %b %Y";
 $langAmShort = "Student ID";
 $langMonthlyCourseRegistration = "Registration to $langsCourse";
