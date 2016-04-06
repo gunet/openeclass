@@ -3222,6 +3222,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
+    // -----------------------------------
+    // upgrade queries for 3.4
+    // -----------------------------------
+    if (version_compare($oldversion, '3.4', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.4'));
+        
+    }
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 
