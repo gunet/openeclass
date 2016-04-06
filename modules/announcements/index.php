@@ -168,14 +168,6 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
     $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
         
-        $('.table_td_body').each(function() {
-                $(this).trunk8({
-                    lines: '3',
-                    fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"adminannouncements_single . php ? ann_id = '
-                    + $(this).data('id')+'\">$langMore</div>'
-                })
-            });
-        
            var oTable = $('#ann_table{$course_id}').DataTable ({
                 ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
                 'bStateSave': true,
@@ -195,8 +187,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                     $('.table_td_body').each(function() {
                 $(this).trunk8({
                     lines: '3',
-                    fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"adminannouncements_single . php ? ann_id = '
-                    + $(this).data('id')+'\">$langMore</div>'
+                    fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME]?course={$course_code}&an_id='+ $(this).data('id')+'\">$langMore</div>'
                 })
             });
                     $('#ann_table{$course_id}_filter label input').attr({
