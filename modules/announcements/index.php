@@ -247,12 +247,17 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
             $(document).on( 'click', '.reorder', function(e) {
                 e.preventDefault();
                 var link = $(this).attr('href');
+                var tr_affected = $(this).closest('tr');
                 
                 $.ajax({
                     type: 'POST',
                     url: link,
                     data: {
                         pin_announce: 1
+                    },
+                    beforeSend: function(){
+                        console.log(tr_affected);
+                        tr_affected.css('backgroundColor','rgba(100,100,100,0.3)');
                     },
                     success: function(data){
                         oTable.ajax.reload(null, false);
