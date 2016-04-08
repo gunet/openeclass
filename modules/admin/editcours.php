@@ -34,21 +34,21 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
-$tree = new Hierarchy();
+$data['tree'] = new Hierarchy();
 $course = new Course();
 $user = new User();
 
 if (isset($_GET['c'])) {
-    $c = q($_GET['c']);
+    $data['c'] = $c = q($_GET['c']);
     $_SESSION['c_temp'] = $c;
 }
 
 if (!isset($c)) {
-    $c = $_SESSION['c_temp'];
+    $data['c'] = $c = $_SESSION['c_temp'];
 }
 
 // validate course Id
-$cId = course_code_to_id($c);
+$data['cId'] = $cId = course_code_to_id($c);
 validateCourseNodes($cId, isDepartmentAdmin());
 
 $toolName = $langCourseEdit;
@@ -64,112 +64,16 @@ $tool_content .= action_bar(array(
 // A course has been selected
 if (isset($c)) {    
     // Get information about selected course
-    $row = Database::get()->querySingle("SELECT course.code as code, course.title as title , course.prof_names as prof_names, course.visible as visible
-		  FROM course
-		 WHERE course.code = ?s", $_GET['c']);   
-    
-    // Display course information and link to edit
-    $tool_content .= "<table class='table-default'>
-                <th colspan='2'>" . $langCourseInfo . " ".icon('fa-gear',$langModify, "infocours.php?c=" . q($c) . "")."</th>";
-    
-    $departments = $course->getDepartmentIds($cId);
-    $i = 1;
-    foreach ($departments as $dep) {
-        $thtitle = ($i == 1) ? $langFaculty . ':' : '';
-        $tool_content .= "
-            <tr>
-                <th width='250'>$thtitle</th>
-                <td>" . $tree->getFullPath($dep) . "</td>
-            </tr>";
-        $i++;
-    }
+    $data['course'] = $q = Database::get()->querySingle("SELECT code, title, prof_names, visible, doc_quota, video_quota, group_quota, dropbox_quota
+			FROM course WHERE code=?s", $c);
 
-    $tool_content .= "
-        <tr>
-	  <th>$langCode:</th>
-	  <td>" . q($row->code) . "</td>
-	</tr>
-	<tr>
-	  <th><b>$langTitle:</b></th>
-	  <td>" . q($row->title) . "</td>
-	</tr>
-	<tr>
-	  <th><b>" . $langTutor . ":</b></th>
-	  <td>" . q($row->prof_names) . "</td>
-	</tr>
-	</table>";
-    // Display course quota and link to edit
-    $tool_content .= "<table class='table-default'>
-	<th colspan='2'>$langQuota ".icon('fa-gear', $langModify, "quotacours.php?c=" . q($c) . ""). "</th>
-	<tr>
-	  <td colspan='2'><div class='sub_title1'>$langTheCourse " . q($row->title) . " $langMaxQuota</div></td>
-	  </tr>";
-    // Get information about course quota
-    $q = Database::get()->querySingle("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota
-			FROM course WHERE code=?s",$c);
-    $dq = format_file_size($q->doc_quota);
-    $vq = format_file_size($q->video_quota);
-    $gq = format_file_size($q->group_quota);
-    $drq = format_file_size($q->dropbox_quota);
-
-    $tool_content .= "
-	<tr>
-	  <td>$langLegend <b>$langDoc</b>:</td>
-	  <td>" . $dq . "</td>
-	</tr>";
-    $tool_content .= "
-	<tr>
-	  <td>$langLegend <b>$langVideo</b>:</td>
-	  <td>" . $vq . "</td>
-	</tr>";
-    $tool_content .= "
-	<tr>
-	  <td width='250'>$langLegend <b>$langGroups</b>:</td>
-	  <td>" . $gq . "</td>
-	</tr>";
-    $tool_content .= "
-	<tr>
-	  <td>$langLegend <b>$langDropBox</b>:</td>
-	  <td>" . $drq . "</td>
-	</tr>";
-    $tool_content .= "</table>";
-    // Display course type and link to edit
-    $tool_content .= "<table class='table-default'>
-                <th colspan='2'>$langCourseStatus ".icon('fa-gear', $langModify, "statuscours.php?c=" . q($c) . "")."</th>";
-    $tool_content .= "<tr><th width='250'>" . $langCurrentStatus . ":</th><td>" . course_status_message($cId) . "</td>";
-    $tool_content .= "</tr></table>";
-    // Display other available choices
-    $tool_content .= "<table class='table-default'><th colspan='2'>$langOtherActions</th>";
-    // Users list
-    $tool_content .= "
-	<tr>
-	  <td><a href='listusers.php?c=$cId'>$langListUsersActions</a></td>
-	</tr>";    
-    // Backup course
-    $tool_content .= "<tr>
-	  <td><a href='../course_info/archive_course.php?c=" . q($c). '&amp;' .generate_csrf_token_link_parameter() . "'>" . $langTakeBackup . "</a></td>
-	</tr>";
-    // Course metadata 
-    if (get_config('course_metadata')) {
-        $tool_content .= "<tr>
-          <td><a href='../course_metadata/index.php?course=" . q($c) . "'>" . $langCourseMetadata . "</a></td>
-        </tr>";
-    }
-    if (get_config('opencourses_enable')) {
-        $tool_content .= "<tr>
-          <td><a href='../course_metadata/control.php?course=" . q($c) . "'>" . $langCourseMetadataControlPanel . "</a></td>
-        </tr>";
-    }
-    // Delete course
-    $tool_content .= "
-	<tr>
-	  <td><a href='delcours.php?c=" . getIndirectReference($cId) . "'>" . $langCourseDel . "</a></td>
-	</tr>";
-    $tool_content .= "</table>";
+    $data['departments'] = $course->getDepartmentIds($cId);
 }
 // If $c is not set we have a problem
 else {
     // Print an error message
     $tool_content .= "<div class='alert alert-warning'>$langErrChoose</div>";
 }
-draw($tool_content, 3);
+$data['menuTypeID'] = 3;
+view ('admin.courses.editcours', $data);
+//draw($tool_content, 3);
