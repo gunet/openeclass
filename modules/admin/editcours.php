@@ -55,25 +55,22 @@ $toolName = $langCourseEdit;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 
-$tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => "searchcours.php",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+$data['action_bar'] = action_bar([
+                [
+                    'title' => $langBack,
+                    'url' => "searchcours.php",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label'
+                ]
+            ]);
 
 // A course has been selected
 if (isset($c)) {    
     // Get information about selected course
-    $data['course'] = $q = Database::get()->querySingle("SELECT code, title, prof_names, visible, doc_quota, video_quota, group_quota, dropbox_quota
-			FROM course WHERE code=?s", $c);
-
+    $data['course'] = Database::get()->querySingle("SELECT code, title, prof_names, visible, doc_quota, video_quota, group_quota, dropbox_quota
+			FROM course WHERE code = ?s", $c);
     $data['departments'] = $course->getDepartmentIds($cId);
 }
-// If $c is not set we have a problem
-else {
-    // Print an error message
-    $tool_content .= "<div class='alert alert-warning'>$langErrChoose</div>";
-}
+
 $data['menuTypeID'] = 3;
 view ('admin.courses.editcours', $data);
-//draw($tool_content, 3);

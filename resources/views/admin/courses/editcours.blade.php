@@ -2,6 +2,7 @@
 
 @section('content')
     {!! isset($action_bar) ?  $action_bar : '' !!}
+    @if (isset($c))
     <!--Display course information and link to edit-->
     <table class='table-default'>
         <th colspan='2'>{{ trans('langCourseInfo') }} {!! icon('fa-gear',trans('langModify'), "infocours.php?c=".$c) !!}</th>
@@ -113,4 +114,7 @@
             </td>
 	</tr>
     </table>
+    @else
+        <div class='alert alert-warning'>{{ trans('langErrChoose') }}</div>
+    @endif
 @endsection
