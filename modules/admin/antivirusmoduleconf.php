@@ -46,8 +46,6 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langAntivirusUpdated</div>";
     Session::Messages($langAntivirusUpdated, 'alert-success');
     redirect_to_home_page('modules/admin/antivirusmoduleconf.php');
 }
