@@ -115,10 +115,14 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     } elseif ($myrow->start_display > $now) {
                         $vis_class = 'not_visible';
                         $status_icon_list = "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->start_display'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
+                    } else {
+                        $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
+                        $vis_class = 'visible';
                     }
                 }else{
                     $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
-                    $vis_class = 'visible';}
+                    $vis_class = 'visible';
+                }
             }
 
             //setting datables column data
