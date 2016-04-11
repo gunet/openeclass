@@ -25,7 +25,7 @@
 
                         <td class="text-muted clearfix">
                             <div class="extapp-dscr-wrapper">
-                                {{ $app->getShortDescription() }}
+                                {!! $app->getShortDescription() !!}
                             </div>
                             <div class="extapp-controls">
                                 <div class="btn-group btn-group-sm">
