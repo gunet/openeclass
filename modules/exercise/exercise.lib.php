@@ -89,7 +89,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
-            list($answer) = explode('::', $answer);
+            list($answer) = Question::blanksSplitAnswer($answer);
             // replaces [blank] by an input field
             $replace_callback = function () use ($questionId, $exerciseResult) {
                     static $id = 0;
@@ -97,7 +97,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                     $value = (isset($exerciseResult[$questionId][$id])) ? 'value = '.$exerciseResult[$questionId][$id] : '';
                     return "<input type='text' style='line-height:normal;' name='choice[$questionId][$id]' $value>";
             };
-            $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape(($answer)));
+            $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer));
         }
         // unique answer
         if ($answerType == UNIQUE_ANSWER) {
