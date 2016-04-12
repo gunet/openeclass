@@ -59,9 +59,9 @@ if (isset($_GET['add_conference'])) {
     $tool_content .= "</div>";   
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label class='col-sm-2 control-label'>$langActivate</label>
-            <div class='col-sm-10 radio'><label><input type='radio' id='enabled_false' name='status' checked='false' value='inactive'>$langNo</label></div>
-            <div class='col-sm-offset-2 col-sm-10 radio'><label><input type='radio' id='enabled_true' name='status' checked='true' value='active'>$langYes</label></div>
-        </div>";
+        <div class='col-sm-10 radio'><label><input type='radio' id='enabled_true' name='status' checked value='active'>$langYes</label></div>
+        <div class='col-sm-offset-2 col-sm-10 radio'><label><input type='radio' id='enabled_false' name='status' value='inactive'>$langNo</label></div>            
+    </div>";
     $tool_content .= "<input type = 'hidden' name = 'course_id' value='$course_id'>";
 
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
@@ -82,14 +82,10 @@ if (isset($_GET['add_conference'])) {
        unlink($fileChatName);
     if(file_exists($tmpArchiveFile))
         unlink($tmpArchiveFile);
+        
+    Session::Messages($langChatDeleted,"alert-success");
+    redirect_to_home_page("modules/conference/index.php");
     
-    // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langChatDeleted</div>";    
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
 }
 else if (isset($_POST['submit'])) {
     $title = $_POST['title'];
@@ -106,13 +102,9 @@ else if (isset($_POST['submit'])) {
         (?d,?s,?s,?s)", $course_id,$title,$description,$status);
     }    
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langNoteSaved</div>";
-    // Display link to go back to index.php
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+    Session::Messages($langAttendanceEdit,"alert-success");
+    redirect_to_home_page("modules/conference/index.php");
+    
 } // end of if($submit)
 else {    
     if (isset($_GET['edit_conference'])) {
@@ -144,18 +136,22 @@ else {
         $tool_content .= "</div>";         
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label class='col-sm-2 control-label'>$langActivate</label>";
-        if ($conf->status == "inactive") {
-            $checkedfalse2 = " checked='false' ";
-        } else $checkedfalse2 = '';
-        
-        $tool_content .= "<div class='col-sm-10 radio'><label><input type='radio' id='enabled_false' name='status' $checkedfalse2 value='inactive'>$langNo</label></div>";
-        
         if ($conf->status == "active") {
             $checkedtrue2 = " checked='false' ";
         } else $checkedtrue2 = '';
         
-         $tool_content .= "<div class='col-sm-offset-2 col-sm-10 radio'><label><input type='radio' id='enabled_true' name='status' $checkedtrue2 value='active'>$langYes</label></div>
-            </div>";
+        $tool_content .= "<div class='col-sm-10 radio'>
+                <label><input type='radio' id='enabled_true' name='status' $checkedtrue2 value='active'>$langYes</label></div>";
+        
+        if ($conf->status == "inactive") {
+            $checkedfalse2 = " checked='false' ";
+        } else $checkedfalse2 = '';
+        
+        $tool_content .= "<div class='col-sm-offset-2 col-sm-10 radio'>
+                            <label><input type='radio' id='enabled_false' name='status' $checkedfalse2 value='inactive'>$langNo</label>
+                        </div>
+        </div>";
+     
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
         $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
         $tool_content .= "</fieldset></form></div>";
@@ -181,10 +177,10 @@ else {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
                 <thead>
-                <tr><th class = 'text-center'>".$m['title']."</th>
+                <tr><th class = 'text-center'>$langTitle</th>
                     <th class = 'text-center'>$langDescr</th>
-                    <th class = 'text-center'>$langChatActive</th>
-                    <th class = 'text-center'>$langStartDate</th>";
+                    <th class = 'text-center' width='50'>$langChatActive</th>
+                    <th class = 'text-center' width='180'>$langStartDate</th>";
                     
             if($is_editor){
                 $tool_content .= "<th class = 'text-center'>".icon('fa-gears')."</th>"; 
@@ -197,8 +193,8 @@ else {
                 ($conf->status == 'active')? $tool_content .= "<a href='./conference.php?conference_id=$conf->conf_id'>$conf->conf_title</a>" : $tool_content .= $conf->conf_description;
                 $tool_content .= "</td>";
                 $tool_content .= "<td>$conf->conf_description</td>";
-                $tool_content .= "<td>$enabled_conference</td>";
-                $tool_content .= "<td>$conf->start</td>";
+                $tool_content .= "<td class='text-center'>$enabled_conference</td>";
+                $tool_content .= "<td class='text-center'>".nice_format($conf->start, true)."</td>";
                 if($is_editor)
                 {
                     $tool_content .= "<td class='option-btn-cell'>".action_button(array(
