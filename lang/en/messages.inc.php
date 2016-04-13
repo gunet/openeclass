@@ -2715,7 +2715,7 @@ $langAccountActivate = 'User Account Reactivation';
 $langAccountActivateMessage = 'The following user requests account reactivation:';
 $langphpMyAdminURL = "phpMyAdmin URL";
 $langSystemInfoURL = "System Info URL";
-$lang_restrict_teacher_owndep = 'Restrict $langsCourse creation to the departments the user belongs to';
+$lang_restrict_teacher_owndep = "Restrict $langsCourse creation to the departments the user belongs to";
 $langUpgTooOld = 'The currently installed version of Open eClass you are trying to upgrade is
 too old. Upgrade to version 3.x is only supported from version 2.2 and above.
 Please upgrade your installation to 2.2 and then to the latest version.';
