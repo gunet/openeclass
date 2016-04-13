@@ -163,7 +163,7 @@ else {
                     
     } else {
         //display available conferences
-        if($is_editor)
+        if ($is_editor)
         {
             $tool_content .= action_bar(array(
                 array('title' => $langAdd,
@@ -171,15 +171,18 @@ else {
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success')));
+            
+            $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d ORDER BY conf_id DESC",$course_id);
+        } else {
+            $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d AND status = 'active' ORDER BY conf_id DESC",$course_id);
         }
-        $q = Database::get()->queryArray("SELECT * FROM conference WHERE course_id=?d ORDER BY conf_id DESC",$course_id);
         if (count($q)>0) {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
                 <thead>
                 <tr><th class = 'text-center'>$langTitle</th>
                     <th class = 'text-center'>$langDescr</th>
-                    <th class = 'text-center' width='50'>$langChatActive</th>
+                    <th class = 'text-center' width='50'>$langNewBBBSessionStatus</th>
                     <th class = 'text-center' width='180'>$langStartDate</th>";
                     
             if($is_editor){
@@ -187,8 +190,8 @@ else {
             }
             $tool_content .="</tr></thead>";
             foreach ($q as $conf) {
-                $enabled_conference = ($conf->status == 'active')? $langYes : $langNo;
-                $tool_content .= "<tr>";
+                $enabled_conference = ($conf->status == 'active')? $langChatActive : $langChatInactive;
+                ($conf->status == 'active')? $tool_content .= "<tr>" : $tool_content .= "<tr class='not_visible'>";
                 $tool_content .= "<td>";
                 ($conf->status == 'active')? $tool_content .= "<a href='./conference.php?conference_id=$conf->conf_id'>$conf->conf_title</a>" : $tool_content .= $conf->conf_description;
                 $tool_content .= "</td>";
