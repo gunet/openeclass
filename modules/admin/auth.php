@@ -71,5 +71,4 @@ $data['authMethods'] = $authMethods = Database::get()->queryArray("SELECT * FROM
     
 $data['menuTypeID'] = 3;
 view ('admin.users.auth', $data);
-//draw($tool_content, 3);
 
