@@ -70,5 +70,5 @@ $data['auth_active_ids'] = $auth_active_ids = get_auth_active_methods();
 $data['authMethods'] = $authMethods = Database::get()->queryArray("SELECT * FROM auth ORDER BY auth_default DESC, auth_id");
     
 $data['menuTypeID'] = 3;
-view ('admin.users.auth', $data);
+view ('admin.users.auth.index', $data);
 
