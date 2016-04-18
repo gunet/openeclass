@@ -173,7 +173,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                         'showTitle' => true,
                         'class' => 'login-option',
                         'title' => $langViaSocialNetwork);
-                    $hybridLinkId = count($authLink) - 1;
+                    $hybridLinkId = count($authLinks) - 1;
                 }
             } elseif (!$loginFormEnabled) {
                 $loginFormEnabled = true;
