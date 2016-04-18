@@ -254,8 +254,6 @@ define('MONTHS', 30 * 24 * 60 * 60);
 
 // schedule indexing if necessary
 if (Session::get('scheduleIndexing')) {
-    $tool_content .= "<div class='alert alert-warning'>{$langIndexingNeeded} <a id='idxpbut' href='../search/idxpopup.php' onclick=\"return idxpopup('../search/idxpopup.php', 600, 500)\">{$langHere}.</a></div>";
-
     $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -561,4 +559,3 @@ else {
 }
 $data['menuTypeID'] = 3;
 view('admin.other.eclassconf', $data);
-//draw($tool_content, 3, null, $head_content);
