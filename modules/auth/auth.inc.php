@@ -680,7 +680,7 @@ function process_login() {
  Yahoo, Live accounts)
 * ************************************************************** */
 
-function hybridauth_login() {
+function hybridauth_login($provider=null) {
     global $surname, $givenname, $email, $status, $is_admin, $language,
         $langInvalidId, $langAccountInactive1, $langAccountInactive2,
         $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
@@ -700,7 +700,11 @@ function hybridauth_login() {
 
     // if user select a provider to login with then include hybridauth config
     // and main class, try to authenticate, finally redirect to profile
-    if (isset($_GET['provider'])) {
+    if (!$provider and isset($_GET['provider'])) {
+        $provider = $_GET['provider'];
+    }
+
+    if ($provider) {
         try {
             $hybridauth = new Hybrid_Auth($config);
             
@@ -739,7 +743,7 @@ function hybridauth_login() {
         
             return false;
         }
-    } //endif( isset( $_GET["provider"] ) && $_GET["provider"] )
+    }
     
     
     // from here on an alternative version of proccess_login() runs where

@@ -135,6 +135,8 @@ if ($auth > 1 and $auth < 6) {
         </fieldset>
         ". generate_csrf_token_form_field() ."
     </form></div>";
+} elseif (in_array($auth_ids[$auth], $hybridAuthMethods)) {
+    hybridauth_login($auth_ids[$auth]);
 }
 
 draw($tool_content, 3);
