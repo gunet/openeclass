@@ -472,8 +472,6 @@ $data['menuTypeID'] = 3;
 // display search results
 view('admin.users.list_users', $data);
 
-//draw($tool_content, 3, null, $head_content);
-
 /**
  * make links from one page to another during search results
  * @global string $params
