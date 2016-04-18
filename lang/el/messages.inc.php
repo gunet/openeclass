@@ -856,6 +856,11 @@ $langSaveChat = "Αποθήκευση κουβέντας";
 $langSaveMessage = "Η κουβέντα αποθηκεύθηκε στα Έγγραφα";
 $langSaveErrorMessage = "Η κουβέντα δεν μπόρεσε να αποθηκευθεί";
 $langNoGuest = "Οι χρήστες-επισκέπτες δεν μπορούν να χρησιμοποιήσουν το υποσύστημα 'Κουβέντα' !";
+$langChatDeleted ="Η κουβέντα διαγράφηκε";
+$langNoChatAvailable = "Δεν υπάρχουν διαθέσιμες \"Κουβεντούλες\"";
+$langChatActive = "Ενεργή";
+$langChatInactive = "Ανενεργή";
+$langChatTitleError = "Παρακαλώ συμπληρώστε τον τίτλο της Κουβεντούλας";
 
 /* * ***************************************************************
  * copyright.php
@@ -1106,7 +1111,7 @@ $langAttendanceActivityDate2 = "Ημερομηνία";
 $langAttendanceBook = "Καταχώρηση παρουσιών δραστηριότητας";
 $langAttendanceBooking = "Καταχώρηση";
 $langAttendanceUpdate = "Ενημέρωση";
-$langAttendanceEdit = "Επιτυχής αλλαγή";
+$langAttendanceEdit = "Η αλλαγή έγινε με επιτυχία";
 $langAttendanceSucInsert = "Η δραστηριότητα προστέθηκε";
 $langAttendanceLimit = "Επιτυχής ενημέρωση αριθμού παρουσιών";
 $langAttendanceDel = "H δραστηριότητα διαγράφηκε";
@@ -4151,7 +4156,7 @@ $langReferencedObject = "Αφορά";
 $langSelectFromMenu = "Επιλέξτε...";
 $langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
 $langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
-$langNoteSaved = "Αποθηκεύτηκε επιτυχώς";
+$langNoteSaved = "Αποθηκεύτηκε με επιτυχία";
 $langAllNotes = "Όλες οι σημειώσεις";
 
 /* * ******************************************
@@ -4614,7 +4619,7 @@ $langBlogPostTitle = "Τίτλος Ανάρτησης";
 $langBlogPost = "Ανάρτηση Ιστολογίου";
 $langModifBlogPost = "Αλλαγή της ανάρτησης";
 $langEmptyBlogPostTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο της ανάρτησης";
-$langBlogPostSaveSucc = "Η ανάρτηση αποθηκεύθηκε επιτυχώς";
+$langBlogPostSaveSucc = "Η ανάρτηση αποθηκεύθηκε με επιτυχία";
 $langBlogPostSaveFail = "Υπήρξε πρόβλημα κατά την αποθήκευση της ανάρτησης";
 $langBlogPostHistory = "Ιστορικό αναρτήσεων";
 $langBlogPostNotAllowedCreate = "Δεν έχετε δικαίωμα δημιουργίας ανάρτησης";
