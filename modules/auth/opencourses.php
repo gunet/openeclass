@@ -54,10 +54,11 @@ if (isset($_GET['fc'])) {
 // This is needed in case the user decides to switch language.
 if (isset($fc)) {
     $_SESSION['fc_memo'] = $fc;
-} else {
+} elseif (isset($_SESSION['fc_memo'])) {
     $fc = $_SESSION['fc_memo'];
+} else {
+    redirect_to_home_page();
 }
-
 
 $fac = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?d", $fc)->name;
 if (!($fac = $fac[0])) {
