@@ -34,9 +34,6 @@
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
-$toolName = $langAuthChangeUser;
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 
 if (isset($_GET['auth'])) {
     $auth = getDirectReference($_GET['auth']);
@@ -47,21 +44,14 @@ if (!isset($auth)) {
     $auth = $_SESSION['auth_temp'];
 }
 
-$tool_content .= action_bar(array(
-                array('title' => $langBack,
-                    'url' => "auth.php",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')
-                ));
-
 $auth_change = isset($_REQUEST['auth_change']) ? intval($_REQUEST['auth_change']) : false;
 register_posted_variables(array('submit' => true));
 
 if ($submit && $auth && $auth_change) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (Database::get()->query("UPDATE user SET password=?s WHERE password=?s AND id != 1", $auth_ids[$auth_change], $auth_ids[$auth])->affectedRows >= 1) {
-        $tool_content .= "<div class='alert alert-success'>$langAuthChangeYes</div";                        
-        draw($tool_content, 3);
+        Session::Messages($langAuthChangeYes, 'alert-success');
+        redirect_to_home_page('modules/admin/auth.php');
     }
 }
 
@@ -73,20 +63,19 @@ foreach ($auth_methods as $key => $value) {
     }
 }
 foreach ($auth_methods as $value) {
-    $auth_methods_active[$value] = $auth_ids[$value];
+    $data['auth_methods_active'][$value] = $auth_ids[$value];
 }
 
-if (isset($auth_methods_active) == 0) {
-    $tool_content .= "<div class='alert alert-warning'>$langAuthChangeno</div>";
-} else {
-    $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' name='authchange' method='post' action='$_SERVER[SCRIPT_NAME]'>";    
-    $tool_content .= "<fieldset><div class='form-group'><label class='col-sm-2 control-label'>$langAuthChangeto:</label>";
-    $tool_content .= "<div class='col-sm-10'>";
-    $tool_content .= selection($auth_methods_active, 'auth_change', '', "class='form-control'");
-    $tool_content .= "</div></div>";
-    $tool_content .= "<input type='hidden' name='auth' value='" . getIndirectReference(intval($auth)) . "'>";    
-    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></div>";
-    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."    </form></div>";
-}
+$toolName = $langAuthChangeUser;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 
-draw($tool_content, 3);
+$data['action_bar'] = action_bar(array(
+                array('title' => $langBack,
+                    'url' => "auth.php",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+                ));
+
+$data['menuTypeID'] = 3;
+view ('admin.users.auth.auth_change', $data);
