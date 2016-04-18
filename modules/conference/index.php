@@ -193,7 +193,7 @@ else {
                 $enabled_conference = ($conf->status == 'active')? $langChatActive : $langChatInactive;
                 ($conf->status == 'active')? $tool_content .= "<tr>" : $tool_content .= "<tr class='not_visible'>";
                 $tool_content .= "<td>";
-                ($conf->status == 'active')? $tool_content .= "<a href='./conference.php?conference_id=$conf->conf_id'>$conf->conf_title</a>" : $tool_content .= $conf->conf_description;
+                ($conf->status == 'active')? $tool_content .= "<a href='./conference.php?conference_id=$conf->conf_id'>$conf->conf_title</a>" : $tool_content .= $conf->conf_title;
                 $tool_content .= "</td>";
                 $tool_content .= "<td>$conf->conf_description</td>";
                 $tool_content .= "<td class='text-center'>$enabled_conference</td>";
