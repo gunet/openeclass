@@ -36,12 +36,12 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 
 if (isset($_GET['auth'])) {
-    $auth = getDirectReference($_GET['auth']);
+    $data['auth'] = $auth = getDirectReference($_GET['auth']);
     $_SESSION['auth_temp'] = $auth;
 }
 
 if (!isset($auth)) {
-    $auth = $_SESSION['auth_temp'];
+    $data['auth'] = $auth = $_SESSION['auth_temp'];
 }
 
 $auth_change = isset($_REQUEST['auth_change']) ? intval($_REQUEST['auth_change']) : false;
