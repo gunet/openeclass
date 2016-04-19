@@ -296,8 +296,8 @@ function load_js($file, $init='') {
                 js_link('select2-3.5.1/select2.min.js');
             $file = "select2-3.5.1/select2_locale_$language.js";
         } elseif ($file == 'bootstrap-datetimepicker') {
-        $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') .
-        js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');        
+            $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.css') .
+            js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
             $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
         } elseif ($file == 'bootstrap-timepicker') {
             $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
