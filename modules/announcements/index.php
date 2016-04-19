@@ -41,16 +41,6 @@ $action->record(MODULE_ID_ANNOUNCE);
 
 define_rss_link();
 
-if ($is_editor && isset($_POST['pin_announce'])) {
-    if (isset($_GET['pin']) && ($_GET['pin'] == 1)) {
-        $top_order = Database::get()->querySingle("SELECT MAX(`order`) as max from announcement WHERE course_id = ?d", $course_id)->max + 1;
-        Database::get()->query("UPDATE announcement SET `order` = ?d  where id = ?d and course_id = ?d", $top_order, $_GET['pin_an_id'], $course_id);
-    } elseif (isset($_GET['pin']) && ($_GET['pin'] == 0)) {
-        Database::get()->query("UPDATE announcement SET `order` = 0  where id = ?d and course_id = ?d", $_GET['pin_an_id'], $course_id);
-    }
-    exit();
-}
-
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['action']) && $is_editor) {
@@ -88,7 +78,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $extra_sql = '';
         $extra_terms = array();
     }
-    $result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql ORDER BY `order` DESC , `date` DESC  $extra_sql", $course_id, $keyword, $extra_terms);
+    $result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql ORDER BY `order` DESC $extra_sql", $course_id, $keyword, $extra_terms);
 
     $data['iTotalRecords'] = $all_announc->total;
     $data['iTotalDisplayRecords'] = $filtered_announc->total;
@@ -96,11 +86,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     if ($is_editor) {
         $iterator = 1;
         $now = date("Y-m-d H:i:s");
-        $pinned_greater = Database::get()->querySingle("SELECT MAX(`order`) AS max_order FROM announcement WHERE course_id = ?d", $course_id)->max_order;
         foreach ($result as $myrow) {
-
-            $to_top = "";
-
             //checking visible status
             if ($myrow->visible == '0') {
                 $visible = 1;
@@ -126,27 +112,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             }
 
             //setting datables column data
-            if ($myrow->order != 0) {
-                $pinned_class = "text-danger";
-                $pinned = 0;
-                if ($myrow->order != $pinned_greater) {
-                    $to_top = "<a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=1'><span class='fa fa-arrow-up  pull-right'></span></a>";
-                }
-            } elseif ($myrow->order == 0) {
-                $pinned_class = "not_visible";
-                $pinned = 1;
-            }
-
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
                 '0' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&an_id=$myrow->id'>".standard_text_escape($myrow->title)."</a>
-                            <a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=$pinned'>
-                                <span class='fa fa-thumb-tack $pinned_class pull-right'></span>
-                            </a>
-                            $to_top
+                            <a href='".$_SERVER['SCRIPT_NAME']."?course=".$course_code."&an_id=".$myrow->id."'>".standard_text_escape($myrow->title)."</a>
                         </div>
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->content)."</div>
                         </div>",
@@ -165,24 +136,25 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                         'class' => 'delete',
                         'icon' => 'fa-times',
                         'icon-class' => 'delete_btn',
-                        'icon-extra' => "data-id='$myrow->id'")
-                    )));
+                        'icon-extra' => "data-id='$myrow->id'"),
+                    array('title' => $langMove,
+                        'level' => 'primary',
+                        'icon' => 'fa-arrow-up',
+                        'disabled' => !($iterator != 1 || $offset > 0),
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id"),
+                    array('title' => $langMove,
+                        'level' => 'primary',
+                        'disabled' => $offset + $iterator >= $all_announc->total,
+                        'icon' => 'fa-arrow-down',
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id"))));
             $iterator++;
         }
     } else {
         foreach ($result as $myrow) {
-
-            if ($myrow->order != 0) {
-                $pinned = "<span class='fa fa-thumb-tack pull-right text-danger'></span>";
-            } else {
-                $pinned = "";
-            }
-
             $data['aaData'][] = array(
                 '0' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
                             <a href='".$_SERVER['SCRIPT_NAME']."?course=".$course_code."&an_id=".$myrow->id."'>".standard_text_escape($myrow->title)."</a>
-                            $pinned
                         </div>
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->content)."</div>
                         </div>",
@@ -193,7 +165,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit();
 }
-
 load_js('tools.js');
 //check if Datables code is needed
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
@@ -211,23 +182,23 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                 'searchDelay': 1000,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
-                                    [10, 15, 20 , -1],
-                                    [10, 15, 20, '$langAllOfThem'] // change per page values here
-                                ],
+                   [10, 15, 20 , -1],
+                   [10, 15, 20, '$langAllOfThem'] // change per page values here
+               ],
                 'fnDrawCallback': function( oSettings ) {
-                                        popover_init();
-                                        tooltip_init();
-                                        $('.table_td_body').each(function() {
-                                            $(this).trunk8({
-                                                lines: '3',
-                                                fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME]?course={$course_code}&an_id='+ $(this).data('id')+'\">$langMore</div>'
-                                            })
-                                        });
-                                        $('#ann_table{$course_id}_filter label input').attr({
-                                            class : 'form-control input-sm',
-                                            placeholder : '$langSearch...'
-                                        });
-                                    },
+                    popover_init();
+                    tooltip_init();
+                    $('.table_td_body').each(function() {
+                $(this).trunk8({
+                    lines: '3',
+                    fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME]?course={$course_code}&an_id='+ $(this).data('id')+'\">$langMore</div>'
+                })
+            });
+                    $('#ann_table{$course_id}_filter label input').attr({
+                          class : 'form-control input-sm',
+                          placeholder : '$langSearch...'
+                        });
+},
                 'sPaginationType': 'full_numbers',
                 'bSort': false,
                 'oLanguage': {
@@ -246,29 +217,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                            'sLast':     '&raquo;'
                        }
                    }
-            });
-            
-            $(document).on( 'click', '.reorder', function(e) {
-                e.preventDefault();
-                var link = $(this).attr('href');
-                var tr_affected = $(this).closest('tr');
-                
-                $.ajax({
-                    type: 'POST',
-                    url: link,
-                    data: {
-                        pin_announce: 1
-                    },
-                    beforeSend: function(){
-                        console.log(tr_affected);
-                        tr_affected.css('backgroundColor','rgba(100,100,100,0.3)');
-                    },
-                    success: function(data){
-                        oTable.ajax.reload(null, false);
-                    }
-                });
-            });
-            
+            });            
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
                 var row_id = $(this).data('id');
@@ -459,15 +408,17 @@ if ($is_editor) {
                     $moduleTag->syncTags($tagsArray);
                 }
             } else { // add new announcement
-
+                $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
+                                                       WHERE course_id = ?d", $course_id)->maxorder;
+                $order = $orderMax + 1;
                 // insert
                 $id = Database::get()->query("INSERT INTO announcement
                                              SET content = ?s,
                                                  title = ?s, `date` = " . DBHelper::timeAfter() . ",
-                                                 course_id = ?d, `order` = 0,
+                                                 course_id = ?d, `order` = ?d,
                                                  start_display = ?t,
                                                  stop_display = ?t,
-                                                 visible = ?d", $newContent, $antitle, $course_id, $start_display, $stop_display, $is_visible)->lastInsertID;
+                                                 visible = ?d", $newContent, $antitle, $course_id, $order, $start_display, $stop_display, $is_visible)->lastInsertID;
                 $log_type = LOG_INSERT;
 
                 if (isset($_POST['tags'])) {
