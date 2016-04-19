@@ -39,7 +39,7 @@ $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#id_user_registered_at').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right', 
                 language: '" . $language . "',
                 autoclose: true    
             });

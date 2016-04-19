@@ -138,7 +138,7 @@ function checkenableenddate(){
 }
 $(function() {
     $('#startdate').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-right', 
         language: '".$language."',
         autoclose: true
     });

@@ -250,7 +250,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $(function() {
             $('#PollStart, #PollEnd').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right', 
                 language: '".$language."',
                 autoclose: true
             });
