@@ -80,8 +80,9 @@ if (isset($_GET['add_server'])) {
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label class='col-sm-3 control-label'>$langActivate:</label>
-            <div class='col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' checked='false' value='false'>$langNo</label></div>
-            <div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' checked='true' value='true'>$langYes</label></div>
+            <div class='col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' checked='true' value='true'>$langYes</label></div>
+            <div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' checked='false' value='false'>$langNo</label></div>
+            
         </div>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>

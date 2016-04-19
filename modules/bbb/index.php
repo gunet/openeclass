@@ -63,11 +63,25 @@ load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 load_js('validation.js');
 
+$head_content .= "
+<script type='text/javascript'>
+
+// Bootstrap datetimepicker Initialization
+$(function() {
+$('input#start_session').datetimepicker({
+        format: 'dd-mm-yyyy hh:ii',
+        pickerPosition: 'bottom-right',
+        language: '".$language."',
+        autoclose: true,        
+    });
+});
+
+</script>";
 $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#BBBEndDate').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right', 
                 language: '".$language."',
                 autoclose: true    
             }).on('changeDate', function(ev){
@@ -103,21 +117,6 @@ $head_content .= "<script type='text/javascript'>
         });
     </script>";
 
-$head_content .= "
-<script type='text/javascript'>
-
-// Bootstrap datetimepicker Initialization
-$(function() {
-$('input#start_session').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii',
-        pickerPosition: 'bottom-left',
-        language: '".$language."',
-        autoclose: true,
-        todayBtn: true
-    });
-});
-
-</script>";
 load_js('select2');
 
 $head_content .= "<script type='text/javascript'>
@@ -194,14 +193,11 @@ elseif(isset($_POST['update_bbb_session']))
 {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
-    $start = $startDate_obj->format('Y-m-d H:i:s'); 
-    $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
-    if(isset($_POST['BBBEndDate'] ))
-    {
+    $start = $startDate_obj->format('Y-m-d H:i:s');     
+    if(isset($_POST['BBBEndDate'] )) {
+        $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
         $end = $endDate_obj->format('Y-m-d H:i:s');    
-    }
-    else
-    {
+    } else {
         $end = NULL;
     }
     add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, '0' ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'],$_POST['record'],$_POST['sessionUsers'], true, getDirectReference($_GET['id']));
