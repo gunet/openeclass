@@ -1631,8 +1631,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `course_id` int(11) NOT NULL,
     `conf_title` text NOT NULL,
     `conf_description` text DEFAULT NULL,
-    `status` enum('active','inactive') DEFAULT NULL,
-    `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `status` enum('active','inactive') DEFAULT 'active',
+    `start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`conf_id`)) $charset_spec");
 
 $_SESSION['theme'] = 'default';

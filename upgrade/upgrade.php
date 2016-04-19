@@ -3328,12 +3328,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('poll', 'type')) {
             Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");
         }
-
-        if (!DBHelper::fieldExists('conference', 'conf_title')) {
-            Database::get()->query("ALTER TABLE `conference` ADD `conf_title` text NOT NULL AFTER course_id");
-        }
-
-        
+               
         Database::get()->query('INSERT IGNORE INTO course_module
             (module_id, visible, course_id)
             SELECT ?d, 0, id FROM course', MODULE_ID_MINDMAP);
