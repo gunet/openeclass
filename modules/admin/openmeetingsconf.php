@@ -38,7 +38,7 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 $om_server = isset($_GET['edit_server']) ?  $_GET['edit_server'] : '';
 
 if (isset($_GET['add_server'])) {
-    $pageName = $$langAddOpenMeetingsServer;
+    $pageName = $langAddBBBServer;
     $toolName = $langOpenMeetingsConf;
     $navigation[] = array('url' => 'openmeetingsconf.php', 'name' => $langOpenMeetingsConf);
     $tool_content .= action_bar(array(
@@ -73,14 +73,22 @@ if (isset($_GET['add_server'])) {
             <div class='col-sm-9'><input class='form-control' type='text' name='webapp_form'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBEnableRecordings:</label>
-            <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' checked='true' value='false'>$langNo</label></div>
-            <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true'>$langYes</label></div>";
+    $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langMaxRooms:</label>
+            <div class='col-sm-9'><input class='form-control' type='text' id='max_rooms_for' name='max_rooms_form'></div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langMaxUsers:</label>
+            <div class='col-sm-9'><input class='form-control' type='text' id='max_users_form' name='max_users_form'></div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBEnableRecordings:</label>            
+                    <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true'>$langYes</label></div>
+                    <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' checked='true' value='false'>$langNo</label></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label class='col-sm-3 control-label'>$langActivate:</label>
-            <div class='col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' checked='false' value='false'>$langNo</label></div>
-            <div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' checked='true' value='true'>$langYes</label></div>
+                    <div class='col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' checked='true' value='true'>$langYes</label></div>
+                    <div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' checked='false' value='false'>$langNo</label></div>            
         </div>";
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
     $tool_content .= "</fieldset></form></div>";
@@ -114,13 +122,11 @@ else if (isset($_POST['submit'])) {
     $username = $_POST['username_form'];
     $password = $_POST['password_form'];
     $module = $_POST['module_form'];
-    $webapp = $_POST['webapp_form'];
+    $webapp = $_POST['webapp_form'];    
     $max_rooms = $_POST['max_rooms_form'];
     $max_users = $_POST['max_users_form'];
     $enable_recordings = $_POST['enable_recordings'];
-    $enabled = $_POST['enabled'];
-    $weight = $_POST['weight'];
-//print_r($_POST);die();
+    $enabled = $_POST['enabled'];    
     
     if (isset($_POST['id_form'])) {
         $id = $_POST['id_form'];
@@ -130,7 +136,7 @@ else if (isset($_POST['submit'])) {
                 password = ?s,
                 module_key =?s,
                 webapp =?s,
-                enabled=?s,
+                enabled=?s,                
                 max_rooms=?d,
                 max_users=?d,
                 enable_recordings=?s 
@@ -197,7 +203,7 @@ else {
         } else $checkedtrue = '';
         $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true' $checkedtrue>$langYes</label></div>";
         $tool_content .= "</div>";
-     $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langMaxRooms:</label>
                 <div class='col-sm-9'><input class='form-control' type='text' id='max_rooms_for' name='max_rooms_form' value='$server->max_rooms'></div>";
         $tool_content .= "</div>";
@@ -210,16 +216,15 @@ else {
         $tool_content .= "<label class='col-sm-3 control-label'>$langActivate:</label>";
         if ($server->enabled == "false") {
             $checkedfalse2 = " checked='false' ";
-        } else $checkedfalse2 = '';
-        
-        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' $checkedfalse2 value='false'>$langNo</label></div>";
-        
+        } else $checkedfalse2 = '';                        
         if ($server->enabled == "true") {
             $checkedtrue2 = " checked='false' ";
         } else $checkedtrue2 = '';
         
-         $tool_content .= "<div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' $checkedtrue2 value='true'>$langYes</label></div>
-            </div>";      $tool_content .= "<input class='form-control' type = 'hidden' name = 'id_form' value='$om_server'>";
+         $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' $checkedtrue2 value='true'>$langYes</label></div>";
+         $tool_content .= "<div class='col-sm-offset-3 col-sm-9 radio'><label><input type='radio' id='enabled_false' name='enabled' $checkedfalse2 value='false'>$langNo</label></div>
+            </div>";      
+        $tool_content .= "<input class='form-control' type = 'hidden' name = 'id_form' value='$om_server'>";
         $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
         $tool_content .= "</fieldset></form></div>";
 /*        
@@ -275,8 +280,6 @@ else {
                 $tool_content .= "<td>$srv->module_key</td>";
                 $tool_content .= "<td>$srv->webapp</td>";
                 $tool_content .= "<td class = 'text-center'>$enabled_bbb_server</td>";
-
-
                 $tool_content .= "<td class='option-btn-cell'>".action_button(array(
                                                     array('title' => $langEditChange,
                                                           'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
@@ -291,7 +294,7 @@ else {
             }            	
             $tool_content .= "</table></div>";
         } else {
-             $tool_content .= "<div class='alert alert-warning'>Δεν υπάρχουν διαθέσιμοι εξυπηρετητές.</div>";
+             $tool_content .= "<div class='alert alert-warning'>$langNoAvailableBBBServers</div>";
         }
     }
 }
