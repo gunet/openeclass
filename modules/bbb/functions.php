@@ -658,9 +658,9 @@ function bbb_session_details() {
 
     $myGroups = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id=?d", $_SESSION['uid']);
 
-    $activeClause = $is_editor? '': "AND active = '1'";
+    $activeClause = !$is_editor? '': "AND active = '1'";
     $result = Database::get()->queryArray("SELECT * FROM bbb_session
-            WHERE course_id = ?s $activeClause ORDER BY start_date DESC", $course_id);
+                            WHERE course_id = ?s $activeClause ORDER BY start_date DESC", $course_id);
     if (get_total_bbb_servers() == '0' && get_total_om_servers() == '0' && get_total_webconf_servers() == '0' ) {            
         if ($is_editor) {
             $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";
