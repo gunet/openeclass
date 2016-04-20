@@ -344,13 +344,11 @@ if ($is_editor) {
             $titleToModify = Session::has('antitle') ? Session::get('antitle') : q($announce->title);
             if ($announce->start_display) {
                 $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $announce->start_display);
-                $startdate = $startDate_obj->format('d-m-Y H:i');
-                $showFrom = q($startdate);
+                $showFrom = q($startDate_obj->format('d-m-Y H:i'));
             }
             if ($announce->stop_display) {
                 $endDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $announce->stop_display);
-                $enddate = $endDate_obj->format('d-m-Y H:i');
-                $showUntil = q($enddate);
+                $showUntil = q($endDate_obj->format('d-m-Y H:i'));
             }
         }
     }
@@ -368,7 +366,7 @@ if ($is_editor) {
             $v->rule('required', array('enddate'));
             $v->labels(array('enddate' => "$langTheField $langEndDate"));
         }
-        if($v->validate()) {        
+        if ($v->validate()) {        
             if ($language == 'el') {
                 $datetime = claro_format_locale_date($dateTimeFormatShort);
             } else {
@@ -398,7 +396,15 @@ if ($is_editor) {
 
             if (!empty($_POST['id'])) {
                 $id = intval($_POST['id']);
-                Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = " . DBHelper::timeAfter() . ", start_display = ?t, stop_display = ?t, visible = ?d  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $is_visible, $id);
+                Database::get()->query("UPDATE announcement
+                    SET content = ?s,
+                        title = ?s,
+                        `date` = " . DBHelper::timeAfter() . ",
+                        start_display = ?t,
+                        stop_display = ?t,
+                        visible = ?d
+                    WHERE id = ?d",
+                    $newContent, $antitle, $start_display, $stop_display, $is_visible, $id);
                 $log_type = LOG_MODIFY;
                 $message = "<div class='alert alert-success'>$langAnnModify</div>";
 
@@ -413,12 +419,13 @@ if ($is_editor) {
                 $order = $orderMax + 1;
                 // insert
                 $id = Database::get()->query("INSERT INTO announcement
-                                             SET content = ?s,
-                                                 title = ?s, `date` = " . DBHelper::timeAfter() . ",
-                                                 course_id = ?d, `order` = ?d,
-                                                 start_display = ?t,
-                                                 stop_display = ?t,
-                                                 visible = ?d", $newContent, $antitle, $course_id, $order, $start_display, $stop_display, $is_visible)->lastInsertID;
+                        SET content = ?s,
+                            title = ?s, `date` = " . DBHelper::timeAfter() . ",
+                            course_id = ?d, `order` = ?d,
+                            start_display = ?t,
+                            stop_display = ?t,
+                            visible = ?d",
+                        $newContent, $antitle, $course_id, $order, $start_display, $stop_display, $is_visible)->lastInsertID;
                 $log_type = LOG_INSERT;
 
                 if (isset($_POST['tags'])) {
@@ -538,46 +545,46 @@ if ($is_editor) {
 
         if (isset($_GET['modify'])) {
             $langAdd = $pageName = $langModifAnn;
-            $announce->visible? $checked_public = "checked" : $checked_public = "";
+            $checked_public = $announce->visible? 'checked' : '';
             if (!is_null($announce->start_display)) {
-                $showFrom = $announce->start_display;
-                $start_checkbox = "checked";
-                $start_text_disabled = "";
+                // $showFrom is set earlier
+                $start_checkbox = 'checked';
+                $start_text_disabled = '';
                 $end_disabled = "";
                 if (!is_null($announce->stop_display)) {
-                    $end_checkbox = "checked";
-                    $end_text_disabled = "";
-                    $showUntil = $announce->stop_display;
+                    // $showUntil is set earlier
+                    $end_checkbox = 'checked';
+                    $end_text_disabled = '';
                 } else {
-                    $end_checkbox = "";
-                    $end_text_disabled = "disabled";
-                    $showUntil = "";
+                    $showUntil = '';
+                    $end_checkbox = '';
+                    $end_text_disabled = 'disabled';
                 }
             } else {
-                $start_checkbox = "";
-                $start_text_disabled = "disabled";
-                $end_checkbox = "";
-                $end_disabled = "disabled";
-                $end_text_disabled = "disabled";
-                $showFrom = "";
-                $showUntil = "";
+                $start_checkbox = '';
+                $start_text_disabled = 'disabled';
+                $end_checkbox = '';
+                $end_disabled = 'disabled';
+                $end_text_disabled = 'disabled';
+                $showFrom = '';
+                $showUntil = '';
             }
 
 
         } else {
             $pageName = $langAddAnn;
-            $checked_public = "checked";
-            $start_checkbox = Session::has('startdate_active') ? "checked" : "";
-            $end_checkbox = Session::has('enddate_active') ? "checked" : "";
-            $showFrom = Session::has('startdate') ? Session::get('startdate') : "";
-            $end_disabled = Session::has('startdate_active') ? "" : "disabled";
-            $showUntil = Session::has('enddate') ? Session::get('enddate') : "";
-            $titleToModify = Session::has('antitle') ? Session::get('antitle') : "";
+            $checked_public = 'checked';
+            $start_checkbox = Session::has('startdate_active') ? 'checked' : '';
+            $end_checkbox = Session::has('enddate_active') ? 'checked' : '';
+            $showFrom = Session::has('startdate') ? Session::get('startdate') : '';
+            $end_disabled = Session::has('startdate_active') ? '' : 'disabled';
+            $showUntil = Session::has('enddate') ? Session::get('enddate') : '';
+            $titleToModify = Session::has('antitle') ? Session::get('antitle') : '';
         }
-        $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langAnnouncements);
+        $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langAnnouncements);
 
-        if (!isset($AnnouncementToModify)) $AnnouncementToModify = "";
-        if (!isset($contentToModify)) $contentToModify = "";
+        if (!isset($AnnouncementToModify)) $AnnouncementToModify = '';
+        if (!isset($contentToModify)) $contentToModify = '';
         
         $antitle_error = Session::getError('antitle', "<span class='help-block'>:message</span>");
         $startdate_error = Session::getError('startdate', "<span class='help-block'>:message</span>");
