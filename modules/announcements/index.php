@@ -758,7 +758,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
 
     if ($is_editor) {
         $tool_content .= "<thead>";
-        $tool_content .= "<tr class='list-header'><th style='width: 55%;'>$langAnnouncement</th>";
+        $tool_content .= "<tr class='list-header'><th>$langAnnouncement</th>";
         $tool_content .= "<th>$langDate</th><th>$langNewBBBSessionStatus</th><th class='text-center'><i class='fa fa-cogs'></i></th>";
     }
     $tool_content .= "</tr></thead><tbody></tbody></table>";
