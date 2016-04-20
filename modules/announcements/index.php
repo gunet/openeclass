@@ -753,7 +753,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
 
     if (!$is_editor) {
         $tool_content .= "<thead>";
-        $tool_content .= "<tr class='list-header'><th style='width:70%;'>$langAnnouncement</th><th>$langDate</th>";
+        $tool_content .= "<tr class='list-header'><th>$langAnnouncement</th><th>$langDate</th>";
     }
 
     if ($is_editor) {
