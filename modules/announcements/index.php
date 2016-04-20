@@ -24,7 +24,6 @@ $require_help = true;
 $helpTopic = 'Announce';
 $guest_allowed = true;
 
-
 include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/sendMail.inc.php';
@@ -33,7 +32,6 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/log.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/tags/moduleElement.class.php';
-// The following is added for statistics purposes
 require_once 'include/action.php';
 
 $action = new action();
@@ -51,7 +49,7 @@ if ($is_editor && isset($_POST['pin_announce'])) {
     exit();
 }
 
-//Identifying ajax request
+// Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['action']) && $is_editor) {
         if ($_POST['action']=='delete') {
@@ -200,7 +198,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
     load_js('datatables');
     $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-        
+
            var oTable = $('#ann_table{$course_id}').DataTable ({
                 ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
                 'bStateSave': true,
@@ -246,13 +244,13 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                            'sLast':     '&raquo;'
                        }
                    }
-            });            
-            
+            });
+
             $(document).on( 'click', '.reorder', function(e) {
                 e.preventDefault();
                 var link = $(this).attr('href');
                 var tr_affected = $(this).closest('tr');
-                
+
                 $.ajax({
                     type: 'POST',
                     url: link,
@@ -268,7 +266,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                     }
                 });
             });
-            
+
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
                 var row_id = $(this).data('id');
@@ -386,7 +384,7 @@ if ($is_editor) {
     }
 
     /* modify */
-    if (isset($_GET['modify'])) {    
+    if (isset($_GET['modify'])) {
         $modify = intval($_GET['modify']);
         $announce = Database::get()->querySingle("SELECT * FROM announcement WHERE id=?d", $modify);
         if ($announce) {
@@ -408,7 +406,7 @@ if ($is_editor) {
     if (isset($_POST['submitAnnouncement'])) { // modify announcement
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('antitle'));
-        $v->labels(array('antitle' => "$langTheField $langAnnTitle"));        
+        $v->labels(array('antitle' => "$langTheField $langAnnTitle"));
         if (isset($_POST['startdate_active'])) {
             $v->rule('required', array('startdate'));
             $v->labels(array('startdate' => "$langTheField $langStartDate"));
@@ -417,7 +415,7 @@ if ($is_editor) {
             $v->rule('required', array('enddate'));
             $v->labels(array('enddate' => "$langTheField $langEndDate"));
         }
-        if($v->validate()) {        
+        if($v->validate()) {
             if ($language == 'el') {
                 $datetime = claro_format_locale_date($dateTimeFormatShort);
             } else {
@@ -633,11 +631,11 @@ if ($is_editor) {
 
         if (!isset($AnnouncementToModify)) $AnnouncementToModify = '';
         if (!isset($contentToModify)) $contentToModify = '';
-        
+
         $antitle_error = Session::getError('antitle', "<span class='help-block'>:message</span>");
         $startdate_error = Session::getError('startdate', "<span class='help-block'>:message</span>");
         $enddate_error = Session::getError('enddate', "<span class='help-block'>:message</span>");
-        
+
         load_js('bootstrap-datetimepicker');
         $head_content .= "
             <script type='text/javascript'>
@@ -757,7 +755,7 @@ if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $cours
         (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
 }
 if (isset($_GET['an_id'])) {
-    $tool_content .= action_bar(array(        
+    $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
             'icon' => 'fa-reply',
@@ -771,6 +769,7 @@ if (isset($_GET['an_id'])) {
             'button-class' => 'btn-success',
             'show' => $is_editor)));
 }
+
 /* display announcements */
 if (isset($_GET['an_id'])) {
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
@@ -812,37 +811,32 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
     $tool_content .= "</tr></thead><tbody></tbody></table>";
 }
 
-
 add_units_navigation(TRUE);
 load_js('select2');
 load_js('trunk8');
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
-    
+        $('input[name=startdate_active]').prop('checked') ? $('input[name=startdate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
+        $('input[name=enddate_active]').prop('checked') ? $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
 
-            $('input[name=startdate_active]').prop('checked') ? $('input[name=startdate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[type=checkbox]').eq(0).parents('.input-group').children('input').prop('disabled', true);
-            $('input[name=enddate_active]').prop('checked') ? $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', false) : $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
+        $('input[name=startdate_active]').on('click', function() {
+            if ($('input[name=startdate_active]').prop('checked')) {
+                $('input[name=enddate_active]').prop('disabled', false);
+            } else {
+                $('input[name=enddate_active]').prop('disabled', true);
+                $('input[name=enddate_active]').prop('checked', false);
+                $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
+            }
+        });
 
-                $('input[name=startdate_active]').on('click', function() {
-                    if ($('input[name=startdate_active]').prop('checked')) {
-                        $('input[name=enddate_active]').prop('disabled', false);
-                    } else {
-                        $('input[name=enddate_active]').prop('disabled', true);
-                        $('input[name=enddate_active]').prop('checked', false);
-                        $('input[name=enddate_active]').parents('.input-group').children('input').prop('disabled', true);
-                    }
-                });
-
-
-                $('.input-group-addon input[type=checkbox]').on('click', function(){
-                var prop = $(this).parents('.input-group').children('input').prop('disabled');
-                    if(prop){
-                        $(this).parents('.input-group').children('input').prop('disabled', false);
-                    } else {
-                        $(this).parents('.input-group').children('input').prop('disabled', true);
-                    }
-                });
-
+        $('.input-group-addon input[type=checkbox]').on('click', function(){
+        var prop = $(this).parents('.input-group').children('input').prop('disabled');
+            if(prop){
+                $(this).parents('.input-group').children('input').prop('disabled', false);
+            } else {
+                $(this).parents('.input-group').children('input').prop('disabled', true);
+            }
+        });
 
         $('#select-recipients').select2();
         $('#selectAll').click(function(e) {
@@ -859,6 +853,6 @@ $head_content .= "<script type='text/javascript'>
             $('#select-recipients').val(stringVal).trigger('change');
         });
     });
-    </script>";
+</script>";
 
 draw($tool_content, 2, null, $head_content);
