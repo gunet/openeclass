@@ -51,7 +51,7 @@ if (isset($_GET['add_server'])) {
     $tool_content .= "<fieldset>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='host' class='col-sm-3 control-label'>$langOpenMeetingsServer:</label>
-                    <div class='col-sm-9'><input class='form-control' id='host' type='text' name='hostname_form'></div>";
+                    <div class='col-sm-9'><input class='form-control' id='host' type='text' name='hostname_form' value='http://'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'><label for='ip_form' class='col-sm-3 control-label'>$langOpenMeetingsPort:</label>
                 <div class='col-sm-9'><input class='form-control' type='text' id='ip_form' name='port_form'></div>";
@@ -117,7 +117,7 @@ if (isset($_GET['add_server'])) {
 }
 // Save new config.php
 else if (isset($_POST['submit'])) {
-    $hostname = $_POST['hostname_form'];
+    $hostname = canonicalize_url($_POST['hostname_form']);
     $port = $_POST['port_form'];
     $username = $_POST['username_form'];
     $password = $_POST['password_form'];
@@ -142,8 +142,9 @@ else if (isset($_POST['submit'])) {
                 enable_recordings=?s 
                 WHERE id =?d", $hostname, $port, $username, $password, $module, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $id);
     } else {
+        $hostname = canonicalize_url($hostname);
         Database::get()->querySingle("INSERT INTO om_servers (hostname,port,username,password,module_key,webapp,enabled,max_rooms,max_users,enable_recordings) VALUES
-        (?s,?s,?s,?s,?s,?s,?s,?d,?d,?s)", $hostname, $port, $username, $password, $module, $webapp,$enabled,$max_rooms,$max_users,$enable_recordings);
+        (?s,?s,?s,?s,?s,?s,?s,?d,?d,?s)", $hostname, $port, $username, $password, $module, $webapp, $enabled,$max_rooms,$max_users,$enable_recordings);
     }    
     // Display result message
     $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";

@@ -293,14 +293,11 @@ elseif(isset($_GET['choice']))
 } elseif (isset($_POST['new_bbb_session'])) { // new bbb session
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
-    $start = $startDate_obj->format('Y-m-d H:i:s');   
-    $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
-    if(isset($_POST['BBBEndDate']))
-    {
+    $start = $startDate_obj->format('Y-m-d H:i:s');       
+    if(isset($_POST['BBBEndDate'])) {
+        $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
         $end = $endDate_obj->format('Y-m-d H:i:s');
-    }
-    else
-    {
+    } else {
         $end=NULL;
     }
     add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, '0' ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
