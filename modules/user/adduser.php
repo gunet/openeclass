@@ -53,7 +53,7 @@ if (isset($_GET['add'])) {
         Session::Messages( $langTheU . $langAdded, "alert alert-success");
         // notify user via email
         $email = uid_to_email($uid_to_add);
-        if (!empty($email) and email_seems_valid($email)) {
+        if (!empty($email) and Swift_Validate::email($email)) {
             $emailsubject = "$langYourReg " . course_id_to_title($course_id);
             $emailbody = "$langNotifyRegUser1 <a href='{$urlServer}courses/$course_code/'>" . q(course_id_to_title($course_id)) . "</a> $langNotifyRegUser2 $langFormula \n$gunet";
 
@@ -81,7 +81,7 @@ if (isset($_GET['add'])) {
             send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody, $charset);
         }
     } else {
-        Session::Messages( $langAddError, "alert alert-warning");
+        Session::Messages($langAddError, "alert alert-warning");
     }
     redirect_to_home_page("modules/user/index.php?course=$course_code");
 } else {

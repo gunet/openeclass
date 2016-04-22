@@ -156,9 +156,9 @@ if (isset($_POST['submit'])) {
                                              'imagetype' => $type));
     }
 
+    
     // check if email is valid
-    if ((get_config('email_required') or get_config('email_verification_required')) and !email_seems_valid($email_form)) {
-
+    if ((get_config('email_required') or get_config('email_verification_required')) and !Swift_Validate::email($email_form)) { 
         Session::Messages($langEmailWrong);
         redirect_to_home_page("main/profile/profile.php");
     }

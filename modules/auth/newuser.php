@@ -326,7 +326,7 @@ if (!isset($_POST['submit'])) {
             }
         }
     }
-    if (!empty($email) and !email_seems_valid($email)) {
+    if (!empty($email) and !Swift_Validate::email($email)) {
         $registration_errors[] = $langEmailWrong;
     } else {
         $email = mb_strtolower(trim($email));

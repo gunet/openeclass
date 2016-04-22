@@ -557,7 +557,7 @@ if ($is_editor) {
                     $emailTo = $person->email;
                     $user_id = $person->id;
                     // check email syntax validity
-                    if (!email_seems_valid($emailTo)) {
+                    if (!Swift_Validate::email($emailTo)) {
                         $invalid++;
                     } elseif (get_user_email_notification($user_id, $course_id)) {
                         // checks if user is notified by email

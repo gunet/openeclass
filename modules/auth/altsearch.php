@@ -198,7 +198,7 @@ if ($is_valid) {
             $email = $_SESSION['auth_user_info']['email'];
         }
     }
-    if (!empty($email) and !email_seems_valid($email)) {
+    if (!empty($email) and !Swift_Validate::email($email)) {
         $ok = NULL;
         $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
     } else {
@@ -358,7 +358,7 @@ if ($is_valid) {
         }
 
         // check if mail address is valid
-        if (!empty($email) and !email_seems_valid($email)) {
+        if (!empty($email) and !Swift_Validate::email($email)) {
             $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
             user_info_form();
             draw($tool_content, 0, null, $head_content);
