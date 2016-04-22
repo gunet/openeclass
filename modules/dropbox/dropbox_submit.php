@@ -170,6 +170,7 @@ if (isset($_POST['submit'])) {
         }
         $msgURL = $urlServer . 'modules/dropbox/index.php?mid=' . $msg->id;
         if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients of dropbox file
+            $errormail = FALSE;
             if ($course_id != 0 || isset($_POST['course'])) {//message in course context
                 $c = course_id_to_title($cid);
                 $subject_dropbox = "$c (".course_id_to_code($cid).") - $langNewDropboxFile";
@@ -223,7 +224,11 @@ if (isset($_POST['submit'])) {
 
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
-                        send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
+                        if (Swift_Validate::email($emailaddr)) { // if email address is valid
+                            send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
+                        } else {
+                            $errormail = TRUE;
+                        }
                     }
                 }
             } else {//message in personal context
@@ -265,12 +270,20 @@ if (isset($_POST['submit'])) {
                         $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
-                        send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
+                        if (Swift_Validate::email($emailaddr)) { // if email address is valid
+                            send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
+                        } else {
+                            $errormail = TRUE;
+                        }
                     }
                 }
             }
         }
-        Session::Messages($langdocAdd, 'alert-success');
+        if (!$errormail) {
+            Session::Messages($langdocAdd, 'alert-success');
+        } else {
+            Session::Messages($langUsersEmailWrong, 'alert-warning');
+        }
     } else { //end if(!$error)
         Session::Messages($errormsg, 'alert-danger');
     }
