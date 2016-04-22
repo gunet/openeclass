@@ -86,7 +86,7 @@ if (!$all_set) {
     $errors[] = $langFieldsMissing;
 }
 
-if (!email_seems_valid($usermail)) {
+if (!Swift_Validate::email($usermail)) {
     $errors[] = $langEmailWrong;
     $all_set = false;
 } else {

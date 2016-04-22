@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
                     $info[$field] = array_shift($userl);
                 }
 
-                if (!isset($info['email']) or ! email_seems_valid($info['email'])) {
+                if (!isset($info['email']) or !Swift_Validate::email($info['email'])) {
                     $info['email'] = '';
                 }
 

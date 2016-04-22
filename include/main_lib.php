@@ -167,11 +167,6 @@ define('JQUERY_VERSION', '2.1.1');
 
 require_once 'lib/session.class.php';
 
-// Check if a string looks like a valid email address
-function email_seems_valid($email) {
-    return (preg_match('#^[0-9a-z_\.\+-]+@([0-9a-z][0-9a-z-]*[0-9a-z]\.)+[a-z]{2,}$#i', $email) and !preg_match('#@.*--#', $email));
-}
-
 // ----------------------------------------------------------------------
 // for safety reasons use the functions below
 // ---------------------------------------------------------------------
