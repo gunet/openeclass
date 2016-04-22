@@ -571,11 +571,12 @@ if ($is_editor) {
                 }, $course_id);
                 if (count($recipients) > 0) {
                     send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
+                }                
+                Session::Messages("$langAnnAddWithEmail $countEmail $langRegUser", 'alert-success');
+                if ($invalid > 0) { // info about invalid emails (if exist)
+                    Session::Messages("$langInvalidMail $invalid", 'alert-warning');
                 }
-                $messageInvalid = " $langOn $countEmail $langRegUser, $invalid $langInvalidMail";
-                Session::Messages("$langAnnAdd $langEmailSent<br>$messageInvalid", 'alert-success');
-            }
-            else {
+            } else {
                 Session::Messages($langAnnAdd, 'alert-success');
             }
             redirect_to_home_page("modules/announcements/index.php?course=$course_code");
