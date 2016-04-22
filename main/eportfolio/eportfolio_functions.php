@@ -114,18 +114,40 @@ function render_eportfolio_fields_content($uid) {
  * @return string
  */
 function render_eportfolio_fields_form() {
-    global $uid, $langOptional, $langCompulsory;
+    global $uid, $langOptional, $langCompulsory, $head_content;
 
-    $return_string = "";
+    $return_string = array();
+    $return_string['panels'] = "";
+    $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav'>
+            <ul id='floatMenu' class='nav nav-pills nav-stacked well well-sm' role='tablist'>";
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
 
+    $j = 0;
+    
     foreach ($result as $c) {
 
         $res = Database::get()->queryArray("SELECT id, name, shortname, description, required, datatype, data
                                             FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $c->id);
 
         if (count($res) > 0) {
+            
+            $return_string['panels'] .= '<div class="panel panel-default" id="'.$c->id.'">
+                                       <div class="panel-heading">
+                                           <h2 class="panel-title">'.$c->name.'</h2>
+                                       </div>
+                                       <div class="panel-body">
+                                           <fieldset>';
+            if ($j == 0) {
+                $active = " class='active'";
+            } else {
+                $active = "";
+            }
+            
+            $j++;
+            
+            $return_string['right_menu'] .= "<li$active><a href='#$c->id'>$c->name</a></li>";
+            
             foreach ($res as $f) {
 
                 if (isset($fdata)) {
@@ -140,9 +162,9 @@ function render_eportfolio_fields_form() {
                     $help_block = '';
                 }
                 
-                $return_string .= '<div class="'.$form_class.'">';
-                $return_string .= '<label class="col-sm-2 control-label" for="'.$f->shortname.'">'.q($f->name).'</label>';
-                $return_string .= '<div class="col-sm-10">';
+                $return_string['panels'] .= '<div class="'.$form_class.'">';
+                $return_string['panels'] .= '<label class="col-sm-2 control-label" for="'.$f->shortname.'">'.q($f->name).'</label>';
+                $return_string['panels'] .= '<div class="col-sm-10">';
 
                 //get data to prefill fields
                 $data_res = Database::get()->querySingle("SELECT data FROM eportfolio_fields_data
@@ -170,7 +192,7 @@ function render_eportfolio_fields_form() {
                         } else {
                             $placeholder = 'placeholder="'.$langCompulsory.'"';
                         }
-                        $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'">';
+                        $return_string['panels'] .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'">';
                         break;
                     case EPF_TEXTAREA:
                         if (isset($fdata) && $fdata != '') {
@@ -178,7 +200,7 @@ function render_eportfolio_fields_form() {
                         } elseif (isset($_REQUEST['epf_'.$f->shortname]) && isset($_REQUEST['epf_'.$f->shortname]) != '') {
                             $val = $_REQUEST['epf_'.$f->shortname];
                         }
-                        $return_string .= rich_text_editor('epf_'.$f->shortname, 8, 20, $val);
+                        $return_string['panels'] .= rich_text_editor('epf_'.$f->shortname, 8, 20, $val);
                         if ($f->required == 0) {
                             $req_label = $langOptional;
                         } else {
@@ -197,7 +219,7 @@ function render_eportfolio_fields_form() {
                             $placeholder = 'placeholder="'.$langCompulsory.'"';
                         }
                         load_js('bootstrap-datepicker');
-                        $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
+                        $return_string['panels'] .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
                         break;
                     case EPF_MENU:
                         if (isset($fdata) && $fdata != '') {
@@ -211,7 +233,7 @@ function render_eportfolio_fields_form() {
                         $options = array_combine(range(1, count($options)), array_values($options));
                         $options[0] = "";
                         ksort($options);
-                        $return_string .= selection($options, 'epf_'.$f->shortname, $def_selection);
+                        $return_string['panels'] .= selection($options, 'epf_'.$f->shortname, $def_selection);
                         if ($f->required == 0) {
                             $req_label = $langOptional;
                         } else {
@@ -229,23 +251,32 @@ function render_eportfolio_fields_form() {
                         } else {
                             $placeholder = 'placeholder="'.$langCompulsory.'"';
                         }
-                        $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'">';
+                        $return_string['panels'] .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="epf_'.$f->shortname.'">';
                         break;
                 }
                 if (!empty($f->description)) {
-                    $return_string .= '<small><em>'.standard_text_escape($f->description);
+                    $return_string['panels'] .= '<small><em>'.standard_text_escape($f->description);
                     if (isset($req_label)) {
-                        $return_string .= $req_label;
+                        $return_string['panels'] .= $req_label;
                     }
-                    $return_string .= '</em></small>';
+                    $return_string['panels'] .= '</em></small>';
                 } elseif (isset($req_label)) {
-                    $return_string .= '<small><em>'.$req_label.'</em></small>';
+                    $return_string['panels'] .= '<small><em>'.$req_label.'</em></small>';
                 }
-                $return_string .= $help_block.'</div></div>';
+                $return_string['panels'] .= $help_block.'</div></div>';
                 unset($req_label);
             }
+            
+            $return_string['panels'] .= '</fieldset>
+                       </div>
+                   </div>';
+            
         }
     }
+    
+    $return_string['right_menu'] .= '</ul>
+                                 </div>';
+    
     return $return_string;
 }
 
