@@ -90,13 +90,13 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
                 ]
             ]);
     $data['enabled_recordings'] = true;
+    $data['enabled'] = true;
     if (isset($_GET['edit_server'])) {
          $data['bbb_server'] = getDirectReference($_GET['edit_server']);
          $data['server'] = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id = ?d", $data['bbb_server']);
          if ($data['server']->enable_recordings == "false") {
              $data['enabled_recordings'] = false;
          }
-         $data['enabled'] = true;
          if ($data['server']->enabled == "false") {
              $data['enabled'] = false;
          }       

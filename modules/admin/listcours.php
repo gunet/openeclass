@@ -254,7 +254,7 @@ $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourses);
 $toolName = $langListCours;
 
 // Display Actions Toolbar
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
             array('title' => $langAllCourses,
                 'url' => "$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=" . getIndirectReference(0) . "&amp;search_submit=$langSearch",
                 'icon' => 'fa-search',
@@ -264,29 +264,6 @@ $tool_content .= action_bar(array(
                 'icon' => 'fa-reply',
                 'level' => 'primary')));                    
 
-$width = (!isDepartmentAdmin()) ? 100 : 80;
-// Construct course list table
-$tool_content .= "<table id='course_results_table' class='display'>
-    <thead>
-    <tr>
-    <th align='left'>$langCourseCode</th>
-    <th>$langGroupAccess</th>
-    <th width='260' align='left'>$langFaculty</th>
-    <th>".icon('fa-cogs')."</th>
-    </tr></thead>";
 
-$tool_content .= "<tbody></tbody></table>";
-
-// edit department
-if (isset($_GET['formsearchfaculte']) and $_GET['formsearchfaculte'] and is_numeric(getDirectReference($_GET['formsearchfaculte']))) {
-    $tool_content .= "<div align='right' style='margin-top: 60px; margin-bottom:10px;'>";
-    $tool_content .= "<form action='multieditcourse.php' method='post'>";
-    // redirect all request vars towards action
-    foreach ($_REQUEST as $key => $value) {
-        $tool_content .= "<input type='hidden' name='$key' value='$value'>";
-    }
-
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='move_submit' value='$langChangeDepartment'> ";
-    $tool_content .= generate_csrf_token_form_field() ."</form></div>";
-}
-draw($tool_content, 3, null, $head_content);
+view('admin.courses.listcours', $data);
+//draw($tool_content, 3, null, $head_content);

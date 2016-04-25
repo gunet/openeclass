@@ -6,24 +6,24 @@
         <form class='form-horizontal' role='form' name='serverForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
         <fieldset>
             <div class='form-group'>
-                <label for='host' class='col-sm-3 control-label'>{!! trans('langWebConfServer') !!}:</label>
+                <label for='host' class='col-sm-3 control-label'>{{ trans('langWebConfServer') }}:</label>
                 <div class='col-sm-9'>
                     <input class='form-control' id='host' type='text' name='hostname_form' value="{{ isset($server) ? $server->hostname : ''}}">
                 </div>
             </div>
             <div class='form-group'>
-                <label class='col-sm-3 control-label'>{!! trans('langActivate') !!}:</label>
+                <label class='col-sm-3 control-label'>{{ trans('langActivate') }}:</label>
                 <div class='col-sm-9'>
                     <div class='radio'>
                         <label>
                             <input  type='radio' id='enabled_true' name='enabled' value='true'{{ $enabled ? ' checked' : '' }}>
-                            {!! trans('langYes') !!}
+                            {{ trans('langYes') }}
                         </label>                    
                     </div>                     
                     <div class='radio'>
                         <label>
                             <input  type='radio' id='enabled_false' name='enabled' value='false'{{ $enabled ? '' : ' checked' }}>
-                            {!! trans('langNo') !!}
+                            {{ trans('langNo') }}
                         </label>
                     </div>
                 </div>
@@ -41,6 +41,6 @@
     </div>
     <script language="javaScript" type="text/javascript">
         var chkValidator  = new Validator("serverForm");
-        chkValidator.addValidation("hostname_form","req", "{!! trans('langWebConfServerAlertHostname') !!}");
+        chkValidator.addValidation("hostname_form","req", "{{ trans('langWebConfServerAlertHostname') }}");
     </script>    
 @endsection

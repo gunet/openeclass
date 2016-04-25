@@ -111,4 +111,3 @@ $data['node_picker'] = $html;
     
 $data['menuTypeID'] = 3;
 view ('admin.courses.infocours', $data);
-//draw($tool_content, 3, null, $head_content);

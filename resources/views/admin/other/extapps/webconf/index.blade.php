@@ -7,8 +7,8 @@
             <table class='table-default'>
                 <thead>
                     <tr>
-                        <th class = 'text-center'>{!! trans('langWebConfServer') !!}</th>
-                        <th class = 'text-center'>{!! trans('langBBBEnabled') !!}</th>
+                        <th class = 'text-center'>{{ trans('langWebConfServer') }}</th>
+                        <th class = 'text-center'>{{ trans('langBBBEnabled') }}</th>
                         <th class = 'text-center'>{!! icon('fa-gears') !!}</th>
                     </tr>
                 </thead>
@@ -16,7 +16,7 @@
                     <tr>
                         <td>{{ $wc_server->hostname }}</td>
                         <td class='text-center'>
-                            {!! $wc_server->enabled=='true' ? trans('langYes') : trans('langNo') !!}
+                            {{ $wc_server->enabled=='true' ? trans('langYes') : trans('langNo') }}
                         </td>
                         <td class='option-btn-cell'>
                             {!! action_button([
