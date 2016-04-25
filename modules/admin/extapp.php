@@ -35,9 +35,6 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 $data['appName'] = $appName = isset($_GET['edit'])? $_GET['edit']: null;
 // Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page
 if (isset($_POST['state'])) {
-    /*echo $_POST['state'];
-    echo "\n";
-    echo "\n"; */
     $appName = $_POST['appName'];
     if(showSecondFactorChallenge()!=""){
         $parts = explode(",",$appName);
@@ -49,19 +46,21 @@ if (isset($_POST['state'])) {
         }
         checkSecondFactorChallenge();
     }
-    $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
+    $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;    
     $appNameAjax = getDirectReference($appName);    
     
     if (($appNameAjax == 'openmeetings') and $newState == 1) {
-        echo 'here';
-        $app_bbb = ExtAppManager::getApp('bigbluebutton');
-        //print_r($app_bbb);
-        //$app_bbb->setEnabled(!$newState);    
-        $app_bbb->setEnabled(0);
+        $app_bbb = ExtAppManager::getApp('bigbluebutton');        
+        $app_bbb->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled      
+    }
+    
+    if (($appNameAjax == 'bigbluebutton') and $newState == 1) {
+        $app_bbb = ExtAppManager::getApp('openmeetings');
+        $app_bbb->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled          
     }
     
     ExtAppManager::getApp($appNameAjax)->setEnabled($newState);    
-    echo $newState;
+    echo $newState;    
     exit;
 }
 
