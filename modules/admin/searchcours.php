@@ -76,4 +76,3 @@ $data['html'] = $html;
 
 $data['menuTypeID'] = 3;
 view('admin.courses.searchcours', $data);
-//draw($tool_content, 3, null, $head_content);

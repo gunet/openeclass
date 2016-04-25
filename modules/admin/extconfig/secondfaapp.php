@@ -185,11 +185,6 @@ class secondfaApp extends ExtApp {
         }
     }
 
-
-    //    $tool_content .= "<tr>".secondfaApp::getInitialize("1","tester","test@test.com")."</tr>";
-
-
-
     /* INITIALIZATION FUNCTIONS */
 
     public static function getUnitialize(){
