@@ -25,6 +25,22 @@
  *        It is included in every file via baseTheme.php
  */
 
+/**
+ * Escape HTML entities in a string.
+ *
+ * Override Blade's e() from vendor/illuminate/support/helpers.php
+ *
+ * @param  \Illuminate\Contracts\Support\Htmlable|string  $value
+ * @return string
+ */
+function e($value) {
+    if ($value instanceof Htmlable) {
+        return $value->toHtml();
+    }
+
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
+}
+
 // set default time zone
 date_default_timezone_set("Europe/Athens");
 mb_internal_encoding('UTF-8');
