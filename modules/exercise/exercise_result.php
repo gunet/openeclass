@@ -383,11 +383,12 @@ if (count($exercise_question_ids)>0){
                                 $answer .= q($temp);
                                 break;
                             }
-                            $choice[$j] = trim($choice[$j]);
+                            $choice[$j] = canonicalize_whitespace($choice[$j]);
                             // if the word entered is the same as the one defined by the professor
                             $canonical_choice = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($choice[$j], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $choice[$j];
                             $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper(substr($temp, 0, $pos), 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : substr($temp, 0, $pos);
-                            $right_answers = preg_split('/\s*\|\s*/', $canonical_match);
+                            $right_answers = array_map('canonicalize_whitespace',
+                                preg_split('/\s*\|\s*/', $canonical_match));
                             if (in_array($canonical_choice, $right_answers)) {
                                 // gives the related weighting to the student
                                 $questionScore += $answerWeighting[$j-1];
