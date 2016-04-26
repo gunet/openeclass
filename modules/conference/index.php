@@ -23,6 +23,7 @@
 $require_current_course = TRUE;
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/textLib.inc.php';
 $coursePath = $webDir . '/courses/';
 
 $toolName = $langChat;
@@ -153,7 +154,7 @@ else {
         </div>";
      
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
-        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
+        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></div>";
         $tool_content .= "</fieldset></form></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[
@@ -180,24 +181,24 @@ else {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
                 <thead>
-                <tr><th class = 'text-center'>$langTitle</th>
-                    <th class = 'text-center'>$langDescr</th>
-                    <th class = 'text-center' width='50'>$langNewBBBSessionStatus</th>
-                    <th class = 'text-center' width='180'>$langStartDate</th>";
+                    <tr class='list-header'>
+                        <th>$langChat</th>
+                        <th class = 'text-center' width='150'>$langNewBBBSessionStatus</th>
+                        <th class = 'text-center' width='200'>$langStartDate</th>";
                     
             if($is_editor){
                 $tool_content .= "<th class = 'text-center'>".icon('fa-gears')."</th>"; 
             }
             $tool_content .="</tr></thead>";
             foreach ($q as $conf) {
-                $enabled_conference = ($conf->status == 'active')? $langChatActive : $langChatInactive;
+                $enabled_conference = ($conf->status == 'active')? "<span class='text-success'><span class='fa fa-eye'></span> $langAdminAnVis</span>" : "<span class='text-danger'><span class='fa fa-eye-slash'></span> $langAdminAnNotVis</span>";
                 ($conf->status == 'active')? $tool_content .= "<tr>" : $tool_content .= "<tr class='not_visible'>";
                 $tool_content .= "<td>";
                 ($conf->status == 'active')? $tool_content .= "<a href='./conference.php?conference_id=$conf->conf_id'>$conf->conf_title</a>" : $tool_content .= $conf->conf_title;
+                $tool_content .= "<div style='font-size:smaller; padding-top: 10px;'>$conf->conf_description</div>";
                 $tool_content .= "</td>";
-                $tool_content .= "<td>$conf->conf_description</td>";
                 $tool_content .= "<td class='text-center'>$enabled_conference</td>";
-                $tool_content .= "<td class='text-center'>".nice_format($conf->start, true)."</td>";
+                $tool_content .= "<td class='text-center'>".claro_format_locale_date($dateTimeFormatShort, strtotime($conf->start))."</td>";
                 if($is_editor)
                 {
                     $tool_content .= "<td class='option-btn-cell'>".action_button(array(
