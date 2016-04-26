@@ -23,12 +23,34 @@
 $require_current_course = TRUE;
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/textLib.inc.php';
+require_once 'functions.php';
 $coursePath = $webDir . '/courses/';
 
 $toolName = $langChat;
 
 load_js('tools.js');
 load_js('validation.js');
+load_js('select2');
+
+$head_content .= "<script type='text/javascript'>
+    $(document).ready(function () {                       
+        $('#select-chatusers').select2();
+        $('#selectAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-chatusers').find('option').each(function(){
+                stringVal.push($(this).val());
+            });
+            $('#select-chatusers').val(stringVal).trigger('change');
+        });
+        $('#removeAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-chatusers').val(stringVal).trigger('change');
+        });
+    });
+</script>";
 
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
@@ -62,8 +84,26 @@ if (isset($_GET['add_conference'])) {
         <div class='col-sm-10 radio'><label><input type='radio' id='enabled_true' name='status' checked value='active'>$langYes</label></div>
         <div class='col-sm-offset-2 col-sm-10 radio'><label><input type='radio' id='enabled_false' name='status' value='inactive'>$langNo</label></div>            
     </div>";
-    $tool_content .= "<input type = 'hidden' name = 'course_id' value='$course_id'>";
+    
+    $tool_content .= "<div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langChatToSpecUsers:</label></div>
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <select class='form-control' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
+        $chat_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.username
+                                                    FROM course_user cu
+                                                        JOIN user u ON cu.user_id=u.id
+                                                    WHERE cu.course_id = ?d
+                                                    ORDER BY u.surname, u.givenname", $course_id);
 
+        $tool_content .= "<option value='0' selected><h2>$langAllUsers</h2></option>";
+        foreach($chat_users as $cu) {
+            $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->username) . ")</option>";
+        }
+        $tool_content .= "</select>
+                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+            </div>
+        </div>";
+        
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
     $tool_content .= "</fieldset></form></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
@@ -91,15 +131,23 @@ else if (isset($_POST['submit'])) {
     $title = $_POST['title'];
     $description = $_POST['description'];
     $status = $_POST['status'];
+    
+    $chat_user_id = $chat_group_id = 0; // default value
+    if (isset($_POST['chat_users']) and count($_POST['chat_users']) > 0) {
+        $chat_user_id = '';
+        foreach ($_POST['chat_users'] as $chatusers) {         
+            $chat_user_id .= "$chatusers" . ",";
+        }
+        $chat_user_id = mb_substr($chat_user_id, 0, -1);
+    }
+    
     if (isset($_POST['conference_id'])) {
-    $conf_id = $_POST['conference_id'];
-        Database::get()->querySingle("UPDATE conference SET conf_title= ?s,conf_description = ?s,
-                status = ?s
-                WHERE conf_id =?d", $title, $description, $status, $conf_id);
-    } else {
-        $course_id = $_POST['course_id'];
-        Database::get()->querySingle("INSERT INTO conference (course_id,conf_title,conf_description,status) VALUES
-        (?d,?s,?s,?s)", $course_id,$title,$description,$status);
+        $conf_id = $_POST['conference_id'];
+        Database::get()->querySingle("UPDATE conference SET conf_title= ?s,conf_description = ?s, status = ?s, user_id = ?s, group_id = ?s
+                                        WHERE conf_id =?d", $title, $description, $status, $chat_user_id, $chat_group_id, $conf_id);
+    } else {                
+        Database::get()->querySingle("INSERT INTO conference (course_id, conf_title, conf_description, status, user_id, group_id) 
+                                            VALUES (?d, ?s, ?s, ?s, ?s, ?s)", $course_id, $title, $description, $status, $chat_user_id, $chat_group_id);
     }    
     // Display result message
     Session::Messages($langAttendanceEdit,"alert-success");
@@ -128,12 +176,54 @@ else {
         $tool_content .= "<input class='form-control' type='text' name='title' id='title' value='$conf->conf_title' size='50' />";
         $tool_content .= "</div>";        
         $tool_content .= "</div>";        
+        
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='desc' class='col-sm-2 control-label'>$langDescr:</label>";
         $tool_content .= "<div class='col-sm-10'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";
-        $tool_content .= "</div>";         
+        $tool_content .= "</div>";
+                                
+        $tool_content .= "<div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langChatToSpecUsers:</label></div>
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <select class='form-control' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
+        
+        if ($conf->user_id > 0) { // existing chat users (if exist)
+            $existing_chat_users = explode(',', $conf->user_id);        
+            foreach ($existing_chat_users as $ecu) {
+                $chat_users = Database::get()->querySingle("SELECT id, CONCAT(surname, ' ', givenname) AS name, username
+                                                        FROM user WHERE id = $ecu
+                                                        ORDER BY surname, givenname");
+
+                $tool_content .= "<option value='" . q($chat_users->id) . "' selected>" . q($chat_users->name) . " (" . q($chat_users->username) . ")</option>";
+            }
+            $other_users = '';
+            foreach ($existing_chat_users as $ecu) {
+                $other_users .= "'" . $ecu . "',";
+            }
+            $other_users = mb_substr($other_users, 0, -1);
+            $extra_sql = "AND cu.user_id NOT IN ($other_users)";
+            $tool_content .= "<option value='0'><h2>$langAllUsers</h2></option>";
+        } else {
+            $extra_sql = "";
+            $tool_content .= "<option value='0' selected><h2>$langAllUsers</h2></option>";
+        }
+        // remaining chat users 
+        $other_chat_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) AS name, u.username
+                                                    FROM course_user cu
+                                                        JOIN user u ON cu.user_id=u.id
+                                                    WHERE cu.course_id = ?d $extra_sql
+                                                    ORDER BY u.surname, u.givenname", $course_id);        
+                
+        foreach($other_chat_users as $cu) {            
+            $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->username) . ")</option>";            
+        }
+        $tool_content .= "</select>
+                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+            </div>
+        </div>";
+        
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label class='col-sm-2 control-label'>$langActivate</label>";
         if ($conf->status == "active") {
@@ -153,7 +243,7 @@ else {
         </div>";
      
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
-        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
+        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></div>";
         $tool_content .= "</fieldset></form></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[
@@ -163,8 +253,7 @@ else {
                     
     } else {
         //display available conferences
-        if ($is_editor)
-        {
+        if ($is_editor) {
             $tool_content .= action_bar(array(
                 array('title' => $langAdd,
                     'url' => "index.php?add_conference",
@@ -180,39 +269,42 @@ else {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
                 <thead>
-                <tr><th class = 'text-center'>$langTitle</th>
-                    <th class = 'text-center'>$langDescr</th>
-                    <th class = 'text-center' width='50'>$langNewBBBSessionStatus</th>
-                    <th class = 'text-center' width='180'>$langStartDate</th>";
+                    <tr class='list-header'>
+                        <th>$langChat</th>
+                        <th class = 'text-center' width='150'>$langNewBBBSessionStatus</th>
+                        <th class = 'text-center' width='200'>$langStartDate</th>";
                     
             if($is_editor){
                 $tool_content .= "<th class = 'text-center'>".icon('fa-gears')."</th>"; 
             }
             $tool_content .="</tr></thead>";
             foreach ($q as $conf) {
-                $enabled_conference = ($conf->status == 'active')? $langChatActive : $langChatInactive;
+                $enabled_conference = ($conf->status == 'active')? "<span class='text-success'><span class='fa fa-eye'></span> $langAdminAnVis</span>" : "<span class='text-danger'><span class='fa fa-eye-slash'></span> $langAdminAnNotVis</span>";
                 ($conf->status == 'active')? $tool_content .= "<tr>" : $tool_content .= "<tr class='not_visible'>";
                 $tool_content .= "<td>";
-                ($conf->status == 'active')? $tool_content .= "<a href='./conference.php?conference_id=$conf->conf_id'>$conf->conf_title</a>" : $tool_content .= $conf->conf_title;
-                $tool_content .= "</td>";
-                $tool_content .= "<td>$conf->conf_description</td>";
-                $tool_content .= "<td class='text-center'>$enabled_conference</td>";
-                $tool_content .= "<td class='text-center'>".nice_format($conf->start, true)."</td>";
-                if($is_editor)
-                {
-                    $tool_content .= "<td class='option-btn-cell'>".action_button(array(
-                                                        array('title' => $langEdit,
-                                                              'url' => "$_SERVER[SCRIPT_NAME]?edit_conference=$conf->conf_id",
-                                                              'icon' => 'fa-edit'),
-                                                        array('title' => $langDelete,
-                                                              'url' => "$_SERVER[SCRIPT_NAME]?delete_conference=$conf->conf_id",
-                                                              'icon' => 'fa-times',
-                                                              'class' => 'delete',
-                                                              'confirm' => $langConfirmDelete)
-                                                        ))."</td>";
+                if (is_valid_chat_user($uid, $conf->conf_id, $conf->status)) { // chat access control
+                    $tool_content .= "<a href='./conference.php?conference_id=$conf->conf_id'>$conf->conf_title</a>";
+                } else {
+                    $tool_content .= $conf->conf_title;
                 }
-                    $tool_content .= "</tr>";
-            }            	
+                $tool_content .= "<div style='font-size:smaller; padding-top: 10px;'>$conf->conf_description</div>";
+                $tool_content .= "</td>";
+                $tool_content .= "<td class='text-center'>$enabled_conference</td>";
+                $tool_content .= "<td class='text-center'>".claro_format_locale_date($dateTimeFormatShort, strtotime($conf->start))."</td>";
+                if($is_editor) {
+                        $tool_content .= "<td class='option-btn-cell'>".action_button(array(
+                            array('title' => $langEdit,
+                                  'url' => "$_SERVER[SCRIPT_NAME]?edit_conference=$conf->conf_id",
+                                  'icon' => 'fa-edit'),
+                            array('title' => $langDelete,
+                                  'url' => "$_SERVER[SCRIPT_NAME]?delete_conference=$conf->conf_id",
+                                  'icon' => 'fa-times',
+                                  'class' => 'delete',
+                                  'confirm' => $langConfirmDelete)
+                            ))."</td>";
+                }
+                $tool_content .= "</tr>";
+            }
             $tool_content .= "</table></div>";
         } else {
              $tool_content .= "<div class='alert alert-warning'>$langNoChatAvailable</div>";

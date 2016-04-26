@@ -3286,7 +3286,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `conf_description` text DEFAULT NULL,
                         `status` enum('active','inactive') DEFAULT NULL,
                         `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        PRIMARY KEY (`conf_id`)) $charset_spec");
+                        `user_id` varchar(255) DEFAULT '0',
+                        `group_id` varchar(255) DEFAULT '0',
+                        PRIMARY KEY (`conf_id`,`course_id`)) $charset_spec");
 
         // om_servers table
         Database::get()->query('CREATE TABLE IF NOT EXISTS `om_servers` (
