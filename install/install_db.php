@@ -1594,7 +1594,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `conf_description` text DEFAULT NULL,
     `status` enum('active','inactive') DEFAULT 'active',
     `start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`conf_id`)) $charset_spec");
+    `user_id` varchar(255) default '0',
+    `group_id` varchar(255) default '0',
+    PRIMARY KEY (`conf_id`,`course_id`)) $charset_spec");
 
 $_SESSION['theme'] = 'default';
 $webDir = '..';

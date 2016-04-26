@@ -3236,7 +3236,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `conf_description` text DEFAULT NULL,
                         `status` enum('active','inactive') DEFAULT 'active',
                         `start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        PRIMARY KEY (`conf_id`)) $charset_spec");
+                        `user_id` varchar(255) default '0',
+                        `group_id` varchar(255) default '0',
+                        PRIMARY KEY (`conf_id`,`course_id`)) $charset_spec");
                 
         // drop trigger
         Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");

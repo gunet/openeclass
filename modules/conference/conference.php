@@ -29,32 +29,43 @@ $require_help = TRUE;
 $helpTopic = 'Conference';
 
 require_once '../../include/baseTheme.php';
+require_once 'functions.php';
+
 $coursePath = $webDir . '/courses/';
 $conference_id = $_GET['conference_id'];
-if(Database::get()->querySingle("SELECT count(*) as count FROM conference WHERE conf_id=?d AND status='active'", $conference_id)->count == 0)
+$q = Database::get()->querySingle("SELECT status FROM conference WHERE conf_id = ?d AND course_id = ?d", $conference_id, $course_id);
+if ($q) { // additional security
+    $conference_status = $q->status;
+} else {
+    Session::Messages($langForbidden, "alert-danger");
     redirect_to_home_page("modules/conference/index.php?course=$course_code");
-        
-    $fileChatName = $coursePath . $course_code . '/'. $conference_id. '_chat.txt';
-    $tmpArchiveFile = $coursePath . $course_code . '/'. $conference_id. '_tmpChatArchive.txt';
+}
+if (!is_valid_chat_user($uid, $conference_id, $conference_status)) {
+  Session::Messages($langForbidden, "alert-danger");
+  redirect_to_home_page("modules/conference/index.php?course=$course_code");
+}
 
-    $nick = uid_to_name($uid);
+  $fileChatName = $coursePath . $course_code . '/'. $conference_id. '_chat.txt';
+  $tmpArchiveFile = $coursePath . $course_code . '/'. $conference_id. '_tmpChatArchive.txt';
+
+  $nick = uid_to_name($uid);
 
 // How many lines to show on screen
-    define('MESSAGE_LINE_NB', 40);
+  define('MESSAGE_LINE_NB', 40);
 // How many lines to keep in temporary archive
 // (the rest are in the current chat file)
-    define('MAX_LINE_IN_FILE', 80);
+  define('MAX_LINE_IN_FILE', 80);
 
-    if ($GLOBALS['language'] == 'el') {
-        $timeNow = date("d-m-Y / H:i", time());
-    } else {
-        $timeNow = date("Y-m-d / H:i", time());
-    }
+  if ($GLOBALS['language'] == 'el') {
+      $timeNow = date("d-m-Y / H:i", time());
+  } else {
+      $timeNow = date("Y-m-d / H:i", time());
+  }
 
-    if (!file_exists($fileChatName)) {
-        $fp = fopen($fileChatName, 'w') or die('<center>$langChatError</center>');
-        fclose($fp);
-    }
+  if (!file_exists($fileChatName)) {
+      $fp = fopen($fileChatName, 'w') or die('<center>$langChatError</center>');
+      fclose($fp);
+  }
 
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
