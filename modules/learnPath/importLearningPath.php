@@ -492,7 +492,7 @@ function utf8_decode_if_is_utf8($str) {
 $okMsgs = array();
 $errorMsgs = array();
 
-$maxFilledSpace = 100000000;
+$maxFilledSpace = 1.0e10; // Max filled space: 10 GB
 
 $baseWorkDir = 'courses/' . $course_code . '/scormPackages/';
 
