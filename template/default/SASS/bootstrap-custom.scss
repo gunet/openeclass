@@ -3192,6 +3192,9 @@ a.btn, button{
 // FAQ Module
 .faq-section {
     &.panel-group {
+
+        margin-bottom: 0px;
+
         .panel {
 
             border-radius: 0px;
@@ -3202,6 +3205,10 @@ a.btn, button{
             margin-left: 25px;
             padding-top: 10px;
             padding-bottom: 10px;
+
+            &:last-child {
+                border-bottom: 0px;
+            }
 
             &+.panel {
                 
@@ -3217,6 +3224,11 @@ a.btn, button{
 
                     a {
                         text-decoration: none;
+
+                        span:first-child {
+                            padding-right: 10px;
+                        }
+
                     }
 
                 }
@@ -3224,6 +3236,7 @@ a.btn, button{
 
             .panel-body {
                 border-top: 0px;
+                padding-left: 25px;
             }
 
         }  
