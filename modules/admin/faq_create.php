@@ -59,12 +59,18 @@ if (isset($_POST['modifyFaq'])) {
     $record = $_POST['id'];
 
     Database::get()->query("UPDATE faq SET `title`=?s, `body`=?s WHERE `id`=?d", $question, $answer, $record);
+
+    Session::Messages("$langFaqEditSuccess", 'alert-success');
+    redirect_to_home_page("modules/admin/faq_create.php");
 }
 
 if (isset($_GET['faq']) && $_GET['faq'] == 'delete') {
     $record = $_GET['id'];
 
     Database::get()->query("DELETE FROM faq WHERE `id`=?d", $record);
+
+    Session::Messages("$langFaqDeleteSuccess", 'alert-success');
+    redirect_to_home_page("modules/admin/faq_create.php");
 }
 
 if (isset($_GET['faq']) && $_GET['faq'] != 'delete') {
@@ -72,6 +78,8 @@ if (isset($_GET['faq']) && $_GET['faq'] != 'delete') {
   $submitBtn = 'submitFaq';
   $submitBtnValue = $langSubmit;
   $id = "";
+  $title = "";
+  $body = "";
   
   if ($_GET['faq'] == 'modify') {
 
@@ -79,13 +87,9 @@ if (isset($_GET['faq']) && $_GET['faq'] != 'delete') {
     $submitBtnValue = $langSave;
     $id = "<input type='hidden' name='id' value='$_GET[id]'>";
 
-  }
-
-  if ($_GET['faq'] == 'modify') {
-
-    $submitBtn = 'modifyFaq';
-    $submitBtnValue = $langSave;
-    $id = "<input type='hidden' name='id' value='$_GET[id]'>";
+    $faq = Database::get()->querySingle("SELECT * FROM `faq` WHERE `id`=?d", $_GET['id']);
+    $title = $faq->title;
+    $body = $faq->body;
 
   }
 
@@ -98,12 +102,12 @@ if (isset($_GET['faq']) && $_GET['faq'] != 'delete') {
               <div class='form-group'>
                   <label for='question' class='col-sm-2 control-label'>$langFaqQuestion <sup><small>(<span class='text-danger'>*</span>)</small></sup>:</label>
                   <div class='col-sm-10'>
-                      <input class='form-control' type='text' name='question' value='' />
+                      <input class='form-control' type='text' name='question' value='$title' />
                   </div>
               </div>
               <div class='form-group'>
                   <label for='answer' class='col-sm-2 control-label'>$langFaqAnswer <sup><small>(<span class='text-danger'>*</span>)</small></sup>:</label>
-                  <div class='col-sm-10'>" . rich_text_editor('answer', 5, 40, '') . "</div>
+                  <div class='col-sm-10'>" . rich_text_editor('answer', 5, 40, $body) . "</div>
               </div>
               <div class='form-group'>
                   <div class='col-sm-offset-2 col-sm-10'>

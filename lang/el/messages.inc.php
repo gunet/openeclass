@@ -188,6 +188,8 @@ $langFaqCategory = "Κατηγορία";
 $langFaqAdd = "Προσθήκη ερώτησης";
 $langFaqExpandAll = "Άνοιγμα όλων";
 $langFaqCloseAll = "Κλείσιμο όλων";
+$langFaqEditSuccess = "Οι αλλαγές αποθηκεύτηκαν με επιτυχία";
+$langFaqDeleteSuccess = "Η ερώτηση διαγράφτηκε με επιτυχία";
 
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;
