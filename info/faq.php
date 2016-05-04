@@ -80,7 +80,7 @@ $tool_content .= "
     $(document).ready(function() {
       $(document).on('click', '.expand:not(.revert)', function(e) {
         e.preventDefault();
-        $('.faq-section .panel-collapse').collapse('show');
+        $('.faq-section .panel-collapse:not(.in)').collapse('show');
         $(this).toggleClass('revert');
         $(this).children().eq(0).toggleClass('fa-plus-circle').toggleClass('fa-minus-circle');
         $(this).children().eq(1).html('$langFaqCloseAll');

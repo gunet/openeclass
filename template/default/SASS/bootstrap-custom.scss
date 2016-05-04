@@ -3237,6 +3237,11 @@ a.btn, button{
             .panel-body {
                 border-top: 0px;
                 padding-left: 25px;
+
+                p:first-child {
+                    font-family: 'Roboto', Arial, sans-serif;
+                }
+
             }
 
         }  
