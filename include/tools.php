@@ -229,6 +229,10 @@ function loggedInMenu($rich=true) {
     array_push($sideMenuLink, $urlServer . "info/about.php");
     array_push($sideMenuImg, "fa-credit-card");
 
+    array_push($sideMenuText, $GLOBALS['langFaq']);
+    array_push($sideMenuLink, $urlServer . "info/faq.php");
+    array_push($sideMenuImg, "fa-question-circle");
+
     array_push($sideMenuText, $GLOBALS['langContact']);
     array_push($sideMenuLink, $urlServer . "info/contact.php");
     array_push($sideMenuImg, "fa-phone");
@@ -584,6 +588,10 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langExtAppConfig']);
         array_push($sideMenuLink, "../admin/extapp.php");
+        array_push($sideMenuImg, "arrow.png");
+
+        array_push($sideMenuText, $GLOBALS['langAdminCreateFaq']);
+        array_push($sideMenuLink, "../admin/faq_create.php");
         array_push($sideMenuImg, "arrow.png");
 
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);

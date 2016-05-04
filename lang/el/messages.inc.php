@@ -178,6 +178,17 @@ $langApplyRule = 'Εφαρμογή του κανόνα στους υπάρχον
 $langRuleApplied = 'Ο κανόνας εφαρμόστηκε σε όλους τους υπάρχοντες χρήστες';
 $langSureToDelRule = "Θέλετε σίγουρα να διαγραφεί ο κανόνας;";
 
+// FAQ
+$langAdminCreateFaq = "Δημιουργία FAQ";
+$langFaq = "Συχνές ερωτήσεις";
+$langFaqQuestion = "Ερώτηση";
+$langFaqAnswer = "Απάντηση";
+$langFaqOrder = "Ταξινόμηση";
+$langFaqCategory = "Κατηγορία";
+$langFaqAdd = "Προσθήκη ερώτησης";
+$langFaqExpandAll = "Άνοιγμα όλων";
+$langFaqCloseAll = "Κλείσιμο όλων";
+
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;
 $langNbStudents = "Αριθμός " . $langsOfStudents;

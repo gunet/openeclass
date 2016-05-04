@@ -3243,9 +3243,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // drop trigger
         Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
 
+        //Create Sticky Announcements
         $arr_date = Database::get()->queryArray("SELECT id FROM announcement ORDER BY `date` ASC");
         $arr_order_objects = Database::get()->queryArray("SELECT id FROM announcement ORDER BY `order` ASC");
-
         $arr_order = [];
         foreach ($arr_order_objects as $key=>$value) {
             $arr_order[$key] = $value->id;
@@ -3272,6 +3272,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             $ordering++;
             Database::get()->query("UPDATE `announcement` SET `order` = ?d where `id`= ?d", $ordering, $announcement_id);
         }
+
+        //Create FAQ table
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `faq` (
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `title` text NOT NULL,
+                            `body` text NOT NULL,
+                            `order` int(11) NOT NULL,
+                            PRIMARY KEY (`id`)) $charset_spec");
     }
 
     // update eclass version
