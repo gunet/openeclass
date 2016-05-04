@@ -53,15 +53,14 @@ $tool_content .= "
               $tool_content .= "
 
               <div class='panel'>
-                <div class='panel-heading' role='tab' id='headingOne'>
+                <div class='panel-heading' role='tab' id='heading$faq->id'>
                   <h4 class='panel-title'>
                     <a role='button' data-toggle='collapse' data-parent='#accordion' href='#faq-$faq->id' aria-expanded='true' aria-controls='#$faq->id'>
-                        <span>$faqCounter.</span>$faq->title
-                        <span class='caret'></span>
+                        <span>$faqCounter.</span>$faq->title <span class='caret'></span>
                     </a>
                   </h4>
                 </div>
-                <div id='faq-$faq->id' class='panel-collapse collapse' role='tabpanel' aria-labelledby='headingOne'>
+                <div id='faq-$faq->id' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading$faq->id'>
                   <div class='panel-body'>
                     <p><strong><u>$langFaqAnswer:</u></strong></p>
                     $faq->body
