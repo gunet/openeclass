@@ -36,6 +36,7 @@ $tool_content = action_bar(array(
                                   'button-class' => 'btn-success'),
                             array('title' => 'Expand All',
                                   'url' => "#",
+                                  'class' => 'expand',
                                   'icon' => 'fa-plus-circle',
                                   'level' => 'primary-label'),
                             array('title' => $langBack,
@@ -170,6 +171,24 @@ $tool_content .= "
         </div>
       </div>
   </div>
+  <script type='text/javascript'>
+    $(document).ready(function() {
+      $(document).on('click', '.expand:not(.revert)', function(e) {
+        e.preventDefault();
+        $('.faq-section .panel-collapse:not(.in)').collapse('show');
+        $(this).toggleClass('revert');
+        $(this).children().eq(0).toggleClass('fa-plus-circle').toggleClass('fa-minus-circle');
+        $(this).children().eq(1).html('$langFaqCloseAll');
+      });
+      $(document).on('click', '.expand.revert', function(e) {
+        e.preventDefault();
+        $('.faq-section .panel-collapse.in').collapse('hide');
+        $(this).toggleClass('revert');
+        $(this).children().eq(0).toggleClass('fa-minus-circle').toggleClass('fa-plus-circle');
+        $(this).children().eq(1).html('$langFaqExpandAll');
+      });
+    });
+  </script>
 ";
 
 draw($tool_content, 3, null, $head_content);
