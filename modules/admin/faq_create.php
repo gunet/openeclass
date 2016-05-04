@@ -156,8 +156,8 @@ $tool_content .= "
                     <a role='button' data-toggle='collapse' data-parent='#accordion' href='#faq-$faq->id' aria-expanded='true' aria-controls='#$faq->id'>
                         <span>$faqCounter.</span>$faq->title <span class='caret'></span>
                     </a>
-                    <a href='$_SERVER[SCRIPT_NAME]?faq=delete&id=$faq->id'><span class='fa fa-times text-danger pull-right'></span></a>
-                    <a href='$_SERVER[SCRIPT_NAME]?faq=modify&id=$faq->id'><span class='fa fa-pencil-square pull-right'></span></a>
+                    <a href='$_SERVER[SCRIPT_NAME]?faq=delete&id=$faq->id'><span class='fa fa-times text-danger pull-right' data-toggle='tooltip' data-placement='top' title='$langDelete'></span></a>
+                    <a href='$_SERVER[SCRIPT_NAME]?faq=modify&id=$faq->id'><span class='fa fa-pencil-square pull-right' data-toggle='tooltip' data-placement='top' title='$langEdit'></span></a>
                   </h4>
                 </div>
                 <div id='faq-$faq->id' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading$faq->id'>
