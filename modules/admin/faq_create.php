@@ -24,6 +24,8 @@ $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
+load_js('sortable/Sortable.min.js');
+
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $toolName = $langAdminCreateFaq;
 $pageName = $langAdminCreateFaq;
@@ -44,6 +46,13 @@ $tool_content = action_bar(array(
                                   'icon' => 'fa-reply',
                                   'level' => 'primary-label')),false);
 
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+  if (isset($_POST['toDelete'])){
+    Database::get()->query("DELETE FROM faq WHERE `id`=?d", $_POST['toDelete']);
+
+  }
+}
+
 if (isset($_POST['submitFaq'])) {
     $question = $_POST['question'];
     $answer = $_POST['answer'];
@@ -51,6 +60,9 @@ if (isset($_POST['submitFaq'])) {
     $top = Database::get()->querySingle("SELECT MAX(`order`) as max FROM `faq`")->max;
 
     Database::get()->query("INSERT INTO faq (title, body, `order`) VALUES (?s, ?s, ?d)", $question, $answer, $top + 1);
+
+    Session::Messages("$langFaqAddSuccess", 'alert-success');
+    redirect_to_home_page("modules/admin/faq_create.php");
 }
 
 if (isset($_POST['modifyFaq'])) {
@@ -136,7 +148,7 @@ if (isset($_GET['faq']) && $_GET['faq'] != 'delete') {
 
 }
 
-$faqs = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` DESC");
+$faqs = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");
 
 $faqCounter = 0;
 
@@ -144,23 +156,24 @@ $tool_content .= "
   <div class='row'>
       <div class='col-xs-12'>
         <div class='panel'>
-          <div class='panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>";
+          <div class='panel-group faq-section  list-group' id='accordion' role='tablist' aria-multiselectable='true'>";
 
             foreach ($faqs as $faq) {
               $faqCounter++;
               $tool_content .= "
 
-              <div class='panel'>
-                <div class='panel-heading' role='tab' id='heading$faq->id'>
+              <div class='panel list-group-item' data-id='$faq->order'>
+                <div class='panel-heading' role='tab' id='heading-$faq->id'>
                   <h4 class='panel-title'>
                     <a role='button' data-toggle='collapse' data-parent='#accordion' href='#faq-$faq->id' aria-expanded='true' aria-controls='#$faq->id'>
                         <span>$faqCounter.</span>$faq->title <span class='caret'></span>
                     </a>
-                    <a href='$_SERVER[SCRIPT_NAME]?faq=delete&id=$faq->id'><span class='fa fa-times text-danger pull-right' data-toggle='tooltip' data-placement='top' title='$langDelete'></span></a>
+                    <a class='forDelete' href='javascript:void(0);' data-id='$faq->id'><span class='fa fa-times text-danger pull-right' data-toggle='tooltip' data-placement='top' title='$langDelete'></span></a>
+                    <a href='javascript:void(0);'><span class='fa fa-arrows pull-right'></span></a>
                     <a href='$_SERVER[SCRIPT_NAME]?faq=modify&id=$faq->id'><span class='fa fa-pencil-square pull-right' data-toggle='tooltip' data-placement='top' title='$langEdit'></span></a>
                   </h4>
                 </div>
-                <div id='faq-$faq->id' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading$faq->id'>
+                <div id='faq-$faq->id' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading-$faq->id'>
                   <div class='panel-body'>
                     <p><strong><u>$langFaqAnswer:</u></strong></p>
                     $faq->body
@@ -177,6 +190,7 @@ $tool_content .= "
   </div>
   <script type='text/javascript'>
     $(document).ready(function() {
+
       $(document).on('click', '.expand:not(.revert)', function(e) {
         e.preventDefault();
         $('.faq-section .panel-collapse:not(.in)').collapse('show');
@@ -184,6 +198,7 @@ $tool_content .= "
         $(this).children().eq(0).toggleClass('fa-plus-circle').toggleClass('fa-minus-circle');
         $(this).children().eq(1).html('$langFaqCloseAll');
       });
+
       $(document).on('click', '.expand.revert', function(e) {
         e.preventDefault();
         $('.faq-section .panel-collapse.in').collapse('hide');
@@ -191,6 +206,40 @@ $tool_content .= "
         $(this).children().eq(0).toggleClass('fa-minus-circle').toggleClass('fa-plus-circle');
         $(this).children().eq(1).html('$langFaqExpandAll');
       });
+
+      $(document).on('click', '.forDelete', function(e) {
+        e.preventDefault();
+        idDelete = $(this).data('id');
+        $(this).parents('.list-group-item').remove();
+        var ids = [];
+        $('.faq-section .list-group-item').each(function () {
+          ids.push($(this).data('id'));
+        });
+        $.ajax({
+          type: 'post',
+          data: { toDelete: idDelete, 
+                  toReorder: ids
+                },
+          success: function() {
+          
+          }
+        });
+      });
+
+      Sortable.create(accordion, {
+          handle: '.fa-arrows',
+          animation: 150,
+          onEnd: function (evt) {
+            var itemEl = $(evt.item);
+            //var id = itemEl.attr('data-id');
+
+            var ids = [];
+            $('.faq-section .list-group-item').each(function () {
+              ids.push($(this).data('id'));
+            });
+            console.log(ids);
+          }
+        });
     });
   </script>
 ";
