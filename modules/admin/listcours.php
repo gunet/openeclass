@@ -266,4 +266,3 @@ $data['action_bar'] = action_bar(array(
 
 $data['menuTypeID'] = 3;
 view('admin.courses.listcours', $data);
-//draw($tool_content, 3, null, $head_content);
