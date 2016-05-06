@@ -4878,6 +4878,7 @@ $langTwitterAccount = 'Twitter λογαριασμός';
 $langLinkedInProfile = 'LinkedIn προφίλ';
 $langBio = 'Βιογραφικό';
 $langUploadBio = 'Ανέβασμα Βιογραφικού';
+$lang_eportfolio_enable = 'Ενεργοποίηση e-portfolio χρηστών';
 
 /* * ******************************************
   Widgets

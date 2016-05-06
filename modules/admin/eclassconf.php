@@ -354,6 +354,7 @@ if (isset($_POST['submit'])) {
         'hide_login_link' => true,
         'dropbox_allow_student_to_student' => true,
         'dropbox_allow_personal_messages' => true,
+        'eportfolio_enable' => true,
         'personal_blog' => true,
         'personal_blog_commenting' => true,
         'personal_blog_rating' => true,
@@ -944,6 +945,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $cbox_am_required = get_config('am_required') ? 'checked' : '';
     $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
     $cbox_dropbox_allow_personal_messages = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
+    $cbox_eportfolio_enable = get_config('eportfolio_enable') ? 'checked' : '';
     $cbox_personal_blog = get_config('personal_blog') ? 'checked' : '';
     $cbox_personal_blog_commenting = get_config('personal_blog_commenting') ? 'checked' : '';
     $cbox_personal_blog_rating = get_config('personal_blog_rating') ? 'checked' : '';
@@ -1017,6 +1019,12 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                     <label>
                                         <input type='checkbox' name='dropbox_allow_personal_messages' value='1' $cbox_dropbox_allow_personal_messages>
                                         $lang_dropbox_allow_personal_messages
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' $cbox_eportfolio_enable>
+                                        $lang_eportfolio_enable
                                     </label>
                                 </div>
                                 <div class='checkbox'>

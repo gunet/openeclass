@@ -4360,6 +4360,7 @@ $langTwitterAccount = 'Twitter account';
 $langLinkedInProfile = 'LinkedIn profile';
 $langBio = 'Curriculum vitae';
 $langUploadBio = 'Upload CV';
+$lang_eportfolio_enable = 'Enable users\' e-portfolio';
 $langInCoursesL = "in course";
 $langOfCourse = "for course";
 $langCommentsUser = "User comments";
