@@ -4361,6 +4361,7 @@ $langLinkedInProfile = 'LinkedIn profile';
 $langBio = 'Curriculum vitae';
 $langUploadBio = 'Upload CV';
 $lang_eportfolio_enable = 'Enable users\' e-portfolio';
+$langePortfolioDisabled = 'e-portfolio feature is disabled by the platform\'s administrators.';
 $langInCoursesL = "in course";
 $langOfCourse = "for course";
 $langCommentsUser = "User comments";

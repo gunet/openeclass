@@ -31,6 +31,11 @@ $toolName = $langMyePortfolio;
 $pageName = $langUploadBio;
 $navigation[] = array('url' => 'eportfolio.php', 'name' => $langMyePortfolio);
 
+if (!get_config('eportfolio_enable')) {
+    $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
+    draw($tool_content, 1);
+    exit;
+}
 
 if (isset($_GET['delete_bio'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();

@@ -21,11 +21,16 @@
 
 
 $require_login = false;
+$guest_allowed = true;
 
 include '../../include/baseTheme.php';
 include 'main/eportfolio/eportfolio_functions.php';
 
-
+if (!get_config('eportfolio_enable')) {
+    $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
+    draw($tool_content, 1);
+    exit;
+}
 
 $userdata = array();
 
