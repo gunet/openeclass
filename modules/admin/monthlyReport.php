@@ -61,4 +61,3 @@ if (isset($_POST["selectedMonth"])) {
 load_js('tools.js');
 $data['menuTypeID'] = 3;
 view('admin.other.stats.monthlyReport', $data);
-//draw($tool_content, 3, 'admin', $head_content);
