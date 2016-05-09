@@ -171,7 +171,7 @@ $toolName = $langOldStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../usage/index.php?t=a", "name" => $langUsage);
 
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                     'url' => "../usage/index.php?t=a",
                     'icon' => 'fa-reply',
@@ -185,62 +185,27 @@ foreach (Database::get()->queryArray($query) as $row) {
 }
 $min_w = date("d-m-Y", $min_when);
 
-$tool_content .= '<div class="alert alert-info">' . sprintf($langOldStatsLoginsExpl, get_config('actions_expire_interval')) . '</div>';
-
-/****   C3 plot   ****/
-$tool_content .= "<div class='row plotscontainer'>";
-$tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
-$tool_content .= plot_placeholder("old_stats", $langLoginUser);
-$tool_content .= "</div></div>";
-
 $endDate_obj = new DateTime();
-$user_date_start = $endDate_obj->format('d-m-Y');
+$data['user_date_start'] = $endDate_obj->format('d-m-Y');
 $startDate_obj = $endDate_obj->sub(new DateInterval('P2Y'));
-$user_date_start = $startDate_obj->format('d-m-Y');
+$data['user_date_start'] = $startDate_obj->format('d-m-Y');
 
 if (isset($_POST['user_date_start']) && isset($_POST['user_date_end'])) {
     $uds = DateTime::createFromFormat('d-m-Y', $_POST['user_date_start']);
     $u_date_start = $uds->format('Y-m-d');
-    $user_date_start = $uds->format('d-m-Y');
+    $data['user_date_start'] = $uds->format('d-m-Y');
 
     $ude = DateTime::createFromFormat('d-m-Y', $_POST['user_date_end']);
     $u_date_end = $ude->format('Y-m-d');
-    $user_date_end = $ude->format('d-m-Y');
+    $data['user_date_end'] =  $ude->format('d-m-Y');
 } else {
     $last_month = "P" . get_config('actions_expire_interval') . "M";
     $date_end = new DateTime();
     $date_end->sub(new DateInterval($last_month));
     $u_date_end = $date_end->format('Y-m-d');
-    $user_date_end = $date_end->format('d-m-Y');
+    $data['user_date_end'] = $date_end->format('d-m-Y');
 }
 
+$data['menuTypeID'] = 3;
+view('admin.other.stats.oldStats', $data);
 
-//    $tool_content .= "<div class='alert alert-warning'>$langNoStatistics</div>";
-
-$tool_content .= '<div class="form-wrapper"><form class="form-horizontal" role="form" method="post">';
-$tool_content .= "<div class='input-append date form-group' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-2 control-label' for='user_date_start'>$langStartDate:</label>
-        <div class='col-xs-10 col-sm-9'>               
-            <input class='form-control' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
-        </div>
-        <div class='col-xs-2 col-sm-1'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
-        </div>";        
-$tool_content .= "<div class='input-append date form-group' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-2 control-label' for='user_date_end'>$langEndDate:</label>
-            <div class='col-xs-10 col-sm-9'>
-                <input class='form-control' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
-            </div>
-        <div class='col-xs-2 col-sm-1'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
-        </div>";
-$tool_content .= '<div class="col-sm-offset-2 col-sm-10">    
-    <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
-    </div>  
-</form></div>';
-              
-draw($tool_content, 3, null, $head_content);
