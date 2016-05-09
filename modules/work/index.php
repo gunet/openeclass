@@ -2662,7 +2662,7 @@ function show_assignment($id, $display_graph_results = false) {
                 }
                 if (trim($row->grade_comments)) {
                     $label = '<b>'.$m['gradecomments'] . '</b>:';
-                    $comments .= "&nbsp;<span>" . standard_text_escape($row->grade_comments) . "</span>";
+                    $comments .= "&nbsp;<span>" . q_math($row->grade_comments) . "</span>";
                 } else {
                     $label = '';
                     $comments = '';
