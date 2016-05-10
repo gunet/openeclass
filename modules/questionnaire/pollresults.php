@@ -108,6 +108,7 @@ if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
 }
 $pid = intval($_GET['pid']);
 $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
+$PollType = $thePoll ->type;
 if (!$is_editor && !$thePoll->show_results) {
     Session::Messages($langPollResultsAccess);
     redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);    
@@ -191,6 +192,7 @@ $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid 
 $j=1; 
 $chart_data = array();
 $chart_counter = 0;
+if ($PollType == 0){   
 foreach ($questions as $theQuestion) {
     $this_chart_data = array();
     if ($theQuestion->qtype == QTYPE_LABEL) {
@@ -423,6 +425,13 @@ foreach ($questions as $theQuestion) {
         }
         $tool_content .= "</div></div>"; 
     }
+}
+}
+elseif($PollType == 1){
+redirect_to_home_page("modules/questionnaire/colles.php?course=$course_code");
+}
+elseif($PollType == 2){
+redirect_to_home_page("modules/questionnaire/attls.php");
 }
 // display page
 draw($tool_content, 2, null, $head_content);

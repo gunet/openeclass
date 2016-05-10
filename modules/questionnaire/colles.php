@@ -447,6 +447,38 @@ $chart_counter = 0;
 		
         $tool_content .= "</div></div>";
 		$this_chart_data= array();
+//Summarizing results: #students belong to category
+ /*
+ $chart_data = array();                                             
 
+	$this_chart_data = array();
+
+        $tool_content .= "
+        <div class='panel panel-success'>
+            <div class='panel-heading'>
+                <h3 class='panel-title'>$lang_result_summary</h3>
+            </div>
+            <div class='panel-body'>
+                <h4>$lang_ckw_skw_chart</h4>";
+
+				$this_chart_data['category'][] = "Connected";
+				$this_chart_data['category'][] = "Separated";
+				$this_chart_data['category'][] = "Both connected and separated";
+				$total_partic = $connected+$separated+$both_con_sep;
+                $this_chart_data['percentage'][] = 100*$connected/$total_partic;
+				$this_chart_data['percentage'][] = 100*$separated/$total_partic;
+				$this_chart_data['percentage'][] = 100*$both_con_sep/$total_partic;
+
+            /****   C3 plot   ****/
+  /*          $chart_data[] = $this_chart_data;
+            $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
+            $tool_content .= "<div class='row plotscontainer'>";
+            $tool_content .= "<div class='col-lg-12'>";
+            $tool_content .= plot_placeholder("poll_chart$chart_counter");
+            $tool_content .= "</div></div>";
+			$chart_counter++; 
+		
+        $tool_content .= "</div></div>";
+*/
 // display page
 draw($tool_content, 2, null, $head_content);
