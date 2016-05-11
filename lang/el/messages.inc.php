@@ -857,6 +857,7 @@ $langNoChatAvailable = "Δεν υπάρχουν διαθέσιμες \"Κουβ�
 $langChatActive = "Ενεργή";
 $langChatInactive = "Ανενεργή";
 $langChatTitleError = "Παρακαλώ συμπληρώστε τον τίτλο της Κουβεντούλας";
+$langUntitledChat = "Ελεύθερη κουβεντούλα $langsOfCourse";
 
 /* * ***************************************************************
  * copyright.php
