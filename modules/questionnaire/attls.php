@@ -77,8 +77,7 @@ $head_content .= "<script type='text/javascript'>
         });
 
     function draw_plots(){
-        var options = null;
-        console.log(pollChartData[0]);
+        var options = null;        
         for(var i=0;i<pollChartData.length;i++){
             options = {
                 data: {
@@ -198,120 +197,120 @@ $w_skw = array (0.48,0.39,0.01,0.06,0.08,0.09,0.39,0.11,0.53,0.25,0.29,0.5,0.26,
 //$result = Database::get()->queryArray("SELECT t2.uid as st, t1.*, t1.answer_text,sum(t1.answer_text*t3.ckw) as tckw, sum(t1.answer_text*t3.skw) as tskw FROM poll_answer_record as t1 , poll_user_record as t2, poll_attls as t3 
 									//	WHERE t1.poll_user_record_id=t2.id AND t2.pid = ?d AND t1.qid = t3.id group by t2.uid", $pid);
 
-	$result = Database::get()->queryArray("SELECT  t1.*, t2.uid as st FROM poll_answer_record as t1, poll_user_record as t2
-									WHERE t1.poll_user_record_id=t2.id AND t2.pid = ?d group by st", $pid);
-	
-	
+$result = Database::get()->queryArray("SELECT  t1.*, t2.uid as st FROM poll_answer_record as t1, poll_user_record as t2
+                                                                WHERE t1.poll_user_record_id=t2.id AND t2.pid = ?d group by st", $pid);
 
-	$tool_content .= "<table class='table-default'>
-                    <tbody>
-                    <tr>
-                            <th>$langStudents</th>
-                            <th>$lang_Results</th> 
-                    </tr>";
-					
-		$connected = 0;
-		$separated = 0;
-		$both_con_sep = 0;
-	foreach ($result as $theresult){
 
-		$uid = $theresult->st;
-		$p_user_id = $theresult->poll_user_record_id;
+$tool_content .= "<table class='table-default'>
+            <tbody>
+            <tr>
+                    <th>$langStudents</th>
+                    <th>$lang_Results</th> 
+            </tr>";
 
-		$user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $uid);
-			$f_name = $user->givenname;
-			$l_name = $user->surname;
-		$answers = Database::get()->queryArray("SELECT t1.answer_text as ans, t2.* FROM poll_answer_record as t1, poll_user_record as t2 WHERE t1.poll_user_record_id=t2.id AND t2.uid = ?d AND t2.pid = ?d ", $uid, $pid);
-			
-		$ckw = 0;
-		$skw = 0;
-		$i = 0;
-		foreach ($answers as $answer){
-			$q_ans = $answer -> ans;
-			$a = $q_ans * $w_ckw[$i];
-			$b = $q_ans * $w_skw[$i];
-			$i++;
-			$ckw = $ckw + $a;
-			$skw = $skw + $b;
-		}
-		
-		$tool_content .="<tr><td>".$l_name. " ". $f_name."</td><td>";
+$connected = 0;
+$separated = 0;
+$both_con_sep = 0;
+foreach ($result as $theresult){
 
-		$dif_scores = $ckw-$skw;
+    $uid = $theresult->st;
+    $p_user_id = $theresult->poll_user_record_id;
 
-		if($dif_scores>1){
-		$connected ++;
-			$tool_content .= $langCKW . "<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$showall</a>";
-			$tool_content .= "</td><td class='hidden_names' style='display:none;'><table border='1' width='100%'>";
-			$answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
-													WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
-				foreach ($answers as $answer){
-					$q = $answer -> qt;
-					$a = $answer -> ant;
-						if ($a == 1)
-							$ans = $lang_rate1;
-						elseif ($a == 2)
-							$ans = $lang_rate2;
-						elseif ($a == 3)
-							$ans = $lang_rate3;
-						elseif ($a == 4)
-							$ans = $lang_rate4;
-						elseif ($a == 5)
-							$ans = $lang_rate5;
-					$tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
-				}$tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td>  "; 
-		}
-		else if($dif_scores<-1) {
-		$separated ++;
-			$tool_content .= $langSKW ."<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$showall</a>";
-			$tool_content .= "</td><td class='hidden_names' style='display:none;'><table border='1' width='100%'>";
-			$answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
-													WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
-				foreach ($answers as $answer){
-					$q = $answer -> qt;
-					$a = $answer -> ant;
-						if ($a == 1)
-							$ans = $lang_rate1;
-						elseif ($a == 2)
-							$ans = $lang_rate2;
-						elseif ($a == 3)
-							$ans = $lang_rate3;
-						elseif ($a == 4)
-							$ans = $lang_rate4;
-						elseif ($a == 5)
-							$ans = $lang_rate5;
-					$tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
-				}$tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td> "; 
-		}
-		else{
-		$both_con_sep++;
-		 $tool_content .= $langCKW_SKW ."<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$showall</a>";
-			$tool_content .= "</td><td class='hidden_names' style='display:none;'><table border='1' width='100%'>";
-			$answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
-													WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
-				foreach ($answers as $answer){
-					$q = $answer -> qt;
-					$a = $answer -> ant;
-						if ($a == 1)
-							$ans = $lang_rate1;
-						elseif ($a == 2)
-							$ans = $lang_rate2;
-						elseif ($a == 3)
-							$ans = $lang_rate3;
-						elseif ($a == 4)
-							$ans = $lang_rate4;
-						elseif ($a == 5)
-							$ans = $lang_rate5;
-					$tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
-				}$tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td> "; 
-		}
-		$tool_content .="</td></tr>";	
-					}
-		$tool_content .="</tbody></table>";
-		
+    $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $uid);
+    $f_name = $user->givenname;
+    $l_name = $user->surname;
+    $answers = Database::get()->queryArray("SELECT t1.answer_text as ans, t2.* FROM poll_answer_record as t1, poll_user_record as t2 WHERE t1.poll_user_record_id=t2.id AND t2.uid = ?d AND t2.pid = ?d ", $uid, $pid);
+
+    $ckw = 0;
+    $skw = 0;
+    $i = 0;
+    foreach ($answers as $answer){
+        $q_ans = $answer -> ans;
+        $a = $q_ans * $w_ckw[$i];
+        $b = $q_ans * $w_skw[$i];
+        $i++;
+        $ckw = $ckw + $a;
+        $skw = $skw + $b;
+    }
+
+    $tool_content .="<tr><td>".$l_name. " ". $f_name."</td><td>";
+
+    $dif_scores = $ckw-$skw;
+
+    if($dif_scores>1){
+        $connected ++;
+        $tool_content .= $langCKW . "<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$showall</a>";
+        $tool_content .= "</td><td class='hidden_names' style='display:none;'><table border='1' width='100%'>";
+        $answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
+                                                                                        WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
+        foreach ($answers as $answer){
+            $q = $answer -> qt;
+            $a = $answer -> ant;
+            if ($a == 1)
+                    $ans = $lang_rate1;
+            elseif ($a == 2)
+                    $ans = $lang_rate2;
+            elseif ($a == 3)
+                    $ans = $lang_rate3;
+            elseif ($a == 4)
+                    $ans = $lang_rate4;
+            elseif ($a == 5)
+                    $ans = $lang_rate5;
+            $tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
+        }
+        $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td>  "; 
+    }
+    else if($dif_scores<-1) {
+        $separated ++;
+        $tool_content .= $langSKW ."<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$showall</a>";
+        $tool_content .= "</td><td class='hidden_names' style='display:none;'><table border='1' width='100%'>";
+        $answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
+                                                                                        WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
+        foreach ($answers as $answer){
+            $q = $answer -> qt;
+            $a = $answer -> ant;
+            if ($a == 1)
+                    $ans = $lang_rate1;
+            elseif ($a == 2)
+                    $ans = $lang_rate2;
+            elseif ($a == 3)
+                    $ans = $lang_rate3;
+            elseif ($a == 4)
+                    $ans = $lang_rate4;
+            elseif ($a == 5)
+                    $ans = $lang_rate5;
+            $tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
+        }
+        $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td> "; 
+    } else {
+        $both_con_sep++;
+        $tool_content .= $langCKW_SKW ."<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$showall</a>";
+        $tool_content .= "</td><td class='hidden_names' style='display:none;'><table border='1' width='100%'>";
+            $answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
+                                                                                            WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
+        foreach ($answers as $answer) {
+            $q = $answer -> qt;
+            $a = $answer -> ant;
+            if ($a == 1)
+                    $ans = $lang_rate1;
+            elseif ($a == 2)
+                    $ans = $lang_rate2;
+            elseif ($a == 3)
+                    $ans = $lang_rate3;
+            elseif ($a == 4)
+                    $ans = $lang_rate4;
+            elseif ($a == 5)
+                    $ans = $lang_rate5;
+            $tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
+        }
+        $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td> "; 
+    }
+    $tool_content .="</td></tr>";	
+                            }
+    $tool_content .="</tbody></table>";
+
 
 //default tables
-
 if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
     redirect_to_home_page();
 }
@@ -332,36 +331,34 @@ if(!$total_participants) {
 
 //Summarizing results: #students belong to category
  
- $chart_data = array();                                             
+$chart_data = array();                                             
+$this_chart_data = array();
 
-	$this_chart_data = array();
+$tool_content .= "
+<div class='panel panel-success'>
+    <div class='panel-heading'>
+        <h3 class='panel-title'>$lang_result_summary</h3>
+    </div>
+    <div class='panel-body'>
+        <h4>$lang_ckw_skw_chart</h4>";
 
-        $tool_content .= "
-        <div class='panel panel-success'>
-            <div class='panel-heading'>
-                <h3 class='panel-title'>$lang_result_summary</h3>
-            </div>
-            <div class='panel-body'>
-                <h4>$lang_ckw_skw_chart</h4>";
+$this_chart_data['category'][] = "Connected";
+$this_chart_data['category'][] = "Separated";
+$this_chart_data['category'][] = "Both connected and separated";
+$total_partic = $connected+$separated+$both_con_sep;
+$this_chart_data['percentage'][] = 100*$connected/$total_partic;
+$this_chart_data['percentage'][] = 100*$separated/$total_partic;
+$this_chart_data['percentage'][] = 100*$both_con_sep/$total_partic;
 
-				$this_chart_data['category'][] = "Connected";
-				$this_chart_data['category'][] = "Separated";
-				$this_chart_data['category'][] = "Both connected and separated";
-				$total_partic = $connected+$separated+$both_con_sep;
-                $this_chart_data['percentage'][] = 100*$connected/$total_partic;
-				$this_chart_data['percentage'][] = 100*$separated/$total_partic;
-				$this_chart_data['percentage'][] = 100*$both_con_sep/$total_partic;
+/****   C3 plot   ****/
+$chart_data[] = $this_chart_data;
+$tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
+$tool_content .= "<div class='row plotscontainer'>";
+$tool_content .= "<div class='col-lg-12'>";
+$tool_content .= plot_placeholder("poll_chart");
+$tool_content .= "</div></div>";
 
-            /****   C3 plot   ****/
-            $chart_data[] = $this_chart_data;
-            $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
-            $tool_content .= "<div class='row plotscontainer'>";
-            $tool_content .= "<div class='col-lg-12'>";
-            $tool_content .= plot_placeholder("poll_chart$chart_counter");
-            $tool_content .= "</div></div>";
-			$chart_counter++; 
-		
-        $tool_content .= "</div></div>";
+$tool_content .= "</div></div>";
 
 // display page
 draw($tool_content, 2, null, $head_content);
