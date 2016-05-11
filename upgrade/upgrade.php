@@ -3240,6 +3240,22 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `group_id` varchar(255) default '0',
                         PRIMARY KEY (`conf_id`,`course_id`)) $charset_spec");
                 
+        // create db entries about old chats
+        $query = Database::get()->queryArray("SELECT id, code FROM course");
+        foreach ($query as $codes) {
+            $c = $codes->code;
+            $chatfile = "$webDir/courses/$c/chat.txt";
+            if (file_exists($chatfile) and filesize($chatfile) > 0) {
+                $q_ins = Database::get()->query("INSERT INTO conference SET
+                                                course_id = $codes->id,
+                                                conf_title = '$langUntitledChat',
+                                                status = 'active'");
+                $last_conf_id = $q_ins->lastInsertID;
+                $newchatfile = "$webDir/courses/$c/" . $last_conf_id . "_chat.txt";
+                rename($chatfile, $newchatfile);
+            }
+        }
+        
         // drop trigger
         Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
 
