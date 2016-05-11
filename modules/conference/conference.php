@@ -92,28 +92,28 @@ $head_content .= '<script type="text/javascript">
     }, 2000);        
 </script>';
 
-if ($is_editor) {
-    $tool_content .= action_bar(array(
-        array('title' => $langSave,
-            'url' => "messageList.php?course=$course_code&amp;store=true&amp;conference_id=$conference_id&amp;".generate_csrf_token_link_parameter(),
-            'icon' => 'fa-plus-circle',
-            'level' => 'primary-label',
-            'button-class' => 'btn-success',
-            'link-attrs' => "target='messageList'"
-        ),
-        array('title' => $langBack,
-                'url' => "index.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label'
-        ),
-        array('title' => $langWash,
-            'url' => "messageList.php?course=$course_code&amp;reset=true&amp;conference_id=$conference_id&amp;".generate_csrf_token_link_parameter(),
-            'icon' => 'fa-trash',
-            'level' => 'primary',
-            'link-attrs' => "target='messageList'"
-            )
-    ));
-}
+$tool_content .= action_bar(array(
+    array('title' => $langSave,
+        'url' => "messageList.php?course=$course_code&amp;store=true&amp;conference_id=$conference_id&amp;".generate_csrf_token_link_parameter(),
+        'icon' => 'fa-plus-circle',
+        'level' => 'primary-label',
+        'button-class' => 'btn-success',
+        'link-attrs' => "target='messageList'",
+        'show' => $is_editor
+    ),
+    array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
+    ),
+    array('title' => $langWash,
+        'url' => "messageList.php?course=$course_code&amp;reset=true&amp;conference_id=$conference_id&amp;".generate_csrf_token_link_parameter(),
+        'icon' => 'fa-trash',
+        'level' => 'primary',
+        'link-attrs' => "target='messageList'",
+        'show' => $is_editor
+        )
+));
 
 $tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
    <div class='row'><div class='col-sm-12'><div class='form-wrapper'>
