@@ -204,8 +204,8 @@ $result = Database::get()->queryArray("SELECT  t1.*, t2.uid as st FROM poll_answ
 $tool_content .= "<table class='table-default'>
             <tbody>
             <tr>
-                    <th>$langStudents</th>
-                    <th>$lang_Results</th> 
+                <th>$langStudents</th>
+                <th>$lang_Results</th> 
             </tr>";
 
 $connected = 0;
@@ -247,15 +247,15 @@ foreach ($result as $theresult){
             $q = $answer -> qt;
             $a = $answer -> ant;
             if ($a == 1)
-                    $ans = $lang_rate1;
+                $ans = $lang_rate1;
             elseif ($a == 2)
-                    $ans = $lang_rate2;
+                $ans = $lang_rate2;
             elseif ($a == 3)
-                    $ans = $lang_rate3;
+                $ans = $lang_rate3;
             elseif ($a == 4)
-                    $ans = $lang_rate4;
+                $ans = $lang_rate4;
             elseif ($a == 5)
-                    $ans = $lang_rate5;
+                $ans = $lang_rate5;
             $tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
         }
         $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td>  "; 
@@ -270,15 +270,15 @@ foreach ($result as $theresult){
             $q = $answer -> qt;
             $a = $answer -> ant;
             if ($a == 1)
-                    $ans = $lang_rate1;
+                $ans = $lang_rate1;
             elseif ($a == 2)
-                    $ans = $lang_rate2;
+                $ans = $lang_rate2;
             elseif ($a == 3)
-                    $ans = $lang_rate3;
+                $ans = $lang_rate3;
             elseif ($a == 4)
-                    $ans = $lang_rate4;
+                $ans = $lang_rate4;
             elseif ($a == 5)
-                    $ans = $lang_rate5;
+                $ans = $lang_rate5;
             $tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
         }
         $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td> "; 
@@ -286,21 +286,21 @@ foreach ($result as $theresult){
         $both_con_sep++;
         $tool_content .= $langCKW_SKW ."<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$showall</a>";
         $tool_content .= "</td><td class='hidden_names' style='display:none;'><table border='1' width='100%'>";
-            $answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
-                                                                                            WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
+        $answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
+                                                                                        WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
         foreach ($answers as $answer) {
             $q = $answer -> qt;
             $a = $answer -> ant;
             if ($a == 1)
-                    $ans = $lang_rate1;
+                $ans = $lang_rate1;
             elseif ($a == 2)
-                    $ans = $lang_rate2;
+                $ans = $lang_rate2;
             elseif ($a == 3)
-                    $ans = $lang_rate3;
+                $ans = $lang_rate3;
             elseif ($a == 4)
-                    $ans = $lang_rate4;
+                $ans = $lang_rate4;
             elseif ($a == 5)
-                    $ans = $lang_rate5;
+                $ans = $lang_rate5;
             $tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
         }
         $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td> "; 
@@ -330,7 +330,6 @@ if(!$total_participants) {
 }
 
 //Summarizing results: #students belong to category
- 
 $chart_data = array();                                             
 $this_chart_data = array();
 
@@ -342,13 +341,13 @@ $tool_content .= "
     <div class='panel-body'>
         <h4>$lang_ckw_skw_chart</h4>";
 
-$this_chart_data['category'][] = "Connected";
-$this_chart_data['category'][] = "Separated";
-$this_chart_data['category'][] = "Both connected and separated";
+$this_chart_data['category'][] = $langConnected;
+$this_chart_data['category'][] = $langSeparated;
+$this_chart_data['category'][] = $langBothWays;
 $total_partic = $connected+$separated+$both_con_sep;
-$this_chart_data['percentage'][] = 100*$connected/$total_partic;
-$this_chart_data['percentage'][] = 100*$separated/$total_partic;
-$this_chart_data['percentage'][] = 100*$both_con_sep/$total_partic;
+$this_chart_data['percentage'][] = round(100*$connected/$total_partic,2);
+$this_chart_data['percentage'][] = round(100*$separated/$total_partic,2);
+$this_chart_data['percentage'][] = round(100*$both_con_sep/$total_partic,2);
 
 /****   C3 plot   ****/
 $chart_data[] = $this_chart_data;
