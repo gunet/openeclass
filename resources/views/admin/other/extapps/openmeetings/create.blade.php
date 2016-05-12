@@ -101,8 +101,6 @@
    <script language="javaScript" type="text/javascript">
             var chkValidator  = new Validator("serverForm");
             chkValidator.addValidation("hostname_form","req","{{ trans('langBBBServerAlertHostname') }}");
-            chkValidator.addValidation("ip_form","req","{{ trans('langBBBServerAlertIP') }}");
-            chkValidator.addValidation("ip_form","regexp=^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$","{{ trans('langBBBServerAlertIP') }}");
             chkValidator.addValidation("key_form","req","{{ trans('langBBBServerAlertKey') }}");
             chkValidator.addValidation("api_url_form","req","{{ trans('langBBBServerAlertAPIUrl') }}");
             chkValidator.addValidation("max_rooms_form","req","{{ trans('langBBBServerAlertMaxRooms') }}");
