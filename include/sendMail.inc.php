@@ -109,6 +109,11 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
 // Try to send a message using Swift Mailer, catching exceptions
 function sendMessage($message) {
     global $langMailError;
+
+    if ($email_bounces = get_config('email_bounces')) {
+        $message->setReturnPath($email_bounces);
+    }
+
     try {
         return getMailer()->send($message);
     } catch (Exception $e) {

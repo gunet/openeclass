@@ -59,6 +59,7 @@ function store_mail_config() {
     set_config('dont_mail_unverified_mails', $dont_mail_unverified_mails);
     set_config('email_from', $email_from);
     set_config('email_announce', $_POST['email_announce']);
+    set_config('email_bounces', $_POST['email_bounces']);
     if ($_POST['email_transport'] == 1) {
         set_config('email_transport', 'smtp');
         register_posted_variables(array('smtp_encryption' => true,
@@ -104,7 +105,7 @@ function mail_settings_form() {
         $lang_email_from, $langEmailAnnounce, $langUsername, $langPassword,
         $langEmailSendmail, $langEmailTransport, $langEmailSMTPServer,
         $langEmailSMTPPort, $langEmailEncryption, $langEmailSendWarn,
-        $langPreviousStep, $langNextStep, $tool_content;
+        $langPreviousStep, $langNextStep, $tool_content, $langEmailBounces;
 
     // True if running initial install
     $install = isset($GLOBALS['input_fields']);
@@ -162,6 +163,12 @@ function mail_settings_form() {
                            <div class='col-sm-10'>
                                 <input type='text' class='form-control' name='email_announce' id='formEmailAnnounce' value='".q(get_var('email_announce'))."'>
                                 <span class='help-block' id='emailSendWarn'>$langEmailSendWarn</span>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formEmailBounces' class='col-sm-2 control-label'>$langEmailBounces:</label>
+                           <div class='col-sm-10'>
+                                <input type='text' class='form-control' name='email_bounces' id='formEmailBounces' value='".q(get_var('email_bounces'))."'>
                            </div>
                         </div>
                         <div class='form-group'>

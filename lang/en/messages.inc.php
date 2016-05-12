@@ -3816,6 +3816,7 @@ $langNoLinkCategories = "There are no link categories";
 $langResourceBrowser = 'Resource Browser';
 $langAuthTitle = "Authentication Method Name";
 $langEmailAnnounce = "Announcement notification (CC) address";
+$langEmailBounces = 'Delivery error (bounce) address';
 $langListCalendar = "Calendar view";
 $langAttendances = "Attendances";
 $langNewAttendance = "New attendance";
