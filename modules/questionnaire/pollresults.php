@@ -77,8 +77,7 @@ $head_content .= "<script type='text/javascript'>
         });
 
     function draw_plots(){
-        var options = null;
-        console.log(pollChartData[0]);
+        var options = null;        
         for(var i=0;i<pollChartData.length;i++){
             options = {
                 data: {
@@ -108,6 +107,7 @@ if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
 }
 $pid = intval($_GET['pid']);
 $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
+$PollType = $thePoll ->type;
 if (!$is_editor && !$thePoll->show_results) {
     Session::Messages($langPollResultsAccess);
     redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);    
@@ -188,241 +188,247 @@ $export_box
 </div>";
 
 $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position ASC", $pid);
-$j=1; 
+$j=1;
 $chart_data = array();
 $chart_counter = 0;
-foreach ($questions as $theQuestion) {
-    $this_chart_data = array();
-    if ($theQuestion->qtype == QTYPE_LABEL) {
-        $tool_content .= "<div class='alert alert-info'>$theQuestion->question_text</div>"; 
-    } else {
-        $tool_content .= "
-        <div class='panel panel-success'>
-            <div class='panel-heading'>
-                <h3 class='panel-title'>$langQuestion $j</h3>
-            </div>
-            <div class='panel-body'>
-                <!--h4>".q($theQuestion->question_text)."</h4-->";
+if ($PollType == 0) {   
+    foreach ($questions as $theQuestion) {
+        $this_chart_data = array();
+        if ($theQuestion->qtype == QTYPE_LABEL) {
+            $tool_content .= "<div class='alert alert-info'>$theQuestion->question_text</div>"; 
+        } else {
+            $tool_content .= "
+            <div class='panel panel-success'>
+                <div class='panel-heading'>
+                    <h3 class='panel-title'>$langQuestion $j</h3>
+                </div>
+                <div class='panel-body'>
+                    <!--h4>".q($theQuestion->question_text)."</h4-->";
 
-        $j++;
+            $j++;
 
-        if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {
-            $all_answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theQuestion->pqid);
-            foreach ($all_answers as $row) {
-                $this_chart_data['answer'][] = q($row->answer_text);
-                $this_chart_data['percentage'][] = 0;
-            }
-            if ($theQuestion->qtype == QTYPE_SINGLE) {
-                $this_chart_data['answer'][] = $langPollUnknown;
-                $this_chart_data['percentage'][] = 0;
-            }          
-            $answers = Database::get()->queryArray("SELECT a.aid AS aid, b.answer_text AS answer_text, count(a.aid) AS count
-                        FROM poll_user_record c, poll_answer_record a
-                        LEFT JOIN poll_question_answer b
-                        ON a.aid = b.pqaid
-                        WHERE a.qid = ?d
-                        AND a.poll_user_record_id = c.id
-                        AND (c.email_verification = 1 OR c.email_verification IS NULL)
-                        GROUP BY a.aid", $theQuestion->pqid);
-            $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record WHERE qid= ?d", $theQuestion->pqid)->total;
-            $answers_table = "
-                <table class='table-default'>
-                    <tr>
-                        <th>$langAnswer</th>
-                        <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr>";            
-            foreach ($answers as $answer) {              
-                $percentage = round(100 * ($answer->count / $answer_total),2);
-                if(isset($answer->answer_text)){
-                    $q_answer = q($answer->answer_text);
-                    $aid = $answer->aid;
-                } else {
-                    $q_answer = $langPollUnknown;
-                    $aid = -1;
+            if ($theQuestion->qtype == QTYPE_MULTIPLE || $theQuestion->qtype == QTYPE_SINGLE) {
+                $all_answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theQuestion->pqid);
+                foreach ($all_answers as $row) {
+                    $this_chart_data['answer'][] = q($row->answer_text);
+                    $this_chart_data['percentage'][] = 0;
                 }
-                $this_chart_data['percentage'][array_search($q_answer,$this_chart_data['answer'])] = $percentage;
-                if ($thePoll->anonymized != 1) {
-                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
-                            FROM poll_user_record AS a, user AS b
-                            WHERE a.id IN (
-                                    SELECT poll_user_record_id FROM poll_answer_record WHERE qid = ?d AND aid = ?d
-                                )
-                            AND a.uid = b.id
-                            UNION
-                            SELECT a.email AS fullname
-                            FROM poll_user_record a, poll_answer_record b 
-                            WHERE b.qid = ?d
-                            AND b.aid = ?d
-                            AND a.email IS NOT NULL
-                            AND a.email_verification = 1
-                            AND b.poll_user_record_id = a.id                            
-                            ", $theQuestion->pqid, $aid, $theQuestion->pqid, $aid);                    
-                    foreach($names as $name) {
-                      $names_array[] = $name->fullname;
-                    }
-                    $names_str = implode(', ', $names_array);  
-                    $ellipsized_names_str = q(ellipsize($names_str, 60));
-                }
-                $answers_table .= "
-                    <tr>
-                            <td>".$q_answer."</td>
-                            <td>$answer->count</td>".(($thePoll->anonymized == 1)?'':'<td>'.$ellipsized_names_str.(($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').'</td><td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a></td>')."</tr>";     
-                unset($names_array);
-            }
-            $answers_table .= "</table><br>";
-            $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
-            /****   C3 plot   ****/
-            $tool_content .= "<div class='row plotscontainer'>";
-            $tool_content .= "<div class='col-lg-12'>";
-            $tool_content .= plot_placeholder("poll_chart$chart_counter", q($theQuestion->question_text));
-            $tool_content .= "</div></div>";
-            $tool_content .= $answers_table;
-            $chart_counter++;
-        } elseif ($theQuestion->qtype == QTYPE_SCALE) {
-            for ($i=1;$i<=$theQuestion->q_scale;$i++) {
-                $this_chart_data['answer'][] = "$i";
-                $this_chart_data['percentage'][] = 0;
-            }
-
-            $answers = Database::get()->queryArray("SELECT a.answer_text, count(a.answer_text) as count 
-                    FROM poll_answer_record a, poll_user_record b
-                    WHERE a.qid = ?d
-                    AND a.poll_user_record_id = b.id
-                    AND (b.email_verification = 1 OR b.email_verification IS NULL)
-                    GROUP BY a.answer_text", $theQuestion->pqid);
-            $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total "
-                    . "FROM poll_answer_record "
-                    . "WHERE qid= ?d", $theQuestion->pqid)->total;
-
-            $answers_table = "
-                <table class='table-default'>
-                    <tr>
-                        <th>$langAnswer</th>
-                        <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
-            foreach ($answers as $answer) {
-                $percentage = round(100 * ($answer->count / $answer_total),2);
-                $this_chart_data['percentage'][array_search($answer->answer_text,$this_chart_data['answer'])] = $percentage;
-                
-                if ($thePoll->anonymized != 1) {
-                    // Gets names for registered users and emails for unregistered
-                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
-                            FROM poll_user_record AS a, user AS b
-                            WHERE a.id IN (
-                                    SELECT poll_user_record_id FROM poll_answer_record WHERE qid = ?d AND answer_text = ?s
-                                )
-                            AND a.uid = b.id
-                            UNION
-                            SELECT a.email AS fullname
-                            FROM poll_user_record a, poll_answer_record b 
-                            WHERE b.qid = ?d 
-                            AND b.answer_text = ?s
-                            AND a.email IS NOT NULL
-                            AND a.email_verification = 1
-                            AND b.poll_user_record_id = a.id                            
-                            ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);
-                    
-                    foreach($names as $name) {
-                      $names_array[] = $name->fullname;
-                    }
-                    $names_str = implode(', ', $names_array);  
-                    $ellipsized_names_str = q(ellipsize($names_str, 60));
-                }
-                $answers_table .= "
-                    <tr>
-                        <td>".q($answer->answer_text)."</td>
-                        <td>$answer->count</td>"
-                        . (($thePoll->anonymized == 1) ? 
-                        '' :
-                        '<td>'.$ellipsized_names_str.
-                            (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').
-                        '</td>
-                        <td class="hidden_names" style="display:none;">'
-                            . q($names_str) .
-                            ' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a>
-                        </td>').
-                    "</tr>";     
-                unset($names_array);                
-            }
-            $answers_table .= "</table>";
-            /****   C3 plot   ****/
-            $chart_data[] = $this_chart_data;
-            $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
-            $tool_content .= "<div class='row plotscontainer'>";
-            $tool_content .= "<div class='col-lg-12'>";
-            $tool_content .= plot_placeholder("poll_chart$chart_counter", q($theQuestion->question_text));
-            $tool_content .= "</div></div>";
-            $tool_content .= $answers_table;
-            $chart_counter++;
-        } elseif ($theQuestion->qtype == QTYPE_FILL) {            
-            $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text 
-                                        FROM poll_answer_record a, poll_user_record b
-                                        WHERE a.qid = ?d 
-                                        AND a.poll_user_record_id = b.id
-                                        AND (b.email_verification = 1 OR b.email_verification IS NULL)                                        
-                                        GROUP BY a.answer_text", $theQuestion->pqid);                   
-            $tool_content .= "<table class='table-default'>
-                    <tbody>
-                    <tr>
+                if ($theQuestion->qtype == QTYPE_SINGLE) {
+                    $this_chart_data['answer'][] = $langPollUnknown;
+                    $this_chart_data['percentage'][] = 0;
+                }          
+                $answers = Database::get()->queryArray("SELECT a.aid AS aid, b.answer_text AS answer_text, count(a.aid) AS count
+                            FROM poll_user_record c, poll_answer_record a
+                            LEFT JOIN poll_question_answer b
+                            ON a.aid = b.pqaid
+                            WHERE a.qid = ?d
+                            AND a.poll_user_record_id = c.id
+                            AND (c.email_verification = 1 OR c.email_verification IS NULL)
+                            GROUP BY a.aid", $theQuestion->pqid);
+                $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record WHERE qid= ?d", $theQuestion->pqid)->total;
+                $answers_table = "
+                    <table class='table-default'>
+                        <tr>
                             <th>$langAnswer</th>
-                            <th>$langSurveyTotalAnswers</th>
-                            ".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."    
-                    </tr>";
-            $k=1;
-            foreach ($answers as $answer) {             
-                if (!$thePoll->anonymized) {
-                    // Gets names for registered users and emails for unregistered
-                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
-                            FROM poll_user_record AS a, user AS b
-                            WHERE a.id IN (
-                                    SELECT poll_user_record_id FROM poll_answer_record 
-                                    WHERE qid = ?d 
-                                    AND answer_text = ?s
-                                )
-                            AND a.uid = b.id
-                            UNION
-                            SELECT a.email AS fullname
-                            FROM poll_user_record a, poll_answer_record b 
-                            WHERE b.qid = ?d
-                            AND b.answer_text = ?s
-                            AND a.email IS NOT NULL
-                            AND a.email_verification = 1
-                            AND b.poll_user_record_id = a.id                            
-                            ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);                    
-                    foreach($names as $name) {
-                      $names_array[] = $name->fullname;
+                            <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr>";            
+                foreach ($answers as $answer) {              
+                    $percentage = round(100 * ($answer->count / $answer_total),2);
+                    if(isset($answer->answer_text)){
+                        $q_answer = q($answer->answer_text);
+                        $aid = $answer->aid;
+                    } else {
+                        $q_answer = $langPollUnknown;
+                        $aid = -1;
                     }
-                    $names_str = implode(', ', $names_array);  
-                    $ellipsized_names_str = q(ellipsize($names_str, 60));
+                    $this_chart_data['percentage'][array_search($q_answer,$this_chart_data['answer'])] = $percentage;
+                    if ($thePoll->anonymized != 1) {
+                        $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
+                                FROM poll_user_record AS a, user AS b
+                                WHERE a.id IN (
+                                        SELECT poll_user_record_id FROM poll_answer_record WHERE qid = ?d AND aid = ?d
+                                    )
+                                AND a.uid = b.id
+                                UNION
+                                SELECT a.email AS fullname
+                                FROM poll_user_record a, poll_answer_record b 
+                                WHERE b.qid = ?d
+                                AND b.aid = ?d
+                                AND a.email IS NOT NULL
+                                AND a.email_verification = 1
+                                AND b.poll_user_record_id = a.id                            
+                                ", $theQuestion->pqid, $aid, $theQuestion->pqid, $aid);                    
+                        foreach($names as $name) {
+                          $names_array[] = $name->fullname;
+                        }
+                        $names_str = implode(', ', $names_array);  
+                        $ellipsized_names_str = q(ellipsize($names_str, 60));
+                    }
+                    $answers_table .= "
+                        <tr>
+                                <td>".$q_answer."</td>
+                                <td>$answer->count</td>".(($thePoll->anonymized == 1)?'':'<td>'.$ellipsized_names_str.(($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').'</td><td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a></td>')."</tr>";     
+                    unset($names_array);
                 }
-                $row_class = ($k>3) ? 'class="hidden_row" style="display:none;"' : '';
-                $extra_column = !$thePoll->anonymized ? 
-                        "<td>"
-                        . $ellipsized_names_str
-                        . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').
-                        "</td>
-                        <td class='hidden_names' style='display:none;'>'
-                           . q($names_str) .
-                           ' <a href='#' class='trigger_names' data-type='multiple' id='hide'>'.$shownone.'</a>
-                       </td>" : "";                       
-                $tool_content .= "
-                <tr $row_class>
-                        <td>".q($answer->answer_text)."</td>
-                        <td>$answer->count</td>
-                        $extra_column
-                </tr>";                               
-                $k++;
-                if (!$thePoll->anonymized) unset($names_array);
-            }
-            if ($k>4) {
-             $tool_content .= "
-                <tr>
-                        <td colspan='".($thePoll->anonymized ? 2 : 3)."'><a href='#' class='trigger_names' data-type='fill' id='show'>$showall</a></td>
-                </tr>";                       
-            }             
+                $answers_table .= "</table><br>";
+                $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
+                /****   C3 plot   ****/
+                $tool_content .= "<div class='row plotscontainer'>";
+                $tool_content .= "<div class='col-lg-12'>";
+                $tool_content .= plot_placeholder("poll_chart$chart_counter", q($theQuestion->question_text));
+                $tool_content .= "</div></div>";
+                $tool_content .= $answers_table;
+                $chart_counter++;
+            } elseif ($theQuestion->qtype == QTYPE_SCALE) {
+                for ($i=1;$i<=$theQuestion->q_scale;$i++) {
+                    $this_chart_data['answer'][] = "$i";
+                    $this_chart_data['percentage'][] = 0;
+                }
 
-            $tool_content .= '</tbody></table><br>';
+                $answers = Database::get()->queryArray("SELECT a.answer_text, count(a.answer_text) as count 
+                        FROM poll_answer_record a, poll_user_record b
+                        WHERE a.qid = ?d
+                        AND a.poll_user_record_id = b.id
+                        AND (b.email_verification = 1 OR b.email_verification IS NULL)
+                        GROUP BY a.answer_text", $theQuestion->pqid);
+                $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total "
+                        . "FROM poll_answer_record "
+                        . "WHERE qid= ?d", $theQuestion->pqid)->total;
+
+                $answers_table = "
+                    <table class='table-default'>
+                        <tr>
+                            <th>$langAnswer</th>
+                            <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
+                foreach ($answers as $answer) {
+                    $percentage = round(100 * ($answer->count / $answer_total),2);
+                    $this_chart_data['percentage'][array_search($answer->answer_text,$this_chart_data['answer'])] = $percentage;
+
+                    if ($thePoll->anonymized != 1) {
+                        // Gets names for registered users and emails for unregistered
+                        $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
+                                FROM poll_user_record AS a, user AS b
+                                WHERE a.id IN (
+                                        SELECT poll_user_record_id FROM poll_answer_record WHERE qid = ?d AND answer_text = ?s
+                                    )
+                                AND a.uid = b.id
+                                UNION
+                                SELECT a.email AS fullname
+                                FROM poll_user_record a, poll_answer_record b 
+                                WHERE b.qid = ?d 
+                                AND b.answer_text = ?s
+                                AND a.email IS NOT NULL
+                                AND a.email_verification = 1
+                                AND b.poll_user_record_id = a.id                            
+                                ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);
+
+                        foreach($names as $name) {
+                          $names_array[] = $name->fullname;
+                        }
+                        $names_str = implode(', ', $names_array);  
+                        $ellipsized_names_str = q(ellipsize($names_str, 60));
+                    }
+                    $answers_table .= "
+                        <tr>
+                            <td>".q($answer->answer_text)."</td>
+                            <td>$answer->count</td>"
+                            . (($thePoll->anonymized == 1) ? 
+                            '' :
+                            '<td>'.$ellipsized_names_str.
+                                (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').
+                            '</td>
+                            <td class="hidden_names" style="display:none;">'
+                                . q($names_str) .
+                                ' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a>
+                            </td>').
+                        "</tr>";     
+                    unset($names_array);                
+                }
+                $answers_table .= "</table>";
+                /****   C3 plot   ****/
+                $chart_data[] = $this_chart_data;
+                $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
+                $tool_content .= "<div class='row plotscontainer'>";
+                $tool_content .= "<div class='col-lg-12'>";
+                $tool_content .= plot_placeholder("poll_chart$chart_counter", q($theQuestion->question_text));
+                $tool_content .= "</div></div>";
+                $tool_content .= $answers_table;
+                $chart_counter++;
+            } elseif ($theQuestion->qtype == QTYPE_FILL) {            
+                $answers = Database::get()->queryArray("SELECT COUNT(a.arid) AS count, a.answer_text 
+                                            FROM poll_answer_record a, poll_user_record b
+                                            WHERE a.qid = ?d 
+                                            AND a.poll_user_record_id = b.id
+                                            AND (b.email_verification = 1 OR b.email_verification IS NULL)                                        
+                                            GROUP BY a.answer_text", $theQuestion->pqid);                   
+                $tool_content .= "<table class='table-default'>
+                        <tbody>
+                        <tr>
+                                <th>$langAnswer</th>
+                                <th>$langSurveyTotalAnswers</th>
+                                ".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."    
+                        </tr>";
+                $k=1;
+                foreach ($answers as $answer) {             
+                    if (!$thePoll->anonymized) {
+                        // Gets names for registered users and emails for unregistered
+                        $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname
+                                FROM poll_user_record AS a, user AS b
+                                WHERE a.id IN (
+                                        SELECT poll_user_record_id FROM poll_answer_record 
+                                        WHERE qid = ?d 
+                                        AND answer_text = ?s
+                                    )
+                                AND a.uid = b.id
+                                UNION
+                                SELECT a.email AS fullname
+                                FROM poll_user_record a, poll_answer_record b 
+                                WHERE b.qid = ?d
+                                AND b.answer_text = ?s
+                                AND a.email IS NOT NULL
+                                AND a.email_verification = 1
+                                AND b.poll_user_record_id = a.id                            
+                                ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);                    
+                        foreach($names as $name) {
+                          $names_array[] = $name->fullname;
+                        }
+                        $names_str = implode(', ', $names_array);  
+                        $ellipsized_names_str = q(ellipsize($names_str, 60));
+                    }
+                    $row_class = ($k>3) ? 'class="hidden_row" style="display:none;"' : '';
+                    $extra_column = !$thePoll->anonymized ? 
+                            "<td>"
+                            . $ellipsized_names_str
+                            . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').
+                            "</td>
+                            <td class='hidden_names' style='display:none;'>'
+                               . q($names_str) .
+                               ' <a href='#' class='trigger_names' data-type='multiple' id='hide'>'.$shownone.'</a>
+                           </td>" : "";                       
+                    $tool_content .= "
+                    <tr $row_class>
+                            <td>".q($answer->answer_text)."</td>
+                            <td>$answer->count</td>
+                            $extra_column
+                    </tr>";                               
+                    $k++;
+                    if (!$thePoll->anonymized) unset($names_array);
+                }
+                if ($k>4) {
+                 $tool_content .= "
+                    <tr>
+                            <td colspan='".($thePoll->anonymized ? 2 : 3)."'><a href='#' class='trigger_names' data-type='fill' id='show'>$showall</a></td>
+                    </tr>";                       
+                }             
+
+                $tool_content .= '</tbody></table><br>';
+            }
+            $tool_content .= "</div></div>"; 
         }
-        $tool_content .= "</div></div>"; 
     }
+} elseif($PollType == 1) { // Colles poll
+    redirect_to_home_page("modules/questionnaire/colles.php?course=$course_code");
+} elseif($PollType == 2) { // ATTLES poll
+    redirect_to_home_page("modules/questionnaire/attls.php");
 }
 // display page
 draw($tool_content, 2, null, $head_content);

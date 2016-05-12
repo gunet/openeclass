@@ -3256,6 +3256,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             }
         }
         
+        // upgrade poll table (COLLES and ATTLS support)
+        if (!DBHelper::fieldExists('poll', 'type')) {
+            Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");
+        }
+        
         // drop trigger
         Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
 

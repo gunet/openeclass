@@ -64,6 +64,23 @@ switch ($_REQUEST['UseCase']) {
 
 draw($tool_content, 2, null, $head_content);
 
+/**
+ * @brief display poll form
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $tool_content
+ * @global type $langSubmit
+ * @global type $langPollInactive
+ * @global type $langPollUnknown
+ * @global type $uid
+ * @global type $langPollAlreadyParticipated
+ * @global type $is_editor
+ * @global type $langBack
+ * @global type $langQuestion
+ * @global type $langCancel
+ * @global type $head_content
+ * @global type $langPollParticipantInfo
+ */
 function printPollForm() {
     global $course_id, $course_code, $tool_content,
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
@@ -238,10 +255,25 @@ function printPollForm() {
     }	
 }
 
+/**
+ * @brief submit poll
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $uid
+ * @global type $langPollSubmitted
+ * @global type $langBack
+ * @global type $langUsage
+ * @global type $langTheField
+ * @global type $langFormErrors
+ * @global type $charset
+ * @global type $urlServer
+ * @global type $langPollEmailUsed
+ * @global type $langPollParticipateConfirmation
+ */
 function submitPoll() {
     global $tool_content, $course_code, $uid, $langPollSubmitted, $langBack,
            $langUsage, $langTheField, $langFormErrors, $charset, $urlServer,
-           $langPollEmailUsed;
+           $langPollEmailUsed, $langPollParticipateConfirmation;
     
     $pid = intval($_POST['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
@@ -266,7 +298,7 @@ function submitPoll() {
             $participantEmail = $_POST['participantEmail'];
             $verification_code = randomkeys(255);
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, $participantEmail, 0, $verification_code)->lastInsertID;
-            $subject = "Επιβεβαίωση Συμμετοχής σε Ερωτηματολόγιο";
+            $subject = $langPollParticipateConfirmation;
             $body_html = "
              <!-- Header Section -->
             <div id='mail-header'>
