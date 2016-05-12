@@ -2753,6 +2753,7 @@ $langSurveyNone = "Δεν έχουν δημιουργηθεί έρευνες μ�
 $langSurveyInactive = "Η Έρευνα Μαθησιακού Προφίλ έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
 $langSurveyCharts = "Αποτελέσματα έρευνας";
 $langHasParticipated = "Έχετε ήδη συμμετάσχει";
+$langOpenParticipation = "Οι συμμετοχές είναι ανοικτές";
 $langSurveyNotStarted = "Δεν έχει ανοίξει ακόμα";
 $langQQuestionNotGiven = "Δεν έχετε εισαγάγει την τελευταία ερώτηση.";
 $langQFillInAllQs = "Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
