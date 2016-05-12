@@ -576,6 +576,7 @@ $langEnableCommonDocs = "Ενεργοποίηση λειτουργίας «Κο�
 $langEnableMyDocs = 'Ενεργοποίηση προσωπικών αρχείων';
 $langMyDocsQuota = 'Όριο αποθηκευτικού χώρου προσωπικών αρχείων';
 $langEmailAnnounce = "Διεύθυνση κοινοποίησης ανακοινώσεων";
+$langEmailBounces = 'Διεύθυνση λήψης σφαλμάτων (bounces)';
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
