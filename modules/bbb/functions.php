@@ -125,7 +125,7 @@ function new_bbb_session() {
                         ORDER BY UPPER(u.surname), UPPER(u.givenname)";
             $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
 
-            $tool_content .= "<option value='-1' selected><h2>$langAllUsers</h2></option>";
+            $tool_content .= "<option value='0' selected><h2>$langAllUsers</h2></option>";
             foreach ($res as $r) {
                 if (isset($r->user_id)) {
                     $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . " (".q($r->username).")</option>";
@@ -299,7 +299,7 @@ function add_update_bbb_session($title,$desc,$start_session,$end_session,$type,$
 
         if (isset($_POST['groups']) and count($_POST['groups'] > 0)) {
             $recipients = array();
-            if ($_POST['groups'][0] == -1) { // all users
+            if ($_POST['groups'][0] == 0) { // all users
                 $result = Database::get()->queryArray("SELECT cu.user_id, u.email FROM course_user cu
                                                         JOIN user u ON cu.user_id=u.id
                                                     WHERE cu.course_id = ?d
@@ -512,7 +512,7 @@ function edit_bbb_session($session_id) {
                                     GROUP BY u.id
                                     ORDER BY UPPER(u.surname), UPPER(u.givenname)";
                         $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
-                        $tool_content .= "<option value='-1'><h2>$langAllUsers</h2></option>";
+                        $tool_content .= "<option value='0'><h2>$langAllUsers</h2></option>";
                         foreach ($res as $r) {
                             if (isset($r->user_id)) {
                                 $tool_content .= "<option value='{$r->user_id}'";                                
@@ -624,6 +624,7 @@ function edit_bbb_session($session_id) {
  * @global type $tool_content
  * @global type $is_editor
  * @global type $course_code
+ * @global type $uid
  * @global type $langNewBBBSessionStart
  * @global type $langNewBBBSessionDesc,
  * @global type $langNewBBBSessionEnd,
@@ -647,7 +648,7 @@ function edit_bbb_session($session_id) {
  */
 function bbb_session_details() {
 
-    global $course_id, $tool_content, $is_editor, $course_code,
+    global $course_id, $tool_content, $is_editor, $course_code, $uid,
         $langNewBBBSessionStart, $langParticipants,$langConfirmDelete,
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle, 
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langNewBBBSessionDesc,
@@ -659,8 +660,8 @@ function bbb_session_details() {
     $myGroups = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id=?d", $_SESSION['uid']);
 
     $activeClause = !$is_editor? '': "AND active = '1'";
-    $result = Database::get()->queryArray("SELECT * FROM bbb_session
-                            WHERE course_id = ?s $activeClause ORDER BY start_date DESC", $course_id);
+    $result = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id = ?s $activeClause 
+                                                ORDER BY start_date DESC", $course_id);
     if (get_total_bbb_servers() == '0' && get_total_om_servers() == '0' && get_total_webconf_servers() == '0' ) {            
         if ($is_editor) {
             $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";
@@ -669,7 +670,7 @@ function bbb_session_details() {
         }
     } elseif ($result) {
         if (!$is_editor) {
-            $tool_content .= "<div class='alert alert-info'><label>$langNote</label>:<br>$langBBBNoteEnableJoin</div>";
+            $tool_content .= "<div class='alert alert-info'><label>$langNote</label>: $langBBBNoteEnableJoin</div>";
         }
         $headingsSent = false;
         $headings = "<div class='row'>
@@ -685,24 +686,23 @@ function bbb_session_details() {
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
 
-        define('DAY_MINUTES', 24 * 60);
-        
-        foreach ($result as $row) {
+        define('DAY_MINUTES', 24 * 60);        
+        foreach ($result as $row) {            
             $participants = '';
             // Get participants
             $r_group = explode(",",$row->participants);
-            foreach ($r_group as $participant_uid) {
+            foreach ($r_group as $participant_uid) {                
                 if ($participants) {
                     $participants .= ', ';
-                }
-                $participant_uid = str_replace("'", '', $participant_uid);
+                }                                
+                $participant_uid = str_replace("'", '', $participant_uid);                
                 if (preg_match('/^_/', $participant_uid)) {
                     $participants .= gid_to_name(str_replace("_", '', $participant_uid));
                 } else {
-                    if ($participant_uid == -1) {
+                    if ($participant_uid == 0) {
                         $participants .= $langAllUsers;
-                    } else {
-                        $participants .= uid_to_name($participant_uid, 'fullname');
+                    } else {                        
+                        $participants .= uid_to_name($participant_uid, 'fullname');                        
                     }
                 }
             }
@@ -711,43 +711,38 @@ function bbb_session_details() {
             $title = $row->title;
             $start_date = $row->start_date;
             $end_date = $row->end_date;
-            if($end_date)
-            {
+            if($end_date) {
                 $timeLeft = date_diff_in_minutes($end_date, date('Y-m-d H:i:s'));
-                $timeLabel = $end_date;
-            }
-            else
-            {
+                $timeLabel = nice_format($end_date, TRUE);
+            } else {                
                 $timeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
                 $timeLabel = '';
             }
-            //$timeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
-            //$timeLabel = $end_date;
             if ($timeLeft > 0) {
                 $timeLabel .= "<br><span class='label label-warning'><small>$langDaysLeft " .
                     format_time_duration($timeLeft * 60) .
                     "</small></span>";
-            } elseif (-$timeLeft > DAY_MINUTES) {
+            } elseif (isset($end_date) and (-$timeLeft > DAY_MINUTES)) {
                 $timeLabel .= "<br><span class='label label-danger'><small>$m[expired]</small></span>";
-            }
-
-            // $row->public == '1' ? $type = $langNewBBBSessionPublic: $type = $langNewBBBSessionPrivate;
+            }           
             $meeting_id = $row->meeting_id;
             $att_pw = $row->att_pw;
             $mod_pw = $row->mod_pw;
             $record = $row->record;
             $desc = isset($row->description)? $row->description: '';
-
-            $canJoin = $row->active == '1' &&
-                date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < $row->unlock_interval &&
-                -$timeLeft < DAY_MINUTES &&
-                (get_total_bbb_servers() <> '0' || get_total_om_servers() <> '0' || get_total_webconf_servers() <> '0');
+            
+            $canJoin = FALSE;
+            if (($row->active == '1') and (date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < $row->unlock_interval)
+                    and (get_total_bbb_servers() <> '0' or get_total_om_servers() <> '0' or get_total_webconf_servers() <> '0')) {
+                $canJoin = TRUE;
+            }
+            if (isset($end_date) && -$timeLeft > DAY_MINUTES) {
+                $canJoin = FALSE;
+            }
             if ($canJoin) {
-                if($is_editor)
-                {
+                if($is_editor) {
                     $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
-                }else
-                {
+                } else {
                     //$joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
                     $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
                 }
@@ -763,7 +758,7 @@ function bbb_session_details() {
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
                     <td class='text-left'>$joinLink</td>
                     <td>$desc</td>
-                    <td class='text-center'>$start_date</td>
+                    <td class='text-center'>".nice_format($start_date, TRUE)."</td>
                     <td class='text-center'>$timeLabel</td>
                     <td style='width: 30%'>$participants</td>
                     <td class='option-btn-cell'>".
@@ -785,22 +780,26 @@ function bbb_session_details() {
                                     'confirm' => $langConfirmDelete)
                             )) .
                     "</td></tr>";
-            } else {
+            } else {                
+                $access = FALSE;
                 // Allow access to session only if user is in participant group or session is scheduled for everyone
-                $access = false;
-                if(!empty($r_group) && count($r_group)>0 && $r_group[0]<>'')
-                {
-                    foreach ($myGroups as $mg) {
-                        if (in_array("'_" . $mg->group_id . "'", $r_group)) {
-                            $access = true;
-                        }
-                }
-                }else{
-                    $access = true;
-                }
+                $r_group = explode(",", $row->participants);                
+                if (in_array('0', $r_group)) { // all users
+                    $access = TRUE;                    
+                } else {
+                    if (in_array("$uid", $r_group)) { // user search
+                        $access = TRUE;                        
+                    } else {                        
+                        foreach ($myGroups as $user_gid) { // group search
+                            if (in_array("_$user_gid->group_id", $r_group)) {
+                                $access = TRUE;                                 
+                            }
+                        }              
+                    }
+                }                
+                 
                 // Always allow access to editor switched to student view
-                $access = $access || in_array("'".$_SESSION['uid']."'", $r_group) ||
-                    (isset($_SESSION['student_view']) and $_SESSION['student_view'] == $course_code);
+                $access = $access || (isset($_SESSION['student_view']) and $_SESSION['student_view'] == $course_code);
 
                 if ($access) {
                     if (!$headingsSent) {
@@ -810,7 +809,7 @@ function bbb_session_details() {
                     $tool_content .= "<tr>
                         <td class='text-center'>$joinLink</td>
                         <td>$desc</td>
-                        <td class='text-center'>$start_date</td>                        
+                        <td class='text-center'>".nice_format($start_date, TRUE)."</td>
                         <td class='text-center'>$timeLabel</td>
                         <td style='width: 30%'>$participants</td>
                         <td class='text-center'>";
