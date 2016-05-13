@@ -292,7 +292,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
                             cursor: move;
                         }
                       </style>";    
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
         array('title' => $langCategoryAdd,
               'url' => "custom_profile_fields.php?add_cat",
               'icon' => 'fa-plus-circle',
