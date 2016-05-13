@@ -655,6 +655,15 @@ function bbb_session_details() {
         $langNoBBBSesssions, $langDaysLeft, $m, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
         $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers;
 
+    
+    if (get_total_bbb_servers() == '0' && get_total_om_servers() == '0' && get_total_webconf_servers() == '0' ) {            
+        if ($is_editor) {
+            $tool_content .= "<div class='alert alert-danger'><label>$langNote</label>: $langBBBNotServerAvailableTeacher</div>";
+        } else {
+            $tool_content .= "<div class='alert alert-danger'><label>$langNote</label>: $langBBBNotServerAvailableStudent</div>";
+        }
+    }
+    
     load_js('trunk8');
 
     $myGroups = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id=?d", $_SESSION['uid']);
@@ -662,13 +671,7 @@ function bbb_session_details() {
     $activeClause = !$is_editor? '': "AND active = '1'";
     $result = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id = ?s $activeClause 
                                                 ORDER BY start_date DESC", $course_id);
-    if (get_total_bbb_servers() == '0' && get_total_om_servers() == '0' && get_total_webconf_servers() == '0' ) {            
-        if ($is_editor) {
-            $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";
-        } else {
-            $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableStudent</p>";
-        }
-    } elseif ($result) {
+    if ($result) {
         if (!$is_editor) {
             $tool_content .= "<div class='alert alert-info'><label>$langNote</label>: $langBBBNoteEnableJoin</div>";
         }
@@ -826,18 +829,11 @@ function bbb_session_details() {
         if ($headingsSent) {
             $tool_content .= "</table></div></div></div>";
         }
-
-        if (get_total_bbb_servers() == '0' && get_total_om_servers() == '0' && get_total_webconf_servers() == '0') {
-            if ($is_editor) {
-                $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";
-            } else {
-                $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableStudent</p>";
-            }
-        }
+        
         if (!$is_editor and !$headingsSent) {
             $tool_content .= "<div class='alert alert-warning'>$langNoBBBSesssions</div>";
         }
-    } else {
+    } else {        
         $tool_content .= "<div class='alert alert-warning'>$langNoBBBSesssions</div>";
     }
 }
