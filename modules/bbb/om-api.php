@@ -139,13 +139,14 @@ function om_session_running($meeting_id)
 /**
  * @brief create Open Meeting Room
  * @global type $course_id
+ * @global $langBBBCreationRoomError
  * @param type $title
  * @param type $meeting_id
  * @param type $record
  */
 function create_om_meeting($title, $meeting_id,$record)
 {
-    global $course_id;
+    global $course_id, $langBBBCreationRoomError;
     
     $run_to = -1;
     $min_users  = 10000000;
@@ -246,10 +247,7 @@ function create_om_meeting($title, $meeting_id,$record)
         );
 
         $l = $roomService->addRoomWithModeration($params);
-
-        if(!isset($room_id))
-            echo "<div class='alert alert-danger'>$langBBBCreationRoomError.</div>";
-    
+            
         //TO REMOVE!!!
         Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",$run_to, $meeting_id);
 
@@ -350,9 +348,8 @@ function get_om_connected_users($om_server)
             'roomId' => $rr->id
         );
 
-        $cu = $roomService->getRoomCounters($params);
-        die($cu);
-        $connected_users += $cu;
+        $cu = $roomService->getRoomCounters($params);        
+        $connected_users++;
     }
     
     return $connected_users;
