@@ -259,7 +259,7 @@ elseif(isset($_GET['choice']))
                         header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1) );
                         break;
                     case 'webconf':
-                        header('Location: http://localhost/openeclass/modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id']);
+                        header('Location: ' . get_config('base_url') . '/modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id']);
                         break;                    
                 }
             } else {
@@ -288,7 +288,7 @@ elseif(isset($_GET['choice']))
                             header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0) );
                             break;
                         case 'webconf':
-                            header('Location: http://localhost/openeclass/modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id']);
+                            header('Location: '. get_config('base_url') . 'modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id']);
                             break;                          
                     }
                 }
