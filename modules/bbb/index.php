@@ -245,6 +245,9 @@ elseif(isset($_GET['choice']))
                             create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
                         }
                         break;
+                    case 'webconf':
+                        create_webconf_jnlp_file($_GET['meeting_id']);
+                        break;                        
                 }            
             if(isset($_GET['mod_pw'])) {
                 switch($server_type)
@@ -255,6 +258,9 @@ elseif(isset($_GET['choice']))
                     case 'om':
                         header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1) );
                         break;
+                    case 'webconf':
+                        header('Location: http://localhost/openeclass/modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id']);
+                        break;                    
                 }
             } else {
                 # Get session capacity                
@@ -265,7 +271,7 @@ elseif(isset($_GET['choice']))
                 {
                     $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw);
                 }
-                if($server_type == 'om')
+                if($server_type == 'om' || $server_type = 'webconf')
                 {
                     $ssUsers = 0;
                 }
@@ -281,6 +287,9 @@ elseif(isset($_GET['choice']))
                         case 'om':
                             header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0) );
                             break;
+                        case 'webconf':
+                            header('Location: http://localhost/openeclass/modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id']);
+                            break;                          
                     }
                 }
             }

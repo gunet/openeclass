@@ -30,3 +30,41 @@ function get_total_webconf_servers()
 
     return $total;
 }
+
+function create_webconf_jnlp_file($meeting_id)
+{
+    global $webDir;
+    $jnlp_file = $webDir.'/modules/bbb/webconf/rooms/'.$meeting_id.'.jnlp';
+    
+    if (!file_exists($jnlp_file))
+    {
+        $file = fopen($jnlp_file,"w");
+        echo fwrite($file,
+                "<?xml version='1.0' encoding='utf-8'?>
+                <jnlp spec='1.0+' codebase='http://delos.uoa.gr/opendelos/resources/screencast/' >
+                    <information>
+                        <title>Delos ScreenShare</title>
+                        <vendor>Dele Olajide</vendor>
+                        <homepage>http://code.google.com/p/red5screnshare/</homepage>
+                        <description>Delos ScreenShare</description>
+                        <description kind='short'>An Open Source Screen Share Java application for Adobe Flash</description>
+                        <offline-allowed/>
+                    </information>
+                <security>
+                    <all-permissions/>
+                </security>
+                <resources>
+                    <j2se version='1.4+'/>
+                    <jar href='screenshare.jar'/>
+                </resources>
+                <application-desc main-class='org.redfire.screen.ScreenShare'>
+                    <argument>195.130.123.149</argument> 
+                    <argument>screenshare</argument> 
+                    <argument>1935</argument> 
+                    <argument>$meeting_id</argument> 
+                    <argument>flashsv1</argument>
+                </application-desc> 
+            </jnlp>");
+        fclose($file);
+    }
+}
