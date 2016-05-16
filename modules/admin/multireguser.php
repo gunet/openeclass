@@ -61,9 +61,9 @@ if (isset($_POST['submit'])) {
     }
     
     foreach ($fields as $field) {
-        if (!in_array($field, $acceptable_fields)) {
-            $tool_content = "<div class='alert alert-danger'>$langMultiRegFieldError <b>" . q($field) . "</b></div>";
-            draw($tool_content, 3, 'admin');
+        if (!in_array($field, $acceptable_fields)) {           
+            Session::Messages("$langMultiRegFieldError <b>$field)</b>", 'alert-danger');
+            redirect_to_home_page('modules/admin/multireguser.php');
             exit;
         }
     }
