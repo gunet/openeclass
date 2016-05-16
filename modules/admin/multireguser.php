@@ -140,17 +140,16 @@ if (isset($_POST['submit'])) {
                     'level' => 'primary-label')
                 ), false);
 
-    
-        $data['eclass_method_unique'] = TRUE;        
-        $auth = get_auth_active_methods();
-        $data['auth_m'] = array();
-        foreach ($auth as $methods) {
-            if ($methods != 1) {
-                $data['eclass_method_unique'] = FALSE;
-            }
-            $auth_text = get_auth_info($methods);
-            $data['auth_m'][$methods] = $auth_text;            
+    $data['eclass_method_unique'] = TRUE;        
+    $auth = get_auth_active_methods();
+    $data['auth_m'] = array();
+    foreach ($auth as $methods) {
+        if ($methods != 1) {
+            $data['eclass_method_unique'] = FALSE;
         }
+        $auth_text = get_auth_info($methods);
+        $data['auth_m'][$methods] = $auth_text;            
+    }
 
     if (isDepartmentAdmin()) {
         list($js, $html) = $tree->buildUserNodePickerIndirect(array('params' => 'name="facid[]"',
