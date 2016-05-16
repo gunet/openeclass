@@ -33,6 +33,8 @@
  */
 function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $moderator) {
 
+    global $webDir, $urlServer;
+    
     $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
     if ($res) {
         $running_server = $res->running_at;
@@ -59,12 +61,22 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
     $l = array();
     $l = $soapUsers->loginUser($params);
 
+    // check for user profile image if exists
+    $profileimageurl = "courses/userimg/${uid}_256";
+    if (file_exists("${webDir}/$profileimageurl.jpg")) {
+        $userimage = "${urlServer}/$profileimageurl.jpg";    
+    } elseif (file_exists("${webDir}/$profileimageurl.png")) { 
+        $userimage = "${urlServer}/$profileimageurl.png";
+    } else {       
+        $userimage = '';
+    }
+
     $params = array(
             'SID' => $session_id,
             'username' => $username,
             'firstname' => $name,
             'lastname' => $surname,
-            'profilePictureUrl' => '',
+            'profilePictureUrl' => $userimage,
             'email' => $email,
             'externalUserId' => $uid,
             'externalUserType' => 'openeclass',
