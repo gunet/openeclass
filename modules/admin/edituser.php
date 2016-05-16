@@ -113,8 +113,9 @@ if ($u) {
                 }
             }
         }
-        
-        $view = 'admin.users.edituserauth';       
+        $data['menuTypeID'] = 3;
+        view('admin.users.edituserauth', $data);
+        exit();    
     }
     if (!$u_submitted) { // if the form was not submitted
         // Display Actions Toolbar
@@ -191,7 +192,9 @@ if ($u) {
                             LEFT JOIN course_user AS b ON a.id = b.course_id
                             WHERE b.user_id = ?s ORDER BY b.status", $u);
         $data['auth_ids'] = $auth_ids;
-        $view = 'admin.users.edituser';  
+        $data['menuTypeID'] = 3;
+        view('admin.users.edituser', $data);
+        exit();            
     } else { // if the form was submitted then update user
 
         // get the variables from the form and initialize them
@@ -238,8 +241,8 @@ if ($u) {
             }
             $tool_content .= "<div class='alert alert-danger'>$cpf_error_str <br>
                                 <a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></div";
-            draw($tool_content, 3, null, $head_content);
-            exit();
+            Session::Messages("$cpf_error_str<br><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a>", 'alert-danger');
+            redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         }
 
         if ($registered_at > $user_expires_at) {
@@ -295,5 +298,4 @@ if ($u) {
     redirect_to_home_page('modules/admin/listusers.php?search=yes');
 }
 
-$data['menuTypeID'] = 3;
-view($view, $data);
+
