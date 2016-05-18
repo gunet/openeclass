@@ -59,6 +59,7 @@ $db->query("DROP TABLE IF EXISTS prof_request");
 $db->query("DROP TABLE IF EXISTS user");
 $db->query("DROP TABLE IF EXISTS oai_record");
 $db->query("DROP TABLE IF EXISTS oai_metadata");
+$db->query("DROP TABLE IF EXISTS om_servers");
 $db->query("DROP TABLE IF EXISTS bbb_servers");
 $db->query("DROP TABLE IF EXISTS bbb_session");
 
@@ -1434,6 +1435,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `bbb_session` (
     `title` varchar(255) DEFAULT NULL,
     `description` text,
     `start_date` datetime DEFAULT NULL,
+    `end_date` datetime DEFAULT NULL,
     `public` enum('0','1') DEFAULT NULL,
     `active` enum('0','1') DEFAULT NULL,
     `running_at` int(11) DEFAULT NULL,
@@ -1446,6 +1448,22 @@ $db->query("CREATE TABLE IF NOT EXISTS `bbb_session` (
     `record` enum('true','false') DEFAULT 'false',
     `sessionUsers` int(11) DEFAULT 0,
     PRIMARY KEY (`id`)) $charset_spec");
+
+// om_servers table
+$db->query("CREATE TABLE IF NOT EXISTS `om_servers` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `hostname` varchar(255) DEFAULT NULL,
+    `port` varchar(255) DEFAULT NULL,
+    `enabled` enum('true','false') DEFAULT NULL,
+    `username` varchar(255) DEFAULT NULL,
+    `password` varchar(255) DEFAULT NULL,
+    `module_key` int(11) DEFAULT NULL,
+    `webapp` varchar(255) DEFAULT NULL,
+    `max_rooms` int(11) DEFAULT NULL,
+    `max_users` int(11) DEFAULT NULL,
+    `enable_recordings` enum('true','false') DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idx_om_servers` (`hostname`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_settings` (
     `setting_id` INT(11) NOT NULL,

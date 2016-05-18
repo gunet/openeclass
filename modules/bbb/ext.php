@@ -20,7 +20,7 @@
  * ========================================================================
  */
 
-$require_current_course = TRUE;
+$require_current_course = FALSE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
@@ -38,6 +38,7 @@ $title = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_i
 $att_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->att_pw;
 $record = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->record;
 $start_date = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->start_date;
+$end_date = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->end_date;
 $active = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->active;
 $unlock_interval = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->unlock_interval;
 $r_group = explode(",",Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->external_users);

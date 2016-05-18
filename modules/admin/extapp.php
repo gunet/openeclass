@@ -36,10 +36,21 @@ $appName = isset($_GET['edit'])? $_GET['edit']: null;
 
 // Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page
 if (isset($_POST['state'])) {
+    $appName= $_POST['appName'];
     $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
-    $appNameAjax = $_POST['appName'];
-    ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
-
+    $appNameAjax = $appName;   
+    
+    if (($appNameAjax == 'openmeetings') and $newState == 1) {
+        $app_bbb = ExtAppManager::getApp('bigbluebutton');        
+        $app_bbb->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled      
+    }
+    
+    if (($appNameAjax == 'bigbluebutton') and $newState == 1) {
+        $app_bbb = ExtAppManager::getApp('openmeetings');
+        $app_bbb->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled          
+    }
+    
+    ExtAppManager::getApp($appNameAjax)->setEnabled($newState);    
     echo $newState;
     exit;
 }
@@ -76,41 +87,40 @@ if ($appName) {
 
     $boolean_field = "";
 
-        $tool_content .= "\n<div class='row extapp'>\n<div class='col-xs-12'>\n";
-        $tool_content .= "  <div class='form-wrapper'>\n";
-    $tool_content .= "    <form class='form-horizontal' role='form' action='extapp.php?edit=" . $appName . "' method='post'>\n";
-        $tool_content .= "      <fieldset>\n";
+    $tool_content .= "<div class='row extapp'>\n<div class='col-xs-12'>";
+    $tool_content .= "<div class='form-wrapper'>";
+    $tool_content .= "<form class='form-horizontal' role='form' action='extapp.php?edit=" . $appName . "' method='post'>";
+    $tool_content .= "<fieldset>";
 
-        foreach ($app->getParams() as $param) {
+    foreach ($app->getParams() as $param) {
 
-            if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
-                $checked = $param->value() == 1 ? "value='0' checked" : "value='1'";
-                $boolean_field .= "        <div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>\n";
-                $boolean_field .= "          <label><input type='checkbox' name='" . $param->name() . "' $checked>" . $param->display() . "</label>";
-                $boolean_field .= "        </div></div></div>\n";
-            } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
-                $tool_content .= "        <div class='form-group'>\n";
-                $tool_content .= "          <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
-                $tool_content .= "          <div class='col-sm-10'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
-                                                q($param->value()) . "</textarea></div>";
-                $tool_content .= "        </div>\n";
-            } else {
-                $tool_content .= "        <div class='form-group'>\n";
-                $tool_content .= "          <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
-                $tool_content .= "          <div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
-                $tool_content .= "        </div>\n";
-            }
+        if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
+            $checked = $param->value() == 1 ? "value='0' checked" : "value='1'";
+            $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>\n";
+            $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' $checked>" . $param->display() . "</label>";
+            $boolean_field .= "</div></div></div>\n";
+        } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
+            $tool_content .= "<div class='form-group'>\n";
+            $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
+            $tool_content .= "<div class='col-sm-10'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
+                                            q($param->value()) . "</textarea></div>";
+            $tool_content .= "</div>";
+        } else {
+            $tool_content .= "<div class='form-group'>";
+            $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
+            $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+            $tool_content .= "</div>";
         }
+    }
 
-        $tool_content .= $boolean_field;
-        $tool_content .= "          <div class='form-group'>\n";
-        $tool_content .= "              <div class='col-sm-offset-2 col-sm-10'>";
-    $tool_content .= "                  <button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>";
-        $tool_content .= "              </div>\n";
-        $tool_content .= "          </div>\n";
-        $tool_content .= "      </fieldset>". generate_csrf_token_form_field() ."\n";
-        $tool_content .= "    </form>\n</div>\n</div>\n</div>\n";
-        //$tool_content .= "<p>".$app->getLongDescription()."</p>";
+    $tool_content .= $boolean_field;
+    $tool_content .= "<div class='form-group'>\n";
+    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>";
+    $tool_content .= "<button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>";
+    $tool_content .= "</div>";
+    $tool_content .= "</div>";
+    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."\n";
+    $tool_content .= "</form>\n</div>\n</div>\n</div>";
 } else {
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -137,17 +147,15 @@ if ($appName) {
         }
         $tool_content .= $app->getDisplayName() . "</a></div></td>\n";
 
-        $tool_content .= "<td class=\"text-muted clearfix\"><div class=\"extapp-dscr-wrapper\">" . $app->getShortDescription() . "</div><div class=\"extapp-controls\"><div class=\"btn-group btn-group-sm\">" . $app_active . "<a href=\"$urlAppend" . $app->getConfigUrl() . "\" class=\"btn btn-primary\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></td>\n";
-        $tool_content .="</tr>\n";
+        $tool_content .= "<td class=\"text-muted clearfix\"><div class=\"extapp-dscr-wrapper\">" . $app->getShortDescription() . "</div><div class=\"extapp-controls\"><div class=\"btn-group btn-group-sm\">" . $app_active . "<a href=\"$urlAppend" . $app->getConfigUrl() . "\" class=\"btn btn-primary\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></td>";
+        $tool_content .="</tr>";
     }
 
-    $tool_content.="</table>\n";
-    $tool_content .= "</div>\n</div>\n";
-    
+    $tool_content .="</table>";
+    $tool_content .= "</div></div>";
     
     // Modal message when trying to enable tool without applying settings
-    $tool_content .= "
-                        <div class='modal fade' id='noSettings' tabindex='-1' role='dialog' aria-labelledby='myModalLabel'>
+    $tool_content .= "<div class='modal fade' id='noSettings' tabindex='-1' role='dialog' aria-labelledby='myModalLabel'>
                           <div class='modal-dialog' role='document'>
                             <div class='modal-content'>
                               <div class='modal-header'>
@@ -159,8 +167,7 @@ if ($appName) {
                               </div>
                             </div>
                           </div>
-                        </div>
-            ";
+                        </div>";
 }
 
 draw($tool_content, 3, null, $head_content);
