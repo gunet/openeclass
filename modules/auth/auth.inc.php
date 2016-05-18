@@ -1061,7 +1061,7 @@ function shib_cas_login($type) {
     } else {
         $sqlLogin = "COLLATE utf8_bin = ?s";
     }
-    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, lang, verified_mail
+    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, am, lang, verified_mail
 						FROM user WHERE username $sqlLogin", $uname);
 
     if ($info) {
