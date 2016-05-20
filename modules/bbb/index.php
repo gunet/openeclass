@@ -271,7 +271,7 @@ elseif(isset($_GET['choice']))
                 {
                     $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw);
                 }
-                if($server_type == 'om' || $server_type = 'webconf')
+                if($server_type == 'om' || $server_type == 'webconf')
                 {
                     $ssUsers = 0;
                 }
