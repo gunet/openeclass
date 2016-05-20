@@ -5151,7 +5151,7 @@ $langAddWebConfServerInfo = "Στοιχεία νέου εξυπηρετητή We
 $langUpdateWebConfServer = "Στοιχεία εξυπηρετητή WebConf";
 $langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές WebConf";
 $langWebConfServer = "WebConf url";
-$langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το url της WebConf εγκατάστασης";
+$langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της WebConf εγκατάστασης";
 
 // Messages for Lti Consumer
 $langLtiConsumer = "Εξωτερικές εφαρμογές LTI";
