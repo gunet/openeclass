@@ -435,7 +435,7 @@ $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
 Copyright © 2003 - 2011 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
 Platform ' . $siteName . ' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
-which is a complete Electronic $langCourse Management System and is GUnet\'s
+which is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.
 It was developed and is actively supported by the GUnet Asynchronous
 eLearning Group, and is <a href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
