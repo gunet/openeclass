@@ -241,8 +241,6 @@ if ($u) {
             foreach ($cpf_check as $cpf_error) {
                 $cpf_error_str .= $cpf_error;
             }
-            $tool_content .= "<div class='alert alert-danger'>$cpf_error_str <br>
-                                <a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></div";
             Session::Messages("$cpf_error_str<br><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a>", 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         }
