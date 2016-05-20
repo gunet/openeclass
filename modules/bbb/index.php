@@ -248,7 +248,11 @@ elseif(isset($_GET['choice']))
                     case 'webconf':
                         create_webconf_jnlp_file($_GET['meeting_id']);
                         break;                        
-                }            
+                }
+            //TO BE BETTER IMPLEMENTED
+            $webconf_server = Database::get()->querySingle("SELECT * FROM wc_servers WHERE enabled='true' ORDER BY id DESC LIMIT 1")->hostname;                         
+            $screenshare_server = Database::get()->querySingle("SELECT * FROM wc_servers WHERE enabled='true' ORDER BY id DESC LIMIT 1")->screenshare;
+            //
             if(isset($_GET['mod_pw'])) {
                 switch($server_type)
                 {
@@ -259,7 +263,7 @@ elseif(isset($_GET['choice']))
                         header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1) );
                         break;
                     case 'webconf':
-                        header('Location: ' . get_config('base_url') . '/modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')));
+                        header('Location: ' . get_config('base_url') . '/modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
                         break;                    
                 }
             } else {
@@ -288,7 +292,7 @@ elseif(isset($_GET['choice']))
                             header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0) );
                             break;
                         case 'webconf':
-                            header('Location: '. get_config('base_url') . 'modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')));
+                            header('Location: '. get_config('base_url') . 'modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
                             break;                          
                     }
                 }

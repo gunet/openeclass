@@ -36,10 +36,12 @@ function create_webconf_jnlp_file($meeting_id)
     global $webDir;
     $jnlp_file = $webDir.'/modules/bbb/webconf/rooms/'.$meeting_id.'.jnlp';
     
-    if (!file_exists($jnlp_file))
-    {
-        $file = fopen($jnlp_file,"w");
-        echo fwrite($file,
+    //TO BE BETTER IMPLEMENTED
+    $screenshare_server = Database::get()->querySingle("SELECT * FROM wc_servers WHERE enabled='true' ORDER BY id DESC LIMIT 1")->screenshare;
+    //
+            
+    $file = fopen($jnlp_file,"w");
+    echo fwrite($file,
                 "<?xml version='1.0' encoding='utf-8'?>
                 <jnlp spec='1.0+' codebase='http://delos.uoa.gr/opendelos/resources/screencast/' >
                     <information>
@@ -58,13 +60,13 @@ function create_webconf_jnlp_file($meeting_id)
                     <jar href='screenshare.jar'/>
                 </resources>
                 <application-desc main-class='org.redfire.screen.ScreenShare'>
-                    <argument>195.130.123.149</argument> 
+                    <argument>".$screenshare_server."</argument> 
                     <argument>screenshare</argument> 
                     <argument>1935</argument> 
                     <argument>$meeting_id</argument> 
                     <argument>flashsv1</argument>
                 </application-desc> 
             </jnlp>");
-        fclose($file);
-    }
+    fclose($file);
+    
 }
