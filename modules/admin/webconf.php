@@ -44,16 +44,18 @@ if (isset($_GET['delete_server'])) {
 // Save new config.php
 else if (isset($_POST['submit'])) {
     $hostname = $_POST['hostname_form'];
+    $screenshare = $_POST['screenshare_form'];
     $enabled = $_POST['enabled'];
     
     if (isset($_POST['id_form'])) {
         $id = $_POST['id_form'];
         Database::get()->querySingle("UPDATE wc_servers SET hostname = ?s,
+                screenshare=?s,
                 enabled=?s
-                WHERE id =?d", $hostname, $enabled, $id);
+                WHERE id =?d", $hostname, $screenshare, $enabled, $id);
     } else {
-        Database::get()->querySingle("INSERT INTO wc_servers (hostname,enabled) VALUES
-        (?s,?s)", $hostname, $enabled);
+        Database::get()->querySingle("INSERT INTO wc_servers (hostname,screenshare,enabled) VALUES
+        (?s,?s,?s)", $hostname, $screenshare, $enabled);
     }    
     // Display result message
     Session::Messages($langFileUpdatedSuccess, 'alert-success');

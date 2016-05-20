@@ -5150,8 +5150,10 @@ $langAddWebConfServer = "Προσθήκη εξυπηρετητή";
 $langAddWebConfServerInfo = "Στοιχεία νέου εξυπηρετητή WebConf";
 $langUpdateWebConfServer = "Στοιχεία εξυπηρετητή WebConf";
 $langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές WebConf";
-$langWebConfServer = "WebConf url";
+$langWebConfServer = "WebConf server";
+$langWebConfScreenshareServer = "Screenshare server";
 $langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της WebConf εγκατάστασης";
+$langWebConfScreenshareServerAlertHostname = "Παρακαλώ πληκτρολογείστε του Screnshare εξυπηρετητή";
 
 // Messages for Lti Consumer
 $langLtiConsumer = "Εξωτερικές εφαρμογές LTI";

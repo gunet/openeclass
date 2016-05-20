@@ -8,6 +8,7 @@
                 <thead>
                     <tr>
                         <th class = 'text-center'>{{ trans('langWebConfServer') }}</th>
+                        <th class = 'text-center'>{{ trans('langWebConfScreenshareServer') }}</th>
                         <th class = 'text-center'>{{ trans('langBBBEnabled') }}</th>
                         <th class = 'text-center'>{!! icon('fa-gears') !!}</th>
                     </tr>
@@ -15,6 +16,7 @@
                 @foreach ($wc_servers as $wc_server)
                     <tr>
                         <td>{{ $wc_server->hostname }}</td>
+                        <td>{{ $wc_server->screenshare }}</td>
                         <td class='text-center'>
                             {{ $wc_server->enabled=='true' ? trans('langYes') : trans('langNo') }}
                         </td>

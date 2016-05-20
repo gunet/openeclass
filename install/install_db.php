@@ -1449,7 +1449,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `om_servers` (
 $db->query("CREATE TABLE IF NOT EXISTS `wc_servers` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `hostname` varchar(255) DEFAULT NULL,
-                        `rtmp` varchar(255) DEFAULT NULL,
+                        `screenshare` varchar(255) DEFAULT NULL,
                         `enabled` enum('true','false') DEFAULT NULL,
                         PRIMARY KEY (`id`),
                         KEY `idx_wc_servers` (`hostname`)) $charset_spec");
