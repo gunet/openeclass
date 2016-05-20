@@ -24,32 +24,29 @@ $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
-load_js('sortable/Sortable.min.js');
 
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$toolName = $langAdminCreateFaq;
-$pageName = $langAdminCreateFaq;
-
-$tool_content = action_bar(array(
-                            array('title' => $langFaqAdd,
-                                  'url' => $_SERVER['SCRIPT_NAME'].'?faq=new',
-                                  'icon' => 'fa-plus-circle',
-                                  'level' => 'primary-label',
-                                  'button-class' => 'btn-success'),
-                            array('title' => 'Expand All',
-                                  'url' => "#",
-                                  'class' => 'expand',
-                                  'icon' => 'fa-plus-circle',
-                                  'level' => 'primary-label'),
-                            array('title' => $langBack,
-                                  'url' => "adminannouncements.php",
-                                  'icon' => 'fa-reply',
-                                  'level' => 'primary-label')),false);
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-  if (isset($_POST['toDelete'])){
-    Database::get()->query("DELETE FROM faq WHERE `id`=?d", $_POST['toDelete']);
 
+  if (isset($_POST['toDelete'])){
+    Database::get()->query("UPDATE `faq` SET `order`=`order` - 1 WHERE `order`>?d", $_POST['oldOrder']);
+    Database::get()->query("DELETE FROM faq WHERE `id`=?d", $_POST['toDelete']);
+  }
+
+  if (isset($_POST['toReorder'])){
+
+    $in = "in";
+
+    if ($_POST['newIndex'] < $_POST['oldIndex']){
+      Database::get()->query("UPDATE `faq` SET `order`=`order` + 1 WHERE `order`>=?d AND `order`<?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+      $in .= " up";
+    }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
+      Database::get()->query("UPDATE `faq` SET `order`=`order` - 1 WHERE `order`<?d AND `order`>=?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+      $in .= " down";
+    }
+
+    Database::get()->query("UPDATE `faq` SET `order`=?d WHERE `id`=?d ", $_POST['newIndex'] + 1, $_POST['toReorder']);
+    
   }
 }
 
@@ -84,6 +81,28 @@ if (isset($_GET['faq']) && $_GET['faq'] == 'delete') {
     Session::Messages("$langFaqDeleteSuccess", 'alert-success');
     redirect_to_home_page("modules/admin/faq_create.php");
 }
+
+load_js('sortable/Sortable.min.js');
+
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$toolName = $langAdminCreateFaq;
+$pageName = $langAdminCreateFaq;
+
+$tool_content = action_bar(array(
+                            array('title' => $langFaqAdd,
+                                  'url' => $_SERVER['SCRIPT_NAME'].'?faq=new',
+                                  'icon' => 'fa-plus-circle',
+                                  'level' => 'primary-label',
+                                  'button-class' => 'btn-success'),
+                            array('title' => 'Expand All',
+                                  'url' => "#",
+                                  'class' => 'expand',
+                                  'icon' => 'fa-plus-circle',
+                                  'level' => 'primary-label'),
+                            array('title' => $langBack,
+                                  'url' => "adminannouncements.php",
+                                  'icon' => 'fa-reply',
+                                  'level' => 'primary-label')),false);
 
 if (isset($_GET['faq']) && $_GET['faq'] != 'delete') {
 
@@ -162,13 +181,13 @@ $tool_content .= "
               $faqCounter++;
               $tool_content .= "
 
-              <div class='panel list-group-item' data-id='$faq->order'>
+              <div class='panel list-group-item' data-id='$faq->id'>
                 <div class='panel-heading' role='tab' id='heading-$faq->id'>
                   <h4 class='panel-title'>
                     <a role='button' data-toggle='collapse' data-parent='#accordion' href='#faq-$faq->id' aria-expanded='true' aria-controls='#$faq->id'>
                         <span>$faqCounter.</span>$faq->title <span class='caret'></span>
                     </a>
-                    <a class='forDelete' href='javascript:void(0);' data-id='$faq->id'><span class='fa fa-times text-danger pull-right' data-toggle='tooltip' data-placement='top' title='$langDelete'></span></a>
+                    <a class='forDelete' href='javascript:void(0);' data-id='$faq->id' data-order='$faq->order'><span class='fa fa-times text-danger pull-right' data-toggle='tooltip' data-placement='top' title='$langDelete'></span></a>
                     <a href='javascript:void(0);'><span class='fa fa-arrows pull-right'></span></a>
                     <a href='$_SERVER[SCRIPT_NAME]?faq=modify&id=$faq->id'><span class='fa fa-pencil-square pull-right' data-toggle='tooltip' data-placement='top' title='$langEdit'></span></a>
                   </h4>
@@ -210,6 +229,7 @@ $tool_content .= "
       $(document).on('click', '.forDelete', function(e) {
         e.preventDefault();
         idDelete = $(this).data('id');
+        idOrder = $(this).data('order');
         $(this).parents('.list-group-item').remove();
         var ids = [];
         $('.faq-section .list-group-item').each(function () {
@@ -217,11 +237,12 @@ $tool_content .= "
         });
         $.ajax({
           type: 'post',
-          data: { toDelete: idDelete, 
-                  toReorder: ids
+          data: { 
+                  toDelete: idDelete,
+                  oldOrder: idOrder
                 },
           success: function() {
-          
+            $('.row.action_bar').before('<p>asdf</p>');
           }
         });
       });
@@ -230,14 +251,28 @@ $tool_content .= "
           handle: '.fa-arrows',
           animation: 150,
           onEnd: function (evt) {
-            var itemEl = $(evt.item);
-            //var id = itemEl.attr('data-id');
 
-            var ids = [];
-            $('.faq-section .list-group-item').each(function () {
-              ids.push($(this).data('id'));
-            });
-            console.log(ids);
+            var itemEl = $(evt.item);
+            var idReorder = itemEl.attr('data-id');
+
+            //var ids = [];
+            //$('.faq-section .list-group-item').each(function () {
+              //ids.push($(this).data('id'));
+            //});
+
+            $.ajax({
+              type: 'post',
+              dataType: 'text',
+              data: { 
+                      toReorder: idReorder,
+                      oldIndex: evt.oldIndex,
+                      newIndex: evt.newIndex
+                    },
+              success: function(data) {
+                
+              }
+            })
+
           }
         });
     });

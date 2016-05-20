@@ -38,7 +38,7 @@ $tool_content .= action_bar(array(
                                       'button-class' => 'btn-default')
                             ),false);
 
-$faqs = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` DESC");
+$faqs = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");
 
 $faqCounter = 0;
 
