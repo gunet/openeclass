@@ -44,8 +44,8 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
 
     $url = $res->hostname.':'.$res->port;
 
-    $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
-    $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
+    $soapUsers = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/UserService?wsdl');
+    $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/RoomService?wsdl');
 
     $rs = array();
     $rs = $soapUsers->getSession();
@@ -112,8 +112,8 @@ function om_session_running($meeting_id)
     
     $url = $res->hostname.':'.$res->port;
 
-    $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
-    $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
+    $soapUsers = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/UserService?wsdl');
+    $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/RoomService?wsdl');
 
     $rs = array();
     $rs = $soapUsers->getSession();
@@ -227,8 +227,8 @@ function create_om_meeting($title, $meeting_id,$record)
     if ($res) {
         $url = $res->hostname.':'.$res->port;
 
-        $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
-        $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
+        $soapUsers = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/UserService?wsdl');
+        $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/RoomService?wsdl');
 
         $rs = array();
         $rs = $soapUsers->getSession();
@@ -279,8 +279,8 @@ function get_om_active_rooms($om_server)
     
     $url = $res->hostname.':'.$res->port;
 
-    $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
-    $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
+    $soapUsers = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/UserService?wsdl');
+    $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/RoomService?wsdl');
 
     $rs = array();
     $rs = $soapUsers->getSession();
@@ -326,8 +326,8 @@ function get_om_connected_users($om_server)
         
     $url = $res->hostname.':'.$res->port;
 
-    $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
-    $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
+    $soapUsers = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/UserService?wsdl');
+    $roomService = new SoapClient('http://'.$url.'/'.$res->webapp.'/services/RoomService?wsdl');
 
     $rs = array();
     $rs = $soapUsers->getSession();
