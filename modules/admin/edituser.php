@@ -80,16 +80,18 @@ if ($u) {
         checkSecondFactorChallenge();
         $auth = intval($_POST['auth']);
         $oldauth = array_search($info->password, $auth_ids);
-        $tool_content .= "<div class='alert alert-success'>$langQuotaSuccess.";
+        $extra_msg = '' ;
         if ($auth == 1 and $oldauth != 1) {
-            $tool_content .= " <a href='password.php?userid=" . getIndirectReference($u) . "'>$langEditAuthSetPass</a>";
+            $extra_msg = " <a href='password.php?userid=" . getIndirectReference($u) . "'>$langEditAuthSetPass</a>";
             $newpass = '.';
         } else {
             $newpass = $auth_ids[$auth];
         }
-        $tool_content .= "</div>";
+
         Database::get()->query("UPDATE user SET password = ?s WHERE id = ?s", $newpass, $u);
         $info->password = $newpass;
+        Session::Messages($langQuotaSuccess, 'alert-success');
+        redirect_to_home_page('modules/admin/edituser.php');
     }
 
     if (isset($_POST['delete_ext_uid'])) {
