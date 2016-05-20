@@ -371,7 +371,7 @@
                     <span class='fa fa-caret-square-o-up fa-2x'></span>
                 </div>
                 <footer class="footer">
-                    <span>Open eClass © 2003-{{ date('Y') }} &mdash; <a href="{{ $urlAppend }}info/terms.php">{{ trans('langUsageTerms') }}</a></span>
+                    <span><a href='{{ $urlAppend }}info/copyright.php'>Open eClass © 2003-{{ date('Y') }}</a> &mdash; <a href="{{ $urlAppend }}info/terms.php">{{ trans('langUsageTerms') }}</a></span>
                 </footer>
             </div>
         </div>
