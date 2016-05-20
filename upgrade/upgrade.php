@@ -3347,6 +3347,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('poll', 'type')) {
             Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");
         }
+        
+        if (!DBHelper::fieldExists('wc_servers', 'screenshare')) {
+            Database::get()->query("ALTER TABLE `wc_servers` ADD `screenshare` varchar(255) DEFAULT NULL");
+        }
                
         Database::get()->query('INSERT IGNORE INTO course_module
             (module_id, visible, course_id)
