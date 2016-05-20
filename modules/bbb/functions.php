@@ -1096,6 +1096,127 @@ function bbb_join_user($meeting_id, $att_pw, $surname, $name) {
 }
 
 
+
+/** KAPELAS PAROUSIOLOGIO
+ * @brief create join as simple user link
+ * @param type $meeting_id
+ * @param type $mod_pw
+ * @return type
+ */
+function get_meeting_info($meeting_id, $mod_pw) {
+    
+    $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s", $meeting_id);
+    if ($res) {
+        $running_server = $res->running_at;
+    }
+    
+    $res = Database::get()->querySingle("SELECT server_key, api_url FROM bbb_servers WHERE id = ?d", $running_server);
+    $salt = $res->server_key;
+    $bbb_url = $res->api_url;
+        
+    // Instatiate the BBB class:
+    $bbb = new BigBlueButton($salt,$bbb_url);
+
+    $joinParams = array(
+        'meetingId' => $meeting_id, // REQUIRED - We have to know which meeting to join.
+        'password' => $mod_pw //,	// REQUIRED - Must match either attendee or moderator pass for meeting.
+    );
+    // Get the URL to join meeting:
+    $result = $bbb-> getMeetingInfoUrl($bbb_url, $salt, $joinParams);
+
+    return $result;
+}
+
+
+/** KAPELAS PAROUSIOLOGIO
+ * @brief get active rooms of a given BBB server
+ * @param type $meeting_id 
+ * @return type
+ */
+/*function get_active_rooms($meeting_id) {
+    $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s", $meeting_id);
+    if ($res) {
+        $running_server = $res->running_at;
+    }
+    
+    $res = Database::get()->querySingle("SELECT server_key, api_url FROM bbb_servers WHERE id = ?d", $running_server);
+    $salt = $res->server_key;
+    $bbb_url = $res->api_url;
+            
+    // Get the URL for Meetings running on server:
+   $result = $bbb_url."api/getMeetings?checksum=".sha1("getMeetings".$salt);
+
+    return $result;
+}*/
+
+
+
+
+/**
+ * @brief xml read from url and write to local file
+ * @param type $xml_url
+ * @param type $xml_location
+ * @param type $meet_id
+ */
+function xml2file ($xml_url, $xml_location, $meet_id) {
+     
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+    curl_setopt($ch, CURLOPT_URL, $xml_url);
+    $data = curl_exec($ch);
+    curl_close($ch);
+    file_put_contents($xml_location, $data);
+
+}
+
+/**
+ * @brief xml read from url and write to database
+ * @param type $xml_url
+ */
+function xml2sql($xml_url) {
+    
+    $source = $xml_url;
+    // load as file
+    $sitemap2 = simplexml_load_file($source);
+
+    // load as string
+    $xmlstr = file_get_contents($source);
+    $sitemap1 = simplexml_load_string($xmlstr);    
+    $xml = $sitemap2;    
+    $xml_meet_id = $xml->meetingID;   //meetingID of specific bbb request meeting room
+    foreach ($xml -> attendees -> attendee as $row) {
+        $userID = $row -> userID;
+        $fullName = $row -> fullName;
+        $role = $row -> role;
+        $sql = "INSERT INTO bbb_xml (meetingID, userid, fullName, role)";
+        $sql = $sql . " VALUES ('$xml_meet_id', '$userID', '$fullName', '$role')";
+
+        $result = Database::get()->query($sql);
+    
+    }    
+}
+
+
+/** KAPELAS PAROUSIOLOGIO
+ * @brief get room attendees
+ * @global $webDir
+ * @type param $meet_id
+ * @type param $moder_pw 
+ * @return type
+ */
+function room_attendes($meet_id, $moder_pw) {
+    global $webDir;
+    
+    // Create XML URL for specific meeting
+    $xml_url =  get_meeting_info($meet_id,$moder_pw);    
+    // xml2file    
+    $xml_location = $webDir . "/modules/bbb/path/".$meet_id."-".date("d.m.Y_H:i:s").".xml";
+    xml2file($xml_url, $xml_location, $meet_id);    
+    // write to db   
+    xml2sql($xml_url);
+}
+
 /**
  * @brief Generate random strings. Used to create meeting_id, attendance password and moderator password
  * @param type $length
