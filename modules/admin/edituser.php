@@ -90,7 +90,7 @@ if ($u) {
 
         Database::get()->query("UPDATE user SET password = ?s WHERE id = ?s", $newpass, $u);
         $info->password = $newpass;
-        Session::Messages($langQuotaSuccess, 'alert-success');
+        Session::Messages($langQuotaSuccess.$extra_msg, 'alert-success');
         redirect_to_home_page('modules/admin/edituser.php');
     }
 
