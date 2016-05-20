@@ -1,5 +1,4 @@
 <?php
-
 echo '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
@@ -40,7 +39,7 @@ echo '
             var flashvars = {};
 			flashvars.videoconf_url = "rtmpe://webcast.gunet.gr/avchat/'.$_GET['meeting_id'].'"
 			flashvars.chat_url = "rtmpe://webcast.gunet.gr/textchat/'.$_GET['meeting_id'].'"
-			flashvars.jnlp_url = "http://localhost/openeclass/modules/bbb/webconf/rooms/'.$_GET['meeting_id'].'.jnlp"
+			flashvars.jnlp_url = "'. base64_decode($_GET['base_url']) . '/openeclass/modules/bbb/webconf/rooms/'.$_GET['meeting_id'].'.jnlp"
 			flashvars.base_screen_url = "rtmp://195.130.123.149/screenshare"
 			flashvars.screen_streamname = "'.$_GET['meeting_id'].'"
 			flashvars.username = "'. $_GET['user'] . '"
