@@ -42,11 +42,58 @@ if (isset($_GET['id'])) {
     $toolName = $langMyePortfolio;
 }
 
-$userdata = Database::get()->querySingle("SELECT surname, givenname, username, has_icon
+$userdata = Database::get()->querySingle("SELECT surname, givenname, username, has_icon, eportfolio_enable
                                           FROM user WHERE id = ?d", $id);
 
 if ($userdata) {
     if ($uid == $id) {
+        
+        if (isset($_POST['toggle_val'])) {
+            if ($_POST['toggle_val'] == 'on') {
+                Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 1, $id);
+                $userdata->eportfolio_enable = 1;
+            } elseif ($_POST['toggle_val'] == 'off') {
+                Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 0, $id);
+                $userdata->eportfolio_enable = 0;
+            }
+        }
+        
+        $head_content .= "<script type='text/javascript'>//<![CDATA[
+                              $(function(){
+                                  $('#toggle_event_editing button').click(function(){
+	                                  if($(this).hasClass('locked_active') || $(this).hasClass('unlocked_inactive')){
+		                                  /* code to do when unlocking */
+                                          $('#enable-eportfolio-form input').val('on');
+                                          $('#enable-eportfolio-form').submit();
+	                                  }else{
+		                                  /* code to do when locking */
+                                          $('#enable-eportfolio-form input').val('off');
+                                          $('#enable-eportfolio-form').submit();
+	                                  }
+	
+	                                  /* reverse locking status */
+	                                  $('#toggle_event_editing button').eq(0).toggleClass('locked_inactive locked_active btn-default btn-info');
+	                                  $('#toggle_event_editing button').eq(1).toggleClass('unlocked_inactive unlocked_active btn-info btn-default');
+                                  });
+                              });//]]> 
+                          </script>";
+        
+        if ($userdata->eportfolio_enable == 0) {
+            $off_class = "btn btn-info locked_active";
+            $on_class = "btn btn-default unlocked_inactive";
+        } elseif ($userdata->eportfolio_enable == 1) {
+            $off_class = "btn btn-default locked_inactive";
+            $on_class = "btn btn-info unlocked_active";
+        }
+        
+        $tool_content .= '<div class="btn-group" id="toggle_event_editing">
+                              <form method="post" action="" id="enable-eportfolio-form">
+                                  <input type="hidden" name="toggle_val">
+                              </form>
+	                          <button type="button" class="'.$off_class.'">OFF</button>
+	                          <button type="button" class="'.$on_class.'">ON</button>
+                          </div>';
+        
         $tool_content .= 
             action_bar(array(
                 array('title' => $langEditePortfolio,
@@ -59,6 +106,12 @@ if ($userdata) {
                     'level' => 'primary-label')
                 ));    
     } else {
+        if ($userdata->eportfolio_enable == 0) {
+            $tool_content = "<div class='alert alert-danger'>$langUserePortfolioDisabled</div>";
+            draw($tool_content, 1);
+            exit;
+        }
+        
         if (file_exists("$webDir/courses/userbios/$id"."_bio.pdf")) {
             $tool_content .=
                 action_bar(array(

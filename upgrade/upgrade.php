@@ -148,6 +148,9 @@ if (!DBHelper::fieldExists('user', 'id')) {
                         DROP doc_flag");
     Database::get()->query("ALTER TABLE admin
                         CHANGE idUser user_id INT(11) NOT NULL PRIMARY KEY");
+    if (!DBHelper::fieldExists('user', 'eportfolio_enable')) {
+        Database::get()->query("ALTER TABLE `user` ADD eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0");
+    }
 }
 
 // Make sure 'video' subdirectory exists and is writable

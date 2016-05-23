@@ -4880,6 +4880,7 @@ $langBio = 'Βιογραφικό';
 $langUploadBio = 'Ανέβασμα Βιογραφικού';
 $lang_eportfolio_enable = 'Ενεργοποίηση e-portfolio χρηστών';
 $langePortfolioDisabled = 'Τo e-portfolio των χρηστών είναι απενεργοποιημένo από τους διαχειριστές της πλατφόρμας.';
+$langUserePortfolioDisabled = 'Τo e-portfolio του χρήστη είναι απενεργοποιημένo.';
 
 /* * ******************************************
   Widgets
