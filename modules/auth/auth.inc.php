@@ -1038,6 +1038,7 @@ function shib_cas_login($type) {
         $email = $shib['email'];
         $am = $shib['studentid'];
     } elseif ($type == 'cas') {
+        $uname = $surname = $givenname = '';
         $uname = $_SESSION['cas_uname'];
         $surname = $_SESSION['cas_surname'];
         $givenname = $_SESSION['cas_givenname'];
