@@ -48,6 +48,15 @@ $tool_content .= "
         <div class='panel'>
           <div class='panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>";
 
+          if (count($faqs) == 0) {
+            $tool_content .= "
+
+              <div class='panel list-group-item'>
+                <div class='text-center text-muted'><em>$langFaqNoEntries</em> <br><br> <em>$langFaqAddNew</em></div>
+              </div>
+              ";
+          } else {
+
             foreach ($faqs as $faq) {
               $faqCounter++;
               $tool_content .= "
@@ -69,6 +78,7 @@ $tool_content .= "
               </div>
               ";
             }
+          }
                 
 $tool_content .= "
           </div>

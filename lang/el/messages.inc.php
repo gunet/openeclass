@@ -191,6 +191,8 @@ $langFaqCloseAll = "Κλείσιμο όλων";
 $langFaqEditSuccess = "Οι αλλαγές αποθηκεύτηκαν με επιτυχία";
 $langFaqAddSuccess = "Η ερώτηση αποθηκεύτηκε με επιτυχία";
 $langFaqDeleteSuccess = "Η ερώτηση διαγράφτηκε με επιτυχία";
+$langFaqNoEntries = "Δεν υπάρχουν ερωτήσεις.";
+$langFaqAddNew = "Προσθέστε μία καινούργια πατώντας το κουμπί \"Προσθήκη ερώτησης\".";
 
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;
