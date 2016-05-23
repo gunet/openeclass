@@ -100,7 +100,7 @@ $tool_content = action_bar(array(
                                   'icon' => 'fa-plus-circle',
                                   'level' => 'primary-label'),
                             array('title' => $langBack,
-                                  'url' => "adminannouncements.php",
+                                  'url' => $_SERVER['SCRIPT_NAME'],
                                   'icon' => 'fa-reply',
                                   'level' => 'primary-label')),false);
 
@@ -252,10 +252,12 @@ $tool_content .= "
                   oldOrder: idOrder
                 },
           success: function() {
-            moreDeletes = $('.alert-success').length;
+            
             $('.indexing').each(function (i){
               $(this).html(i+1);
             });
+
+            moreDeletes = $('.alert-success').length;
             if (moreDeletes > 0){
               $('.alert-success').html('$langFaqDeleteSuccess');
             } else {
@@ -287,7 +289,16 @@ $tool_content .= "
                       newIndex: evt.newIndex
                     },
               success: function(data) {
-                
+                $('.indexing').each(function (i){
+                  $(this).html(i+1);
+                });
+
+                moreDeletes = $('.alert-success').length;
+                if (moreDeletes > 0){
+                  $('.alert-success').html('$langFaqReorderSuccess');
+                } else {
+                  $('.row.action_bar').before('<div class=\'alert alert-success\'>$langFaqReorderSuccess</div>');
+                }
               }
             })
 

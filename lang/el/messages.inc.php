@@ -193,6 +193,7 @@ $langFaqAddSuccess = "Η ερώτηση αποθηκεύτηκε με επιτυ
 $langFaqDeleteSuccess = "Η ερώτηση διαγράφτηκε με επιτυχία";
 $langFaqNoEntries = "Δεν υπάρχουν ερωτήσεις.";
 $langFaqAddNew = "Προσθέστε μία καινούργια πατώντας το κουμπί \"Προσθήκη ερώτησης\".";
+$langFaqReorderSuccess = "Η ταξινόμηση έγινε επιτυχώς";
 
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;
