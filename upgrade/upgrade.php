@@ -40,7 +40,7 @@ require_once 'upgrade/functions.php';
 
 set_time_limit(0);
 
-if (php_sapi_name() == 'cli' and ! isset($_SERVER['REMOTE_ADDR'])) {
+if (php_sapi_name() == 'cli' and !isset($_SERVER['REMOTE_ADDR'])) {    
     $command_line = true;
 } else {
     $command_line = false;
@@ -76,7 +76,7 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 // Coming from the admin tool or stand-alone upgrade?
 $fromadmin = !isset($_POST['submit_upgrade']);
 
-if (!$command_line and !(isset($_SESSION['is_admin']) and $_SESSION['is_admin'])) {
+if ($command_line and !(isset($_SESSION['is_admin']) and $_SESSION['is_admin'])) {        
     redirect_to_home_page('upgrade/');
 }
 
