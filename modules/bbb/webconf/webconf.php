@@ -40,7 +40,7 @@ echo '
 			flashvars.videoconf_url = "rtmpe://'.base64_decode($_GET['webconf_server']).'/avchat/'.$_GET['meeting_id'].'"
 			flashvars.chat_url = "rtmpe://'.base64_decode($_GET['webconf_server']).'/textchat/'.$_GET['meeting_id'].'"
 			flashvars.jnlp_url = "'. base64_decode($_GET['base_url']) . '/openeclass/modules/bbb/webconf/rooms/'.$_GET['meeting_id'].'.jnlp"
-			flashvars.base_screen_url = "rtmp://'.base64_decode($_GET['screenshare_server']).'195.130.123.149/screenshare"
+			flashvars.base_screen_url = "rtmp://'.base64_decode($_GET['screenshare_server']).'/screenshare"
 			flashvars.screen_streamname = "'.$_GET['meeting_id'].'"
 			flashvars.username = "'. $_GET['user'] . '"
             var params = {};
