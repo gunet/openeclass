@@ -194,7 +194,7 @@ $tool_content .= "
                 <div class='panel-heading' role='tab' id='heading-$faq->id'>
                   <h4 class='panel-title'>
                     <a role='button' data-toggle='collapse' data-parent='#accordion' href='#faq-$faq->id' aria-expanded='true' aria-controls='#$faq->id'>
-                        <span>$faqCounter.</span>$faq->title <span class='caret'></span>
+                        <span class='indexing'>$faqCounter.</span>$faq->title <span class='caret'></span>
                     </a>
                     <a class='forDelete' href='javascript:void(0);' data-id='$faq->id' data-order='$faq->order'><span class='fa fa-times text-danger pull-right' data-toggle='tooltip' data-placement='top' title='$langDelete'></span></a>
                     <a href='javascript:void(0);'><span class='fa fa-arrows pull-right'></span></a>
@@ -252,7 +252,15 @@ $tool_content .= "
                   oldOrder: idOrder
                 },
           success: function() {
-            $('.row.action_bar').before('<p>asdf</p>');
+            moreDeletes = $('.alert-success').length;
+            $('.indexing').each(function (i){
+              $(this).html(i+1);
+            });
+            if (moreDeletes > 0){
+              $('.alert-success').html('$langFaqDeleteSuccess');
+            } else {
+              $('.row.action_bar').before('<div class=\'alert alert-success\'>$langFaqDeleteSuccess</div>');
+            }
           }
         });
       });
