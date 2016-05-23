@@ -25,6 +25,7 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 include 'main/eportfolio/eportfolio_functions.php';
+require_once 'modules/sharing/sharing.php';
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
@@ -142,7 +143,13 @@ if ($userdata) {
                         </div>";
     
     $tool_content .= render_eportfolio_fields_content($id);
+    if ($userdata->eportfolio_enable == 1) {
+        $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/eportfolio.php?id=".$id, $langUserePortfolio)."</div>";
+    } else {
+        $social_share = '';
+    }
     $tool_content .= "</div>
+                $social_share
             </div>
         </div>
     </div>
