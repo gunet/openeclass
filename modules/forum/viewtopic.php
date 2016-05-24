@@ -111,6 +111,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     }
     Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $post_id, 'forum_post');   
     Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
+    triggerGame($course_id, $uid, ForumEvent::DELPOST);
     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
     //orphan replies get -1 to parent_post_id

@@ -30,6 +30,7 @@ require_once 'functions.php';
 require_once 'CommentEvent.php';
 require_once 'BlogEvent.php';
 require_once 'WikiEvent.php';
+require_once 'ForumEvent.php';
 
 //$toolName = $langAttendance;
 $toolName = "Πιστοποιήσεις";
@@ -394,7 +395,7 @@ if ($is_editor) {
             $type = MODULE_ID_COMMENTS;
             $activity = CommentEvent::COURSE_ACTIVITY;
           }
-          if($type == 9){
+          if($type == MODULE_ID_FORUM){
             $activity = "forum";
           }
           if($type == 39){
@@ -493,7 +494,7 @@ if ($is_editor) {
         add_certificate_other_activity_only_value($certificate_id, "38a");
         $display = FALSE;
     }elseif (isset($_GET['addActivityFor'])) { // display available exercises
-        add_certificate_other_activity_only_value($certificate_id, 9);
+        add_certificate_other_activity_only_value($certificate_id, MODULE_ID_FORUM);
         $display = FALSE;
     }elseif (isset($_GET['addActivityLp'])) { // display available exercises
         certificate_display_available_Lp($certificate_id);

@@ -32,10 +32,21 @@ class ForumEvent extends BasicEvent {
         parent::__construct();
         
         $handle = function($data) {
-            $this->setEventData($data);
+            $threshold = 0;
             
-            // TODO: fetch data from DB: SELECT COUNT POST FROM FORUM FOR USER $data->uid
-            $this->context['threshold'] = 20;
+            // fetch posts count from DB and use it as threshold
+            $subm = Database::get()->querySingle("SELECT count(fp.id) as count "
+                    . " FROM forum_post fp "
+                    . " JOIN forum_topic ft ON (ft.id = fp.topic_id) "
+                    . " JOIN forum f ON (f.id = ft.forum_id) "
+                    . " WHERE fp.poster_id = ?d "
+                    . " AND f.course_id = ?d", $data->uid, $data->courseId);
+            if ($subm && floatval($subm->count) > 0) {
+                $threshold = floatval($subm->count);
+            }
+            
+            $this->setEventData($data);
+            $this->context['threshold'] = $threshold;
             $this->emit(parent::PREPARERULES);
         };
         

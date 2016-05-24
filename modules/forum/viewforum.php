@@ -184,6 +184,7 @@ if (($is_editor) and isset($_GET['topicdel'])) {
         Database::get()->query("DELETE FROM rating WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);
         Database::get()->query("DELETE FROM rating_cache WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);
         Database::get()->query("DELETE FROM forum_post WHERE id = $r->id");
+        triggerGame($course_id, $uid, ForumEvent::DELPOST);
     }
     $post_authors = array_unique($post_authors);
     foreach ($post_authors as $author) {

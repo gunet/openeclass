@@ -474,7 +474,7 @@ function display_certificate_activities($certificate_id) {
             $title = "Σχόλια στο μάθημα";
         	}
 
-          if($details->activity_type == "forum"){
+          if($details->activity_type == ForumEvent::ACTIVITY){
         		$type = "Συζητήσεις";
             $title = "Posts σε συζητήσεις";
         	}
