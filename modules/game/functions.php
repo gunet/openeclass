@@ -479,12 +479,12 @@ function display_certificate_activities($certificate_id) {
             $title = "Posts σε συζητήσεις";
         	}
 
-          if($details->activity_type == "social bookmark likes"){
+          if($details->activity_type == RatingEvent::SOCIALBOOKMARK_ACTIVITY && $details->module == MODULE_ID_RATING){
         		$type = "Likes στους κοινωνικούς συνδέσμους";
             $title = "Ratings";
         	}
 
-          if($details->activity_type == "forum likes"){
+          if($details->activity_type == RatingEvent::FORUM_ACTIVITY && $details->module == MODULE_ID_RATING){
         		$type = "Likes στα forum posts";
             $title = "Ratings";
         	}

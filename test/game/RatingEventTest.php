@@ -51,36 +51,18 @@ class RatingEventTest extends AbstractEventTest {
         $this->event = new RatingEvent();
     }
     
-    public function testNewForumLikeContext() {
+    public function testForumCastContext() {
         $this->currentdata = self::$forumData;
-        $this->event->emit(RatingEVENT::NEWLIKE, [$this->currentdata]);
+        $this->event->emit(RatingEvent::RATECAST, [$this->currentdata]);
         $context = $this->event->getContext();
         
         $this->assertNotNull($context);
         $this->assertEquals(RatingEvent::FORUM_ACTIVITY, $context['activityType']);
     }
     
-    public function testDelForumLikeContext() {
-        $this->currentdata = self::$forumData;
-        $this->event->emit(RatingEVENT::DELLIKE, [$this->currentdata]);
-        $context = $this->event->getContext();
-        
-        $this->assertNotNull($context);
-        $this->assertEquals(RatingEvent::FORUM_ACTIVITY, $context['activityType']);
-    }
-    
-    public function testNewSocialBookmarkLikeContext() {
+    public function testSocialBookmarkCastContext() {
         $this->currentdata = self::$socialBookmarkData;
-        $this->event->emit(RatingEVENT::NEWLIKE, [$this->currentdata]);
-        $context = $this->event->getContext();
-        
-        $this->assertNotNull($context);
-        $this->assertEquals(RatingEvent::SOCIALBOOKMARK_ACTIVITY, $context['activityType']);
-    }
-    
-    public function testDelSocialBookmarkLikeContext() {
-        $this->currentdata = self::$socialBookmarkData;
-        $this->event->emit(RatingEVENT::DELLIKE, [$this->currentdata]);
+        $this->event->emit(RatingEvent::RATECAST, [$this->currentdata]);
         $context = $this->event->getContext();
         
         $this->assertNotNull($context);

@@ -24,24 +24,60 @@ require_once 'BasicEvent.php';
 
 class RatingEvent extends BasicEvent {
     
-    const FORUM_ACTIVITY = 'forum likes';
-    const SOCIALBOOKMARK_ACTIVITY = 'social bookmark likes';
-    const NEWLIKE = 'like-submitted';
-    const DELLIKE = 'like-deleted';
+    const FORUM_ACTIVITY = 'forum_post';
+    const SOCIALBOOKMARK_ACTIVITY = 'link';
+    const RATECAST = 'rate-cast';
     
     public function __construct() {
         parent::__construct();
         
         $handle = function($data) {
-            $this->setEventData($data);
+            // fetch grade from DB and use it as threshold
+            switch($data->activityType) {
+                case self::FORUM_ACTIVITY:
+                    $subm = Database::get()->querySingle("SELECT SUM(value) AS grade "
+                            . " FROM rating r "
+                            . " WHERE r.rid IN ( "
+                            . "  SELECT fp.id "
+                            . "  FROM forum_post fp "
+                            . "  JOIN forum_topic ft ON (ft.id = fp.topic_id) "
+                            . "  JOIN forum f ON (f.id = ft.forum_id) "
+                            . "  WHERE f.course_id = ?d "
+                            . " ) "
+                            . " AND r.rtype = ?s "
+                            . " AND r.user_id = ?d", $data->courseId, self::FORUM_ACTIVITY, $data->uid);
+                    $threshold = $this->getThreshold($subm);
+                    break;
+                case self::SOCIALBOOKMARK_ACTIVITY:
+                    $subm = Database::get()->querySingle("SELECT SUM(r.value) AS grade "
+                            . " FROM rating r WHERE r.rid in ( "
+                            . "  SELECT l.id "
+                            . "  FROM link l "
+                            . "  WHERE l.course_id = ?d "
+                            . " ) "
+                            . " AND r.rtype = ?s "
+                            . " AND r.user_id = ?d", $data->courseId, self::SOCIALBOOKMARK_ACTIVITY, $data->uid);
+                    $threshold = $this->getThreshold($subm);
+                    break;
+                default:
+                    $threshold = 0;
+                    break;
+            }
             
-            // TODO: fetch data from DB: SELECT COUNT LIKES FROM RATING FOR USER $data->uid FOR MODULE $data->module
-            $this->context['threshold'] = 80;
+            $this->setEventData($data);
+            $this->context['threshold'] = $threshold;
             $this->emit(parent::PREPARERULES);
         };
         
-        $this->on(self::NEWLIKE, $handle);
-        $this->on(self::DELLIKE, $handle);
+        $this->on(self::RATECAST, $handle);
+    }
+    
+    private function getThreshold($subm) {
+        $threshold = 0;
+        if ($subm && floatval($subm->grade) > 0) {
+            $threshold = floatval($subm->grade);
+        }
+        return $threshold;
     }
     
 }

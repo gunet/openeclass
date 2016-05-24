@@ -32,6 +32,7 @@ require_once 'BlogEvent.php';
 require_once 'WikiEvent.php';
 require_once 'ForumEvent.php';
 require_once 'LearningPathEvent.php';
+require_once 'RatingEvent.php';
 
 //$toolName = $langAttendance;
 $toolName = "Πιστοποιήσεις";
@@ -399,12 +400,12 @@ if ($is_editor) {
           if($type == MODULE_ID_FORUM){
             $activity = "forum";
           }
-          if($type == 39){
-            $activity = "social bookmark likes";
+          if($type == MODULE_ID_RATING){
+            $activity = RatingEvent::SOCIALBOOKMARK_ACTIVITY;
           }
           if($type == "39a"){
-            $type == 39;
-            $activity = "forum likes";
+            $type = MODULE_ID_RATING;
+            $activity = RatingEvent::FORUM_ACTIVITY;
           }
           if($type == MODULE_ID_WIKI){
             $activity = "wiki";
@@ -501,7 +502,7 @@ if ($is_editor) {
         certificate_display_available_Lp($certificate_id);
         $display = FALSE;
     }elseif (isset($_GET['addActivityRat'])) { // display available exercises
-        add_certificate_other_activity_only_value($certificate_id, 39);
+        add_certificate_other_activity_only_value($certificate_id, MODULE_ID_RATING);
         $display = FALSE;
     }elseif (isset($_GET['addActivityRatPosts'])) { // display available exercises
         add_certificate_other_activity_only_value($certificate_id, "39a");
