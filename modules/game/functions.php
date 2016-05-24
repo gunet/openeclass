@@ -393,7 +393,7 @@ function display_certificate_activities($certificate_id) {
             }
         	}
 
-          if($details->activity_type == "learning path"){
+          if($details->activity_type == LearningPathEvent::ACTIVITY){
         		$checkForExer = Database::get()->queryArray("SELECT name FROM  lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $details->resource);
             foreach ($checkForExer as $newExerToCertificate) {
         			$title = $newExerToCertificate->name;

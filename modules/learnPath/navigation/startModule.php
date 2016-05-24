@@ -53,6 +53,8 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/document/doc_init.php';
 
 function directly_pass_lp_module($table, $userid, $lpmid) {
+    global $course_id;
+    
     // if credit was already set this query changes nothing else it update the query made at the beginning of this script
     $sql = "UPDATE `" . $table . "`
                SET `credit` = 1,
@@ -63,6 +65,7 @@ function directly_pass_lp_module($table, $userid, $lpmid) {
              WHERE `user_id` = ?d
                AND `learnPath_module_id` = ?d";
     Database::get()->query($sql, $userid, $lpmid);
+    triggerLPGame($course_id, $userid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
 }
 
 if (isset($_GET['viewModule_id']) && !empty($_GET['viewModule_id'])) {
@@ -91,6 +94,7 @@ if ($uid) { // if not anonymous
         Database::get()->query("INSERT INTO `lp_user_module_progress`
 	            ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data` )
 	            VALUES (?d , ?d, ?d, '', '')", $uid, $_SESSION['path_id'], $learnPathModuleId);
+        triggerLPGame($course_id, $uid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
     }
 }  // else anonymous : record nothing !
 // Get info about launched module

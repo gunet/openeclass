@@ -35,6 +35,8 @@
   ==============================================================================
  */
 
+require_once 'modules/game/LearningPathEvent.php';
+
 /*
  * content type
  */
@@ -1636,4 +1638,15 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
             }
         }
     }
+}
+
+function triggerLPGame($courseId, $uid, $lpId, $eventName) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = LearningPathEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_LP;
+    $eventData->resource = intval($lpId);
+    
+    LearningPathEvent::trigger($eventName, $eventData);
 }

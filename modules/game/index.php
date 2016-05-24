@@ -31,6 +31,7 @@ require_once 'CommentEvent.php';
 require_once 'BlogEvent.php';
 require_once 'WikiEvent.php';
 require_once 'ForumEvent.php';
+require_once 'LearningPathEvent.php';
 
 //$toolName = $langAttendance;
 $toolName = "Πιστοποιήσεις";
