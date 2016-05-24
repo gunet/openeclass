@@ -1642,80 +1642,94 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
 // Gamification Tables
 $db->query("CREATE TABLE `certificate` (
   `id` int(11) not null auto_increment primary key,
-  `course` int(11) not null references course(id),
-  `author` int(11) not null references user(id),
+  `course` int(11) not null,
+  `author` int(11) not null,
   `title` varchar(255) not null,
   `description` text,
   `autoassign` tinyint(1) not null default 1,
   `active` tinyint(1) not null default 1,
   `created` datetime,
   `expires` datetime,
-  index `certificate_course` (`course`)
+  index `certificate_course` (`course`),
+  foreign key (`course`) references `course` (`id`),
+  foreign key (`author`) references `user`(`id`)
 )");
 
 $db->query("CREATE TABLE `badge` (
   `id` int(11) not null auto_increment primary key,
-  `course` int(11) not null references course(id),
-  `author` int(11) not null references user(id),
+  `course` int(11) not null,
+  `author` int(11) not null,
   `title` varchar(255) not null,
   `description` text,
   `autoassign` tinyint(1) not null default 1,
   `active` tinyint(1) not null default 1,
   `created` datetime,
   `expires` datetime,
-  index `badge_course` (`course`)
+  index `badge_course` (`course`),
+  foreign key (`course`) references `course` (`id`),
+  foreign key (`author`) references `user`(`id`)
 )");
 
 $db->query("CREATE TABLE `user_certificate` (
   `id` int(11) not null auto_increment primary key,
-  `user` int(11) not null references user(id),
-  `certificate` int(11) not null references certificate(id),
+  `user` int(11) not null,
+  `certificate` int(11) not null,
   `created` datetime,
-  unique key `user_certificate` (`user`, `certificate`)
+  unique key `user_certificate` (`user`, `certificate`),
+  foreign key (`user`) references `user`(`id`),
+  foreign key (`certificate`) references `certificate` (`id`)
 )");
 
 $db->query("CREATE TABLE `user_badge` (
   `id` int(11) not null auto_increment primary key,
-  `user` int(11) not null references user(id),
-  `badge` int(11) not null references badge(id),
+  `user` int(11) not null,
+  `badge` int(11) not null,
   `created` datetime,
-  unique key `user_badge` (`user`, `badge`)
+  unique key `user_badge` (`user`, `badge`),
+  foreign key (`user`) references `user`(`id`),
+  foreign key (`badge`) references `badge` (`id`)
 )");
 
 $db->query("CREATE TABLE `certificate_criterion` (
   `id` int(11) not null auto_increment primary key,
-  `certificate` int(11) not null references certificate(id),
+  `certificate` int(11) not null,
   `activity_type` varchar(255),
   `module` int(11),
   `resource` int(11),
   `threshold` decimal(7,2),
-  `operator` varchar(20)
+  `operator` varchar(20),
+  foreign key (`certificate`) references `certificate`(`id`)
 )");
 
 $db->query("CREATE TABLE `badge_criterion` (
   `id` int(11) not null auto_increment primary key,
-  `badge` int(11) not null references badge(id),
+  `badge` int(11) not null,
   `activity_type` varchar(255),
   `module` int(11),
   `resource` int(11),
   `threshold` decimal(7,2),
-  `operator` varchar(20)
+  `operator` varchar(20),
+  foreign key (`badge`) references `badge`(`id`)
 )");
 
 $db->query("CREATE TABLE `user_certificate_criterion` (
   `id` int(11) not null auto_increment primary key,
-  `user` int(11) not null references user(id),
-  `certificate_criterion` int(11) not null references certificate_criterion(id),
+  `user` int(11) not null,
+  `certificate_criterion` int(11) not null,
   `created` datetime,
-  unique key `user_certificate_criterion` (`user`, `certificate_criterion`)
+  unique key `user_certificate_criterion` (`user`, `certificate_criterion`),
+  foreign key (`user`) references `user`(`id`),
+  foreign key (`certificate_criterion`) references `certificate_criterion`(`id`)
 )");
 
 $db->query("CREATE TABLE `user_badge_criterion` (
   `id` int(11) not null auto_increment primary key,
-  `user` int(11) not null references user(id),
-  `badge_criterion` int(11) not null references badge_criterion(id),
+  `user` int(11) not null,
+  `badge_criterion` int(11) not null,
   `created` datetime,
-  unique key `user_badge_criterion` (`user`, `badge_criterion`)
+  unique key `user_badge_criterion` (`user`, `badge_criterion`),
+  foreign key (`user`) references `user`(`id`),
+  foreign key (`badge_criterion`) references `badge_criterion`(`id`)
 )");
 
 $_SESSION['theme'] = 'default';
