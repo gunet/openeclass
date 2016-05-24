@@ -404,7 +404,7 @@ function display_certificate_activities($certificate_id) {
             }
         	}
 
-          if($details->activity_type == "document"){
+          if($details->activity_type == ViewingEvent::DOCUMENT_ACTIVITY){
         		$checkForExer = Database::get()->queryArray("SELECT title FROM document WHERE document.course_id = ?d AND document.id = ?d", $course_id, $details->resource);
             foreach ($checkForExer as $newExerToCertificate) {
         			$title = $newExerToCertificate->title;
@@ -415,7 +415,7 @@ function display_certificate_activities($certificate_id) {
             }
         	}
 
-          if($details->activity_type == "video"){
+          if($details->activity_type == ViewingEvent::VIDEO_ACTIVITY){
         		$checkForExer = Database::get()->queryArray("SELECT title FROM video WHERE video.course_id = ?d AND video.id = ?d", $course_id, $details->resource);
             foreach ($checkForExer as $newExerToCertificate) {
         			$title = $newExerToCertificate->title;
@@ -426,7 +426,7 @@ function display_certificate_activities($certificate_id) {
             }
         	}
 
-          if($details->activity_type == "videolink"){
+          if($details->activity_type == ViewingEvent::VIDEOLINK_ACTIVITY){
         		$checkForExer = Database::get()->queryArray("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $details->resource);
             foreach ($checkForExer as $newExerToCertificate) {
         			$title = $newExerToCertificate->title;
@@ -437,7 +437,7 @@ function display_certificate_activities($certificate_id) {
             }
         	}
 
-          if($details->activity_type == "ebook"){
+          if($details->activity_type == ViewingEvent::EBOOK_ACTIVITY){
         		$checkForExer = Database::get()->queryArray("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $details->resource);
             foreach ($checkForExer as $newExerToCertificate) {
         			$title = $newExerToCertificate->title;
@@ -448,7 +448,7 @@ function display_certificate_activities($certificate_id) {
             }
         	}
 
-          if($details->activity_type == "questionnaire"){
+          if($details->activity_type == ViewingEvent::QUESTIONNAIRE_ACTIVITY){
         		$checkForExer = Database::get()->queryArray("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $details->resource);
             foreach ($checkForExer as $newExerToCertificate) {
         			$title = $newExerToCertificate->name;

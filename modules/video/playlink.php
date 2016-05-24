@@ -41,12 +41,13 @@ if ($row) {
     $videoData = new stdClass();
     $videoData->courseId = $course_id;
     $videoData->uid = $uid;
-    $videoData->activityType = ViewingEvent::VIDEO_ACTIVITY;
+    $videoData->activityType = ViewingEvent::VIDEOLINK_ACTIVITY;
     $videoData->module = MODULE_ID_VIDEO;
     $videoData->resource = intval($_GET['id']);
     ViewingEvent::trigger(ViewingEvent::NEWVIEW, $videoData);
     
     $vObj = MediaResourceFactory::initFromVideoLink($row);
     echo MultimediaHelper::medialinkIframeObject($vObj);
-} else
+} else {
     header("Location: ${urlServer}modules/video/index.php?course=$course_code");
+}

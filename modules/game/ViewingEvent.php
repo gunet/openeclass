@@ -25,6 +25,7 @@ require_once 'BasicEvent.php';
 class ViewingEvent extends BasicEvent {
     
     const VIDEO_ACTIVITY = 'video';
+    const VIDEOLINK_ACTIVITY = 'videolink';
     const EBOOK_ACTIVITY = 'ebook';
     const DOCUMENT_ACTIVITY = 'document';
     const QUESTIONNAIRE_ACTIVITY = 'questionnaire';

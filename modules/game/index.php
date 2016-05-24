@@ -33,6 +33,7 @@ require_once 'WikiEvent.php';
 require_once 'ForumEvent.php';
 require_once 'LearningPathEvent.php';
 require_once 'RatingEvent.php';
+require_once 'ViewingEvent.php';
 
 //$toolName = $langAttendance;
 $toolName = "Πιστοποιήσεις";
