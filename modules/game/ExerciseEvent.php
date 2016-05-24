@@ -31,10 +31,23 @@ class ExerciseEvent extends BasicEvent {
         parent::__construct();
         
         $this->on(self::NEWRESULT, function($data) {
-            $this->setEventData($data);
+            $threshold = 0;
             
-            // TODO: fetch data from DB: SELECT EXERCISE GRADE FOR USER $data->uid
-            $this->context['threshold'] = 8.6;
+            // fetch score from DB and use it as threshold
+            $eur = Database::get()->querySingle("SELECT s.* "
+                    . " FROM exercise_user_record s "
+                    . " JOIN exercise a ON (s.eid = a.id) "
+                    . " WHERE s.uid = ?d "
+                    . " AND s.eid = ?d"
+                    . " AND a.course_id = ?d"
+                    . " AND s.attempt_status = ?d"
+                    . " ORDER BY eurid DESC LIMIT 1", $data->uid, $data->resource, $data->courseId, ATTEMPT_COMPLETED);
+            if ($eur && floatval($eur->total_score) > 0) {
+                $threshold = floatval($eur->total_score);
+            }
+            
+            $this->setEventData($data);
+            $this->context['threshold'] = $threshold;
             $this->emit(parent::PREPARERULES);
         });
     }
