@@ -24,7 +24,8 @@ require_once 'BasicEvent.php';
 
 class CommentEvent extends BasicEvent {
     
-    const BLOG_ACTIVITY = 'blog';
+    const BLOG_ACTIVITY = 'blogpost';
+    const COURSE_ACTIVITY = 'course';
     const NEWCOMMENT = 'comment-submitted';
     const DELCOMMENT = 'comment-deleted';
     
@@ -32,10 +33,20 @@ class CommentEvent extends BasicEvent {
         parent::__construct();
         
         $handle = function($data) {
-            $this->setEventData($data);
+            $threshold = 0;
             
-            // TODO: fetch data from DB: SELECT COUNT COMMENTS FOR USER $data->uid FOR MODULE $data->module
-            $this->context['threshold'] = 18;
+            // fetch comments count from DB and use it as threshold
+            $subm = Database::get()->querySingle("SELECT count(id) AS count "
+                    . " FROM comments "
+                    . " WHERE user_id = ?d "
+                    . " AND rid = ?d "
+                    . " AND rtype = ?s", $data->uid, $data->courseId, $data->activityType);
+            if ($subm && floatval($subm->count) > 0) {
+                $threshold = floatval($subm->count);
+            }
+            
+            $this->setEventData($data);
+            $this->context['threshold'] = $threshold;
             $this->emit(parent::PREPARERULES);
         };
         

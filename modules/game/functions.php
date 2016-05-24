@@ -464,12 +464,12 @@ function display_certificate_activities($certificate_id) {
             $title = "Πλήθος posts";
         	}
 
-          if($details->activity_type == "blog comments"){
+          if($details->activity_type == CommentEvent::BLOG_ACTIVITY && $details->module == MODULE_ID_COMMENTS){
         		$type = "Σχόλια";
             $title = "Σχόλια σε blogs";
         	}
 
-          if($details->activity_type == "course comments"){
+          if($details->activity_type == CommentEvent::COURSE_ACTIVITY && $details->module == MODULE_ID_COMMENTS){
         		$type = "Σχόλια";
             $title = "Σχόλια στο μάθημα";
         	}
