@@ -87,7 +87,7 @@ if ($appName) {
 
     $boolean_field = "";
 
-    $tool_content .= "<div class='row extapp'>\n<div class='col-xs-12'>";
+    $tool_content .= "<div class='row extapp'><div class='col-xs-12'>";
     $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form class='form-horizontal' role='form' action='extapp.php?edit=" . $appName . "' method='post'>";
     $tool_content .= "<fieldset>";
@@ -96,12 +96,12 @@ if ($appName) {
 
         if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
             $checked = $param->value() == 1 ? "value='0' checked" : "value='1'";
-            $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>\n";
+            $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
             $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' $checked>" . $param->display() . "</label>";
-            $boolean_field .= "</div></div></div>\n";
+            $boolean_field .= "</div></div></div>";
         } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
-            $tool_content .= "<div class='form-group'>\n";
-            $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
+            $tool_content .= "<div class='form-group'>";
+            $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
             $tool_content .= "<div class='col-sm-10'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
                                             q($param->value()) . "</textarea></div>";
             $tool_content .= "</div>";
@@ -114,13 +114,13 @@ if ($appName) {
     }
 
     $tool_content .= $boolean_field;
-    $tool_content .= "<div class='form-group'>\n";
+    $tool_content .= "<div class='form-group'>";
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>";
     $tool_content .= "<button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='clear'>$langClearSettings</button>";
     $tool_content .= "</div>";
     $tool_content .= "</div>";
-    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."\n";
-    $tool_content .= "</form>\n</div>\n</div>\n</div>";
+    $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."";
+    $tool_content .= "</form></div></div></div>";
 } else {
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -128,26 +128,34 @@ if ($appName) {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
 
-    $tool_content .= "<div class=\"row extapp\">\n<div class='col-xs-12'>\n";
-    $tool_content .="<table class=\"table-default dataTable no-footer extapp-table\">\n";
-    $tool_content.="<thead class='list-header'><td>$langExtAppName</td><td>$langExtAppDescription</td></thead>\n";
-    $tool_content.="\n";
+    $tool_content .= "<div class='row extapp'><div class='col-xs-12'>";
+    $tool_content .="<table class='table-default dataTable no-footer extapp-table'>";
+    $tool_content .="<thead class='list-header'><td>$langExtAppName</td><td>$langExtAppDescription</td></thead>";    
     foreach (ExtAppManager::getApps() as $app) {
-        $tool_content .="<tr>\n";
+        $tool_content .="<tr>";
         // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!
-        $tool_content .= "<td style=\"width:90px; padding:0px;\">";
-        $tool_content .= "<div class=\"text-center\" style=\"padding:10px;\"><a href=\"$urlAppend" . $app->getConfigUrl() . "\"'>";
+        $tool_content .= "<td style='width:90px; padding:0px;'>";
+        $tool_content .= "<div class='text-center' style='padding:10px;'><a href='$urlAppend" . $app->getConfigUrl() . "''>";
         if ($app->getAppIcon() !== null) {
-            $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
+            $tool_content .= "<img height='50' width='89' src='" . $app->getAppIcon() . "'/>";
         }
-        if ($app->isConfigured()){
-            $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-off\"></i></button>";
-        } else {
-            $app_active = "<button type=\"button\" class=\"btn btn-default\" data-app=\"" . $app->getName() . "\"  data-toggle='modal' data-target='#noSettings'> <i class=\"fa fa-warning\"></i> </button>";
+        
+        //echo $app->getName();
+        //echo "<br>";
+        if ($app->isConfigured()) {
+            if ($app->getName() == 'bigbluebutton') {
+                $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success bbb-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger bbb-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
+            } elseif ($app->getName() == 'openmeetings') {
+                $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success om-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger om-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
+            } else {
+                $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
+            }            
+        } else { 
+            $app_active = "<button type='button' class='btn btn-default' data-app='" . $app->getName() . "'  data-toggle='modal' data-target='#noSettings'> <i class='fa fa-warning'></i> </button>";
         }
-        $tool_content .= $app->getDisplayName() . "</a></div></td>\n";
+        $tool_content .= $app->getDisplayName() . "</a></div></td>";
 
-        $tool_content .= "<td class=\"text-muted clearfix\"><div class=\"extapp-dscr-wrapper\">" . $app->getShortDescription() . "</div><div class=\"extapp-controls\"><div class=\"btn-group btn-group-sm\">" . $app_active . "<a href=\"$urlAppend" . $app->getConfigUrl() . "\" class=\"btn btn-primary\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></td>";
+        $tool_content .= "<td class='text-muted clearfix'><div class='extapp-dscr-wrapper'>" . $app->getShortDescription() . "</div><div class='extapp-controls'><div class='btn-group btn-group-sm'>" . $app_active . "<a href='$urlAppend" . $app->getConfigUrl() . "' class='btn btn-primary'> <i class='fa fa-sliders fw'></i> </a></div></div></td>";
         $tool_content .="</tr>";
     }
 
