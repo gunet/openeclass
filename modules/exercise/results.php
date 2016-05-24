@@ -67,6 +67,7 @@ if ($is_editor && isset($_GET['purgeAttempID'])) {
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
+$exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $displayScore = $objExercise->selectScore();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
@@ -90,13 +91,14 @@ if($exerciseDescription_temp) {
 }
 $tool_content .= "</table>
 </div><br>";
-$status = (isset($_GET['status'])) ? intval($_GET['status']) : 0; 
+$status = (isset($_GET['status'])) ? intval($_GET['status']) : ''; 
 $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId' ".(($status == 0)? 'selected' : '').">--- $langCurrentStatus ---</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_COMPLETED."' ".(($status == 1)? 'selected' : '').">$langAttemptCompleted</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PENDING."' ".(($status == 2)? 'selected' : '').">$langAttemptPending</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PAUSED."' ".(($status == 3)? 'selected' : '').">$langAttemptPaused</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_CANCELED."' ".(($status == 4)? 'selected' : '').">$langAttemptCanceled</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId'>--- $langCurrentStatus ---</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_ACTIVE."' ".(($status === 0)? 'selected' : '').">$langAttemptActive</option>            
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_COMPLETED."' ".(($status === 1)? 'selected' : '').">$langAttemptCompleted</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PENDING."' ".(($status === 2)? 'selected' : '').">$langAttemptPending</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PAUSED."' ".(($status === 3)? 'selected' : '').">$langAttemptPaused</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_CANCELED."' ".(($status === 4)? 'selected' : '').">$langAttemptCanceled</option>
         </select>";
 //This part of the code could be improved
 if ($is_editor) {
@@ -104,16 +106,17 @@ if ($is_editor) {
 } else {
     $result[] = (object) array('uid' => $uid);
 }
-$extra_sql = ($status != 0 ) ? 'AND attempt_status = '.$status : '';
+$extra_sql = ($status !== '' ) ? ' AND attempt_status = '.$status : '';
 
 foreach ($result as $row) {
     $sid = $row->uid;
     $theStudent = Database::get()->querySingle("SELECT surname, givenname, am FROM user WHERE id = ?d", $sid);
 
     $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(a.record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, a.record_end_date,
-                CASE b.time_constraint WHEN 0 THEN TIME_TO_SEC(TIMEDIFF(a.record_end_date, a.record_start_date))
+                CASE b.time_constraint 
+                WHEN 0 THEN TIME_TO_SEC(TIMEDIFF(a.record_end_date, a.record_start_date))
                 ELSE b.time_constraint*60-a.secs_remaining END AS time_duration, a.total_score, a.total_weighting, a.eurid, a.attempt_status
-                FROM `exercise_user_record` a, exercise b WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id $extra_sql", $sid, $exerciseId);
+                FROM `exercise_user_record` a, exercise b WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id$extra_sql ORDER BY a.record_start_date DESC", $sid, $exerciseId);
     if (count($result2) > 0) { // if users found
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
         $tool_content .= "<tr><td colspan='".($is_editor ? 5 : 4)."'>";
@@ -131,26 +134,24 @@ foreach ($result as $row) {
                 <tr>
                   <th class='text-center'>" . $langStart . "</td>
                   <th class='text-center'>" . $langExerciseDuration . "</td>
-                  <th class='text-center'>" . $langYourTotalScore2 . "</td>
+                  <th class='text-center'>" . $langTotalScore . "</td>
                   <th class='text-center'>" . $langCurrentStatus. "</th>
                   ". ($is_editor ? "<th class='text-center'>" . icon('fa-gears'). "</th>" : "") ."
                 </tr>";
 
         $k = 0;
         foreach ($result2 as $row2) {
-//            if ($is_editor && $row2->attempt_status == ATTEMPT_PENDING) {
-//                $class .= ' highlight_row'; 
-//            }
-            $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-center'>" . q($row2->record_start_date) . "</td>";
-            if ($row2->time_duration == '00:00:00' or empty($row2->time_duration)) { // for compatibility
-                $tool_content .= "<td class='center'>$langNotRecorded</td>";
-            } else {
-                $tool_content .= "<td class='text-center'>" . format_time_duration($row2->time_duration) . "</td>";
-            }
-            if ($row2->attempt_status == ATTEMPT_COMPLETED) {
+            $row_class = "";
+            $action_btn_state = true;
+            if ($row2->attempt_status == ATTEMPT_COMPLETED) { // IF ATTEMPT COMPLETED
+                $status = $langAttemptCompleted;
                 if ($showScore) {
-                    $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . q($row2->total_score) . "/" . q($row2->total_weighting) . "</a>";
+                    $answersCount = Database::get()->querySingle("SELECT count(*) AS answers_cnt FROM `exercise_answer_record` WHERE `eurid` = ?d", $row2->eurid)->answers_cnt;
+                    if ($answersCount) {
+                        $results_link = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" . q($row2->total_score) . "/" . q($row2->total_weighting) . "</a>";
+                    } else {
+                        $results_link = q($row2->total_score) . "/" . q($row2->total_weighting);
+                    }
                 } else {
                     switch ($displayScore) {
                         case 2:
@@ -164,28 +165,56 @@ foreach ($result as $row) {
                             break;                        
                     }
                 }
-            } else {
-                if ($row2->attempt_status == ATTEMPT_PAUSED) {
+            } else { // IF ATTEMPT ANYTHING BUT COMPLETED
+                // IF ATTEMPT PAUSED OR ACTIVE
+                if ($row2->attempt_status == ATTEMPT_PAUSED || $row2->attempt_status == ATTEMPT_ACTIVE) {
                     $results_link = "-/-";
+                    if ($row2->attempt_status == ATTEMPT_PAUSED) {
+                        $status = $langAttemptPaused;
+                    } else {
+                        $status = $langAttemptActive;
+                        $now = new DateTime('NOW');
+                        $estimatedEndTime = DateTime::createFromFormat('Y-m-d / H:i', $row2->record_start_date);
+                        // in an active exercise if a time constaint passes the exercise can safely be deleted
+                        // if not it can be deleted after a day
+                        if ($exerciseTimeConstraint) {
+                            $estimatedEndTime->add(new DateInterval('PT' . $exerciseTimeConstraint . 'M'));                            
+                        } else {
+                            $estimatedEndTime->add(new DateInterval('P1D')); 
+                        }
+                        if ($now > $estimatedEndTime) {
+                            $row_class = " class='warning' data-toggle='tooltip' title='$langAttemptActiveButDeadMsg'";
+                        } else {
+                            if ($exerciseTimeConstraint) {
+                                $action_btn_state = false;
+                            }
+                            $row_class = " class='success' data-toggle='tooltip' title='$langAttemptActiveMsg'";                        
+                        }
+                    }
+                // IF ATTEMPT PENDING OR CANCELED
                 } else {
                     $results_link = q($row2->total_score). "/" . q($row2->total_weighting);
+                    if ($row2->attempt_status == ATTEMPT_PENDING) {
+                        $status = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" .$langAttemptPending. "</a>";
+                    } else {
+                        $status = $langAttemptCanceled;
+                    }
                 }
-            }
-            $tool_content .= "<td class='text-center'>$results_link</td>";
-            if ($row2->attempt_status == ATTEMPT_COMPLETED) {
-                $status = $langAttemptCompleted;
-            } elseif ($row2->attempt_status == ATTEMPT_PENDING) {
-                $status = "<a href='exercise_result.php?course=$course_code&amp;eurId=$row2->eurid'>" .$langAttemptPending. "</a>";
-            } elseif ($row2->attempt_status == ATTEMPT_PAUSED) {
-                $status = $langAttemptPaused;
-            } elseif ($row2->attempt_status == ATTEMPT_CANCELED) {
-                $status = $langAttemptCanceled;
+            }  
+            $tool_content .= "
+                        <tr$row_class>
+                            <td class='text-center'>" . q($row2->record_start_date) . "</td>";
+            if ($row2->time_duration == '00:00:00' || empty($row2->time_duration) || $row2->attempt_status == ATTEMPT_ACTIVE) { // for compatibility
+                $tool_content .= "<td class='text-center'>$langNotRecorded</td>";
+            } else {
+                $tool_content .= "<td class='text-center'>" . format_time_duration($row2->time_duration) . "</td>";
             }
             $tool_content .= "
+                    <td class='text-center'>$results_link</td>
                     <td class='text-center'>$status</td>";
             if ($is_editor) {
             $tool_content .= "
-                    <td class='option-btn-cell'>" . action_button(array(
+                    <td class='option-btn-cell'>" . ($action_btn_state ? action_button(array(
                         array(
                             'title' => $langDelete,
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",
@@ -193,7 +222,7 @@ foreach ($result as $row) {
                             'confirm' => $langQuestionCatDelConfirrm,
                             'class' => 'delete'
                         )
-                    )) . "</td>";
+                    )) : "") . "</td>";
             }
             $tool_content .= "            
                 </tr>";            

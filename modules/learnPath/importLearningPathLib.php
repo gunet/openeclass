@@ -49,8 +49,6 @@ require_once("include/lib/fileManageLib.inc.php");
 require_once("include/lib/fileUploadLib.inc.php");
 require_once("include/lib/fileDisplayLib.inc.php");
 
-define('CLARO_FILE_PERMISSIONS', 0777);
-
 // globals
 $errorFound = false;
 $elementsPile = null;
@@ -533,7 +531,7 @@ function doImport($course_code, $webDir, $scoFileSize, $scoFileName, $displayExt
     $okMsgs = array();
     $errorMsgs = array();
 
-    $maxFilledSpace = 100000000;
+    $maxFilledSpace = 1.0e10; // Max filled space: 10 GB
 
     $courseDir = "/courses/" . $course_code . "/scormPackages/";
     $tempDir = "/courses/" . $course_code . "/temp/";
@@ -541,7 +539,7 @@ function doImport($course_code, $webDir, $scoFileSize, $scoFileName, $displayExt
     $tempWorkDir = $webDir . $tempDir;
 
     if (!is_dir($baseWorkDir)) {
-        claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
+        make_dir($baseWorkDir);
     }
 
     // arrays used to store inserted ids
@@ -561,7 +559,7 @@ function doImport($course_code, $webDir, $scoFileSize, $scoFileName, $displayExt
     $baseWorkDir .= "path_" . $tempPathId;
 
     if (!is_dir($baseWorkDir)) {
-        claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
+        make_dir($baseWorkDir);
     }
 
     /*

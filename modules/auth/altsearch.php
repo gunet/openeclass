@@ -123,7 +123,7 @@ if (!isset($_SESSION['was_validated']) or
             // try to authenticate user
             $auth_method_settings = get_auth_settings($auth);
             if ($auth == 6) {
-                redirect_to_home_page('secure/index_reg.php' . ($prof ? '?p=1' : ''));
+                redirect_to_home_page('secure/index.php?reg=1' . ($prof ? '&p=1' : ''));
             }
             $is_valid = auth_user_login($auth, $uname, $passwd, $auth_method_settings);
         }
@@ -198,7 +198,7 @@ if ($is_valid) {
             $email = $_SESSION['auth_user_info']['email'];
         }
     }
-    if (!empty($email) and !email_seems_valid($email)) {
+    if (!empty($email) and !Swift_Validate::email($email)) {
         $ok = NULL;
         $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
     } else {
@@ -264,6 +264,9 @@ if ($is_valid) {
                           whitelist='',
                           description = ''", $surname_form, $givenname_form, $uname, $password, $email, $am, $language, $verified_mail);
         $last_id = $q1->lastInsertID;
+        // update personal calendar info table
+        // we don't check if trigger exists since it requires `super` privilege
+        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $last_id);
         $userObj->refresh($last_id, array(intval($depid)));
         user_hook($last_id);
 
@@ -355,7 +358,7 @@ if ($is_valid) {
         }
 
         // check if mail address is valid
-        if (!empty($email) and !email_seems_valid($email)) {
+        if (!empty($email) and !Swift_Validate::email($email)) {
             $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
             user_info_form();
             draw($tool_content, 0, null, $head_content);

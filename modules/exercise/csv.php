@@ -25,15 +25,15 @@ require_once '../../include/init.php';
 
 if ($is_editor) {
     $exerciseId = filter_input(INPUT_GET, 'exerciseId', FILTER_SANITIZE_NUMBER_INT);
-    header("Content-disposition: filename=" . $course_code . "_" . $exerciseId . "_" . date("Y-m-d") . ".xls");
-    header("Content-type: text/csv; charset=UTF-16");
-    header("Pragma: no-cache");
-    header("Expires: 0");
+    header('Content-disposition: filename=' . $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv');
+    header('Content-type: text/csv; charset=UTF-16');
+    header('Pragma: no-cache');
+    header('Expires: 0');
 
     $bom = "\357\273\277";
 
     $crlf = "\r\n";
-    $output = "$bom$langSurname\t$langName\t$langAm\t$langStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
+    $output = "$bom$langSurname\t$langName\t$langAm\t$langStart\t$langExerciseDuration\t$langStudentTotalScore\t$langTotalScore$crlf";
     $output .= "$crlf";
 
     $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ?d", $exerciseId);
@@ -62,7 +62,8 @@ if ($is_editor) {
             }
             $totalScore = $row2->total_score;
             $totalWeighting = $row2->total_weighting;
-            $output .= csv_escape("( $totalScore/$totalWeighting )") . "\t";
+            $output .= csv_escape("$totalScore") . "\t";
+            $output .= csv_escape("$totalWeighting") . "\t";
             $output .= "$crlf";
         }
     }

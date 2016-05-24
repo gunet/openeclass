@@ -24,7 +24,6 @@ $require_editor = TRUE;
 
 require_once '../../include/init.php';
 require_once 'group_functions.php';
-require_once 'modules/usage/duration_query.php';
 
 $group_id = intval($_REQUEST['group_id']);
 initialize_group_info($group_id);

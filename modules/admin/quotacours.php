@@ -26,45 +26,26 @@
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
-
-if (!isset($_GET['c'])) {
-    die();
-}
-
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
+
+if (!isset($_GET['c'])) {
+    redirect_to_home_page();
+}
 
 $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
 
 // validate course Id
-$cId = course_code_to_id(getDirectReference($_GET['c']));
+$cId = course_code_to_id($_GET['c']);
 validateCourseNodes($cId, isDepartmentAdmin());
 
-$toolName = $langQuota;
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourse);
-$navigation[] = array('url' => 'editcours.php?c=' . q(getDirectReference($_GET['c'])), 'name' => $langCourseEdit);
-
-if (isset($_GET['c'])) {
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "editcours.php?c=" . q(getDirectReference($_GET['c'])),
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
-    } else {
-        $tool_content .= action_bar(array(
-            array('title' => $langBackAdmin,
-                  'url' => "index.php",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label')));           
-    }
+$data['course'] = Database::get()->querySingle("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota FROM course WHERE code = ?s", $_GET['c']); 
 
 // Initialize some variables
-$quota_info = '';
 define('MB', 1048576);
 
 // Update course quota
@@ -76,53 +57,42 @@ if (isset($_POST['submit'])) {
     $drq = $_POST['drq'] * MB;
     // Update query
     $sql = Database::get()->query("UPDATE course SET doc_quota=?f, video_quota=?f, group_quota=?f, dropbox_quota=?f
-			WHERE code = ?s", $dq, $vq, $gq, $drq, getDirectReference($_GET['c']));
+			WHERE code = ?s", $dq, $vq, $gq, $drq, $_GET['c']);
     // Some changes occured
     if ($sql->affectedRows > 0) {
-        $tool_content .= "<div class='alert alert-info'>$langQuotaSuccess</div>";
+        Session::Messages($langQuotaSuccess, 'alert-success');
     }
     // Nothing updated
     else {
-        $tool_content .= "<div class='alert alert-warning'>$langQuotaFail</div>";
+        Session::Messages($langQuotaFail);    
     }
+    redirect_to_home_page('modules/admin/quotacours.php?c='.$data['course']->code);
 }
 // Display edit form for course quota
-else {        
-    $q = Database::get()->querySingle("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota FROM course WHERE code = ?s", getDirectReference($_GET['c']));
-    $quota_info .= $langTheCourse . " <b>" . q($q->title) . "</b> " . $langMaxQuota;
-    $dq = $q->doc_quota / MB;
-    $vq = $q->video_quota / MB;
-    $gq = $q->group_quota / MB;
-    $drq = $q->dropbox_quota / MB;
+$toolName = $langQuota;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourse);
+$navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);
 
-    $tool_content .= "<div class='form-wrapper'>
-            <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?c=" . getIndirectReference(getDirectReference($_GET['c'])) . "' method='post'>
-            <fieldset>                    
-                <div class='alert alert-info'>$quota_info</div>
-                <div class='form-group'>
-                    <label class='col-sm-4 control-label'>$langLegend $langDoc:</label>
-                        <div class='col-sm-6'><input type='text' name='dq' value='$dq' size='4' maxlength='4'> Mb.</div>
-                </div>
-                <div class='form-group'>
-                    <label class='col-sm-4 control-label'>$langLegend $langVideo:</label>
-                        <div class='col-sm-6'><input type='text' name='vq' value='$vq' size='4' maxlength='4'> Mb.</div>
-                </div>
-                <div class='form-group'>
-                    <label class='col-sm-4 control-label'>$langLegend <b>$langGroups</b>:</label>
-                        <div class='col-sm-6'><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</div>
-                </div>
-                <div class='form-group'>
-                    <label class='col-sm-4 control-label'>$langLegend <b>$langDropBox</b>:</label>
-                        <div class='col-sm-6'><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</div>
-                </div>
-                <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-4'>
-                        <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
-                    </div>
-                </div>
-            </fieldset>
-            ". generate_csrf_token_form_field() ."
-            </form>
-        </div>";
+if (isset($_GET['c'])) {
+        $data['action_bar'] = action_bar(array(
+            array('title' => $langBack,
+                  'url' => "editcours.php?c=$_GET[c]",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label')));
+} else {
+        $data['action_bar'] = action_bar(array(
+            array('title' => $langBackAdmin,
+                  'url' => "index.php",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label')));           
 }
-draw($tool_content, 3);
+
+
+$data['dq'] = round($data['course']->doc_quota / MB);
+$data['vq'] = round($data['course']->video_quota / MB);
+$data['gq'] = round($data['course']->group_quota / MB);
+$data['drq'] = round($data['course']->dropbox_quota / MB);
+
+$data['menuTypeID'] = 3;
+view('admin.courses.quotacours', $data);

@@ -36,6 +36,7 @@ $user = new User();
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $requiredFields = array('auth_form', 'surname_form',
         'givenname_form', 'language_form', 'department', 'pstatus');        
     if (get_config('am_required') and @$_POST['pstatus'] == 5) {
@@ -95,6 +96,9 @@ if (isset($_POST['submit'])) {
                 VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", " .
                         DBHelper::timeAfter(get_config('account_duration')) . ", ?s, '', ?s, '')",
              $surname_form, $givenname_form, $uname_form, $password_encrypted, $email_form, $pstatus, $phone_form, $am_form, $language_form, $verified_mail)->lastInsertID;
+        // update personal calendar info table
+        // we don't check if trigger exists since it requires `super` privilege
+        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $uid);
         $user->refresh($uid, array(intval($depid)));
         user_hook($uid);
         //process custom profile fields values
@@ -213,7 +217,7 @@ hContent;
 $reqtype = '';
 
 if (isset($_GET['id'])) {
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
               'url' => 'index.php',
               'icon' => 'fa-reply',
@@ -237,7 +241,7 @@ if (isset($_GET['id'])) {
         $backlink = $_SERVER['SCRIPT_NAME'];
     }
 
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
               'class' => 'back_btn',
               'icon' => 'fa-reply',
@@ -245,70 +249,58 @@ if (isset($_GET['id'])) {
 }
 
 $lang = false;
-$ext_uid = null;
-$ps = $pn = $pu = $pe = $pam = $pphone = $pcom = $pdate = '';
+$data['ext_uid'] = $ext_uid = null;
+$data['ps'] = $data['pn'] = $data['pu'] = $data['pe'] = $data['pam'] = $data['pphone'] = $data['pcom'] = $data['pdate'] = '';
 $depid = Session::has('department')? intval(Session::get('department')): null;
-$pv = Session::has('verified_mail_form')? Session::get('verified_mail_form'): '';
+$data['pv'] = Session::has('verified_mail_form')? Session::get('verified_mail_form'): '';
 if (isset($_GET['id'])) { // if we come from prof request
-    $id = intval($_GET['id']);
+    $data['id'] = $id = intval($_GET['id']);
 
     $res = Database::get()->querySingle("SELECT givenname, surname, username, email, faculty_id, phone, am,
                         comment, lang, date_open, status, verified_mail FROM user_request WHERE id =?d", $id);
     if ($res) {
-        $ext_uid = Database::get()->querySingle('SELECT *
+        $data['ext_uid'] = $ext_uid = Database::get()->querySingle('SELECT *
             FROM user_request_ext_uid WHERE user_request_id = ?d', $id);
-        $ps = $res->surname;
-        $pn = $res->givenname;
-        $pu = $res->username;
-        $pe = $res->email;
-        $pv = intval($res->verified_mail);
+        $data['ps'] = $res->surname;
+        $data['pn'] = $res->givenname;
+        $data['pu'] = $res->username;
+        $data['pe'] = $res->email;
+        $data['pv'] = intval($res->verified_mail);
         $depid = intval($res->faculty_id);
-        $pam = $res->am;
-        $pphone = $res->phone;
-        $pcom = $res->comment;
-        $language = $res->lang;
-        $pstatus = intval($res->status);
-        $pdate = nice_format(date('Y-m-d', strtotime($res->date_open)));
+        $data['pam'] = $res->am;
+        $data['pphone'] = $res->phone;
+        $data['pcom'] = $res->comment;
+        $data['language'] = $res->lang;
+        $data['pstatus'] = intval($res->status);
+        $data['pdate'] = nice_format(date('Y-m-d', strtotime($res->date_open)));
         // faculty id validation
         if ($res->faculty_id) {
             validateNode($depid, isDepartmentAdmin());
         }
-        $cpf_context = array('origin' => 'teacher_register', 'pending' => true, 'user_request_id' => $id);
+        $data['cpf_context'] = array('origin' => 'teacher_register', 'pending' => true, 'user_request_id' => $id);
     } else {
-        $cpf_context = array('origin' => 'teacher_register');
+        $data['cpf_context'] = array('origin' => 'teacher_register');
     }
-    $params = '';
+    $data['params'] = $params = '';
 } elseif (@$_GET['type'] == 'user') {
-    $pstatus = 5;
-    $cpf_context = array('origin' => 'student_register');
+    $data['pstatus'] =  $pstatus = 5;
+    $data['cpf_context'] =  array('origin' => 'student_register');
     $pageName = $langUserDetails;
     $title = $langInsertUserInfo;
-    $params = "?type=user";
+    $data['params'] =  $params = "?type=user";
 } else {
-    $pstatus = 1;
-    $cpf_context = array('origin' => 'teacher_register');
+    $data['pstatus'] =  $pstatus = 1;
+    $data['cpf_context'] = array('origin' => 'teacher_register');
     $pageName = $langProfReg;
     $title = $langNewProf;
-    $params = "?type=";
+    $data['params'] =  $params = "?type=";
 }
 
-$tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]$params' method='post' onsubmit='return validateNodePickerForm();'>
-        <fieldset>";
-formGroup('givenname_form', $langName,
-    "<input class='form-control' id='givenname_form' type='text' name='givenname_form'" .
-        getValue('givenname_form', $pn) . " placeholder='$langName'>");
-formGroup('surname_form', $langSurname,
-    "<input class='form-control' id='surname_form' type='text' name='surname_form'" .
-        getValue('surname_form', $ps) . " placeholder='$langSurname'>");
-formGroup('uname_form', $langUsername,
-    "<input class='form-control' id='Username' type='text' name='uname_form'" .
-        getValue('uname_form', $pu) . " autocomplete='off' placeholder='$langUsername'>");
 
 $active_auth_methods = get_auth_active_methods();
-$eclass_method_unique = count($active_auth_methods) == 1 && $active_auth_methods[0] == 1;
+$data['eclass_method_unique'] = $eclass_method_unique = count($active_auth_methods) == 1 && $active_auth_methods[0] == 1;
 
-$verified_mail_data = array(0 => $m['pending'], 1 => $m['yes'], 2 => $m['no']);
+$data['verified_mail_data'] =  array(0 => $m['pending'], 1 => $m['yes'], 2 => $m['no']);
 
 $nodePickerParams = array(
     'params' => 'name="department"',
@@ -321,98 +313,22 @@ if (isDepartmentAdmin()) {
 }
 list($tree_js, $tree_html) = $tree->buildNodePickerIndirect($nodePickerParams);
 $head_content .= $tree_js;
+$data['tree_html'] = $tree_html;
 
-if ($eclass_method_unique) {
-    $tool_content .= "<input type='hidden' name='auth_form' value='1'>";
-} else {
-    $auth_m = array();
+if (!$eclass_method_unique) {
+    $data['auth_m'] = $auth_m = array();
     foreach ($active_auth_methods as $m) {
-        $auth_m[$m] = get_auth_info($m);
+        $data['auth_m'][$m] = $auth_m[$m] = get_auth_info($m);
     }
-    formGroup('auth_selection', $langEditAuthMethod,
-        selection($auth_m, 'auth_form', '', "id='auth_selection' class='form-control'"));
 }
-
-formGroup('passsword_form', $langPass,
-    "<input class='form-control' type='text' name='password'" .
-        getValue('password', genPass()) . " id='password' autocomplete='off' placeholder='" . q($langPass) . "'><span id='result'></span>");
-if (get_config('email_required')) {
-    $email_message = "$langEmail $langCompulsory";
-} else {
-    $email_message = "$langEmail $langOptional";
-}
-formGroup('email_form', $langEmail,
-    "<input class='form-control' id='email_form' type='text' name='email_form'" .
-    getValue('email_form', $pe) . " placeholder='" . q($email_message) . "'>");
-formGroup('verified_mail_form', $langEmailVerified,
-    selection($verified_mail_data, "verified_mail_form", $pv, "class='form-control'"));
-formGroup('phone_form', $langPhone,
-    "<input class='form-control' id='phone_form' type='text' name='phone_form'" .
-    getValue('phone_form', $pphone) . " placeholder='" . q($langPhone) . "'>");
-formGroup('faculty', $langFaculty, $tree_html);
-
-if ($pstatus == 5) { // only for students
-    if (get_config('am_required')) {
-        $am_message = $langCompulsory;
-    } else {
-        $am_message = $langOptional;
-    }
-    formGroup('am_form', $langAm, 
-        "<input class='form-control' id='am_form' type='text' name='am_form'" .
-        getValue('am_form', $pam) . " placeholder='" . q($am_message) . "'>");
-}
-
-formGroup('language_form', $langLanguage,
-    lang_select_options('language_form', "class='form-control'",
-        Session::has('language_form')? Session::get('language_form'): $language));
 
 if ($ext_uid) {
-    $provider_icon = $themeimg . '/' . $auth_ids[$ext_uid->auth_id] . '.png';
-    $provider_full_name = $authFullName[$ext_uid->auth_id];
-    formGroup('provider', $langProviderConnectWith,
-        "<p class='form-control-static'>
-           <img src='$provider_icon' alt=''>&nbsp;" . q($provider_full_name) .
-           "<br /><small>$langProviderConnectWithTooltip</small></p>");
+    $data['auth_ids'] = $auth_ids;
+    $data['authFullName'] = $authFullName;
 }
 
-if (isset($_GET['id'])) {
-    formGroup('comments', $langComments, '<p class="form-control-static">' . q($pcom) . '</p>');
-    formGroup('date', $langDate, '<p class="form-control-static">' . q($pdate) . '</p>');
-    $tool_content .= "<input type='hidden' name='rid' value='$id'>";
-}
-if (isset($pstatus)) { 
-    $tool_content .= "<input type='hidden' name='pstatus' value='$pstatus'>";
-}
-
-// add custom profile fields input
-$tool_content .= render_profile_fields_form($cpf_context, true);
-
-$tool_content .= "
-        <div class='col-sm-offset-2 col-sm-10'>
-          <input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>
-        </div>        
-      </fieldset>
-      ". generate_csrf_token_form_field() ."
-    </form>
-  </div>";
-
-draw($tool_content, 3, null, $head_content);
-
-function formGroup($name, $label, $input) {
-    global $tool_content;
-    if (Session::hasError($name)) {
-        $form_class = 'form-group has-error';
-        $help_block = '<span class="help-block">' . Session::getError($name) . '</span>';
-    } else {
-        $form_class = 'form-group';
-        $help_block = '';
-    }
-    $tool_content .= "
-      <div class='$form_class'>
-        <label for='$name' class='col-sm-2 control-label'>" . q($label) . ":</label>
-        <div class='col-sm-10'>$input$help_block</div>
-      </div>";
-}
+$data['menuTypeID'] = 3;
+view('admin.users.newuseradmin', $data);     
 
 function getValue($name, $default='') {
     if (Session::has($name)) {
@@ -421,7 +337,7 @@ function getValue($name, $default='') {
         $value = $default;
     }
     if ($value !== '') {
-        return " value='" . q($value) . "'";
+        return q($value);
     } else {
         return '';
     }

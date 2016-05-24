@@ -29,6 +29,7 @@ class CronUtil {
         header('Content-Length: ' . strlen($img));
         header('Connection: Close');
         echo $img;
+        Debug::message('cron image out', Debug::INFO);
     }
 
     public static function flush() {
@@ -40,6 +41,7 @@ class CronUtil {
             @ob_end_flush();
         }
         @ob_start();
+        Debug::message('cron forked', Debug::INFO);
     }
 
     public static function lock() {
@@ -48,9 +50,11 @@ class CronUtil {
 
         if (file_exists($lock)) {
             self::imgOut();
+            Debug::message('cron lock already exists, exiting. If you think this is an error, please manually rmdir /courses/cron.lock/ directory.', Debug::WARNING);
             exit();
         }
         mkdir($lock);
+        Debug::message('cron lock', Debug::INFO);
     }
 
     public static function unlock() {
@@ -60,6 +64,7 @@ class CronUtil {
         if (file_exists($lock)) {
             rmdir($lock);
         }
+        Debug::message('cron unlock', Debug::INFO);
     }
 
 }

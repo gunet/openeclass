@@ -203,7 +203,7 @@ function move_dir($src, $dest) {
             die("<br>Error! a file named $dest already exists\n");
         }
     } else {
-        mkdir($dest, 0775, true);
+        make_dir($dest);
     }
 
     $handle = opendir($src);
@@ -241,7 +241,7 @@ function move_dir($src, $dest) {
 function copyDirTo($origDirPath, $destination) {
     // extract directory name - create it at destination - update destination trail
     $dirName = my_basename($origDirPath);
-    mkdir($destination . "/" . $dirName, 0775);
+    make_dir($destination . '/' . $dirName);
     $destinationTrail = $destination . "/" . $dirName;
 
     $cwd = getcwd();
@@ -600,7 +600,7 @@ function claro_copy_file($sourcePath, $targetPath) {
         if (preg_match('|^' . $sourcePath . '/|', $targetPath . '/'))
             return false;
 
-        if (!claro_mkdir($targetPath . '/' . $fileName, CLARO_FILE_PERMISSIONS))
+        if (!make_dir($targetPath . '/' . $fileName))
             return false;
 
         $dirHandle = opendir($sourcePath);
@@ -627,55 +627,6 @@ function claro_copy_file($sourcePath, $targetPath) {
 
         return true;
     } // end elseif is_dir()
-}
-
-/*
- * create directory
- *
- * @param string  $pathname
- * @param int     $mode directory permission (optional)
- * @param boolean $recursive (optional)
- * @return boolean TRUE if succeed, false otherwise
- */
-
-function claro_mkdir($pathName, $mode = 0777, $recursive = false) {
-    global $webDir;
-
-    if ($recursive) {
-        if (strstr($pathName, $webDir) !== false) {
-            /* Remove rootSys path from pathName for system with safe_mode or open_basedir restrictions
-              Functions (like file_exists, mkdir, ...) return false for files inaccessible with these restrictions
-             */
-
-            $pathName = str_replace($webDir, '', $pathName);
-            $dirTrail = $webDir;
-        } else {
-            $dirTrail = '';
-        }
-
-        $dirList = explode('/', str_replace('\\', '/', $pathName));
-        $dirList[0] = empty($dirList[0]) ? '/' : $dirList[0];
-        foreach ($dirList as $thisDir) {
-            $dirTrail .= empty($dirTrail) ? $thisDir : '/' . $thisDir;
-
-            if (file_exists($dirTrail)) {
-                if (is_dir($dirTrail)) {
-                    continue;
-                } else {
-                    return false;
-                }
-            }
-            else {
-                if (!mkdir($dirTrail, $mode)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-    else {
-        return mkdir($pathName, $mode);
-    }
 }
 
 /* ----------- end of backported functions from Claroline 1.7.x ----------- */

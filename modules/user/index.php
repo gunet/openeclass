@@ -28,10 +28,12 @@ $helpTopic = 'User';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 require_once 'include/course_settings.php';
+require_once 'include/lib/textLib.inc.php';
 
 //Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
     if (isset($_POST['action']) && $_POST['action'] == 'delete') {
+        checkSecondFactorChallenge();
         $unregister_gid = intval(getDirectReference($_POST['value']));
         $unregister_ok = true;
         // Security: don't remove myself except if there is another prof
@@ -112,7 +114,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['aaData'] = array();
     foreach ($result as $myrow) {
         $full_name = $myrow->givenname . " " . $myrow->surname;
-        $am_message = empty($myrow->am) ? '' : ("<div class='right'>($langAm: " . q($myrow->am) . ")</div>");
+        $am_message = empty($myrow->am) ? '' : ("<div class='right'>$langAmShort: " . q($myrow->am) . "</div>");
+        $stats_icon = icon('fa-bar-chart', $langUserStats, "../usage/index.php?course=$course_code&amp;id=$myrow->id");
         /* $link_parent_email = "";
           if (get_config('enable_secondary_email')) {
           if ($myrow->editor == 1 or $myrow->tutor == 1 or $myrow->status == 1 or empty($myrow['parent_email'])) {
@@ -124,52 +127,63 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
           }
           } */
         //create date field with unregister button
-        $date_field = ($myrow->reg_date == '0000-00-00') ? $langUnknownDate : nice_format($myrow->reg_date);
+        $date_field = $myrow->reg_date ? claro_format_locale_date( $dateFormatMiddle, strtotime($myrow->reg_date)) : $langUnknownDate;
 
         // Create appropriate role control buttons
         // Admin right
+
+        if (showSecondFactorChallenge() != ''){
+            $asktotp = " onclick=\"var totp=prompt('Type 2FA:','');this.setAttribute('href', this.getAttribute('href')+'&sfaanswer='+escape(totp));\" ";
+        } else {
+            $asktotp = '';
+        }
         $user_role_controls = '';
         if ($myrow->id != $_SESSION["uid"] && $myrow->reviewer == '1') {
-            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id'><img src='$themeimg/reviewer_remove.png' alt='$langRemoveRightReviewer' title='$langRemoveRightReviewer'></a>";
+            $user_role_controls .= "<a $asktotp href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id'><img src='$themeimg/reviewer_remove.png' alt='$langRemoveRightReviewer' title='$langRemoveRightReviewer'></a>";
         } else {
-            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";
+            $user_role_controls .= "<a $asktotp href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";
         }
         // opencourses reviewer right
         if (get_config('opencourses_enable')) {
                 if ($myrow->reviewer == '1') {
-                    $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id'><img src='$themeimg/reviewer_remove.png' alt='$langRemoveRightReviewer' title='$langRemoveRightReviewer'></a>";
+                    $user_role_controls .= "<a $asktotp href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id'><img src='$themeimg/reviewer_remove.png' alt='$langRemoveRightReviewer' title='$langRemoveRightReviewer'></a>";
                 } else {
-                    $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";
+                    $user_role_controls .= "<a $asktotp href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";
                 }
         }
+
         $user_role_controls = action_button(array(
             array(
               'title' => $langUnregCourse,
               'level' => 'primary',
               'url' => '#',
               'icon' => 'fa-times',
-              'btn_class' => 'delete_btn btn-default'
+              'btn_class' => 'delete_btn btn-default',
             ),
             array(
                 'title' => $myrow->tutor == '0' ? $langGiveRightTutor : $langRemoveRightTutor,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->tutor == '0' ? "give" : "remove")."Tutor=". getIndirectReference($myrow->id),
-                'icon' => $myrow->tutor == '0' ? "fa-square-o" : "fa-check-square-o"
+                'icon' => $myrow->tutor == '0' ? "fa-square-o" : "fa-check-square-o",
+                'link-attrs' => $asktotp
             ),
             array(
                 'title' => $myrow->editor == '0' ? $langGiveRightEditor : $langRemoveRightEditor,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=". getIndirectReference($myrow->id),
-                'icon' => $myrow->editor == '0' ? "fa-square-o" : "fa-check-square-o"
+                'icon' => $myrow->editor == '0' ? "fa-square-o" : "fa-check-square-o",
+                'link-attrs' => $asktotp
             ),            
             array(
                 'title' => $myrow->status != '1' ? $langGiveRightAdmin : $langRemoveRightAdmin,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->status == '1' ? "remove" : "give")."Admin=". getIndirectReference($myrow->id),
                 'icon' => $myrow->status != '1' ? "fa-square-o" : "fa-check-square-o",
-                'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1')
+                'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1'),
+                'link-attrs' => $asktotp
             ),
             array(
                 'title' => $myrow->reviewer != '1' ? $langGiveRightReviewer : $langRemoveRightReviewer,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->reviewer == '1' ? "remove" : "give")."Reviewer=". getIndirectReference($myrow->id),
                 'icon' => $myrow->reviewer != '1' ? "fa-square-o" : "fa-check-square-o",
+                'link-attrs' => $asktotp,
                 'disabled' => $myrow->id == $_SESSION["uid"],
                 'show' => get_config('opencourses_enable') && 
                             (
@@ -183,14 +197,29 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($myrow->tutor == '1') array_push($user_roles, $langTutor);
         if ($myrow->editor == '1') array_push($user_roles, $langEditor);        
         if ($myrow->reviewer == '1') array_push($user_roles, $langOpenCoursesReviewer);
+
+        $user_role_string = implode(', ', $user_roles);
+
+        $nameColumn = "
+                        <div class='pull-left' style='width: 32px ; margin-right: 10px;'>
+                            <img class='img-circle' src='".user_icon($myrow->id) . "' />
+                            <div style='padding-left:8px; padding-top: 5px;'>$stats_icon</div>
+                        </div>
+                        <div class='pull-left'>
+                            <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false)."</div>
+                            <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a></small></div>
+                            <div class='text-muted'><small>$am_message</small></div>
+                        </div>";
+        $roleColumn = "<div class='text-muted'>".str_replace(', ', ',<br>', $user_role_string)."</div>";
+
         //setting datables column data
         $data['aaData'][] = array(
             'DT_RowId' => getIndirectReference($myrow->id),
             'DT_RowClass' => 'smaller',
-            '0' => display_user($myrow->id) . "&nbsp<span>(<a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>) $am_message</span>",
-            '1' => "<small>".implode(', ', $user_roles)."</small>",
+            '0' => $nameColumn,
+            '1' => $roleColumn,
             '2' => user_groups($course_id, $myrow->id),
-            '3' => $date_field,
+            '3' => "<div class='text-center text-muted'>$date_field</div>",
             '4' => $user_role_controls
         );
     }
@@ -203,7 +232,6 @@ $limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : 0;
 $toolName = $langUsers;
 load_js('tools.js');
 load_js('datatables');
-load_js('datatables_filtering_delay');
 $head_content .= "
 <script type='text/javascript'>
         $(document).ready(function() {
@@ -264,15 +292,24 @@ $head_content .= "
             });            
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
-                var row_id = $(this).closest('tr').attr('id');
-                bootbox.confirm('" . js_escape($langDeleteUser) . " " . js_escape($langDeleteUser2) . "', function(result) {
-                    if (result) {
+                var row_id = $(this).closest('tr').attr('id');";
+
+  if(showSecondFactorChallenge()!=""){
+    $asktotp = "sfaanswer: escape(result),";
+    $head_content .= "bootbox.prompt('" . js_escape($langDeleteUser) . " " . js_escape($langDeleteUser2) . ". <p>Type 2FA:</p>', function(result) {";
+  }
+  else{
+    $asktotp = "";
+    $head_content .= "bootbox.confirm('" . js_escape($langDeleteUser) . " " . js_escape($langDeleteUser2) . "', function(result) {";
+  }
+  $head_content .= "if (result) {
                         $.ajax({
                           type: 'POST',
                           url: '',
                           datatype: 'json',
                           data: {
-                            action: 'delete', 
+                            action: 'delete',
+                            $asktotp 
                             value: row_id
                           },
                           success: function(data){
@@ -305,11 +342,19 @@ $head_content .= "
 $limit_sql = '';
 // Handle user removal / status change
 if (isset($_GET['giveAdmin'])) {
+    if(showSecondFactorChallenge()!=""){
+      $_POST['sfaanswer'] = $_GET['sfaanswer'];
+      checkSecondFactorChallenge();
+    }
     $new_admin_gid = intval(getDirectReference($_GET['giveAdmin']));
     Database::get()->query("UPDATE course_user SET status = " . USER_TEACHER . "
                         WHERE user_id = ?d
                         AND course_id = ?d", $new_admin_gid, $course_id);
 } elseif (isset($_GET['giveTutor'])) {
+    if(showSecondFactorChallenge()!=""){
+      $_POST['sfaanswer'] = $_GET['sfaanswer'];
+      checkSecondFactorChallenge();
+    }
     $new_tutor_gid = intval(getDirectReference($_GET['giveTutor']));
     Database::get()->query("UPDATE course_user SET tutor = 1
                         WHERE user_id = ?d
@@ -319,22 +364,38 @@ if (isset($_GET['giveAdmin'])) {
                               `group`.course_id = ?d AND
                               group_members.user_id = ?d", $course_id, $new_tutor_gid);
 } elseif (isset($_GET['giveEditor'])) {
+    if(showSecondFactorChallenge()!=""){
+      $_POST['sfaanswer'] = $_GET['sfaanswer'];
+      checkSecondFactorChallenge();
+    }
     $new_editor_gid = intval(getDirectReference($_GET['giveEditor']));
     Database::get()->query("UPDATE course_user SET editor = 1
                         WHERE user_id = ?d
                         AND course_id = ?d", $new_editor_gid, $course_id);
 } elseif (isset($_GET['removeAdmin'])) {
+    if(showSecondFactorChallenge()!=""){
+      $_POST['sfaanswer'] = $_GET['sfaanswer'];
+      checkSecondFactorChallenge();
+    }
     $removed_admin_gid = intval(getDirectReference($_GET['removeAdmin']));
     Database::get()->query("UPDATE course_user SET status = " . USER_STUDENT . "
                         WHERE user_id <> ?d AND
                               user_id = ?d AND
                               course_id = ?d", $uid, $removed_admin_gid, $course_id);
 } elseif (isset($_GET['removeTutor'])) {
+    if(showSecondFactorChallenge()!=""){
+      $_POST['sfaanswer'] = $_GET['sfaanswer'];
+      checkSecondFactorChallenge();
+    }
     $removed_tutor_gid = intval(getDirectReference($_GET['removeTutor']));
     Database::get()->query("UPDATE course_user SET tutor = 0
                         WHERE user_id = ?d 
                               AND course_id = ?d", $removed_tutor_gid, $course_id);
 } elseif (isset($_GET['removeEditor'])) {
+    if(showSecondFactorChallenge()!=""){
+      $_POST['sfaanswer'] = $_GET['sfaanswer'];
+      checkSecondFactorChallenge();
+    }
     $removed_editor_gid = intval(getDirectReference($_GET['removeEditor']));
     Database::get()->query("UPDATE course_user SET editor = 0
                         WHERE user_id = ?d 
@@ -343,11 +404,19 @@ if (isset($_GET['giveAdmin'])) {
 
 if (get_config('opencourses_enable')) {
     if (isset($_GET['giveReviewer'])) {
+        if(showSecondFactorChallenge()!=""){
+          $_POST['sfaanswer'] = $_GET['sfaanswer'];
+          checkSecondFactorChallenge();
+        }
         $new_reviewr_gid = intval(getDirectReference($_GET['giveReviewer']));
         Database::get()->query("UPDATE course_user SET status = " . USER_TEACHER . ", reviewer = 1
                         WHERE user_id = ?d 
                         AND course_id = ?d", $new_reviewr_gid, $course_id);
     } elseif (isset($_GET['removeReviewer'])) {
+        if(showSecondFactorChallenge()!=""){
+          $_POST['sfaanswer'] = $_GET['sfaanswer'];
+          checkSecondFactorChallenge();
+        }
         $removed_reviewer_gid = intval(getDirectReference($_GET['removeReviewer']));
         Database::get()->query("UPDATE course_user SET status = " . USER_STUDENT . ", reviewer = 0
                         WHERE user_id <> ?d AND

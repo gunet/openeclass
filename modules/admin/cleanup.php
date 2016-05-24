@@ -22,34 +22,31 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 
+if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
+    $messages = [];
+    foreach (array('temp' => 2, 'garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
+        $messages[] = sprintf("$langCleaningUp", "<b>$days</b>", ($days == 1) ? $langDaySing : $langDayPlur, $dir);
+        cleanup("$webDir/courses/$dir", $days);
+    }
+    Session::Messages($messages, 'alert-success');
+    redirect_to_home_page('modules/admin/cleanup.php');
+}
+
 $toolName = $langCleanUp;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
-
-if (isset($_POST['submit'])) {
-    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    foreach (array('temp' => 2, 'garbage' => 5, 'archive' => 1, 'tmpUnzipping' => 1) as $dir => $days) {
-        $tool_content .= sprintf("<div class='alert alert-success'>$langCleaningUp</div>", "<b>$days</b>", ($days == 1) ? $langDaySing : $langDayPlur, $dir);
-        cleanup("$webDir/courses/$dir", $days);
-    }
-} else {
-    $tool_content .= "
-    <div class='alert alert-danger'>$langCleanupInfo</div>
-    <div class='col-sm-12 col-sm-offset-5'>
-    <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-        <input class='btn btn-primary' type='submit' name='submit' value='$langCleanup'>
-        ". generate_csrf_token_form_field() ."
-    </form>
-    </div>";
-}
-
-
-draw($tool_content, 3);
+$data['action_bar'] = action_bar([
+                                    [
+                                        'title' => $langBack,
+                                        'url' => "index.php",
+                                        'icon' => 'fa-reply',
+                                        'level' => 'primary-label'
+                                    ]
+                                ]);
+$data['menuTypeID'] = 3;
+view('admin.server.cleanup', $data);
 
 // Remove all files under $path older than $max_age days
 // Afterwards, remove $path as well if it points to an empty directory

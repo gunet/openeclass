@@ -30,6 +30,7 @@ $pageName = $langDisableModules;
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     Database::get()->query('DELETE FROM module_disable');
     $arr = array();
     if (isset($_POST['moduleDisable'])) {
@@ -42,49 +43,25 @@ if (isset($_POST['submit'])) {
     Session::Messages($langWikiEditionSucceed, 'alert-success');
     redirect_to_home_page('modules/admin/modules.php');
 } else {
-    $disabled = array();
+    $data['disabled'] = [];
     foreach (Database::get()->queryArray('SELECT module_id FROM module_disable') as $item) {
-        $disabled[] = $item->module_id;
+        $data['disabled'][] = $item->module_id;
     }
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => $urlAppend . 'modules/admin/index.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')), false) .
-        "<div class='alert alert-warning'>$langDisableModulesHelp</div>
-         <div class='form-wrapper'>
-           <form class='form-horizontal' role='form' action='modules.php' method='post'>";
+    $data['action_bar'] = action_bar(
+                        [
+                            [
+                                'title' => $langBack,
+                                'url' => $urlAppend . 'modules/admin/index.php',
+                                'icon' => 'fa-reply',
+                                'level' => 'primary-label'
+                            ]
+                        ], false);
 
-    $alwaysEnabled = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_DROPBOX, MODULE_ID_DESCRIPTION);
-    foreach ($modules as $mid => $minfo) {
-        if (in_array($mid, $alwaysEnabled)) {
-            continue;
-        }
-        $checked = in_array($mid, $disabled)? ' checked': '';
-        $icon = $minfo['image'];
-        if (isset($theme_settings['icon_map'][$icon])) {
-            $icon = $theme_settings['icon_map'][$icon];
-        }
-        $icon = icon($icon);
-        $tool_content .= "
-           <div class='form-group'>
-             <div class='col-xs-12 checkbox'>
-               <label>
-                 <input type='checkbox' name='moduleDisable[" . getIndirectReference($mid) . "]' value='1'$checked> " .
-                    $icon . '&nbsp;' . q($minfo['title']) . "
-               </label>
-             </div>
-           </div>";
+    $alwaysEnabledModules = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_DROPBOX, MODULE_ID_DESCRIPTION);
+    foreach ($alwaysEnabledModules as $alwaysEnabledModule) {
+        unset($modules[$alwaysEnabledModule]);
     }
-    $tool_content .= "
-           <div class='form-group'>
-             <div class='col-xs-12'>
-               <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitChanges) . "'>
-             </div>
-           </div>
-           ". generate_csrf_token_form_field() ."
-         </form>
-       </div>";
+    $data['modules'] = $modules;
 }
-
-draw($tool_content, 3, null, $head_content);
+$data['menuTypeID'] = 3;
+view('admin.other.modules', $data);

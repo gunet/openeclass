@@ -25,9 +25,25 @@
  *        It is included in every file via baseTheme.php
  */
 
+/**
+ * Escape HTML entities in a string.
+ *
+ * Override Blade's e() from vendor/illuminate/support/helpers.php
+ *
+ * @param  \Illuminate\Contracts\Support\Htmlable|string  $value
+ * @return string
+ */
+function e($value) {
+    if ($value instanceof Htmlable) {
+        return $value->toHtml();
+    }
+
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
+}
+
 // set default time zone
 date_default_timezone_set("Europe/Athens");
-
+mb_internal_encoding('UTF-8');
 $webDir = dirname(dirname(__FILE__));
 chdir($webDir);
 require 'vendor/autoload.php';
@@ -420,10 +436,12 @@ $modules = array(
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'fa-ellipsis-h'),
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'fa-wikipedia'),
     MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'fa-columns'),
+    MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-comments-o'),
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-sort-numeric-desc'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-check-square-o'),
     MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'fa-exchange'),
-    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'mindmap'),
+    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'fa-map'),
+    MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => 'lti_consumer', 'image' => 'fa-link'),
 );
 // ----------------------------------------
 // course admin modules
@@ -521,6 +539,7 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                               module_id NOT IN (" . MODULE_ID_CHAT . ",
                                                 " . MODULE_ID_ASSIGN . ",
                                                 " . MODULE_ID_BBB . ",
+                                                " . MODULE_ID_LTI_CONSUMER . ",
                                                 " . MODULE_ID_DROPBOX . ",
                                                 " . MODULE_ID_FORUM . ",
                                                 " . MODULE_ID_GROUPS . ",

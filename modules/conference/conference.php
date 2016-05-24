@@ -29,29 +29,43 @@ $require_help = TRUE;
 $helpTopic = 'Conference';
 
 require_once '../../include/baseTheme.php';
+require_once 'functions.php';
+
 $coursePath = $webDir . '/courses/';
 $conference_id = $_GET['conference_id'];
-    $fileChatName = $coursePath . $course_code . '/'. $conference_id. '_chat.txt';
-    $tmpArchiveFile = $coursePath . $course_code . '/'. $conference_id. '_tmpChatArchive.txt';
+$q = Database::get()->querySingle("SELECT status FROM conference WHERE conf_id = ?d AND course_id = ?d", $conference_id, $course_id);
+if ($q) { // additional security
+    $conference_status = $q->status;
+} else {
+    Session::Messages($langForbidden, "alert-danger");
+    redirect_to_home_page("modules/conference/index.php?course=$course_code");
+}
+if (!is_valid_chat_user($uid, $conference_id, $conference_status)) {
+  Session::Messages($langForbidden, "alert-danger");
+  redirect_to_home_page("modules/conference/index.php?course=$course_code");
+}
 
-    $nick = uid_to_name($uid);
+  $fileChatName = $coursePath . $course_code . '/'. $conference_id. '_chat.txt';
+  $tmpArchiveFile = $coursePath . $course_code . '/'. $conference_id. '_tmpChatArchive.txt';
+
+  $nick = uid_to_name($uid);
 
 // How many lines to show on screen
-    define('MESSAGE_LINE_NB', 40);
+  define('MESSAGE_LINE_NB', 40);
 // How many lines to keep in temporary archive
 // (the rest are in the current chat file)
-    define('MAX_LINE_IN_FILE', 80);
+  define('MAX_LINE_IN_FILE', 80);
 
-    if ($GLOBALS['language'] == 'el') {
-        $timeNow = date("d-m-Y / H:i", time());
-    } else {
-        $timeNow = date("Y-m-d / H:i", time());
-    }
+  if ($GLOBALS['language'] == 'el') {
+      $timeNow = date("d-m-Y / H:i", time());
+  } else {
+      $timeNow = date("Y-m-d / H:i", time());
+  }
 
-    if (!file_exists($fileChatName)) {
-        $fp = fopen($fileChatName, 'w') or die('<center>$langChatError</center>');
-        fclose($fp);
-    }
+  if (!file_exists($fileChatName)) {
+      $fp = fopen($fileChatName, 'w') or die('<center>$langChatError</center>');
+      fclose($fp);
+  }
 
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
@@ -78,28 +92,28 @@ $head_content .= '<script type="text/javascript">
     }, 2000);        
 </script>';
 
-if ($is_editor) {
-    $tool_content .= action_bar(array(
-        array('title' => $langSave,
-            'url' => "messageList.php?course=$course_code&amp;store=true&amp;conference_id=$conference_id&amp;".generate_csrf_token_link_parameter(),
-            'icon' => 'fa-plus-circle',
-            'level' => 'primary-label',
-            'button-class' => 'btn-success',
-            'link-attrs' => "target='messageList'"
-        ),
-        array('title' => $langBack,
-                'url' => "index.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label'
-        ),
-        array('title' => $langWash,
-            'url' => "messageList.php?course=$course_code&amp;reset=true&amp;conference_id=$conference_id&amp;".generate_csrf_token_link_parameter(),
-            'icon' => 'fa-trash',
-            'level' => 'primary',
-            'link-attrs' => "target='messageList'"
-            )
-    ));
-}
+$tool_content .= action_bar(array(
+    array('title' => $langSave,
+        'url' => "messageList.php?course=$course_code&amp;store=true&amp;conference_id=$conference_id&amp;".generate_csrf_token_link_parameter(),
+        'icon' => 'fa-plus-circle',
+        'level' => 'primary-label',
+        'button-class' => 'btn-success',
+        'link-attrs' => "target='messageList'",
+        'show' => $is_editor
+    ),
+    array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
+    ),
+    array('title' => $langWash,
+        'url' => "messageList.php?course=$course_code&amp;reset=true&amp;conference_id=$conference_id&amp;".generate_csrf_token_link_parameter(),
+        'icon' => 'fa-trash',
+        'level' => 'primary',
+        'link-attrs' => "target='messageList'",
+        'show' => $is_editor
+        )
+));
 
 $tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
    <div class='row'><div class='col-sm-12'><div class='form-wrapper'>

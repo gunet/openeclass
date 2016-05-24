@@ -30,9 +30,9 @@ $require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
 
 if (isset($_GET['c'])) {
-    $course_id = intval(getDirectReference($_GET['c']));
+   $data['course_id'] = $course_id = intval(getDirectReference($_GET['c']));
 } else {
-    $course_id = 0;
+    $data['course_id'] = $course_id = 0;
 }
 
 require_once 'include/lib/hierarchy.class.php';
@@ -47,44 +47,54 @@ $user = new User();
 // validate course Id
 validateCourseNodes($course_id, isDepartmentAdmin());
 
+// Delete course
+if (isset($_GET['delete']) && $course_id) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+    if(showSecondFactorChallenge() != ""){
+      $_POST['sfaanswer'] = $_GET['sfaanswer'];
+      checkSecondFactorChallenge();
+    }
+    delete_course($course_id);
+    // Display confirmatiom message for course deletion
+    Session::Messages($langCourseDelSuccess, "alert-success");
+    redirect_to_home_page('modules/admin/listcours.php');
+}
+
 $toolName = $langCourseDel;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 
 // If course deleted go back to listcours.php
 if (isset($_GET['c']) && !isset($_GET['delete'])) {
-    $tool_content .= action_bar(array(
-     array('title' => $langBack,
-           'url' => "listcours.php",
-           'icon' => 'fa-reply',
-           'level' => 'primary-label')));   
+    $data['action_bar'] = action_bar([
+                    [
+                        'title' => $langBack,
+                        'url' => "listcours.php",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label'
+                    ]
+                ]);   
 } else {
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => "index.php",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+    $data['action_bar'] = action_bar([
+                    [
+                        'title' => $langBack,
+                        'url' => "index.php",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label'
+                    ]
+                ]);
 }
 
-// Delete course
-if (isset($_GET['delete']) && $course_id) {
-    delete_course($course_id);
-    $tool_content .= "<div class='alert alert-success'>" . $langCourseDelSuccess . "</div>";
+if (!Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $course_id)) {
+    redirect_to_home_page('modules/admin/index.php');
 }
-// Display confirmatiom message for course deletion
-else {
-    if (!Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $course_id)) {
-        $tool_content .= "<p class='right'><a href='index.php'>$langBack</a></p>";
-        draw($tool_content, 3);
-        exit();
-    }
-    $tool_content .= "<div class='alert alert-danger'>" . $langCourseDelConfirm2 . " <em>" . q(course_id_to_title($course_id)) . "</em>;
-		<br><br><i>" . $langNoticeDel . "</i><br>
-		</div>";
-    $tool_content .= "<ul class='list-group'>
-                        <li class='list-group-item'><a href='" . $_SERVER['SCRIPT_NAME'] . "?c=" . getIndirectReference($course_id) . "&amp;delete=yes'><b>$langYes</b></a></li>
-                        <li class='list-group-item'><a href='listcours.php'><b>$langNo</b></a></li>
-                    </ul>";
+$data['asktotp'] = "";
+if (showSecondFactorChallenge() != "") {
+    $data['asktotp'] = " onclick=\"var totp=prompt('Type 2FA:','');this.setAttribute('href', this.getAttribute('href')+'&sfaanswer='+escape(totp));\" ";
 }
 
-draw($tool_content, 3);
+$data['menuTypeID'] = 3;
+view ('admin.courses.delcours', $data);
+
+
+

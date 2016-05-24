@@ -31,6 +31,8 @@
  */
 
 require_once 'modules/bbb/functions.php';
+require_once 'modules/bbb/om-api.php';
+require_once 'modules/bbb/webconf-api.php';
 require_once 'modules/dropbox/class.mailbox.php';
 
 /*
@@ -40,10 +42,11 @@ require_once 'modules/dropbox/class.mailbox.php';
  * create the needed tools array
  *
  * @param int $menuTypeID Type of menu to generate
+ * @param bool $rich Whether to include rich text notifications in title
  *
  */
 
-function getSideMenu($menuTypeID) {
+function getSideMenu($menuTypeID, $rich=true) {
     switch ($menuTypeID) {
         case 0: { //logged out
                 $menu = loggedOutMenu();
@@ -51,12 +54,12 @@ function getSideMenu($menuTypeID) {
             }
 
         case 1: { //logged in                      
-                $menu = loggedInMenu();
+                $menu = loggedInMenu($rich);
                 break;
             }
 
         case 2: { //course home (lesson tools)
-                $menu = lessonToolsMenu();
+                $menu = lessonToolsMenu($rich);
                 break;
             }
 
@@ -164,9 +167,11 @@ function getExternalLinks() {
  *
  * (student | professor | platform administrator)
  *
+ * @param bool $rich Whether to include rich text notifications in title
+ *
  * @return array
  */
-function loggedInMenu() {
+function loggedInMenu($rich=true) {
     global $uid, $is_admin, $is_power_user, $is_usermanage_user,
     $is_departmentmanage_user, $urlServer, $course_code, $session;
 
@@ -275,7 +280,7 @@ function loggedInMenu() {
 
     $mbox = new Mailbox($uid, 0);
     $new_msgs = $mbox->unreadMsgsNumber();
-    if ($new_msgs == 0) {
+    if (!$rich or $new_msgs == 0) {
         array_push($sideMenuText, $GLOBALS['langMyDropBox']);
     } else {
         array_push($sideMenuText, "<b>$GLOBALS[langMyDropBox]<span class='badge pull-right'>$new_msgs</span></b>");
@@ -375,7 +380,7 @@ function loggedOutMenu() {
     array_push($sideMenuLink, $urlServer . "modules/auth/listfaculte.php");
     array_push($sideMenuImg, "fa-graduation-cap");
 
-    if (get_config('user_registration')) {
+    if (get_config('user_registration') and get_config('registration_link') != 'hide') {
         array_push($sideMenuText, $GLOBALS['langNewUser']);
         array_push($sideMenuLink, $urlServer . "modules/auth/registration.php");
         array_push($sideMenuImg, "fa-pencil-square-o");
@@ -630,7 +635,7 @@ function adminMenu() {
         array_push($sideMenuLink, "../admin/modules.php");
         array_push($sideMenuImg, "fa-caret-right");
 
-        array_push($sideMenuText, $GLOBALS['langStat']);
+        array_push($sideMenuText, $GLOBALS['langUsage']);
         array_push($sideMenuLink, "../../modules/usage/?t=a");
         array_push($sideMenuImg, "fa-caret-right");
         
@@ -675,9 +680,11 @@ function adminMenu() {
  * in regard to the user's user level
  * (student | professor | platform administrator)
  *
+ * @param bool $rich Whether to include rich text notifications in title
+ *
  * @return array
  */
-function lessonToolsMenu() {
+function lessonToolsMenu($rich=true) {
     global $uid, $is_editor, $is_course_admin, $courses,
            $course_code, $langAdministrationTools, $langExternalLinks,
            $modules, $admin_modules, $urlAppend, $status, $course_id;
@@ -744,13 +751,13 @@ function lessonToolsMenu() {
                 continue;
             }
 
-            // hide teleconference when no BBB servers are enabled
-            if ($mid == MODULE_ID_BBB and !get_total_bbb_servers()) {
+            // hide teleconference when no BBB, OpenMeetings or WebConf servers are enabled
+            if ($mid == MODULE_ID_BBB and !get_total_bbb_servers() and !get_total_om_servers() and !get_total_webconf_servers()) {
                 continue;
             }
 
             // if we are in dropbox or announcements add (if needed) mail address status
-            if ($mid == MODULE_ID_DROPBOX or $mid == MODULE_ID_ANNOUNCE) {
+            if ($rich and ($mid == MODULE_ID_DROPBOX or $mid == MODULE_ID_ANNOUNCE)) {
                 if ($mid == MODULE_ID_DROPBOX) {
                     $mbox = new Mailbox($uid, course_code_to_id($course_code));
                     $new_msgs = $mbox->unreadMsgsNumber();
@@ -763,7 +770,7 @@ function lessonToolsMenu() {
                 } else {
                     array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
                 }
-            } elseif ($mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
+            } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
                 array_push($sideMenuText, '<b>' . q($modules[$mid]['title']) .
                     "<span class='badge pull-right'>$new_docs</span></b>");
             } else {

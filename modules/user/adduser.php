@@ -46,16 +46,16 @@ if (isset($_GET['add'])) {
             Database::get()->query("UPDATE course_user_request SET status = 2 WHERE id = ?d", $req->id);
         }
     }
-    
+
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
                                                                'right' => '+5'));
     if ($result) {
-        Session::Messages( $langTheU . $langAdded, "alert alert-success");        
+        Session::Messages( $langTheU . $langAdded, "alert alert-success");
         // notify user via email
         $email = uid_to_email($uid_to_add);
-        if (!empty($email) and email_seems_valid($email)) {
+        if (!empty($email) and Swift_Validate::email($email)) {
             $emailsubject = "$langYourReg " . course_id_to_title($course_id);
-            $emailbody = "$langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2 $langFormula \n$gunet";
+            $emailbody = "$langNotifyRegUser1 <a href='{$urlServer}courses/$course_code/'>" . q(course_id_to_title($course_id)) . "</a> $langNotifyRegUser2 $langFormula \n$gunet";
 
             $header_html_topic_notify = "<!-- Header Section -->
             <div id='mail-header'>
@@ -81,10 +81,10 @@ if (isset($_GET['add'])) {
             send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody, $charset);
         }
     } else {
-        Session::Messages( $langAddError, "alert alert-warning");        
+        Session::Messages($langAddError, "alert alert-warning");
     }
-    redirect_to_home_page("modules/user/index.php?course=$course_code");    
-} else {    
+    redirect_to_home_page("modules/user/index.php?course=$course_code");
+} else {
     register_posted_variables(array('search_surname' => true,
                                     'search_givenname' => true,
                                     'search_username' => true,
@@ -99,7 +99,7 @@ if (isset($_GET['add'])) {
 
     $tool_content .= "<div class='alert alert-info'>$langAskUser</div>
                 <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>                
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <fieldset>
                 <div class='form-group'>
                 <label for='surname' class='col-sm-2 control-label'>$langSurname:</label>
@@ -146,7 +146,7 @@ if (isset($_GET['add'])) {
                     SELECT user_id FROM course_user WHERE course_id = ?d", $course_id);
         $result = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.username, u.am FROM
                                                 user u LEFT JOIN lala c ON u.id = c.user_id WHERE
-                                                c.user_id IS NULL AND $query", $values);
+                                                c.user_id IS NULL AND u.expires_at >= CURRENT_DATE() AND $query", $values);
         if ($result) {
             $tool_content .= "<table class='table-default'>
                                 <tr>
@@ -158,7 +158,7 @@ if (isset($_GET['add'])) {
                                   <th>$langActions</th>
                                 </tr>";
             $i = 1;
-            foreach ($result as $myrow) {                
+            foreach ($result as $myrow) {
                 $tool_content .= "<td class='text-right'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
                         q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
                         q($myrow->am) . "</td><td class='text-center'>" .

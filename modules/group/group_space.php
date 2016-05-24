@@ -40,7 +40,7 @@ $toolName = $langGroups;
 $pageName = $group_name;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 
-if (!$is_editor) {
+if (!$is_editor) {    
     if ((!$is_member) and (!$self_reg)) { // check if we are group member
         Session::Messages($langForbidden, 'alert-danger');
         redirect_to_home_page("modules/group/index.php?course=$course_code");       
@@ -61,7 +61,7 @@ if (!$is_editor) {
         }
     }
     if (isset($_GET['selfUnReg']) and $_GET['selfUnReg'] == 1) {
-        if ($is_member and $status != USER_GUEST) { // if registration is possible
+        if ($is_member and $allow_unreg and $status != USER_GUEST) { // if registration is possible
             
             Database::get()->query("DELETE FROM group_members WHERE user_id = ?d AND group_id = ?d", $uid, $group_id);
             $group = gid_to_name($group_id);
@@ -133,7 +133,7 @@ if (isset($_GET['group_as'])) {
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }	     
-} else {
+} else {        
     $tool_content .= action_bar(array(
                 array('title' => $langModify,
                       'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
@@ -164,8 +164,8 @@ if (isset($_GET['group_as'])) {
                       'url' => "index.php?course=$course_code",
                       'icon' => 'fa-reply',
                       'level' => 'primary'),
-                array('title' => $langEmailGroup,
-                      'url' => "group_email.php?course=$course_code&amp;group_id=$group_id",
+                array('title' => $langEmailGroup,                    
+                      'url' => "../dropbox/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
                       'icon' => 'fa-envelope',                  
                       'show' => $is_editor or $is_tutor),
                 array('title' => "$langDumpUser ( $langcsvenc1 )",

@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
             }
 
             $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
-        } else {
+        } else {            
             $cwd = getcwd();
             if (is_dir($dropbox_dir)) {
                 $dropbox_space = dir_total_space($dropbox_dir);
@@ -130,11 +130,12 @@ if (isset($_POST['submit'])) {
 
             validateUploadedFile($_FILES['file']['name'], 1);
 
-            if ($filesize + $dropbox_space > $diskQuotaDropbox) {
-                $errormsg = $langNoSpace;
+            if ($filesize + $dropbox_space > $diskQuotaDropbox) {            
+                $errormsg = $langMesageNoSent;
                 $error = TRUE;
             } elseif (!is_uploaded_file($filetmpname)) { // check user found : no clean error msg
-                die($langBadFormData);
+                $errormsg = $langBadFormData;
+                $error = TRUE;
             }
             // set title
             if (isset($_POST['message_title']) and $_POST['message_title'] != '') {
@@ -146,7 +147,7 @@ if (isset($_POST['submit'])) {
             $real_filename = $filename;
             $filename = safe_filename($format);
             $filename = php2phps($filename);
-            $recipients = $_POST["recipients"];
+            $recipients = $_POST["recipients"];            
             //After uploading the file, create the db entries
             if (!$error) {
                 $filename_final = $dropbox_dir . '/' . $filename;
@@ -160,13 +161,16 @@ if (isset($_POST['submit'])) {
                         AntivirusApp::block($output->output);
                     }
                 }
-
                 $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
+            } else {                
+                Session::Messages($errormsg, 'alert-danger');
+                redirect_to_home_page('modules/dropbox/' . ($course_id? "?course=$course_code": ''));
             }
             chdir($cwd);
         }
         $msgURL = $urlServer . 'modules/dropbox/index.php?mid=' . $msg->id;
         if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients of dropbox file
+            $errormail = FALSE;
             if ($course_id != 0 || isset($_POST['course'])) {//message in course context
                 $c = course_id_to_title($cid);
                 $subject_dropbox = "$c (".course_id_to_code($cid).") - $langNewDropboxFile";
@@ -176,13 +180,13 @@ if (isset($_POST['submit'])) {
                         $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
                         $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $c);
                         $datetime = date('l jS \of F Y h:i:s A');
-
+                        $course_code = course_id_to_code($cid);
                         $header_dropbox_message = "
                             <!-- Header Section -->
                             <div id='mail-header'>
                                 <div>
                                     <br>
-                                    <div id='header-title'>Ενημέρωση για καινούριο μήνυμα στο μάθημα <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
+                                    <div id='header-title'>$langNewDropboxFile $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
                                         <ul id='forum-category'>
                                             <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
                                             <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
@@ -220,25 +224,24 @@ if (isset($_POST['submit'])) {
 
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
-                        send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
+                        if (Swift_Validate::email($emailaddr)) { // if email address is valid
+                            send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
+                        } else {
+                            $errormail = TRUE;
+                        }
                     }
                 }
             } else {//message in personal context
                 $subject_dropbox = $langNewDropboxFile;
                 foreach ($recipients as $userid) {
-                    if (get_user_email_notification($userid)) {
-                        //$linkhere = "<a href='${urlServer}main/profile/profile.php'>$langHere</a>.";
-                        //$unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $title);
-                        //$body_dropbox_message = "$langSender: " . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). " <br /><br /> $subject <br /><br />" . $_POST['body']. "<br />";
-                        //$body_dropbox_message .= "$langNote: $langDoNotReply <a href='$msgURL'>$langHere</a>.<br />";
-                        //$body_dropbox_message .= "$unsubscribe $linkhere";
+                    if (get_user_email_notification($userid)) {                        
                         $datetime = date('l jS \of F Y h:i:s A');
                         $header_dropbox_message = "
                             <!-- Header Section -->
                             <div id='mail-header'>
                                 <div>
                                     <br>
-                                    <div id='header-title'>Ενημέρωση για καινούριο μήνυμα στο μάθημα <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
+                                    <div id='header-title'>$langNewDropboxFile $langInCourses <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
                                         <ul id='forum-category'>
                                             <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
                                             <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
@@ -267,12 +270,20 @@ if (isset($_POST['submit'])) {
                         $body_dropbox_message = $header_dropbox_message.$main_dropbox_message.$footer_dropbox_message;
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
-                        send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
+                        if (Swift_Validate::email($emailaddr)) { // if email address is valid
+                            send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
+                        } else {
+                            $errormail = TRUE;
+                        }
                     }
                 }
             }
         }
-        Session::Messages($langdocAdd, 'alert-success');
+        if (!$errormail) {
+            Session::Messages($langdocAdd, 'alert-success');
+        } else {
+            Session::Messages($langUsersEmailWrong, 'alert-warning');
+        }
     } else { //end if(!$error)
         Session::Messages($errormsg, 'alert-danger');
     }

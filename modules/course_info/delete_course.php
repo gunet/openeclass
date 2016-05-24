@@ -31,6 +31,7 @@ $pageName = $langDelCourse;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 if (isset($_POST['delete'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $tool_content .= action_bar(array(
         array('title' => "$langBackHome $siteName",
             'url' => '../../index.php',
@@ -42,7 +43,7 @@ if (isset($_POST['delete'])) {
     
     $garbage = "$webDir/courses/garbage";
     if (!is_dir($garbage)) {
-        mkdir($garbage, 0775);
+        make_dir($garbage);
     }
     rename("$webDir/courses/archive/$course_code", "$garbage/$course_code");
      
@@ -66,6 +67,7 @@ if (isset($_POST['delete'])) {
             $langByDel_A <b>" . q($currentCourseName) . " ($course_code) ;</b></div>
     <div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+    ".showSecondFactorChallenge()."
     <div class='form-group'>
         <div class='col-sm-10 col-sm-offset-5'>
             <input class='btn btn-primary' type='submit' name='delete' value='$langDelete'>

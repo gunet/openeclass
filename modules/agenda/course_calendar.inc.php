@@ -532,10 +532,10 @@ require_once 'include/lib/references.class.php';
     function event_list_view($display = 'all', $sens = 'ASC'){
         global $langNoEvents;
 
-        $events = get_list_course_events($display, $sens);
+        $events = get_list_course_events($display, 'DESC');
 
         if (count($events) > 0) {
-            return event_list($events, $sens);
+            return event_list($events, 'DESC');
         }else{
             return "<div class='alert alert-warning text-center'>$langNoEvents</div>";
         }

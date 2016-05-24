@@ -144,7 +144,7 @@ class secondfaApp extends ExtApp {
         } else {
             $user = Database::get()->querySingle("SELECT email FROM user WHERE id = ?s", $userid);
             $email = $user->email;
-            $company = get_config('institution');
+            $company = "GUNET eClass";
             return self::getInitialize($userid,$company,$email);
         }
     }
@@ -185,11 +185,6 @@ class secondfaApp extends ExtApp {
         }
     }
 
-
-    //    $tool_content .= "<tr>".secondfaApp::getInitialize("1","tester","test@test.com")."</tr>";
-
-
-
     /* INITIALIZATION FUNCTIONS */
 
     public static function getUnitialize(){
@@ -219,9 +214,12 @@ class secondfaApp extends ExtApp {
                     <tr><p>$langSFAScan</p></tr>
                     <tr><img src='".$sfa_url."'/></tr>
                     <tr><p>".$langSFAInsert."</p></tr>
+                    <p>
                     <div class=''>
                         <input class='form-control' type='text' autocomplete='off' name='sfasecret' disabled=disabled value='" . q($sfa_secret) . "'/></tr>
                     </div>
+                    </p>
+                    <tr><p>(Server Time) ".date("h:i:sa")."</p></tr>
                     <tr><p>$langSFATypeWYS</p></tr>
                     <tr>
                     <div class=''>

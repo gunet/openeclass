@@ -216,8 +216,7 @@ $(document).ready(function () {
                 {state: state,
                  appName: appName},
                 function (data) {
-                    var newState = (data === "0")? "fa-toggle-off":"fa-toggle-on";
-                    console.log(newState);
+                    var newState = (data === "0")? "fa-toggle-off":"fa-toggle-on";                    
                     button.removeClass('fa-spinner fa-spin').addClass(newState);
                     btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
                     newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
@@ -386,5 +385,4 @@ $(document).ready(function () {
         });
 
     });
-
 });

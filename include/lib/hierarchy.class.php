@@ -687,8 +687,8 @@ jContent;
                 $i = 0;
                 foreach ($defaults as $def) {
                     $html .= '<p id="nd_' . $i . '">';
-                    $html .= '<input type="hidden" ' . $params . ' value="' . $def . '" />';
-                    $html .= $this->getFullPath(getDirectReference($def));
+                    $html .= '<input type="hidden" ' . $params . ' value="' . getIndirectReference($def) . '" />';
+                    $html .= $this->getFullPath($def);
                     $html .= '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></span></a></p>';
                     $i++;
                 }

@@ -217,7 +217,6 @@ if ($allow_only_defaults) {
 $departments = isset($_POST['department']) ? arrayValuesDirect($_POST['department']) : array();
 $deps_valid = true;
 
-
 foreach ($departments as $dep) {
     if ($allow_only_defaults && !in_array($dep, $allowables)) {
         $deps_valid = false;
@@ -313,7 +312,7 @@ if (!isset($_POST['create_course'])) {
                       $langStartDate <input class='dateInForm form-control' type='text' name='start_date' value='' readonly>
                 </div>
                 <div class='col-sm-10 col-sm-offset-2'>
-                      $langDuration <input class='dateInForm form-control' type='text' name='finish_date' value='' readonly>
+                      $langEndDate <input class='dateInForm form-control' type='text' name='finish_date' value='' readonly>
                 </div>                
             </div>
             <div class='form-group'>
@@ -349,29 +348,29 @@ if (!isset($_POST['create_course'])) {
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input id='courseopen' type='radio' name='formvisible' value='2' checked>
-                        <img src='$themeimg/lock_open.png' alt='$langOpenCourse' title='$langOpenCourse' width='16'>&nbsp;$langOpenCourse
+                        <input id='courseopen' type='radio' name='formvisible' value='2' checked>".
+                        $course_access_icons[COURSE_OPEN]." $langOpenCourse
                         <span class='help-block'><small>$langPublic</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input id='coursewithregistration' type='radio' name='formvisible' value='1'>
-                        <img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16'>&nbsp;$m[legrestricted]
+                        <input id='coursewithregistration' type='radio' name='formvisible' value='1'>".
+                        $course_access_icons[COURSE_REGISTRATION]." $m[legrestricted]
                         <span class='help-block'><small>$langPrivOpen</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input id='courseclose' type='radio' name='formvisible' value='0'>
-                        <img src='$themeimg/lock_closed.png' alt='$langClosedCourse' title='$langClosedCourse' width='16'>&nbsp;$langClosedCourse
+                        <input id='courseclose' type='radio' name='formvisible' value='0'>".
+                        $course_access_icons[COURSE_CLOSED]." $langClosedCourse
                         <span class='help-block'><small>$langClosedCourseShort</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input id='courseinactive' type='radio' name='formvisible' value='3'>
-                        <img src='$themeimg/lock_inactive.png' alt='$langInactiveCourse' title='$langInactiveCourse' width='16'>&nbsp;$langInactiveCourse
+                        <input id='courseinactive' type='radio' name='formvisible' value='3'>".
+                        $course_access_icons[COURSE_INACTIVE]." $langInactiveCourse
                         <span class='help-block'><small>$langCourseInactiveShort</small></span>
                       </label>
                     </div>                   
@@ -464,10 +463,10 @@ if (!isset($_POST['create_course'])) {
         $view_type = $_POST['view_type'];        
     }
     if (empty($_POST['start_date'])) {
-        $_POST['start_date'] = '0000-00-00';
+        $_POST['start_date'] = NULL;
     }
     if (empty($_POST['finish_date'])) {
-        $_POST['finish_date'] = '0000-00-00';
+        $_POST['finish_date'] = NULL;
     }
 
     $description = purify($_POST['description']);
@@ -506,13 +505,13 @@ if (!isset($_POST['create_course'])) {
     //===================course format and start and finish date===============
     if ($view_type == "weekly") {
 
-        //get the last inserted id as the course id
+        // get the last inserted id as the course id
         $course_id = $new_course_id;
 
         $begin = new DateTime($_POST['start_date']);
 
-        //check if there is no end date
-        if ($_POST['finish_date'] == "" || $_POST['finish_date'] == '0000-00-00') {
+        // check if there is no end date
+        if (!isset($_POST['finish_date']) or empty($_POST['finish_date'])) {
             $end = new DateTime($begin->format("Y-m-d"));
             $end->add(new DateInterval('P26W'));
         } else {

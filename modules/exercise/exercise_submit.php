@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,8 +17,8 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
- */
+ * ======================================================================== */
+
 
 include('exercise.class.php');
 include('question.class.php');
@@ -34,7 +34,6 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'modules/attendance/functions.php';
-require_once 'game.php';
 
 $pageName = $langExercicesView;
 $picturePath = "courses/$course_code/image";
@@ -69,6 +68,10 @@ if (isset($_COOKIE['inExercise'])) {
 
 //Identifying ajax request that cancels an active attempt
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        if ($_POST['action'] == 'refreshSession') {
+            // Does nothing just refreshes the session
+            exit();
+        } 
         if ($_POST['action'] == 'endExerciseNoSubmit') {   
             
             $exerciseId = $_POST['eid'];             
@@ -76,7 +79,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $eurid = $_POST['eurid'];
             Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d, secs_remaining = ?d
                     WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, 0, $eurid);
-            triggerGame($course_id, $uid, $exerciseId);
             Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
             unset_exercise_var($exerciseId);
             exit();
@@ -151,7 +153,6 @@ if (isset($_POST['buttonCancel'])) {
         $exercisetotalweight = $objExercise->selectTotalWeighting();
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = ?d
                 WHERE eurid = ?d", ATTEMPT_CANCELED, $exercisetotalweight, $eurid);
-        triggerGame($course_id, $uid, $exerciseId);
         Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
         unset_exercise_var($exerciseId);
         Session::Messages($langAttemptWasCanceled);
@@ -192,7 +193,6 @@ if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise
         $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;        
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
                         total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
-        triggerGame($course_id, $uid, $exerciseId);
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseExpiredTime);
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
@@ -234,7 +234,6 @@ $nbrQuestions = count($questionList);
 // either from a previews attempt meaning that user hasn't sumbited his answers permanantly  
 // 		and exerciseTimeConstrain hasn't yet passed,
 // either start a new attempt and count now() as begin time.
-
 if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || isset($paused_attempt)) {
     
     $eurid = isset($paused_attempt) ? $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $paused_attempt->eurid : $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
@@ -272,7 +271,6 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
         $start = date('Y-m-d H:i:s', $attempt_value);
         $eurid = Database::get()->query("INSERT INTO exercise_user_record (eid, uid, record_start_date, total_score, total_weighting, attempt, attempt_status)
                         VALUES (?d, ?d, ?t, 0, 0, ?d, 0)", $exerciseId, $uid, $start, $attempt+1)->lastInsertID;            
-        triggerGame($course_id, $uid, $exerciseId);
         $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $eurid;
         $timeleft = $exerciseTimeConstraint*60;            
    }
@@ -312,7 +310,6 @@ if (isset($_POST['formSent'])) {
     }
 
     // inserts user's answers in the database and adds them in the $exerciseResult array which is returned
-
     $action = isset($paused_attempt) ? 'update' : 'insert';
 
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
@@ -347,7 +344,6 @@ if (isset($_POST['formSent'])) {
         // record results of exercise
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
                                 total_weighting = ?f, secs_remaining = ?d WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $secs_remaining, $eurid);
-        triggerGame($course_id, $uid, $exerciseId);
         
         if ($attempt_status == ATTEMPT_COMPLETED) {
             // update attendance book
@@ -382,8 +378,7 @@ if (isset($_POST['formSent'])) {
             $objExercise->save_unanswered(0); //passing 0 to save like unanswered
         }
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?d, total_weighting = ?d, attempt_status = ?d, secs_remaining = ?d
-                WHERE eurid = ?d", $totalScore, $totalWeighting, ATTEMPT_PAUSED, $secs_remaining, $eurid);
-        triggerGame($course_id, $uid, $exerciseId);
+                WHERE eurid = ?d", $totalScore, $totalWeighting, ATTEMPT_PAUSED, $secs_remaining, $eurid);  
         unset_exercise_var($exerciseId);      
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);        
     } 
@@ -410,7 +405,7 @@ $tool_content .= "</div><br>";
 
   
 $tool_content .= "
-  <form class='form-horizontal exercise' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId".(isset($paused_attempt) ? "&amp;eurId=$eurid" : "")."'>
+  <form class='form-horizontal exercise' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId".(isset($paused_attempt) ? "&amp;eurId=$eurid" : "")."' autocomplete='off'>
   <input type='hidden' name='formSent' value='1'>
   <input type='hidden' name='attempt_value' value='$attempt_value'>
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions'>";
@@ -457,19 +452,20 @@ if (!$questionList) {
 } else {
     $tool_content .= "
         <br>
-        <div class='pull-right'><input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;<input class='btn btn-primary' type='submit' value='";
+        <div class='pull-right'><input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;<input class='btn btn-primary blockUI' type='submit' value='";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
         $tool_content .= "$langCont' />";
     } else {
         $tool_content .= $langNext . " &gt;" . "' />";
     }
     if ($exerciseTempSave && !($exerciseType == 2 && ($questionNum == $nbrQuestions))) {
-        $tool_content .= "&nbsp;<input class='btn btn-primary' type='submit' name='buttonSave' value='$langTemporarySave' />";   
+        $tool_content .= "&nbsp;<input class='btn btn-primary blockUI' type='submit' name='buttonSave' value='$langTemporarySave' />";   
     }
     $tool_content .= "</div>";
 }
 $tool_content .= "</form>";
 if ($questionList) {
+$refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
 $head_content .= "<script type='text/javascript'>            
                 $(window).bind('beforeunload', function(){
                     var date = new Date();
@@ -506,7 +502,12 @@ $head_content .= "<script type='text/javascript'>
                             $(window).unbind('unload');
                             document.cookie = 'inExercise=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';                            
                     });
-                    
+                    setInterval(function() {
+                        $.ajax({
+                          type: 'POST',
+                          data: { action: 'refreshSession'}
+                        });                    
+                    }, $refresh_time);
     		});
                 $(exercise_enter_handler);</script>";
 }

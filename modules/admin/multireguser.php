@@ -43,12 +43,13 @@ $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     register_posted_variables(array('email_public' => true,
         'am_public' => true,
         'phone_public' => true), 'all', 'intval');
     $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
-    $unparsed_lines = '';
-    $new_users_info = array();
+    $data['unparsed_lines'] = '';
+    $data['new_users_info'] = array();
     $newstatus = ($_POST['type'] == 'prof') ? 1 : 5;
     $departments = isset($_POST['facid']) ? arrayValuesDirect($_POST['facid']) : array();
     $am = $_POST['am'];
@@ -60,9 +61,9 @@ if (isset($_POST['submit'])) {
     }
     
     foreach ($fields as $field) {
-        if (!in_array($field, $acceptable_fields)) {
-            $tool_content = "<div class='alert alert-danger'>$langMultiRegFieldError <b>" . q($field) . "</b></div>";
-            draw($tool_content, 3, 'admin');
+        if (!in_array($field, $acceptable_fields)) {           
+            Session::Messages("$langMultiRegFieldError <b>$field)</b>", 'alert-danger');
+            redirect_to_home_page('modules/admin/multireguser.php');
             exit;
         }
     }
@@ -84,7 +85,7 @@ if (isset($_POST['submit'])) {
                     $info[$field] = array_shift($userl);
                 }
 
-                if (!isset($info['email']) or ! email_seems_valid($info['email'])) {
+                if (!isset($info['email']) or !Swift_Validate::email($info['email'])) {
                     $info['email'] = '';
                 }
 
@@ -105,101 +106,51 @@ if (isset($_POST['submit'])) {
                 }
                 $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, @$info['email'], $departments, @$info['id'], @$info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public);
                 if ($new === false) {
-                    $unparsed_lines .= q($line . "\n" . $error . "\n");
+                    $data['unparsed_lines'] .= q($line . "\n" . $error . "\n");
                 } else {
-                    $new_users_info[] = $new;
+                    $data['new_users_info'][] = $new;
 
                     // Now, the $userl array should contain only course codes
                     foreach ($userl as $ccode) {
                         if (!register($new[0], $ccode)) {
-                            $unparsed_lines .=
+                            $data['unparsed_lines'] .=
                                     sprintf($langMultiRegCourseInvalid . "\n", q("$info[last] $info[first] ($info[username])"), q($ccode));
                         }
                     }
                 }
             } else {
-                $unparsed_lines .= $line;
+                $data['unparsed_lines'] .= $line;
             }
         }
         $line = strtok("\n");
     }
-    if (!empty($unparsed_lines)) {
-        $tool_content .= "<p><b>$langErrors</b></p><pre>" . q($unparsed_lines) . "</pre>";
-    }
-    $tool_content .= "<table class='table-default'><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>$langPhone</th><th>$langAm</th><th>username</th><th>password</th></tr>\n";
-    foreach ($new_users_info as $n) {
-        $tool_content .= "<tr><td>" . q($n[1]) . "</td><td>" . q($n[2]) . "</td><td>" . q($n[3]) . "</td><td>" . q($n[4]) . "</td><td>" . q($n[5]) . "</td><td>" . q($n[6]) . "</td><td>" . q($n[7]) . "</td></tr>\n";
-    }
-    $tool_content .= "</table>";
+
+    $view = 'admin.users.multireguser_result';
 } else {
     Database::get()->queryFunc("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name", function($n) use(&$facs) {
         $facs[$n->id] = $n->name;
     });
-    $access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
+    $data['access_options'] = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
         ACCESS_PROFS => $langProfileInfoProfs,
         ACCESS_USERS => $langProfileInfoUsers);
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                     'url' => "index.php",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
-                ),false);
-    $tool_content .= "<div class='alert alert-info'>$langMultiRegUserInfo</div>
-        <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();' >
-        <fieldset>        
-        <div class='form-group'>
-            <label for='fields' class='col-sm-3 control-label'>$langMultiRegFields:</label>
-            <div class='col-sm-9'>
-                <input class='form-control' id='fields' type='text' name='fields' value='first last id email phone'>
-            </div>
-        </div>
-        <div class='form-group'>
-            <label for='user_info' class='col-sm-3 control-label'>$langUsersData:</label>
-            <div class='col-sm-9'>
-                <textarea class='auth_input form-control' name='user_info' id='user_info' rows='10'></textarea>
-            </div>
-        </div>
-        <div class='form-group'>
-            <label for='type' class='col-sm-3 control-label'>$langMultiRegType:</label>
-            <div class='col-sm-9'>
-                <select class='form-control' name='type' id='type'>
-                    <option value='stud'>$langsOfStudents</option>
-                    <option value='prof'>$langOfTeachers</option>
-                </select>
-            </div>
-        </div>";
-    
-        $eclass_method_unique = TRUE;        
-        $auth = get_auth_active_methods();
-        foreach ($auth as $methods) {
-            if ($methods != 1) {
-                $eclass_method_unique = FALSE;
-            }
+                ), false);
+
+    $data['eclass_method_unique'] = TRUE;        
+    $auth = get_auth_active_methods();
+    $data['auth_m'] = array();
+    foreach ($auth as $methods) {
+        if ($methods != 1) {
+            $data['eclass_method_unique'] = FALSE;
         }
-        if (!$eclass_method_unique) {
-            $auth_m = array();
-            $tool_content .= "<div class='form-group'>
-                <label for='passsword' class='col-sm-3 control-label'>$langMethods</label>
-                <div class='col-sm-9'>";
-        
-            foreach ($auth as $methods) {
-                $auth_text = get_auth_info($methods);
-                $auth_m[$methods] = $auth_text;            
-            }
-            $tool_content .= selection($auth_m, "auth_methods_form", '', "class='form-control'");
-            $tool_content .= "</div></div>";
-        }
-        
-        $tool_content .= "<div class='form-group'>
-            <label for='prefix' class='col-sm-3 control-label'>$langMultiRegPrefix:</label>
-            <div class='col-sm-9'>
-                <input class='form-control' type='text' name='prefix' id='prefix' value='user'>
-            </div>
-        </div>
-        <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langFaculty:</label>
-            <div class='col-sm-9'>";
+        $auth_text = get_auth_info($methods);
+        $data['auth_m'][$methods] = $auth_text;            
+    }
+
     if (isDepartmentAdmin()) {
         list($js, $html) = $tree->buildUserNodePickerIndirect(array('params' => 'name="facid[]"',
             'allowables' => $user->getDepartmentIds($uid)));
@@ -207,54 +158,12 @@ if (isset($_POST['submit'])) {
         list($js, $html) = $tree->buildUserNodePickerIndirect(array('params' => 'name="facid[]"'));
     }
     $head_content .= $js;
-    $tool_content .= $html;
-    $tool_content .= "</div>
-        </div>
-        <div class='form-group'>
-            <label for='am' class='col-sm-3 control-label'>$langAm:</label>
-            <div class='col-sm-9'>
-                <input class='form-control' type='text' name='am' id='am'>
-            </div>
-        </div>
-        <div class='form-group'>
-        <label for='lang' class='col-sm-3 control-label'>$langLanguage:</label>
-            <div class='col-sm-9'>" . lang_select_options('lang', 'class="form-control"') . "</div>
-        </div>
-        <div class='form-group'>
-        <label for='email_public' class='col-sm-3 control-label'>$langEmail</label>
-            <div class='col-sm-9'>" . selection($access_options, 'email_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
-        </div>
-        <div class='form-group'>
-        <label for='am_public' class='col-sm-3 control-label'>$langAm</label>
-            <div class='col-sm-9'>" . selection($access_options, 'am_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
-        </div>
-        <div class='form-group'>
-        <label for='phone_public' class='col-sm-3 control-label'>$langPhone</label>
-            <div class='col-sm-9'>" . selection($access_options, 'phone_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
-        </div>
-        <div class='form-group'>
-        <label for='send_mail' class='col-sm-3 control-label'>$langInfoMail</label>
-            <div class='col-sm-9'>
-                <div class='checkbox'>
-                    <label>
-                        <input name='send_mail' id='send_mail' type='checkbox'> $langMultiRegSendMail
-                    </label>
-                </div>            
-            </div>
-        </div>
-        <div class='form-group'>
-            <div class='col-sm-9 col-sm-offset-3'>
-                <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-                <a class='btn btn-default' href='index.php'>$langCancel</a>
-            </div>
-        </div>       
-        </fieldset>
-        ". generate_csrf_token_form_field() ."
-        </form>
-        </div>";
+    $data['html'] = $html;
+    
+    $view = 'admin.users.multireguser';
 }
-
-draw($tool_content, 3, null, $head_content);
+$data['menuTypeID'] = 3;
+view($view, $data);
 
 function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public) {
     global $charset, $langAsProf,
@@ -299,6 +208,9 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                  email_public, phone_public, am_public, description, verified_mail, whitelist)
                 VALUES (?s,?s,?s,?s,?s,?d," . DBHelper::timeAfter() . "," . DBHelper::timeAfter(get_config('account_duration')) . ",?s,?s,?s,?d,?d,?d,'',".EMAIL_VERIFIED.",'')"
                     , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
+    // update personal calendar info table
+    // we don't check if trigger exists since it requires `super` privilege
+    Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $id);
     $user->refresh($id, $departments);
     user_hook($id);
     $telephone = get_config('phone');

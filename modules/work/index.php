@@ -38,11 +38,9 @@ require_once 'modules/attendance/functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/sendMail.inc.php';
-require_once 'modules/graphics/plotter.php';
 require_once 'include/log.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'modules/admin/extconfig/externals.php';
-require_once 'modules/game/AssignmentEvent.php';
 
 // For colorbox, fancybox, shadowbox use
 require_once 'include/lib/modalboxhelper.class.php';
@@ -54,6 +52,11 @@ $action = new action();
 $action->record(MODULE_ID_ASSIGN);
 /* * *********************************** */
 
+require_once 'modules/usage/usage.lib.php';
+$head_content .= "
+<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+load_js('d3/d3.min.js');
+load_js('c3-0.4.10/c3.min.js');
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
 $works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWorks);
@@ -405,6 +408,39 @@ if ($is_editor) {
 
     </script>";
 
+    $head_content .= "<script type='text/javascript'>
+            var gradesChartData = null;
+
+            $(document).ready(function(){
+                if(gradesChartData != null){
+                    draw_plots();
+                }
+            });
+
+        function draw_plots(){
+            var options = null;
+            options = {
+                data: {
+                    json: gradesChartData,
+                    x: 'grade',
+                    types:{
+                        percentage: 'bar'
+                    },
+                    axes: {percentage: 'y'},
+                    names:{percentage:'%'},
+                    colors:{percentage:'#e9d460'}
+                },
+                legend:{show:false},
+                bar:{width:{ratio:0.8}},
+                axis:{ x: {type:'category'}, y:{max: 100, padding:{top:0, bottom:0}}},
+                bindto: '#grades_chart'
+            };
+            c3.generate(options);
+    }
+
+    </script>";
+        
+        
     $email_notify = (isset($_POST['email']) && $_POST['email']);
     if (isset($_POST['grade_comments'])) {
         $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
@@ -572,26 +608,27 @@ function add_assignment() {
         $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
         $auto_judge           = isset($_POST['auto_judge']) ? filter_input(INPUT_POST, 'auto_judge', FILTER_VALIDATE_INT) : 0;
         $auto_judge_scenarios = isset($_POST['auto_judge_scenarios']) ? serialize($_POST['auto_judge_scenarios']) : "";
-        $lang                 = isset($_POST['lang']) ? filter_input(INPUT_POST, 'lang') : '';        
+        $lang                 = isset($_POST['lang']) ? filter_input(INPUT_POST, 'lang') : '';
         $secret = uniqid('');
 
         if ($assign_to_specific == 1 && empty($assigned_to)) {
             $assign_to_specific = 0;
         }
-        if (@mkdir("$workPath/$secret", 0777) && @mkdir("$workPath/admin_files/$secret", 0777, true)) {
+        if (make_dir("$workPath/$secret") and make_dir("$workPath/admin_files/$secret")) {
             $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_type, submission_date, secret_directory, group_submissions, max_grade, grading_scale_id, assign_to_specific, auto_judge, auto_judge_scenarios, lang) "
                     . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?f, ?d, ?d, ?d, ?s, ?s)", $course_id, $title, $desc, $deadline, $late_submission, '', $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $grading_scale_id, $assign_to_specific, $auto_judge, $auto_judge_scenarios, $lang)->lastInsertID;
 
-            // tags
-            if (isset($_POST['tags'])) {
-                $tagsArray = explode(',', $_POST['tags']);
-                $moduleTag = new ModuleElement($id);
-                $moduleTag->attachTags($tagsArray);
-            }
-
-            $secret = work_secret($id);
             if ($id) {
-                $student_name = trim(uid_to_name($uid));
+                // tags
+                if (isset($_POST['tags'])) {
+                    $tagsArray = explode(',', $_POST['tags']);
+                    $moduleTag = new ModuleElement($id);
+                    $moduleTag->attachTags($tagsArray);
+                }
+
+                $secret = work_secret($id);
+
+                $student_name = canonicalize_whitespace(uid_to_name($uid));
                 $local_name = !empty($student_name)? $student_name : uid_to_name($uid, 'username');
                 $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
                 if (!empty($am)) {
@@ -635,18 +672,23 @@ function add_assignment() {
                     'deadline' => $deadline,
                     'secret' => $secret,
                     'group' => $group_submissions));
-                Session::Messages($langNewAssignSuccess,'alert-success');
+                Session::Messages($langNewAssignSuccess, 'alert-success');
                 redirect_to_home_page("modules/work/index.php?course=$course_code");
             } else {
                 @rmdir("$workPath/$secret");
-                die('Error creating directories');
+                Session::Mesages($langGeneralError, 'alert-danger');
+                redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
             }
+        } else {
+            Session::Mesages($langErrorCreatingDirectory);
+            redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
         }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
     }
 }
+
 // edit assignment
 function edit_assignment($id) {
 
@@ -917,7 +959,6 @@ function submit_work($id, $on_behalf_of = null) {
                                      file_name, submission_text, comments, grade, grade_comments, grade_submission_ip,
                                      grade_submission_date, group_id)
                                      VALUES (?d, ?d, NOW(), ?s, ?s, ?s, ?s, ?s, ?f, ?s, ?s, NOW(), ?d)", $data)->lastInsertID;
-            triggerGame($course_id, $user_id, $row->id);
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $sid,
                 'title' => $row->title,
                 'assignment_id' => $row->id,
@@ -932,7 +973,7 @@ function submit_work($id, $on_behalf_of = null) {
                     update_attendance_book($user_id, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                     update_gradebook_book($user_id, $row->id, $grade/$row->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                 }
-            } else {   
+            } else {
                 $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
                 // update attendance book as well
                 update_attendance_book($quserid, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
@@ -1030,7 +1071,7 @@ function submit_work($id, $on_behalf_of = null) {
         }
         // End Auto-judge
 
-        Session::Messages($success_msgs, 'alert-success');        
+        Session::Messages($success_msgs, 'alert-success');
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else { // not submit_ok
         Session::Messages($langExerciseNotPermit);
@@ -1087,7 +1128,7 @@ function new_assignment() {
             });
             $('#WorkEnd, #WorkStart').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-left',
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true
             });
@@ -1438,7 +1479,7 @@ function show_edit_assignment($id) {
             });
             $('#WorkEnd, #WorkStart').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-left',
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true
             });
@@ -1897,16 +1938,12 @@ function delete_assignment($id) {
                                         AND id = ?d", $course_id, $id);
     if (count($row) > 0) {
         if (Database::get()->query("DELETE FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id)->affectedRows > 0){
-            $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id);
-            foreach ($uids as $user_id) {
-                triggerGame($course_id, $user_id, $id);
-            }
             if ($row->assign_to_specific) {
                 Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
             }
             move_dir("$workPath/$secret", "$webDir/courses/garbage/${course_code}_work_${id}_$secret");
-            
+
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_DELETE, array('id' => $id,
                 'title' => $row->title));
             return true;
@@ -1933,11 +1970,7 @@ function purge_assignment_subs($id) {
 	$secret = work_secret($id);
         $row = Database::get()->querySingle("SELECT title,assign_to_specific FROM assignment WHERE course_id = ?d
                                         AND id = ?d", $course_id, $id);
-        $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
         if (Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $id)->affectedRows > 0) {
-            foreach ($uids as $user_id) {
-                triggerGame($course_id, $user_id, $id);
-            }
             if ($row->assign_to_specific) {
                 Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
             }
@@ -1959,9 +1992,7 @@ function delete_user_assignment($id) {
     global $tool_content, $course_code, $webDir;
 
     $filename = Database::get()->querySingle("SELECT file_path FROM assignment_submit WHERE id = ?d", $id);
-    $row = Database::get()->querySingle("SELECT s.uid, s.assignment_id, a.course_id FROM assignment_submit s JOIN assignment a ON (s.assignment_id = a.id) where s.id = ?d", $id);
     if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $id)->affectedRows > 0) {
-        triggerGame($row->course_id, $row->uid, $id);
         if ($filename->file_path) {
             $file = $webDir . "/courses/" . $course_code . "/work/" . $filename->file_path;
             if (!my_delete($file)) {
@@ -2278,19 +2309,12 @@ function assignment_details($id, $row) {
     $tool_content .= "
     <div class='panel panel-action-btn-primary'>
         <div class='panel-heading'>
-            <div class='pull-right'>
-            ". (($is_editor) ?
-                    action_button(array(
-                        array(
-                            'title' => $langEditChange,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
-                            'level' => 'primary-label',
-                            'icon' => 'fa-edit'
-                        )
-                    )) : "")."
-            </div>
             <h3 class='panel-title'>
-                $m[WorkInfo]
+                $m[WorkInfo] &nbsp;
+                ". (($is_editor) ?    
+                "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit'>
+                    <span class='fa fa-edit' title='' data-toggle='tooltip' data-original-title='$langEditChange'></span>
+                </a>" : "")."                    
             </h3>
         </div>
         <div class='panel-body'>
@@ -2549,11 +2573,23 @@ function show_assignment($id, $display_graph_results = false) {
                 if ($assign->submission_type) {
                     $filelink = "<a href='#' class='onlineText btn btn-xs btn-default' data-id='$row->id'>$langQuestionView</a>";
                 } else {
-                    $filelink = empty($row->file_name) ? '&nbsp;' :
-                            ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
-                            q($row->file_name) . "</a>");
+                    if (empty($row->file_name)) {
+                        $filelink = '&nbsp;';
+                    } else {
+                        $namelen = mb_strlen($row->file_name);
+                        if ($namelen > 30) {
+                            $extlen = mb_strlen(get_file_extension($row->file_name));
+                            $basename = mb_substr($row->file_name, 0, $namelen - $extlen - 3);
+                            $ext = mb_substr($row->file_name, $namelen - $extlen - 3);
+                            $filename = ellipsize($basename, 30, '...' . $ext);
+                        } else {
+                            $filename = $row->file_name;
+                        }
+                        $filelink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
+                            q($filename) . "</a>";
+                    }
                 }
-                if(Session::has("grades")) {
+                if (Session::has("grades")) {
                     $grades = Session::get('grades');
                     $grade = $grades[$row->id]['grade'];
                 } else {
@@ -2585,7 +2621,7 @@ function show_assignment($id, $display_graph_results = false) {
                 if (trim($row->comments != '')) {
                     $tool_content .= "<div style='margin-top: .5em;'><small>" .
                             q($row->comments) . '</small></div>';
-                }                
+                }
                 $tool_content .= "</td>
                                 <td width='85'>" . q($stud_am) . "</td>
                                 <td class='text-center' width='180'>
@@ -2626,7 +2662,7 @@ function show_assignment($id, $display_graph_results = false) {
                 }
                 if (trim($row->grade_comments)) {
                     $label = '<b>'.$m['gradecomments'] . '</b>:';
-                    $comments .= "&nbsp;<span>" . standard_text_escape($row->grade_comments) . "</span>";
+                    $comments .= "&nbsp;<span>" . q_math($row->grade_comments) . "</span>";
                 } else {
                     $label = '';
                     $comments = '';
@@ -2668,8 +2704,6 @@ function show_assignment($id, $display_graph_results = false) {
                 $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign, user
                                                              WHERE assign.assignment_id = ?d AND user.id = assign.uid AND
                                                              assign.grade <> ''", $id)->count;
-                $chart = new Plotter();
-                $chart->setTitle("$langGraphResults");
                 if ($assign->grading_scale_id) {
                     $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
                     $scales = unserialize($serialized_scale_data);
@@ -2681,9 +2715,16 @@ function show_assignment($id, $display_graph_results = false) {
                         $key = closest($gradeValue, $scale_values, true)['key'];
                         $gradeValue = $scales[$key]['scale_item_name'];
                     }
-                    $chart->growWithPoint("$gradeValue ($percentage%)", $percentage);
+                    $this_chart_data['grade'][] = "$gradeValue";
+                    $this_chart_data['percentage'][] = $percentage;
                 }
-                $tool_content .= $chart->plot();
+                
+                $tool_content .= "<script type = 'text/javascript'>gradesChartData = ".json_encode($this_chart_data).";</script>";
+                /****   C3 plot   ****/
+                $tool_content .= "<div class='row plotscontainer'>";
+                $tool_content .= "<div class='col-lg-12'>";
+                $tool_content .= plot_placeholder("grades_chart", $langGraphResults);
+                $tool_content .= "</div></div>";
             }
         }
     } else {
@@ -2863,7 +2904,7 @@ function show_assignments() {
 
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-              FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);    
+              FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
  $tool_content .= action_bar(array(
             array('title' => $langNewAssign,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
@@ -2948,7 +2989,7 @@ function show_assignments() {
 function submit_grade_comments($args) {
     global $tool_content, $langGrades, $langWorkWrongInput, $course_id,
            $langTheField, $m, $course_code, $langFormErrors;
-    
+
     $id = $args['assignment'];
     $sid = $args['submission'];
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
@@ -2976,8 +3017,6 @@ function submit_grade_comments($args) {
                                     SET grade = ?f, grade_comments = ?s,
                                     grade_submission_date = NOW(), grade_submission_ip = ?s
                                     WHERE id = ?d", $grade, $comment, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows>0) {
-            $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-            triggerGame($course_id, $quserid, $id);
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                     'title' => $assignment->title,
                     'grade' => $grade,
@@ -2990,7 +3029,8 @@ function submit_grade_comments($args) {
                 }
             } else {
                 //update gradebook if needed
-                update_gradebook_book($quserid, $id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);                
+                $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
+                update_gradebook_book($quserid, $id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
             }
         }
         if (isset($args['email'])) {
@@ -3039,8 +3079,6 @@ function submit_grades($grades_id, $grades, $email = false) {
                 if (Database::get()->query("UPDATE assignment_submit
                                             SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
                                             WHERE id = ?d", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {
-                    $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                    triggerGame($course_id, $quserid, $assignment->id);
                     Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                             'title' => $assignment->title,
                             'grade' => $grade));
@@ -3052,7 +3090,8 @@ function submit_grades($grades_id, $grades, $email = false) {
                         foreach ($user_ids as $user_id) {
                             update_gradebook_book($user_id, $assignment->id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                         }
-                    } else {                    
+                    } else {
+                        $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
                         update_gradebook_book($quserid, $assignment->id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                     }
 

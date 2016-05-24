@@ -8,15 +8,20 @@
         "ezyang/htmlpurifier": "dev-master",
         "phpids/phpids": "dev-master",
         "pragmarx/google2fa":"dev-master",
-        "hoa/ruler": "~1.0",
-        "sabre/event": "~2.0.0"
+        "swiftmailer/swiftmailer": "@stable"
     },
     "autoload": {
+        "psr-0": {
+            "install\\Installer": ""
+        },
         "psr-4": {
             "Widgets\\": "Widgets"
         }
     },
-    "require-dev": {
-        "phpunit/phpunit": "~4.8.0"
-    }
+    "scripts": {
+    "post-install-cmd": ["install\\Installer::ensureHtaccess"],
+    "post-update-cmd":  ["install\\Installer::ensureHtaccess"],
+    "post-package-install": ["install\\Installer::vendorTestCodeCleanup"],
+    "post-package-update": ["install\\Installer::vendorTestCodeCleanup"]
+  }      
 }

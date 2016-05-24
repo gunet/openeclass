@@ -33,7 +33,7 @@ $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
 if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
-    $auth = intval($_REQUEST['auth']);
+    $data['auth'] = $auth = intval($_REQUEST['auth']);
 }
 
 if (!isset($auth) or !isset($auth_ids[$auth])) {
@@ -72,18 +72,18 @@ register_posted_variables(array(
     'submit' => true,
     'test_username' => true), 'all');
 
+$data['test_username'] = $test_username;
+$data['test_password'] = '';
 if (isset($_POST['test_password'])) {
-    $test_password = $_POST['test_password'];
-} else {
-    $test_password = '';
+    $data['test_password'] = $_POST['test_password'];
 }
 
-if ($submit and $test_username !== '' and $test_password !== '') {
+if ($submit and $test_username !== '' and $data['test_password'] !== '') {
     if (!$token or !validate_csrf_token($token)) {
         csrf_token_error();
     }
     $settings = get_auth_settings($auth);
-    $is_valid = auth_user_login($auth, $test_username, $test_password, $settings);
+    $is_valid = auth_user_login($auth, $test_username, $data['test_password'], $settings);
     if ($is_valid) {
         Session::Messages($langConnYes, 'alert-success');
         if (isset($_SESSION['auth_user_info']['attributes'])) {
@@ -98,7 +98,7 @@ if ($submit and $test_username !== '' and $test_password !== '') {
     } 
 }
 
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
         array(
             'title' => $langBack,
             'icon' => 'fa-reply',
@@ -107,35 +107,11 @@ $tool_content .= action_bar(array(
         )));
 
 if ($auth > 1 and $auth < 6) {
-    $tool_content .= "<div class='form-wrapper'>
-       <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
-        <input type='hidden' name='auth' value='$auth'>
-        <fieldset>  
-
-
-            <div class='alert alert-info'>$langTestAccount ({$auth_ids[$auth]})</div>
-            <div class='form-group'>
-                <label for='test_username' class='col-sm-2 control-label'>$langUsername:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='test_username' id='test_username' value='" . q(canonicalize_whitespace($test_username)) . "' autocomplete='off'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='test_password' class='col-sm-2 control-label'>$langPass:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='password' name='test_password' id='test_password' value='" . q($test_password) . "' autocomplete='off'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                    <input class='btn btn-primary' type='submit' name='submit' value='$langConnTest'>
-                    <a class='btn btn-default' href='auth.php'>$langCancel</a>
-                </div>
-            </div>
-        </fieldset>
-        ". generate_csrf_token_form_field() ."
-    </form></div>";
+    $view = 'admin.users.auth.auth_test';
+} elseif (in_array($auth_ids[$auth], $hybridAuthMethods)) {
+    hybridauth_login($auth_ids[$auth]);
 }
-
-draw($tool_content, 3);
+$data['auth_ids'] = $auth_ids;
+$data['menuTypeID'] = 3;
+view($view, $data);
 

@@ -27,83 +27,86 @@ $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
-    $coursePath = $webDir . '/courses/';    
-    $conference_id = $_POST['conference_id'];
-    (isset($_POST['conference_id']) ? $conference_id = $_POST['conference_id'] : $conference_id = $_GET['conference_id']);
+$coursePath = $webDir . '/courses/';
+if (isset($_REQUEST['conference_id'])) {
+    $conference_id = $_REQUEST['conference_id'];
+} else {
+    redirect_to_home_page("modules/conference/messageList.php?course=$course_code");    
+}
 
-    $fileChatName = $coursePath . $course_code . '/' . $conference_id. '_chat.txt';
-    $tmpArchiveFile = $coursePath . $course_code . '/' . $conference_id. '_tmpChatArchive.txt';
+$fileChatName = $coursePath . $course_code . '/' . $conference_id. '_chat.txt';
+$tmpArchiveFile = $coursePath . $course_code . '/' . $conference_id. '_tmpChatArchive.txt';
 
-    $nick = uid_to_name($uid);
+$nick = uid_to_name($uid);
 
 // How many lines to show on screen
-    define('MESSAGE_LINE_NB', 20);
+define('MESSAGE_LINE_NB', 20);
 // How many lines to keep in temporary archive
 // (the rest are in the current chat file)
-    define('MAX_LINE_IN_FILE', 20);
+define('MAX_LINE_IN_FILE', 20);
 
-    if ($GLOBALS['language'] == 'el') {
-        $timeNow = date("d-m-Y / H:i", time());
-    } else {
-        $timeNow = date("Y-m-d / H:i", time());
-    }
+if ($GLOBALS['language'] == 'el') {
+    $timeNow = date("d-m-Y / H:i", time());
+} else {
+    $timeNow = date("Y-m-d / H:i", time());
+}
 
-    if (!file_exists($fileChatName)) {
-        $fp = fopen($fileChatName, 'w') or die('<center>$langChatError</center>');
-        fclose($fp);
-    }
+if (!file_exists($fileChatName)) {
+    $fp = fopen($fileChatName, 'w') or die('<center>$langChatError</center>');
+    fclose($fp);
+}
 
 // chat commands
 // reset command
-    if (isset($_GET['reset']) && $is_editor) { 
-        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();       
-        $fchat = fopen($fileChatName, 'w');
+if (isset($_GET['reset']) && $is_editor) { 
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();       
+    $fchat = fopen($fileChatName, 'w');
 
-        if (flock($fchat, LOCK_EX)) {
-            ftruncate($fchat, 0);
-            fwrite($fchat, $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " -------- !@#$ systemMsgClear\n");
-            fflush($fchat);
-            flock($fchat, LOCK_UN);
-        }
-        fclose($fchat);
-        @unlink($tmpArchiveFile);
-        redirect_to_home_page("modules/conference/messageList.php?course=$course_code&conference_id=$conference_id");
+    if (flock($fchat, LOCK_EX)) {
+        ftruncate($fchat, 0);
+        fwrite($fchat, $timeNow . " ---- " . $langWashFrom . " ---- " . $nick . " -------- !@#$ systemMsgClear\n");
+        fflush($fchat);
+        flock($fchat, LOCK_UN);
     }
+    fclose($fchat);
+    @unlink($tmpArchiveFile);
+    redirect_to_home_page("modules/conference/messageList.php?course=$course_code&conference_id=$conference_id");
+}
 
 // store
-    if (isset($_GET['store']) && $is_editor) {
-        require_once 'modules/document/doc_init.php';
-        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();       
-        $saveIn = "chat." . date("Y-m-j-his") . ".txt";
-        $chat_filename = '/' . safe_filename('txt');
-        
-        //Concat temp & chat file removing system messages and html tags
-        $exportFileChat = $coursePath . $course_code . '/'. $conference_id . '_chat_export.txt';
-        $fp = fopen($exportFileChat, 'a+');        
-        $tmp_file = @file_get_contents($tmpArchiveFile);
-        $chat_file = @file_get_contents($fileChatName);        
-        $con_file = preg_replace(array('/^(.*?)!@#\$ systemMsg.*\n/m','/!@#\$.*/'), '', strip_tags($tmp_file.$chat_file));
+if (isset($_GET['store']) && $is_editor) {
+    require_once 'modules/document/doc_init.php';
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();       
+    $saveIn = "chat." . date("Y-m-j-his") . ".txt";
+    $chat_filename = '/' . safe_filename('txt');
 
-        fwrite($fp, $con_file);
-        fclose($fp);
-        
-        if (copy($exportFileChat, $basedir . $chat_filename)) {            
-            Database::get()->query("INSERT INTO document SET
-                                course_id = ?d,
-                                subsystem = ?d,
-                                path = ?s,
-                                filename = ?s,
-                                format='txt',
-                                date = NOW(),
-                                date_modified = NOW()", $course_id, $subsystem, $chat_filename, $saveIn);
-            $fchat = fopen($fileChatName, 'a');
-            fwrite($fchat, $timeNow." ---- ".$langSaveMessage . " ---- !@#$ systemMsgSave\n");
-            fclose($fchat);
-        } else {
-        }
-        @unlink($exportFileChat);
-        redirect_to_home_page("modules/conference/messageList.php?course=$course_code&conference_id=$conference_id");
+    //Concat temp & chat file removing system messages and html tags
+    $exportFileChat = $coursePath . $course_code . '/'. $conference_id . '_chat_export.txt';
+    $fp = fopen($exportFileChat, 'a+');        
+    $tmp_file = @file_get_contents($tmpArchiveFile);
+    $chat_file = @file_get_contents($fileChatName);        
+    $con_file = preg_replace(array('/^(.*?)!@#\$ systemMsg.*\n/m','/!@#\$.*/'), '', strip_tags($tmp_file.$chat_file));
+
+    fwrite($fp, $con_file);
+    fclose($fp);
+
+    if (copy($exportFileChat, $basedir . $chat_filename)) {            
+        Database::get()->query("INSERT INTO document SET
+                            course_id = ?d,
+                            subsystem = ?d,
+                            path = ?s,
+                            filename = ?s,
+                            format='txt',
+                            date = NOW(),
+                            date_modified = NOW()", $course_id, $subsystem, $chat_filename, $saveIn);
+        $fchat = fopen($fileChatName, 'a');
+        fwrite($fchat, $timeNow." ---- ".$langSaveMessage . " ---- !@#$ systemMsgSave\n");
+        fclose($fchat);
+    } else {
     }
+    @unlink($exportFileChat);
+    redirect_to_home_page("modules/conference/messageList.php?course=$course_code&conference_id=$conference_id");
+}
   
 // add new line
     if (isset($_POST['chatLine']) and trim($_POST['chatLine']) != '') {
@@ -122,7 +125,7 @@ require_once 'include/lib/textLib.inc.php';
 <html>
 <head>
     <base target="_parent">
-    <meta http-equiv="refresh" content="30; url=<?php echo $_SERVER['SCRIPT_NAME']; ?>" />
+    <meta http-equiv="refresh" content="30; url=<?php echo "{$urlServer}modules/conference/messageList.php?course=$course_code&conference_id=$conference_id" ?>" />
     <title>Chat messages</title>
     <!-- jQuery -->
     <script src="<?php echo $urlServer;?>js/jquery-<?php echo JQUERY_VERSION; ?>.min.js"></script>
@@ -156,7 +159,7 @@ require_once 'include/lib/textLib.inc.php';
         $newline = mathfilter($thisLine, 12, '../../courses/mathimg/');
         $str_1 = explode(' !@#$ ', $newline);
         
-        //New message system (Opecart 3.0 generated conferences)
+        //New message system (3.0 generated conferences)
         if (isset($str_1[1])) {
             if (trim($str_1[1]) == "systemMsgClear" || trim($str_1[1]) == "systemMsgSave") {
                 if (trim($str_1[1]) == "systemMsgClear"){

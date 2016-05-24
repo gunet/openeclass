@@ -32,16 +32,16 @@ if(!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c'){
 }
 elseif(isset($_REQUEST['t']) && ($_REQUEST['t'] == 'a' || ($_REQUEST['t'] == 'u' && isset($_REQUEST['u'])))){
     $require_admin = true;
-    $stats_type = ($_REQUEST['t'] == 'u')? 'user':'admin';    
+    $stats_type = ($_REQUEST['t'] == 'u')? 'user':'admin';
 }
-else{ // expecting $_REQUEST['t'] == 'u'    
+else{ // expecting $_REQUEST['t'] == 'u'
     $require_valid_uid = TRUE;
     $stats_type = 'user';
 }
 $helpTopic = 'Usage';
 $require_login = true;
 require_once '../../include/baseTheme.php';
-require_once 'usage.lib.php';
+require_once 'modules/usage/usage.lib.php';
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
@@ -50,10 +50,10 @@ $head_content .= "
 load_js('d3/d3.min.js');
 load_js('c3-0.4.10/c3.min.js');
 load_js('bootstrap-datepicker');
-    
+
 $head_content .= "
 <script type='text/javascript'>
-    var lang = '$language'; 
+    var lang = '$language';
     var langHits = '$langHits';
     var langDuration = '$langDuration';
     var langDay = '$langDay';
@@ -70,8 +70,8 @@ $head_content .= "
     var langResults = '$langResults2';
     var langNoResult = '$langNoResult';
     var langTotalResults = '$langTotalResults';
-    var langDisplayed= '$langDisplayed';   
-    var langTill = '$langTill'; 
+    var langDisplayed= '$langDisplayed';
+    var langTill = '$langTill';
     var langFrom = '$langFrom2';
     var langSearch = '$langSearch';
     var langActions = '$langActions';
@@ -86,7 +86,6 @@ $head_content .= "
     var langHours = '$langHours';
 </script>";
 load_js('datatables');
-load_js('datatables_filtering_delay');
 load_js('datatables_bootstrap');
 //load_js('datatables_tabletools');
 load_js('datatables_buttons');
@@ -102,7 +101,7 @@ load_js('datatables_buttons_html5');
 //load_js('datatables_buttons_foundation');
 load_js('bootstrap-datetimepicker');
 load_js('statistics.js');
-//Remove space between consecutive pagination buttons if datatables 
+//Remove space between consecutive pagination buttons if datatables
 $head_content .= "<style>
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     padding : 0px;
@@ -120,7 +119,6 @@ $head_content .= "<style>
 
 $pageName = $langUsage;
 
-
 if (isset($_GET['per_course_dur'])) {
     $tool_content .= action_bar(array(
         array('title' => $langPersonalStats,
@@ -130,29 +128,27 @@ if (isset($_GET['per_course_dur'])) {
             'url' => "../../main/portfolio.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
-        ),false);    
+        ),false);
     $tool_content .= user_duration_per_course();
 } else {
     if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)){
-        require_once "course.php";
+        require_once 'modules/usage/course.php';
     }
     elseif($stats_type == 'admin' && $is_admin){
-        require_once "admin.php";
+        require_once 'modules/usage/admin.php';
     } else {
-        require_once "user.php";
+        require_once 'modules/usage/user.php';
         $stats_type = 'user';
     }
 }
 
 add_units_navigation(true);
 
-if($stats_type == 'admin' || ($stats_type == 'user' && isset($_REQUEST['u']))){
+if ($stats_type == 'admin' || ($stats_type == 'user' && isset($_REQUEST['u']))) {
     $navigation[] = array('url' => '../admin/', 'name' => $langAdmin);
     draw($tool_content, 3, null, $head_content);
-}
-elseif($stats_type == 'course'){
+} elseif ($stats_type == 'course') {
     draw($tool_content, 2, null, $head_content);
-}
-else{
+} else {
     draw($tool_content, 1, null, $head_content);
 }

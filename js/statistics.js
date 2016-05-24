@@ -50,9 +50,12 @@ var tableOptions = {
     'c':{
         1:{'pageLength': 5, sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;}}, {'targets':2, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[6], row[5]);} }, {"visible": false, "targets": 5}, {"visible": false, "targets": 6}]},
         2:{'pageLength': 5, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[4], row[3]);} }, {"visible": false, "targets": 3}, {"visible": false, "targets": 4}]},
-        3:{'pageLength': 50, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}, {"visible": false, "targets": 4}]}
+        3:{'pageLength': 50, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {'targets':3, 'className':'action', 'render': function ( data, type, row ) {return actionWithDetails(data, row[4]);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}, {"visible": false, "targets": 4}]}
     }
 };
+
+    //3:{'pageLength': 50, sumCols:[], durCol:null, colDefs:[{'targets':1, 'className':'mynowrap', 'render': function ( data, type, row ) {return userEmailLink(data, row[7], row[6]);} }, {'targets':3, 'className':'action', 'render': function ( data, type, row ) {return actionWithDetails(data, row, 4);} }, {"visible": false, "targets": 6}, {"visible": false, "targets": 7}, {"visible": false, "targets": 4}]}
+    
 charts = new Object();
 piecourse = -1;
 piemodule = -1;
@@ -82,34 +85,41 @@ $(document).ready(function(){
     $('#enddate').change(function(){
         edate = $(this).datepicker("getDate");
         enddate = edate.getFullYear()+"-"+(edate.getMonth()+1)+"-"+edate.getDate();
-    });
-    $('#enddate').blur(function(){
         adjust_interval_options();
         refresh_plots();
     });
+    $('#enddate').blur(function(){
+        setTimeout(function(){
+            adjust_interval_options();
+            refresh_plots();}, 1);
+    });
    $('#plots-view').click(function(){
         if(selectedview != 'plots'){
-            $('#list-view').removeClass("active");
+            $('#list-view').removeClass("active");            
             $('#logs-view').removeClass("active");
             $(this).addClass("active");
             selectedview = 'plots';
+            $('#module').parent().hide();
+            $('#interval').parent().show();
             $('#interval').prop('disabled', false);
             $('.plotscontainer').show();
             for(var c in charts){
                 charts[c].resize();
             }
-            $('.detailscontainer').hide();
+            $('.detailscontainer').hide();            
             $('.logscontainer').hide();
         }
     });
     $('#list-view').click(function(){
         if(selectedview != 'list'){
-            $('#plots-view').removeClass("active");
+            $('#plots-view').removeClass("active");            
             $('#logs-view').removeClass("active");
             $(this).addClass("active");
             selectedview = 'list';
+            $('#module').parent().hide();
+            $('#interval').parent().show();
             $('#interval').prop('disabled', true);
-            $('.detailscontainer').show();
+            $('.detailscontainer').show();            
             $('.logscontainer').hide();
             $('.plotscontainer').hide();
         }
@@ -122,11 +132,14 @@ $(document).ready(function(){
             $(this).addClass("active");
             selectedview = 'logs';
             $('#interval').prop('disabled', true);
+            $('#interval').parent().hide();
+            $('#module').parent().show();
             $('.logscontainer').show();
             $('.detailscontainer').hide();
             $('.plotscontainer').hide();
         }
     });
+    
     sdate = $('#startdate').datepicker("getDate");
     startdate = sdate.getFullYear()+"-"+(sdate.getMonth()+1)+"-"+sdate.getDate();
     edate = $('#enddate').datepicker("getDate");
@@ -168,6 +181,13 @@ $(document).ready(function(){
         department = $('#department option:selected').val();
         $('#department').change(function(){
             department = $('#department option:selected').val();
+            refresh_plots();
+        });
+    }
+    if($('#module').length){
+        module = $('#module option:selected').val();
+        $('#module').change(function(){
+            module = $('#module option:selected').val();
             refresh_plots();
         });
     }
@@ -222,15 +242,45 @@ $(document).ready(function(){
         detailsTables[tableElId].buttons().container().appendTo( '#'+tableElId+'_buttons');
     }
     
-    $('.detailscontainer').hide();
+    $('.detailscontainer').hide();    
     $('.logscontainer').hide();
     refresh_plots();
+    $('#cdetails3 tbody').on('mouseover', 'td.action', function(){ 
+        var tr = $(this).closest('tr');
+        var row =  detailsTables['cdetails3'].row( tr );
+        $(this).css('cursor','pointer');
+    });
+    $('#cdetails3 tbody').on('click', 'td.action', function () {
+        var tr = $(this).closest('tr');
+        var row =  detailsTables['cdetails3'].row( tr );
+        if ( row.child.isShown() ) {
+            row.child.hide();
+            tr.removeClass('shown');
+            $(this).find('span').removeClass('fa-caret-down');
+            $(this).find('span').addClass('fa-caret-right');
+        }
+        else {
+            row.child( cellHover(row.data()[4]), tr.attr('class') ).show();
+            tr.addClass('shown');
+            $(this).find('span').removeClass('fa-caret-right');
+            $(this).find('span').addClass('fa-caret-down');
+        }
+    } );
     
+    /*$('#cdetails3 tbody').on('mouseout', 'td.action', function () {
+        var tr = $(this).closest('tr');
+        var row =  detailsTables['cdetails3'].row( tr );
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+    } );*/
     
 });//document ready   
 
 function refresh_plots(){
-    xAxisTicksAdjust();    
+    xAxisTicksAdjust();        
     if(stats === 'c'){
         logs_refresh_required = true;
         if(selectedview == 'logs'){
@@ -288,7 +338,7 @@ function refresh_module_pref_plot(){
                 json: data.chartdata,
                 names: data.modules,
                 type:'pie',
-                onclick: function (d,i){ refresh_course_module_plot(d.id);}
+                onclick: function (d,i){refresh_course_module_plot(d.id);}
                 },
             bindto: '#modulepref_pie',
             tooltip: {
@@ -440,7 +490,7 @@ function refresh_course_pref_plot(){
     });
 }
 
-function refresh_user_course_plot(){    
+function refresh_user_course_plot(){        
     $.getJSON('results.php',{t:'uc', s:startdate, e:enddate, i:interval, u:user, c:piecourse, m:piemodule},function(data){
         if(data.chartdata.chartdata == null){
             $("#course_stats_title").text(data.charttitle);
@@ -488,12 +538,16 @@ function refresh_user_login_plot(){
                 xFormat: '%Y-%m-%d',
                 type:'area',
                 names:{
-                    logins: langLoginUser
+                    logins: langLoginUser,
+                    visits: langHits
+                },
+                axes:{
+                    logins: 'y'
                 }
             },
             zoom:{enabled:true},
             size:{height:250},
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], rotate:60, values:xTicks, fit:false}, min: xMinVal, label: xAxisLabels[interval]}, y:{label: langLoginUser, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], rotate:60, values:xTicks, fit:false}, min: xMinVal, label: xAxisLabels[interval]}, y:{padding:{top:0, bottom:0}}},
             bindto: '#userlogins_stats'
         };
         /*if(typeof charts.ul !== "undefined"){
@@ -600,7 +654,7 @@ function refresh_department_course_plot(depid, leafdepartment){
         fillTableTotalUsers();
     });
 }
-
+            
 function refresh_users_activity_table(){
     if(logs_refresh_required){
         $.getJSON('results.php',{t:'cad', s:startdate, e:enddate, u:user, c:course, m:module},function(data){
@@ -609,7 +663,7 @@ function refresh_users_activity_table(){
         logs_refresh_required = false;
     }
 }
-            
+
 function adjust_interval_options(){
     if($('#interval').length){
         dayMilliseconds = 24*60*60*1000;
@@ -630,16 +684,19 @@ function xAxisTicksAdjust()
 {
 	var xmin = sdate;
 	var xmax = edate;
-	xMinVal = xmin.getFullYear()+'-'+(xmin.getMonth()+1)+'-'+1;
-	xMaxVal = xmax.getFullYear()+'-'+(xmax.getMonth()+1)+'-'+xmax.getDate();
-	dayMilliseconds = 24*60*60*1000;
+	
+        dayMilliseconds = 24*60*60*1000;
         diffInDays = (edate-sdate)/dayMilliseconds;
-        xTicks = [xMinVal];
+        xTicks = new Array();
 	var tick = new Date(xmin);
-        i = 0;
         cur = xmin.getMonth();
         if(interval == 1){
-            while(tick < xmax)
+            xMinVal = xmin.getFullYear()+'-'+(xmin.getMonth()+1)+'-'+tick.getDate();
+            xMaxVal = xmax.getFullYear()+'-'+(xmax.getMonth()+1)+'-'+xmax.getDate();
+            if(tick.getDate() == 1){
+                xTicks.push(xMinVal);
+            }
+            while(tick <= xmax)
             {
                     tick.setDate(tick.getDate() + 1);
                     tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-'+tick.getDate();
@@ -650,32 +707,46 @@ function xAxisTicksAdjust()
             }    
         }
         else if(interval == 7){
-            while(tick < xmax)
+            xminMonday = new Date(xmin.getTime() - xmin.getUTCDay()*dayMilliseconds);
+            xMinVal = xminMonday.getFullYear()+'-'+(xminMonday.getMonth()+1)+'-'+xminMonday.getDate();
+            xmaxMonday = new Date(xmax.getTime() + (7-xmax.getUTCDay())*dayMilliseconds);
+            xMaxVal = xmaxMonday.getFullYear()+'-'+(xmaxMonday.getMonth()+1)+'-'+xmaxMonday.getDate();
+            xTicks.push(xMinVal);
+            tick = new Date(xminMonday);
+            i = 1;
+            while(tick <= xmaxMonday)
             {
                     tick.setDate(tick.getDate() + 7);
                     tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-'+tick.getDate();
-                    if(i % 7 == 0)
+                    if(i % 2 == 0){
                         xTicks.push(tickval);
+                    }
                     i++;
+                    
             } 
         }
         else if(interval == 30){
-            while(tick < xmax)
+            xMinVal = xmin.getFullYear()+'-'+(xmin.getMonth()+1)+'-15';
+            xMaxVal = xmax.getFullYear()+'-'+(xmax.getMonth()+1)+'-15';
+            xTicks.push(xMinVal);
+            while(tick <= xmax)
             {
                     tick.setMonth(tick.getMonth() + 1);
-                    tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-'+tick.getDate();
+                    tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-15';
                     xTicks.push(tickval);
             } 
         }
         else if(interval == 365){
-            while(tick < xmax)
+            xMinVal = xmin.getFullYear()+'-06-30';
+            xMaxVal = xmax.getFullYear()+'-06-30';
+            xTicks.push(xMinVal);
+            while(tick <= xmax)
             {
                     tick.setFullYear(tick.getFullYear() + 1);
-                    tickval = tick.getFullYear()+'-'+(tick.getMonth()+1)+'-'+tick.getDate();
+                    tickval = tick.getFullYear()+'-06-30';
                     xTicks.push(tickval);
             }     
         }
-	xTicks.push(xMaxVal);
 }
 
 function refreshDataTable(datatableel, datarows)
@@ -741,4 +812,10 @@ function userEmailLink(user, email, username){
     return "<a href='mailto:"+email+"' title='"+username+"'>"+user+"</a>";
 }
 
+function actionWithDetails(action, row, indexWithDetails){
+    return "<a>"+action+" <span class='fa fa-caret-right'></span> </a>";
+}
 
+function cellHover(text){
+    return text;
+}

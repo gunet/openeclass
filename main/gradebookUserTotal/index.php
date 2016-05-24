@@ -51,7 +51,7 @@ if (count($courses) > 0) {
             if ($grade) {
                 $content = true;
                 $grade_content .= "<tr><td>" . $course1->title . " ($gd_title)</td>
-                    <td><a href='../../modules/gradebook/index.php?course=$code&amp;gradebook_id=$gradebook_id'>" . $grade ." / " . $range . "</a></td></tr>";            
+                    <td><a href='../../modules/gradebook/index.php?course=$code&amp;gradebook_id=" . getIndirectReference($gradebook_id). "'>" . $grade ." / " . $range . "</a></td></tr>";            
             }
         }
     }

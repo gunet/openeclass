@@ -28,17 +28,17 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
-$tree = new Hierarchy();
+$data['tree'] = $tree = new Hierarchy();
 $user = new User();
 
 load_js('datatables');
-load_js('datatables_filtering_delay');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#requests_table').DataTable ({                                
                 'sPaginationType': 'full_numbers',
-                'bAutoWidth': true,                
+                'bAutoWidth': true,
+                'searchDelay': 1000,
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -55,7 +55,7 @@ $head_content .= "<script type='text/javascript'>
                        'sLast':     '&raquo;'
                    }
                }
-            }).fnSetFilteringDelay(1000);
+            });
             $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
         });
         </script>";
@@ -75,14 +75,14 @@ $basetoolurl = $_SERVER['SCRIPT_NAME'];
 if (isset($_GET['type']) and $_GET['type'] == 'user') {
     $list_status = 5;
     $toolName = $langUserOpenRequests;
-    $reqtype = '&amp;type=user';
+    $data['reqtype'] = $reqtype = '&amp;type=user';
     $basetoolurl .= '?type=user';
     $linkreg = $langUserDetails;
     $linkget = '?type=user';
 } else {
     $list_status = 1;
     $toolName = $langOpenProfessorRequests;
-    $reqtype = '';
+    $data['reqtype'] = $reqtype = '';
     $linkreg = $langProfReg;
     $linkget = '';
 }
@@ -90,7 +90,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // Main body
 $close = isset($_GET['close']) ? $_GET['close'] : (isset($_POST['close']) ? $_POST['close'] : '');
-$id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : '');
+$data['id'] = $id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_POST['id']) ? intval($_POST['id']) : '');
 $show = isset($_GET['show']) ? $_GET['show'] : (isset($_POST['show']) ? $_POST['show'] : '');
 
 // id validation
@@ -120,8 +120,7 @@ switch ($show) {
 }
 
 // Display Actions Toolbar
-$tool_content .= "
-      <div id='operations_container'>" .
+$data['action_bar'] = 
         action_bar(array(
             array('title' => $linkreg,
                 'url' => "newuseradmin.php$linkget",
@@ -140,8 +139,7 @@ $tool_content .= "
                 'url' => "$basetoolurl",
                 'icon' => 'fa-reply',
                 'level' => 'primary')
-                )) .
-        "</div>";
+                ));
 
 // -----------------------------------
 // display closed requests
@@ -150,7 +148,8 @@ if (!empty($show) and $show == 'closed') {
     if (!empty($id) and $id > 0) {        
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        $tool_content .= "<div class='alert alert-success'>$langReintroductionApplication</div>";     
+        Session::Messages($langReintroductionApplication, 'alert-success');
+        redirect_to_home_page('modules/admin/listreq.php');             
     } else {
         $count_req = count(Database::get()->queryArray("SELECT * FROM user_request WHERE (state = 2 AND status = ?d)", $list_status));
 
@@ -161,26 +160,9 @@ if (!empty($show) and $show == 'closed') {
 
         $q .= "ORDER BY date_open DESC";
 
-        $sql = Database::get()->queryArray($q);
-        $tool_content .= "<div class='table-responsive'><table id = 'requests_table' class='table-default'>";
-        $tool_content .= table_header(1, $langDateClosed_small);        
-        foreach ($sql as $req) {
-            $tool_content .= "<tr>";
-            $tool_content .= '<td>' . q($req->givenname) . "&nbsp;" . q($req->surname) . "";
-            $tool_content .= '<td>' . q($req->username) . '</td>';
-            $tool_content .= '<td>' . $tree->getFullPath($req->faculty_id) . '</td>';
-            $tool_content .= "<td align='center'>
-				<small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
-            $tool_content .= "<td align='center'>
-				<small>" . nice_format(date('Y-m-d', strtotime($req->date_closed))) . "</small></td>";
-            $tool_content .= "<td class='option-btn-cell'>";
-            $tool_content .= action_button(array(
-                                array('title' => $langRestore, 
-                                      'url' => "$_SERVER[SCRIPT_NAME]?id=$req->id&amp;show=closed$reqtype",
-                                      'icon' => 'fa-retweet')));
-            $tool_content .= "</td></tr>";
-        }
-        $tool_content .= "</table></div>";
+        $data['user_requests'] = Database::get()->queryArray($q);
+
+        $view = 'admin.users.listreq.closedRequests';
     }
     
 // -----------------------------------
@@ -190,35 +172,17 @@ if (!empty($show) and $show == 'closed') {
     if (!empty($id) && ($id > 0)) {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        $tool_content .= "<div class='alert alert-success'>$langReintroductionApplication</div>";
+        Session::Messages($langReintroductionApplication, 'alert-success');
+        redirect_to_home_page('modules/admin/listreq.php');    
     } else {
-        $tool_content .= "<div class='table-responsive'><table id = 'requests_table' class='table-default'>";
-        $tool_content .= table_header(1, $langDateReject_small);
-        $sql = Database::get()->queryArray("SELECT id, givenname, surname, username, email,
+
+        $data['user_requests'] = Database::get()->queryArray("SELECT id, givenname, surname, username, email,
                                         faculty_id, phone, am, date_open, date_closed, comment
                                         FROM user_request
                                         WHERE (state = 3 AND status = $list_status $depqryadd) ORDER BY date_open DESC");
-        $tool_content .= "<tbody>";
-        foreach ($sql as $req) {
-            $tool_content .= "<tr>";
-            $tool_content .= "<td>" . q($req->givenname) . "&nbsp;" . q($req->surname) . "</td>";
-            $tool_content .= "<td>" . q($req->username) . "&nbsp;</td>";
-            $tool_content .= "<td>" . $tree->getFullPath($req->faculty_id) . "</td>";
-            $tool_content .= "<td align='center'>
-				<small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
-            $tool_content .= "<td align='center'>
-				<small>" . nice_format(date('Y-m-d', strtotime($req->date_closed))) . "</small></td>";
-            $tool_content .= "<td class='option-btn-cell'>";
-            $tool_content .= action_button(array(
-                                array('title' => $langRestore,
-                                      'url' => "$_SERVER[SCRIPT_NAME]?id=$req->id&amp;show=closed$reqtype",
-                                      'icon' => 'fa-retweet')));
-            $tool_content .= "</td></tr>";
-        }
+
+        $view = 'admin.users.listreq.closedRequests';      
     }
-    $tool_content .= "</tbody>";
-    $tool_content .= "</table>";
-    $tool_content .= "</div>";
 
 // ------------------------------
 // close request
@@ -231,9 +195,11 @@ if (!empty($show) and $show == 'closed') {
                                            date_closed = " . DBHelper::timeAfter() . "
                                        WHERE id = ?d", $id);
             if ($list_status == 1) {
-                $tool_content .= "<div class='alert alert-info'>$langProfessorRequestClosed</div>";
+                Session::Messages($langProfessorRequestClosed, 'alert-info');
+                redirect_to_home_page('modules/admin/listreq.php');                
             } else {
-                $tool_content .= "<div class='alert alert-info'$langRequestStudent</div>";
+                Session::Messages($langRequestStudent, 'alert-info');
+                redirect_to_home_page('modules/admin/listreq.php');                   
             }
             break;
         case '2':
@@ -268,7 +234,7 @@ if (!empty($show) and $show == 'closed') {
                             <div id='mail-body'>
                                 <br>
                                 <div id='mail-body-inner'>
-                                    ".q($_POST[comment])."<br><br>
+                                    ".q($_POST['comment'])."<br><br>
                                     <ul id='forum-category'>
                                         <li><span><b>$langManager $siteName:</b></span> <span class='left-space'>$administratorName</span></li>
                                         <li><span><b>$langPhone:</b></span> <span class='left-space'>$telephone</span></li>
@@ -284,41 +250,18 @@ if (!empty($show) and $show == 'closed') {
                             send_mail_multipart('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailPlainBody, $emailbody, $charset);
 
                         }
-                        $tool_content .= "<div class='alert alert-success'>" . (($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject);
-                        $tool_content .= " $langRequestMessageHasSent <b>" . q($_POST[prof_email]) . "</b></div>";
-                        $tool_content .= "<br><p><b>$langComments:</b><br>" . q($_POST[comment]) . "</p>";
+                        $message = $list_status == 1 ? $langTeacherRequestHasRejected : $langRequestReject;
+                        $message .= " $langRequestMessageHasSent <b>" . q($_POST['prof_email']) . "</b>";
+                        $message .= "<br><p><b>$langComments:</b><br>" . q($_POST['comment']) . "</p>";                        
+                        Session::Messages($message, 'alert-success');
+                        redirect_to_home_page('modules/admin/listreq.php');
+
                     }
                 }
             } else {
                 // display the form
-                $d = Database::get()->querySingle("SELECT comment, givenname, surname, email, status FROM user_request WHERE id = ?d", $id);
-                $warning = ($d->status == 5) ? $langWarnReject : $langGoingRejectRequest;
-                $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-			<div class='alert alert-warning'>$warning</div>
-			<table class='table-default'>
-			<tr><th class='left'>$langName</th>
-			<td>" . q($d->givenname) . "</td></tr>
-			<tr><th class='left'>$langSurname</th>
-			<td>" . q($d->surname) . "</td></tr>
-			<tr><th class='left'>$langEmail</th>
-			<td>" . q($d->email) . "</td></tr>
-			<tr><th class='left'>$langComments</th>
-			<td>
-			<input type='hidden' name='id' value='" . $id . "'>
-			<input type='hidden' name='close' value='2'>
-			<input type='hidden' name='prof_givenname' value='" . q($d->givenname) . "'>
-			<input type='hidden' name='prof_surname' value='" . q($d->surname) . "'>
-			<textarea class='auth_input' name='comment' rows='5' cols='60'>" . q($d->comment) . "</textarea>
-			</td></tr>
-			<tr><th class='left'>$langRequestSendMessage</th>
-			<td>&nbsp;<input type='text' class='auth_input' name='prof_email' value='" . q($d->email) . "'>
-			<input type='checkbox' name='sendmail' value='1' checked='yes'> <small>($langGroupValidate)</small>
-			</td></tr>
-			<tr><th class='left'>&nbsp;</th>
-			<td><input class='btn btn-primary' type='submit' name='submit' value='" . q($langRejectRequest) . "'>&nbsp;&nbsp;<small>($langRequestDisplayMessage)</small></td>
-			</tr></table>
-            ". generate_csrf_token_form_field() ."
-			</form>";
+                $data['user_request'] = Database::get()->querySingle("SELECT comment, givenname, surname, email, status FROM user_request WHERE id = ?d", $id);                
+                $view = 'admin.users.listreq.rejectForm';
             }
             break;
         default:
@@ -331,65 +274,14 @@ if (!empty($show) and $show == 'closed') {
 // -----------------------------------
 else {
     // show username as well (useful)
-    $sql = Database::get()->queryArray("SELECT id, givenname, surname, username, faculty_id, date_open, comment, password FROM user_request
+    $data['user_requests'] = Database::get()->queryArray("SELECT id, givenname, surname, username, faculty_id, date_open, comment, password FROM user_request
                                 WHERE (state = 1 AND status = $list_status $depqryadd)");
-    if (count($sql) > 0) {
-        $tool_content .= "<div class='table-responsive'><table id='requests_table' class='table-default'>";
-        $tool_content .= table_header();        
-        $tool_content .= "<tbody>";
-        foreach ($sql as $req) {                        
-            $tool_content .= "<td>" . q($req->givenname) . "&nbsp;" . q($req->surname) . "</td>";
-            $tool_content .= "<td>" . q($req->username) . "</td>";
-            $tool_content .= "<td>" . $tree->getFullPath($req->faculty_id) . "</td>";
-            $tool_content .= "<td class='text-center'>
-                                <small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
-            $tool_content .= "<td class='option_btn_cell'>";
-            switch ($req->password) {
-                case 'pop3':
-                    $link = "../auth/ldapnewprofadmin.php?id=$req->id&amp;auth=2";                                                  
-                    $authmethod = "($langViaPop)";
-                    break;
-                case 'imap':
-                    $link = "../auth/ldapnewprofadmin.php?id=$req->id&amp;auth=3";
-                    $authmethod = "($langViaImap)";
-                    break;
-                case 'ldap':
-                    $link = "../auth/ldapnewprofadmin.php?id=$req->id&amp;auth=4";
-                    $authmethod = "($langViaLdap)";
-                    break;
-                case 'db':
-                    $link = "../auth/ldapnewprofadmin.php?id=$req->id&amp;auth=5";
-                    $authmethod = "($langViaDB)";
-                    break;
-                case 'shibboleth':
-                    $link = "../auth/ldapnewprofadmin.php?id=$req->id&amp;auth=6";
-                    $authmethod = "($langViaShibboleth)";
-                    break;
-                case 'cas':
-                    $link = "../auth/ldapnewprofadmin.php?id=$req->id&amp;auth=7";
-                    $authmethod = "($langViaCAS)";
-                    break;
-                default:
-                    $link = "newuseradmin.php?id=$req->id";
-                    $authmethod = '';
-                    break;
-            }
-            $tool_content .= action_button(array(
-                array('title' => "$langElaboration $authmethod",
-                      'icon' => 'fa-edit',
-                      'url' => $link)
-            ));
-            $tool_content .= "</td></tr>";            
-        }
-        $tool_content .= "</tbody>";
-        $tool_content .= "</table>";
-        $tool_content .= "</div>";
-    } else {
-        $tool_content .= "<div class='alert alert-warning'>$langUserNoRequests</div>";
-    }
+    $view = 'admin.users.listreq.index';
+
 }
 
-draw($tool_content, 3, null, $head_content);
+$data['menuTypeID'] = 3;
+view($view, $data);
 
 /**
  * @brief function to display table header

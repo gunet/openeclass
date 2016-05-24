@@ -215,7 +215,7 @@ if ($can_upload) {
         } else {
             $uploaded = true;
         }
-        $components = explode('/', $extra_path);
+        $components = explode('/', trim($extra_path, '/'));
         $fileName = end($components);
     } elseif (isset($_POST['file_content'])) {
         if ($diskUsed + strlen($_POST['file_content']) > $diskQuotaDocument) {
@@ -228,11 +228,18 @@ if ($can_upload) {
     }
     if ($uploaded and !isset($_POST['editPath'])) {
         // Check if file already exists
+        if (isset($fileURL)) {
+            $checkFileSQL = 'extra_path = ?s';
+            $checkFileName = $extra_path;
+        } else {
+            $checkFileSQL = 'filename = ?s';
+            $checkFileName = $fileName;
+        }
         $result = Database::get()->querySingle("SELECT path, visible FROM document WHERE
                                            $group_sql AND
                                            path REGEXP ?s AND
-                                           filename = ?s LIMIT 1",
-                                        "^$uploadPath/[^/]+$", $fileName);
+                                           $checkFileSQL LIMIT 1",
+                                        "^$uploadPath/[^/]+$", $checkFileName);
         if ($result) {
             if (isset($_POST['replace'])) {
                 // Delete old file record when replacing file
@@ -1006,7 +1013,7 @@ if (!isset($curDirPath)) {
 $curDirName = my_basename($curDirPath);
 $parentDir = my_dirname($curDirPath);
 if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
-    $tool_content .= $langInvalidDir;
+    Session::Messages($langInvalidDir, 'alert-danger');
     draw($tool_content, $menuTypeID);
     exit;
 }
@@ -1034,6 +1041,29 @@ if (!$is_in_tinymce) {
     $document_timestamp = $session->getDocumentTimestamp($course_id);
 } else {
     $document_timestamp = false;
+}
+
+
+// Check directory access if in subfolder
+if ($curDirPath) {
+    $dirInfo = Database::get()->querySingle("SELECT visible, public
+        FROM document WHERE $group_sql AND path = ?s", $curDirPath);
+    if (!$dirInfo) {
+        Session::Messages($langInvalidDir);
+        draw($tool_content, $menuTypeID);
+        exit;
+    } elseif (!$can_upload and !resource_access($dirInfo->visible, $dirInfo->public)) {
+        if (!$uid) {
+            // If not logged in, try to log in first
+            $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+            header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
+        } else {
+            // Logged in but access forbidden
+            Session::Messages($langInvalidDir);
+            draw($tool_content, $menuTypeID);
+        }
+        exit;
+    }
 }
 
 /* * * Retrieve file info for current directory from database and disk ** */

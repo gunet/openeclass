@@ -22,28 +22,17 @@
 
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
-$toolName = $langAddTime;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
-$navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
 
 // Main body
 $activate = isset($_GET['activate']) ? $_GET['activate'] : ''; //variable of declaring the activation update
 // update process for all the inactive records/users
-if ((!empty($activate)) && ($activate == 1)) {
-    
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
-    
+if ((!empty($activate)) && ($activate == 1)) {    
     // update        
     $countinactive = Database::get()->query("UPDATE user SET expires_at = ".DBHelper::timeAfter(15552000) . " WHERE expires_at<= CURRENT_DATE()")->affectedRows;
     if ($countinactive > 0) {
-        $tool_content .= " " . $langRealised . " " . $countinactive . " " . $langChanges . " <br><br>";
+        Session::Messages("$langRealised $countinactive $langChanges", 'alert-success');
     } else {
-        $tool_content .= $langNoChanges;
-    }
-    
+        Session::Messages($langNoChanges);
+    }   
 }
-draw($tool_content, 3);
+redirect_to_home_page('modules/admin/listusers.php');

@@ -99,7 +99,7 @@ if (isset($_POST['submit'])) {
     checkSecondFactorChallenge();
     saveSecondFactorUserProfile();
     if (!file_exists($webDir . '/courses/userimg/')) {
-        mkdir($webDir . '/courses/userimg/', 0775);
+        make_dir($webDir . '/courses/userimg/');
         touch($webDir."courses/userimg/index.php");
     }
     $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes') ? '1' : '0';
@@ -113,7 +113,7 @@ if (isset($_POST['submit'])) {
                     'email_form' => get_config('email_required'),
                     'surname_form' => !$is_admin,
                     'givenname_form' => true,
-                    'username_form' => true,
+                    'username_form' => $allow_username_change,
                     'email_public' => false,
                     'phone_public' => false,
                     'am_public' => false);
@@ -121,8 +121,7 @@ if (isset($_POST['submit'])) {
     //add custom profile fields required variables
     augment_registered_posted_variables_arr($var_arr);
     
-    $all_ok = register_posted_variables($var_arr, 'all');
-
+    $all_ok = register_posted_variables($var_arr, 'all');    
     $departments = null;
     if (!get_config('restrict_owndep')) {
         if (!isset($_POST['department']) and !$is_admin) {
@@ -157,9 +156,9 @@ if (isset($_POST['submit'])) {
                                              'imagetype' => $type));
     }
 
+    
     // check if email is valid
-    if ((get_config('email_required') or get_config('email_verification_required')) and !email_seems_valid($email_form)) {
-
+    if ((get_config('email_required') or get_config('email_verification_required')) and !Swift_Validate::email($email_form)) { 
         Session::Messages($langEmailWrong);
         redirect_to_home_page("main/profile/profile.php");
     }
@@ -409,8 +408,8 @@ $tool_content .=
 if ($allow_name_change) {
     $tool_content .= "<input type='text' class='form-control' name='givenname_form' id='givenname_form' value='$givenname_form'>";
 } else {
-    $tool_content .= "<label>$givenname_form</label>
-            <input type='hidden' name='givenname_form' value='$givenname_form' />";
+    $tool_content .= "<p class='form-control-static'>$givenname_form</p>";
+    $tool_content .= "<input type='hidden' name='givenname_form' value='$givenname_form'>";
 }
 
 $tool_content .= "</div></div>";
@@ -419,7 +418,8 @@ $tool_content .= "<div class='col-sm-10'>";
 if ($allow_name_change) {
     $tool_content .= "<input type='text' class='form-control' name='surname_form' id='surname_form' value='$surname_form'>";
 } else {
-    $tool_content .= "<label>" . $surname_form . "</label><input type='hidden' name='surname_form' value='$surname_form' />";
+    $tool_content .= "<p class='form-control-static'>$surname_form</p>";
+    $tool_content .= "<input type='hidden' name='surname_form' value='$surname_form'>";
 }
 $tool_content .= "</div></div>";
 $tool_content .= "<div class='form-group'><label for='username_form' class='col-sm-2 control-label'>$langUsername:</label>";
@@ -428,8 +428,8 @@ if ($allow_username_change) {
     $tool_content .= "<input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='$username_form' />";
 } else {
     // means that it is external auth method, so the user cannot change this password
-    $tool_content .= "<label>$username_form</label> [$auth_text]
-            <input type='hidden' name='username_form' value='$username_form' />";
+    $tool_content .= " [$auth_text]
+            <p class='form-control-static'>$username_form</p>";
 }
 $tool_content .= "</div></div>";
 
@@ -509,7 +509,6 @@ if (get_config('email_verification_required')) {
         <div class='col-sm-10 form-control-static'>$message</div>
       </div>";
 }
-
 if (!get_config('restrict_owndep')) {
     $tool_content .= "<div class='form-group'><label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>";
     $tool_content .= "<div class='col-sm-10 form-control-static'>";

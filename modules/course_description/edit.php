@@ -33,23 +33,30 @@ $toolName = $langCourseDescription;
 $pageName = $langEditCourseProgram;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
 
+$head_content .= "
+<script type='text/javascript'>
+    $(document).on('change', '#typSel', function (e) {
+        $('#titleSel').val( $(this).children(':selected').text() );
+    });
+</script>";
+
 if (isset($_REQUEST['id'])) {
-    $editId = intval(getDirectReference($_REQUEST['id']));
-    $q = Database::get()->querySingle("SELECT title, comments, type FROM course_description WHERE course_id = ?d AND id = ?d", $course_id, $editId);
-    $cdtitle = Session::has('editTitle') ? Session::get('editTitle') : $q->title;
-    $comments = Session::has('editComments') ? Session::get('editComments') : $q->comments;
-    $defaultType = Session::has('editType') ? Session::get('editType') : $q->type;
+    $data['editId'] = getDirectReference($_REQUEST['id']);
+    $course_desc = Database::get()->querySingle("SELECT title, comments, type FROM course_description WHERE course_id = ?d AND id = ?d", $course_id, $data['editId']);
+    $data['cdtitle'] = Session::has('editTitle') ? Session::get('editTitle') : $course_desc->title;
+    $comments = Session::has('editComments') ? Session::get('editComments') : $course_desc->comments;
+    $data['defaultType'] = Session::has('editType') ? Session::get('editType') : $course_desc->type;
 } else {
-    $editId = false;
-    $cdtitle = Session::has('editTitle') ? Session::get('editTitle') : "";
+    $data['editId'] = false;
+    $data['cdtitle'] = Session::has('editTitle') ? Session::get('editTitle') : "";
     $comments = Session::has('editComments') ? Session::get('editComments') : "";
-    $defaultType = Session::has('editType') ? Session::get('editType') : "";
+    $data['defaultType'] = Session::has('editType') ? Session::get('editType') : "";
 }
 
-$q = Database::get()->queryArray("SELECT id, title FROM course_description_type ORDER BY `order`");
-$types = array();
-$types[''] = '';
-foreach ($q as $type) {
+$types = Database::get()->queryArray("SELECT id, title FROM course_description_type ORDER BY `order`");
+$data['types'] = array();
+$data['types'][''] = '';
+foreach ($types as $type) {
     $title = $titles = @unserialize($type->title);
     if ($titles !== false) {
         if (isset($titles[$language]) && !empty($titles[$language])) {
@@ -60,78 +67,25 @@ foreach ($q as $type) {
             $title = array_shift($titles);
         }
     }
-    $types[$type->id] = $title;
+    $data['types'][$type->id] = $title;
 }
-
-$tool_content .= action_bar(array(
-            array('title' => $langBack,
+$data['titleError'] = Session::getError('editTitle') ? " has-error" : "";
+$data['action_bar'] = action_bar(array(
+            array('title' => trans('langBack'),
                   'url' => "index.php?course=$course_code",
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')));
 
-$tool_content .= "
-    <div class='row'>
-        <div class='col-xs-12'>
-            <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>";
-if ($editId !== false) {
-    $tool_content .= "<input type='hidden' name='editId' value='" . getIndirectReference($editId) . "' />";
-}
-$tool_content .= "
-                    <fieldset>
-                        <div class='form-group'>
-                            <label for='typSel' class='col-sm-2 control-label'>$langType:</label>
-                            <div class='col-sm-10'>
-                            " . selection($types, 'editType', $defaultType, 'class="form-control" id="typSel"') . "
-                            </div>
-                        </div>
-                        <div class='form-group".(Session::getError('editTitle') ? " has-error" : "")."'>
-                            <label for='titleSel' class='col-sm-2 control-label'>$langTitle:</label>
-                            <div class='col-sm-10'>
-                                <input type='text' name='editTitle' class='form-control' value='$cdtitle' size='40' id='titleSel'>
-                                <span class='help-block'>".Session::getError('editTitle')."</span>                                    
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <label for='editComments' class='col-sm-2 control-label'>$langContent:</label>
-                            <div class='col-sm-10'>
-                            " . @rich_text_editor('editComments', 4, 20, $comments) . "
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>".
-                                form_buttons(array(
-                                    array(
-                                        'text'  =>  $langSave,
-                                        'name'  =>  'saveCourseDescription',
-                                        'value' =>  $langAdd
-                                    ),
-                                    array(
-                                        'href'  =>  "index.php?course=$course_code"
-                                    )
-                                ))
-                            ."
-                        </div>
-                        </div>
-                  </fieldset>
-                  ". generate_csrf_token_form_field() ."
-                </form>
-            </div>
-        </div>
-    </div>";
+$data['text_area_comments'] = rich_text_editor('editComments', 4, 20, $comments);
 
-
-$head_content .= <<<hCont
-<script type="text/javascript">
-/* <![CDATA[ */
-
-    $(document).on('change', '#typSel', function (e) {
-        //console.log(e);
-        //alert($(this).children(':selected').text());
-        $('#titleSel').val( $(this).children(':selected').text() );
-    });
-
-/* ]]> */
-</script>
-hCont;
-draw($tool_content, 2, null, $head_content);
+$data['form_buttons'] = form_buttons(array(
+            array(
+                'text'  =>  $langSave,
+                'name'  =>  'saveCourseDescription',
+                'value' =>  $langAdd
+            ),
+            array(
+                'href'  =>  "index.php?course=$course_code"
+            )
+        ));
+view('modules.course.description.create', $data);

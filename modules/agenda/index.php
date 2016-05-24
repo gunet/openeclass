@@ -137,12 +137,12 @@ function checkenableenddate(){
     }
 }
 $(function() {
-    $('#startdatecal').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+    $('#startdate').datetimepicker({
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-right', 
         language: '".$language."',
         autoclose: true
     });
-    $('#enddatecal').datepicker({
+    $('#enddate').datepicker({
         format: 'dd-mm-yyyy', pickerPosition: 'bottom-left', 
         language: '".$language."',
         autoclose: true
@@ -267,7 +267,7 @@ if ($is_editor) {
                     <input type='text' class='form-control' id='event_title' name='event_title' placeholder='$langTitle' value='" . q($event_title) . "'>
                 </div>
             </div>
-            <div class='input-append date form-group' id='startdatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+            <div class='input-append date form-group' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                 <label for='startdate' class='col-sm-2 control-label'>$langDate :</label>
                 <div class='col-sm-10'>
                     <div class='input-group'>
@@ -313,7 +313,7 @@ if ($is_editor) {
                         </select>
                         </div>
                     ";
-            $tool_content .= "<div class='input-append date' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+            $tool_content .= "<div class='input-append date' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                 <label for='Enddate' class='col-sm-2 control-label'>$langUntil :</label>
                     <div class='col-sm-4'>
                         <div class='input-group'>

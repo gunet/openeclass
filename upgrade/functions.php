@@ -1102,6 +1102,8 @@ function upgrade_course_3_0($code, $course_id) {
                                     VALUES (".MODULE_ID_BLOG.", 0, $course_id)");
     Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
                                     VALUES (".MODULE_ID_BBB.", 0, $course_id)");
+    Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
+                                    VALUES (".MODULE_ID_LTI_CONSUMER.", 0, $course_id)");
 
     if ($q1 and $q2) { // if everything ok drop course db
         // finally drop database
@@ -1604,7 +1606,7 @@ function move_group_documents_to_main_db($code, $course_id) {
             if (file_exists($group_document_dir)) {
                 unlink($group_document_dir);
             }
-            mkdir($group_document_dir, 0775);
+            make_dir($group_document_dir);
         } else {
             traverseDirTree($group_document_dir, 'group_documents_main_db_file', 'group_documents_main_db_dir', array($course_id, $new_group_id));
         }
@@ -1640,7 +1642,7 @@ function group_documents_main_db($path, $course_id, $group_id, $type) {
 function mkdir_or_error($dirname) {
     global $langErrorCreatingDirectory;
     if (!is_dir($dirname)) {
-        if (!mkdir($dirname, 0775)) {
+        if (!make_dir($dirname)) {
             echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $dirname</div>";
         }
     }
@@ -1732,7 +1734,7 @@ function importThemes($themes = null) {
     global $webDir;
     if (!isset($themes) || isset($themes) && !empty($themes)) {
         $themesDir = "$webDir/template/$_SESSION[theme]/themes";
-        if(!is_dir("$webDir/courses/theme_data")) mkdir("$webDir/courses/theme_data", 0755, true);
+        if(!is_dir("$webDir/courses/theme_data")) make_dir("$webDir/courses/theme_data");
         if (is_dir($themesDir) && $handle = opendir($themesDir)) {
             if (!isset($themes)) {
                 while (false !== ($file_name = readdir($handle))) {

@@ -160,7 +160,7 @@ if (isset($_GET['mid'])) {
                     $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
                 }
             }
-            $out .= "
+            $out .= generate_csrf_token_form_field() . "
                 <fieldset>
                 <legend>$langReply</legend>
                     <div class='form-group'>
@@ -354,6 +354,7 @@ $out .=         "
                    'bProcessing': true,
                    'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                    'bServerSide': true,
+                   'searchDelay': 1000,
                    'sAjaxSource': 'ajax_handler.php?mbox_type=inbox&course_id=$course_id',
                    'aLengthMenu': [
                        [10, 15, 20 , -1],
@@ -384,7 +385,7 @@ $out .=         "
                              'sLast':     '&raquo;'
                         }
                     }
-                 }).fnSetFilteringDelay(1000);
+                 });
                  $(document).off( 'click','.delete_in_inner');
                  $(document).on( 'click','.delete_in', function (e) {
                      e.preventDefault();
@@ -399,8 +400,8 @@ $out .=         "
                           data: string,
                           success: function(data){
                              var num_page_records = oTable.fnGetData().length;
-                             var per_page = oTable.fnPagingInfo().iLength;
-                             var page_number = oTable.fnPagingInfo().iPage;
+                             var per_page = $('#inbox_table').DataTable().page.info().length;
+                             var page_number = $('#inbox_table').DataTable().page.info().page;
                              if(num_page_records==1){
                                  if(page_number!=0) {
                                      page_number--;
@@ -432,8 +433,8 @@ $out .=         "
                                  cache: false,
                                  success: function(){
                                      var num_page_records = oTable.fnGetData().length;
-                                     var per_page = oTable.fnPagingInfo().iLength;
-                                     var page_number = oTable.fnPagingInfo().iPage;
+                                     var per_page = $('#inbox_table').DataTable().page.info().length;
+                                     var page_number = $('#inbox_table').DataTable().page.info().page;
                                      if(num_page_records==1){
                                          if(page_number!=0) {
                                              page_number--;

@@ -213,9 +213,14 @@ class Session {
             return FALSE;
         }
     }    
-    public static function getError($key) {
+    public static function getError($key, $delimiter = '') {
         if (isset($_SESSION[$key]['errors'][0])){
-            return $_SESSION[$key]['errors'][0];
+            if ($delimiter) {
+                $message = str_replace(':message', $_SESSION[$key]['errors'][0], $delimiter);
+            } else {
+                $message = $_SESSION[$key]['errors'][0];
+            }
+            return $message;
         } else {
             return FALSE;
         }

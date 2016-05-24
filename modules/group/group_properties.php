@@ -44,6 +44,7 @@ initialize_group_info($group_id);
 $group = Database::get()->querySingle("SELECT * FROM group_properties WHERE group_id = ?d AND course_id = ?d", $group_id, $course_id);
 
 $checked['self_reg'] = ($group->self_registration?'checked':'');
+$checked['allow_unreg'] = ($group->allow_unregister?'checked':'');
 $checked['private_forum_yes'] =($group->private_forum?' checked="1"' : '');
 $checked['private_forum_no'] = ($group->private_forum? '' : ' checked="1"');
 $checked['has_forum'] = ($group->forum?'checked':'');
@@ -74,8 +75,19 @@ $tool_content .= "
                         </label>
                         </div>                    
                 </div>
-            </div>        
-		    <div class='form-group'>
+            </div>
+            <div class='form-group'>
+            <label class='col-sm-3 control-label'>$langGroupAllowUnregister:</label>
+                <div class='col-xs-9'>             
+                    <div class='checkbox'>
+                    <label>
+                     <input type='checkbox' name='allow_unreg' $checked[allow_unreg]>
+                        $langGroupAllowStudentUnregister
+                        </label>
+                        </div>                    
+                </div>
+            </div>
+            <div class='form-group'>
                 <label class='col-sm-3 control-label'>$langPrivate_1:</label>
                 <div class='col-sm-9'>            
                     <div class='radio'>

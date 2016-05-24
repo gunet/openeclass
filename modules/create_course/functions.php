@@ -96,15 +96,17 @@ function create_course_dirs($code) {
     global $langDirectoryCreateError;
 
     $base = "courses/$code";
+    $old_umask = umask();
     umask(0);
     foreach (array($base, "$base/image", "$base/document", "$base/dropbox",
                    "$base/page", "$base/work", "$base/group", "$base/temp",
                    "$base/scormPackages", "video/$code") as $dir) {
-       if (!(mkdir($dir))) {
+       if (!make_dir($dir)) {
             Session::Messages(sprintf($langDirectoryCreateError, $dir));
             return false;
        } 
     }
+    umask($old_umask);
     return true;
 }
 
@@ -121,7 +123,7 @@ function create_modules($cid) {
         MODULE_ID_GRADEBOOK, MODULE_ID_ATTENDANCE, MODULE_ID_GROUPS,
         MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
         MODULE_ID_CHAT, MODULE_ID_QUESTIONNAIRE,
-        MODULE_ID_LP, MODULE_ID_WIKI, MODULE_ID_BLOG, MODULE_ID_BBB);
+        MODULE_ID_LP, MODULE_ID_WIKI, MODULE_ID_BLOG, MODULE_ID_BBB, MODULE_ID_WALL, MODULE_ID_LTI_CONSUMER);
 
     $vis_placeholders = array();
     $vis_args = array();

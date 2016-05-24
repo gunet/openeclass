@@ -47,8 +47,6 @@
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-define('CLARO_FILE_PERMISSIONS', 0777);
-
 require_once("../../include/baseTheme.php");
 require_once "include/lib/learnPathLib.inc.php";
 require_once "include/lib/fileManageLib.inc.php";
@@ -494,13 +492,12 @@ function utf8_decode_if_is_utf8($str) {
 $okMsgs = array();
 $errorMsgs = array();
 
-$maxFilledSpace = 100000000;
+$maxFilledSpace = 1.0e10; // Max filled space: 10 GB
 
-$courseDir = "/courses/" . $course_code . "/scormPackages/";
-$baseWorkDir = $webDir . $courseDir; // path_id
+$baseWorkDir = 'courses/' . $course_code . '/scormPackages/';
 
 if (!is_dir($baseWorkDir)) {
-    claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
+    make_dir($baseWorkDir);
 }
 
 // handle upload
@@ -525,7 +522,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     $baseWorkDir .= "path_" . $tempPathId;
 
     if (!is_dir($baseWorkDir)) {
-        claro_mkdir($baseWorkDir, CLARO_FILE_PERMISSIONS);
+        make_dir($baseWorkDir);
     }
 
     /*
@@ -784,9 +781,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     // insert corresponding entries in database
 
     if (!$errorFound) {
-        // PHP extraction of zip file using zlib
-        chdir($baseWorkDir);
-
         // PCLZIP_OPT_PATH is the path where files will be extracted ( '' )
         // PLZIP_OPT_REMOVE_PATH suppress a part of the path of the file ( $pathToManifest )
         // the result is that the manifest is in th eroot of the path_# directory and all files will have a path related to the root
@@ -1062,16 +1056,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     /* --------------------------------------
       status messages
       -------------------------------------- */
-    $tool_content .= "\n<!-- Messages -->\n";
     foreach ($okMsgs as $msg) {
-        $tool_content .= "\n<span class=\"correct\">$langSuccessOk</span>" . $msg . "<br />";
+        $tool_content .= "<div class='text-success'>" . icon('fa-check', $langSuccessOk) . ' ' . $msg . '</div>';
     }
 
     foreach ($errorMsgs as $msg) {
-        $tool_content .= "<span class='error'>$langError</span>" . $msg . "<br />";
+        $tool_content .= "<div class='text-danger'>" . icon('fa-times', $langError) . ' ' . $msg . '</div>';
     }
-
-    $tool_content .= "\n<!-- End messages -->\n";
 
     // installation completed or not message
     if (!$errorFound) {

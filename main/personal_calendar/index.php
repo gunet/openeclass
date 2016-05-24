@@ -68,7 +68,7 @@ $head_content .= "
 $(function() {
     $('#startdate').datetimepicker({
         format: 'dd-mm-yyyy hh:ii', 
-        pickerPosition: 'bottom-left', 
+        pickerPosition: 'bottom-right', 
         language: '".$language."',
         autoclose: true
     });

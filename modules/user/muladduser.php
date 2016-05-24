@@ -40,6 +40,7 @@ $tool_content .= action_bar(array(
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $ok = array();
     $not_found = array();
     $existing = array();
@@ -95,6 +96,7 @@ $tool_content .= "<div class='alert alert-info'>$langAskManyUsers</div>
             <div class='form-group'>
                 <textarea class='auth_input' name='user_info' rows='10'></textarea>
             </div>
+            ".showSecondFactorChallenge()." 
             <div class='col-sm-offset-2 col-sm-10'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
             </div>                       

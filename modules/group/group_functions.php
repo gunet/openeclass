@@ -25,6 +25,7 @@ function initialize_group_id($param = 'group_id') {
  * @global type $course_id
  * @global type $status
  * @global type $self_reg
+ * @global type $allow_unreg
  * @global type $multi_reg
  * @global type $has_forum
  * @global type $private_forum
@@ -38,7 +39,7 @@ function initialize_group_id($param = 'group_id') {
  * @global type $tutors
  * @global type $member_count
  * @global type $is_tutor
- * @global type $is_edito
+ * @global type $is_editor
  * @global type $is_member
  * @global type $uid
  * @global type $urlServer
@@ -48,22 +49,22 @@ function initialize_group_id($param = 'group_id') {
  */
 function initialize_group_info($group_id) {
     
-    global $course_id, $is_editor, $status, $self_reg, $has_forum, $private_forum, $documents, $wiki,
+    global $course_id, $is_editor, $status, $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki,
     $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors, $group_category,
     $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code;
  
-    $grp_property_item = Database::get()->querySingle("SELECT self_registration, forum, private_forum, documents, wiki
+    $grp_property_item = Database::get()->querySingle("SELECT self_registration, allow_unregister, forum, private_forum, documents, wiki
                      FROM group_properties WHERE course_id = ?d AND group_id = ?d", $course_id, $group_id);
-    $self_reg = $grp_property_item->self_registration;        
+    $self_reg = $grp_property_item->self_registration;
+    $allow_unreg = $grp_property_item->allow_unregister;
     $has_forum = $grp_property_item->forum;
     $private_forum = $grp_property_item->private_forum;
     $documents = $grp_property_item->documents;
-    $wiki = $grp_property_item->wiki;
-    
+    $wiki = $grp_property_item->wiki;    
    
-    // Guest users aren't allowed to register in a group
+    // Guest users aren't allowed to register / unregister
     if ($status == USER_GUEST) {
-        $self_reg = 0;
+        $self_reg = $allow_unreg = 0;
     }
     
     $res = Database::get()->querySingle("SELECT name, description, forum_id, max_members, secret_directory, category_id
@@ -77,14 +78,32 @@ function initialize_group_info($group_id) {
     $forum_id = $res->forum_id;
     $max_members = Session::has('maxStudent') ? Session::get('maxStudent') : $res->max_members;
     $secret_directory = $res->secret_directory;
-    $member_count = Database::get()->querySingle("SELECT COUNT(*) as count FROM group_members
+    $group_category = $res->category_id;
+    
+    $member_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM group_members
                                                                     WHERE group_id = ?d
                                                                     AND is_tutor = 0", $group_id)->count;
-    $group_category = $res->category_id;
-
+    
     $tutors = group_tutors($group_id);
-    $is_tutor = $is_member = $user_group_description = false;
-
+    
+    $is_tutor = $is_member = FALSE;
+    $user_group_description = NULL;
+    
+    if (isset($uid)) { // check if we are group_member
+        $res = Database::get()->querySingle("SELECT user_id FROM group_members
+                                     WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
+        if ($res) {
+            $is_member = TRUE;
+        }
+        // check if we are group tutor
+        $res = Database::get()->querySingle("SELECT is_tutor FROM group_members
+                                     WHERE group_id = ?d AND user_id = ?d AND is_tutor = 1", $group_id, $uid);
+        if ($res) {
+            $is_tutor = $res->is_tutor;
+        }
+    }
+    
+    // check description
     if ($is_tutor || $is_editor) {
         $res = Database::get()->queryArray("SELECT description,user_id FROM group_members
                                      WHERE group_id = ?d", $group_id);
@@ -95,11 +114,9 @@ function initialize_group_info($group_id) {
         }
     } else {
         if (isset($uid)) {
-            $res = Database::get()->querySingle("SELECT is_tutor, description FROM group_members
+            $res = Database::get()->querySingle("SELECT description FROM group_members
                                          WHERE group_id = ?d AND user_id = ?d AND is_tutor != 1", $group_id, $uid);
-            if ($res) {
-                $is_member = true;
-                $is_tutor = $res->is_tutor;
+            if ($res) {                
                 $user_group_description .= $res->description;
             }
         }        

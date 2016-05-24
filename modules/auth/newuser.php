@@ -326,7 +326,7 @@ if (!isset($_POST['submit'])) {
             }
         }
     }
-    if (!empty($email) and !email_seems_valid($email)) {
+    if (!empty($email) and !Swift_Validate::email($email)) {
         $registration_errors[] = $langEmailWrong;
     } else {
         $email = mb_strtolower(trim($email));
@@ -436,6 +436,9 @@ if (!isset($_POST['submit'])) {
         }
 
         $last_id = $q1->lastInsertID;
+        // update personal calendar info table
+        // we don't check if trigger exists since it requires `super` privilege
+        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $last_id);
         $userObj->refresh($last_id, $departments);
         user_hook($last_id);
         

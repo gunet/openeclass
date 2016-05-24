@@ -29,7 +29,7 @@ class ExtAppManager {
 
     public static $AppNames = array('GoogleDriveApp', 'OneDriveApp',
         'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp', 'OpenDelosApp',
-        'BBBApp', 'OpenMeetings', 'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
+        'BBBApp', 'OpenMeetings', 'WebConfApp', 'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
         'AnalyticsApp');
     private static $APPS = null;
 
@@ -163,7 +163,12 @@ abstract class ExtApp {
     }
 
     protected function getBaseURL() {
-        return Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", "base_url")->value;
+        $r = Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", "base_url");
+        if ($r) {
+            return $r->value;            
+        } else {
+            return null;
+        }        
     }
 
     public abstract function getDisplayName();

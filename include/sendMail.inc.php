@@ -19,34 +19,21 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-// Send a mail message, with the proper MIME headers and charset tag
-// From: address is always the platform administrator, and the
-// $from_address specified appears in the Reply-To: header
-function send_mail($from, $from_address, $to, $to_address, $subject, $body, $charset, $extra_headers = '') {
+// Send a mail message - From: address is always the platform administrator
+function send_mail($from, $from_address, $to, $to_address, $subject, $body) {
     if ((is_array($to_address) and !count($to_address)) or empty($to_address)) {
         return true;
     }
+    
+    $message = Swift_Message::newInstance($subject, $body)
+        ->setFrom(fromHeader($from, $from_address));
     if (count($to_address) > 1) {
-        $to_header = '(undisclosed-recipients)';
-        $bcc = 'Bcc: ' . join(', ', $to_address) . PHP_EOL;
+        $message->setBcc($to_address);
     } else {
-        if (empty($to)) {
-            $to_header = $to_address;
-        } else {
-            $to_header = qencode($to, $charset) . " <$to_address>";
-        }
-        $bcc = '';
-    }
-    $headers = fromHeader($from, $from_address) . $bcc .
-		"MIME-Version: 1.0" . PHP_EOL .
-		"Content-Type: text/plain; charset=$charset" . PHP_EOL .
-        "Content-Transfer-Encoding: 8bit" .
-        reply_to($from, $from_address, $extra_headers);
-    if ($extra_headers) {
-		$headers .= PHP_EOL . preg_replace('/\n+/', PHP_EOL, $extra_headers);
+        $message->setTo(array($to_address => $to));
     }
 
-    return @mail($to_header, qencode($subject, $charset), $body, $headers);
+    return sendMessage($message);
 }
 
 
@@ -54,8 +41,7 @@ function send_mail($from, $from_address, $to, $to_address, $subject, $body, $cha
 // and charset tag, with a plain text and an HTML part
 // From: address is always the platform administrator, and the
 // $from_address specified appears in the Reply-To: header
-function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $body_plain, $body_html, $charset) {
-
+function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $body_plain, $body_html) {
     if ((is_array($to_address) and !count($to_address)) or empty($to_address)) {
         return true;
     }
@@ -63,86 +49,79 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
     $emailAnnounce = get_config('email_announce');
     $body_html = add_host_to_urls($body_html);
 
+    $message = Swift_Message::newInstance($subject)
+        ->setFrom(fromHeader($from, $from_address));
+
     if (count($to_address) > 1) {
-        if (isset($emailAnnounce) and (!(empty($emailAnnounce)))) {
-            if (empty($to)) {
-                $to_header = $emailAnnounce;
-            } else {
-                $to_header = $to . " <$emailAnnounce>";
-            }
-        } else {
-            if (empty($to)) {
-                $to_header = '(undisclosed recipients)';
-            } else {
-                $to_header = "($to)";
-            }
+        if (isset($emailAnnounce) and !empty($emailAnnounce)) {
+            $message->setTo(array($emailAnnounce => $to));
         }
-                $bcc = 'Bcc: ' . join(', ', $to_address) . PHP_EOL;
+        $message->setBcc($to_address);
     } else {
-        if (empty($to)) {
-            if (is_array($to_address)) {
-                $to_header = $to_address[0];
-            } else {
-                $to_header = $to_address;
-            }
-        } else {
-            if (is_array($to_address)) {
-                $to_header = qencode($to, $charset) . " <{$to_address[0]}>";
-            } else {
-                $to_header = qencode($to, $charset) . " <$to_address>";
-            }
+        if (is_array($to_address)) {
+            $to_address = $to_address[0];
         }
-        $bcc = '';
+        $message->setTo(array($to_address => $to));
     }
-    $separator = uniqid('==OeCl_0_', true) . '_' . md5(time());
-    $headers = fromHeader($from, $from_address) . $bcc .
-		   "MIME-Version: 1.0" . PHP_EOL .
-           "Content-Type: multipart/alternative;" . PHP_EOL .
-           "    boundary=\"$separator\"" .
-            reply_to($from, $from_address);
 
-	$body = "This is a multi-part message in MIME format." . PHP_EOL . PHP_EOL .
-		"--$separator" . PHP_EOL .
-		"Content-Type: text/plain; charset=$charset" . PHP_EOL .
-		"Content-Transfer-Encoding: 8bit\n\n$body_plain" . PHP_EOL . PHP_EOL .
-		"--$separator" . PHP_EOL .
-		"Content-Type: text/html; charset=$charset" . PHP_EOL .
-		"Content-Transfer-Encoding: 8bit" . PHP_EOL . PHP_EOL .
-        "<html><head><meta http-equiv='Content-Type' " .
-        "content='text/html; charset=\"$charset\"'>" .
-        "<title>message</title>".
-        "<style type='text/css'>
-            /* General Styles */
-            body{ padding: 0px; margin: 0px; color: #555; background-color: #f7f7f7; font-family: 'Helvetica', sans-serif; font-size: 1em; }
-            #container{ margin: 20px; padding: 10px; background-color: #fefefe; }
-            #mail-header, #mail-body, #mail-footer{ padding:  0 15px 15px; }
-            hr{ margin: 0px; }
+    addReplyTo($message, $from, $from_address);
 
-            /* Header Styles */
-            #mail-header{ padding-top: 10px; border-bottom: 1px solid #ddd; color: #666; }
-            #header-title{ background-color: #f5f5f5; margin-left: -15px; margin-right: -15px; margin-bottom: 12px; padding: 12px 15px; font-weight: bold; }
-            #forum-category{ list-style: none; padding-left: 0px; }
-            #forum-category li{ padding-bottom: 1px; }
-            #forum-category li span:first-child{ width: 150px; }
-            #forum-category li span:last-child{ padding-left: 10px; }
-            #forum-category{ margin-bottom: 0px; }
+    $message->setBody($body_plain, 'text/plain')
+        ->addPart("<html>
+<head>
+  <meta http-equiv='Content-Type' content='text/html; charset='UTF-8'>
+  <title>message</title>
+  <style type='text/css'>
+    /* General Styles */
+    body { padding: 0px; margin: 0px; color: #555; background-color: #f7f7f7; font-family: 'Helvetica', sans-serif; font-size: 1em; }
+    #container { margin: 20px; padding: 10px; background-color: #fefefe; }
+    #mail-header, #mail-body, #mail-footer { padding: 0 15px 15px; }
+    hr { margin: 0px; }
 
-            /* Body Styles */
-            #mail-body-inner{ padding-left: 30px; padding-right: 30px; }
+    /* Header Styles */
+    #mail-header { padding-top: 10px; border-bottom: 1px solid #ddd; color: #666; }
+    #header-title { background-color: #f5f5f5; margin-left: -15px; margin-right: -15px; margin-bottom: 12px; padding: 12px 15px; font-weight: bold; }
+    #forum-category { list-style: none; padding-left: 0px; }
+    #forum-category li { padding-bottom: 1px; }
+    #forum-category li span:first-child { width: 150px; }
+    #forum-category li span:last-child { padding-left: 10px; }
+    #forum-category { margin-bottom: 0px; }
 
-            /* Footer Styles */
-            #mail-footer{ padding-bottom: 25px; border-top: 1px solid #ddd; color: #888; position: relative; }
-            #mail-footer-left{ float: left; width: 8%; width: 80px; }
-            #mail-footer-right{ float: left; width: 90%; }
-            b.notice{ color: #555; }
-        </style>\n".
-        "</head><body><div id='container'>\n" .
-		"$body_html\n</div></body></html>" . PHP_EOL .
-		"--$separator--" . PHP_EOL;
-	return @mail($to_header, qencode($subject, $charset),
-               $body, $headers);
+    /* Body Styles */
+    #mail-body-inner { padding-left: 30px; padding-right: 30px; }
+
+    /* Footer Styles */
+    #mail-footer { padding-bottom: 25px; border-top: 1px solid #ddd; color: #888; position: relative; }
+    #mail-footer-left { float: left; width: 8%; width: 80px; }
+    #mail-footer-right { float: left; width: 90%; }
+    b.notice { color: #555; }
+  </style>
+</head>
+<body>
+  <div id='container'>
+    $body_html
+  </div>
+</body></html>", 'text/html');
+
+    return sendMessage($message);
 }
 
+// Try to send a message using Swift Mailer, catching exceptions
+function sendMessage($message) {
+    global $langMailError;
+
+    if ($email_bounces = get_config('email_bounces')) {
+        $message->setReturnPath($email_bounces);
+    }
+
+    try {
+        return getMailer()->send($message);
+    } catch (Exception $e) {
+        Session::Messages("$langMailError<p>" . q($e->getMessage()) . '</p>',
+            'alert-danger');
+        return false;
+    }
+}
 
 // Determine the correct From: header
 function fromHeader($from, $from_address) {
@@ -150,50 +129,53 @@ function fromHeader($from, $from_address) {
 
     if (empty($from_address) or !get_config('email_from')) {
         $from_address = get_config('email_sender');
-        return "From: " . qencode($siteName, $charset) .
-                " <$from_address>\n";
+        $from = $siteName;
     } else {
-        return "From: " .
-                qencode("$from ($langVia: $siteName)", $charset) .
-                " <$from_address>" . PHP_EOL;
+        $from = "$from ($langVia: $siteName)";
     }
+    return array($from_address => $from);
 }
 
 
-// Determine the correct Reply-To: header if needed
-function reply_to($from, $from_address, $extra_headers='') {
-    global $emailAdministrator, $charset;
+// Add the correct Reply-To: header if needed
+function addReplyTo($message, $from, $from_address) {
+    global $emailAdministrator;
         
     // Don't include reply-to if it has been provided by caller
-    if (strpos(strtolower($extra_headers), 'reply-to:') !== false) {
-        return '';
+    if ($message->getReplyTo()) {
+        return;
     }
 
     if (!get_config('email_from') and $emailAdministrator <> $from_address) {
-        if (empty($from)) {
-            return PHP_EOL . "Reply-To: $from_address";
+        $message->setReplyTo(array($from_address => $from));
+    }
+}
+
+// Get a Swift Mailer instance depending on configuration
+function getMailer() {
+    static $mailer;
+
+    if (!isset($transport)) {
+        $type = get_config('email_transport');
+        if ($type == 'smtp') {
+            $transport = Swift_SmtpTransport::newInstance(get_config('smtp_host'), get_config('smtp_server'));
+            $username = get_config('smtp_username');
+            if ($username) {
+                $transport->setUsername($username)->setPassword(get_config('smtp_password'));
+            }
+            $encryption = get_config('smtp_encryption');
+            if ($encryption) {
+                $transport->setEncryption($encryption);
+            }
+        } elseif ($type == 'sendmail') {
+            $transport = Swift_SendmailTransport::newInstance(get_config('sendmail_command'));
         } else {
-            return PHP_EOL . "Reply-To: " .
-                   qencode($from, $charset) .
-                   " <$from_address>";
+            $transport = Swift_MailTransport::newInstance();
         }
-    } else {
-        return '';
+        $mailer = Swift_Mailer::newInstance($transport);
     }
+    return $mailer;
 }
-
-
-// Encode a mail header line with according to MIME / RFC 2047
-function qencode($header, $charset) {
-    // If header contains no chars > 128, return it without encoding
-    if (!preg_match('/[\200-\377]/', $header)) {
-        return $header;
-    } else {
-        mb_internal_encoding('UTF-8');
-        return mb_encode_mimeheader($header, $charset);
-    }
-}
-
 
 /**
  * Make sure URLs appearing in href and src attributes in HTML include a host. 

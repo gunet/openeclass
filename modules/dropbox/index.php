@@ -46,7 +46,7 @@ if (!isset($course_id)) {
 if ($course_id != 0) {
     $dropbox_dir = $webDir . "/courses/" . $course_code . "/dropbox";
     if (!is_dir($dropbox_dir)) {
-        mkdir($dropbox_dir);
+        make_dir($dropbox_dir);
     }
     
     // get dropbox quotas from database
@@ -146,9 +146,9 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] 
     $pageName = $langQuotaBar;
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langDropBox);
     $space_released = 0;
-    if ($is_editor && ($diskUsed/$diskQuotaDropbox >= 0.9)) { 
-        $space_to_free = ($diskQuotaDropbox/1024/1024/10);
-        
+    
+    if ($is_editor && ($diskUsed/$diskQuotaDropbox >= 0.8)) { // 80% of quota        
+        $space_to_free = format_file_size($diskQuotaDropbox*0.8);        
         if (isset($_GET['free']) && $_GET['free'] == TRUE) { //free some space
             $sql = "SELECT da.filename, da.id, da.filesize FROM dropbox_attachment as da, dropbox_msg as dm
                     WHERE da.msg_id = dm.id
@@ -159,11 +159,11 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] 
                 unlink($dropbox_dir . "/" . $file->filename);
                 $space_released += $file->filesize;
                 Database::get()->query("DELETE FROM dropbox_attachment WHERE id = ?d", $file->id);
-                if ($space_released >= $diskQuotaDropbox/10) {
+                if ($space_released >= $diskQuotaDropbox/20) { // we want to keep 20% of quota
                     break;
                 }
             }
-            $tool_content .= "<div class='alert alert-success'>".sprintf($langDropboxFreeSpaceSuccess, $space_released/1024/1024)."</div>";
+            $tool_content .= "<div class='alert alert-success'>".sprintf($langDropboxFreeSpaceSuccess, format_file_size($space_released))."</div>";
         } else { //provide option to free some space
             $tool_content .= "<div id='operations_container'>
                                 <ul id='opslist'>
@@ -292,10 +292,15 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                               WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d";
                     $result_g = Database::get()->queryArray($sql_g, $course_id, $uid);            
                 }
-                
+                                    
                 foreach ($result_g as $res_g)
                 {
-                    $tool_content .= "<option value = '_$res_g->id'>".q($res_g->name)."</option>";
+                    if (isset($_GET['group_id']) and $_GET['group_id'] == $res_g->id) {
+                        $selected_group = " selected";
+                    } else {
+                        $selected_group = "";
+                    }
+                    $tool_content .= "<option value = '_$res_g->id' $selected_group>".q($res_g->name)."</option>";
                 }
             } else {
                 //if user is student and student-student messages not allowed for course messages show teachers
@@ -490,8 +495,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         ";
 	}
 } else {//mailbox
-    load_js('datatables');
-    load_js('datatables_filtering_delay');
+    load_js('datatables');    
     $head_content .= "<script type='text/javascript'>
                         $(document).ready(function() {
 

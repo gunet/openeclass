@@ -29,20 +29,23 @@ $helpTopic = 'Questionnaire';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
-require_once 'modules/game/ViewingEvent.php';
 
 load_js('bootstrap-slider');
 
 $toolName = $langQuestionnaire;
 $pageName = $langParticipate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
-
-if (!isset($_REQUEST['UseCase'])) {
+//Identifying ajax request that cancels an active attempt
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        if ($_POST['action'] == 'refreshSession') {
+            // Does nothing just refreshes the session
+            exit();
+        } 
+}
+if (!isset($_REQUEST['UseCase']))
     $_REQUEST['UseCase'] = "";
-}
-if (!isset($_REQUEST['pid'])) {
+if (!isset($_REQUEST['pid']))
     die();
-}
 $p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $_REQUEST['pid']);
 if(!$p){
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -61,16 +64,40 @@ switch ($_REQUEST['UseCase']) {
 
 draw($tool_content, 2, null, $head_content);
 
+/**
+ * @brief display poll form
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $tool_content
+ * @global type $langSubmit
+ * @global type $langPollInactive
+ * @global type $langPollUnknown
+ * @global type $uid
+ * @global type $langPollAlreadyParticipated
+ * @global type $is_editor
+ * @global type $langBack
+ * @global type $langQuestion
+ * @global type $langCancel
+ * @global type $head_content
+ * @global type $langPollParticipantInfo
+ */
 function printPollForm() {
     global $course_id, $course_code, $tool_content,
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo;
     
+    $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     $head_content .= " 
     <script>
         $(function() {
-            $('.grade_bar').slider();    
+            $('.grade_bar').slider(); 
+            setInterval(function() {
+                $.ajax({
+                  type: 'POST',
+                  data: { action: 'refreshSession'}
+                });                    
+            }, $refresh_time);            
         });
     </script>";
     
@@ -95,7 +122,7 @@ function printPollForm() {
     $temp_EndDate = mktime(substr($temp_EndDate, 11, 2), substr($temp_EndDate, 14, 2), 0, substr($temp_EndDate, 5, 2), substr($temp_EndDate, 8, 2), substr($temp_EndDate, 0, 4));
     $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
     
-    if (($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
+    if ($is_editor || ($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
         $tool_content .= action_bar(array(
             array(
                 'title' => $langBack,
@@ -219,7 +246,7 @@ function printPollForm() {
         }
         $tool_content .= "<div class='text-center'>";
         if (!$is_editor) {
-            $tool_content .= "<input class='btn btn-primary' name='submit' type='submit' value='".q($langSubmit)."'> ";
+            $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='".q($langSubmit)."'> ";
         }
         $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>".(($is_editor) ? q($langBack) : q($langCancel) )."</a></div></form>";
     } else {
@@ -228,10 +255,25 @@ function printPollForm() {
     }	
 }
 
+/**
+ * @brief submit poll
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $uid
+ * @global type $langPollSubmitted
+ * @global type $langBack
+ * @global type $langUsage
+ * @global type $langTheField
+ * @global type $langFormErrors
+ * @global type $charset
+ * @global type $urlServer
+ * @global type $langPollEmailUsed
+ * @global type $langPollParticipateConfirmation
+ */
 function submitPoll() {
     global $tool_content, $course_code, $uid, $langPollSubmitted, $langBack,
            $langUsage, $langTheField, $langFormErrors, $charset, $urlServer,
-           $langPollEmailUsed, $course_id;
+           $langPollEmailUsed, $langPollParticipateConfirmation;
     
     $pid = intval($_POST['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
@@ -250,21 +292,13 @@ function submitPoll() {
         $CreationDate = date("Y-m-d H:i");
         $answer = $_POST['answer'];
         if ($uid) {
-            $eventData = new stdClass();
-            $eventData->courseId = $course_id;
-            $eventData->uid = $uid;
-            $eventData->activityType = ViewingEvent::QUESTIONNAIRE_ACTIVITY;
-            $eventData->module = MODULE_ID_QUESTIONNAIRE;
-            $eventData->resource = intval($pid);
-            ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
-            
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid)->lastInsertID;
         } else {
             require_once 'include/sendMail.inc.php';
             $participantEmail = $_POST['participantEmail'];
             $verification_code = randomkeys(255);
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, $participantEmail, 0, $verification_code)->lastInsertID;
-            $subject = "Επιβεβαίωση Συμμετοχής σε Ερωτηματολόγιο";
+            $subject = $langPollParticipateConfirmation;
             $body_html = "
              <!-- Header Section -->
             <div id='mail-header'>

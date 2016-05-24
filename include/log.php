@@ -90,7 +90,7 @@ class Log {
         global $tool_content, $modules;
         global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
             $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo,
-            $langModifyInfo, $langAbuseReport;
+            $langModifyInfo, $langAbuseReport, $langWall;
 
         $q1 = $q2 = $q3 = $q4 = '';
 
@@ -126,77 +126,79 @@ class Log {
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
                                 ORDER BY ts DESC");
+        $users_login_data = "";
         if ($num_of_logs > 0) {
             if ($course_id > 0) {
-                $tool_content .= "<div class='alert alert-info'>$langCourse: " . q(course_id_to_title($course_id)) . "</div>";
+                $users_login_data .= "<div class='alert alert-info'>$langCourse: " . q(course_id_to_title($course_id)) . "</div>";
             }
             if ($module_id > 0) {
                 if ($module_id == MODULE_ID_USERS) {
-                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAdminUsers . "</div>";
+                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $langAdminUsers . "</div>";
                 } elseif ($module_id == MODULE_ID_TOOLADMIN) {
-                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langExternalLinks . "</div>";
+                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $langExternalLinks . "</div>";
                 } elseif ($module_id == MODULE_ID_ABUSE_REPORT) {
-                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAbuseReport . "</div>";
+                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $langAbuseReport . "</div>";
                 } else {
-                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
+                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
                 }
             }
-            $tool_content .= "<table id = 'log_results_table' class='table-default'>";
-            $tool_content .= "<thead>";
+            $users_login_data .= "<table id = 'log_results_table' class='table-default'>";
+            $users_login_data .= "<thead>";
             // log header
-            $tool_content .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
+            $users_login_data .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
             if ($course_id == -1) {
-                $tool_content .= "<th>$langCourse</th>";
+                $users_login_data .= "<th>$langCourse</th>";
             }
             if ($module_id == -1) {
-                $tool_content .= "<th>$langModule</th>";
+                $users_login_data .= "<th>$langModule</th>";
             }
-            $tool_content .= "<th>$langAction</th><th>$langDetail</th>";
-            $tool_content .= "</tr>";
-            $tool_content .= "</thead>";
-            $tool_content .= "<tbody>";
+            $users_login_data .= "<th>$langAction</th><th>$langDetail</th>";
+            $users_login_data .= "</tr>";
+            $users_login_data .= "</thead>";
+            $users_login_data .= "<tbody>";
             // display logs
             foreach ($sql as $r) {
-                $tool_content .= "<tr>";
-                $tool_content .= "<td>" . nice_format($r->ts, true) . "</td>";
+                $users_login_data .= "<tr>";
+                $users_login_data .= "<td>" . nice_format($r->ts, true) . "</td>";
                 if (($r->user_id == 0) or ($logtype == LOG_DELETE_USER)) { // login failures or delete user
-                    $tool_content .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
+                    $users_login_data .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
                 } else {
-                    $tool_content .= "<td>" . display_user($r->user_id, false, false) . "</td>";
+                    $users_login_data .= "<td>" . display_user($r->user_id, false, false) . "</td>";
                 }
                 if ($course_id == -1) { // all courses
-                    $tool_content .= "<td>" .  q(course_id_to_title($r->course_id)) . "</td>";
+                    $users_login_data .= "<td>" .  q(course_id_to_title($r->course_id)) . "</td>";
                 }
                 if ($module_id == -1) { // all modules
                     $mid = $r->module_id;
                     if ($mid == MODULE_ID_USERS) {
-                        $tool_content .= "<td>" . $langAdminUsers . "</td>";
+                        $users_login_data .= "<td>" . $langAdminUsers . "</td>";
                     } elseif ($mid == MODULE_ID_TOOLADMIN) {
-                        $tool_content .= "<td>" . $langExternalLinks . "</td>";
+                        $users_login_data .= "<td>" . $langExternalLinks . "</td>";
                     } elseif ($mid == MODULE_ID_SETTINGS) {
-                        $tool_content .= "<td>" . $langCourseInfo . "</td>";
+                        $users_login_data .= "<td>" . $langCourseInfo . "</td>";
                     } elseif ($mid == MODULE_ID_ABUSE_REPORT) {
-                        $tool_content .= "<td>" . $langAbuseReport . "</td>";
+                        $users_login_data .= "<td>" . $langAbuseReport . "</td>";
                     } elseif ($mid == MODULE_ID_COURSEINFO) {
-                        $tool_content .= "<td>" . $langModifyInfo . "</td>";
+                        $users_login_data .= "<td>" . $langModifyInfo . "</td>";
                     } else {
-                        $tool_content .= "<td>" . $modules[$mid]['title'] . "</td>";
+                        $users_login_data .= "<td>" . $modules[$mid]['title'] . "</td>";
                     }
                 }
-                $tool_content .= "<td>" . $this->get_action_names($r->action_type) . "</td>";
+                $users_login_data .= "<td>" . $this->get_action_names($r->action_type) . "</td>";
                 if ($course_id == 0 or $module_id == 0) { // system logging
-                    $tool_content .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
+                    $users_login_data .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
                 } else { // course logging
-                    $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
+                    $users_login_data .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
                 }
-                $tool_content .= "</tr>";
+                $users_login_data .= "</tr>";
             }
-            $tool_content .= "</tbody>";
-            $tool_content .= "</table>";
+            $users_login_data .= "</tbody>";
+            $users_login_data .= "</table>";
         } else {
-            $tool_content .= "<div class='alert alert-warning'>$langNoUsersLog</div>";
+            $users_login_data .= "<div class='alert alert-warning'>$langNoUsersLog</div>";
         }
-        return;
+        $tool_content .= $users_login_data;
+        return $users_login_data;
     }
 
     /**
@@ -275,11 +277,17 @@ class Log {
                 break;
             case MODULE_ID_ABUSE_REPORT: $content = $this->abuse_report_action_details($details);
                 break;
+            case MODULE_ID_WALL: $content = $this->wall_action_details($details);
+                break;
             case MODULE_ID_COURSEINFO: $content = $this->modify_course_action_details($details);
                 break;
             case MODULE_ID_SETTINGS: $content = $this->modify_course_action_details($details); // <-- for backward compatibility only !!!
                 break;
             case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
+                break;
+            case MODULE_ID_GRADEBOOK: $content = $this->gradebook_action_details($details);
+                break;
+            case MODULE_ID_ATTENDANCE: $content = $this->attendance_action_details($details);
                 break;
             default: $content = $langUnknownModule;
                 break;
@@ -891,7 +899,7 @@ class Log {
 
         global $langcreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
                $langComment, $langForumPost, $langAbuseResourceType, $langContent, $langAbuseReportStatus,
-               $langAbuseReportOpen, $langAbuseReportClosed, $langLinks;
+               $langAbuseReportOpen, $langAbuseReportClosed, $langLinks, $langWallPost; 
 
         $reports_cats = array('rudeness' => $langRudeness,
                               'spam' => $langSpam,
@@ -899,7 +907,8 @@ class Log {
 
         $resource_types = array('comment' => $langComment,
                                 'forum_post' => $langForumPost,
-                                'link' => $langLinks);
+                                'link' => $langLinks,
+                                'wallpost' => $langWallPost);
 
         $details = unserialize($details);
 
@@ -917,10 +926,286 @@ class Log {
         } elseif ($details['status'] == 0) {
             $content.= "$langAbuseReportStatus: &laquo".$langAbuseReportClosed."&raquo";
         }
+        
+        return $content;
+    }
+    
+    /**
+     * display action details for social wall
+     * @global type $langContent
+     * @global type $langWallVideoLink
+     * @param type $details
+     * @return string
+     */
+    private function wall_action_details($details) {
+        global $langContent, $langWallYoutubeVideoLink;
+        
+        $details = unserialize($details);
+        
+        $content = '';
+        
+        if (!empty($details['content'])) {
+            $content .= "$langContent: &laquo".q($details['content'])."&raquo<br/>";
+        }
+        if (!empty($details['youtube'])) {
+            $content .= "$langWallYoutubeVideoLink: &laquo".q($details['youtube'])."&raquo<br/>";
+        }
 
         return $content;
     }
-
+    
+    /**
+     * 
+     * @brief display action details in gradebooks    
+     * @global type $langTitle
+     * @global type $langType
+     * @global type $langDate
+     * @global type $langStart
+     * @global type $langEnd
+     * @global type $langDelete
+     * @global type $langGradebookWeight
+     * @global type $langVisibility
+     * @global type $langGradebookRange
+     * @global type $langOfGradebookActivity
+     * @global type $langOfGradebookUser
+     * @global type $langOfGradebookUsers
+     * @global type $langAdd
+     * @global type $langDelete
+     * @global type $langGroups
+     * @global type $langUsers
+     * @global type $langUser
+     * @global type $langGradebookDateOutOf
+     * @global type $langGradebookDateIn
+     * @global type $langModify
+     * @global type $langOfGradebookVisibility
+     * @global type $langOfUsers
+     * @global type $langAction
+     * @global type $langGradebookDateRange
+     * @global type $langGradebookRegistrationDateRange
+     * @global type $langGradebookLabs
+     * @global type $langGradebookOral
+     * @global type $langGradebookProgress
+     * @global type $langGradebookOtherType
+     * @global type $langGradebookExams
+     * @global type $langVisibleVals
+     * @global type $langRefreshList
+     * @param type $details
+     * @return string
+     */
+    private function gradebook_action_details($details){
+        global $langTitle, $langType, $langDate, $langStart, $langEnd, $langDelete, $langGradebookWeight, $langVisibility, $langGradebookRange, $langOfGradebookActivity, 
+                $langOfGradebookUser, $langOfGradebookUsers, $langAdd, $langDelete, $langGroups, $langUsers, $langUser, $langGradebookDateOutOf, $langGradebookDateIn,
+                $langModify, $langOfGradebookVisibility, $langOfUsers, $langAction, $langGradebookDateRange, $langGradebookRegistrationDateRange,
+                $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType, $langGradebookExams, $langVisibleVals, $langRefreshList;
+        
+        $langActivityType = array('', $langGradebookOral, $langGradebookLabs, $langGradebookProgress, $langGradebookExams, $langGradebookOtherType);
+        
+        $d = unserialize($details);        
+        $content = "";
+        $separator = function() use(&$content) {return empty($content)? "":", ";};
+        //Gradebook basic info
+        if(isset($d['title'])){
+            $content .= "$langTitle: {$d['title']}";
+        }
+        if(isset($d['gradebook_range'])){
+            $content .= $separator()."$langGradebookRange: ".$d['gradebook_range'];
+        }
+        if(isset($d['start_date'])){
+            $content .= $separator()."$langStart: ".$d['start_date'];
+        }
+        if(isset($d['end_date'])){
+            $content .= $separator()."$langEnd: ".$d['end_date'];
+        }
+        
+        if(isset($d['action'])){
+            $content .= $separator()."$langAction: ";
+            if($d['action'] == 'change gradebook visibility'){
+                $content .= "$langModify $langOfGradebookVisibility";
+                $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visibility']]}";                
+            }
+            //Gradebook activities
+            elseif($d['action'] == 'add activity' or $d['action'] == 'modify activity'){
+                $content .= ($d['action'] == 'add activity')? "$langAdd $langOfGradebookActivity":"$langModify $langOfGradebookActivity";
+                if(isset($d['activity_type']) && isset($langActivityType[$d['activity_type']])){
+                    $content .= $separator()."$langType: {$langActivityType[$d['activity_type']]}";
+                }
+                if(isset($d['activity_title'])){
+                    $content .= $separator()."$langTitle:</label> {$d['activity_title']}";
+                }
+                if(isset($d['activity_date'])){
+                    $content .= $separator()."$langDate: {$d['activity_date']}";
+                }
+                if(isset($d['weight'])){
+                    $content .= $separator()."$langGradebookWeight: {$d['weight']}";
+                }
+                if(isset($d['visible'])){
+                    $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visible']]}";
+                }
+            }
+            elseif($d['action'] == 'delete activity'){
+                $content .= "$langDelete $langOfGradebookActivity";
+                if(isset($d['activity_title'])){
+                    $content .= $separator()."$langTitle: {$d['activity_title']}";
+                }
+            }
+            //Gradebook users
+            elseif($d['action'] == 'add users'){
+                $content .= "$langAdd $langOfUsers";
+                if(isset($d['user_count'])){
+                    $content .= $separator()."$langUsers: {$d['user_count']}";
+                }                
+            }
+            elseif($d['action'] == 'delete users'){
+                $content .= ($d['action'] == 'delete user')? "$langDelete $langOfGradebookUser":"$langDelete $langOfGradebookUsers";
+                if(isset($d['user_name'])){
+                    $content .= $separator()."$langUser: {$d['user_name']}";
+                }
+                elseif(isset($d['user_count'])){
+                    $content .= $separator()."$langUsers: {$d['user_count']}";
+                }
+                
+            }
+            elseif($d['action'] == 'reset users'){
+                $content .= "$langRefreshList";
+                if(isset($d['group_count'])){
+                    $content .= $separator()."$langGroups: {$d['group_count']}";
+                }
+                elseif(isset($d['user_count'])){
+                    $content .= $separator()."$langUsers: {$d['user_count']}";
+                }
+            }
+            elseif($d['action'] == 'add users in date range' || $d['action'] == 'delete users out of date range'){
+                $content .= ($d['action'] == 'add users in date range')? "$langAdd $langOfUsers $langGradebookDateIn $langGradebookDateRange":"$langDelete $langOfUsers $langGradebookDateOutOf $langGradebookDateRange";
+                if(isset($d['user_count'])){
+                    $content .= $separator()."$langUsers: {$d['user_count']}";
+                }
+                if(isset($d['users_start']) && $d['users_end']){
+                    $content .= $separator()."$langGradebookRegistrationDateRange: {$d['users_start']} - {$d['users_end']}";
+                }
+                
+            }
+        }
+        
+        return $content;
+    }
+    
+   /**
+    * @brief display action details in attendance module
+    * @global type $langTitle
+    * @global type $langDate
+    * @global type $langStart
+    * @global type $langEnd
+    * @global type $langAttendanceLimit
+    * @global type $langVisibility
+    * @global type $langOfGradebookActivity
+    * @global type $langOfGradebookUser
+    * @global type $langOfGradebookUsers
+    * @global type $langAdd
+    * @global type $langDelete
+    * @global type $langGroups
+    * @global type $langUsers
+    * @global type $langUser
+    * @global type $langGradebookDateOutOf
+    * @global type $langGradebookDateIn
+    * @global type $langOfGradebookVisibility
+    * @global type $langAction
+    * @global type $langGradebookDateRange
+    * @global type $langGradebookRegistrationDateRange
+    * @global type $langModify
+    * @global type $langVisibleVals
+    * @global type $langRefreshList
+    * @param type $details
+    * @return string
+    */
+    private function attendance_action_details($details){
+        global $langTitle, $langDate, $langStart, $langEnd, $langAttendanceLimit, $langVisibility, $langOfGradebookActivity, 
+                $langOfGradebookUser, $langOfGradebookUsers, $langAdd, $langDelete, $langGroups, $langUsers, $langUser, $langGradebookDateOutOf, 
+                $langGradebookDateIn, $langOfGradebookVisibility, $langAction, $langGradebookDateRange, $langGradebookRegistrationDateRange,
+                $langModify, $langVisibleVals, $langRefreshList, $langOfUsers;
+        
+        $d = unserialize($details);
+        $content = "";
+        $separator = function() use(&$content) {return empty($content)? "":", ";};
+        //Attendance basic info
+        if(isset($d['title'])){
+            $content .= "$langTitle: {$d['title']}";
+        }
+        if(isset($d['attendance_limit'])){
+            $content .= $separator()."$langAttendanceLimit: ".$d['attendance_limit'];
+        }
+        if(isset($d['start_date'])){
+            $content .= $separator()."$langStart: ".$d['start_date'];
+        }
+        if(isset($d['end_date'])){
+            $content .= $separator()."$langEnd: ".$d['end_date'];
+        }
+        if(isset($d['action'])){
+            $content .= $separator()."$langAction: ";
+            if($d['action'] == 'change gradebook visibility'){
+                $content .= "$langModify $langOfGradebookVisibility";
+                $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visibility']]}";
+                
+            }
+            //Attendance activities
+            elseif($d['action'] == 'add activity' or $d['action'] == 'modify activity'){
+                $content .= ($d['action'] == 'add activity')? "$langAdd $langOfGradebookActivity":"$langModify $langOfGradebookActivity";
+                if(isset($d['activity_title'])){
+                    $content .= $separator()."$langTitle:</label> {$d['activity_title']}";
+                }
+                if(isset($d['activity_date'])){
+                    $content .= $separator()."$langDate: {$d['activity_date']}";
+                }
+                if(isset($d['visible'])){
+                    $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visible']]}";
+                }
+            }
+            elseif($d['action'] == 'delete activity'){             
+                $content .= "$langDelete $langOfGradebookActivity";
+                if(isset($d['activity_title'])){
+                    $content .= $separator()."$langTitle: {$d['activity_title']}";
+                }
+            }
+            //Attendance users
+            elseif($d['action'] == 'add users'){
+                $content .= "$langAdd $langOfUsers";
+                if(isset($d['user_count'])){
+                    $content .= $separator()."$langUsers: {$d['user_count']}";
+                }
+                
+            }
+            elseif($d['action'] == 'delete user'){
+                $content .= ($d['action'] == 'delete user')? "$langDelete $langOfGradebookUser":"$langDelete $langOfGradebookUsers";
+                if(isset($d['user_name'])){
+                    $content .= $separator()."$langUser: {$d['user_name']}";
+                }
+                elseif(isset($d['user_count'])){
+                    $content .= $separator()."$langUsers: {$d['user_count']}";
+                }
+                
+            }
+            elseif($d['action'] == 'reset users'){
+                $content .= "$langRefreshList";
+                if(isset($d['group_count'])){
+                    $content .= $separator()."$langGroups: {$d['group_count']}";
+                }
+                elseif(isset($d['user_count'])){
+                    $content .= $separator()."$langUsers: {$d['user_count']}";
+                }
+            }
+            elseif($d['action'] == 'add users in date range' || $d['action'] == 'delete users in date range'){
+                $content .= ($d['action'] == 'add users in date range')? "$langAdd $langOfUsers $langGradebookDateIn $langGradebookDateRange":"$langDelete $langOfUsers $langGradebookDateOutOf $langGradebookDateRange";
+                if(isset($d['user_count'])){
+                    $content .= $separator()."$langUsers: {$d['user_count']}";
+                }
+                if(isset($d['users_start']) && $d['users_end']){
+                    $content .= $separator()."$langGradebookRegistrationDateRange: {$d['users_start']} - {$d['users_end']}";
+                }
+                
+            }
+        }        
+        return $content;
+    }
+    
     /**
      * @global type $langInsert
      * @global type $langModify

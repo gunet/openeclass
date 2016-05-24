@@ -133,13 +133,11 @@ function check_auth_configured($auth_id) {
 
 function count_auth_users($auth) {
     global $auth_ids;
+    
     $auth = intval($auth);
-
-    if ($auth === 1) {
-        for ($i = 2; $i <= count($auth_ids); $i++) {
-            $extra = " AND password != '{$auth_ids[$i]}'";
-        }
-        $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user WHERE password != '{$auth_ids[1]}' $extra");
+    if ($auth === 1) {        
+        $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user 
+                                                    WHERE password NOT IN (SELECT auth_name FROM auth WHERE id > 1)");
     } else {
         $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user WHERE password = '" . $auth_ids[$auth] . "'");
     }
@@ -682,7 +680,7 @@ function process_login() {
  Yahoo, Live accounts)
 * ************************************************************** */
 
-function hybridauth_login() {
+function hybridauth_login($provider=null) {
     global $surname, $givenname, $email, $status, $is_admin, $language,
         $langInvalidId, $langAccountInactive1, $langAccountInactive2,
         $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
@@ -702,7 +700,11 @@ function hybridauth_login() {
 
     // if user select a provider to login with then include hybridauth config
     // and main class, try to authenticate, finally redirect to profile
-    if (isset($_GET['provider'])) {
+    if (!$provider and isset($_GET['provider'])) {
+        $provider = $_GET['provider'];
+    }
+
+    if ($provider) {
         try {
             $hybridauth = new Hybrid_Auth($config);
             
@@ -741,7 +743,7 @@ function hybridauth_login() {
         
             return false;
         }
-    } //endif( isset( $_GET["provider"] ) && $_GET["provider"] )
+    }
     
     
     // from here on an alternative version of proccess_login() runs where
@@ -990,6 +992,12 @@ function alt_login($user_info_object, $uname, $pass) {
                 $_SESSION['surname'] = $user_info_object->surname;
                 $_SESSION['givenname'] = $user_info_object->givenname;
             }
+            if (!empty($_SESSION['auth_user_info']['studentid']) and
+                $user_info_object->am != $_SESSION['auth_user_info']['studentid']) {
+                Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
+                    $_SESSION['auth_user_info']['studentid'],
+                    $user_info_object->id);
+            }
             $_SESSION['status'] = $user_info_object->status;
             $_SESSION['email'] = $user_info_object->email;
             $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_object->lang;
@@ -1043,6 +1051,12 @@ function shib_cas_login($type) {
         foreach ($_SESSION['cas_attributes'] as $name => $value) {
             $attributes[strtolower($name)] = $value;
         }
+        unset($_SESSION['cas_attributes']);
+    } elseif (isset($_SESSION['shib_attributes'])) {
+        foreach ($_SESSION['shib_attributes'] as $name => $value) {
+            $attributes[strtolower($name)] = $value;
+        }
+        unset($_SESSION['shib_attributes']);
     }
 
     // user is authenticated, now let's see if he is registered also in db
@@ -1051,7 +1065,7 @@ function shib_cas_login($type) {
     } else {
         $sqlLogin = "COLLATE utf8_bin = ?s";
     }
-    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, lang, verified_mail
+    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, am, lang, verified_mail
 						FROM user WHERE username $sqlLogin", $uname);
 
     if ($info) {
@@ -1095,9 +1109,13 @@ function shib_cas_login($type) {
             Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s,
                                            status = ?d WHERE id = ?d",
                                         $surname, $givenname, $email, $status, $info->id);
+            if (!empty($am) and $info->am != $am) {
+                Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
+                    $am, $info->id);
+            }
 
             $userObj->refresh($info->id, $options['departments']);
-            user_hook($_SESSION['uid']);
+            user_hook($info->id);
 
             // check for admin privileges
             $admin_rights = get_admin_rights($info->id);
@@ -1116,11 +1134,7 @@ function shib_cas_login($type) {
                 $is_departmentmanage_user = 1;
             }
             $_SESSION['uid'] = $info->id;
-            if (isset($_SESSION['langswitch'])) {
-                $language = $_SESSION['langswitch'];
-            } else {
-                $language = $info->lang;
-            }
+            $language = $_SESSION['langswitch'] = $info->lang;
         }
     } elseif ($autoregister and !(get_config('am_required') and empty($am))) {
         // if user not found and autoregister enabled, create user
@@ -1153,6 +1167,9 @@ function shib_cas_login($type) {
                         whitelist = ''",
                 $surname, $givenname, $type, $uname, $email, $status,
                 $language, $options['am'], $verified_mail)->lastInsertID;
+        // update personal calendar info table
+        // we don't check if trigger exists since it requires `super` privilege
+        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $_SESSION['uid']);
         $userObj = new User();
         $userObj->refresh($_SESSION['uid'], $options['departments']);
         user_hook($_SESSION['uid']);
@@ -1304,7 +1321,7 @@ function update_shibboleth_endpoint($settings) {
 
     $path = $webDir . '/secure';
     if (!file_exists($path)) {
-        if (!mkdir($path, 0700, true)) {
+        if (!make_dir($path)) {
             Session::Messages("Error: mkdir($path)", 'alert-danger');
             return false;
         }
@@ -1322,6 +1339,7 @@ session_start();
         }
     }
     $filecontents .= '
+$_SESSION["shib_attributes"] = $_SERVER;
 if (isset($_GET["reg"])) {
     header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["p"]? "?p=1": ""));
 } else {
@@ -1347,4 +1365,26 @@ if (isset($_GET["reg"])) {
         Session::Messages("Warning: unable to delete obsolete $indexregfile", 'alert-warning');
     }
     return true;
+}
+
+function get_shibboleth_vars($file) {
+    $shib_vars = array(
+        'uname' => '',
+        'email' => '',
+        'cn' => '',
+        'surname' => '',
+        'givenname' => '',
+        'studentid' => '');
+
+    if (is_readable($file)) {
+        $shib_index = file_get_contents($file);
+        while (preg_match('/\[[^]]*shib_(\w+)[^=]+=\s*@?([^;]+)\s*;/', $shib_index, $matches)) {
+            $shib_vars[$matches[1]] = $matches[2];
+            $shib_index = substr($shib_index, strlen($matches[0]));
+        }
+    }
+    if (isset($shib_vars['shib_nom']) and !isset($shib_vars['shib_cn'])) {
+        $shib_vars['shib_cn'] = $shib_vars['shib_nom'];
+    }
+    return $shib_vars;
 }
