@@ -40,7 +40,7 @@ require_once 'upgrade/functions.php';
 
 set_time_limit(0);
 
-if (php_sapi_name() == 'cli' and ! isset($_SERVER['REMOTE_ADDR'])) {
+if (php_sapi_name() == 'cli' and !isset($_SERVER['REMOTE_ADDR'])) {    
     $command_line = true;
 } else {
     $command_line = false;
