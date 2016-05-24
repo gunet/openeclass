@@ -488,7 +488,7 @@ function display_certificate_activities($certificate_id) {
         		$type = "Likes στα forum posts";
             $title = "Ratings";
         	}
-          if($details->activity_type == "wiki"){
+          if($details->activity_type == WikiEvent::ACTIVITY){
         		$type = "Aριθμός δημιουργημένων σελίδων στο wiki";
             $title = "Wiki";
         	}

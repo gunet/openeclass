@@ -32,10 +32,20 @@ class WikiEvent extends BasicEvent {
         parent::__construct();
         
         $handle = function($data) {
-            $this->setEventData($data);
+            $threshold = 0;
             
-            // TODO: fetch data from DB: SELECT COUNT WIKI PAGES FOR USER $data->uid
-            $this->context['threshold'] = 7;
+            // fetch wiki pages count from DB and use it as threshold
+            $subm = Database::get()->querySingle("SELECT count(wp.id) as count "
+                    . " FROM wiki_pages wp "
+                    . " JOIN wiki_properties w ON (w.id = wp.wiki_id) "
+                    . " WHERE owner_id = ?d "
+                    . " AND w.course_id = ?d", $data->uid, $data->courseId);
+            if ($subm && floatval($subm->count) > 0) {
+                $threshold = floatval($subm->count);
+            }
+            
+            $this->setEventData($data);
+            $this->context['threshold'] = $threshold;
             $this->emit(parent::PREPARERULES);
         };
         

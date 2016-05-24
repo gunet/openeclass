@@ -29,6 +29,7 @@ require_once 'include/lib/textLib.inc.php';
 require_once 'functions.php';
 require_once 'CommentEvent.php';
 require_once 'BlogEvent.php';
+require_once 'WikiEvent.php';
 
 //$toolName = $langAttendance;
 $toolName = "Πιστοποιήσεις";
@@ -403,7 +404,7 @@ if ($is_editor) {
             $type == 39;
             $activity = "forum likes";
           }
-          if($type == 26){
+          if($type == MODULE_ID_WIKI){
             $activity = "wiki";
           }
           Database::get()->query("INSERT INTO certificate_criterion
@@ -519,7 +520,7 @@ if ($is_editor) {
         certificate_display_available_Que($certificate_id);
         $display = FALSE;
     }elseif (isset($_GET['addActivityWi'])) { // display available exercises
-        add_certificate_other_activity_only_value($certificate_id, 26);
+        add_certificate_other_activity_only_value($certificate_id, MODULE_ID_WIKI);
         $display = FALSE;
     }
 
