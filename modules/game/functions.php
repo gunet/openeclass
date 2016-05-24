@@ -459,7 +459,7 @@ function display_certificate_activities($certificate_id) {
             }
         	}
 
-          if($details->activity_type == "blog"){
+          if($details->activity_type == BlogEvent::ACTIVITY){
         		$type = "Blog";
             $title = "Πλήθος posts";
         	}

@@ -32,10 +32,19 @@ class BlogEvent extends BasicEvent {
         parent::__construct();
         
         $handle = function($data) {
-            $this->setEventData($data);
+            $threshold = 0;
             
-            // TODO: fetch data from DB: SELECT COUNT BLOG POSTS FOR USER $data->uid
-            $this->context['threshold'] = 12;
+            // fetch blog posts count from DB and use it as threshold
+            $subm = Database::get()->querySingle("SELECT count(id) AS count "
+                    . " FROM blog_post "
+                    . " WHERE user_id = ?d "
+                    . " AND course_id = ?d ", $data->uid, $data->courseId);
+            if ($subm && floatval($subm->count) > 0) {
+                $threshold = floatval($subm->count);
+            }
+            
+            $this->setEventData($data);
+            $this->context['threshold'] = $threshold;
             $this->emit(parent::PREPARERULES);
         };
         

@@ -28,6 +28,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'functions.php';
 require_once 'CommentEvent.php';
+require_once 'BlogEvent.php';
 
 //$toolName = $langAttendance;
 $toolName = "Πιστοποιήσεις";
@@ -382,7 +383,7 @@ if ($is_editor) {
 
         if(isset($_POST['type'])){
           $type = $_POST['type'];
-          if($type == 37){
+          if($type == MODULE_ID_BLOG){
             $activity = "blog";
           }
           if($type == MODULE_ID_COMMENTS){
@@ -482,7 +483,7 @@ if ($is_editor) {
         $display = FALSE;
     }elseif (isset($_GET['addActivityBlog'])) { // display available exercises
         //certificate_display_available_Blog($certificate_id);
-        add_certificate_other_activity_only_value($certificate_id, 37);
+        add_certificate_other_activity_only_value($certificate_id, MODULE_ID_BLOG);
         $display = FALSE;
     }elseif (isset($_GET['addActivityCom'])) { // display available exercises
         add_certificate_other_activity_only_value($certificate_id, MODULE_ID_COMMENTS);
