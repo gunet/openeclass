@@ -412,12 +412,12 @@ if ($is_editor) {
             $activity = "wiki";
           }
           Database::get()->query("INSERT INTO certificate_criterion
-                                      SET certificate = ?d, activity_type = ?s, module = ?s, `operator` = ?s, threshold = ?d",
+                                      SET certificate = ?d, activity_type = ?s, module = ?s, `operator` = ?s, threshold = ?f",
                                   $certificate_id, $activity, $type, $operator, $threshold);
         }elseif ($_POST['id']) {
             //update
             $id = $_POST['id'];
-            Database::get()->query("UPDATE certificate_criterion SET `operator` = ?s, threshold = ?d
+            Database::get()->query("UPDATE certificate_criterion SET `operator` = ?s, threshold = ?f
                                         WHERE id = ?d", $operator, $threshold, $id);
             Session::Messages("$langGradebookEdit", "alert-success");
             redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id");

@@ -505,7 +505,7 @@ function display_certificate_activities($certificate_id) {
             if($details->operator=='gt') $tool_content .=" > ";
             if($details->operator=='let') $tool_content .=" <= ";
             if($details->operator=='get') $tool_content .=" >= ";
-            if($details->operator=='nee') $tool_content .=" != ";
+            if($details->operator=='neq') $tool_content .=" != ";
 
 
             $tool_content .= " $details->threshold </td>";
@@ -942,13 +942,13 @@ function add_certificate_other_activity($certificate_id) {
                             <label for='actTitle' class='col-sm-2 control-label'>Τελεστής</label>
                             <div class='col-sm-10'>
                                 <select class='form-control' name='operator'>
-                                    <option value='eq' ".((!isset($operator))?'selected="selected"':"")."> </option>
+                                    <option value='' ".((!isset($operator))?'selected="selected"':"")."> </option>
                                     <option value='eq' ".(($operator=='eq')?'selected="selected"':"").">=</option>
                                     <option value='lt' ".(($operator=='lt')?'selected="selected"':"")."><</option>
                                     <option value='gt' ".(($operator=='gt')?'selected="selected"':"").">></option>
                                     <option value='let' ".(($operator=='let')?'selected="selected"':"")."><=</option>
                                     <option value='get' ".(($operator=='get')?'selected="selected"':"").">>=</option>
-                                    <option value='nee' ".(($operator=='nee')?'selected="selected"':"").">!=</option>
+                                    <option value='neq' ".(($operator=='neq')?'selected="selected"':"").">!=</option>
 
                                 </select>
                             </div>
@@ -1004,13 +1004,13 @@ function add_certificate_other_activity_only_value($certificate_id, $type) {
                             <label for='actTitle' class='col-sm-2 control-label'>Τελεστής</label>
                             <div class='col-sm-10'>
                                 <select class='form-control' name='operator'>
-                                    <option value='eq'> </option>
-                                    <option value='eq'>>=</option>
+                                    <option value=''> </option>
+                                    <option value='eq'>=</option>
                                     <option value='lt' ><</option>
                                     <option value='gt' >></option>
                                     <option value='let'><=</option>
                                     <option value='get'>>=</option>
-                                    <option value='nee'>!=</option>
+                                    <option value='neq'>!=</option>
 
                                 </select>
                             </div>
