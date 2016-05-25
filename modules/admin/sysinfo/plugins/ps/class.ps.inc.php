@@ -82,7 +82,7 @@ class PS extends PSI_Plugin
                 }
             } else {
                 CommonFunctions::executeProgram("ps", "axo pid,ppid,pmem,args", $buffer, PSI_DEBUG);
-                if (((PSI_OS == 'Linux') || (PSI_OS == 'Android')) && (!preg_match("/^[^\n]+\n.+/", $buffer))) { //alternative method if no data
+                if (((PSI_OS == 'Linux') || (PSI_OS == 'Android')) && (!preg_match("/^[^\n]+\n\s*\d+\s+\d+\s+[\d\.]+\s+.+/", $buffer))) { //alternative method if no data
                     if (CommonFunctions::rfts('/proc/meminfo', $mbuf)) {
                         $bufe = preg_split("/\n/", $mbuf, -1, PREG_SPLIT_NO_EMPTY);
                         $totalmem = 0;
@@ -167,6 +167,7 @@ class PS extends PSI_Plugin
         if (empty($this->_filecontent)) {
             return;
         }
+        $items = array();
         foreach ($this->_filecontent as $roworig) {
             $row = preg_split("/[\s]+/", trim($roworig), 4);
             if (count($row) != 4) {
@@ -236,7 +237,7 @@ class PS extends PSI_Plugin
                 $xmlnode->addAttribute('MemoryUsage', $value[2]);
                 $xmlnode->addAttribute('Name', $value[3]);
                 if (PSI_OS !== 'WINNT') {
-                    if ($parentid === 1){
+                    if ($parentid === 1) {
                         $xmlnode->addAttribute('Expanded', 0);
                     }
                     if (defined('PSI_PLUGIN_PS_SHOW_KTHREADD_EXPANDED') && (PSI_PLUGIN_PS_SHOW_KTHREADD_EXPANDED === false) && ($value[3] === "[kthreadd]")) {
