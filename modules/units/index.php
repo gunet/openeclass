@@ -53,6 +53,25 @@ load_js('tools.js');
 load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox(true);
 
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+
+    if (isset($_POST['toReorder'])){
+
+        if ($_POST['newIndex'] < $_POST['oldIndex']){
+          Database::get()->query("UPDATE `unit_resources` SET `order`=`order` + 1 WHERE `order` >= ?d AND `order` < ?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+        }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
+          Database::get()->query("UPDATE `unit_resources` SET `order`=`order` - 1 WHERE `order` <= ?d AND `order` > ?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+        }
+
+        Database::get()->query("UPDATE `unit_resources` SET `order`=?d WHERE `id`=?d ", $_POST['newIndex'] + 1, $_POST['toReorder']);
+        
+    }
+
+    echo
+
+    exit();
+}
+
 if (isset($_REQUEST['edit_submit'])) {
     units_set_maxorder();
     $tool_content .= handle_unit_info_edit();

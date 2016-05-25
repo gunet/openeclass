@@ -134,8 +134,21 @@ function show_resources($unit_id) {
         $head_content .= "<script>
         $(document).ready(function(){
             Sortable.create(unitResources,{
-                handle: 'fa-arrows',
-                animation: 150
+                animation: 150,
+                onEnd: function (evt) {
+                var itemEl = $(evt.item);
+                var idReorder = itemEl.attr('data-id');
+
+                $.ajax({
+                  type: 'post',
+                  dataType: 'text',
+                  data: { 
+                          toReorder: idReorder,
+                          oldIndex: evt.oldIndex,
+                          newIndex: evt.newIndex
+                        }
+                    });
+                }
             });
         });
         $(function(){
@@ -319,7 +332,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'=>
           <td width='1'>" . icon($image, '') . "</td>
           <td class='text-left'>$download_hidden_link$link$comment</td>" .
             actions('doc', $resource_id, $status) .
@@ -339,7 +352,7 @@ function show_text($comments, $resource_id, $visibility) {
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
     $tool_content .= "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td colspan='2'>$comments</td>" .
             actions('text', $resource_id, $visibility) .
             "
@@ -429,7 +442,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         $comment_box = '';
     }
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</a></td>
           <td>$link$title</a>$comment_box</td>" .
             actions('lp', $resource_id, $status) . '
@@ -495,7 +508,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     }
     $class_vis = ($visibility == 0 or !$module_visible or $status == 'del') ? ' class="not_visible"' : ' ';
     $tool_content .= "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>".icon($imagelink)."</td>
           <td>$videolink $comment_box</td>" . actions('video', $resource_id, $visibility) . "
         </tr>";
@@ -528,7 +541,7 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
                  ' class="not_visible"': ' ';
     $vlcat = Database::get()->querySingle("SELECT * FROM video_category WHERE id = ?d AND course_id = ?d", $videolinkcat_id, $course_id);
     $content = "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>".icon('fa-folder-o')."</td>
           <td>" . q($title);
 
@@ -624,7 +637,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
         $comment_box = '';
     }
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td>$exlink $comment_box</td>" .
             actions('lp', $resource_id, $visibility) . '
@@ -687,7 +700,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
           <td>$exlink $comment_box</td>" . actions('lp', $resource_id, $visibility) . "
         </tr>";
@@ -740,7 +753,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td>$forumlink $comment_box</td>" .
             actions('forum', $resource_id, $visibility) . '
@@ -795,7 +808,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
         $comment_box = '';
     }
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td>$polllink $comment_box</td>" .
             actions('poll', $resource_id, $visibility) . '
@@ -858,7 +871,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
         $comment_box = '';
     }
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td>$wikilink $comment_box</td>" .
             actions('wiki', $resource_id, $visibility) . '
@@ -920,7 +933,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td>$exlink $comment_box</td>" . actions('link', $resource_id, $visibility) . "
         </tr>";
@@ -965,7 +978,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
     } else {
         foreach ($sql as $lcat) {
             $content .= "
-                        <tr$class_vis>
+                        <tr$class_vis data-id='$resource_id'>
                           <td width='1'>".icon('fa-folder-o')."</td>
                           <td>" . q($lcat->name);
             if (!empty($lcat->description)) {
@@ -1043,7 +1056,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility) {
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
           <td>$exlink $comment_box</td>" . actions('ebook', $resource_id, $visibility) . "
         </tr>";
@@ -1166,7 +1179,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
     }
 
     return "
-        <tr$class_vis>
+        <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
           <td>$exlink $comment_box</td>" . actions('section', $resource_id, $visibility) . "
         </tr>";
@@ -1224,16 +1237,10 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('description'))),
-                array('title' => $langDown,
-                      'level' => 'primary',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$resource_id",
-                      'icon' => 'fa-arrow-down',
-                      'disabled' => $resource_id == $GLOBALS['max_resource_id']),
                 array('title' => $langUp,
                       'level' => 'primary',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id",
-                      'icon' => 'fa-arrow-up',
-                      'disabled' => $first),
+                      'url' => "javascript:void(0);",
+                      'icon' => 'fa-arrows'),
                 array('title' => $langDelete,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
                       'icon' => 'fa-times',
