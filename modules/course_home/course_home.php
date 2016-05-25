@@ -65,20 +65,18 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
     if (isset($_POST['toReorder'])){
 
-        $la = 'in';
-
         if ($_POST['newIndex'] < $_POST['oldIndex']){
-            $la .= 'up';
-          Database::get()->query("UPDATE `course_units` SET `order`=`order` + 1 WHERE `order`>=?d AND `order`<?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+          Database::get()->query("UPDATE `course_units` SET `order`=`order` + 1 WHERE `order` >= ?d AND `order` < ?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
         }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
-            $la .= 'down';
-          Database::get()->query("UPDATE `course_units` SET `order`=`order` - 1 WHERE `order`<?d AND `order`>=?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+          Database::get()->query("UPDATE `course_units` SET `order`=`order` - 1 WHERE `order` <= ?d AND `order` > ?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
         }
 
         Database::get()->query("UPDATE `course_units` SET `order`=?d WHERE `id`=?d ", $_POST['newIndex'] + 1, $_POST['toReorder']);
         
     }
-    echo var_dump($_POST);
+
+    echo
+
     exit();
 
 /*
