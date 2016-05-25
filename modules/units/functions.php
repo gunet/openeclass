@@ -132,6 +132,12 @@ function show_resources($unit_id) {
     $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
     if (count($req) > 0) {
         $head_content .= "<script>
+        $(document).ready(function(){
+            Sortable.create(unitResources,{
+                handle: 'fa-arrows',
+                animation: 150
+            });
+        });
         $(function(){
             $('.fileModal').click(function (e)
             {
@@ -171,16 +177,17 @@ function show_resources($unit_id) {
                 });
             });
         });
+
         </script>";
         $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
         $tool_content .= "<div class='table-responsive'>";
-        $tool_content .= "<table class='table-default'>";
+        $tool_content .= "<table class='table-default'><tbody id='unitResources'>";
         foreach ($req as $info) {
             $info->comments = standard_text_escape($info->comments);
             show_resource($info);
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</tbody></table>";
         $tool_content .= "</div>";
     }
 }

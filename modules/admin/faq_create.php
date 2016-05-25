@@ -35,19 +35,17 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
   if (isset($_POST['toReorder'])){
 
-    $in = "in";
-
     if ($_POST['newIndex'] < $_POST['oldIndex']){
       Database::get()->query("UPDATE `faq` SET `order`=`order` + 1 WHERE `order`>=?d AND `order`<?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
-      $in .= " up";
     }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
       Database::get()->query("UPDATE `faq` SET `order`=`order` - 1 WHERE `order`<?d AND `order`>=?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
-      $in .= " down";
     }
 
     Database::get()->query("UPDATE `faq` SET `order`=?d WHERE `id`=?d ", $_POST['newIndex'] + 1, $_POST['toReorder']);
     
   }
+
+  exit();
 }
 
 if (isset($_POST['submitFaq'])) {
@@ -257,6 +255,7 @@ $tool_content .= "
               $(this).html(i+1);
             });
 
+            $('tooltip').remove();
             moreDeletes = $('.alert-success').length;
             if (moreDeletes > 0){
               $('.alert-success').html('$langFaqDeleteSuccess');
@@ -274,11 +273,6 @@ $tool_content .= "
 
             var itemEl = $(evt.item);
             var idReorder = itemEl.attr('data-id');
-
-            //var ids = [];
-            //$('.faq-section .list-group-item').each(function () {
-              //ids.push($(this).data('id'));
-            //});
 
             $.ajax({
               type: 'post',

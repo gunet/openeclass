@@ -50,6 +50,7 @@ if (isset($_REQUEST['id'])) {
 $pageName = '';
 $lang_editor = $language;
 load_js('tools.js');
+load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox(true);
 
 if (isset($_REQUEST['edit_submit'])) {
@@ -141,6 +142,7 @@ if (isset($id) and $id !== false) {
         $pageName = $info->title;
         $comments = trim($info->comments);
     } else {
+      $tool_content .= "<br>";
         Session::Messages($langUnknownResType);
         redirect_to_home_page("courses/$course_code/");        
     }

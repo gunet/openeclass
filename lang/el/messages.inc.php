@@ -734,6 +734,7 @@ $professorMessage = "Μήνυμα $langsOfTeacher";
 $langEmailOption = "Αποστολή (με email) της ανακοίνωσης στους εγγεγραμμένους χρήστες";
 $langUp = "Επάνω";
 $langDown = "Κάτω";
+$langReorder = "Ταξινόμηση";
 $langNoAnnounce = "Δεν υπάρχουν ανακοινώσεις";
 $langNoRecentAnnounce = "Δεν υπάρχουν πρόσφατες ανακοινώσεις";
 $langSureToDelAnnounce = "Είστε σίγουρος ότι θέλετε να διαγράψετε την ανακοίνωση";
