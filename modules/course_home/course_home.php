@@ -776,15 +776,14 @@ if ($is_editor) {
                               'show' => $visible == COURSE_OPEN),)) .
                     '</div>';                    
                 } else {
-                    $cunits_content .= "<div class='item-side'>" .
+                    $cunits_content .= "<div class='item-side'>
+                                            <div class='reorder-btn'>
+                                                <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
+                                            </div>" .
                     action_button(array(
                         array('title' => $langEditChange,
                               'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
                               'icon' => 'fa-edit'),
-                        array('title' => $langReorder,
-                              'level' => 'primary',
-                              'url' => "javascript:void(0);",
-                              'icon' => 'fa-arrows'),
                         array('title' => $vis == 1? $langViewHide : $langViewShow,
                               'url' => "$_SERVER[SCRIPT_NAME]?vis=". getIndirectReference($cu->id),
                               'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),

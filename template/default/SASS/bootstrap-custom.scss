@@ -1844,11 +1844,19 @@ ul.tablelist
         border: none;
     }
     .item-side{
-        //position: absolute;
-        width: 108px;
+        // width: 108px;
         float: right;
-        //top: 0px;
-        //right: 0px;
+
+        .reorder-btn{
+            padding-right: 10px;
+            font-size: 20px;
+            display: inline-block;
+            padding-top: 4px;
+            span {
+                cursor: pointer;
+                vertical-align: bottom;
+            }
+        }
         .btn-group a{
             //border-top: none !important;
         }
