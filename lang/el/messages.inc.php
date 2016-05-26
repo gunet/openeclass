@@ -4882,6 +4882,7 @@ $lang_eportfolio_enable = 'Ενεργοποίηση e-portfolio χρηστών';
 $langePortfolioDisabled = 'Τo e-portfolio των χρηστών είναι απενεργοποιημένo από τους διαχειριστές της πλατφόρμας.';
 $langUserePortfolioDisabled = 'Τo e-portfolio του χρήστη είναι απενεργοποιημένo.';
 $langResume = 'Resume';
+$langePortfolioDisableWarning = 'Το e-portfolio σας είναι απενεργοποιημένο και επομένως δεν είναι ορατό σε άλλους χρήστες και επισκέπτες της πλατφόρμας';
 
 /* * ******************************************
   Widgets

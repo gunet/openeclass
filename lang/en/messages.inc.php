@@ -4364,6 +4364,7 @@ $lang_eportfolio_enable = 'Enable users\' e-portfolio';
 $langePortfolioDisabled = 'e-portfolio feature is disabled by the platform\'s administrators.';
 $langUserePortfolioDisabled = 'This user has disabled the e-portfolio feature.';
 $langResume = 'Resume';
+$langePortfolioDisableWarning = 'Your e-portfolio is disabled, therefore it is not accessible to platform\s users and guests';
 $langInCoursesL = "in course";
 $langOfCourse = "for course";
 $langCommentsUser = "User comments";

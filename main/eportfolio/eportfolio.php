@@ -82,6 +82,7 @@ if ($userdata) {
         if ($userdata->eportfolio_enable == 0) {
             $off_class = "btn btn-info locked_active";
             $on_class = "btn btn-default unlocked_inactive";
+            $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
         } elseif ($userdata->eportfolio_enable == 1) {
             $off_class = "btn btn-default locked_inactive";
             $on_class = "btn btn-info unlocked_active";
