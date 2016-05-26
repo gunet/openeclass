@@ -95,17 +95,30 @@ if ($userdata) {
 	                          <button type="button" class="'.$on_class.'">ON</button>
                           </div>';
         
-        $tool_content .= 
-            action_bar(array(
-                array('title' => $langEditePortfolio,
-                    'url' => "edit_eportfolio.php",
-                    'icon' => 'fa-edit',
-                    'level' => 'primary-label'),
-                array('title' => $langUploadBio,
-                    'url' => "bio_upload.php",
-                    'icon' => 'fa-upload',
-                    'level' => 'primary-label')
-                ));    
+        $action_bar_array = array();
+        
+        if (file_exists("$webDir/courses/userbios/$id"."_bio.pdf")) {
+            $action_bar_array[] = array('title' => $langBio,
+                            'url' => "{$urlAppend}courses/userbios/$id"."_bio.pdf",
+                            'icon' => 'fa-download',
+                            'level' => 'primary-label');
+        }
+        
+        $action_bar_array = array_merge($action_bar_array, 
+                                        array(
+                                            array('title' => $langResume,
+                                                'url' => "eportfolio.php?id=$id",
+                                                'level' => 'primary-label',
+                                                'button-class' => 'btn-info'),
+                                            array('title' => $langEditePortfolio,
+                                                'url' => "edit_eportfolio.php",
+                                                'icon' => 'fa-edit'),
+                                            array('title' => $langUploadBio,
+                                                'url' => "bio_upload.php",
+                                                'icon' => 'fa-upload')
+                                        ));
+        
+        $tool_content .= action_bar($action_bar_array);    
     } else {
         if ($userdata->eportfolio_enable == 0) {
             $tool_content = "<div class='alert alert-danger'>$langUserePortfolioDisabled</div>";
@@ -113,15 +126,24 @@ if ($userdata) {
             exit;
         }
         
+        $action_bar_array = array();
+        
         if (file_exists("$webDir/courses/userbios/$id"."_bio.pdf")) {
-            $tool_content .=
-                action_bar(array(
-                    array('title' => $langBio,
-                    'url' => "{$urlAppend}courses/userbios/$id"."_bio.pdf",
-                    'icon' => 'fa-download',
-                    'level' => 'primary-label')
-                ));
+            $action_bar_array[] = array('title' => $langBio,
+                            'url' => "{$urlAppend}courses/userbios/$id"."_bio.pdf",
+                            'icon' => 'fa-download',
+                            'level' => 'primary-label');
         }
+        
+        $action_bar_array = array_merge($action_bar_array,
+                array(
+                        array('title' => $langResume,
+                                'url' => "eportfolio.php?id=$id",
+                                'level' => 'primary-label',
+                                'button-class' => 'btn-info')
+                ));
+        
+        $tool_content .= action_bar($action_bar_array);
     }
     
     $tool_content .= "
