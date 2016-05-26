@@ -43,7 +43,7 @@ if (isset($_GET['id'])) {
     $toolName = $langMyePortfolio;
 }
 
-$userdata = Database::get()->querySingle("SELECT surname, givenname, username, has_icon, eportfolio_enable
+$userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable
                                           FROM user WHERE id = ?d", $id);
 
 if ($userdata) {
@@ -130,19 +130,72 @@ if ($userdata) {
                 <div class='panel panel-default'>
                 <div class='panel-body'>
                     <div id='pers_info' class='row'>
-                        <div class='col-xs-12 col-sm-2'>
-                            <div id='profile-avatar'>" . profile_image($id, IMAGESIZE_LARGE, 'img-responsive img-circle') . "</div>
-                        </div>
                         <div class='col-xs-12 col-sm-10 profile-pers-info'>
                             <div class='row profile-pers-info-name'>
                                 <div class='col-xs-12'>
                                     <div>" . q("$userdata->givenname $userdata->surname") . "</div>
-                                    <div class='not_visible'>(".q($userdata->username).")</div>
                                 </div>
                             </div>
-                        </div>";
+                        </div>
+                    </div>";
+
+    $head_content .= "<script type='text/javascript'>
+    $(document).ready(function() {
+        /* Check if we are in safari and fix Bootstrap Affix*/
+        if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+        var stickywidget = $('#floatMenu');
+        var explicitlySetAffixPosition = function() {
+            stickywidget.css('left',stickywidget.offset().left+'px');
+        };
+        /* Before the element becomes affixed, add left CSS that is equal to the distance of the element from the left of the screen */
+        stickywidget.on('affix.bs.affix',function(){
+            stickywidget.removeAttr('style');
+            explicitlySetAffixPosition();
+        });
+        stickywidget.on('affixed-bottom.bs.affix',function(){
+            stickywidget.css('left', 'auto');
+        });
+        /* On resize of window, un-affix affixed widget to measure where it should be located, set the left CSS accordingly, re-affix it */
+        $(window).resize(function(){
+            if(stickywidget.hasClass('affix')) {
+                stickywidget.removeClass('affix');
+                explicitlySetAffixPosition();
+                stickywidget.addClass('affix');
+            }
+        });
+    }
+    </script>";
     
-    $tool_content .= render_eportfolio_fields_content($id);
+    $head_content .= "
+        <script>
+        $(function() {
+            $('body').scrollspy({ target: '#affixedSideNav' });
+        });
+        </script>
+    ";
+    
+    $head_content .= "
+        <script>
+        $(function() {
+            $('#floatMenu').affix({
+              offset: {
+                top: 230,
+                bottom: function () {
+                  return (this.bottom = $('.footer').outerHeight(true))
+                }
+              }
+            })
+        });
+        </script>";
+    
+    $ret_str = render_eportfolio_fields_content($id);
+    
+    $tool_content .= "<div class='row'>
+                        <div class='col-sm-9'>";
+    $tool_content .= $ret_str['panels'];
+    $tool_content .= "</div>";
+    $tool_content .= $ret_str['right_menu'];
+    $tool_content .= "</div>";
     if ($userdata->eportfolio_enable == 1) {
         $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/eportfolio.php?id=".$id, $langUserePortfolio)."</div>";
     } else {
@@ -152,8 +205,7 @@ if ($userdata) {
                 $social_share
             </div>
         </div>
-    </div>
-</div>";
+    </div>";
 }
 if ($uid == $id) {
     draw($tool_content, 1);

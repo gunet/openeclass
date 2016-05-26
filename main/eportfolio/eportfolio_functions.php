@@ -34,79 +34,89 @@ define('EPF_LINK', 5);
 function render_eportfolio_fields_content($uid) {
     global $langProfileNotAvailable;
     
-    $pills_items = '<div class="tab-content">';
-
+    $return_string = array();
+    $return_string['panels'] = "";
+    $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav'>
+            <ul id='floatMenu' class='nav nav-pills nav-stacked well well-sm' role='tablist'>";
+    
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");
     
-    $pills_menu = '<ul class="nav nav-pills">';
-    $i = 0;
+    $j = 0;
     
-    foreach ($result as $cat) {
-        if ($i==0) {
-            $active_class = ' class="active"';
-            $active = ' active';
-            $i++;
-        } else {
-            $active_class = $active = '';
-            $i++;
-        }
-        
-        $pills_menu .= '<li'.$active_class.'><a href="#cat'.$cat->id.'" data-toggle="tab">'.$cat->name.'</a></li>';
-        
-        $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM eportfolio_fields
-               WHERE categoryid = ?d ORDER BY sortorder DESC", $cat->id);
-        
-        if (count($res) > 0) { //category start
-        $pills_items .= "<div class='tab-pane$active' id='cat".$cat->id."'><div class='row'>
-        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
-        <h4>".$cat->name."</h4>";
-        }
-
-        foreach ($res as $f) { //get user data for each field
-            $pills_items .= "<div class='profile-pers-info-data'>";
-
-            $fdata_res = Database::get()->querySingle("SELECT data FROM eportfolio_fields_data
-            WHERE user_id = ?d AND field_id = ?d", $uid, $f->id);
-
-            $pills_items .= "<span class='tag'>".$f->name." : </span>";
-
-            if (!$fdata_res || $fdata_res->data == '') {
-                $pills_items .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+    foreach ($result as $c) {
+    
+        $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $c->id);
+    
+        if (count($res) > 0) {
+    
+            $return_string['panels'] .= '<div class="panel panel-default" id="'.$c->id.'">
+                                       <div class="panel-heading">
+                                           <h2 class="panel-title">'.$c->name.'</h2>
+                                       </div>
+                                       <div class="panel-body">
+                                           <fieldset>';
+            if ($j == 0) {
+                $active = " class='active'";
             } else {
-                switch ($f->datatype) {
-                    case EPF_TEXTBOX:
-                        $pills_items .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
-                        break;
-                    case EPF_TEXTAREA:
-                        $pills_items .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
-                        break;
-                    case EPF_DATE:
-                        $pills_items .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
-                        break;
-                    case EPF_MENU:
-                        $options = unserialize($f->data);
-                        $options = array_combine(range(1, count($options)), array_values($options));
-                        $options[0] = "";
-                        ksort($options);
-                        $pills_items .= "<span class='tag-value'>".q($options[$fdata_res->data])."</span>";
-                        break;
-                    case EPF_LINK:
-                        $pills_items .= "<span class='tag-value'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></span>";
-                        break;
-                }
+                $active = "";
             }
-            $pills_items .= "</div>";
-        }
-
-        if (count($res) > 0) { //category end
-            $pills_items .= "</div></div></div>";
-        }
-
-    }
-    $pills_items .= "</div>";
-    $pills_menu .= "</ul>";
     
-    return $pills_menu.$pills_items;
+            $j++;
+    
+            $return_string['right_menu'] .= "<li$active><a href='#$c->id'>$c->name</a></li>";
+            
+            foreach ($res as $f) {
+    
+                if (isset($fdata)) {
+                    unset($fdata);
+                }
+                
+                $return_string['panels'] .= '<div class="profile-pers-info form-group">';
+                $return_string['panels'] .= '<span class="tag"><strong>'.q($f->name).': </strong></span>';
+                $return_string['panels'] .= '<span>';
+    
+                //get data to prefill fields
+                $fdata_res = Database::get()->querySingle("SELECT data FROM eportfolio_fields_data
+                                 WHERE user_id = ?d AND field_id = ?d", $uid, $f->id);
+                if (!$fdata_res || $fdata_res->data == '') {
+                    $return_string['panels'] .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+                } else {
+                    switch ($f->datatype) {
+                        case EPF_TEXTBOX:
+                            $return_string['panels'] .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
+                            break;
+                        case EPF_TEXTAREA:
+                            $return_string['panels'] .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
+                            break;
+                        case EPF_DATE:
+                            $return_string['panels'] .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
+                            break;
+                        case EPF_MENU:
+                            $options = unserialize($f->data);
+                            $options = array_combine(range(1, count($options)), array_values($options));
+                            $options[0] = "";
+                            ksort($options);
+                            $return_string['panels'] .= "<span class='tag-value'>".q($options[$fdata_res->data])."</span>";
+                            break;
+                        case EPF_LINK:
+                            $return_string['panels'] .= "<span class='tag-value'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></span>";
+                            break;
+                    }
+                }
+                $return_string['panels'] .= "</div>";
+            }
+    
+            $return_string['panels'] .= '</fieldset>
+                       </div>
+                   </div>';
+    
+        }
+    }
+    
+    $return_string['right_menu'] .= '</ul>
+                                 </div>';
+    
+    return $return_string;
 }
 
 /**
@@ -114,7 +124,7 @@ function render_eportfolio_fields_content($uid) {
  * @return string
  */
 function render_eportfolio_fields_form() {
-    global $uid, $langOptional, $langCompulsory, $head_content;
+    global $uid, $langOptional, $langCompulsory;
 
     $return_string = array();
     $return_string['panels'] = "";
