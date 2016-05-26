@@ -1206,7 +1206,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
 function actions($res_type, $resource_id, $status, $res_id = false) {
     global $is_editor, $langEditChange, $langDelete, $langVisibility,
     $langAddToCourseHome, $langDown, $langUp,
-    $langConfirmDelete, $course_code, $langViewHide, $langViewShow;
+    $langConfirmDelete, $course_code, $langViewHide, $langViewShow, $langReorder;
 
     static $first = true;
 
@@ -1223,7 +1223,10 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
         $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
     }
 
-    $content = "<td class='option-btn-cell'>";
+    $content = "<td style='width: 85px;' class='option-btn-cell'><div class='reorder-btn pull-left' style='padding:0 10px; font-size: 18px; cursor: pointer;
+                vertical-align: bottom;'>
+                                                <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
+                                            </div><div class='pull-left'>";
     $content .= action_button(array(
                 array('title' => $langEditChange,
                       'url' => $edit_link,
@@ -1237,16 +1240,14 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('description'))),
-                array('title' => $langUp,
-                      'level' => 'primary',
-                      'url' => "javascript:void(0);",
-                      'icon' => 'fa-arrows'),
                 array('title' => $langDelete,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
                       'icon' => 'fa-times',
                       'confirm' => $langConfirmDelete,
                       'class' => 'delete')
             ));
+
+    $content .= "</div>";
 
     $first = false;
     return $content;
