@@ -48,14 +48,14 @@ function new_bbb_session() {
     global $langNewBBBSessionDesc, $langNewBBBSessionStart;
     global $langNewBBBSessionActive, $langNewBBBSessionInActive;
     global $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore;
-    global $start_session,$end_session;
-    global $langTitle, $langBBBNotifyExternalUsersHelpBlock;
-    global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
-    global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue, $langBBBRecordFalse,$langBBBSessionMaxUsers;
-    global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
-    global $langBBBAlertTitle,$langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
-    global $langEnd,$langBBBEndHelpBlock;
-
+    global $start_session, $end_session;
+    global $langTitle, $langBBBNotifyExternalUsersHelpBlock, $langBBBRecordFalse;
+    global $langBBBNotifyUsers, $langBBBNotifyExternalUsers, $langBBBSessionMaxUsers;
+    global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue;
+    global $langBBBSessionSuggestedUsers, $langBBBSessionSuggestedUsers2;
+    global $langBBBAlertTitle, $langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
+    global $langEnd, $langBBBEndHelpBlock;
+        
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
     $textarea = rich_text_editor('desc', 4, 20, '');
@@ -63,11 +63,10 @@ function new_bbb_session() {
     $start_session = $start_date->format('d-m-Y H:i');
     $end_date = new DateTime;
     $end_session = $end_date->format('d-m-Y H:i');
-    $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
-    if ($c>20) {
-        $c = $c/2;
-
-    } // If more than 20 course users, we suggest 50% of them
+    $c = Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
+    if ($c>80) {
+        $c = floor($c/2); // If more than 80 course users, we suggest 50% of them
+    }
     $tool_content .= "
         <div class='form-wrapper'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' >
@@ -134,29 +133,27 @@ function new_bbb_session() {
 
         $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
-        </div>
-        <div class='form-group'>
-            <label for='group_button' class='col-sm-2 control-label'>$langBBBRecord:</label>
-            <div class='col-sm-10'>
+        </div>";
+        $en_recordings = Database::get()->querySingle("SELECT enable_recordings FROM bbb_servers WHERE enabled='true'")->enable_recordings;
+        if ($en_recordings == 'true') {
+            $tool_content .= "<div class='form-group'>
+                <label for='group_button' class='col-sm-2 control-label'>$langBBBRecord:</label>
+                <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='user_button' name='record' value='1'";
-                        if (Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
-                        {
-                            $tool_content .=" disabled";
-                        }
-                        $tool_content .=">
+                        <input type='radio' id='user_button' name='record' value='true' checked>
                         $langBBBRecordTrue
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='group_button' name='record' value='0' checked>
+                        <input type='radio' id='group_button' name='record' value='false'>
                        $langBBBRecordFalse
                       </label>
                     </div>
-            </div>
-        </div>";
+                </div>
+            </div>";
+        }
         $tool_content .= "<div class='form-group'>
             <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
             <div class='col-sm-10'>
@@ -178,9 +175,9 @@ function new_bbb_session() {
             <label for='minutes_before' class='col-sm-2 control-label'>$langBBBSessionAvailable:</label>
             <div class='col-sm-10'>
                     <select class='form-control' name='minutes_before' id='minutes_before'>
-                        <option value='15'' selected='selected'>15</option>
+                        <option value='10' selected>10</option>
+                        <option value='15'>15</option>
                         <option value='30'>30</option>
-                        <option value='10'>10</option>
                     </select> $langBBBMinutesBefore
             </div>
         </div>
@@ -235,8 +232,7 @@ function new_bbb_session() {
  * @param type $title
  * @param type $desc
  * @param type $start_session
- * @param type $end_session
- * @param type $type
+ * @param type $end_session 
  * @param type $status
  * @param type $notifyUsers
  * @param type $minutes_before
@@ -244,8 +240,9 @@ function new_bbb_session() {
  * @param type $update // true == add, false == update
  * @param type $session
  */
-function add_update_bbb_session($title,$desc,$start_session,$end_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record, $sessionUsers, $update = 'false', $session_id = '')
+function add_update_bbb_session($title, $desc, $start_session, $end_session, $status, $notifyUsers, $minutes_before, $external_users, $record, $sessionUsers, $update, $session_id = '')
 {
+            
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
         $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
         $langDescr, $course_code, $course_id, $urlServer;
@@ -257,35 +254,22 @@ function add_update_bbb_session($title,$desc,$start_session,$end_session,$type,$
             $r_group .= "$group" .',';        
         }
         $r_group = mb_substr($r_group, 0, -1); // remove last comma
-    }
-
-    // Enable recording or not
-    switch($record)
-    {
-        case 0:
-            $record="false";
-            break;
-        case 1:
-            $record="true";
-            break;
-    }
-
-    if ($update == 'true') {
+    }       
+    if (isset($update) and $update) {
         Database::get()->querySingle("UPDATE bbb_session SET title=?s, description=?s, start_date=?t, end_date=?t,
                                         public=?s, active=?s, unlock_interval=?d, external_users=?s,
                                         participants=?s, record=?s, sessionUsers=?d WHERE id=?d",
-                                $title, $desc, $start_session, $end_session, $type, $status, $minutes_before,
+                                $title, $desc, $start_session, $end_session, 1, $status, $minutes_before,
                                 $external_users, $r_group, $record, $sessionUsers, $session_id);
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM bbb_session WHERE id = ?d", $session_id);
-    } else {
+    } else {                        
         $q = Database::get()->query("INSERT INTO bbb_session (course_id, title, description, start_date, end_date,
                                                             public, active, running_at,
                                                             meeting_id, mod_pw, att_pw,
                                                             unlock_interval, external_users, participants, record,
                                                             sessionUsers)
                                                         VALUES (?d,?s,?s,?t,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)",
-                                            $course_id, $title, $desc, $start_session, $end_session,
-                                            $type, $status,
+                                            $course_id, $title, $desc, $start_session, $end_session, 1, $status,
                                             generateRandomString(), generateRandomString(), generateRandomString(),
                                             $minutes_before, $external_users, $r_group, $record,$sessionUsers);
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM bbb_session WHERE id = ?d", $q->lastInsertID);
@@ -296,7 +280,6 @@ function add_update_bbb_session($title,$desc,$start_session,$end_session,$type,$
     $new_att_pw = $q->att_pw;
     // if we have to notify users for new session
     if ($notifyUsers == "1") {
-
         if (isset($_POST['groups']) and count($_POST['groups'] > 0)) {
             $recipients = array();
             if ($_POST['groups'][0] == 0) { // all users
@@ -429,17 +412,14 @@ function edit_bbb_session($session_id) {
     global $langBBBEndHelpBlock, $langEnd;
 
 
-    $row = Database::get()->querySingle("SELECT * FROM bbb_session WHERE id = ?d ", $session_id);
-
-    $type = ($row->public == 1 ? 1 : 0);
+    $row = Database::get()->querySingle("SELECT * FROM bbb_session WHERE id = ?d ", $session_id);   
     $status = ($row->active == 1 ? 1 : 0);
     $record = ($row->record == "true" ? 1 : 0);
+    $running_at = $row->running_at;
     $r_group = explode(",",$row->participants);
-
     $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date);
     $start = $startDate_obj->format('d-m-Y H:i');
-    $endDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date);
-            
+    $endDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date);            
     if(isset($row->end_date)) { 
         $BBBEndDate = $endDate_obj->format('d-m-Y H:i');         
     } else {
@@ -448,173 +428,172 @@ function edit_bbb_session($session_id) {
     $enableEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : ($BBBEndDate ? 1 : 0);
 
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
-    $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
+    $c = Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_user 
+                            WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
     if ($c>80) {
-        $c = $c/2;
-    } // If more than 80 course users, we suggest 50% of them
+        $c = floor($c/2); // If more than 80 course users, we suggest 50% of them
+    }
     $tool_content .= "
-                <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=" . getIndirectReference($session_id) . "' method='post'>
-                    <fieldset>
-                    <div class='form-group'>
-                        <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-                        <div class='col-sm-10'>
-                            <input class='form-control' type='text' name='title' id='title' value='".q($row->title)."'>
-                        </div>
+        <div class='form-wrapper'>
+            <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=" . getIndirectReference($session_id) . "' method='post'>
+            <fieldset>
+            <div class='form-group'>
+                <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
+                <div class='col-sm-10'>
+                    <input class='form-control' type='text' name='title' id='title' value='".q($row->title)."'>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='desc' class='col-sm-2 control-label'>$langNewBBBSessionDesc:</label>
+                <div class='col-sm-10'>
+                    $textarea
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='start_session' class='col-sm-2 control-label'>$langNewBBBSessionStart:</label>
+                <div class='col-sm-10'>
+                    <input class='form-control' type='text' name='start_session' id='start_session' value='".q($start)."'>
+                </div>
+            </div>
+            <div class='input-append date form-group".(Session::getError('BBBEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$BBBEndDate' data-date-format='dd-mm-yyyy'>
+                <label for='BBBEndDate' class='col-sm-2 control-label'>$langEnd:</label>
+                <div class='col-sm-10'>
+                    <div class='input-group'>
+                        <span class='input-group-addon'>
+                        <input style='cursor:pointer;' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
+                        </span>                           
+                        <input class='form-control' name='BBBEndDate' id='BBBEndDate' type='text' value='$BBBEndDate'".($enableEndDate ? '' : ' disabled').">                                                         
                     </div>
-                    <div class='form-group'>
-                        <label for='desc' class='col-sm-2 control-label'>$langNewBBBSessionDesc:</label>
-                        <div class='col-sm-10'>
-                            $textarea
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <label for='start_session' class='col-sm-2 control-label'>$langNewBBBSessionStart:</label>
-                        <div class='col-sm-10'>
-                            <input class='form-control' type='text' name='start_session' id='start_session' value='".q($start)."'>
-                        </div>
-                    </div>
-                    <div class='input-append date form-group".(Session::getError('BBBEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$BBBEndDate' data-date-format='dd-mm-yyyy'>
-                        <label for='BBBEndDate' class='col-sm-2 control-label'>$langEnd:</label>
-                        <div class='col-sm-10'>
-                            <div class='input-group'>
-                                <span class='input-group-addon'>
-                                <input style='cursor:pointer;' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
-                                </span>                           
-                                <input class='form-control' name='BBBEndDate' id='BBBEndDate' type='text' value='$BBBEndDate'".($enableEndDate ? '' : ' disabled').">                                                         
+                <span class='help-block'>".(Session::hasError('BBBEndDate') ? Session::getError('BBBEndDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBEndHelpBlock")."</span>
+             </div>
+            </div>         
+            <div class='form-group'>
+                <label for='select-groups' class='col-sm-2 control-label'>$langParticipants:</label>
+                <div class='col-sm-10'>
+                            <select name='groups[]' multiple='multiple' class='form-control' id='select-groups'>";
+                //select all users from this course except yourself
+                $sql = "SELECT `group`.`id`,`group`.`name` FROM `group` RIGHT JOIN course ON group.course_id=course.id WHERE course.code=?s ORDER BY UPPER(NAME)";
+                $res = Database::get()->queryArray($sql, $course_code);
+                foreach ($res as $r) {
+                    if (isset($r->id)) {
+                        $tool_content .= "<option value='_{$r->id}'";
+                        if (in_array(("_{$r->id}"), $r_group)) {
+                            $tool_content .= ' selected';
+                        }
+                        $tool_content .=">" . q($r->name) . "</option>";
+                    }
+                }
+                //select all users from this course except yourself
+                $sql = "SELECT u.id AS user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
+                            FROM user u, course_user cu
+                                        WHERE cu.course_id = ?d
+                            AND cu.user_id = u.id
+                            AND cu.status != ?d
+                            AND u.id != ?d
+                            GROUP BY u.id
+                            ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+                $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
+                $tool_content .= "<option value='0'><h2>$langAllUsers</h2></option>";
+                foreach ($res as $r) {
+                    if (isset($r->user_id)) {
+                        $tool_content .= "<option value='{$r->user_id}'";                                
+                        if (in_array(("$r->user_id"), $r_group)) {
+                            $tool_content .= ' selected';
+                        }
+                        $tool_content .= ">" . q($r->name) . " (".q($r->username).")</option>";
+                    }
+                }               
+                $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                </div>
+            </div>";            
+            $en_recordings = Database::get()->querySingle("SELECT enable_recordings FROM bbb_servers WHERE id = ?d", $running_at)->enable_recordings;
+            if ($en_recordings == 'true') {
+                $tool_content .= "<div class='form-group'>
+                    <label for='group_button' class='col-sm-2 control-label'>$langBBBRecord:</label>
+                    <div class='col-sm-10'>
+                            <div class='radio'>
+                              <label>
+                                <input type='radio' id='user_button' name='record' value='true' " .
+                                    (($record == true) ? 'checked' : '') . ">
+                                $langBBBRecordTrue
+                              </label>
                             </div>
-                        <span class='help-block'>".(Session::hasError('BBBEndDate') ? Session::getError('BBBEndDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBEndHelpBlock")."</span>
-                     </div>
-                    </div>         
-                    <div class='form-group'>
-                        <label for='select-groups' class='col-sm-2 control-label'>$langParticipants:</label>
-                        <div class='col-sm-10'>
-                                    <select name='groups[]' multiple='multiple' class='form-control' id='select-groups'>";
-                        //select all users from this course except yourself
-                        $sql = "SELECT `group`.`id`,`group`.`name` FROM `group` RIGHT JOIN course ON group.course_id=course.id WHERE course.code=?s ORDER BY UPPER(NAME)";
-                        $res = Database::get()->queryArray($sql, $course_code);
-                        foreach ($res as $r) {
-                            if (isset($r->id)) {
-                                $tool_content .= "<option value='_{$r->id}'";
-                                if (in_array(("_{$r->id}"), $r_group)) {
-                                    $tool_content .= ' selected';
-                                }
-                                $tool_content .=">" . q($r->name) . "</option>";
-                            }
-                        }
-                        //select all users from this course except yourself
-                        $sql = "SELECT u.id AS user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
-                                    FROM user u, course_user cu
-                                                WHERE cu.course_id = ?d
-                                    AND cu.user_id = u.id
-                                    AND cu.status != ?d
-                                    AND u.id != ?d
-                                    GROUP BY u.id
-                                    ORDER BY UPPER(u.surname), UPPER(u.givenname)";
-                        $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
-                        $tool_content .= "<option value='0'><h2>$langAllUsers</h2></option>";
-                        foreach ($res as $r) {
-                            if (isset($r->user_id)) {
-                                $tool_content .= "<option value='{$r->user_id}'";                                
-                                if (in_array(("$r->user_id"), $r_group)) {
-                                    $tool_content .= ' selected';
-                                }
-                                $tool_content .= ">" . q($r->name) . " (".q($r->username).")</option>";
-                            }
-                        }
-
-                        if (Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0) {
-                            $recordingDisabled = ' disabled';
-                        } else {
-                            $recordingDisabled = '';
-                        }
-                        $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
-                        </div>
+                            <div class='radio'>
+                              <label>
+                                <input type='radio' id='group_button' name='record' value='false' " .
+                                    (($record == false) ? 'checked' : '') . ">
+                               $langBBBRecordFalse
+                              </label>
+                            </div>
                     </div>
-                    <div class='form-group'>
-                        <label for='group_button' class='col-sm-2 control-label'>$langBBBRecord:</label>
-                        <div class='col-sm-10'>
-                                <div class='radio'>
-                                  <label>
-                                    <input type='radio' id='user_button' name='record' value='1' " .
-                                        (($record==1) ? 'checked' : '') . $recordingDisabled . ">
-                                    $langBBBRecordTrue
-                                  </label>
-                                </div>
-                                <div class='radio'>
-                                  <label>
-                                    <input type='radio' id='group_button' name='record' value='0' " .
-                                        (($record==0) ? 'checked' : '').">
-                                   $langBBBRecordFalse
-                                  </label>
-                                </div>
+                </div>";
+            }
+            
+            $tool_content .= "<div class='form-group'>
+                <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
+                <div class='col-sm-10'>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='active_button' name='status' value='1' ".(($status==1) ? "checked" : "").">
+                            $langNewBBBSessionActive
+                          </label>
                         </div>
-                    </div>";
-                    $tool_content .= "<div class='form-group'>
-                        <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
-                        <div class='col-sm-10'>
-                                <div class='radio'>
-                                  <label>
-                                    <input type='radio' id='active_button' name='status' value='1' ".(($status==1) ? "checked" : "").">
-                                    $langNewBBBSessionActive
-                                  </label>
-                                </div>
-                                <div class='radio'>
-                                  <label>
-                                    <input type='radio' id='inactive_button' name='status' value='0' ".(($status==0) ? "checked" : "").">
-                                   $langNewBBBSessionInActive
-                                  </label>
-                                </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='inactive_button' name='status' value='0' ".(($status==0) ? "checked" : "").">
+                           $langNewBBBSessionInActive
+                          </label>
                         </div>
-                    </div>
-                    <div class='form-group'>
-                        <label for='minutes_before' class='col-sm-2 control-label'>$langBBBSessionAvailable:</label>
-                        <div class='col-sm-10'>
-                                <select class='form-control' name='minutes_before' id='minutes_before'>
-                                    <option value='15' ".(($row->unlock_interval=='15') ? "selected" : "").">15</option>
-                                    <option value='30' ".(($row->unlock_interval=='30') ? "selected" : "").">30</option>
-                                    <option value='10' ".(($row->unlock_interval=='10') ? "selected" : "").">10</option>
-                                </select> $langBBBMinutesBefore
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='minutes_before' class='col-sm-2 control-label'>$langBBBSessionAvailable:</label>
+                <div class='col-sm-10'>
+                        <select class='form-control' name='minutes_before' id='minutes_before'>
+                            <option value='10' ".(($row->unlock_interval=='10') ? "selected" : "").">10</option>
+                            <option value='15' ".(($row->unlock_interval=='15') ? "selected" : "").">15</option>
+                            <option value='30' ".(($row->unlock_interval=='30') ? "selected" : "").">30</option>                            
+                        </select> $langBBBMinutesBefore
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='sessionUsers' class='col-sm-2 control-label'>$langBBBSessionMaxUsers:</label>
+                <div class='col-sm-10'>
+                    <input class='form-control' type='text' name='sessionUsers' id='sessionUsers' size='5' value='".$row->sessionUsers."'> $langBBBSessionSuggestedUsers:
+                    <strong>$c</strong> ($langBBBSessionSuggestedUsers2)
+                </div>
+            </div>
+            <div class='form-group'>
+                <label for='tags_1' class='col-sm-2 control-label'>$langBBBNotifyExternalUsers:</label>
+                <div class='col-sm-10'>
+                    <input class='form-control tags' id='tags_1' name='external_users' type='text' value='".trim($row->external_users)."'>
+                    <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBNotifyExternalUsersHelpBlock</span>
+                </div>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                         <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='notifyUsers' value='1'>$langBBBNotifyUsers
+                          </label>
                         </div>
-                    </div>
-                    <div class='form-group'>
-                        <label for='sessionUsers' class='col-sm-2 control-label'>$langBBBSessionMaxUsers:</label>
-                        <div class='col-sm-10'>
-                            <input class='form-control' type='text' name='sessionUsers' id='sessionUsers' size='5' value='".$row->sessionUsers."'> $langBBBSessionSuggestedUsers:
-                            <strong>$c</strong> ($langBBBSessionSuggestedUsers2)
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <label for='tags_1' class='col-sm-2 control-label'>$langBBBNotifyExternalUsers:</label>
-                        <div class='col-sm-10'>
-                            <input class='form-control tags' id='tags_1' name='external_users' type='text' value='".trim($row->external_users)."'>
-                            <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBNotifyExternalUsersHelpBlock</span>
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                                 <div class='checkbox'>
-                                  <label>
-                                    <input type='checkbox' name='notifyUsers' value='1'>$langBBBNotifyUsers
-                                  </label>
-                                </div>
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <input class='btn btn-primary' type='submit' name='update_bbb_session' value='$langModify'>
-                        </div>
-                    </div>
-                    </fieldset>
-                     ". generate_csrf_token_form_field() ."
-                    </form></div>";
-                $tool_content .='<script language="javaScript" type="text/javascript">
-                    //<![CDATA[
-                    var chkValidator  = new Validator("sessionForm");
-                    chkValidator.addValidation("title","req","'.$langBBBAlertTitle.'");
-                    chkValidator.addValidation("sessionUsers","req","'.$langBBBAlertMaxParticipants.'");
-                    chkValidator.addValidation("sessionUsers","numeric","'.$langBBBAlertMaxParticipants.'");
-                    //]]></script>';
+                </div>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                    <input class='btn btn-primary' type='submit' name='update_bbb_session' value='$langModify'>
+                </div>
+            </div>
+            </fieldset>
+             ". generate_csrf_token_form_field() ."
+            </form></div>";
+        $tool_content .='<script language="javaScript" type="text/javascript">
+            //<![CDATA[
+            var chkValidator  = new Validator("sessionForm");
+            chkValidator.addValidation("title","req","'.$langBBBAlertTitle.'");
+            chkValidator.addValidation("sessionUsers","req","'.$langBBBAlertMaxParticipants.'");
+            chkValidator.addValidation("sessionUsers","numeric","'.$langBBBAlertMaxParticipants.'");
+            //]]></script>';
 }
 
 
@@ -656,7 +635,7 @@ function bbb_session_details() {
         $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers;
 
     
-    if (get_total_bbb_servers() == '0' && get_total_om_servers() == '0' && get_total_webconf_servers() == '0' ) {            
+    if (!is_active_bbb_server() && !is_active_om_server()) { // check availability
         if ($is_editor) {
             $tool_content .= "<div class='alert alert-danger'><label>$langNote</label>: $langBBBNotServerAvailableTeacher</div>";
         } else {
@@ -664,11 +643,12 @@ function bbb_session_details() {
         }
     }
     
+    define('DAY_MINUTES', 24 * 60);
+    
     load_js('trunk8');
 
     $myGroups = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id=?d", $_SESSION['uid']);
-
-    $activeClause = !$is_editor? '': "AND active = '1'";
+    $activeClause = $is_editor? '': "AND active = '1'";
     $result = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id = ?s $activeClause 
                                                 ORDER BY start_date DESC", $course_id);
     if ($result) {
@@ -688,8 +668,7 @@ function bbb_session_details() {
                                <th class='text-center'>$langParticipants</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
-
-        define('DAY_MINUTES', 24 * 60);        
+       
         foreach ($result as $row) {            
             $participants = '';
             // Get participants
@@ -717,7 +696,7 @@ function bbb_session_details() {
             if($end_date) {
                 $timeLeft = date_diff_in_minutes($end_date, date('Y-m-d H:i:s'));
                 $timeLabel = nice_format($end_date, TRUE);
-            } else {                
+            } else {
                 $timeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
                 $timeLabel = '';
             }
@@ -736,7 +715,7 @@ function bbb_session_details() {
             
             $canJoin = FALSE;
             if (($row->active == '1') and (date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < $row->unlock_interval)
-                    and (get_total_bbb_servers() <> '0' or get_total_om_servers() <> '0' or get_total_webconf_servers() <> '0')) {
+                    and (is_active_bbb_server() or is_active_om_server())) {
                 $canJoin = TRUE;
             }
             if (isset($end_date) && -$timeLeft > DAY_MINUTES) {
@@ -745,8 +724,7 @@ function bbb_session_details() {
             if ($canJoin) {
                 if($is_editor) {
                     $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
-                } else {
-                    //$joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
+                } else {                    
                     $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
                 }
             } else {
@@ -783,7 +761,7 @@ function bbb_session_details() {
                                     'confirm' => $langConfirmDelete)
                             )) .
                     "</td></tr>";
-            } else {                
+            } else {
                 $access = FALSE;
                 // Allow access to session only if user is in participant group or session is scheduled for everyone
                 $r_group = explode(",", $row->participants);                
@@ -1215,17 +1193,6 @@ function get_active_rooms($salt,$bbb_url)
     return $sum;
 }
 
-function get_total_bbb_servers()
-{
-    $total = 0;
-
-    if (get_config('ext_bigbluebutton_enabled')) {
-        $total = Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count;
-    }
-
-    return $total;
-}
-
 /**
  * @brief display video recordings in multimedia
  * @global type $langBBBImportRecordingsOK
@@ -1355,4 +1322,71 @@ function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
         }
     }
     return $result['participantCount'];
+}
+
+
+/**
+ * @global type $course_id
+ * @brief check if BBB server is active
+ * @return type
+ */
+function is_active_bbb_server()
+{
+    global $course_id;
+    
+    if (!get_config('ext_bigbluebutton_enabled')) { // check for configuration
+        return false;
+    } else {                
+         $q = Database::get()->queryArray("SELECT id, all_courses FROM bbb_servers WHERE enabled='true'");
+         if (count($q) > 0) {
+            foreach ($q as $data) {
+                if ($data->all_courses == 1) { // server is enabled for all courses                     
+                    return true;
+                } else {
+                    $q = Database::get()->querySingle("SELECT * FROM course_external_server 
+                                        WHERE course_id = ?d AND external_server = $data->id", $course_id);
+                    if ($q) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+         } else { // no active servers
+             return false;
+         }
+    }
+}
+
+/**
+ * @global type $course_id
+ * @brief check if OM server is active
+ * @return type
+ */
+function is_active_om_server()
+{   
+    global $course_id;
+    
+    if (!get_config('ext_openmeetings_enabled')) { // check for configuration
+        return false;
+    } else {                
+         $q = Database::get()->queryArray("SELECT id, all_courses FROM om_servers WHERE enabled='true'");
+         if (count($q) > 0) {
+            foreach ($q as $data) {
+                if ($data->all_courses == 1) { // server is enabled for all courses                     
+                    return true;
+                } else {
+                    $q = Database::get()->querySingle("SELECT * FROM course_external_server 
+                                        WHERE course_id = ?d AND external_server = $data->id", $course_id);
+                    if ($q) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+         } else { // no active servers
+             return false;
+         }
+    }
 }

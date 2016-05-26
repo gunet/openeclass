@@ -1425,6 +1425,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `bbb_servers` (
     `max_users` int(11) DEFAULT NULL,
     `enable_recordings` enum('true','false') DEFAULT NULL,
     `weight` int(11) DEFAULT NULL,
+    `all_courses` tinyint(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`),
     KEY `idx_bbb_servers` (`hostname`)) $charset_spec");
 
@@ -1462,8 +1463,16 @@ $db->query("CREATE TABLE IF NOT EXISTS `om_servers` (
     `max_rooms` int(11) DEFAULT NULL,
     `max_users` int(11) DEFAULT NULL,
     `enable_recordings` enum('true','false') DEFAULT NULL,
+    `all_courses` tinyint(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`),
     KEY `idx_om_servers` (`hostname`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `course_external_server` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) NOT NULL,
+    `external_server` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY (`external_server`, `course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_settings` (
     `setting_id` INT(11) NOT NULL,

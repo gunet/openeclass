@@ -66,6 +66,47 @@ $('input#start_session').datetimepicker({
 });
 
 </script>";
+
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#BBBEndDate').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', 
+                pickerPosition: 'bottom-right', 
+                language: '".$language."',
+                autoclose: true    
+            }).on('changeDate', function(ev){
+                if($(this).attr('id') === 'BBBEndDate') {
+                    $('#answersDispEndDate, #scoreDispEndDate').removeClass('hidden');
+                }
+            }).on('blur', function(ev){
+                if($(this).attr('id') === 'BBBEndDate') {
+                    var end_date = $(this).val();
+                    if (end_date === '') {
+                        if ($('input[name=\"dispresults\"]:checked').val() == 4) {
+                            $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
+                        }                          
+                        $('#answersDispEndDate, #scoreDispEndDate').addClass('hidden');
+                    }
+                }
+            });
+            $('#enableEndDate').change(function() {
+                var dateType = $(this).prop('id').replace('enable', '');
+                if($(this).prop('checked')) {
+                    $('input#BBB'+dateType).prop('disabled', false);
+                    if (dateType === 'EndDate' && $('input#BBBEndDate').val() !== '') {
+                        $('#answersDispEndDate, #scoreDispEndDate').removeClass('hidden');
+                    }
+                } else {
+                    $('input#BBB'+dateType).prop('disabled', true);
+                    if ($('input[name=\"dispresults\"]:checked').val() == 4) {
+                        $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
+                    }                    
+                    $('#answersDispEndDate, #scoreDispEndDate').addClass('hidden');
+                }
+            });
+        });
+    </script>";
+
 load_js('select2');
 
 $head_content .= "<script type='text/javascript'>
@@ -129,7 +170,7 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
-                      'show' => get_total_bbb_servers())));
+                      'show' => is_active_bbb_server())));
         }
     }
 }
@@ -138,12 +179,25 @@ if (isset($_GET['add'])) {
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);    
     new_bbb_session();
 }
-elseif(isset($_POST['update_bbb_session']))
-{
+elseif(isset($_POST['update_bbb_session'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    if (isset($_POST['enableEndDate']) and ($_POST['enableEndDate'])) {
+        $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
+        $end = $endDate_obj->format('Y-m-d H:i:s');
+    } else {
+        $end = NULL;
+    }
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
-    $start = $startDate_obj->format('Y-m-d H:i:s');    
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, '0' ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'],$_POST['record'],$_POST['sessionUsers'], true, getDirectReference($_GET['id']));
+    $start = $startDate_obj->format('Y-m-d H:i:s');
+    $notifyUsers = 0;
+    if (isset($_POST['notifyUsers']) and $_POST['notifyUsers']) {
+        $notifyUsers = 1;
+    }
+    $record = 'false';
+    if (isset($_POST['record'])) {
+        $record = $_POST['record'];
+    }    
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end ,$_POST['status'], $notifyUsers, $_POST['minutes_before'], $_POST['external_users'], $record, $_POST['sessionUsers'], true, getDirectReference($_GET['id']));
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }
@@ -200,12 +254,26 @@ elseif(isset($_GET['choice']))
 } elseif (isset($_POST['new_bbb_session'])) { // new BBB session
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
-    $start = $startDate_obj->format('Y-m-d H:i:s');    
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, '0' ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
+    $start = $startDate_obj->format('Y-m-d H:i:s');
+    if (isset($_POST['enableEndDate']) and ($_POST['enableEndDate'])) {
+        $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
+        $end = $endDate_obj->format('Y-m-d H:i:s');
+    } else {
+        $end = NULL;
+    }
+    $notifyUsers = 0;
+    if (isset($_POST['notifyUsers']) and $_POST['notifyUsers']) {
+        $notifyUsers = 1;
+    }
+    $record = 'true';
+    if (isset($_POST['record'])) {
+        $record = $_POST['record'];
+    }
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], $_POST['external_users'], $record, $_POST['sessionUsers'], false);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/bbb/index.php?course=$course_code");
 }
-else {
+else { // display list of conferences
     bbb_session_details();
 }
 

@@ -3265,6 +3265,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('bbb_session', 'end_date')) {
             Database::get()->query("ALTER TABLE `bbb_session` ADD `end_date` datetime DEFAULT NULL AFTER `start_date`");
         }
+        // upgrade bbb_session table        
+        if (!DBHelper::fieldExists('bbb_servers', 'all_courses')) {
+            Database::get()->query("ALTER TABLE bbb_servers ADD all_courses TINYINT(1) NOT NULL DEFAULT 1");
+        }
         
         // om_servers table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `om_servers` (
@@ -3279,8 +3283,17 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `max_rooms` int(11) DEFAULT NULL,
             `max_users` int(11) DEFAULT NULL,
             `enable_recordings` enum('true','false') DEFAULT NULL,
+            `all_courses` tinyint(1) NOT NULL DEFAULT 1,    
             PRIMARY KEY (`id`),
             KEY `idx_om_servers` (`hostname`)) $charset_spec");
+        
+        // course external server table
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `course_external_server` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `course_id` int(11) NOT NULL,
+            `external_server` int(11) NOT NULL,
+            PRIMARY KEY (`id`),
+            KEY (`external_server`, `course_id`)) $charset_spec");        
         
         // drop trigger
         Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
