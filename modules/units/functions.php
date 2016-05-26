@@ -1223,7 +1223,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
         $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
     }
 
-    $content = "<td style='width: 85px;' class='option-btn-cell'><div class='reorder-btn pull-left' style='padding:0 10px; font-size: 18px; cursor: pointer;
+    $content = "<td style='width: 85px;' class='option-btn-cell'><div class='reorder-btn pull-left' style='padding:0 10px; font-size: 16px; cursor: pointer;
                 vertical-align: bottom;'>
                                                 <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
                                             </div><div class='pull-left'>";
