@@ -43,7 +43,7 @@ $active = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_
 $unlock_interval = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->unlock_interval;
 $r_group = explode(",",Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->external_users);
 
-if ($active<>'1' || date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))> $unlock_interval || date_diff_in_minutes(date('Y-m-d H:i:s'),$start_date) > 1440 || get_total_bbb_servers()=='0' || !in_array($_GET['username'],$r_group))
+if ($active<>'1' || date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))> $unlock_interval || date_diff_in_minutes(date('Y-m-d H:i:s'),$start_date) > 1440 || !is_active_bbb_server() || !in_array($_GET['username'],$r_group))
 {
     echo $langBBBNoteEnableJoin;
     exit;

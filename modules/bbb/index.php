@@ -47,12 +47,15 @@ $toolName = $langBBB;
 
 //Here we check if we use BBB,OpenMeetings or WebConf
 //Algo to be implemented later
-if(get_total_bbb_servers() == '0' && get_total_om_servers() <> '0')
+if(is_active_om_server()) {
     $server_type='om';
-if(get_total_bbb_servers() <> '0' /*&& get_total_om_servers() == '0'*/)
+}
+if(is_active_bbb_server()) {
     $server_type='bbb';
-if(get_total_webconf_servers() <> '0' /*&& get_total_om_servers() == '0'*/)
+}
+if(get_total_webconf_servers() <> '0' /*&& get_total_om_servers() == '0'*/) {
     $server_type='webconf';
+}
 
 // guest user not allowed
 if (check_guest()) {
@@ -72,11 +75,12 @@ $('input#start_session').datetimepicker({
         format: 'dd-mm-yyyy hh:ii',
         pickerPosition: 'bottom-right',
         language: '".$language."',
-        autoclose: true,        
+        autoclose: true
     });
 });
 
 </script>";
+
 $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#BBBEndDate').datetimepicker({
@@ -180,7 +184,7 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
-                      'show' => max(get_total_bbb_servers(),  get_total_om_servers(),  get_total_webconf_servers()))));
+                      'show' => (is_active_bbb_server() or is_active_om_server()))));
         }
     }
 }
@@ -189,18 +193,25 @@ if (isset($_GET['add'])) {
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);    
     new_bbb_session();
 }
-elseif(isset($_POST['update_bbb_session']))
-{
+elseif(isset($_POST['update_bbb_session'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
-    $start = $startDate_obj->format('Y-m-d H:i:s');     
-    if(isset($_POST['BBBEndDate'] )) {
+    if (isset($_POST['enableEndDate']) and ($_POST['enableEndDate'])) {
         $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
-        $end = $endDate_obj->format('Y-m-d H:i:s');    
+        $end = $endDate_obj->format('Y-m-d H:i:s');
     } else {
         $end = NULL;
     }
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, '0' ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'],$_POST['record'],$_POST['sessionUsers'], true, getDirectReference($_GET['id']));
+    $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
+    $start = $startDate_obj->format('Y-m-d H:i:s');
+    $notifyUsers = 0;
+    if (isset($_POST['notifyUsers']) and $_POST['notifyUsers']) {
+        $notifyUsers = 1;
+    }
+    $record = 'false';
+    if (isset($_POST['record'])) {
+        $record = $_POST['record'];
+    }    
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end ,$_POST['status'], $notifyUsers, $_POST['minutes_before'], $_POST['external_users'], $record, $_POST['sessionUsers'], true, getDirectReference($_GET['id']));
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }
@@ -222,15 +233,14 @@ elseif(isset($_GET['choice']))
             enable_bbb_session(getDirectReference($_GET['id']));
             break;
         case 'do_join':
-            #check if there is any record-capable server. Otherwise notify users
+            #check if there is any record-capable bbb server. Otherwise notify users
             if (isset($_GET['record'])) {
-                if(($_GET['record']=='true' && $server_type=='webconf') || ($_GET['record']=='true' && Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0 &&  Database::get()->querySingle("SELECT COUNT(*) AS count FROM om_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0))
+                if($_GET['record']=='true' && Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
                 {
                     $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";
                     break;
-                }
-            }
-            switch($server_type)
+                }                         
+                switch($server_type)
                 {
                     case 'bbb':
                         if (bbb_session_running($_GET['meeting_id']) == false)                        
@@ -249,10 +259,12 @@ elseif(isset($_GET['choice']))
                         create_webconf_jnlp_file($_GET['meeting_id']);
                         break;                        
                 }
-            //TO BE BETTER IMPLEMENTED
-            $webconf_server = Database::get()->querySingle("SELECT * FROM wc_servers WHERE enabled='true' ORDER BY id DESC LIMIT 1")->hostname;                         
-            $screenshare_server = Database::get()->querySingle("SELECT * FROM wc_servers WHERE enabled='true' ORDER BY id DESC LIMIT 1")->screenshare;
-            //
+                //TO BE BETTER IMPLEMENTED
+                $webconf_server = Database::get()->querySingle("SELECT * FROM wc_servers WHERE enabled='true' ORDER BY id DESC LIMIT 1")->hostname;                         
+                $screenshare_server = Database::get()->querySingle("SELECT * FROM wc_servers WHERE enabled='true' ORDER BY id DESC LIMIT 1")->screenshare;
+                //
+                
+            }
             if(isset($_GET['mod_pw'])) {
                 switch($server_type)
                 {
@@ -269,8 +281,7 @@ elseif(isset($_GET['choice']))
             } else {
                 # Get session capacity                
                 $sess = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id']);
-                $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);                                
-                
+                $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);                
                 if($server_type=='bbb')
                 {
                     $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw);
@@ -278,8 +289,8 @@ elseif(isset($_GET['choice']))
                 if($server_type == 'om' || $server_type == 'webconf')
                 {
                     $ssUsers = 0;
-                }
-                if( ($sess->sessionUsers > 0) && ($sess->sessionUsers < $ssUsers)) {
+                }                
+                if( ($sess->sessionUsers > 0) && ($sess->sessionUsers < get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw))) {
                     $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
                     break;
                 } else {
@@ -303,21 +314,29 @@ elseif(isset($_GET['choice']))
             break;
     }
 
-} elseif (isset($_POST['new_bbb_session'])) { // new bbb session
+} elseif (isset($_POST['new_bbb_session'])) { // new BBB session
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
-    $start = $startDate_obj->format('Y-m-d H:i:s');       
-    if(isset($_POST['BBBEndDate'])) {
+    $start = $startDate_obj->format('Y-m-d H:i:s');
+    if (isset($_POST['enableEndDate']) and ($_POST['enableEndDate'])) {
         $endDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['BBBEndDate']);
         $end = $endDate_obj->format('Y-m-d H:i:s');
     } else {
-        $end=NULL;
+        $end = NULL;
     }
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, '0' ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
+    $notifyUsers = 0;
+    if (isset($_POST['notifyUsers']) and $_POST['notifyUsers']) {
+        $notifyUsers = 1;
+    }
+    $record = 'true';
+    if (isset($_POST['record'])) {
+        $record = $_POST['record'];
+    }
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], $_POST['external_users'], $record, $_POST['sessionUsers'], false);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/bbb/index.php?course=$course_code");
 }
-else {
+else { // display list of conferences
     bbb_session_details();
 }
 
