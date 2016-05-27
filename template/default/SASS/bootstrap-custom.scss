@@ -2218,6 +2218,9 @@ a.list-group-item.delete:hover{
 .unit-resources{
     padding-top: 40px;
 }
+.unit-resources table tr:first-child td{
+    border: none;
+}
 
 /* COURSE HOME */
 /* Course description title */

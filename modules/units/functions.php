@@ -195,7 +195,7 @@ function show_resources($unit_id) {
         $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
         $tool_content .= "<div class='table-responsive'>";
-        $tool_content .= "<table class='table-default'><tbody id='unitResources'>";
+        $tool_content .= "<table class='table table-striped table-hover'><tbody id='unitResources'>";
         foreach ($req as $info) {
             $info->comments = standard_text_escape($info->comments);
             show_resource($info);

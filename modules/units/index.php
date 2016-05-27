@@ -240,11 +240,10 @@ $tool_content .= "
       }
 
       $tool_content .="
-          <div class='unit-resources'>
-          </div>
-          ";
+          <div class='unit-resources'>";
+            show_resources($id);
+      $tool_content .= "</div>";
 
-          show_resources($id);
     $tool_content .= "
         </div>          
       </div>
