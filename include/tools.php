@@ -752,7 +752,7 @@ function lessonToolsMenu($rich=true) {
             }
                        
             // hide teleconference when no BBB, OpenMeetings or WebConf servers are enabled
-            if ($mid == MODULE_ID_BBB and !is_active_bbb_server() and !is_active_om_server() and !get_total_webconf_servers()) {
+            if ($mid == MODULE_ID_BBB and !is_active_bbb_server() and !is_active_om_server() and !is_active_webconf_server()) {            
                 continue;
             }
 

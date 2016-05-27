@@ -53,7 +53,7 @@ if(is_active_om_server()) {
 if(is_active_bbb_server()) {
     $server_type='bbb';
 }
-if(get_total_webconf_servers() <> '0' /*&& get_total_om_servers() == '0'*/) {
+if(is_active_webconf_server()) {
     $server_type='webconf';
 }
 
@@ -184,7 +184,7 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
-                      'show' => (is_active_bbb_server() or is_active_om_server()))));
+                      'show' => (is_active_bbb_server() or is_active_om_server() or is_active_webconf_server()))));
         }
     }
 }
@@ -255,8 +255,8 @@ elseif(isset($_GET['choice']))
                             create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
                         }
                         break;
-                    case 'webconf':
-                        create_webconf_jnlp_file($_GET['meeting_id']);
+                    case 'webconf':                        
+                        create_webconf_jnlp_file($_GET['meeting_id']);                        
                         break;                        
                 }
                 //TO BE BETTER IMPLEMENTED
@@ -278,34 +278,23 @@ elseif(isset($_GET['choice']))
                         header('Location: ' . get_config('base_url') . '/modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
                         break;                    
                 }
-            } else {
-                # Get session capacity                
-                $sess = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id']);
-                $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);                
-                if($server_type=='bbb')
-                {
+            } else {                
+                if ($server_type=='bbb') { # Get session capacity                
+                    $sess = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id']);
+                    $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);
                     $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw);
-                }
-                if($server_type == 'om' || $server_type == 'webconf')
-                {
-                    $ssUsers = 0;
-                }                
-                if( ($sess->sessionUsers > 0) && ($sess->sessionUsers < get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw))) {
-                    $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
-                    break;
-                } else {
-                    switch($server_type)
-                    {
-                        case 'bbb':
-                            header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
-                            break;
-                        case 'om':
-                            header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0) );
-                            break;
-                        case 'webconf':
-                            header('Location: '. get_config('base_url') . 'modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
-                            break;                          
+                    if(($sess->sessionUsers > 0) && ($sess->sessionUsers < get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw))) {
+                        $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
+                        break;
+                    } else {
+                        header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
                     }
+                }
+                if($server_type == 'om') { 
+                    header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0) );
+                }
+                if ($server_type == 'webconf') {
+                    header('Location: '. get_config('base_url') . 'modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
                 }
             }
             break;

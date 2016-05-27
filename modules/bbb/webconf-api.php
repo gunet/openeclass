@@ -20,20 +20,38 @@
  * ======================================================================== 
  */
 
-function get_total_webconf_servers()
+/**
+ * @brief check if webconf server is enabled
+ * @return boolean
+ */
+function is_active_webconf_server()
 {
-    $total = 0;
-
-    if (get_config('ext_webconf_enabled')) {
-        $total = Database::get()->querySingle("SELECT COUNT(*) AS count FROM wc_servers WHERE enabled='true'")->count;
-    }
-
-    return $total;
+    
+    if (!get_config('ext_webconf_enabled')) { // check for configuration
+        return false;
+    } else {                
+         $q = Database::get()->queryArray("SELECT id FROM wc_servers WHERE enabled='true'");
+         if (count($q) > 0) {
+            return true;
+         } else { // no active servers
+             return false;
+         }
+    }        
 }
 
+/**
+ * @brief create jnlp file
+ * @global type $webDir
+ * @param type $meeting_id
+ */
 function create_webconf_jnlp_file($meeting_id)
 {
     global $webDir;
+    
+    if (!file_exists("$webDir/modules/bbb/webconf/rooms/")) {
+        make_dir("$webDir/modules/bbb/webconf/rooms/");
+    }
+    
     $jnlp_file = $webDir.'/modules/bbb/webconf/rooms/'.$meeting_id.'.jnlp';
     
     //TO BE BETTER IMPLEMENTED
@@ -41,7 +59,7 @@ function create_webconf_jnlp_file($meeting_id)
     //
             
     $file = fopen($jnlp_file,"w");
-    echo fwrite($file,
+    fwrite($file,
                 "<?xml version='1.0' encoding='utf-8'?>
                 <jnlp spec='1.0+' codebase='http://delos.uoa.gr/opendelos/resources/screencast/' >
                     <information>
@@ -67,6 +85,5 @@ function create_webconf_jnlp_file($meeting_id)
                     <argument>flashsv1</argument>
                 </application-desc> 
             </jnlp>");
-    fclose($file);
-    
+    fclose($file);   
 }

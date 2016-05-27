@@ -635,7 +635,7 @@ function bbb_session_details() {
         $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers;
 
     
-    if (!is_active_bbb_server() && !is_active_om_server()) { // check availability
+    if (!is_active_bbb_server() and !is_active_om_server() and !is_active_webconf_server()) { // check availability
         if ($is_editor) {
             $tool_content .= "<div class='alert alert-danger'><label>$langNote</label>: $langBBBNotServerAvailableTeacher</div>";
         } else {
@@ -715,7 +715,7 @@ function bbb_session_details() {
             
             $canJoin = FALSE;
             if (($row->active == '1') and (date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < $row->unlock_interval)
-                    and (is_active_bbb_server() or is_active_om_server())) {
+                    and (is_active_bbb_server() or is_active_om_server() or is_active_webconf_server())) {
                 $canJoin = TRUE;
             }
             if (isset($end_date) && -$timeLeft > DAY_MINUTES) {
