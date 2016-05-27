@@ -30,9 +30,10 @@
  *
  */
 
-require_once 'modules/bbb/functions.php';
-require_once 'modules/bbb/om-api.php';
-require_once 'modules/bbb/webconf-api.php';
+
+require_once 'modules/tc/functions.php';
+require_once 'modules/tc/om-api.php';
+require_once 'modules/tc/webconf-api.php';
 require_once 'modules/dropbox/class.mailbox.php';
 
 /*
@@ -750,9 +751,10 @@ function lessonToolsMenu($rich=true) {
             if ($mid == MODULE_ID_GROUPS and !$courses[$course_code]) {
                 continue;
             }
+
                        
             // hide teleconference when no BBB, OpenMeetings or WebConf servers are enabled
-            if ($mid == MODULE_ID_BBB and !is_active_bbb_server() and !is_active_om_server() and !is_active_webconf_server()) {            
+            if ($mid == MODULE_ID_TC and !is_active_bbb_server() and !is_active_om_server() and !is_active_webconf_server()) {            
                 continue;
             }
 

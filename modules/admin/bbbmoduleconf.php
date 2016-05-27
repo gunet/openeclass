@@ -24,7 +24,7 @@
 // Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
-require_once 'modules/bbb/functions.php';
+require_once 'modules/tc/functions.php';
 
 $toolName = $langBBBConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);

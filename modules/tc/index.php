@@ -40,7 +40,7 @@ ModalBoxHelper::loadModalBox();
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
-$action->record(MODULE_ID_BBB);
+$action->record(MODULE_ID_TC);
 /* * *********************************** */
 
 $toolName = $langBBB;
@@ -275,7 +275,7 @@ elseif(isset($_GET['choice']))
                         header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1) );
                         break;
                     case 'webconf':
-                        header('Location: ' . get_config('base_url') . '/modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
+                        header('Location: ' . get_config('base_url') . '/modules/tc/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
                         break;                    
                 }
             } else {                
@@ -294,7 +294,7 @@ elseif(isset($_GET['choice']))
                     header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0) );
                 }
                 if ($server_type == 'webconf') {
-                    header('Location: '. get_config('base_url') . 'modules/bbb/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
+                    header('Location: '. get_config('base_url') . 'modules/tc/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
                 }
             }
             break;
@@ -323,7 +323,7 @@ elseif(isset($_GET['choice']))
     }
     add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], $_POST['external_users'], $record, $_POST['sessionUsers'], false);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
-    redirect_to_home_page("modules/bbb/index.php?course=$course_code");
+    redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
 else { // display list of conferences
     bbb_session_details();

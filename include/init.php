@@ -439,7 +439,7 @@ $modules = array(
     MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-comments-o'),
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-sort-numeric-desc'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-check-square-o'),
-    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'fa-exchange'),
+    MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-exchange'),
     MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'fa-map'),
     MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => 'lti_consumer', 'image' => 'fa-link'),
 );
@@ -538,8 +538,8 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                               module_id NOT IN (SELECT module_id FROM module_disable) AND
                               module_id NOT IN (" . MODULE_ID_CHAT . ",
                                                 " . MODULE_ID_ASSIGN . ",
-                                                " . MODULE_ID_BBB . ",
                                                 " . MODULE_ID_LTI_CONSUMER . ",
+                                                " . MODULE_ID_TC . ",
                                                 " . MODULE_ID_DROPBOX . ",
                                                 " . MODULE_ID_FORUM . ",
                                                 " . MODULE_ID_GROUPS . ",
