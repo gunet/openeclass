@@ -30,7 +30,7 @@
                     <input type='hidden' name='auth' value='{{ $auth }}'>
                     <div class='form-group'>
                         <div class='col-sm-offset-2 col-sm-10'>
-                            {{ $form_buttons }}
+                            {!! $form_buttons !!}
                             @if (isset($_SESSION['prof']) and $_SESSION['prof']) 
                                 <input type='hidden' name='p' value='1'>
                             @endif
