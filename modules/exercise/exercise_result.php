@@ -72,7 +72,7 @@ load_js('tools.js');
 if (isset($_GET['eurId'])) {
     $eurid = $_GET['eurId'];
     $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
-    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d ORDER BY answer_record_id", $eurid);
     $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
     if (!$exercise_user_record) {
         //No record matches with thiw exercise user record id
