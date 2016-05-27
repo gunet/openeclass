@@ -201,7 +201,7 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = htmlspecialchars($q->title);         
-        $link[$i] = "<a class='btn btn-default $page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
+        $link[$i] = "<a class='$page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
     } else {
         $link[$i] = '&nbsp;';
     }
@@ -211,50 +211,45 @@ if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
     $tool_content .= "
         <div class='row'>
             <div class='col-md-12'>
-                <div class='panel panel-default'>
-                    <div class='panel-body'>
-                        $link[previous]
-                        $link[next]
-                    </div>
-                </div>
+              <div class='form-wrapper clearfix'>
+                $link[previous]
+                $link[next]
+              </div>
             </div>
         </div>";
 }
 $moduleTag = new ModuleElement($id);
 $tags_list = $moduleTag->showTags();
-$tool_content .= "<div class='row margin-bottom'>
-      <div class='col-md-12'>
-        
-      </div>
-    </div>
-
-    <div class='row'>
-      <div class='col-md-12'>
-        <div class='panel panel-default'>
-            <div class='panel-heading'>
-                <div class='panel-title h3'>".q($pageName)."</div>
-            </div>
-            <div class='panel-body'>$comments";
-if (!empty($tags_list)) {
-    $tool_content .= "
-                    <div>
-                        $langTags: $tags_list
-                    </div>
-                    ";
-}
-    $tool_content .= "    
-            </div>          
-        </div>
-      </div>
-    </div>
-    <div class='row'>
-  <div class='col-md-12'>
-    <div class='panel padding'>";
-show_resources($id);
 $tool_content .= "
+  <div class='row'>
+    <div class='col-md-12'>
+      <div class='panel panel-default'>
+        <div class='panel-body'>
+          <div class='inner-heading'>
+            ".q($pageName)."
+          </div>
+          <div>
+            $comments
+          </div>";
+      if (!empty($tags_list)) {
+        $tool_content .= "
+          <div class='unit-tags'>
+              <small><span class='text-muted'>$langTags:</span> $tags_list</small>
+          </div>
+          ";
+      }
+
+      $tool_content .="
+          <div class='unit-resources'>
+          </div>
+          ";
+
+          show_resources($id);
+    $tool_content .= "
+        </div>          
+      </div>
     </div>
-  </div>
-</div>";
+  </div>";
 $q = Database::get()->queryArray("SELECT id, title FROM course_units
              WHERE course_id = ?d AND `order` > 0
                    $visibility_check
@@ -269,8 +264,7 @@ foreach ($q as $info) {
 $tool_content .= "
     <div class='row'>
         <div class='col-md-12'>
-            <div class='panel panel-default'>
-                <div class='panel-body'>
+            <div class='form-wrapper'>
                     <form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
                         <div class='form-group'>
                             <label class='col-sm-8 control-label'>$langCourseUnits</label>
@@ -282,7 +276,6 @@ $tool_content .= "
                             </div>
                         </div>
                     </form>
-                </div>
             </div>
         </div>
     </div>";

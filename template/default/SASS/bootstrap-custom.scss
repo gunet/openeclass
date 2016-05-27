@@ -2210,6 +2210,15 @@ a.list-group-item.delete:hover{
     border-radius: 5px;
 }
 
+/* COURSE UNITS */
+.unit-tags{
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+.unit-resources{
+    padding-top: 40px;
+}
+
 /* COURSE HOME */
 /* Course description title */
 .course-info-title{
@@ -3160,6 +3169,9 @@ div #treeModal div .modal-body {
     padding-bottom: 15px;
     margin-bottom: 25px;
     border-bottom: 1px solid #ccc;
+    font-size: 16px;
+    font-family: "Roboto" !important;
+    font-weight: bold;
 }
 .li-indented{
     padding-left: 15px !important;
