@@ -457,7 +457,7 @@ require_once 'include/lib/references.class.php';
             'assignment' => 'modules/work/index.php?id=thisid&course=thiscourse',
             'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
             'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
-            'teleconference' => 'modules/bbb/?course=thiscourse');
+            'teleconference' => 'modules/tc/?course=thiscourse');
 
        $fromdatetime = date('Y-m-d H:i:s', $from / 1000);
        $todatetime = date('Y-m-d H:i:s', $to / 1000);

@@ -51,7 +51,7 @@ class Calendar_Events {
             'assignment' => 'modules/work/index.php?id=thisid&course=thiscourse',
             'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
             'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
-            'teleconference' => 'modules/bbb/?course=thiscourse');
+            'teleconference' => 'modules/tc/?course=thiscourse');
 
     /** @staticvar object with user calendar settings
     */

@@ -38,7 +38,7 @@ ModalBoxHelper::loadModalBox();
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
-$action->record(MODULE_ID_BBB);
+$action->record(MODULE_ID_TC);
 /* * *********************************** */
 
 $toolName = $langBBB;
@@ -271,7 +271,7 @@ elseif(isset($_GET['choice']))
     }
     add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], $_POST['external_users'], $record, $_POST['sessionUsers'], false);
     Session::Messages($langBBBAddSuccessful, 'alert-success');
-    redirect_to_home_page("modules/bbb/index.php?course=$course_code");
+    redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
 else { // display list of conferences
     bbb_session_details();

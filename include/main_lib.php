@@ -84,7 +84,7 @@ define('MODULE_ID_SEARCH', 28);
 define('MODULE_ID_CONTACT', 29);
 define('MODULE_ID_ATTENDANCE', 30);
 define('MODULE_ID_GRADEBOOK', 32);
-define('MODULE_ID_BBB', 34);
+define('MODULE_ID_TC', 34);
 define('MODULE_ID_BLOG', 37);
 define('MODULE_ID_COMMENTS', 38);
 define('MODULE_ID_RATING', 39);

@@ -425,7 +425,7 @@ $modules = array(
     MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'blog'),
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
-    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')
+    MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'conference')
 );
 // ----------------------------------------
 // course admin modules
@@ -521,7 +521,7 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                               module_id NOT IN (SELECT module_id FROM module_disable) AND
                               module_id NOT IN (" . MODULE_ID_CHAT . ",
                                                 " . MODULE_ID_ASSIGN . ",
-                                                " . MODULE_ID_BBB . ",
+                                                " . MODULE_ID_TC . ",
                                                 " . MODULE_ID_DROPBOX . ",
                                                 " . MODULE_ID_FORUM . ",
                                                 " . MODULE_ID_GROUPS . ",

@@ -321,7 +321,7 @@ function add_update_bbb_session($title, $desc, $start_session, $end_session, $st
             }
             if (count($recipients) > 0) {
                 $emailsubject = $langBBBScheduledSession;
-                $bbblink = $urlServer . "modules/bbb/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;mod_pw=$new_mod_pw&amp;att_pw=$new_att_pw";
+                $bbblink = $urlServer . "modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;mod_pw=$new_mod_pw&amp;att_pw=$new_att_pw";
                 $emailheader = "
                     <div id='mail-header'>
                         <div>
@@ -359,7 +359,7 @@ function add_update_bbb_session($title, $desc, $start_session, $end_session, $st
                     </div>
                 ";
             foreach ($recipients as $row) {
-                $bbblink = $urlServer . "modules/bbb/ext.php?course=$course_code&amp;meeting_id=$new_meeting_id&amp;username=" . urlencode($row);
+                $bbblink = $urlServer . "modules/tc/ext.php?course=$course_code&amp;meeting_id=$new_meeting_id&amp;username=" . urlencode($row);
 
                 $emailmain = "
                 <div id='mail-body'>
@@ -829,7 +829,7 @@ function disable_bbb_session($id)
 
     Database::get()->querySingle("UPDATE bbb_session set active='0' WHERE id=?d",$id);
     Session::Messages($langBBBUpdateSuccessful, 'alert-success');
-    redirect_to_home_page("modules/bbb/index.php?course=$course_code");
+    redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
 
 /**
@@ -845,7 +845,7 @@ function enable_bbb_session($id)
 
     Database::get()->querySingle("UPDATE bbb_session SET active='1' WHERE id=?d",$id);
     Session::Messages($langBBBUpdateSuccessful, 'alert-success');
-    redirect_to_home_page("modules/bbb/index.php?course=$course_code");
+    redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
 
 
@@ -862,7 +862,7 @@ function delete_bbb_session($id)
 
     Database::get()->querySingle("DELETE FROM bbb_session WHERE id=?d",$id);
     Session::Messages($langBBBDeleteSuccessful, 'alert-success');
-    redirect_to_home_page("modules/bbb/index.php?course=$course_code");
+    redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
 
 /**
