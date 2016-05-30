@@ -1427,24 +1427,26 @@ $db->query("CREATE TABLE IF NOT EXISTS `bbb_servers` (
     `max_users` int(11) DEFAULT NULL,
     `enable_recordings` enum('true','false') DEFAULT NULL,
     `weight` int(11) DEFAULT NULL,
+    `all_courses` tinyint(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`),
     KEY `idx_bbb_servers` (`hostname`)) $charset_spec");
 
 // om_servers table
 $db->query("CREATE TABLE IF NOT EXISTS `om_servers` (
-                        `id` int(11) NOT NULL AUTO_INCREMENT,
-                        `hostname` varchar(255) DEFAULT NULL,
-                        `port` varchar(255) DEFAULT NULL,
-                        `enabled` enum('true','false') DEFAULT NULL,
-                        `username` varchar(255) DEFAULT NULL,
-                        `password` varchar(255) DEFAULT NULL,
-                        `module_key` int(11) DEFAULT NULL,
-                        `webapp` varchar(255) DEFAULT NULL,
-                        `max_rooms` int(11) DEFAULT NULL,
-                        `max_users` int(11) DEFAULT NULL,
-                        `enable_recordings` enum('true','false') DEFAULT NULL,
-                        PRIMARY KEY (`id`),
-                        KEY `idx_om_servers` (`hostname`)) $charset_spec");
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `hostname` varchar(255) DEFAULT NULL,
+                `port` varchar(255) DEFAULT NULL,
+                `enabled` enum('true','false') DEFAULT NULL,
+                `username` varchar(255) DEFAULT NULL,
+                `password` varchar(255) DEFAULT NULL,
+                `module_key` int(11) DEFAULT NULL,
+                `webapp` varchar(255) DEFAULT NULL,
+                `max_rooms` int(11) DEFAULT NULL,
+                `max_users` int(11) DEFAULT NULL,
+                `enable_recordings` enum('true','false') DEFAULT NULL,
+                `all_courses` tinyint(1) NOT NULL DEFAULT 1,
+                PRIMARY KEY (`id`),
+                KEY `idx_om_servers` (`hostname`)) $charset_spec");
 // wc_servers table
 $db->query("CREATE TABLE IF NOT EXISTS `wc_servers` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1486,6 +1488,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `lti_apps` (
     `lti_provider_secret` varchar(255) DEFAULT NULL,
     `enabled` enum('0','1') DEFAULT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `course_external_server` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `course_id` int(11) NOT NULL,
+    `external_server` int(11) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY (`external_server`, `course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_settings` (
     `setting_id` INT(11) NOT NULL,

@@ -47,7 +47,11 @@
 
     <!-- Font Awesome - A font of icons -->
     <link href="{{ $template_base }}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
-    
+    @if (isset($css_files))
+        @foreach($css_files as $css_file)
+            <link rel="stylesheet" href="{{ $urlAppend }}{{ $css_file }}?v={{ $eclass_version }}">
+        @endforeach
+    @endif
     <!--[if lt IE 9]>
       <script type="text/javascript" src="{{ $template_base }}/js/html5shiv.min.js"></script>
       <script type="text/javascript" src="{{ $template_base }}/js/respond.min.js"></script>
@@ -379,6 +383,11 @@
 
     @if (get_config('ext_analytics_enabled') and $html_footer = get_config('ext_analytics_code')) {
         {!! get_config('ext_analytics_code') !!}
+    @endif
+    @if (isset($footer_js_files))
+        @foreach($footer_js_files as $footer_js_file)
+            <script src="{{ $urlAppend }}{{ $footer_js_file }}" type="text/javascript"></script>
+        @endforeach
     @endif
 </body>
 </html>
