@@ -35,7 +35,7 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
 
     global $webDir, $urlServer;
     
-    $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
+    $res = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s",$meeting_id);
     if ($res) {
         $running_server = $res->running_at;
     }
@@ -93,7 +93,7 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
 
 function om_session_running($meeting_id)
 {
-    $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
+    $res = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s",$meeting_id);
 
     if (!isset($res->running_at)) {
         return false;
@@ -195,7 +195,7 @@ function create_om_meeting($title, $meeting_id,$record)
             if (($max_rooms == 0 && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $active_rooms < $max_rooms) || ($active_rooms < $max_rooms && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $max_rooms == 0)) // YOU FOUND THE SERVER
             {
                 $run_to = $row->id;
-                Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",$row->id, $meeting_id);
+                Database::get()->querySingle("UPDATE tc_session SET running_at=?s WHERE meeting_id=?s",$row->id, $meeting_id);
                 break;
             }
         }
@@ -218,7 +218,7 @@ function create_om_meeting($title, $meeting_id,$record)
                 }
             }
         }
-        Database::get()->querySingle("UPDATE bbb_session SET running_at=?d WHERE meeting_id=?s",$run_to,$meeting_id);
+        Database::get()->querySingle("UPDATE tc_session SET running_at=?d WHERE meeting_id=?s",$run_to,$meeting_id);
     }
 
     // we find the om server that will serve the session
@@ -261,7 +261,7 @@ function create_om_meeting($title, $meeting_id,$record)
         $l = $roomService->addRoomWithModeration($params);
             
         //TO REMOVE!!!
-        Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",$run_to, $meeting_id);
+        Database::get()->querySingle("UPDATE tc_session SET running_at=?s WHERE meeting_id=?s",$run_to, $meeting_id);
 
     }
 }

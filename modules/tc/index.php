@@ -228,7 +228,7 @@ elseif(isset($_GET['choice']))
                 }            
                 if (bbb_session_running($_GET['meeting_id']) == false)
                 {
-                    $mod_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;                
+                    $mod_pw = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;                
                     create_meeting($_GET['title'],$_GET['meeting_id'],$mod_pw,$_GET['att_pw'],$_GET['record']);
                 }
             }
@@ -236,7 +236,7 @@ elseif(isset($_GET['choice']))
                 header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
             } else {
                 # Get session capacity                
-                $sess = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id']);
+                $sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id']);
                 $serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);                                
                 if( ($sess->sessionUsers > 0) && ($sess->sessionUsers < get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw))) {
                     $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";

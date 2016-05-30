@@ -256,14 +256,14 @@ function add_update_bbb_session($title, $desc, $start_session, $end_session, $st
         $r_group = mb_substr($r_group, 0, -1); // remove last comma
     }       
     if (isset($update) and $update) {
-        Database::get()->querySingle("UPDATE bbb_session SET title=?s, description=?s, start_date=?t, end_date=?t,
+        Database::get()->querySingle("UPDATE tc_session SET title=?s, description=?s, start_date=?t, end_date=?t,
                                         public=?s, active=?s, unlock_interval=?d, external_users=?s,
                                         participants=?s, record=?s, sessionUsers=?d WHERE id=?d",
                                 $title, $desc, $start_session, $end_session, 1, $status, $minutes_before,
                                 $external_users, $r_group, $record, $sessionUsers, $session_id);
-        $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM bbb_session WHERE id = ?d", $session_id);
+        $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM tc_session WHERE id = ?d", $session_id);
     } else {                        
-        $q = Database::get()->query("INSERT INTO bbb_session (course_id, title, description, start_date, end_date,
+        $q = Database::get()->query("INSERT INTO tc_session (course_id, title, description, start_date, end_date,
                                                             public, active, running_at,
                                                             meeting_id, mod_pw, att_pw,
                                                             unlock_interval, external_users, participants, record,
@@ -272,7 +272,7 @@ function add_update_bbb_session($title, $desc, $start_session, $end_session, $st
                                             $course_id, $title, $desc, $start_session, $end_session, 1, $status,
                                             generateRandomString(), generateRandomString(), generateRandomString(),
                                             $minutes_before, $external_users, $r_group, $record,$sessionUsers);
-        $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM bbb_session WHERE id = ?d", $q->lastInsertID);
+        $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM tc_session WHERE id = ?d", $q->lastInsertID);
     }
     $new_meeting_id = $q->meeting_id;
     $new_title = $q->title;
@@ -412,7 +412,7 @@ function edit_bbb_session($session_id) {
     global $langBBBEndHelpBlock, $langEnd;
 
 
-    $row = Database::get()->querySingle("SELECT * FROM bbb_session WHERE id = ?d ", $session_id);   
+    $row = Database::get()->querySingle("SELECT * FROM tc_session WHERE id = ?d ", $session_id);   
     $status = ($row->active == 1 ? 1 : 0);
     $record = ($row->record == "true" ? 1 : 0);
     $running_at = $row->running_at;
@@ -649,7 +649,7 @@ function bbb_session_details() {
 
     $myGroups = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id=?d", $_SESSION['uid']);
     $activeClause = $is_editor? '': "AND active = '1'";
-    $result = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id = ?s $activeClause 
+    $result = Database::get()->queryArray("SELECT * FROM tc_session WHERE course_id = ?s $activeClause 
                                                 ORDER BY start_date DESC", $course_id);
     if ($result) {
         if (!$is_editor) {
@@ -827,7 +827,7 @@ function disable_bbb_session($id)
 {
     global $langBBBUpdateSuccessful, $course_code;
 
-    Database::get()->querySingle("UPDATE bbb_session set active='0' WHERE id=?d",$id);
+    Database::get()->querySingle("UPDATE tc_session set active='0' WHERE id=?d",$id);
     Session::Messages($langBBBUpdateSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
@@ -843,7 +843,7 @@ function enable_bbb_session($id)
 {
     global $langBBBUpdateSuccessful, $course_code;
 
-    Database::get()->querySingle("UPDATE bbb_session SET active='1' WHERE id=?d",$id);
+    Database::get()->querySingle("UPDATE tc_session SET active='1' WHERE id=?d",$id);
     Session::Messages($langBBBUpdateSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
@@ -860,7 +860,7 @@ function delete_bbb_session($id)
 {
     global $langBBBDeleteSuccessful, $course_code;
 
-    Database::get()->querySingle("DELETE FROM bbb_session WHERE id=?d",$id);
+    Database::get()->querySingle("DELETE FROM tc_session WHERE id=?d",$id);
     Session::Messages($langBBBDeleteSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
@@ -914,7 +914,7 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
             if (($max_rooms == 0 && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $active_rooms < $max_rooms) || ($active_rooms < $max_rooms && $max_users == 0) || (($max_users > ($users_to_join + $connected_users)) && $max_rooms == 0)) // YOU FOUND THE SERVER
             {
                 $run_to = $row->id;
-                Database::get()->querySingle("UPDATE bbb_session SET running_at=?s WHERE meeting_id=?s",$row->id, $meeting_id);
+                Database::get()->querySingle("UPDATE tc_session SET running_at=?s WHERE meeting_id=?s",$row->id, $meeting_id);
                 break;
             }
         }
@@ -937,7 +937,7 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
                 }
             }
         }
-        Database::get()->querySingle("UPDATE bbb_session SET running_at=?d WHERE meeting_id=?s",$run_to,$meeting_id);
+        Database::get()->querySingle("UPDATE tc_session SET running_at=?d WHERE meeting_id=?s",$run_to,$meeting_id);
     }
 
     // we find the bbb server that will serve the session
@@ -997,7 +997,7 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
  */
 function bbb_join_moderator($meeting_id, $mod_pw, $att_pw, $surname, $name) {
 
-    $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
+    $res = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s",$meeting_id);
     if ($res) {
         $running_server = $res->running_at;
     }
@@ -1046,7 +1046,7 @@ return;
  */
 function bbb_join_user($meeting_id, $att_pw, $surname, $name) {
 
-    $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
+    $res = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s",$meeting_id);
     if ($res) {
         $running_server = $res->running_at;
     }
@@ -1085,7 +1085,7 @@ function generateRandomString($length = 10) {
 
 function bbb_session_running($meeting_id)
 {
-    $res = Database::get()->querySingle("SELECT running_at FROM bbb_session WHERE meeting_id = ?s",$meeting_id);
+    $res = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s",$meeting_id);
 
     if (!isset($res->running_at)) {
         return false;
@@ -1206,9 +1206,10 @@ function publish_video_recordings($course_id, $id)
 {
     global $langBBBImportRecordingsOK, $langBBBImportRecordingsNo, $langBBBImportRecordingsNoNew, $tool_content;
 
-    $sessions = Database::get()->queryArray("SELECT bbb_session.id,bbb_session.course_id AS course_id,"
-            . "bbb_session.title,bbb_session.description,bbb_session.start_date,"
-            . "bbb_session.meeting_id,course.prof_names FROM bbb_session LEFT JOIN course ON bbb_session.course_id=course.id WHERE course.code=?s AND bbb_session.id=?d", $course_id, $id);
+    $sessions = Database::get()->queryArray("SELECT tc_session.id,tc_session.course_id AS course_id,"
+            . "tc_session.title,tc_session.description,tc_session.start_date,"
+            . "tc_session.meeting_id,course.prof_names FROM tc_session "
+            . "LEFT JOIN course ON tc_session.course_id=course.id WHERE course.code=?s AND tc_session.id=?d", $course_id, $id);
 
     $servers = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY id DESC");
 

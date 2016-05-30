@@ -3260,8 +3260,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('poll', 'type')) {
             Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");
         }
-        
-        // upgrade bbb_session table        
+                
+        // upgrade bbb_session table
         if (!DBHelper::fieldExists('bbb_session', 'end_date')) {
             Database::get()->query("ALTER TABLE `bbb_session` ADD `end_date` datetime DEFAULT NULL AFTER `start_date`");
         }
@@ -3286,7 +3286,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `all_courses` tinyint(1) NOT NULL DEFAULT 1,    
             PRIMARY KEY (`id`),
             KEY `idx_om_servers` (`hostname`)) $charset_spec");
-        
+                
+        // rename `bbb_session` to `tc_session`
+        Database::get()->query("RENAME TABLE bbb_session TO tc_session");                
         // course external server table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `course_external_server` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
