@@ -105,6 +105,11 @@
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/blog/index.php"><span class="fa fa-columns fa-fw"></span>{{ trans('langMyBlog') }}</a>
                                         </li>
                                         @endif
+                                        @if (get_config('eportfolio_enable')) 
+                                        <li role="presentation">
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/eportfolio/eportfolio.php"><span class="fa fa-star fa-fw"></span>{{ trans('langMyePortfolio') }}</a>
+                                        </li>
+                                        @endif
                                         @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')))
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/mydocs/index.php"><span class="fa fa-folder-open-o fa-fw"></span>{{ trans('langMyDocs') }}</a>

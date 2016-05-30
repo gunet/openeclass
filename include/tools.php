@@ -306,6 +306,12 @@ function loggedInMenu() {
         array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
         array_push($sideMenuImg, "fa-columns");
     }
+    
+    if (get_config('eportfolio_enable')) {
+        array_push($sideMenuText, $GLOBALS['langMyePortfolio']);
+        array_push($sideMenuLink, $urlServer . "main/eportfolio/eportfolio.php");
+        array_push($sideMenuImg, "fa-star");
+    }
 
     // link for my documents
     if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
