@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 function list_docs($id = NULL, $subsystem = NULL) {
-    global $course_code;
+    global $course_code, $langNoDocuments;
     
     load_js('jstree3');
     
@@ -67,6 +67,12 @@ function list_docs($id = NULL, $subsystem = NULL) {
                        },
                        'plugins' : [ 'checkbox', 'types' ]
                      });
+                     
+                     $('#$div_id').on('ready.jstree', function(e, data) {
+                         if(data.instance._cnt == 0) {
+                             $('#".$input_id."_div').html('<div class=\"alert alert-warning\">$langNoDocuments</div>');
+                         }
+                     })
                      
                      $('#wall_form').on('submit', function(e) {
                         var selectedElms = $('#$div_id').jstree('get_selected', true);
