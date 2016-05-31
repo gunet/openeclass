@@ -108,7 +108,7 @@ if ($userdata) {
         $action_bar_array = array_merge($action_bar_array, 
                                         array(
                                             array('title' => $langResume,
-                                                'url' => "eportfolio.php?id=$id",
+                                                'url' => "index.php?id=$id",
                                                 'level' => 'primary-label',
                                                 'button-class' => 'btn-info'),
                                             array('title' => $langEditePortfolio,
@@ -139,7 +139,7 @@ if ($userdata) {
         $action_bar_array = array_merge($action_bar_array,
                 array(
                         array('title' => $langResume,
-                                'url' => "eportfolio.php?id=$id",
+                                'url' => "index.php?id=$id",
                                 'level' => 'primary-label',
                                 'button-class' => 'btn-info')
                 ));
@@ -220,7 +220,7 @@ if ($userdata) {
     $tool_content .= $ret_str['right_menu'];
     $tool_content .= "</div>";
     if ($userdata->eportfolio_enable == 1) {
-        $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/eportfolio.php?id=".$id, $langUserePortfolio)."</div>";
+        $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/index.php?id=".$id, $langUserePortfolio)."</div>";
     } else {
         $social_share = '';
     }

@@ -29,7 +29,7 @@ check_guest();
 
 $toolName = $langMyePortfolio;
 $pageName = $langUploadBio;
-$navigation[] = array('url' => 'eportfolio.php', 'name' => $langMyePortfolio);
+$navigation[] = array('url' => 'index.php', 'name' => $langMyePortfolio);
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
@@ -60,7 +60,7 @@ elseif (isset($_POST['submit'])) {
 $tool_content .=
     action_bar(array(
         array('title' => $langBack,
-            'url' => "eportfolio.php",
+            'url' => "index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
         
@@ -89,7 +89,7 @@ $tool_content .=
     <div class='form-group'>
         <div class='col-sm-10 col-sm-offset-2'>
             <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-            <a href='{$urlAppend}main/eportfolio/eportfolio.php' class='btn btn-default'>$langCancel</a>
+            <a href='{$urlAppend}main/eportfolio/index.php' class='btn btn-default'>$langCancel</a>
         </div>
     </div>";
 

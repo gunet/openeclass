@@ -309,7 +309,7 @@ function loggedInMenu() {
     
     if (get_config('eportfolio_enable')) {
         array_push($sideMenuText, $GLOBALS['langMyePortfolio']);
-        array_push($sideMenuLink, $urlServer . "main/eportfolio/eportfolio.php");
+        array_push($sideMenuLink, $urlServer . "main/eportfolio/index.php");
         array_push($sideMenuImg, "fa-star");
     }
 
