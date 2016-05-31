@@ -224,10 +224,10 @@ if (isset($_GET['showPost'])) { //show comments case
             $video_div = '<div class="form-group tab-pane fade" id="videos_div">
                               '.list_videos($id).'
                           </div>';
+            $video_li = '<li><a data-toggle="pill" href="#videos_div">'.$langVideo.'</a></li>';
         } else {
-            $video_div = '<div class="form-group tab-pane fade" id="videos_div">
-                              <div class = "alert alert-warning">'.$langInactiveModule.'</div>
-                          </div>';
+            $video_div = '';
+            $video_li = '';
         }
         
         if (visible_module(MODULE_ID_DOCS)) {
@@ -235,10 +235,10 @@ if (isset($_GET['showPost'])) { //show comments case
                               <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs($id).'
                           </div>';
+            $docs_li = '<li><a data-toggle="pill" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
-            $docs_div = '<div class="form-group tab-pane fade" id="docs_div">
-                              <div class = "alert alert-warning">'.$langInactiveModule.'</div>
-                          </div>';
+            $docs_div = '';
+            $docs_li = '';
         }
         
         if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
@@ -246,10 +246,10 @@ if (isset($_GET['showPost'])) { //show comments case
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs($id,'mydocs').'
                           </div>';
+            $mydocs_li = '<li><a data-toggle="pill" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
-            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div">
-                              <div class = "alert alert-warning">'.$langInactiveModule.'</div>
-                          </div>';
+            $mydocs_div = '';
+            $mydocs_li = '';
         }
         
         $tool_content .= '<div class="row">
@@ -263,9 +263,9 @@ if (isset($_GET['showPost'])) { //show comments case
                             </div>
                             <ul class="nav nav-pills">
                                 <li class="active"><a data-toggle="pill" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
-                                <li><a data-toggle="pill" href="#videos_div">'.$langVideo.'</a></li>
-                                <li><a data-toggle="pill" href="#docs_div">'.$langDoc.'</a></li>
-                                <li><a data-toggle="pill" href="#mydocs_div">'.$langMyDocs.'</a></li>        
+                                '.$video_li.'
+                                '.$docs_li.'
+                                '.$mydocs_li.'        
                             </ul>
                             <div class="tab-content">
                                 <div class="form-group tab-pane fade in active" id="youtube_video_div">
@@ -304,10 +304,10 @@ if (isset($_GET['showPost'])) { //show comments case
             $video_div = '<div class="form-group tab-pane fade" id="videos_div">
                               '.list_videos().'
                           </div>';
+            $video_li = '<li><a data-toggle="pill" href="#videos_div">'.$langVideo.'</a></li>';
         } else {
-            $video_div = '<div class="form-group tab-pane fade" id="videos_div">
-                              <div class = "alert alert-warning">'.$langInactiveModule.'</div>
-                          </div>';
+            $video_div = '';
+            $video_li = '';
         }
         
         if (visible_module(MODULE_ID_DOCS)) {
@@ -315,10 +315,10 @@ if (isset($_GET['showPost'])) { //show comments case
                             <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs().'
                           </div>';
+            $docs_li = '<li><a data-toggle="pill" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
-             $docs_div = '<div class="form-group tab-pane fade" id="docs_div">
-                              <div class = "alert alert-warning">'.$langInactiveModule.'</div>
-                          </div>';
+             $docs_div = '';
+             $docs_li = '';
         }
         
         if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
@@ -326,10 +326,10 @@ if (isset($_GET['showPost'])) { //show comments case
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs(NULL,'mydocs').'
                           </div>';
+            $mydocs_li = '<li><a data-toggle="pill" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
-            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div">
-                              <div class = "alert alert-warning">'.$langInactiveModule.'</div>
-                          </div>';
+            $mydocs_div = '';
+            $mydocs_li = '';
         }
         
         $tool_content .= '<div class="row">
@@ -343,9 +343,9 @@ if (isset($_GET['showPost'])) { //show comments case
                             </div>
                             <ul class="nav nav-pills">
                                 <li class="active"><a data-toggle="pill" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
-                                <li><a data-toggle="pill" href="#videos_div">'.$langVideo.'</a></li>
-                                <li><a data-toggle="pill" href="#docs_div">'.$langDoc.'</a></li>
-                                <li><a data-toggle="pill" href="#mydocs_div">'.$langMyDocs.'</a></li>
+                                '.$video_li.'
+                                '.$docs_li.'
+                                '.$mydocs_li.'
                             </ul>
                             <div class="tab-content">
                                 <div class="form-group tab-pane fade in active" id="youtube_video_div">
