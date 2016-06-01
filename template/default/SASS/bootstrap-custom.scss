@@ -2221,6 +2221,12 @@ a.list-group-item.delete:hover{
 .unit-resources table tr:first-child td{
     border: none;
 }
+.course_units_pager{
+    padding: 15px;
+    font-size: 16px;
+    font-family: "Roboto" !important;
+    font-weight: 500;
+}
 
 /* COURSE HOME */
 /* Course description title */
@@ -3172,9 +3178,9 @@ div #treeModal div .modal-body {
     padding-bottom: 15px;
     margin-bottom: 25px;
     border-bottom: 1px solid #ccc;
-    font-size: 16px;
+    font-size: 18px;
     font-family: "Roboto" !important;
-    font-weight: bold;
+    font-weight: 500;
 }
 .li-indented{
     padding-left: 15px !important;
