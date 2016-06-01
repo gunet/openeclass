@@ -238,30 +238,40 @@ $tool_content .= "
         e.preventDefault();
         idDelete = $(this).data('id');
         idOrder = $(this).data('order');
-        $(this).parents('.list-group-item').remove();
+        elem_rem = $(this).parents('.list-group-item');
         var ids = [];
         $('.faq-section .list-group-item').each(function () {
           ids.push($(this).data('id'));
         });
-        $.ajax({
-          type: 'post',
-          data: { 
-                  toDelete: idDelete,
-                  oldOrder: idOrder
-                },
-          success: function() {
-            
-            $('.indexing').each(function (i){
-              $(this).html(i+1);
-            });
+        bootbox.confirm('".js_escape($langSureToDelAnnounce)."', function(result) {
+          if (result) {
 
-            $('tooltip').remove();
-            moreDeletes = $('.alert-success').length;
-            if (moreDeletes > 0){
-              $('.alert-success').html('$langFaqDeleteSuccess');
-            } else {
-              $('.row.action_bar').before('<div class=\'alert alert-success\'>$langFaqDeleteSuccess</div>');
-            }
+            $.ajax({
+              type: 'post',
+              data: { 
+                      toDelete: idDelete,
+                      oldOrder: idOrder
+                    },
+              success: function() {
+
+                elem_rem.remove();
+                
+                $('.indexing').each(function (i){
+                  $(this).html(i+1);
+                });
+
+                $('.tooltip').remove();
+
+                moreDeletes = $('.alert-success').length;
+
+                if (moreDeletes > 0){
+                  $('.alert-success').html('$langFaqDeleteSuccess');
+                } else {
+                  $('.row.action_bar').before('<div class=\'alert alert-success\'>$langFaqDeleteSuccess</div>');
+                }
+
+              }
+            });
           }
         });
       });
