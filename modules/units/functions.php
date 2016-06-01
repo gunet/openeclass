@@ -134,6 +134,7 @@ function show_resources($unit_id) {
         $head_content .= "<script>
         $(document).ready(function(){
             Sortable.create(unitResources,{
+                handle: '.fa-arrows',
                 animation: 150,
                 onEnd: function (evt) {
                 var itemEl = $(evt.item);
