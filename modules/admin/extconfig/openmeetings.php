@@ -47,12 +47,11 @@ class OpenMeetings extends ExtApp {
     }
 
     /**
-     * Return true if any OpenMeetings servers are enabled, else false
-     * 
+     * @brief return true if any OpenMeetings servers are enabled, else false     
      * @return boolean
      */
     public function isConfigured() {
-        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM om_servers WHERE enabled='true'")->count > 0;
+        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM tc_servers WHERE enabled='true' AND `type`='om'")->count > 0;
     }
 
 }

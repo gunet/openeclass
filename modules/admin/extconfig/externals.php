@@ -180,7 +180,18 @@ abstract class ExtApp {
     public function getAppIcon() {
         return $this->getBaseURL() . "template/icons/" . $this->getName() . ".png";
     }
-
+    
+    public function update_tc_sessions($type) {
+        
+        $r = Database::get()->querySingle("SELECT id FROM tc_servers 
+                                            WHERE `type` = '$type' AND enabled = 'true'
+                                            ORDER BY weight ASC");
+        if ($r) {
+            $tc_id = $r->id;
+            Database::get()->query("UPDATE tc_session SET running_at = $tc_id");
+        }        
+    }
+    
 }
 
 abstract class ExtParam {

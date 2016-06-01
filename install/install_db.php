@@ -1413,22 +1413,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `logins` (
     `course_id` INT(11) NOT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
 
-// bbb_servers table
-$db->query("CREATE TABLE IF NOT EXISTS `bbb_servers` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `hostname` varchar(255) DEFAULT NULL,
-    `ip` varchar(255) NOT NULL,
-    `enabled` enum('true','false') DEFAULT NULL,
-    `server_key` varchar(255) DEFAULT NULL,
-    `api_url` varchar(255) DEFAULT NULL,
-    `max_rooms` int(11) DEFAULT NULL,
-    `max_users` int(11) DEFAULT NULL,
-    `enable_recordings` enum('true','false') DEFAULT NULL,
-    `weight` int(11) DEFAULT NULL,
-    `all_courses` tinyint(1) NOT NULL DEFAULT 1,
-    PRIMARY KEY (`id`),
-    KEY `idx_bbb_servers` (`hostname`)) $charset_spec");
-
 // bbb_sessions tables
 $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1450,22 +1434,26 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
     `sessionUsers` int(11) DEFAULT 0,
     PRIMARY KEY (`id`)) $charset_spec");
 
-// om_servers table
-$db->query("CREATE TABLE IF NOT EXISTS `om_servers` (
+// tc_servers table
+$db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
+    `type` varchar(255) NOT NULL DEFAULT 'bbb',
     `hostname` varchar(255) DEFAULT NULL,
+    `ip` varchar(255) NOT NULL,
     `port` varchar(255) DEFAULT NULL,
     `enabled` enum('true','false') DEFAULT NULL,
+    `server_key` varchar(255) DEFAULT NULL,
     `username` varchar(255) DEFAULT NULL,
-    `password` varchar(255) DEFAULT NULL,
-    `module_key` int(11) DEFAULT NULL,
+    `password` varchar(255) DEFAULT NULL,    
+    `api_url` varchar(255) DEFAULT NULL,
     `webapp` varchar(255) DEFAULT NULL,
     `max_rooms` int(11) DEFAULT NULL,
     `max_users` int(11) DEFAULT NULL,
     `enable_recordings` enum('true','false') DEFAULT NULL,
+    `weight` int(11) DEFAULT NULL,
     `all_courses` tinyint(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`),
-    KEY `idx_om_servers` (`hostname`)) $charset_spec");
+    KEY `idx_tc_servers` (`hostname`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_external_server` (
     `id` int(11) NOT NULL AUTO_INCREMENT,

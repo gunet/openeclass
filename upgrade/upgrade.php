@@ -3265,30 +3265,27 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('bbb_session', 'end_date')) {
             Database::get()->query("ALTER TABLE `bbb_session` ADD `end_date` datetime DEFAULT NULL AFTER `start_date`");
         }
-        // upgrade bbb_session table        
+        
+        // rename `bbb_session` to `tc_session`
+        if (DBHelper::tableExists('bbb_session')) {
+            Database::get()->query("RENAME TABLE bbb_session TO tc_session");
+        }
+        
+        // upgrade bbb_servers table
         if (!DBHelper::fieldExists('bbb_servers', 'all_courses')) {
+            Database::get()->query("ALTER TABLE bbb_servers ADD `type` varchar(255) NOT NULL DEFAULT 'bbb' AFTER id");
+            Database::get()->query("ALTER TABLE bbb_servers ADD port varchar(255) DEFAULT NULL AFTER ip");
+            Database::get()->query("ALTER TABLE bbb_servers ADD username varchar(255) DEFAULT NULL AFTER server_key");
+            Database::get()->query("ALTER TABLE bbb_servers ADD password varchar(255) DEFAULT NULL AFTER username");
+            Database::get()->query("ALTER TABLE bbb_servers ADD webapp varchar(255) DEFAULT NULL AFTER api_url");
             Database::get()->query("ALTER TABLE bbb_servers ADD all_courses TINYINT(1) NOT NULL DEFAULT 1");
         }
         
-        // om_servers table
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `om_servers` (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `hostname` varchar(255) DEFAULT NULL,
-            `port` varchar(255) DEFAULT NULL,
-            `enabled` enum('true','false') DEFAULT NULL,
-            `username` varchar(255) DEFAULT NULL,
-            `password` varchar(255) DEFAULT NULL,
-            `module_key` int(11) DEFAULT NULL,
-            `webapp` varchar(255) DEFAULT NULL,
-            `max_rooms` int(11) DEFAULT NULL,
-            `max_users` int(11) DEFAULT NULL,
-            `enable_recordings` enum('true','false') DEFAULT NULL,
-            `all_courses` tinyint(1) NOT NULL DEFAULT 1,    
-            PRIMARY KEY (`id`),
-            KEY `idx_om_servers` (`hostname`)) $charset_spec");
-                
-        // rename `bbb_session` to `tc_session`
-        Database::get()->query("RENAME TABLE bbb_session TO tc_session");                
+        // rename `bbb_servers` to `tc_servers`
+        if (DBHelper::tableExists('bbb_servers')) {
+            Database::get()->query("RENAME TABLE bbb_servers TO tc_servers");
+        }
+                                                
         // course external server table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `course_external_server` (
             `id` int(11) NOT NULL AUTO_INCREMENT,

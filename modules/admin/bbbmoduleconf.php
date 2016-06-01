@@ -75,14 +75,14 @@ if (isset($_GET['add_server'])) {
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label class='col-sm-3 control-label'>$langBBBEnableRecordings:</label>
-            <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' checked='true' value='false'>$langNo</label></div>
-            <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true'>$langYes</label></div>";
+            <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true'>$langYes</label></div>
+            <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' checked='true' value='false'>$langNo</label></div>";            
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
     
     $tool_content .= "<label class='col-sm-3 control-label'>$langActivate:</label>
-            <div class='col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' checked='false' value='false'>$langNo</label></div>
-            <div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' checked='true' value='true'>$langYes</label></div>
+            <div class='col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' checked='true' value='true'>$langYes</label></div>
+            <div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' checked='false' value='false'>$langNo</label></div>    
         </div>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
@@ -118,7 +118,7 @@ if (isset($_GET['add_server'])) {
     
 } else if (isset($_GET['delete_server'])) {
     $id = $_GET['delete_server'];
-    Database::get()->querySingle("DELETE FROM bbb_servers WHERE id=?d", $id);
+    Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
     // Display result message
     Session::Messages($langFileUpdatedSuccess, 'alert-success');
     redirect_to_home_page('modules/admin/bbbmoduleconf.php');   
@@ -141,7 +141,7 @@ else if (isset($_POST['submit'])) {
 
     if (isset($_POST['id_form'])) {
         $id = $_POST['id_form'];
-        Database::get()->querySingle("UPDATE bbb_servers SET hostname = ?s,
+        Database::get()->querySingle("UPDATE tc_servers SET hostname = ?s,
                 ip = ?s,
                 server_key = ?s,
                 api_url = ?s,
@@ -152,8 +152,8 @@ else if (isset($_POST['submit'])) {
                 weight = ?d
                 WHERE id =?d", $hostname, $ip, $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $id);
     } else {
-        Database::get()->querySingle("INSERT INTO bbb_servers (hostname,ip,server_key,api_url,max_rooms,max_users,enable_recordings,enabled,weight) VALUES
-        (?s,?s,?s,?s,?s,?s,?s,?s,?d)", $hostname, $ip, $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight);
+        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, ip, server_key, api_url, max_rooms, max_users, enable_recordings, enabled, weight) VALUES
+        ('bbb', ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?s, ?d)", $hostname, $ip, $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight);
     }    
     // Display result message
     Session::Messages($langFileUpdatedSuccess,"alert-success");
@@ -175,7 +175,7 @@ else {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
         
-        $server = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id = ?d", $bbb_server);
+        $server = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $bbb_server);
         
         $tool_content .= "<div class='form-wrapper'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
@@ -207,12 +207,12 @@ else {
         $tool_content .= "<label class='col-sm-3 control-label'>$langBBBEnableRecordings:</label>";
         if ($server->enable_recordings == "false") {
             $checkedfalse = " checked='true' ";
-        } else $checkedfalse = '';
-        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' value='false' $checkedfalse>$langNo</label></div>";
+        } else $checkedfalse = '';        
         if ($server->enable_recordings == "true") {
             $checkedtrue = " checked='true' ";
         } else $checkedtrue = '';
         $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true' $checkedtrue>$langYes</label></div>";
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' value='false' $checkedfalse>$langNo</label></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
 
@@ -220,15 +220,13 @@ else {
         if ($server->enabled == "false") {
             $checkedfalse2 = " checked='false' ";
         } else $checkedfalse2 = '';
-        
-        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' $checkedfalse2 value='false'>$langNo</label></div>";
-        
         if ($server->enabled == "true") {
             $checkedtrue2 = " checked='false' ";
         } else $checkedtrue2 = '';
         
-         $tool_content .= "<div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' $checkedtrue2 value='true'>$langYes</label></div>
-            </div>";
+        $tool_content .= "<div class='col-sm-9 radio'><label><input type='radio' id='enabled_true' name='enabled' $checkedtrue2 value='true'>$langYes</label></div>";
+        $tool_content .= "<div class='col-sm-offset-3 col-sm-9 radio'><label><input type='radio' id='enabled_false' name='enabled' $checkedfalse2 value='false'>$langNo</label></div>";
+        $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
                 <div class='col-sm-9'><input class='form-control' type='text' name='weight' value='$server->weight'></div>";
@@ -265,7 +263,7 @@ else {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
-        $q = Database::get()->queryArray("SELECT * FROM bbb_servers");
+        $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'bbb'");
         if (count($q)>0) {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>

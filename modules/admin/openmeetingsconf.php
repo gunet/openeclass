@@ -36,7 +36,7 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     
-    $om_id = $hostnamevalue = $portnamevalue = $adminuservalue = $adminpassvalue = $adminmodulevalue = $adminwebappvalue = $adminmaxusers = $adminmaxrooms = '' ;
+    $om_id = $hostnamevalue = $portnamevalue = $adminuservalue = $adminpassvalue = $adminwebappvalue = $adminmaxusers = $adminmaxrooms = $weight = '';
     $adminenrecordings_true = "checked value='true'";
     $adminenrecordings_false = "value='false'";
     $adminactivate_true = "checked value='true'";
@@ -45,16 +45,16 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     if (isset($_GET['edit_server'])) {
         $pageName = $langEdit;
         $om_server = $_GET['edit_server'];        
-        $server = Database::get()->querySingle("SELECT * FROM om_servers WHERE id = ?d", $om_server);    
+        $server = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $om_server);    
         if ($server) {
             $hostnamevalue = $server->hostname;    
             $portnamevalue = $server->port;
             $adminuservalue = $server->username;
-            $adminpassvalue = $server->password;
-            $adminmodulevalue = $server->module_key;
+            $adminpassvalue = $server->password;            
             $adminwebappvalue = $server->webapp;
             $adminmaxrooms = $server->max_rooms;
-            $adminmaxusers = $server->max_users;        
+            $adminmaxusers = $server->max_users;
+            $weight = $server->weight;
             if ($server->enable_recordings == 'true') {        
                 $adminenrecordings_true = "value='true' checked";
                 $adminenrecordings_false = "value='false'";
@@ -99,11 +99,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='api_url_form' class='col-sm-3 control-label'>$langOpenMeetingsAdminPass:</label>
             <div class='col-sm-9'><input class='form-control' type='text' name='password_form' value='$adminpassvalue'></div>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='module_key_form' class='col-sm-3 control-label'>$langOpenMeetingsModuleKey:</label>
-            <div class='col-sm-9'><input class='form-control' type='text' name='module_form' value='$adminmodulevalue'></div>";
-    $tool_content .= "</div>";
+    $tool_content .= "</div>";    
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='webapp_form' class='col-sm-3 control-label'>$langOpenMeetingsWebApp:</label>
             <div class='col-sm-9'><input class='form-control' type='text' name='webapp_form' value='$adminwebappvalue'></div>";
@@ -126,6 +122,10 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
             <div class='col-sm-9 radio'><label><input type='radio' name='enabled' $adminactivate_true>$langYes</label></div>
             <div class='col-sm-offset-3 col-sm-9 radio'><label><input type='radio' name='enabled' $adminactivate_false>$langNo</label></div>
         </div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
+            <div class='col-sm-9'><input class='form-control' type='text' name='weight' value='$weight'></div>";
+    $tool_content .= "</div>";
     $tool_content .= $om_id;
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
     $tool_content .= "</fieldset></form></div>";
@@ -136,10 +136,12 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                 chkValidator.addValidation("key_form","req","' . $langBBBServerAlertKey . '");
                 chkValidator.addValidation("api_url_form","req","' . $langBBBServerAlertAPIUrl . '");
                 chkValidator.addValidation("max_rooms_form","req","' . $langBBBServerAlertMaxRooms . '");
+                chkValidator.addValidation("weight","req","' . $langBBBServerAlertOrder . '");
+                chkValidator.addValidation("weight","numeric","' . $langBBBServerAlertOrder . '");
             </script>';
 } else if (isset($_GET['delete_server'])) {
         $id = $_GET['delete_server'];
-        Database::get()->querySingle("DELETE FROM om_servers WHERE id=?d", $id);
+        Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
         // Display result message
         $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";    
         $tool_content .= action_bar(array(
@@ -151,30 +153,30 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     $hostname = $_POST['hostname_form'];
     $port = $_POST['port_form'];
     $username = $_POST['username_form'];
-    $password = $_POST['password_form'];
-    $module = $_POST['module_form'];
+    $password = $_POST['password_form'];    
     $webapp = $_POST['webapp_form'];    
     $max_rooms = $_POST['max_rooms_form'];
     $max_users = $_POST['max_users_form'];
     $enable_recordings = $_POST['enable_recordings'];
-    $enabled = $_POST['enabled'];    
+    $enabled = $_POST['enabled'];
+    $weight = $_POST['weight'];
     
     if (isset($_POST['id_form'])) {        
         $id = $_POST['id_form'];
-        Database::get()->querySingle("UPDATE om_servers SET hostname = ?s,
+        Database::get()->querySingle("UPDATE tc_servers SET hostname = ?s,
                 port = ?s,
                 username = ?s,
-                password = ?s,
-                module_key = ?s,
+                password = ?s,                
                 webapp = ?s,
                 enabled = ?s,
                 max_rooms = ?d,
                 max_users = ?d,
-                enable_recordings=?s 
-                WHERE id = ?d", $hostname, $port, $username, $password, $module, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $id);
+                enable_recordings = ?s,
+                weight = ?d
+                WHERE id = ?d", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight, $id);
     } else {
-        Database::get()->querySingle("INSERT INTO om_servers (hostname,port,username,password,module_key,webapp,enabled,max_rooms,max_users,enable_recordings) VALUES
-        (?s,?s,?s,?s,?s,?s,?s,?d,?d,?s)", $hostname, $port, $username, $password, $module, $webapp,$enabled,$max_rooms,$max_users,$enable_recordings);
+        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, port, username, password, webapp, enabled, max_rooms, max_users, enable_recordings, weight) VALUES
+        ('om', ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d, ?s, ?d)", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight);
     }    
     // Display result message
     $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
@@ -197,15 +199,14 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         'icon' => 'fa-reply',
         'level' => 'primary-label')));
 
-    $q = Database::get()->queryArray("SELECT * FROM om_servers");
+    $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'om'");
     if (count($q) > 0) {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>
             <thead>
             <tr><th class = 'text-center'>$langOpenMeetingsServer</th>
                 <th class = 'text-center'>$langOpenMeetingsPort</th>
-                <th class = 'text-center'>$langOpenMeetingsAdminUser</th>
-                <th class = 'text-center'>$langOpenMeetingsModuleKey</th>
+                <th class = 'text-center'>$langOpenMeetingsAdminUser</th>                
                 <th class = 'text-center'>$langOpenMeetingsWebApp</th>
                 <th class = 'text-center'>".icon('fa-gears')."</th></tr>
             </thead>";
@@ -214,8 +215,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>$srv->hostname</td>";
             $tool_content .= "<td>$srv->port</td>";
-            $tool_content .= "<td>$srv->username</td>";
-            $tool_content .= "<td>$srv->module_key</td>";
+            $tool_content .= "<td>$srv->username</td>";            
             $tool_content .= "<td>$srv->webapp</td>";
             $tool_content .= "<td class='option-btn-cell'>".action_button(array(
                                                 array('title' => $langEditChange,

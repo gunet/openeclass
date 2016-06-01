@@ -41,13 +41,15 @@ if (isset($_POST['state'])) {
     $appNameAjax = $appName;   
     
     if (($appNameAjax == 'openmeetings') and $newState == 1) {
-        $app_bbb = ExtAppManager::getApp('bigbluebutton');        
-        $app_bbb->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled      
+        $app_bbb = ExtAppManager::getApp('bigbluebutton');
+        $app_bbb->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled
+        $app_bbb->update_tc_sessions('om'); // update tc sessions
     }
     
     if (($appNameAjax == 'bigbluebutton') and $newState == 1) {
         $app_bbb = ExtAppManager::getApp('openmeetings');
-        $app_bbb->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled          
+        $app_bbb->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled
+        $app_bbb->update_tc_sessions('bbb'); // update tc sessions
     }
     
     ExtAppManager::getApp($appNameAjax)->setEnabled($newState);    

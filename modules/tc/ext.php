@@ -28,11 +28,6 @@ require_once 'include/sendMail.inc.php';
 require_once 'bbb-api.php';
 require_once 'functions.php';
 
-//$total = Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count;
-//echo $total;
-
-//print_r($_GET);
-
 $mod_pw = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;
 $title = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->title;
 $att_pw = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->att_pw;
@@ -49,14 +44,13 @@ if ($active<>'1' || date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))> $unlo
     exit;
 }
 if(bbb_session_running($_GET['meeting_id']) == false)
-{
-    //echo $title;
+{    
     create_meeting($title,$_GET['meeting_id'],$mod_pw,$att_pw,$record);
 }
 # Get session capacity
 $c = Database::get()->querySingle("SELECT sessionUsers FROM tc_session where meeting_id=?s",$_GET['meeting_id']);
 $sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id']);
-$serv = Database::get()->querySingle("SELECT * FROM bbb_servers WHERE id=?d", $sess->running_at);
+$serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
 
 if( ($c->sessionUsers > 0) && ($c->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$_GET['meeting_id'],$sess->mod_pw)))
 {
