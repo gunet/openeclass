@@ -22,9 +22,9 @@
 
 require_once 'genericrequiredparam.php';
 
-class BBBApp extends ExtApp {
+class WebConfApp extends ExtApp {
 
-    const NAME = "BigBlueButton";
+    const NAME = "WebConf";
 
     public function __construct() {
         parent::__construct();
@@ -35,7 +35,7 @@ class BBBApp extends ExtApp {
     }
 
     public function getShortDescription() {
-        return $GLOBALS['langBBBDescription'];
+        return $GLOBALS['langWebConfDescription'];
     }
 
     public function getLongDescription() {
@@ -43,16 +43,16 @@ class BBBApp extends ExtApp {
     }
 
     public function getConfigUrl() {
-        return 'modules/admin/bbbmoduleconf.php';
+        return 'modules/admin/webconf.php';
     }
 
     /**
-     * Return true if any BBB servers are enabled, else false
+     * Return true if any WebConf servers are enabled, else false
      * 
      * @return boolean
      */
     public function isConfigured() {
-        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM tc_servers WHERE enabled='true' AND `type` = 'bbb'")->count > 0;
+        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM tc_servers WHERE enabled='true' AND `type` = 'webconf'")->count > 0;
     }
 
 }

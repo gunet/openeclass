@@ -1461,7 +1461,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `wc_servers` (
 $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     `type` varchar(255) NOT NULL DEFAULT 'bbb',
     `hostname` varchar(255) DEFAULT NULL,
-    `ip` varchar(255) NOT NULL,
+    `ip` varchar(255) DEFAULT NULL,
     `port` varchar(255) DEFAULT NULL,
     `enabled` enum('true','false') DEFAULT NULL,
     `server_key` varchar(255) DEFAULT NULL,
