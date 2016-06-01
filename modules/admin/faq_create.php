@@ -38,7 +38,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     if ($_POST['newIndex'] < $_POST['oldIndex']){
       Database::get()->query("UPDATE `faq` SET `order`=`order` + 1 WHERE `order`>=?d AND `order`<?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
     }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
-      Database::get()->query("UPDATE `faq` SET `order`=`order` - 1 WHERE `order`<?d AND `order`>=?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+      Database::get()->query("UPDATE `faq` SET `order`=`order` - 1 WHERE `order`<=?d AND `order`>?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
     }
 
     Database::get()->query("UPDATE `faq` SET `order`=?d WHERE `id`=?d ", $_POST['newIndex'] + 1, $_POST['toReorder']);
@@ -287,12 +287,12 @@ $tool_content .= "
                   $(this).html(i+1);
                 });
 
-                moreDeletes = $('.alert-success').length;
+             /* moreDeletes = $('.alert-success').length;
                 if (moreDeletes > 0){
                   $('.alert-success').html('$langFaqReorderSuccess');
                 } else {
                   $('.row.action_bar').before('<div class=\'alert alert-success\'>$langFaqReorderSuccess</div>');
-                }
+                } */
               }
             })
 
