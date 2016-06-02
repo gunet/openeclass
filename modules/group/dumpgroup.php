@@ -19,60 +19,41 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_current_course = TRUE;
-$require_editor = TRUE;
+$require_current_course = true;
+$require_editor = true;
 
 require_once '../../include/init.php';
 require_once 'group_functions.php';
+require_once 'include/lib/csv.class.php';
 
 $group_id = intval($_REQUEST['group_id']);
 initialize_group_info($group_id);
-   
-if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
-    $charset = 'Windows-1253';
-    $sendSep = true;
-} else {
-    $charset = 'UTF-8';
-    $sendSep = false;
-}
-$crlf = "\r\n";
 
-header("Content-Type: text/csv; charset=$charset");
-header("Content-Disposition: attachment; filename=groupuser.csv");
+$csv = new CSV();
 
-if ($sendSep) {
-    echo 'sep=;', $crlf;
+if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
+    $csv->setEncoding('UTF-8');
 }
 
 // dump group users
 if (isset($_GET['u']) and $_GET['u'] == 1) {
-    echo csv_escape($group_name);
-    echo $crlf;
-    echo $crlf;
-    echo join(';', array_map("csv_escape", array($langSurname, $langName, $langEmail, $langAm, $langUsername)));
-    echo $crlf;
-    
-    $result = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.username, group_members.is_tutor		     
+    $csv->outputRecord($group_name);
+    $csv->outputRecord($langSurname, $langName, $langEmail, $langAm, $langUsername);
+    Database::get()->queryFunc("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.username, group_members.is_tutor
                                     FROM group_members, user
                                     WHERE group_members.group_id = ?d AND
                                           group_members.user_id = user.id
-                                    ORDER BY user.surname, user.givenname", $group_id);
-    
-    foreach ($result as $row) {
-        echo csv_escape($row->surname) . ";" .
-             csv_escape($row->givenname) . ";" .
-             csv_escape($row->email) . ";" .
-             csv_escape($row->am) . ";" .
-             csv_escape($row->username);
-        echo $crlf;
-    }    
+                                    ORDER BY user.surname, user.givenname",
+        function ($item) use ($csv) {
+            $csv->outputRecord($item->surname, $item->givenname, $item->email, $item->am, $item->username);
+        }, $group_id);
 } else {
     // dump group users duration
     if (isset($_REQUEST['u_date_start']) and isset($_REQUEST['u_date_end'])) {
         $u_date_start = $_REQUEST['u_date_start'];
         $u_date_end = $_REQUEST['u_date_end'];
     } else {
-        $min_date = Database::get()->querySingle("SELECT MIN(day) AS minday FROM actions_daily WHERE course_id = ?d", $course_id)->minday;        
+        $min_date = Database::get()->querySingle("SELECT MIN(day) AS minday FROM actions_daily WHERE course_id = ?d", $course_id)->minday;
         $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
         $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
     }
@@ -81,20 +62,15 @@ if (isset($_GET['u']) and $_GET['u'] == 1) {
     } else {
         $date_spec = '';
     }
-    echo csv_escape($first_line), $crlf, $crlf, join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langGroup, $langDuration))),
-    $crlf;
+    $csv->outputRecord($first_line)->outputRecord($langSurname, $langName, $langAm, $langGroup, $langDuration);
     $totalDuration = 0;
 
     $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
 
     foreach ($result as $row) {
-        echo csv_escape($row->surname) . ";" .
-        csv_escape($row->givenname) . ";" .
-        csv_escape($row->am) . ";" .
-        csv_escape($group_name) . ";" .
-        csv_escape(format_time_duration(0 + $row->duration)) . ";" .
-        csv_escape(round($row->duration / 3600));
-        echo $crlf;
+        $csv->outputRecord($row->surname, $row->givenname, $row->am,
+            $group_name, format_time_duration(0 + $row->duration),
+            round($row->duration / 3600));
     }
 }
 

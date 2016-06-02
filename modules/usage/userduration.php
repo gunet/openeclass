@@ -32,56 +32,40 @@ $require_login = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
+require_once 'include/lib/csv.class.php';
 
 if (isset($_GET['format']) and $_GET['format'] == 'csv') {
     $format = 'csv';
-
-    if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
-        $charset = 'Windows-1253';
-        $sendSep = true;
-    } else {
-        $charset = 'UTF-8';
-        $sendSep = false;
+    $csv = new CSV();
+    if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
+        $csv->setEncoding('UTF-8');
     }
-    $crlf = "\r\n";
-
-    header("Content-Type: text/csv; charset=$charset");
-    header("Content-Disposition: attachment; filename=usersduration.csv");
-
-    if ($sendSep) {
-        echo 'sep=;', $crlf;
-    }
-
-    echo join(';', array_map("csv_escape", array($langSurnameName, $langAm, $langGroup, $langDuration))),
-    $crlf, $crlf;
+    $csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langDuration);
 } else {
     $format = 'html';
     $toolName = $langUserDuration;
 
-    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-
+    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);  
+    
     $tool_content .= action_bar(array(
         array('title' => $langUsage,
             'url' => "index.php?course=$course_code",
             'icon' => 'fa-bar-chart',
+            'level' => 'primary-label'),
+        array('title' => $langGlossaryToCsv,
+            'url' => "userduration.php?course=$course_code&amp;format=csv",
+            'icon' => 'fa-download',
             'level' => 'primary-label'),
         array('title' => $langBack,
             'url' => "../../courses/{$course_code}/",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
     ),false);
-
-    // display number of users
-    $tool_content .= "
-        <div class='alert alert-info'>
-           <b>$langDumpUserDurationToFile: </b>1. <a href='userduration.php?course=$course_code&amp;format=csv'>$langcsvenc2</a>
-                2. <a href='userduration.php?course=$course_code&amp;format=csv&amp;enc=1253'>$langcsvenc1</a>
-          </div>";
-
+    
     $tool_content .= "
         <table class='table-default'>
         <tr>
-          <th>$langSurname $langName</th>
+          <th>$langSurnameName</th>
           <th>$langAm</th>
           <th>$langGroup</th>
           <th>$langDuration</th>
@@ -89,20 +73,18 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
 }
 
 $result = user_duration_query($course_id);
-if (count($result) > 0) {
-    foreach ($result as $row) {
+if (count($result) > 0) {    
+    foreach ($result as $row) {        
         $grp_name = user_groups($course_id, $row->id, $format);
-        if ($format == 'html') {
+        if ($format == 'html') {            
             $tool_content .= "<td class='bullet'>" . display_user($row->id) . "</td>
                                 <td class='center'>$row->am</td>
                                 <td class='center'>$grp_name</td>
                                 <td class='center'>" . format_time_duration(0 + $row->duration) . "</td>
                                 </tr>";
         } else {
-            echo csv_escape($row->surname . ' ' . $row->givenname), ';',
-            csv_escape($row->am), ';',
-            csv_escape($grp_name), ';',
-            csv_escape(format_time_duration(0 + $row->duration)), $crlf;
+            $csv->outputRecord($row->surname, $row->givenname,
+                $row->am, $grp_name, format_time_duration(0 + $row->duration));
         }
     }
     if ($format == 'html') {
@@ -142,13 +124,13 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
     if ($group !== false) {
         $from = "`group_members` AS groups
                                 LEFT JOIN user ON groups.user_id = user.id";
-        $and = "AND groups.group_id = ?d";
+        $and = "AND groups.group_id = ?d";        
         $terms[] = $group;
     } else {
-        $from = " (SELECT
-                            id, surname, givenname, username, password, email, parent_email, status, phone, am,
-                            registered_at, expires_at, lang, description, has_icon, verified_mail, receive_mail, email_public,
-                            phone_public, am_public, whitelist, last_passreminder
+        $from = " (SELECT 
+                            id, surname, givenname, username, password, email, parent_email, status, phone, am, 
+                            registered_at, expires_at, lang, description, has_icon, verified_mail, receive_mail, email_public, 
+                            phone_public, am_public, whitelist, last_passreminder 
                           FROM user UNION (SELECT 0 as id,
                             '' as surname,
                             'Anonymous' as givenname,
@@ -161,7 +143,7 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             null as am,
                             null as registered_at,
                             null as expires_at,
-                            null as lang,
+                            null as lang,                            
                             null as description,
                             null as has_icon,
                             null as verified_mail,
@@ -171,9 +153,9 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             null as am_public,
                             null as whitelist,
                             null as last_passreminder)) as user ";
-        $and = '';
+        $and = '';               
     }
-
+        
     return Database::get()->queryArray("SELECT SUM(actions_daily.duration) AS duration,
                                    user.surname AS surname,
                                    user.givenname AS givenname,
