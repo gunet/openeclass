@@ -179,7 +179,7 @@ function printPollForm() {
             if($qtype==QTYPE_LABEL) {
                 $tool_content .= "    
                     <div class='alert alert-info' role='alert'>
-                        $theQuestion->question_text
+                        <strong>$theQuestion->question_text</strong>
                     </div>";                
             } else {
                 $tool_content .= "
