@@ -75,14 +75,14 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
             
             // select certificates not already conquered
             $certsQ = "select c.id from certificate c where c.course = ?d and c.id not in ("
-                    . " select certificate from user_certificate where user = ?d )";
+                    . " select certificate from user_certificate where user = ?d and completed = 1)";
             Database::get()->queryFunc($certsQ, function($c) {
                 $this->certificateIds[] = $c->id;
             }, $data->courseId, $data->uid);
             
             // select badges not already conquered
             $badgesQ = "select b.id from badge b where b.course = ?d and b.id not in ("
-                    . " select badge from user_badge where user = ?d )";
+                    . " select badge from user_badge where user = ?d and completed = 1)";
             Database::get()->queryFunc($badgesQ, function($b) {
                 $this->badgeIds[] = $b->id;
             }, $data->courseId, $data->uid);

@@ -50,6 +50,8 @@ class Game extends GameAbstract {
     }
     
     public function evaluate($context) {
+        $this->prepareForContext($context);
+        
         if (!$this->autoassign) {
             return false;
         }

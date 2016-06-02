@@ -57,20 +57,38 @@ abstract class GameAbstract {
     
     abstract public function evaluate($context);
     
+    protected function prepareForContext($context) {
+        $uid = (isset($context['uid'])) ? $context['uid'] : null;
+        $userCriterionIds = (isset($context['userCriterionIds'])) ? $context['userCriterionIds'] : array();
+        if ($uid) {
+            $completed_criteria = 0;
+            foreach($this->criterionIds as $crit) {
+                if (in_array($crit, $userCriterionIds)) {
+                    $completed_criteria++;
+                }
+            }
+            $total_criteria = count($this->criterionIds);
+            
+            $exists = Database::get()->querySingle("select count(id) as cnt from $this->table where user = ?d and $this->field = ?d", $uid, $this->id)->cnt;
+            if (!$exists) {
+                Database::get()->query("insert into $this->table (user, $this->field, completed_criteria, total_criteria, updated) values (?d, ?d, ?d, ?d, ?t)", $uid, $this->id, $completed_criteria, $total_criteria, gmdate('Y-m-d H:i:s'));
+            } else {
+                Database::get()->query("update $this->table set completed_criteria = ?d, total_criteria = ?d, updated = ?t where user = ?d and $this->field = ?d", $completed_criteria, $total_criteria, gmdate('Y-m-d H:i:s'), $uid, $this->id);
+            }
+        }
+    }
+    
     protected function assertedAction($context) {
         $uid = (isset($context['uid'])) ? $context['uid'] : null;
         if ($uid) {
-            $exists = Database::get()->querySingle("select count(id) as cnt from $this->table where user = ?d and $this->field = ?d", $uid, $this->id)->cnt;
-            if (!$exists) {
-                Database::get()->query("insert into $this->table (user, $this->field, created) values (?d, ?d, ?t)", $uid, $this->id, gmdate('Y-m-d H:i:s'));
-            }
+            Database::get()->query("update $this->table set completed = true, assigned = ?t where user = ?d and $this->field = ?d", gmdate('Y-m-d H:i:s'), $uid, $this->id);
         }
     }
     
     protected function notAssertedAction($context) {
         $uid = (isset($context['uid'])) ? $context['uid'] : null;
         if ($uid) {
-            Database::get()->query("delete from $this->table where user = ?d and $this->field = ?d", $uid, $this->id);
+            Database::get()->query("update $this->table set completed = false, assigned = null where user = ?d and $this->field = ?d", $uid, $this->id);
         }
     }
 }
