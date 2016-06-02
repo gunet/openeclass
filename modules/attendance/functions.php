@@ -262,7 +262,7 @@ function display_attendance_activities($attendance_id) {
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap,
            $langAdd, $langExport, $langBack, $langNoRegStudent;
     
-   
+    $attendance_id_ind = getIndirectReference($attendance_id);
     $tool_content .= action_bar(
             array(
                 array('title' => $langAdd,                 
@@ -292,11 +292,11 @@ function display_attendance_activities($attendance_id) {
                 array('title' => $langConfig,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editSettings=1",
                       'icon' => 'fa-cog'),
-                array('title' => "$langExport $langToA $langcsvenc1",
-                        'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id&amp;enc=1253",
+                array('title' => "$langExport",
+                        'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id_ind",
                     'icon' => 'fa-file-excel-o'),
-                array('title' => "$langExport $langToA $langcsvenc2",
-                        'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id",                                              
+                array('title' => "$langExport ($langcsvenc2)",
+                        'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id_ind&amp;enc=UTF-8",                                              
                         'icon' => 'fa-file-excel-o'),                
             ),
             true

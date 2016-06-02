@@ -290,7 +290,7 @@ function submitPoll() {
     if($v->validate()) {
         // first populate poll_answer
         $CreationDate = date("Y-m-d H:i");
-        $answer = $_POST['answer'];
+        $answer = isset($_POST['answer'])? $_POST['answer']: array();
         if ($uid) {
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid)->lastInsertID;
         } else {
@@ -318,7 +318,8 @@ function submitPoll() {
             send_mail_multipart('', '', '', $participantEmail, $subject, $body_plain, $body_html, $charset);
         }
 
-        foreach ($_POST['question'] as $pqid => $qtype) {
+        $question = isset($_POST['question'])? $_POST['question']: array();
+        foreach ($question as $pqid => $qtype) {
             $pqid = intval($pqid);
             if ($qtype == QTYPE_MULTIPLE) {
                 if(is_array($answer[$pqid])){

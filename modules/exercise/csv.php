@@ -22,26 +22,20 @@
 
 $require_current_course = TRUE;
 require_once '../../include/init.php';
+require_once 'include/lib/csv.class.php';
 
 if ($is_editor) {
     $exerciseId = filter_input(INPUT_GET, 'exerciseId', FILTER_SANITIZE_NUMBER_INT);
-    header('Content-disposition: filename=' . $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv');
-    header('Content-type: text/csv; charset=UTF-16');
-    header('Pragma: no-cache');
-    header('Expires: 0');
-
-    $bom = "\357\273\277";
-
-    $crlf = "\r\n";
-    $output = "$bom$langSurname\t$langName\t$langAm\t$langStart\t$langExerciseDuration\t$langStudentTotalScore\t$langTotalScore$crlf";
-    $output .= "$crlf";
+    $csv = new CSV();
+    $csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv';
+    $csv->outputRecord($langSurname, $langName, $langAm, $langStart, $langExerciseDuration, $langStudentTotalScore, $langTotalScore);
 
     $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ?d", $exerciseId);
 
     foreach ($result as $row) {
         $sid = $row->uid;
-        $surname = uid_to_name($sid,'surname');
-        $name = uid_to_name($sid,'givenname');
+        $surname = uid_to_name($sid, 'surname');
+        $name = uid_to_name($sid, 'givenname');
         $am = uid_to_am($sid);
 
         $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
@@ -50,23 +44,13 @@ if ($is_editor) {
 			FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d", $sid, $exerciseId);
         
         foreach ($result2 as $row2) {
-            $output .= csv_escape($surname) . "\t";
-            $output .= csv_escape($name) . "\t";
-            $output .= csv_escape($am) . "\t";
-            $recordStartDate = $row2->record_start_date;
-            $output .= csv_escape($recordStartDate) . "\t";
             if ($row2->time_duration == '00:00:00' or empty($row2->time_duration)) { // for compatibility
-                $output .= csv_escape($langNotRecorded) . "\t";
+                $duration = $langNotRecorded;
             } else {
-                $output .= csv_escape(format_time_duration($row2->time_duration)) . "\t";
+                $duration = format_time_duration($row2->time_duration);
             }
-            $totalScore = $row2->total_score;
-            $totalWeighting = $row2->total_weighting;
-            $output .= csv_escape("$totalScore") . "\t";
-            $output .= csv_escape("$totalWeighting") . "\t";
-            $output .= "$crlf";
+            $csv->outputRecord($surname, $name, $am, $row2->record_start_date, $duration, $row2->total_score, $row2->total_weighting);
         }
     }
-    echo iconv('UTF-8', 'UTF-16LE', $output);
-}  // end of initial if
+}
 

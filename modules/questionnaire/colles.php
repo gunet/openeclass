@@ -139,11 +139,13 @@ $export_box = "";
 if ($is_editor) {
     $export_box .= "
         <div class='alert alert-info'>
-            <b>$langDumpUserDurationToFile:</b><br>
-            <b>$langPollPercentResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langcsvenc2</a>,
-               <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a><br>
-            <b>$langPollFullResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langcsvenc2</a>,
-               <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid&amp;full=1'>$langcsvenc1</a>
+            <b>$langDumpUserDurationToFile:</b>
+            <ul>
+              <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langPollPercentResults</a>
+                  (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
+              <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langPollFullResults</a>
+                  (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
+            </ul>
         </div>";
 }
 
