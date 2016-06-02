@@ -341,7 +341,7 @@ function add_update_bbb_session($title, $desc, $start_session, $end_session, $st
             }
             if (count($recipients) > 0) {
                 $emailsubject = $langBBBScheduledSession;
-                $bbblink = $urlServer . "modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;mod_pw=$new_mod_pw&amp;att_pw=$new_att_pw";
+                $bbblink = $urlServer . "modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;att_pw=$new_att_pw";
                 $emailheader = "
                     <div id='mail-header'>
                         <div>
@@ -996,19 +996,15 @@ function bbb_join_moderator($meeting_id, $mod_pw, $att_pw, $surname, $name) {
             'userId' => '', // OPTIONAL - string
             'webVoiceConf' => ''    // OPTIONAL - string
         );
-
         // Get the URL to join meeting:
-        $itsAllGood = true;
-        try {$result = $bbb->getJoinMeetingURL($joinParams);}
-            catch (Exception $e) {
-                echo 'Caught exception: ', $e->getMessage(), "\n";
-                $itsAllGood = false;
+
+        try {
+        	$result = $bbb->getJoinMeetingURL($joinParams);
         }
-        if ($itsAllGood) {
-            return $result;
-        } else {
-            return '';
-        }
+        catch (Exception $e) {
+            echo 'Caught exception: ', $e->getMessage(), "\n";
+			return $result;
+        }    
     }
 return;
 }

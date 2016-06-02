@@ -140,10 +140,7 @@ if ($appName) {
         $tool_content .= "<div class='text-center' style='padding:10px;'><a href='$urlAppend" . $app->getConfigUrl() . "''>";
         if ($app->getAppIcon() !== null) {
             $tool_content .= "<img height='50' width='89' src='" . $app->getAppIcon() . "'/>";
-        }
-        
-        //echo $app->getName();
-        //echo "<br>";
+        }                
         if ($app->isConfigured()) {
             if ($app->getName() == 'bigbluebutton') {
                 $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success bbb-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger bbb-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";

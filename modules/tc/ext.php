@@ -23,39 +23,86 @@
 $require_current_course = FALSE;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/sendMail.inc.php';
 // For creating bbb urls & params
 require_once 'bbb-api.php';
+require_once 'om-api.php';
 require_once 'functions.php';
 
-$mod_pw = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;
-$title = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->title;
-$att_pw = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->att_pw;
-$record = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->record;
-$start_date = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->start_date;
-$end_date = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->end_date;
-$active = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->active;
-$unlock_interval = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->unlock_interval;
-$r_group = explode(",",Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->external_users);
-
-if ($active<>'1' || date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))> $unlock_interval || date_diff_in_minutes(date('Y-m-d H:i:s'),$start_date) > 1440 || !is_active_bbb_server() || !in_array($_GET['username'],$r_group))
-{
-    echo $langBBBNoteEnableJoin;
+if (isset($_GET['meeting_id'])) {
+	$meeting_id = $_GET['meeting_id'];
+} else {
+    redirect_to_home_page();    
     exit;
 }
-if(bbb_session_running($_GET['meeting_id']) == false)
-{    
-    create_meeting($title,$_GET['meeting_id'],$mod_pw,$att_pw,$record);
-}
-# Get session capacity
-$c = Database::get()->querySingle("SELECT sessionUsers FROM tc_session where meeting_id=?s",$_GET['meeting_id']);
-$sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id']);
-$serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
 
-if( ($c->sessionUsers > 0) && ($c->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$_GET['meeting_id'],$sess->mod_pw)))
-{
-    $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
+$q = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s", $meeting_id);
+
+$server_id = $q->running_at;
+$mod_pw = $q->mod_pw;
+$title = $q->title;
+$att_pw = $q->att_pw;
+$record = $q->record;
+$start_date = $q->start_date;
+$end_date = $q->end_date;
+$active = $q->active;
+$unlock_interval = $q->unlock_interval;
+$external_users = $q->external_users;
+$r_group = explode(",",$external_users);
+
+$server_type = Database::get()->querySingle("SELECT `type` FROM tc_servers WHERE id = ?d", $server_id)->type;
+
+if ($server_type == 'bbb' and !is_active_bbb_server()) {
+    Session::Messages($langBBBNoteEnableJoin, 'alert-warning');
+    redirect_to_home_page();
+    exit;
 }
-else {
-        header('Location: ' . bbb_join_user($_GET['meeting_id'],$att_pw,$_GET['username'],""));
+if ($server_type == 'om' and !is_active_om_server()) {
+    Session::Messages($langBBBNoteEnableJoin, 'alert-warning');
+        redirect_to_home_page();    
+        exit;
+}
+
+if ($active <> '1' 
+    or date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))> $unlock_interval 
+    or date_diff_in_minutes(date('Y-m-d H:i:s'),$start_date) > 1440     
+    or !in_array($_GET['username'],$r_group)) {
+        Session::Messages($langBBBNoteEnableJoin, 'alert-warning');
+        redirect_to_home_page();    
+        exit;
+}
+
+if ($server_type == 'bbb') { // bbb server
+    if(bbb_session_running($meeting_id) == false) {
+        create_meeting($title,$meeting_id,$mod_pw,$att_pw,$record);
+    }
+    # Get session capacity
+    $c = Database::get()->querySingle("SELECT sessionUsers, mod_pw FROM tc_session WHERE meeting_id=?s",$meeting_id);    
+    $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
+
+    if($c->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$meeting_id,$c->mod_pw))
+    {
+        Session::Messages($langBBBMaxUsersJoinError, 'alert-warning');
+        redirect_to_home_page();    
+        exit;    
+    } else {
+        header('Location: ' . bbb_join_user($meeting_id,$att_pw,$_GET['username'],""));
+    }
+}
+
+if ($server_type == 'om') { // OM server
+    if(om_session_running($meeting_id) == false) {
+        create_om_meeting($title, $meeting_id, $record);
+    }
+    # Get session capacity
+    $c = Database::get()->querySingle("SELECT sessionUsers, mod_pw FROM tc_session where meeting_id=?s",$meeting_id);    
+    $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
+
+    if ($c->sessionUsers < get_om_connected_users($server_id))
+    {
+        Session::Messages($langBBBMaxUsersJoinError, 'alert-warning');
+        redirect_to_home_page();    
+        exit;    
+    } else {
+        header('Location: ' . om_join_user($meeting_id, $_GET['username'], -1, "", $_GET['username'], "", 0));
+    }
 }
