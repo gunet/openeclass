@@ -44,15 +44,15 @@ if (!isset($course_id)) {
 }
 
 if ($course_id != 0) {
-    $dropbox_dir = $webDir . "/courses/" . $course_code . "/dropbox";
-    if (!is_dir($dropbox_dir)) {
-        make_dir($dropbox_dir);
+    $message_dir = $webDir . "/courses/" . $course_code . "/dropbox";
+    if (!is_dir($message_dir)) {
+        make_dir($message_dir);
     }
     
     // get dropbox quotas from database
     $d = Database::get()->querySingle("SELECT dropbox_quota FROM course WHERE code = ?s", $course_code);
     $diskQuotaDropbox = $d->dropbox_quota;
-    $diskUsed = dir_total_space($dropbox_dir);
+    $diskUsed = dir_total_space($message_dir);
 }
 
 // javascript functions
@@ -156,7 +156,7 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] 
                     ORDER BY dm.timestamp ASC";   
             $result = Database::get()->queryArray($sql, $course_id); 
             foreach ($result as $file) {
-                unlink($dropbox_dir . "/" . $file->filename);
+                unlink($message_dir . "/" . $file->filename);
                 $space_released += $file->filesize;
                 Database::get()->query("DELETE FROM dropbox_attachment WHERE id = ?d", $file->id);
                 if ($space_released >= $diskQuotaDropbox/20) { // we want to keep 20% of quota
@@ -195,12 +195,12 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             draw($tool_content, 1, null, $head_content);
             exit;
         }
-        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' id='newmsg' method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' id='newmsg' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } elseif ($course_id == 0 && $type == 'cm') {
-        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } else {
         $type = 'cm'; //only course messages are allowed in the context of a course
-        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     }
     $tool_content .= "
 	<fieldset>
@@ -220,7 +220,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 AND course_module.visible = ?d
                 AND course_user.user_id = ?d
                 ORDER BY title";
-        $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, $uid);
+        $res = Database::get()->queryArray($sql, MODULE_ID_MESSAGE, 1, $uid);
         
         $head_content .= "<script type='text/javascript'>
                             $(document).on('change','#courseselect',function(){

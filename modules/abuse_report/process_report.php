@@ -20,7 +20,7 @@
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/abuse_report/abuse_report.php';
-require_once 'modules/dropbox/class.msg.php';
+require_once 'modules/message/class.msg.php';
 
 $rtype = $_POST['rtype'];
 $rid = intval($_POST['rid']);
@@ -152,7 +152,7 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
         
         $v = Database::get()->querySingle("SELECT visible FROM course_module
                                 WHERE module_id = ?d AND
-                                course_id = ?d", MODULE_ID_DROPBOX, $cid)->visible;
+                                course_id = ?d", MODULE_ID_MESSAGE, $cid)->visible;
         
         if ($v == 1) {
             $reports_cats = array('rudeness' => $langRudeness,

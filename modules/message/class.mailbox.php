@@ -58,7 +58,7 @@ Class Mailbox {
                     AND `dropbox_index`.`is_read` = ?d 
                     AND `dropbox_index`.`recipient_id` = ?d
                     AND `dropbox_index`.`deleted` = ?d";
-            return Database::get()->querySingle($sql, MODULE_ID_DROPBOX, 1, 0, 0, $this->uid, 0)->unread_count;
+            return Database::get()->querySingle($sql, MODULE_ID_MESSAGE, 1, 0, 0, $this->uid, 0)->unread_count;
         } else { //unread messages in course context
             $sql = "SELECT COUNT(`msg_id`) as `unread_count`
                     FROM `dropbox_index`, `dropbox_msg`
@@ -96,7 +96,7 @@ Class Mailbox {
         } else {
             $sql .= "AND `dropbox_msg`.`author_id` = ?d";
         }
-        return Database::get()->querySingle($sql, MODULE_ID_DROPBOX, 1, 0, $this->uid, 0, $this->uid)->all_count;
+        return Database::get()->querySingle($sql, MODULE_ID_MESSAGE, 1, 0, $this->uid, 0, $this->uid)->all_count;
     }
     
     /**
@@ -139,7 +139,7 @@ Class Mailbox {
                     AND `dropbox_index`.`recipient_id` != `dropbox_msg`.`author_id`
                     AND `dropbox_index`.`deleted` = ?d $query_sql
                     GROUP BY `dropbox_msg`.`id` ORDER BY `timestamp` DESC $extra_sql";
-            $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, 0, $this->uid, 0, $args);
+            $res = Database::get()->queryArray($sql, MODULE_ID_MESSAGE, 1, 0, $this->uid, 0, $args);
         } else { //messages in course context
             $sql = "SELECT `dropbox_msg`.`id` 
                     FROM `dropbox_msg`,`dropbox_index`
@@ -199,7 +199,7 @@ Class Mailbox {
                     AND `author_id` = ?d
                     AND  `dropbox_index`.`recipient_id` = ?d $query_sql
                     ORDER BY `timestamp` DESC $extra_sql";
-            $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, 0, 0, $this->uid, $this->uid, $args);
+            $res = Database::get()->queryArray($sql, MODULE_ID_MESSAGE, 1, 0, 0, $this->uid, $this->uid, $args);
         } else { //messages in course context
             $sql = "SELECT `dropbox_msg`.`id` 
                     FROM `dropbox_msg`,`dropbox_index` 

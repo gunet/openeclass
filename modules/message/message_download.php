@@ -19,8 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 /**
- * @file dropbox_download.php
- * @brief Download files from dropbox
+ * @file message_download.php
+ * @brief Download files from message
  */
 $require_login = TRUE;
 $require_current_course = TRUE;
@@ -29,7 +29,7 @@ include '../../include/baseTheme.php';
 require_once 'class.msg.php';
 require_once 'include/lib/forcedownload.php';
 
-$dropbox_dir = $webDir . "/courses/" . $course_code . "/dropbox";
+$message_dir = $webDir . "/courses/" . $course_code . "/dropbox";
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
@@ -39,7 +39,7 @@ if (isset($_GET['id'])) {
 
 $work = new Msg($id, $uid, 'any');
 if (!$work->error) {
-    $path = $dropbox_dir . "/" . $work->filename; //path to file as stored on server
+    $path = $message_dir . "/" . $work->filename; //path to file as stored on server
     $file = $work->real_filename;
     
     send_file_to_client($path, $file, null, true);

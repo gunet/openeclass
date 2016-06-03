@@ -257,7 +257,7 @@ class Log {
                 break;
             case MODULE_ID_VIDEO: $content = $this->video_action_details($details);
                 break;
-            case MODULE_ID_DROPBOX: $content = $this->dropbox_action_details($details);
+            case MODULE_ID_MESSAGE: $content = $this->dropbox_action_details($details);
                 break;
             case MODULE_ID_GROUPS: $content = $this->group_action_details($details);
                 break;
