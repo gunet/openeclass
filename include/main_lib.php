@@ -69,7 +69,7 @@ define('MODULE_ID_FORUM', 9);
 define('MODULE_ID_EXERCISE', 10);
 define('MODULE_ID_COURSEINFO', 14);
 define('MODULE_ID_GROUPS', 15);
-define('MODULE_ID_DROPBOX', 16);
+define('MODULE_ID_MESSAGE', 16);
 define('MODULE_ID_GLOSSARY', 17);
 define('MODULE_ID_EBOOK', 18);
 define('MODULE_ID_CHAT', 19);

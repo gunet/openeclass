@@ -114,7 +114,7 @@ function create_course_dirs($code) {
  */
 function create_modules($cid) {
     $vis_module_ids = array(MODULE_ID_AGENDA, MODULE_ID_LINKS, MODULE_ID_DOCS,
-        MODULE_ID_ANNOUNCE, MODULE_ID_DESCRIPTION, MODULE_ID_DROPBOX,);
+        MODULE_ID_ANNOUNCE, MODULE_ID_DESCRIPTION, MODULE_ID_MESSAGE,);
 
     $invis_module_ids = array(MODULE_ID_VIDEO, MODULE_ID_ASSIGN,
         MODULE_ID_FORUM, MODULE_ID_EXERCISE,

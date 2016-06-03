@@ -31,7 +31,7 @@
  */
 
 require_once 'modules/tc/functions.php';
-require_once 'modules/dropbox/class.mailbox.php';
+require_once 'modules/message/class.mailbox.php';
 
 /*
  * Function getSideMenu
@@ -102,7 +102,7 @@ function getToolsArray($cat) {
                         course_id = $cid AND
                         module_id NOT IN (" . MODULE_ID_CHAT . ",
                                           " . MODULE_ID_ASSIGN . ",
-                                          " . MODULE_ID_DROPBOX . ",
+                                          " . MODULE_ID_MESSAGE . ",
                                           " . MODULE_ID_FORUM . ",
                                           " . MODULE_ID_GROUPS . ",
                                           " . MODULE_ID_ATTENDANCE . ",
@@ -263,7 +263,7 @@ function loggedInMenu($rich=true) {
         array_push($sideMenuImg, "fa-plus-circle");
     }
 
-    require_once 'modules/dropbox/class.mailbox.php';
+    require_once 'modules/message/class.mailbox.php';
 
     array_push($sideMenuText, $GLOBALS['langMyCourses']);
     array_push($sideMenuLink, $urlServer . "main/my_courses.php");
@@ -276,7 +276,7 @@ function loggedInMenu($rich=true) {
     } else {
         array_push($sideMenuText, "<b>$GLOBALS[langMyDropBox]<span class='badge pull-right'>$new_msgs</span></b>");
     }
-    array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
+    array_push($sideMenuLink, $urlServer . "modules/message/index.php");
     array_push($sideMenuImg, "fa-envelope-o");
 
     array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
@@ -721,8 +721,8 @@ function lessonToolsMenu($rich=true) {
             }
 
             // if we are in dropbox or announcements add (if needed) mail address status
-            if ($rich and ($mid == MODULE_ID_DROPBOX or $mid == MODULE_ID_ANNOUNCE)) {
-                if ($mid == MODULE_ID_DROPBOX) {
+            if ($rich and ($mid == MODULE_ID_MESSAGE or $mid == MODULE_ID_ANNOUNCE)) {
+                if ($mid == MODULE_ID_MESSAGE) {
                     $mbox = new Mailbox($uid, course_code_to_id($course_code));
                     $new_msgs = $mbox->unreadMsgsNumber();
                     if ($new_msgs != 0) {

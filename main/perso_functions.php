@@ -26,8 +26,8 @@
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
-require_once 'modules/dropbox/class.mailbox.php';
-require_once 'modules/dropbox/class.msg.php';
+require_once 'modules/message/class.mailbox.php';
+require_once 'modules/message/class.msg.php';
 /**
  * @brief display user courses
  * @global type $session
@@ -209,7 +209,7 @@ function getUserMessages() {
         $message_content .= "<li class='list-item'>
                                 <div class='item-wholeline'>                                    
                                     <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
-                                        <a href='{$urlServer}modules/dropbox/index.php?mid=$message->id'>" .q($message->subject)."</a>
+                                        <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                     </div>                                    
                                     <div class='text-grey'>$course_title</div>
                                     <div>$message_date</div>

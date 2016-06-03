@@ -52,7 +52,7 @@ if (isset($_POST['submit'])) {
          <div class='form-wrapper'>
            <form class='form-horizontal' role='form' action='modules.php' method='post'>";
 
-    $alwaysEnabled = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_DROPBOX, MODULE_ID_DESCRIPTION);
+    $alwaysEnabled = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE, MODULE_ID_DESCRIPTION);
     foreach ($modules as $mid => $minfo) {
         if (in_array($mid, $alwaysEnabled)) {
             continue;

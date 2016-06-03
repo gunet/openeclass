@@ -165,7 +165,7 @@ if (isset($_GET['group_as'])) {
                       'icon' => 'fa-reply',
                       'level' => 'primary'),
                 array('title' => $langEmailGroup,                    
-                      'url' => "../dropbox/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
+                      'url' => "../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
                       'icon' => 'fa-envelope',                  
                       'show' => $is_editor or $is_tutor),
                 array('title' => "$langDumpUser",
