@@ -64,4 +64,37 @@ class Game extends GameAbstract {
             return false;
         }
     }
+    
+    public static function checkCompleteness($uid, $course_id) {
+        $context = new Hoa\Ruler\Context();
+        $context['uid'] = $uid;
+        $context['courseId'] = $course_id;
+        $context['userCriterionIds'] = array();
+
+        $iter = array('certificate', 'badge');
+        foreach ($iter as $key) {
+            $gameQ = "select g.*, '$key' as type from $key g where course = ?d and active = 1 and (expires is null or expires > ?t)";
+            Database::get()->queryFunc($gameQ, function($game) use ($key, $uid, &$context) {
+                // get game child-criterion ids
+                $criterionIds = array();
+                Database::get()->queryFunc("select c.id from {$key}_criterion c where $key = ?d ", function($crit) use (&$criterionIds) {
+                    $criterionIds[] = $crit->id;
+                }, $game->id);
+                $game->criterionIds = $criterionIds;
+
+                // get user satisfied criterion ids
+                $userCriterionIds = array();
+                $critQ = "select uc.{$key}_criterion as criterion from user_{$key}_criterion uc where user = ?d";
+                Database::get()->queryFunc($critQ, function($uc) use (&$userCriterionIds, $criterionIds) {
+                    if (in_array($uc->criterion, $criterionIds)) {
+                        $userCriterionIds[] = $uc->criterion;
+                    }
+                }, $uid);
+                $context['userCriterionIds'] = $userCriterionIds;
+
+                $gameObj = Game::initWithProperties($game);
+                $gameObj->evaluate($context);
+            }, $course_id, gmdate('Y-m-d H:i:s'));
+        }
+    }
 }
