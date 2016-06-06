@@ -31,7 +31,7 @@ $coursePath = $webDir . '/courses/';
 if (isset($_REQUEST['conference_id'])) {
     $conference_id = $_REQUEST['conference_id'];
 } else {
-    redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
+    redirect_to_home_page("modules/chat/messageList.php?course=$course_code");
 }
 
 $fileChatName = $coursePath . $course_code . '/' . $conference_id. '_chat.txt';
@@ -70,7 +70,7 @@ if (isset($_GET['reset']) && $is_editor) {
     }
     fclose($fchat);
     @unlink($tmpArchiveFile);
-    redirect_to_home_page("modules/conference/messageList.php?course=$course_code&conference_id=$conference_id");
+    redirect_to_home_page("modules/chat/messageList.php?course=$course_code&conference_id=$conference_id");
 }
 
 // store
@@ -105,7 +105,7 @@ if (isset($_GET['store']) && $is_editor) {
     } else {
     }
     @unlink($exportFileChat);
-    redirect_to_home_page("modules/conference/messageList.php?course=$course_code&conference_id=$conference_id");
+    redirect_to_home_page("modules/chat/messageList.php?course=$course_code&conference_id=$conference_id");
 }
 
 // add new line
@@ -118,14 +118,14 @@ if (isset($_GET['store']) && $is_editor) {
         }
         fwrite($fchat, $timeNow . ' - ' . $nick . ' : ' . stripslashes($chatLine) . " !@#$ $uid       \n");
         fclose($fchat);
-        redirect_to_home_page("modules/conference/messageList.php?course=$course_code&conference_id=$conference_id");
+        redirect_to_home_page("modules/chat/messageList.php?course=$course_code&conference_id=$conference_id");
     }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <base target="_parent">
-    <meta http-equiv="refresh" content="30; url=<?php echo "{$urlServer}modules/conference/messageList.php?course=$course_code&conference_id=$conference_id" ?>" />
+    <meta http-equiv="refresh" content="30; url=<?php echo "{$urlServer}modules/chat/messageList.php?course=$course_code&conference_id=$conference_id" ?>" />
     <title>Chat messages</title>
     <!-- jQuery -->
     <script src="<?php echo $urlServer;?>js/jquery-<?php echo JQUERY_VERSION; ?>.min.js"></script>

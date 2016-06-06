@@ -430,7 +430,7 @@ $modules = array(
     MODULE_ID_MESSAGE => array('title' => $langDropBox, 'link' => 'message', 'image' => 'fa-envelope-o'),
     MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-list'),
     MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-book'),
-    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'conference', 'image' => 'fa-exchange'),
+    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'chat', 'image' => 'fa-exchange'),
     MODULE_ID_DESCRIPTION => array('title' => $langDescription, 'link' => 'course_description', 'image' => 'fa-info-circle'),
     MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-question-circle'),
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'fa-ellipsis-h'),
