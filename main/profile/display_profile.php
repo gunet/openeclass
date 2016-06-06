@@ -89,7 +89,7 @@ if ($userdata) {
             $tool_content .= 
                 action_bar(array(
                     array('title' => $langProfileSendMail,
-                        'url' => "../../modules/dropbox/index.php?upload=1&id=$id",
+                        'url' => $urlAppend . "modules/message/index.php?upload=1&amp;id=$id",
                         'icon' => 'fa-envelope',
                         'level' => 'primary-label')
                     ));
