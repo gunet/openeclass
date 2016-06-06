@@ -31,7 +31,7 @@ $coursePath = $webDir . '/courses/';
 if (isset($_REQUEST['conference_id'])) {
     $conference_id = $_REQUEST['conference_id'];
 } else {
-    redirect_to_home_page("modules/conference/messageList.php?course=$course_code");    
+    redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
 }
 
 $fileChatName = $coursePath . $course_code . '/' . $conference_id. '_chat.txt';
@@ -40,10 +40,10 @@ $tmpArchiveFile = $coursePath . $course_code . '/' . $conference_id. '_tmpChatAr
 $nick = uid_to_name($uid);
 
 // How many lines to show on screen
-define('MESSAGE_LINE_NB', 20);
+define('MESSAGE_LINE_NB', 100);
 // How many lines to keep in temporary archive
 // (the rest are in the current chat file)
-define('MAX_LINE_IN_FILE', 20);
+define('MAX_LINE_IN_FILE', 100);
 
 if ($GLOBALS['language'] == 'el') {
     $timeNow = date("d-m-Y / H:i", time());
@@ -58,8 +58,8 @@ if (!file_exists($fileChatName)) {
 
 // chat commands
 // reset command
-if (isset($_GET['reset']) && $is_editor) { 
-    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();       
+if (isset($_GET['reset']) && $is_editor) {
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     $fchat = fopen($fileChatName, 'w');
 
     if (flock($fchat, LOCK_EX)) {
@@ -76,21 +76,21 @@ if (isset($_GET['reset']) && $is_editor) {
 // store
 if (isset($_GET['store']) && $is_editor) {
     require_once 'modules/document/doc_init.php';
-    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();       
+    if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     $saveIn = "chat." . date("Y-m-j-his") . ".txt";
     $chat_filename = '/' . safe_filename('txt');
 
     //Concat temp & chat file removing system messages and html tags
     $exportFileChat = $coursePath . $course_code . '/'. $conference_id . '_chat_export.txt';
-    $fp = fopen($exportFileChat, 'a+');        
+    $fp = fopen($exportFileChat, 'a+');
     $tmp_file = @file_get_contents($tmpArchiveFile);
-    $chat_file = @file_get_contents($fileChatName);        
+    $chat_file = @file_get_contents($fileChatName);
     $con_file = preg_replace(array('/^(.*?)!@#\$ systemMsg.*\n/m','/!@#\$.*/'), '', strip_tags($tmp_file.$chat_file));
 
     fwrite($fp, $con_file);
     fclose($fp);
 
-    if (copy($exportFileChat, $basedir . $chat_filename)) {            
+    if (copy($exportFileChat, $basedir . $chat_filename)) {
         Database::get()->query("INSERT INTO document SET
                             course_id = ?d,
                             subsystem = ?d,
@@ -107,7 +107,7 @@ if (isset($_GET['store']) && $is_editor) {
     @unlink($exportFileChat);
     redirect_to_home_page("modules/conference/messageList.php?course=$course_code&conference_id=$conference_id");
 }
-  
+
 // add new line
     if (isset($_POST['chatLine']) and trim($_POST['chatLine']) != '') {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -135,7 +135,7 @@ if (isset($_GET['store']) && $is_editor) {
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="<?php echo $urlServer;?>template/default/CSS/bootstrap-custom.css">
-               
+
     <style type="text/css">
         span { color: #727266; font-size: 11px; }
         div { font-size: 12px; }
@@ -152,13 +152,13 @@ if (isset($_GET['store']) && $is_editor) {
         $lineToRemove = 0;
     }
     $tmp = array_splice($fileContent, 0, $lineToRemove);
-    
-    $fileReverse = array_reverse($fileContent);    
+
+    $fileReverse = array_reverse($fileContent);
     foreach ($fileReverse as $thisLine) {
         $thisLine = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $thisLine);
         $newline = mathfilter($thisLine, 12, '../../courses/mathimg/');
         $str_1 = explode(' !@#$ ', $newline);
-        
+
         //New message system (3.0 generated conferences)
         if (isset($str_1[1])) {
             if (trim($str_1[1]) == "systemMsgClear" || trim($str_1[1]) == "systemMsgSave") {
@@ -173,7 +173,7 @@ if (isset($_GET['store']) && $is_editor) {
                                     $str_1[0]
                                 </div>
                             </div>
-                      </div>\n";        
+                      </div>\n";
             } else {
                 $user_id = (int) trim($str_1[1]);
                 $str_2 = explode(' - ', $str_1[0]);
@@ -190,11 +190,11 @@ if (isset($_GET['store']) && $is_editor) {
                                     </a>
                                     <div class='media-body bubble'>
                                         <div class='label label-success media-heading'>$datetime</div>
-                                        <small>$langBlogPostUser ". display_user($user_id, false, false) ."</small>    
+                                        <small>$langBlogPostUser ". display_user($user_id, false, false) ."</small>
                                         <div class='margin-top-thin'>
                                             " . $usertext . "
                                         </div>
-                                    </div>    
+                                    </div>
                                 </div>
                             </div>
                       </div>\n";
@@ -206,7 +206,7 @@ if (isset($_GET['store']) && $is_editor) {
                                     $str_1[0]
                                 </div>
                             </div>
-                      </div>\n";            
+                      </div>\n";
         }
     }
     echo "</body></html>\n";
@@ -229,4 +229,3 @@ if (isset($_GET['store']) && $is_editor) {
         $fp = fopen($tmpFile, "a");
         fwrite($fp, $content);
     }
-    
