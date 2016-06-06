@@ -109,7 +109,7 @@ if ($userdata) {
                                         array('title' => $langResourcesCollection,
                                               'url' => "resources.php?id=$id",
                                               'level' => 'primary-label'),
-                                        array('title' => $langEditePortfolio,
+                                        array('title' => $langEditResume,
                                             'url' => "edit_eportfolio.php",
                                             'icon' => 'fa-edit'),
                                         array('title' => $langUploadBio,

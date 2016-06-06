@@ -29,7 +29,7 @@ check_uid();
 check_guest();
 
 $toolName = $langMyePortfolio;
-$pageName = $langEditePortfolio;
+$pageName = $langEditResume;
 $navigation[] = array('url' => 'index.php', 'name' => $langMyePortfolio);
 
 if (!get_config('eportfolio_enable')) {
