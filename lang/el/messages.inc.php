@@ -4884,6 +4884,7 @@ $langUserePortfolioDisabled = 'Τo e-portfolio του χρήστη είναι α
 $langResume = 'Resume';
 $langePortfolioDisableWarning = 'Το e-portfolio σας είναι απενεργοποιημένο και επομένως δεν είναι ορατό σε άλλους χρήστες και επισκέπτες της πλατφόρμας';
 $langAddResePortfolio = 'Προσθήκη σε e-Portfolio';
+$langResourcesCollection = 'Συλλογή πόρων';
 
 /* * ******************************************
   Widgets

@@ -106,6 +106,9 @@ if ($userdata) {
                                             'url' => "index.php?id=$id",
                                             'level' => 'primary-label',
                                             'button-class' => 'btn-info'),
+                                        array('title' => $langResourcesCollection,
+                                              'url' => "resources.php?id=$id",
+                                              'level' => 'primary-label'),
                                         array('title' => $langEditePortfolio,
                                             'url' => "edit_eportfolio.php",
                                             'icon' => 'fa-edit'),
@@ -129,7 +132,10 @@ if ($userdata) {
                                         array('title' => $langResume,
                                             'url' => "index.php?id=$id",
                                             'level' => 'primary-label',
-                                            'button-class' => 'btn-info')
+                                            'button-class' => 'btn-info'),
+                                        array('title' => $langResourcesCollection,
+                                              'url' => "resources.php?id=$id",
+                                              'level' => 'primary-label'),
                                     ));
     }
     
@@ -210,8 +216,7 @@ if ($userdata) {
     } else {
         $social_share = '';
     }
-    $tool_content .= "</div>
-                $social_share
+    $tool_content .= "$social_share</div>
             </div>
         </div>
     </div>";
