@@ -188,11 +188,15 @@ function generate_single_post_html($post) {
         }
         $post_actions .= '</div>';
     } else {
-        $post_actions = '';
+        $post_actions = '<div class="pull-right">';
         if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
             $head_content .= abuse_report_add_js();
-            $post_actions .= '<div class="pull-right">'.abuse_report_icon_flag ('wallpost', $id, $course_id).'</div>';
+            $post_actions .= abuse_report_icon_flag ('wallpost', $id, $course_id)."&nbsp;";
         }
+        if ($pinned == 1) {
+            $post_actions .= icon('fa-lock', $langWallPinPost);
+        }
+        $post_actions .= '</div>';
     }
     
     
@@ -286,13 +290,17 @@ function generate_infinite_container_html($posts, $next_page) {
             }
             $post_actions .= '</div>';
         } else {
-            $post_actions = '';
+            $post_actions = '<div class="pull-right">';
             if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
                 if ($next_page == 2) { //needed only for the first page and not for dynamically added content
                     $head_content .= abuse_report_add_js(".infinite-container");
                 }
-                $post_actions .= '<div class="pull-right">'.abuse_report_icon_flag ('wallpost', $id, $course_id).'</div>';
+                $post_actions .= abuse_report_icon_flag ('wallpost', $id, $course_id)."&nbsp;";
             }
+            if ($pinned == 1) {
+                $post_actions .= icon('fa-lock', $langWallPinPost);
+            }
+            $post_actions .= '</div>';
         }
         
         
