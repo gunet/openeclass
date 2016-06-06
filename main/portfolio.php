@@ -207,15 +207,15 @@ $tool_content .= "
                     <div class='panel'>
                         <div class='panel-body'>
                             <ul class='tablelist'>";
-                            if(!empty($user_messages)){
+                            if (!empty($user_messages)) {
                                 $tool_content.=$user_messages;
-                            }else{
+                            } else {
                                 $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langDropboxNoMessage- </div></li>";
                             }
                             $tool_content.="</ul>
                         </div>
                         <div class='panel-footer clearfix'>
-                            <div class='pull-right'><a href='{$urlAppend}modules/dropbox/'><small>$langMore&hellip;</small></a></div>
+                            <div class='pull-right'><a href='{$urlAppend}modules/message/'><small>$langMore&hellip;</small></a></div>
                         </div>
                     </div>
                 </div>
@@ -271,15 +271,18 @@ $tool_content .= "
                               <span class='text-muted'>$langSumCoursesEnrolled</span>
                             </li>
                             ";
-                            if( !$is_editor && $teacher_courses_count>0 ) {
+                            if (!$is_editor && $teacher_courses_count > 0) {
                                 $tool_content .= "<li class='list-group-item'>
                                                     <span class='badge'>$teacher_courses_count</span>
                                                     <span class='text-muted'>$langSumCoursesSupport</span>
                                                     </li>";
                             }
+                            $tool_content .= "</ul>";
+                            if (isset($_SESSION['canChangePassword']) and $_SESSION['canChangePassword']) {
+                                $tool_content .= "
+                        <div class='pull-right'><a href='{$urlServer}main/profile/password.php'><small>$langProfileQuickPassword</small></a></div>";
+                            }
                             $tool_content .= "
-                        </ul>
-                        <div class='pull-right'><a href='".$urlServer."main/profile/password.php'><small>$langProfileQuickPassword</small></a></div>
                     </div>
                 </div>
             </div>
