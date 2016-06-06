@@ -186,6 +186,11 @@ function generate_single_post_html($post) {
             $head_content .= abuse_report_add_js();
             $post_actions .= abuse_report_icon_flag ('wallpost', $id, $course_id);
         }
+        if (!$is_editor) {
+            if ($pinned == 1) {
+                $post_actions .= "&nbsp;".icon('fa-lock', $langWallPinPost);
+            }
+        }
         $post_actions .= '</div>';
     } else {
         $post_actions = '<div class="pull-right">';
@@ -287,6 +292,11 @@ function generate_infinite_container_html($posts, $next_page) {
                     $head_content .= abuse_report_add_js(".infinite-container");
                 }
                 $post_actions .= abuse_report_icon_flag ('wallpost', $id, $course_id);
+            }
+            if (!$is_editor) {
+                if ($pinned == 1) {
+                    $post_actions .= "&nbsp;".icon('fa-lock', $langWallPinPost);
+                }
             }
             $post_actions .= '</div>';
         } else {
