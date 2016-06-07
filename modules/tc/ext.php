@@ -20,10 +20,9 @@
  * ========================================================================
  */
 
-$require_current_course = FALSE;
-
-require_once '../../include/baseTheme.php';
 // For creating bbb urls & params
+require_once '../../config/config.php';
+require_once '../../modules/db/database.php';
 require_once 'bbb-api.php';
 require_once 'om-api.php';
 require_once 'functions.php';
@@ -51,23 +50,10 @@ $r_group = explode(",",$external_users);
 
 $server_type = Database::get()->querySingle("SELECT `type` FROM tc_servers WHERE id = ?d", $server_id)->type;
 
-if ($server_type == 'bbb' and !is_active_bbb_server()) {
-    Session::Messages($langBBBNoteEnableJoin, 'alert-warning');
-    redirect_to_home_page();
-    exit;
-}
-if ($server_type == 'om' and !is_active_om_server()) {
-    Session::Messages($langBBBNoteEnableJoin, 'alert-warning');
-        redirect_to_home_page();    
-        exit;
-}
-
 if ($active <> '1' 
-    or date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))> $unlock_interval 
-    or date_diff_in_minutes(date('Y-m-d H:i:s'),$start_date) > 1440     
+    or date_diff_in_minutes($start_date,date('Y-m-d H:i:s')) > $unlock_interval 
     or !in_array($_GET['username'],$r_group)) {
-        Session::Messages($langBBBNoteEnableJoin, 'alert-warning');
-        redirect_to_home_page();    
+	    echo "Ο σύνδεσμος είναι ενεργός μόνο για όσες τηλεσυνεργασίες είναι σε εξέλιξη";
         exit;
 }
 
@@ -76,32 +62,30 @@ if ($server_type == 'bbb') { // bbb server
         create_meeting($title,$meeting_id,$mod_pw,$att_pw,$record);
     }
     # Get session capacity
-    $c = Database::get()->querySingle("SELECT sessionUsers, mod_pw FROM tc_session WHERE meeting_id=?s",$meeting_id);    
+    $sess = Database::get()->querySingle("SELECT sessionUsers, mod_pw, running_at FROM tc_session WHERE meeting_id=?s",$meeting_id);
     $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
 
-    if($c->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$meeting_id,$c->mod_pw))
+    if($sess->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$meeting_id,$sess->mod_pw))
     {
-        Session::Messages($langBBBMaxUsersJoinError, 'alert-warning');
-        redirect_to_home_page();    
-        exit;    
+        echo "Έχει συμπληρωθεί ο μέγιστος αριθμός συμμετεχόντων στην τηλεσυνεργασία. Παρακαλώ δοκιμάστε να συνδεθείτε αργότερα ή επικοινωνήστε με τους διαχειριστές.";
+        exit;
     } else {
         header('Location: ' . bbb_join_user($meeting_id,$att_pw,$_GET['username'],""));
     }
 }
 
 if ($server_type == 'om') { // OM server
-    if(om_session_running($meeting_id) == false) {
+    if (om_session_running($meeting_id) == false) {
         create_om_meeting($title, $meeting_id, $record);
     }
     # Get session capacity
-    $c = Database::get()->querySingle("SELECT sessionUsers, mod_pw FROM tc_session where meeting_id=?s",$meeting_id);    
+    $sess = Database::get()->querySingle("SELECT sessionUsers, mod_pw, running_at FROM tc_session where meeting_id=?s",$meeting_id);    
     $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
 
-    if ($c->sessionUsers < get_om_connected_users($server_id))
+    if ($sess->sessionUsers < get_om_connected_users($server_id))
     {
-        Session::Messages($langBBBMaxUsersJoinError, 'alert-warning');
-        redirect_to_home_page();    
-        exit;    
+        echo "Έχει συμπληρωθεί ο μέγιστος αριθμός συμμετεχόντων στην τηλεσυνεργασία. Παρακαλώ δοκιμάστε να συνδεθείτε αργότερα ή επικοινωνήστε με τους διαχειριστές.";
+        exit;
     } else {
         header('Location: ' . om_join_user($meeting_id, $_GET['username'], -1, "", $_GET['username'], "", 0));
     }
