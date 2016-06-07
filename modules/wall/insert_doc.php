@@ -71,8 +71,12 @@ function list_docs($id = NULL, $subsystem = NULL) {
                      $('#$div_id').on('ready.jstree', function(e, data) {
                          if(data.instance._cnt == 0) {
                              $('#".$input_id."_div').html('<div class=\"alert alert-warning\">$langNoDocuments</div>');
+                         } else {
+                             $('#$div_id').jstree('close_all');
                          }
                      })
+                     
+                     
                      
                      $('#wall_form').on('submit', function(e) {
                         var selectedElms = $('#$div_id').jstree('get_selected', true);
