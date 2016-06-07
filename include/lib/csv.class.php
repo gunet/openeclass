@@ -28,6 +28,7 @@ class CSV {
 	public $filename = null;
 	public $sendBOM = false;
 	public $sendSep = false;
+    public $debug = false;
 
 	private $outputStarted = false;
 	private $encoding;
@@ -75,51 +76,65 @@ class CSV {
             function($item) use (&$record) {
                 $record[] = $this->escape($item);
             });
-        echo implode($this->encodedFieldSeparator, $record),
-            $this->encodedRecordSeparator;
+        if ($this->debug) {
+            echo '<tr><td>', implode('</td><td>', $record), '</td></tr>';
+        } else {
+            echo implode($this->encodedFieldSeparator, $record),
+                $this->encodedRecordSeparator;
+        }
         return $this;
 	}
 
 	public function outputHeaders() {
-		$filenameAttr = '';
-		if ($this->filename) {
-			if (preg_match('/[^\x20-\x7E]/', $filenameAttr) and
-				strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
-					$filenameAttr = urlencode($this->filename);
-            } else {
-                $filenameAttr = $this->filename;
+        if ($this->debug) {
+            echo '<p>Encoding: ', $this->encoding, ', filename: ', q($this->filename),
+                '</p><table border>';
+        } else {
+            $filenameAttr = '';
+            if ($this->filename) {
+                if (preg_match('/[^\x20-\x7E]/', $filenameAttr) and
+                    strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
+                        $filenameAttr = urlencode($this->filename);
+                } else {
+                    $filenameAttr = $this->filename;
+                }
+                // Add quotes to filename if it contains spaces
+                if (strpos($filenameAttr, ' ') !== false) {
+                    $filenameAttr = '"' . $filenameAttr . '"';
+                }
+                $filenameAttr = '; filename=' . $filenameAttr;
             }
-			// Add quotes to filename if it contains spaces
-			if (strpos($filenameAttr, ' ') !== false) {
-				$filenameAttr = '"' . $filenameAttr . '"';
-			}
-			$filenameAttr = '; filename=' . $filenameAttr;
-		}
-		header("Content-Type: text/csv; charset=" . $this->encoding);
-		header("Content-Disposition: attachment" . $filenameAttr);
+            header("Content-Type: text/csv; charset=" . $this->encoding);
+            header("Content-Disposition: attachment" . $filenameAttr);
 
-		if ($this->sendBOM) {
-			switch ($this->encoding) {
-				case 'UTF-8':
-					echo chr(0xEF), chr(0xBB), chr(0xBF);
-					break;
-				case 'UTF-16LE':
-					echo chr(0xFF), chr(0xFE);
-					break;
-				case 'UTF-16LE':
-					echo chr(0xFE), chr(0xFF);
-					break;
-			}
-		}
+            if ($this->sendBOM) {
+                switch ($this->encoding) {
+                    case 'UTF-8':
+                        echo chr(0xEF), chr(0xBB), chr(0xBF);
+                        break;
+                    case 'UTF-16LE':
+                        echo chr(0xFF), chr(0xFE);
+                        break;
+                    case 'UTF-16LE':
+                        echo chr(0xFE), chr(0xFF);
+                        break;
+                }
+            }
 
-		if ($this->sendSep) {
-			echo iconv('UTF-8', $this->encoding, 'sep=' . $this->fieldSeparator),
-				$this->encodedRecordSeparator;
-		}
+            if ($this->sendSep) {
+                echo iconv('UTF-8', $this->encoding, 'sep=' . $this->fieldSeparator),
+                    $this->encodedRecordSeparator;
+            }
+        }
 	}
 
     public function escape($string, $force=false) {
         $string = preg_replace('/[\r\n]+/', ' ', trim($string));
+
+        if ($this->debug) {
+            return q($string);
+        }
+
         if (($this->fieldSeparator == "\t" and
              preg_match("/[;\t]/", $string)) or
             ($this->fieldSeparator != "\t" and
