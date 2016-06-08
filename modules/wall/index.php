@@ -224,7 +224,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $video_div = '<div class="form-group tab-pane fade" id="videos_div">
                               '.list_videos($id).'
                           </div>';
-            $video_li = '<li><a data-toggle="pill" href="#videos_div">'.$langVideo.'</a></li>';
+            $video_li = '<li><a data-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
         } else {
             $video_div = '';
             $video_li = '';
@@ -235,7 +235,7 @@ if (isset($_GET['showPost'])) { //show comments case
                               <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs($id).'
                           </div>';
-            $docs_li = '<li><a data-toggle="pill" href="#docs_div">'.$langDoc.'</a></li>';
+            $docs_li = '<li><a data-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
             $docs_div = '';
             $docs_li = '';
@@ -246,7 +246,7 @@ if (isset($_GET['showPost'])) { //show comments case
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs($id,'mydocs').'
                           </div>';
-            $mydocs_li = '<li><a data-toggle="pill" href="#mydocs_div">'.$langMyDocs.'</a></li>';
+            $mydocs_li = '<li><a data-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
             $mydocs_div = '';
             $mydocs_li = '';
@@ -261,20 +261,24 @@ if (isset($_GET['showPost'])) { //show comments case
                                 <label for="message_input">'.$langMessage.'</label>
                                 <textarea class="form-control" rows="6" name="message" id="message_input">'.strip_tags($content).'</textarea>
                             </div>
-                            <ul class="nav nav-pills">
-                                <li class="active"><a data-toggle="pill" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
-                                '.$video_li.'
-                                '.$docs_li.'
-                                '.$mydocs_li.'        
-                            </ul>
-                            <div class="tab-content">
-                                <div class="form-group tab-pane fade in active" id="youtube_video_div">
-                                    <label for="youtube_video">'.$langWallYoutubeVideoLink.'</label>
-                                    <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
+                                        '.$video_li.'
+                                        '.$docs_li.'
+                                        '.$mydocs_li.'        
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="form-group tab-pane fade in active" id="youtube_video_div">
+                                            <label for="youtube_video">'.$langWallYoutubeVideoLink.'</label>
+                                            <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
+                                        </div>
+                                        '.$video_div.'
+                                        '.$docs_div.'
+                                        '.$mydocs_div.'
+                                    </div>
                                 </div>
-                                '.$video_div.'
-                                '.$docs_div.'
-                                '.$mydocs_div.'
                             </div>
                         </fieldset>
                         <div class="form-group">'.
@@ -304,7 +308,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $video_div = '<div class="form-group tab-pane fade" id="videos_div">
                               '.list_videos().'
                           </div>';
-            $video_li = '<li><a data-toggle="pill" href="#videos_div">'.$langVideo.'</a></li>';
+            $video_li = '<li><a data-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
         } else {
             $video_div = '';
             $video_li = '';
@@ -315,7 +319,7 @@ if (isset($_GET['showPost'])) { //show comments case
                             <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs().'
                           </div>';
-            $docs_li = '<li><a data-toggle="pill" href="#docs_div">'.$langDoc.'</a></li>';
+            $docs_li = '<li><a data-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
              $docs_div = '';
              $docs_li = '';
@@ -326,7 +330,7 @@ if (isset($_GET['showPost'])) { //show comments case
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs(NULL,'mydocs').'
                           </div>';
-            $mydocs_li = '<li><a data-toggle="pill" href="#mydocs_div">'.$langMyDocs.'</a></li>';
+            $mydocs_li = '<li><a data-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
             $mydocs_div = '';
             $mydocs_li = '';
@@ -339,22 +343,26 @@ if (isset($_GET['showPost'])) { //show comments case
                         <fieldset> 
                             <div class="form-group">
                                 <label for="message_input">'.$langMessage.'</label>
-                                <textarea class="form-control" rows="6" name="message" id="message_input">'.$content.'</textarea>
+                                <textarea onfocus="document.getElementById(\'resources_panel\').style.display=\'\'" class="form-control" rows="6" name="message" id="message_input">'.$content.'</textarea>
                             </div>
-                            <ul class="nav nav-pills">
-                                <li class="active"><a data-toggle="pill" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
-                                '.$video_li.'
-                                '.$docs_li.'
-                                '.$mydocs_li.'
-                            </ul>
-                            <div class="tab-content">
-                                <div class="form-group tab-pane fade in active" id="youtube_video_div">
-                                    <label for="youtube_video">'.$langWallYoutubeVideoLink.'</label>
-                                    <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
+                            <div id="resources_panel" class="panel panel-default" style="display:none">
+                                <div class="panel-body">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
+                                        '.$video_li.'
+                                        '.$docs_li.'
+                                        '.$mydocs_li.'
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="form-group tab-pane fade in active" id="youtube_video_div">
+                                            <label for="youtube_video">'.$langWallYoutubeVideoLink.'</label>
+                                            <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
+                                        </div>
+                                        '.$video_div.'
+                                        '.$docs_div.'
+                                        '.$mydocs_div.'
+                                    </div>
                                 </div>
-                                '.$video_div.'
-                                '.$docs_div.'
-                                '.$mydocs_div.'
                             </div>
                         </fieldset>
                         <div class="form-group">'.
