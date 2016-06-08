@@ -333,7 +333,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     }
 
     return "
-        <tr$class_vis data-id='$resource_id'=>
+        <tr$class_vis data-id='$resource_id'>
           <td width='1'>" . icon($image, '') . "</td>
           <td class='text-left'>$download_hidden_link$link$comment</td>" .
             actions('doc', $resource_id, $status) .
