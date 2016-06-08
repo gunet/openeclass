@@ -336,6 +336,13 @@ if (isset($_GET['showPost'])) { //show comments case
             $mydocs_li = '';
         }
         
+        $head_content .= '<script>
+                              function expand_form() {
+                                  document.getElementById(\'resources_panel\').style.display=\'\';
+                                  document.getElementById(\'textr\').rows = 6;
+                              }
+                          </script>';
+        
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
                 <div class="form-wrapper">
@@ -343,7 +350,7 @@ if (isset($_GET['showPost'])) { //show comments case
                         <fieldset> 
                             <div class="form-group">
                                 <label for="message_input">'.$langMessage.'</label>
-                                <textarea onfocus="document.getElementById(\'resources_panel\').style.display=\'\'" class="form-control" rows="6" name="message" id="message_input">'.$content.'</textarea>
+                                <textarea id="textr" onfocus="expand_form();" class="form-control" rows="1" name="message" id="message_input">'.$content.'</textarea>
                             </div>
                             <div id="resources_panel" class="panel panel-default" style="display:none">
                                 <div class="panel-body">
