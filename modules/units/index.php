@@ -211,7 +211,7 @@ if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
     $tool_content .= "
         <div class='row'>
             <div class='col-md-12'>
-              <div class='form-wrapper course_units_pager'>
+              <div class='form-wrapper course_units_pager clearfix'>
                 $link[previous]
                 $link[next]
               </div>
