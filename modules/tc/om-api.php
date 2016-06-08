@@ -102,27 +102,23 @@ function om_session_running($meeting_id)
 
     if (!isset($res->running_at)) {
         return false;
+    } else {
+        $running_server = $res->running_at;
     }
-    $running_server = $res->running_at;
-
-    if (Database::get()->querySingle("SELECT COUNT(*) AS count FROM tc_servers
-            WHERE id=?d AND enabled='true'", $running_server)->count == 0) {
-        //it means that the server is disabled so session must be recreated
-        return false;
-    }
-
+    
     $res = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $running_server);
+    $enabled = $res->enabled;
+    if ($enabled == 'false') {
+        return false;
+    }    
     
     $url = $res->hostname.':'.$res->port;
-
     $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
     $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
 
     $rs = array();
     $rs = $soapUsers->getSession();
-
-    $session_id = $rs->return->session_id;
-    
+    $session_id = $rs->return->session_id;    
     $params = array(
 	'SID' => $session_id,
 	'username' => $res->username,
@@ -360,9 +356,9 @@ function is_om_server_available($server_id) {
         // active_rooms < max_rooms && max_users = 0 (UNLIMITED)
         // active_users < max_users && max_rooms = 0 (UNLIMITED)
         if (($max_rooms == 0 && $max_users == 0) 
-            or (($max_users > ($users_to_join + $connected_users)) and $active_rooms < $max_rooms) 
-            or ($active_rooms < $max_rooms and $max_users == 0) 
-            or (($max_users > ($users_to_join + $connected_users)) && $max_rooms == 0)) // YOU FOUND THE SERVER
+            or (($max_users >= ($users_to_join + $connected_users)) and $active_rooms <= $max_rooms) 
+            or ($active_rooms <= $max_rooms and $max_users == 0) 
+            or (($max_users >= ($users_to_join + $connected_users)) && $max_rooms == 0)) // YOU FOUND THE SERVER
         {
             return true;
         } else {     

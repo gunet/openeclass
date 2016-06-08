@@ -3373,6 +3373,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE bbb_servers ADD username varchar(255) DEFAULT NULL AFTER server_key");
             Database::get()->query("ALTER TABLE bbb_servers ADD password varchar(255) DEFAULT NULL AFTER username");
             Database::get()->query("ALTER TABLE bbb_servers ADD webapp varchar(255) DEFAULT NULL AFTER api_url");
+            Database::get()->query("ALTER TABLE bbb_servers ADD screenshare varchar(255) DEFAULT NULL AFTER weight");
             Database::get()->query("ALTER TABLE bbb_servers ADD all_courses TINYINT(1) NOT NULL DEFAULT 1");
         }
                         
