@@ -397,7 +397,7 @@ function show_resources($post_id) {
     if (count($req) > 0) {
         $ret_str .= '<div class="table-responsive">';
         $ret_str .= '<table class="table">';
-        $ret_str .= '<thead><tr><th colspan="2">'.$langWallAttachedResources.'</th></tr></thead>';
+        $ret_str .= '<thead><tr><th colspan="2"><span style="font-size:12px">'.$langWallAttachedResources.'</span></th></tr></thead>';
         foreach ($req as $info) {
             $ret_str .= show_resource($info);
         }
@@ -478,7 +478,7 @@ function show_document($title, $resource_id, $doc_id) {
     return "
     <tr$class_vis>
     <td width='1'>" . icon($image, '') . "</td>
-    <td class='text-left'>$link</td></tr>";
+    <td class='text-left' style='font-size:12px'>$link</td></tr>";
 }
 
 function show_video($table, $title, $resource_id, $video_id) {
