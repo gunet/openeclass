@@ -716,7 +716,7 @@ function lessonToolsMenu($rich=true) {
             }
 
             // hide teleconference when no BBB or OM servers are enabled
-            if ($mid == MODULE_ID_TC and !is_active_tc_server()) {
+            if ($mid == MODULE_ID_TC and !is_configured_tc_server()) {
                 continue;
             }
 

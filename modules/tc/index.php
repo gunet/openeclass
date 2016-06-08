@@ -46,7 +46,7 @@ $action->record(MODULE_ID_TC);
 
 $toolName = $langBBB;
 
-$server_type = is_active_tc_server();
+$tc_type = is_configured_tc_server();
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
@@ -170,7 +170,7 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
-                      'show' => is_active_tc_server())));
+                      'show' => is_active_tc_server($tc_type))));
         }
     }
 }
@@ -221,13 +221,8 @@ elseif(isset($_GET['choice']))
         case 'do_join': 
             //get info
             $sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id']);
-            $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
-            if (isset($_GET['record']) and $_GET['record']=='true') { // check if there is any record-capable tc server
-               if ($serv->enable_recordings != 'true') {
-                    $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";                                    
-               }
-            }            
-            if ($server_type == 'bbb') { // if tc server is `bbb`
+            $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);            
+            if ($tc_type == 'bbb') { // if tc server is `bbb`
                 $mod_pw = $sess->mod_pw;
                 if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting                                       
                     create_meeting($_GET['title'],$_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $_GET['record']);
@@ -241,7 +236,7 @@ elseif(isset($_GET['choice']))
                 } else { // join users
                     header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
                 }
-            } elseif ($server_type == 'om') { // if tc server is `om`                                 
+            } elseif ($tc_type == 'om') { // if tc server is `om`                                 
                 if (om_session_running($_GET['meeting_id']) == false) { // create meeting
                     create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
                 }                    
@@ -250,7 +245,7 @@ elseif(isset($_GET['choice']))
                 } else { // join user
                     header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0));
                 }
-            } elseif ($server_type == 'webconf') { // if tc server is `webconf`
+            } elseif ($tc_type == 'webconf') { // if tc server is `webconf`
                 create_webconf_jnlp_file($_GET['meeting_id']);
                 $webconf_server = $serv->hostname;
                 $screenshare_server = $serv->screenshare;
