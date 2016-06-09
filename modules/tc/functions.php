@@ -774,7 +774,8 @@ function bbb_session_details() {
                                     'icon' => 'fa-edit'),
                             array(  'title' => $langBBBImportRecordings,
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=import_video",
-                                    'icon' => "fa-edit"),
+                                    'icon' => "fa-edit",
+                                    'show' => $tc_type == 'bbb'),
                             array(  'title' => $row->active? $langDeactivate : $langActivate,
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=do_".
                                              ($row->active? 'disable' : 'enable'),
@@ -1195,7 +1196,7 @@ function publish_video_recordings($course_id, $id)
             . "tc_session.meeting_id, course.prof_names FROM tc_session "
             . "LEFT JOIN course ON tc_session.course_id=course.id WHERE course.code=?s AND tc_session.id=?d", $course_id, $id);
 
-    $servers = Database::get()->queryArray("SELECT * FROM tc_servers WHERE enabled='true' ORDER BY id DESC");
+    $servers = Database::get()->queryArray("SELECT * FROM tc_servers WHERE enabled='true' AND `type` = 'bbb'");
 
     $perServerResult = array(); /*AYTO THA EINAI TO ID THS KATASTASHS GIA KATHE SERVER*/
 
