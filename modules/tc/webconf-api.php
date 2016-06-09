@@ -21,43 +21,23 @@
  */
 
 /**
- * @brief check if webconf server is enabled
- * @return boolean
- */
-function is_active_webconf_server()
-{
-    
-    if (!get_config('ext_webconf_enabled')) { // check for configuration
-        return false;
-    } else {                
-         $q = Database::get()->queryArray("SELECT id FROM wc_servers WHERE enabled='true'");
-         if (count($q) > 0) {
-            return true;
-         } else { // no active servers
-             return false;
-         }
-    }        
-}
-
-/**
  * @brief create jnlp file
  * @global type $webDir
+ * @global type $course_code
  * @param type $meeting_id
  */
 function create_webconf_jnlp_file($meeting_id)
 {
-    global $webDir;
+    global $webDir, $course_code;
     
-    if (!file_exists("$webDir/modules/tc/webconf/rooms/")) {
-        make_dir("$webDir/modules/tc/webconf/rooms/");
+    if (!file_exists("$webDir/courses/$course_code/rooms/")) {
+        make_dir("$webDir/courses/$course_code/rooms/");
     }
     
-    $jnlp_file = $webDir.'/modules/tc/webconf/rooms/'.$meeting_id.'.jnlp';
+    $jnlp_file = $webDir.'/courses/rooms/'.$meeting_id.'.jnlp';
     
-    //TO BE BETTER IMPLEMENTED
-    $screenshare_server = Database::get()->querySingle("SELECT * FROM wc_servers WHERE enabled='true' ORDER BY id DESC LIMIT 1")->screenshare;
-    //
-            
+    $screenshare_server = Database::get()->querySingle("SELECT screenshare FROM tc_servers WHERE enabled='true' AND `type`='webconf' ORDER BY weight ASC LIMIT 1")->screenshare;
+               
     $file = fopen($jnlp_file,"w");
     fwrite($file,
                 "<?xml version='1.0' encoding='utf-8'?>
