@@ -3260,31 +3260,30 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('poll', 'type')) {
             Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");
         }
-                
-        // upgrade bbb_session table
-        if (!DBHelper::fieldExists('bbb_session', 'end_date')) {
-            Database::get()->query("ALTER TABLE `bbb_session` ADD `end_date` datetime DEFAULT NULL AFTER `start_date`");
-        }
         
-        // rename `bbb_session` to `tc_session`
+        // upgrade bbb_session table
         if (DBHelper::tableExists('bbb_session')) {
+            if (!DBHelper::fieldExists('bbb_session', 'end_date')) {
+                Database::get()->query("ALTER TABLE `bbb_session` ADD `end_date` datetime DEFAULT NULL AFTER `start_date`");
+            }            
             Database::get()->query("RENAME TABLE bbb_session TO tc_session");
         }
         
         // upgrade bbb_servers table
-        if (!DBHelper::fieldExists('bbb_servers', 'all_courses')) {
-            Database::get()->query("ALTER TABLE bbb_servers ADD `type` varchar(255) NOT NULL DEFAULT 'bbb' AFTER id");
-            Database::get()->query("ALTER TABLE bbb_servers ADD port varchar(255) DEFAULT NULL AFTER ip");
-            Database::get()->query("ALTER TABLE bbb_servers ADD username varchar(255) DEFAULT NULL AFTER server_key");
-            Database::get()->query("ALTER TABLE bbb_servers ADD password varchar(255) DEFAULT NULL AFTER username");
-            Database::get()->query("ALTER TABLE bbb_servers ADD webapp varchar(255) DEFAULT NULL AFTER api_url");
-            Database::get()->query("ALTER TABLE bbb_servers ADD screenshare varchar(255) DEFAULT NULL AFTER weight");
-            Database::get()->query("ALTER TABLE bbb_servers ADD all_courses TINYINT(1) NOT NULL DEFAULT 1");
-        }
-        
-        // rename `bbb_servers` to `tc_servers`
-        if (DBHelper::tableExists('bbb_servers')) {
-            Database::get()->query("RENAME TABLE bbb_servers TO tc_servers");
+        if (DBHelper::tableExists('bbb_servers')) {        
+            if (!DBHelper::fieldExists('bbb_servers', 'all_courses')) {
+                Database::get()->query("ALTER TABLE bbb_servers ADD `type` varchar(255) NOT NULL DEFAULT 'bbb' AFTER id");
+                Database::get()->query("ALTER TABLE bbb_servers ADD port varchar(255) DEFAULT NULL AFTER ip");
+                Database::get()->query("ALTER TABLE bbb_servers ADD username varchar(255) DEFAULT NULL AFTER server_key");
+                Database::get()->query("ALTER TABLE bbb_servers ADD password varchar(255) DEFAULT NULL AFTER username");
+                Database::get()->query("ALTER TABLE bbb_servers ADD webapp varchar(255) DEFAULT NULL AFTER api_url");
+                Database::get()->query("ALTER TABLE bbb_servers ADD screenshare varchar(255) DEFAULT NULL AFTER weight");
+                Database::get()->query("ALTER TABLE bbb_servers ADD all_courses TINYINT(1) NOT NULL DEFAULT 1");
+            }
+            // rename `bbb_servers` to `tc_servers`
+            if (DBHelper::tableExists('bbb_servers')) {
+                Database::get()->query("RENAME TABLE bbb_servers TO tc_servers");
+            }
         }
                                                 
         // course external server table
