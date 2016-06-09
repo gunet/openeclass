@@ -1665,6 +1665,9 @@ $langDelCatSuccess = "Η κατηγορία διαγράφηκε με επιτυ
 $langImportQTI = "Εισαγωγή από IMS QTI";
 $langExportQTI = "Εξαγωγή σε IMS QTI";
 $langIMSQTIUploadFile = "Εντοπισμός θέσης του αρχείου IMS QTI μάθησης στον Η/Υ σας (τοπικά)";
+$langDisplayResults = 'Εμφάνιση';
+$langExportWithAnswers = 'με απαντήσεις';
+
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
 $langExerciseModify = "Τροποποίηση Άσκησης";
@@ -1796,9 +1799,6 @@ $langResults2="αποτελέσματα";
 $langResultsFailed = "Αποτυχία";
 $langStudentTotalScore = "Βαθμολογία εκπαιδευόμενου";
 $langTotalScore = "Συνολική βαθμολογία";
-$langExerciseScores1 = "HTML";
-$langExerciseScores2 = "Ποσοστιαία";
-$langExerciseScores3 = "CSV";
 $langNotRecorded = "μη καταγεγραμμένη";
 
 // import exercise.php

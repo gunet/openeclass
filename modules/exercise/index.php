@@ -249,13 +249,15 @@ if (!$nbrExercises) {
                 $descr = '';
             }
             $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
-            $eid = $row->id;
-			$NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?d", $eid)->count;
+            $eid = getIndirectReference($row->id);
+            $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count
+                FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
             if ($NumOfResults) {
-                $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId={$row->id}'>$langExerciseScores1</a> |
-				<a href='csv.php?course=$course_code&amp;exerciseId=" . $row->id . "' target=_blank>" . $langExerciseScores3 . "</a></td>";
+                $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langDisplayResults</a> |
+                <a href='csv.php?course=$course_code&amp;exerciseId=$eid'>$langExport</a>
+                (<a href='csv.php?course=$course_code&amp;full=true&amp;exerciseId=$eid'>$langExportWithAnswers</a>)</td>";
             } else {
-                $tool_content .= "<td class='text-center'>	-&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- </td>";
+                $tool_content .= "<td class='text-center'>	&mdash; </td>";
             }
             $langModify_temp = htmlspecialchars($langModify);
             $langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
@@ -330,7 +332,8 @@ if (!$nbrExercises) {
                                                 FROM exercise_user_record WHERE uid = ?d
                                                 AND eid = ?d", $uid, $row->id)->count;
                     if ($attempts > 0) {
-                        $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId={$row->id}'>$langExerciseScores1</a></td>";
+                        $eid = getIndirectReference($row->id);
+                        $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langDisplayResults</a></td>";
                     } else {
                         $tool_content .= "<td class='text-center''>&dash;</td>";
                     }

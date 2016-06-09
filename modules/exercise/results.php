@@ -36,7 +36,7 @@ $pageName = $langResults;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
-    $exerciseId = intval($_GET['exerciseId']);
+    $exerciseId = getDirectReference($_GET['exerciseId']);
 }
 
 // if the object is not in the session
@@ -49,7 +49,7 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
         draw($tool_content, 2);
         exit();
     }
-    if(!$objExercise->selectScore() &&  !$is_editor) {
+    if(!$objExercise->selectScore() && !$is_editor) {
         redirect_to_home_page("modules/exercise/index.php?course=$course_code");
     }
 }

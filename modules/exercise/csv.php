@@ -23,12 +23,37 @@
 $require_current_course = TRUE;
 require_once '../../include/init.php';
 require_once 'include/lib/csv.class.php';
+require_once 'modules/exercise/question.class.php';
+require_once 'modules/exercise/answer.class.php';
 
 if ($is_editor) {
-    $exerciseId = filter_input(INPUT_GET, 'exerciseId', FILTER_SANITIZE_NUMBER_INT);
+    $full = isset($_GET['full']) and $_GET['full'];
+    $exerciseId = getDirectReference($_GET['exerciseId']);
     $csv = new CSV();
     $csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv';
-    $csv->outputRecord($langSurname, $langName, $langAm, $langStart, $langExerciseDuration, $langStudentTotalScore, $langTotalScore);
+
+    $headings = array();
+    if ($full) {
+        Database::get()->queryFunc('SELECT question_id, question, type
+            FROM exercise_question, exercise_with_questions
+            WHERE exercise_with_questions.question_id = exercise_question.id AND
+                  exercise_id = ?d
+            ORDER BY q_position', function ($item) use (&$headings) {
+                if ($item->type == FILL_IN_BLANKS or $item->type == FILL_IN_BLANKS_TOLERANT) {
+                    list($answer) = Question::blanksSplitAnswer(Database::get()
+                        ->querySingle('SELECT answer
+                            FROM exercise_answer WHERE question_id = ?d',
+                            $item->question_id)->answer);
+                    $headings = array_merge($headings, Question::getBlanks($answer));
+                } else {
+                    $headings[] = $item->question;
+                }
+            }, $exerciseId);
+    }
+
+    $csv->outputRecord($langSurname, $langName, $langAm, $langStart,
+        $langExerciseDuration, $langStudentTotalScore, $langTotalScore,
+        $headings);
 
     $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ?d", $exerciseId);
 
@@ -40,16 +65,43 @@ if ($is_editor) {
 
         $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
 			record_end_date, TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration,
-			total_score, total_weighting
+			total_score, total_weighting, eurid
 			FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d", $sid, $exerciseId);
         
+        $answerCache = array();
         foreach ($result2 as $row2) {
             if ($row2->time_duration == '00:00:00' or empty($row2->time_duration)) { // for compatibility
                 $duration = $langNotRecorded;
             } else {
                 $duration = format_time_duration($row2->time_duration);
             }
-            $csv->outputRecord($surname, $name, $am, $row2->record_start_date, $duration, $row2->total_score, $row2->total_weighting);
+
+            $values = array();
+            if ($full) {
+                Database::get()->queryFunc('SELECT question_id, answer, answer_id, type
+                    FROM exercise_answer_record
+                        JOIN exercise_question
+                            ON exercise_question.id = exercise_answer_record.question_id
+                    WHERE eurid = ?d ORDER BY answer_record_id',
+                    function ($item) use (&$values) {
+                        if ($item->type == FREE_TEXT) {
+                            $values[] = canonicalize_whitespace(html_entity_decode(strip_tags($item->answer)));
+                        } elseif ($item->type == FILL_IN_BLANKS or $item->type == FILL_IN_BLANKS_TOLERANT) {
+                            $values[] = $item->answer;
+                        } else {
+                            $qid = $item->question_id;
+                            if (!isset($answerCache[$qid])) {
+                                $answerCache[$qid] = new Answer($qid);
+                            }
+                            $values[] = canonicalize_whitespace(html_entity_decode(
+                                strip_tags($answerCache[$qid]->selectAnswer($item->answer_id))));
+                        }
+                    }, $row2->eurid);
+            }
+
+            $csv->outputRecord($surname, $name, $am, $row2->record_start_date,
+                $duration, $row2->total_score, $row2->total_weighting,
+                $values);
         }
     }
 }
