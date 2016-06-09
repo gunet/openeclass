@@ -40,7 +40,7 @@ require_once 'upgrade/functions.php';
 
 set_time_limit(0);
 
-if (php_sapi_name() == 'cli' and !isset($_SERVER['REMOTE_ADDR'])) {    
+if (php_sapi_name() == 'cli' and ! isset($_SERVER['REMOTE_ADDR'])) {
     $command_line = true;
 } else {
     $command_line = false;
@@ -76,21 +76,14 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 // Coming from the admin tool or stand-alone upgrade?
 $fromadmin = !isset($_POST['submit_upgrade']);
 
-if ($command_line and !(isset($_SESSION['is_admin']) and $_SESSION['is_admin'])) {        
-    redirect_to_home_page('upgrade/');
-}
-
 if (isset($_POST['login']) and isset($_POST['password'])) {
-    checkSecondFactorChallenge();
     if (!is_admin($_POST['login'], $_POST['password'])) {
         Session::Messages($langUpgAdminError, 'alert-warning');
         redirect_to_home_page('upgrade/');
-    } else {
-        $_SESSION['is_admin_authorizedupdate'] = true;
     }
 }
-elseif (!$command_line and (!(isset($_SESSION['is_admin_authorizedupdate'])) or $_SESSION['is_admin_authorizedupdate'] !== true)){
-    Session::Messages($langUpgAdminError, 'alert-warning');
+
+if (!$command_line and !(isset($_SESSION['is_admin']) and $_SESSION['is_admin'])) {
     redirect_to_home_page('upgrade/');
 }
 
@@ -970,8 +963,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             'poll_question_answer', 'assignment', 'assignment_submit',
             'exercise', 'exercise_user_record', 'exercise_question',
             'exercise_answer', 'exercise_with_questions', 'course_module',
-            'actions', 'actions_summary', 'logins', 'wiki_locks', 'bbb_servers', 'bbb_session','om_servers','wc_servers',
-            'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats', 'lti_apps');
+            'actions', 'actions_summary', 'logins', 'wiki_locks', 'bbb_servers', 'bbb_session',
+            'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats');
         foreach ($new_tables as $table_name) {
             if (DBHelper::tableExists($table_name)) {
                 if (Database::get()->querySingle("SELECT COUNT(*) AS c FROM `$table_name`")->c > 0) {
@@ -1740,7 +1733,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                       `title` varchar(255) DEFAULT NULL,
                       `description` text,
                       `start_date` datetime DEFAULT NULL,
-                      `end_date` datetime DEFAULT NULL,                      
                       `public` enum("0","1") DEFAULT NULL,
                       `active` enum("0","1") DEFAULT NULL,
                       `running_at` int(11) DEFAULT NULL,
@@ -1754,7 +1746,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                        `sessionUsers` int(11) DEFAULT 0,
                       PRIMARY KEY (`id`))');
 
-        //bbb_servers table
         Database::get()->query('CREATE TABLE IF NOT EXISTS `bbb_servers` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `hostname` varchar(255) DEFAULT NULL,
@@ -2114,10 +2105,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("ALTER TABLE unit_resources DROP INDEX unit_resources_title");
     }
 
-    if (!DBHelper::fieldExists('bbb_session', 'end_date')) {
-        Database::get()->query('ALTER TABLE bbb_session ADD end_date datetime NULL AFTER start_date');
-        $t = Database::get()->queryArray("SELECT cours_id, code FROM cours");
-    }
 
     // // ----------------------------------
     // creation of indices
@@ -2684,10 +2671,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         updateInfo(-1, sprintf($langUpgForVersion, '3.2'));
         set_config('ext_bigbluebutton_enabled',
             Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count > 0? '1': '0');
-        set_config('ext_openmeetings_enabled',
-            Database::get()->querySingle("SELECT COUNT(*) AS count FROM om_servers WHERE enabled='true'")->count > 0? '1': '0');
-        set_config('ext_webconf_enabled',
-            Database::get()->querySingle("SELECT COUNT(*) AS count FROM wc_servers WHERE enabled='true'")->count > 0? '1': '0');
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
                                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -3034,22 +3017,22 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             MODIFY `start_display` DATETIME DEFAULT NULL,
             MODIFY `stop_display` DATETIME DEFAULT NULL');
         Database::get()->query("UPDATE IGNORE announcement SET start_display=null
-                            WHERE start_display='0000-00-00 00:00:00'");
+            WHERE start_display='0000-00-00 00:00:00'");
         Database::get()->query("UPDATE IGNORE announcement SET stop_display=null
-                            WHERE stop_display='0000-00-00 00:00:00'");
+            WHERE stop_display='0000-00-00 00:00:00'");
         Database::get()->query('ALTER TABLE `agenda`
             CHANGE `start` `start` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course`
             MODIFY `created` DATETIME DEFAULT NULL,
             MODIFY `start_date` DATE DEFAULT NULL,
-            MODIFY `finish_date` DATE DEFAULT NULL');
+            MODIFY `finish_date` DATE DEFAULT NULL');        
         Database::get()->query("UPDATE IGNORE course SET start_date=null
                             WHERE start_date='0000-00-00 00:00:00'");
         Database::get()->query("UPDATE IGNORE course SET finish_date=null
                             WHERE finish_date='0000-00-00 00:00:00'");
         Database::get()->query('ALTER TABLE `course_weekly_view`
             MODIFY `start_week` DATE DEFAULT NULL,
-            MODIFY `finish_week` DATE DEFAULT NULL');
+            MODIFY `finish_week` DATE DEFAULT NULL');        
         Database::get()->query('ALTER TABLE `course_weekly_view_activities`
             CHANGE `date` `date` DATETIME NOT NULL');
         Database::get()->query('ALTER TABLE `course_user_request`
@@ -3238,58 +3221,25 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             }
         }
     }
-    
+
     // -----------------------------------
     // upgrade queries for 3.4
     // -----------------------------------
     if (version_compare($oldversion, '3.4', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.4'));
 
-        // wall tables
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `wall_post` (
-                        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                        `course_id` INT(11) NOT NULL,
-                        `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                        `content` TEXT,
-                        `youtube` VARCHAR(250) DEFAULT '',
-                        `timestamp` INT(11) NOT NULL DEFAULT 0,
-                        `pinned` TINYINT(1) NOT NULL DEFAULT 0,
-                        INDEX `wall_post_index` (`course_id`)) $charset_spec");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `wall_post_resources` (
-                        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                        `post_id` INT(11) NOT NULL,
-                        `title` VARCHAR(255) NOT NULL DEFAULT '',
-                        `res_id` INT(11) NOT NULL,
-                        `type` VARCHAR(255) NOT NULL DEFAULT '',
-                        INDEX `wall_post_resources_index` (`post_id`)) $charset_spec");
-        
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
-                        `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                        `class` varchar(400) NOT NULL) $charset_spec"); 
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
-                        `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                        `widget_id` int(11) unsigned NOT NULL,
-                        `widget_area_id` int(11) NOT NULL,
-                        `options` text NOT NULL,
-                        `position` int(3) NOT NULL,
-                        `user_id` int(11) NULL,
-                        `course_id` int(11) NULL,
-                         FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
-                         FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-                         FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");
-        
         // Conference table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `conference` (
                         `conf_id` int(11) NOT NULL AUTO_INCREMENT,
                         `course_id` int(11) NOT NULL,
                         `conf_title` text NOT NULL,
                         `conf_description` text DEFAULT NULL,
-                        `status` enum('active','inactive') DEFAULT NULL,
-                        `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        `user_id` varchar(255) DEFAULT '0',
-                        `group_id` varchar(255) DEFAULT '0',
+                        `status` enum('active','inactive') DEFAULT 'active',
+                        `start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        `user_id` varchar(255) default '0',
+                        `group_id` varchar(255) default '0',
                         PRIMARY KEY (`conf_id`,`course_id`)) $charset_spec");
-        
+                
         // create db entries about old chats
         $query = Database::get()->queryArray("SELECT id, code FROM course");
         foreach ($query as $codes) {
@@ -3305,81 +3255,37 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 rename($chatfile, $newchatfile);
             }
         }
-
-        // om_servers table
-        Database::get()->query('CREATE TABLE IF NOT EXISTS `om_servers` (
-                        `id` int(11) NOT NULL AUTO_INCREMENT,
-                        `hostname` varchar(255) DEFAULT NULL,
-                        `port` varchar(255) DEFAULT NULL,
-                        `enabled` enum("true","false") DEFAULT NULL,
-                        `username` varchar(255) DEFAULT NULL,
-                        `password` varchar(255) DEFAULT NULL,
-                        `module_key` int(11) DEFAULT NULL,
-                        `webapp` varchar(255) DEFAULT NULL,
-                        `max_rooms` int(11) DEFAULT NULL,
-                        `max_users` int(11) DEFAULT NULL,
-                        `enable_recordings` enum("true","false") DEFAULT NULL,
-                        PRIMARY KEY (`id`),
-                        KEY `idx_om_servers` (`hostname`))');
         
-        // wc_servers table
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `wc_servers` (
-                        `id` int(11) NOT NULL AUTO_INCREMENT,
-                        `hostname` varchar(255) DEFAULT NULL,
-                        `screenshare` varchar(255) DEFAULT NULL,                        
-                        `enabled` enum('true','false') DEFAULT NULL,
-                        PRIMARY KEY (`id`),
-                        KEY `idx_wc_servers` (`hostname`)) $charset_spec");
-
-        // lti_apps tables
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `lti_apps` (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `course_id` int(11) DEFAULT NULL,
-            `title` varchar(255) DEFAULT NULL,
-            `description` text,
-            `lti_provider_url` varchar(255) DEFAULT NULL,
-            `lti_provider_key` varchar(255) DEFAULT NULL,
-            `lti_provider_secret` varchar(255) DEFAULT NULL,
-            `enabled` enum('0','1') DEFAULT NULL,
-            PRIMARY KEY (`id`)) $charset_spec");
-
-						
+        // upgrade poll table (COLLES and ATTLS support)
         if (!DBHelper::fieldExists('poll', 'type')) {
             Database::get()->query("ALTER TABLE `poll` ADD `type` TINYINT(1) NOT NULL DEFAULT 0");
         }
         
-        Database::get()->query('INSERT IGNORE INTO course_module
-            (module_id, visible, course_id)
-            SELECT ?d, 0, id FROM course', MODULE_ID_MINDMAP);
-                       
-        if (!DBHelper::fieldExists('wc_servers', 'screenshare')) {
-            Database::get()->query("ALTER TABLE `wc_servers` ADD `screenshare` varchar(255) DEFAULT NULL");
-        }
-        
         // upgrade bbb_session table
-        if (!DBHelper::fieldExists('bbb_session', 'end_date')) {
-            Database::get()->query("ALTER TABLE `bbb_session` ADD `end_date` datetime DEFAULT NULL AFTER `start_date`");
-        }               
-        
-        // rename `bbb_session` to `tc_session`
         if (DBHelper::tableExists('bbb_session')) {
+            if (!DBHelper::fieldExists('bbb_session', 'end_date')) {
+                Database::get()->query("ALTER TABLE `bbb_session` ADD `end_date` datetime DEFAULT NULL AFTER `start_date`");
+            }            
             Database::get()->query("RENAME TABLE bbb_session TO tc_session");
         }
         
         // upgrade bbb_servers table
-        if (!DBHelper::fieldExists('bbb_servers', 'all_courses')) {
-            Database::get()->query("ALTER TABLE bbb_servers ADD `type` varchar(255) NOT NULL DEFAULT 'bbb' AFTER id");
-            Database::get()->query("ALTER TABLE bbb_servers ADD port varchar(255) DEFAULT NULL AFTER ip");
-            Database::get()->query("ALTER TABLE bbb_servers ADD username varchar(255) DEFAULT NULL AFTER server_key");
-            Database::get()->query("ALTER TABLE bbb_servers ADD password varchar(255) DEFAULT NULL AFTER username");
-            Database::get()->query("ALTER TABLE bbb_servers ADD webapp varchar(255) DEFAULT NULL AFTER api_url");
-            Database::get()->query("ALTER TABLE bbb_servers ADD screenshare varchar(255) DEFAULT NULL AFTER weight");
-            Database::get()->query("ALTER TABLE bbb_servers ADD all_courses TINYINT(1) NOT NULL DEFAULT 1");
+        if (DBHelper::tableExists('bbb_servers')) {        
+            if (!DBHelper::fieldExists('bbb_servers', 'all_courses')) {
+                Database::get()->query("ALTER TABLE bbb_servers ADD `type` varchar(255) NOT NULL DEFAULT 'bbb' AFTER id");
+                Database::get()->query("ALTER TABLE bbb_servers ADD port varchar(255) DEFAULT NULL AFTER ip");
+                Database::get()->query("ALTER TABLE bbb_servers ADD username varchar(255) DEFAULT NULL AFTER server_key");
+                Database::get()->query("ALTER TABLE bbb_servers ADD password varchar(255) DEFAULT NULL AFTER username");
+                Database::get()->query("ALTER TABLE bbb_servers ADD webapp varchar(255) DEFAULT NULL AFTER api_url");
+                Database::get()->query("ALTER TABLE bbb_servers ADD screenshare varchar(255) DEFAULT NULL AFTER weight");
+                Database::get()->query("ALTER TABLE bbb_servers ADD all_courses TINYINT(1) NOT NULL DEFAULT 1");
+            }
+            // rename `bbb_servers` to `tc_servers`
+            if (DBHelper::tableExists('bbb_servers')) {
+                Database::get()->query("RENAME TABLE bbb_servers TO tc_servers");
+            }
         }
-                        
-        // rename `bbb_session` to `tc_session`
-        Database::get()->query("RENAME TABLE bbb_servers TO tc_servers");
-        
+                                                
         // course external server table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `course_external_server` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3390,7 +3296,44 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         
         // drop trigger
         Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
-    
+
+        //Create Sticky Announcements
+        $arr_date = Database::get()->queryArray("SELECT id FROM announcement ORDER BY `date` ASC");
+        $arr_order_objects = Database::get()->queryArray("SELECT id FROM announcement ORDER BY `order` ASC");
+        $arr_order = [];
+        foreach ($arr_order_objects as $key=>$value) {
+            $arr_order[$key] = $value->id;
+        }
+
+        $length = count($arr_order);
+
+        $offset = 0;
+        for ($i = 0; $i < $length; $i++) {
+            if ($arr_date[$i]->id != $arr_order[$i-$offset]) {
+                $offset++;
+            }
+        }
+
+        $zero = $length - $offset;
+        $arr_sticky = array_slice($arr_order, -$offset);
+        $arr_default = array_slice($arr_order, 0, $zero);
+
+        $default_placeholders = implode(',', array_fill(0, count($arr_default), '?d'));
+        Database::get()->query("UPDATE `announcement` SET `order` = 0 WHERE `id` IN ($default_placeholders)", $arr_default);
+
+        $ordering = 0;
+        foreach ($arr_sticky as $announcement_id) {
+            $ordering++;
+            Database::get()->query("UPDATE `announcement` SET `order` = ?d where `id`= ?d", $ordering, $announcement_id);
+        }
+
+        //Create FAQ table
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `faq` (
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `title` text NOT NULL,
+                            `body` text NOT NULL,
+                            `order` int(11) NOT NULL,
+                            PRIMARY KEY (`id`)) $charset_spec");
     }
 
     // update eclass version
