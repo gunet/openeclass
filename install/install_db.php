@@ -59,11 +59,9 @@ $db->query("DROP TABLE IF EXISTS prof_request");
 $db->query("DROP TABLE IF EXISTS user");
 $db->query("DROP TABLE IF EXISTS oai_record");
 $db->query("DROP TABLE IF EXISTS oai_metadata");
-$db->query("DROP TABLE IF EXISTS bbb_servers");
 $db->query("DROP TABLE IF EXISTS om_servers");
-$db->query("DROP TABLE IF EXISTS wc_servers");
+$db->query("DROP TABLE IF EXISTS bbb_servers");
 $db->query("DROP TABLE IF EXISTS bbb_session");
-$db->query("DROP TABLE IF EXISTS lti_apps");
 
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
@@ -811,6 +809,25 @@ $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
                 `name` MEDIUMTEXT NOT NULL,
                 `sortorder`  INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `wall_post` (
+        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `course_id` INT(11) NOT NULL,
+        `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+        `content` TEXT DEFAULT NULL,
+        `youtube` VARCHAR(250) DEFAULT '',
+        `timestamp` INT(11) NOT NULL DEFAULT 0,
+        `pinned` TINYINT(1) NOT NULL DEFAULT 0,
+        INDEX `wall_post_index` (`course_id`)) $charset_spec");
+
+$db->query("CREATE TABLE `wall_post_resources` (
+        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `post_id` INT(11) NOT NULL,
+        `title` VARCHAR(255) NOT NULL DEFAULT '',
+        `res_id` INT(11) NOT NULL,
+        `type` VARCHAR(255) NOT NULL DEFAULT '',
+        INDEX `wall_post_resources_index` (`post_id`)) $charset_spec");
+
+
 $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `course_id` INT(11) NOT NULL,
@@ -825,7 +842,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `end_message` MEDIUMTEXT NULL DEFAULT NULL,
     `anonymized` INT(1) NOT NULL DEFAULT 0,
     `show_results` INT(1) NOT NULL DEFAULT 0,
-	`type` TINYINT(1) NOT NULL DEFAULT 0,
+    `type` TINYINT(1) NOT NULL DEFAULT 0,
     `assign_to_specific` TINYINT NOT NULL DEFAULT '0' ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
@@ -1415,19 +1432,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `logins` (
     `course_id` INT(11) NOT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
 
-// lti_apps tables
-$db->query("CREATE TABLE IF NOT EXISTS `lti_apps` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `course_id` int(11) DEFAULT NULL,
-    `title` varchar(255) DEFAULT NULL,
-    `description` text,
-    `lti_provider_url` varchar(255) DEFAULT NULL,
-    `lti_provider_key` varchar(255) DEFAULT NULL,
-    `lti_provider_secret` varchar(255) DEFAULT NULL,
-    `enabled` enum('0','1') DEFAULT NULL,
-    PRIMARY KEY (`id`)) $charset_spec");
-
-// tc_sessions tables
+// bbb_sessions tables
 $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) DEFAULT NULL,
@@ -1448,17 +1453,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
     `sessionUsers` int(11) DEFAULT 0,
     PRIMARY KEY (`id`)) $charset_spec");
 
-// wc_servers table
-$db->query("CREATE TABLE IF NOT EXISTS `wc_servers` (
-        `id` int(11) NOT NULL AUTO_INCREMENT,
-        `hostname` varchar(255) DEFAULT NULL,
-        `screenshare` varchar(255) DEFAULT NULL,
-        `enabled` enum('true','false') DEFAULT NULL,
-        PRIMARY KEY (`id`),
-        KEY `idx_wc_servers` (`hostname`)) $charset_spec");
-
 // tc_servers table
 $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
     `type` varchar(255) NOT NULL DEFAULT 'bbb',
     `hostname` varchar(255) DEFAULT NULL,
     `ip` varchar(255) DEFAULT NULL,
@@ -1633,8 +1630,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `conf_description` text DEFAULT NULL,
     `status` enum('active','inactive') DEFAULT 'active',
     `start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `user_id` varchar(255) DEFAULT '0',
-    `group_id` varchar(255) DEFAULT '0',
+    `user_id` varchar(255) default '0',
+    `group_id` varchar(255) default '0',
     PRIMARY KEY (`conf_id`,`course_id`)) $charset_spec");
 
 $_SESSION['theme'] = 'default';
