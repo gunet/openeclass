@@ -736,13 +736,25 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $blog_map = restore_table($restoreThis, 'blog_post', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         }
-
+        
+        // Wall
+        if (file_exists("$restoreThis/wall_post")) {
+            $wall_map = restore_table($restoreThis, 'wall_post', array('set' => array('course_id' => $new_course_id),
+                    'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        
+            restore_table($restoreThis, 'wall_post_resources', array('delete' => array('id'),
+            'map' => array('post_id' => $wall_map),
+            'map_function' => 'wall_map_function',
+            'map_function_data' => array($document_map, $video_map, $videolink_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        }
+        
         // Comments
         if (file_exists("$restoreThis/comments")) {
             $comment_map = restore_table($restoreThis, 'comments', array('delete' => array('id'),
             'map' => array('user_id' => $userid_map),
             'map_function' => 'comments_map_function',
-            'map_function_data' => array($blog_map, $new_course_id),
+            'map_function_data' => array($blog_map, $wall_map, $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         }
         
@@ -753,7 +765,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'map' => array('user_id' => $userid_map),
             'map_function' => 'abuse_report_map_function',
             'map_function_data' => array($forum_post_map, 
-            $comment_map, $link_map)), $url_prefix_map, $backupData, $restoreHelper);
+            $comment_map, $link_map, $wall_map)), $url_prefix_map, $backupData, $restoreHelper);
         }
 
         // Rating
@@ -761,13 +773,13 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             restore_table($restoreThis, 'rating', array('delete' => array('rate_id'),
             'map' => array('user_id' => $userid_map),
             'map_function' => 'ratings_map_function',
-            'map_function_data' => array($blog_map, $forum_post_map, $link_map,
+            'map_function_data' => array($blog_map, $forum_post_map, $link_map, $wall_map,
             $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
         if (file_exists("$restoreThis/rating_cache")) {
             restore_table($restoreThis, 'rating_cache', array('delete' => array('rate_cache_id'),
             'map_function' => 'ratings_map_function',
-            'map_function_data' => array($blog_map, $forum_post_map, $link_map,
+            'map_function_data' => array($blog_map, $forum_post_map, $link_map, $wall_map, 
             $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
 
@@ -1414,7 +1426,7 @@ function unit_map_function(&$data, $maps) {
 }
 
 function ratings_map_function(&$data, $maps) {
-    list($blog_post_map, $forum_post_map, $link_map, $course_id) = $maps;
+    list($blog_post_map, $forum_post_map, $link_map, $wall_map, $course_id) = $maps;
     $rtype = $data['rtype'];
     if ($rtype == 'blogpost') {
         $data['rid'] = $blog_post_map[$data['rid']];
@@ -1424,23 +1436,27 @@ function ratings_map_function(&$data, $maps) {
         $data['rid'] = $forum_post_map[$data['rid']];
     } elseif ($rtype == 'link') {
         $data['rid'] = $link_map[$data['rid']];
+    } elseif ($rtype == 'wallpost') {
+        $data['rid'] = $wall_map[$data['rid']];
     }
     return true;
 }
 
 function comments_map_function(&$data, $maps) {
-    list($blog_post_map, $course_id) = $maps;
+    list($blog_post_map, $wall_map, $course_id) = $maps;
     $rtype = $data['rtype'];
     if ($rtype == 'blogpost') {
         $data['rid'] = $blog_post_map[$data['rid']];
     } elseif ($rtype == 'course') {
         $data['rid'] = $course_id;
+    } elseif ($rtype == 'wallpost') {
+        $data['rid'] = $wall_map[$data['rid']];
     }
     return true;
 }
 
 function abuse_report_map_function(&$data, $maps) {
-    list($forum_post_map, $comment_map, $link_map) = $maps;
+    list($forum_post_map, $comment_map, $link_map, $wall_map) = $maps;
     $rtype = $data['rtype'];
     if ($rtype == 'comment') {
         $data['rid'] = $comment_map[$data['rid']];
@@ -1448,6 +1464,23 @@ function abuse_report_map_function(&$data, $maps) {
         $data['rid'] = $forum_post_map[$data['rid']];
     } elseif ($rtype == 'link') {
         $data['rid'] = $link_map[$data['rid']];
+    } elseif ($rtype == 'wallpost') {
+        $data['rid'] = $wall_map[$data['rid']];
+    }
+    return true;
+}
+
+function wall_map_function(&$data, $maps) {
+    list($document_map, $video_map, $videolink_map) = $maps;
+    $type = $data['type'];
+    if ($type == 'document') {
+        if (isset($document_map[$data['res_id']])) {
+            $data['res_id'] = @$document_map[$data['res_id']];
+        }
+    } elseif ($type == 'video') {
+        $data['res_id'] = @$video_map[$data['res_id']];
+    } elseif ($type == 'videolink') {
+        $data['res_id'] = @$videolink_map[$data['res_id']];
     }
     return true;
 }

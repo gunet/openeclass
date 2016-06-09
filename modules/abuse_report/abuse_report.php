@@ -231,6 +231,15 @@ function abuse_report_show_flag ($rtype, $rid, $course_id, $is_editor) {
             } else {
                 return false;
             }
+        } elseif ($rtype == 'wallpost') {
+            $result = Database::get()->querySingle("SELECT `user_id` FROM `wall_post` WHERE `id` = ?d", $rid);
+            if ($result) {
+                if ($result->user_id == $_SESSION['uid']) {
+                    return false;
+                }
+            } else {
+                return false;
+            } 
         } else { //unknown rtype
             return false;
         }

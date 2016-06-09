@@ -24,14 +24,17 @@ require_once 'include/course_settings.php';
 require_once 'class.comment.php';
 require_once 'class.commenting.php';
 
+$wall_commenting = false;
 
 if ($_POST['rtype'] == 'blogpost') {
     $setting_id = SETTING_BLOG_COMMENT_ENABLE;
 } elseif ($_POST['rtype'] == 'course') {
     $setting_id = SETTING_COURSE_COMMENT_ENABLE;
+} elseif ($_POST['rtype'] == 'wallpost') {
+    $wall_commenting = true;
 }
 
-if (setting_get($setting_id, $course_id) == 1) {
+if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
     //response array
     //[0] -> status, [1] -> message, other positions -> other data 
     $response = array();

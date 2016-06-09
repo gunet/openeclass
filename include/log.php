@@ -274,7 +274,9 @@ class Log {
             case MODULE_ID_TOOLADMIN: $content = $this->external_link_action_details($details);
                 break;
             case MODULE_ID_ABUSE_REPORT: $content = $this->abuse_report_action_details($details);
-                break;            
+                break;
+            case MODULE_ID_WALL: $content = $this->wall_action_details($details);
+                break;
             case MODULE_ID_COURSEINFO: $content = $this->modify_course_action_details($details);
                 break;
             case MODULE_ID_SETTINGS: $content = $this->modify_course_action_details($details); // <-- for backward compatibility only !!!
@@ -921,6 +923,30 @@ class Log {
             $content.= "$langAbuseReportStatus: &laquo".$langAbuseReportClosed."&raquo";
         }
         
+        return $content;
+    }
+    
+    /**
+     * display action details for social wall
+     * @global type $langContent
+     * @global type $langWallVideoLink
+     * @param type $details
+     * @return string
+     */
+    private function wall_action_details($details) {
+        global $langContent, $langWallYoutubeVideoLink;
+    
+        $details = unserialize($details);
+    
+        $content = '';
+    
+        if (!empty($details['content'])) {
+            $content .= "$langContent: &laquo".q($details['content'])."&raquo<br/>";
+        }
+        if (!empty($details['youtube'])) {
+            $content .= "$langWallYoutubeVideoLink: &laquo".q($details['youtube'])."&raquo<br/>";
+        }
+    
         return $content;
     }
             
