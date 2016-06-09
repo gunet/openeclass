@@ -34,11 +34,12 @@ function create_webconf_jnlp_file($meeting_id)
         make_dir("$webDir/courses/$course_code/rooms/");
     }
     
-    $jnlp_file = $webDir.'/courses/rooms/'.$meeting_id.'.jnlp';
+    $screenshare_server = Database::get()->querySingle("SELECT screenshare FROM tc_servers WHERE enabled='true'
+                                        AND `type`='webconf' ORDER BY weight ASC LIMIT 1")->screenshare;
     
-    $screenshare_server = Database::get()->querySingle("SELECT screenshare FROM tc_servers WHERE enabled='true' AND `type`='webconf' ORDER BY weight ASC LIMIT 1")->screenshare;
-               
-    $file = fopen($jnlp_file,"w");
+    $jnlp_file = $webDir.'/courses/'.$course_code.'/rooms/'.$meeting_id.'.jnlp';
+                       
+    $file = fopen($jnlp_file,"w");    
     fwrite($file,
                 "<?xml version='1.0' encoding='utf-8'?>
                 <jnlp spec='1.0+' codebase='http://delos.uoa.gr/opendelos/resources/screencast/' >
