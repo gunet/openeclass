@@ -31,6 +31,14 @@ if ($is_editor) {
     $exerciseId = getDirectReference($_GET['exerciseId']);
     $csv = new CSV();
     $csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv';
+    $csv->debug = true;
+
+    // where to put each question - needed for randomized exercises
+    // contains a mapping of question_id => offset
+    $questionOffset = array();
+
+    // cache of answers to questions
+    $answerCache = array();
 
     $headings = array();
     if ($full) {
@@ -38,13 +46,27 @@ if ($is_editor) {
             FROM exercise_question, exercise_with_questions
             WHERE exercise_with_questions.question_id = exercise_question.id AND
                   exercise_id = ?d
-            ORDER BY q_position', function ($item) use (&$headings) {
+            ORDER BY q_position', function ($item) use (&$headings, &$questionOffset, &$answerCache) {
+                $qid = $item->question_id;
+                $questionOffset[$qid] = count($headings);
                 if ($item->type == FILL_IN_BLANKS or $item->type == FILL_IN_BLANKS_TOLERANT) {
                     list($answer) = Question::blanksSplitAnswer(Database::get()
                         ->querySingle('SELECT answer
-                            FROM exercise_answer WHERE question_id = ?d',
-                            $item->question_id)->answer);
+                            FROM exercise_answer WHERE question_id = ?d', $qid)->answer);
                     $headings = array_merge($headings, Question::getBlanks($answer));
+                } elseif ($item->type == MATCHING) {
+                    $answerObj = new Answer($qid);
+                    for ($i = 1; $i <= $answerObj->selectNbrAnswers(); $i++) {
+                        $text = canonicalize_whitespace(html_entity_decode(
+                            strip_tags($answerObj->selectAnswer($i))));
+                        if ($answerObj->isCorrect($i)) {
+                            // matching option from column A
+                            $headings[] = $text;
+                        } else {
+                            // matching option from column B
+                            $answerCache[$qid][$i] = $text;
+                        }
+                    }
                 } else {
                     $headings[] = $item->question;
                 }
@@ -68,7 +90,6 @@ if ($is_editor) {
 			total_score, total_weighting, eurid
 			FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d", $sid, $exerciseId);
         
-        $answerCache = array();
         foreach ($result2 as $row2) {
             if ($row2->time_duration == '00:00:00' or empty($row2->time_duration)) { // for compatibility
                 $duration = $langNotRecorded;
@@ -76,27 +97,55 @@ if ($is_editor) {
                 $duration = format_time_duration($row2->time_duration);
             }
 
-            $values = array();
             if ($full) {
+                // how many answers for each question have we encountered so far for this row
+                // needed to track fill-in-blanks multiple answers per question_id
+                $questionOffsetCount = array();
+                foreach (array_keys($questionOffset) as $qid) {
+                    $questionOffsetCount[$qid] = 0;
+                }
+
+                // blank row template
+                $values = array_fill(0, count($headings), '');
+
                 Database::get()->queryFunc('SELECT question_id, answer, answer_id, type
                     FROM exercise_answer_record
                         JOIN exercise_question
                             ON exercise_question.id = exercise_answer_record.question_id
-                    WHERE eurid = ?d ORDER BY answer_record_id',
-                    function ($item) use (&$values) {
+                    WHERE eurid = ?d ORDER BY question_id, answer_record_id',
+                    function ($item) use (&$values, &$answerCache, &$questionOffsetCount, $questionOffset) {
+                        $qid = $item->question_id;
+                        $index = $questionOffset[$qid] + $questionOffsetCount[$qid];
                         if ($item->type == FREE_TEXT) {
-                            $values[] = canonicalize_whitespace(html_entity_decode(strip_tags($item->answer)));
+                            $values[$index] = canonicalize_whitespace(html_entity_decode(strip_tags($item->answer)));
                         } elseif ($item->type == FILL_IN_BLANKS or $item->type == FILL_IN_BLANKS_TOLERANT) {
-                            $values[] = $item->answer;
+                            $values[$index] = $item->answer;
                         } else {
-                            $qid = $item->question_id;
                             if (!isset($answerCache[$qid])) {
-                                $answerCache[$qid] = new Answer($qid);
+                                $answerObj = new Answer($qid);
+                                for ($i = 1; $i <= $answerObj->selectNbrAnswers(); $i++) {
+                                    $answerCache[$qid][$i] = canonicalize_whitespace(
+                                        html_entity_decode(strip_tags(
+                                            $answerObj->selectAnswer($i))));
+                                }
                             }
-                            $values[] = canonicalize_whitespace(html_entity_decode(
-                                strip_tags($answerCache[$qid]->selectAnswer($item->answer_id))));
+                            $answer_id = $item->answer_id;
+                            if ($answer_id > 0) {
+                                if (isset($answerCache[$qid][$answer_id])) {
+                                    $values[$index] = $answerCache[$qid][$answer_id];
+                                } else {
+                                    // Unknown value - exercise changed?
+                                    $values[$index] = '## ? ##';
+                                }
+                            }
+                        }
+                        if (in_array($item->type,
+                                array(MATCHING, FILL_IN_BLANKS, FILL_IN_BLANKS_TOLERANT))) {
+                            $questionOffsetCount[$qid]++;
                         }
                     }, $row2->eurid);
+            } else {
+                $values = array();
             }
 
             $csv->outputRecord($surname, $name, $am, $row2->record_start_date,
