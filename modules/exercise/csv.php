@@ -31,7 +31,6 @@ if ($is_editor) {
     $exerciseId = getDirectReference($_GET['exerciseId']);
     $csv = new CSV();
     $csv->filename = $course_code . '_' . $exerciseId . '_' . date('Y-m-d') . '.csv';
-    $csv->debug = true;
 
     // where to put each question - needed for randomized exercises
     // contains a mapping of question_id => offset
