@@ -179,6 +179,23 @@ $langApplyRule = 'Εφαρμογή του κανόνα στους υπάρχον
 $langRuleApplied = 'Ο κανόνας εφαρμόστηκε σε όλους τους υπάρχοντες χρήστες';
 $langSureToDelRule = "Θέλετε σίγουρα να διαγραφεί ο κανόνας;";
 
+// FAQ
+$langAdminCreateFaq = "Δημιουργία FAQ";
+$langFaq = "Συχνές ερωτήσεις";
+$langFaqQuestion = "Ερώτηση";
+$langFaqAnswer = "Απάντηση";
+$langFaqOrder = "Ταξινόμηση";
+$langFaqCategory = "Κατηγορία";
+$langFaqAdd = "Προσθήκη ερώτησης";
+$langFaqExpandAll = "Άνοιγμα όλων";
+$langFaqCloseAll = "Κλείσιμο όλων";
+$langFaqEditSuccess = "Οι αλλαγές αποθηκεύτηκαν με επιτυχία";
+$langFaqAddSuccess = "Η ερώτηση αποθηκεύτηκε με επιτυχία";
+$langFaqDeleteSuccess = "Η ερώτηση διαγράφτηκε με επιτυχία";
+$langFaqNoEntries = "Δεν υπάρχουν ερωτήσεις.";
+$langFaqAddNew = "Προσθέστε μία καινούργια πατώντας το κουμπί \"Προσθήκη ερώτησης\".";
+$langFaqReorderSuccess = "Η ταξινόμηση έγινε επιτυχώς";
+
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;
 $langNbStudents = "Αριθμός " . $langsOfStudents;
@@ -585,12 +602,18 @@ $langAdminModifAnn = "Τροποποίηση ανακοίνωσης διαχει
 $langAdminAnnModify = "Η ανακοίνωση διαχειριστή τροποποιήθηκε";
 $langAdminAnVis = "Ορατή";
 $langAdminAnNotVis = "Μη ορατή";
+$langAdminExpired = "Έχει Λήξει";
+$langAdminWaiting = "Αναμονή";
 $langAdminAnnAdd = "Η ανακοίνωση διαχειριστή προστέθηκε";
 $langAdminAnnDel = "Η ανακοίνωση διαχειριστή διαγράφηκε";
 $langAdminAnnMes = "τοποθετήθηκε την";
 $langAdminAnnTitleEn = "Τίτλος (Αγγλικά)";
 $langAdminAnnBodyEn = "Ανακοίνωση (Αγγλικά)";
 $langAdminAnnCommEn = "Σχόλια (Αγγλικά)";
+$langAnnouncementIsVis = "Είναι δημόσια ορατή";
+$langAnnouncementIsNotVis = "Δεν είναι δημόσια ορατή";
+$langAnnouncementWillBeVis = "Θα ενεργοποιηθεί στις: ";
+$langAnnouncementWillNotBeVis = "Απενεργοποιήθηκε στις: ";
 
 // cleanup.php
 $langCleanupOldFiles = 'Εκκαθάριση παλαιών αρχείων';
@@ -712,6 +735,7 @@ $professorMessage = "Μήνυμα $langsOfTeacher";
 $langEmailOption = "Αποστολή (με email) της ανακοίνωσης στους εγγεγραμμένους χρήστες";
 $langUp = "Επάνω";
 $langDown = "Κάτω";
+$langReorder = "Ταξινόμηση";
 $langNoAnnounce = "Δεν υπάρχουν ανακοινώσεις";
 $langNoRecentAnnounce = "Δεν υπάρχουν πρόσφατες ανακοινώσεις";
 $langSureToDelAnnounce = "Είστε σίγουρος ότι θέλετε να διαγράψετε την ανακοίνωση";
@@ -867,7 +891,7 @@ $langCopyright = "Πληροφορίες Πνευματικών Δικαιωμά
 $langCopyrightNotice = '
 <a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2015<br>&nbsp;<br>
 Η πλατφόρμα ' . $siteName . ' βασίζεται στην ανοικτή πλατφόρμα <a href="http://www.openeclass.org" target=_blank>Open eClass</a>
-η οποία είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί
+η οποία είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών $langOfCourses και αποτελεί
 την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
 Ασύγχρονης Τηλεκπαίδευσης. Aναπτύχθηκε και υποστηρίζεται ενεργά από την Ομάδα
 Ασύγχρονης Τηλεκπαίδευσης του GUnet και <a
@@ -1346,7 +1370,7 @@ $langResourceAccess = "Δικαίωμα πρόσβασης";
 $langResourceAccessLock = "Κλείδωμα";
 $langResourceAccessUnlock = "Ξεκλείδωμα";
 $langCopy = "Αντιγραφή";
-$langNoSpace = "To ανέβασμα του αρχείου απέτυχε επειδή έχετε υπερβεί το όριο του αποθηκευτικού χώρου.
+$langNoSpace = "To ανέβασμα του αρχείου απέτυχε. Έχετε υπερβεί το όριο χώρου αποθήκευσης.
         Για περισσότερες πληροφορίες, επικοινωνήστε με το διαχειριστή του συστήματος.";
 $langUnwantedFiletype = 'Μη αποδεκτός τύπος αρχείου';
 $langDownloadEnd = "Το ανέβασμα ολοκληρώθηκε";
@@ -1642,6 +1666,9 @@ $langDelCatSuccess = "Η κατηγορία διαγράφηκε με επιτυ
 $langImportQTI = "Εισαγωγή από IMS QTI";
 $langExportQTI = "Εξαγωγή σε IMS QTI";
 $langIMSQTIUploadFile = "Εντοπισμός θέσης του αρχείου IMS QTI μάθησης στον Η/Υ σας (τοπικά)";
+$langDisplayResults = 'Εμφάνιση';
+$langExportWithAnswers = 'με απαντήσεις';
+
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
 $langExerciseModify = "Τροποποίηση Άσκησης";
@@ -1773,9 +1800,6 @@ $langResults2="αποτελέσματα";
 $langResultsFailed = "Αποτυχία";
 $langStudentTotalScore = "Βαθμολογία εκπαιδευόμενου";
 $langTotalScore = "Συνολική βαθμολογία";
-$langExerciseScores1 = "HTML";
-$langExerciseScores2 = "Ποσοστιαία";
-$langExerciseScores3 = "CSV";
 $langNotRecorded = "μη καταγεγραμμένη";
 
 // import exercise.php
@@ -3716,6 +3740,7 @@ $langCodeUTF = "κωδικοποίηση UTF-8";
 $langCodeWin = "κωδικοποίηση Windows-1253";
 $langNoUserSelected = "Δεν επιλέξατε χρήστη";
 $langRecordLog = "Καταγραφές ενεργειών";
+$langSumFrom = "συνολικά στο";
         
 /* * ***********************************************
  * log.php
