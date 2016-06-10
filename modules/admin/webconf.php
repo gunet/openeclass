@@ -63,7 +63,7 @@ else if (isset($_POST['submit'])) {
 } // end of if($submit)
 
 if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
-    $pageName = isset($_GET['add_server']) ? $langAddWebConfServer : $langEdit;
+    $pageName = isset($_GET['add_server']) ? $langAddServer : $langEdit;
     $toolName = $langWebConf;
     $navigation[] = array('url' => 'webconf.php', 'name' => $langWebConf);
     $data['action_bar'] = action_bar([
@@ -90,7 +90,7 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
 
     //display available WebConf servers
     $data['action_bar'] = action_bar(array(
-        array('title' => $langAddWebConfServer,
+        array('title' => $langAddServer,
             'url' => "webconf.php?add_server",
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',

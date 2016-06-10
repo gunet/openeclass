@@ -4622,7 +4622,7 @@ $langCMeta['instructor_add'] = "Προσθήκη διδάσκοντος";
  * ***************************************** */
 
 $langBBBConf = "Ρυθμίσεις \"Τηλεσυνεργασίας\" του $siteName";
-$langAddBBBServer = "Προσθήκη εξυπηρετητή";
+$langAddServer = "Προσθήκη εξυπηρετητή";
 $langAddBBBServerInfo = "Στοιχεία νέου εξυπηρετητή BigBlueButton";
 $langUpdateBBBServer = "Στοιχεία εξυπηρετητή BigBlueButton";
 $langAvailableBBBServers = "Διαθέσιμοι εξυπηρετητές BigBlueButton";
@@ -5128,12 +5128,11 @@ $langWebConfDescription = "<p>Το υποσύστημα <strong>Τηλεσυνε
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
-$langAddOpenMeetingsServer = "Προσθήκη εξυπηρετητή";
 $langAddOpenMeetingsServerInfo = "Στοιχεία νέου εξυπηρετητή OpenMeetings";
 $langUpdateOpenMeetingsServer = "Στοιχεία εξυπηρετητή OpenMeetings";
 $langAvailableOpenMeetingsServers = "Διαθέσιμοι εξυπηρετητές OpenMeetings";
 $langOpenMeetingsServer = "Όνομα του εξυπηρετητή";
-$langOpenMeetingsPort = "Πόρτα";
+$langPort = "Πόρτα";
 $langOpenMeetingsAdminUser ="Username διαχειριστή OpenMeetings";
 $langOpenMeetingsAdminPass ="Password διαχειριστή OpenMeetings";
 $langOpenMeetingsModuleKey = "Module key";
@@ -5144,7 +5143,6 @@ $langMindmap = 'Εννοιολογικός χάρτης';
 
 // Messages for WebConf
 $langWebConf = "Ρυθμίσεις \"WebConf\" του $siteName";
-$langAddWebConfServer = "Προσθήκη εξυπηρετητή";
 $langAddWebConfServerInfo = "Στοιχεία νέου εξυπηρετητή WebConf";
 $langUpdateWebConfServer = "Στοιχεία εξυπηρετητή WebConf";
 $langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές WebConf";
