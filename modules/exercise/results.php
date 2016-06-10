@@ -36,7 +36,7 @@ $pageName = $langResults;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
-    $exerciseId = intval($_GET['exerciseId']);
+    $exerciseId = getDirectReference($_GET['exerciseId']);
 }
 
 // if the object is not in the session
@@ -49,7 +49,7 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
         draw($tool_content, 2);
         exit();
     }
-    if(!$objExercise->selectScore() &&  !$is_editor) {
+    if (!$objExercise->selectScore() && !$is_editor) {
         redirect_to_home_page("modules/exercise/index.php?course=$course_code");
     }
 }
@@ -62,7 +62,7 @@ if ($is_editor && isset($_GET['purgeAttempID'])) {
     $eurid = $_GET['purgeAttempID'];
     $objExercise->purgeAttempt($eurid);
     Session::Messages($langPurgeExerciseResultsSuccess);
-    redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=$exerciseId");  
+    redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=$exerciseId");
 }
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
@@ -73,10 +73,10 @@ $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
 $cur_date = new DateTime("now");
 $end_date = new DateTime($objExercise->selectEndDate());
-$showScore = $displayScore == 1 
+$showScore = $displayScore == 1
             || $is_editor
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
-            || $displayScore == 4 && $end_date < $cur_date; 
+            || $displayScore == 4 && $end_date < $cur_date;
 $tool_content .= "
 <div class='table-responsive'>
     <table class='table-default'>
@@ -91,10 +91,10 @@ if($exerciseDescription_temp) {
 }
 $tool_content .= "</table>
 </div><br>";
-$status = (isset($_GET['status'])) ? intval($_GET['status']) : ''; 
+$status = (isset($_GET['status'])) ? intval($_GET['status']) : '';
 $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId'>--- $langCurrentStatus ---</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_ACTIVE."' ".(($status === 0)? 'selected' : '').">$langAttemptActive</option>            
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_ACTIVE."' ".(($status === 0)? 'selected' : '').">$langAttemptActive</option>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_COMPLETED."' ".(($status === 1)? 'selected' : '').">$langAttemptCompleted</option>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PENDING."' ".(($status === 2)? 'selected' : '').">$langAttemptPending</option>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PAUSED."' ".(($status === 3)? 'selected' : '').">$langAttemptPaused</option>
@@ -113,7 +113,7 @@ foreach ($result as $row) {
     $theStudent = Database::get()->querySingle("SELECT surname, givenname, am FROM user WHERE id = ?d", $sid);
 
     $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(a.record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date, a.record_end_date,
-                CASE b.time_constraint 
+                CASE b.time_constraint
                 WHEN 0 THEN TIME_TO_SEC(TIMEDIFF(a.record_end_date, a.record_start_date))
                 ELSE b.time_constraint*60-a.secs_remaining END AS time_duration, a.total_score, a.total_weighting, a.eurid, a.attempt_status
                 FROM `exercise_user_record` a, exercise b WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id$extra_sql ORDER BY a.record_start_date DESC", $sid, $exerciseId);
@@ -162,7 +162,7 @@ foreach ($result as $row) {
                             break;
                         case 4:
                             $results_link = $langScoreDispEndDate;
-                            break;                        
+                            break;
                     }
                 }
             } else { // IF ATTEMPT ANYTHING BUT COMPLETED
@@ -178,9 +178,9 @@ foreach ($result as $row) {
                         // in an active exercise if a time constaint passes the exercise can safely be deleted
                         // if not it can be deleted after a day
                         if ($exerciseTimeConstraint) {
-                            $estimatedEndTime->add(new DateInterval('PT' . $exerciseTimeConstraint . 'M'));                            
+                            $estimatedEndTime->add(new DateInterval('PT' . $exerciseTimeConstraint . 'M'));
                         } else {
-                            $estimatedEndTime->add(new DateInterval('P1D')); 
+                            $estimatedEndTime->add(new DateInterval('P1D'));
                         }
                         if ($now > $estimatedEndTime) {
                             $row_class = " class='warning' data-toggle='tooltip' title='$langAttemptActiveButDeadMsg'";
@@ -188,7 +188,7 @@ foreach ($result as $row) {
                             if ($exerciseTimeConstraint) {
                                 $action_btn_state = false;
                             }
-                            $row_class = " class='success' data-toggle='tooltip' title='$langAttemptActiveMsg'";                        
+                            $row_class = " class='success' data-toggle='tooltip' title='$langAttemptActiveMsg'";
                         }
                     }
                 // IF ATTEMPT PENDING OR CANCELED
@@ -200,7 +200,7 @@ foreach ($result as $row) {
                         $status = $langAttemptCanceled;
                     }
                 }
-            }  
+            }
             $tool_content .= "
                         <tr$row_class>
                             <td class='text-center'>" . q($row2->record_start_date) . "</td>";
@@ -224,8 +224,8 @@ foreach ($result as $row) {
                         )
                     )) : "") . "</td>";
             }
-            $tool_content .= "            
-                </tr>";            
+            $tool_content .= "
+                </tr>";
             $k++;
         }
         $tool_content .= "</table></div><br>";
@@ -243,6 +243,6 @@ $head_content .= "
                   return false;
               });
             });
-    </script>        
+    </script>
         ";
 draw($tool_content, 2, null, $head_content);
