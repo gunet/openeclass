@@ -231,10 +231,10 @@ class Calendar_Events {
                 if (!empty($q)) {
                     $q .= " UNION ";
                 }
-                $dc = str_replace('start', 'bbb.start_date', $datecond);
-                $q .= "SELECT bbb.id, CONCAT(c.title,': ',bbb.title), bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(bbb.start_date, interval 1 hour), '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
-                        . "FROM bbb_session bbb JOIN course_user cu ON bbb.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
-                        . "WHERE cu.user_id =?d AND bbb.active='1' "
+                $dc = str_replace('start', 'tc.start_date', $datecond);
+                $q .= "SELECT tc.id, CONCAT(c.title,': ',tc.title), tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(tc.start_date, interval 1 hour), '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
+                        . "FROM tc_session tc JOIN course_user cu ON tc.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
+                        . "WHERE cu.user_id =?d AND tc.active='1' "
                         . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
 

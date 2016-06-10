@@ -127,10 +127,10 @@ require_once 'include/lib/references.class.php';
             if(!empty($q)){
                 $q .= " UNION ";
             }
-            $dc = str_replace('start','bbb.start_date',$datecond);
-            $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + '00:00', '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
-                    . "FROM bbb_session bbb  "
-                    . "WHERE bbb.course_id =?d "
+            $dc = str_replace('start','tc.start_date',$datecond);
+            $q .= "SELECT tc.id, tc.title, tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(tc.start_date + '00:00', '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
+                    . "FROM tc_session tc  "
+                    . "WHERE tc.course_id =?d "
                     . $dc;
             $q_args = array_merge($q_args, $q_args_templ);
             //assignements
