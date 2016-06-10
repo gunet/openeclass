@@ -2133,8 +2133,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("CREATE INDEX `att_act_index` ON attendance_activities(attendance_id)");
     DBHelper::indexExists('attendance_book', 'att_book_index') or
             Database::get()->query("CREATE INDEX `att_book_index` ON attendance_book(attendance_activity_id)");
-    DBHelper::indexExists('bbb_session', 'bbb_index') or
-            Database::get()->query("CREATE INDEX `bbb_index` ON bbb_session(course_id)");
     DBHelper::indexExists('course', 'course_index') or
             Database::get()->query("CREATE INDEX `course_index` ON course(code)");
     DBHelper::indexExists('course_description', 'cd_type_index') or
@@ -3346,7 +3344,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `pinned` TINYINT(1) NOT NULL DEFAULT 0,
                             INDEX `wall_post_index` (`course_id`)) $charset_spec");
         
-        Database::get()->query("CREATE TABLE `wall_post_resources` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `wall_post_resources` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `post_id` INT(11) NOT NULL,
                             `title` VARCHAR(255) NOT NULL DEFAULT '',
