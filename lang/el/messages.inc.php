@@ -4320,6 +4320,7 @@ $langJQCheckAll = 'Επιλογή όλων';
 $langJQUncheckAll = 'Αφαίρεση όλων';
 $langPopUp = 'Αναδυόμενο για εικόνες';
 $langPopUpFrame = 'Αναδυόμενο για πολυμέσα';
+$langPopUpBootboxFrame = 'Αναδυόμενο για συνδέσμους';
 $langPwStrengthTooShort = "Πολύ σύντομο";
 $langPwStrengthWeak = "Αδύναμο";
 $langPwStrengthGood = "Καλό";
