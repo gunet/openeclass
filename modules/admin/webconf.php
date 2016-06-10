@@ -85,7 +85,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         }
         $wc_id = "<input class='form-control' type = 'hidden' name = 'id_form' value='$server->id'>";
     } else {
-        $pageName = $langAddWebConfServer;    
+        $pageName = $langAddServer;    
     }
     $toolName = $langWebConf;
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]", 'name' => $langWebConf);
@@ -129,7 +129,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
 
     //display available WebConf servers
     $tool_content .= action_bar(array(
-            array('title' => $langAddWebConfServer,
+            array('title' => $langAddServer,
                 'url' => "$_SERVER[SCRIPT_NAME]?add_server",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',

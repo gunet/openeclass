@@ -38,7 +38,7 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
 if (isset($_GET['add_server'])) {
-    $pageName = $langAddBBBServer;
+    $pageName = $langAddServer;
     $toolName = $langBBBConf;
     $navigation[] = array('url' => 'bbbmoduleconf.php', 'name' => $langBBBConf);
     $tool_content .= action_bar(array(
@@ -247,7 +247,7 @@ else {
     } else {
         //display available BBB servers
         $tool_content .= action_bar(array(
-            array('title' => $langAddBBBServer,
+            array('title' => $langAddServer,
                 'url' => "bbbmoduleconf.php?add_server",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',

@@ -72,7 +72,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
             $om_id = "<input class='form-control' type = 'hidden' name = 'id_form' value='$server->id'>";
         }
     } else {
-        $pageName = $langAddOpenMeetingsServer;
+        $pageName = $langAddServer;
     }
     $toolName = $langOpenMeetingsConf;
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]", 'name' => $langOpenMeetingsConf);    
@@ -89,7 +89,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     $tool_content .= "<label for='host' class='col-sm-3 control-label'>$langOpenMeetingsServer:</label>
         <div class='col-sm-9'><input class='form-control' id='host' type='text' name='hostname_form' value='$hostnamevalue'></div>";
     $tool_content .= "</div>";    
-    $tool_content .= "<div class='form-group'><label for='port_form' class='col-sm-3 control-label'>$langOpenMeetingsPort:</label>
+    $tool_content .= "<div class='form-group'><label for='port_form' class='col-sm-3 control-label'>$langPort:</label>
                 <div class='col-sm-9'><input class='form-control' type='text' id='port_form' name='port_form' value='$portnamevalue'></div>";
     $tool_content .= "</div>";    
     $tool_content .= "<div class='form-group'>";
@@ -181,7 +181,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
 } else {
     //display available OpenMeetings servers
     $tool_content .= action_bar(array(
-    array('title' => $langAddOpenMeetingsServer,
+    array('title' => $langAddServer,
         'url' => "$_SERVER[SCRIPT_NAME]?add_server",
         'icon' => 'fa-plus-circle',
         'level' => 'primary-label',
@@ -197,7 +197,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         $tool_content .= "<table class='table-default'>
             <thead>
             <tr><th class = 'text-center'>$langOpenMeetingsServer</th>
-                <th class = 'text-center'>$langOpenMeetingsPort</th>
+                <th class = 'text-center'>$langPort</th>
                 <th class = 'text-center'>$langBBBEnabled</th>                    
                 <th class = 'text-center'>$langOpenMeetingsAdminUser</th>                
                 <th class = 'text-center'>$langOpenMeetingsWebApp</th>
