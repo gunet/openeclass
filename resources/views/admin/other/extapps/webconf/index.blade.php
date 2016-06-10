@@ -41,6 +41,6 @@
             </table>
         </div>
     @else
-        <div class='alert alert-warning'>Δεν υπάρχουν διαθέσιμοι εξυπηρετητές.</div>
+        <div class='alert alert-warning'>{{ trans('langNoAvailableBBBServers') }}</div>
     @endif    
 @endsection
