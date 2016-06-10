@@ -433,7 +433,7 @@ $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
 Copyright © 2003 - 2011 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
 Platform ' . $siteName . ' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
-which is a complete Electronic $langCourse Management System and is GUnet\'s
+which is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.
 It was developed and is actively supported by the GUnet Asynchronous
 eLearning Group, and is <a href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
@@ -930,9 +930,9 @@ $logo = "Asynchronous eLearning Platform $siteName";
 $gunet = "$siteName Asynchronous eLearning Group";
 $introcontact = "You can contact with the Asynchronous eLearning Group of <strong>" . $siteName . "</strong> using the
  following ways:";
-$langPostMail = "<strong>Post Office Address:</strong>";
+$langPostMail = "Post Office Address:";
 $langPhone = "Telephone";
-$langFax = "<strong>Fax:</strong>";
+$langFax = "Fax";
 $langForm = "Completion Form";
 $langReturn = "Back";
 $langAddPage = "Add a page";
@@ -1901,6 +1901,7 @@ $langNameOfLang['english'] = "English";
 $langNameOfLang['french'] = "French";
 $charset = 'UTF-8';
 $dateFormatShort = "%b %d, %y";
+$dateFormatMiddle = "%d %b, %Y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
@@ -2859,7 +2860,7 @@ $langErrorValidatingManifest = "File <i>manifest</i> contains errors: ";
 $langExportIMSCP = "Export to IMS CP 1.1.4 format";
 $langLostPassPending = "You've already attempted to recover the password within the last hour. Please try later.";
 $langToUser = "to user";
-$langGiveRightReviewer = "Reviewer right";
+$langGiveRightReviewer = "Add OpenCourses Reviewer right";
 $langRemoveRightReviewer = "OpenCourses Reviewer permission removal";
 $langUsersWithNoMail = "Users without email address";
 $langOldValue = "Old value";
@@ -3118,6 +3119,12 @@ $langAttendanceAutoBook = "Record attendance automatically";
 $langGradebook = "Gradebook";
 $langGradebookManagement = "Gradebook management";
 $langGradebookAddActivity = "New activity";
+$langOfGradebookActivity = "of activity";
+$langOfGradebookUsers = "of users";
+$langOfGradebookUsers = "of user";
+$langOfGradebookGroups = "of groups";
+$langOfGradebookVisibility = "of visibilty";
+$langOfGradebookSettings = "of gradebook settings";
 $langGradebookActivityDescription = "Description";
 $langGradebookActivityDate = "Activity date";
 $langGradebookActivityDate2 = "Date";
@@ -3154,6 +3161,10 @@ $langGradebookMEANS = "Values";
 $langGradebookActiveUsers = "Gradebook users";
 $langGradebookActiveUsersSemester = "Students registerd in the last six months";
 $langGradebookRange = "Gradebook range";
+$langGradebookDateRange = "date range";
+$langGradebookDateOutOf = "out of";
+$langGradebookDateIn = "in";
+$langGradebookRegistrationDateRange = "Registration date range";
 $langGradebookWeightAlert = "The weight you have entered for the activity is larger than allowed.";
 $langGradeNoBookAlert = "You cannot enter grades. Weight you have not assigned to an activity:";
 $langGradebookNewUser = "You should click on 'Submit' to create a gradebook record for the user";
@@ -3186,6 +3197,9 @@ $langParticipants = "Participants";
 $langLoading = "Loading";
 $langRemainingTime = "Remaining time";
 $langAnswerUngraded = "The answer haven't been graded yet.";
+$langAttemptActive = "Not Completed";
+$langAttemptActiveButDeadMsg = "Time constraint of this exercise has surpassed. It can be safely deleted.";
+$langAttemptActiveMsg = "The attempt is still active";
 $langAttemptCompleted = "Completed";
 $langAttemptPending = "Pending Grading";
 $langAttemptCanceled = "Canceled";
@@ -3888,8 +3902,8 @@ $langEBookPages = $langEBook. ' ' .$langPages;
 $langNewEBookPage = "New Page";
 $langEBookInfoEdit = "Edit e-Books' Info/Sections";
 $langDisableModules = 'Modules';
-$langDisableModulesHelp = 'You can select which modules will be disabled
-    for all $langsCourses platform-wide.';
+$langDisableModulesHelp = "You can select which modules will be disabled
+    for all $langsCourses platform-wide.";
 $langldap_id_attr = "Attribute for student ID";
 $langcasuserstudentid = "CAS SAML attribute for student ID";
 $langPrint = "Print";

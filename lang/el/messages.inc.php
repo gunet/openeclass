@@ -160,9 +160,9 @@ $langCronName = "Όνομα εργασίας";
 $langCronLastRun = "Τελευταία Εκτέλεση";
 $langExternalTools = 'Εξωτερικά εργαλεία';
 $langDisableModules = 'Υποσυστήματα';
-$langDisableModulesHelp = 'Μπορείτε να επιλέξετε ποια από τα παρακάτω
+$langDisableModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω
     υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλα τα $langsCourses της
-    πλατφόρμας.';
+    πλατφόρμας.";
 $langAutoEnroll = 'Αυτόματη εγγραφή';
 $langAutoEnrollNew = 'Προσθήκη κανόνα';
 $langAutoEnrollAdded = 'Ο κανόνας προστέθηκε';
@@ -2014,9 +2014,9 @@ $langAdminMessage = "Μήνυμα Διαχειριστή $siteName";
 
 // contact.php
 $introcontact = "Μπορείτε να επικοινωνείτε με την Ομάδα Υποστήριξης της πλατφόρμας <strong>" . $siteName . "</strong> με τους παρακάτω τρόπους:";
-$langPostMail = "<strong>Ταχυδρομική Διεύθυνση:</strong>";
+$langPostMail = "Ταχυδρομική Διεύθυνση:";
 $langPhone = "Τηλέφωνο";
-$langFax = "<strong>Fax:</strong>";
+$langFax = "Fax:";
 $langForm = "Συμπλήρωση Φόρμας";
 $langReturn = "Eπιστροφή";
 
@@ -3552,7 +3552,7 @@ $langNameOfLang['french'] = "Γαλλικά";
 $langNameOfLang['variables'] = "Ονόματα μεταβλητών";
 $charset = 'UTF-8';
 $dateFormatShort = "%b %d, %y";
-$dateFormatMiddle = "%d %b %Y";
+$dateFormatMiddle = "%d %b, %Y";
 $dateFormatLong = '%A, %d %B %Y';
 $dateTimeFormatLong = '%d %B %Y / Ώρα: %R';
 $dateTimeFormatShort = '%d %b %Y %R';
