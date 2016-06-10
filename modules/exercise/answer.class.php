@@ -146,7 +146,10 @@ if (!class_exists('Answer')):
                 return '::0';
             }
         }
-
+             
+        function selectAnswers() {
+            return $this->answer;
+        }
         /**
          * tells if answer is correct or not
          *

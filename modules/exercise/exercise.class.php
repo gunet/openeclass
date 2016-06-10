@@ -180,7 +180,9 @@ if (!class_exists('Exercise')) {
         function selectDescription() {
             return $this->description;
         }
-
+        function selectParsedDescription() {
+            return mathfilter(nl2br(make_clickable($this->description)), 12, "../../courses/mathimg/");
+        }
         /**
          * set description
          *

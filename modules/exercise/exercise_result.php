@@ -19,11 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
-
+include('userRecord.class.php');
 $require_current_course = TRUE;
 $guest_allowed = true;
 include '../../include/baseTheme.php';
@@ -33,7 +32,7 @@ $pageName = $langExercicesResult;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
 // picture path
-$picturePath = "courses/$course_code/image";
+$data['picturePath'] = $picturePath = "courses/$course_code/image";
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
     $grade = $_POST['question_grade'];
@@ -70,10 +69,11 @@ load_js('tools.js');
 
 
 if (isset($_GET['eurId'])) {
-    $eurid = $_GET['eurId'];
-    $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
-    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-    $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
+    $data['eurid'] = $eurid = $_GET['eurId'];
+    $exercise_user_record = new userRecord();
+    $exercise_user_record->find($eurid);
+    $data['exercise_user_record'] = $exercise_user_record;
+    $data['user'] = $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
     if (!$exercise_user_record) {
         //No record matches with thiw exercise user record id
         Session::Messages($langExerciseNotFound);
@@ -84,8 +84,7 @@ if (isset($_GET['eurId'])) {
        // Nobody can see results of a paused exercise
        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
-    $objExercise = new Exercise();
-    $objExercise->read($exercise_user_record->eid);
+    $exercise = $exercise_user_record->exercise();
 } else {
     //exercise user recird id is not set
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
@@ -156,97 +155,29 @@ $head_content .= "<script type='text/javascript'>
                 });
                 </script>";
 }
-$exerciseTitle = $objExercise->selectTitle();
-$exerciseDescription = $objExercise->selectDescription();
-$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
-$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
-$displayResults = $objExercise->selectResults();
-$displayScore = $objExercise->selectScore();
-$exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
+$data['exerciseTitle'] = $exerciseTitle = $exercise->exercise;
+$data['exerciseDescription'] = $exerciseDescription = $exercise->selectParsedDescription();
+
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
 $cur_date = new DateTime("now");
-$end_date = new DateTime($objExercise->selectEndDate());
+$end_date = new DateTime($exercise->selectEndDate());
 
-$showResults = $displayResults == 1
+$data['showResults'] = $showResults = $exercise->results == 1
                || $is_editor
-               || $displayResults == 3 && $exerciseAttemptsAllowed == $userAttempts
-               || $displayResults == 4 && $end_date < $cur_date;
+               || $exercise->results == 3 && $exercise->attemptsAllowed == $userAttempts
+               || $exercise->results == 4 && $end_date < $cur_date;
 
-$showScore = $displayScore == 1
+$data['showScore'] = $showScore = $exercise->score == 1
             || $is_editor
-            || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
-            || $displayScore == 4 && $end_date < $cur_date;
+            || $exercise->score == 3 && $exercise->attemptsAllowed == $userAttempts
+            || $exercise->score == 4 && $end_date < $cur_date;
 
-$tool_content .= "<div class='panel panel-primary'>
-  <div class='panel-heading'>
-    <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
-  </div>
-  <div class='panel-body'>";
+$data['questions'] = $exercise_user_record->questions();
 
-if (!empty($exerciseDescription_temp)) {
-    if ($exerciseDescription_temp) {
-        $tool_content .= $exerciseDescription_temp."<hr>";
-    }
-}
-$tool_content .= "
-    <div class='row'>
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langSurname:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->surname) . "
-        </div>
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langName:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->givenname) . "
-        </div>";
-        if ($user->am) {
-            $tool_content .= "
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langAm:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->am) . "
-        </div>";
-        }
-        if ($user->phone) {
-            $tool_content .= "
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langPhone:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->phone) . "
-        </div>";
-        }
-        if ($user->email) {
-            $tool_content .= "
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>Email:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->email) . "
-        </div>";
-        }
-$tool_content .= "
-      </div>
-    </div>
-  </div>
-  <div class='row margin-bottom-fat'>
-    <div class='col-md-5 col-md-offset-7'>";
-if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
-    $tool_content .= "
-            <div class='btn-group btn-group-sm' style='float:right;'>
-                <a class='btn btn-primary' id='all'>$langAllExercises</a>
-                <a class='btn btn-default' id='ungraded'>$langAttemptPending</a>
-            </div>";
-}
-$tool_content .= "
-    </div>
-  </div>";
-$i = 0;
+view('modules.exercise.results', $data);
+exit();
+
 
 // for each question
 if (count($exercise_question_ids)>0){
@@ -331,9 +262,8 @@ if (count($exercise_question_ids)>0){
         if ($answerType != FREE_TEXT) { // if NOT FREE TEXT (i.e. question has answers)
             // construction of the Answer object
             $objAnswerTmp = new Answer($row->question_id);
-            $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
-            for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+            for ($answerId = 1; $answerId <= $objAnswerTmp->selectNbrAnswers(); $answerId++) {
                 $answer = $objAnswerTmp->selectAnswer($answerId);
                 $answerComment = $objAnswerTmp->selectComment($answerId);
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
@@ -345,7 +275,8 @@ if (count($exercise_question_ids)>0){
 
                 switch ($answerType) {
                     // for unique answer
-                    case UNIQUE_ANSWER : $studentChoice = ($choice == $answerId) ? 1 : 0;
+                    case UNIQUE_ANSWER : 
+                        $studentChoice = ($choice == $answerId) ? 1 : 0;
                         if ($studentChoice) {
                             $questionScore += $answerWeighting;
                         }
@@ -526,21 +457,5 @@ if (count($exercise_question_ids)>0){
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
-if ($showScore) {
-    $tool_content .= "
-    <br/>
-    <table class='table-default'>
-    <tr>
-	<td class='text-right'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b>
-      </td>
-    </tr>
-    </table>";
-}
-$tool_content .= "
-  <br/>
-  <div align='center'>" . (($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ?
-  "<a class='btn btn-primary' href='index.php' id='submitButton'>$langSubmit</a>" : '')."
-  <a class='btn btn-default' href='index.php?course=$course_code'>$langReturn</a>
-  </div>";
 
 draw($tool_content, 2, null, $head_content);
