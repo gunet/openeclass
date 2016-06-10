@@ -1532,7 +1532,7 @@ function delete_course($cid) {
                             WHERE `comments`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $cid);
     Database::get()->query("DELETE `wall_post_resources` FROM `wall_post_resources` INNER JOIN `wall_post` ON `wall_post_resources`.`post_id` = `wall_post`.`id`
                             WHERE `wall_post`.`course_id` = ?d", $cid);
-    Database::get()->query("DELETE FROM `wall_post` WHERE `course_id` = ?d", $cid);
+    Database::get()->query("DELETE FROM `wall_post` WHERE `course_id` = ?d", $cid);    
     // check if we have guest account. If yes delete it.
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
     if ($guest_user) {
@@ -1585,6 +1585,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM attendance_users WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM attendance WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM tc_session WHERE course_id = ?d", $cid);
 
     removeDir("$webDir/courses/$course_code");
     removeDir("$webDir/video/$course_code");    

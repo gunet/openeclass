@@ -130,7 +130,7 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'exercise_question_cats' => $sql_course,
         'exercise_answer_record' => "question_id IN (SELECT id FROM exercise_question
                                                                 WHERE course_id = $course_id)",
-        'bbb_session' => "course_id IN (SELECT id FROM bbb_session WHERE course_id = $course_id)",
+        'tc_session' => "course_id IN (SELECT id FROM tc_session WHERE course_id = $course_id)",
         'blog_post' => $sql_course,
         'comments' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR
             (rtype = 'wallpost' AND rid IN (SELECT id FROM wall_post WHERE course_id = $course_id))",

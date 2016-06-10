@@ -59,9 +59,8 @@ $db->query("DROP TABLE IF EXISTS prof_request");
 $db->query("DROP TABLE IF EXISTS user");
 $db->query("DROP TABLE IF EXISTS oai_record");
 $db->query("DROP TABLE IF EXISTS oai_metadata");
-$db->query("DROP TABLE IF EXISTS om_servers");
-$db->query("DROP TABLE IF EXISTS bbb_servers");
-$db->query("DROP TABLE IF EXISTS bbb_session");
+$db->query("DROP TABLE IF EXISTS tc_servers");
+$db->query("DROP TABLE IF EXISTS tc_session");
 
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
@@ -1432,7 +1431,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `logins` (
     `course_id` INT(11) NOT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
 
-// bbb_sessions tables
+// tc_sessions tables
 $db->query("CREATE TABLE IF NOT EXISTS `tc_session` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) DEFAULT NULL,
@@ -1650,7 +1649,7 @@ $db->query("CREATE INDEX `assign_spec_index` ON assignment_to_specific(user_id)"
 $db->query("CREATE INDEX `att_index` ON attendance(course_id)");
 $db->query("CREATE INDEX `att_act_index` ON attendance_activities(attendance_id)");
 $db->query("CREATE INDEX `att_book_index` ON attendance_book(attendance_activity_id)");
-$db->query("CREATE INDEX `bbb_index` ON bbb_session(course_id)");
+$db->query("CREATE INDEX `tc_index` ON tc_session(course_id)");
 $db->query("CREATE INDEX `course_index` ON course(code)");
 $db->query('CREATE INDEX `cd_type_index` ON course_description (`type`)');
 $db->query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, `type`)');
