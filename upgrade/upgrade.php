@@ -3020,11 +3020,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `course_id` INT(11) NOT NULL,
                         `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                        `content` TEXT DEFAULT '',
+                        `content` TEXT DEFAULT NULL,
                         `youtube` VARCHAR(250) DEFAULT '',
                         `timestamp` INT(11) NOT NULL DEFAULT 0,
                         `pinned` TINYINT(1) NOT NULL DEFAULT 0,
                         INDEX `wall_post_index` (`course_id`)) $charset_spec");
+
         Database::get()->query("CREATE TABLE `wall_post_resources` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `post_id` INT(11) NOT NULL,
