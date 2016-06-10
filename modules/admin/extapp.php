@@ -41,15 +41,27 @@ if (isset($_POST['state'])) {
     $appNameAjax = $appName;   
     
     if (($appNameAjax == 'openmeetings') and $newState == 1) {
-        $app_bbb = ExtAppManager::getApp('bigbluebutton');
-        $app_bbb->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled
-        $app_bbb->update_tc_sessions('om'); // update tc sessions
+        $app_tc = ExtAppManager::getApp('bigbluebutton');
+        $app_tc->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled
+        $app_tc = ExtAppManager::getApp('webconf');
+        $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
+        $app_tc->update_tc_sessions('om'); // update tc sessions
     }
     
     if (($appNameAjax == 'bigbluebutton') and $newState == 1) {
-        $app_bbb = ExtAppManager::getApp('openmeetings');
-        $app_bbb->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled
-        $app_bbb->update_tc_sessions('bbb'); // update tc sessions
+        $app_tc = ExtAppManager::getApp('openmeetings');
+        $app_tc->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled
+        $app_tc = ExtAppManager::getApp('webconf');
+        $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
+        $app_tc->update_tc_sessions('bbb'); // update tc sessions
+    }
+    
+    if (($appNameAjax == 'webconf') and $newState == 1) {
+        $app_tc = ExtAppManager::getApp('bigbluebutton');
+        $app_tc->setEnabled(!$newState);  // disable bigbluebutton if bigbluebutton has been enabled
+        $app_tc = ExtAppManager::getApp('openmeetings');
+        $app_tc->setEnabled(!$newState); // disable openmeetings if openmeetings has been enabled
+        $app_tc->update_tc_sessions('webconf'); // update tc sessions
     }
     
     ExtAppManager::getApp($appNameAjax)->setEnabled($newState);    
@@ -146,8 +158,10 @@ if ($appName) {
                 $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success bbb-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger bbb-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
             } elseif ($app->getName() == 'openmeetings') {
                 $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success om-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger om-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
+            } elseif ($app->getName() == 'webconf') {
+                $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success webconf-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger webconf-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
             } else {
-                $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
+            $app_active = $app->isEnabled() ? "<button type='button' class='btn btn-success extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-on'></i> </button>" : "<button type='button' class='btn btn-danger extapp-status' data-app='" . $app->getName() . "'> <i class='fa fa-toggle-off'></i></button>";
             }            
         } else { 
             $app_active = "<button type='button' class='btn btn-default' data-app='" . $app->getName() . "'  data-toggle='modal' data-target='#noSettings'> <i class='fa fa-warning'></i> </button>";

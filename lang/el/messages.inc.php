@@ -4646,7 +4646,7 @@ $langCMeta['instructor_add'] = "Προσθήκη διδάσκοντος";
  * ***************************************** */
 
 $langBBBConf = "Ρυθμίσεις \"Τηλεσυνεργασίας\" του $siteName";
-$langAddBBBServer = "Προσθήκη εξυπηρετητή";
+$langAddServer = "Προσθήκη εξυπηρετητή";
 $langAddBBBServerInfo = "Στοιχεία νέου εξυπηρετητή BigBlueButton";
 $langUpdateBBBServer = "Στοιχεία εξυπηρετητή BigBlueButton";
 $langAvailableBBBServers = "Διαθέσιμοι εξυπηρετητές BigBlueButton";
@@ -5147,16 +5147,27 @@ $langAntivirusDescription = "<p>Σύνδεση με εγκατεστημένο �
 $langWafDescription = "<p>Ενεργοποίηση τείχους προστασίας εφαρμογής ιστού</p>";
 $langOpenMeetingsDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://openmeetings.apache.org/\" target=\"_blank\">Apache OpenMeetings</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p>
 <p>Το OpenMeetings ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα OpenMeetings επιλέξτε <a href=\"openmeetingsconf.php\">Ρυθμίσεις</a>.</p>";
+$langWebConfDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p>
+<p>Το WebConf ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα WebConf επιλέξτε <a href=\"webconf.php\">Ρυθμίσεις</a>.</p>";
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
-$langAddOpenMeetingsServer = "Προσθήκη εξυπηρετητή";
 $langAddOpenMeetingsServerInfo = "Στοιχεία νέου εξυπηρετητή OpenMeetings";
 $langUpdateOpenMeetingsServer = "Στοιχεία εξυπηρετητή OpenMeetings";
 $langAvailableOpenMeetingsServers = "Διαθέσιμοι εξυπηρετητές OpenMeetings";
 $langOpenMeetingsServer = "Όνομα του εξυπηρετητή";
-$langOpenMeetingsPort = "Πόρτα";
+$langPort = "Πόρτα";
 $langOpenMeetingsAdminUser ="Username διαχειριστή OpenMeetings";
 $langOpenMeetingsAdminPass ="Password διαχειριστή OpenMeetings";
 $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "Όνομα WebApp";
+
+// Messages for WebConf
+$langWebConf = "Ρυθμίσεις \"WebConf\" του $siteName";
+$langAddWebConfServerInfo = "Στοιχεία νέου εξυπηρετητή WebConf";
+$langUpdateWebConfServer = "Στοιχεία εξυπηρετητή WebConf";
+$langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές WebConf";
+$langWebConfServer = "WebConf server";
+$langWebConfScreenshareServer = "Screenshare server";
+$langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της WebConf εγκατάστασης";
+$langWebConfScreenshareServerAlertHostname = "Παρακαλώ πληκτρολογείστε του Screnshare εξυπηρετητή";
