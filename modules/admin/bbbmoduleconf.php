@@ -121,7 +121,7 @@ if (isset($_GET['add_server'])) {
     Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
     // Display result message
     Session::Messages($langFileUpdatedSuccess, 'alert-success');
-    redirect_to_home_page('modules/admin/bbbmoduleconf.php');   
+    redirect_to_home_page('modules/admin/bbbmoduleconf.php');
 }
 
 // Save new config
@@ -157,13 +157,7 @@ else if (isset($_POST['submit'])) {
     }    
     // Display result message
     Session::Messages($langFileUpdatedSuccess,"alert-success");
-    redirect_to_home_page("modules/admin/bbbmoduleconf.php");
-    // Display link to go back to index.php
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "bbbmoduleconf.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+    redirect_to_home_page("modules/admin/bbbmoduleconf.php");    
 } // end of if($submit)
 // Display config edit form
 else {    
@@ -263,7 +257,7 @@ else {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
-        $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'bbb'");
+        $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'bbb' ORDER BY weight");
         if (count($q)>0) {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>

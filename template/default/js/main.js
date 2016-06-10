@@ -224,13 +224,15 @@ $(document).ready(function () {
                 });
     });
     
-    // External Apps activate/deactivate button
+    // deactivate om + webconf button when bbb button is enabled
     $('.bbb-status').on('click', function () {
         var url = window.location.href;
         var button = $(this).children('i');
         var om_button = $('.om-status').children('i');
+        var webconf_button = $('.webconf-status').children('i');
         var state = button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var om_state = om_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
+        var webconf_state = webconf_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var appName = button.parent('button').attr('data-app');
         
         button.removeClass(state).addClass('fa-spinner fa-spin');
@@ -250,7 +252,14 @@ $(document).ready(function () {
                            om_newBtnColorState = om_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
                            om_button.parent('button').removeClass(om_btnColorState).addClass(om_newBtnColorState);
                         }
-                    }                    
+                        if (webconf_state === 'fa-toggle-on') {
+                           webconf_newState = "fa-toggle-off";
+                           webconf_button.removeClass('fa-spinner fa-spin').addClass(webconf_newState);
+                           webconf_btnColorState = webconf_button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
+                           webconf_newBtnColorState = webconf_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                           webconf_button.parent('button').removeClass(webconf_btnColorState).addClass(webconf_newBtnColorState);
+                        }
+                    }
                     button.removeClass('fa-spinner fa-spin').addClass(newState);                    
                     btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';                    
                     newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';                    
@@ -258,13 +267,15 @@ $(document).ready(function () {
                 });
     });
     
-    
+    // deactivate bbb + webconf button when om button is enabled
     $('.om-status').on('click', function () {
         var url = window.location.href;
         var button = $(this).children('i');
         var bbb_button = $('.bbb-status').children('i');
+        var webconf_button = $('.webconf-status').children('i');
         var state = button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var bbb_state = bbb_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
+        var webconf_state = webconf_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var appName = button.parent('button').attr('data-app');
         
         button.removeClass(state).addClass('fa-spinner fa-spin');
@@ -284,6 +295,13 @@ $(document).ready(function () {
                            bbb_newBtnColorState = bbb_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
                            bbb_button.parent('button').removeClass(bbb_btnColorState).addClass(bbb_newBtnColorState);
                         }
+                        if (webconf_state === 'fa-toggle-on') {
+                           webconf_newState = "fa-toggle-off";
+                           webconf_button.removeClass('fa-spinner fa-spin').addClass(webconf_newState);
+                           webconf_btnColorState = webconf_button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
+                           webconf_newBtnColorState = webconf_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                           webconf_button.parent('button').removeClass(webconf_btnColorState).addClass(webconf_newBtnColorState);
+                        }
                     }                    
                     button.removeClass('fa-spinner fa-spin').addClass(newState);                    
                     btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';                    
@@ -291,6 +309,50 @@ $(document).ready(function () {
                     button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);                    
                 });
     });
+    
+    // deactivate bbb + om button when webconf button is enabled
+    $('.webconf-status').on('click', function () {
+        var url = window.location.href;
+        var button = $(this).children('i');
+        var bbb_button = $('.bbb-status').children('i');
+        var om_button = $('.om-status').children('i');
+        var state = button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
+        var bbb_state = bbb_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
+        var om_state = om_button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
+        var appName = button.parent('button').attr('data-app');
+        
+        button.removeClass(state).addClass('fa-spinner fa-spin');
+        
+        $.post( url,
+                {state: state,
+                 appName: appName},
+                function (data) {                    
+                    if (data === "0") {
+                        newState = "fa-toggle-off";                        
+                    } else {
+                        newState = "fa-toggle-on";
+                        if (bbb_state === 'fa-toggle-on') {
+                           bbb_newState = "fa-toggle-off";
+                           bbb_button.removeClass('fa-spinner fa-spin').addClass(bbb_newState);
+                           bbb_btnColorState = bbb_button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
+                           bbb_newBtnColorState = bbb_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                           bbb_button.parent('button').removeClass(bbb_btnColorState).addClass(bbb_newBtnColorState);
+                        }
+                        if (om_state === 'fa-toggle-on') {
+                           om_newState = "fa-toggle-off";
+                           om_button.removeClass('fa-spinner fa-spin').addClass(om_newState);
+                           om_btnColorState = om_button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
+                           om_newBtnColorState = om_button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                           om_button.parent('button').removeClass(om_btnColorState).addClass(om_newBtnColorState);
+                        }
+                    }
+                    button.removeClass('fa-spinner fa-spin').addClass(newState);
+                    btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
+                    newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                    button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
+                });
+    });
+                
 
     // Leftnav - rotate Category Menu Item icon
     if ($(".collapse.in").length > 0) { //when page first loads the show.bs.collapse event is not triggered

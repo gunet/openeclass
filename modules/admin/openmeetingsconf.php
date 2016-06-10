@@ -143,12 +143,9 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         $id = $_GET['delete_server'];
         Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
         // Display result message
-        $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";    
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+        Session::Messages($langFileUpdatedSuccess, 'alert-success');
+        redirect_to_home_page('modules/admin/bbbmoduleconf.php');
+        
 } elseif (isset($_POST['submit'])) { // Save new config.php        
     $hostname = $_POST['hostname_form'];
     $port = $_POST['port_form'];
@@ -179,13 +176,8 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         ('om', ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d, ?s, ?d)", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight);
     }    
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
-    
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "$_SERVER[SCRIPT_NAME]",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+    Session::Messages($langFileUpdatedSuccess,"alert-success");
+    redirect_to_home_page("modules/admin/openmeetingsconf.php");        
 } else {
     //display available OpenMeetings servers
     $tool_content .= action_bar(array(
@@ -199,22 +191,24 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         'icon' => 'fa-reply',
         'level' => 'primary-label')));
 
-    $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'om'");
+    $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'om' ORDER BY weight");
     if (count($q) > 0) {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>
             <thead>
             <tr><th class = 'text-center'>$langOpenMeetingsServer</th>
                 <th class = 'text-center'>$langOpenMeetingsPort</th>
+                <th class = 'text-center'>$langBBBEnabled</th>                    
                 <th class = 'text-center'>$langOpenMeetingsAdminUser</th>                
                 <th class = 'text-center'>$langOpenMeetingsWebApp</th>
                 <th class = 'text-center'>".icon('fa-gears')."</th></tr>
             </thead>";
         foreach ($q as $srv) {
-            $enabled_bbb_server = ($srv->enabled)? $langYes : $langNo;
+            $enabled_om_server = ($srv->enabled == 'true')? $langYes : $langNo;
             $tool_content .= "<tr>";
             $tool_content .= "<td>$srv->hostname</td>";
             $tool_content .= "<td>$srv->port</td>";
+            $tool_content .= "<td>$enabled_om_server</td>";
             $tool_content .= "<td>$srv->username</td>";            
             $tool_content .= "<td>$srv->webapp</td>";
             $tool_content .= "<td class='option-btn-cell'>".action_button(array(

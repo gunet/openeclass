@@ -36,7 +36,7 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 if (isset($_GET['delete_server'])) {
     $id = $_GET['delete_server'];
-    Database::get()->querySingle("DELETE FROM wc_servers WHERE id=?d", $id);
+    Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
     // Display result message   
     Session::Messages($langFileUpdatedSuccess, 'alert-success');
     redirect_to_home_page('modules/admin/webconf.php');
@@ -49,12 +49,12 @@ else if (isset($_POST['submit'])) {
     
     if (isset($_POST['id_form'])) {
         $id = $_POST['id_form'];
-        Database::get()->querySingle("UPDATE wc_servers SET hostname = ?s,
+        Database::get()->querySingle("UPDATE tc_servers SET hostname = ?s,
                 screenshare=?s,
                 enabled=?s
                 WHERE id =?d", $hostname, $screenshare, $enabled, $id);
     } else {
-        Database::get()->querySingle("INSERT INTO wc_servers (hostname,screenshare,enabled) VALUES
+        Database::get()->querySingle("INSERT INTO tc_servers (hostname,screenshare,enabled) VALUES
         (?s,?s,?s)", $hostname, $screenshare, $enabled);
     }    
     // Display result message
@@ -77,7 +77,7 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
     $data['enabled'] = true;
     if (isset($_GET['edit_server'])) {
         $data['wc_server'] = $_GET['edit_server'];
-        $data['server'] = Database::get()->querySingle("SELECT * FROM wc_servers WHERE id = ?d", $data['wc_server']);
+        $data['server'] = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $data['wc_server']);
         if ($data['server']->enabled == "false") {
             $data['enabled'] = false;
         }
@@ -100,7 +100,7 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
 
-    $data['wc_servers'] = Database::get()->queryArray("SELECT * FROM wc_servers");
+    $data['wc_servers'] = Database::get()->queryArray("SELECT * FROM tc_servers");
     $view = 'admin.other.extapps.webconf.index';
 }
 
