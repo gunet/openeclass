@@ -149,7 +149,8 @@ if (!$nbrReports) {
     
     $resource_types = array('comment' => $langComment,
                             'forum_post' => $langForumPost,
-                            'link' => $langLink);
+                            'link' => $langLink,
+                            'wallpost' => $langWallPost);
     
     $maxpage = 1 + intval($total_reports / $limitReportsPage);
     if ($maxpage > 0) {
