@@ -327,7 +327,7 @@ if (count($exercise_question_ids)>0){
                                 $answer .= '<b>' . q($choice[$j]) . '</b>';
                             }
                             // else if the word entered is not the same as the one defined by the professor
-                            elseif (!empty($choice[$j])) {
+                            elseif ($choice[$j] !== '') {
                                 // adds the word in red at the end of the string, and strikes it
                                 $answer.='<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
                             } else {
