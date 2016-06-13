@@ -808,6 +808,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
                 `name` MEDIUMTEXT NOT NULL,
                 `sortorder`  INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `faq` (
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `title` text NOT NULL,
+                            `body` text NOT NULL,
+                            `order` int(11) NOT NULL,
+                            PRIMARY KEY (`id`)) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `wall_post` (
         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
         `course_id` INT(11) NOT NULL,
