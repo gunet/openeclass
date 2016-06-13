@@ -41,8 +41,7 @@ require_once 'modules/sharing/sharing.php';
 if ($blog_type == 'course_blog') {
     $user_id = 0;
     
-    define_rss_link();
-    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
+    define_rss_link();    
     $toolName = $langBlog;
     
     //check if commenting is enabled for course blogs
@@ -124,10 +123,13 @@ $num_chars_teaser_break = 500;//chars before teaser break
 
 if ($blog_type == 'course_blog' && $is_editor) {
     if ($action == "settings") {
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langGeneralSettings;
     } elseif ($action == "createPost") {
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langBlogAddPost;
-    } elseif ($action == "editPost") {
+    } elseif ($action == "editPost") {        
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langEditChange;
     }
     $tool_content .= action_bar(array(
@@ -293,7 +295,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
         
         
     }
-} elseif ($blog_type == 'perso_blog' && $is_blog_editor) {
+} elseif ($blog_type == 'perso_blog' && $is_blog_editor) {    
     $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?user=$user_id&amp;action=showBlog",
@@ -399,13 +401,15 @@ if ($action == "createPost") {
 }
 
 //edit blog post form
-if ($action == "editPost") {
+if ($action == "editPost") {    
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {
         //different criteria regarding creating posts for different blog types
         if ($blog_type == 'course_blog') {
             $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
         } elseif ($blog_type == 'perso_blog') {
+            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]", 'name' => $langBlog);
+            $pageName = $langEditChange;
             $allow_to_edit = $is_blog_editor;
         }
         if ($allow_to_edit) {

@@ -34,8 +34,7 @@ load_js('waypoints-infinite');
 
 $posts_per_page = 10;
 
-$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWall);
-$toolName = $langWall;
+$pageName = $langWall;
 
 //handle submit
 if (isset($_POST['submit'])) {
