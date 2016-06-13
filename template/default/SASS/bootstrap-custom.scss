@@ -1844,11 +1844,19 @@ ul.tablelist
         border: none;
     }
     .item-side{
-        //position: absolute;
-        width: 108px;
+        // width: 108px;
         float: right;
-        //top: 0px;
-        //right: 0px;
+
+        .reorder-btn{
+            padding-right: 10px;
+            font-size: 18px;
+            display: inline-block;
+            padding-top: 4px;
+            span {
+                cursor: pointer;
+                vertical-align: bottom;
+            }
+        }
         .btn-group a{
             //border-top: none !important;
         }
@@ -2200,6 +2208,24 @@ a.list-group-item.delete:hover{
     width: 10px;
     height: 10px;
     border-radius: 5px;
+}
+
+/* COURSE UNITS */
+.unit-tags{
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+.unit-resources{
+    padding-top: 40px;
+}
+.unit-resources table tr:first-child td{
+    border: none;
+}
+.course_units_pager{
+    padding: 15px;
+    font-size: 16px;
+    font-family: "Roboto" !important;
+    font-weight: 500;
 }
 
 /* COURSE HOME */
@@ -2942,6 +2968,9 @@ td.forum-response-column {
     .forum-post-message {
         margin: 5px 10px;
         padding-bottom: 32px;
+        word-break: break-all;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
     }
     .forum-post-footer {
         margin: 20px 0px 0px;
@@ -3152,6 +3181,9 @@ div #treeModal div .modal-body {
     padding-bottom: 15px;
     margin-bottom: 25px;
     border-bottom: 1px solid #ccc;
+    font-size: 18px;
+    font-family: "Roboto" !important;
+    font-weight: 500;
 }
 .li-indented{
     padding-left: 15px !important;
@@ -3179,7 +3211,71 @@ a.btn, button{
     font-family: Roboto, sans-serif;
     font-size: larger;
     padding-bottom: 10px;
+    /*white-space: nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;*/
 }
 .table_td_body{
     padding-top: 5px;
+}
+
+.table-default.dataTable{border:none !important; }
+
+// FAQ Module
+.faq-section {
+    &.panel-group {
+
+        margin-bottom: 0px;
+
+        .panel {
+
+            border-radius: 0px;
+            @include box-shadow(0px 0px 0px 0px rgba(0, 0, 0, 0));
+            border: 0px;
+            border-bottom: 1px solid #ddd;
+            margin-right: 25px;
+            margin-left: 25px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            &:last-child {
+                border-bottom: 0px;
+            }
+
+            &+.panel {
+
+            }
+
+            .panel-heading {
+
+                padding-right: 0px;
+                padding-left: 0px;
+
+                h4 {
+                    font-family: 'Roboto', Arial, sans-serif;
+
+                    a {
+                        text-decoration: none;
+
+                        span:first-child {
+                            padding-right: 10px;
+                        }
+
+                    }
+
+                }
+            }
+
+            .panel-body {
+                border-top: 0px;
+                padding-left: 25px;
+
+                p:first-child {
+                    font-family: 'Roboto', Arial, sans-serif;
+                }
+
+            }
+
+        }
+    }
 }
