@@ -46,7 +46,16 @@ $action->record(MODULE_ID_TC);
 
 $toolName = $langBBB;
 
-$server_type = is_active_tc_server();
+//Here we check if we use BBB,OpenMeetings or WebConf
+if(is_active_om_server()) {
+    $server_type='om';
+}
+if(is_active_bbb_server()) {
+    $server_type='bbb';
+}
+if(is_active_webconf_server()) {
+    $server_type='webconf';
+}
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
@@ -170,7 +179,7 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
-                      'show' => is_active_tc_server())));
+                      'show' => (is_active_bbb_server() or is_active_om_server() or is_active_webconf_server()))));
         }
     }
 }
@@ -218,44 +227,69 @@ elseif(isset($_GET['choice']))
         case 'do_enable':
             enable_bbb_session(getDirectReference($_GET['id']));
             break;
-        case 'do_join': 
-            //get info
-            $sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id']);
-            $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
-            if (isset($_GET['record']) and $_GET['record']=='true') { // check if there is any record-capable tc server
-               if ($serv->enable_recordings != 'true') {
-                    $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";                                    
-               }
-            }            
-            if ($server_type == 'bbb') { // if tc server is `bbb`
-                $mod_pw = $sess->mod_pw;
-                if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting                                       
-                    create_meeting($_GET['title'],$_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $_GET['record']);
+        case 'do_join':
+            #check if there is any record-capable bbb server. Otherwise notify users
+            if (isset($_GET['record'])) {
+                if($_GET['record']=='true' && Database::get()->querySingle("SELECT COUNT(*) AS count FROM tc_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
+                {
+                    $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";
+                    break;
                 }
-                if(isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
-                    header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                switch($server_type)
+                {                    
+                    case 'bbb':
+                        if (bbb_session_running($_GET['meeting_id']) == false)
+                        {
+                            $mod_pw = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id'])->mod_pw;
+                            create_meeting($_GET['title'],$_GET['meeting_id'],$mod_pw,$_GET['att_pw'],$_GET['record']);
+                        }
+                        break;
+                    case 'om':
+                        if (om_session_running($_GET['meeting_id']) == false)
+                        {                            
+                            create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
+                        }
+                        break;
+                    case 'webconf':                                
+                        create_webconf_jnlp_file($_GET['meeting_id']);
+                        break;
+                }
+                //TO BE BETTER IMPLEMENTED
+                $webconf_server = Database::get()->querySingle("SELECT * FROM wc_servers WHERE enabled='true' ORDER BY id DESC LIMIT 1")->hostname;                         
+                $screenshare_server = Database::get()->querySingle("SELECT * FROM wc_servers WHERE enabled='true' ORDER BY id DESC LIMIT 1")->screenshare;
+            }            
+            if(isset($_GET['mod_pw'])) {
+                switch($server_type)
+                {
+                    case 'bbb':
+                        header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                        break;
+                    case 'om':
+                        header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1) );
+                        break;
+                    case 'webconf':
+                        header('Location: ' . get_config('base_url') . '/modules/tc/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
+                        break;                    
+                }
+            } else {                
+                if ($server_type=='bbb') { # Get session capacity                
+                    $sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id']);
+                    $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
+                    $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw);
+                    if(($sess->sessionUsers > 0) && ($sess->sessionUsers < get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $sess->mod_pw))) {
+                        $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
+                        break;
+                    } else {
+                        header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                    }
+                }
+                if($server_type == 'om') { 
+                    header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0) );
+                }
+                if ($server_type == 'webconf') {
+                    header('Location: '. get_config('base_url') . 'modules/tc/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));          
                 }                
-                $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $mod_pw);
-                if(($sess->sessionUsers > 0) && ($sess->sessionUsers < $ssUsers)) { // session is full
-                    $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
-                } else { // join users
-                    header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
-                }
-            } elseif ($server_type == 'om') { // if tc server is `om`                                 
-                if (om_session_running($_GET['meeting_id']) == false) { // create meeting
-                    create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
-                }                    
-                if(isset($_GET['mod_pw'])) { // join moderator (== $is_editor)                    
-                    header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1));
-                } else { // join user
-                    header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0));
-                }
-            } elseif ($server_type == 'webconf') { // if tc server is `webconf`
-                create_webconf_jnlp_file($_GET['meeting_id']);
-                $webconf_server = $serv->hostname;
-                $screenshare_server = $serv->screenshare;
-                header('Location: ' . get_config('base_url') . '/modules/tc/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
-            }            
+            }
             break;
         case 'import_video':
             publish_video_recordings($course_code,getDirectReference($_GET['id']));

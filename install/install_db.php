@@ -1473,7 +1473,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     `max_users` int(11) DEFAULT NULL,
     `enable_recordings` enum('true','false') DEFAULT NULL,
     `weight` int(11) DEFAULT NULL,
-    `screenshare` varchar(255) DEFAULT NULL,
     `all_courses` tinyint(1) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`),
     KEY `idx_tc_servers` (`hostname`)) $charset_spec");
