@@ -32,8 +32,6 @@
 
 
 require_once 'modules/tc/functions.php';
-require_once 'modules/tc/om-api.php';
-require_once 'modules/tc/webconf-api.php';
 require_once 'modules/message/class.mailbox.php';
 
 /*
@@ -754,7 +752,7 @@ function lessonToolsMenu($rich=true) {
 
                        
             // hide teleconference when no BBB, OpenMeetings or WebConf servers are enabled
-            if ($mid == MODULE_ID_TC and !is_active_bbb_server() and !is_active_om_server() and !is_active_webconf_server()) {            
+            if ($mid == MODULE_ID_TC and !is_configured_tc_server()) {
                 continue;
             }
 
