@@ -242,6 +242,7 @@ if (!$nbrExercises) {
             $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
         }
         // prof only
+        $eid = getIndirectReference($row->id);
         if ($is_editor) {
             if (!empty($row->description)) {
                 $descr = "<br/>$row->description";
@@ -249,8 +250,8 @@ if (!$nbrExercises) {
                 $descr = '';
             }
             $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
-            $eid = getIndirectReference($row->id);
-			$NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
+            
+            $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
             if ($NumOfResults) {
                 $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langDisplayResults</a> |
                     <a href='csv.php?course=$course_code&amp;exerciseId=$eid'>$langExport</a>
