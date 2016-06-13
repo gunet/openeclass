@@ -1,99 +1,25 @@
 @extends('layouts.default')
 
 @section('content')
-    <div class='panel panel-primary'>
-        <div class='panel-heading'>
-          <h3 class='panel-title'>{!! q_math($exerciseTitle) !!}</h3>
-        </div>
-        <div class='panel-body'>
-        @if (!empty($exerciseDescription))
-            {!! $exerciseDescription !!}
-            <hr>
-        @endif
-            <div class='row'>
-                <div class='col-xs-6 col-md-3 text-right'>
-                    <strong>{{ trans('langSurname') }}:</strong>
-                </div>
-                <div class='col-xs-6 col-md-3'>
-                    {{ $user->surname }}
-                </div>
-                <div class='col-xs-6 col-md-3 text-right'>
-                    <strong>{{ trans('langName') }}:</strong>
-                </div>
-                <div class='col-xs-6 col-md-3'>
-                    {{ $user->givenname }}
-                </div>
-                @if ($user->am)
-                    <div class='col-xs-6 col-md-3 text-right'>
-                        <strong>{{ trans('langAm') }}:</strong>
-                    </div>
-                    <div class='col-xs-6 col-md-3'>
-                        {{ $user->am }}
-                    </div>
-                @endif
-                @if ($user->phone)
-                <div class='col-xs-6 col-md-3 text-right'>
-                    <strong>{{ trans('langPhone') }}:</strong>
-                </div>
-                <div class='col-xs-6 col-md-3'>
-                    {{ $user->phone }}
-                </div>
-                @endif
-                @if ($user->email)
-                    <div class='col-xs-6 col-md-3 text-right'>
-                        <strong>Email:</strong>
-                    </div>
-                    <div class='col-xs-6 col-md-3'>
-                        {{ $user->email }}
-                    </div>
-                @endif
-            </div>
-        </div>
-    </div>
-    <div class='row margin-bottom-fat'>
-        <div class='col-md-5 col-md-offset-7'>
-        @if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING)
-            <div class='btn-group btn-group-sm' style='float:right;'>
-                <a class='btn btn-primary' id='all'>{{ trans('langAllExercises') }}</a>
-                <a class='btn btn-default' id='ungraded'>{{ trans('langAttemptPending') }}</a>
-            </div>
-        @endif
-        </div>
-    </div>
-    @if (!empty($questions))
-        @foreach ($questions as $key => $question)
-            @if ($question->type == FREE_TEXT)
-                @include('modules.exercise.partials.freeText')
-            @else
-                @include('modules.exercise.partials.other')
-            @endif
-        @endforeach
-    @endif
-
-
-
-
-
-
-
-    @if ($showScore)
-        <br>
+    <div class='table-responsive'>
         <table class='table-default'>
             <tr>
-                <td class='text-right'>
-                    <b>
-                        {{ trans('langYourTotalScore') }}: 
-                        <span id='total_score'>{{ $exercise_user_record->total_score }}</span> / {{ $exercise_user_record->total_weighting }}
-                    </b>
-                </td>
+                <th>{!! q_math($exercise->exercise)  !!}</th>
             </tr>
+            @if ($exercise->selectParsedDescription())
+                <tr>
+                    <td>{!! $exercise->selectParsedDescription() !!}</td>
+                </tr>
+            @endif
         </table>
-    @endif
-    <br>
-    <div align='center'>
-        @if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING)
-            <a class='btn btn-primary' href='index.php' id='submitButton'>{{ trans('langSubmit') }}</a>
-        @endif
-        <a class='btn btn-default' href='index.php?course={{ $course_code }}'>{{ trans('langReturn') }}</a>
     </div>
+    <br>
+    <select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId'>--- {{ trans('langCurrentStatus') }} ---</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_ACTIVE."'".($status === 0 ? ' selected' : '').">{{  trans('langAttemptActive') }}</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_COMPLETED."'".($status === 1 ? ' selected' : '').">{{ trans('langAttemptCompleted') }}</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PENDING."'".($status === 2 ? ' selected' : '').">{{ trans('langAttemptPending') }}</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PAUSED."'".($status === 3 ? ' selected' : '').">{{ trans('langAttemptPaused') }}</option>
+        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_CANCELED."'".($status === 4 ? ' selected' : '').">{{ trans('langAttemptCanceled') }}</option>
+    </select>    
 @endsection

@@ -181,7 +181,7 @@ if (!class_exists('Exercise')) {
             return $this->description;
         }
         function selectParsedDescription() {
-            return mathfilter(nl2br(make_clickable($this->description)), 12, "../../courses/mathimg/");
+            return standard_text_escape(mathfilter(nl2br(make_clickable($this->description)), 12, "../../courses/mathimg/"));
         }
         /**
          * set description

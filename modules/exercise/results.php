@@ -64,9 +64,13 @@ if ($is_editor && isset($_GET['purgeAttempID'])) {
     Session::Messages($langPurgeExerciseResultsSuccess);
     redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=$exerciseId");
 }
+//$data['exercise'] = $objExercise;
+//$data['status'] = $status = (isset($_GET['status'])) ? intval($_GET['status']) : '';
+//view('modules.exercise.results', $data);
+//exit();
+
 $exerciseTitle = $objExercise->selectTitle();
-$exerciseDescription = $objExercise->selectDescription();
-$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
+$exerciseDescription = $objExercise->selectParsedDescription();
 $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
 $displayScore = $objExercise->selectScore();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();

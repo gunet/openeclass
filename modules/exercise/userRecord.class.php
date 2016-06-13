@@ -86,11 +86,13 @@
                 if ($question->read($question_id))  {
                     $question->user_score = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $question_id, $this->id)->weight;
                     $question->user_choice = $question->get_answers_record_new($this->id);
+                    $question->is_deleted = false;
                     $question->answers = new Answer($question->id);
-                    array_push($questionsList, $question);
                 } else {
-                    array_push($questionsList, false);
+                    $question->user_score = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $question_id, $this->id)->weight;
+                    $question->is_deleted = true;
                 }
+                array_push($questionsList, $question);
             }
 
             return $questionsList;
