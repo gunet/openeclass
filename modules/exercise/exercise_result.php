@@ -93,7 +93,7 @@ if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
 $head_content .= "<script type='text/javascript'>
     		$(document).ready(function(){
                     function save_grade(elem){
-                        var grade = parseInt($(elem).val());
+                        var grade = parseFloat($(elem).val());
                         var element_name = $(elem).attr('name');
                         var questionId = parseInt(element_name.substring(14,element_name.length - 1));
                         var questionMaxGrade = parseInt($(elem).next().val());
@@ -112,7 +112,7 @@ $head_content .= "<script type='text/javascript'>
                             $(elem).parent().prev().hide();
                             $(elem).prop('disabled', true);
                             $(elem).css({'border-color':'#dfdfdf'});
-                            var prev_grade = parseInt($('span#total_score').html());
+                            var prev_grade = parseFloat($('span#total_score').html());
                             var updated_grade = prev_grade + grade;
                             $('span#total_score').html(updated_grade);
                             return true;

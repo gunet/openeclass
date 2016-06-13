@@ -333,7 +333,7 @@ if (!$nbrExercises) {
                                                 FROM exercise_user_record WHERE uid = ?d
                                                 AND eid = ?d", $uid, $row->id)->count;
                     if ($attempts > 0) {
-                        $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid}'>$langExerciseScores1</a></td>";
+                        $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langExerciseScores1</a></td>";
                     } else {
                         $tool_content .= "<td class='text-center''>&dash;</td>";
                     }

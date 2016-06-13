@@ -1800,6 +1800,7 @@ $langResults2="αποτελέσματα";
 $langResultsFailed = "Αποτυχία";
 $langStudentTotalScore = "Βαθμολογία εκπαιδευόμενου";
 $langTotalScore = "Συνολική βαθμολογία";
+$langExerciseScores1 = "HTML";
 $langNotRecorded = "μη καταγεγραμμένη";
 
 // import exercise.php
