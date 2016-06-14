@@ -496,6 +496,7 @@ $langAnnouncesDel = "Delete $langsCourse announcements";
 $langAgendaDel = "Delete $langsCourse calendar data";
 $langHideDocuments = "Hide $langsCourse documents";
 $langHideWork = "Hide $langsCourse assignments";
+$langDelBlogPosts = "Delete $langsCourse blog posts";
 $langSubmitActions = "Submit Actions";
 $langOptions = "Options";
 $langRefreshSuccess = "$langCourse refresh was successful. The following actions took place:";
@@ -504,6 +505,7 @@ $langAnnDeleted = "Announcements deleted from $langsCourse";
 $langAgendaDeleted = "Calendar data deleted from $langsCourse";
 $langWorksDeleted = "Assignments deleted";
 $langDocsDeleted = "Documents deleted";
+$langBlogPostsDeleted = "Blog posts deleted from $langsCourse";
 $langContactProf = "Contact $langTeachers";
 $langEmailEmpty = "Your e-mail address is empty. To contact the $langsCourse $langsTeachers,
 you must have a valid address, so that they can reply to your message. You can
