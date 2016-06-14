@@ -220,7 +220,7 @@ if (isset($_GET['showPost'])) { //show comments case
         $youtube = Session::has('youtube')? Session::get('youtube') : $post->youtube;
         
         if (visible_module(MODULE_ID_VIDEO)) {
-            $video_div = '<div class="form-group tab-pane fade" id="videos_div">
+            $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
                               '.list_videos($id).'
                           </div>';
             $video_li = '<li><a data-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
@@ -230,7 +230,7 @@ if (isset($_GET['showPost'])) { //show comments case
         }
         
         if (visible_module(MODULE_ID_DOCS)) {
-            $docs_div = '<div class="form-group tab-pane fade" id="docs_div">
+            $docs_div = '<div class="form-group tab-pane fade" id="docs_div" style="padding:10px">
                               <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs($id).'
                           </div>';
@@ -241,7 +241,7 @@ if (isset($_GET['showPost'])) { //show comments case
         }
         
         if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
-            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div">
+            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div" style="padding:10px">
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs($id,'mydocs').'
                           </div>';
@@ -269,7 +269,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$mydocs_li.'        
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="form-group tab-pane fade in active" id="youtube_video_div">
+                                        <div class="form-group tab-pane fade in active" id="youtube_video_div" style="padding:10px">
                                             <label for="youtube_video">'.$langWallYoutubeVideoLink.'</label>
                                             <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
                                         </div>
@@ -304,7 +304,7 @@ if (isset($_GET['showPost'])) { //show comments case
         $youtube = Session::has('youtube')? Session::get('youtube'): '';
         
         if (visible_module(MODULE_ID_VIDEO)) {
-            $video_div = '<div class="form-group tab-pane fade" id="videos_div">
+            $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
                               '.list_videos().'
                           </div>';
             $video_li = '<li><a data-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
@@ -314,7 +314,7 @@ if (isset($_GET['showPost'])) { //show comments case
         }
         
         if (visible_module(MODULE_ID_DOCS)) {
-            $docs_div = '<div class="form-group tab-pane fade" id="docs_div">
+            $docs_div = '<div class="form-group tab-pane fade" id="docs_div" style="padding:10px">
                             <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs().'
                           </div>';
@@ -325,7 +325,7 @@ if (isset($_GET['showPost'])) { //show comments case
         }
         
         if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
-            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div">
+            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div" style="padding:10px">
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs(NULL,'mydocs').'
                           </div>';
@@ -360,7 +360,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$mydocs_li.'
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="form-group tab-pane fade in active" id="youtube_video_div">
+                                        <div class="form-group tab-pane fade in active" id="youtube_video_div" style="padding:10px">
                                             <label for="youtube_video">'.$langWallYoutubeVideoLink.'</label>
                                             <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
                                         </div>
