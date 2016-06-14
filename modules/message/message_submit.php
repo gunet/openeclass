@@ -169,8 +169,8 @@ if (isset($_POST['submit'])) {
             chdir($cwd);
         }
         $msgURL = $urlServer . 'modules/message/index.php?mid=' . $msg->id;
+        $errormail = FALSE;
         if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients of dropbox file
-            $errormail = FALSE;
             if ($course_id != 0 || isset($_POST['course'])) {//message in course context
                 $c = course_id_to_title($cid);
                 $subject_dropbox = "$c (".course_id_to_code($cid).") - $langNewDropboxFile";
