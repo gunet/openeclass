@@ -216,7 +216,7 @@ function generate_single_post_html($post) {
                                           <div class="label label-success media-heading">'.$datetime.'</div>
                                           <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                           '.$post_actions.'
-                                          <div class="margin-top-thin">
+                                          <div class="margin-top-thin" style="padding:20px">
                                               '.$youtube_block.'
                                               <div class="userContent">'.nl2br(standard_text_escape($content)).'</div>
                                           </div>
@@ -327,7 +327,7 @@ function generate_infinite_container_html($posts, $next_page) {
                                           <div class="label label-success media-heading">'.$datetime.'</div>
                                           <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                           '.$post_actions.'
-                                          <div class="margin-top-thin">
+                                          <div class="margin-top-thin" style="padding:20px">
                                               '.$youtube_block.'
                                               <div class="userContent">'.nl2br(standard_text_escape($content)).'</div>
                                           </div>
