@@ -496,6 +496,7 @@ $langAnnouncesDel = "Delete course announcements";
 $langAgendaDel = "Delete course calendar data";
 $langHideDocuments = "Hide course documents";
 $langHideWork = "Hide course assignments";
+$langDelWallPosts = "Delete wall posts";
 $langSubmitActions = "Submit Actions";
 $langOptions = "Options";
 $langRefreshSuccess = "The lesson refresh operation was successful. The following actions took place:";
@@ -504,6 +505,7 @@ $langAnnDeleted = "Announcements deleted from course";
 $langAgendaDeleted = "Calendar data deleted from course";
 $langWorksDeleted = "Assignments deleted";
 $langDocsDeleted = "Documents deleted";
+$langWallPostsDeleted = "Wall posts deleted";
 $langContactProf = "Contact $langTeachers";
 $langEmailEmpty = "Your e-mail address is empty. To contact the course $langsTeachers,
 you must have a valid address, so that they can reply to your message. You can
