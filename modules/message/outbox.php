@@ -54,7 +54,7 @@ if (isset($_GET['mid'])) {
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',
                                     'icon' => 'fa-times',
-                                    'button-class' => 'delete_out_inner',
+                                    'class' => 'delete_out_inner',
                                     'link-attrs' => "data-id='$msg->id'")
                         ));
         $recipients = '';
@@ -152,7 +152,7 @@ if (isset($_GET['mid'])) {
         
         $(document).on( "click",".delete_out_inner", function (e) {
             e.preventDefault();
-            var id = $(this).data("id");
+            var id = $(this).children("a").data("id");
             var string = "mid="+id;
             bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {                       
             if(result) {
