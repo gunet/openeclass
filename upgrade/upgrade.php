@@ -3295,35 +3295,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // drop trigger
         Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
 
-        //Create Sticky Announcements
-        $arr_date = Database::get()->queryArray("SELECT id FROM announcement ORDER BY `date` ASC");
-        $arr_order_objects = Database::get()->queryArray("SELECT id FROM announcement ORDER BY `order` ASC");
-        $arr_order = [];
-        foreach ($arr_order_objects as $key=>$value) {
-            $arr_order[$key] = $value->id;
-        }
-
-        $length = count($arr_order);
-
-        $offset = 0;
-        for ($i = 0; $i < $length; $i++) {
-            if ($arr_date[$i]->id != $arr_order[$i-$offset]) {
-                $offset++;
-            }
-        }
-
-        $zero = $length - $offset;
-        $arr_sticky = array_slice($arr_order, -$offset);
-        $arr_default = array_slice($arr_order, 0, $zero);
-
-        $default_placeholders = implode(',', array_fill(0, count($arr_default), '?d'));
-        Database::get()->query("UPDATE `announcement` SET `order` = 0 WHERE `id` IN ($default_placeholders)", $arr_default);
-
-        $ordering = 0;
-        foreach ($arr_sticky as $announcement_id) {
-            $ordering++;
-            Database::get()->query("UPDATE `announcement` SET `order` = ?d where `id`= ?d", $ordering, $announcement_id);
-        }
+        updateAnnouncementSticky("announcement");
+        updateAnnouncementSticky("admin_announcement");
 
         //Create FAQ table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `faq` (

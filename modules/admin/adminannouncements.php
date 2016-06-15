@@ -24,6 +24,15 @@ $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
+if (isset($_GET['pin'])) {
+    if ($_GET['pin'] == 1) {
+        $top_order = Database::get()->querySingle("SELECT MAX(`order`) as max from admin_announcement")->max + 1;
+        Database::get()->query("UPDATE admin_announcement SET `order` = ?d  where id = ?d", $top_order, $_GET['pin_an_id']);
+    } elseif ($_GET['pin'] == 0) {
+        Database::get()->query("UPDATE admin_announcement SET `order` = 0  where id = ?d", $_GET['pin_an_id']);
+    }
+}
+
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $toolName = $langAdminAn;
 
@@ -191,17 +200,14 @@ if (isset($_GET['delete'])) {
             $message = $langAdminAnnModify;
         } else {
             // add new announcement
-            // order
-            $orderMax = Database::get()->querySingle("SELECT MAX(`order`) as max FROM admin_announcement")->max;
-            $order = $orderMax + 1;
             Database::get()->query("INSERT INTO admin_announcement
                             SET title = ?s,
                                 body = ?s,
                                 lang = ?s,
                                 `date` = " . DBHelper::timeAfter() . ",
-                                `order` = ?d,
+                                `order` = 0,
                                 $start_sql,
-                                $end_sql, `visible`=?d", $title, $newContent, $lang_admin_ann, $order, $dates, $show_public);
+                                $end_sql, `visible`=?d", $title, $newContent, $lang_admin_ann, 0, $dates, $show_public);
             $message = $langAdminAnnAdd;
         }
     } else {
@@ -338,11 +344,7 @@ if (isset($_GET['up'])) {
     $sortDirection = "ASC";
 }
 
-// if there are announcements without ordering -> order by id, latest is first
-$no_order = Database::get()->querySingle("SELECT id, `order` FROM admin_announcement WHERE `order`=0");
-if ($no_order) {
-    Database::get()->query("UPDATE admin_announcement SET `order`=`id`+1");
-}
+
 
 if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
     Database::get()->queryFunc("SELECT id, `order` FROM admin_announcement ORDER BY `order` $sortDirection", function ($announcement) use(&$thisAnnouncementOrderFound, &$nextAnnouncementId, &$nextAnnouncementOrder, &$thisAnnouncementOrder, &$thisAnnouncementId) {
@@ -363,9 +365,11 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
 
 // display admin announcements
 if ($displayAnnouncementList == true) {
-    $result = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");
+    $pinned_greater = Database::get()->querySingle("SELECT MAX(`order`) AS max_order FROM admin_announcement")->max_order;
+    $result = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC , `date` DESC");
     $bottomAnnouncement = $announcementNumber = count($result);
     if ($announcementNumber > 0) {
+
         $tool_content .= "<div class='table-responsive'><table class='table-default'>
                         <tr class='list-header'>
                             <th style='width: 55%;'>$langAnnouncement</th>
@@ -375,6 +379,19 @@ if ($displayAnnouncementList == true) {
                         </tr>";
         $now = date("Y-m-d H:i:s");
         foreach ($result as $myrow) {
+
+            $to_top = "";
+
+            if ($myrow->order != 0) {
+                $pinned_class = "text-danger";
+                $pinned = 0;
+                if ($myrow->order != $pinned_greater) {
+                    $to_top = "<a class='reorder' href='$_SERVER[SCRIPT_NAME]?pin_an_id=$myrow->id&pin=1'><span class='fa fa-arrow-up  pull-right'></span></a>";
+                }
+            } elseif ($myrow->order == 0) {
+                $pinned_class = "not_visible";
+                $pinned = 1;
+            }
 
             if ($myrow->visible == '0') {
                 $visibility = 1;
@@ -403,7 +420,12 @@ if ($displayAnnouncementList == true) {
             $tool_content .= "<tr class='$classvis'>
                 <td>
                     <div class='table_td'>
-                        <div class='table_td_header clearfix'><a href='adminannouncements_single.php?ann_id=$myrow->id'>".standard_text_escape($myrow->title)."</a></div>
+                        <div class='table_td_header clearfix'><a href='adminannouncements_single.php?ann_id=$myrow->id'>".standard_text_escape($myrow->title)."</a>
+                        <a class='reorder' href='$_SERVER[SCRIPT_NAME]?pin_an_id=$myrow->id&pin=$pinned'>
+                                <span class='fa fa-thumb-tack $pinned_class pull-right'></span>
+                            </a>
+                            $to_top
+                        </div>
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->body)."</div>
                     </div>
                 </td>
@@ -417,12 +439,6 @@ if ($displayAnnouncementList == true) {
                         array('title' => $visibility == 0 ? $langViewHide : $langViewShow,
                             'url' => "$_SERVER[SCRIPT_NAME]?id=$myrow->id&amp;vis=$visibility",
                             'icon' => $visibility == 0 ? 'fa-eye-slash' : 'fa-eye'),
-                        array('title' => $langUp,
-                            'url' => "$_SERVER[SCRIPT_NAME]?up=$myrow->id",
-                            'icon' => 'fa-arrow-up'),
-                        array('title' => $langDown,
-                            'url' => "$_SERVER[SCRIPT_NAME]?down=$myrow->id",
-                            'icon' => 'fa-arrow-down'),
                         array('title' => $langDelete,
                             'class' => 'delete',
                             'url' => "$_SERVER[SCRIPT_NAME]?delete=$myrow->id",
