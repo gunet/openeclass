@@ -2052,9 +2052,9 @@ function show_student_assignment($id) {
 }
 
 function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submissions_exist=false) {
-    global $tool_content, $m, $langWorkFile, $langSendFile, $langSave, $langSubmit, $uid,
+    global $tool_content, $m, $langWorkFile, $langSave, $langSubmit, $uid,
     $langNotice3, $gid, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
-    $course_code, $course_id, $langBack, $is_editor, $langCancel, $langWorkOnlineText,
+    $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
     $langGradeScalesSelect;
 
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
@@ -3241,16 +3241,18 @@ function users_with_no_submissions($id) {
         $q = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
                                 WHERE user.id = course_user.user_id
-                                AND course_user.course_id = ?d AND course_user.status = 5
-                                AND user.id NOT IN (SELECT uid FROM assignment_submit
-                                                    WHERE assignment_id = ?d) AND user.id IN (SELECT user_id FROM assignment_to_specific WHERE assignment_id = ?d)", $course_id, $id, $id);
+                                AND course_user.course_id = ?d 
+                                AND course_user.status = " .USER_STUDENT . "
+                                AND user.id NOT IN (SELECT uid FROM assignment_submit WHERE assignment_id = ?d) 
+                                AND user.id IN (SELECT user_id FROM assignment_to_specific WHERE assignment_id = ?d) ORDER BY surname, givenname", $course_id, $id, $id);
     } else {
         $q = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
                                 WHERE user.id = course_user.user_id
-                                AND course_user.course_id = ?d AND course_user.status = 5
+                                AND course_user.course_id = ?d 
+                                AND course_user.status = " . USER_STUDENT . "
                                 AND user.id NOT IN (SELECT uid FROM assignment_submit
-                                                    WHERE assignment_id = ?d)", $course_id, $id);
+                                                    WHERE assignment_id = ?d) ORDER BY surname, givenname", $course_id, $id);
     }
     $users = array();
     foreach ($q as $row) {
