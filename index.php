@@ -306,7 +306,6 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
 
     $ann_content = '';
     if ($announceArr && sizeof($announceArr) > 0) {
-        $ann_content .= "<ul class='front-announcements'>";
         $numOfAnnouncements = sizeof($announceArr);
         for ($i = 0; $i < $numOfAnnouncements; $i++) {
             $aid = $announceArr[$i]->id;
@@ -319,7 +318,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     <li>
                     <div><a class='announcement-title' href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a></div>
                     <span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($ann_date)) . " -</span>
-                    <div class='announcement-main' data-id='$aid'>".$announceArr[$i]->body."</div>";
+                    <div class='announcement-main' data-id='$aid'>".$announceArr[$i]->body."</div></li>";
         }
     }
 
@@ -333,11 +332,11 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
 
         // display admin announcements
         if(!empty($ann_content)) {
-            $tool_content .= "<h3 class='content-title'>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>
+            $tool_content .= "<h3 class='content-title'><a href='${urlServer}main/system_announcements.php'>$langAnnouncements</a> <a href='${urlServer}rss.php' style='padding-left:5px;'>
                     <i class='fa fa-rss-square'></i>
                     </a></h3>";
             $tool_content .= "<div class='panel'>
-                            <div class='panel-body'>";
+                            <div class='panel-body'><ul class='front-announcements'>";
             $tool_content .= $ann_content;
             $tool_content .= "</ul></div></div>";
         }

@@ -151,13 +151,49 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     array('title' => $langDelete,
                         'class' => 'delete',
                         'icon' => 'fa-times',
-                        'icon-class' => 'delete_btn',
                         'icon-extra' => "data-id='$myrow->id'")
                 )));
             $iterator++;
         }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit();
+}
+if (isset($_GET['an_id'])) {
+
+    $row = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ". intval($_GET['an_id']));
+    if(empty($row)){
+        redirect_to_home_page("modules/admin/adminannouncements/");
+    }
+}
+
+if (isset($_GET['an_id'])) {
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => $_SERVER['SCRIPT_NAME'],
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')),false);
+}
+
+if (isset($_GET['an_id'])) {
+    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAnnouncements);
+    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'>";
+    $tool_content .= "<div class='panel-body'>";
+    $tool_content .= "
+                        <div class='single_announcement'>
+                            <div class='announcement-title'>
+                                ".standard_text_escape($row->title)."
+                            </div>
+                            <span class='announcement-date'>
+                                - ".claro_format_locale_date($dateFormatLong, strtotime($row->date))." -
+                            </span>
+                            <div class='announcement-main'>
+                                ".standard_text_escape($row->body)."
+                            </div>
+                        </div>";
+
+    $tool_content .= "
+                    </div>
+                </div></div></div>";
 }
 
 //check if Datables code is needed
@@ -386,7 +422,7 @@ if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
                         'icon' => 'fa-reply',
                         'level' => 'primary-label')
                     ));
-    } else {
+    } elseif (!isset($_GET['an_id'])) {
         $tool_content .= action_bar(array(
                 array('title' => $langAdminAddAnn,
                     'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
@@ -465,6 +501,7 @@ if (isset($_GET['delete'])) {
             $message = $langAdminAnnModify;
         } else {
             // add new announcement
+
             Database::get()->query("INSERT INTO admin_announcement
                             SET title = ?s,
                                 body = ?s,
@@ -472,7 +509,7 @@ if (isset($_GET['delete'])) {
                                 `date` = " . DBHelper::timeAfter() . ",
                                 `order` = 0,
                                 $start_sql,
-                                $end_sql, `visible`=?d", $title, $newContent, $lang_admin_ann, 0, $dates, $show_public);
+                                $end_sql, `visible`=?d", $title, $newContent, $lang_admin_ann, $dates, $show_public);
             $message = $langAdminAnnAdd;
         }
     } else {
@@ -628,9 +665,8 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
     });
 }
 
-
 // display admin announcements
-if ($displayAnnouncementList == true) {
+if ($displayAnnouncementList == true && !isset($_GET['an_id'])) {
     $tool_content .= "
             <table id='ann_table_admin' class='table-default'>
                 <thead>
