@@ -249,7 +249,7 @@ elseif(isset($_GET['choice']))
                 create_webconf_jnlp_file($_GET['meeting_id']);
                 $webconf_server = $serv->hostname;
                 $screenshare_server = $serv->screenshare;
-                header('Location: ' . get_config('base_url') . '/modules/tc/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server));
+                header('Location: ' . get_config('base_url') . '/modules/tc/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server) .'&course='.$course_code);
             }            
             break;
         case 'import_video':

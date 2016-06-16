@@ -38,7 +38,7 @@ function create_webconf_jnlp_file($meeting_id)
                                         AND `type`='webconf' ORDER BY weight ASC LIMIT 1")->screenshare;
     
     $jnlp_file = $webDir.'/courses/'.$course_code.'/rooms/'.$meeting_id.'.jnlp';
-                       
+    
     $file = fopen($jnlp_file,"w");    
     fwrite($file,
                 "<?xml version='1.0' encoding='utf-8'?>
