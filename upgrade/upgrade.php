@@ -3312,7 +3312,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `course_id` INT(11) NOT NULL,
                             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `content` TEXT DEFAULT NULL,
-                            `youtube` VARCHAR(250) DEFAULT '',
+                            `extvideo` VARCHAR(250) DEFAULT '',
                             `timestamp` INT(11) NOT NULL DEFAULT 0,
                             `pinned` TINYINT(1) NOT NULL DEFAULT 0,
                             INDEX `wall_post_index` (`course_id`)) $charset_spec");
