@@ -54,8 +54,8 @@ else if (isset($_POST['submit'])) {
                 enabled=?s
                 WHERE id =?d", $hostname, $screenshare, $enabled, $id);
     } else {
-        Database::get()->querySingle("INSERT INTO tc_servers (hostname, screenshare, enabled, max_rooms, max_users, weight) VALUES
-        (?s, ?s, ?s, 0, 0, 1)", $hostname, $screenshare, $enabled);
+        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, screenshare, enabled, max_rooms, max_users, weight) VALUES
+        ('webconf', ?s, ?s, ?s, 0, 0, 1)", $hostname, $screenshare, $enabled);
     }    
     // Display result message
     Session::Messages($langFileUpdatedSuccess, 'alert-success');
