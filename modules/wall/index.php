@@ -339,7 +339,7 @@ if (isset($_GET['showPost'])) { //show comments case
         
         $head_content .= '<script>
                               function expand_form() {
-                                  document.getElementById(\'resources_panel\').style.display=\'\';
+                                  $("#resources_panel").collapse(\'show\');
                               }
                           </script>';
         
@@ -352,7 +352,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                 <label for="message_input">'.$langMessage.'</label>
                                 <textarea id="textr" onfocus="expand_form();" class="form-control" rows="1" name="message" id="message_input">'.$content.'</textarea>
                             </div>
-                            <div id="resources_panel" class="panel panel-default" style="display:none">
+                            <div id="resources_panel" class="panel panel-default collapse">
                                 <div class="panel-body">
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a data-toggle="tab" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
