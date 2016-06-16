@@ -55,8 +55,8 @@ else if (isset($_POST['submit'])) {
                                             enabled=?s
                                         WHERE id =?d", $hostname, $screenshare, $enabled, $id);
     } else {
-        Database::get()->querySingle("INSERT INTO wc_servers (hostname, screenshare, enabled, max_rooms, max_users, weight) 
-                                            VALUES (?s, ?s, ?s, 0, 0, 1)", $hostname, $screenshare, $enabled);
+        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, screenshare, enabled, max_rooms, max_users, weight) 
+                                            VALUES ('webconf', ?s, ?s, ?s, 0, 0, 1)", $hostname, $screenshare, $enabled);
     }
     // Display result message
     Session::Messages($langFileUpdatedSuccess, 'alert-success');
@@ -64,7 +64,7 @@ else if (isset($_POST['submit'])) {
 } // end of if($submit)
 
 if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {    
-    $hostnamevalue = $hostsharescreenvalue = '';
+    $wc_id = $hostnamevalue = $hostsharescreenvalue = '';
     $adminactivate_true = "checked value='true'";
     $adminactivate_false = "value='false'";
                     
@@ -85,7 +85,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         }
         $wc_id = "<input class='form-control' type = 'hidden' name = 'id_form' value='$server->id'>";
     } else {
-        $pageName = $langAddServer;    
+        $pageName = $langAddServer;        
     }
     $toolName = $langWebConf;
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]", 'name' => $langWebConf);
@@ -115,7 +115,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                 <div class='col-sm-9 radio'><label><input type='radio' name='enabled' $adminactivate_true>$langYes</label></div>
                 <div class='col-sm-offset-3 col-sm-9 radio'><label><input type='radio' name='enabled' $adminactivate_false>$langNo</label></div>
             </div>";
-        $tool_content .= $wc_id;            
+        $tool_content .= $wc_id;
         $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
         $tool_content .= "</fieldset></form></div>";    
         $tool_content .= '<script language="javaScript" type="text/javascript">
@@ -162,7 +162,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                                                       'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$wc_server->id",
                                                       'icon' => 'fa-edit'),
                                                 array('title' => $langDelete,
-                                                      'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$$wc_server->id",
+                                                      'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$wc_server->id",
                                                       'icon' => 'fa-times',
                                                       'class' => 'delete',
                                                       'confirm' => $langConfirmDelete)
