@@ -41,13 +41,13 @@ load_js('bootstrap-datetimepicker');
 load_js('trunk8');
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-    if (isset($_POST['action']) && $is_editor) {
+    if (isset($_POST['action'])) {
         if ($_POST['action']=='delete') {
             /* delete announcement */
             $row_id = intval($_POST['value']);
-            $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
+            $announce = Database::get()->querySingle("SELECT title, content FROM admin_announcement WHERE id = ?d ", $row_id);
             $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->body)), 50, '+');
-            Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
+            Database::get()->query("DELETE FROM admin_announcement WHERE id= ?d", $row_id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
             Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
                 'title' => $announce->title,
@@ -57,7 +57,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             /* modify visibility */
             $row_id = intval($_POST['value']);
             $visible = intval($_POST['visible']) ? 1 : 0;
-            Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", $visible, $row_id);
+            Database::get()->query("UPDATE admin_announcement SET visible = ?d WHERE id = ?d", $visible, $row_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
             exit();
         }
