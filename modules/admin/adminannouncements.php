@@ -40,6 +40,271 @@ load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 load_js('trunk8');
 
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['action']) && $is_editor) {
+        if ($_POST['action']=='delete') {
+            /* delete announcement */
+            $row_id = intval($_POST['value']);
+            $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
+            $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->body)), 50, '+');
+            Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
+            Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+            Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
+                'title' => $announce->title,
+                'content' => $txt_content));
+            exit();
+        } elseif ($_POST['action']=='visible') {
+            /* modify visibility */
+            $row_id = intval($_POST['value']);
+            $visible = intval($_POST['visible']) ? 1 : 0;
+            Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", $visible, $row_id);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+            exit();
+        }
+    }
+    $limit = intval($_GET['iDisplayLength']);
+    $offset = intval($_GET['iDisplayStart']);
+    $keyword = '%' . $_GET['sSearch'] . '%';
+
+
+    $all_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM admin_announcement");
+    $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM admin_announcement WHERE title LIKE ?s", $keyword);
+    if ($limit>0) {
+        $extra_sql = 'LIMIT ?d, ?d';
+        $extra_terms = array($offset, $limit);
+    } else {
+        $extra_sql = '';
+        $extra_terms = array();
+    }
+    $result = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE title LIKE ?s ORDER BY `order` DESC , `date` DESC  $extra_sql", $keyword, $extra_terms);
+
+    $data['iTotalRecords'] = $all_announc->total;
+    $data['iTotalDisplayRecords'] = $filtered_announc->total;
+    $data['aaData'] = array();
+        $iterator = 1;
+        $now = date("Y-m-d H:i:s");
+        $pinned_greater = Database::get()->querySingle("SELECT MAX(`order`) AS max_order FROM admin_announcement")->max_order;
+        foreach ($result as $myrow) {
+
+            $to_top = "";
+
+            //checking visible status
+            if ($myrow->visible == '0') {
+                $visible = 1;
+                $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsNotVis'><span class='fa fa-eye-slash'></span> $langAdminAnNotVis</li>";
+                $vis_class = 'not_visible';
+            } else {
+                $visible = 0;
+                if (isset($myrow->begin)) {
+                    if (isset($myrow->end) && $myrow->end < $now) {
+                        $vis_class = 'not_visible';
+                        $status_icon_list = "<li class='text-danger'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillNotBeVis$myrow->end'><span class='fa fa-clock-o'></span> $langAdminExpired</li>";
+                    } elseif ($myrow->begin > $now) {
+                        $vis_class = 'not_visible';
+                        $status_icon_list = "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->begin'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
+                    } else {
+                        $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
+                        $vis_class = 'visible';
+                    }
+                }else{
+                    $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
+                    $vis_class = 'visible';
+                }
+            }
+
+            //setting datables column data
+            if ($myrow->order != 0) {
+                $pinned_class = "text-danger";
+                $pinned = 0;
+                if ($myrow->order != $pinned_greater) {
+                    $to_top = "<a class='reorder' href='$_SERVER[SCRIPT_NAME]?pin_an_id=$myrow->id&pin=1'><span class='fa fa-arrow-up  pull-right'></span></a>";
+                }
+            } elseif ($myrow->order == 0) {
+                $pinned_class = "not_visible";
+                $pinned = 1;
+            }
+
+            $data['aaData'][] = array(
+                'DT_RowId' => $myrow->id,
+                'DT_RowClass' => $vis_class,
+                '0' => "<div class='table_td'>
+                        <div class='table_td_header clearfix'>
+                            <a href='$_SERVER[SCRIPT_NAME]?an_id=$myrow->id'>".standard_text_escape($myrow->title)."</a>
+                            <a class='reorder' href='$_SERVER[SCRIPT_NAME]?pin_an_id=$myrow->id&pin=$pinned'>
+                                <span class='fa fa-thumb-tack $pinned_class pull-right'></span>
+                            </a>
+                            $to_top
+                        </div>
+                        <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->body)."</div>
+                        </div>",
+                //'0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
+                '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->date)),
+                '2' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
+                '3' => action_button(array(
+                    array('title' => $langEditChange,
+                        'icon' => 'fa-edit',
+                        'url' => "$_SERVER[SCRIPT_NAME]?modify=$myrow->id"),
+                    array('title' => !$myrow->visible == '0' ? $langViewHide : $langViewShow,
+                        'icon' => !$myrow->visible == '0' ? 'fa-eye-slash' : 'fa-eye',
+                        'icon-class' => 'vis_btn',
+                        'icon-extra' => "data-vis='$visible' data-id='$myrow->id'"),
+                    array('title' => $langDelete,
+                        'class' => 'delete',
+                        'icon' => 'fa-times',
+                        'icon-class' => 'delete_btn',
+                        'icon-extra' => "data-id='$myrow->id'")
+                )));
+            $iterator++;
+        }
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
+//check if Datables code is needed
+if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
+    load_js('datatables');
+    $head_content .= "<script type='text/javascript'>
+        $(document).ready(function() {
+
+           var oTable = $('#ann_table_admin').DataTable ({
+                'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],
+                'bStateSave': true,
+                'bProcessing': true,
+                'bServerSide': true,
+                'sScrollX': true,
+                'responsive': true,
+                'searchDelay': 1000,
+                'sAjaxSource': '$_SERVER[REQUEST_URI]',
+                'aLengthMenu': [
+                   [10, 15, 20 , -1],
+                   [10, 15, 20, '$langAllOfThem'] // change per page values here
+               ],
+                'fnDrawCallback': function( oSettings ) {
+                    popover_init();
+                    tooltip_init();
+                    $('.table_td_body').each(function() {
+                        $(this).trunk8({
+                            lines: '3',
+                            fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME]?an_id='+ $(this).data('id')+'\">$langMore</div>'
+                        })
+                    });
+                    $('#ann_table_admin_filter label input').attr({
+                          class : 'form-control input-sm',
+                          placeholder : '$langSearch...'
+                        });
+                 },
+                 'sPaginationType': 'full_numbers',
+                'bSort': false,
+                'oLanguage': {
+                       'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
+                       'sZeroRecords':  '".$langNoResult."',
+                       'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
+                       'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                       'sInfoFiltered': '',
+                       'sInfoPostFix':  '',
+                       'sSearch':       '',
+                       'sUrl':          '',
+                       'oPaginate': {
+                           'sFirst':    '&laquo;',
+                           'sPrevious': '&lsaquo;',
+                           'sNext':     '&rsaquo;',
+                           'sLast':     '&raquo;'
+                       }
+                   }
+                });
+
+            $(document).on( 'click', '.reorder', function(e) {
+                e.preventDefault();
+                var link = $(this).attr('href');
+                var tr_affected = $(this).closest('tr');
+
+                $.ajax({
+                    type: 'POST',
+                    url: link,
+                    data: {
+                        pin_announce: 1
+                    },
+                    beforeSend: function(){
+                        console.log(tr_affected);
+                        tr_affected.css('backgroundColor','rgba(100,100,100,0.3)');
+                    },
+                    success: function(data){
+                        oTable.ajax.reload(null, false);
+                    }
+                });
+            });
+
+            $(document).on( 'click','.delete_btn', function (e) {
+                e.preventDefault();
+                var row_id = $(this).data('id');
+                bootbox.confirm('".js_escape($langSureToDelAnnounce)."', function(result) {
+                    if(result) {
+                        $.ajax({
+                          type: 'POST',
+                          url: '',
+                          datatype: 'json',
+                          data: {
+                             action: 'delete',
+                             value: row_id
+                          },
+                          success: function(data){
+                            var info = oTable.page.info();
+                            /*var num_page_records = info.recordsDisplay;
+                            var per_page = info.iLength;*/
+                            var page_number = info.page;
+                            /*if(num_page_records==1){
+                                if(page_number!=0) {
+                                    page_number--;
+                                }
+                            } */
+                            oTable.draw(false);
+                          },
+                          error: function(xhr, textStatus, error){
+                              console.log(xhr.statusText);
+                              console.log(textStatus);
+                              console.log(error);
+                          }
+                        });
+                        $.ajax({
+                            type: 'POST',
+                            url: '{$urlAppend}/modules/search/idxasync.php'
+                        });
+                    }
+                });
+            });
+            $(document).on( 'click','.vis_btn', function (g) {
+                g.preventDefault();
+                var vis = $(this).data('vis');
+                var row_id = $(this).data('id');
+                $.ajax({
+                  type: 'POST',
+                  url: '',
+                  datatype: 'json',
+                  data: {
+                        action: 'visible',
+                        value: row_id,
+                        visible: vis
+                  },
+                  success: function(data){
+                    oTable.draw(false);
+                  },
+                  error: function(xhr, textStatus, error){
+                      console.log(xhr.statusText);
+                      console.log(textStatus);
+                      console.log(error);
+                  }
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: '{$urlAppend}/modules/search/idxasync.php'
+                });
+            });
+            $('.success').delay(3000).fadeOut(1500);
+
+        });
+        </script>";
+}
+
 $head_content .= <<<hContent
 <script type='text/javascript'>
 function toggle(id, checkbox, name)
@@ -363,95 +628,22 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
     });
 }
 
+
 // display admin announcements
 if ($displayAnnouncementList == true) {
-    $pinned_greater = Database::get()->querySingle("SELECT MAX(`order`) AS max_order FROM admin_announcement")->max_order;
-    $result = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC , `date` DESC");
-    $bottomAnnouncement = $announcementNumber = count($result);
-    if ($announcementNumber > 0) {
-
-        $tool_content .= "<div class='table-responsive'><table class='table-default'>
-                        <tr class='list-header'>
-                            <th style='width: 55%;'>$langAnnouncement</th>
-                            <th>$langDate</th>
-                            <th>$langNewBBBSessionStatus</th>
-                            <th><div align='center'>" . icon('fa-gears') . "</th>
-                        </tr>";
-        $now = date("Y-m-d H:i:s");
-        foreach ($result as $myrow) {
-
-            $to_top = "";
-
-            if ($myrow->order != 0) {
-                $pinned_class = "text-danger";
-                $pinned = 0;
-                if ($myrow->order != $pinned_greater) {
-                    $to_top = "<a class='reorder' href='$_SERVER[SCRIPT_NAME]?pin_an_id=$myrow->id&pin=1'><span class='fa fa-arrow-up  pull-right'></span></a>";
-                }
-            } elseif ($myrow->order == 0) {
-                $pinned_class = "not_visible";
-                $pinned = 1;
-            }
-
-            if ($myrow->visible == '0') {
-                $visibility = 1;
-                $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsNotVis'><span class='fa fa-eye-slash'></span> $langAdminAnNotVis</li>";
-                $classvis = 'not_visible';
-            } else {
-                $visibility = 0;
-                if (isset($myrow->begin)) {
-                    if (isset($myrow->end) && $myrow->end < $now) {
-                        $classvis = 'not_visible';
-                        $status_icon_list = "<li class='text-danger'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillNotBeVis$myrow->end'><span class='fa fa-clock-o'></span> $langAdminExpired</li>";
-                    } elseif ($myrow->begin > $now) {
-                        $classvis = 'not_visible';
-                        $status_icon_list = "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->begin'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
-                    } else {
-                        $classvis = 'visible';
-                        $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
-                    }
-                }else{
-                    $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
-                    $classvis = 'visible';}
-            }
-
-            $myrow->date = claro_format_locale_date($dateFormatLong, strtotime($myrow->date));
-
-            $tool_content .= "<tr class='$classvis'>
-                <td>
-                    <div class='table_td'>
-                        <div class='table_td_header clearfix'><a href='adminannouncements_single.php?ann_id=$myrow->id'>".standard_text_escape($myrow->title)."</a>
-                        <a class='reorder' href='$_SERVER[SCRIPT_NAME]?pin_an_id=$myrow->id&pin=$pinned'>
-                                <span class='fa fa-thumb-tack $pinned_class pull-right'></span>
-                            </a>
-                            $to_top
-                        </div>
-                        <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->body)."</div>
-                    </div>
-                </td>
-                <td>$myrow->date</td>
-                <td><div><ul class='list-unstyled'>$status_icon_list</ul></div></td>
-                <td>" .
-                    action_button(array(
-                        array('title' => $langEditChange,
-                            'url' => "$_SERVER[SCRIPT_NAME]?modify=$myrow->id",
-                            'icon' => 'fa-edit'),
-                        array('title' => $visibility == 0 ? $langViewHide : $langViewShow,
-                            'url' => "$_SERVER[SCRIPT_NAME]?id=$myrow->id&amp;vis=$visibility",
-                            'icon' => $visibility == 0 ? 'fa-eye-slash' : 'fa-eye'),
-                        array('title' => $langDelete,
-                            'class' => 'delete',
-                            'url' => "$_SERVER[SCRIPT_NAME]?delete=$myrow->id",
-                            'confirm' => $langConfirmDelete,
-                            'icon' => 'fa-times')
-                    )) . "
-                </td></tr>";
-        }
-        $tool_content .= "</table>";
-        $tool_content .= "</div>";
-    } else {
-        $tool_content .= "<div class='row'><div class='col-xs-12'><div class='alert alert-warning'>$langNoAnnounce</div></div></div>";
-    }
+    $tool_content .= "
+            <table id='ann_table_admin' class='table-default'>
+                <thead>
+                    <tr class='list-header'>
+                        <th>$langAnnouncement</th>
+                        <th>$langDate</th>
+                        <th>$langNewBBBSessionStatus</th>
+                        <th class='text-center'><i class='fa fa-cogs'></i></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>";
 }
+
 
 draw($tool_content, 3, null, $head_content);
