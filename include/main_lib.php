@@ -258,6 +258,8 @@ function load_js($file, $init='') {
             $head_content .= css_link('datatables/extensions/Buttons/css/buttons.foundation.css');
         } elseif ($file == 'RateIt') {
             $file = 'jquery.rateit.min.js';
+        } elseif ($file == 'autosize') {
+            $file = 'autosize/autosize.min.js';
         } elseif ($file == 'waypoints-infinite') {
             $head_content .= js_link('waypoints/jquery.waypoints.min.js');
             $file = 'waypoints/shortcuts/infinite.min.js';

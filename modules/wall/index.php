@@ -300,6 +300,8 @@ if (isset($_GET['showPost'])) { //show comments case
     //show post form
     if (allow_to_post($course_id, $uid, $is_editor)) {
         
+        load_js('autosize');
+        
         $content = Session::has('content')? Session::get('content'): '';
         $youtube = Session::has('youtube')? Session::get('youtube'): '';
         
@@ -337,8 +339,7 @@ if (isset($_GET['showPost'])) { //show comments case
         
         $head_content .= '<script>
                               function expand_form() {
-                                  document.getElementById(\'resources_panel\').style.display=\'\';
-                                  document.getElementById(\'textr\').rows = 6;
+                                  $("#resources_panel").collapse(\'show\');
                               }
                           </script>';
         
@@ -351,7 +352,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                 <label for="message_input">'.$langMessage.'</label>
                                 <textarea id="textr" onfocus="expand_form();" class="form-control" rows="1" name="message" id="message_input">'.$content.'</textarea>
                             </div>
-                            <div id="resources_panel" class="panel panel-default" style="display:none">
+                            <div id="resources_panel" class="panel panel-default collapse">
                                 <div class="panel-body">
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a data-toggle="tab" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
@@ -384,6 +385,9 @@ if (isset($_GET['showPost'])) { //show comments case
                 </div>
             </div>
         </div>';
+        
+        //auto-expand textarea while typing
+        $tool_content .= "<script>autosize(document.querySelector('textarea'));</script>";
     }
     
     //show wall posts
