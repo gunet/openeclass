@@ -48,7 +48,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $extra_sql = '';
         $extra_terms = array();
     }
-    $result = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE title LIKE ?s ORDER BY `order` DESC , `date` DESC  $extra_sql", $keyword, $extra_terms);
+
+    $student_sql = 'AND visible = 1 AND (`begin` <= NOW() OR `begin` IS NULL) AND (`end` >= NOW() OR `end` IS NULL)';
+    $result = Database::get()->queryArray("SELECT * FROM admin_announcement WHERE title LIKE ?s $student_sql ORDER BY `order` DESC , `date` DESC  $extra_sql", $keyword, $extra_terms);
 
     $data['iTotalRecords'] = $all_announc->total;
     $data['iTotalDisplayRecords'] = $filtered_announc->total;

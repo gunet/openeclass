@@ -151,7 +151,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     array('title' => $langDelete,
                         'class' => 'delete',
                         'icon' => 'fa-times',
-                        'icon-class' => 'delete_btn',
                         'icon-extra' => "data-id='$myrow->id'")
                 )));
             $iterator++;
@@ -502,6 +501,7 @@ if (isset($_GET['delete'])) {
             $message = $langAdminAnnModify;
         } else {
             // add new announcement
+
             Database::get()->query("INSERT INTO admin_announcement
                             SET title = ?s,
                                 body = ?s,
@@ -509,7 +509,7 @@ if (isset($_GET['delete'])) {
                                 `date` = " . DBHelper::timeAfter() . ",
                                 `order` = 0,
                                 $start_sql,
-                                $end_sql, `visible`=?d", $title, $newContent, $lang_admin_ann, 0, $dates, $show_public);
+                                $end_sql, `visible`=?d", $title, $newContent, $lang_admin_ann, $dates, $show_public);
             $message = $langAdminAnnAdd;
         }
     } else {
