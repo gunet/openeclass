@@ -300,6 +300,8 @@ if (isset($_GET['showPost'])) { //show comments case
     //show post form
     if (allow_to_post($course_id, $uid, $is_editor)) {
         
+        load_js('autosize');
+        
         $content = Session::has('content')? Session::get('content'): '';
         $youtube = Session::has('youtube')? Session::get('youtube'): '';
         
@@ -338,7 +340,6 @@ if (isset($_GET['showPost'])) { //show comments case
         $head_content .= '<script>
                               function expand_form() {
                                   document.getElementById(\'resources_panel\').style.display=\'\';
-                                  document.getElementById(\'textr\').rows = 6;
                               }
                           </script>';
         
@@ -384,6 +385,9 @@ if (isset($_GET['showPost'])) { //show comments case
                 </div>
             </div>
         </div>';
+        
+        //auto-expand textarea while typing
+        $tool_content .= "<script>autosize(document.querySelector('textarea'));</script>";
     }
     
     //show wall posts
