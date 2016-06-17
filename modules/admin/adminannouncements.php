@@ -151,6 +151,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     array('title' => $langDelete,
                         'class' => 'delete',
                         'icon' => 'fa-times',
+                        'icon-class' => 'delete_btn',
                         'icon-extra' => "data-id='$myrow->id'")
                 )));
             $iterator++;

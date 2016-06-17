@@ -131,7 +131,7 @@ $head_content .= "<script type='text/javascript'>
 
 $tool_content .= action_bar(array(
     array('title' => $langBack,
-        'url' => $_SERVER["SCRIPT_NAME"],
+        'url' => $urlServer,
         'icon' => 'fa-reply',
         'level' => 'primary-label',
         'button-class' => 'btn-default')
