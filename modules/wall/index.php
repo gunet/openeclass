@@ -235,7 +235,7 @@ if (isset($_GET['showPost'])) { //show comments case
         if (visible_module(MODULE_ID_DOCS)) {
             $docs_div = '<div class="form-group tab-pane fade" id="docs_div" style="padding:10px">
                               <input type="hidden" name="doc_ids" id="docs">
-                              '.list_docs($id).'
+                              '.list_docs($id, NULL, TRUE).'
                           </div>';
             $docs_li = '<li><a data-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
@@ -248,7 +248,7 @@ if (isset($_GET['showPost'])) { //show comments case
         if (($post_author == $uid) && (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable')))) {
             $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div" style="padding:10px">
                             <input type="hidden" name="mydoc_ids" id="mydocs">
-                              '.list_docs($id,'mydocs').'
+                              '.list_docs($id,'mydocs', TRUE).'
                           </div>';
             $mydocs_li = '<li><a data-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
