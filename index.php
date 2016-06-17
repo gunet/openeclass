@@ -316,7 +316,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
             }
             $ann_content .= "
                     <li>
-                    <div><a class='announcement-title' href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a></div>
+                    <div><a class='announcement-title' href='main/system_announcements.php?an_id=$aid'>" . q($announceArr[$i]->title) . "</a></div>
                     <span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($ann_date)) . " -</span>
                     <div class='announcement-main' data-id='$aid'>".$announceArr[$i]->body."</div></li>";
         }

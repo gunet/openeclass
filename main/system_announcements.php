@@ -129,13 +129,6 @@ $head_content .= "<script type='text/javascript'>
         });
         </script>";
 
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => $urlServer,
-        'icon' => 'fa-reply',
-        'level' => 'primary-label',
-        'button-class' => 'btn-default')
-),false);
 
 if (isset($_GET['an_id'])) {
 
@@ -143,6 +136,22 @@ if (isset($_GET['an_id'])) {
     if(empty($row)){
         redirect_to_home_page("main/system_announcements/");
     }
+
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => $_SERVER['SCRIPT_NAME'],
+            'icon' => 'fa-reply',
+            'level' => 'primary-label',
+            'button-class' => 'btn-default')
+    ),false);
+} else {
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => $urlServer,
+            'icon' => 'fa-reply',
+            'level' => 'primary-label',
+            'button-class' => 'btn-default')
+    ),false);
 }
 
 
