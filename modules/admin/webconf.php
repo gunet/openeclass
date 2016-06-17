@@ -46,17 +46,19 @@ else if (isset($_POST['submit'])) {
     $hostname = $_POST['hostname_form'];
     $screenshare = $_POST['screenshare_form'];
     $enabled = $_POST['enabled'];
+    $allcourses = $_POST['allcourses'];
     
     if (isset($_POST['id_form'])) {
         $id = $_POST['id_form'];
         Database::get()->querySingle("UPDATE tc_servers SET 
                                             hostname = ?s,
                                             screenshare=?s,
-                                            enabled=?s
-                                        WHERE id =?d", $hostname, $screenshare, $enabled, $id);
+                                            enabled=?s,
+                                            all_courses=?d
+                                        WHERE id =?d", $hostname, $screenshare, $enabled, $allcourses, $id);
     } else {
-        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, screenshare, enabled, max_rooms, max_users, weight) 
-                                            VALUES ('webconf', ?s, ?s, ?s, 0, 0, 1)", $hostname, $screenshare, $enabled);
+        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, screenshare, enabled, max_rooms, max_users, weight, all_courses) 
+                                            VALUES ('webconf', ?s, ?s, ?s, 0, 0, 1, ?d)", $hostname, $screenshare, $enabled, $allcourses);
     }
     // Display result message
     Session::Messages($langFileUpdatedSuccess, 'alert-success');
@@ -66,7 +68,9 @@ else if (isset($_POST['submit'])) {
 if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {    
     $wc_id = $hostnamevalue = $hostsharescreenvalue = '';
     $adminactivate_true = "checked value='true'";
+    $adminassignall_true = "checked value='1'";
     $adminactivate_false = "value='false'";
+    $adminassignall_false = "value='0'";
                     
     if (isset($_GET['edit_server'])) {
         $pageName = $langEdit;
@@ -81,6 +85,13 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
             } else {
                 $adminactivate_true = "value='true'";
                 $adminactivate_false = "value='false' checked ";
+            }
+            if ($server->all_courses == '1') {
+                $adminassignall_true = "value='1' checked ";
+                $adminassignall_false = "value='0'";
+            } else {
+                $adminassignall_true = "value='1'";
+                $adminassignall_false = "value='0' checked ";
             }
         }
         $wc_id = "<input class='form-control' type = 'hidden' name = 'id_form' value='$server->id'>";
@@ -114,6 +125,15 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                 <label class='col-sm-3 control-label'>$langActivate:</label>
                 <div class='col-sm-9 radio'><label><input type='radio' name='enabled' $adminactivate_true>$langYes</label></div>
                 <div class='col-sm-offset-3 col-sm-9 radio'><label><input type='radio' name='enabled' $adminactivate_false>$langNo</label></div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-3 control-label'>$langUseOfTc:</label>
+                <div class='col-sm-9 radio'><label><input type='radio' name='allcourses' $adminassignall_true>$langToAllCourses</label>
+                    <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToAllCoursesInfo'></span>
+                </div>
+                <div class='col-sm-offset-3 col-sm-9 radio'><label><input type='radio' name='allcourses' $adminassignall_false>$langToSomeCourses</label>
+                    <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToSomeCoursesInfo'></span>
+                </div>
             </div>";
         $tool_content .= $wc_id;
         $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
