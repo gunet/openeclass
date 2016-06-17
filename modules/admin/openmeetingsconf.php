@@ -41,6 +41,8 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     $adminenrecordings_false = "value='false'";
     $adminactivate_true = "checked value='true'";
     $adminactivate_false = "value='false'";
+    $adminassignall_true = "checked value='1'";
+    $adminassignall_false = "value='0'";
     
     if (isset($_GET['edit_server'])) {
         $pageName = $langEdit;
@@ -68,6 +70,13 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
             } else {
                 $adminactivate_true = "value='true'";
                 $adminactivate_false = "value='false' checked ";
+            }
+            if ($server->all_courses == '1') {
+                $adminassignall_true = "value='1' checked ";
+                $adminassignall_false = "value='0'";
+            } else {
+                $adminassignall_true = "value='1'";
+                $adminassignall_false = "value='0' checked ";
             }
             $om_id = "<input class='form-control' type = 'hidden' name = 'id_form' value='$server->id'>";
         }
@@ -126,6 +135,15 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
             <div class='col-sm-9'><input class='form-control' type='text' name='weight' value='$weight'></div>";
     $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>
+                <label class='col-sm-3 control-label'>$langUseOfTc:</label>
+                <div class='col-sm-9 radio'><label><input type='radio' name='allcourses' $adminassignall_true>$langToAllCourses</label>
+                    <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToAllCoursesInfo'></span>
+                </div>
+                <div class='col-sm-offset-3 col-sm-9 radio'><label><input type='radio' name='allcourses' $adminassignall_false>$langToSomeCourses</label>
+                    <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToSomeCoursesInfo'></span>
+                </div>
+            </div>";
     $tool_content .= $om_id;
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
     $tool_content .= "</fieldset></form></div>";
@@ -157,6 +175,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     $enable_recordings = $_POST['enable_recordings'];
     $enabled = $_POST['enabled'];
     $weight = $_POST['weight'];
+    $allcourses = $_POST['allcourses'];
     
     if (isset($_POST['id_form'])) {        
         $id = $_POST['id_form'];
@@ -169,11 +188,12 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                 max_rooms = ?d,
                 max_users = ?d,
                 enable_recordings = ?s,
-                weight = ?d
-                WHERE id = ?d", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight, $id);
+                weight = ?d,
+                all_courses = ?d
+                WHERE id = ?d", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight, $allcourses, $id);
     } else {
-        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, port, username, password, webapp, enabled, max_rooms, max_users, enable_recordings, weight) VALUES
-        ('om', ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d, ?s, ?d)", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight);
+        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, port, username, password, webapp, enabled, max_rooms, max_users, enable_recordings, weight, all_courses) VALUES
+        ('om', ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d, ?s, ?d, ?d)", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight, $allcourses);
     }    
     // Display result message
     Session::Messages($langFileUpdatedSuccess,"alert-success");

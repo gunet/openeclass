@@ -170,7 +170,7 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
-                      'show' => is_active_tc_server($tc_type))));
+                      'show' => is_active_tc_server($tc_type, $course_id))));
         }
     }
 }

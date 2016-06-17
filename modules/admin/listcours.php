@@ -164,7 +164,23 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $dep .= $tree->getFullPath($department) . $br;
             $i++;
         }
-
+        // display tc_server action if needed
+        $tc_type = is_configured_tc_server();
+        if ($tc_type == FALSE) {
+            $show_tc = false;
+        } else {
+            if (is_tc_server_enabled_for_all($tc_type)) {
+                $show_tc = false;
+            } else {                                
+                $show_tc = true;
+                if (is_active_tc_server($tc_type, $logs->id)) {
+                    $icon_tc = 'fa-check-square-o';
+                } else {
+                    $icon_tc = 'fa-square-o';
+                }
+            }
+        }
+        
         // Add links to course users, delete course and course edit
         $icon_content = action_button(array(
             array(
@@ -182,6 +198,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'icon' => 'fa-list',
                 'url' => "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE",
                 'show' => !isDepartmentAdmin()
+            ),
+            array(
+                'title' => $langActivateConference,
+                'icon' => $icon_tc,
+                'url' => "$_SERVER[SCRIPT_NAME]?c=$logs->id",
+                'show' => $show_tc
             ),  
             array(
                 'title' => $langDelete,
