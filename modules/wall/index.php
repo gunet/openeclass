@@ -167,8 +167,11 @@ if (isset($_POST['submit'])) {
             if (visible_module(MODULE_ID_DOCS)) {
                 insert_docs($id);
             }
+            
+            $post_author = Database::get()->querySingle("SELECT user_id FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id)->user_id;
+            
             //save my documents
-            if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
+            if (($post_author == $uid) && (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) ) {
                 insert_docs($id,'mydocs');
             }
             
@@ -240,7 +243,9 @@ if (isset($_GET['showPost'])) { //show comments case
             $docs_li = '';
         }
         
-        if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
+        $post_author = Database::get()->querySingle("SELECT user_id FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id)->user_id;
+        
+        if (($post_author == $uid) && (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable')))) {
             $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div" style="padding:10px">
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs($id,'mydocs').'
