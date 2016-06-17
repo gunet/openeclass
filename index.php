@@ -228,8 +228,8 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
 
             $('.announcement-main').each(function() {
                 $(this).trunk8({
-                    lines: '5',
-                    fill: '&hellip;<div class=\"announcements-more\"><a href=\"modules/announcements/main_ann.php?aid=' +
+                    lines: '4',
+                    fill: '&hellip;<div class=\"announcements-more\"><a href=\"main/system_announcements.php?an_id=' +
                         $(this).data('id') + '\">$langMore</a></div>'
                 });
             })
@@ -302,7 +302,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                                                         AND lang=?s
                                                         AND (`begin` <= NOW() or `begin` IS null)
                                                         AND (NOW() <= `end` or `end` IS null)
-                                                ORDER BY `order` DESC", $language);
+                                                ORDER BY `date` DESC LIMIT 5", $language);
 
     $ann_content = '';
     if ($announceArr && sizeof($announceArr) > 0) {
@@ -316,7 +316,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
             }
             $ann_content .= "
                     <li>
-                    <div><a class='announcement-title' href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a></div>
+                    <div><a class='announcement-title' href='main/system_announcements.php?an_id=$aid'>" . q($announceArr[$i]->title) . "</a></div>
                     <span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($ann_date)) . " -</span>
                     <div class='announcement-main' data-id='$aid'>".$announceArr[$i]->body."</div></li>";
         }
