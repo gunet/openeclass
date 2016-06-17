@@ -46,16 +46,19 @@ else if (isset($_POST['submit'])) {
     $hostname = $_POST['hostname_form'];
     $screenshare = $_POST['screenshare_form'];
     $enabled = $_POST['enabled'];
+    $allcourses = $_POST['allcourses'];
     
     if (isset($_POST['id_form'])) {
         $id = $_POST['id_form'];
-        Database::get()->querySingle("UPDATE tc_servers SET hostname = ?s,
-                screenshare=?s,
-                enabled=?s
-                WHERE id =?d", $hostname, $screenshare, $enabled, $id);
+        Database::get()->querySingle("UPDATE tc_servers SET 
+                                            hostname = ?s,
+                                            screenshare=?s,
+                                            enabled=?s,
+                                            all_courses=?d
+                                        WHERE id =?d", $hostname, $screenshare, $enabled, $allcourses, $id);
     } else {
-        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, screenshare, enabled, max_rooms, max_users, weight) VALUES
-        ('webconf', ?s, ?s, ?s, 0, 0, 1)", $hostname, $screenshare, $enabled);
+        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, screenshare, enabled, max_rooms, max_users, weight, all_courses) 
+                                            VALUES ('webconf', ?s, ?s, ?s, 0, 0, 1, ?d)", $hostname, $screenshare, $enabled, $allcourses);
     }    
     // Display result message
     Session::Messages($langFileUpdatedSuccess, 'alert-success');
@@ -75,12 +78,19 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
             ]
         ]);
     $data['enabled'] = true;
+    $data['enabled_all_courses'] = true;
     if (isset($_GET['edit_server'])) {
         $data['wc_server'] = $_GET['edit_server'];
         $data['server'] = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $data['wc_server']);
         if ($data['server']->enabled == "false") {
             $data['enabled'] = false;
         }
+        if ($data['server']->all_courses == "1") {
+             $data['enabled_all_courses'] = true;
+         }
+         if ($data['server']->all_courses == "0") {
+             $data['enabled_all_courses'] = false;
+         }
     }
     $view = 'admin.other.extapps.webconf.create';
 

@@ -38,7 +38,7 @@
                         'class' => 'delete',
                         'confirm' => trans('langConfirmDelete')
                     ]
-                ]) }}
+                ]) !!}
                 </td>
             </tr>
         @endforeach            	

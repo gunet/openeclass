@@ -655,7 +655,7 @@ function bbb_session_details() {
         $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langBBBNoServerForRecording;
 
     
-    if (!is_active_tc_server($tc_type)) { // check availability
+    if (!is_active_tc_server($tc_type, $course_id)) { // check availability
         if ($is_editor) {
             $tool_content .= "<div class='alert alert-danger'>$langBBBNotServerAvailableTeacher</div>";
         } else {
@@ -670,7 +670,7 @@ function bbb_session_details() {
     $result = Database::get()->queryArray("SELECT * FROM tc_session WHERE course_id = ?s $activeClause 
                                                 ORDER BY start_date DESC", $course_id);
     if ($result) {
-        if ((!$is_editor) and is_active_tc_server($tc_type)) {
+        if ((!$is_editor) and is_active_tc_server($tc_type, $course_id)) {
             $tool_content .= "<div class='alert alert-info'><label>$langNote</label>: $langBBBNoteEnableJoin</div>";
         }
         $headingsSent = false;
@@ -734,7 +734,7 @@ function bbb_session_details() {
             
             $canJoin = FALSE;
             if (($row->active == '1') and (date_diff_in_minutes($start_date, date('Y-m-d H:i:s')) < $row->unlock_interval)
-                    and is_active_tc_server($tc_type)) {
+                    and is_active_tc_server($tc_type, $course_id)) {
                 $canJoin = TRUE;
             }
             if (isset($end_date) and ($timeLeft < 0)) {
@@ -1306,16 +1306,36 @@ function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
     return $result['participantCount'];
 }
 
+
 /**
- * @brief find enabled tc server
- * @global type $course_id
+ * @brief check if tc_server is enabled for all courses
  * @param type $tc_type
  * @return boolean
  */
-function is_active_tc_server($tc_type) 
+function is_tc_server_enabled_for_all($tc_type) {
+    
+    $q = Database::get()->queryArray("SELECT all_courses FROM tc_servers WHERE enabled='true' AND `type` = '$tc_type'");
+    if (count($q) > 0) {
+       foreach ($q as $data) {
+           if ($data->all_courses == 1) { // server is enabled for all courses
+               return true;
+           } else {
+               return false;
+           }
+       }
+    } else { // no active servers
+        return false;
+    }
+}
+/**
+ * @brief find enabled tc server
+ * @param type $course_id
+ * @param type $tc_type
+ * @return boolean
+ */
+function is_active_tc_server($tc_type, $course_id) 
 {    
-    global $course_id;
-            
+        
     $q = Database::get()->queryArray("SELECT id, all_courses FROM tc_servers WHERE enabled='true' AND `type` = '$tc_type'");
     if (count($q) > 0) {
        foreach ($q as $data) {
