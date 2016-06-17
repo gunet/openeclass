@@ -229,7 +229,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
             $('.announcement-main').each(function() {
                 $(this).trunk8({
                     lines: '4',
-                    fill: '&hellip;<div class=\"announcements-more\"><a href=\"modules/announcements/main_ann.php?aid=' +
+                    fill: '&hellip;<div class=\"announcements-more\"><a href=\"main/system_announcements.php?an_id=' +
                         $(this).data('id') + '\">$langMore</a></div>'
                 });
             })
