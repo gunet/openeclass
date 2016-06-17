@@ -210,7 +210,7 @@ function generate_single_post_html($post) {
                               <div class="col-sm-12">
                                   <div class="media">
                                       <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
-                                        '. profile_image($user_id, IMAGESIZE_SMALL) .'
+                                        '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
                                       </a>
                                       <div class="media-body bubble">
                                           <div class="label label-success media-heading">'.$datetime.'</div>
@@ -321,7 +321,7 @@ function generate_infinite_container_html($posts, $next_page) {
                               <div class="col-sm-12">
                                   <div class="media">
                                       <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
-                                        '. profile_image($user_id, IMAGESIZE_SMALL) .'
+                                        '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
                                       </a>
                                       <div class="media-body bubble">
                                           <div class="label label-success media-heading">'.$datetime.'</div>
