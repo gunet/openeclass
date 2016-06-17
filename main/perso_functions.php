@@ -129,23 +129,38 @@ function getUserLessonInfo($uid) {
  */ 
 function getUserAnnouncements($lesson_id, $type = '') {
 
-    global $urlAppend, $dateFormatLong;
+    global $urlAppend, $dateFormatLong, $langAdminAn;
 
-    if (!count($lesson_id)) {
-        return '';
-    }
-            
-    $ann_content = '';
-    $last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
-
-    $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
     if ($type == 'more') {
         $sql_append = '';
     } else {
         $sql_append = 'LIMIT 5';
     }
-    $q = Database::get()->queryArray("SELECT announcement.title,
-                                             announcement.`date`,
+
+    $ann_content = '';
+
+
+    $last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
+
+    if (!count($lesson_id)) {
+        $q = Database::get()->queryArray("
+                                SELECT admin_announcement.title,
+                                             admin_announcement.`date` AS an_date,
+                                             admin_announcement.id                                            
+                                FROM admin_announcement
+                                WHERE   admin_announcement.visible = 1
+                                        AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
+                                        AND (admin_announcement.end >= NOW() OR admin_announcement.end IS NULL)
+                                        AND admin_announcement.`date` >= ?s
+                                 ORDER BY an_date DESC
+                         $sql_append", $last_month);
+    } else {
+
+
+        $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
+
+        $q = Database::get()->queryArray("(SELECT announcement.title,
+                                             announcement.`date` AS an_date,
                                              announcement.id,
                                              course.code,
                                              course.title course_title
@@ -158,25 +173,62 @@ function getUserAnnouncements($lesson_id, $type = '') {
                                 AND (announcement.stop_display >= NOW() OR announcement.stop_display IS NULL)
                                 AND announcement.`date` >= ?s
                                 AND course_module.module_id = ?d
-                                AND course_module.visible = 1
-                        ORDER BY announcement.`date` DESC $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE);
+                                AND course_module.visible = 1)
+                                UNION 
+                                (SELECT admin_announcement.title,
+                                             admin_announcement.`date` AS admin_an_date,
+                                             admin_announcement.id, '', ''                                             
+                                FROM admin_announcement
+                                WHERE   admin_announcement.visible = 1
+                                        AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
+                                        AND (admin_announcement.end >= NOW() OR admin_announcement.end IS NULL)
+                                        AND admin_announcement.`date` >= ?s
+                                ) ORDER BY an_date DESC
+                         $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE, $last_month);
+    }
     if ($q) { // if announcements exist
         foreach ($q as $ann) {
-            $course_title = q(ellipsize($ann->course_title, 80));
-            $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
-            $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
-            $ann_content .= "
-            <li class='list-item'>
-                <div class='item-wholeline'>
-                        <div class='text-title'>
-                            <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-                        </div>
 
-                    <div class='text-grey'>$course_title</div>
-                    
-                    <div>$ann_date</div>
-                </div>
-            </li>";
+            if( isset($ann->code) & $ann->code !='' ) {
+
+                $course_title = q(ellipsize($ann->course_title, 80));
+                $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
+                $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
+
+                $ann_content .= "
+                    <li class='list-item'>
+                        <div class='item-wholeline'>
+                                <div class='text-title'>
+                                    <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                                </div>
+        
+                            <div class='text-grey'>$course_title</div>
+                            
+                            <div>$ann_date</div>
+                        </div>
+                    </li>";
+
+            } else {
+
+                $ann_url = $urlAppend . 'main/system_announcements/?an_id=' . $ann->id;
+                $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
+
+                $ann_content .= "
+                <li class='list-item'>
+                    <div class='item-wholeline'>
+                            <div class='text-title'>
+                                <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                            </div>
+    
+                        <div class='text-grey'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
+                        
+                        <div>$ann_date</div>
+                    </div>
+                </li>";
+
+            }
+
+
         }
         return $ann_content;
     } else {
