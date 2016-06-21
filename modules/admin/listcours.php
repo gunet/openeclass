@@ -31,7 +31,7 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
-if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {    
     $tree = new Hierarchy();
     $course = new Course();
     $user = new User();
@@ -175,8 +175,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 $show_tc = true;
                 if (is_active_tc_server($tc_type, $logs->id)) {
                     $icon_tc = 'fa-check-square-o';
+                    $link_tc = "tc=0&amp;tc_type=$tc_type";
                 } else {
                     $icon_tc = 'fa-square-o';
+                    $link_tc = "tc=1&amp;tc_type=$tc_type";
                 }
             }
         }
@@ -202,7 +204,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             array(
                 'title' => $langActivateConference,
                 'icon' => $icon_tc,
-                'url' => "$_SERVER[SCRIPT_NAME]?c=$logs->id",
+                'url' => "$_SERVER[SCRIPT_NAME]?c=$logs->id&amp;$link_tc",
                 'show' => $show_tc
             ),  
             array(
@@ -296,6 +298,22 @@ $tool_content .= "<table id='course_results_table' class='display'>
     </tr></thead>";
 
 $tool_content .= "<tbody></tbody></table>";
+
+// enable - disable tc server per course
+if (isset($_GET['tc'])) {
+    if ($_GET['tc'] == 1) {
+        $tc_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE enabled='true' AND `type` = ?s ORDER BY weight ASC", $_GET['tc_type'])->id;        
+        if ($tc_id) {
+            Database::get()->query("INSERT INTO course_external_server SET course_id=?d, external_server=?d", $_GET['c'], $tc_id);
+            Session::Messages($langTcCourseEnabled, 'alert alert-info');
+        }
+    } elseif($_GET['tc'] == 0)  {
+        Database::get()->query("DELETE FROM course_external_server WHERE course_id = ?d", $_GET['c']);
+        Session::Messages($langTcCourseDisabled, 'alert alert-info');        
+    } else {
+        redirect_to_home_page('modules/admin/index.php');
+    }
+}
 
 // edit department
 if (isset($_GET['formsearchfaculte']) and $_GET['formsearchfaculte'] and is_numeric($_GET['formsearchfaculte'])) {
