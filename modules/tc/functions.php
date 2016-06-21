@@ -1334,7 +1334,7 @@ function is_tc_server_enabled_for_all($tc_type) {
  * @return boolean
  */
 function is_active_tc_server($tc_type, $course_id) 
-{    
+{
         
     $q = Database::get()->queryArray("SELECT id, all_courses FROM tc_servers WHERE enabled='true' AND `type` = '$tc_type'");
     if (count($q) > 0) {

@@ -189,6 +189,7 @@ abstract class ExtApp {
         if ($r) {
             $tc_id = $r->id;
             Database::get()->query("UPDATE tc_session SET running_at = $tc_id");
+            Database::get()->query("UPDATE course_external_server SET external_server = $tc_id");
         }        
     }
     

@@ -274,6 +274,8 @@ $langClosedCourse = "Κλειστό $langsCourse";
 $langClosedCourses = "Κλειστά $langsCourses";
 $langRegCourse = "Απαιτείται εγγραφή";
 $langInactiveCourse = "Ανενεργό $langsCourse";
+$langTcCourseEnabled = "Η δυνατότητα τηλεσυνεργασίας ενεργοποιήθηκε.";
+$langTcCourseDisabled = "Η δυνατότητα τηλεσυνεργασίας απενεργοποιήθηκε.";
 
 // quotacours
 $langQuotaAdmin = "Διαχείριση Αποθηκευτικού Χώρου $langOfCourse";
