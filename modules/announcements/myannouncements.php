@@ -26,26 +26,23 @@ require_once 'main/perso.php';
 
 $pageName = $langMyPersoAnnouncements;
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
 
-    $announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax');
-    $announcements_filtered = getUserAnnouncements($lesson_ids, 'more', 'to_ajax', $_GET['sSearch']);
-
-    $all_announc = count($announcements);
-    $filtered_announc = count($announcements_filtered);
-    if ($limit>0) {
-        $extra_sql = 'LIMIT ?d, ?d';
-        $extra_terms = array($offset, $limit);
+    $announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax', $_GET['sSearch']);
+    $data['iTotalDisplayRecords'] =  count($announcements);
+    if (!isset($_GET['sSearch']) or $_GET['sSearch'] === '') {
+        $data['iTotalRecords'] = count(getUserAnnouncements($lesson_ids, 'more', 'to_ajax'));
     } else {
-        $extra_sql = '';
-        $extra_terms = array();
+        $data['iTotalRecords'] = $data['iTotalDisplayRecords'];
     }
 
-    $data['iTotalRecords'] = $all_announc;
-    $data['iTotalDisplayRecords'] = $filtered_announc;
+    if ($limit > 0) {
+        $announcements = array_slice($announcements, $offset, $limit);
+    }
+
     $data['aaData'] = array();
     foreach ($announcements as $myrow) {
 

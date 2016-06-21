@@ -127,7 +127,7 @@ function getUserLessonInfo($uid) {
  * @param type $param
  * @return string
  */ 
-function getUserAnnouncements($lesson_id, $type = '', $to_ajax = null, $filter = '') {
+function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null) {
 
     global $urlAppend, $dateFormatLong, $langAdminAn;
 
@@ -137,8 +137,14 @@ function getUserAnnouncements($lesson_id, $type = '', $to_ajax = null, $filter =
         $sql_append = 'LIMIT 5';
     }
 
-    $filtering = "WHERE title LIKE %$filter%;";
-    $ann_content = '';
+    if (!is_null($filter)) {
+        $admin_filter_sql = 'AND admin_announcement.title LIKE ?s';
+        $course_filter_sql = 'AND announcement.title LIKE ?s';
+        $filter_param = '%' . $filter . '%';
+    } else {
+        $admin_filter_sql = $course_filter_sql = '';
+        $filter_param = array();
+    }
 
     $last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
 
@@ -148,14 +154,13 @@ function getUserAnnouncements($lesson_id, $type = '', $to_ajax = null, $filter =
                                              admin_announcement.`date` AS an_date,
                                              admin_announcement.id                                            
                                 FROM admin_announcement
-                                WHERE   admin_announcement.visible = 1
+                                WHERE admin_announcement.visible = 1
                                         AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
                                         AND (admin_announcement.end >= NOW() OR admin_announcement.end IS NULL)
-                                        AND admin_announcement.`date` >= ?s
+                                        AND admin_announcement.`date` >= ?s $admin_filter_sql
                                  ORDER BY an_date DESC
-                         $sql_append", $last_month);
+                         $sql_append", $last_month, $filter_param);
     } else {
-
 
         $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
 
@@ -174,7 +179,7 @@ function getUserAnnouncements($lesson_id, $type = '', $to_ajax = null, $filter =
                                 AND (announcement.stop_display >= NOW() OR announcement.stop_display IS NULL)
                                 AND announcement.`date` >= ?s
                                 AND course_module.module_id = ?d
-                                AND course_module.visible = 1)
+                                AND course_module.visible = 1 $course_filter_sql)
                                 UNION 
                                 (SELECT admin_announcement.title,
                                              admin_announcement.`date` AS admin_an_date,
@@ -183,11 +188,12 @@ function getUserAnnouncements($lesson_id, $type = '', $to_ajax = null, $filter =
                                 WHERE   admin_announcement.visible = 1
                                         AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
                                         AND (admin_announcement.end >= NOW() OR admin_announcement.end IS NULL)
-                                        AND admin_announcement.`date` >= ?s
+                                        AND admin_announcement.`date` >= ?s $admin_filter_sql
                                 ) ORDER BY an_date DESC
-                         $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE, $last_month);
+                         $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE, $filter_param, $last_month, $filter_param);
     }
     if ($q && is_null($to_ajax)) { // if announcements exist
+        $ann_content = '';
         foreach ($q as $ann) {
 
             if( isset($ann->code) & $ann->code !='' ) {
