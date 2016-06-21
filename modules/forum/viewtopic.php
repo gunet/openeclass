@@ -304,7 +304,7 @@ foreach ($result as $myrow) {
     // support for math symbols
     $message = mathfilter($message, 12, "../../courses/mathimg/");
     if ($count == 0) {
-        $postTitle = "<h4 class='h4'>".q($topic_subject)."</h4>";
+        $postTitle = "<h4 class='h4'>".q($topic_subject)."</h4></br>";
     } else {
         $postTitle = "";
     }
