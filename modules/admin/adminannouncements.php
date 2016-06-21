@@ -669,6 +669,7 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
 // display admin announcements
 if ($displayAnnouncementList == true && !isset($_GET['an_id'])) {
     $tool_content .= "
+        <div class='table-responsive'>
             <table id='ann_table_admin' class='table-default'>
                 <thead>
                     <tr class='list-header'>
@@ -679,7 +680,8 @@ if ($displayAnnouncementList == true && !isset($_GET['an_id'])) {
                     </tr>
                 </thead>
                 <tbody></tbody>
-            </table>";
+            </table>
+        </div>";
 }
 
 

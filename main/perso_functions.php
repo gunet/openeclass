@@ -127,7 +127,7 @@ function getUserLessonInfo($uid) {
  * @param type $param
  * @return string
  */ 
-function getUserAnnouncements($lesson_id, $type = '') {
+function getUserAnnouncements($lesson_id, $type = '', $to_ajax = null, $filter = '') {
 
     global $urlAppend, $dateFormatLong, $langAdminAn;
 
@@ -137,8 +137,8 @@ function getUserAnnouncements($lesson_id, $type = '') {
         $sql_append = 'LIMIT 5';
     }
 
+    $filtering = "WHERE title LIKE %$filter%;";
     $ann_content = '';
-
 
     $last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
 
@@ -162,6 +162,7 @@ function getUserAnnouncements($lesson_id, $type = '') {
         $q = Database::get()->queryArray("(SELECT announcement.title,
                                              announcement.`date` AS an_date,
                                              announcement.id,
+                                             announcement.content,
                                              course.code,
                                              course.title course_title
                         FROM course, course_module, announcement
@@ -177,7 +178,7 @@ function getUserAnnouncements($lesson_id, $type = '') {
                                 UNION 
                                 (SELECT admin_announcement.title,
                                              admin_announcement.`date` AS admin_an_date,
-                                             admin_announcement.id, '', ''                                             
+                                             admin_announcement.id, admin_announcement.body AS content, '', ''                                             
                                 FROM admin_announcement
                                 WHERE   admin_announcement.visible = 1
                                         AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
@@ -186,7 +187,7 @@ function getUserAnnouncements($lesson_id, $type = '') {
                                 ) ORDER BY an_date DESC
                          $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE, $last_month);
     }
-    if ($q) { // if announcements exist
+    if ($q && is_null($to_ajax)) { // if announcements exist
         foreach ($q as $ann) {
 
             if( isset($ann->code) & $ann->code !='' ) {
@@ -210,7 +211,7 @@ function getUserAnnouncements($lesson_id, $type = '') {
 
             } else {
 
-                $ann_url = $urlAppend . 'main/system_announcements/?an_id=' . $ann->id;
+                $ann_url = $urlAppend . 'main/system_announcements.php/?an_id=' . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
 
                 $ann_content .= "
@@ -231,6 +232,12 @@ function getUserAnnouncements($lesson_id, $type = '') {
 
         }
         return $ann_content;
+    } elseif ($q && !is_null($to_ajax)) {
+        foreach ($q as $arr_q) {
+            $arr_an[] = $arr_q;
+        }
+
+        return $arr_an;
     } else {
         return '';
     }
