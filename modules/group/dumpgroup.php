@@ -34,6 +34,7 @@ $csv = new CSV();
 if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
+$csv->filename = $course_code . '_group_' . $group_name . '.csv';
 
 // dump group users
 if (isset($_GET['u']) and $_GET['u'] == 1) {

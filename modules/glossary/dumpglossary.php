@@ -29,6 +29,7 @@ $csv = new CSV();
 if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
+$csv->filename = $course_code . '_glossary.csv';
 
 $csv->outputRecord($langGlossaryTerm, $langGlossaryDefinition, $langGlossaryUrl);
 
