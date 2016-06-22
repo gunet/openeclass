@@ -193,7 +193,7 @@ if ($topic_locked == 1) {
                     'url' => "viewforum.php?course=$course_code&forum=$forum",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')                
-                ),false);
+                ));
 }
 
 if ($paging and $total > $posts_per_page) {
@@ -257,7 +257,7 @@ if ($paging and $total > $posts_per_page) {
 
 $tool_content .= "<div class='table-responsive'><table class='table-default'>
     <tr class='list-header'>
-      <th style='width:20%'>$langUserForum</th>
+      <th style='width:14%'>$langUserForum</th>
       <th>$langMessage</th>";
 if ($is_editor ) {
     $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
@@ -296,18 +296,14 @@ foreach ($result as $myrow) {
     }
     
     $tool_content .= "<td>
-                        <div>".profile_image($myrow->poster_id, '100px', 'img-responsive img-circle margin-bottom-thin'). "</div>
-                        <div>" .display_user($myrow->poster_id, false, false)."</div>
-                        <div>".$user_stats[$myrow->poster_id]."</div>
+                        <div>".profile_image($myrow->poster_id, '50px', 'img-responsive img-circle margin-bottom-thin'). "</div>
+                        <div><small>" .display_user($myrow->poster_id, false, false)."</small</div>
+                        <div><small>".$user_stats[$myrow->poster_id]."</small></div>
                       </td>";
     $message = $myrow->post_text;
     // support for math symbols
     $message = mathfilter($message, 12, "../../courses/mathimg/");
-    if ($count == 0) {
-        $postTitle = "<h4 class='h4'>".q($topic_subject)."</h4>";
-    } else {
-        $postTitle = "";
-    }
+    
 
     $rate_str = "";
     if (setting_get(SETTING_FORUM_RATING_ENABLE, $course_id)) {
@@ -332,7 +328,7 @@ foreach ($result as $myrow) {
     }
 
         $tool_content .= "<a name='".$myrow->id."'></a>".$anchor_link."</span>";
-	$tool_content .= "$postTitle<small class='text-muted'><b>$langSent:</b> " . claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time)) . "</small>
+	$tool_content .= "<small class='text-muted'><b>$langSent:</b> " . claro_format_locale_date($dateTimeFormatShort, strtotime($myrow->post_time)) . "</small>
 	  </div>
 	  <div class='forum-post-message'>$message</div><div class='forum-post-footer clearfix'><div class='pull-left'>$rate_str</div><div class='pull-right text-muted'><small>$parent_post_link</small></div>
 	</div></td>";
