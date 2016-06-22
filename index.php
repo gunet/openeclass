@@ -228,7 +228,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
 
             $('.announcement-main').each(function() {
                 $(this).trunk8({
-                    lines: '4',
+                    lines: '2',
                     fill: '&hellip;<div class=\"announcements-more\"><a href=\"main/system_announcements.php?an_id=' +
                         $(this).data('id') + '\">$langMore</a></div>'
                 });
@@ -302,7 +302,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                                                         AND lang=?s
                                                         AND (`begin` <= NOW() or `begin` IS null)
                                                         AND (NOW() <= `end` or `end` IS null)
-                                                ORDER BY `date` DESC LIMIT 5", $language);
+                                                ORDER BY `date` DESC LIMIT 3", $language);
 
     $ann_content = '';
     if ($announceArr && sizeof($announceArr) > 0) {
