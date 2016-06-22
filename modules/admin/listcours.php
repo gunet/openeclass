@@ -168,9 +168,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $tc_type = is_configured_tc_server();
         if ($tc_type == FALSE) {
             $show_tc = false;
+            $icon_tc = $link_tc = '';
         } else {
             if (is_tc_server_enabled_for_all($tc_type)) {
                 $show_tc = false;
+                $icon_tc = $link_tc = '';
             } else {                                
                 $show_tc = true;
                 if (is_active_tc_server($tc_type, $logs->id)) {
