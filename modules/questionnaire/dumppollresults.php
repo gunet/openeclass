@@ -37,13 +37,14 @@ $csv = new CSV();
 if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
-$csv->filename = "pollresults_$course_code.csv";
 
 $p = Database::get()->querySingle("SELECT pid, name, anonymized FROM poll
         WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
 if (!$p) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
+
+$csv->filename = $course_code . '_poll_results_' . ($full ? 'full_' : '') . $p->name . '.csv';
 
 $anonymized = $p->anonymized;
 $qlist = array();

@@ -40,6 +40,8 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
     if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
         $csv->setEncoding('UTF-8');
     }
+    $csv->filename = $course_code . '_user_duration.csv';
+
     $csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langDuration);
 } else {
     $format = 'html';

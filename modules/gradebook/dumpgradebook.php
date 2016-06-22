@@ -29,7 +29,7 @@ $csv = new CSV();
 if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
-$csv->filename = "list_gradebook_users_$course_code.csv";
+$csv->filename = $course_code . "_list_gradebook_users.csv";
 
 $gid = getDirectReference($_GET['gradebook_id']);
 
