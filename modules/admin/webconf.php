@@ -43,8 +43,7 @@ if (isset($_GET['delete_server'])) {
 }
 // Save new config.php
 else if (isset($_POST['submit'])) {
-    $hostname = $_POST['hostname_form'];
-    $screenshare = $_POST['screenshare_form'];
+    $hostname = $_POST['hostname_form'];    
     $enabled = $_POST['enabled'];
     $allcourses = $_POST['allcourses'];
     
@@ -52,13 +51,12 @@ else if (isset($_POST['submit'])) {
         $id = $_POST['id_form'];
         Database::get()->querySingle("UPDATE tc_servers SET 
                                             hostname = ?s,
-                                            screenshare=?s,
                                             enabled=?s,
                                             all_courses=?d
-                                        WHERE id =?d", $hostname, $screenshare, $enabled, $allcourses, $id);
+                                        WHERE id =?d", $hostname, $enabled, $allcourses, $id);
     } else {
-        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, screenshare, enabled, max_rooms, max_users, weight, all_courses) 
-                                            VALUES ('webconf', ?s, ?s, ?s, 0, 0, 1, ?d)", $hostname, $screenshare, $enabled, $allcourses);
+        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, enabled, max_rooms, max_users, weight, all_courses) 
+                                            VALUES ('webconf', ?s, ?s, ?s, 0, 0, 1, ?d)", $hostname, $enabled, $allcourses);
     }
     // Display result message
     Session::Messages($langFileUpdatedSuccess, 'alert-success');
@@ -66,7 +64,7 @@ else if (isset($_POST['submit'])) {
 } // end of if($submit)
 
 if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {    
-    $wc_id = $hostnamevalue = $hostsharescreenvalue = '';
+    $wc_id = $hostnamevalue = '';
     $adminactivate_true = "checked value='true'";
     $adminassignall_true = "checked value='1'";
     $adminactivate_false = "value='false'";
@@ -77,8 +75,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         $wc_server = $_GET['edit_server'];
         $server = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $wc_server);
         if ($server) {
-            $hostnamevalue = $server->hostname;
-            $hostsharescreenvalue = $server->screenshare;
+            $hostnamevalue = $server->hostname;            
             if ($server->enabled == 'true') {
                 $adminactivate_true = "value='true' checked ";
                 $adminactivate_false = "value='false'";
@@ -114,13 +111,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                 <div class='col-sm-9'>
                     <input class='form-control' id='host' type='text' name='hostname_form' value='$hostnamevalue'>
                 </div>
-            </div>
-            <div class='form-group'>
-                <label for='rtpm' class='col-sm-3 control-label'>$langWebConfScreenshareServer:</label>
-                <div class='col-sm-9'>
-                    <input class='form-control' id='screenshare' type='text' name='screenshare_form' value='$hostsharescreenvalue'>
-                </div>
-            </div>
+            </div>            
             <div class='form-group'>
                 <label class='col-sm-3 control-label'>$langActivate:</label>
                 <div class='col-sm-9 radio'><label><input type='radio' name='enabled' $adminactivate_true>$langYes</label></div>
@@ -140,8 +131,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         $tool_content .= "</fieldset></form></div>";    
         $tool_content .= '<script language="javaScript" type="text/javascript">
             var chkValidator  = new Validator("serverForm");
-            chkValidator.addValidation("hostname_form","req", "' . $langWebConfServerAlertHostname . '");
-            chkValidator.addValidation("screenshare_form","req", "' . $langWebConfScreenshareServerAlertHostname . '");
+            chkValidator.addValidation("hostname_form","req", "' . $langWebConfServerAlertHostname . '");            
         </script>';
 
 // Display config.php edit form
@@ -165,8 +155,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
             <table class='table-default'>
                 <thead>
                     <tr>
-                        <th class = 'text-center'>$langWebConfServer</th>
-                        <th class = 'text-center'>$langWebConfScreenshareServer</th>
+                        <th class = 'text-center'>$langWebConfServer</th>                        
                         <th class = 'text-center'>$langBBBEnabled</th>
                         <th class = 'text-center'>" . icon('fa-gears') . "</th>
                     </tr>
@@ -174,8 +163,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                 foreach ($q as $wc_server) {
                     $enabled_wc_server = ($wc_server->enabled == 'true')? $langYes : $langNo;
                     $tool_content .= "<tr>";
-                    $tool_content .= "<td>$wc_server->hostname</td>";
-                    $tool_content .= "<td>$wc_server->screenshare</td>";
+                    $tool_content .= "<td>$wc_server->hostname</td>";                    
                     $tool_content .= "<td class='text-center'>$enabled_wc_server</td>";
                     $tool_content .= "<td class='option-btn-cell'>".action_button(array(
                                                 array('title' => $langEditChange,

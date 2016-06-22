@@ -5172,11 +5172,11 @@ $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "Όνομα WebApp";
 
 // Messages for WebConf
-$langWebConf = "Ρυθμίσεις \"WebConf\" του $siteName";
-$langAddWebConfServerInfo = "Στοιχεία νέου εξυπηρετητή WebConf";
-$langUpdateWebConfServer = "Στοιχεία εξυπηρετητή WebConf";
-$langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές WebConf";
-$langWebConfServer = "WebConf server";
+$langWebConf = "Ρυθμίσεις \"Wowza\" του $siteName";
+$langAddWebConfServerInfo = "Στοιχεία νέου εξυπηρετητή Wowza";
+$langUpdateWebConfServer = "Στοιχεία εξυπηρετητή Wowza";
+$langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές Wowza";
+$langWebConfServer = "Wowza server";
 $langWebConfScreenshareServer = "Screenshare server";
-$langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της WebConf εγκατάστασης";
+$langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της Wowza εγκατάστασης";
 $langWebConfScreenshareServerAlertHostname = "Παρακαλώ πληκτρολογείστε του Screnshare εξυπηρετητή";

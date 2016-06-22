@@ -151,7 +151,7 @@ if ($appName) {
         $tool_content .= "<td style='width:90px; padding:0px;'>";
         $tool_content .= "<div class='text-center' style='padding:10px;'><a href='$urlAppend" . $app->getConfigUrl() . "''>";
         if ($app->getAppIcon() !== null) {
-            $tool_content .= "<img height='50' width='89' src='" . $app->getAppIcon() . "'/>";
+            $tool_content .= "<img height='50' width='89' src='" . $app->getAppIcon() . "'/>";            
         }                
         if ($app->isConfigured()) {
             if ($app->getName() == 'bigbluebutton') {
@@ -166,8 +166,11 @@ if ($appName) {
         } else { 
             $app_active = "<button type='button' class='btn btn-default' data-app='" . $app->getName() . "'  data-toggle='modal' data-target='#noSettings'> <i class='fa fa-warning'></i> </button>";
         }
-        $tool_content .= $app->getDisplayName() . "</a></div></td>";
-
+        $tool_content .= $app->getDisplayName() . "</a>";
+        if ($app->getName() == 'webconf') {
+            $tool_content .= "<p class='text-danger'>(Beta)</p>";
+        }
+        $tool_content .= "</div></td>";
         $tool_content .= "<td class='text-muted clearfix'><div class='extapp-dscr-wrapper'>" . $app->getShortDescription() . "</div><div class='extapp-controls'><div class='btn-group btn-group-sm'>" . $app_active . "<a href='$urlAppend" . $app->getConfigUrl() . "' class='btn btn-primary'> <i class='fa fa-sliders fw'></i> </a></div></div></td>";
         $tool_content .="</tr>";
     }

@@ -28,21 +28,19 @@
  */
 function create_webconf_jnlp_file($meeting_id)
 {
-    global $webDir, $course_code;
+    global $webDir, $course_code, $urlServer;
     
     if (!file_exists("$webDir/courses/$course_code/rooms/")) {
         make_dir("$webDir/courses/$course_code/rooms/");
     }
-    
-    $screenshare_server = Database::get()->querySingle("SELECT screenshare FROM tc_servers WHERE enabled='true'
-                                        AND `type`='webconf' ORDER BY weight ASC LIMIT 1")->screenshare;
-    
+       
     $jnlp_file = $webDir.'/courses/'.$course_code.'/rooms/'.$meeting_id.'.jnlp';
+    $jar_file = $urlServer.'modules/tc/webconf/screenshare.jar';
     
     $file = fopen($jnlp_file,"w");    
     fwrite($file,
                 "<?xml version='1.0' encoding='utf-8'?>
-                <jnlp spec='1.0+' codebase='http://delos.uoa.gr/opendelos/resources/screencast/' >
+                <jnlp spec='1.0+' codebase='".$jar_file."'>
                     <information>
                         <title>Delos ScreenShare</title>
                         <vendor>Dele Olajide</vendor>
@@ -59,7 +57,7 @@ function create_webconf_jnlp_file($meeting_id)
                     <jar href='screenshare.jar'/>
                 </resources>
                 <application-desc main-class='org.redfire.screen.ScreenShare'>
-                    <argument>".$screenshare_server."</argument> 
+                    <argument>".$jar_file."</argument> 
                     <argument>screenshare</argument> 
                     <argument>1935</argument> 
                     <argument>$meeting_id</argument> 
