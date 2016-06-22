@@ -31,7 +31,7 @@ $csv = new CSV();
 if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
-$csv->filename = "userslearningpathstats_$course_code.csv";
+$csv->filename = $course_code . "_learning_path_user_stats.csv";
 
 $csv->outputRecord($langStudent, $langAm, $langGroup, $langProgress);
 

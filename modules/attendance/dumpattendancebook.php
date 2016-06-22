@@ -29,7 +29,7 @@ $csv = new CSV();
 if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
-$csv->filename = "list_attendance_users_$course_code.csv";
+$csv->filename = $course_code . "_list_attendance_users.csv";
 
 $activities = Database::get()->queryArray("SELECT id, title
     FROM attendance_activities WHERE attendance_id = ?d",
