@@ -51,7 +51,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $data['aaData'][] = array(
                 '0' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
-                            <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=" . $myrow->code . "&an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
+                            <a href='" . $urlAppend . "modules/announcements/?course=" . $myrow->code . "&an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
                         </div>
                         <div class='table_td_body' data-id='$myrow->id'>" . standard_text_escape($myrow->content) . "</div>
                         </div>",
@@ -61,7 +61,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $data['aaData'][] = array(
                 '0' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
-                            <a href='" . $_SERVER['SCRIPT_NAME'] . "?an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
+                            <a href='" . $urlAppend . "main/system_announcements.php/?an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
                         </div>
                         <div class='table_td_body' data-id='$myrow->id'>" . standard_text_escape($myrow->content) . "</div>
                         </div>",
