@@ -4329,7 +4329,7 @@ $langSFATypeWYS = 'Type the code that you see in the App:';
 $langSFAScan = 'Scan Image:';
 $langsecondfaUpdated = '2FA settings successfully updated';
 $langAnalyticsDescription = '<p>You can connect the platform to an external web analytics service (e.g. Google
-    Analytics, Piwiki) in order to record detailed statistics and information on visitors.</p>';
+    Analytics, Piwik) in order to record detailed statistics and information on visitors.</p>';
 $langAntivirusDescription = "<p>Connection with existing Antivirus software</p>";
 $langWafDescription = "<p>Enable Web Application Firewall</p>";
 $langExerciseAttemptLeft = 'Beware! Only one attempt remaining.';

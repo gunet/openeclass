@@ -5134,7 +5134,7 @@ $langTags = 'Ετικέτες';
 // Messages for external tools
 $langAnalyticsDescription = '<p>Μπορείτε να συνδέσετε την πλατφόρμα με κάποια
     εξωτερική υπηρεσία ανάλυσης επισκέψεων (Web Analytics, π.χ. Google
-    Analytics, Piwiki) προκειμένου να διατηρούνται αναλυτικά στατιστικά
+    Analytics, Piwik) προκειμένου να διατηρούνται αναλυτικά στατιστικά
     για τους επισκέπτες.</p>';
 $langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
 <p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών $langOfCourses</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης $langsOfCourses που επίσης αναπτύσσει το GUNET.</p>";
