@@ -229,9 +229,11 @@ function loggedInMenu($rich=true) {
     array_push($sideMenuLink, $urlServer . "info/about.php");
     array_push($sideMenuImg, "fa-credit-card");
 
-    array_push($sideMenuText, $GLOBALS['langFaq']);
-    array_push($sideMenuLink, $urlServer . "info/faq.php");
-    array_push($sideMenuImg, "fa-question-circle");
+    if (faq_exist()) {
+        array_push($sideMenuText, $GLOBALS['langFaq']);
+        array_push($sideMenuLink, $urlServer . "info/faq.php");
+        array_push($sideMenuImg, "fa-question-circle");
+    }
 
     array_push($sideMenuText, $GLOBALS['langContact']);
     array_push($sideMenuLink, $urlServer . "info/contact.php");
@@ -375,9 +377,11 @@ function loggedOutMenu() {
     array_push($sideMenuLink, $urlServer . "info/about.php");
     array_push($sideMenuImg, "fa-credit-card");
 
-    array_push($sideMenuText, $GLOBALS['langFaq']);
-    array_push($sideMenuLink, $urlServer . "info/faq.php");
-    array_push($sideMenuImg, "fa-question-circle");
+    if (faq_exist()) {
+        array_push($sideMenuText, $GLOBALS['langFaq']);
+        array_push($sideMenuLink, $urlServer . "info/faq.php");
+        array_push($sideMenuImg, "fa-question-circle");
+    }
 
     array_push($sideMenuText, $GLOBALS['langContact']);
     array_push($sideMenuLink, $urlServer . "info/contact.php");

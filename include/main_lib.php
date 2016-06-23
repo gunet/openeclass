@@ -2793,6 +2793,20 @@ function getOnlineUsers() {
 }
 
 /**
+ * checks if F.A.Q. exist
+ * @return boolean
+ */
+function faq_exist() {
+    
+    $count_faq = Database::get()->querySingle("SELECT COUNT(*) AS count FROM faq")->count;
+    if ($count_faq > 0) {
+        return true;
+    } else {
+        return false;
+    }    
+}
+
+/**
  * Initialize copyright/license global arrays
  */
 function copyright_info($cid, $noImg=1) {
@@ -3928,7 +3942,3 @@ function checkSecondFactorChallenge(){
         return "";
     }
 }
-
-
-
-
