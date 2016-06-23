@@ -158,17 +158,17 @@ function createcolles($pid) {
         (pid, question_text, qtype, q_position, q_scale)
         VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles16, 5, 20, 5)->lastInsertID;
 
-    $pqid = Database::get()->query("INSERT INTO poll_question
+	$pqid = Database::get()->query("INSERT INTO poll_question
         (pid, question_text, qtype, q_position, q_scale)
-        VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles21, 5, 21, 5)->lastInsertID;
+        VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $lcolles5, 4, 21, NULL)->lastInsertID;
 
     $pqid = Database::get()->query("INSERT INTO poll_question
         (pid, question_text, qtype, q_position, q_scale)
-        VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles22, 5, 22, 5)->lastInsertID;
+        VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles17, 5, 22, 5)->lastInsertID;
 
     $pqid = Database::get()->query("INSERT INTO poll_question
         (pid, question_text, qtype, q_position, q_scale)
-        VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles23, 5, 23, 5)->lastInsertID;
+        VALUES (?d, ?s, ?d, ?d, ?d)", $pid, $qcolles18, 5, 23, 5)->lastInsertID;
 
     $pqid = Database::get()->query("INSERT INTO poll_question
         (pid, question_text, qtype, q_position, q_scale)
