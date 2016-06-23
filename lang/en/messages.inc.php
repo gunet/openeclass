@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2016-03-31 17:13:19
+// Generated 2016-05-19 12:28:21
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -433,7 +433,7 @@ $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
 Copyright © 2003 - 2011 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
 Platform ' . $siteName . ' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
-which is a complete Electronic Course Management System and is GUnet\'s
+which is a complete Electronic $langCourse Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.
 It was developed and is actively supported by the GUnet Asynchronous
 eLearning Group, and is <a href="http://download.eclass.gunet.gr" target="_blank">distributed freely</a>
@@ -494,8 +494,6 @@ $langAnnouncesDel = "Delete $langsCourse announcements";
 $langAgendaDel = "Delete $langsCourse calendar data";
 $langHideDocuments = "Hide $langsCourse documents";
 $langHideWork = "Hide $langsCourse assignments";
-$langDelWallPosts = "Delete $langsCourse wall posts";
-$langDelBlogPosts = "Delete $langsCourse blog posts";
 $langSubmitActions = "Submit Actions";
 $langOptions = "Options";
 $langRefreshSuccess = "$langCourse refresh was successful. The following actions took place:";
@@ -504,8 +502,6 @@ $langAnnDeleted = "Announcements deleted from $langsCourse";
 $langAgendaDeleted = "Calendar data deleted from $langsCourse";
 $langWorksDeleted = "Assignments deleted";
 $langDocsDeleted = "Documents deleted";
-$langBlogPostsDeleted = "Blog posts deleted from $langsCourse";
-$langWallPostsDeleted = "Wall posts deleted from $langsCourse";
 $langContactProf = "Contact $langTeachers";
 $langEmailEmpty = "Your e-mail address is empty. To contact the $langsCourse $langsTeachers,
 you must have a valid address, so that they can reply to your message. You can
@@ -794,6 +790,9 @@ $langExerciseLis = "List of exercises";
 $langResults = "Results";
 $langResultsFailed = "Failure";
 $langYourTotalScore2 = "Total score";
+$langExerciseScores1 = "HTML";
+$langExerciseScores2 = "Percentages";
+$langExerciseScores3 = "CSV";
 $langNotRecorded = "Not recorded";
 $langSubTitle = "<br><strong>Tip: </strong>If you want to add a link to a page,
 		go to that page, cut and paste its address in the
@@ -934,9 +933,9 @@ $logo = "Asynchronous eLearning Platform $siteName";
 $gunet = "$siteName Asynchronous eLearning Group";
 $introcontact = "You can contact with the Asynchronous eLearning Group of <strong>" . $siteName . "</strong> using the
  following ways:";
-$langPostMail = "Post Office Address:";
+$langPostMail = "<strong>Post Office Address:</strong>";
 $langPhone = "Telephone";
-$langFax = "Fax";
+$langFax = "<strong>Fax:</strong>";
 $langForm = "Completion Form";
 $langReturn = "Back";
 $langAddPage = "Add a page";
@@ -1905,7 +1904,6 @@ $langNameOfLang['english'] = "English";
 $langNameOfLang['french'] = "French";
 $charset = 'UTF-8';
 $dateFormatShort = "%b %d, %y";
-$dateFormatMiddle = "%d %b, %Y";
 $dateFormatLong = '%A %B %e, %Y';
 $dateTimeFormatLong = '%B %d, %Y at %I:%M %p';
 $timeNoSecFormat = '%I:%M %p';
@@ -2717,7 +2715,7 @@ $langAccountActivate = 'User Account Reactivation';
 $langAccountActivateMessage = 'The following user requests account reactivation:';
 $langphpMyAdminURL = "phpMyAdmin URL";
 $langSystemInfoURL = "System Info URL";
-$lang_restrict_teacher_owndep = "Restrict $langsCourse creation to the departments the user belongs to";
+$lang_restrict_teacher_owndep = 'Restrict $langsCourse creation to the departments the user belongs to';
 $langUpgTooOld = 'The currently installed version of Open eClass you are trying to upgrade is
 too old. Upgrade to version 3.x is only supported from version 2.2 and above.
 Please upgrade your installation to 2.2 and then to the latest version.';
@@ -2864,7 +2862,7 @@ $langErrorValidatingManifest = "File <i>manifest</i> contains errors: ";
 $langExportIMSCP = "Export to IMS CP 1.1.4 format";
 $langLostPassPending = "You've already attempted to recover the password within the last hour. Please try later.";
 $langToUser = "to user";
-$langGiveRightReviewer = "Add OpenCourses Reviewer right";
+$langGiveRightReviewer = "Reviewer right";
 $langRemoveRightReviewer = "OpenCourses Reviewer permission removal";
 $langUsersWithNoMail = "Users without email address";
 $langOldValue = "Old value";
@@ -3123,12 +3121,6 @@ $langAttendanceAutoBook = "Record attendance automatically";
 $langGradebook = "Gradebook";
 $langGradebookManagement = "Gradebook management";
 $langGradebookAddActivity = "New activity";
-$langOfGradebookActivity = "of activity";
-$langOfGradebookUsers = "of users";
-$langOfGradebookUsers = "of user";
-$langOfGradebookGroups = "of groups";
-$langOfGradebookVisibility = "of visibilty";
-$langOfGradebookSettings = "of gradebook settings";
 $langGradebookActivityDescription = "Description";
 $langGradebookActivityDate = "Activity date";
 $langGradebookActivityDate2 = "Date";
@@ -3165,10 +3157,6 @@ $langGradebookMEANS = "Values";
 $langGradebookActiveUsers = "Gradebook users";
 $langGradebookActiveUsersSemester = "Students registerd in the last six months";
 $langGradebookRange = "Gradebook range";
-$langGradebookDateRange = "date range";
-$langGradebookDateOutOf = "out of";
-$langGradebookDateIn = "in";
-$langGradebookRegistrationDateRange = "Registration date range";
 $langGradebookWeightAlert = "The weight you have entered for the activity is larger than allowed.";
 $langGradeNoBookAlert = "You cannot enter grades. Weight you have not assigned to an activity:";
 $langGradebookNewUser = "You should click on 'Submit' to create a gradebook record for the user";
@@ -3201,9 +3189,6 @@ $langParticipants = "Participants";
 $langLoading = "Loading";
 $langRemainingTime = "Remaining time";
 $langAnswerUngraded = "The answer haven't been graded yet.";
-$langAttemptActive = "Not Completed";
-$langAttemptActiveButDeadMsg = "Time constraint of this exercise has surpassed. It can be safely deleted.";
-$langAttemptActiveMsg = "The attempt is still active";
 $langAttemptCompleted = "Completed";
 $langAttemptPending = "Pending Grading";
 $langAttemptCanceled = "Canceled";
@@ -3257,7 +3242,7 @@ $langAssignmentSubsDeleted = "Assignment's submissions have been deleted";
 $langAllAssignmentSubsDeleted = "All Assignments' submissions have been deleted";
 $langDelError = "Assignment was not deleted. Please try again.";
 $langBBBConf = "$siteName Teleconference settings";
-$langAddServer = "Add server";
+$langAddBBBServer = "Add server";
 $langAddBBBServerInfo = "New BigBlueButton server info";
 $langUpdateBBBServer = "BigBlueButton server info";
 $langAvailableBBBServers = "There are no available BigBlueButton servers";
@@ -3498,8 +3483,6 @@ $langEditCatSuccess = "The category was successfully edited";
 $langDelCatSuccess = "The category was successfully deleted";
 $langImportQTI = "IMS QTI Import";
 $langIMSQTIUploadFile = "Locate IMS QTI file on your computer";
-$langDisplayResults = 'Display';
-$langExportWithAnswers = 'with full answers';
 $langModifyInQuestionPool = "only in question pool";
 $langScale = "Scale";
 $langQuestionDiffGrade = "Difficulty Grade";
@@ -3833,7 +3816,6 @@ $langNoLinkCategories = "There are no link categories";
 $langResourceBrowser = 'Resource Browser';
 $langAuthTitle = "Authentication Method Name";
 $langEmailAnnounce = "Announcement notification (CC) address";
-$langEmailBounces = 'Delivery error (bounce) address';
 $langListCalendar = "Calendar view";
 $langAttendances = "Attendances";
 $langNewAttendance = "New attendance";
@@ -3906,8 +3888,8 @@ $langEBookPages = $langEBook. ' ' .$langPages;
 $langNewEBookPage = "New Page";
 $langEBookInfoEdit = "Edit e-Books' Info/Sections";
 $langDisableModules = 'Modules';
-$langDisableModulesHelp = "You can select which modules will be disabled
-    for all $langsCourses platform-wide.";
+$langDisableModulesHelp = 'You can select which modules will be disabled
+    for all $langsCourses platform-wide.';
 $langldap_id_attr = "Attribute for student ID";
 $langcasuserstudentid = "CAS SAML attribute for student ID";
 $langPrint = "Print";
@@ -4324,7 +4306,7 @@ $langSFATypeWYS = 'Type the code that you see in the App:';
 $langSFAScan = 'Scan Image:';
 $langsecondfaUpdated = '2FA settings successfully updated';
 $langAnalyticsDescription = '<p>You can connect the platform to an external web analytics service (e.g. Google
-    Analytics, Piwik) in order to record detailed statistics and information on visitors.</p>';
+    Analytics, Piwiki) in order to record detailed statistics and information on visitors.</p>';
 $langAntivirusDescription = "<p>Connection with existing Antivirus software</p>";
 $langWafDescription = "<p>Enable Web Application Firewall</p>";
 $langExerciseAttemptLeft = 'Beware! Only one attempt remaining.';
@@ -4342,7 +4324,7 @@ $langEmailSendmail = 'Sendmail Command';
 $langShibGivenname = "Shibboleth Given Name";
 $langShibSurname = "Shibboleth Surname";
 $langShibStudentId = "Shibboleth Student ID";
-$langAnnHasPublished = "An announcement has been published for $langsCourse";
+$langAnnHasPublished = "An announcement has published in $langsCourse";
 $langor = "or";
 $langFavouriteCourse = "Favourite $langOfCourses";
 $langFavouriteCourses = "Popular $langCourses";
@@ -4375,11 +4357,11 @@ $langUpgForVersion = 'Version %s upgrades.';
 $langGroupAllowStudentUnregister = "$langsStudents allow to unregister";
 $langTypeInactive = "Inactive";
 $langWall = 'Wall';
-$langWallExtVideo = 'External video';
+$langWallYoutubeVideo = 'Youtube video';
 $langWallPostSaved = 'Post saved';
 $langWallMessageEmpty = 'Post was empty';
-$langWallExtVideoLink = 'Youtube or Vimeo video url';
-$langWallExtVideoLinkNotValid = 'Not valid YouTube or Vimeo address';
+$langWallYoutubeVideoLink = 'Youtube link address';
+$langWallYoutubeVideoLinkNotValid = 'Not valid YouTube address';
 $langNoWallPosts = "There are no wall posts in $langsOfCourse";
 $langWallUser = 'User ';
 $langWallSharedVideo = ' shared a video';
