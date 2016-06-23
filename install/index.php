@@ -66,9 +66,11 @@ if (!isset($language_codes[$lang])) {
 }
 
 if ($lang == 'el') {
-    $install_info_file = "http://wiki.openeclass.org/doku.php?id=el:install_doc";
+    $install_info_file = "http://docs.openeclass.org/doku.php?id=el:install_doc";
+    $readme_file =  "http://docs.openeclass.org/el:readme_gr";
 } else {
-    $install_info_file = "http://wiki.openeclass.org/doku.php?id=en:install_doc";
+    $install_info_file = "http://docs.openeclass.org/doku.php?id=en:install_doc";
+    $readme_file = "http://docs.openeclass.org/en:readme_gr";
 }
 
 // include_messages
@@ -563,7 +565,7 @@ elseif (isset($_POST['install1'])) {
 	<li>$langInstallBullet3</li>
 	</ul>	
 	<div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
-	<div class='smaller'>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</div></div><br />
+	<div class='smaller'>$langBeforeInstall2<a href='$readme_file' target=_blank>$langHere</a>.</div></div><br />
 	<div class='right'><input type='submit' class='btn btn-primary' name='install2' value='$langNextStep &raquo;' /></div>" .
             hidden_vars($all_vars) . "</form>\n";
     draw($tool_content);
