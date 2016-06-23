@@ -5178,5 +5178,4 @@ $langUpdateWebConfServer = "Στοιχεία εξυπηρετητή Wowza";
 $langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές Wowza";
 $langWebConfServer = "Wowza server";
 $langWebConfScreenshareServer = "Screenshare server";
-$langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της Wowza εγκατάστασης";
-$langWebConfScreenshareServerAlertHostname = "Παρακαλώ πληκτρολογείστε του Screnshare εξυπηρετητή";
+$langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της εγκατάστασης Wowza";
