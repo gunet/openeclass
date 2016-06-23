@@ -1809,7 +1809,9 @@ function updateAnnouncementSticky( $table ) {
     $arr_default = array_slice($arr_order, 0, $zero);
 
     $default_placeholders = implode(',', array_fill(0, count($arr_default), '?d'));
-    Database::get()->query("UPDATE $table SET `order` = 0 WHERE `id` IN ($default_placeholders)", $arr_default);
+    if (!empty($default_placeholders)) {
+        Database::get()->query("UPDATE $table SET `order` = 0 WHERE `id` IN ($default_placeholders)", $arr_default);
+    }
 
     $ordering = 0;
     foreach ($arr_sticky as $announcement_id) {
