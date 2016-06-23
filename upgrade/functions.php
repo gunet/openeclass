@@ -179,9 +179,9 @@ function update_assignment_submit() {
 
 // checks if admin user
 function is_admin($username, $password) {
-
+    
     global $mysqlMainDb, $session;
-
+        
     if (DBHelper::fieldExists('user', 'user_id')) {
         $user = Database::get()->querySingle("SELECT * FROM user, admin
 				WHERE admin.idUser = user.user_id AND
@@ -292,7 +292,7 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
  * @param type $lang
  */
 function upgrade_course($code, $lang) {
-
+            
     upgrade_course_2_1_3($code);
     upgrade_course_2_2($code, $lang);
     upgrade_course_2_3($code);
@@ -319,7 +319,7 @@ function upgrade_course_3_0($code, $course_id) {
     global $langUpgCourse, $mysqlMainDb, $webDir;
 
     Database::get()->query("USE `$code`");
-
+    
     // move forum tables to central db
     if (DBHelper::tableExists('forums', $code)) {
         $forumcatid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.forum_category")->max;
@@ -379,7 +379,7 @@ function upgrade_course_3_0($code, $course_id) {
     }
 
     // move video/multimedia tables to central db and drop them
-    if (DBHelper::tableExists('video_category', $code) and DBHelper::tableExists('video', $code) and DBHelper::tableExists('videolinks', $code)) {
+    if (DBHelper::tableExists('video_category', $code) and DBHelper::tableExists('video', $code) and DBHelper::tableExists('videolinks', $code)) {        
         // move video_category data
         $video_category_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video_category")->max;
         if (is_null($video_category_offset)) {
@@ -395,7 +395,7 @@ function upgrade_course_3_0($code, $course_id) {
                             SET res_id = res_id + ?d
                             WHERE units.id = res.unit_id AND course_id = ?d AND type = 'videolinkcategory'",
                     $video_category_offset, $course_id) && $ok;
-
+           
         // move video data
         $video_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video")->max;
         if (is_null($video_offset)) {
@@ -410,19 +410,19 @@ function upgrade_course_3_0($code, $course_id) {
         }
         $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.video
                         (`id`, `course_id`, `path`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + ?d, ?d, `path`, `url`, `titre`, `description`,
+                        SELECT `id` + ?d, ?d, `path`, `url`, `titre`, `description`, 
                                NULLIF(`category`, 0) + ?d,
                                COALESCE(`creator`, ''), COALESCE(`publisher`, ''),
                                `date`, `visible`, `public` FROM video ORDER by id",
                     $video_offset, $course_id, $video_category_offset) && $ok;
-
-
+        
+                
         $ok = Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + ?d
                             WHERE units.id = res.unit_id AND course_id = ?d AND type = 'video'",
                     $video_offset, $course_id) && $ok;
-
-
+   
+    
         // move videolink data
         $videolink_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.videolink")->max;
         if (is_null($videolink_offset)) {
@@ -431,18 +431,18 @@ function upgrade_course_3_0($code, $course_id) {
 
         $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.videolink
                         (`id`, `course_id`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + ?d, ?d, `url`, `titre`, `description`,
+                        SELECT `id` + ?d, ?d, `url`, `titre`, `description`, 
                                NULLIF(`category`, 0) + ?d,
                                COALESCE(`creator`, ''), COALESCE(`publisher`, ''),
                                `date`, `visible`, `public` FROM videolinks ORDER by id",
                     $videolink_offset, $course_id, $video_category_offset) && $ok;
-
+        
 
         $ok = Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + ?d
+                            SET res_id = res_id + ?d 
                             WHERE units.id = res.unit_id AND course_id = ?d AND type IN ('videolink', 'videolinks')",
                     $videolink_offset, $course_id) && $ok;
-
+        
         if ($ok) { // drop old tables
             Database::get()->query("DROP TABLE videolinks");
             Database::get()->query("DROP TABLE video_category");
@@ -480,26 +480,26 @@ function upgrade_course_3_0($code, $course_id) {
                                     is_read TINYINT NOT NULL DEFAULT 1,
                                     deleted TINYINT NOT NULL DEFAULT 1
                                     )");
-
+        
         //we use dropbox_post to fill temp table with recipients and dropbox_file with senders
         Database::get()->query("INSERT INTO dropbox_temp_index
                         (`msg_id`, `recipient_id`)
 
                         SELECT id, uploaderId FROM dropbox_file");
-
+        
         Database::get()->query("INSERT INTO dropbox_temp_index
 
                         (`msg_id`, `recipient_id`)
 
                         SELECT fileID, recipientId FROM dropbox_post");
-
+        
         //Users present at dropbox_person but not in temp haven't deleted their messages
 
         Database::get()->query("UPDATE dropbox_temp_index t
                                        INNER JOIN dropbox_person p
                                          ON t.msg_id = p.fileID AND t.recipient_id = p.personId
                                      SET deleted = ?d", 0);
-
+        
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.dropbox_index
                          (`msg_id`, `recipient_id`, `is_read`, `deleted`)
                          SELECT DISTINCT dropbox_map.new_id, dropbox_temp_index.recipient_id, dropbox_temp_index.is_read, dropbox_temp_index.deleted
@@ -794,8 +794,8 @@ function upgrade_course_3_0($code, $course_id) {
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.poll
                          (`pid`, `course_id`, `creator_id`, `name`, `creation_date`, `start_date`, `end_date`, `active`, `anonymized`)
                          SELECT `pid` + $pollid_offset, $course_id, `creator_id`, `name`, `creation_date`, `start_date`,
-                                `end_date`, `active`, `anonymized` 
-                         FROM poll ORDER BY pid") != null);
+                                `end_date`, `active`, `anonymized`
+                           FROM poll ORDER BY pid") != null);
 
         // ----- poll_question DB Table ----- //
         $pollquestionid_offset = Database::get()->querySingle("SELECT MAX(pqid) AS max FROM `$mysqlMainDb`.poll_question")->max;
@@ -883,7 +883,7 @@ function upgrade_course_3_0($code, $course_id) {
                          (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`,
                           `active`, `secret_directory`, `group_submissions`, `assign_to_specific`)
                          SELECT `id` + $assignmentid_offset, $course_id, `title`, `description`, `comments`,
-                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`, '0'
+                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`, '0' 
                                 FROM assignments ORDER BY id") != null);
 
         // ----- assigments DB Table ----- //
@@ -902,7 +902,7 @@ function upgrade_course_3_0($code, $course_id) {
                                 assignment_submit.submission_date, assignment_submit.submission_ip,
                                 assignment_submit.file_path, assignment_submit.file_name,
                                 assignment_submit.comments,
-                                CAST(REPLACE(NULLIF(assignment_submit.grade, ''), ',', '.') AS DECIMAL(10,2)),
+                                CAST(REPLACE(NULLIF(assignment_submit.grade, ''), ',', '.') AS DECIMAL(10,2)), 
                                 assignment_submit.grade_comments,
                                 assignment_submit.grade_submission_date, assignment_submit.grade_submission_ip,
                                 assignment_submit.group_id
@@ -1058,8 +1058,8 @@ function upgrade_course_3_0($code, $course_id) {
                             FROM `actions`
                             GROUP BY DATE(`date_time`), `user_id`, `module_id`", function ($row) use ($mysqlMainDb) {
         Database::get()->query("INSERT INTO `$mysqlMainDb`.`actions_daily`
-                        (`id`, `user_id`, `module_id`, `course_id`, `hits`, `duration`, `day`, `last_update`)
-                        VALUES
+                        (`id`, `user_id`, `module_id`, `course_id`, `hits`, `duration`, `day`, `last_update`) 
+                        VALUES 
                         (NULL, $row->user_id, $row->module_id, $row->course_id, $row->hits, $row->duration, '$row->day', NOW())");
     });
 
@@ -1102,14 +1102,13 @@ function upgrade_course_3_0($code, $course_id) {
                                     VALUES (".MODULE_ID_BLOG.", 0, $course_id)");
     Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
                                     VALUES (".MODULE_ID_TC.", 0, $course_id)");
-    Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
-                                    VALUES (".MODULE_ID_LTI_CONSUMER.", 0, $course_id)");
-
+    
+    
     if ($q1 and $q2) { // if everything ok drop course db
         // finally drop database
         Database::get()->query("DROP DATABASE `$code`");
     }
-
+        
     // refresh XML metadata
     Database::get()->query("USE `$mysqlMainDb`");
     require_once "modules/course_metadata/CourseXML.php";
@@ -1124,9 +1123,9 @@ function upgrade_course_3_0($code, $course_id) {
  * @param int    $course_id
  */
 function upgrade_course_3_0_rc2($code, $course_id) {
-
+    
     global $mysqlMainDb;
-
+    
     Database::get()->query("USE `$mysqlMainDb`");
     // refresh XML metadata
     require_once "modules/course_metadata/CourseXML.php";
@@ -1143,25 +1142,25 @@ function upgrade_course_3_0_rc2($code, $course_id) {
  * @param type $extramessage
  */
 function upgrade_course_2_11($code) {
-
+    
     global $langUpgCourse;
-
+       
     Database::get()->query("USE `$code`");
-
+    
     if (!DBHelper::fieldExists('video', 'category', $code)) {
         Database::get()->query("ALTER TABLE video ADD category INT(6) DEFAULT NULL AFTER description");
     }
-
+    
     if (!DBHelper::fieldExists('videolinks', 'category', $code)) {
         Database::get()->query("ALTER TABLE videolinks ADD category INT(6) DEFAULT NULL AFTER description");
     }
-
+    
     if (!DBHelper::tableExists('video_category', $code)) {
         Database::get()->query("CREATE TABLE video_category (
-            id int(6) NOT NULL auto_increment,
-            name varchar(255) NOT NULL,
-            description text DEFAULT NULL,
-            `order` int(6) NOT NULL,
+            id int(6) NOT NULL auto_increment, 
+            name varchar(255) NOT NULL, 
+            description text DEFAULT NULL, 
+            `order` int(6) NOT NULL,                
             PRIMARY KEY (id)) DEFAULT CHARACTER SET=utf8");
     }
 }
@@ -1177,7 +1176,7 @@ function upgrade_course_2_10($code, $course_id) {
     global $langUpgCourse;
 
     Database::get()->query("USE `$code`");
-
+    
     Database::get()->query("ALTER TABLE `dropbox_file` CHANGE `description` `description` TEXT");
 
     // refresh XML metadata
@@ -1196,7 +1195,7 @@ function upgrade_course_2_10($code, $course_id) {
 
 /**
  * @brief upgrade to 2.9
- * @global type $langUpgCourse*
+ * @global type $langUpgCourse* 
  * @param type $code
  * @param type $lang
  * @param type $extramessage
@@ -1206,7 +1205,7 @@ function upgrade_course_2_9($code, $lang) {
     global $langUpgCourse;
 
     Database::get()->query("USE `$code`");
-
+    
     if (!DBHelper::fieldExists('dropbox_file', 'real_filename', $code)) {
         Database::get()->query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
         Database::get()->query("UPDATE dropbox_file SET real_filename = filename");
@@ -1220,14 +1219,14 @@ function upgrade_course_2_9($code, $lang) {
  * @param type $code
  * @param type $lang
  * @param type $extramessage
- *
+ * 
  */
 function upgrade_course_2_8($code, $lang) {
 
     global $langUpgCourse, $global_messages;
 
     Database::get()->query("USE `$code`");
-
+    
     DBHelper::fieldExists('exercices', 'public', $code) or
             Database::get()->query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
     DBHelper::fieldExists('video', 'visible', $code) or
@@ -1259,7 +1258,7 @@ function upgrade_course_2_5($code, $lang) {
     global $langUpgCourse, $global_messages;
 
     Database::get()->query("USE `$code`");
-
+    
     Database::get()->query("UPDATE `accueil` SET `rubrique` = " .
             quote($global_messages['langVideo'][$lang]) . "
                         WHERE `define_var` = 'MODULE_ID_VIDEO'");
@@ -1317,9 +1316,9 @@ function upgrade_course_2_5($code, $lang) {
  */
 function upgrade_course_2_4($code, $course_id, $lang) {
     global $langUpgCourse, $mysqlMainDb, $global_messages, $webDir;
-
+    
     Database::get()->query("USE `$code`");
-
+    
     // not needed anymore
     delete_table('stat_accueil');
     delete_table('users');
@@ -1463,7 +1462,7 @@ function upgrade_course_2_3($code) {
     global $langUpgCourse;
 
     Database::get()->query("USE `$code`");
-
+    
     // upgrade exercises
     if (!DBHelper::fieldExists('exercices', 'score', $code))
         echo add_field('exercices', 'score', "TINYINT(1) NOT NULL DEFAULT '1'");
@@ -1717,7 +1716,7 @@ function fix_multiple_usernames()  {
             foreach ($q2 as $uid) {
                 while (++$i) {
                     $new_username = $uid->username . $i;
-                    // check if new username exists
+                    // check if new username exists 
                     if (!Database::get()->querySingle("SELECT user_id FROM user WHERE BINARY username = ?s", $new_username)) {
                         Database::get()->query("UPDATE user SET username = ?s WHERE user_id = ?d", $new_username, $uid->user_id);
                         $tool_content .= sprintf($langUpgradeChangeUsername, $uid->username, $new_username) . "<br>";
@@ -1740,13 +1739,13 @@ function importThemes($themes = null) {
                 while (false !== ($file_name = readdir($handle))) {
                     if ($file_name != "." && $file_name != "..") {
                         installTheme($themesDir, $file_name);
-                    }
-                }
+                    }                 
+                }                
             } else {
                 while (false !== ($file_name = readdir($handle))) {
                     if ($file_name != "." && $file_name != ".." && in_array($file_name, $themes)) {
                         installTheme($themesDir, $file_name);
-                    }
+                    }                 
                 }
             }
             closedir($handle);
@@ -1755,7 +1754,7 @@ function importThemes($themes = null) {
 }
 function installTheme($themesDir, $file_name) {
     global $webDir;
-    if (copy("$themesDir/$file_name", "$webDir/courses/theme_data/$file_name")) {
+    if (copy("$themesDir/$file_name", "$webDir/courses/theme_data/$file_name")) {                   
         $archive = new PclZip("$webDir/courses/theme_data/$file_name");
         if (!$archive->extract(PCLZIP_OPT_PATH, "$webDir/courses/theme_data/temp")) {
             die("Error : ".$archive->errorInfo(true));
@@ -1763,13 +1762,13 @@ function installTheme($themesDir, $file_name) {
             unlink("$webDir/courses/theme_data/$file_name");
             $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");
             unlink("$webDir/courses/theme_data/temp/theme_options.txt");
-            $theme_options = unserialize(base64_decode($base64_str));
+            $theme_options = unserialize(base64_decode($base64_str));                
             $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
             @rename("$webDir/courses/theme_data/temp/$theme_options->id", "$webDir/courses/theme_data/$new_theme_id");
             recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
             removeDir("$webDir/courses/theme_data/temp");
         }
-    }
+    }    
 }
 function setGlobalContactInfo() {
     global $Institution, $postaddress, $telephone, $fax;
@@ -1785,6 +1784,39 @@ function setGlobalContactInfo() {
     }
     if (!isset($fax)) {
         $fax = get_config('fax');
+    }
+}
+
+function updateAnnouncementSticky( $table ) {
+    $arr_date = Database::get()->queryArray("SELECT id FROM $table ORDER BY `date` ASC");
+    $arr_order_objects = Database::get()->queryArray("SELECT id FROM $table ORDER BY `order` ASC");
+    $arr_order = [];
+    foreach ($arr_order_objects as $key=>$value) {
+        $arr_order[$key] = $value->id;
+    }
+
+    $length = count($arr_order);
+
+    $offset = 0;
+    for ($i = 0; $i < $length; $i++) {
+        if ($arr_date[$i]->id != $arr_order[$i-$offset]) {
+            $offset++;
+        }
+    }
+
+    $zero = $length - $offset;
+    $arr_sticky = array_slice($arr_order, -$offset);
+    $arr_default = array_slice($arr_order, 0, $zero);
+
+    $default_placeholders = implode(',', array_fill(0, count($arr_default), '?d'));
+    if (!empty($default_placeholders)) {
+        Database::get()->query("UPDATE $table SET `order` = 0 WHERE `id` IN ($default_placeholders)", $arr_default);
+    }
+
+    $ordering = 0;
+    foreach ($arr_sticky as $announcement_id) {
+        $ordering++;
+        Database::get()->query("UPDATE $table SET `order` = ?d where `id`= ?d", $ordering, $announcement_id);
     }
 }
 
