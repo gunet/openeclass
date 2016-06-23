@@ -236,6 +236,12 @@ function loggedInMenu($rich=true) {
     array_push($sideMenuLink, $urlServer . "info/about.php");
     array_push($sideMenuImg, "fa-credit-card");
 
+    if (faq_exist()) {
+        array_push($sideMenuText, $GLOBALS['langFaq']);
+        array_push($sideMenuLink, $urlServer . "info/faq.php");
+        array_push($sideMenuImg, "fa-question-circle");
+    }
+
     array_push($sideMenuText, $GLOBALS['langContact']);
     array_push($sideMenuLink, $urlServer . "info/contact.php");
     array_push($sideMenuImg, "fa-phone");
@@ -391,6 +397,12 @@ function loggedOutMenu() {
     array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
     array_push($sideMenuLink, $urlServer . "info/about.php");
     array_push($sideMenuImg, "fa-credit-card");
+
+    if (faq_exist()) {
+        array_push($sideMenuText, $GLOBALS['langFaq']);
+        array_push($sideMenuLink, $urlServer . "info/faq.php");
+        array_push($sideMenuImg, "fa-question-circle");
+    }
 
     array_push($sideMenuText, $GLOBALS['langContact']);
     array_push($sideMenuLink, $urlServer . "info/contact.php");
