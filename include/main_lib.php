@@ -92,7 +92,6 @@ define('MODULE_ID_SHARING', 40);
 define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_ABUSE_REPORT', 42);
 define('MODULE_ID_WALL', 46);
-define('MODULE_ID_MINDMAP', 47);
 
 // user modules
 
