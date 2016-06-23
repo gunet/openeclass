@@ -5176,14 +5176,12 @@ $langOpenMeetingsWebApp = "Όνομα WebApp";
 $langMindmap = 'Εννοιολογικός χάρτης';
 
 // Messages for WebConf
-$langWebConf = "Ρυθμίσεις \"WebConf\" του $siteName";
-$langAddWebConfServerInfo = "Στοιχεία νέου εξυπηρετητή WebConf";
-$langUpdateWebConfServer = "Στοιχεία εξυπηρετητή WebConf";
-$langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές WebConf";
-$langWebConfServer = "WebConf server";
-$langWebConfScreenshareServer = "Screenshare server";
-$langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της WebConf εγκατάστασης";
-$langWebConfScreenshareServerAlertHostname = "Παρακαλώ πληκτρολογείστε του Screnshare εξυπηρετητή";
+$langWebConf = "Ρυθμίσεις \"Wowza\" του $siteName";
+$langAddWebConfServerInfo = "Στοιχεία νέου εξυπηρετητή Wowza";
+$langUpdateWebConfServer = "Στοιχεία εξυπηρετητή Wowza";
+$langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές Wowza";
+$langWebConfServer = "Wowza server";
+$langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της εγκατάστασης Wowza";
 
 // Messages for Lti Consumer
 $langLtiConsumer = "Εξωτερικές εφαρμογές LTI";
