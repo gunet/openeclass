@@ -5180,3 +5180,33 @@ $langWebConfServer = "Wowza server";
 $langWebConfScreenshareServer = "Screenshare server";
 $langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της Wowza εγκατάστασης";
 $langWebConfScreenshareServerAlertHostname = "Παρακαλώ πληκτρολογείστε του Screnshare εξυπηρετητή";
+
+// Mindmap
+
+$langMindmap = "Mindmap";
+$langScreenshot = "στιγμιότυπο οθόνης";
+$langOpenEx = "άνοιγμα παραδείγματος";
+$langSelectNode = "επιλογή κόμβου";
+$langClickNode = "κλικ σε κόμβο";
+$langSelectedNode = "επιλεγμένος κόμβος";
+$langToggleNode = "εναλλαγή κόμβου";
+$langEditEn = "ενεργοποίηση τροποποίησης";
+$langEditDis = "απενενεργοποίηση τροποποίησης";
+$langAddNode = "προσθήκη κόμβου";
+$langDblClickNode = "διπλό κλικ";
+$langMoveNode = "μετακίνηση κόμβου";
+$langMoveTFirstNode = "μετακίνηση στην αρχή";
+$langMoveTLastNode = "μετακίνηση στο τέλος";
+$langRemoveNode = "αφαίρεση κόμβου";
+$langSaveFile = "αποθήκευση αρχείου";
+$langSaveInDoc = "αποθήκευση στα έγγραφα";
+$langOpenFile = "άνοιγμα αρχείου";
+$langEditMind = "Τροποποίηση";
+$langToggle = "Εναλλαγή";
+$langOpenMind = "Άνοιγμα";
+$langPleaseSelectNode = "παρακαλώ επιλέξτε ένα κόμβο.";
+$langPlzClickNode = "προσπαθήστε να κάνετε κλικ σε ένα κόμβο";
+$langPlzDblClickNode = "προσπαθήστε να κάνετε διπλό κλικ σε ένα κόμβο";
+$langPlzChooseFile = "παρακαλώ επιλέξτε αρχείο";
+ 
+ 

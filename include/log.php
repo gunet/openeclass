@@ -285,6 +285,8 @@ class Log {
                 break;
             case MODULE_ID_ATTENDANCE: $content = $this->attendance_action_details($details);
                 break;
+			case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
+                break;	
             default: $content = $langUnknownModule;
                 break;
         }
