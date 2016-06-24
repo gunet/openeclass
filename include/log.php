@@ -69,7 +69,7 @@ class Log {
                                 details = ?s,
                                 action_type = ?d,
                                 ts = " . DBHelper::timeAfter() . ",
-                                ip = ?s", $userid, $course_id, $module_id, serialize($details), $action_type, $_SERVER['REMOTE_ADDR']);
+                                ip = ?s", $userid, $course_id, $module_id, serialize($details), $action_type, Log::get_client_ip());
         return;
     }
 
@@ -1233,6 +1233,27 @@ class Log {
             case LOG_LOGIN_FAILURE: return $langLoginFailures;
             case LOG_DELETE_USER: return $langUnregUsers;
             default: return $langUnknownAction;
+        }
+    }
+
+    /**
+     * Retrieve the best guess of the client's actual IP address.
+     *
+     * http://stackoverflow.com/questions/1634782/what-is-the-most-accurate-way-to-retrieve-a-users-correct-ip-address-in-php
+     *
+     * @return string IP address
+     */
+    public function get_client_ip() {
+        foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key) {
+            if (array_key_exists($key, $_SERVER)) {
+                foreach (explode(',', $_SERVER[$key]) as $ip) {
+                    $ip = trim($ip);
+
+                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
+                        return $ip;
+                    }
+                }
+            }
         }
     }
 
