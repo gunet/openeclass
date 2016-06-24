@@ -2,7 +2,7 @@
 
 /*
  * ========================================================================
- * Open eClass 3.3 - E-learning and Course Management System
+ * Open eClass 3.4 - E-learning and Course Management System
  * ========================================================================
   Copyright(c) 2003-2016  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.3.2');
+define('ECLASS_VERSION', '3.4');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
