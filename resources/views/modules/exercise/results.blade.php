@@ -21,5 +21,94 @@
         <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PENDING."'".($status === 2 ? ' selected' : '').">{{ trans('langAttemptPending') }}</option>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PAUSED."'".($status === 3 ? ' selected' : '').">{{ trans('langAttemptPaused') }}</option>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_CANCELED."'".($status === 4 ? ' selected' : '').">{{ trans('langAttemptCanceled') }}</option>
-    </select>    
+    </select>
+    @foreach ($students as $student)
+        @if (count($user_attempts[$student->id]) > 0)
+            <div class='table-responsive'>
+                <table class='table-default'>
+                    <tr>
+                        <td colspan='{{ $is_editor ? 5 : 4 }}'>
+                        @if (!$student->id)
+                            {{ trans('langNoGroupStudents') }}
+                        @else
+                            <b>{{ trans('langUser') }}:</b> 
+                            {{ $student->surname }} {{ $student->givenname }}
+                            <div class='smaller'>
+                                ({{ trans('langAm') }}: {{ $student->am ?: '-' }})
+                            </div>
+                        @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class='text-center'>{{ trans('langStart') }}</td>
+                        <th class='text-center'>{{ trans('langExerciseDuration') }}</td>
+                        <th class='text-center'>{{ trans('langTotalScore') }}</td>
+                        <th class='text-center'>{{ trans('langCurrentStatus') }}</th>
+                        @if($is_editor)
+                            <th class='text-center'>{!! icon('fa-gears') !!}</th>
+                        @endif
+                    </tr>
+                    
+                    
+        @foreach ($user_attempts[$student->id] as $attempt)
+
+                    <tr{{ $row_class }}>
+                        <td class='text-center'> {{ $attempt->record_start_date }}</td>
+                        @if ($attempt->time_duration == '00:00:00' || empty($attempt->time_duration) || $attempt->attempt_status == ATTEMPT_ACTIVE)
+                            <td class='text-center'>$langNotRecorded</td>
+                        @else
+                            <td class='text-center'>{!! format_time_duration($attempt->time_duration) !!}</td>
+                        @endif
+                        <td class='text-center'>
+                            @if ($attempt->attempt_status == ATTEMPT_COMPLETED)
+                                <!--I NEED TO ADD SOME LOGIC HERE-->
+                            @elseif ($attempt->attempt_status == ATTEMPT_PAUSED || $attempt->attempt_status == ATTEMPT_ACTIVE)
+                                -/-
+                            @else
+                                {{ $attempt->total_score }} / {{ $attempt->total_weighting }}
+                            @endif
+                        </td>
+                        <td class='text-center'>
+                        @if ($attempt->attempt_status == ATTEMPT_COMPLETED)
+                            {{ trans('langAttemptCompleted') }}
+                        @elseif ($attempt->attempt_status == ATTEMPT_PAUSED)
+                            {{ trans('langAttemptPaused') }}
+                        @elseif ($attempt->attempt_status == ATTEMPT_ACTIVE)
+                            {{ trans('langAttemptActive') }}
+                        @elseif($attempt->attempt_status == ATTEMPT_PENDING)
+                            <a href='exercise_result.php?course={{ $course_code }}&amp;eurId={{ $attempt->eurid }}'>
+                                {{ trans('langAttemptPending') }} 
+                            </a>
+                        @else
+                            {{ trans('langAttemptCanceled') }}
+                        @endif
+                        </td>
+                        @if ($is_editor)
+                                <td class='option-btn-cell'>
+                                @if($action_btn_state) { 
+                                    {!! action_button(array(
+                                        array(
+                                            'title' => trans('langDelete'),
+                                            'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$attempt->eurid",
+                                            'icon' => "fa-times",
+                                            'confirm' => trans('langQuestionCatDelConfirrm'),
+                                            'class' => 'delete'
+                                        )
+                                    )) !!}
+                                @endif
+                                </td>
+                        @endif
+
+                    </tr>
+
+        @endforeach                    
+                    
+                    
+                    
+                    
+                    
+                </table>
+            </div>
+        @endif
+    @endforeach
 @endsection
