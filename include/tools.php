@@ -633,6 +633,10 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langExtAppConfig']);
         array_push($sideMenuLink, "../admin/extapp.php");
         array_push($sideMenuImg, "fa-caret-right");
+
+        array_push($sideMenuText, $GLOBALS['langAdminCreateFaq']);
+        array_push($sideMenuLink, "../admin/faq_create.php");
+        array_push($sideMenuImg, "fa-caret-right");
         
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);
         array_push($sideMenuLink, "../admin/theme_options.php");
