@@ -95,7 +95,7 @@ function getToolsArray($cat) {
     global $course_code;
 
     $cid = course_code_to_id($course_code);
-
+var_dump($cid); die;
     switch ($cat) {
         case 'Public':
             $sql = "SELECT * FROM course_module

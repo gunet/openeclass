@@ -23,9 +23,7 @@
 require_once '../include/baseTheme.php';
 $pageName = $langFaq;
 
-      
-
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
                                 array('title' => $langFaqExpandAll,
                                       'url' => "#",
                                       'class' => 'expand',
@@ -37,6 +35,11 @@ $tool_content .= action_bar(array(
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
+
+$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
+
+view('info.faq', $data);
+exit;
 
 $faqs = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");
 
