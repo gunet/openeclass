@@ -52,7 +52,7 @@ function getSideMenu($menuTypeID, $rich=true) {
                 break;
             }
 
-        case 1: { //logged in                      
+        case 1: { //logged in
                 $menu = loggedInMenu($rich);
                 break;
             }
@@ -95,7 +95,7 @@ function getToolsArray($cat) {
     global $course_code;
 
     $cid = course_code_to_id($course_code);
-var_dump($cid); die;
+
     switch ($cat) {
         case 'Public':
             $sql = "SELECT * FROM course_module
@@ -176,7 +176,7 @@ function loggedInMenu($rich=true) {
 
     $sideMenuGroup = array();
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
-      
+
     if ((isset($is_admin) and $is_admin) or
             (isset($is_power_user) and $is_power_user) or
             (isset($is_usermanage_user) and ($is_usermanage_user)) or
@@ -194,7 +194,7 @@ function loggedInMenu($rich=true) {
             $arrMenuType['class'] = ' in';
         } else {
             $arrMenuType['class'] = '';
-        }          
+        }
         array_push($sideMenuSubGroup, $arrMenuType);
 
         if ((isset($is_admin) and $is_admin) or
@@ -249,7 +249,7 @@ function loggedInMenu($rich=true) {
     foreach ($sideMenuLink as $module_link) {
         if ($current_module_dir == module_path($module_link)) {
             $sideMenuSubGroup[0]['class'] = ' in';
-        }        
+        }
     }
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
@@ -332,15 +332,15 @@ function loggedInMenu($rich=true) {
     array_push($sideMenuText, $GLOBALS['langMyWidgets']);
     array_push($sideMenuLink, $urlServer . "main/my_widgets.php");
     array_push($sideMenuImg, "fa-magic");
-    
+
     array_push($sideMenuText, $GLOBALS['langMyStats']);
     array_push($sideMenuLink, $urlServer . "modules/usage/?t=u");
     array_push($sideMenuImg, "fa-area-chart");
-    
+
     foreach ($sideMenuLink as $module_link) {
         if ($current_module_dir == module_path($module_link)) {
             $sideMenuSubGroup[0]['class'] = ' in';
-        }        
+        }
     }
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
@@ -511,7 +511,7 @@ function adminMenu() {
     foreach ($sideMenuLink as $module_link) {
         if ($current_module_dir == module_path($module_link)) {
             $sideMenuSubGroup[0]['class'] = ' in';
-        }        
+        }
     }
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
@@ -551,13 +551,13 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langAutoEnroll']);
         array_push($sideMenuLink, '../admin/autoenroll.php');
         array_push($sideMenuImg, 'fa-caret-right');
-        
+
         foreach ($sideMenuLink as $module_link) {
             if ($current_module_dir == module_path($module_link)) {
                 $sideMenuSubGroup[0]['class'] = ' in';
-            }        
+            }
         }
-        
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
@@ -599,13 +599,13 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
         array_push($sideMenuLink, $urlServer . "upgrade/");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         foreach ($sideMenuLink as $module_link) {
             if ($current_module_dir == module_path($module_link)) {
                 $sideMenuSubGroup[0]['class'] = ' in';
-            }        
+            }
         }
-        
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
@@ -637,15 +637,15 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langAdminCreateFaq']);
         array_push($sideMenuLink, "../admin/faq_create.php");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);
         array_push($sideMenuLink, "../admin/theme_options.php");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         array_push($sideMenuText, $GLOBALS['langWidgets']);
         array_push($sideMenuLink, "../admin/widgets.php");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         array_push($sideMenuText, $GLOBALS['langDisableModules']);
         array_push($sideMenuLink, "../admin/modules.php");
         array_push($sideMenuImg, "fa-caret-right");
@@ -653,7 +653,7 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langUsage']);
         array_push($sideMenuLink, "../../modules/usage/?t=a");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         array_push($sideMenuText, $GLOBALS['langRecordLog']);
         array_push($sideMenuLink, "../admin/otheractions.php");
         array_push($sideMenuImg, "fa-caret-right");
@@ -672,13 +672,13 @@ function adminMenu() {
         $manual_language = ($language == 'el')? $language: 'en';
         array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=$manual_language:admin_doc");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         foreach ($sideMenuLink as $module_link) {
             if ($current_module_dir == module_path($module_link)) {
                 $sideMenuSubGroup[0]['class'] = ' in';
-            }        
+            }
         }
-        
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
@@ -711,7 +711,7 @@ function lessonToolsMenu($rich=true) {
     $sideMenuImg = array();
     $sideMenuID = array();
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
-    
+
     $arrMenuType = array();
     $arrMenuType['type'] = 'none';
 
@@ -766,7 +766,7 @@ function lessonToolsMenu($rich=true) {
                 continue;
             }
 
-                       
+
             // hide teleconference when no BBB, OpenMeetings or WebConf servers are enabled
             if ($mid == MODULE_ID_TC and !is_configured_tc_server()) {
                 continue;
@@ -845,7 +845,7 @@ function lessonToolsMenu($rich=true) {
                             '/?course=' . $course_code;
             if (module_path($module_link) == $current_module_dir) {
                 $sideMenuSubGroup[0]['class'] = ' in';
-            }            
+            }
             array_push($sideMenuText, $adm_mod['title']);
             array_push($sideMenuLink, q($module_link));
             array_push($sideMenuImg, $adm_mod['image']);
