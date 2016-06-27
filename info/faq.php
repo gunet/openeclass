@@ -23,6 +23,29 @@
 require_once '../include/baseTheme.php';
 $pageName = $langFaq;
 
+$head_content .= "<script type='text/javascript'>
+    $(document).ready(function() {
+      $(document).on('click', '.expand:not(.revert)', function(e) {
+        e.preventDefault();
+        $('.faq-section .panel-collapse:not(.in)').collapse('show');
+        $(this).toggleClass('revert');
+        $(this).children().eq(0).toggleClass('fa-plus-circle').toggleClass('fa-minus-circle');
+        $(this).children().eq(1).html('$langFaqCloseAll');
+      });
+      $(document).on('click', '.expand.revert', function(e) {
+        e.preventDefault();
+        $('.faq-section .panel-collapse.in').collapse('hide');
+        $(this).toggleClass('revert');
+        $(this).children().eq(0).toggleClass('fa-minus-circle').toggleClass('fa-plus-circle');
+        $(this).children().eq(1).html('$langFaqExpandAll');
+      });
+    });
+  </script>";
+
+$data['faqs'] = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");
+
+$faqCounter = 0;
+
 $data['action_bar'] = action_bar(array(
                                 array('title' => $langFaqExpandAll,
                                       'url' => "#",
@@ -40,6 +63,12 @@ $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
 
 view('info.faq', $data);
 exit;
+
+
+
+
+
+
 
 $faqs = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");
 
