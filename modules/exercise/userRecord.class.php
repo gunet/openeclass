@@ -24,6 +24,10 @@
     class userRecord {
 
         public $id;
+        public $eid;
+        public $uid;
+        public $record_start_date;
+        public $record_end_date;
         public $total_score;
         public $total_weighting;
         public $questionsList;
@@ -38,6 +42,8 @@
             $this->id = 0;
             $this->eid = 0;
             $this->uid = 0;
+            $this->record_start_date = (new DateTime('NOW'))->format('Y-m-d H:i:s');
+            $this->record_end_date = null;
             $this->total_score = 0;
             $this->total_weighting = 0;
             $this->questionsList = [];
@@ -60,17 +66,28 @@
                 $this->id = $eur->eurid;
                 $this->eid = $eur->eid;
                 $this->uid = $eur->uid;
+                $this->record_start_date = DateTime::createFromFormat('Y-m-d H:i:s', $eur->record_start_date);
+                $this->record_end_date = $eur->record_end_date ? DateTime::createFromFormat('Y-m-d H:i:s', $eur->record_end_date) : DateTime::createFromFormat('Y-m-d H:i:s', $eur->record_start_date);           
                 $this->attempt_status  = $eur->attempt_status;
                 $this->total_score = $eur->total_score;
                 $this->total_weighting = $eur->total_weighting;
-
+                $this->secs_remaining = $eur->secs_remaining;
+                $this->exercise = $this->findExercise();
+                $start_date_obj = $this->record_start_date;
+                $this->time_duration = $this->exercise->timeConstraint 
+                        ? $this->exercise->timeConstraint * 60 - $this->secs_remaining
+                        : $this->record_end_date->getTimestamp() - $this->record_start_date->getTimestamp();
+                $this->max_attempt_end_date = $this->exercise->selectTimeConstraint() 
+                        ? $start_date_obj->add(new DateInterval('PT' . $this->exercise->selectTimeConstraint() . 'M'))
+                        : $start_date_obj->add(new DateInterval('P1D'));
+                $this->answers_cnt = Database::get()->querySingle("SELECT count(*) AS answers_cnt FROM `exercise_answer_record` WHERE `eurid` = ?d", $this->id)->answers_cnt;
                 return true;
             }
 
             // question not found
             return false;
         }
-        
+    
         function questions() {
             $questionsList = [];           
             $question_ids = [];
@@ -98,7 +115,7 @@
             return $questionsList;
         }
         
-        function exercise() {
+        function findExercise() {
             $exercise_obj = new Exercise();
             if($exercise_obj->read($this->eid)) {
                 return $exercise_obj;

@@ -79,12 +79,12 @@ if (isset($_GET['eurId'])) {
         Session::Messages($langExerciseNotFound);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
-    if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status==ATTEMPT_PAUSED) {
+    if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status == ATTEMPT_PAUSED) {
        // student is not allowed to view other people's exercise results
        // Nobody can see results of a paused exercise
        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
-    $exercise = $exercise_user_record->exercise();
+    $exercise = $exercise_user_record->exercise;
 } else {
     //exercise user recird id is not set
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
