@@ -42,7 +42,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     }
 
     Database::get()->query("UPDATE `faq` SET `order`=?d WHERE `id`=?d ", $_POST['newIndex'] + 1, $_POST['toReorder']);
-    
   }
 
   exit();
@@ -71,14 +70,6 @@ if (isset($_POST['modifyFaq'])) {
     redirect_to_home_page("modules/admin/faq_create.php");
 }
 
-if (isset($_GET['faq']) && $_GET['faq'] == 'delete') {
-    $record = $_GET['id'];
-
-    Database::get()->query("DELETE FROM faq WHERE `id`=?d", $record);
-
-    Session::Messages("$langFaqDeleteSuccess", 'alert-success');
-    redirect_to_home_page("modules/admin/faq_create.php");
-}
 
 load_js('sortable/Sortable.min.js');
 
@@ -86,136 +77,8 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $toolName = $langAdminCreateFaq;
 $pageName = $langAdminCreateFaq;
 
-$tool_content = action_bar(array(
-                            array('title' => $langFaqAdd,
-                                  'url' => $_SERVER['SCRIPT_NAME'].'?faq=new',
-                                  'icon' => 'fa-plus-circle',
-                                  'level' => 'primary-label',
-                                  'button-class' => 'btn-success'),
-                            array('title' => $langFaqExpandAll,
-                                  'url' => "#",
-                                  'class' => 'expand',
-                                  'icon' => 'fa-plus-circle',
-                                  'level' => 'primary-label'),
-                            array('title' => $langBack,
-                                  'url' => $_SERVER['SCRIPT_NAME'],
-                                  'icon' => 'fa-reply',
-                                  'level' => 'primary-label')),false);
-
-if (isset($_GET['faq']) && $_GET['faq'] != 'delete') {
-
-  $submitBtn = 'submitFaq';
-  $submitBtnValue = $langSubmit;
-  $id = "";
-  $title = "";
-  $body = "";
-  
-  if ($_GET['faq'] == 'modify') {
-
-    $submitBtn = 'modifyFaq';
-    $submitBtnValue = $langSave;
-    $id = "<input type='hidden' name='id' value='$_GET[id]'>";
-
-    $faq = Database::get()->querySingle("SELECT * FROM `faq` WHERE `id`=?d", $_GET['id']);
-    $title = $faq->title;
-    $body = $faq->body;
-
-  }
-
-  $tool_content .= "
-    <div class='row'>
-        <div class='col-xs-12'>
-        <div class='form-wrapper'>
-          <form role='form' class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
-              $id
-              <div class='form-group'>
-                  <label for='question' class='col-sm-2 control-label'>$langFaqQuestion <sup><small>(<span class='text-danger'>*</span>)</small></sup>:</label>
-                  <div class='col-sm-10'>
-                      <input class='form-control' type='text' name='question' value='$title' />
-                  </div>
-              </div>
-              <div class='form-group'>
-                  <label for='answer' class='col-sm-2 control-label'>$langFaqAnswer <sup><small>(<span class='text-danger'>*</span>)</small></sup>:</label>
-                  <div class='col-sm-10'>" . rich_text_editor('answer', 5, 40, $body) . "</div>
-              </div>
-              <div class='form-group'>
-                  <div class='col-sm-offset-2 col-sm-10'>
-                      <sup><small>(<span class='text-danger'>*</span>)</small></sup> <small class='text-muted'>$langCPFFieldRequired</small>
-                  </div>
-              </div>
-              <div class='form-group'>
-                <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
-                  array(
-                      'text' => $submitBtnValue,
-                      'name' => $submitBtn,
-                      'value'=> $submitBtnValue
-                  ),
-                  array(
-                      'href' => "$_SERVER[SCRIPT_NAME]",
-                  )
-              ))."</div>
-              </div>
-          </form>
-        </div>
-      </div>
-      </div>
-  ";
-  draw($tool_content, 3, null, $head_content);
-  exit();
-
-}
-
-$faqs = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");
-
-$faqCounter = 0;
-
-$tool_content .= "
-  <div class='row'>
-      <div class='col-xs-12'>
-        <div class='panel'>
-          <div class='panel-group faq-section  list-group' id='accordion' role='tablist' aria-multiselectable='true'>";
-
-          if (count($faqs) == 0) {
-            $tool_content .= "
-
-              <div class='panel list-group-item'>
-                <div class='text-center text-muted'><em>$langFaqNoEntries</em> <br><br> <em>$langFaqAddNew</em></div>
-              </div>
-              ";
-          } else {
-
-            foreach ($faqs as $faq) {
-              $faqCounter++;
-              $tool_content .= "
-
-              <div class='panel list-group-item' data-id='$faq->id'>
-                <div class='panel-heading' role='tab' id='heading-$faq->id'>
-                  <h4 class='panel-title'>
-                    <a role='button' data-toggle='collapse' data-parent='#accordion' href='#faq-$faq->id' aria-expanded='true' aria-controls='#$faq->id'>
-                        <span class='indexing'>$faqCounter.</span>$faq->title <span class='caret'></span>
-                    </a>
-                    <a class='forDelete' href='javascript:void(0);' data-id='$faq->id' data-order='$faq->order'><span class='fa fa-times text-danger pull-right' data-toggle='tooltip' data-placement='top' title='$langDelete'></span></a>
-                    <a href='javascript:void(0);'><span class='fa fa-arrows pull-right'></span></a>
-                    <a href='$_SERVER[SCRIPT_NAME]?faq=modify&id=$faq->id'><span class='fa fa-pencil-square pull-right' data-toggle='tooltip' data-placement='top' title='$langEdit'></span></a>
-                  </h4>
-                </div>
-                <div id='faq-$faq->id' class='panel-collapse collapse' role='tabpanel' aria-labelledby='heading-$faq->id'>
-                  <div class='panel-body'>
-                    <p><strong><u>$langFaqAnswer:</u></strong></p>
-                    $faq->body
-                  </div>
-                </div>
-              </div>
-              ";
-            }
-          }
-                
-$tool_content .= "
-          </div>
-        </div>
-      </div>
-  </div>
-  <script type='text/javascript'>
+$head_content .= "
+    <script type='text/javascript'>
     $(document).ready(function() {
 
       $(document).on('click', '.expand:not(.revert)', function(e) {
@@ -283,6 +146,7 @@ $tool_content .= "
 
             var itemEl = $(evt.item);
             var idReorder = itemEl.attr('data-id');
+            console.log(idReorder);
 
             $.ajax({
               type: 'post',
@@ -294,15 +158,9 @@ $tool_content .= "
                     },
               success: function(data) {
                 $('.indexing').each(function (i){
+                    console.log(i);
                   $(this).html(i+1);
                 });
-
-             /* moreDeletes = $('.alert-success').length;
-                if (moreDeletes > 0){
-                  $('.alert-success').html('$langFaqReorderSuccess');
-                } else {
-                  $('.row.action_bar').before('<div class=\'alert alert-success\'>$langFaqReorderSuccess</div>');
-                } */
               }
             })
 
@@ -312,4 +170,51 @@ $tool_content .= "
   </script>
 ";
 
-draw($tool_content, 3, null, $head_content);
+
+$data['action_bar'] = action_bar(
+    [
+        [
+            'title' => $langFaqAdd,
+            'url' => $_SERVER['SCRIPT_NAME'].'?faq=new',
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'
+        ],
+        [
+            'title' => $langFaqExpandAll,
+            'url' => "#",
+            'class' => 'expand',
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label'
+        ],
+        [
+            'title' => $langBack,
+            'url' => $_SERVER['SCRIPT_NAME'],
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
+        ]
+    ],false);
+
+$data['faqs'] = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");
+
+$data['new'] = isset($_GET['faq']) && $_GET['faq'] == 'new';
+$data['modify'] = isset($_GET['faq']) && $_GET['faq'] == 'modify';
+
+
+if ($data['modify']) {
+    $data['submitBtn'] = 'modifyFaq';
+    $data['submitBtnValue'] = $langSave;
+    $data['id'] = $_GET['id'];
+    $data['faq_mod'] = Database::get()->querySingle("SELECT * FROM `faq` WHERE `id`=?d", $_GET['id']);
+    $data['editor'] = rich_text_editor('answer', 5, 40, $data['faq_mod']->body );
+}
+
+if ($data['new']) {
+    $data['submitBtn'] = 'submitFaq';
+    $data['submitBtnValue'] = $langSave;
+    $data['editor'] = rich_text_editor('answer', 5, 40, '' );
+}
+
+$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
+
+view('admin.other.faq_create', $data);
