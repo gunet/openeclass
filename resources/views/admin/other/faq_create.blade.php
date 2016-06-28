@@ -62,7 +62,7 @@
                                                 <span class="indexing">{{ $key+1 }}.</span>{!! $faq->title !!} <span class='caret'></span>
                                             </a>
                                             <a class='forDelete' href='javascript:void(0);' data-id='{{ $faq->id }}' data-order='{{ $faq->order }}'><span class='fa fa-times text-danger pull-right' data-toggle='tooltip' data-placement='top' title='{{ trans('langDelete') }}'></span></a>
-                                            <a href='javascript:void(0);'><span class='fa fa-arrows pull-right'></span></a>
+                                            <a href='javascript:void(0);'><span class='fa fa-arrows pull-right' data-toggle='tooltip' data-placement='top' title='{{ trans('langReorder') }}'></span></a>
                                             <a href='{{ $_SERVER['SCRIPT_NAME'] }}?faq=modify&id={{ $faq->id }}'><span class='fa fa-pencil-square pull-right' data-toggle='tooltip' data-placement='top' title='{{ trans('langEdit') }}'></span></a>
                                         </h4>
                                     </div>
