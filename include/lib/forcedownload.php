@@ -374,7 +374,9 @@ function public_path_to_disk_path($path_components, $path = '') {
                                       FROM document
                                       WHERE $group_sql AND
                                             filename = ?s AND
-                                            path LIKE '$path%' HAVING depth = $depth", $component);
+                                            path LIKE ?s 
+                                            AND (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) = ?d",
+                                    $component, $path . '%', $depth);
         if (!$r) {
             not_found('/' . implode('/', $path_components));
         }        
