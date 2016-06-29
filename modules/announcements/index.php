@@ -127,12 +127,14 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             if ($myrow->order != 0) {
                 $pinned_class = "text-danger";
                 $pinned = 0;
+                $tooltip = "data-toggle='tooltip' data-placement='top' title='$langAdminPinnedOff'";
                 if ($myrow->order != $pinned_greater) {
-                    $to_top = "<a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=1'><span class='fa fa-arrow-up  pull-right'></span></a>";
+                    $to_top = "<a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=1'><span class='fa fa-arrow-up  pull-right' data-toggle='tooltip' data-placement='top' title='$langAdminPinnedToTop'></span></a>";
                 }
             } elseif ($myrow->order == 0) {
                 $pinned_class = "not_visible";
                 $pinned = 1;
+                $tooltip = "data-toggle='tooltip' data-placement='top' title='$langAdminPinnedOn'";
             }
 
             $data['aaData'][] = array(
@@ -142,7 +144,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                         <div class='table_td_header clearfix'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&an_id=$myrow->id'>".standard_text_escape($myrow->title)."</a>
                             <a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=$pinned'>
-                                <span class='fa fa-thumb-tack $pinned_class pull-right'></span>
+                                <span class='fa fa-thumb-tack $pinned_class pull-right' $tooltip></span>
                             </a>
                             $to_top
                         </div>
@@ -171,7 +173,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         foreach ($result as $myrow) {
 
             if ($myrow->order != 0) {
-                $pinned = "<span class='fa fa-thumb-tack pull-right text-danger'></span>";
+                $pinned = "<span class='fa fa-thumb-tack pull-right text-danger' data-toggle='tooltip' data-placement='top' title='$langAdminPinned'></span>";
             } else {
                 $pinned = "";
             }
