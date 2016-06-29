@@ -89,7 +89,7 @@ $sql = "SELECT MIN(LPM.`learnPath_module_id`) AS learnPath_module_id,
          AND LPM.`module_id` = M.`module_id`
          AND M.`course_id` = ?d
     GROUP BY LPM.`module_id`
-    ORDER BY LPM.`rank`";
+    ORDER BY MIN(LPM.`rank`)";
 $moduleList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
 $extendedList = array();
