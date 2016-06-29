@@ -167,16 +167,16 @@ function commentBox($type, $mode) {
                     . $langAdd . '</a>';
             }
         } else {
-            // display comment
-            $output .= q($currentComment);
             // display edit and delete links if user as the right to see it
+            // display comment
+            $output .= standard_text_escape($currentComment);
             if ($is_editor) {
-                $output .= '&nbsp;&nbsp;&nbsp;'
-                        . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "")                        
+                $output .= ''
+                        . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "")
                         . '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=del' . $col_name . '" '
                         . ' onclick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmYourChoice) . '\')) return false;">' . "\n"
                         . icon('fa-times', $langDelete)."</a>";
-            }
+            }            
         }
     }
 
@@ -264,8 +264,6 @@ function nameBox($type, $mode, $formlabel = FALSE) {
 
         $result = Database::get()->querySingle($sql, $course_id);
         $currentName = ($result && !empty($result->name)) ? $result->name : false;
-
-        //$output .= '<strong>'
         $output .= q($currentName);
 
         if ($is_editor) {
