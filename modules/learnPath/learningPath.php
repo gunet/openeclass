@@ -144,13 +144,17 @@ if (count($fetchedList) == 0) {
 
 $extendedList = array();
 $modar = array();
-foreach ($fetchedList as $module) {
+foreach ($fetchedList as $module) {        
     $modar['learnPath_module_id'] = $module->learnPath_module_id;
     $modar['parent'] = $module->parent;
     $modar['lock'] = $module->lock;
     $modar['module_id'] = $module->module_id;
     $modar['contentType'] = $module->contentType;
-    $modar['name'] = $module->name;
+    if (empty($module->name) and $module->contentType == 'LINK') {
+        $modar['name'] = $module->path;
+    } else {
+        $modar['name'] = $module->name;    
+    }
     $modar['lesson_status'] = $module->lesson_status;
     $modar['raw'] = $module->raw;
     $modar['scoreMax'] = $module->scoreMax;
