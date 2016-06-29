@@ -180,6 +180,11 @@ if ($moduleNb > 1) {
     }
 }
 
+$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+$theme_options_styles = unserialize($theme_options->styles);
+$urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+$logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData."/".$theme_options_styles['imageUploadSmall'] : $themeimg."/eclass-new-logo-small.png" ;
 
 echo "<!DOCTYPE HTML>
 <html>
@@ -313,12 +318,12 @@ echo "<!DOCTYPE HTML>
             <div class='container-fluid'>
                 <div class='navbar-header col-xs-2'>
                   <a id='leftTOCtoggler' class='btn pull-left'><span class='fa fa-bars fa-lg'></span></a>
-                  <a id='toc_logo' class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='{$themeimg}/eclass-new-logo-small.png' alt='Logo'></a>
+                  <a id='toc_logo' class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='$logoUrl' alt='Logo'></a>
                 </div>
                 <div class='navbar-header col-xs-10 pull-right'>
                     <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
                         $prevNextString
-                        <li id='close-btn'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'>&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></li>
+                        <li id='close-btn'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'>&nbsp;</span><span class='hidden-xs'>$langLogout</span></span></a></li>
                     </ul>
                     <div class='pull-right progressbar-plr'>";
 
