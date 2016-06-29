@@ -93,6 +93,12 @@ if ($show_orphan_file and $file_path) {
     }
 }
 
+$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+$theme_options_styles = unserialize($theme_options->styles);
+$urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+$logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData."/".$theme_options_styles['imageUploadSmall'] : $themeimg."/eclass-new-logo-small.png" ;
+
 $pageName = $langEBook;
 if ($unit !== false) {
     $exit_fullscreen_link = $urlAppend . "modules/units/index.php?course=$course_code&amp;id=$unit";
@@ -179,6 +185,12 @@ if ($file_path) {
     }
 }
 
+$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+$theme_options_styles = unserialize($theme_options->styles);
+$urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+$logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData."/".$theme_options_styles['imageUploadSmall'] : $themeimg."/eclass-new-logo-small.png" ;
+
 $t = new Template();
 $t->set_root($webDir . '/template/' . $theme);
 $t->set_file('page', 'ebook_fullscreen.html');
@@ -195,6 +207,7 @@ $t->set_var('unit_parameter', $unit_parameter);
 $t->set_var('template_base', $urlAppend . 'template/' . $theme . '/');
 $t->set_var('img_base', $themeimg);
 $t->set_var('js_base', $urlAppend . 'js');
+$t->set_var('logo_img_small', $logoUrl);
 
 $t->set_var('ebook_url_base', $ebook_url_base);
 if (!$show_orphan_file) {
