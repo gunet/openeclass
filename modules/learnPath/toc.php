@@ -89,7 +89,11 @@ $modar = array();
 foreach ($result as $list) {
     $modar['module_id'] = $list->module_id;
     $modar['course_id'] = $list->course_id;
-    $modar['name'] = $list->name;
+    if (empty($list->name) and $list->contentType == 'LINK') {
+        $modar['name'] = $list->path;
+    } else {
+        $modar['name'] = $list->name;    
+    }
     $modar['comment'] = $list->comment;
     $modar['accessibility'] = $list->accessibility;
     $modar['startAsset_id'] = $list->startAsset_id;
