@@ -27,11 +27,10 @@ require_once 'include/lib/mediaresource.factory.php';
 
 $nameTools = $langMediaTypeDesc;
 
-if (isset($_GET['id'])) {
-    $id = q($_GET['id']);
+if (isset($_GET['id'])) {    
+    $row = Database::get()->querySingle("SELECT * FROM videolink WHERE course_id = ?d AND url = ?s", $course_id, $_GET['id']);
 
-    $row = Database::get()->querySingle("SELECT * FROM videolink WHERE course_id = ?d AND url = ?s", $course_id, $id);
-    if ($row) {
+    if ($row) {        
         $vObj = MediaResourceFactory::initFromVideoLink($row);
         echo MultimediaHelper::medialinkIframeObject($vObj);
     }
