@@ -317,19 +317,24 @@ function selectImage($contentType) {
  */
 
 function selectAlt($contentType) {
-    global $langDoc, $langExercise, $langAltScorm;
+    global $langDoc, $langExercise, $langAltScorm, $langOther,
+           $langLinks, $langCourseDescriptionShort, $langVideo;
 
     $altList[CTDOCUMENT_] = $langDoc;
     $altList[CTCLARODOC_] = $langDoc;
     $altList[CTEXERCISE_] = $langExercise;
     $altList[CTSCORM_] = $langAltScorm;
     $altList[CTSCORMASSET_] = $langAltScorm;
+    $altList[CTLINK_] = $langLinks;
+    $altList[CTCOURSE_DESCRIPTION_] = $langCourseDescriptionShort;
+    $altList[CTMEDIA_] = $langVideo;
+    $altList[CTMEDIALINK_] = $langLinks;
 
     if (array_key_exists($contentType, $altList)) {
         return $altList[$contentType];
     }
 
-    return "default.png";
+    return $langOther;
 }
 
 /*
