@@ -116,6 +116,7 @@ switch ($module->contentType) {
         }
 
         $moduleStartAssetPage = $furl;
+        $_SESSION['FILE_PHP__LP_MODE'] = true;
         break;
 
     case CTEXERCISE_ :
