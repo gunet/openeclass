@@ -205,10 +205,10 @@ switch ($cmd) {
         break;
 }
 
-
-$sql = "SELECT M.*, count(M.`module_id`) AS timesUsed
+$sql = "SELECT M.*, count(M.`module_id`) AS timesUsed, A.`path`
         FROM `lp_module` AS M
    LEFT JOIN `lp_rel_learnPath_module` AS LPM ON LPM.`module_id` = M.`module_id`
+   LEFT JOIN `lp_asset` AS A ON M.`startAsset_id` = A.`asset_id`
         WHERE M.`contentType` != ?s
           AND M.`contentType` != ?s
           AND M.`contentType` != ?s
@@ -220,7 +220,6 @@ $result = Database::get()->queryArray($sql, CTSCORM_, CTSCORMASSET_, CTLABEL_, $
 $atleastOne = false;
 
 $num_results = count($result);
-
 
 // Display modules of the pool of this course
 
@@ -235,14 +234,17 @@ if (!$num_results == 0) {
 foreach ($result as $list) {    
 
     //DELETE , RENAME, COMMENT
-
+    if (empty($list->name) and $list->contentType == 'LINK') {
+        $list->name = $list->path;
+    }
+    
     $contentType_img = selectImage($list->contentType);
     $contentType_alt = selectAlt($list->contentType);
     $tool_content .= "<tr><td width='1'>".icon($contentType_img, $contentType_alt)."</td>
       <td class='text-left'><b>" . q($list->name) . "</b>";
 
     if ($list->comment) {
-        $tool_content .= "<br /><small style=\"color: #a19b99;\"><b>$langComments</b>: " . $list->comment . "</small>";
+        $tool_content .= "<br /><small style='color: #a19b99;'><b>$langComments</b>: " . $list->comment . "</small>";
     }
 
     $tool_content .= "</td><td class='option-btn-cell'>";
