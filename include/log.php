@@ -1255,7 +1255,7 @@ class Log {
                 }
             }
         }
-        return $_SERVER['REMOTE_ADDR];	
+        return $_SERVER['REMOTE_ADDR'];	
     }
 
 }
