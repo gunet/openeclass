@@ -1251,7 +1251,7 @@ class Log {
                 }
             }
         }
-        if (isset($_SERVER['REMOTE_ADDR']) {
+        if (isset($_SERVER['REMOTE_ADDR'])) {
             return $_SERVER['REMOTE_ADDR'];
         } else {
             return '0.0.0.0';
