@@ -1010,6 +1010,20 @@ function upgrade_course_3_0($code, $course_id) {
                                 `q_position`, `type`
                            FROM questions ORDER BY id") != null) && $ok;
 
+        // Rename exercise question images
+        $imageBase = $webDir . '/courses/' . $code . '/image/quiz-';
+        $idList = array();
+        foreach (glob($imageBase . '*') as $imageFile) {
+            $parts = explode('-', $imageFile);
+            $idList[] = end($parts);
+        }
+        if (count($idList)) {
+            sort($idList, SORT_NUMERIC);
+            foreach (array_reverse($idList) as $id) {
+                rename($imageBase . $id, $imageBase . ($id + $questionid_offset));
+            }
+        }
+
         // ----- reponses DB Table ----- //
         $answerid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.exercise_answer")->max;
         if (is_null($answerid_offset)) {
