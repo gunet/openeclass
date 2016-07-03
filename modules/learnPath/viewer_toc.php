@@ -323,7 +323,7 @@ echo "<!DOCTYPE HTML>
                 <div class='navbar-header col-xs-10 pull-right'>
                     <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
                         $prevNextString
-                        <li id='close-btn'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'>&nbsp;</span><span class='hidden-xs'>$langLogout</span></span></a></li>
+                        <li id='close-btn'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'></span>&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></li>
                     </ul>
                     <div class='pull-right progressbar-plr'>";
 
