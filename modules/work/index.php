@@ -425,20 +425,37 @@ if ($is_editor) {
                     json: gradesChartData,
                     x: 'grade',
                     types:{
-                        percentage: 'bar'
+                        percentage: 'line'
                     },
                     axes: {percentage: 'y'},
                     names:{percentage:'%'},
                     colors:{percentage:'#e9d460'}
                 },
-                legend:{show:false},
-                bar:{width:{ratio:0.8}},
-                axis:{ x: {type:'category'}, y:{max: 100, padding:{top:0, bottom:0}}},
+                legend: {
+                        show:false
+                    },
+                bar: {
+                    width: {
+                        ratio:0.8
+                        }
+                    },
+                axis:{
+                    x: {
+                      type: 'category'
+                    }, 
+                    y: {
+                       max: 100, 
+                       min: 0, 
+                       padding: {
+                           top:0, 
+                           bottom:0
+                       }
+                   }
+                },
                 bindto: '#grades_chart'
             };
             c3.generate(options);
     }
-
     </script>";
         
         
@@ -2438,13 +2455,35 @@ function sort_link($title, $opt, $attrib = '') {
     }
 }
 
-// show assignment - prof view only
-// the optional message appears instead of assignment details
+
+/** 
+ * @brief show assignment - prof view only
+ * @brief the optional message appears instead of assignment details
+ * @global type $tool_content
+ * @global type $m
+ * @global type $langNoSubmissions
+ * @global type $langSubmissions
+ * @global type $langWorkOnlineText
+ * @global type $langGradeOk
+ * @global type $course_code
+ * @global type $langGraphResults
+ * @global type $m
+ * @global type $course_code
+ * @global array $works_url
+ * @global type $course_id
+ * @global type $langDelWarnUserAssignment
+ * @global type $langQuestionView
+ * @global type $langDelete
+ * @global type $langEditChange
+ * @global type $langAutoJudgeShowWorkResultRpt
+ * @global type $langGroupName
+ * @param type $id
+ * @param type $display_graph_results
+ */
 function show_assignment($id, $display_graph_results = false) {
-    global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions,
-    $langEndDeadline, $langWEndDeadline, $langNEndDeadline, $langWorkOnlineText,
-    $langDays, $langDaysLeft, $langGradeOk, $course_code, $webDir, $urlServer,
-    $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id,
+    global $tool_content, $m, $langNoSubmissions, $langSubmissions,
+    $langWorkOnlineText, $langGradeOk, $course_code, 
+    $langGraphResults, $m, $course_code, $works_url, $course_id,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
     $langAutoJudgeShowWorkResultRpt, $langGroupName, $langGroups;
 
@@ -2471,34 +2510,16 @@ function show_assignment($id, $display_graph_results = false) {
     } else {
         $order = 'surname';
     }
-
-    $result1 = Database::get()->queryArray("SELECT * FROM assignment_submit AS assign, user
-                                 WHERE assign.assignment_id = ?d AND user.id = assign.uid
-                                 ORDER BY ?s ?s", $id, $order, $rev);
-
-    $num_results = count($result1);
-    if ($num_results > 0) {
-        if ($num_results == 1) {
+   
+    $count_of_assignments = Database::get()->querySingle("SELECT COUNT(*) AS count_of_assignments FROM assignment_submit 
+                                 WHERE assignment_id = ?d ", $id)->count_of_assignments;    
+    if ($count_of_assignments > 0) {
+        if ($count_of_assignments == 1) {
             $num_of_submissions = $m['one_submission'];
         } else {
-            $num_of_submissions = sprintf("$m[more_submissions]", $num_results);
+            $num_of_submissions = sprintf("$m[more_submissions]", $count_of_assignments);
         }
-
-        $gradeOccurances = array(); // Named array to hold grade occurances/stats
-        $gradesExists = 0;
-        foreach ($result1 as $row) {
-            $theGrade = $row->grade;
-            if ($theGrade) {
-                $gradesExists = 1;
-                if (!isset($gradeOccurances[$theGrade])) {
-                    $gradeOccurances[$theGrade] = 1;
-                } else {
-                    if ($gradesExists) {
-                        ++$gradeOccurances[$theGrade];
-                    }
-                }
-            }
-        }
+        
         if (!$display_graph_results) {
             $group_id = 0;
             $extra_sql = '';
@@ -2520,6 +2541,7 @@ function show_assignment($id, $display_graph_results = false) {
                     $extra_sql .= " AND user.id IN ($users_sql_ready)";
                 }
             }           
+
             $result = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
                                                    assign.uid uid, assign.group_id group_id,
                                                    assign.submission_date submission_date,
@@ -2552,6 +2574,8 @@ function show_assignment($id, $display_graph_results = false) {
                                     </select>
                                 </form>
                             </div>
+                        <div class='margin-bottom-thin'>
+                            <b>$langSubmissions:</b>&nbsp; $count_of_assignments
                         </div>
                         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
                         <input type='hidden' name='grades_id' value='$id' />                        
@@ -2705,29 +2729,45 @@ function show_assignment($id, $display_graph_results = false) {
             <div class='pull-right'>
                 <button class='btn btn-primary' type='submit' name='submit_grades'>$langGradeOk</button>
             </div>
-        </form>";
-        } else {
-        // display pie chart with grades results
+            </form>";
+        } else {            
+            $result1 = Database::get()->queryArray("SELECT grade FROM assignment_submit WHERE assignment_id = ?d ORDER BY grade ASC", $id);
+            $gradeOccurances = array(); // Named array to hold grade occurances/stats
+            $gradesExists = 0;
+            foreach ($result1 as $row) {
+                $theGrade = $row->grade;
+                if ($theGrade) {
+                    $gradesExists = 1;
+                    if (!isset($gradeOccurances[$theGrade])) {
+                        $gradeOccurances[$theGrade] = 1;
+                    } else {
+                        if ($gradesExists) {
+                            ++$gradeOccurances[$theGrade];
+                        }
+                    }
+                }
+            }
+            
+            // display pie chart with grades results
             if ($gradesExists) {
                 // Used to display grades distribution chart
-                $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign, user
-                                                             WHERE assign.assignment_id = ?d AND user.id = assign.uid AND
-                                                             assign.grade <> ''", $id)->count;
+                $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign
+                                                             WHERE assign.assignment_id = ?d AND
+                                                             assign.grade <> ''", $id)->count;                                                           
                 if ($assign->grading_scale_id) {
                     $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
                     $scales = unserialize($serialized_scale_data);
                     $scale_values = array_value_recursive('scale_item_value', $scales);
-                }
+                }                
                 foreach ($gradeOccurances as $gradeValue => $gradeOccurance) {
                     $percentage = round((100.0 * $gradeOccurance / $graded_submissions_count),2);
                     if ($assign->grading_scale_id) {
                         $key = closest($gradeValue, $scale_values, true)['key'];
                         $gradeValue = $scales[$key]['scale_item_name'];
-                    }
+                    }                    
                     $this_chart_data['grade'][] = "$gradeValue";
                     $this_chart_data['percentage'][] = $percentage;
-                }
-                
+                }                                
                 $tool_content .= "<script type = 'text/javascript'>gradesChartData = ".json_encode($this_chart_data).";</script>";
                 /****   C3 plot   ****/
                 $tool_content .= "<div class='row plotscontainer'>";
@@ -2736,7 +2776,7 @@ function show_assignment($id, $display_graph_results = false) {
                 $tool_content .= "</div></div>";
             }
         }
-    } else {
+    } else { // no submissions
         $tool_content .= "
                       <p class='sub_title1'>$langSubmissions:</p>
                       <div class='alert alert-warning'>$langNoSubmissions</div>";
