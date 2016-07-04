@@ -4102,6 +4102,7 @@ $langOnBehalfOfGroupComment = 'Υποβλήθηκε από: %s, εκ μέρου�
 $langDelWarnUserAssignment = 'Επιβεβαίωση διαγραφής εργασίας ' . $langOfUser;
 $langMyPersoDeadlines = "Οι διορίες μου";
 $langAssignmentWillBeActive = 'Η εργασία θα είναι ενεργή στις';
+$langExportGrades = "Εξαγωγή βαθμολογιών";
 
 /* * ***********************************************************
  * listerqusers.php

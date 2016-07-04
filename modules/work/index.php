@@ -41,6 +41,7 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/log.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'modules/admin/extconfig/externals.php';
+require_once 'include/lib/csv.class.php';
 
 // For colorbox, fancybox, shadowbox use
 require_once 'include/lib/modalboxhelper.class.php';
@@ -481,6 +482,8 @@ if ($is_editor) {
                 show_submission_form($id, groups_with_no_submissions($id), true);
             } elseif ($choice == 'plain') {
                 show_plain_view($id);
+            } elseif ($choice == 'export') {
+                export_grades_to_csv($id);
             }
         } else {
             $pageName = $work_title;
@@ -2216,7 +2219,8 @@ function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft,
     $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
     $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
-    $langSaved, $langGraphResults, $langWorksDelConfirm, $langWorkFile, $course_id, $langEditChange;
+    $langSaved, $langGraphResults, $langWorksDelConfirm, $langWorkFile, $course_id, 
+    $langEditChange, $langExportGrades;
 
     if ($is_editor) {
         $tool_content .= action_bar(array(
@@ -2232,6 +2236,11 @@ function assignment_details($id, $row) {
                 'icon' => 'fa-file-archive-o',
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;download=$id",
                 'level' => 'primary'
+            ),
+            array(
+                'title' => $langExportGrades,
+                'icon' => 'fa-file-excel-o',
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=export"
             ),
             array(
                 'title' => $langGraphResults,
