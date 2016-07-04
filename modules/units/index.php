@@ -58,16 +58,14 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     if (isset($_POST['toReorder'])){
 
         if ($_POST['newIndex'] < $_POST['oldIndex']){
-          Database::get()->query("UPDATE `unit_resources` SET `order`=`order` + 1 WHERE `order` >= ?d AND `order` < ?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+          Database::get()->query("UPDATE `unit_resources` SET `order`=`order` + 1 WHERE `unit_id` = ?d AND `order` >= ?d AND `order` < ?d", $id, $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
         }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
-          Database::get()->query("UPDATE `unit_resources` SET `order`=`order` - 1 WHERE `order` <= ?d AND `order` > ?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+          Database::get()->query("UPDATE `unit_resources` SET `order`=`order` - 1 WHERE `unit_id` = ?d AND `order` <= ?d AND `order` > ?d", $id, $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
         }
 
-        Database::get()->query("UPDATE `unit_resources` SET `order`=?d WHERE `id`=?d ", $_POST['newIndex'] + 1, $_POST['toReorder']);
+        Database::get()->query("UPDATE `unit_resources` SET `order`=?d WHERE `unit_id` = ?d AND `id`=?d ",$_POST['newIndex'] + 1, $id, $_POST['toReorder']);
         
     }
-
-    echo
 
     exit();
 }
