@@ -132,8 +132,9 @@ foreach ($resultex as $listex) {
                   AND course_id = ?d", $insertedAsset_id, $insertedExercice_id, $course_id);
 
             insertInLearningPath($insertedExercice_id, $order);
+            Session::Messages($exercise->title . " :  " . $langExInsertedAsModule);
+            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
 
-            $messBox .= "<p>" . disp_message_box1($exercise->title . " :  " . $langExInsertedAsModule . "<br>", "success") . "</p>";
         } else {
             // exercise is already used as a module in another learning path , so reuse its reference
             // check if this is this LP that used this exercise as a module
@@ -150,7 +151,8 @@ foreach ($resultex as $listex) {
             if ($num == 0) {
                 // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 insertInLearningPath($thisExerciseModule->module_id, $order);
-                $messBox .= "<p>" . disp_message_box1(q($exercise->title) . " : " . $langExInsertedAsModule . "<br>", "success") . "</p>";
+                Session::Messages($exercise->title . " : " . $langExInsertedAsModule);
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
             } else {
                 $messBox .= "<p>" . disp_message_box1(q($listex->title) . " : " . $langExAlreadyUsed . "<br>", "caution") . "</p>";
             }

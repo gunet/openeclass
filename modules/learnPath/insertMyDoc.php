@@ -168,12 +168,10 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
                         VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $langDefaultModuleAddedComment, $order);
                 $addedDoc = $filenameDocument;
-                $InfoBox = $addedDoc . " " . $langDocInsertedAsModule . "<br />";
-                $style = "success";
-                $tool_content .= "<table class='table-default'><tr>";
-                $tool_content .= disp_message_box($InfoBox, $style);
-                $tool_content .= "</tr></table>";
-                $tool_content .= "<br />";
+
+                Session::Messages($addedDoc . " : " . $langDocInsertedAsModule);
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
+
             } else {
                 // check if this is this LP that used this document as a module
                 $sql = "SELECT * FROM `lp_rel_learnPath_module` AS LPM,

@@ -142,6 +142,8 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) {
             $nb++;
         }
     }
+    Session::Messages($langDocInsertedAsModule);
+    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
 } //end if ADD command
 //STEP ONE : display form to add module of the course that are not in this path yet
 // this is the same SELECT as "select all 'addable' modules of this course for this learning path"
