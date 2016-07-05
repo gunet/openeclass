@@ -30,7 +30,7 @@ $helpTopic = 'User';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 $toolName = $langUsers;
 $pageName = $langAddUser;

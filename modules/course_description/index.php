@@ -28,7 +28,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 // track stats
 require_once 'include/action.php';

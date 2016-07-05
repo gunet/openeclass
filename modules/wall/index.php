@@ -24,7 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/wall/wall_functions.php';
 require_once 'insert_video.php';
 require_once 'insert_doc.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 ModalBoxHelper::loadModalBox(false);
 

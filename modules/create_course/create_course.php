@@ -29,7 +29,7 @@ if ($session->status !== USER_TEACHER && !$is_departmentmanage_user) { // if we 
     redirect_to_home_page();
 }
 
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';

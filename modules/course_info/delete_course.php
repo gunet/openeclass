@@ -22,7 +22,7 @@
 $require_current_course = TRUE;
 $require_course_admin = TRUE;
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'archive_functions.php';
 
 $toolName = $langCourseInfo;

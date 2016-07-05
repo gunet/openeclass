@@ -31,7 +31,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/course_settings.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/abuse_report/abuse_report.php';

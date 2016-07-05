@@ -24,7 +24,7 @@ ini_set("error_log", $webDir . '/courses/cron.log');
 error_log("cron START");
 
 require_once 'include/lib/cronutil.class.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 session_write_close();
 
 

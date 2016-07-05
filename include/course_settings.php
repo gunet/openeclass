@@ -23,7 +23,7 @@
  * Per course settings
  */
 
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 /** Get the default value of a course setting.
  * 

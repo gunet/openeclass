@@ -26,7 +26,7 @@ $require_help = TRUE;
 $helpTopic = 'User';
 
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'include/course_settings.php';
 require_once 'include/lib/textLib.inc.php';
 

@@ -32,7 +32,7 @@ require_once 'include/lib/pwgen.inc.php';
 
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 require_once 'modules/auth/methods/hybridauth/config.php';
 require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';

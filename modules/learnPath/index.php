@@ -57,7 +57,7 @@ require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_LP);
 /* * *********************************** */
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 $style = "";
 

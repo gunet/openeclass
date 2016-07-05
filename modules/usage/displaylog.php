@@ -35,7 +35,7 @@ if (isset($_GET['from_admin'])) {
 
 $require_course_admin = true;
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 load_js('datatables');
 load_js('bootstrap-datetimepicker');

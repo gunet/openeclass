@@ -22,7 +22,7 @@
 
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 $opendelosapp = ExtAppManager::getApp(strtolower(OpenDelosApp::NAME));
 

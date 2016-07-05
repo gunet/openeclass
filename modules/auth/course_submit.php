@@ -22,7 +22,7 @@
 
 $require_login = TRUE;
 require_once '../../include/init.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 header('Content-Type: text/plain; charset=UTF-8');
 
 if (isset($_POST['cid']) and isset($_POST['state'])) {

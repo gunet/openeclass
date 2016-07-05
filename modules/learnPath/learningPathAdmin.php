@@ -57,7 +57,7 @@ $require_current_course = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 $body_action = '';
 $dialogBox = '';
