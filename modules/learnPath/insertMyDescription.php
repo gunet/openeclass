@@ -112,8 +112,7 @@ if (!$thisDocumentModule) {
     }
 }
 
-$tool_content .= "<div class='alert alert-success'>";
-$tool_content .= disp_tool_title($langLinkInsertedAsModule);
-$tool_content .= "</div>";
+Session::Messages($langLinkInsertedAsModule);
+redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
 
 draw($tool_content, 2);
