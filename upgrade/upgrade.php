@@ -3328,15 +3328,21 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '3.5', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '3.5'));
-            $resources = Database::get()->queryArray("SELECT unit_id FROM unit_resources GROUP BY unit_id");
-            foreach ($resources as $resource) {
-                $ids_change = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id=$resource->unit_id ORDER BY `order`");
+
+        // Fix multiple equal orders for the same unit if needed
+        Database::get()->queryFunc('SELECT unit_id FROM unit_resources
+            GROUP BY unit_id, `order` HAVING COUNT(`order`) > 1',
+            function ($unit) {
                 $i = 0;
-                foreach ($ids_change as $myrow) {
-                    $i++;
-                    Database::get()->query("UPDATE unit_resources SET `order` = ?d WHERE `id`=$myrow->id", $i);
-                }
-            }
+                Database::get()->queryFunc('SELECT id
+                    FROM unit_resources WHERE unit_id = ?d
+                    ORDER BY `order`, id',
+                    function ($resource) use (&$i) {
+                        $i++;
+                        Database::get()->query('UPDATE unit_resources SET `order` = ?d
+                            WHERE id = ?d', $i, $resource->id);
+                    }, $unit->unit_id);
+            });
     }
 
     // update eclass version
