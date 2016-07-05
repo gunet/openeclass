@@ -3326,6 +3326,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             INDEX `wall_post_resources_index` (`post_id`)) $charset_spec");
     }
 
+    if (version_compare($oldversion, '3.5', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.5'));
+            $resources = Database::get()->queryArray("SELECT unit_id FROM unit_resources GROUP BY unit_id");
+            foreach ($resources as $resource) {
+                $ids_change = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id=$resource->unit_id ORDER BY `order`");
+                $i = 0;
+                foreach ($ids_change as $myrow) {
+                    $i++;
+                    Database::get()->query("UPDATE unit_resources SET `order` = ?d WHERE `id`=$myrow->id", $i);
+                }
+            }
+    }
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 

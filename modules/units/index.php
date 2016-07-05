@@ -277,4 +277,5 @@ $tool_content .= "
         </div>
     </div>";
 
+
 draw($tool_content, 2, null, $head_content);
