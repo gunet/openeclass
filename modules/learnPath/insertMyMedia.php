@@ -93,8 +93,9 @@ while ($iterator <= $_POST['maxMediaForm']) {
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 reuse_module($thisLinkModule->module_id);
 
-                $dialogBox .= q($video->title) . ': ' . $langMediaInsertedAsModule . '<br>';
-                $style = "success";
+                Session::Messages($video->title . ': ' . $langMediaInsertedAsModule);
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
+
             } else {
                 $dialogBox .= q($video->title) . ': ' . $langMediaAlreadyUsed . '<br>';
                 $style = "warning";
@@ -102,8 +103,8 @@ while ($iterator <= $_POST['maxMediaForm']) {
         } else {
             create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
 
-            $dialogBox .= q($video->title) . ': ' . $langMediaInsertedAsModule . "<br>";
-            $style = "success";
+            Session::Messages($video->title . ': ' . $langMediaInsertedAsModule);
+            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
         }
     }
 
@@ -134,8 +135,8 @@ while ($iterator <= $_POST['maxMediaForm']) {
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 reuse_module($thisLinkModule->module_id);
 
-                $dialogBox .= q($videolink->title) . " : " . $langMediaInsertedAsModule . "<br />";
-                $style = "success";
+                Session::Messages($video->title . ': ' . $langMediaInsertedAsModule);
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
             } else {
                 $dialogBox .= q($videolink->title) . " : " . $langMediaAlreadyUsed . "<br />";
                 $style = "warning";
@@ -143,8 +144,8 @@ while ($iterator <= $_POST['maxMediaForm']) {
         } else {
             create_new_module($videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
 
-            $dialogBox .= q($videolink->title) . " : " . $langMediaInsertedAsModule . "<br />";
-            $style = "success";
+            Session::Messages($video->title . ': ' . $langMediaInsertedAsModule);
+            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
         }
     }
     $iterator++;
@@ -168,7 +169,7 @@ draw($tool_content, 2, null, $head_content);
  * @return string
  */
 function showmedia() {
-    global $langName, $langSelection, $langAddModulesButton, $course_code, $course_id;
+    global $langName, $langSelection, $langAddModulesButton, $course_code, $course_id, $langNoVideo;
         
     $output = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                <div class='table-responsive'>
@@ -182,7 +183,19 @@ function showmedia() {
                <tbody>";
 
     $i = 1;
+    $j = 1;
     $resultMedia = Database::get()->queryArray("SELECT * FROM video WHERE visible = 1 AND course_id = ?d ORDER BY title", $course_id);
+    $resultMediaLinks = Database::get()->queryArray("SELECT * FROM videolink WHERE visible = 1 AND course_id = ?d ORDER BY title", $course_id);
+    
+    if (empty($resultMedia) && empty($resultMediaLinks)){
+        $output .= "
+            <tr>
+                <td class='text-grey' align='center'>$langNoVideo</td>
+                <td></td>
+            </tr>
+        ";
+    }
+    
     foreach ($resultMedia as $myrow) {
         $vObj = MediaResourceFactory::initFromVideo($myrow);
 
@@ -193,9 +206,6 @@ function showmedia() {
         $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_" . $i . "' id='insertMedia_" . $i . "' value='" . $myrow->id . "' /></div></td></tr>";
         $i++;
     }
-
-    $j = 1;
-    $resultMediaLinks = Database::get()->queryArray("SELECT * FROM videolink WHERE visible = 1 AND course_id = ?d ORDER BY title", $course_id);
     foreach ($resultMediaLinks as $myrow) {
         $vObj = MediaResourceFactory::initFromVideoLink($myrow);
         $output .= "<tr>                    

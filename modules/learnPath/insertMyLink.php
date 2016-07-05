@@ -108,7 +108,8 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
 				VALUES (?d, ?d, '', ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $order);
 
-            $dialogBox .= "<div class='alert alert-success'>".q($row->title) . " : " . $langLinkInsertedAsModule . "</div>";
+            Session::Messages($row->title . " : " . $langDocInsertedAsModule);
+            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
         } else {
             // check if this is this LP that used this document as a module
             $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
@@ -132,7 +133,8 @@ while ($iterator <= $_POST['maxLinkForm']) {
 					(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
 					VALUES (?d, ?d, '', ?d,'OPEN', 1)", $_SESSION['path_id'], $thisLinkModule->module_id, $order);
 
-                $dialogBox .= "<div class='alert alert-success'>".q($row->title) . " : " . $langLinkInsertedAsModule . "</div>";                
+                Session::Messages($row->title . " : " . $langDocInsertedAsModule);
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
             } else {
                 $dialogBox .= "<div class='alert alert-warning'>".q($row->title) . " : " . $langLinkAlreadyUsed . "</div>";
             }
