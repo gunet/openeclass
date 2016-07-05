@@ -146,7 +146,9 @@ if (file_exists($disk_path)) {
         }
         
         if ($is_in_lpmode && $is_android) {
-            $dl_url = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info->path;
+            require_once 'include/lib/fileDisplayLib.inc.php';
+            //$dl_url = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . $file_info->path;
+            $dl_url = file_url($file_info->path);
             echo $langMailVerificationClick . " " . "<a href='" . $dl_url . "'>". $langDownload . "</a>";
             unset($_SESSION['FILE_PHP__LP_MODE']);
             exit();
