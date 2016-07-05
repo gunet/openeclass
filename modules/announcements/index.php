@@ -29,7 +29,7 @@ require_once 'include/lib/textLib.inc.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/action.php';

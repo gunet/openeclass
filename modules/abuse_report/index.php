@@ -22,7 +22,7 @@ $require_current_course = true;
 $require_course_admin = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'modules/message/class.msg.php';
 
 $toolName = $langAbuseReports;

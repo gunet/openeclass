@@ -26,7 +26,7 @@ $helpTopic = 'courseTools';
 $require_login = true;
 
 include '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 $toolName = $langToolManagement;
 add_units_navigation(TRUE);

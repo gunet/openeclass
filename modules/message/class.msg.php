@@ -19,7 +19,7 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 Class Msg {
     

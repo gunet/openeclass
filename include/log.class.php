@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 /**
- * @file log.php
+ * @file log.class.php
  * @author Yannis Exidaridis <jexi@noc.uoa.gr>
  * @brief defines class Log for logging actions
  */

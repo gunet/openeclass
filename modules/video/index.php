@@ -39,7 +39,7 @@ require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';

@@ -35,7 +35,7 @@
  */
 
 require_once dirname(__FILE__) . "/class.wiki.php";
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 !defined("WIKI_NOT_FOUND_ERROR") && define("WIKI_NOT_FOUND_ERROR", "Wiki not found");
 

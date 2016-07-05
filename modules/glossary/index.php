@@ -27,7 +27,7 @@ $helpTopic = 'Glossary';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 ModalBoxHelper::loadModalBox();
 

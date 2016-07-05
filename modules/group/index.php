@@ -33,7 +33,7 @@ $helpTopic = 'Group';
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
 require_once 'group_functions.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 /* * ***Required classes for wiki creation*** */
 require_once 'modules/wiki/lib/class.wiki.php';
 require_once 'modules/wiki/lib/class.wikipage.php';
