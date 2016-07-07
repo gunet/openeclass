@@ -254,7 +254,7 @@ $tool_content .= "
                     <div class='col-xs-8 col-sm-5'>
 
                     <div class='h3' style='font-size: 18px; margin: 10px 0 10px 0;'><a href='".$urlServer."main/profile/display_profile.php'>".q("$_SESSION[givenname] $_SESSION[surname]")."</a></div>
-                    <div><div class='h5'><span class='tag'>$langHierarchyNode: </span></div><span class='tag-value text-muted'>";
+                    <div><div class='h5'><span class='tag'>$langFaculty: </span></div><span class='tag-value text-muted'>";
 
                     $departments = $user->getDepartmentIds($uid);
                         $i = 1;
