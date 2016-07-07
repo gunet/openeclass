@@ -105,11 +105,18 @@ if ($uid) {
     $uidCheckString = "AND UMP.`user_id` IS NULL ";
 }
 
-$sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
-	LPM.`lock`, M.`module_id`,
-	M.`contentType`, M.`name`,
-	UMP.`lesson_status`, UMP.`raw`,
-	UMP.`scoreMax`, UMP.`credit`, A.`path`
+$sql = "SELECT 
+    MIN(LPM.`learnPath_module_id`) as learnPath_module_id,
+    MIN(LPM.`parent`) as parent,
+	MIN(LPM.`lock`) as `lock`, 
+	MIN(M.`module_id`) as module_id,
+	MIN(M.`contentType`) as contentType,
+	MIN(M.`name`) as name,
+	MIN(UMP.`lesson_status`) as lesson_status,
+	MIN(UMP.`raw`) as raw,
+	MIN(UMP.`scoreMax`) as scoreMax,
+	MIN(UMP.`credit`) as credit,
+	MIN(A.`path`) as path
         FROM (`lp_module` AS M,
 	`lp_rel_learnPath_module` AS LPM)
      LEFT JOIN `lp_user_module_progress` AS UMP
@@ -123,7 +130,7 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
             AND LPM.`module_id` = M.`module_id`
             AND M.`course_id` = ?d
        GROUP BY LPM.`module_id`
-       ORDER BY LPM.`rank`";
+       ORDER BY MIN(LPM.`rank`)";
 
 $fetchedList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
