@@ -140,7 +140,7 @@ $tool_content .= action_bar(array(
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'
             )
-        ));
+        ),false);
 
 if (count($fetchedList) == 0) {
     $tool_content .= "<div class='alert alert-warning'>$langNoModule</div>";
