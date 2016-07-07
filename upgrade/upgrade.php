@@ -3296,7 +3296,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
 
         updateAnnouncementSticky("announcement");
-        updateAnnouncementSticky("admin_announcement");
+        updateAnnouncementAdminSticky("admin_announcement");
 
         //Create FAQ table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `faq` (

@@ -1801,7 +1801,7 @@ function setGlobalContactInfo() {
     }
 }
 
-function updateAnnouncementSticky( $table ) {
+function updateAnnouncementAdminSticky( $table ) {
     $arr_date = Database::get()->queryArray("SELECT id FROM $table ORDER BY `date` ASC");
     $arr_order_objects = Database::get()->queryArray("SELECT id FROM $table ORDER BY `order` ASC");
     $arr_order = [];
@@ -1831,6 +1831,42 @@ function updateAnnouncementSticky( $table ) {
     foreach ($arr_sticky as $announcement_id) {
         $ordering++;
         Database::get()->query("UPDATE $table SET `order` = ?d where `id`= ?d", $ordering, $announcement_id);
+    }
+}
+
+function updateAnnouncementSticky( $table ) {
+    $courses = Database::get()->queryArray("SELECT course_id FROM $table GROUP BY course_id");
+    foreach ($courses as $course) {
+        $arr_date = Database::get()->queryArray("SELECT id FROM $table WHERE course_id = $course->course_id ORDER BY `date` ASC");
+        $arr_order_objects = Database::get()->queryArray("SELECT id FROM $table WHERE course_id = $course->course_id ORDER BY `order` ASC");
+        $arr_order = [];
+        foreach ($arr_order_objects as $key => $value) {
+            $arr_order[$key] = $value->id;
+        }
+
+        $length = count($arr_order);
+
+        $offset = 0;
+        for ($i = 0; $i < $length; $i++) {
+            if ($arr_date[$i]->id != $arr_order[$i - $offset]) {
+                $offset++;
+            }
+        }
+
+        $zero = $length - $offset;
+        $arr_sticky = array_slice($arr_order, -$offset);
+        $arr_default = array_slice($arr_order, 0, $zero);
+
+        $default_placeholders = implode(',', array_fill(0, count($arr_default), '?d'));
+        if (!empty($default_placeholders)) {
+            Database::get()->query("UPDATE $table SET `order` = 0 WHERE `id` IN ($default_placeholders)", $arr_default);
+        }
+
+        $ordering = 0;
+        foreach ($arr_sticky as $announcement_id) {
+            $ordering++;
+            Database::get()->query("UPDATE $table SET `order` = ?d WHERE `id`= ?d", $ordering, $announcement_id);
+        }
     }
 }
 
