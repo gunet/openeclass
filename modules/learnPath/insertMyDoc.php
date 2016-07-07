@@ -205,8 +205,9 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
         }
     }
 }
-if (!empty($confirmation))
-    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
+if (!empty($confirmation)) {
+    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
+}
 
 /* ======================================
   DEFINE CURRENT DIRECTORY

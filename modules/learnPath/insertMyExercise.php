@@ -75,6 +75,8 @@ $tool_content .=
 // see checked exercises to add
 $resultex = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1", $course_id);
 
+$confirmation = [];
+
 // for each exercise checked, try to add it to the learning path.
 foreach ($resultex as $listex) {
     if (isset($_REQUEST['insertExercise']) && isset($_REQUEST['check_' . $listex->id])) {  //add
@@ -132,8 +134,9 @@ foreach ($resultex as $listex) {
                   AND course_id = ?d", $insertedAsset_id, $insertedExercice_id, $course_id);
 
             insertInLearningPath($insertedExercice_id, $order);
-            Session::Messages($exercise->title . " :  " . $langExInsertedAsModule);
-            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
+
+            $confirmation[] = $exercise->title . " :  " . $langExInsertedAsModule;
+            Session::Messages($confirmation);
 
         } else {
             // exercise is already used as a module in another learning path , so reuse its reference
@@ -151,19 +154,19 @@ foreach ($resultex as $listex) {
             if ($num == 0) {
                 // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 insertInLearningPath($thisExerciseModule->module_id, $order);
-                Session::Messages($exercise->title . " : " . $langExInsertedAsModule);
-                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
+
+                $confirmation[] = $exercise->title . " : " . $langExInsertedAsModule;
+                Session::Messages($confirmation);
             } else {
-                $messBox .= "<p>" . disp_message_box1(q($listex->title) . " : " . $langExAlreadyUsed . "<br>", "caution") . "</p>";
+                $confirmation[] = $listex->title . " : " . $langExAlreadyUsed;
+                Session::Messages($confirmation);
             }
         }
     } // end if request
 } //end while
 
-if(!empty($messBox)) {
-    $tool_content .= "<div class='alert alert-warning'>";
-    $tool_content .= $messBox;
-    $tool_content .= "</div>";
+if (!empty($confirmation)) {
+    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
 }
 
 //STEP ONE : display form to add an exercise
