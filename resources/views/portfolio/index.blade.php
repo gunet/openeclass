@@ -124,7 +124,7 @@
                             </div>
                             <div>
                                 <div class='h5'>
-                                    <span class='tag'>{{ trans('langHierarchyNode') }}: </span>
+                                    <span class='tag'>{{ trans('langFaculty') }}: </span>
                                 </div>
                                 <span class='tag-value text-muted'>
                                     @foreach ($departments as $key => $dep)

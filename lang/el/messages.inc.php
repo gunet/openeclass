@@ -1121,7 +1121,7 @@ $langVideoText = "Παράδειγμα ενός αρχείου RealVideo. Μπο
 $langGoogle = "Μηχανή αναζήτησης";
 $langIntroductionText = "Εισαγωγικό κείμενο του $langsOfCourse. Αντικαταστήστε το με το δικό σας, κάνοντας κλίκ στην <strong>Αλλαγή</strong>.";
 $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία το $langsCourse με τίτλο ";
-$langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές σχολές ή τμήματα. Παρακαλώ ξαναπροσπαθήστε.";
+$langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές $langsFaculties. Παρακαλώ ξαναπροσπαθήστε.";
 
 $langAttendance = "Παρουσιολόγιο";
 $langAttendances = "Παρουσιολόγια";
@@ -1847,30 +1847,28 @@ $langGreekCode = "Ο κωδικός που βάλατε περιέχει μη λ
  * ********************************************* */
 $langEditNodeSuccess = "Η επεξεργασία πραγματοποιήθηκε επιτυχώς!";
 $langEmptyNodeName = "Αφήσατε το όνομα κενό! Δοκιμάστε ξανά";
-$langHierarchyActions = "Κατάλογος Σχολών - Τμημάτων - Ενέργειες";
-$langHierarchyNodes = "Σχολές - Τμήματα";
-$langHierarchyNode = "Σχολή - Τμήμα";
+$langHierarchyActions = "Κατάλογος $langOfFaculties - Ενέργειες";
 $langNCodeExists = "Ο κωδικός που βάλατε υπάρχει ήδη! Δοκιμάστε ξανά επιλέγοντας διαφορετικό";
-$langNodeAdd = "Επιλογή Σχολής - Τμήματος";
-$langNodeDel = "Διαγραφή Σχολής - Τμήματος";
-$langNodeEdit = "Επεξεργασία Σχολής - Τμήματος";
-$langNodeCode1 = "Κωδικός Σχολής - Τμήματος";
-$langNodeName = "Όνομα Σχολής - Τμήματος";
-$langNodeParent = "Γονική Σχολή - Τμήμα";
-$langNodeParent2 = "(στην οποία θα ανήκει η σχολή - τμήμα που επεξεργάζεστε)";
+$langNodeAdd = "Επιλογή $langOfFaculty";
+$langNodeDel = "Διαγραφή $langOfFaculty";
+$langNodeEdit = "Επεξεργασία $langOfFaculty";
+$langNodeCode1 = "Κωδικός $langOfFaculty";
+$langNodeName = "Όνομα $langOfFaculty";
+$langNodeParent = "Γονική $langFaculty";
+$langNodeParent2 = "(στην οποία θα ανήκει η $langsFaculty που επεξεργάζεστε)";
 $langNodeAllowCourse = "Εγγραφή $langsOfCourses";
-$langNodeAllowCourse2 = "(έλεγχος αν θα μπορούν να ανήκουν $langsCourses στη σχολή - τμήμα)";
+$langNodeAllowCourse2 = "(έλεγχος αν θα μπορούν να ανήκουν $langsCourses στη $langsFaculty)";
 $langNodeAllowUser = "Εγγραφή χρηστών";
-$langNodeAllowUser2 = "(έλεγχος αν θα μπορούν να ανήκουν χρήστες στη σχολή - τμήμα)";
+$langNodeAllowUser2 = "(έλεγχος αν θα μπορούν να ανήκουν χρήστες στη $langsFaculty)";
 $langNodeOrderPriority = "Προτεραιότητα Ταξινόμησης";
 $langNodeOrderPriority2 = "(όσο ψηλότερη τιμή, τόσο ψηλότερα στην ταξινόμηση)";
-$langNodeProErase = "Υπάρχουν $langsCourses ή χρήστες που ανήκουν σε αυτόν τον κόμβο (σχολή/τμήμα) ή στα παιδιά του!";
-$langNodeNoErase = "Η διαγραφή της σχολής - τμήματος δεν είναι δυνατή.";
-$langNodeErase = "Η σχολή - τμήμα διαγράφηκε!";
+$langNodeProErase = "Υπάρχουν $langsCourses ή χρήστες που ανήκουν σε αυτόν τον κόμβο ($langsFaculty) ή στα παιδιά του!";
+$langNodeNoErase = "Η διαγραφή της $langsOfFaculty δεν είναι δυνατή.";
+$langNodeErase = "Η $langsFaculty διαγράφηκε!";
 $langReturnToAddNode = "Επιστροφή στην προσθήκη";
-$langReturnToEditNode = "Επιστροφή στην επεξεργασία σχολή - τμήματος";
+$langReturnToEditNode = "Επιστροφή στην επεξεργασία $langsOfFaculty";
 $langEmptyNodeSelect = "Παρακαλώ κάντε μια επιλογή από τη λίστα και μετά πατήστε Επιλογή";
-$langEmptyAddNode = "Παρακαλώ επιλέξτε Σχολή/Τμήμα και ξαναπροσπαθήστε";
+$langEmptyAddNode = "Παρακαλώ επιλέξτε $langFaculty και ξαναπροσπαθήστε";
 
 /* * *************************************************************
  * grades.php
@@ -2084,7 +2082,7 @@ $lang_forgot_pass = "Ξεχάσατε το συνθηματικό σας;";
 $langNewAnnounce = "Νέα!";
 $langUnregUser = "Διαγραφή λογαριασμού";
 $langListCourses = "$langCourses";
-$langHierarchy = "Ιεραρχία Τμημάτων";
+$langHierarchy = "Ιεραρχία $langOfFaculties";
 $langAsynchronous = "Ομάδα Ασύγχρονης Τηλεκπαίδευσης";
 $langUserLogin = "Σύνδεση χρήστη";
 $langAdminLoginPage = "Σύνδεση διαχειριστή";
@@ -2107,7 +2105,7 @@ $langCourseOptions = "Επιλογές $langOfCourse";
 $langAlternateLogin = "Εναλλακτική σύνδεση";
 $langTooManyFails = "Έχετε κάνει πολλές αποτυχημένες προσπάθειες. Πρέπει να περιμένετε για ένα μικρό διάστημα μέχρι την επόμενη προσπάθεια.";
 $langMyStats = "Τα στατιστικά μου";
-$langCompactProfile = "Συνοπτικό Προφίλ";
+$langCompactProfile = "Συνοπτικό προφίλ";
 
 /* * *********************************************************
  * install.php
@@ -2223,8 +2221,8 @@ $lang_display_captcha_label = "Κωδικός ασφαλείας (CAPTCHA)";
 $lang_display_captcha_unsupported = 'Για την ενεργοποίηση του κωδικού ασφαλείας, απαιτείται υποστήριξη γραμματοσειρών TrueType (TTF) από τη βιβλιοθήκη GD της PHP';
 $lang_insert_xml_metadata = "Μετασχολιασμός αρχείων υποσυστήματος «Έγγραφα» σύμφωνα με το πρότυπο LOM";
 $lang_enable_mobileapi = "Να επιτρέπεται η επικοινωνία με κινητές συσκευές (smartphones/tablets)";
-$lang_course_multidep = "Να επιτρέπεται τα $langsCourses να ανήκουν σε πολλά τμήματα-σχολές";
-$lang_user_multidep = "Να επιτρέπεται η εγγραφή χρηστών σε πολλά τμήματα-σχολές";
+$lang_course_multidep = "Να επιτρέπεται τα $langsCourses να ανήκουν σε πολλές $langsFaculties";
+$lang_user_multidep = "Να επιτρέπεται η εγγραφή χρηστών σε πολλές $langsFaculties";
 $lang_restrict_owndep = "Να μην επιτρέπεται η αλλαγή τμήματος από τους χρήστες";
 $lang_restrict_teacher_owndep = "Να μην επιτρέπεται η δημιουργία $langsOfCourses από τους $langsTeachers στα τμήματα που δεν ανήκουν";
 $lang_allow_teacher_clone_course = "Να επιτρέπεται η κλωνοποίηση $langsOfCourses από τους $langsTeachers";
@@ -4707,7 +4705,7 @@ $langBBBScheduleSessionInfoJoin = "Συνδεθείτε για να την πα�
 
 $langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον εκπαιδευτή του $langsOfCourse.";
 $langBBBNotServerAvailableTeacher = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
-$langBBBServerOrder = "Σειρά προτίμησης κατά την επιλογή εξυπηρετητή";
+$langBBBServerOrder = "Σειρά προτίμησης κατά την επιλογή εξυπηρέτη";
 $langBBBConnectionError = "Η σύνδεση με τον εξυπηρέτη τηλεσυνεργασιών δεν είναι δυνατή";
 $langBBBConnectionErrorOverload = "Η σύνδεση με τον εξυπηρέτη τηλεσυνεργασιών δεν είναι δυνατή. Είτε δεν έχει ενεργοποιηθεί είτε δεν μπορούν να συνδεθούν άλλοι χρήστες.";
 $langBBBGetUsersError = "Δεν ήταν δυνατή η ανάκτηση πληροφοριών για την τηλεσυνεργασία ";
@@ -4739,7 +4737,7 @@ $langBBBMaxUsersJoinError = "Έχει συμπληρωθεί ο μέγιστος
 $langBBBEndHelpBlock = "Κάντε κλικ για να ορίσετε Ημερομηνία Λήξης Τηλεσυνεργασίας";
 $langUseOfTc = "Χρήση του εξυπηρέτη";
 $langToAllCourses = "Σε όλα τα $langsCourses";
-$langToAllCoursesInfo = "Ο εξυπηρέτης θα μπορεί να χρησιμοποιείται από όλα τα $langsCourses.";
+$langToAllCoursesInfo = "Επιλέξτε αν ο εξυπηρέτης θα μπορεί να χρησιμοποιείται από όλα τα $langsCourses ή από ορισμένα";
 $langToSomeCourses = "Σε συγκεκριμένα $langsCourses";
 $langToSomeCoursesInfo = "Ο εξυπηρέτης θα μπορεί να χρησιμοποιείται από συγκεκριμένα $langsCourses. Για να ορίσετε ποια $langsCourses θα τον χρησιμοποιούν μεταβείτε στην \"Αναζήτηση $langsOfCourses\" και επιλέξτε \"Ενέργειες\".";
 

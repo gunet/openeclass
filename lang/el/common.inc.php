@@ -70,13 +70,14 @@ $langsCourses = "μαθήματα";
 $langsOfCourse = "μαθήματος";
 $langsOfCourses = "μαθημάτων";        
 
-$langFaculty = "Σχολή - Τμήμα";
-$langOfFaculty = "Σχολής - Τμήματος";
-$langOfFaculties = "Σχολών - Τμημάτων";
-$langFaculties = "Σχολές - Τμήματα";
+$langFaculty = "Κατηγορία";
+$langOfFaculty = "Κατηγορίας";
+$langOfFaculties = "Κατηγοριών";
+$langFaculties = "Κατηγορίες";
 
-$langsFaculty = "σχολή - τμήμα";
-$langsFaculties = "σχολές - τμήματα";
+$langsFaculty = "κατηγορία";
+$langsOfFaculty = "κατηγορίας";
+$langsFaculties = "κατηγορίες";
 
 $langpres = "Προπτυχιακά";
 $langposts = "Μεταπτυχιακά";

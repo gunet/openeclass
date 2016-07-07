@@ -188,7 +188,7 @@ function printPollForm() {
                             $langQuestion $i
                         </div>
                         <div class='panel-body'>
-                            <h4>".q($theQuestion->question_text)."</h4>
+                            <h5>".q($theQuestion->question_text)."</h5>
                             <input type='hidden' name='question[$pqid]' value='$qtype'>";
                 if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
                     $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
