@@ -60,6 +60,7 @@ $(document).ready(function() {
 EOF;
 
 $iterator = 1;
+$confirmation = [];
 
 if (!isset($_POST['maxMediaForm'])) {
     $_POST['maxMediaForm'] = 0;
@@ -93,18 +94,19 @@ while ($iterator <= $_POST['maxMediaForm']) {
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 reuse_module($thisLinkModule->module_id);
 
-                Session::Messages($video->title . ': ' . $langMediaInsertedAsModule);
-                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
+                $confirmation[] = $video->title . ': ' . $langMediaInsertedAsModule;
+                Session::Messages($confirmation);
 
             } else {
-                $dialogBox .= q($video->title) . ': ' . $langMediaAlreadyUsed . '<br>';
-                $style = "warning";
+
+                $confirmation[] = q($video->title) . ': ' . $langMediaAlreadyUsed;
+                Session::Messages($confirmation);
             }
         } else {
             create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
 
-            Session::Messages($video->title . ': ' . $langMediaInsertedAsModule);
-            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
+            $confirmation[] = $video->title . ': ' . $langMediaInsertedAsModule;
+            Session::Messages($confirmation);
         }
     }
 
@@ -135,27 +137,26 @@ while ($iterator <= $_POST['maxMediaForm']) {
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 reuse_module($thisLinkModule->module_id);
 
-                Session::Messages($video->title . ': ' . $langMediaInsertedAsModule);
-                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
+                $confirmation[] = $video->title . ': ' . $langMediaInsertedAsModule;
+                Session::Messages($confirmation);
             } else {
-                $dialogBox .= q($videolink->title) . " : " . $langMediaAlreadyUsed . "<br />";
-                $style = "warning";
+
+                $confirmation[] = q($videolink->title) . " : " . $langMediaAlreadyUsed;
+                Session::Messages($confirmation);
             }
         } else {
             create_new_module($videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
 
-            Session::Messages($video->title . ': ' . $langMediaInsertedAsModule);
-            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
+            $confirmation[] = $video->title . ': ' . $langMediaInsertedAsModule;
+            Session::Messages($confirmation);
         }
     }
     $iterator++;
 }
-
-
-
-if (isset($dialogBox) && $dialogBox != "") {
-    $tool_content .= "<div class='alert alert-$style'>$dialogBox</div>";    
+if (!empty($confirmation)) {
+    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
 }
+
 
 $tool_content .= showmedia();
 draw($tool_content, 2, null, $head_content);
