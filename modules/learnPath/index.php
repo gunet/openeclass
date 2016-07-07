@@ -497,7 +497,7 @@ foreach ($result as $list) { // while ... learning path list
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
         
-        $play_img = "<i class='fa fa-play-circle' style='font-size:20px;'></i>";
+        $play_img = "<span class='fa fa-list' style='font-size:15px;'></span>";
         
         if(!$is_editor){ // If is student
 //            if ($list->lock == 'CLOSE'){ // If is student and LP is closed
@@ -508,9 +508,9 @@ foreach ($result as $list) { // while ... learning path list
 //                    $play_button = $play_img;
 //                }
 //            } else { // If is student and LP is open
-                $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
                 if (count($resultmodules) > 0) { // If there are modules
-                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>$play_img</a>";
+                    $play_button = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>$play_img</a>";
                 } else { // If there are no modules
                     $play_button = $play_img;
                 }
@@ -524,16 +524,16 @@ foreach ($result as $list) { // while ... learning path list
 //                    $play_button = $play_img;
 //                }  
 //            } else { // If is admin and LP is open
-                $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
                 if (count($resultmodules) > 0) { // If there are modules
-                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>$play_img</a>";
+                    $play_button = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>$play_img</a>";
                 } else {
                     $play_button = $play_img;
                 }
             //}
         }
 
-        $tool_content .= "<td>$play_url<span class='pull-right'>$play_button</span></td>\n";
+        $tool_content .= "<td>$play_url<span style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathData'>$play_button</span></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
