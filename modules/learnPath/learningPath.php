@@ -192,20 +192,25 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
   ================================================================ */
 
 // comment
+$tool_content .= "<div class='panel panel-default'>
+                    <div class='panel-heading list-header'>
+                        <h3 class='panel-title'>$langLearningPathData</h3>
+                    </div>";
+$tool_content .= "<table class='table-default'>";
+$tool_content .= "<tr><th width='70'>$langTitle:</th>";
+$tool_content .= "<td>". nameBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
-    $tool_content .= "
-        <div class='row'>
-            <div class='col-xs-12'>"
-                . commentBox(LEARNINGPATH_, DISPLAY_) .
-            "</div>
-        </div>
-    ";
+    $tool_content .= "<tr>
+      <th width='90'>$langDescr:</th>
+      ";
+    $tool_content .= "<td>". commentBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 }
+$tool_content .= "</table></div>";
 
 // --------------------------- module table header --------------------------
 $tool_content .= "<div class='table-responsive'>";
 $tool_content .= "<table class='table-default'>";
-$tool_content .= "<tr class='list-header'><th colspan=\"" . ($maxDeep + 2) . "\"><div align=\"left\">&nbsp;&nbsp;<b>" . $langLearningObjects . "</b></div></th>\n";
+$tool_content .= "<tr class='list-header'><th colspan=\"" . ($maxDeep + 2) . "\"><div align=\"left\">&nbsp;&nbsp;<b>" . $langLearningPathStructure . "</b></div></th>\n";
 
 
 // show only progress column for authenticated users
