@@ -31,7 +31,7 @@ $TOCurl = "../viewer_toc.php?course=$course_code";
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>">
         <title>-</title>
-        <link href="../../../template/<?php echo $theme ?>/theme.css" rel="stylesheet" type="text/css" />
+        <link href="../../../template/<?php echo $theme ?>/CSS/lp.css" rel="stylesheet" type="text/css" />
         <script type='text/javascript'>
             <!-- //
           parent.tocFrame.location.href = "<?php echo $TOCurl; ?>";
