@@ -265,7 +265,6 @@ echo "<!DOCTYPE HTML>
         }
         #navigation-btns #close-btn span{
             font-size:16px;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
         #leftTOCtoggler{
             margin-top: 7px;
@@ -315,7 +314,7 @@ echo "<!DOCTYPE HTML>
 <body>
 
     <nav class='navbar navbar-inverse navbar-static-top' role='navigation'>
-            <div class='container-fluid'><div class='row'>
+            <div class='container-fluid'>
                 <div class='navbar-header col-xs-2'>
                   <a id='leftTOCtoggler' class='btn pull-left'><span class='fa fa-bars fa-lg'></span></a>
                   <a id='toc_logo' class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='$logoUrl' alt='Logo'></a>
@@ -323,7 +322,7 @@ echo "<!DOCTYPE HTML>
                 <div class='navbar-header col-xs-10 pull-right'>
                     <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
                         $prevNextString
-                        <li id='close-btn' style='padding-top: 15px;'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'></span>&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></li>
+                        <li id='close-btn' style='padding-top: 15px;'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></li>
                     </ul>
                     <div class='pull-right progressbar-plr'>";
 
@@ -335,7 +334,7 @@ echo "<!DOCTYPE HTML>
                         }
 echo "</div>
                 </div>
-            </div></div>
+            </div>
     </nav>
     </body>
 </html>";
