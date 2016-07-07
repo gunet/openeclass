@@ -53,6 +53,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         <div class='table_td_header clearfix'>
                             <a href='" . $urlAppend . "modules/announcements/?course=" . $myrow->code . "&an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
                         </div>
+                        <small class='text-grey'>".q(ellipsize($myrow->course_title, 80))."</small>
                         <div class='table_td_body' data-id='$myrow->id'>" . standard_text_escape($myrow->content) . "</div>
                         </div>",
                 '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->an_date))
@@ -63,6 +64,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         <div class='table_td_header clearfix'>
                             <a href='" . $urlAppend . "main/system_announcements.php/?an_id=" . $myrow->id . "'>" . standard_text_escape($myrow->title) . "</a>
                         </div>
+                        <small class='text-grey'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></small>
                         <div class='table_td_body' data-id='$myrow->id'>" . standard_text_escape($myrow->content) . "</div>
                         </div>",
                 '1' => claro_format_locale_date($dateFormatLong, strtotime($myrow->an_date))
