@@ -118,6 +118,7 @@ if (!isset($style)) {
 }
 
 $iterator = 0;
+$confirmation = [];
 
 if (!isset($_REQUEST['maxDocForm'])) {
     $_REQUEST['maxDocForm'] = 0;
@@ -168,9 +169,8 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                         VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $langDefaultModuleAddedComment, $order);
                 $addedDoc = $filenameDocument;
 
-                Session::Messages($addedDoc . " : " . $langDocInsertedAsModule);
-                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
-
+                $confirmation[] = $addedDoc . " : " . $langDocInsertedAsModule;
+                Session::Messages($confirmation);
             } else {
                 // check if this is this LP that used this document as a module
                 $sql = "SELECT count(*) as count FROM `lp_rel_learnPath_module` AS LPM,
@@ -194,16 +194,19 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                             (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
                             VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $thisDocumentModule->module_id, $langDefaultModuleAddedComment, $order);
                     $addedDoc = $filenameDocument;
-                    $InfoBox = $addedDoc . " " . $langDocInsertedAsModule . "<br />";                    
-                    $tool_content .= "<div class='alert alert-success'>$InfoBox</div>";                    
+
+                    $confirmation[] = $addedDoc . " : " . $langDocInsertedAsModule;
+                    Session::Messages($confirmation);
                 } else {
-                    $InfoBox = "<b>$filenameDocument</b>: " . $langDocumentAlreadyUsed . "<br />";                    
-                    $tool_content .= "<div class='alert alert-warning'>$InfoBox</div>";
+                    $confirmation[] = $filenameDocument . " : " . $langDocumentAlreadyUsed;
+                    Session::Messages($confirmation);
                 }
             }
         }
     }
 }
+if (!empty($confirmation))
+    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
 
 /* ======================================
   DEFINE CURRENT DIRECTORY
