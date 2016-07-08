@@ -1335,23 +1335,25 @@ function is_tc_server_enabled_for_all($tc_type) {
  */
 function is_active_tc_server($tc_type, $course_id) 
 {
-        
-    $q = Database::get()->queryArray("SELECT id, all_courses FROM tc_servers WHERE enabled='true' AND `type` = '$tc_type'");
+    $found = false;    
+    $q = Database::get()->queryArray("SELECT id, all_courses FROM tc_servers WHERE enabled='true'
+                                AND `type` = '$tc_type' ORDER BY weight");
     if (count($q) > 0) {
-       foreach ($q as $data) {
-           if ($data->all_courses == 1) { // server is enabled for all courses                     
-               return true;
-           } else {
-               $q = Database::get()->querySingle("SELECT * FROM course_external_server 
-                                   WHERE course_id = ?d AND external_server = $data->id", $course_id);
-               if ($q) {
-                   return true;
-               } else {
-                   return false;
-               }
-           }
-       }
-    } else { // no active servers
+        foreach ($q as $data) {           
+            if ($data->all_courses == 1) { // tc_server is enabled for all courses                                             
+                return true;
+            } else { // check if tc_server is enabled for specific course
+                $q = Database::get()->querySingle("SELECT * FROM course_external_server 
+                                    WHERE course_id = ?d AND external_server = $data->id", $course_id);
+                if ($q) {
+                    $found = true;
+                } else {
+                    $found = false;
+                }
+            }
+        }
+        return $found;
+    } else { // no active tc_servers
         return false;
     }
     

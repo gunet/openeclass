@@ -163,28 +163,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $br = ($i < count($departments)) ? '<br/>' : '';
             $dep .= $tree->getFullPath($department) . $br;
             $i++;
-        }
-        // display tc_server action if needed
-        $tc_type = is_configured_tc_server();
-        if ($tc_type == FALSE) {
-            $show_tc = false;
-            $icon_tc = $link_tc = '';
-        } else {
-            if (is_tc_server_enabled_for_all($tc_type)) {
-                $show_tc = false;
-                $icon_tc = $link_tc = '';
-            } else {                                
-                $show_tc = true;
-                if (is_active_tc_server($tc_type, $logs->id)) {
-                    $icon_tc = 'fa-check-square-o';
-                    $link_tc = "tc=0&amp;tc_type=$tc_type";
-                } else {
-                    $icon_tc = 'fa-square-o';
-                    $link_tc = "tc=1&amp;tc_type=$tc_type";
-                }
-            }
-        }
-        
+        }               
         // Add links to course users, delete course and course edit
         $icon_content = action_button(array(
             array(
@@ -202,13 +181,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'icon' => 'fa-list',
                 'url' => "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE",
                 'show' => !isDepartmentAdmin()
-            ),
-            array(
-                'title' => $langActivateConference,
-                'icon' => $icon_tc,
-                'url' => "$_SERVER[SCRIPT_NAME]?c=$logs->id&amp;$link_tc",
-                'show' => $show_tc
-            ),  
+            ),            
             array(
                 'title' => $langDelete,
                 'icon' => 'fa-times',
@@ -300,22 +273,6 @@ $tool_content .= "<table id='course_results_table' class='display'>
     </tr></thead>";
 
 $tool_content .= "<tbody></tbody></table>";
-
-// enable - disable tc server per course
-if (isset($_GET['tc'])) {
-    if ($_GET['tc'] == 1) {
-        $tc_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE enabled='true' AND `type` = ?s ORDER BY weight ASC", $_GET['tc_type'])->id;        
-        if ($tc_id) {
-            Database::get()->query("INSERT INTO course_external_server SET course_id=?d, external_server=?d", $_GET['c'], $tc_id);
-            Session::Messages($langTcCourseEnabled, 'alert alert-info');
-        }
-    } elseif($_GET['tc'] == 0)  {
-        Database::get()->query("DELETE FROM course_external_server WHERE course_id = ?d", $_GET['c']);
-        Session::Messages($langTcCourseDisabled, 'alert alert-info');        
-    } else {
-        redirect_to_home_page('modules/admin/index.php');
-    }
-}
 
 // edit department
 if (isset($_GET['formsearchfaculte']) and $_GET['formsearchfaculte'] and is_numeric($_GET['formsearchfaculte'])) {
