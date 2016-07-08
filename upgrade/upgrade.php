@@ -3363,7 +3363,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 $i = 0;
                 Database::get()->queryFunc('SELECT id
                     FROM unit_resources WHERE unit_id = ?d
-                    ORDER BY `order`, id',
+                    ORDER BY `order`',
                     function ($resource) use (&$i) {
                         $i++;
                         Database::get()->query('UPDATE unit_resources SET `order` = ?d
