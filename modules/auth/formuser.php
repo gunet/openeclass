@@ -151,6 +151,7 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
     $warning = '';
     
     // additional layer of checks to verify that the provider is valid via hybridauth middleware
+    if($provider_name == 'linkedin') $provider_name = 'LinkedIn'; //small fix required for LinkedIn
     if (count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) { 
         try {
             $hybridauth = new Hybrid_Auth($config);
