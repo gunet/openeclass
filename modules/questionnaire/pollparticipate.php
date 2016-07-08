@@ -33,7 +33,6 @@ require_once 'functions.php';
 load_js('bootstrap-slider');
 
 $toolName = $langQuestionnaire;
-$pageName = $langParticipate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
 //Identifying ajax request that cancels an active attempt
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -79,13 +78,14 @@ draw($tool_content, 2, null, $head_content);
  * @global type $langQuestion
  * @global type $langCancel
  * @global type $head_content
+ * @global type $pageName
  * @global type $langPollParticipantInfo
  */
 function printPollForm() {
     global $course_id, $course_code, $tool_content,
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
-    $langCancel, $head_content, $langPollParticipantInfo;
+    $langCancel, $head_content, $langPollParticipantInfo, $pageName;
     
     $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     $head_content .= " 
@@ -123,6 +123,8 @@ function printPollForm() {
     $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
     
     if ($is_editor || ($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
+        
+        $pageName = $thePoll->name;
         $tool_content .= action_bar(array(
             array(
                 'title' => $langBack,
@@ -131,19 +133,15 @@ function printPollForm() {
                 'level' => 'primary-label'
             )
         ));
-        $tool_content .= "
-            <div class='panel panel-primary'>
-                <div class='panel-heading'>
-                    <h3 class='panel-title'>$thePoll->name</h3>
-                </div>";
+        
         if ($thePoll->description) {
-            $tool_content .= "
+            $tool_content .= "<div class='panel panel-primary'>            
                 <div class='panel-body'>
                     <p>$thePoll->description</p>
-                </div>";
+                </div>
+            </div>";
         }
-        $tool_content .= "
-            </div>
+        $tool_content .= "            
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='poll' method='post'>
             <input type='hidden' value='2' name='UseCase'>
             <input type='hidden' value='$pid' name='pid'>";     
