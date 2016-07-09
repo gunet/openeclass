@@ -59,6 +59,23 @@ $action->record(MODULE_ID_LP);
 /* * *********************************** */
 require_once 'include/log.class.php';
 
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+
+    if (isset($_POST['toReorder'])){
+
+        if ($_POST['newIndex'] < $_POST['oldIndex']){
+            Database::get()->query("UPDATE `lp_learnPath` SET `rank`=`rank` + 1 WHERE `course_id` = ?d AND `rank` >= ?d AND `rank` < ?d", $course_id, $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+        }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
+            Database::get()->query("UPDATE `lp_learnPath` SET `rank`=`rank` - 1 WHERE `course_id` = ?d AND `rank` <= ?d AND `rank` > ?d", $course_id, $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+        }
+
+        Database::get()->query("UPDATE `lp_learnPath` SET `rank`=?d WHERE `course_id` = ?d AND `learnPath_id`=?d ",$_POST['newIndex'] + 1, $course_id, $_POST['toReorder']);
+
+    }
+
+    exit();
+}
+
 $style = "";
 
 if (!add_units_navigation(TRUE)) {
@@ -213,15 +230,6 @@ if ($is_editor) {
 					AND `visible` != ?d
 					AND `course_id` = ?d", $visibility, $_GET['visibility_path_id'], $visibility, $course_id);
                 break;
-            // ORDER COMMAND
-            case "moveUp" :
-                $thisLearningPathId = intval($_GET['move_path_id']);
-                $sortDirection = "DESC";
-                break;
-            case "moveDown" :
-                $thisLearningPathId = intval($_GET['move_path_id']);
-                $sortDirection = "ASC";
-                break;
             // CREATE COMMAND
             case "create" :
                 // create form sent
@@ -326,50 +334,33 @@ if ($is_editor) {
         } // end of switch
     } // end of if(isset)
 } // end of if
-// IF ORDER COMMAND RECEIVED
-// CHANGE ORDER
-if (isset($sortDirection) && $sortDirection) {
-    $result = Database::get()->queryArray("SELECT `learnPath_id`, `rank`
-            FROM `lp_learnPath`
-            WHERE `course_id` = ?d
-            ORDER BY `rank` $sortDirection", $course_id);
 
-    // LP = learningPath
-    foreach ($result as $LP) {
-        // STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER.
-        //          COMMIT ORDER SWAP ON THE DB
 
-        if (isset($thisLPOrderFound) && $thisLPOrderFound == true) {
-            $nextLPId = $LP->learnPath_id;
-            $nextLPOrder = $LP->rank;
+load_js('sortable/Sortable.min.js');
+$head_content .= "
+    <script>
+        $(document).ready(function(){
+            Sortable.create(tosort,{
+                handle: '.fa-arrows',
+                animation: 150,
+                onEnd: function (evt) {
+                var itemEl = $(evt.item);
+                var idReorder = itemEl.attr('data-id');
 
-            // move 1 to a temporary rank
-            Database::get()->query("UPDATE `lp_learnPath`
-                    SET `rank` = '-1337'
-                    WHERE `learnPath_id` = ?d
-                    AND `course_id` = ?d", $thisLearningPathId, $course_id);
-
-            // move 2 to the previous rank of 1
-            Database::get()->query("UPDATE `lp_learnPath`
-                     SET `rank` = ?d
-                     WHERE `learnPath_id` = ?d
-                     AND `course_id` = ?d", $thisLPOrder, $nextLPId, $course_id);
-
-            // move 1 to previous rank of 2
-            Database::get()->query("UPDATE `lp_learnPath`
-                     SET `rank` = ?d
-                     WHERE `learnPath_id` = ?d
-                     AND `course_id` = ?d", $nextLPOrder, $thisLearningPathId, $course_id);
-            break;
-        }
-
-        // STEP 1 : FIND THE ORDER OF THE ANNOUNCEMENT
-        if ($LP->learnPath_id == $thisLearningPathId) {
-            $thisLPOrder = $LP->rank;
-            $thisLPOrderFound = true;
-        }
-    }
-}
+                $.ajax({
+                  type: 'post',
+                  dataType: 'text',
+                  data: { 
+                          toReorder: idReorder,
+                          oldIndex: evt.oldIndex,
+                          newIndex: evt.newIndex
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+";
 
 // Display links to create and import a learning path
 if ($is_editor) {
@@ -418,6 +409,7 @@ if ($l == 0) {
 $tool_content .= "
 <div class='table-responsive'>    
     <table class='table-default'>
+    <thead>
     <tr class='list-header'>
       <th><div align='left'>$langLearningPaths</div></th>\n";
 
@@ -429,7 +421,7 @@ if ($is_editor) {
     $tool_content .= "      <th colspan='2' width='50'><div align='center'>$langProgress</div></th>\n";
 }
 // close title line
-$tool_content .= "    </tr>\n";
+$tool_content .= "    </tr></thead><tbody id='tosort'>\n";
 
 // display invisible learning paths only if user is courseAdmin
 if ($is_editor) {
@@ -483,7 +475,7 @@ foreach ($result as $list) { // while ... learning path list
 
     //$is_blocked = $list->lock == 'CLOSE'? true : false;
     
-    $tool_content .= "<tr " . $style . ">";
+    $tool_content .= "<tr " . $style . " data-id='$list->learnPath_id'>";
     //Display current learning path name
     if (!$is_blocked) {
         // locate 1st module of current learning path
@@ -603,7 +595,8 @@ foreach ($result as $list) { // while ... learning path list
 
         $is_real_dir = is_dir(realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $list->learnPath_id));
 
-        $tool_content .= "<td class='option-btn-cell'>" .
+        $tool_content .= "<td class='option-btn-cell' style='width: 90px;'><div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer;
+                vertical-align: bottom;'><span class='fa fa-arrows' style='cursor: pointer;'></span></div><div class='pull-left'>" .
                 action_button(array(
                     array('title' => $langEditChange,
                         'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
@@ -616,16 +609,6 @@ foreach ($result as $list) { // while ... learning path list
                         'url' => $list->lock == 'OPEN'? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $list->learnPath_id,
                         'icon' => $list->lock == 'OPEN'? 'fa-minus-circle' : 'fa-play-circle',
                         'show' => !($ind == 1)),
-                    array('title' => $langUp,
-                        'level' => 'primary',
-                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;move_path_id=" . $list->learnPath_id,
-                        'icon' => 'fa-arrow-up',
-                        'disabled' => $iterator == 1),
-                    array('title' => $langDown,
-                        'level' => 'primary',
-                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveDown&amp;move_path_id=" . $list->learnPath_id,
-                        'icon' => 'fa-arrow-down',
-                        'disabled' => $iterator >= $LPNumber),
                     array('title' => $langTracking,
                         'url' => "details.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
                         'icon' => 'fa-line-chart'),
@@ -644,7 +627,7 @@ foreach ($result as $list) { // while ... learning path list
                         'class' => 'delete',
                         'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name)."\"" : $langDelete)               
                 )) .
-                "</td>\n";
+                "</div></td>\n";
     } elseif ($uid) {
         // % progress
         $prog = get_learnPath_progress($list->learnPath_id, $uid);
@@ -670,7 +653,7 @@ if (!$is_editor && $iterator != 1 && $uid) {
       <th><div align='right'>" . disp_progress_bar($total, 1) . "</div></th>
     </tr>\n";
 }
-$tool_content .= "\n     </table></div>\n";
+$tool_content .= "\n     </tbody></table></div>\n";
 $tool_content .= "<div class='modal fade' id='restrictlp' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
   <div class='modal-dialog'>
     <div class='modal-content'>
