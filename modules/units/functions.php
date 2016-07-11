@@ -21,7 +21,7 @@ function process_actions() {
     global $tool_content, $id, $langResourceCourseUnitDeleted,
         $langResourceUnitModified, $course_id, $course_code, $webDir,
         $head_content, $langBack, $urlAppend, $navigation, $pageName,
-        $langEditChange;
+        $langEditChange, $langViMod;
 
     // update index and refresh course metadata
     require_once 'modules/search/indexer.class.php';
@@ -69,7 +69,8 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
-            $tool_content .= "<div class='alert alert-success'>$langResourceCourseUnitDeleted</div>";
+            Session::Messages($langResourceCourseUnitDeleted, 'alert-success');
+            redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
         }
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
         $res_id = intval($_REQUEST['vis']);
@@ -80,6 +81,8 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
+            Session::Messages($langViMod, 'alert-success');
+            redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
         }
     } elseif (isset($_REQUEST['down'])) { // change order down
         $res_id = intval($_REQUEST['down']);
