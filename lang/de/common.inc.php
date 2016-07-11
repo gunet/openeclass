@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2016-02-09 19:07:12
+// Generated 2016-07-11 12:00:26
 
 $langCourse = "Kurs";
 $langEclass = "Open eClass - die asynchrone E-Learning Plattform";
