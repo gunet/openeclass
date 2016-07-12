@@ -250,8 +250,8 @@ function printPolls() {
         $tool_content .= "\n    <div class='alert alert-warning'>" . $langPollNone . "</div><br>";
     } else {
         // Print active polls
-        $tool_content .= "
-                    <div class='table-repsonsive'>
+        $tool_content .= "<div class='row'><div class='col-md-12'>
+                    <div class='table-responsive'>
 		      <table class='table-default'>
 		      <tr class='list-header'>
 			<th><div align='left'>&nbsp;$langTitle</div></th>
@@ -556,6 +556,6 @@ function printPolls() {
             }
             $index_aa ++;
         }
-        $tool_content .= "</table></div>";
+        $tool_content .= "</table></div></div></div>";
     }
 }
