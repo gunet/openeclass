@@ -32,18 +32,22 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     Database::get()->query("UPDATE `faq` SET `order`=`order` - 1 WHERE `order`>?d", $_POST['oldOrder']);
     Database::get()->query("DELETE FROM faq WHERE `id`=?d", $_POST['toDelete']);
   }
-
-  if (isset($_POST['toReorder'])){
-
-    if ($_POST['newIndex'] < $_POST['oldIndex']){
-      Database::get()->query("UPDATE `faq` SET `order`=`order` + 1 WHERE `order`>=?d AND `order`<?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
-    }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
-      Database::get()->query("UPDATE `faq` SET `order`=`order` - 1 WHERE `order`<=?d AND `order`>?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
-    }
-
-    Database::get()->query("UPDATE `faq` SET `order`=?d WHERE `id`=?d ", $_POST['newIndex'] + 1, $_POST['toReorder']);
     
-  }
+    if (isset($_POST['toReorder'])){
+        $toReorder = $_POST['toReorder'];
+
+        if (isset($_POST['prevReorder'])) {
+            $prevRank = Database::get()->querySingle("SELECT `order` FROM faq WHERE id = ?d", $_POST['prevReorder'])->order;
+        } else {
+            $prevRank = 0;
+        }
+
+        Database::get()->query("UPDATE `faq` SET `order` = `order` + 1 WHERE `order` > ?d", $prevRank);
+        Database::get()->query("UPDATE `faq` SET `order` = ?d WHERE id = ?d", $prevRank + 1, $toReorder);
+        $delta = Database::get()->querySingle("SELECT MIN(`order`) AS minOrder FROM faq ")->minOrder;
+        Database::get()->query("UPDATE `faq` SET `order` = `order` - ?d  + 1", $delta);
+
+    }
 
   exit();
 }
@@ -282,31 +286,25 @@ $tool_content .= "
           onEnd: function (evt) {
 
             var itemEl = $(evt.item);
+                
             var idReorder = itemEl.attr('data-id');
+            var prevIdReorder = itemEl.prev().attr('data-id');
 
             $.ajax({
               type: 'post',
               dataType: 'text',
               data: { 
                       toReorder: idReorder,
-                      oldIndex: evt.oldIndex,
-                      newIndex: evt.newIndex
+                      prevReorder: prevIdReorder,
                     },
               success: function(data) {
                 $('.indexing').each(function (i){
                   $(this).html(i+1);
                 });
-
-             /* moreDeletes = $('.alert-success').length;
-                if (moreDeletes > 0){
-                  $('.alert-success').html('$langFaqReorderSuccess');
-                } else {
-                  $('.row.action_bar').before('<div class=\'alert alert-success\'>$langFaqReorderSuccess</div>');
-                } */
               }
             })
-
           }
+          
         });
     });
   </script>

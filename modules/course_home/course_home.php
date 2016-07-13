@@ -64,44 +64,22 @@ $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_name
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     if (isset($_POST['toReorder'])){
+        $toReorder = $_POST['toReorder'];
 
-        if ($_POST['newIndex'] < $_POST['oldIndex']){
-          Database::get()->query("UPDATE `course_units` SET `order`=`order` + 1 WHERE `order` >= ?d AND `order` < ?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
-        }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
-          Database::get()->query("UPDATE `course_units` SET `order`=`order` - 1 WHERE `order` <= ?d AND `order` > ?d", $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+        if (isset($_POST['prevReorder'])) {
+            $prevRank = Database::get()->querySingle("SELECT `order` FROM course_units WHERE id = ?d", $_POST['prevReorder'])->order;
+        } else {
+            $prevRank = 0;
         }
 
-        Database::get()->query("UPDATE `course_units` SET `order`=?d WHERE `id`=?d ", $_POST['newIndex'] + 1, $_POST['toReorder']);
-        
-    }
+        Database::get()->query("UPDATE `course_units` SET `order` = `order` + 1 WHERE `course_id` = ?d AND `order` > ?d", $course_id, $prevRank);
+        Database::get()->query("UPDATE `course_units` SET `order` = ?d WHERE `course_id` = ?d AND id = ?d", $prevRank + 1, $course_id, $toReorder);
+        $delta = Database::get()->querySingle("SELECT MIN(`order`) AS minOrder FROM course_units WHERE course_id =?d", $course_id)->minOrder;
+        Database::get()->query("UPDATE `course_units` SET `order` = `order` - ?d  + 1 WHERE `course_id` = ?d", $delta, $course_id);
 
-    echo
+    }
 
     exit();
-
-/*
-    if (isset($_POST['down'])) {
-        $id = intval(getDirectReference($_POST['down'])); // change order down
-        if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
-            move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
-        } else {
-            $res_id = intval(getDirectReference($_POST['down']));
-            if (($id = check_admin_unit_resource($res_id))) {
-                move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'down', "course_weekly_view_id=$id");
-            }
-        }
-    } elseif (isset($_POST['up'])) { // change order up
-        $id = intval(getDirectReference($_POST['up']));
-        if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
-            move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
-        } else {
-            $res_id = intval(getDirectReference($_POST['up']));
-            if (($id = check_admin_unit_resource($res_id))) {
-                move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'up', "course_weekly_view_id=$id");
-            }
-        }
-    }
-    */
 
 }
 
@@ -136,20 +114,23 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
 .'Sortable.create(boxlistSort,{
         animation: 350,
         handle: \'.fa-arrows\',
-        onEnd: function (evt) {
-            var itemEl = $(evt.item);
-            var idReorder = itemEl.attr(\'data-id\');
+                animation: 150,
+                onEnd: function (evt) {
+                
+                var itemEl = $(evt.item);
+                
+                var idReorder = itemEl.attr(\'data-id\');
+                var prevIdReorder = itemEl.prev().attr(\'data-id\');
 
-            $.ajax({
-              type: \'post\',
-              dataType: \'text\',
-              data: { 
-                      toReorder: idReorder,
-                      oldIndex: evt.oldIndex,
-                      newIndex: evt.newIndex
-                    }
-                });
-            }
+                $.ajax({
+                  type: \'post\',
+                  dataType: \'text\',
+                  data: { 
+                          toReorder: idReorder,
+                          prevReorder: prevIdReorder,
+                        }
+                    });
+                }
 });'
 .'var calendar = $("#bootstrapcalendar").calendar({
                     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
