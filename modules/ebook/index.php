@@ -42,8 +42,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         Database::get()->query("UPDATE `ebook` SET `order` = `order` + 1 WHERE `course_id` = ?d AND `order` > ?d", $course_id, $prevRank);
         Database::get()->query("UPDATE `ebook` SET `order` = ?d WHERE `course_id` = ?d AND id = ?d", $prevRank + 1, $course_id, $toReorder);
         $delta = Database::get()->querySingle("SELECT MIN(`order`) AS minOrder FROM ebook WHERE course_id =?d", $course_id)->minOrder;
-        Database::get()->query("UPDATE `ebook` SET `order` = `order` - ?d  + 1
-            WHERE `course_id` = ?d", $delta, $course_id);
+        Database::get()->query("UPDATE `ebook` SET `order` = `order` - ?d  + 1 WHERE `course_id` = ?d", $delta, $course_id);
 
     }
 

@@ -56,15 +56,19 @@ ModalBoxHelper::loadModalBox(true);
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     if (isset($_POST['toReorder'])){
+        $toReorder = $_POST['toReorder'];
 
-        if ($_POST['newIndex'] < $_POST['oldIndex']){
-          Database::get()->query("UPDATE `unit_resources` SET `order`=`order` + 1 WHERE `unit_id` = ?d AND `order` >= ?d AND `order` < ?d", $id, $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
-        }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
-          Database::get()->query("UPDATE `unit_resources` SET `order`=`order` - 1 WHERE `unit_id` = ?d AND `order` <= ?d AND `order` > ?d", $id, $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+        if (isset($_POST['prevReorder'])) {
+            $prevRank = Database::get()->querySingle("SELECT `order` FROM unit_resources WHERE id = ?d", $_POST['prevReorder'])->order;
+        } else {
+            $prevRank = 0;
         }
 
-        Database::get()->query("UPDATE `unit_resources` SET `order`=?d WHERE `unit_id` = ?d AND `id`=?d ",$_POST['newIndex'] + 1, $id, $_POST['toReorder']);
-        
+        Database::get()->query("UPDATE `unit_resources` SET `order` = `order` + 1 WHERE `unit_id` = ?d AND `order` > ?d", $id, $prevRank);
+        Database::get()->query("UPDATE `unit_resources` SET `order` = ?d WHERE `unit_id` = ?d AND id = ?d", $prevRank + 1, $id, $toReorder);
+        $delta = Database::get()->querySingle("SELECT MIN(`order`) AS minOrder FROM unit_resources WHERE unit_id =?d", $id)->minOrder;
+        Database::get()->query("UPDATE `unit_resources` SET `order` = `order` - ?d  + 1 WHERE `unit_id` = ?d", $delta, $id);
+
     }
 
     exit();

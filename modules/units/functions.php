@@ -140,16 +140,18 @@ function show_resources($unit_id) {
                 handle: '.fa-arrows',
                 animation: 150,
                 onEnd: function (evt) {
+                
                 var itemEl = $(evt.item);
+                
                 var idReorder = itemEl.attr('data-id');
+                var prevIdReorder = itemEl.prev().attr('data-id');
 
                 $.ajax({
                   type: 'post',
                   dataType: 'text',
                   data: { 
                           toReorder: idReorder,
-                          oldIndex: evt.oldIndex,
-                          newIndex: evt.newIndex
+                          prevReorder: prevIdReorder,
                         }
                     });
                 }
