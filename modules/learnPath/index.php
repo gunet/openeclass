@@ -62,14 +62,18 @@ require_once 'include/log.class.php';
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
     if (isset($_POST['toReorder'])){
+        $toReorder = $_POST['toReorder'];
 
-        if ($_POST['newIndex'] < $_POST['oldIndex']){
-            Database::get()->query("UPDATE `lp_learnPath` SET `rank`=`rank` + 1 WHERE `course_id` = ?d AND `rank` >= ?d AND `rank` < ?d", $course_id, $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
-        }elseif ($_POST['newIndex'] > $_POST['oldIndex']) {
-            Database::get()->query("UPDATE `lp_learnPath` SET `rank`=`rank` - 1 WHERE `course_id` = ?d AND `rank` <= ?d AND `rank` > ?d", $course_id, $_POST['newIndex'] + 1, $_POST['oldIndex'] + 1);
+        if (isset($_POST['prevReorder'])) {
+            $prevRank = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath WHERE learnPath_id = ?d", $_POST['prevReorder'])->rank;
+        } else {
+            $prevRank = 0;
         }
 
-        Database::get()->query("UPDATE `lp_learnPath` SET `rank`=?d WHERE `course_id` = ?d AND `learnPath_id`=?d ",$_POST['newIndex'] + 1, $course_id, $_POST['toReorder']);
+        Database::get()->query("UPDATE `lp_learnPath` SET `rank`=`rank` + 1 WHERE `course_id` = ?d AND `rank` > ?d", $course_id, $prevRank);
+        Database::get()->query("UPDATE `lp_learnPath` SET `rank` = ?d WHERE `course_id` = ?d AND learnPath_id = ?d", $prevRank + 1, $course_id, $toReorder);
+        $delta = Database::get()->querySingle("SELECT MIN(`rank`) AS minOrder FROM lp_learnPath WHERE course_id =?d", $course_id)->minOrder;
+        Database::get()->query("UPDATE `lp_learnPath` SET `rank` = `rank` - ?d  + 1 WHERE `course_id` = ?d", $delta, $course_id);
 
     }
 
@@ -346,16 +350,18 @@ $head_content .= "
                 handle: '.fa-arrows',
                 animation: 150,
                 onEnd: function (evt) {
+                
                 var itemEl = $(evt.item);
+                
                 var idReorder = itemEl.attr('data-id');
+                var prevIdReorder = itemEl.prev().attr('data-id');
 
                 $.ajax({
                   type: 'post',
                   dataType: 'text',
                   data: { 
                           toReorder: idReorder,
-                          oldIndex: evt.oldIndex,
-                          newIndex: evt.newIndex
+                          prevReorder: prevIdReorder,
                         }
                     });
                 }
@@ -491,7 +497,7 @@ foreach ($result as $list) { // while ... learning path list
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
         
-        $play_img = "<span class='fa fa-list-ul' style='font-size:15px;'></span>";
+        $play_img = "<span class='fa fa-line-chart' style='font-size:15px;'></span>";
         
         if(!$is_editor){ // If is student
 //            if ($list->lock == 'CLOSE'){ // If is student and LP is closed
@@ -519,7 +525,7 @@ foreach ($result as $list) { // while ... learning path list
 //                    $play_button = $play_img;
 //                }  
 //            } else { // If is admin and LP is open
-            $play_button = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>$play_img</a>";
+            $play_button = "";
                 if (count($resultmodules) > 0) { // If there are modules
                     $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
 
@@ -529,7 +535,7 @@ foreach ($result as $list) { // while ... learning path list
             //}
         }
 
-        $tool_content .= "<td>$play_url<span style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathData'>$play_button</span></td>\n";
+        $tool_content .= "<td>$play_url<span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathData'>$play_button</span></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
