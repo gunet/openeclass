@@ -255,7 +255,7 @@ if ($paging and $total > $posts_per_page) {
     }
 }
 
-$tool_content .= "<div class='table-responsive'><table class='table-default'>
+$tool_content .= "<div class='row'><div class='col-xs-12'><div class='table-responsive'><table class='table-default'>
     <tr class='list-header'>
       <th style='width:14%'>$langUserForum</th>
       <th>$langMessage</th>";
@@ -367,7 +367,7 @@ foreach ($result as $myrow) {
 Database::get()->query("UPDATE forum_topic SET num_views = num_views + 1
             WHERE id = ?d AND forum_id = ?d", $topic, $forum);
 
-$tool_content .= "</table></div>";
+$tool_content .= "</table></div></div></div>";
 
 if ($paging and $total > $posts_per_page) {
     $tool_content .= "
