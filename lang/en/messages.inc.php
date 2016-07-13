@@ -3752,6 +3752,7 @@ $langCloneCourse = "Clone this $langsCourse";
 $langGradebookInfoForUsers = 'Choose users to be tracked in gradebook';
 $langExportQTI = "IMS QTI Export";
 $langLPViewerToggleLeftTOC = "Toggle table of contents";
+$langLearnPathDeleted = 'The Learning Path was deleted';
 $langSumCoursesEnrolled = "$langCourses I am enrolled in";
 $langSumCoursesSupport = "$langCourses i support";
 $langProfileLastVisit = "Last visit";

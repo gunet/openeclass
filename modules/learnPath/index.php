@@ -209,8 +209,10 @@ if ($is_editor) {
                                                 WHERE `learnPath_id` = ?d
                                                 AND `course_id` = ?d", $_GET['del_path_id'], $course_id);
                 Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
-
+                Session::Messages($langLearnPathDeleted, 'alert-success');
+                redirect_to_home_page('modules/learnPath/?course=' . $course_code);
                 break;
+
             // ACCESSIBILITY COMMAND
             case "mkBlock" :
             case "mkUnblock" :
