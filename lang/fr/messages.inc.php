@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2016-07-11 12:00:26
+// Generated 2016-07-13 11:33:18
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -4765,7 +4765,7 @@ $langBBBConnectionErrorOverload = "Connection to teleconference server is not po
 $langBBBEndHelpBlock = "Click to set Teleconference End Date";
 $langUseOfTc = "Use server";
 $langToAllCourses = "For all $langsCourses";
-$langToAllCoursesInfo = "Server will be used for all $langsCourses.";
+$langToAllCoursesInfo = "Select whether server will be available to all $langsCourses or only a subset.";
 $langToSomeCourses = "For specific $langsCourses";
 $langToSomeCoursesInfo = "Server will be used for specific $langsCourses. To set which $langsCourses will use it, please visit \"Search $langsCourses\" and select \"Actions\".";
 $langWallExtVideo = 'External video';
@@ -4794,3 +4794,9 @@ $langUpdateWebConfServer = "Wowza server info";
 $langAvailableWebConfServers = "Available Wowza servers";
 $langWebConfServer = "Wowza server";
 $langWebConfServerAlertHostname = "Please enter the hostname where Wowza is installed";
+$langLearnPathDeleted = 'The Learning Path was deleted';
+$langAdminPinnedOff = "Unpin announcement";
+$langAdminPinnedOn = "Pin announcement";
+$langAdminPinned = "Pinned announcement";
+$langAdminPinnedToTop = "Pin to top";
+$langExportGrades = "Export Grades";
