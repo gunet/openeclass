@@ -64,10 +64,9 @@ hContent;
     return $head;
 }
 
-function getDelosButton() {
-    global $course_code, $langAddOpenDelosVideoLink;
-    return array('title' => $langAddOpenDelosVideoLink,
-        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=opendelos",
+function getDelosButton($course_code, $urlAppend) {
+    return array('title' => $GLOBALS['langAddOpenDelosVideoLink'],
+        'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=opendelos",
         'icon' => 'fa-plus-circle',
         'level' => 'primary-label',
         'button-class' => 'btn-success');
