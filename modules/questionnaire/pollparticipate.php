@@ -225,7 +225,7 @@ function printPollForm() {
                         $tool_content .= "
                         <div style='margin-bottom: 0.5em;'><small>".q($langCollesLegend)."</small></div>
                         <div class='form-group'>                        
-                            <div class='col-sm-offset-2 col-sm-10'>
+                            <div class='col-sm-offset-2 col-sm-10' style='padding-top:15px;'>
                                 <input name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
                             </div>                            
                         </div>";
