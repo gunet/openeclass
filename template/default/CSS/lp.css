@@ -9,9 +9,10 @@ body {
     padding: 0;
     margin-bottom: 1px;
     height: 99%!important;
-    height: auto;
     background-color: #ffffff;
-    font-family: "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+    font-family: "Helvetica", Verdana, Arial, Helvetica, sans-serif;
+    position: relative;
+
 }
 
 .lp_right {
@@ -81,14 +82,11 @@ a img {
 }
 
 .menu_left {
-    width: 97%;
-    margin-left: 2px;
-    margin-right: 2px;
-    background-color: #f8f8f8;
-    border: 1px dashed #DFDFDF;
+    background-color: #eeeeee;
     color: #666666;
-    float: left;
-    font-size: 11px;
+    font-size: 13px;
+    position: relative;
+    height: 100%;
 }
 
 .menu_left a {

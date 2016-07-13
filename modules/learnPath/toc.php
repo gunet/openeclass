@@ -54,8 +54,12 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <link href='{$urlAppend}template/default/CSS/font-awesome-4.2.0/css/font-awesome.css' rel='stylesheet'>  
         
     <link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet' type='text/css' />
+    
+    <script>
+    
+</script>
 </head>
-<body style='padding-right: 5px;'>
+<body>
 <div class='menu_left'>";
 
 if ($uid) {
