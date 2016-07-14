@@ -20,10 +20,10 @@
  * ======================================================================== 
  */
 
-use Sabre\DAV\Client;
-
+require_once 'vendor/autoload.php';
 require_once 'credentialdrive.php';
-include "SabreDAV/vendor/autoload.php";
+
+use Sabre\DAV\Client;
 
 class WebDAV extends CredentialDrive {
 
