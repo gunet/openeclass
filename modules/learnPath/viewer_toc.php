@@ -206,7 +206,7 @@ echo "<!DOCTYPE HTML>
     <script src='{$urlAppend}js/jquery.slimscroll.min.js'></script>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>
+    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css?v=".ECLASS_VERSION."'>
 
     <!-- Font Awesome - A font of icons -->
     <link href='{$urlAppend}template/default/CSS/font-awesome-4.2.0/css/font-awesome.css' rel='stylesheet'>
