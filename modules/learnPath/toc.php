@@ -53,7 +53,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <!-- Font Awesome - A font of icons -->
     <link href='{$urlAppend}template/default/CSS/font-awesome-4.2.0/css/font-awesome.css' rel='stylesheet'>  
         
-    <link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet' type='text/css' />
+    <link href='{$urlAppend}template/$theme/CSS/lp.css?v=".ECLASS_VERSION."8' rel='stylesheet' type='text/css' />
     
     <script>
     
