@@ -100,15 +100,15 @@ function httpGetRequest($url) {
 }
 
 function displayDelosForm($jsonObj, $currentVideoLinks) {
-    global $course_id, $course_code, $langTitle, $langDescr, $langcreator, $langpublisher, $langDate,
-    $langSelect, $langAddModulesButton, $langOpenDelosReplaceInfo, $langCategory;
+    global $course_id, $course_code, $urlAppend, $langTitle, $langDescr, $langcreator, $langpublisher,
+    $langDate, $langSelect, $langAddModulesButton, $langOpenDelosReplaceInfo, $langCategory;
 
     if ($jsonObj === null) {
         return '';
     }
 
     $html = '';
-    $html .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
+    $html .= "<form method='POST' action='" . $urlAppend . "modules/video/edit.php?course=" . $course_code . "'>";
     $html .= <<<delosform
 <div class="table-responsive">
     <table class="table-default">
@@ -217,22 +217,24 @@ function storeDelosResources($jsonObj) {
 
                 if ($stored) {
                     $id = $stored->id;
-                    $q = Database::get()->query("UPDATE videolink SET 
+                    Database::get()->query("UPDATE videolink SET 
                         url = ?s, title = ?s, description = ?s, creator = ?s, publisher = ?s, date = ?t 
                         WHERE course_id = ?d 
                         AND category = ?d 
                         AND id = ?d", canonicalize_url($url), $title, $description, $creator, $publisher, $date, $course_id, $submittedCategory, $id);
                 } else {
-                    $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)
-                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
-                    $id = $q->lastInsertID;
+                    $id = Database::get()->query('INSERT INTO videolink 
+                        (course_id, url, title, description, category, creator, publisher, date)
+                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', 
+                        $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date)->lastInsertID;
                 }
+                
+                // index and log
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
-                $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
                 Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
                     'url' => canonicalize_url($url),
                     'title' => $title,
-                    'description' => $txt_description));
+                    'description' => ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+')));
             }
         }
     }

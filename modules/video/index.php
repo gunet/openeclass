@@ -102,7 +102,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
             // delete category
             delete_video_category($_GET['id']);
             
-        } else {  // delete video / videolink
+        } else { // delete video / videolink
             $table = select_table($_GET['table']);
             delete_video($_GET['id'], $table, $course_id, $course_code, $webDir);
         }

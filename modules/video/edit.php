@@ -209,6 +209,9 @@ if (isset($_GET['id']) && isset($_GET['table_edit'])) {
 // handle common data for create/edit
 $data['nick'] = $_SESSION['givenname'] . ' ' . $_SESSION['surname'];
 $data['resultcategories'] = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
+if ($_GET['form_input'] === 'opendelos') {
+    $data['jsonObj'] = requestDelosJSON();
+}
 
 // js and view
 load_js('tools.js');
@@ -236,5 +239,11 @@ function checkrequired(which, entry) {
 }
 </script>
 hContent;
-$head_content .= getDelosJavaScript();
-view('modules.video.edit', $data);
+    
+if ($_GET['form_input'] === 'opendelos') {
+    $head_content .= getDelosJavaScript();
+    view('modules.video.editdelos', $data);
+} else {
+    view('modules.video.edit', $data);
+}
+
