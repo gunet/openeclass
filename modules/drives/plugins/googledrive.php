@@ -20,8 +20,8 @@
  * ======================================================================== 
  */
 
+require_once 'vendor/autoload.php';
 require_once 'oauthdrive.php';
-require_once 'google-api-php-client/autoload.php';
 
 final class GoogleDrive extends OAuthDrive {
 
