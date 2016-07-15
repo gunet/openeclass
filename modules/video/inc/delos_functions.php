@@ -67,14 +67,6 @@ hContent;
     return $head;
 }
 
-function getDelosButton($course_code, $urlAppend) {
-    return array('title' => $GLOBALS['langAddOpenDelosVideoLink'],
-        'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=opendelos",
-        'icon' => 'fa-plus-circle',
-        'level' => 'primary-label',
-        'button-class' => 'btn-success');
-}
-
 function requestDelosJSON() {
     // DEBUG
     //$json = '{"playerBasePath" : "http://opendelos.org/playerBasePath", "resources":[{"resourceID" : "1", "videoLecture" : {"title" : "title1", "description" : "description1", "date" : "2016-07-14 12:00:00", "rights" : {"creator" : {"name" : "crname1"}}, "organization" : {"name" : "orgname1"}}}, {"resourceID" : "2", "videoLecture" : {"title" : "title2", "description" : "description2", "date" : "2016-07-15 12:00:00", "rights" : {"creator" : {"name" : "crname2"}}, "organization" : {"name" : "orgname2"}}} ]}';

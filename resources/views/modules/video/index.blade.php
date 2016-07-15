@@ -24,7 +24,11 @@
                   'icon' => 'fa-pie-chart')
         );
         if (isDelosEnabled()) {
-            $actionBarArray[] = getDelosButton($course_code, $urlAppend);
+            $actionBarArray[] = array('title' => $GLOBALS['langAddOpenDelosVideoLink'],
+                'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=opendelos",
+                'icon' => 'fa-plus-circle',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success');
         }
         $action_bar = action_bar($actionBarArray);
     }
