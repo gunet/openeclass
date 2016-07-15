@@ -211,6 +211,7 @@ $data['nick'] = $_SESSION['givenname'] . ' ' . $_SESSION['surname'];
 $data['resultcategories'] = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
 if ($_GET['form_input'] === 'opendelos') {
     $data['jsonObj'] = requestDelosJSON();
+    $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
 }
 
 // js and view
