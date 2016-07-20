@@ -29,8 +29,7 @@ require_once '../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 $pageName = $langAdminAn;
 
-load_js('datatables');
-load_js('trunk8');
+
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
@@ -78,9 +77,45 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     exit();
 }
 
+if (isset($_GET['an_id'])) {
 
+    $row = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ". intval($_GET['an_id']));
+    if(empty($row)){
+        redirect_to_home_page("main/system_announcements/");
+    }
 
-$head_content .= "<script type='text/javascript'>
+    $data['action_bar'] = action_bar([
+        ['title' => $langBack,
+            'url' => $_SERVER['SCRIPT_NAME'],
+            'icon' => 'fa-reply',
+            'level' => 'primary-label',
+            'button-class' => 'btn-default']
+    ],false);
+
+    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAnnouncements);
+
+    $data['title'] = standard_text_escape($row->title);
+    $data['date'] = claro_format_locale_date($dateFormatLong, strtotime($row->date));
+    $data['body'] = standard_text_escape($row->body);
+
+    $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
+
+    view('info.single_system_announcement', $data);
+} else {
+    // display admin announcements
+
+    load_js('datatables');
+    load_js('trunk8');
+
+    $data['action_bar'] = action_bar([
+        ['title' => $langBack,
+            'url' => $urlServer,
+            'icon' => 'fa-reply',
+            'level' => 'primary-label',
+            'button-class' => 'btn-default']
+    ],false);
+
+    $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
 
            var oTable = $('#ann_table_admin_logout').DataTable ({
@@ -129,72 +164,7 @@ $head_content .= "<script type='text/javascript'>
         });
         </script>";
 
+    $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;
 
-if (isset($_GET['an_id'])) {
-
-    $row = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ". intval($_GET['an_id']));
-    if(empty($row)){
-        redirect_to_home_page("main/system_announcements/");
-    }
-
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => $_SERVER['SCRIPT_NAME'],
-            'icon' => 'fa-reply',
-            'level' => 'primary-label',
-            'button-class' => 'btn-default')
-    ),false);
-} else {
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => $urlServer,
-            'icon' => 'fa-reply',
-            'level' => 'primary-label',
-            'button-class' => 'btn-default')
-    ),false);
-}
-
-
-
-if (isset($_GET['an_id'])) {
-    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAnnouncements);
-    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'>";
-    $tool_content .= "<div class='panel-body'>";
-    $tool_content .= "
-                        <div class='single_announcement'>
-                            <div class='announcement-title'>
-                                ".standard_text_escape($row->title)."
-                            </div>
-                            <span class='announcement-date'>
-                                - ".claro_format_locale_date($dateFormatLong, strtotime($row->date))." -
-                            </span>
-                            <div class='announcement-main'>
-                                ".standard_text_escape($row->body)."
-                            </div>
-                        </div>";
-
-    $tool_content .= "
-                    </div>
-                </div></div></div>";
-} else {
-    // display admin announcements
-    $tool_content .= "
-        <table id='ann_table_admin_logout' class='table-default'>
-            <thead>
-                <tr class='list-header'>
-                    <th>$langAnnouncement</th>
-                    <th>$langDate</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>";
-}
-
-
-
-
-if (isset($uid) and $uid) {
-    draw($tool_content, 1, null, $head_content);
-} else {
-    draw($tool_content, 0, null, $head_content);
+    view('info.system_announcements', $data);
 }
