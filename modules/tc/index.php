@@ -177,7 +177,7 @@ if ($is_editor) {
 
 if (isset($_GET['add'])) {
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);    
-    new_bbb_session();
+    bbb_session_form();
 }
 elseif(isset($_POST['update_bbb_session'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -187,6 +187,7 @@ elseif(isset($_POST['update_bbb_session'])) {
     } else {
         $end = NULL;
     }
+    
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
     $start = $startDate_obj->format('Y-m-d H:i:s');
     $notifyUsers = 0;
@@ -196,8 +197,8 @@ elseif(isset($_POST['update_bbb_session'])) {
     $record = 'false';
     if (isset($_POST['record'])) {
         $record = $_POST['record'];
-    }    
-    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], $_POST['external_users'], $record, $_POST['sessionUsers'], true, getDirectReference($_GET['id']));
+    }
+    add_update_bbb_session($_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $_POST['minutes_before'], $_POST['external_users'], $record, $_POST['sessionUsers'], true, getDirectReference($_POST['id']));
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }
@@ -207,7 +208,7 @@ elseif(isset($_GET['choice']))
     switch($_GET['choice'])
     {
         case 'edit':
-            edit_bbb_session(getDirectReference($_GET['id']));
+            bbb_session_form(getDirectReference($_GET['id']));
             break;
         case 'do_delete':
             delete_bbb_session(getDirectReference($_GET['id']));
