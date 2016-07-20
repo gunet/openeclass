@@ -4761,11 +4761,11 @@ $langAbuseReportClosed = 'Κλειστή αναφορά';
  * Social Wall
  * ************************************************************ */
 $langWall = 'Τοίχος';
-$langWallYoutubeVideo = 'Βίντεο Youtube';
+$langWallExtVideo = 'Εξωτερικό βίντεο';
 $langWallPostSaved = 'Η ανάρτηση αποθηκεύθηκε';
 $langWallMessageEmpty = 'Το μήνυμα της ανάρτησης ήταν κενό';
-$langWallYoutubeVideoLink = 'Διεύθυνση βίντεο Youtube';
-$langWallYoutubeVideoLinkNotValid = 'Η τιμή του πεδίου για τη διεύθυνση του βίντεο δεν είναι έγκυρη διεύθυνση του Youtube';
+$langWallExtVideoLink = 'Διεύθυνση βίντεο Youtube ή Vimeo';
+$langWallExtVideoLinkNotValid = 'Η τιμή του πεδίου για τη διεύθυνση του βίντεο δεν είναι έγκυρη διεύθυνση των υπηρεσιών Youtube ή Vimeo';
 $langNoWallPosts = 'Δεν υπάρχουν αναρτήσεις στον τοίχο του μαθήματος';
 $langWallUser = 'Ο χρήστης ';
 $langWallSharedVideo = ' μοιράστηκε ένα βίντεο';

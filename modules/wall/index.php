@@ -22,6 +22,7 @@ $require_current_course = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/wall/wall_functions.php';
+require_once 'modules/wall/ExtVideoUrlParser.class.php';
 require_once 'insert_video.php';
 require_once 'insert_doc.php';
 require_once 'include/log.php';
@@ -40,7 +41,7 @@ $pageName = $langWall;
 if (isset($_POST['submit'])) {
     if (allow_to_post($course_id, $uid, $is_editor)) {
         if (!empty($_POST['message'])) {
-            if (empty($_POST['youtube'])) {
+            if (empty($_POST['extvideo'])) {
                 $content = links_autodetection($_POST['message']);
                 $id = Database::get()->query("INSERT INTO wall_post (course_id, user_id, content, timestamp) VALUES (?d,?d,?s,UNIX_TIMESTAMP())",
                         $course_id, $uid, $content)->lastInsertID;
@@ -49,18 +50,18 @@ if (isset($_POST['submit'])) {
                           'content' => $content));
                 Session::Messages($langWallPostSaved, 'alert-success');
             } else {
-                if (validate_youtube_link($_POST['youtube']) === FALSE) {
+                if (ExtVideoUrlParser::validateUrl($_POST['extvideo']) === FALSE) {
                     Session::flash('content', $_POST['message']);
-                    Session::flash('youtube', $_POST['youtube']);
-                    Session::Messages($langWallYoutubeVideoLinkNotValid);
+                    Session::flash('extvideo', $_POST['extvideo']);
+                    Session::Messages($langWallExtVideoLinkNotValid);
                 } else {
                     $content = links_autodetection($_POST['message']);
-                    $id = Database::get()->query("INSERT INTO wall_post (course_id, user_id, content, youtube, timestamp) VALUES (?d,?d,?s,?s, UNIX_TIMESTAMP())",
-                            $course_id, $uid, $content, $_POST['youtube'])->lastInsertID;
+                    $id = Database::get()->query("INSERT INTO wall_post (course_id, user_id, content, extvideo, timestamp) VALUES (?d,?d,?s,?s, UNIX_TIMESTAMP())",
+                            $course_id, $uid, $content, $_POST['extvideo'])->lastInsertID;
                     Log::record($course_id, MODULE_ID_WALL, LOG_INSERT,
                         array('id' => $id,
                               'content' => $content,
-                              'youtube' => $_POST['youtube']));
+                              'youtube' => $_POST['extvideo']));
                     Session::Messages($langWallPostSaved, 'alert-success');
                 }
             }
@@ -80,8 +81,8 @@ if (isset($_POST['submit'])) {
             }
         } else {
             Session::Messages($langWallMessageEmpty);
-            if (!empty($_POST['youtube'])) {
-                Session::flash('youtube', $_POST['youtube']);
+            if (!empty($_POST['extvideo'])) {
+                Session::flash('extvideo', $_POST['extvideo']);
             }
         }
         redirect_to_home_page("modules/wall/index.php?course=$course_code");
@@ -109,14 +110,14 @@ if (isset($_POST['submit'])) {
         Commenting::deleteComments('wallpost', $id);
         Rating::deleteRatings('wallpost', $id);
         
-        $post = Database::get()->querySingle("SELECT content, youtube FROM wall_post WHERE id = ?d", $id);
+        $post = Database::get()->querySingle("SELECT content, extvideo FROM wall_post WHERE id = ?d", $id);
         $content = $post->content;
-        $youtube = $post->youtube;
+        $extvideo = $post->extvideo;
         
         Log::record($course_id, MODULE_ID_WALL, LOG_DELETE, 
             array('id' => $id,
                   'content' => $content,
-                  'youtube' => $youtube));
+                  'extvideo' => $extvideo));
         
         Database::get()->query("DELETE FROM wall_post_resources WHERE post_id = ?d", $id);
         Database::get()->query("DELETE FROM wall_post WHERE id = ?d", $id);
@@ -127,11 +128,11 @@ if (isset($_POST['submit'])) {
     $id = intval($_GET['edit']);
     if (allow_to_edit($id, $uid, $is_editor)) {
         if (!empty($_POST['message'])) {
-            if (empty($_POST['youtube'])) {
+            if (empty($_POST['extvideo'])) {
                 $content = links_autodetection($_POST['message']);
-                $youtube = '';
-                Database::get()->query("UPDATE wall_post SET content = ?s, youtube = ?s WHERE id = ?d AND course_id = ?d",
-                    $content, $youtube, $id, $course_id);
+                $extvideo = '';
+                Database::get()->query("UPDATE wall_post SET content = ?s, extvideo = ?s WHERE id = ?d AND course_id = ?d",
+                    $content, $extvideo, $id, $course_id);
                 Database::get()->query("DELETE FROM wall_post_resources WHERE post_id = ?d", $id);
                 
                 Log::record($course_id, MODULE_ID_WALL, LOG_MODIFY,
@@ -139,22 +140,22 @@ if (isset($_POST['submit'])) {
                 'content' => $content));
                 
             } else {
-                if (validate_youtube_link($_POST['youtube']) === FALSE) {
+                if (ExtVideoUrlParser::validateUrl($_POST['extvideo']) === FALSE) {
                     Session::flash('content', $_POST['message']);
-                    Session::flash('youtube', $_POST['youtube']);
-                    Session::Messages($langWallYoutubeVideoLinkNotValid);
+                    Session::flash('extvideo', $_POST['extvideo']);
+                    Session::Messages($langWallExtVideoLinkNotValid);
                     redirect_to_home_page("modules/wall/index.php?course=$course_code&edit=$id");
                 } else {
                     $content = links_autodetection($_POST['message']);
-                    $youtube = $_POST['youtube'];
-                    Database::get()->query("UPDATE wall_post SET content = ?s, youtube = ?s WHERE id = ?d AND course_id = ?d",
-                        $content, $youtube, $id, $course_id);
+                    $extvideo = $_POST['extvideo'];
+                    Database::get()->query("UPDATE wall_post SET content = ?s, extvideo = ?s WHERE id = ?d AND course_id = ?d",
+                        $content, $extvideo, $id, $course_id);
                     Database::get()->query("DELETE FROM wall_post_resources WHERE post_id = ?d", $id);
                     
                     Log::record($course_id, MODULE_ID_WALL, LOG_MODIFY,
                     array('id' => $id,
                     'content' => $content,
-                    'youtube' => $youtube));
+                    'extvideo' => $extvideo));
                     
                 }
             }
@@ -179,8 +180,8 @@ if (isset($_POST['submit'])) {
             redirect_to_home_page("modules/wall/index.php?course=$course_code");
         } else {
             Session::Messages($langWallMessageEmpty);
-            if (!empty($_POST['youtube'])) {
-                Session::flash('youtube', $_POST['youtube']);
+            if (!empty($_POST['extvideo'])) {
+                Session::flash('extvideo', $_POST['extvideo']);
                 redirect_to_home_page("modules/wall/index.php?course=$course_code&edit=$id");
             }
         }
@@ -196,7 +197,7 @@ if (isset($_POST['submit'])) {
 
 if (isset($_GET['showPost'])) { //show comments case
     $id = intval($_GET['showPost']);
-    $post = Database::get()->querySingle("SELECT id, user_id, content, youtube, FROM_UNIXTIME(timestamp) as datetime, pinned FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $post = Database::get()->querySingle("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);
     if ($post) {
         $tool_content .= action_bar(array(
                   array('title' => $langBack,
@@ -218,9 +219,9 @@ if (isset($_GET['showPost'])) { //show comments case
                                    'level' => 'primary-label')
                           ),false);
         
-        $post = Database::get()->querySingle("SELECT content, youtube FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);
+        $post = Database::get()->querySingle("SELECT content, extvideo FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $content = Session::has('content')? Session::get('content') : $post->content;
-        $youtube = Session::has('youtube')? Session::get('youtube') : $post->youtube;
+        $extvideo = Session::has('extvideo')? Session::get('extvideo') : $post->extvideo;
         
         if (visible_module(MODULE_ID_VIDEO)) {
             $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
@@ -268,15 +269,15 @@ if (isset($_GET['showPost'])) { //show comments case
                             <div class="panel panel-default">
                                 <div class="panel-body">
                                     <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
+                                        <li class="active"><a data-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'
                                         '.$docs_li.'
                                         '.$mydocs_li.'        
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="form-group tab-pane fade in active" id="youtube_video_div" style="padding:10px">
-                                            <label for="youtube_video">'.$langWallYoutubeVideoLink.'</label>
-                                            <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
+                                        <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
+                                            <label for="extvideo_video">'.$langWallExtVideoLink.'</label>
+                                            <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
                                         </div>
                                         '.$video_div.'
                                         '.$docs_div.'
@@ -308,7 +309,7 @@ if (isset($_GET['showPost'])) { //show comments case
         load_js('autosize');
         
         $content = Session::has('content')? Session::get('content'): '';
-        $youtube = Session::has('youtube')? Session::get('youtube'): '';
+        $extvideo = Session::has('extvideo')? Session::get('extvideo'): '';
         
         if (visible_module(MODULE_ID_VIDEO)) {
             $video_div = '<div class="form-group tab-pane fade" id="videos_div" style="padding:10px">
@@ -360,15 +361,15 @@ if (isset($_GET['showPost'])) { //show comments case
                             <div id="resources_panel" class="panel panel-default collapse">
                                 <div class="panel-body">
                                     <ul class="nav nav-tabs">
-                                        <li class="active"><a data-toggle="tab" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
+                                        <li class="active"><a data-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'
                                         '.$docs_li.'
                                         '.$mydocs_li.'
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="form-group tab-pane fade in active" id="youtube_video_div" style="padding:10px">
-                                            <label for="youtube_video">'.$langWallYoutubeVideoLink.'</label>
-                                            <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
+                                        <div class="form-group tab-pane fade in active" id="extvideo_video_div" style="padding:10px">
+                                            <label for="extvideo_video">'.$langWallExtVideoLink.'</label>
+                                            <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
                                         </div>
                                         '.$video_div.'
                                         '.$docs_div.'
@@ -396,7 +397,7 @@ if (isset($_GET['showPost'])) { //show comments case
     }
     
     //show wall posts
-    $posts = Database::get()->queryArray("SELECT id, user_id, content, youtube, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY pinned DESC, timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
+    $posts = Database::get()->queryArray("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY pinned DESC, timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
     if (count($posts) == 0) {
         $tool_content .= '<div class="alert alert-warning">'.$langNoWallPosts.'</div>';
     } else {

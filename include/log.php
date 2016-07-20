@@ -932,7 +932,7 @@ class Log {
      * @return string
      */
     private function wall_action_details($details) {
-        global $langContent, $langWallYoutubeVideoLink;
+        global $langContent, $langWallExtVideoLink;
         
         $details = unserialize($details);
         
@@ -941,8 +941,8 @@ class Log {
         if (!empty($details['content'])) {
             $content .= "$langContent: &laquo".q($details['content'])."&raquo<br/>";
         }
-        if (!empty($details['youtube'])) {
-            $content .= "$langWallYoutubeVideoLink: &laquo".q($details['youtube'])."&raquo<br/>";
+        if (!empty($details['extvideo'])) {
+            $content .= "$langWallExtVideoLink: &laquo".q($details['extvideo'])."&raquo<br/>";
         }
 
         return $content;

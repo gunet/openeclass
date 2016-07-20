@@ -27,6 +27,7 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/document/doc_init.php';
+require_once 'modules/wall/ExtVideoUrlParser.class.php';
 
 function allow_to_post($course_id, $user_id, $is_editor) {
     if ($is_editor) {
@@ -113,19 +114,6 @@ function links_autodetection($text) {
     return $ret_text;
 }
 
-function validate_youtube_link($video_url) {
-    
-    if (strrpos($video_url, 'v=', -1) === FALSE) {
-        return false;
-    }
-    
-    if (stristr($video_url, 'www.youtube.com/') === FALSE) {
-        return false;
-    }
-    
-    return true;
-}
-
 function generate_single_post_html($post) {
     global $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
     $course_code, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
@@ -138,18 +126,23 @@ function generate_single_post_html($post) {
     $content = $post->content;
     $token = token_generate($user_id, true);
     $datetime = nice_format($post->datetime, true);
-    $youtube = $post->youtube;
+    $extvideo = $post->extvideo;
     $pinned = $post->pinned;
-    if ($youtube == '') {
+    if ($extvideo == '') {
         $shared = $langWallSharedPost;
-        $youtube_block = '';
+        $extvideo_block = '';
     } else {
         $shared = $langWallSharedVideo;
-        $pos_v = strrpos ($youtube, 'v=', - 1);
-        $youtube = 'http://www.youtube.com/embed/'.mb_substr($youtube, $pos_v+2);
-        $youtube_block = '<div class="video_status">
-                               <iframe  scrolling="no" width="445" height="250" src="'.$youtube.'" frameborder="0" allowfullscreen></iframe>
-                            </div>';
+    $extvideo_embed = ExtVideoUrlParser::get_embed_url($extvideo);
+        if ($extvideo_embed[0] == 'youtube') {
+            $extvideo_block = '<div class="video_status">
+                                   <iframe  scrolling="no" width="445" height="250" src="'.$extvideo_embed[1].'" frameborder="0" allowfullscreen></iframe>
+                               </div>';
+        } elseif ($extvideo_embed[0] == 'vimeo') {
+            $extvideo_block = '<div class="video_status">
+                                   <iframe  scrolling="no" width="445" height="250" src="'.$extvideo_embed[1].'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                               </div>';
+        }
     }
     
     $rating = new Rating('thumbs_up', 'wallpost', $id);
@@ -217,7 +210,7 @@ function generate_single_post_html($post) {
                                           <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                           '.$post_actions.'
                                           <div class="margin-top-thin" style="padding:20px">
-                                              '.$youtube_block.'
+                                              '.$extvideo_block.'
                                               <div class="userContent">'.nl2br(standard_text_escape($content)).'</div>
                                           </div>
                                           '.show_resources($id).'
@@ -256,17 +249,22 @@ function generate_infinite_container_html($posts, $next_page) {
         $pinned = $post->pinned;
         $token = token_generate($user_id, true);
         $datetime = nice_format($post->datetime, true);
-        $youtube = $post->youtube;
-        if ($youtube == '') {
+        $extvideo = $post->extvideo;
+        if ($extvideo == '') {
             $shared = $langWallSharedPost;
-            $youtube_block = '';
+            $extvideo_block = '';
         } else {
             $shared = $langWallSharedVideo;
-            $pos_v = strrpos ($youtube, 'v=', - 1);
-            $youtube = 'http://www.youtube.com/embed/'.mb_substr($youtube, $pos_v+2);
-            $youtube_block = '<div class="video_status">
-                               <iframe  scrolling="no" width="445" height="250" src="'.$youtube.'" frameborder="0" allowfullscreen></iframe>
-                            </div>';
+            $extvideo_embed = ExtVideoUrlParser::get_embed_url($extvideo);
+            if ($extvideo_embed[0] == 'youtube') {
+                $extvideo_block = '<div class="video_status">
+                                       <iframe  scrolling="no" width="445" height="250" src="'.$extvideo_embed[1].'" frameborder="0" allowfullscreen></iframe>
+                                   </div>';
+            } elseif ($extvideo_embed[0] == 'vimeo') {
+                $extvideo_block = '<div class="video_status">
+                                       <iframe  scrolling="no" width="445" height="250" src="'.$extvideo_embed[1].'" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                                   </div>';
+            }
         }
         
         $rating = new Rating('thumbs_up', 'wallpost', $id);
@@ -328,7 +326,7 @@ function generate_infinite_container_html($posts, $next_page) {
                                           <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                           '.$post_actions.'
                                           <div class="margin-top-thin" style="padding:20px">
-                                              '.$youtube_block.'
+                                              '.$extvideo_block.'
                                               <div class="userContent">'.nl2br(standard_text_escape($content)).'</div>
                                           </div>
                                           '.show_resources($id).'
