@@ -113,6 +113,9 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['delblogposts'])) {
         $output[] = del_blog_posts();
     }
+    if (isset($_POST['delwallposts'])) {
+        $output[] = del_wall_posts();
+    }
 
     if (($count_events = count($output)) > 0) {
         $tool_content .= "<div class='alert alert-success'>";
@@ -186,6 +189,10 @@ if (isset($_POST['submit'])) {
             <div class='form-group'>
               <label for='delblogposts' class='col-sm-2 control-label'>$langBlog</label>
               <div class='col-sm-10 checkbox'><label><input type='checkbox' name='delblogposts'>$langDelBlogPosts</label></div>
+            </div>
+            <div class='form-group'>
+              <label for='delwallposts' class='col-sm-2 control-label'>$langWall</label>
+              <div class='col-sm-10 checkbox'><label><input type='checkbox' name='delwallposts'>$langDelWallPosts</label></div>
             </div>";
             }
         $tool_content .= "
@@ -364,3 +371,26 @@ function del_blog_posts() {
     
     return "<p>$langBlogPostsDeleted</p>";
 }
+
+/**
+ *
+ * @global type $langWallPostsDeleted
+ * @return type 
+ */
+function del_wall_posts() {
+    global $langWallPostsDeleted, $course_id;
+
+    Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `wall_post` ON `rating`.`rid` = `wall_post`.`id`
+                            WHERE `rating`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $course_id);
+    Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `wall_post` ON `rating_cache`.`rid` = `wall_post`.`id`
+                            WHERE `rating_cache`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $course_id);
+    Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `wall_post` ON `comments`.`rid` = `wall_post`.`id`
+                            WHERE `comments`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $course_id);
+    Database::get()->query("DELETE `wall_post_resources` FROM `wall_post_resources` INNER JOIN `wall_post` ON `wall_post_resources`.`post_id` = `wall_post`.`id`
+                            WHERE `wall_post`.`course_id` = ?d", $course_id);
+    Database::get()->query("DELETE FROM abuse_report WHERE rtype = ?s AND course_id = ?d", 'wallpost', $course_id);
+    Database::get()->query("DELETE FROM `wall_post` WHERE `course_id` = ?d", $course_id);
+
+    return "<p>$langWallPostsDeleted</p>";
+}
+
