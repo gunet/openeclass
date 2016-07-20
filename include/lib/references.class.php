@@ -33,7 +33,7 @@
  *  
  */
 
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 class References {
     /** @const integer a module id for a course generally

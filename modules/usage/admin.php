@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,11 +17,11 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 
-$head_content .= 
+$head_content .=
     "<script type='text/javascript'>
         startdate = null;
         interval = 1;
@@ -35,6 +35,14 @@ $head_content .=
 /**** Summary info    ****/
 
 $tool_content .= action_bar(array(
+                array('title' => $langStatOfFaculty,
+                    'url' => "faculty_stats.php",
+                    'icon' => 'fa-bar-chart',
+                    'level' => 'primary-label'),
+                array('title' => $langMonthlyReport,
+                    'url' => "../admin/monthlyReport.php",
+                    'icon' => 'fa-bar-chart',
+                    'level' => 'primary-label'),
                 array('title' => $langOldStats,
                     'url' => "../admin/oldStats.php",
                     'icon' => 'fa-bar-chart',
@@ -77,12 +85,12 @@ $tool_content .= "
 
 
 /****   Form   ****/
-require_once('form.php');
+require_once 'modules/usage/form.php';
 
 /****   Plots   ****/
 $tool_content .= "<div class='row plotscontainer'>";
 $tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
-$tool_content .= plot_placeholder("userlogins_stats", $langNbLogin);
+$tool_content .= plot_placeholder("userlogins_stats", $langNbLogin.' '.$langAndTotalCourseVisits);
 $tool_content .= "</div>";
 $tool_content .= "<div id='favcourses_container' class='col-lg-12'>";
 $tool_content .= plot_placeholder("popular_courses", $langFavouriteCourses);
@@ -94,7 +102,7 @@ $tool_content .= "<div id='modulepref_pie_container' class='col-sm-6'>";
 $tool_content .= plot_placeholder("depuser_stats", $langUsers);
 $tool_content .= "</div>";
 $tool_content .= "<div id='module_container' class='col-sm-6'>";
-$tool_content .= plot_placeholder("depcourse_stats", $langCoursesHeader);
+$tool_content .= plot_placeholder("depcourse_stats", $langCourses);
 $tool_content .= "</div>";
 $tool_content .= "</div>";
 
@@ -104,7 +112,7 @@ $tool_content .= "<div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr>"
         . "<th rowspan='2'>$langCategory</th>"
         . "<th colspan='3'>$langUsers</th>"
-        . "<th colspan='4'>$langCoursesHeader</th>"
+        . "<th colspan='4'>$langCourses</th>"
         . "</tr><tr>";
 foreach($langStatsUserStatus as $us){
     $tschema .= "<th>$us</th>";

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.3
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -95,14 +95,14 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             if ($setWeighting) {
                 @$blanks = unserialize($blanks);
                 // separates text and weightings by '::'
-                $reponse.='::';
+                $reponse .= '::';
                 $questionWeighting = 0;
                 foreach ($weighting as $val) {
                     // a blank can't have a negative weighting
                     $val = abs($val);
-                    $questionWeighting+=$val;
+                    $questionWeighting += $val;
                     // adds blank weighting at the end of the text
-                    $reponse.=$val . ',';
+                    $reponse .= $val . ',';
                 }
                 $reponse = substr($reponse, 0, -1);
                 $objAnswer->createAnswer($reponse, 0, '', 0, 0);
@@ -114,7 +114,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                     $objQuestion->save($exerciseId);
                 }
 
-                $editQuestion = $questionId;               
+                $editQuestion = $questionId;
                 unset($setWeighting);
             }
             // if no text has been typed or the text contains no blank
@@ -126,37 +126,11 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 // now we're going to give a weighting to each blank
                 $setWeighting = 1;
                 unset($submitAnswers);
-                // removes character '::' possibly inserted by the user in the text
-                $reponse = str_replace('::', '', $reponse);
-                // we save the answer because it will be modified
-                $temp = $reponse;
-                // blanks will be put into an array
-                $blanks = Array();
-                $i = 1;
-                // the loop will stop at the end of the text
-                while (1) {
-                    if (($pos = strpos($temp, '[')) === false) {
-                        break;
-                    }
-                    // removes characters till '['
-                    $temp = substr($temp, $pos + 1);
-                    // quits the loop if there are no more blanks
-                    if (($pos = strpos($temp, ']')) === false) {
-                        break;
-                    }
-                    // stores the found blank into the array
-                    $blank = substr($temp, 0, $pos);
-                    // skip blanks containing math tags [m]...[/m]
-                    if ($blank != 'm' and $blank != '/m') {
-                        $blanks[$i++] = substr($temp, 0, $pos);
-                    }
-                    // removes the character ']'
-                    $temp = substr($temp, $pos + 1);
-                }
+                $blanks = Question::getBlanks($reponse);
             }
         } else {
             if (isset($exerciseId)) {
-               redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$question_id"); 
+               redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$question_id");
             } else {
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyAnswers=$question_id");
             }
@@ -203,7 +177,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             $objQuestion->updateWeighting($questionWeighting);
             $objQuestion->save($exerciseId);
             $editQuestion = $questionId;
-            
+
         }
     } elseif ($answerType == TRUE_FALSE) {
         $questionWeighting = $nbrGoodAnswers = 0;
@@ -402,7 +376,7 @@ if (isset($_GET['modifyAnswers'])) {
                         <h3 class='panel-title'>$langQuestion</h3>
                       </div>
                       <div class='panel-body'>
-                            <h4><small>$questionTypeWord</small><br>" . nl2br(q_math($questionName)) . "</h4>                         
+                            <h4><small>$questionTypeWord</small><br>" . nl2br(q_math($questionName)) . "</h4>
                       </div>
                     </div>";
    $tool_content .= "<div class='panel panel-info'>
@@ -410,13 +384,13 @@ if (isset($_GET['modifyAnswers'])) {
                         <h3 class='panel-title'>$langQuestionAnswers</h3>
                       </div>
                       <div class='panel-body'>";
-   
+
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
         $tool_content .= "
                     <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>
                     <input type='hidden' name='formSent' value='1' />
                     <input type='hidden' name='nbrAnswers' value='$nbrAnswers' />
-                    
+
                     <fieldset>
                     <table class='table table-striped table-hover'>";
         // if there is an error message
@@ -523,12 +497,12 @@ if (isset($_GET['modifyAnswers'])) {
                                     <tr>
                                         <td>$langWeightingForEachBlank</td>
                                     </tr>
-                                    <table class='table'>"; 
+                                    <table class='table'>";
                 foreach ($blanks as $i => $blank) {
                     $tool_content .= "
                                             <tr>
                                               <td class='text-right'><b>[" . q($blank) . "] :</b></td>" . "
-                                              <td><input class='form-control' type='text' name='weighting[".($i-1)."]' value='" . (isset($weighting[$i-1]) ? intval($weighting[$i-1]) : 0) . "'></td>
+                                              <td><input class='form-control' type='text' name='weighting[".($i)."]' value='" . (isset($weighting[$i]) ? $weighting[$i] : 0) . "'></td>
                                             </tr>";
                 }
                 $tool_content .= "</table>";
@@ -673,7 +647,7 @@ if (isset($_GET['modifyAnswers'])) {
             </tr>
           </table>";
     }
-    
+
     $cancel_link = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
     $submit_text = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) && !isset($setWeighting) ? "$langNext &gt;" : $langCreate;
     $back_button = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) && isset($setWeighting) ? "<input class='btn btn-primary' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";

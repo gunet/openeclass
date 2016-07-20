@@ -33,7 +33,6 @@ require_once 'functions.php';
 load_js('bootstrap-slider');
 
 $toolName = $langQuestionnaire;
-$pageName = $langParticipate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
 //Identifying ajax request that cancels an active attempt
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -64,11 +63,29 @@ switch ($_REQUEST['UseCase']) {
 
 draw($tool_content, 2, null, $head_content);
 
+/**
+ * @brief display poll form
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $tool_content
+ * @global type $langSubmit
+ * @global type $langPollInactive
+ * @global type $langPollUnknown
+ * @global type $uid
+ * @global type $langPollAlreadyParticipated
+ * @global type $is_editor
+ * @global type $langBack
+ * @global type $langQuestion
+ * @global type $langCancel
+ * @global type $head_content
+ * @global type $pageName
+ * @global type $langPollParticipantInfo
+ */
 function printPollForm() {
     global $course_id, $course_code, $tool_content,
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
-    $langCancel, $head_content, $langPollParticipantInfo;
+    $langCancel, $head_content, $langPollParticipantInfo, $pageName;
     
     $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     $head_content .= " 
@@ -106,6 +123,8 @@ function printPollForm() {
     $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
     
     if ($is_editor || ($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
+        
+        $pageName = $thePoll->name;
         $tool_content .= action_bar(array(
             array(
                 'title' => $langBack,
@@ -114,19 +133,15 @@ function printPollForm() {
                 'level' => 'primary-label'
             )
         ));
-        $tool_content .= "
-            <div class='panel panel-primary'>
-                <div class='panel-heading'>
-                    <h3 class='panel-title'>$thePoll->name</h3>
-                </div>";
+        
         if ($thePoll->description) {
-            $tool_content .= "
+            $tool_content .= "<div class='panel panel-primary'>            
                 <div class='panel-body'>
                     <p>$thePoll->description</p>
-                </div>";
+                </div>
+            </div>";
         }
-        $tool_content .= "
-            </div>
+        $tool_content .= "            
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='poll' method='post'>
             <input type='hidden' value='2' name='UseCase'>
             <input type='hidden' value='$pid' name='pid'>";     
@@ -162,7 +177,7 @@ function printPollForm() {
             if($qtype==QTYPE_LABEL) {
                 $tool_content .= "    
                     <div class='alert alert-info' role='alert'>
-                        $theQuestion->question_text
+                        <strong>$theQuestion->question_text</strong>
                     </div>";                
             } else {
                 $tool_content .= "
@@ -171,7 +186,7 @@ function printPollForm() {
                             $langQuestion $i
                         </div>
                         <div class='panel-body'>
-                            <h4>".q($theQuestion->question_text)."</h4>
+                            <h5>".q($theQuestion->question_text)."</h5>
                             <input type='hidden' name='question[$pqid]' value='$qtype'>";
                 if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
                     $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
@@ -229,7 +244,7 @@ function printPollForm() {
         }
         $tool_content .= "<div class='text-center'>";
         if (!$is_editor) {
-            $tool_content .= "<input class='btn btn-primary' name='submit' type='submit' value='".q($langSubmit)."'> ";
+            $tool_content .= "<input class='btn btn-primary blockUI' name='submit' type='submit' value='".q($langSubmit)."'> ";
         }
         $tool_content .= "<a class='btn btn-default' href='index.php?course=$course_code'>".(($is_editor) ? q($langBack) : q($langCancel) )."</a></div></form>";
     } else {
@@ -238,10 +253,25 @@ function printPollForm() {
     }	
 }
 
+/**
+ * @brief submit poll
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $uid
+ * @global type $langPollSubmitted
+ * @global type $langBack
+ * @global type $langUsage
+ * @global type $langTheField
+ * @global type $langFormErrors
+ * @global type $charset
+ * @global type $urlServer
+ * @global type $langPollEmailUsed
+ * @global type $langPollParticipateConfirmation
+ */
 function submitPoll() {
     global $tool_content, $course_code, $uid, $langPollSubmitted, $langBack,
            $langUsage, $langTheField, $langFormErrors, $charset, $urlServer,
-           $langPollEmailUsed;
+           $langPollEmailUsed, $langPollParticipateConfirmation;
     
     $pid = intval($_POST['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
@@ -258,7 +288,7 @@ function submitPoll() {
     if($v->validate()) {
         // first populate poll_answer
         $CreationDate = date("Y-m-d H:i");
-        $answer = $_POST['answer'];
+        $answer = isset($_POST['answer'])? $_POST['answer']: array();
         if ($uid) {
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid)->lastInsertID;
         } else {
@@ -266,7 +296,7 @@ function submitPoll() {
             $participantEmail = $_POST['participantEmail'];
             $verification_code = randomkeys(255);
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, $participantEmail, 0, $verification_code)->lastInsertID;
-            $subject = "Επιβεβαίωση Συμμετοχής σε Ερωτηματολόγιο";
+            $subject = $langPollParticipateConfirmation;
             $body_html = "
              <!-- Header Section -->
             <div id='mail-header'>
@@ -286,7 +316,8 @@ function submitPoll() {
             send_mail_multipart('', '', '', $participantEmail, $subject, $body_plain, $body_html, $charset);
         }
 
-        foreach ($_POST['question'] as $pqid => $qtype) {
+        $question = isset($_POST['question'])? $_POST['question']: array();
+        foreach ($question as $pqid => $qtype) {
             $pqid = intval($pqid);
             if ($qtype == QTYPE_MULTIPLE) {
                 if(is_array($answer[$pqid])){

@@ -60,7 +60,7 @@ if ($userdata) {
         $allow_password_change = false;
     } else {
         $allow_password_change = true;
-    }
+    }    
     if ($uid == $id) {
         $passurl = $urlServer . 'main/profile/password.php';
         $tool_content .= 
@@ -77,7 +77,8 @@ if ($userdata) {
                 array('title' => $langEmailUnsubscribe,
                     'url' => "emailunsubscribe.php",
                     'icon' => 'fa-envelope',
-                    'level' => 'primary'),
+                    'level' => 'primary',
+                    'show' => (get_mail_ver_status($uid) == EMAIL_VERIFIED) and (!empty($_SESSION['courses']))),
                 array('title' => $langUnregUser,
                     'url' => "../unreguser.php",
                     'icon' => 'fa-times',
@@ -88,7 +89,7 @@ if ($userdata) {
             $tool_content .= 
                 action_bar(array(
                     array('title' => $langProfileSendMail,
-                        'url' => "../../modules/dropbox/index.php?upload=1&id=$id",
+                        'url' => $urlAppend . "modules/message/index.php?upload=1&amp;id=$id",
                         'icon' => 'fa-envelope',
                         'level' => 'primary-label')
                     ));
@@ -213,7 +214,7 @@ if ($userdata) {
         $tool_content .= "
     <div id='profile-departments' class='row'>
         <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>            
-            <div><span class='tag'>$langHierarchyNode : </span>";
+            <div><span class='tag'>$langFaculty : </span>";
             $departments = $user->getDepartmentIds($id);
                 $i = 1;
                 foreach ($departments as $dep) {

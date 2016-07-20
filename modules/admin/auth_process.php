@@ -34,9 +34,9 @@ $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
 if (isset($_REQUEST['auth']) && is_numeric(getDirectReference($_REQUEST['auth']))) {
-    $auth = intval(getDirectReference($_REQUEST['auth'])); // $auth gets the integer value of the auth method if it is set
+    $data['auth'] = $auth = intval(getDirectReference($_REQUEST['auth'])); // $auth gets the integer value of the auth method if it is set
 } else {
-    $auth = false;
+    $data['auth'] = $auth = false;
 }
 
 register_posted_variables(array('imaphost' => true, 'pop3host' => true,
@@ -64,6 +64,7 @@ if (empty($ldap_login_attr)) {
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     switch ($auth) {
         case 1:
             $settings = array();
@@ -159,7 +160,7 @@ if (isset($_POST['submit'])) {
             auth_default = GREATEST(auth_default, 1),
             auth_title = ?s
         WHERE auth_id = ?d",
-        function ($error) use (&$tool_content, $langErrActiv) {
+        function ($error) use ($langErrActiv) {
             Session::Messages($langErrActiv, 'alert-warning');
         }, $auth_settings, $auth_instructions, $auth_title, $auth);
     if ($result) {
@@ -178,7 +179,7 @@ if (isset($_POST['submit'])) {
         redirect_to_home_page('modules/admin/auth.php');
     }
 
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
         array('title' => $langConnTest,
               'url' => "auth_test.php?auth=$auth",
               'icon' => 'fa-plug',
@@ -190,87 +191,37 @@ if (isset($_POST['submit'])) {
               'url' => 'auth.php')));
 
     $pageName = get_auth_info($auth);
-
-    // get authentication settings
-    if ($auth != 6) {
-        $auth_data = get_auth_settings($auth);
+    $data['auth_data'] = $auth_data = get_auth_settings($auth);
+    if ($auth == 6) {
+        $data['secureIndexPath'] = $webDir . '/secure/index.php';
+        $data['shib_vars'] = get_shibboleth_vars($data['secureIndexPath']);
+        //$r = Database::get()->querySingle("SELECT auth_settings, auth_instructions, auth_title FROM auth WHERE auth_id = 6");
+        $shibsettings = $data['auth_data']['auth_settings'];
+        if ($shibsettings != 'shibboleth' and $shibsettings != '') {
+            $data['shibseparator'] = $shibsettings;
+            $data['checkedshib'] = 'checked';
+        } else {
+            $data['checkedshib'] = $data['shibseparator'] = '';
+        }        
+    } else {
+        if (in_array($auth, [8, 9, 10, 11, 12, 13])) {
+            //$r = Database::get()->querySingle("SELECT auth_settings, auth_instructions, auth_name FROM auth WHERE auth_id = ?d", $auth);
+            if (!empty($data['auth_data']['auth_settings'])) {
+                foreach (unserialize($data['auth_data']['auth_settings']) as $key => $auth_setting) {
+                    $data['auth_data'][$key] = $auth_setting;
+                }
+                if (isset($data['auth_data']['id'])) {
+                    $data['auth_data']['key'] = $data['auth_data']['id'];
+                }
+            } else {
+                $data['auth_data']['id'] = $data['auth_data']['key'] = $data['auth_data']['secret'] = '';
+            }       
+        }
     }
-    // display form
-    $tool_content .= "<div class='form-wrapper'>
-    <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
-	<fieldset>	
-        <input type='hidden' name='auth' value='" . getIndirectReference(intval($auth)) . "'>";
-
-    switch ($auth) {
-        case 1: $tool_content .= eclass_auth_form($auth_data['auth_title'], $auth_data['auth_instructions']);
-            break;
-        case 2: require_once 'modules/auth/methods/pop3form.php';
-            break;
-        case 3: require_once 'modules/auth/methods/imapform.php';
-            break;
-        case 4: require_once 'modules/auth/methods/ldapform.php';
-            break;
-        case 5: require_once 'modules/auth/methods/dbform.php';
-            break;
-        case 6: require_once 'modules/auth/methods/shibform.php';
-            break;
-        case 7: require_once 'modules/auth/methods/casform.php';
-            break;
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
-            require_once 'modules/auth/methods/hybridauthform.php'; // generic HybridAuth form for provider settings
-            hybridAuthForm($auth);
-            break;
-        default:
-            break;
-    }
-    $tool_content .= "
-                <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>
-                        <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
-                        <a class='btn btn-default' href='auth.php'>$langCancel</a>
-                    </div>
-                </div>
-            </fieldset>
-            ". generate_csrf_token_form_field() ."
-        </form>
-    </div>";
 }
 
-draw($tool_content, 3);
-
-/**
- * @brief display form for completing info about authentication via eclass
- * @global type $langAuthTitle
- * @global type $langInstructionsAuth
- * @param type $auth_title
- * @param type $auth_instructions
- * @return string
- */
-function eclass_auth_form($auth_title, $auth_instructions) {
-
-    global $langAuthTitle, $langInstructionsAuth;
-
-    $content = "<div class='form-group'>
-            <label for='auth_title' class='col-sm-2 control-label'>$langAuthTitle:</label>
-            <div class='col-sm-10'>
-                <input class='form-control' name='auth_title' id='auth_title' type='text' value='" . q($auth_title) . "'>
-            </div>
-        </div>
-        <div class='form-group'>
-            <label for='auth_instructions' class='col-sm-2 control-label'>$langInstructionsAuth:</label>
-            <div class='col-sm-10'>
-                <textarea class='form-control' name='auth_instructions' id='auth_instructions' rows='10'>" . q($auth_instructions) . "</textarea>
-            </div>
-        </div>";
-
-    return $content;
-}
-
+$data['menuTypeID'] = 3;
+view ('admin.users.auth.auth_process', $data);
 
 /**
  * @brief utility function
@@ -284,4 +235,3 @@ function pack_settings($settings) {
     }
     return implode('|', $items);
 }
-

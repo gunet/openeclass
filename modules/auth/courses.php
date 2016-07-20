@@ -23,17 +23,13 @@
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+
 $tree = new Hierarchy();
 
 $toolName = $langChoiceLesson;
-
-$icons = array(
-    COURSE_OPEN => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' />",
-    COURSE_REGISTRATION => "<img src='$themeimg/lock_registration.png' alt='" . $langRegCourse . "' title='" . $langRegCourse . "' />",
-    COURSE_CLOSED => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' />"
-);
 
 if (isset($_REQUEST['fc'])) {
     $fc = intval($_REQUEST['fc']);
@@ -189,7 +185,7 @@ function getdepnumcourses($fac) {
 /**
  * @brief display courses list
  * @global type $m
- * @global array $icons
+ * @global array $course_access_icons
  * @global type $langTutor
  * @global type $langRegistration
  * @global type $langRegistration
@@ -204,11 +200,21 @@ function getdepnumcourses($fac) {
  * @return string
  */
 function expanded_faculte($facid, $uid) {
-    global $m, $icons, $langTutor, $langRegistration,
+    global $m, $course_access_icons, $langTutor, $langRegistration,
     $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
-    $themeimg, $tree;
+    $themeimg, $tree, $is_power_user, $is_departmentmanage_user;
 
     $retString = '';
+
+    if ($is_power_user) {
+        $unlock_all_courses = true;
+    } elseif ($is_departmentmanage_user) {
+        $user = new User();
+        $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
+        $unlock_all_courses = in_array($facid, $subtrees);
+    } else {
+        $unlock_all_courses = false;
+    }
 
     // build a list of course followed by user.
     $myCourses = array();
@@ -240,14 +246,14 @@ function expanded_faculte($facid, $uid) {
                       WHERE course.id = course_department.course
                         AND course_department.department = ?d
                         AND course.visible != ?d
-                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $icons) {
+                   ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $uid, $myCourses, $themeimg, $langTutor, $m, $course_access_icons, $unlock_all_courses) {
         global $urlAppend, $courses_list;
         $cid = $mycours->cid;
         $course_title = q($mycours->i);
         $password = q($mycours->password);
         $courses_list[$cid] = array($mycours->k, $mycours->visible);
         // link creation
-        if ($mycours->visible == COURSE_OPEN or $GLOBALS['is_power_user'] or isset($myCourses[$cid])) {
+        if ($mycours->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$cid])) {
             // open course, registered to course, or power user who can see all
             $codelink = "<a href='{$urlAppend}courses/" . $mycours->k . "/'>$course_title</a>";
         } elseif ($mycours->visible == COURSE_CLOSED) { // closed course            
@@ -286,18 +292,10 @@ function expanded_faculte($facid, $uid) {
             $disabled = ($mycours->visible == 0) ? 'disabled' : '';
             $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class />";
         }
-        $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />
+        $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
                    <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$requirepassword</td>
                    <td>" . q($mycours->t) . "</td>
-                   <td align='center'>";
-
-        // show the necessary access icon
-        foreach ($icons as $visible => $image) {
-            if ($visible == $mycours->visible) {
-                $retString .= $image;
-            }
-        }
-        $retString .= "</td></tr>";        
+                   <td class='text-center'>" . $course_access_icons[$mycours->visible] . "</td></tr>";        
     }, intval($facid), COURSE_INACTIVE);
     $retString .= "</table></div>";
 

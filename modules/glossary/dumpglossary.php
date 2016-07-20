@@ -19,40 +19,23 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_current_course = TRUE;
+$require_current_course = true;
 $require_editor = true;
 
 require_once '../../include/init.php';
+require_once 'include/lib/csv.class.php';
 
-if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
-    $charset = 'Windows-1253';
-    $sendSep = true;
-} else {
-    $charset = 'UTF-8';
-    $sendSep = false;
+$csv = new CSV();
+if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
+    $csv->setEncoding('UTF-8');
 }
-$crlf = "\r\n";
+$csv->filename = $course_code . '_glossary.csv';
 
-if (!$is_editor) {
-    Session::Messages($langForbidden);
-    redirect_to_home_page('modules/glossary/index.php?course=' . $course_code);
-}
+$csv->outputRecord($langGlossaryTerm, $langGlossaryDefinition, $langGlossaryUrl);
 
-header("Content-Type: text/csv; charset=$charset");
-header("Content-Disposition: attachment; filename=glossary.csv");
-
-if ($sendSep) {
-    echo 'sep=;', $crlf;
-}
-
-echo join(';', array_map("csv_escape", array($langGlossaryTerm, $langGlossaryDefinition, $langGlossaryUrl))),
-$crlf;
-$sql = Database::get()->queryArray("SELECT term, definition, url FROM glossary
+$sql = Database::get()->queryFunc("SELECT term, definition, url FROM glossary
                             WHERE course_id = ?d
-                            ORDER BY `order`", $course_id);
-
-foreach ($sql as $a) {
-    echo join(';', array_map("csv_escape", array($a->term, $a->definition, $a->url)));
-    echo "$crlf";   
-}    
-
+                            ORDER BY `order`",
+            function ($item) use ($csv) {
+                $csv->outputRecord($item->term, $item->definition, $item->url);
+            }, $course_id);

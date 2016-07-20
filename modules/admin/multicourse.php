@@ -21,21 +21,13 @@
 
 $require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'modules/admin/hierarchy_validations.php';
 require_once 'modules/create_course/functions.php';
 
-$toolName = $langMultiCourse;
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -51,6 +43,8 @@ if (isset($_POST['submit'])) {
     }
 
     $vis = intval($_POST['formvisible']);
+    $sucess_messages = [];
+    $error_messages = [];
     while ($line !== false) {
         $line = canonicalize_whitespace($line);
         if (!empty($line)) {
@@ -86,82 +80,45 @@ if (isset($_POST['submit'])) {
             if ($code) {
                 course_index($code);
             }
-            $class = $prof_not_found ? 'alert alert-warning' : 'alert alert-success';
-            $tool_content .= "<div class='$class'><b>" . q($title) . '</b>: ' . q($langMultiCourseCreated);
-            if ($prof_uid) {
-                $tool_content .= '<br>' . q($langTeacher) . ': <b>' . q($prof_name) . '</b>';
-            } elseif ($prof_not_found) {
-                $tool_content .= '<br>' . q($langTeacher) . ': <b>' .
+            if ($prof_not_found) {
+                $error_messages[] = "<b>" . q($title) . '</b>: ' . q($langMultiCourseCreated).'<br>' . 
+                        q($langTeacher) . ': <b>' .
                         q($prof_info) . '</b>: ' . q($langNoUsersFound2);
+            } else {
+                $sucess_messages[] = "<b>" . q($title) . '</b>: ' . q($langMultiCourseCreated).'<br>' 
+                        . q($langTeacher) . ': <b>' . q($prof_name) . '</b>';
             }
-            $tool_content .= '</div>';
         }
         $line = strtok("\n");
     }
-} else {
-    $tree = new hierarchy();
-    $course = new course();
-    $user = new user();
-
-    load_js('jstree3');
-
-    $tool_content .= "<div class='alert alert-info'>$langMultiCourseInfo</div>
-        <div class='form-wrapper'>
-        <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "' onsubmit=\"return validateNodePickerForm();\">
-        <fieldset>
-        <div class='form-group'>
-            <label for='title' class='col-sm-3 control-label'>$langMultiCourseTitles:</label>
-            <div class='col-sm-9'>" . text_area('courses', 20, 80, '') . "</div>
-        </div>
-	<div class='form-group'>
-            <label for='title' class='col-sm-3 control-label'>$langFaculty:</label>	  
-            <div class='col-sm-9'>";
-        list($js, $html) = $tree->buildCourseNodePickerIndirect(array('allowables' => $user->getDepartmentIds($uid)));
-        $head_content .= $js;
-        $tool_content .= $html;
-    $tool_content .= "</div></div>";
-
-    $tool_content .= "<div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langConfidentiality</label></div>
-        <div class='form-group'>
-            <label for='password' class='col-sm-3 control-label'>$langOptPassword</label>
-            <div class='col-sm-9'>
-                <input id='coursepassword' class='form-control' type='text' name='password' id='password' autocomplete='off' />
-            </div>
-        </div>
-        <div class='form-group'>
-        <label for='Public' class='col-sm-3 control-label'>$langOpenCourse</label>
-            <div class='col-sm-9 radio'><label><input id='courseopen' type='radio' name='formvisible' value='2' checked> $langPublic</label></div>
-            </div>
-        <div class='form-group'>
-            <label for='PrivateOpen' class='col-sm-3 control-label'>$langRegCourse</label>	
-            <div class='col-sm-9 radio'><label><input id='coursewithregistration' type='radio' name='formvisible' value='1'> $langPrivOpen</label></div>
-        </div>
-        <div class='form-group'>
-            <label for='PrivateClosed' class='col-sm-3 control-label'>$langClosedCourse</label>
-            <div class='col-sm-9 radio'><label><input id='courseclose' type='radio' name='formvisible' value='0'> $langClosedCourseShort</label></div>
-       </div>
-        <div class='form-group'>
-             <label for='Inactive' class='col-sm-3 control-label'>$langInactiveCourse</label>
-             <div class='col-sm-9 radio'><label><input id='courseinactive' type='radio' name='formvisible' value='3'> $langCourseInactiveShort</label></div>
-         </div>
-         <div class='form-group'>
-          <label for='language' class='col-sm-3 control-label'>$langLanguage:</label>	  
-           <div class='col-sm-9'>" . lang_select_options('lang') . "</div>
-         </div>
-         ".showSecondFactorChallenge()."
-         <div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                <a href='index.php' class='btn btn-default'>$langCancel</a>    
-            </div>
-        </div>
-        </fieldset>
-        ". generate_csrf_token_form_field() ."
-        </form>
-        </div>";
+    if (!empty($sucess_messages)) Session::Messages ($sucess_messages, 'alert-success');
+    if (!empty($error_messages)) Session::Messages ($error_messages);
+    redirect_to_home_page('modules/admin/multicourse.php');
 }
 
-draw($tool_content, 3, null, $head_content);
+$toolName = $langMultiCourse;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
+$data['action_bar'] = action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));    
+$tree = new hierarchy();
+$course = new course();
+$user = new user();
+
+load_js('jstree3');
+
+
+list($js, $html) = $tree->buildCourseNodePickerIndirect(array('allowables' => $user->getDepartmentIds($uid)));
+$head_content .= $js;
+$data['html'] = $html;
+
+$data['menuTypeID'] = 3; 
+view('admin.courses.multicourse', $data);
+        
+
 
 /**
  * @brief helper function

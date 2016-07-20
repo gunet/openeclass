@@ -89,7 +89,21 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $filter_query = '';
     }
 
-    $query .= (isDepartmentAdmin()) ? ' AND course_department.department IN (' . implode(', ', $user->getDepartmentIds($uid)) . ') ' : '';
+    // Limit department admin search only to subtrees of own departments
+    if (isDepartmentAdmin()) {
+        $begin = true;
+        foreach ($user->getDepartmentIds($uid) as $department) {
+            if ($begin) {
+                $query .= ' AND (';
+                $begin = false;
+            } else {
+                $query .= ' OR ';
+            }
+            $nodeLftRgt = $tree->getNodeLftRgt($department);
+            $query .= 'hierarchy.lft BETWEEN ' . $nodeLftRgt->lft . ' AND ' . $nodeLftRgt->rgt;
+        }
+        $query .= ')';
+    }
 
     // sorting
     $extra_query = "ORDER BY course.title " .
@@ -152,7 +166,27 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $dep .= $tree->getFullPath($department) . $br;
             $i++;
         }
-
+        // display tc_server action if needed
+        $tc_type = is_configured_tc_server();
+        if ($tc_type == FALSE) {
+            $show_tc = false;
+            $icon_tc = $link_tc = '';
+        } else {
+            if (is_tc_server_enabled_for_all($tc_type)) {
+                $show_tc = false;
+                $icon_tc = $link_tc = '';
+            } else {                                
+                $show_tc = true;
+                if (is_active_tc_server($tc_type, $logs->id)) {
+                    $icon_tc = 'fa-check-square-o';
+                    $link_tc = "tc=0&amp;tc_type=$tc_type";
+                } else {
+                    $icon_tc = 'fa-square-o';
+                    $link_tc = "tc=1&amp;tc_type=$tc_type";
+                }
+            }
+        }
+        
         // Add links to course users, delete course and course edit
         $icon_content = action_button(array(
             array(
@@ -170,6 +204,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'icon' => 'fa-list',
                 'url' => "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE",
                 'show' => !isDepartmentAdmin()
+            ),
+            array(
+                'title' => $langActivateConference,
+                'icon' => $icon_tc,
+                'url' => "$_SERVER[SCRIPT_NAME]?c=$logs->id&amp;$link_tc",
+                'show' => $show_tc
             ),  
             array(
                 'title' => $langDelete,
@@ -235,12 +275,28 @@ $head_content .= "<script type='text/javascript'>
         </script>";
 
 
+// enable - disable tc server per course
+if (isset($_GET['tc'])) {
+    if ($_GET['tc'] == 1) {
+        $tc_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE enabled='true' AND `type` = ?s ORDER BY weight ASC", $_GET['tc_type'])->id;        
+        if ($tc_id) {
+            Database::get()->query("INSERT INTO course_external_server SET course_id=?d, external_server=?d", $_GET['c'], $tc_id);
+            Session::Messages($langTcCourseEnabled, 'alert alert-info');
+        }
+    } elseif($_GET['tc'] == 0)  {
+        Database::get()->query("DELETE FROM course_external_server WHERE course_id = ?d", $_GET['c']);
+        Session::Messages($langTcCourseDisabled, 'alert alert-info');        
+    } else {
+        redirect_to_home_page('modules/admin/index.php');
+    }
+}
+
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourses);
 $toolName = $langListCours;
 
 // Display Actions Toolbar
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
             array('title' => $langAllCourses,
                 'url' => "$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=" . getIndirectReference(0) . "&amp;search_submit=$langSearch",
                 'icon' => 'fa-search',
@@ -250,29 +306,5 @@ $tool_content .= action_bar(array(
                 'icon' => 'fa-reply',
                 'level' => 'primary')));                    
 
-$width = (!isDepartmentAdmin()) ? 100 : 80;
-// Construct course list table
-$tool_content .= "<table id='course_results_table' class='display'>
-    <thead>
-    <tr>
-    <th align='left'>$langCourseCode</th>
-    <th>$langGroupAccess</th>
-    <th width='260' align='left'>$langFaculty</th>
-    <th>".icon('fa-cogs')."</th>
-    </tr></thead>";
-
-$tool_content .= "<tbody></tbody></table>";
-
-// edit department
-if (isset($_GET['formsearchfaculte']) and $_GET['formsearchfaculte'] and is_numeric(getDirectReference($_GET['formsearchfaculte']))) {
-    $tool_content .= "<div align='right' style='margin-top: 60px; margin-bottom:10px;'>";
-    $tool_content .= "<form action='multieditcourse.php' method='post'>";
-    // redirect all request vars towards action
-    foreach ($_REQUEST as $key => $value) {
-        $tool_content .= "<input type='hidden' name='$key' value='$value'>";
-    }
-
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='move_submit' value='$langChangeDepartment'> ";
-    $tool_content .= generate_csrf_token_form_field() ."</form></div>";
-}
-draw($tool_content, 3, null, $head_content);
+$data['menuTypeID'] = 3;
+view('admin.courses.listcours', $data);

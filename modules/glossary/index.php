@@ -27,11 +27,11 @@ $helpTopic = 'Glossary';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 ModalBoxHelper::loadModalBox();
 
-$data['edit_url'] = $base_url = 'index.php?course=' . $course_code;
+$data['base_url'] = $base_url = 'index.php?course=' . $course_code;
 $cat_url = 'categories.php?course=' . $course_code;
 
 /*
@@ -43,7 +43,7 @@ $action->record(MODULE_ID_GLOSSARY);
 
 if ($is_editor) {
     load_js('tools.js');
-    $max_glossary_terms = get_config('max_glossary_terms');
+    $data['max_glossary_terms'] = get_config('max_glossary_terms');
 }
 
 $toolName = $langGlossary;
@@ -54,26 +54,28 @@ Database::get()->queryFunc("SELECT id, name, description, `order`
                       ORDER BY name", function ($cat) use (&$categories) {
     $categories[intval($cat->id)] = $cat->name;
 }, $course_id);
+$data['categories'] = $categories;
 
 $indirectcategories = array();
 foreach ($categories as $k => $v) {
     $indirectcategories[getIndirectReference($k)] = $v;
 }
 if (isset($_GET['cat'])) {
-    $cat_id = intval(getDirectReference($_GET['cat']));
-    $data['edit_url'] .= "&amp;cat=$cat_id";
+    $data['cat_id'] = $cat_id = intval(getDirectReference($_GET['cat']));
+    $data['edit_url'] = $base_url."&amp;cat=$cat_id";
 } else {
-    $cat_id = false;
+    $data['cat_id'] = $cat_id = false;
+    $data['edit_url'] = $base_url;
 }
 if (isset($_GET['prefix'])) {
-    $data['edit_url'] .= '&amp;prefix=' . urlencode($_GET['prefix']);
+    $data['edit_url'] = $base_url.'&amp;prefix=' . urlencode($_GET['prefix']);
 }
 
 $glossary_data = Database::get()->querySingle("SELECT glossary_expand, glossary_index
                                          FROM course WHERE id = ?d", $course_id);
 if ($glossary_data) {
-    $expand_glossary = $glossary_data->glossary_expand;
-    $glossary_index = $glossary_data->glossary_index;
+    $data['expand_glossary'] = $expand_glossary = $glossary_data->glossary_expand;
+    $data['glossary_index'] = $glossary_index = $glossary_data->glossary_index;
     if ($glossary_index) {
         $prefixes = array();
         Database::get()->queryFunc("SELECT DISTINCT UPPER(LEFT(term, 1)) AS prefix
@@ -85,6 +87,7 @@ if ($glossary_data) {
             }
         }, $course_id);
     }
+    $data['prefixes'] = $prefixes;
 }
 
 
@@ -103,13 +106,13 @@ if ($is_editor) {
         if (isset($_GET['edit'])) {
             $pageName = $langEdit;
         }
-        $tool_content .= action_bar(array(
+        $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                       'url' => "$base_url",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
     } else {
-        $tool_content .= action_bar(array(
+        $data['action_bar'] = action_bar(array(
                 array('title' => $langAddGlossaryTerm,
                       'url' => "$base_url&amp;add=1",
                       'icon' => 'fa-plus-circle',
@@ -123,11 +126,11 @@ if ($is_editor) {
                 array('title' => $langConfig,
                       'url' => "$base_url&amp;config=1",                      
                       'icon' => 'fa-gear'),
-                array('title' => "$langGlossaryToCsv (UTF8)",
+                array('title' => "$langGlossaryToCsv",
                       'url' => "dumpglossary.php?course=$course_code",
                       'icon' => 'fa-download'),
-                array('title' => "$langGlossaryToCsv (Windows 1253)",
-                      'url' => "dumpglossary.php?course=$course_code&amp;enc=1253",
+                array('title' => "$langGlossaryToCsv (UTF-8)",
+                      'url' => "dumpglossary.php?course=$course_code&amp;enc=UTF-8",
                       'icon' => 'fa-download'),
                 array('title' => $langCategories,
                       'url' => "categories.php?course=$course_code",
@@ -255,8 +258,7 @@ if ($is_editor) {
                                 'href' => $base_url
                             )
                         ));
-        echo view('modules.glossary.config', $data);
-        exit;
+        view('modules.glossary.config', $data);
     }
 
     // display form for adding or editing a glossary term
@@ -292,9 +294,10 @@ if ($is_editor) {
         $data['definition'] = Session::has('definition') ? Session::get('definition') : (isset($_GET['add']) ? "" : $glossary_item->definition );
         $notes = Session::has('notes') ? Session::get('notes') : (isset($_GET['add']) ? "" : $glossary_item->notes );
         $data['category_selection'] = '';
+
         if ($categories) {
             $categories[0] = '-';
-            $indirectcategories[0] = '-';
+            array_unshift($indirectcategories, "-");
             $data['category_selection'] = "
                         <div class='form-group'>
                              <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
@@ -317,14 +320,10 @@ if ($is_editor) {
                         'href' => $base_url,
                     )
                 ));
-        echo view('modules.glossary.create', $data);
-        exit;
+        view('modules.glossary.create', $data);
     }
-    $total_glossary_terms = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
-                                                          WHERE course_id = ?d", $course_id)->count;    
-    if ($expand_glossary && $total_glossary_terms > $max_glossary_terms) {
-        $tool_content .= sprintf("<div class='alert alert-warning'>$langGlossaryOverLimit</div>", "<b>$max_glossary_terms</b>");
-    }        
+    $data['total_glossary_terms'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
+                                                          WHERE course_id = ?d", $course_id)->count;       
 } else {
     // Show categories link for students if needed
     if ($categories) {
@@ -360,92 +359,17 @@ if (isset($_GET['edit'])) {
 }
 
 if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
-    if ($glossary_index and count($prefixes) > 1) {
-        $tool_content .= "<div class='alphabetic_index'>";
-        $begin = true;
-        foreach ($prefixes as $letter) {
-            $active = (!isset($_GET['prefix']) && !$cat_id && $begin) ||
-                    (isset($_GET['prefix']) and $_GET['prefix'] == $letter);
-            $tool_content .= ($begin ? '' : ' | ') .
-                    ($active ? '<b>' : "<a href='$base_url&amp;prefix=" . urlencode($letter) . "'>") .
-                    q($letter) . ($active ? '</b>' : '</a>');
-            $begin = false;
-        }
-        $tool_content .= "</div>";
-    }    
     if ($cat_id) {
         $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
         $pageName = q($categories[$cat_id]);
         $where .= " AND category_id = $cat_id";
     }
-    $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
+    $data['glossary_terms'] = $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
                             FROM glossary WHERE course_id = ?d $where
                             GROUP BY term
-                            ORDER BY term", $course_id, $terms);
-    if (count($sql) > 0) {
-        $tool_content .= "<div class='table-responsive glossary-categories'>";
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'>
-                     <th class='text-left'>$langGlossaryTerm</th>
-                     <th class='text-left'>$langGlossaryDefinition</th>";
-        if ($is_editor) {
-            $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
-        }
-        $tool_content .= "</tr>";    
-        foreach ($sql as $g) {
-            if (isset($_GET['id'])) {
-                $pageName = q($g->term);
-            }        
-            if (!empty($g->url)) {
-                $urllink = "<div><span class='term-url'><small><a href='" . q($g->url) .
-                        "' target='_blank'>" . q($g->url) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444;'></i></a></small></span></div>";
-            } else {
-                $urllink = '';
-            }
-
-            if (!empty($g->category_id)) {
-                $cat_descr = "<span class='text-muted'>$langCategory: <a href='$base_url&amp;cat=" . getIndirectReference($g->category_id) . "'>" . q($categories[$g->category_id]) . "</a></span>";
-            } else {
-                $cat_descr = '';
-            }
-
-            if (!empty($g->notes)) {
-                $urllink .= "<br><u>$langComments:</u><div class='text-muted'>". standard_text_escape($g->notes)."</div>";
-            }
-
-            if (!empty($g->definition)) {
-                $definition_data = q($g->definition);
-            } else {
-                $definition_data = '-';
-            }
-
-            $tool_content .= "<tr>
-                     <td width='150'><strong><a href='$base_url&amp;id=" . getIndirectReference($g->id) . "'>" . q($g->term) . "</a></strong><br><span><small>$cat_descr</small></span></td>
-                     <td><em>$definition_data</em>$urllink</td>";
-
-            if ($is_editor) {
-                $tool_content .= "<td class='option-btn-cell'>";
-                $tool_content .= action_button(array(
-                        array('title' => $langEditChange,
-                              'url' => "$data[edit_url]&amp;edit=" . getIndirectReference($g->id),
-                              'icon' => 'fa-edit'),
-                        array('title' => $langDelete,
-                              'url' => "$data[edit_url]&amp;delete=" . getIndirectReference($g->id),
-                              'icon' => 'fa-times',
-                              'class' => 'delete',
-                              'confirm' => $langConfirmDelete))
-                    );
-               $tool_content .= "</td>";
-            }                        
-            $tool_content .= "</tr>";        
-        }
-        $tool_content .= "</table></div>";
-    } else {
-        $tool_content .= "<br><div class='alert alert-warning'>$langNoResult</div>";
-    }
+                            ORDER BY term", $course_id, $terms);    
+    view('modules.glossary.index', $data);   
 }
-draw($tool_content, 2, null, $head_content);
-
 
 /**
  * @brief find glossary term order

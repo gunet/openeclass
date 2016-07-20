@@ -20,8 +20,11 @@
  * ======================================================================== */
 
 require_once '../../include/baseTheme.php';
+ini_set("error_log", $webDir . '/courses/cron.log');
+error_log("cron START");
+
 require_once 'include/lib/cronutil.class.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 session_write_close();
 
 
@@ -31,11 +34,13 @@ CronUtil::imgOut();
 CronUtil::flush();
 monthlycronjob();
 CronUtil::unlock();
+error_log("cron END");
 
 /**
  * @brief run jobs once a month
  */
-function monthlycronjob() {    
+function monthlycronjob() {
+    error_log("cron monthlyjob START");
     $monthlyname = 'admin_monthly';
     $lastmonth = mktime(date("H"), date("i"), date("s"), date("n") - 1, date("j"), date("Y"));
 
@@ -57,13 +62,17 @@ function monthlycronjob() {
         } else {
             Database::get()->query("UPDATE cron_params SET last_run = CURRENT_TIMESTAMP WHERE name = ?s", $monthlyname);
         }
+    } else {
+        error_log("cron monthlyjob was recently (< 1month) run, skipping ...");
     }
+    error_log("cron monthlyjob END");
 }
 
 /**
  * 
  */
 function summarizeLogins() {
+    error_log("cron summarizeLogins START");
     $stop_stmp = time() - (get_config('actions_expire_interval') - 1) * 30 * 24 * 3600;
     $stop_month = date('Y-m-01 00:00:00', $stop_stmp);
 
@@ -106,6 +115,7 @@ function summarizeLogins() {
             }
         }
     }
+    error_log("cron summarizeLogins END");
 }
 
 /**
@@ -120,8 +130,10 @@ function summarizeLogins() {
  * @global type $langTypeOpen
  */
 function summarizeMonthlyData() {
+    error_log("cron summarizeMonthlyData START");
     global $langCourse, $langCoursVisible, $langFaculty, $langTeacher,
-    $langNbUsers, $langTypeClosed, $langTypeRegistration, $langTypeOpen;
+    $langNbUsers, $langTypeClosed, $langTypeRegistration, $langTypeOpen,
+    $langInactiveCourse;
 
     // Check if data for last month have already been inserted in 'monthly_summary'...
     $lmon = mktime(0, 0, 0, date('m') - 1, date('d'), date('Y'));
@@ -176,12 +188,14 @@ function summarizeMonthlyData() {
             visitorsNum = ?d, coursNum = ?d, logins = ?d, details = ?s";
         Database::get()->query($sql, $last_month, $prof_sum, $stud_sum, $vis_sum, $cours_sum, $login_sum, $mtext);
     }
+    error_log("cron summarizeMonthlyData END");
 }
 
 /**
  * @brief summarize monthly actions
  */
 function summarizeMonthlyActions() {
+    error_log("cron summarizeMonthlyActions START");
     require_once 'include/action.php';
     
     $action = new action();
@@ -191,6 +205,7 @@ function summarizeMonthlyActions() {
             $action->summarize($course->id);
         }
     });
+    error_log("cron summarizeMonthlyActions END");
 }
 
 /**
@@ -198,9 +213,11 @@ function summarizeMonthlyActions() {
  * @global type $webDir
  */
 function optimizeIndex() {
+    error_log("cron optimizeIndex START");
     global $webDir; // required for indexer
     require_once 'modules/search/indexer.class.php';
     $idx = new Indexer();
     set_time_limit(0);
     $idx->getIndex()->optimize();
+    error_log("cron optimizeIndex END");
 }

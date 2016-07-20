@@ -152,12 +152,6 @@ $tool_content .=
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'))) ;
 $tool_content .= showlinks();
-//$tool_content .= "<br />";
-//$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php?course=$course_code">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
-// display list of modules used by this learning path
-//$tool_content .= display_path_content();
-
 
 draw($tool_content, 2, null, $head_content);
 
@@ -183,18 +177,20 @@ function showlinks() {
                         <th>$langName</th>
                         <th width='50'>$langSelection</th>
                       </tr></thead>
-                      <tbody>
-                      
-                      ";
+                      <tbody>";
     $i = 1;
     foreach ($result as $myrow) {
         $output .= "
-                <tr>                
-                <td align='left' valign='top'><a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>
-                <br>
-                <small class='comments'>" . $myrow->description . "</small></td>";
-        $output .= "<td><div align='center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
-                </tr>";
+            <tr>                
+            <td align='left' valign='top'>";
+            if (empty($myrow->title)) {
+                $output .= "<a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->url) . "</a>";
+            } else {
+                $output .= "<a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>";
+            }
+            $output .= "<br><small class='comments'>" . $myrow->description . "</small></td>";
+            $output .= "<td><div align='center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
+            </tr>";
         $i++;
     }
     $output .= "</tbody>

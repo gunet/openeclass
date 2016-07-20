@@ -27,9 +27,8 @@ $toolName = $langAutoEnroll;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 
-
 if (isset($_REQUEST['add'])) {
-    $type = intval($_REQUEST['add']);
+    $data['type'] = $type = intval($_REQUEST['add']);
     if (!in_array($type, array(USER_STUDENT, USER_TEACHER))) {
         forbidden();
     }
@@ -45,6 +44,7 @@ if (isset($_GET['delete'])) {
     redirect_to_home_page('modules/admin/autoenroll.php');
 } elseif (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     if (isset($_POST['id'])) {
         if (!($rule = getDirectReference($_POST['id']))) {
             forbidden();
@@ -83,18 +83,17 @@ if (isset($_GET['delete'])) {
     load_js('jstree3');
     load_js('select2');
 
-    $pageName = isset($_GET['add'])? $langAutoEnrollNew: $langEditChange;
-    $navigation[] = array('url' => 'autoenroll.php', 'name' => $langAutoEnroll);
-
+    $data['deps'] = $department = array();
+    $courses = '';
     if (isset($_GET['edit'])) {
         if (!($rule = getDirectReference($_GET['edit']))) {
             forbidden();
         }
 
         $q = Database::get()->querySingle('SELECT * FROM autoenroll_rule WHERE id = ?d', $rule);
-        $type = $q->status;
+        $data['type'] = $type = $q->status;
 
-        $department = array_map(function ($item) { return getIndirectReference($item->department); },
+        $department = array_map(function ($item) { return $item->department; },
             Database::get()->queryArray(
                 'SELECT department FROM autoenroll_rule_department WHERE rule = ?d', $rule));
      
@@ -109,52 +108,21 @@ if (isset($_GET['delete'])) {
                     'SELECT course_id, title, public_code FROM autoenroll_course, course
                          WHERE autoenroll_course.course_id = course.id AND
                                rule = ?d', $rule)));
-        $ruleInput = "<input type='hidden' name='id' value='" . q($_GET['edit']) . "'>";
+        
 
-        $deps = array_map(function ($dep) { return getIndirectReference($dep->department_id); },
+        $data['deps'] = array_map(function ($dep) { return getIndirectReference($dep->department_id); },
             Database::get()->queryArray('SELECT department_id
                 FROM autoenroll_department
                 WHERE rule = ?d', $rule));
-    } else {
-        $deps = $department = array();
-        $courses = $ruleInput = '';
     }
 
-    $tree = new Hierarchy();
-    list($jsTree, $htmlTree) = $tree->buildUserNodePickerIndirect(array('defaults' => $department, 'multiple' => true));
+    $data['tree'] = $tree = new Hierarchy();
+    list($jsTree, $data['htmlTree']) = $tree->buildUserNodePickerIndirect(array('defaults' => $department, 'multiple' => true));
 
     // The following code is modified from Hierarchy::buildJSNodePicker()
-    $options = array('defaults' => $deps, 'where' => 'AND node.allow_course = true');
+    $options = array('defaults' => $data['deps'], 'where' => 'AND node.allow_course = true');
     $joptions = json_encode($options);
 
-    $htmlTreeCourse = "<div id='nodCnt2'>";
-    $i = 0;
-    foreach ($deps as $dep) {
-        $htmlTreeCourse .= "<p id='nc_$i'>
-            <input type='hidden' name='rule_deps[]' value='$dep'>" .
-            $tree->getFullPath(getDirectReference($dep)) .
-            "&nbsp;<a href='#nodCnt2'><span class='fa fa-times' data-toggle='tooltip' data-original-title='".q($langNodeDel)."' data-placement='top' title='".q($langNodeDel)."'></span></a></p>";
-        $i++;
-    }
-    $htmlTreeCourse .= "</div>
-        <div><p><a id='ndAdd2' href='#add'><span class='fa fa-plus' data-toggle='tooltip' data-placement='top' title='".q($langNodeAdd)."'></i></a></p></div>
-        <div class='modal fade' id='treeCourseModal' tabindex='-1' role='dialog' aria-labelledby='treeModalLabel' aria-hidden='true'>
-          <div class='modal-dialog'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <button type='button' class='close treeCourseModalClose'><span aria-hidden='true'>&times;</span><span class='sr-only'>$langCancel</span></button>
-                <h4 class='modal-title' id='treeCourseModalLabel'>" . q($langNodeAdd) . "</h4>
-              </div>
-              <div class='modal-body'>
-                <div id='js-tree-course'></div>
-              </div>
-              <div class='modal-footer'>
-                <button type='button' class='btn btn-default treeCourseModalClose'>$langCancel</button>
-                <button type='button' class='btn btn-primary' id='treeCourseModalSelect'>$langSelect</button>
-              </div>
-            </div>
-          </div>
-        </div>";
 
     $head_content .= $jsTree . "
       <script>
@@ -254,57 +222,22 @@ if (isset($_GET['delete'])) {
 
         });
       </script>";
-
-    $statusLabel = q(($type == USER_STUDENT)? $langStudents: $langTeachers);
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => 'autoenroll.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary-label'))) . "
-      <div class='form-wrapper'>
-        <form role='form' class='form-horizontal' method='post' action='autoenroll.php'>
-          <input type='hidden' name='add' value='$type'>$ruleInput
-          <fieldset>
-            <div class='form-group'>
-              <label class='col-sm-3 control-label'>$langStatus:</label>   
-              <div class='col-sm-9'><p class='form-control-static'>$statusLabel</p></div>
-            </div>
-            <div class='form-group'>
-              <label for='title' class='col-sm-3 control-label'>$langFaculty:</label>   
-              <div class='col-sm-9 form-control-static'>$htmlTree</div>
-            </div>
-            <div class='form-group'>
-              <label for='title' class='col-sm-3 control-label'>$langAutoEnrollCourse:</label>   
-              <div class='col-sm-9'>
-                <input class='form-control' type='hidden' id='courses' name='courses' value=''>
-              </div>
-            </div>
-            <div class='form-group'>
-              <label for='title' class='col-sm-3 control-label'>$langAutoEnrollDepartment:</label>   
-              <div class='col-sm-9 form-control-static'>$htmlTreeCourse</div>
-            </div>
-            <div class='form-group'>
-              <div class='col-sm-12 checkbox'>
-                <label>
-                  <input type='checkbox' name='apply' id='apply' value='1' checked='1'>
-                  $langApplyRule
-                </label>
-              </div>
-            </div>
-            <div class='form-group'>
-              <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                <a href='autoenroll.php' class='btn btn-default'>$langCancel</a>    
-              </div>
-            </div>
-          </fieldset>
-          ". generate_csrf_token_form_field() ."
-        </form>
-      </div>";
-
+                      
+    $pageName = isset($_GET['add']) ? $langAutoEnrollNew : $langEditChange;
+    $navigation[] = array('url' => 'autoenroll.php', 'name' => $langAutoEnroll);
+    $data['action_bar'] = action_bar([
+            [
+                'title' => $langBack,
+                'url' => 'autoenroll.php',
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+            ]
+        ]);
+    
+    $view = 'admin.users.autoenroll.create';
 } else {
 
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
         array('title' => "$langAutoEnrollNew ($langStudents)",
               'url' => 'autoenroll.php?add=' . USER_STUDENT,
               'icon' => 'fa-plus-circle',
@@ -319,91 +252,38 @@ if (isset($_GET['delete'])) {
               'url' => 'index.php',
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
-
-    $rules = array();
+    
+    $data['rules'] = false;
     $i = 0;
     Database::get()->queryFunc('SELECT * FROM autoenroll_rule',
-        function ($item) {
-            global $rules, $i, $urlAppend, $langStudents, $langTeachers,
-                $langAutoEnrollRule, $langApplyTo, $langSureToDelRule,
-                $langApplyDepartments, $langApplyAnyDepartment,
-                $langAutoEnrollCourse, $langAutoEnrollDepartment,
-                $langDelete, $langEditChange;
-            $i++;
-            $rule = $item->id;
-            $statusLabel = q(($item->status == USER_STUDENT)? $langStudents: $langTeachers);
-            $rules[$rule] = "
-          <div class='panel panel-info'>
-            <div class='panel-heading'>
-              $langAutoEnrollRule $i
-              <div class='pull-right'>" .
-              action_button(array(
-                  array(
-                      'title' => $langEditChange,
-                      'icon' => 'fa-edit',
-                      'url' => "autoenroll.php?edit=" . getIndirectReference($rule)),
-                  array(
-                      'title' => $langDelete,
-                      'icon' => 'fa-times',
-                      'url' => "autoenroll.php?delete=" . getIndirectReference($rule),
-                      'confirm' => $langSureToDelRule,
-                      'btn_class' => 'delete_btn btn-default'),
-              )) . "
-              </div>
-            </div>
-            <div class='panel-body'>
-              <div>$langApplyTo: <b>$statusLabel</b> ";
+        function ($item) use (&$data, &$i) {
+            $data['rules'][$i] = (array) $item;
 
-            $deps = Database::get()->queryArray('SELECT hierarchy.id, name
+            $data['rules'][$i]['deps'] = Database::get()->queryArray('SELECT hierarchy.id, name
                 FROM autoenroll_rule_department, hierarchy
                 WHERE autoenroll_rule_department.department = hierarchy.id AND
-                      rule = ?d', $rule);
-            if ($deps) {
-                $rules[$rule] .= $langApplyDepartments . ':<ul>';
-                foreach ($deps as $dep) {
-                    $rules[$rule] .= '<li>' . q(getSerializedMessage($dep->name)) . '</li>';
-                }
-                $rules[$rule] .= '</ul>';
-            } else {
-                $rules[$rule] .= $langApplyAnyDepartment . ':<br>';
-            }
+                      rule = ?d', $item->id);
 
-            $courses = Database::get()->queryArray('SELECT code, title, public_code
+
+            $data['rules'][$i]['courses'] = Database::get()->queryArray('SELECT code, title, public_code
                 FROM autoenroll_course, course
                 WHERE autoenroll_course.course_id = course.id AND
-                      rule = ?d', $rule);
-            if ($courses) {
-                $rules[$rule] .= $langAutoEnrollCourse . ':<ul>';
-                foreach ($courses as $course) {
-                    $rules[$rule] .= "<li><a href='{$urlAppend}courses/{$course->code}/'>" .
-                        q($course->title) . '</a> (' .
-                        q($course->public_code) . ')</li>';
-                }
-                $rules[$rule] .= '</ul>';
-            }
+                      rule = ?d', $item->id);
 
-            $deps = Database::get()->queryArray('SELECT hierarchy.id, name
+
+            $data['rules'][$i]['auto_enroll_deps'] = Database::get()->queryArray('SELECT hierarchy.id, name
                 FROM autoenroll_department, hierarchy
                 WHERE autoenroll_department.department_id = hierarchy.id AND
-                      rule = ?d', $rule);
-            if ($deps) {
-                $rules[$rule] .= $langAutoEnrollDepartment . ':<ul>';
-                foreach ($deps as $dep) {
-                    $rules[$rule] .= "<li><a href='{$urlAppend}modules/auth/courses.php?fc={$dep->id}'>" .
-                        q(getSerializedMessage($dep->name)) . '</a></li>';
-                }
-                $rules[$rule] .= '</ul>';
-            }
-            $rules[$rule] .= "</div></div></div>";
+                      rule = ?d', $item->id);
+            $i++;
         });
-    if ($i) {
-        $tool_content .= implode($rules);
-    } else {
-        $tool_content .= "<div class='alert alert-warning text-center'>$langNoRules</div>";
-    }
+    $view = 'admin.users.autoenroll.index';
+        
 }
 
-draw($tool_content, 3, null, $head_content);
+$data['menuTypeID'] = 3;
+view($view, $data);
+
 
 function multiInsert($table, $signature, $key, $values) {
     $terms = array();

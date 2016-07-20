@@ -69,6 +69,7 @@ $tool_content .= "
             <input class='form-control' name='password' placeholder='$langPass' type='password'>
           </div>
         </div>
+        ".showSecondFactorChallenge()."
         <div class='form-group'>
           <div class='col-xs-12'>
             <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit_upgrade2' value='$langUpgrade'>$langUpgrade</button>

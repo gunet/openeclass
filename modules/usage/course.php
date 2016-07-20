@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,9 +17,9 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
-$head_content .= 
+$head_content .=
     "<script type='text/javascript'>
         startdate = null;
         interval = null;
@@ -30,55 +30,101 @@ $head_content .=
         stats = 'c';
     </script>";
 
-$tool_content .= action_bar(array(
-    array('title' => $langUsersLog,
-        'url' => "displaylog.php?course=$course_code",
-        'icon' => 'fa-user',
-        'level' => 'primary-label'),
-    array('title' => $langUserDuration,
-        'url' => "userduration?course=$course_code",
-        'icon' => 'fa-clock-o',
-        'level' => 'primary-label'),
-    array('title' => $langOldStats,
-        'url' => "oldStats.php",
-        'icon' => 'fa-bar-chart',
-        'level' => 'primary-label'),
-    array('title' => $langBack,
-        'url' => "{$urlServer}courses/{$course_code}",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')
-),false);
+if (isset($_GET['id'])) {
+    $tool_content .= action_bar(array(    
+        array('title' => $langUsers,
+            'url' => "../user/index.php",
+            'icon' => 'fa-user',
+            'level' => 'primary-label'),
+        array('title' => $langBack,
+            'url' => "{$urlServer}courses/{$course_code}",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')
+    ),false);
+} else {
+    $tool_content .= action_bar(array(
+        array('title' => $langUsersLog,
+            'url' => "displaylog.php?course=$course_code",
+            'icon' => 'fa-user',
+            'level' => 'primary-label'),
+        array('title' => $langUserDuration,
+            'url' => "userduration.php?course=$course_code",
+            'icon' => 'fa-clock-o',
+            'level' => 'primary-label'),
+        array('title' => $langOldStats,
+            'url' => "oldStats.php",
+            'icon' => 'fa-bar-chart',
+            'level' => 'primary-label'),
+        array('title' => $langBack,
+            'url' => "{$urlServer}courses/{$course_code}",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')
+    ),false);
 
+}
 /**** Summary info    ****/
-$visits = course_visits($course_id);
-$tool_content .= "
-<div class='row'>
-    <div class='col-xs-12'>
-        <div class='panel panel-default'>
-            <div class='panel-body'>
-                <div class='inner-heading'><strong>$langPlatformGenStats</strong></div>
-                <div class='row'>
-                <div class='col-sm-6'>
-                    <ul class='list-group'>
-                        <li class='list-group-item'><strong>$langUsageUsers</strong><span class='badge'>".count_course_users($course_id)."</span></li>
-                        <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge'>".count_course_users($course_id,USER_TEACHER)."</span></li>
-                        <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge'>".count_course_users($course_id,USER_STUDENT)."</span></li>
-                    </ul>
-                    </div>
+if (isset($_GET['id'])) {
+    $visits = course_visits($course_id, $_GET['id']);
+} else {
+    $visits = course_visits($course_id);
+}
+if (isset($_GET['id'])) {
+    $regdate = Database::get()->querySingle("SELECT DATE_FORMAT(DATE(reg_date),'%e-%c-%Y') AS reg_date
+                                FROM course_user
+                                WHERE course_id = ?d AND user_id = ?d ORDER BY reg_date ASC LIMIT 1", $course_id, $_GET['id'])->reg_date;
+    $tool_content .= "
+    <div class='row'>
+        <div class='col-xs-12'>
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <div class='inner-heading'><strong>$langUserStats: ". uid_to_name($_GET['id'], 'fullname') ."</strong></div>
+                    <div class='row'>
                     <div class='col-sm-6'>
                         <ul class='list-group'>
-                        <li class='list-group-item'><strong>$langGroups</strong><span class='badge'>".count_course_groups($course_id)."</span></li>
-                        <li class='list-group-item'><strong>$langHits</strong><span class='badge'>".$visits['hits']."</span></li>
-                        <li class='list-group-item'><strong>$langDuration</strong><span class='badge'>".$visits['duration']."</span></li>
-                    </ul>
+                            <li class='list-group-item'><strong>$langCourseRegistrationDate</strong><span class='badge'>".$regdate."</span></li>
+                            <li class='list-group-item'><strong>$langHits</strong><span class='badge'>".$visits['hits']."</span></li>
+                        </ul>
+                        </div>
+                        <div class='col-sm-6'>
+                            <ul class='list-group'>                            
+                            <li class='list-group-item'><strong>$langDuration</strong><span class='badge'>".$visits['duration']."</span></li>
+                        </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>";
+    </div>";
+} else {
+    $tool_content .= "
+    <div class='row'>
+        <div class='col-xs-12'>
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <div class='inner-heading'><strong>$langPlatformGenStats</strong></div>
+                    <div class='row'>
+                    <div class='col-sm-6'>
+                        <ul class='list-group'>
+                            <li class='list-group-item'><strong>$langUsageUsers</strong><span class='badge'>".count_course_users($course_id)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge'>".count_course_users($course_id,USER_TEACHER)."</span></li>
+                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge'>".count_course_users($course_id,USER_STUDENT)."</span></li>
+                        </ul>
+                        </div>
+                        <div class='col-sm-6'>
+                            <ul class='list-group'>
+                            <li class='list-group-item'><strong>$langGroups</strong><span class='badge'>".count_course_groups($course_id)."</span></li>
+                            <li class='list-group-item'><strong>$langHits</strong><span class='badge'>".$visits['hits']."</span></li>
+                            <li class='list-group-item'><strong>$langDuration</strong><span class='badge'>".$visits['duration']."</span></li>
+                        </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>";
+}
+require_once 'modules/usage/form.php';
 
-require_once('form.php');
 /****   Plots   ****/
 $tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
 $tool_content .= plot_placeholder("generic_stats", "$langHits $langAnd $langDuration");
@@ -93,9 +139,11 @@ $tool_content .= plot_placeholder("module_stats", $langModule);
 $tool_content .= "</div>"
               . "</div></div>";
 
-$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
-$tool_content .= plot_placeholder("coursereg_stats", $langMonthlyCourseRegistrations);
-$tool_content .= "</div></div>";
+if (!isset($_GET['id'])) {
+    $tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'>";
+    $tool_content .= plot_placeholder("coursereg_stats", $langMonthlyCourseRegistrations);
+    $tool_content .= "</div></div>";
+}
 
 /****   Datatables   ****/
 $tool_content .= "<div class='panel panel-default detailscontainer'>";
@@ -113,14 +161,31 @@ $tschema = "<thead><tr>"
 $tool_content .= table_placeholder("cdetails1", "table table-striped table-bordered", $tschema, "$langHits $langAnd $langDuration");
 $tool_content .= "</div>";
 
-$tool_content .= "<div class='panel panel-default detailscontainer'>";
+if (!isset($_GET['id'])) {
+    $tool_content .= "<div class='panel panel-default detailscontainer'>";
+    $tschema = "<thead><tr>"
+            . "<th>$langDate</th>"
+            . "<th>$langUser</th>"
+            . "<th>$langAction</th>"
+            . "<th>$langUsername</th>"
+            . "<th>$langEmail</th>"
+            . "</tr></thead>"
+            . "<tbody></tbody>";
+    $tool_content .= table_placeholder("cdetails2", "table table-striped table-bordered", $tschema, $langMonthlyCourseRegistrations);
+    $tool_content .= "</div>";
+}
+
+$tool_content .= "<div class='panel panel-default logscontainer'>";
 $tschema = "<thead><tr>"
-        . "<th>$langDate</th>"
+        . "<th>$langDate - $langHour</th>"
         . "<th>$langUser</th>"
+        . "<th>$langModule</th>"
         . "<th>$langAction</th>"
+        . "<th>$langDetail</th>"
+        . "<th>$langIpAddress</th>"
         . "<th>$langUsername</th>"
         . "<th>$langEmail</th>"
         . "</tr></thead>"
         . "<tbody></tbody>";
-$tool_content .= table_placeholder("cdetails2", "table table-striped table-bordered", $tschema, $langMonthlyCourseRegistrations);
+$tool_content .= table_placeholder("cdetails3", "table table-striped table-bordered", $tschema, $langUsersLog);
 $tool_content .= "</div>";

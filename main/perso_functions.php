@@ -26,8 +26,8 @@
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
-require_once 'modules/dropbox/class.mailbox.php';
-require_once 'modules/dropbox/class.msg.php';
+require_once 'modules/message/class.mailbox.php';
+require_once 'modules/message/class.msg.php';
 /**
  * @brief display user courses
  * @global type $session
@@ -154,6 +154,8 @@ function getUserAnnouncements($lesson_id, $type = '') {
                                 AND course.id = course_module.course_id
                                 AND course.id = announcement.course_id
                                 AND announcement.visible = 1
+                                AND (announcement.start_display <= NOW() OR announcement.start_display IS NULL)
+                                AND (announcement.stop_display >= NOW() OR announcement.stop_display IS NULL)
                                 AND announcement.`date` >= ?s
                                 AND course_module.module_id = ?d
                                 AND course_module.visible = 1
@@ -209,7 +211,7 @@ function getUserMessages() {
         $message_content .= "<li class='list-item'>
                                 <div class='item-wholeline'>                                    
                                     <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
-                                        <a href='{$urlServer}modules/dropbox/index.php?mid=$message->id'>" .q($message->subject)."</a>
+                                        <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                     </div>                                    
                                     <div class='text-grey'>$course_title</div>
                                     <div>$message_date</div>

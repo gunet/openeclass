@@ -116,6 +116,7 @@ switch ($module->contentType) {
         }
 
         $moduleStartAssetPage = $furl;
+        $_SESSION['FILE_PHP__LP_MODE'] = true;
         break;
 
     case CTEXERCISE_ :
@@ -175,7 +176,7 @@ switch ($module->contentType) {
         }
 
         if (MultimediaHelper::isEmbeddableMedialink($assetPath)) {
-            $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=" . $assetPath;
+            $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=" . urlencode($assetPath);
         } else {
             $moduleStartAssetPage = $assetPath;
         }

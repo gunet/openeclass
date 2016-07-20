@@ -23,10 +23,9 @@
 $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 
-$toolName = $langMultiRegCourseUser;
-$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
 if (isset($_POST['submit'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        checkSecondFactorChallenge();
         $ok = array();
         $not_found = array();
         $course_not_found = array();
@@ -54,66 +53,38 @@ if (isset($_POST['submit'])) {
             }
             $line = strtok("\n\r");
         }
-
+        $warn_messages = [];
         if (count($not_found)) {
-            $tool_content .= "<div class='alert alert-warning'>$langUsersNotExist<br>";
-            foreach ($not_found as $uname) {
-                $tool_content .= q($uname) . '<br>';
-            }
-            $tool_content .= '</div>';
+            $usernames = implode('<br>', $not_found);
+            $warn_messages[] = "$langUsersNotExist<br> $usernames";
         }
-
         if (count($course_not_found)) {
-            $tool_content .= "<div class='alert alert-warning'>$langCourseNotExist<br>";
-            foreach ($course_not_found as $course) {
-                $tool_content .= q($course) . '<br>';
-            }
-            $tool_content .= '</div>';
+            $courses = implode('<br>', $course_not_found);
+            $warn_messages[] = "$langCourseNotExist<br> $courses";            
         }
-
+        Session::Messages($warn_messages);
         if (count($ok)) {
-            $tool_content .= "<div class='alert alert-success'>$langUsersRegistered<br>";
-            foreach ($ok as $userid) {
-                $tool_content .= display_user($userid) . '<br>';
-            }
-            $tool_content .= '</div>';
+            $added_users = implode('<br>', array_map(function($userid) {
+                return display_user($userid);
+            }, $ok));
+            $sucess_message = "$langUsersRegistered<br> $added_users";
+            Session::Messages($sucess_message, 'alert-success');
         }
-
         if (count($existing)) {
-            $tool_content .= "<div class='alert alert-info'>$langUsersAlreadyRegistered<br>";
-            foreach ($existing as $userid) {
-                $tool_content .= display_user($userid) . '<br>';
-            }
-            $tool_content .= '</div>';
+            $already_registered_users = implode('<br>', array_map(function($userid) {
+                return display_user($userid);
+            }, $existing));
+            $info_message = "$langUsersAlreadyRegistered<br> $already_registered_users";
+            Session::Messages($info_message, 'alert-info');            
         }
+        redirect_to_home_page('modules/admin/multicourseuser.php');
 }
 
-$tool_content .= "<div class='alert alert-info'>$langAskManyUsersToCourses</div>";
-$tool_content .= "<div class='form-wrapper'>
-        <form role='form' class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
-        <fieldset>
-           <h4>$langUsersData</h4>
-            <div class='form-group'>
-                <div class='radio'>
-                <label>
-                    <input type='radio' name='type' value='uname' checked>$langUsername
-                </label>
-                </div>
-            <div class='col-sm-7'>" . text_area('user_info', 10, 30, '') . "</div>
-        </div>
-        </fieldset>
-        <fieldset>
-           <h4>$langCourseCodes</h4>
-           <div class='form-group'>
-                <div class='col-sm-7'>" . text_area('courses_codes', 10, 30, '') . "</div>
-            </div>
-            <div class='col-sm-10 col-sm-offset-2'>
-                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "'>
-            </div>
-        </fieldset>
-        ". generate_csrf_token_form_field() ."
-    </form>
-    </div>";
+$toolName = $langMultiRegCourseUser;
+$navigation[]= array ("url"=>"index.php", "name"=> $langAdmin);
+$data['menuTypeID'] = 3;
+
+view('admin.users.multicourseuser', $data);
 
 /**
  * @brief check if user exist
@@ -150,6 +121,3 @@ function adduser($userid, $cid) {
         return true;
     }	
 }
-
-draw($tool_content, 3);
-

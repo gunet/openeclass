@@ -58,7 +58,7 @@ if (!get_config('email_verification_required') or
 }
 
 if (!empty($_POST['submit'])) {
-    if (!empty($_POST['email']) && email_seems_valid($_POST['email'])) {
+    if (!empty($_POST['email']) && Swift_Validate::email($_POST['email'])) {
         $email = $_POST['email'];
         // user put a new email address update db and session
         if ($email != $_SESSION['email']) {
@@ -128,7 +128,7 @@ if (!empty($_POST['submit'])) {
     }
 }
 
-if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
+if (empty($_POST['email']) or !Swift_Validate::email($_POST['email'])) {
     $tool_content .= "<div class='form-wrapper'>
     	<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>

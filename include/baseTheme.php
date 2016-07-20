@@ -58,7 +58,8 @@ function view($view_file, $view_data = array()) {
     global $webDir, $is_editor, $course_code, $course_id, $language, $siteName,
     $urlAppend, $urlServer, $theme, $pageName, $currentCourseName, $uid, $session, $toolName,
     $require_help, $professor, $helpTopic, $head_content, $toolName, $themeimg, $navigation,
-    $require_current_course, $saved_is_editor, $require_course_admin, $require_editor;
+    $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
+    $require_editor;
 
         // negative course_id might be set in common documents
     if ($course_id < 1) {
@@ -205,6 +206,7 @@ function view($view_file, $view_data = array()) {
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
+       
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         $styles_str = '';
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
@@ -273,10 +275,10 @@ function view($view_file, $view_data = array()) {
             'module_visibility', 'professor', 'pageName', 'menuTypeID', 'section_title',
             'messages', 'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
             'is_mobile', 'current_module_dir','search_action', 'require_current_course',
-            'saved_is_editor', 'require_course_admin', 'require_editor', 'sidebar_courses',
-            'show_toggle_student_view');
+            'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
+            'show_toggle_student_view', 'themeimg', 'currentCourseName');
     $data = array_merge($global_data, $view_data);
-    return $blade->view()->make($view_file, $data)->render();
+    echo $blade->view()->make($view_file, $data)->render();
 }
 function widget_view($view_file, $view_data = array()) {
     global $webDir, $is_editor, $course_code, $course_id, $language, $siteName,
@@ -317,7 +319,7 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
         $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_course_admin, $require_help, $siteName, $siteName,
-        $switchLangURL, $theme, $themeimg,
+        $switchLangURL, $theme, $themeimg, $is_course_admin,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
         $theme_settings, $language, $saved_is_editor, $langProfileImage,
         $langStudentViewEnable, $langStudentViewDisable, $langNoteTitle, $langEnterNote, $langFieldsRequ;
@@ -325,9 +327,9 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);    
     if ($is_embedonce) {
         unset($_SESSION['embedonce']);
-        echo view('layouts.embed', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
+        view('layouts.embed', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
     } else {
-        echo view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
+        view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
     }
     // FOR REFERENCE ONLY (SHOULD BE REMOVED)
     
@@ -929,18 +931,6 @@ function print_a($TheArray) {
         echo "</tr>";
     }
     echo "</table>";
-}
-
-/**
- * Function print_html_r
- *
- * Used for debugging purposes. Dumps array to browser
- *
- * @param array $arr
- */
-function print_html_r($TheArray) {
-    echo nl2br(eregi_replace(" ", " ", print_r($TheArray, TRUE)));
-    echo "<br /><br />";
 }
 
 /**

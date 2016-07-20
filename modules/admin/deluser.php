@@ -22,51 +22,26 @@
 
 $require_usermanage_user = true;
 include '../../include/baseTheme.php';
-$toolName = $langUnregUser;
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-
-$pageName = $langConfirmDelete;
-$tool_content .= action_bar(array(
-        array('title' => $langBackAdmin,
-              'url' => "index.php",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
 
 // get the incoming values and initialize them
 if (isset($_GET['u'])) {
-    $user = getDirectReference($_GET['u']);
-    $iuid = $_GET['u'];
+    $data['user'] = $user = getDirectReference($_GET['u']);
+    $data['iuid'] = $iuid = $_GET['u'];
 } else {
     forbidden();
 }
 
 if ($user) {
-    $u_account = q(uid_to_name($user, 'username'));
-    $u_realname = q(uid_to_name($user));
-    $u_desc = "<em>$u_realname ($u_account)</em>";
+    $data['u_account'] = $u_account = q(uid_to_name($user, 'username'));
+    $data['u_realname'] = q(uid_to_name($user));
+} else {
+    Session::Messages($langErrorDelete, 'alert-danger');
+    redirect_to_home_page('modules/admin/listusers.php');    
 }
 
-if (!isset($_POST['doit'])) {
-    if ($user) {
-        if (get_admin_rights($user) > 0) {
-            $tool_content .= "<div class='alert alert-warning'>" .
-                sprintf($langCantDeleteAdmin, $u_desc) . ' ' .
-                $langIfDeleteAdmin .
-                "</div>";
-        } else {
-            $tool_content .= "<div class='alert alert-warning'>$langConfirmDeleteQuestion1 $u_desc<br>
-                $langConfirmDeleteQuestion3
-              </div>
-              <form method='post' action='$_SERVER[SCRIPT_NAME]?u=$iuid'>
-                <input class='btn btn-danger' type='submit' name='doit' value='$langDelete'>
-                ". generate_csrf_token_form_field() ."
-              </form>";
-        }
-    } else {
-        $tool_content .= "<div class='alert alert-danger'>$langErrorDelete</div>";
-    }
-} else {
+if (isset($_POST['doit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     if (get_admin_rights($user) > 0) {
         Session::Messages($langTryDeleteAdmin, 'alert-danger');
         redirect_to_home_page("modules/admin/deluser.php?u=$iuid");
@@ -79,4 +54,16 @@ if (!isset($_POST['doit'])) {
         redirect_to_home_page('modules/admin/listusers.php');
     }
 }
-draw($tool_content, 3);
+
+$toolName = $langUnregUser;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$pageName = $langConfirmDelete;
+
+$data['action_bar'] = action_bar(array(
+        array('title' => $langBackAdmin,
+              'url' => "modules/admin/listusers.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
+
+$data['menuTypeID'] = 3;
+view ('admin.users.deluser', $data);

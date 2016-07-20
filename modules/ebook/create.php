@@ -56,9 +56,9 @@ if (!$is_editor) {
             , $ebook_id, '1', $langSection.' 1');
     // Initialize document subsystem global variables
     require_once 'modules/document/doc_init.php';
-    require_once 'include/log.php';
+    require_once 'include/log.class.php';
 
-    if (!mkdir($basedir, 0775, true)) {
+    if (!make_dir($basedir)) {
         Database::get()->query("DELETE FROM ebook WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
         Session::Messages($langImpossible, 'alert-danger');
         redirect_to_home_page("modules/ebook/index.php?course=$course_code&create=1");

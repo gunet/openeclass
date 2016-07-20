@@ -31,22 +31,17 @@ foreach (array($language, 'en', 'el') as $l) {
         break;
     }
 }
-$tool_content = action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
+$data['action_bar'] = action_bar(array(
+    array('title' => $langBack,
+          'url' => $urlServer,
+          'icon' => 'fa-reply',
+          'level' => 'primary-label',
+          'button-class' => 'btn-default')
                             ),false);
-$tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
-$tool_content .= str_replace(
+$data['terms'] = str_replace(
     array('{%INSTITUTION%}', '{%EMAIL_HELPDESK%}'),
     array(q(get_config('institution')), "<a href='mailto:$email'>$email</a>"),
     file_get_contents($terms_file));
-$tool_content .= "</div></div></div></div>";
+$data['menuTypeID'] = isset($_SESSION['uid']) ? 1 : 0;
 
-if (isset($_SESSION['uid'])) {
-    draw($tool_content, 1);
-} else {
-    draw($tool_content, 0);
-}
+view('info.terms', $data);

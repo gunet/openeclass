@@ -6,11 +6,11 @@ function renderPlugin_mdstatus(data) {
             name = data['Name'];
             if ((name !== undefined) && (parseInt(name) !== -1)) {
                 percent = Math.round(parseFloat(data['Percent']));
-                html += "<div>Current Action:" + String.fromCharCode(160) + name + "<br/>";
-                html += '<table width=100%><tr><td width=50%><div class="progress">' +
-                        '<div class="progress-bar progress-bar-info" style="width: ' + percent + '%;"></div>' +
-                        '</div><div class="percent">' + percent + '%</div></td><td></td></tr></table>';
-                html += "Finishing in:" + String.fromCharCode(160) + data['Time_To_Finish'] + String.fromCharCode(160) + data['Time_Unit'];
+                html += "<div>" + genlang(13, true,'mdstatus') + ":" + String.fromCharCode(160) + name + "<br/>";
+                html += '<table style="width:100%;"><tbody><tr><td style="width:50%;"><div class="progress">' +
+                        '<div class="progress-bar progress-bar-info" style="width:' + percent + '%;"></div>' +
+                        '</div><div class="percent">' + percent + '%</div></td><td></td></tr></tbody></table>';
+                html += genlang(14, true,'mdstatus') + ":" + String.fromCharCode(160) + data['Time_To_Finish'] + String.fromCharCode(160) + data['Time_Unit'];
                 html += "</div>";
             }
         }
@@ -21,10 +21,9 @@ function renderPlugin_mdstatus(data) {
         var html = "";
         var img = "", alt = "";
 
-        html += "<div style=\"text-align: center; float: left; margin-bottom: 5px; margin-right: 20px; width: 64px;\">";
+        html += "<div style=\"text-align:center; float:left; margin-bottom:5px; margin-right:20px; width:64px;\">";
         switch (data["Status"]) {
-            case " ":
-            case "":
+            case "ok":
                 img = "harddriveok.png";
                 alt = "ok";
                 break;
@@ -41,28 +40,28 @@ function renderPlugin_mdstatus(data) {
                 alt = "warning";
                 break;
             default:
-                alert("--" + data["Status"] + "--");
+//                alert("--" + data["Status"] + "--");
                 img = "error.png";
                 alt = "error";
                 break;
         }
-        html += "<img src=\"./plugins/dmraid/gfx/" + img + "\" alt=\"" + alt + "\" />";
+        html += "<img src=\"./plugins/dmraid/gfx/" + img + "\" alt=\"" + alt + "\" style=\"float:left;width:60px;height:60px;\" onload=\"PNGload($(this));\" />"; //onload IE6 PNG fix
         html += "<small>" + data["Name"] + "</small>";
         html += "</div>";
         return html;
     }
 
     if (data['Plugins']['Plugin_MDStatus'] !== undefined) {
-        $('#mdstatus').empty();
+        $('#mdstatus-data').empty();
         if (data['Plugins']['Plugin_MDStatus']['Supported_Types'] !== undefined) {
             var stitems = items(data['Plugins']['Plugin_MDStatus']['Supported_Types']['Type']);
             if (stitems.length > 0) {
-                var htmltypes = "<tr><th>Supported RAID-Types</th><th>";
-                for (i = 0; i < stitems.length ; i++) {
+                var htmltypes = "<tr><th>"+genlang(2, false, 'mdstatus')+"</th><th>";
+                for (var i = 0; i < stitems.length ; i++) {
                     htmltypes += stitems[i]["@attributes"]["Name"] + " ";
                 }
-                htmltypes += "</th><tr>";
-                $('#mdstatus').append(htmltypes);
+                htmltypes += "</th></tr>";
+                $('#mdstatus-data').append(htmltypes);
                 $('#block_mdstatus').show();
             } else {
                 $('#block_mdstatus').hide();
@@ -73,11 +72,11 @@ function renderPlugin_mdstatus(data) {
         var mditems = items(data['Plugins']['Plugin_MDStatus']['Raid']);
         if (mditems.length > 0) {
             var html = '';
-            for (i = 0; i < mditems.length ; i++) {
+            for (var i = 0; i < mditems.length ; i++) {
                 if (i) {
                     html += "<tr><td></td><td>";
                 } else {
-                    html += "<tr><th>RAID-Devices</th><td>";
+                    html += "<tr><th>"+genlang(3, false, 'mdstatus')+"</th><td>";
                 }
 
                 if (mditems[i]['Disks'] !== undefined) {
@@ -87,15 +86,15 @@ function renderPlugin_mdstatus(data) {
                     var devactive = parseInt(mditems[i]["@attributes"]["Disks_Active"]);
                     var devregis = parseInt(mditems[i]["@attributes"]["Disks_Registered"]);
 
-                    html += "<table style=\"width:100%;\">";
+                    html += "<table style=\"width:100%;\"><tbody>";
                     html += "<tr><td>";
 
                     var diskitems = items(mditems[i]['Disks']['Disk']);
-                    for (j = 0; j < diskitems.length ; j++) {
+                    for (var j = 0; j < diskitems.length ; j++) {
                         html += raid_diskicon(diskitems[j]["@attributes"]);
                     }
 
-                    html += "</td></tr><tr><td>";
+                    html += "</td></tr>";
                     if (mditems[i]['Action'] !== undefined) {
                         var buildedaction = raid_buildaction(mditems[i]['Action']['@attributes']);
                         if (buildedaction) {
@@ -103,34 +102,35 @@ function renderPlugin_mdstatus(data) {
                         }
                     }
 
-                    html += "<table id=\"mdstatus-" + i + "\"class=\"table table-hover table-condensed\">";
-                    html += "<tr class=\"treegrid-mdstatus-" + i + "\"><td><b>" + mditems[i]["@attributes"]["Device_Name"] + "</b></td><td></td></tr>";
-                    html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><th>Status</th><td>" + mditems[i]["@attributes"]["Disk_Status"] + "</td></tr>";
-                    html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><th>RAID-Level</th><td>" + mditems[i]["@attributes"]["Level"] + "</td></tr>";
+                    html += "<tr><td>";
+                    html += "<table id=\"mdstatus-" + i + "\" class=\"table table-hover table-condensed\"><tbody>";
+                    html += "<tr class=\"treegrid-mdstatus-" + i + "\"><td><span class=\"treegrid-spanbold\">" + mditems[i]["@attributes"]["Device_Name"] + "</span></td><td></td></tr>";
+                    html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><td><span class=\"treegrid-spanbold\">"+genlang(5, true,'mdstatus')+"</span></td><td>" + mditems[i]["@attributes"]["Disk_Status"] + "</td></tr>";
+                    html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><td><span class=\"treegrid-spanbold\">"+genlang(6, true ,'mdstatus')+"</span></td><td>" + mditems[i]["@attributes"]["Level"] + "</td></tr>";
                     if (devchunk !== -1) {
-                        html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><th>Chunk Size</th><td>" + devchunk + "K</td></tr>";
+                        html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><td><span class=\"treegrid-spanbold\">"+genlang(7, true,'mdstatus')+"</span></td><td>" + devchunk + "K</td></tr>";
                     }
                     if (devalgo !== -1) {
-                        html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><th>Algorithm</th><td>" + devalgo + "</td></tr>";
+                        html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><td><span class=\"treegrid-spanbold\">"+genlang(8, true ,'mdstatus')+"</span></td><td>" + devalgo + "</td></tr>";
                     }
                     if (devsuper !== -1) {
-                        html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><th>Persistent Superblock</th><td>available</td></tr>";
+                        html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><td><span class=\"treegrid-spanbold\">"+genlang(9, true, 'mdstatus')+"</span></td><td>available</td></tr>";
                     } else {
-                        html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><th>Persistent Superblock</th><td>not available</td></tr>";
+                        html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><td><span class=\"treegrid-spanbold\">"+genlang(9, true, 'mdstatus')+"</span></td><td>not available</td></tr>";
                     }
                     if (devactive !== -1 && devregis !== -1) {
-                        html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><th>Registered/" + String.fromCharCode(8203) + "Active Disks</th><td>" + devregis + "/" + String.fromCharCode(8203)  + devactive + "</td></tr>";
+                        html += "<tr class=\"treegrid-parent-mdstatus-" + i + "\"><td><span class=\"treegrid-spanbold\">"+genlang(12, true, 'mdstatus')+"</span></td><td>" + devregis + "/<wbr>" + devactive + "</td></tr>";
                     }
-                    html += "</table>";
+                    html += "</tbody></table>";
                     html += "</td></tr>";
-                    html += "</table>";
+                    html += "</tbody></table>";
                 }
 
                 html +="</td></tr>";
             }
-            $('#mdstatus').append(html);
+            $('#mdstatus-data').append(html);
 
-            for (i = 0; i < mditems.length ; i++) {
+            for (var i = 0; i < mditems.length ; i++) {
                 if (mditems[i]['Disks'] !== undefined) {
                     $('#mdstatus-'+i).treegrid({
                         initialState: 'collapsed',

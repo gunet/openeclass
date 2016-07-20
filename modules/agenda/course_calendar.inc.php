@@ -35,7 +35,7 @@
  *
  */
 
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/references.class.php';
 
@@ -127,10 +127,10 @@ require_once 'include/lib/references.class.php';
             if(!empty($q)){
                 $q .= " UNION ";
             }
-            $dc = str_replace('start','bbb.start_date',$datecond);
-            $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + '00:00', '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
-                    . "FROM bbb_session bbb  "
-                    . "WHERE bbb.course_id =?d "
+            $dc = str_replace('start','tc.start_date',$datecond);
+            $q .= "SELECT tc.id, tc.title, tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(tc.start_date + '00:00', '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
+                    . "FROM tc_session tc  "
+                    . "WHERE tc.course_id =?d "
                     . $dc;
             $q_args = array_merge($q_args, $q_args_templ);
             //assignements
@@ -457,7 +457,7 @@ require_once 'include/lib/references.class.php';
             'assignment' => 'modules/work/index.php?id=thisid&course=thiscourse',
             'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
             'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
-            'teleconference' => 'modules/bbb/?course=thiscourse');
+            'teleconference' => 'modules/tc/?course=thiscourse');
 
        $fromdatetime = date('Y-m-d H:i:s', $from / 1000);
        $todatetime = date('Y-m-d H:i:s', $to / 1000);
@@ -532,10 +532,10 @@ require_once 'include/lib/references.class.php';
     function event_list_view($display = 'all', $sens = 'ASC'){
         global $langNoEvents;
 
-        $events = get_list_course_events($display, $sens);
+        $events = get_list_course_events($display, 'DESC');
 
         if (count($events) > 0) {
-            return event_list($events, $sens);
+            return event_list($events, 'DESC');
         }else{
             return "<div class='alert alert-warning text-center'>$langNoEvents</div>";
         }

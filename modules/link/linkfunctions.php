@@ -28,170 +28,8 @@ function makedefaultviewcode($locatie) {
 
     $view = str_repeat('0', $aantalcategories);
     $view[$locatie] = '1';
+
     return $view;
-}
-
-/**
- * Function getNumberOfLinks
- * @param unknown_type $catid
- * @return int number of links
- */
-function getNumberOfLinks($catid) {
-    global $course_id;
-    return Database::get()->querySingle("SELECT COUNT(*) as count FROM `link`
-                                                        WHERE course_id = ?d AND category = ?d
-                                                        ORDER BY `order`", $course_id, $catid)->count;
-}
-
-/**
- * @brief display links of category
- * @global type $is_editor
- * @global type $course_id
- * @global type $urlview
- * @global type $tool_content
- * @global type $urlServer
- * @global type $course_code
- * @global type $langLinkDelconfirm
- * @global type $langDelete
- * @global type $langUp
- * @global type $langDown
- * @global type $langEditChange
- * @global type $is_in_tinymce
- * @param type $catid
- */
-function showlinksofcategory($catid) {
-    global $is_editor, $course_id, $urlview, $socialview_param, $tool_content,
-    $urlServer, $course_code, $head_content,
-    $langLinkDelconfirm, $langDelete, $langUp, $langDown,
-    $langEditChange, $is_in_tinymce, $links_num, $langLinkSubmittedBy;
-
-    $tool_content .= "<tr>";
-    $result = Database::get()->queryArray("SELECT * FROM `link`
-                                   WHERE course_id = ?d AND category = ?d
-                                   ORDER BY `order`", $course_id, $catid);
-    $numberoflinks = count($result);
-    $links_num = 1;    
-    foreach ($result as $myrow) {
-        $title = empty($myrow->title) ? $myrow->url : $myrow->title;        
-        $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
-        $tool_content .= "<td class='nocategory-link'><a href='" . q($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
-        if ($catid == -2 && $myrow->user_id != 0) {
-            $tool_content .= "<small> - $langLinkSubmittedBy ".display_user($myrow->user_id, false, false)."</small>";
-        }
-        if (!empty($myrow->description)) {
-            $tool_content .= "<br />" . standard_text_escape($myrow->description);
-        }
-        if ($catid == -2) { //social bookmarks can be rated
-            global $uid;
-            $rating = new Rating('thumbs_up', 'link', $myrow->id);
-            $tool_content .= $rating->put($is_editor, $uid, $course_id);
-        }
-        $tool_content .= "</td>";
-        
-        if ($is_editor && !$is_in_tinymce) {   
-            $tool_content .= "<td class='option-btn-cell'>";
-            $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param;
-            if (isset($category)) {
-                $editlink .= "&amp;category=" . getIndirectReference($category);
-            }
-            $tool_content .= action_button(array(
-                array('title' => $langEditChange,
-                      'icon' => 'fa-edit',
-                      'url' => $editlink),
-                array('title' => $langUp,
-                      'level' => 'primary',
-                      'icon' => 'fa-arrow-up',
-                      'disabled' => $links_num == 1,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=" . getIndirectReference($myrow->id) . $socialview_param,
-                      ),
-                array('title' => $langDown,
-                      'level' => 'primary',
-                      'icon' => 'fa-arrow-down',
-                      'disabled' => $links_num >= $numberoflinks,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=" . getIndirectReference($myrow->id) . $socialview_param,
-                      ),
-                array('title' => $langDelete,
-                      'icon' => 'fa-times',
-                      'class' => 'delete',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param,
-                      'confirm' => $langLinkDelconfirm)
-            ));
-            $tool_content .= "</td>";
-        } elseif ($catid == -2 && !$is_in_tinymce) {
-            if (isset($_SESSION['uid'])) {
-                if (is_link_creator($myrow->id)) {
-                    $tool_content .= "<td class='option-btn-cell'>";
-                    $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param;
-                    $tool_content .= action_button(array(
-                            array('title' => $langEditChange,
-                                    'icon' => 'fa-edit',
-                                    'url' => $editlink),
-                            array('title' => $langDelete,
-                                    'icon' => 'fa-times',
-                                    'class' => 'delete',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param,
-                                    'confirm' => $langLinkDelconfirm)
-                    ));
-                    $tool_content .= "</td>";
-                } else {
-                    if (abuse_report_show_flag('link', $myrow->id , $course_id, $is_editor)) {
-                        $head_content .= abuse_report_add_js();
-                        $flag_arr = abuse_report_action_button_flag('link', $myrow->id, $course_id);
-                    
-                        $tool_content .= "<td class='option-btn-cell'>".action_button(array($flag_arr[0])).$flag_arr[1]."</td>"; //action button option
-                    } else {
-                        $tool_content .= "<td>&nbsp;</td>";
-                    }
-                }
-            }
-        }
-        
-        $tool_content .= "</tr>";
-        $links_num++;
-    }
-}
-
-/**
- * @brief display action bar in categories
- * @global type $urlview
- * @global type $aantalcategories
- * @global type $catcounter
- * @global type $langDelete
- * @global type $langEditChange
- * @global type $langUp
- * @global type $langDown
- * @global type $langCatDel
- * @global type $tool_content
- * @global type $course_code
- * @param type $categoryid
- */
-function showcategoryadmintools($categoryid) {
-    global $urlview, $aantalcategories, $catcounter, $langDelete,
-    $langEditChange, $langUp, $langDown, $langCatDel, $tool_content,
-    $course_code;
-
-    $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($categoryid) . "&amp;urlview=$urlview&amp;";
-    $tool_content .= action_button(array(
-                array('title' => $langEditChange,
-                      'icon' => 'fa-edit',
-                      'url' => "$basecaturl" . "action=editcategory"),
-                array('title' => $langUp,
-                      'level' => 'primary',
-                      'icon' => 'fa-arrow-up',
-                      'disabled' => $catcounter == 0,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=" . getIndirectReference($categoryid)),
-                array('title' => $langDown,
-                       'level' => 'primary',
-                       'icon' => 'fa-arrow-down',
-                       'disabled' => $catcounter == $aantalcategories-1,
-                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=" . getIndirectReference($categoryid)),
-                array('title' => $langDelete,
-                              'icon' => 'fa-times',
-                              'url' => "$basecaturl" . "action=deletecategory",
-                              'class' => 'delete',
-                              'confirm' => $langCatDel)
-                ));           
-    $catcounter++;
 }
 
 /**
@@ -210,102 +48,55 @@ function showcategoryadmintools($categoryid) {
 function submit_link() {
     global $course_id, $langLinkMod, $langLinkAdded, $course_code, $uid, $langSocialCategory,
     $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state,
-	$langFormErrors, $langTheFieldIsRequired;
+	$langFormErrors, $langTheFieldIsRequired, $langTheField;
 
     register_posted_variables(array('urllink' => true,
         'title' => true,
         'description' => true), 'all', 'trim');
     $urllink = canonicalize_url($urllink);
-	$v = new Valitron\Validator($_POST);
-    $v->rule('required', array('urllink'))->message($langTheFieldIsRequired)->label('');
+    
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', ['urllink']);
+    $v->rule('url', ['urllink']);
+    $v->rule('urlActive', ['url']);
+    $v->labels(['urllink' => "$langTheField URL"]);
     if($v->validate()) {
-		if (!is_url_accepted($urllink,"(https?|ftp)")){
-			$message = $langLinkNotPermitted;
-			if (isset($_POST['id'])) {
-				$id =  getDirectReference($_POST['id']);
-				redirect_to_home_page("modules/link/index.php?course=$course_code&action=editlink&id=" . getIndirectReference($id) . "&urlview=");
-			} else {
-				redirect_to_home_page("modules/link/index.php?course=$course_code&action=addlink&urlview=");
-			}
-		}
-		$set_sql = "SET url = ?s, title = ?s, description = ?s, category = ?d";
-		$terms = array($urllink, $title, purify($description), intval(getDirectReference($_POST['selectcategory'])));
+        $set_sql = "SET url = ?s, title = ?s, description = ?s, category = ?d";
+        $terms = array($urllink, $title, purify($description), intval(getDirectReference($_POST['selectcategory'])));
 
-		if (isset($_POST['id'])) {
-			$id = intval(getDirectReference($_POST['id']));
-			Database::get()->query("UPDATE `link` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
+        if (isset($_POST['id'])) {
+                $id = intval(getDirectReference($_POST['id']));
+                Database::get()->query("UPDATE `link` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
 
-			$log_type = LOG_MODIFY;
-		} else {
-			$order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link`
-										WHERE course_id = ?d AND category = ?d", $course_id, getDirectReference($_POST['selectcategory']))->maxorder;
-			$order++;
-			$id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d, user_id = ?d", $terms, $course_id, $order, $uid)->lastInsertID;
-			$log_type = LOG_INSERT;
-		}
-		Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_LINK, $id);
-		// find category name
-		if ($selectcategory == -2) {
-			$category = $langSocialCategory;
-		} else {
-			$category_object = Database::get()->querySingle("SELECT link_category.name as name FROM link, link_category
-															WHERE link.category = link_category.id
-															AND link.course_id = ?s
-															AND link.id = ?d", $course_id, $id);
-			$category = $category_object ? $category_object->name : 0;
-		}
-		$txt_description = ellipsize_html(canonicalize_whitespace(strip_tags($description)), 50, '+');
-		Log::record($course_id, MODULE_ID_LINKS, $log_type, @array('id' => $id,
-			'url' => $urllink,
-			'title' => $title,
-			'description' => $txt_description,
-			'category' => $category));
+                $log_type = LOG_MODIFY;
+        } else {
+                $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link`
+                                                                        WHERE course_id = ?d AND category = ?d", $course_id, getDirectReference($_POST['selectcategory']))->maxorder;
+                $order++;
+                $id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d, user_id = ?d", $terms, $course_id, $order, $uid)->lastInsertID;
+                $log_type = LOG_INSERT;
+        }
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_LINK, $id);
+        // find category name
+        if ($selectcategory == -2) {
+                $category = $langSocialCategory;
+        } else {
+                $category_object = Database::get()->querySingle("SELECT link_category.name as name FROM link, link_category
+                                                                                                                WHERE link.category = link_category.id
+                                                                                                                AND link.course_id = ?s
+                                                                                                                AND link.id = ?d", $course_id, $id);
+                $category = $category_object ? $category_object->name : 0;
+        }
+        $txt_description = ellipsize_html(canonicalize_whitespace(strip_tags($description)), 50, '+');
+        Log::record($course_id, MODULE_ID_LINKS, $log_type, @array('id' => $id,
+                'url' => $urllink,
+                'title' => $title,
+                'description' => $txt_description,
+                'category' => $category));
 
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/link/index.php?course=$course_code&action=addlink&urlview=");
-    }
-}
-
-/**
- * @brief fill in category form values
- * @global type $course_id
- * @global type $form_name
- * @global type $form_description
- * @param type $id
- */
-function category_form_defaults($id) {
-    global $course_id, $form_name, $form_description;
-
-    $myrow = Database::get()->querySingle("SELECT name,description  FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    if ($myrow) {
-        $form_name = ' value="' . q($myrow->name) . '"';
-        $form_description = q($myrow->description);
-    } else {
-        $form_name = $form_description = '';
-    }
-}
-
-/**
- * @brief fill in link form values
- * @global type $course_id
- * @global type $form_url
- * @global type $form_title
- * @global type $form_description
- * @global type $category
- * @param type $id
- */
-function link_form_defaults($id) {
-    global $course_id, $form_url, $form_title, $form_description, $category;
-
-    $myrow = Database::get()->querySingle("SELECT * FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    if ($myrow) {
-        $form_url = ' value="' . q($myrow->url) . '"';
-        $form_title = ' value="' . q($myrow->title) . '"';
-        $form_description = purify(trim($myrow->description));
-        $category = $myrow->category;
-    } else {
-        $form_url = $form_title = $form_description = '';
     }
 }
 

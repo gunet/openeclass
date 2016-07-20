@@ -203,7 +203,7 @@ class Haiku extends OS
      *
      * @return void
      */
-    private function _users()
+    protected function _users()
     {
         $this->sys->setUsers(1);
     }
@@ -223,24 +223,6 @@ class Haiku extends OS
                 if ($ip != $result) {
                     $this->sys->setHostname(gethostbyaddr($ip));
                 }
-            }
-        }
-    }
-
-    /**
-     * IP of the Virtual Host Name
-     *
-     *  @return void
-     */
-    private function _ip()
-    {
-        if (PSI_USE_VHOST === true) {
-            $this->sys->setIp(gethostbyname($this->sys->getHostname()));
-        } else {
-            if (!($result = getenv('SERVER_ADDR'))) {
-                $this->sys->setIp(gethostbyname($this->sys->getHostname()));
-            } else {
-                $this->sys->setIp($result);
             }
         }
     }
@@ -310,10 +292,10 @@ class Haiku extends OS
     {
         if (CommonFunctions::executeProgram('ifconfig', '', $bufr, PSI_DEBUG)) {
             $lines = preg_split("/\n/", $bufr, -1, PREG_SPLIT_NO_EMPTY);
-            $notwas = true;
+            $was = false;
             foreach ($lines as $line) {
                 if (preg_match("/^(\S+)/", $line, $ar_buf)) {
-                    if (!$notwas) {
+                    if ($was) {
                         $dev->setErrors($errors);
                         $dev->setDrops($drops);
                         $this->sys->setNetDevices($dev);
@@ -322,9 +304,9 @@ class Haiku extends OS
                     $drops = 0;
                     $dev = new NetDevice();
                     $dev->setName($ar_buf[1]);
-                    $notwas = false;
+                    $was = true;
                 } else {
-                    if (!$notwas) {
+                    if ($was) {
                         if (preg_match('/\sReceive:\s\d+\spackets,\s(\d+)\serrors,\s(\d+)\sbytes,\s\d+\smcasts,\s(\d+)\sdropped/i', $line, $ar_buf2)) {
                             $errors +=$ar_buf2[1];
                             $drops +=$ar_buf2[3];
@@ -337,17 +319,17 @@ class Haiku extends OS
 
                         if (defined('PSI_SHOW_NETWORK_INFOS') && (PSI_SHOW_NETWORK_INFOS)) {
                             if (preg_match('/\sEthernet,\s+Address:\s(\S*)/i', $line, $ar_buf2))
-                                    $dev->setInfo(preg_replace('/:/', '-', $ar_buf2[1]));
+                                    $dev->setInfo(preg_replace('/:/', '-', strtoupper($ar_buf2[1])));
                             elseif (preg_match('/^\s+inet\saddr:\s(\S*),/i', $line, $ar_buf2))
                                      $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').$ar_buf2[1]);
-                                 elseif (preg_match('/^\s+inet6\saddr:\s(\S*),/i', $line, $ar_buf2))
-                                          if (!preg_match('/^fe80::/i', $ar_buf2[1]))
-                                            $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').$ar_buf2[1]);
+                                 elseif (preg_match('/^\s+inet6\saddr:\s(\S*),/i', $line, $ar_buf2)
+                                          && ($ar_buf2[1]!="::") && !preg_match('/^fe80::/i', $ar_buf2[1]))
+                                            $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').strtolower($ar_buf2[1]));
                         }
                     }
                 }
             }
-            if (!$notwas) {
+            if ($was) {
                 $dev->setErrors($errors);
                 $dev->setDrops($drops);
                 $this->sys->setNetDevices($dev);
@@ -387,7 +369,6 @@ class Haiku extends OS
         $this->error->addError("WARN", "The Haiku version of phpSysInfo is a work in progress, some things currently don't work");
         $this->_distro();
         $this->_hostname();
-        $this->_ip();
         $this->_kernel();
         $this->_uptime();
         $this->_users();

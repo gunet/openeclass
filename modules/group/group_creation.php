@@ -171,7 +171,7 @@ if (isset($_GET['all'])) {
                                   cu.status = " . USER_STUDENT . "
                             GROUP BY u.id
                             ORDER BY u.surname, u.givenname", $course_id);
-    } else {    
+    } else {
         // Students registered to the course but members of no group
         $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
                                                 FROM (user u, course_user cu)
@@ -184,13 +184,13 @@ if (isset($_GET['all'])) {
                                                     GROUP BY u.id
                                                     ORDER BY u.surname, u.givenname", $course_id);
     }
-        $tool_content_not_Member = $tool_content_group_members = '';
-        foreach ($resultNotMember as $myNotMember) {
-            $tool_content_not_Member .= "<option value='$myNotMember->id'>" .
-                    q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am) ? q(" ($myNotMember->am)") : "") . "</option>";
-        }
-		
-        $tool_content .= "<div class='form-group'>
+    $tool_content_not_Member = $tool_content_group_members = '';
+    foreach ($resultNotMember as $myNotMember) {
+        $tool_content_not_Member .= "<option value='$myNotMember->id'>" .
+                q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am) ? q(" ($myNotMember->am)") : "") . "</option>";
+    }
+
+    $tool_content .= "<div class='form-group'>
             <label class='col-sm-2 control-label'>$langGroupMembers:</label>
         <div class='col-sm-10'>
             <div class='table-responsive'>
@@ -258,6 +258,16 @@ if (isset($_GET['all'])) {
                     <div class='checkbox'>
                     <label>
                      <input type='checkbox' name='self_reg' checked>$langGroupAllowStudentRegistration
+                   </label>
+                 </div>                
+                </div>
+            </div>
+            <div class='form-group'>
+             <label class='col-sm-2 control-label'>$langGroupAllowUnregister:</label>
+                <div class='col-xs-9'>             
+                    <div class='checkbox'>
+                    <label>
+                     <input type='checkbox' name='allow_unreg'>$langGroupAllowStudentUnregister
                    </label>
                  </div>                
                 </div>

@@ -130,7 +130,7 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'exercise_question_cats' => $sql_course,
         'exercise_answer_record' => "question_id IN (SELECT id FROM exercise_question
                                                                 WHERE course_id = $course_id)",
-        'bbb_session' => "course_id IN (SELECT id FROM bbb_session WHERE course_id = $course_id)",
+        'tc_session' => "course_id IN (SELECT id FROM tc_session WHERE course_id = $course_id)",
         'blog_post' => $sql_course,
         'comments' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR
                        (rtype = 'wallpost' AND rid IN (SELECT id FROM wall_post WHERE course_id = $course_id))",
@@ -168,7 +168,7 @@ function doArchive($course_id, $course_code) {
     global $webDir, $urlServer, $urlAppend, $siteName, $tool_content;
     
     $basedir = "$webDir/courses/archive/$course_code";
-    file_exists($basedir) or mkdir($basedir, 0755, true);
+    file_exists($basedir) or make_dir($basedir);
 
     // Remove previous back-ups older than 10 minutes
     cleanup("$webDir/courses/archive", 600);
@@ -177,7 +177,7 @@ function doArchive($course_id, $course_code) {
     $backup_date_short = date('Ymd');
 
     $archivedir = $basedir . '/' . $backup_date;
-    file_exists($archivedir) or mkdir($archivedir, 0755, true);
+    file_exists($archivedir) or make_dir($archivedir);
 
     archiveTables($course_id, $course_code, $archivedir);
 

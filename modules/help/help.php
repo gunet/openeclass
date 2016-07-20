@@ -35,6 +35,7 @@ $themeimg = '../../template/' . $theme . '/img';
 if (file_exists("../../lang/$language/help.inc.php")) {
     $siteName = '';
     include "../../lang/$language/common.inc.php";
+    include '../../include/main_lib.php';
     include "../../lang/$language/help.inc.php";
 } else {
     die("$langNoHelpTopic");
@@ -51,11 +52,11 @@ $title = $GLOBALS['langH' . str_replace('_student', '', $_GET['topic'])];
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
     <head>
-        <title><?php echo $GLOBALS["langH$_GET[topic]"]; ?></title>
+        <title><?php echo q($GLOBALS["langH$_GET[topic]"]); ?></title>
         <link href="../../template/<?php echo $theme ?>/help.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        <h3><?php echo $title; ?></h3>
+        <h3><?php echo q($title); ?></h3>
         <?php echo $GLOBALS["lang$_GET[topic]Content"]; ?>
     </body>
 </html>

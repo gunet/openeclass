@@ -1,7 +1,5 @@
 syntax: regexp
 
-^\.htaccess$
-
 ^courses/
 ^video/
 ^secure/
@@ -11,6 +9,13 @@ syntax: regexp
 ^composer\.phar
 ^storage/views/
 ^vendor/
+^laravel/vendor/
+^laravel/.env
+^laravel/storage/app/
+^laravel/storage/framework/cache/
+^laravel/storage/framework/sessions/
+^laravel/storage/framework/views/
+^laravel/storage/logs/
 
 ^nbproject/private/
 ^.sass-cache/

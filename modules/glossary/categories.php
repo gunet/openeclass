@@ -33,7 +33,7 @@ $base_url = $data['base_url'] = 'index.php?course=' . $course_code;
 $cat_url = $data['cat_url'] = 'categories.php?course=' . $course_code;
 
 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
-$toolName = $langGlossary;
+$toolName = $langCategories;
 
 $categories = array();
 $q = Database::get()->queryArray("SELECT id, name, description, `order`
@@ -77,11 +77,11 @@ if ($is_editor) {
                 array('title' => $langConfig,
                       'url' => "$base_url&amp;config=1",                      
                       'icon' => 'fa-gear'),
-                array('title' => "$langGlossaryToCsv (UTF8)",
+                array('title' => "$langGlossaryToCsv",
                       'url' => "dumpglossary.php?course=$course_code",
                       'icon' => 'fa-file-excel-o'),
-                array('title' => "$langGlossaryToCsv (Windows 1253)",
-                      'url' => "dumpglossary.php?course=$course_code&amp;enc=1253",
+                array('title' => "$langGlossaryToCsv (UTF-8)",
+                      'url' => "dumpglossary.php?course=$course_code&amp;enc=UTF-8",
                       'icon' => 'fa-file-excel-o'),
                 array('title' => $langGlossaryTerms,
                       'url' => "index.php?course=$course_code",
@@ -169,7 +169,7 @@ if ($is_editor) {
                                         'href' => $cat_url
                                     )
                                 ));
-        echo view('modules.glossary.createCategory', $data);                
+        view('modules.glossary.createCategory', $data);                
     }
 }
 
@@ -177,7 +177,7 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
     $data['categories'] = Database::get()->queryArray("SELECT id, name, description
                           FROM glossary_category WHERE course_id = ?d
                           ORDER BY name", $course_id);
-    echo view('modules.glossary.indexCategory', $data);
+    view('modules.glossary.indexCategory', $data);
 }
 
 //draw($tool_content, 2, null, $head_content);

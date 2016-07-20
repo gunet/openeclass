@@ -31,16 +31,19 @@ require_once 'include/course_settings.php';
 
 $toolName = $langLabelCourseUserRequest;
 
-if (isset($_REQUEST['course_id'])) {
-    $course_id = $_REQUEST['course_id'];
-}
 $disable_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id);
 
 if ($disable_course_user_requests) {
     redirect_to_home_page();
 }
 
-$userdata = Database::get()->querySingle("SELECT surname, givenname, surname, email FROM user WHERE id = ?d", $uid);
+if (isset($_REQUEST['course_id']) and (!empty($_REQUEST['course_id']))) {
+    $course_id = $_REQUEST['course_id'];
+} else {
+    redirect_to_home_page();
+}
+
+$userdata = Database::get()->querySingle("SELECT username, givenname, surname, email FROM user WHERE id = ?d", $uid);
 
 if (empty($userdata->email)) {
     if ($uid) {
@@ -63,7 +66,7 @@ if (empty($userdata->email)) {
             'level' => 'primary-label')        
         ));        
         
-        $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->email);        
+        $tool_content .= email_profs($course_id, $content, "$userdata->givenname $userdata->surname", $userdata->username, $userdata->email);
         Database::get()->query("INSERT INTO course_user_request SET uid = ?d, course_id = ?d, 
                                                         status = 1, comments = ?s, 
                                                         ts = " . DBHelper::timeAfter() . "",
@@ -72,7 +75,6 @@ if (empty($userdata->email)) {
 } else {
     $tool_content .= form("$userdata->surname $userdata->givenname");
 }
-
 draw($tool_content, 1);
 
 /**
@@ -151,10 +153,11 @@ function form($user) {
  * @param type $course_id
  * @param type $content
  * @param type $from_name
+ * @param type $from_username
  * @param type $from_address
  * @return type
  */
-function email_profs($course_id, $content, $from_name, $from_address) {
+function email_profs($course_id, $content, $from_name, $from_username, $from_address) {
     global $langSendingMessage, $langLabelCourseUserRequest, $langContactIntro, 
             $langHere, $urlServer, $langNote, $langMessage, $langContactIntroFooter;
             
@@ -174,7 +177,7 @@ function email_profs($course_id, $content, $from_name, $from_address) {
 	<div id='mail-header'>
 		<div>
 			<br>
-			<div id='header-title'>".q(sprintf($langContactIntro, $from_name, $from_address))."</div>
+			<div id='header-title'>".q(sprintf($langContactIntro, $from_name, $from_username, $from_address))."</div>
 		</div>
 	</div>";
     
@@ -198,7 +201,6 @@ function email_profs($course_id, $content, $from_name, $from_address) {
 
     $message = $mailHeader.$mailMain.$mailFooter;
     $plainMessage = html2text($message);
-
     foreach ($profs as $prof) {
         if (!get_user_email_notification_from_courses($prof->prof_uid) or (!get_user_email_notification($prof->prof_uid, $course_id))) {            
             continue;

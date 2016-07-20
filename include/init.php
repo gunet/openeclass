@@ -25,9 +25,25 @@
  *        It is included in every file via baseTheme.php
  */
 
+/**
+ * Escape HTML entities in a string.
+ *
+ * Override Blade's e() from vendor/illuminate/support/helpers.php
+ *
+ * @param  \Illuminate\Contracts\Support\Htmlable|string  $value
+ * @return string
+ */
+function e($value) {
+    if ($value instanceof Htmlable) {
+        return $value->toHtml();
+    }
+
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8', false);
+}
+
 // set default time zone
 date_default_timezone_set("Europe/Athens");
-
+mb_internal_encoding('UTF-8');
 $webDir = dirname(dirname(__FILE__));
 chdir($webDir);
 require 'vendor/autoload.php';
@@ -411,10 +427,10 @@ $modules = array(
     MODULE_ID_FORUM => array('title' => $langForums, 'link' => 'forum', 'image' => 'fa-comments'),
     MODULE_ID_EXERCISE => array('title' => $langExercises, 'link' => 'exercise', 'image' => 'fa-pencil-square-o'),
     MODULE_ID_GROUPS => array('title' => $langGroups, 'link' => 'group', 'image' => 'fa-users'),
-    MODULE_ID_DROPBOX => array('title' => $langDropBox, 'link' => 'dropbox', 'image' => 'fa-envelope-o'),
+    MODULE_ID_MESSAGE => array('title' => $langDropBox, 'link' => 'message', 'image' => 'fa-envelope-o'),
     MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-list'),
     MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-book'),
-    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'conference', 'image' => 'fa-exchange'),
+    MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'chat', 'image' => 'fa-exchange'),
     MODULE_ID_DESCRIPTION => array('title' => $langDescription, 'link' => 'course_description', 'image' => 'fa-info-circle'),
     MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-question-circle'),
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'fa-ellipsis-h'),
@@ -423,8 +439,9 @@ $modules = array(
     MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-list'),
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-sort-numeric-desc'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-check-square-o'),
-    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'fa-exchange'),
-    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'mindmap'),
+    MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-exchange'),
+    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'fa-map'),
+    MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => 'lti_consumer', 'image' => 'fa-link'),
 );
 // ----------------------------------------
 // course admin modules
@@ -521,8 +538,9 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                               module_id NOT IN (SELECT module_id FROM module_disable) AND
                               module_id NOT IN (" . MODULE_ID_CHAT . ",
                                                 " . MODULE_ID_ASSIGN . ",
-                                                " . MODULE_ID_BBB . ",
-                                                " . MODULE_ID_DROPBOX . ",
+                                                " . MODULE_ID_LTI_CONSUMER . ",
+                                                " . MODULE_ID_TC . ",
+                                                " . MODULE_ID_MESSAGE . ",
                                                 " . MODULE_ID_FORUM . ",
                                                 " . MODULE_ID_GROUPS . ",
                                                 " . MODULE_ID_GRADEBOOK . ",

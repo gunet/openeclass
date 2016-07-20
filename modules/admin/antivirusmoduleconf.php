@@ -34,7 +34,7 @@ $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 // Scan the connectors directory and locate the appropriate classes
-$connectorClasses = AntivirusApp::getAntivirusServices();
+$data['connectorClasses'] = $connectorClasses = AntivirusApp::getAntivirusServices();
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -46,58 +46,39 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langAntivirusUpdated</div>";
-} // end of if($submit)
-else {
-    $connectorOptions = array_map(function($connectorClass) {
-        $connector = new $connectorClass();
-        $selected = q(get_config('aantivirus_connector')) == $connectorClass ? " selected='selected'" : '';
-        return "<option value='$connectorClass'$selected>".$connector->getName()."</option>";
-    }, $connectorClasses);
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-                <fieldset><legend>$langBasicCfgSetting</legend>
-	 <table class='table table-bordered' width='100%'>
-         <tr>
-            <th width='200' class='left'><b>$langAntivirusConnector</b></th>
-            <td><select name='formconnector'>".implode('', $connectorOptions)."</select></td>
-         </tr>";
-    foreach($connectorClasses as $curConnectorClass) {
-        $connector = new $curConnectorClass();
+    Session::Messages($langAntivirusUpdated, 'alert-success');
+    redirect_to_home_page('modules/admin/antivirusmoduleconf.php');
+}
+$toolName = $langBasicCfgSetting;
+$data['connectorOptions'] = array_map(function($connectorClass) {
+    $connector = new $connectorClass();
+    $selected = q(get_config('aantivirus_connector')) == $connectorClass ? " selected='selected'" : '';
+    return "<option value='$connectorClass'$selected>".$connector->getName()."</option>";
+}, $connectorClasses);
 
-        foreach($connector->getConfigFields() as $curField => $curLabel) {
-            $tool_content .= "
-              <tr class='connector-config connector-$curConnectorClass' style='display: none;'>
-                <th width='200' class='left'><b>$curLabel</b></th>
-                <td><input class='FormData_InputText' type='text' name='form$curField' size='40' value='" . q(get_config($curField)) . "'></td>
-              </tr>";
-        }
+$head_content .= "
+    <script type='text/javascript'>
+    function update_connector_config_visibility() {
+        $('tr.connector-config').hide();
+        $('tr.connector-config input').removeAttr('required');
+        $('tr.connector-'+$('select[name=\"formconnector\"]').val()).show();
+        $('tr.connector-'+$('select[name=\"formconnector\"]').val()+' input').attr('required', 'required');
     }
-    $tool_content .= "</table></fieldset>";
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='submit' value='$langModify'>". generate_csrf_token_form_field() ."</form>";
-
-    $head_content .= "
-        <script type='text/javascript'>
-        function update_connector_config_visibility() {
-            $('tr.connector-config').hide();
-            $('tr.connector-config input').removeAttr('required');
-            $('tr.connector-'+$('select[name=\"formconnector\"]').val()).show();
-            $('tr.connector-'+$('select[name=\"formconnector\"]').val()+' input').attr('required', 'required');
-        }
-        $(document).ready(function() {
-            $('select[name=\"formconnector\"]').change(function() {
-                update_connector_config_visibility();
-            });
+    $(document).ready(function() {
+        $('select[name=\"formconnector\"]').change(function() {
             update_connector_config_visibility();
         });
-        </script>";
-}
+        update_connector_config_visibility();
+    });
+    </script>";
+
 
 // Display link to index.php
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => "extapp.php",
         'icon' => 'fa-reply',
         'level' => 'primary-label')));
-draw($tool_content, 3, null, $head_content);
 
+$data['menuTypeID'] = 3;
+view ('admin.other.extapps.antivirus_config', $data);

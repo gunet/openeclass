@@ -42,6 +42,7 @@ $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
 // Default backup version
 if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     validateUploadedFile($_FILES['archiveZipped']['name'], 3);
 
     $tool_content .= "<fieldset>
@@ -59,6 +60,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 </table></fieldset>";
 } elseif (isset($_POST['send_path']) and isset($_POST['pathToArchive'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $pathToArchive = $_POST['pathToArchive'];
     validateUploadedFile(basename($pathToArchive), 3);
     if (get_file_extension($pathToArchive) !== 'zip') {
@@ -149,6 +151,11 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     <span class='help-block'><small>$langMaxFileSize " .ini_get('upload_max_filesize') . "</small></span>
                 </div>
             </div>
+            <div class='form-group'>
+                <div class='col-sm-10'>
+                ".showSecondFactorChallenge()."
+                </div>
+            </div>
             ". generate_csrf_token_form_field() ."  
             </form>
         </div> 
@@ -163,6 +170,11 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 <input class='btn btn-primary' type='submit' name='send_path' value='" . $langSend . "'>
             </div>
           ". generate_csrf_token_form_field() ."  
+            <div class='form-group'>
+                <div class='col-sm-10'>
+                ".showSecondFactorChallenge()."
+                </div>
+            </div>
           </form>
         </div>";
 }

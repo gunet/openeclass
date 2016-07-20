@@ -72,7 +72,7 @@ if (isset($_GET['rid'])) {
         if ($sql) {
             if ($sql->affectedRows) { // notify user if registered
                 $email = uid_to_email($_GET['u']);
-                if (!empty($email) and email_seems_valid($email)) {
+                if (!empty($email) and Swift_Validate::email($email)) {
                     $emailsubject = "$langYourReg " . course_id_to_title($course_id);
                     $emailbody = "$langNotifyRegUser1 '" . course_id_to_title($course_id) .
                         "' $langNotifyRegUser2 $langFormula \n$gunet";

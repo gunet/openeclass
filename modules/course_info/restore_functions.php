@@ -49,7 +49,7 @@ function unpack_zip_inner($zipfile, $clone) {
 
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
     if (!is_dir($destdir)) {
-        mkdir($destdir, 0755, true);
+        make_dir($destdir);
     }
     chdir($destdir);
     $zip->extract();
@@ -430,7 +430,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 floatval($course_data['dropbox_quota']),
                 intval($course_data[$restoreHelper->getField('course', 'glossary_expand')])
             );
-            if (isset($course_data['home_layout']) and isset($course_data['course_image'])) {
+            if (!isset($course_data['course_image'])) {
+                $course_data['course_image'] = null;
+            }
+            if (isset($course_data['home_layout'])) {
                 $upd_course_sql .= ', home_layout = ?d, course_image = ?s ';
                 $upd_course_args[] = $course_data['home_layout'];
                 $upd_course_args[] = $course_data['course_image'];
@@ -441,6 +444,12 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             }
             // handle course weekly if exists
             if (isset($course_data['view_type']) && isset($course_data['start_date']) && isset($course_data['finish_date'])) {
+                if ($course_data['start_date'] == '0000-00-00') {
+                    $course_data['start_date'] = null;
+                }
+                if ($course_data['finish_date'] == '0000-00-00') {
+                    $course_data['finish_date'] = null;
+                }
                 $upd_course_sql .= " , view_type = ?s, start_date = ?t, finish_date = ?t ";
                 array_push($upd_course_args,
                     $course_data['view_type'],
@@ -450,7 +459,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             }
             $upd_course_sql .= " WHERE id = ?d ";
             array_push($upd_course_args, intval($new_course_id));
-
             Database::get()->query($upd_course_sql, $upd_course_args);
         }
 
@@ -491,6 +499,13 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $urlAppend . 'courses/' . $new_course_code,
             $course_data['code'] =>
             $new_course_code);
+
+        // Update course description URLs if needed
+        $fixed_course_desc = strtr($course_desc, $url_prefix_map);
+        if ($fixed_course_desc != $course_desc) {
+            Database::get()->query('UPDATE course SET description = ?s WHERE id = ?d',
+                $fixed_course_desc, $new_course_id);
+        }
 
         if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_3X) {
             restore_table($restoreThis, 'course_module', array('set' => array('course_id' => $new_course_id), 'delete' => array('id')), $url_prefix_map, $backupData, $restoreHelper);
@@ -722,7 +737,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $blog_map = restore_table($restoreThis, 'blog_post', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         }
-        
+
         // Wall
         if (file_exists("$restoreThis/wall_post")) {
             $wall_map = restore_table($restoreThis, 'wall_post', array('set' => array('course_id' => $new_course_id),
@@ -839,10 +854,6 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $exercise_map[0] = 0;
         $exercise_to_specific_map = restore_table($restoreThis, 'exercise_to_specific', array('map' => array('exercise_id' => $exercise_map),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);               
-        restore_table($restoreThis, 'exercise_user_record', array(
-            'delete' => array('eurid'),
-            'map' => array('eid' => $exercise_map, 'uid' => $userid_map)
-            ), $url_prefix_map, $backupData, $restoreHelper);
         $question_category_map = restore_table($restoreThis, 'exercise_question_cats', array(
             'set' => array('course_id' => $new_course_id),
             'return_mapping' => 'question_cat_id'
@@ -856,15 +867,20 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'exercise_answer', array(
             'delete' => array('id'),
-            'map' => array('question_id' => $question_map)
+            'map' => array('question_id' => $question_map),
+            'return_mapping' => 'id'
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'exercise_with_questions', array(
+            'map' => array('question_id' => $question_map, 'exercise_id' => $exercise_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        $eurid_map = restore_table($restoreThis, 'exercise_user_record', array(
+            'return_mapping' => 'eurid',
+            'map' => array('eid' => $exercise_map, 'uid' => $userid_map)
             ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'exercise_answer_record', array(
             'delete' => array('answer_record_id'),
             'map' => array('question_id' => $question_map,
-                'eurid' => $userid_map)
-            ), $url_prefix_map, $backupData, $restoreHelper);
-        restore_table($restoreThis, 'exercise_with_questions', array(
-            'map' => array('question_id' => $question_map, 'exercise_id' => $exercise_map)
+                'eurid' => $eurid_map)
             ), $url_prefix_map, $backupData, $restoreHelper);
 
         $sql = "SELECT asset.asset_id, asset.path FROM `lp_module` AS module, `lp_asset` AS asset
@@ -1096,6 +1112,9 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
                 $now,
                 date('Y-m-d H:i:s', time() + get_config('account_duration')))->lastInsertID;
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $user_id;
+            // update personal calendar info table
+            // we don't check if trigger exists since it requires `super` privilege
+            Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $user_id);
             $user = new User();
             $user->refresh($user_id, $departments);
             user_hook($user_id);

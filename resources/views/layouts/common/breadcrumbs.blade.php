@@ -5,18 +5,14 @@
                                         <ol class="breadcrumb">
                                             @foreach ($breadcrumbs as $key => $item)
                                                 @if (isset($item['bread_href']))
-                                                    <!-- BEGIN breadCrumbLinkBlock -->
                                                     <li>
                                                         <a href='{{ $item['bread_href'] }}'>
                                                             {!! $session->status != USER_GUEST && isset($uid) && $key == 0 ? '<span class="fa fa-home"></span> ' : "" !!}
-                                                            {{ $item['bread_text'] }}
+                                                            {!! $item['bread_text'] !!}
                                                         </a>
                                                     </li>
-                                                    <!-- END breadCrumbLinkBlock -->
                                                 @else
-                                                    <!-- BEGIN breadCrumbEntryBlock -->
-                                                    <li>{{ $item['bread_text'] }}</li>
-                                                    <!-- END breadCrumbEntryBlock -->
+                                                    <li>{!! $item['bread_text'] !!}</li>
                                                 @endif
                                             @endforeach
                                         </ol>

@@ -27,6 +27,7 @@ $helpTopic = 'Attendance';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'functions.php';
+require_once 'include/log.class.php';
 
 $toolName = $langAttendance;
 
@@ -58,18 +59,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 //Datepicker
 load_js('tools.js');
 load_js('jquery');
-load_js('bootstrap-datetimepicker');
 load_js('datatables');
 
 @$head_content .= "
 <script type='text/javascript'>
 $(function() {
-    $('#startdatepicker, #enddatepicker').datetimepicker({    
-            format: 'dd-mm-yyyy', 
-            pickerPosition: 'bottom-left', 
-            language: '".$language."',
-            autoclose: true 
-        });
     var oTable = $('#users_table{$course_id}').DataTable ({
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -176,6 +170,8 @@ if ($is_editor) {
     // change attendance visibility
     if (isset($_GET['vis'])) {
         Database::get()->query("UPDATE attendance SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $_GET['attendance_id'], $course_id);
+        $log_details = array('action' => 'change attendance visibility', 'id' =>$_GET['attendance_id'], 'title' => get_attendance_title($_GET['attendance_id']), 'visibility' => $_GET['vis']);
+        Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
         Session::Messages($langGlossaryUpdated, 'alert-success');
         redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
@@ -206,6 +202,8 @@ if ($is_editor) {
             $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
             $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');            
             $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $attendance_limit, $newTitle, $start_date, $end_date)->lastInsertID;   
+            $log_details = array('id' => $attendance_id, 'title' => $newTitle, 'attendance_limit' => $attendance_limit, 'start_date' => $start_date, 'end_date' => $end_date);
+            Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_INSERT, $log_details);
 
             Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
             redirect_to_home_page("modules/attendance/index.php?course=$course_code");
@@ -217,10 +215,13 @@ if ($is_editor) {
     //delete user from attendance list
     if (isset($_GET['deleteuser']) and isset($_GET['ruid'])) {
         delete_attendance_user($_GET['at'], $_GET['ruid']);        
+        $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($_GET['at']), 'action' => 'delete user', 'user_name' => uid_to_name($_GET['ruid']));
+        Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
         redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=".urlencode($_GET[at])."&attendanceBook=1");        
     }
     
     //reset attendance users
+    $distinct_users_count = 0;
     if (isset($_POST['resetAttendanceUsers'])) {               
         if ($_POST['specific_attendance_users'] == 2) { // specific users group
             foreach ($_POST['specific'] as $g) {
@@ -229,15 +230,20 @@ if ($is_editor) {
                 $already_inserted_ids = [];
                 foreach ($already_inserted_users as $already_inserted_user) {
                     array_push($already_inserted_ids, $already_inserted_user->uid);
-                }                
+                }
+                $added_users = array();
                 foreach ($ug as $u) {
                     if (!in_array($u->user_id, $already_inserted_ids)) {
                         $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
                                 SELECT $attendance_id, user_id FROM course_user
                                 WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
                         update_user_attendance_activities($attendance_id, $u->user_id);
+                        $distinct_users_count++;
                     }
                 }
+                $log_details = array('id'=>$attendance_id,'title'=>get_attendance_title($attendance_id), 'action' => 'reset users', 'user_count' => $distinct_users_count, 'group_count'=>count($_POST['specific']), 'groups'=>$_POST['specific']);
+                Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
+        
             }
         } elseif ($_POST['specific_attendance_users'] == 1) { // specific users            
             $active_attendance_users = '';
@@ -258,6 +264,9 @@ if ($is_editor) {
             foreach ($gu as $u) {
                 delete_attendance_user($attendance_id, $u);
             }
+            $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'delete users', 'user_count' => count($gu),'users' => $gu);
+            Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
+        
             $already_inserted_users = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d
                                                 AND uid$extra_sql_in", $attendance_id);
             $already_inserted_ids = [];
@@ -265,14 +274,18 @@ if ($is_editor) {
                 array_push($already_inserted_ids, $already_inserted_user->uid);
             }
             if (isset($_POST['specific'])) {
+                $added_users = array();
                 foreach ($_POST['specific'] as $u) {
                     if (!in_array($u, $already_inserted_ids)) {
                         $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
                                 SELECT $attendance_id, user_id FROM course_user
                                 WHERE course_id = ?d AND user_id = ?d", $course_id, $u); 
                         update_user_attendance_activities($attendance_id, $u);
+                        $added_users[] = $u;
                     }
                 }
+                $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'add users', 'user_count' => count($added_users),'users' => $added_users);
+                 Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
             }
         } else { // if we want all users between dates            
             $usersstart = new DateTime($_POST['UsersStart']);
@@ -287,6 +300,9 @@ if ($is_editor) {
             foreach ($gu as $u) {
                 delete_attendance_user($attendance_id, $u);
             }
+            $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'delete users not in date range', 'users_start' => $usersstart->format("Y-m-d"), 'users_end' => $usersend->format("Y-m-d"), 'user_count' => count($gu),'users' => $gu);
+            Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
+        
             //Add students that are not already registered to the gradebook
             $already_inserted_users = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user "
                     . "WHERE attendance_users.uid = course_user.user_id "
@@ -302,13 +318,16 @@ if ($is_editor) {
                         WHERE course_id = ?d 
                         AND status = " . USER_STUDENT . " "
                     . "AND DATE(reg_date) BETWEEN ?s AND ?s",$course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
-
+            $added_users = array();
             foreach ($valid_users_for_insertion as $u) {
                 if (!in_array($u->user_id, $already_inserted_ids)) {
                     Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) VALUES (?d, ?d)", $attendance_id, $u->user_id);
                     update_user_attendance_activities($attendance_id, $u->user_id);
+                    $added_users[] = $u->user_id;
                 }
-            }            
+            }
+            $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'add users in date range', 'users_start' => $usersstart->format("Y-m-d"), 'users_end' => $usersend->format("Y-m-d"), 'user_count' => count($added_users),'users' => $added_users);
+            Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
         }
         Session::Messages($langGradebookEdit,"alert-success");                    
         redirect_to_home_page('modules/attendance/index.php?course=' . $course_code . '&attendance_id=' . $attendance_id . '&attendanceBook=1');
@@ -440,6 +459,8 @@ if ($is_editor) {
             $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
             $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');             
             Database::get()->querySingle("UPDATE attendance SET `title` = ?s, `limit` = ?d, `start_date` = ?t, `end_date` = ?t WHERE id = ?d ", $attendance_title, $attendance_limit, $start_date, $end_date, $attendance_id);
+            $log_details = array('id' => $attendance_id, 'title' => $attendance_title, 'attendance_limit' => $attendance_limit, 'start_date' => $start_date, 'end_date' => $end_date);
+            Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
             Session::Messages($langGradebookEdit,"alert-success");
             redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
         } else {
@@ -456,7 +477,9 @@ if ($is_editor) {
     elseif(isset($_GET['addCourseActivity'])) {
         $id = $_GET['addCourseActivity'];
         $type = intval($_GET['type']);
-        add_attendance_activity($attendance_id, $id, $type);
+        $actt = add_attendance_activity($attendance_id, $id, $type);
+        $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'add activity', 'activity_title' => $actt);
+        Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
         Session::Messages("$langGradebookSucInsert","alert-success");
         redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");        
         $display = FALSE;
@@ -481,6 +504,8 @@ if ($is_editor) {
                 Database::get()->query("UPDATE attendance_activities SET `title` = ?s, date = ?t, 
                                                 description = ?s, `auto` = ?d
                                             WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);
+                $log_details = array('id' => $id, 'title' => get_attendance_title($id), 'action' => 'modify activity', 'activity_title' => $actTitle, 'activity_date' => $actDate, 'visible' => $visible);
+                Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
                 Session::Messages("$langGradebookEdit", "alert-success");
                 redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
             } else {
@@ -488,6 +513,8 @@ if ($is_editor) {
                 $insertAct = Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, 
                                                             `date` = ?t, description = ?s", 
                                                     $attendance_id, $actTitle, $actDate, $actDesc);
+                $log_details = array('id' => $attendance_id, 'title' => get_attendance_title($attendance_id), 'action' => 'add activity', 'activity_title' => $actTitle, 'activity_date' => $actDate);
+                Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
                 Session::Messages("$langGradebookSucInsert","alert-success");
                 redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
             }            
@@ -499,12 +526,19 @@ if ($is_editor) {
     }
     
     elseif (isset($_GET['delete'])) {
+        $log_details = array('id' => $attendance_id, 
+                             'title' => get_attendance_title($attendance_id), 
+                             'action' => 'delete activity', 
+                             'activity_title' => get_attendance_activity_title($attendance_id, getDirectReference($_GET['delete'])));
         delete_attendance_activity($attendance_id, getDirectReference($_GET['delete']));
+        Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_MODIFY, $log_details);
         redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
     
     // delete attendance
-    } elseif (isset($_GET['delete_at'])) {        
-        delete_attendance($_GET['delete_at']);
+    } elseif (isset($_GET['delete_at'])) {
+        $log_details = array('id' => $_GET['delete_at'], 'title' => get_attendance_title($_GET['delete_at']));
+        delete_attendance($_GET['delete_at']);        
+        Log::record($course_id, MODULE_ID_ATTENDANCE, LOG_DELETE, $log_details);
         redirect_to_home_page("modules/attendance/index.php?course=$course_code");
     }
     

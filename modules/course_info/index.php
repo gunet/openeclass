@@ -30,7 +30,7 @@ $require_course_admin = true;
 $require_help = true;
 $helpTopic = 'Infocours';
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -110,22 +110,43 @@ $head_content .= <<<hContent
             autoclose: true
         }).on('changeDate', function(e){
             var date2 = $('input[name=start_date]').datepicker('getDate');
-            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){              
-                $('input[name=finish_date]').datepicker('setDate', date2);                
-            }            
+            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
+                date2.setDate(date2.getDate() + 7);
+                $('input[name=finish_date]').datepicker('setDate', date2);
+                $('input[name=finish_date]').datepicker('setStartDate', date2);
+            }else{
+                $('input[name=finish_date]').datepicker('setStartDate', date2);
+            }
         });
         
         $('input[name=finish_date]').datepicker({
             format: 'yyyy-mm-dd',
-            autoclose: true,            
+            autoclose: true,
             startDate: $('input[name=start_date]').datepicker('getDate')
         }).on('changeDate', function(e){
-           var date1 = $('input[name=start_date]').datepicker('getDate');           
-            if($('input[name=finish_date]').datepicker('getDate')<$('input[name=start_date]').datepicker('getDate')){
-                $('input[name=finish_date]').datepicker('setStartDate', date1);
-            }           
+            var dt1 = $('input[name=start_date]').datepicker('getDate');
+            var dt2 = $('input[name=finish_date]').datepicker('getDate');
+            if (dt2 <= dt1) {
+                var minDate = $('input[name=finish_date]').datepicker('startDate');
+                $('input[name=finish_date]').datepicker('setDate', minDate);
+            }            
         });
-                        
+        
+        if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
+            $('input[name=start_date]').datepicker('setDate', new Date());
+            var date2 = $('input[name=start_date]').datepicker('getDate');
+            date2.setDate(date2.getDate() + 7);
+            $('input[name=finish_date]').datepicker('setDate', date2);
+            $('input[name=finish_date]').datepicker('setStartDate', date2);
+        }else{
+            var date2 = $('input[name=finish_date]').datepicker('getDate');
+            $('input[name=finish_date]').datepicker('setStartDate', date2);
+        }
+        
+        if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
+            $('input[name=finish_date]').datepicker("setDate", 7);
+        }
+        
         $('#weeklyDates').hide();
         
         $('input[name=view_type]').change(function () {
@@ -176,7 +197,15 @@ $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
 
 if (isset($_POST['submit'])) {
+    $view_type = $_POST['view_type'];    
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
+    if (!isset($_POST['start_date']) or !$_POST['start_date']) {
+        $_POST['start_date'] = null;
+    }
+    if (!isset($_POST['start_date']) or !$_POST['finish_date']) {
+        $_POST['finish_date'] = null;
+    }
     if (empty($_POST['title'])) {
         $tool_content .= "<div class='alert alert-danger'>$langNoCourseTitle</div>
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
@@ -185,7 +214,7 @@ if (isset($_POST['submit'])) {
         if (isset($_POST['formvisible']) and ( $_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
             $password = $_POST['password'];
         } else {
-            $password = "";
+            $password = '';
         }
         // if it is opencourses certified keeep the current course_license
         if (isset($_POST['course_license'])) {
@@ -224,15 +253,11 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        //===================course format and start and finish date===============
-        // check if there is a start and finish date if weekly selected
-        if ($_POST['view_type'] || $_POST['start_date'] || $_POST['finish_date']) {
-            if (!$_POST['start_date']) {
-                // if no start date do not allow weekly view and show alert message
-                $view_type = 'units';
-                $_POST['start_date'] = '0000-00-00';
-                $_POST['finish_date'] = '0000-00-00';
-                $noWeeklyMessage = 1;
+        //===================course format and start and finish date===============        
+        if ($view_type == 'weekly') {            
+            if (is_null($_POST['start_date'])) {
+                Session::Messages($langCourseWeeklyFormatNotice);
+                redirect_to_home_page("modules/course_info/index.php?course=$course_code");
             } else { // if there is start date create the weeks from that start date
                 // Number of the previous week records for this course
                 $previousWeeks = Database::get()->queryArray("SELECT id FROM course_weekly_view WHERE course_id = ?d", $course_id);
@@ -246,30 +271,22 @@ if (isset($_POST['submit'])) {
                 } else {
                     $countPreviousWeeks = 0;
                 }
-
                 // counter for the new records
                 $cnt = 1;
-
                 // counter for the old records
                 $cntOld = 0;
-
-                $noWeeklyMessage = 0;
-
-                $view_type = $_POST['view_type'];
+                                
                 $begin = new DateTime($_POST['start_date']);
 
                 // check if there is no end date
-                if ($_POST['finish_date'] == "" || $_POST['finish_date'] == '0000-00-00') {
-                    $end = new DateTime($begin->format("Y-m-d"));
-                    ;
+                if (is_null($_POST['finish_date'])) {
+                    $end = new DateTime($begin->format("Y-m-d"));                    
                     $end->add(new DateInterval('P26W'));
                 } else {
                     $end = new DateTime($_POST['finish_date']);
                 }
 
                 $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
-
-
                 foreach ($daterange as $date) {
                     //===============================
                     // new weeks
@@ -323,7 +340,7 @@ if (isset($_POST['submit'])) {
         if ($deps_changed and !$deps_valid) {
             Session::Messages($langCreateCourseNotAllowedNode, 'alert-danger');
             redirect_to_home_page("modules/course_info/?course=$course_code");
-        } else {
+        } else {            
             Database::get()->query("UPDATE course
                             SET title = ?s,
                                 public_code = ?s,
@@ -363,13 +380,8 @@ if (isset($_POST['submit'])) {
             }
             if (isset($_POST['disable_log_course_user_requests'])) {
                 setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, $_POST['disable_log_course_user_requests'], $course_id);
-            }
-            if ($noWeeklyMessage) {
-                Session::Messages($langCourseWeeklyFormatNotice);
-            } else {
-                Session::Messages($langModifDone,'alert-success');
-            }
-            
+            }                                    
+            Session::Messages($langModifDone,'alert-success');            
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         }
     }
@@ -582,9 +594,11 @@ if (isset($_POST['submit'])) {
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2' id='weeklyDates'>
                         $langStartDate 
-                        <input class='dateInForm form-control' type='text' name='start_date' value='".($c->start_date != "0000-00-00" ? $c->start_date : "")."' readonly>                       
+                        <input class='dateInForm form-control' type='text' name='start_date' value='" .
+                            ($c->start_date ? $c->start_date : '')."' readonly>                       
                         $langEndDate
-                        <input class='dateInForm form-control' type='text' name='finish_date' value='".($c->finish_date != "0000-00-00" ? $c->finish_date : "")."' readonly>
+                        <input class='dateInForm form-control' type='text' name='finish_date' value='" .
+                            ($c->finish_date ? $c->finish_date : '')."' readonly>
                 </div>
             </div>";
 
@@ -761,6 +775,7 @@ if (isset($_POST['submit'])) {
                     </div>                   
                 </div>                    
             </div>
+            ".showSecondFactorChallenge()."
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>

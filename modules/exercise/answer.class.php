@@ -59,7 +59,7 @@ if (!class_exists('Answer')):
          * @author - Olivier Brouckaert
          * @param - integer $questionId - question ID that answers belong to
          */
-        function Answer($questionId) {
+        public function __construct($questionId) {
             $this->questionId = $questionId;
             $this->answer = array();
             $this->correct = array();
@@ -71,8 +71,8 @@ if (!class_exists('Answer')):
             $this->cancel();
 
             // fills arrays
-            $this->read();
-        }
+            $this->read();            
+        }        
 
         /**
          * clears $new_* arrays
@@ -146,7 +146,10 @@ if (!class_exists('Answer')):
                 return '::0';
             }
         }
-
+             
+        function selectAnswers() {
+            return $this->answer;
+        }
         /**
          * tells if answer is correct or not
          *

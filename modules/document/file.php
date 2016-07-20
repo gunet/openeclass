@@ -36,6 +36,12 @@ if (isset($_SESSION['course_code'])) {
     define('old_course_code', $_SESSION['course_code']);
 }
 
+// lpmode is used for learning path
+$is_in_lpmode = false;
+if (isset($_SESSION['FILE_PHP__LP_MODE']) && $_SESSION['FILE_PHP__LP_MODE'] == true) {
+    $is_in_lpmode = true;
+}
+
 $uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
 
 // If URI contains backslashes, redirect to forward slashes
@@ -130,6 +136,21 @@ if (file_exists($disk_path)) {
             (isset($_GET['token']) && token_validate($file_info->path, $_GET['token'], 30));
         if (!$valid) {
             not_found(preg_replace('/^.*file\.php/', '', $uri));
+            exit();
+        }
+        
+        $is_android = false;
+        $useragent=$_SERVER['HTTP_USER_AGENT'];
+        if (preg_match('/(android).+mobile/i', $useragent)) {
+            $is_android = true;
+        }
+        
+        if ($is_in_lpmode && $is_android) {
+            require_once 'include/lib/fileDisplayLib.inc.php';
+            //$dl_url = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . getIndirectReference($file_info->path);
+            $dl_url = file_url($file_info->path);
+            echo $langMailVerificationClick . " " . "<a href='" . $dl_url . "'>". $langDownload . "</a>";
+            unset($_SESSION['FILE_PHP__LP_MODE']);
             exit();
         }
         send_file_to_client($disk_path, $file_info->filename);

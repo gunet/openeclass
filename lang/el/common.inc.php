@@ -60,13 +60,24 @@ $langsstudent_acc = "εκπαιδευόμενο";
 $langGuest = "Χρήστης Επισκέπτης";
 $langGuests = "Χρήστες Επισκέπτες";
 
-$langFaculty = "Σχολή - Τμήμα";
-$langOfFaculty = "Σχολής - Τμήματος";
-$langOfFaculties = "Σχολών - Τμημάτων";
-$langFaculties = "Σχολές - Τμήματα";
+$langCourse = "Μάθημα";
+$langCourses = "Μαθήματα";
+$langOfCourses = "Μαθημάτων";
+$langOfCourse = "Μαθήματος";
 
-$langsFaculty = "σχολή - τμήμα";
-$langsFaculties = "σχολές - τμήματα";
+$langsCourse = "μάθημα";
+$langsCourses = "μαθήματα";
+$langsOfCourse = "μαθήματος";
+$langsOfCourses = "μαθημάτων";        
+
+$langFaculty = "Κατηγορία";
+$langOfFaculty = "Κατηγορίας";
+$langOfFaculties = "Κατηγοριών";
+$langFaculties = "Κατηγορίες";
+
+$langsFaculty = "κατηγορία";
+$langsOfFaculty = "κατηγορίας";
+$langsFaculties = "κατηγορίες";
 
 $langpres = "Προπτυχιακά";
 $langposts = "Μεταπτυχιακά";

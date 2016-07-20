@@ -22,8 +22,6 @@
 $require_current_course = TRUE;
 $require_editor = TRUE;
 
-define('CLARO_FILE_PERMISSIONS', 0777);
-
 require_once "include/baseTheme.php";
 
 require_once "include/lib/fileManageLib.inc.php";

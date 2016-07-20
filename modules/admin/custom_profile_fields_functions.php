@@ -154,7 +154,11 @@ function render_profile_fields_form($context, $valitron = false) {
                             $val = $_REQUEST['cpf_'.$f->shortname];
                         }
                         $return_string .= rich_text_editor('cpf_'.$f->shortname, 8, 20, $val);
-                        $req_label = $langCompulsory;
+                        if ($f->required == 0) {
+                            $req_label = $langOptional;
+                        } else {
+                            $req_label = $langCompulsory;
+                        }
                         break;
                     case CPF_DATE:
                         if (isset($fdata) && $fdata != '') {
@@ -183,7 +187,11 @@ function render_profile_fields_form($context, $valitron = false) {
                         $options[0] = "";
                         ksort($options);
                         $return_string .= selection($options, 'cpf_'.$f->shortname, $def_selection);
-                        $req_label = $langCompulsory;
+                        if ($f->required == 0) {
+                            $req_label = $langOptional;
+                        } else {
+                            $req_label = $langCompulsory;
+                        }
                         break;
                     case CPF_LINK:
                         if (isset($fdata) && $fdata != '') {
@@ -240,7 +248,7 @@ function process_profile_fields_data($context) {
                 $field_name = substr($key, 4);
                 $result = Database::get()->querySingle("SELECT id, required FROM custom_profile_fields WHERE shortname = ?s", $field_name);
                 $field_id = $result->id;
-                $required = $result->id;
+                $required = $result->required;
                 if (isset($context['origin']) && ($context['origin'] == 'edit_profile' || $context['origin'] == 'admin_edit_profile')) { //delete old values if exist
                     if ($required == 1 && empty($value)) {
                         continue;
@@ -441,7 +449,7 @@ function cpf_validate_format_valitron(&$valitron_object) {
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
             $field_name = substr($key, 4);
-            $result = Database::get()->querySingle("SELECT name, datatype FROM custom_profile_fields WHERE shortname = ?s", $field_name);
+            $result = Database::get()->querySingle("SELECT name, datatype, required FROM custom_profile_fields WHERE shortname = ?s", $field_name);
             $datatype = $result->datatype;
             $field_name = $result->name;
             if ($datatype == CPF_LINK) {
@@ -449,7 +457,9 @@ function cpf_validate_format_valitron(&$valitron_object) {
             } elseif ($datatype == CPF_DATE) {
                 $valitron_object->rule('date', $key)->message(sprintf($langCPFDateValidFail, q($field_name)))->label($field_name);
             } elseif ($datatype == CPF_MENU) {
-                $valitron_object->rule('notIn', $key, array(0))->message($langTheFieldIsRequired)->label($field_name);
+                if ($result->required == 1) {
+                    $valitron_object->rule('notIn', $key, array(0))->message($langTheFieldIsRequired)->label($field_name);
+                }
             }
         }
     }

@@ -103,13 +103,11 @@ if (isset($_POST['submitPoll'])) {
                         (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results,type, assign_to_specific)
                         VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollSurveyType, $PollAssignToSpecific)->lastInsertID;         
 				
-
-			if($PollSurveyType == 1)
-				createcolles($pid);
-			
-			elseif($PollSurveyType == 2)
-				createattls($pid);
-				
+            if($PollSurveyType == 1) {
+                createcolles($pid);
+            }   elseif($PollSurveyType == 2) {
+                createattls($pid);
+            }    
             Session::Messages($langPollCreated, 'alert-success');
         }
         if ($PollAssignToSpecific && !empty($PollAssignees)) {
@@ -248,9 +246,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     load_js('bootstrap-datetimepicker');   
     $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#startdatepicker, #enddatepicker').datetimepicker({
+            $('#PollStart, #PollEnd').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right', 
                 language: '".$language."',
                 autoclose: true
             });
@@ -470,13 +468,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='radio'>
                       <label>
                         <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == 1 ? " checked" : "").">
-                        <span>$langCollesSurvey </span>
+                        <span data-toggle='tooltip' data-placement='right' title='$colles_desc'>$langCollesSurvey</span>
+                            
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == 2 ? " checked" : "").">
-                        <span>$langATTLSSurvey</span>
+                        <span data-toggle='tooltip' data-placement='right' title='$rate_scale'>$langATTLSSurvey</span>
                       </label>
                     </div>                        
                 </div>
@@ -755,19 +754,19 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </div>";
 // View edit poll page     
 } else {  
-$tool_content .= $ToolSurveyType;
+    
     $pageName = $langEditChange;
     $navigation[] = array(
             'url' => "admin.php?course=$course_code&amp;pid=$pid", 
             'name' => $poll->name
         );
 
-	if($poll->type == 0)
-		$poll_type = $langGeneralSurvey;
-	else if($poll->type == 1)
-		$poll_type = $langCollesSurvey." $langSurvey";
-	else if($poll->type == 2)
-		$poll_type = $langATTLSSurvey." $langSurvey";
+    if($poll->type == 0)
+            $poll_type = $langGeneralSurvey;
+    else if($poll->type == 1)
+            $poll_type = $langCollesSurvey." $langSurvey";
+    else if($poll->type == 2)
+            $poll_type = $langATTLSSurvey." $langSurvey";
 		
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
     $tool_content .= action_bar(array(

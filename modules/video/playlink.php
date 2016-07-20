@@ -38,5 +38,6 @@ $row = Database::get()->querySingle("SELECT * FROM videolink WHERE course_id = ?
 if ($row) {
     $vObj = MediaResourceFactory::initFromVideoLink($row);
     echo MultimediaHelper::medialinkIframeObject($vObj);
-} else
+} else {
     header("Location: ${urlServer}modules/video/index.php?course=$course_code");
+}

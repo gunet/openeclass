@@ -48,7 +48,6 @@ $require_editor = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
-require_once 'modules/usage/statistics_tools_bar.php';
 
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
     $toolName = $langUsage;
@@ -77,7 +76,7 @@ $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "index.php",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')),false); 
+                      'level' => 'primary-label')),false);
 
 // check if there are learning paths available
 $lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
@@ -87,8 +86,8 @@ if ($lcnt == 0) {
     exit;
 } else {
     $tool_content .= "<div class='alert alert-info'>
-           <b>$langSave $langDumpUserDurationToFile: </b><a href='dumpuserlearnpathdetails.php?course=$course_code'>$langcsvenc2</a>&nbsp;
-                $langOr&nbsp; <a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>          
+          $langSave <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langDumpUserDurationToFile</a>
+                (<a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=UTF-8'>$langcsvenc2</a>)
           </div>";
 }
 
@@ -112,7 +111,7 @@ foreach ($usersList as $user) {
 
     $iterator = 1;
     $globalprog = 0;
-    
+
     $tool_content .= "  <tr>";
     foreach ($learningPathList as $learningPath) {
         // % progress
@@ -123,7 +122,7 @@ foreach ($usersList as $user) {
         $iterator++;
     }
     $total = round($globalprog / ($iterator - 1));
-    $tool_content .= 
+    $tool_content .=
             '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '&amp;uName=' . $user->givenname . '">' .  profile_image($user->id, IMAGESIZE_SMALL, 'img-circle')."&nbsp;". q($user->surname) . ' ' . q($user->givenname) . '</a></td>'
             . '    <td class="text-center">' . q(uid_to_am($user->id)) . '</td>'
             . '    <td class="text-left">' . user_groups($course_id, $user->id) . '</td>'

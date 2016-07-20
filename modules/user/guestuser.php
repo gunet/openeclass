@@ -71,6 +71,7 @@ $tool_content .= action_bar(array(
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
     $password = $_POST['guestpassword'];
     createguest($default_guest_username, $course_id, $password);
     Session::Messages($langGuestSuccess, 'alert-success');
@@ -122,6 +123,7 @@ if (isset($_POST['submit'])) {
                 <span id='result'></span>
             </div>
         </div>
+        ".showSecondFactorChallenge()." 
         <div class='col-sm-offset-2 col-sm-10'>
           <input class='btn btn-primary' type='submit' name='submit' value='$submit_label'>
           <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
@@ -159,6 +161,9 @@ function createguest($username, $course_id, $password) {
                                         VALUES (?s, ?s, ?s, ?s, " . USER_GUEST . ", ".DBHelper::timeAfter().", ".DBHelper::timeAfter(get_config('account_duration')).", '','')",
                                             $langGuestSurname, $langGuestName, $username, $password);
         $guest_id = $q->lastInsertID;
+        // update personal calendar info table
+        // we don't check if trigger exists since it requires `super` privilege
+        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $guest_id);
     }
     Database::get()->query("INSERT IGNORE INTO course_user (course_id, user_id, status, reg_date)
                   VALUES (?d, ?d, " . USER_GUEST . ", ".DBHelper::timeAfter().")", $course_id, $guest_id);

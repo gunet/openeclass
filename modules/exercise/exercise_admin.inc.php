@@ -189,7 +189,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         $(function() {
             $('#exerciseStartDate, #exerciseEndDate').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right', 
                 language: '".$language."',
                 autoclose: true    
             }).on('changeDate', function(ev){

@@ -32,28 +32,17 @@ $require_login = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
+require_once 'include/lib/csv.class.php';
 
 if (isset($_GET['format']) and $_GET['format'] == 'csv') {
     $format = 'csv';
-
-    if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
-        $charset = 'Windows-1253';
-        $sendSep = true;
-    } else {
-        $charset = 'UTF-8';
-        $sendSep = false;
+    $csv = new CSV();
+    if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
+        $csv->setEncoding('UTF-8');
     }
-    $crlf = "\r\n";
+    $csv->filename = $course_code . '_user_duration.csv';
 
-    header("Content-Type: text/csv; charset=$charset");
-    header("Content-Disposition: attachment; filename=usersduration.csv");
-    
-    if ($sendSep) {
-        echo 'sep=;', $crlf;
-    }
-
-    echo join(';', array_map("csv_escape", array($langSurnameName, $langAm, $langGroup, $langDuration))),
-    $crlf, $crlf;
+    $csv->outputRecord($langSurname, $langName, $langAm, $langGroup, $langDuration);
 } else {
     $format = 'html';
     $toolName = $langUserDuration;
@@ -61,9 +50,13 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
     $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);  
     
     $tool_content .= action_bar(array(
-        array('title' => $langStat,
+        array('title' => $langUsage,
             'url' => "index.php?course=$course_code",
             'icon' => 'fa-bar-chart',
+            'level' => 'primary-label'),
+        array('title' => $langGlossaryToCsv,
+            'url' => "userduration.php?course=$course_code&amp;format=csv",
+            'icon' => 'fa-download',
             'level' => 'primary-label'),
         array('title' => $langBack,
             'url' => "../../courses/{$course_code}/",
@@ -71,17 +64,10 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
             'level' => 'primary-label')
     ),false);
     
-    // display number of users
-    $tool_content .= "
-        <div class='alert alert-info'>
-           <b>$langDumpUserDurationToFile: </b>1. <a href='userduration.php?course=$course_code&amp;format=csv'>$langcsvenc2</a>
-                2. <a href='userduration.php?course=$course_code&amp;format=csv&amp;enc=1253'>$langcsvenc1</a>
-          </div>";
-
     $tool_content .= "
         <table class='table-default'>
         <tr>
-          <th>$langSurname $langName</th>
+          <th>$langSurnameName</th>
           <th>$langAm</th>
           <th>$langGroup</th>
           <th>$langDuration</th>
@@ -99,10 +85,8 @@ if (count($result) > 0) {
                                 <td class='center'>" . format_time_duration(0 + $row->duration) . "</td>
                                 </tr>";
         } else {
-            echo csv_escape($row->surname . ' ' . $row->givenname), ';',
-            csv_escape($row->am), ';',
-            csv_escape($grp_name), ';',
-            csv_escape(format_time_duration(0 + $row->duration)), $crlf;
+            $csv->outputRecord($row->surname, $row->givenname,
+                $row->am, $grp_name, format_time_duration(0 + $row->duration));
         }
     }
     if ($format == 'html') {

@@ -35,10 +35,10 @@
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
 function validateNode($id, $checkOwn) {
-    global $tool_content, $head_content, $tree, $user, $uid,
+    global $head_content, $tree, $user, $uid,
     $langBack, $langNotAllowed;
 
-    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+    $notallowed = "$langNotAllowed";
 
     if ($id <= 0) {
         exitWithError($notallowed);
@@ -66,8 +66,8 @@ function validateNode($id, $checkOwn) {
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
 function validateParentId($id, $checkOwn) {
-    global $tool_content, $head_content, $tree, $user, $uid, $langBack, $langNotAllowed;
-    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+    global $head_content, $tree, $user, $uid, $langBack, $langNotAllowed;
+    $notallowed = "$langNotAllowed";
 
     // special parent check
     if ((!$checkOwn && $id < 0) || ($checkOwn && $id <= 0)) {
@@ -96,10 +96,10 @@ function validateParentId($id, $checkOwn) {
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
 function validateUserNodes($userId, $checkOwn) {
-    global $tool_content, $head_content, $tree, $user, $uid,
+    global $head_content, $tree, $user, $uid,
     $langBack, $langNotAllowed;
 
-    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+    $notallowed = "$langNotAllowed";
 
     if ($userId <= 0) {
         exitWithError($notallowed);
@@ -136,9 +136,9 @@ function validateUserNodes($userId, $checkOwn) {
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
 function validateCourseNodes($courseId, $checkOwn) {
-    global $tool_content, $head_content, $tree, $course, $user, $uid, $langBack, $langNotAllowed;
+    global $head_content, $tree, $course, $user, $uid, $langBack, $langNotAllowed;
 
-    $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
+    $notallowed = "$langNotAllowed";
 
     if ($courseId <= 0) {
         exitWithError($notallowed);
@@ -171,12 +171,8 @@ function validateCourseNodes($courseId, $checkOwn) {
  * 
  * @param string $message - The optional error message to display 
  */
-function exitWithError($message) {
-    global $tool_content, $head_content;
-
-    $tool_content .= $message;
-    draw($tool_content, 3, null, $head_content);
-    exit();
+function exitWithError($message) {    
+    Session::Messages($message, 'alert-danger');
 }
 
 /**

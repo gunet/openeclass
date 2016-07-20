@@ -29,7 +29,7 @@ class ExtAppManager {
 
     public static $AppNames = array('GoogleDriveApp', 'OneDriveApp',
         'DropBoxApp', 'OwnCloudApp', 'WebDAVApp', 'FTPApp', 'OpenDelosApp',
-        'BBBApp', 'OpenMeetings', 'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
+        'BBBApp', 'OpenMeetings', 'WebConfApp', 'AutojudgeApp', 'AntivirusApp', 'WafApp', 'secondfaApp',
         'AnalyticsApp');
     private static $APPS = null;
 
@@ -163,7 +163,12 @@ abstract class ExtApp {
     }
 
     protected function getBaseURL() {
-        return Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", "base_url")->value;
+        $r = Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", "base_url");
+        if ($r) {
+            return $r->value;            
+        } else {
+            return null;
+        }        
     }
 
     public abstract function getDisplayName();
@@ -175,7 +180,19 @@ abstract class ExtApp {
     public function getAppIcon() {
         return $this->getBaseURL() . "template/icons/" . $this->getName() . ".png";
     }
-
+    
+    public function update_tc_sessions($type) {
+        
+        $r = Database::get()->querySingle("SELECT id FROM tc_servers 
+                                            WHERE `type` = '$type' AND enabled = 'true'
+                                            ORDER BY weight ASC");
+        if ($r) {
+            $tc_id = $r->id;
+            Database::get()->query("UPDATE tc_session SET running_at = $tc_id");
+            Database::get()->query("UPDATE course_external_server SET external_server = $tc_id");
+        }        
+    }
+    
 }
 
 abstract class ExtParam {
