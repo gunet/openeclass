@@ -4,11 +4,12 @@
 
 {!! $action_bar !!}
 
-@if (!$user_registration or $eclass_stud_reg != 2)
-    <div class='alert alert-info'>{{ trans('langStudentCannotRegister') }}</div>
-@endif
-
-    <div class='form-wrapper'>
+    @if (!$user_registration or $eclass_stud_reg != 2)
+        <div class='alert alert-info'>
+            {{ trans('langStudentCannotRegister') }}
+        </div>
+    @elseif (!isset($_POST['submit']))
+        <div class='form-wrapper'>
             <form class='form-horizontal' role='form' action='newuser.php' method='post' onsubmit='return validateNodePickerForm();'>
             <fieldset>
             <div class='form-group'>
@@ -67,7 +68,7 @@
             <div class='form-group'>
               <label for='UserFac' class='col-sm-2 control-label'>{{ trans('langFaculty') }}:</label>
                 <div class='col-sm-10'>
-                    {!! $buildusernode !!}                                
+                    {!! $buildusernode !!}
                 </div>
             </div>
             <div class='form-group'>
@@ -107,3 +108,5 @@
       </fieldset>
       </form>
       </div>
+    @endif
+@endsection

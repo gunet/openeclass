@@ -33,7 +33,8 @@ require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'modules/admin/custom_profile_fields_functions.php';
 
-$data['display_captcha'] = get_config("display_captcha") && function_exists('imagettfbbox');
+$display_captcha = get_config("display_captcha") && function_exists('imagettfbbox');
+$data['display_captcha'] = $display_captcha;
 $data['captcha'] = "{$urlAppend}include/securimage/securimage_show.php";
 
 $tree = new Hierarchy();
@@ -80,10 +81,11 @@ $data['user_registration'] = get_config('user_registration');
 $data['eclass_stud_reg'] = get_config('eclass_stud_reg'); // student registration via eclass
 
 $data['lang_select_options'] = lang_select_options('localize', "class='form-control'");
-$data['buildusernode'] = $tree->buildUserNodePickerIndirect();
+list($js, $html) = $tree->buildUserNodePickerIndirect();
+$head_content .= $js;
+$data['buildusernode'] = $html;
 
 $data['render_profile_fields_form'] = render_profile_fields_form(array('origin' => 'student_register'));
-
 
 if(!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $provider_id = '';
 
@@ -427,7 +429,7 @@ if (!isset($_POST['submit'])) {
             $session->setLoginTimestamp();
             $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
         }
-        // user msg
+        // user msg        
         $tool_content .= "<div class='alert alert-success'><p>$user_msg</p></div>";
 
         // footer msg
