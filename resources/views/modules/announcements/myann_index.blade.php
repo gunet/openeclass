@@ -6,17 +6,13 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <div class="table-responsive">
-                <table id='ann_table{{ $course_id }}' class='table-default'>
+            <div class='table-responsive'>
+                <table id='ann_table_my_ann' class='table-default'>
                     <thead>
-                        <tr class='list-header'>
-                            <th>{{ trans('langAnnouncement') }}</th>
-                            <th>{{ trans('langDate') }}</th>
-                            @if ($is_editor)
-                                <th>{{ trans('langNewBBBSessionStatus') }}</th>
-                                <th class='text-center'><i class='fa fa-cogs'></i></th>
-                            @endif
-                        </tr>
+                    <tr class='list-header'>
+                        <th>{{ trans('langAnnouncement') }}</th>
+                        <th>{{ trans('langDate') }}</th>
+                    </tr>
                     </thead>
                     <tbody></tbody>
                 </table>

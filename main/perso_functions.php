@@ -94,7 +94,7 @@ function getUserLessonInfo($uid) {
             }
             $lesson_content .= "<tr class='$visclass'>
 			  <td class='text-left'>
-			  <strong><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></strong><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
+			  <b><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
 			  <div class='smaller'>" . q($data->professor) . "</div></td>";
             $lesson_content .= "<td class='text-center right-cell'>";
             if ($data->status == USER_STUDENT) {
@@ -127,26 +127,47 @@ function getUserLessonInfo($uid) {
  * @param type $param
  * @return string
  */ 
-function getUserAnnouncements($lesson_id, $type = '') {
+function getUserAnnouncements($lesson_id, $type='', $to_ajax=null, $filter=null) {
 
-    global $urlAppend, $dateFormatLong;
+    global $urlAppend, $dateFormatLong, $langAdminAn;
 
-    if (!count($lesson_id)) {
-        return '';
-    }
-            
-    $ann_content = '';
-    $last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
-
-    $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
     if ($type == 'more') {
         $sql_append = '';
     } else {
         $sql_append = 'LIMIT 5';
     }
-    $q = Database::get()->queryArray("SELECT announcement.title,
-                                             announcement.`date`,
+
+    if (!is_null($filter)) {
+        $admin_filter_sql = 'AND admin_announcement.title LIKE ?s';
+        $course_filter_sql = 'AND announcement.title LIKE ?s';
+        $filter_param = '%' . $filter . '%';
+    } else {
+        $admin_filter_sql = $course_filter_sql = '';
+        $filter_param = array();
+    }
+
+    $last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
+
+    if (!count($lesson_id)) {
+        $q = Database::get()->queryArray("
+                                SELECT admin_announcement.title,
+                                             admin_announcement.`date` AS an_date,
+                                             admin_announcement.id                                            
+                                FROM admin_announcement
+                                WHERE admin_announcement.visible = 1
+                                        AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
+                                        AND (admin_announcement.end >= NOW() OR admin_announcement.end IS NULL)
+                                        AND admin_announcement.`date` >= ?s $admin_filter_sql
+                                 ORDER BY an_date DESC
+                         $sql_append", $last_month, $filter_param);
+    } else {
+
+        $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
+
+        $q = Database::get()->queryArray("(SELECT announcement.title,
+                                             announcement.`date` AS an_date,
                                              announcement.id,
+                                             announcement.content,
                                              course.code,
                                              course.title course_title
                         FROM course, course_module, announcement
@@ -158,27 +179,71 @@ function getUserAnnouncements($lesson_id, $type = '') {
                                 AND (announcement.stop_display >= NOW() OR announcement.stop_display IS NULL)
                                 AND announcement.`date` >= ?s
                                 AND course_module.module_id = ?d
-                                AND course_module.visible = 1
-                        ORDER BY announcement.`date` DESC $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE);
-    if ($q) { // if announcements exist
+                                AND course_module.visible = 1 $course_filter_sql)
+                                UNION 
+                                (SELECT admin_announcement.title,
+                                             admin_announcement.`date` AS admin_an_date,
+                                             admin_announcement.id, admin_announcement.body AS content, '', ''                                             
+                                FROM admin_announcement
+                                WHERE   admin_announcement.visible = 1
+                                        AND (admin_announcement.begin <= NOW() OR admin_announcement.begin IS NULL)
+                                        AND (admin_announcement.end >= NOW() OR admin_announcement.end IS NULL)
+                                        AND admin_announcement.`date` >= ?s $admin_filter_sql
+                                ) ORDER BY an_date DESC
+                         $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE, $filter_param, $last_month, $filter_param);
+    }
+    if ($q && is_null($to_ajax)) { // if announcements exist
+        $ann_content = '';
         foreach ($q as $ann) {
-            $course_title = q(ellipsize($ann->course_title, 80));
-            $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
-            $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
-            $ann_content .= "
-            <li class='list-item'>
-                <div class='item-wholeline'>
-                        <div class='text-title'>
-                            <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-                        </div>
 
-                    <div class='text-grey'>$course_title</div>
-                    
-                    <div>$ann_date</div>
-                </div>
-            </li>";
+            if( isset($ann->code) & $ann->code !='' ) {
+
+                $course_title = q(ellipsize($ann->course_title, 80));
+                $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
+                $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
+
+                $ann_content .= "
+                    <li class='list-item'>
+                        <div class='item-wholeline'>
+                                <div class='text-title'>
+                                    <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                                </div>
+        
+                            <div class='text-grey'>$course_title</div>
+                            
+                            <div>$ann_date</div>
+                        </div>
+                    </li>";
+
+            } else {
+
+                $ann_url = $urlAppend . 'main/system_announcements.php/?an_id=' . $ann->id;
+                $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->an_date));
+
+                $ann_content .= "
+                <li class='list-item'>
+                    <div class='item-wholeline'>
+                            <div class='text-title'>
+                                <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                            </div>
+    
+                        <div class='text-grey'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
+                        
+                        <div>$ann_date</div>
+                    </div>
+                </li>";
+
+            }
+
+
         }
         return $ann_content;
+    } elseif ($q && !is_null($to_ajax)) {
+        foreach ($q as $arr_q) {
+            $arr_an[] = $arr_q;
+        }
+
+        return $arr_an;
     } else {
         return '';
     }
