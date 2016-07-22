@@ -202,16 +202,12 @@ $data['modify'] = isset($_GET['faq']) && $_GET['faq'] == 'modify';
 
 
 if ($data['modify']) {
-    $data['submitBtn'] = 'modifyFaq';
-    $data['submitBtnValue'] = $langSave;
     $data['id'] = $_GET['id'];
     $data['faq_mod'] = Database::get()->querySingle("SELECT * FROM `faq` WHERE `id`=?d", $_GET['id']);
     $data['editor'] = rich_text_editor('answer', 5, 40, $data['faq_mod']->body );
 }
 
 if ($data['new']) {
-    $data['submitBtn'] = 'submitFaq';
-    $data['submitBtnValue'] = $langSave;
     $data['editor'] = rich_text_editor('answer', 5, 40, '' );
 }
 
