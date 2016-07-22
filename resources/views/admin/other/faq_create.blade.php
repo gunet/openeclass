@@ -26,18 +26,8 @@
                         </div>
                         <div class='form-group'>
                             <div class='col-sm-offset-2 col-sm-10'>
-                                {!! form_buttons(
-                                    [
-                                        [
-                                            'text' => $submitBtnValue,
-                                            'name' => $submitBtn,
-                                            'value' => $submitBtnValue
-                                        ],
-                                        [
-                                            'href' => "$_SERVER[SCRIPT_NAME]",
-                                        ]
-                                    ]
-                                ) !!}
+                                <button type="submit" class="btn btn-primary" name="{{ $new? "submitFaq" : "modifyFaq" }}" value="{{ trans('submitBtnValue') }}">{{ trans('langSave') }}</button>
+                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}" class="btn btn-default">{{ trans('langCancel') }}</a>
                             </div>
                         </div>
                     </form>

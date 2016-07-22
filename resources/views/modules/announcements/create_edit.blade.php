@@ -71,8 +71,8 @@
                         </div>
                         <div class='form-group'>
                             <div class='col-sm-offset-2 col-sm-10'>
-                                <button type="submit" class="btn btn-success" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
-                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-danger">{{ trans('langCancel') }}</a>
+                                <button type="submit" class="btn btn-primary" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
+                                <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn btn-default">{{ trans('langCancel') }}</a>
                             </div>
                             <input type='hidden' name='id' value='{{ trans('AnnouncementToModify') }}'>
                         </div>
