@@ -8,6 +8,25 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Favicon for various devices -->
+    <link rel="shortcut icon" href="{{ $urlAppend }}template/favicon/favicon.ico" />
+    <link rel="apple-touch-icon-precomposed" href="{{ $urlAppend }}template/favicon/openeclass_128x128.png" />
+    <link rel="icon" type="image/png" href="{{ $urlAppend }}template/favicon/openeclass_128x128.png" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{{ $template_base }}/CSS/bootstrap-custom.css?v={{ $eclass_version }}">
+
+    <!-- Font Awesome - A font of icons -->
+    <link href="{{ $template_base }}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
+
+    @if (isset($styles_str) && $styles_str)
+        <style>
+            {!! $styles_str !!}
+        </style>
+    @endif
+
+    @stack('head_styles')
+
     <!-- jQuery -->
     <script type="text/javascript" src="{{ $urlAppend }}js/jquery-2.1.1.min.js"></script>
 
@@ -37,32 +56,15 @@
     <!-- Our javascript -->
     <script type="text/javascript" src="{{ $template_base }}/js/main.js?v={{ $eclass_version }}"></script>
 
-    <!-- Favicon for various devices -->
-    <link rel="shortcut icon" href="{{ $urlAppend }}template/favicon/favicon.ico" />
-    <link rel="apple-touch-icon-precomposed" href="{{ $urlAppend }}template/favicon/openeclass_128x128.png" />
-    <link rel="icon" type="image/png" href="{{ $urlAppend }}template/favicon/openeclass_128x128.png" />
-    
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="{{ $template_base }}/CSS/bootstrap-custom.css?v={{ $eclass_version }}">
 
-    <!-- Font Awesome - A font of icons -->
-    <link href="{{ $template_base }}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
-    @if (isset($css_files))
-        @foreach($css_files as $css_file)
-            <link rel="stylesheet" href="{{ $urlAppend }}{{ $css_file }}?v={{ $eclass_version }}">
-        @endforeach
-    @endif
     <!--[if lt IE 9]>
       <script type="text/javascript" src="{{ $template_base }}/js/html5shiv.min.js"></script>
       <script type="text/javascript" src="{{ $template_base }}/js/respond.min.js"></script>
     <![endif]-->
 
-    @if (isset($styles_str) && $styles_str)
-    <style>
-        {!! $styles_str !!}
-    </style>
-    @endif
     {!! $head_content !!}
+
+    @stack('head_scripts')
 
 </head>
 
@@ -381,13 +383,9 @@
         </div>
     </div>
 
+    @stack('footer_scripts')
     @if (get_config('ext_analytics_enabled') and $html_footer = get_config('ext_analytics_code')) {
         {!! get_config('ext_analytics_code') !!}
-    @endif
-    @if (isset($footer_js_files))
-        @foreach($footer_js_files as $footer_js_file)
-            <script src="{{ $urlAppend }}{{ $footer_js_file }}" type="text/javascript"></script>
-        @endforeach
     @endif
 </body>
 </html>
