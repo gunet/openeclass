@@ -129,9 +129,43 @@ if ($userdata) {
                       'button-class' => 'btn-info'),
             ));
     }
+    
+    //show blog posts collection
+    $blog_posts = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'blog');
+    if ($blog_posts) {
+        $tool_content .= "<div class='row'>";
+        $tool_content .= "<div class='col-sm-12'>";
+        foreach ($blog_posts as $post) {
+            $data = unserialize($post->data);
+            $tool_content .= "<div class='panel panel-action-btn-default'>
+                                <div class='panel-heading'>
+                                    <div class='pull-right'>
+                                        ". action_button(array(
+                                                array(
+                                                    'title' => $langePortfolioRemoveResource,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;rid=".$post->resource_id,
+                                                    'icon' => 'fa-times',
+                                                    'class' => 'delete',
+                                                    'confirm' => $langePortfolioSureToRemoveResource,
+                                                    'show' => ($post->user_id == $uid)
+                                                )))."
+                                     </div>
+                                        <h3 class='panel-title'>".q($data[0])."</h3>
+                                </div>
+                                <div class='panel-body'>
+                                    <div class='label label-success'>" . nice_format($data[2], true). "</div><small>".$langBlogPostUser.display_user($post->user_id, false, false)."</small><br><br>".standard_text_escape($data[1])."
+                                                </div>
+                                                <div class='panel-footer'>
+                                                <div class='row'>
+                                                <div class='col-sm-6'>$post->course_title</div>
+                                                </div>
+                                                </div>
+                                                </div>";
+        }
+        $tool_content .= "</div></div>";
+    }
+    
 }
-
-//$blog_posts = Database::get()->queryArray("SELECT * FROM ");
 
 if ($uid == $id) {
     draw($tool_content, 1);

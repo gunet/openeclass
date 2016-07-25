@@ -4887,6 +4887,8 @@ $langAddResePortfolio = 'Προσθήκη σε e-Portfolio';
 $langResourcesCollection = 'Συλλογή πόρων';
 $langePortfolioResourceAdded = 'Ο πόρος προστέθηκε επιτυχώς στη συλλογή σας';
 $langePortfolioResourceRemoved = 'Ο πόρος αφαιρέθηκε επιτυχώς από τη συλλογή σας';
+$langePortfolioRemoveResource = 'Αφαίρεση';
+$langePortfolioSureToRemoveResource = 'Είστε σίγουροι ότι θέλετε να αφαιρέσετε αυτόν τον πόρο από τη συλλογή σας;';
 
 /* * ******************************************
   Widgets
