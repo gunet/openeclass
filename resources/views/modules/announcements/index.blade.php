@@ -1,6 +1,8 @@
 @extends('layouts.default')
 
 @push('head_scripts')
+<script src="/js/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="/js/trunk8.js"></script>
 <script type='text/javascript'>
     $(document).ready(function() {
 
@@ -8,53 +10,53 @@
 
         var oTable = $('#ann_table{{ $course_id }}').DataTable ({
             @if ($is_editor)
-                'aoColumnDefs':[{'sClass':'option-btn-cell',
+            'aoColumnDefs':[{'sClass':'option-btn-cell',
                 'aTargets':[-1]}],
             @endif
-                'bStateSave': true,
-                'bProcessing': true,
-                'bServerSide': true,
-                'sScrollX': true,
-                'responsive': true,
-                'searchDelay': 1000,
-                'sAjaxSource': '{{ $_SERVER['REQUEST_URI'] }}',
-                'aLengthMenu': [
-                    [10, 15, 20 , -1],
-                    [10, 15, 20, '{{ trans('langAllOfThem') }}'] // change per page values here
-                ],
-                'fnDrawCallback': function( oSettings ) {
-                    popover_init();
-                    tooltip_init();
-                    $('.table_td_body').each(function() {
-                        $(this).trunk8({
-                            lines: '3',
-                            fill: '&hellip;<div class="clearfix"></div><a style="float:right;" href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&an_id='+ $(this).data('id')+'">{{ trans('langMore') }}</div>'
-                        })
-                    });
-                    $('#ann_table{{ $course_id }}_filter label input').attr({
-                        class : 'form-control input-sm',
-                        placeholder : '{{ trans('langSearch') }}...'
-                    });
-                },
-                'sPaginationType': 'full_numbers',
-                'bSort': false,
-                'oLanguage': {
-                    'sLengthMenu':   '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
-                    'sZeroRecords':  '{{ trans('langNoResult') }}',
-                    'sInfo':         '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
-                    'sInfoEmpty':    '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
-                    'sInfoFiltered': '',
-                    'sInfoPostFix':  '',
-                    'sSearch':       '',
-                    'sUrl':          '',
-                    'oPaginate': {
-                        'sFirst':    '&laquo;',
-                        'sPrevious': '&lsaquo;',
-                        'sNext':     '&rsaquo;',
-                        'sLast':     '&raquo;'
-                    }
+            'bStateSave': true,
+            'bProcessing': true,
+            'bServerSide': true,
+            'sScrollX': true,
+            'responsive': true,
+            'searchDelay': 1000,
+            'sAjaxSource': '{{ $_SERVER['REQUEST_URI'] }}',
+            'aLengthMenu': [
+                [10, 15, 20 , -1],
+                [10, 15, 20, '{{ trans('langAllOfThem') }}'] // change per page values here
+            ],
+            'fnDrawCallback': function( oSettings ) {
+                popover_init();
+                tooltip_init();
+                $('.table_td_body').each(function() {
+                    $(this).trunk8({
+                        lines: '3',
+                        fill: '&hellip;<div class="clearfix"></div><a style="float:right;" href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&an_id='+ $(this).data('id')+'">{{ trans('langMore') }}</div>'
+                    })
+                });
+                $('#ann_table{{ $course_id }}_filter label input').attr({
+                    class : 'form-control input-sm',
+                    placeholder : '{{ trans('langSearch') }}...'
+                });
+            },
+            'sPaginationType': 'full_numbers',
+            'bSort': false,
+            'oLanguage': {
+                'sLengthMenu':   '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
+                'sZeroRecords':  '{{ trans('langNoResult') }}',
+                'sInfo':         '{{ trans('langDisplayed') }} _START_ {{ trans('langTill') }} _END_ {{ trans('langFrom2') }} _TOTAL_ {{ trans('langTotalResults') }}',
+                'sInfoEmpty':    '{{ trans('langDisplayed') }} 0 {{ trans('langTill') }} 0 {{ trans('langFrom2') }} 0 {{ trans('langResults2') }}',
+                'sInfoFiltered': '',
+                'sInfoPostFix':  '',
+                'sSearch':       '',
+                'sUrl':          '',
+                'oPaginate': {
+                    'sFirst':    '&laquo;',
+                    'sPrevious': '&lsaquo;',
+                    'sNext':     '&rsaquo;',
+                    'sLast':     '&raquo;'
                 }
-            });
+            }
+        });
 
         $(document).on( 'click', '.reorder', function(e) {
             e.preventDefault();
@@ -76,7 +78,6 @@
                 }
             });
         });
-
         $(document).on( 'click','.delete_btn', function (e) {
             e.preventDefault();
             var row_id = $(this).data('id');
@@ -139,6 +140,30 @@
 
     });
 </script>
+<script>
+    var readMore = '".js_escape($langReadMore)."';
+    var readLess = '".js_escape($langReadLess)."';
+    $(function () { $('.trunk8').trunk8({
+        lines: 3,
+        fill: '&hellip; <a class="read-more" href="#">{{ js_escape($GLOBALS['showall']) }}</a>',
+    });
+
+        $(document).on('click', '.read-more', function (event) {
+            $(this).parent().trunk8('revert').append(' <a class="read-less" href="#">{{ js_escape($GLOBALS['shownone']) }}</a>');
+            event.preventDefault();
+        });
+
+        $(document).on('click', '.read-less', function (event) {
+            $(this).parent().trunk8();
+            event.preventDefault();
+        });
+
+    });
+</script>
+@endpush
+
+@push('head_styles')
+<link rel='stylesheet' type='text/css' href="/js/datatables/media/css/jquery.dataTables.css" />
 @endpush
 
 @section('content')

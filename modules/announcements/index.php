@@ -208,9 +208,6 @@ if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $cours
 
 // INDEX
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
-    load_js('trunk8');
-    load_js('datatables');
-
 
     $data['action_bar'] = action_bar(
         [
@@ -259,7 +256,6 @@ if (isset($_GET['an_id'])) {
 // CREATE & EDIT
 if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
     if ($is_editor) {
-        load_js('select2');
         $head_content .= "<script type='text/javascript'>
         $(document).ready(function () {
             

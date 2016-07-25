@@ -1,5 +1,14 @@
 @extends('layouts.default')
 
+@push('head_styles')
+<link rel='stylesheet' type='text/css' href="/js/select2-3.5.1/select2.css" />
+<link rel='stylesheet' type='text/css' href="/js/select2-3.5.1/select2-bootstrap.css" />
+@endpush
+
+@push('head_scripts')
+<script src="/js/select2-3.5.1/select2.min.js"></script>
+@endpush
+
 @section('content')
 
     {!! $action_bar !!}
