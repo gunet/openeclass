@@ -4885,6 +4885,8 @@ $langResume = 'Resume';
 $langePortfolioDisableWarning = 'Το e-portfolio σας είναι απενεργοποιημένο και επομένως δεν είναι ορατό σε άλλους χρήστες και επισκέπτες της πλατφόρμας';
 $langAddResePortfolio = 'Προσθήκη σε e-Portfolio';
 $langResourcesCollection = 'Συλλογή πόρων';
+$langePortfolioResourceAdded = 'Ο πόρος προστέθηκε επιτυχώς στη συλλογή σας';
+$langePortfolioResourceRemoved = 'Ο πόρος αφαιρέθηκε επιτυχώς από τη συλλογή σας';
 
 /* * ******************************************
   Widgets
