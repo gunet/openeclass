@@ -43,7 +43,7 @@ class WikiSearchEngine {
     /**
      * Constructor
      */
-    function WikiSearchEngine() {
+    public function __construct() {
 
     }
 

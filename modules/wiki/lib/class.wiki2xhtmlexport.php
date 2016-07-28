@@ -50,7 +50,7 @@ class WikiToSingleHTMLExporter extends Wiki2xhtmlRenderer
      * Constructor
      * @param   $wiki Wiki, Wiki to export
      */
-    function WikiToSingleHTMLExporter($wiki)
+    public function __construct($wiki)
     {
         Wiki2xhtmlRenderer::Wiki2xhtmlRenderer($wiki);
         $this->setOpt('first_title_level', 3);
