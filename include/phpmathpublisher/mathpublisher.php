@@ -734,25 +734,25 @@ var $base_verticale;
 //*****************************************************************
 class expression_texte extends  expression
 {
-function expression_texte($exp)
-{
-$this->texte = $exp;
-}
-function dessine($taille)
-{
-$this->image = affiche_math($this->texte,$taille);
-$this->base_verticale = imagesy($this->image) / 2;
-}
+    public function __construct($exp)
+    {
+        $this->texte = $exp;
+    }
+    function dessine($taille)
+    {
+        $this->image = affiche_math($this->texte,$taille);
+        $this->base_verticale = imagesy($this->image) / 2;
+    }
 }
 //*****************************************************************
 class expression_math extends  expression
 {
 var $noeuds;
-function expression_math($exp)
+public function __construct($exp)
 {
-$this->texte = "&$";
-$this->noeuds = $exp;
-$this->noeuds = $this->parse();
+    $this->texte = "&$";
+    $this->noeuds = $exp;
+    $this->noeuds = $this->parse();
 }
 
 function parse()

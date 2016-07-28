@@ -171,7 +171,7 @@ class Template {
      * @return    void
      */
 
-    function Template($root = ".", $unknowns = "remove") {
+    public function __construct($root = ".", $unknowns = "remove") {
         if ($this->debug & 4) {
             echo "<p><b>Template:</b> root = $root, unknowns = $unknowns</p>\n";
         }
