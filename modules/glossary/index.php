@@ -366,7 +366,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
     }
     $data['glossary_terms'] = $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
                             FROM glossary WHERE course_id = ?d $where
-                            GROUP BY term
+                            GROUP BY term, definition, url, notes, category_id, id 
                             ORDER BY term", $course_id, $terms);    
     view('modules.glossary.index', $data);   
 }
