@@ -430,7 +430,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
     }
     $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
                             FROM glossary WHERE course_id = ?d $where
-                            GROUP BY term
+                            GROUP BY term, definition, url, notes, category_id, id
                             ORDER BY term", $course_id, $terms);
     if (count($sql) > 0) {
         $tool_content .= "<div class='table-responsive glossary-categories'>";

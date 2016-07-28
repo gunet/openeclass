@@ -2175,7 +2175,7 @@ function get_glossary_terms($course_id) {
     }
 
     $q = Database::get()->queryArray("SELECT term, definition, url, notes FROM glossary
-                              WHERE course_id = $course_id GROUP BY term");
+                              WHERE course_id = $course_id GROUP BY term, definitino, url, notes");
 
     if (count($q) > intval(get_config('max_glossary_terms'))) {
         return false;
