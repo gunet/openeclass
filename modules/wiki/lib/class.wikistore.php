@@ -50,7 +50,7 @@ class WikiStore {
     /**
      * Constructor
      */
-    function WikiStore() {
+    public function __construct() {
 
     }
 

@@ -59,7 +59,7 @@ class wiki2xhtml {
     var $escape_table;
     var $allowed_inline = array();
 
-    function wiki2xhtml() {
+    public function __construct() {
         # Mise en place des options
         $this->setOpt('active_title', 1);  # Activation des titres !!!
         $this->setOpt('active_setext_title', 0); # Activation des titres setext (EXPERIMENTAL)

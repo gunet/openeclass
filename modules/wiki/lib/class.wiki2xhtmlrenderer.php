@@ -62,8 +62,8 @@ class Wiki2xhtmlRenderer extends wiki2xhtml {
      * Constructor
      * @param Wiki wiki
      */
-    function Wiki2xhtmlRenderer(&$wiki) {
-        wiki2xhtml::wiki2xhtml();
+    public function __construct(&$wiki) {
+        parent::__construct();
 
         $this->wiki = & $wiki;
 

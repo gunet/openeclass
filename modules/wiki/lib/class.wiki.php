@@ -54,7 +54,7 @@ class Wiki {
     /**
      * Constructor
      */
-    function Wiki() {
+    public function __construct() {
         $this->wikiId = 0;
     }
 
