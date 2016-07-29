@@ -166,7 +166,25 @@ if (!isset($_POST['submit'])) {
         $am_message = $langOptional;
     }
 
-    $data['user_data_firstname'] = $data['user_data_lastname'] = $data['user_data_displayName'] = $data['user_data_email'] = $data['user_data_phone'] = '';
+    $data['user_data_firstname'] = $data['user_data_lastname'] = $data['user_data_displayName'] = $data['user_data_email'] = $data['user_data_am'] = $data['user_data_phone'] = '';
+    if (isset($_GET['givenname_form'])) {
+        $data['user_data_firstname'] = $_GET['givenname_form'];
+    }
+    if (isset($_GET['surname_form'])) {
+        $data['user_data_lastname'] = $_GET['surname_form'];
+    }
+    if (isset($_GET['uname'])) {
+        $data['user_data_displayName'] = $_GET['uname'];
+    }
+    if (isset($_GET['email'])) {
+        $data['user_data_email'] = $_GET['email'];
+    }
+    if (isset($_GET['am'])) {
+        $data['user_data_am'] = $_GET['am'];
+    }
+    if (isset($_GET['phone'])) {
+        $data['user_data_phone'] = $_GET['phone'];
+    }                
     if ($user_data) {
         $data['user_data_firstname'] = $user_data->firstName;
         $data['user_data_lastname'] = $user_data->lastName;
@@ -429,33 +447,16 @@ if (!isset($_POST['submit'])) {
             $session->setLoginTimestamp();
             $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
         }
-        // user msg        
-        $tool_content .= "<div class='alert alert-success'><p>$user_msg</p></div>";
-
-        // footer msg
-        if (!$vmail) {
-            $tool_content .= "<p>$langPersonalSettingsMore</p>";
-        } else {
-            $tool_content .=
-                    "<p>$langMailVerificationSuccess2.
-                                 <br /><br />$click <a href='$urlServer'
-                                 class='mainpage'>$langHere</a> $langBackPage</p>";
-        }
-    } else {
-        // errors exist - registration failed
-        $tool_content .= "<div class='alert alert-danger'>";
+        $data['vmail'] = $vmail;
+        $data['menuTypeID'] = 0;
+        view('modules.auth.newuser', $data);        
+    } else { // errors exist
+        $provider_name = '';
+        $provider_id ='';
         foreach ($registration_errors as $error) {
-            $tool_content .= " $error";
+            Session::Messages("$error", 'alert-danger');
         }
-        $tool_content .= "</div><p><a href='$_SERVER[SCRIPT_NAME]?" .
-                'givenname_form=' . urlencode($givenname_form) .
-                '&amp;surname_form=' . urlencode($surname_form) .
-                '&amp;uname=' . urlencode($uname) .
-                '&amp;email=' . urlencode($email) .
-                '&amp;am=' . urlencode($am) .
-                '&amp;phone=' . urlencode($phone) .
-                augment_url_refill_custom_profile_fields_registr() . 
-                "'>$langAgain</a></p>";
+        redirect_to_home_page("modules/auth/newuser.php?givenname_form=" . urlencode($givenname_form) . "&surname_form=" . urlencode($surname_form) . "&uname=" . urlencode($uname) . "&email=" . urlencode($email) . "&am=" . urlencode($am) . "&phone=" . urlencode($phone) . "" . augment_url_refill_custom_profile_fields_registr() . "");        
     }
 } // end of registration
 
