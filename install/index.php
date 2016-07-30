@@ -66,9 +66,11 @@ if (!isset($language_codes[$lang])) {
 }
 
 if ($lang == 'el') {
-    $install_info_file = "http://wiki.openeclass.org/doku.php?id=el:install_doc";
+    $install_info_file = "http://docs.openeclass.org/doku.php?id=el:install_doc";
+    $readme_file =  "http://docs.openeclass.org/el:readme_gr";
 } else {
-    $install_info_file = "http://wiki.openeclass.org/doku.php?id=en:install_doc";
+    $install_info_file = "http://docs.openeclass.org/doku.php?id=en:install_doc";
+    $readme_file = "http://docs.openeclass.org/en:readme_gr";
 }
 
 // include_messages
@@ -146,6 +148,7 @@ if (isset($_POST['welcomeScreen'])) {
         'dont_mail_unverified_mails' => true,
         'email_from' => true,
         'email_announce' => true,
+        'email_bounces' => true,
         'email_transport' => true,
         'smtp_server' => true,
         'smtp_port' => true,
@@ -194,7 +197,7 @@ $all_vars = array('dbHostForm', 'dbUsernameForm', 'dbNameForm', 'dbMyAdmin',
     'passForm', 'campusForm', 'helpdeskForm', 'helpdeskmail',
     'eclass_stud_reg', 'eclass_prof_reg', 'institutionForm',
     'institutionUrlForm', 'faxForm', 'postaddressForm',
-    'dont_mail_unverified_mails', 'email_from', 'email_announce',
+    'dont_mail_unverified_mails', 'email_from', 'email_announce', 'email_bounces',
     'email_transport', 'smtp_server', 'smtp_port', 'smtp_encryption',
     'smtp_username', 'smtp_password', 'sendmail_command');
 
@@ -353,7 +356,7 @@ elseif (isset($_POST['install5'])) {
     $langStepTitle = $langEmailSettings;
     $langStep = sprintf($langStep1, 5, 7);
     $_SESSION['step'] = 5;
-    foreach (array('dont_mail_unverified_mails', 'email_from', 'email_announce',
+    foreach (array('dont_mail_unverified_mails', 'email_from', 'email_announce', 'email_bounces',
                    'email_transport', 'smtp_server', 'smtp_port', 'smtp_encryption',
                    'smtp_username', 'smtp_password', 'sendmail_command') as $name) {
        $GLOBALS['input_fields'][$name] = true;
@@ -564,7 +567,7 @@ elseif (isset($_POST['install1'])) {
 	<li>$langInstallBullet3</li>
 	</ul>	
 	<div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
-	<div class='smaller'>$langBeforeInstall2<a href='../README.txt' target=_blank>$langHere</a>.</div></div><br />
+	<div class='smaller'>$langBeforeInstall2<a href='$readme_file' target=_blank>$langHere</a>.</div></div><br />
 	<div class='right'><input type='submit' class='btn btn-primary' name='install2' value='$langNextStep &raquo;' /></div>" .
             hidden_vars($all_vars) . "</form>\n";
     draw($tool_content);

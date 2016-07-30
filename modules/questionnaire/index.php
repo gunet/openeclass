@@ -178,7 +178,7 @@ draw($tool_content, 2, null, $head_content);
 
 function printPolls() {
     global $tool_content, $course_id, $course_code,
-    $langTitle, $langCancel,
+    $langTitle, $langCancel, $langOpenParticipation,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
     $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
     $langDeactivate, $langPollHasEnded, $langActivate, $langResourceAccessUnlock,
@@ -226,7 +226,7 @@ function printPolls() {
     $poll_check = 0;
     $query = "SELECT * FROM poll WHERE course_id = ?d";
     $query_params[] = $course_id;
-    //Bring only those assigned to the student
+    // Bring only those assigned to the student
     if (!$is_editor) {
         $gids = user_group_info($uid, $course_id);
         if (!empty($gids)) {

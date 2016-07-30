@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 /**
- * @file log.php
+ * @file log.class.php
  * @author Yannis Exidaridis <jexi@noc.uoa.gr>
  * @brief defines class Log for logging actions
  */
@@ -69,7 +69,7 @@ class Log {
                                 details = ?s,
                                 action_type = ?d,
                                 ts = " . DBHelper::timeAfter() . ",
-                                ip = ?s", $userid, $course_id, $module_id, serialize($details), $action_type, $_SERVER['REMOTE_ADDR']);
+                                ip = ?s", $userid, $course_id, $module_id, serialize($details), $action_type, Log::get_client_ip());
         return;
     }
 
@@ -126,79 +126,77 @@ class Log {
                                 WHERE ts BETWEEN '$date_from' AND '$date_now'
                                 $q1 $q2 $q3 $q4
                                 ORDER BY ts DESC");
-        $users_login_data = "";
         if ($num_of_logs > 0) {
             if ($course_id > 0) {
-                $users_login_data .= "<div class='alert alert-info'>$langCourse: " . q(course_id_to_title($course_id)) . "</div>";
+                $tool_content .= "<div class='alert alert-info'>$langCourse: " . q(course_id_to_title($course_id)) . "</div>";
             }
             if ($module_id > 0) {
                 if ($module_id == MODULE_ID_USERS) {
-                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $langAdminUsers . "</div>";
+                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAdminUsers . "</div>";
                 } elseif ($module_id == MODULE_ID_TOOLADMIN) {
-                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $langExternalLinks . "</div>";
+                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langExternalLinks . "</div>";
                 } elseif ($module_id == MODULE_ID_ABUSE_REPORT) {
-                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $langAbuseReport . "</div>";
+                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAbuseReport . "</div>";
                 } else {
-                    $users_login_data .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
+                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
                 }
             }
-            $users_login_data .= "<table id = 'log_results_table' class='table-default'>";
-            $users_login_data .= "<thead>";
+            $tool_content .= "<table id = 'log_results_table' class='table-default'>";
+            $tool_content .= "<thead>";
             // log header
-            $users_login_data .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
+            $tool_content .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
             if ($course_id == -1) {
-                $users_login_data .= "<th>$langCourse</th>";
+                $tool_content .= "<th>$langCourse</th>";
             }
             if ($module_id == -1) {
-                $users_login_data .= "<th>$langModule</th>";
+                $tool_content .= "<th>$langModule</th>";
             }
-            $users_login_data .= "<th>$langAction</th><th>$langDetail</th>";
-            $users_login_data .= "</tr>";
-            $users_login_data .= "</thead>";
-            $users_login_data .= "<tbody>";
+            $tool_content .= "<th>$langAction</th><th>$langDetail</th>";
+            $tool_content .= "</tr>";
+            $tool_content .= "</thead>";
+            $tool_content .= "<tbody>";
             // display logs
             foreach ($sql as $r) {
-                $users_login_data .= "<tr>";
-                $users_login_data .= "<td>" . nice_format($r->ts, true) . "</td>";
+                $tool_content .= "<tr>";
+                $tool_content .= "<td>" . nice_format($r->ts, true) . "</td>";
                 if (($r->user_id == 0) or ($logtype == LOG_DELETE_USER)) { // login failures or delete user
-                    $users_login_data .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
+                    $tool_content .= "<td>&nbsp;&nbsp;&mdash;&mdash;&mdash;</td>";
                 } else {
-                    $users_login_data .= "<td>" . display_user($r->user_id, false, false) . "</td>";
+                    $tool_content .= "<td>" . display_user($r->user_id, false, false) . "</td>";
                 }
                 if ($course_id == -1) { // all courses
-                    $users_login_data .= "<td>" .  q(course_id_to_title($r->course_id)) . "</td>";
+                    $tool_content .= "<td>" .  q(course_id_to_title($r->course_id)) . "</td>";
                 }
                 if ($module_id == -1) { // all modules
                     $mid = $r->module_id;
                     if ($mid == MODULE_ID_USERS) {
-                        $users_login_data .= "<td>" . $langAdminUsers . "</td>";
+                        $tool_content .= "<td>" . $langAdminUsers . "</td>";
                     } elseif ($mid == MODULE_ID_TOOLADMIN) {
-                        $users_login_data .= "<td>" . $langExternalLinks . "</td>";
+                        $tool_content .= "<td>" . $langExternalLinks . "</td>";
                     } elseif ($mid == MODULE_ID_SETTINGS) {
-                        $users_login_data .= "<td>" . $langCourseInfo . "</td>";
+                        $tool_content .= "<td>" . $langCourseInfo . "</td>";
                     } elseif ($mid == MODULE_ID_ABUSE_REPORT) {
-                        $users_login_data .= "<td>" . $langAbuseReport . "</td>";
+                        $tool_content .= "<td>" . $langAbuseReport . "</td>";
                     } elseif ($mid == MODULE_ID_COURSEINFO) {
-                        $users_login_data .= "<td>" . $langModifyInfo . "</td>";
+                        $tool_content .= "<td>" . $langModifyInfo . "</td>";
                     } else {
-                        $users_login_data .= "<td>" . $modules[$mid]['title'] . "</td>";
+                        $tool_content .= "<td>" . $modules[$mid]['title'] . "</td>";
                     }
                 }
-                $users_login_data .= "<td>" . $this->get_action_names($r->action_type) . "</td>";
+                $tool_content .= "<td>" . $this->get_action_names($r->action_type) . "</td>";
                 if ($course_id == 0 or $module_id == 0) { // system logging
-                    $users_login_data .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
+                    $tool_content .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
                 } else { // course logging
-                    $users_login_data .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
+                    $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
                 }
-                $users_login_data .= "</tr>";
+                $tool_content .= "</tr>";
             }
-            $users_login_data .= "</tbody>";
-            $users_login_data .= "</table>";
+            $tool_content .= "</tbody>";
+            $tool_content .= "</table>";
         } else {
-            $users_login_data .= "<div class='alert alert-warning'>$langNoUsersLog</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langNoUsersLog</div>";
         }
-        $tool_content .= $users_login_data;
-        return $users_login_data;
+        return;
     }
 
     /**
@@ -257,7 +255,7 @@ class Log {
                 break;
             case MODULE_ID_VIDEO: $content = $this->video_action_details($details);
                 break;
-            case MODULE_ID_DROPBOX: $content = $this->dropbox_action_details($details);
+            case MODULE_ID_MESSAGE: $content = $this->dropbox_action_details($details);
                 break;
             case MODULE_ID_GROUPS: $content = $this->group_action_details($details);
                 break;
@@ -282,8 +280,6 @@ class Log {
             case MODULE_ID_COURSEINFO: $content = $this->modify_course_action_details($details);
                 break;
             case MODULE_ID_SETTINGS: $content = $this->modify_course_action_details($details); // <-- for backward compatibility only !!!
-                break;
-            case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
                 break;
             case MODULE_ID_GRADEBOOK: $content = $this->gradebook_action_details($details);
                 break;
@@ -899,7 +895,7 @@ class Log {
 
         global $langcreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
                $langComment, $langForumPost, $langAbuseResourceType, $langContent, $langAbuseReportStatus,
-               $langAbuseReportOpen, $langAbuseReportClosed, $langLinks, $langWallPost; 
+               $langAbuseReportOpen, $langAbuseReportClosed, $langLinks, $langWallPost;
 
         $reports_cats = array('rudeness' => $langRudeness,
                               'spam' => $langSpam,
@@ -926,10 +922,10 @@ class Log {
         } elseif ($details['status'] == 0) {
             $content.= "$langAbuseReportStatus: &laquo".$langAbuseReportClosed."&raquo";
         }
-        
+
         return $content;
     }
-    
+
     /**
      * display action details for social wall
      * @global type $langContent
@@ -938,25 +934,25 @@ class Log {
      * @return string
      */
     private function wall_action_details($details) {
-        global $langContent, $langWallYoutubeVideoLink;
-        
+        global $langContent, $langWallExtVideoLink;
+    
         $details = unserialize($details);
-        
+    
         $content = '';
-        
+    
         if (!empty($details['content'])) {
             $content .= "$langContent: &laquo".q($details['content'])."&raquo<br/>";
         }
-        if (!empty($details['youtube'])) {
-            $content .= "$langWallYoutubeVideoLink: &laquo".q($details['youtube'])."&raquo<br/>";
+        if (!empty($details['extvideo'])) {
+            $content .= "$langWallExtVideoLink: &laquo".q($details['extvideo'])."&raquo<br/>";
         }
-
+    
         return $content;
     }
-    
+
     /**
-     * 
-     * @brief display action details in gradebooks    
+     *
+     * @brief display action details in gradebooks
      * @global type $langTitle
      * @global type $langType
      * @global type $langDate
@@ -993,14 +989,14 @@ class Log {
      * @return string
      */
     private function gradebook_action_details($details){
-        global $langTitle, $langType, $langDate, $langStart, $langEnd, $langDelete, $langGradebookWeight, $langVisibility, $langGradebookRange, $langOfGradebookActivity, 
+        global $langTitle, $langType, $langDate, $langStart, $langEnd, $langDelete, $langGradebookWeight, $langVisibility, $langGradebookRange, $langOfGradebookActivity,
                 $langOfGradebookUser, $langOfGradebookUsers, $langAdd, $langDelete, $langGroups, $langUsers, $langUser, $langGradebookDateOutOf, $langGradebookDateIn,
                 $langModify, $langOfGradebookVisibility, $langOfUsers, $langAction, $langGradebookDateRange, $langGradebookRegistrationDateRange,
                 $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType, $langGradebookExams, $langVisibleVals, $langRefreshList;
-        
+
         $langActivityType = array('', $langGradebookOral, $langGradebookLabs, $langGradebookProgress, $langGradebookExams, $langGradebookOtherType);
-        
-        $d = unserialize($details);        
+
+        $d = unserialize($details);
         $content = "";
         $separator = function() use(&$content) {return empty($content)? "":", ";};
         //Gradebook basic info
@@ -1016,12 +1012,12 @@ class Log {
         if(isset($d['end_date'])){
             $content .= $separator()."$langEnd: ".$d['end_date'];
         }
-        
+
         if(isset($d['action'])){
             $content .= $separator()."$langAction: ";
             if($d['action'] == 'change gradebook visibility'){
                 $content .= "$langModify $langOfGradebookVisibility";
-                $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visibility']]}";                
+                $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visibility']]}";
             }
             //Gradebook activities
             elseif($d['action'] == 'add activity' or $d['action'] == 'modify activity'){
@@ -1053,7 +1049,7 @@ class Log {
                 $content .= "$langAdd $langOfUsers";
                 if(isset($d['user_count'])){
                     $content .= $separator()."$langUsers: {$d['user_count']}";
-                }                
+                }
             }
             elseif($d['action'] == 'delete users'){
                 $content .= ($d['action'] == 'delete user')? "$langDelete $langOfGradebookUser":"$langDelete $langOfGradebookUsers";
@@ -1063,7 +1059,7 @@ class Log {
                 elseif(isset($d['user_count'])){
                     $content .= $separator()."$langUsers: {$d['user_count']}";
                 }
-                
+
             }
             elseif($d['action'] == 'reset users'){
                 $content .= "$langRefreshList";
@@ -1082,13 +1078,13 @@ class Log {
                 if(isset($d['users_start']) && $d['users_end']){
                     $content .= $separator()."$langGradebookRegistrationDateRange: {$d['users_start']} - {$d['users_end']}";
                 }
-                
+
             }
         }
-        
+
         return $content;
     }
-    
+
    /**
     * @brief display action details in attendance module
     * @global type $langTitle
@@ -1118,11 +1114,11 @@ class Log {
     * @return string
     */
     private function attendance_action_details($details){
-        global $langTitle, $langDate, $langStart, $langEnd, $langAttendanceLimit, $langVisibility, $langOfGradebookActivity, 
-                $langOfGradebookUser, $langOfGradebookUsers, $langAdd, $langDelete, $langGroups, $langUsers, $langUser, $langGradebookDateOutOf, 
+        global $langTitle, $langDate, $langStart, $langEnd, $langAttendanceLimit, $langVisibility, $langOfGradebookActivity,
+                $langOfGradebookUser, $langOfGradebookUsers, $langAdd, $langDelete, $langGroups, $langUsers, $langUser, $langGradebookDateOutOf,
                 $langGradebookDateIn, $langOfGradebookVisibility, $langAction, $langGradebookDateRange, $langGradebookRegistrationDateRange,
                 $langModify, $langVisibleVals, $langRefreshList, $langOfUsers;
-        
+
         $d = unserialize($details);
         $content = "";
         $separator = function() use(&$content) {return empty($content)? "":", ";};
@@ -1144,7 +1140,7 @@ class Log {
             if($d['action'] == 'change gradebook visibility'){
                 $content .= "$langModify $langOfGradebookVisibility";
                 $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visibility']]}";
-                
+
             }
             //Attendance activities
             elseif($d['action'] == 'add activity' or $d['action'] == 'modify activity'){
@@ -1159,7 +1155,7 @@ class Log {
                     $content .= $separator()."$langVisibility: {$langVisibleVals[$d['visible']]}";
                 }
             }
-            elseif($d['action'] == 'delete activity'){             
+            elseif($d['action'] == 'delete activity'){
                 $content .= "$langDelete $langOfGradebookActivity";
                 if(isset($d['activity_title'])){
                     $content .= $separator()."$langTitle: {$d['activity_title']}";
@@ -1171,7 +1167,7 @@ class Log {
                 if(isset($d['user_count'])){
                     $content .= $separator()."$langUsers: {$d['user_count']}";
                 }
-                
+
             }
             elseif($d['action'] == 'delete user'){
                 $content .= ($d['action'] == 'delete user')? "$langDelete $langOfGradebookUser":"$langDelete $langOfGradebookUsers";
@@ -1181,7 +1177,7 @@ class Log {
                 elseif(isset($d['user_count'])){
                     $content .= $separator()."$langUsers: {$d['user_count']}";
                 }
-                
+
             }
             elseif($d['action'] == 'reset users'){
                 $content .= "$langRefreshList";
@@ -1200,12 +1196,12 @@ class Log {
                 if(isset($d['users_start']) && $d['users_end']){
                     $content .= $separator()."$langGradebookRegistrationDateRange: {$d['users_start']} - {$d['users_end']}";
                 }
-                
+
             }
-        }        
+        }
         return $content;
     }
-    
+
     /**
      * @global type $langInsert
      * @global type $langModify
@@ -1233,6 +1229,32 @@ class Log {
             case LOG_LOGIN_FAILURE: return $langLoginFailures;
             case LOG_DELETE_USER: return $langUnregUsers;
             default: return $langUnknownAction;
+        }
+    }
+
+    /**
+     * Retrieve the best guess of the client's actual IP address.
+     *
+     * http://stackoverflow.com/questions/1634782/what-is-the-most-accurate-way-to-retrieve-a-users-correct-ip-address-in-php
+     *
+     * @return string IP address
+     */
+    public static function get_client_ip() {
+        foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key) {
+            if (array_key_exists($key, $_SERVER)) {
+                foreach (explode(',', $_SERVER[$key]) as $ip) {
+                    $ip = trim($ip);
+                        
+                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
+                        return $ip;
+                    }
+                }
+            }
+        }
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            return $_SERVER['REMOTE_ADDR'];
+        } else {
+            return '0.0.0.0';
         }
     }
 

@@ -58,7 +58,7 @@ class Wiki2xhtmlArea {
      * @param int rows number of rows
      * @param array extraAttributes extra html attributes for the area
      */
-    function Wiki2xhtmlArea(
+    public function __construct(
     $content = ''
     , $name = 'wiki_content'
     , $cols = 80

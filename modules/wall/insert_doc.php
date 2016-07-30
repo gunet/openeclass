@@ -19,8 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-function list_docs($id = NULL, $subsystem = NULL) {
-    global $course_code;
+function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
+    global $course_code, $langNoDocuments;
     
     load_js('jstree3');
     
@@ -66,9 +66,30 @@ function list_docs($id = NULL, $subsystem = NULL) {
                          }
                        },
                        'plugins' : [ 'checkbox', 'types' ]
-                     });
+                     });";
+    
+    if (!$expanded) {               
+        $ret_str .= "
+                     $('#$div_id').on('ready.jstree', function(e, data) {
+                         if(data.instance._cnt == 0) {
+                             $('#".$input_id."_div').html('<div class=\"alert alert-warning\">$langNoDocuments</div>');
+                         } else {
+                             $('#$div_id').jstree('close_all');
+                         }
+                     })";
+    } else { //do not close jstree
+        $ret_str .= "
+                     $('#$div_id').on('ready.jstree', function(e, data) {
+                         if(data.instance._cnt == 0) {
+                             $('#".$input_id."_div').html('<div class=\"alert alert-warning\">$langNoDocuments</div>');
+                         }
+                     })";
+    }
                      
-                     $('#wall_form').on('submit', function(e) {
+                     
+                     
+       $ret_str .= "
+                    $('#wall_form').on('submit', function(e) {
                         var selectedElms = $('#$div_id').jstree('get_selected', true);
                         var concat_ids = '';
                         $.each(selectedElms, function() {

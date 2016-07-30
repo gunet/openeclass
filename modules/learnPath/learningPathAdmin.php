@@ -57,7 +57,7 @@ $require_current_course = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 $body_action = '';
 $dialogBox = '';
@@ -517,8 +517,12 @@ $extendedList = array();
 $modar = array();
 foreach ($result as $list) {
     $modar['module_id'] = $list->module_id;
-    $modar['course_id'] = $list->course_id;
-    $modar['name'] = $list->name;
+    $modar['course_id'] = $list->course_id;    
+    if (empty($list->name) and $list->contentType == 'LINK') {
+        $modar['name'] = $list->path;
+    } else {
+        $modar['name'] = $list->name;    
+    }
     $modar['comment'] = $list->comment;
     $modar['accessibility'] = $list->accessibility;
     $modar['startAsset_id'] = $list->startAsset_id;
@@ -532,7 +536,7 @@ foreach ($result as $list) {
     $modar['rank'] = $list->rank;
     $modar['parent'] = $list->parent;
     $modar['raw_to_pass'] = $list->raw_to_pass;
-    $modar['path'] = $list->path;
+    $modar['path'] = $list->path;    
     $extendedList[] = $modar;
 }
 
@@ -620,13 +624,6 @@ foreach ($flatElementList as $module) {
                 array('title' => $module['visible'] == 0? $langViewShow : $langViewHide,
                     'url' => $module['visible'] == 0? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;cmdid=" . $module['module_id'] : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;cmdid=" . $module['module_id'],
                     'icon' => $module['visible'] == 0 ? 'fa-eye' : 'fa-eye-slash'),
-//                array('title' => $langVisible,
-//                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;cmdid=" . $module['module_id'],
-//                    'icon' => 'fa-eye',
-//                    'confirm' => $module['lock'] == 'CLOSE' ? $langAlertBlockingMakedInvisible : null,
-//                    'confirm_title' => "",
-//                    'confirm_button' => $langAccept,
-//                    'show' => $module['visible'] != 0),
                 // LOCK
                 array('title' => $module['lock'] == 'OPEN'? $langResourceAccessLock : $langResourceAccessUnlock,
                     'url' => $module['lock'] == 'OPEN'? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $module['learnPath_module_id'] : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $module['learnPath_module_id'],

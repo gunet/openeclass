@@ -5,7 +5,7 @@
     <table class='table-default'>
         <tr>
             <td colspan='{{ $maxdepth + 4 }}' class='right'>
-                    {{ trans('langManyExist') }}: <b>{{ $nodesCount }}</b> {{ trans('langHierarchyNodes') }}
+                    {{ trans('langManyExist') }}: <b>{{ $nodesCount }}</b> {{ trans('langFaculties') }}
             </td>
         </tr>
         <tr>

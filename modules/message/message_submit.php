@@ -36,7 +36,7 @@ $personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
 if (!isset($course_id) || !$course_id) {
     $course_id = 0;
 } else {
-    $dropbox_dir = $webDir . "/courses/" . $course_code . "/dropbox";
+    $message_dir = $webDir . "/courses/" . $course_code . "/dropbox";
     // get dropbox quotas from database
     $d = Database::get()->querySingle("SELECT dropbox_quota FROM course WHERE code = ?s", $course_code);
     $diskQuotaDropbox = $d->dropbox_quota;
@@ -47,7 +47,7 @@ if (isset($_POST['course'])) {//for the case of course messages from central ui
     if ($cid === false) {
         $cid = $course_id;
     } else {
-        $dropbox_dir = $webDir . "/courses/" . $_POST['course'] . "/dropbox";
+        $message_dir = $webDir . "/courses/" . $_POST['course'] . "/dropbox";
         // get dropbox quotas from database
         $d = Database::get()->querySingle("SELECT dropbox_quota FROM course WHERE code = ?s", $_POST['course']);
         $diskQuotaDropbox = $d->dropbox_quota;
@@ -120,8 +120,8 @@ if (isset($_POST['submit'])) {
             $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
         } else {            
             $cwd = getcwd();
-            if (is_dir($dropbox_dir)) {
-                $dropbox_space = dir_total_space($dropbox_dir);
+            if (is_dir($message_dir)) {
+                $dropbox_space = dir_total_space($message_dir);
             }
             $filename = php2phps($_FILES['file']['name']);
             $filesize = $_FILES['file']['size'];
@@ -150,7 +150,7 @@ if (isset($_POST['submit'])) {
             $recipients = $_POST["recipients"];            
             //After uploading the file, create the db entries
             if (!$error) {
-                $filename_final = $dropbox_dir . '/' . $filename;
+                $filename_final = $message_dir . '/' . $filename;
                 move_uploaded_file($filetmpname, $filename_final) or die($langUploadError);
                 @chmod($filename_final, 0644);
                 require_once 'modules/admin/extconfig/externals.php';
@@ -164,13 +164,13 @@ if (isset($_POST['submit'])) {
                 $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
             } else {                
                 Session::Messages($errormsg, 'alert-danger');
-                redirect_to_home_page('modules/dropbox/' . ($course_id? "?course=$course_code": ''));
+                redirect_to_home_page('modules/message/' . ($course_id? "?course=$course_code": ''));
             }
             chdir($cwd);
         }
-        $msgURL = $urlServer . 'modules/dropbox/index.php?mid=' . $msg->id;
+        $msgURL = $urlServer . 'modules/message/index.php?mid=' . $msg->id;
+        $errormail = FALSE;
         if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients of dropbox file
-            $errormail = FALSE;
             if ($course_id != 0 || isset($_POST['course'])) {//message in course context
                 $c = course_id_to_title($cid);
                 $subject_dropbox = "$c (".course_id_to_code($cid).") - $langNewDropboxFile";
@@ -204,7 +204,7 @@ if (isset($_POST['submit'])) {
                                     " . $_POST['body']. "
                                 </div><br/>";
                         if ($filesize > 0) {
-                            $main_dropbox_message .= "<div><a href='${urlServer}modules/dropbox/dropbox_download.php?course=".course_id_to_code($cid)."&amp;id=$msg->id'>[$langAttachedFile]</a></div><br/>";
+                            $main_dropbox_message .= "<div><a href='${urlServer}modules/message/message_download.php?course=".course_id_to_code($cid)."&amp;id=$msg->id'>[$langAttachedFile]</a></div><br/>";
                         }
                         $main_dropbox_message .= "
                             </div>";
@@ -287,7 +287,7 @@ if (isset($_POST['submit'])) {
     } else { //end if(!$error)
         Session::Messages($errormsg, 'alert-danger');
     }
-    redirect_to_home_page('modules/dropbox/' . ($course_id? "?course=$course_code": ''));
+    redirect_to_home_page('modules/message/' . ($course_id? "?course=$course_code": ''));
 }
 
 if ($course_id == 0) {

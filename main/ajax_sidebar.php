@@ -89,7 +89,7 @@ function getSidebarMessages() {
                             <span class='item-wholeline'>
                                 <div class='text-title'>$langFrom: " .
                                     display_user($message->author_id, false, false) . "<br>
-                                    $langMailSubject: <a href='{$urlServer}modules/dropbox/index.php?mid=$message->id'>" .
+                                    $langMailSubject: <a href='{$urlServer}modules/message/index.php?mid=$message->id'>" .
                                         q($message->subject) . "</a>
                                 </div>";
                                     if ($course_title) {

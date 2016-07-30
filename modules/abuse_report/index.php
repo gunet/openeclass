@@ -22,8 +22,8 @@ $require_current_course = true;
 $require_course_admin = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
-require_once 'modules/dropbox/class.msg.php';
+require_once 'include/log.class.php';
+require_once 'modules/message/class.msg.php';
 
 $toolName = $langAbuseReports;
 
@@ -94,7 +94,7 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
             
             Database::get()->query("UPDATE abuse_report SET status = ?d WHERE id = ?d", 0, $id);
             
-            if (visible_module(MODULE_ID_DROPBOX)) {
+            if (visible_module(MODULE_ID_MESSAGE)) {
                 //send PM to user that created the report and other course editors
                 $result = Database::get()->queryArray("SELECT user_id FROM course_user
                     WHERE course_id = ?d AND (status = ?d OR editor = ?d) AND user_id <> ?d", $course_id, 1, 1, $uid);

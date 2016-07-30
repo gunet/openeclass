@@ -641,7 +641,7 @@ jContent;
 
             $html .= '<input id="dialog-set-key" type="hidden" ' . $params . ' value="' . $defs[0] . '" />';
             $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#' . $defs[0] . '\', true, null);' : '';
-            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . $def . '" />&nbsp;';
+            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . js_escape($def) . '" />&nbsp;';
         }
 
         $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">
@@ -720,7 +720,7 @@ jContent;
 
             $html .= '<input id="dialog-set-key" type="hidden" ' . $params . ' value="' . getIndirectReference($defs[0]) . '" />';
             $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#' . getIndirectReference($defs[0]) . '\', true, null);' : '';
-            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . $def . '" />&nbsp;';
+            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . js_escape($def) . '" />&nbsp;';
         }
 
         $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">

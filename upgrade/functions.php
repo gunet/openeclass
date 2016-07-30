@@ -1010,6 +1010,20 @@ function upgrade_course_3_0($code, $course_id) {
                                 `q_position`, `type`
                            FROM questions ORDER BY id") != null) && $ok;
 
+        // Rename exercise question images
+        $imageBase = $webDir . '/courses/' . $code . '/image/quiz-';
+        $idList = array();
+        foreach (glob($imageBase . '*') as $imageFile) {
+            $parts = explode('-', $imageFile);
+            $idList[] = end($parts);
+        }
+        if (count($idList)) {
+            sort($idList, SORT_NUMERIC);
+            foreach (array_reverse($idList) as $id) {
+                rename($imageBase . $id, $imageBase . ($id + $questionid_offset));
+            }
+        }
+
         // ----- reponses DB Table ----- //
         $answerid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.exercise_answer")->max;
         if (is_null($answerid_offset)) {
@@ -1785,6 +1799,39 @@ function setGlobalContactInfo() {
     }
     if (!isset($fax)) {
         $fax = get_config('fax');
+    }
+}
+
+function updateAnnouncementSticky( $table ) {
+    $arr_date = Database::get()->queryArray("SELECT id FROM $table ORDER BY `date` ASC");
+    $arr_order_objects = Database::get()->queryArray("SELECT id FROM $table ORDER BY `order` ASC");
+    $arr_order = [];
+    foreach ($arr_order_objects as $key=>$value) {
+        $arr_order[$key] = $value->id;
+    }
+
+    $length = count($arr_order);
+
+    $offset = 0;
+    for ($i = 0; $i < $length; $i++) {
+        if ($arr_date[$i]->id != $arr_order[$i-$offset]) {
+            $offset++;
+        }
+    }
+
+    $zero = $length - $offset;
+    $arr_sticky = array_slice($arr_order, -$offset);
+    $arr_default = array_slice($arr_order, 0, $zero);
+
+    $default_placeholders = implode(',', array_fill(0, count($arr_default), '?d'));
+    if (!empty($default_placeholders)) {
+        Database::get()->query("UPDATE $table SET `order` = 0 WHERE `id` IN ($default_placeholders)", $arr_default);
+    }
+
+    $ordering = 0;
+    foreach ($arr_sticky as $announcement_id) {
+        $ordering++;
+        Database::get()->query("UPDATE $table SET `order` = ?d where `id`= ?d", $ordering, $announcement_id);
     }
 }
 

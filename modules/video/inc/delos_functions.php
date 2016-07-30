@@ -22,7 +22,7 @@
 
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 $opendelosapp = ExtAppManager::getApp(strtolower(OpenDelosApp::NAME));
 
@@ -37,6 +37,9 @@ function getDelosExtEnabled() {
 }
 
 function isDelosEnabled() {
+    // DEBUG
+    //return true;
+    // END DEBUG
     global $opendelosapp;
     if ($opendelosapp && getDelosExtEnabled() && getDelosURL()) {
         return true;
@@ -64,16 +67,11 @@ hContent;
     return $head;
 }
 
-function getDelosButton() {
-    global $course_code, $langAddOpenDelosVideoLink;
-    return array('title' => $langAddOpenDelosVideoLink,
-        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=opendelos",
-        'icon' => 'fa-plus-circle',
-        'level' => 'primary-label',
-        'button-class' => 'btn-success');
-}
-
 function requestDelosJSON() {
+    // DEBUG
+    //$json = '{"playerBasePath" : "http://opendelos.org/playerBasePath", "resources":[{"resourceID" : "1", "videoLecture" : {"title" : "title1", "description" : "description1", "date" : "2016-07-14 12:00:00", "rights" : {"creator" : {"name" : "crname1"}}, "organization" : {"name" : "orgname1"}}}, {"resourceID" : "2", "videoLecture" : {"title" : "title2", "description" : "description2", "date" : "2016-07-15 12:00:00", "rights" : {"creator" : {"name" : "crname2"}}, "organization" : {"name" : "orgname2"}}} ]}';
+    //return json_decode($json);
+    // END DEBUG
     global $course_code;
     $jsonObj = null;
     if (isDelosEnabled()) {
@@ -100,101 +98,6 @@ function httpGetRequest($url) {
     return $response;
 }
 
-function displayDelosForm($jsonObj, $currentVideoLinks) {
-    global $course_id, $course_code, $langTitle, $langDescr, $langcreator, $langpublisher, $langDate,
-    $langSelect, $langAddModulesButton, $langOpenDelosReplaceInfo, $langCategory;
-
-    if ($jsonObj === null) {
-        return '';
-    }
-
-    $html = '';
-    $html .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
-    $html .= <<<delosform
-<div class="table-responsive">
-    <table class="table-default">
-        <tbody>
-            <tr class="list-header">
-                <th>$langTitle</th>
-                <th>$langDescr</th>
-                <th>$langcreator</th>
-                <th>$langpublisher</th>
-                <th>$langDate</th>
-                <th>$langSelect</th>
-            </tr>
-delosform;
-
-    $i = 1;
-    foreach ($jsonObj->resources as $resource) {
-        $trclass = (($i % 2) === 0 ) ? 'even' : 'odd';
-        $vL = $resource->videoLecture;
-        $rid = $resource->resourceID;
-        $url = $jsonObj->playerBasePath . '?rid=' . $rid;
-        $title = $vL->title;
-        $description = $vL->description;
-        $creator = $vL->rights->creator->name;
-        $publisher = $vL->organization->name;
-        $date = $vL->date;
-        $dateTS = strtotime($date);
-        $alreadyAdded = '';
-        if (isset($currentVideoLinks[$url])) {
-            $alreadyAdded = '<span style="color:red">*';
-            $currentTS = strtotime($currentVideoLinks[$url]);
-            if ($dateTS > $currentTS) {
-                $alreadyAdded .= '*';
-            }
-            $alreadyAdded .= '</span>';
-        }
-
-        $html .= <<<delosform
-            <tr class="$trclass">
-                <td align="left"><a href="$url" class="fileURL" target="_blank" title="$title">$title</a></td>
-                <td>$description</td>
-                <td>$creator</td>
-                <td>$publisher</td>
-                <td>$date</td>
-                <td class="center" width="10">
-                    <input name="delosResources[]" value="$rid" type="checkbox"/> $alreadyAdded
-                </td>
-            </tr>
-delosform;
-        $i++;
-    }
-
-    $html .= <<<delosform
-            <tr>
-                <th colspan="4">
-                    <div class='form-group'>
-                        <label for='Category' class='col-sm-2 control-label'>$langCategory:</label>
-                        <div class='col-sm-10'>
-                            <select class='form-control' name='selectcategory'>
-                                <option value='0'>--</option>
-delosform;
-    $resultcategories = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
-    foreach ($resultcategories as $myrow) {
-        $html .= "<option value='$myrow->id'";
-        $html .= '>' . q($myrow->name) . "</option>";
-    }
-    $html .= <<<delosform
-                            </select>
-                        </div>
-                    </div>
-                </th>
-                <th colspan="2">
-                    <div class="pull-right">
-                        <input class="btn btn-primary" name="add_submit_delos" value="$langAddModulesButton" type="submit">        
-                    </div>
-                </th>
-            </tr>
-        </tbody>
-    </table>
-</div></form>
-delosform;
-    $html .= "<div class='alert alert-warning' role='alert'>$langOpenDelosReplaceInfo</div>";
-
-    return $html;
-}
-
 function storeDelosResources($jsonObj) {
     global $course_id;
     $submittedResources = $_POST['delosResources'];
@@ -218,29 +121,30 @@ function storeDelosResources($jsonObj) {
 
                 if ($stored) {
                     $id = $stored->id;
-                    $q = Database::get()->query("UPDATE videolink SET 
+                    Database::get()->query("UPDATE videolink SET 
                         url = ?s, title = ?s, description = ?s, creator = ?s, publisher = ?s, date = ?t 
                         WHERE course_id = ?d 
                         AND category = ?d 
                         AND id = ?d", canonicalize_url($url), $title, $description, $creator, $publisher, $date, $course_id, $submittedCategory, $id);
                 } else {
-                    $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)
-                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
-                    $id = $q->lastInsertID;
+                    $id = Database::get()->query('INSERT INTO videolink 
+                        (course_id, url, title, description, category, creator, publisher, date)
+                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', 
+                        $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date)->lastInsertID;
                 }
+                
+                // index and log
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
-                $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
                 Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
                     'url' => canonicalize_url($url),
                     'title' => $title,
-                    'description' => $txt_description));
+                    'description' => ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+')));
             }
         }
     }
 }
 
-function getCurrentVideoLinks() {
-    global $course_id;
+function getCurrentVideoLinks($course_id) {
     $current = array();
     Database::get()->queryFunc("SELECT url, date FROM videolink WHERE course_id = ?d", function($vl) use (&$current) {
         $current[$vl->url] = $vl->date;

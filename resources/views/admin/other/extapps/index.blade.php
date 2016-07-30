@@ -36,6 +36,8 @@
                                             <button type="button" class="btn{!! $app->isEnabled() ? ' btn-success' : ' btn-danger' !!} bbb-status" data-app="{{ getIndirectReference($app->getName()) }}">     
                                         @elseif ($app->getName() == 'openmeetings')
                                             <button type="button" class="btn{!! $app->isEnabled() ? ' btn-success' : ' btn-danger' !!} om-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
+                                        @elseif ($app->getName() == 'webconf')
+                                            <button type="button" class="btn{!! $app->isEnabled() ? ' btn-success' : ' btn-danger' !!} webconf-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
                                         @else
                                             <button type="button" class="btn{!! $app->isEnabled() ? ' btn-success' : ' btn-danger' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}"> 
                                         @endif

@@ -23,36 +23,32 @@ $require_current_course = true;
 $require_editor = true;
 
 include '../../include/init.php';
+require_once 'include/lib/csv.class.php';
 
-if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
-    $charset = 'Windows-1253';
-    $sendSep = true;
-} else {
-    $charset = 'UTF-8';
-    $sendSep = false;
+$csv = new CSV();
+if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
+    $csv->setEncoding('UTF-8');
 }
-$crlf = "\r\n";
+$csv->filename = $course_code . "_list_gradebook_users.csv";
 
+$gid = getDirectReference($_GET['gradebook_id']);
 
-header("Content-Type: text/csv; charset=$charset");
-header("Content-Disposition: attachment; filename=list_gradebook_users.csv");
+$range = Database::get()->querySingle('SELECT `range` FROM gradebook
+    WHERE course_id = ?d AND id = ?d', $course_id, $gid)->range;
 
-if ($sendSep) {
-    echo 'sep=;', $crlf;
-}
-
-$sql = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", getDirectReference($_GET['gradebook_id']));
-foreach ($sql as $act) {
+$activities = Database::get()->queryArray("SELECT id, title FROM gradebook_activities
+    WHERE gradebook_id = ?d", $gid);
+foreach ($activities as $act) {
     $title = !empty($act->title) ? $act->title : $langGradebookNoTitle;
-    echo csv_escape($title). "$crlf";
-    echo join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade)));
-    echo $crlf;    
-    $sql2 = Database::get()->queryArray("SELECT uid, grade FROM gradebook_book WHERE gradebook_activity_id = ?d", $act->id);
-    foreach ($sql2 as $u) {
-        $userdata = Database::get()->querySingle("SELECT surname, givenname, username, am, email FROM user WHERE id = ?d", $u->uid);
-        echo join(';', array_map("csv_escape", array($userdata->surname, $userdata->givenname, $userdata->am, $userdata->username, $userdata->email, $u->grade)));
-        echo "$crlf";
+    $csv->outputRecord($title)
+        ->outputRecord($langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade);
+    $entries = Database::get()->queryArray('SELECT surname, givenname, username, am, email, grade
+        FROM gradebook_book, user
+        WHERE gradebook_book.uid = user.id AND gradebook_activity_id = ?d',
+        $act->id);
+    foreach ($entries as $item) {
+        $csv->outputRecord($item->surname, $item->givenname, $item->am,
+            $item->username, $item->email, $item->grade * $range);
     }
-    echo "$crlf";
-    echo "$crlf";
+    $csv->outputRecord();
 }

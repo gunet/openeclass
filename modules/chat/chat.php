@@ -38,11 +38,11 @@ if ($q) { // additional security
     $conference_status = $q->status;
 } else {
     Session::Messages($langForbidden, "alert-danger");
-    redirect_to_home_page("modules/conference/index.php?course=$course_code");
+    redirect_to_home_page("modules/chat/index.php?course=$course_code");
 }
 if (!is_valid_chat_user($uid, $conference_id, $conference_status)) {
   Session::Messages($langForbidden, "alert-danger");
-  redirect_to_home_page("modules/conference/index.php?course=$course_code");
+  redirect_to_home_page("modules/chat/index.php?course=$course_code");
 }
 
   $fileChatName = $coursePath . $course_code . '/'. $conference_id. '_chat.txt';

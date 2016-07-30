@@ -72,7 +72,7 @@ class WikiPage {
      * @param DatabaseConnection con connection to the database
      * @param array config associative array containing tables name
      */
-    function WikiPage($wikiId = 0) {
+    public function __construct($wikiId = 0) {
         $this->wikiId = $wikiId;
     }
 

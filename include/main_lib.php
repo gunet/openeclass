@@ -69,7 +69,7 @@ define('MODULE_ID_FORUM', 9);
 define('MODULE_ID_EXERCISE', 10);
 define('MODULE_ID_COURSEINFO', 14);
 define('MODULE_ID_GROUPS', 15);
-define('MODULE_ID_DROPBOX', 16);
+define('MODULE_ID_MESSAGE', 16);
 define('MODULE_ID_GLOSSARY', 17);
 define('MODULE_ID_EBOOK', 18);
 define('MODULE_ID_CHAT', 19);
@@ -282,6 +282,8 @@ function load_js($file, $init='') {
             $head_content .= css_link('datatables/extensions/Buttons/css/buttons.foundation.css');
         } elseif ($file == 'RateIt') {
             $file = 'jquery.rateit.min.js';
+    } elseif ($file == 'autosize') {
+        $file = 'autosize/autosize.min.js';
     } elseif ($file == 'waypoints-infinite') {
         $head_content .= js_link('waypoints/jquery.waypoints.min.js');
         $file = 'waypoints/shortcuts/infinite.min.js';
@@ -333,7 +335,6 @@ function load_js($file, $init='') {
     });
 
     $(document).on('click', '.read-less', function (event) {
-console.log('aaa');
         $(this).parent().trunk8();
         event.preventDefault();
     });
@@ -1117,14 +1118,14 @@ function cp737_to_utf8($s) {
                                "\xcc" => '╠', "\xcd" => '═', "\xce" => '╬', "\xcf" => '╧',
                                "\xd0" => '╨', "\xd1" => '╤', "\xd2" => '╥', "\xd3" => '╙',
                                "\xd4" => '╘', "\xd5" => '╒', "\xd6" => '╓', "\xd7" => '╫',
-                               "\xd8" => '╪', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
+                               "\xd8" => '�', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
                                "\xdc" => '▄', "\xdd" => '▌', "\xde" => '▐', "\xdf" => '▀',
                                "\xe0" => 'ω', "\xe1" => 'ά', "\xe2" => 'έ', "\xe3" => 'ή',
                                "\xe4" => 'ϊ', "\xe5" => 'ί', "\xe6" => 'ό', "\xe7" => 'ύ',
                                "\xe8" => 'ϋ', "\xe9" => 'ώ', "\xea" => 'Ά', "\xeb" => 'Έ',
                                "\xec" => 'Ή', "\xed" => 'Ί', "\xee" => 'Ό', "\xef" => 'Ύ',
                                "\xf0" => 'Ώ', "\xf1" => '±', "\xf2" => '≥', "\xf3" => '≤',
-                               "\xf4" => 'Ϊ', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
+                               "\xf4" => '�', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
                                "\xf8" => '°', "\xf9" => '∙', "\xfa" => '·', "\xfb" => '√',
                                "\xfc" => 'ⁿ', "\xfd" => '²', "\xfe" => '■', "\xff" => ' '));
     }
@@ -1208,7 +1209,7 @@ $native_language_names_init = array(
     'de' => 'Deutsch',
     'is' => 'Íslenska',
     'it' => 'Italiano',
-    'jp' => '日本語',
+    'jp' => '日本�',
     'pl' => 'Polski',
     'ru' => 'Русский',
     'tr' => 'Türkçe',
@@ -1607,6 +1608,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM attendance_users WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM attendance WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM tc_session WHERE course_id = ?d", $cid);
 
     removeDir("$webDir/courses/$course_code");
     removeDir("$webDir/video/$course_code");    
@@ -1683,24 +1685,6 @@ function deleteUser($id, $log) {
         } else {
             return false;
         }
-    }
-}
-
-function csv_escape($string, $force = false) {
-    global $charset;
-
-    if ($charset != 'UTF-8') {
-        if ($charset == 'Windows-1253') {
-            $string = utf8_to_cp1253($string);
-        } else {
-            $string = iconv('UTF-8', $charset, $string);
-        }
-    }
-    $string = preg_replace('/[\r\n]+/', ' ', $string);
-    if (!preg_match("/[ ,!;\"'\\\\]/", $string) and !$force) {
-        return $string;
-    } else {
-        return '"' . str_replace('"', '""', $string) . '"';
     }
 }
 
@@ -1792,7 +1776,8 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @return type
  */
 function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
-    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore;
+    global $head_content, $language, $urlAppend, $course_code, $is_editor, $is_admin, $langResourceBrowser, $langMore;
+    global $langPopUp, $langPopUpFrame, $langPopUpBootboxFrame;
     static $init_done = false;
     if (!$init_done) {
         $init_done = true;
@@ -1927,7 +1912,8 @@ tinymce.init({
     link_class_list: [
         {title: 'None', value: ''},
         {title: '".js_escape($langPopUp)."', value: 'colorbox'},
-        {title: '".js_escape($langPopUpFrame)."', value: 'colorboxframe'}
+        {title: '".js_escape($langPopUpFrame)."', value: 'colorboxframe'},
+        {title: '".js_escape($langPopUpBootboxFrame)."', value: 'bootboxframe'}
     ],
     $filebrowser
     // Menubar options
@@ -2212,7 +2198,7 @@ function get_glossary_terms($course_id) {
     }
 
     $q = Database::get()->queryArray("SELECT term, definition, url, notes FROM glossary
-                              WHERE course_id = $course_id GROUP BY term");
+                              WHERE course_id = $course_id GROUP BY term, definition, url, notes");
 
     if (count($q) > intval(get_config('max_glossary_terms'))) {
         return false;
@@ -2319,7 +2305,7 @@ function greek_to_latin($string) {
 // Limited coverage for now
 function remove_accents($string) {
     return strtr(mb_strtoupper($string, 'UTF-8'), array('Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
-        'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
+        'Ό' => 'Ο', 'Ώ' => 'Ω', '�' => 'Ι', 'Ϋ' => 'Υ',
         'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
         'Ç' => 'C', 'Ñ' => 'N', 'Ý' => 'Y',
         'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
@@ -2828,6 +2814,20 @@ function getOnlineUsers() {
     }
     @closedir($directory_handle);
     return $count;
+}
+
+/**
+ * checks if F.A.Q. exist
+ * @return boolean
+ */
+function faq_exist() {
+    
+    $count_faq = Database::get()->querySingle("SELECT COUNT(*) AS count FROM faq")->count;
+    if ($count_faq > 0) {
+        return true;
+    } else {
+        return false;
+    }    
 }
 
 /**
@@ -4003,6 +4003,7 @@ function checkSecondFactorChallenge(){
         return "";
     }
 }
+
 
 function trans($var_name, $var_array = []) {
     if (preg_match("/\['.+'\]/", $var_name)) {

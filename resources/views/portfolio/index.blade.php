@@ -94,7 +94,7 @@
                         </div>
                         <div class='panel-footer clearfix'>
                             <div class='pull-right'>
-                                <a href='{{ $urlAppend }}modules/dropbox/'>
+                                <a href='{{ $urlAppend }}modules/message/'>
                                     <small>{{ trans('langMore') }}&hellip;</small>
                                 </a>
                             </div>
@@ -124,7 +124,7 @@
                             </div>
                             <div>
                                 <div class='h5'>
-                                    <span class='tag'>{{ trans('langHierarchyNode') }}: </span>
+                                    <span class='tag'>{{ trans('langFaculty') }}: </span>
                                 </div>
                                 <span class='tag-value text-muted'>
                                     @foreach ($departments as $key => $dep)
@@ -154,11 +154,13 @@
                                     </li>
                                 @endif
                             </ul>
-                            <div class='pull-right'>
-                                <a href='{{ $urlServer }}main/profile/password.php'>
-                                    <small>{{ trans('langProfileQuickPassword') }}</small>
-                                </a>
-                            </div>
+                            @if ($_SESSION['canChangePassword'])
+                                <div class='pull-right'>
+                                    <a href='{{ $urlServer }}main/profile/password.php'>
+                                        <small>{{ trans('langProfileQuickPassword') }}</small>
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

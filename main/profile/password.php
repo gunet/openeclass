@@ -32,7 +32,7 @@ $require_valid_uid = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 $toolName = $langMyProfile;
 $pageName = $langChangePass;

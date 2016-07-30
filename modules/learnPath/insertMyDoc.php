@@ -138,11 +138,10 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                       AND A.`path` LIKE ?s
                       AND M.`contentType` = ?s
                       AND M.`course_id` = ?d";
-            $thisDocumentModule = Database::get()->queryArray($sql, $insertDocument, CTDOCUMENT_, $course_id);
-            $num = count($thisDocumentModule);
+            $thisDocumentModule = Database::get()->querySingle($sql, $insertDocument, CTDOCUMENT_, $course_id);
             $basename = substr($insertDocument, strrpos($insertDocument, '/') + 1);
 
-            if ($num == 0) {
+            if (!$thisDocumentModule) {
                 // create new module
                 $insertedModule_id = Database::get()->query("INSERT INTO `lp_module`
                         (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
@@ -176,7 +175,7 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                 $tool_content .= "<br />";
             } else {
                 // check if this is this LP that used this document as a module
-                $sql = "SELECT * FROM `lp_rel_learnPath_module` AS LPM,
+                $sql = "SELECT count(*) as count FROM `lp_rel_learnPath_module` AS LPM,
                              `lp_module` AS M,
                              `lp_asset` AS A
                         WHERE M.`module_id` =  LPM.`module_id`
@@ -184,22 +183,21 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                           AND A.`path` = ?s
                           AND LPM.`learnPath_id` = ?d
                           AND M.`course_id` = ?d";
-                @$num = Database::get()->querySingle($sql, $insertDocument, $_SESSION['path_id'], $course_id)->count;
-                if ($num) {
-                    if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                        // determine the default order of this Learning path
-                        $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
-                                FROM `lp_rel_learnPath_module`
-                                WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
+                $num = Database::get()->querySingle($sql, $insertDocument, $_SESSION['path_id'], $course_id)->count;
+                
+                if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
+                    // determine the default order of this Learning path
+                    $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+                            FROM `lp_rel_learnPath_module`
+                            WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
 
-                        // finally : insert in learning path
-                        Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
-                                (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
-                                VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $thisDocumentModule->module_id, $langDefaultModuleAddedComment, $order);
-                        $addedDoc = $filenameDocument;
-                        $InfoBox = $addedDoc . " " . $langDocInsertedAsModule . "<br />";                    
-                        $tool_content .= "<div class='alert alert-success'>$InfoBox</div>";                    
-                    }
+                    // finally : insert in learning path
+                    Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
+                            (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
+                            VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $thisDocumentModule->module_id, $langDefaultModuleAddedComment, $order);
+                    $addedDoc = $filenameDocument;
+                    $InfoBox = $addedDoc . " " . $langDocInsertedAsModule . "<br />";                    
+                    $tool_content .= "<div class='alert alert-success'>$InfoBox</div>";                    
                 } else {
                     $InfoBox = "<b>$filenameDocument</b>: " . $langDocumentAlreadyUsed . "<br />";                    
                     $tool_content .= "<div class='alert alert-warning'>$InfoBox</div>";

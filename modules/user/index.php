@@ -26,7 +26,7 @@ $require_help = TRUE;
 $helpTopic = 'User';
 
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'include/course_settings.php';
 require_once 'include/lib/textLib.inc.php';
 
@@ -459,11 +459,11 @@ $tool_content .=
             array('title' => $langGroupUserManagement,
                 'url' => "../group/index.php?course=$course_code",
                 'icon' => 'fa-users'),
-            array('title' => "$langDumpUser ( $langcsvenc1 )",
-                'url' => "dumpuser.php?course=$course_code&amp;enc=1253",
-                'icon' => 'fa-file-archive-o'),
-            array('title' => "$langDumpUser ( $langcsvenc2 )",
+            array('title' => $langDumpUser,
                 'url' => "dumpuser.php?course=$course_code",
+                'icon' => 'fa-file-archive-o'),
+            array('title' => "$langDumpUser ($langcsvenc2)",
+                'url' => "dumpuser.php?course=$course_code&amp;enc=UTF-8",
                 'icon' => 'fa-file-archive-o'),
             array('title' => $langDelUsers,
                 'url' => "../course_info/refresh_course.php?course=$course_code&amp;from_user=true",

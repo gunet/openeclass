@@ -19,7 +19,7 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 Class Msg {
     
@@ -160,7 +160,7 @@ Class Msg {
             $this->filesize = 0;
         }
         
-        Log::record($this->course_id, MODULE_ID_DROPBOX, LOG_INSERT,
+        Log::record($this->course_id, MODULE_ID_MESSAGE, LOG_INSERT,
                 array('id' => $this->id,
                       'user_id' => $this->author_id,
                       'filename' => $this->filename,
@@ -179,7 +179,7 @@ Class Msg {
                 AND `msg_id` = ?d";
         Database::get()->query($sql, 1, $this->uid, $this->id);
         
-        Log::record($this->course_id, MODULE_ID_DROPBOX, LOG_DELETE, array('user_id' => $this->uid,
+        Log::record($this->course_id, MODULE_ID_MESSAGE, LOG_DELETE, array('user_id' => $this->uid,
         'subject' => $this->subject));
         
         //delete msg that all recipients have marked for deletion
@@ -194,8 +194,8 @@ Class Msg {
             Database::get()->query($sql, $this->id);
             if ($this->course_id != 0) {//only course messages may have attachment
                 if ($this->filename != '') {
-                    global $dropbox_dir;
-                    unlink($dropbox_dir . "/" . $this->filename);
+                    global $message_dir;
+                    unlink($message_dir . "/" . $this->filename);
                     $sql = "DELETE FROM `dropbox_attachment` WHERE `msg_id` = ?d";
                     Database::get()->query($sql, $this->id);
                 }

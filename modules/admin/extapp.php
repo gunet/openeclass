@@ -50,13 +50,27 @@ if (isset($_POST['state'])) {
     $appNameAjax = getDirectReference($appName);    
     
     if (($appNameAjax == 'openmeetings') and $newState == 1) {
-        $app_bbb = ExtAppManager::getApp('bigbluebutton');        
-        $app_bbb->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled      
+        $app_tc = ExtAppManager::getApp('bigbluebutton');
+        $app_tc->setEnabled(!$newState); // disable bigbluebutton if openmeetings has been enabled
+        $app_tc = ExtAppManager::getApp('webconf');
+        $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
+        $app_tc->update_tc_sessions('om'); // update tc sessions
     }
     
     if (($appNameAjax == 'bigbluebutton') and $newState == 1) {
-        $app_bbb = ExtAppManager::getApp('openmeetings');
-        $app_bbb->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled          
+        $app_tc = ExtAppManager::getApp('openmeetings');
+        $app_tc->setEnabled(!$newState);  // disable openmeetings if bigbluebutton has been enabled
+        $app_tc = ExtAppManager::getApp('webconf');
+        $app_tc->setEnabled(!$newState); // disable webconf if openmeetings has been enabled
+        $app_tc->update_tc_sessions('bbb'); // update tc sessions
+    }
+    
+    if (($appNameAjax == 'webconf') and $newState == 1) {
+        $app_tc = ExtAppManager::getApp('bigbluebutton');
+        $app_tc->setEnabled(!$newState);  // disable bigbluebutton if bigbluebutton has been enabled
+        $app_tc = ExtAppManager::getApp('openmeetings');
+        $app_tc->setEnabled(!$newState); // disable openmeetings if openmeetings has been enabled
+        $app_tc->update_tc_sessions('webconf'); // update tc sessions
     }
     
     ExtAppManager::getApp($appNameAjax)->setEnabled($newState);    

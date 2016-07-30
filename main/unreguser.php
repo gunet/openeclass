@@ -22,7 +22,7 @@
 
 $require_login = TRUE;
 require_once '../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 $toolName = $langMyProfile;
 $pageName = $langUnregUser;

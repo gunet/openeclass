@@ -39,7 +39,7 @@ class WebConfApp extends ExtApp {
     }
 
     public function getLongDescription() {
-        return $GLOBALS['langWebConfDescription'];
+        return $GLOBALS['langBBBDescription'];
     }
 
     public function getConfigUrl() {
@@ -52,7 +52,7 @@ class WebConfApp extends ExtApp {
      * @return boolean
      */
     public function isConfigured() {
-        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM wc_servers WHERE enabled='true'")->count > 0;
+        return Database::get()->querySingle("SELECT COUNT(*) AS count FROM tc_servers WHERE enabled='true' AND `type` = 'webconf'")->count > 0;
     }
 
 }

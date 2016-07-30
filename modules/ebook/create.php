@@ -56,7 +56,7 @@ if (!$is_editor) {
             , $ebook_id, '1', $langSection.' 1');
     // Initialize document subsystem global variables
     require_once 'modules/document/doc_init.php';
-    require_once 'include/log.php';
+    require_once 'include/log.class.php';
 
     if (!make_dir($basedir)) {
         Database::get()->query("DELETE FROM ebook WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);

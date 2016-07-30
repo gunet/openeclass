@@ -43,7 +43,6 @@ if ($blog_type == 'course_blog') {
     $user_id = 0;
     
     define_rss_link();
-    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
     $toolName = $langBlog;
     
     //check if commenting is enabled for course blogs
@@ -125,10 +124,12 @@ $num_chars_teaser_break = 500;//chars before teaser break
 
 if ($blog_type == 'course_blog' && $is_editor) {
     if ($action == "settings") {
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langGeneralSettings;
     } elseif ($action == "createPost") {
         $pageName = $langBlogAddPost;
     } elseif ($action == "editPost") {
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langEditChange;
     }
     $tool_content .= action_bar(array(
@@ -408,6 +409,8 @@ if ($action == "editPost") {
         if ($blog_type == 'course_blog') {
             $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
         } elseif ($blog_type == 'perso_blog') {
+            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]", 'name' => $langBlog);
+            $pageName = $langEditChange;
             $allow_to_edit = $is_blog_editor;
         }
         if ($allow_to_edit) {

@@ -57,7 +57,7 @@ if (isset($_POST['submit'])) {
                             ]
                         ], false);
 
-    $alwaysEnabledModules = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_DROPBOX, MODULE_ID_DESCRIPTION);
+    $alwaysEnabledModules = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE, MODULE_ID_DESCRIPTION);
     foreach ($alwaysEnabledModules as $alwaysEnabledModule) {
         unset($modules[$alwaysEnabledModule]);
     }

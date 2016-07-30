@@ -25,25 +25,15 @@ $require_editor = TRUE;
 include '../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'modules/group/group_functions.php';
+require_once 'include/lib/csv.class.php';
 
-if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
-    $charset = 'Windows-1253';
-    $sendSep = true;
-} else {
-    $charset = 'UTF-8';
-    $sendSep = false;
+$csv = new CSV();
+if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
+    $csv->setEncoding('UTF-8');
 }
-$crlf = "\r\n";
+$csv->filename = $course_code . "_learning_path_user_stats.csv";
 
-header("Content-Type: text/csv; charset=$charset");
-header("Content-Disposition: attachment; filename=userslearningpathstats.csv");
-
-if ($sendSep) {
-    echo 'sep=;', $crlf;
-}
-    
-echo join(';', array_map("csv_escape", array($langStudent, $langAm, $langGroup, $langProgress))),
- $crlf;
+$csv->outputRecord($langStudent, $langAm, $langGroup, $langProgress);
 
 // display a list of user and their respective progress
 $sql = "SELECT U.`surname`, U.`givenname`, U.`id`
@@ -53,7 +43,6 @@ $sql = "SELECT U.`surname`, U.`givenname`, U.`id`
 		ORDER BY U.`surname` ASC, U.`givenname` ASC";
 $usersList = get_limited_list($sql, 500000);
 foreach ($usersList as $user) {
-    echo "$crlf";
     $learningPathList = Database::get()->queryArray("SELECT learnPath_id FROM lp_learnPath WHERE course_id = ?d", $course_id);
     $iterator = 1;
     $globalprog = 0;
@@ -67,9 +56,5 @@ foreach ($usersList as $user) {
         $iterator++;
     }
     $total = round($globalprog / ($iterator - 1));
-    echo csv_escape(uid_to_name($user->id)) .
-    ";" . csv_escape(uid_to_am($user->id)) .
-    ";" . csv_escape(user_groups($course_id, $user->id, 'csv')) .
-    ";" . $total . "%";
+    $csv->outputRecord(uid_to_name($user->id), uid_to_am($user->id), user_groups($course_id, $user->id, 'csv'), $total . '%');
 }
-echo $crlf;

@@ -54,7 +54,7 @@ if (isset($_GET['mid'])) {
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',
                                     'icon' => 'fa-times',
-                                    'button-class' => 'delete_out_inner',
+                                    'class' => 'delete_out_inner',
                                     'link-attrs' => "data-id='$msg->id'")
                         ));
         $recipients = '';
@@ -127,7 +127,7 @@ if (isset($_GET['mid'])) {
                                     $langAttachedFile
                                 </div>
                                 <div class='col-sm-10'>
-                                 <a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
+                                 <a href=\"message_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
                     &nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(".format_file_size($msg->filesize).")
                                 </div>
                             </div>";
@@ -152,7 +152,7 @@ if (isset($_GET['mid'])) {
         
         $(document).on( "click",".delete_out_inner", function (e) {
             e.preventDefault();
-            var id = $(this).data("id");
+            var id = $(this).children("a").data("id");
             var string = "mid="+id;
             bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {                       
             if(result) {

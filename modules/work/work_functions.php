@@ -296,13 +296,48 @@ function cleanup_filename($f) {
     return preg_replace('{//}', '/', $f);
 }
 
-function triggerGame($courseId, $uid, $assignId) {
-    $eventData = new stdClass();
-    $eventData->courseId = $courseId;
-    $eventData->uid = $uid;
-    $eventData->activityType = AssignmentEvent::ACTIVITY;
-    $eventData->module = MODULE_ID_ASSIGN;
-    $eventData->resource = intval($assignId);
+
+/**
+ * @brief Export assignment's grades to CSV file
+ * @global type $course_code
+ * @global type $course_id
+ * @global type $langSurname
+ * @global type $langName
+ * @global type $langAm
+ * @global type $langUsername
+ * @global type $langEmail
+ * @global type $langGradebookGrade
+ * @param type $id
+ */
+function export_grades_to_csv($id) {
     
-    AssignmentEvent::trigger(AssignmentEvent::UPDGRADE, $eventData);
+    global $course_code, $course_id,
+           $langSurname, $langName, $langAm, 
+           $langUsername, $langEmail, $langGradebookGrade;
+    
+    $csv = new CSV();    
+    $csv->filename = $course_code . "_" . $id . "_grades_list.csv";
+    $csv->outputHeaders();
+    // additional security
+    $q = Database::get()->querySingle("SELECT id, title FROM assignment 
+                            WHERE id = ?d AND course_id = ?d", $id, $course_id);
+    if ($q) {
+        $assignment_id = $q->id;
+        $title = $q->title;
+        $csv->outputRecord($title);
+        $csv->outputRecord();
+        $csv->outputRecord($langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade);
+        $sql = Database::get()->queryArray("SELECT uid, grade FROM assignment_submit
+                        WHERE assignment_id = ?d", $assignment_id);
+        foreach ($sql as $data) {
+            $entries = Database::get()->querySingle('SELECT surname, givenname, username, am, email 
+                        FROM user
+                        WHERE id = ?d',
+                        $data->uid);
+            $csv->outputRecord($entries->surname, $entries->givenname, $entries->am,
+                    $entries->username, $entries->email, $data->grade);
+            $csv->outputRecord();
+        }
+    }
+    exit;
 }

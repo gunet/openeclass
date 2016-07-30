@@ -40,7 +40,7 @@ if (isset($_GET['mid'])) {
 
     $mid = intval($_GET['mid']);
     $msg = new Msg($mid, $uid, 'msg_view');
-    if (!$msg->error) {
+    if (!$msg->error) {        
 
         $urlstr = '';
         if ($course_id != 0) {
@@ -60,7 +60,7 @@ if (isset($_GET['mid'])) {
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',
                                     'icon' => 'fa-times',
-                                    'button-class' => 'delete_in_inner',
+                                    'class' => 'delete_in_inner',
                                     'link-attrs' => "data-id='$msg->id'")
                         ));
         $recipients = '';
@@ -133,7 +133,7 @@ if (isset($_GET['mid'])) {
                                     $langAttachedFile
                                 </div>
                                 <div class='col-sm-10'>
-                                 <a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
+                                 <a href=\"message_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
                     &nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(".format_file_size($msg->filesize).")
                                 </div>
                             </div>";
@@ -147,12 +147,12 @@ if (isset($_GET['mid'])) {
         } else {
             $out .= "<div class='form-wrapper' id='replyBox' style='display:none;'>";
             if ($course_id == 0) {
-                $out .= "<form method='post' class='form-horizontal' role='form' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
                 if ($msg->course_id != 0) {//thread belonging to a course viewed from the central ui
                     $out .= "<input type='hidden' name='course' value='".course_id_to_code($msg->course_id)."' />";
                 }
             } else {
-                $out .= "<form method='post' class='form-horizontal' role='form' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
             }
             //hidden variables needed in case of a reply
             foreach ($msg->recipients as $rec) {
@@ -278,9 +278,9 @@ $out .=         "
 
                     $(document).off("click", ".delete_in");
 
-                    $(document).on("click", ".delete_in_inner", function (e) {
+                    $(document).on("click", ".delete_in_inner", function (e) {                    
                          e.preventDefault();
-                         var id = $(this).data("id");
+                         var id = $(this).children("a").data("id");
                          var string = "mid="+id;
                          bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {
                          if(result) {

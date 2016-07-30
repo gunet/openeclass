@@ -34,7 +34,7 @@
  */
 use Hautelook\Phpass\PasswordHash;
 
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'include/lib/user.class.php';
 // pop3 class
 require_once 'modules/auth/methods/pop3.php';
@@ -373,7 +373,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                                                 FROM `$settings[dbtable]`
                                                 WHERE `$settings[dbfielduser]` = ?s", $test_username);
                     if ($res) {
-                        $testauth = external_DB_Check_Pass($test_password, $res->$settings['dbfieldpass'], $settings['dbpassencr']);
+                        $testauth = external_DB_Check_Pass($test_password, $res->{$settings['dbfieldpass']}, $settings['dbpassencr']);
                     }
                 }
             }
@@ -691,6 +691,8 @@ function hybridauth_login($provider=null) {
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
     
+    $_SESSION['canChangePassword'] = false;
+
     // check for errors and whatnot
     $warning = '';
     
@@ -847,6 +849,7 @@ function hybridauth_login($provider=null) {
 function login($user_info_object, $posted_uname, $pass, $provider=null) {
     global $session;
 
+    $_SESSION['canChangePassword'] = false;
     $pass_match = false;
     $hasher = new PasswordHash(8, false);
 
@@ -893,6 +896,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
             }
         }
         if ($is_active) {
+            $_SESSION['canChangePassword'] = true;
             $_SESSION['uid'] = $user_info_object->id;
             $_SESSION['uname'] = $user_info_object->username;
             $_SESSION['surname'] = $user_info_object->surname;
@@ -922,6 +926,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
 function alt_login($user_info_object, $uname, $pass) {
     global $warning, $auth_ids;
 
+    $_SESSION['canChangePassword'] = false;
     $auth = array_search($user_info_object->password, $auth_ids);
     $auth_method_settings = get_auth_settings($auth);
     $auth_allow = 1;
@@ -1018,6 +1023,7 @@ function shib_cas_login($type) {
         $urlServer, $is_admin, $is_power_user, $is_usermanage_user,
         $is_departmentmanage_user, $langUserAltAuth, $langRegistrationDenied;
 
+    $_SESSION['canChangePassword'] = false;
     $alt_auth_stud_reg = get_config('alt_auth_stud_reg');
 
     if ($alt_auth_stud_reg == 2) {

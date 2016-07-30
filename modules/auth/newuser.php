@@ -34,6 +34,8 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $display_captcha = get_config("display_captcha") && function_exists('imagettfbbox');
+$data['display_captcha'] = $display_captcha;
+$data['captcha'] = "{$urlAppend}include/securimage/securimage_show.php";
 
 $tree = new Hierarchy();
 $userObj = new User();
@@ -66,14 +68,24 @@ hContent;
 $pageName = $langUserDetails;
 $navigation[] = array("url" => "registration.php", "name" => $langNewUser);
 
-$user_registration = get_config('user_registration');
-$eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
+$data['action_bar'] = action_bar(
+                                [[
+                                    'title' => $langBack,
+                                    'url' => 'registration.php',
+                                    'icon' => 'fa-reply',
+                                    'level' => 'primary-label',
+                                    'button-class' => 'btn-default'
+                                ]], false);
 
-if (!$user_registration or $eclass_stud_reg != 2) {
-    $tool_content .= "<div class='alert alert-info'>$langStudentCannotRegister</div>";
-    draw($tool_content, 0);
-    exit;
-}
+$data['user_registration'] = get_config('user_registration');
+$data['eclass_stud_reg'] = get_config('eclass_stud_reg'); // student registration via eclass
+
+$data['lang_select_options'] = lang_select_options('localize', "class='form-control'");
+list($js, $html) = $tree->buildUserNodePickerIndirect();
+$head_content .= $js;
+$data['buildusernode'] = $html;
+
+$data['render_profile_fields_form'] = render_profile_fields_form(array('origin' => 'student_register'));
 
 if(!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $provider_id = '';
 
@@ -154,6 +166,33 @@ if (!isset($_POST['submit'])) {
         $am_message = $langOptional;
     }
 
+    $data['user_data_firstname'] = $data['user_data_lastname'] = $data['user_data_displayName'] = $data['user_data_email'] = $data['user_data_am'] = $data['user_data_phone'] = '';
+    if (isset($_GET['givenname_form'])) {
+        $data['user_data_firstname'] = $_GET['givenname_form'];
+    }
+    if (isset($_GET['surname_form'])) {
+        $data['user_data_lastname'] = $_GET['surname_form'];
+    }
+    if (isset($_GET['uname'])) {
+        $data['user_data_displayName'] = $_GET['uname'];
+    }
+    if (isset($_GET['email'])) {
+        $data['user_data_email'] = $_GET['email'];
+    }
+    if (isset($_GET['am'])) {
+        $data['user_data_am'] = $_GET['am'];
+    }
+    if (isset($_GET['phone'])) {
+        $data['user_data_phone'] = $_GET['phone'];
+    }                
+    if ($user_data) {
+        $data['user_data_firstname'] = $user_data->firstName;
+        $data['user_data_lastname'] = $user_data->lastName;
+        $data['user_data_displayName'] =  str_replace(' ', '', $user_data->displayName);
+        $data['user_data_email'] = $user_data->email;
+        $data['user_data_phone'] = $user_data->phone;
+    }     
+    
     if (@count($registration_errors) != 0) {
         // errors exist (from hybridauth) - show message
         $tool_content .= "<div class='alert alert-danger'>";
@@ -163,115 +202,9 @@ if (!isset($_POST['submit'])) {
         $tool_content .= "</div>";
         $provider_name = '';
         $provider_id ='';
-    }
-
-    $tool_content .= action_bar(array(
-                    array('title' => $langBack,
-                        'url' => "{$urlAppend}modules/auth/registration.php",
-                        'icon' => 'fa-reply',
-                        'level' => 'primary-label')), false);
-    $tool_content .= @"<div class='form-wrapper'>
-            <form class='form-horizontal' role='form' action='$_SERVER[REQUEST_URI]' method='post' onsubmit='return validateNodePickerForm();'>
-            <fieldset>
-            <div class='form-group'>
-                <label for='Name' class='col-sm-2 control-label'>$langName:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='givenname_form' size='30' maxlength='100'" .
-                      ($user_data? (" value='" . q($user_data->firstName) . "'"): '') . " placeholder='$langName'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='surname_form' size='30' maxlength='100'" .
-                      ($user_data? (" value='" . q($user_data->lastName) . "'"): '') . " placeholder='$langSurname'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='uname'" .
-                      ($user_data? (" value='" . q(str_replace(' ', '', $user_data->displayName)) . "'"): '') .
-                      " size='30' maxlength='100' autocomplete='off' placeholder='$langUserNotice'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='UserPass' class='col-sm-2 control-label'>$langPass:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off' id='password' placeholder='$langUserNotice'><span id='result'></span>
-                </div>
-            </div>
-            <div class='form-group'>
-              <label for='UserPass2' class='col-sm-2 control-label'>$langConfirmation:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='UserEmail' class='col-sm-2 control-label'>$langEmail:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='email' size='30' maxlength='100'" .
-                      ($user_data? (" value='" . q($user_data->email) . "'"): '') . " placeholder='$email_message'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='UserAm' class='col-sm-2 control-label'>$langAm:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='am' size='20' maxlength='20' placeholder='$am_message'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='phone' size='20' maxlength='20'" .
-                      ($user_data? (" value='" . q($user_data->phone) . "'"): '') . " placeholder='$langOptional'>
-                </div>
-            </div>
-            <div class='form-group'>
-              <label for='UserFac' class='col-sm-2 control-label'>$langFaculty:</label>
-                <div class='col-sm-10'>";
-            list($js, $html) = $tree->buildUserNodePickerIndirect();
-            $head_content .= $js;
-            $tool_content .= $html;
-            $tool_content .= "</div>
-            </div>
-            <div class='form-group'>
-              <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
-              <div class='col-sm-10'>";
-            $tool_content .= lang_select_options('localize', "class='form-control'");
-            $tool_content .= "</div>
-            </div>";
-            if ($display_captcha) {
-                $tool_content .= "<div class='form-group'>
-                      <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></div><br>
-                      <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
-                      <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
-                    </div>";
-            }
-        //add custom profile fields 
-        $tool_content .= render_profile_fields_form(array('origin' => 'student_register'));
-
-        //check if provider_id from an authenticated user and a valid provider name are set so as to show the relevant form
-        if(!empty($provider_name) && !empty($provider_id)) {
-            $tool_content .= "<div class='form-group'>
-              <label for='UserLang' class='col-sm-2 control-label'>$langProviderConnectWith:</label>
-              <div class='col-sm-10'><p class='form-control-static'>
-                <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "'>&nbsp;" . q(ucfirst($provider_name)) . "<br /><small>$langProviderConnectWithTooltip</small></p>
-              </div>
-              <div class='col-sm-offset-2 col-sm-10'>
-                <input type='hidden' name='provider' value='" . $provider_name . "' />
-                <input type='hidden' name='provider_id' value='" . $provider_id . "' />
-              </div>
-              </div>";
-        }
-        $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
-                    <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "' />
-              </div>
-            </div>";
-
-      $tool_content .= "  </fieldset>
-      </form>
-      </div>";
+    }       
+    $data['menuTypeID'] = 0;
+    view('modules.auth.newuser', $data);
 
 } else {
     if (get_config('email_required')) {
@@ -514,35 +447,17 @@ if (!isset($_POST['submit'])) {
             $session->setLoginTimestamp();
             $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
         }
-        // user msg
-        $tool_content .= "<div class='alert alert-success'><p>$user_msg</p></div>";
-
-        // footer msg
-        if (!$vmail) {
-            $tool_content .= "<p>$langPersonalSettingsMore</p>";
-        } else {
-            $tool_content .=
-                    "<p>$langMailVerificationSuccess2.
-                                 <br /><br />$click <a href='$urlServer'
-                                 class='mainpage'>$langHere</a> $langBackPage</p>";
-        }
-    } else {
-        // errors exist - registration failed
-        $tool_content .= "<div class='alert alert-danger'>";
+        $data['vmail'] = $vmail;
+        $data['menuTypeID'] = 0;
+        view('modules.auth.newuser', $data);        
+    } else { // errors exist
+        $provider_name = '';
+        $provider_id ='';
         foreach ($registration_errors as $error) {
-            $tool_content .= " $error";
+            Session::Messages("$error", 'alert-danger');
         }
-        $tool_content .= "</div><p><a href='$_SERVER[SCRIPT_NAME]?" .
-                'givenname_form=' . urlencode($givenname_form) .
-                '&amp;surname_form=' . urlencode($surname_form) .
-                '&amp;uname=' . urlencode($uname) .
-                '&amp;email=' . urlencode($email) .
-                '&amp;am=' . urlencode($am) .
-                '&amp;phone=' . urlencode($phone) .
-                augment_url_refill_custom_profile_fields_registr() . 
-                "'>$langAgain</a></p>";
+        redirect_to_home_page("modules/auth/newuser.php?givenname_form=" . urlencode($givenname_form) . "&surname_form=" . urlencode($surname_form) . "&uname=" . urlencode($uname) . "&email=" . urlencode($email) . "&am=" . urlencode($am) . "&phone=" . urlencode($phone) . "" . augment_url_refill_custom_profile_fields_registr() . "");        
     }
 } // end of registration
 
 unset($uid);
-draw($tool_content, 0, null, $head_content);

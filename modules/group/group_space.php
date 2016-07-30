@@ -30,7 +30,7 @@ $require_help = true;
 $helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'group_functions.php';
 
 initialize_group_id();
@@ -165,15 +165,15 @@ if (isset($_GET['group_as'])) {
                       'icon' => 'fa-reply',
                       'level' => 'primary'),
                 array('title' => $langEmailGroup,                    
-                      'url' => "../dropbox/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
+                      'url' => "../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
                       'icon' => 'fa-envelope',                  
                       'show' => $is_editor or $is_tutor),
-                array('title' => "$langDumpUser ( $langcsvenc1 )",
-                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1&amp;enc=1253",
+                array('title' => "$langDumpUser",
+                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1",
                       'icon' => 'fa-file-archive-o',
                       'show' => $is_editor),
-                array('title' => "$langDumpUser ( $langcsvenc2 )",
-                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1",
+                array('title' => "$langDumpUser ($langcsvenc2)",
+                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1&amp;enc=UTF-8",
                       'icon' => 'fa-file-archive-o',
                       'show' => $is_editor)));
 

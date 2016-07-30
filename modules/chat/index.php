@@ -140,7 +140,7 @@ if ($is_editor) {
             unlink($tmpArchiveFile);
 
         Session::Messages($langChatDeleted,"alert-success");
-        redirect_to_home_page("modules/conference/index.php");
+        redirect_to_home_page("modules/chat/index.php");
 
     } else if (isset($_POST['submit'])) {
         $chat_user_id = $chat_group_id = 0; // default value
@@ -168,7 +168,7 @@ if ($is_editor) {
         }    
         // Display result message
         Session::Messages($langAttendanceEdit,"alert-success");
-        redirect_to_home_page("modules/conference/index.php");
+        redirect_to_home_page("modules/chat/index.php");
 } elseif (isset($_GET['edit_conference'])) {
         $display = FALSE;
         $pageName = $langEdit;
@@ -291,7 +291,7 @@ if ($display == TRUE) {
             ($conf->status == 'active')? $tool_content .= "<tr>" : $tool_content .= "<tr class='not_visible'>";
             $tool_content .= "<td>";
             if (is_valid_chat_user($uid, $conf->conf_id, $conf->status)) { // chat access control
-                $tool_content .= "<a href='./conference.php?conference_id=$conf->conf_id'>$conf->conf_title</a>";
+                $tool_content .= "<a href='./chat.php?conference_id=$conf->conf_id'>$conf->conf_title</a>";
             } else {
                 $tool_content .= $conf->conf_title;
             }

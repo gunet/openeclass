@@ -27,7 +27,7 @@
   
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 load_js('tools.js');
 load_js('datatables');

@@ -468,13 +468,14 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='radio'>
                       <label>
                         <input type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == 1 ? " checked" : "").">
-                        <span>$langCollesSurvey </span>
+                        <span data-toggle='tooltip' data-placement='right' title='$colles_desc'>$langCollesSurvey</span>
+                            
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == 2 ? " checked" : "").">
-                        <span>$langATTLSSurvey</span>
+                        <span data-toggle='tooltip' data-placement='right' title='$rate_scale'>$langATTLSSurvey</span>
                       </label>
                     </div>                        
                 </div>

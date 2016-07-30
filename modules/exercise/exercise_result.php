@@ -19,11 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== 
  */
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
-
+include('userRecord.class.php');
 $require_current_course = TRUE;
 $guest_allowed = true;
 include '../../include/baseTheme.php';
@@ -34,7 +33,7 @@ $pageName = $langExercicesResult;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
 // picture path
-$picturePath = "courses/$course_code/image";
+$data['picturePath'] = $picturePath = "courses/$course_code/image";
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
     $grade = $_POST['question_grade'];
@@ -73,22 +72,22 @@ load_js('tools.js');
 
 
 if (isset($_GET['eurId'])) {
-    $eurid = $_GET['eurId'];
-    $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
-    $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-    $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
+    $data['eurid'] = $eurid = $_GET['eurId'];
+    $exercise_user_record = new userRecord();
+    $exercise_user_record->find($eurid);
+    $data['exercise_user_record'] = $exercise_user_record;
+    $data['user'] = $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
     if (!$exercise_user_record) {
         //No record matches with thiw exercise user record id
         Session::Messages($langExerciseNotFound);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
-    if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status==ATTEMPT_PAUSED) {
+    if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status == ATTEMPT_PAUSED) {
        // student is not allowed to view other people's exercise results
        // Nobody can see results of a paused exercise
        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
-    $objExercise = new Exercise();
-    $objExercise->read($exercise_user_record->eid);
+    $exercise = $exercise_user_record->exercise;
 } else {
     //exercise user recird id is not set
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
@@ -97,7 +96,7 @@ if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
 $head_content .= "<script type='text/javascript'>
     		$(document).ready(function(){
                     function save_grade(elem){
-                        var grade = parseInt($(elem).val());
+                        var grade = parseFloat($(elem).val());
                         var element_name = $(elem).attr('name');
                         var questionId = parseInt(element_name.substring(14,element_name.length - 1));
                         var questionMaxGrade = parseInt($(elem).next().val());
@@ -116,7 +115,7 @@ $head_content .= "<script type='text/javascript'>
                             $(elem).parent().prev().hide();
                             $(elem).prop('disabled', true);
                             $(elem).css({'border-color':'#dfdfdf'});
-                            var prev_grade = parseInt($('span#total_score').html());
+                            var prev_grade = parseFloat($('span#total_score').html());
                             var updated_grade = prev_grade + grade;
                             $('span#total_score').html(updated_grade);
                             return true;
@@ -159,391 +158,308 @@ $head_content .= "<script type='text/javascript'>
                 });
                 </script>";
 }
-$exerciseTitle = $objExercise->selectTitle();
-$exerciseDescription = $objExercise->selectDescription();
-$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
-$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "../../courses/mathimg/");
-$displayResults = $objExercise->selectResults();
-$displayScore = $objExercise->selectScore();
-$exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
+$data['exercise'] = $exercise;
+
+
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
 $cur_date = new DateTime("now");
-$end_date = new DateTime($objExercise->selectEndDate());
+$end_date = new DateTime($exercise->selectEndDate());
 
-$showResults = $displayResults == 1
+$data['showResults'] = $showResults = $exercise->results == 1
                || $is_editor
-               || $displayResults == 3 && $exerciseAttemptsAllowed == $userAttempts
-               || $displayResults == 4 && $end_date < $cur_date;
+               || $exercise->results == 3 && $exercise->attemptsAllowed == $userAttempts
+               || $exercise->results == 4 && $end_date < $cur_date;
 
-$showScore = $displayScore == 1
+$data['showScore'] = $showScore = $exercise->score == 1
             || $is_editor
-            || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
-            || $displayScore == 4 && $end_date < $cur_date;
+            || $exercise->score == 3 && $exercise->attemptsAllowed == $userAttempts
+            || $exercise->score == 4 && $end_date < $cur_date;
 
-$tool_content .= "<div class='panel panel-primary'>
-  <div class='panel-heading'>
-    <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
-  </div>
-  <div class='panel-body'>";
+$data['questions'] = $exercise_user_record->questions();
 
-if (!empty($exerciseDescription_temp)) {
-    if ($exerciseDescription_temp) {
-        $tool_content .= $exerciseDescription_temp."<hr>";
-    }
-}
-$tool_content .= "
-    <div class='row'>
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langSurname:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->surname) . "
-        </div>
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langName:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->givenname) . "
-        </div>";
-        if ($user->am) {
-            $tool_content .= "
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langAm:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->am) . "
-        </div>";
-        }
-        if ($user->phone) {
-            $tool_content .= "
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>$langPhone:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->phone) . "
-        </div>";
-        }
-        if ($user->email) {
-            $tool_content .= "
-        <div class='col-xs-6 col-md-3 text-right'>
-            <strong>Email:</strong>
-        </div>
-        <div class='col-xs-6 col-md-3'>
-            " . q($user->email) . "
-        </div>";
-        }
-$tool_content .= "
-      </div>
-    </div>
-  </div>
-  <div class='row margin-bottom-fat'>
-    <div class='col-md-5 col-md-offset-7'>";
-if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
-    $tool_content .= "
-            <div class='btn-group btn-group-sm' style='float:right;'>
-                <a class='btn btn-primary' id='all'>$langAllExercises</a>
-                <a class='btn btn-default' id='ungraded'>$langAttemptPending</a>
-            </div>";
-}
-$tool_content .= "
-    </div>
-  </div>";
-$i = 0;
-
-// for each question
-if (count($exercise_question_ids)>0){
-    foreach ($exercise_question_ids as $row) {
-
-        // creates a temporary Question object
-        $objQuestionTmp = new Question();
-        $is_question = $objQuestionTmp->read($row->question_id);
-        // gets the student choice for this question
-        $choice = $objQuestionTmp->get_answers_record($eurid);
-        $questionName = $objQuestionTmp->selectTitle();
-        $questionDescription = $objQuestionTmp->selectDescription();
-        $questionDescription_temp = nl2br(make_clickable($questionDescription));
-        $questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
-        $questionWeighting = $objQuestionTmp->selectWeighting();
-        $answerType = $objQuestionTmp->selectType();
-
-        // destruction of the Question object
-        unset($objQuestionTmp);
-        //check if question has been graded
-        $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
-        $question_graded = is_null($question_weight) ? FALSE : TRUE;
-
-        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-            $colspan = 4;
-        } elseif ($answerType == MATCHING) {
-            $colspan = 2;
-        } else {
-            $colspan = 1;
-        }
-        $iplus = $i + 1;
-        $tool_content .= "
-            <table class='table-default ".(($question_graded)? 'graded' : 'ungraded')."'>
-            <tr class='active'>
-              <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
-            </tr>
-            <tr>
-              <td colspan='${colspan}'>";
-        if ($is_question) {
-            $tool_content .= "
-                <b>" . q_math($questionName) . "</b>
-                <br>" .
-                standard_text_escape($questionDescription_temp)
-                . "<br><br>";
-        } else {
-            $tool_content .= "<div class='alert alert-warning'>$langQuestionAlreadyDeleted</div>";
-        }
-
-        $tool_content .= "
-              </td>
-            </tr>";
-        if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
-            $tool_content .= "
-                      <tr class='even'>
-                        <td class='text-center' colspan='${colspan}'><img src='../../$picturePath/quiz-" . $row->question_id . "'></td>
-                      </tr>";
-        }
-        $questionScore = 0;
-
-        if ($showResults && $choice) {
-            if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                $tool_content .= "
-                            <tr class='even'>
-                              <td width='50' valign='top'><b>$langChoice</b></td>
-                              <td width='50' class='center' valign='top'><b>$langExpectedChoice</b></td>
-                              <td valign='top'><b>$langAnswer</b></td>
-                              <td valign='top'><b>$langComment</b></td>
-                            </tr>";
-            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FREE_TEXT) {
-                $tool_content .= "
-                            <tr class='active'>
-                              <td><b>$langAnswer</b></td>
-                            </tr>";
-            } else {
-                $tool_content .= "
-                            <tr class='even'>
-                              <td><b>$langElementList</b></td>
-                              <td><b>$langCorrespondsTo</b></td>
-                            </tr>";
-            }
-        }
-        if ($answerType != FREE_TEXT) { // if NOT FREE TEXT (i.e. question has answers)
-            // construction of the Answer object
-            $objAnswerTmp = new Answer($row->question_id);
-            $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-
-            for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-                $answer = $objAnswerTmp->selectAnswer($answerId);
-                $answerComment = $objAnswerTmp->selectComment($answerId);
-                $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-                $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
-
-                // support for math symbols
-                $answer = mathfilter($answer, 12, '../../courses/mathimg/');
-                $answerComment = mathfilter($answerComment, 12, '../../courses/mathimg/');
-
-                switch ($answerType) {
-                    // for unique answer
-                    case UNIQUE_ANSWER : $studentChoice = ($choice == $answerId) ? 1 : 0;
-                        if ($studentChoice) {
-                            $questionScore += $answerWeighting;
-                        }
-                        break;
-                    // for multiple answers
-                    case MULTIPLE_ANSWER : $studentChoice = @$choice[$answerId];
-                        if ($studentChoice) {
-                            $questionScore += $answerWeighting;
-                        }
-                        break;
-                    // for fill in the blanks
-                    case FILL_IN_BLANKS :
-                    case FILL_IN_BLANKS_TOLERANT :
-                        list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);
-                        // splits weightings that are joined with a comma
-                        $answerWeighting = explode(',', $answerWeighting);
-                        // we save the answer because it will be modified
-                        $temp = $answer;
-                        $answer = '';
-                        $j = 1;
-                        // the loop will stop at the end of the text
-                        while (1) {
-                            // quits the loop if there are no more blanks
-                            if (($pos = strpos($temp, '[')) === false) {
-                                // adds the end of the text
-                                $answer .= q($temp);
-                                break;
-                            }
-                            // adds the piece of text that is before the blank and ended by [
-                            $answer .= substr($temp, 0, $pos + 1);
-                            $temp = substr($temp, $pos + 1);
-                            // quits the loop if there are no more blanks
-                            if (($pos = strpos($temp, ']')) === false) {
-                                // adds the end of the text
-                                $answer .= q($temp);
-                                break;
-                            }
-                            $choice[$j] = trim($choice[$j]);
-                            // if the word entered is the same as the one defined by the professor
-                            $canonical_choice = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($choice[$j], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $choice[$j];
-                            $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper(substr($temp, 0, $pos), 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : substr($temp, 0, $pos);
-                            $right_answers = preg_split('/\s*\|\s*/', $canonical_match);
-                            if (in_array($canonical_choice, $right_answers)) {
-                                // gives the related weighting to the student
-                                $questionScore += $answerWeighting[$j-1];
-                                // increments total score
-                                // adds the word in green at the end of the string
-                                $answer .= '<b>' . q($choice[$j]) . '</b>';
-                            }
-                            // else if the word entered is not the same as the one defined by the professor
-                            elseif (!empty($choice[$j])) {
-                                // adds the word in red at the end of the string, and strikes it
-                                $answer.='<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
-                            } else {
-                                // adds a tabulation if no word has been typed by the student
-                                $answer.='&nbsp;&nbsp;&nbsp;';
-                            }
-                            // adds the correct word, followed by ] to close the blank
-                            $answer .= ' / <span class="text-success"><b>' .
-                                q(preg_replace('/\s*,\s*/', " $langOr ", substr($temp, 0, $pos))) .
-                                '</b></span>]';
-                            $j++;
-                            $temp = substr($temp, $pos + 1);
-                        }
-                        break;
-                    // for matching
-                    case MATCHING : if ($answerCorrect) {
-                            if ($answerCorrect == $choice[$answerId]) {
-                                $questionScore += $answerWeighting;
-                                $choice[$answerId] = $matching[$choice[$answerId]];
-                            } elseif (!$choice[$answerId]) {
-                                $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
-                            } else {
-                                $choice[$answerId] = "<span class='text-danger'>
-                                                                <del>" . q($matching[$choice[$answerId]]) . "</del>
-                                                                </span>";
-                            }
-                        } else {
-                            $matching[$answerId] = $answer;
-                        }
-                        break;
-                    case TRUE_FALSE : $studentChoice = ($choice == $answerId) ? 1 : 0;
-                        if ($studentChoice) {
-                            $questionScore += $answerWeighting;
-                        }
-                        break;
-                } // end switch()
-                if ($showResults) {
-                    if ($answerType != MATCHING || $answerCorrect) {
-                        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                            $tool_content .= "
-                                                <tr class='even'>
-                                                  <td>
-                                                  <div align='center'>";
-
-                            if ($studentChoice) {
-                                $icon_choice= "fa-check-square-o";
-                            } else {
-                                $icon_choice = "fa-square-o";
-                            }
-
-                            $tool_content .= icon($icon_choice) . "</div>
-                                                </td>
-                                                <td><div align='center'>";
-
-                            if ($answerCorrect) {
-                                $icon_choice= "fa-check-square-o";
-                            } else {
-                                $icon_choice = "fa-square-o";
-                            }
-                            $tool_content .= icon($icon_choice)."</div>";
-                            $tool_content .= "
-                                                </td>
-                                                <td>" . standard_text_escape($answer) . "</td>
-                                                <td>";
-                            if ($studentChoice) {
-                                $tool_content .= standard_text_escape(nl2br(make_clickable($answerComment)));
-                            } else {
-                                $tool_content .= '&nbsp;';
-                            }
-                            $tool_content .= "</td></tr>";
-                        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-                            $tool_content .= "
-                                                <tr class='even'>
-                                                  <td>" . standard_text_escape(nl2br($answer)) . "</td>
-                                                </tr>";
-                        } else {
-                            $tool_content .= "
-                                                <tr class='even'>
-                                                  <td>" . standard_text_escape($answer) . "</td>
-                                                  <td>" . q($choice[$answerId]) ." / <span class='text-success'><b>" . q($matching[$answerCorrect]) . "</b></span></td>
-                                                </tr>";
-                        }
-                    }
-                } // end of if
-            } // end for()
-        } else { // If FREE TEXT type
-            $tool_content .= "<tr class='even'>
-                                 <td>" . purify($choice) . "</td>
-                              </tr>";
-        }
-        $tool_content .= "<tr class='active'>
-                            <th colspan='$colspan'>";
-        if ($answerType == FREE_TEXT) {
-            $choice = purify($choice);
-            if (!empty($choice)) {
-                if (!$question_graded) {
-                    $tool_content .= "<span class='text-danger'>$langAnswerUngraded</span>";
-                } else {
-                    $questionScore = $question_weight;
-                }
-            }
-        }
-        if ($showScore) {
-            if ($choice) {
-                if ($answerType == FREE_TEXT && $is_editor && isset($question_graded) && !$question_graded) {
-                 //show input field
-                 $tool_content .= "<span style='float:right;'>
-                                   $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore[$row->question_id]'>
-                                   <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>
-                                   <b>/$questionWeighting</b></span>";
-                } else {
-                $tool_content .= "<span style='float:right;'>
-                                    $langQuestionScore: <b>$questionScore/$questionWeighting</b></span>";
-                }
-            } else {
-                $tool_content .= "<span style='float:right;'>
-                                    $langQuestionScore: <b>$question_weight</b></span>";
-            }
-
-        }
-        $tool_content .= "</th></tr></table>";
-        // destruction of Answer
-        unset($objAnswerTmp);
-        $i++;
-    } // end foreach()
-} else {
-    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-}
-
-if ($showScore) {
-    $tool_content .= "
-    <br/>
-    <table class='table-default'>
-    <tr>
-	<td class='text-right'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b>
-      </td>
-    </tr>
-    </table>";
-}
-$tool_content .= "
-  <br/>
-  <div align='center'>" . (($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) ?
-  "<a class='btn btn-primary' href='index.php' id='submitButton'>$langSubmit</a>" : '')."
-  <a class='btn btn-default' href='index.php?course=$course_code'>$langReturn</a>
-  </div>";
-
-draw($tool_content, 2, null, $head_content);
+view('modules.exercise.exercise_results', $data);
+exit();
+//
+//
+//// for each question
+//if (count($exercise_question_ids)>0){
+//    foreach ($exercise_question_ids as $row) {
+//
+//        // creates a temporary Question object
+//        $objQuestionTmp = new Question();
+//        $is_question = $objQuestionTmp->read($row->question_id);
+//        // gets the student choice for this question
+//        $choice = $objQuestionTmp->get_answers_record($eurid);
+//        $questionName = $objQuestionTmp->selectTitle();
+//        $questionDescription = $objQuestionTmp->selectDescription();
+//        $questionDescription_temp = nl2br(make_clickable($questionDescription));
+//        $questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
+//        $questionWeighting = $objQuestionTmp->selectWeighting();
+//        $answerType = $objQuestionTmp->selectType();
+//
+//        // destruction of the Question object
+//        unset($objQuestionTmp);
+//        //check if question has been graded
+//        $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
+//        $question_graded = is_null($question_weight) ? FALSE : TRUE;
+//
+//        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+//            $colspan = 4;
+//        } elseif ($answerType == MATCHING) {
+//            $colspan = 2;
+//        } else {
+//            $colspan = 1;
+//        }
+//        $iplus = $i + 1;
+//        $tool_content .= "
+//            <table class='table-default ".(($question_graded)? 'graded' : 'ungraded')."'>
+//            <tr class='active'>
+//              <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
+//            </tr>
+//            <tr>
+//              <td colspan='${colspan}'>";
+//        if ($is_question) {
+//            $tool_content .= "
+//                <b>" . q_math($questionName) . "</b>
+//                <br>" .
+//                standard_text_escape($questionDescription_temp)
+//                . "<br><br>";
+//        } else {
+//            $tool_content .= "<div class='alert alert-warning'>$langQuestionAlreadyDeleted</div>";
+//        }
+//
+//        $tool_content .= "
+//              </td>
+//            </tr>";
+//        if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
+//            $tool_content .= "
+//                      <tr class='even'>
+//                        <td class='text-center' colspan='${colspan}'><img src='../../$picturePath/quiz-" . $row->question_id . "'></td>
+//                      </tr>";
+//        }
+//        $questionScore = 0;
+//
+//        if ($showResults && $choice) {
+//            if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+//                $tool_content .= "
+//                            <tr class='even'>
+//                              <td width='50' valign='top'><b>$langChoice</b></td>
+//                              <td width='50' class='center' valign='top'><b>$langExpectedChoice</b></td>
+//                              <td valign='top'><b>$langAnswer</b></td>
+//                              <td valign='top'><b>$langComment</b></td>
+//                            </tr>";
+//            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FREE_TEXT) {
+//                $tool_content .= "
+//                            <tr class='active'>
+//                              <td><b>$langAnswer</b></td>
+//                            </tr>";
+//            } else {
+//                $tool_content .= "
+//                            <tr class='even'>
+//                              <td><b>$langElementList</b></td>
+//                              <td><b>$langCorrespondsTo</b></td>
+//                            </tr>";
+//            }
+//        }
+//        if ($answerType != FREE_TEXT) { // if NOT FREE TEXT (i.e. question has answers)
+//            // construction of the Answer object
+//            $objAnswerTmp = new Answer($row->question_id);
+//
+//            for ($answerId = 1; $answerId <= $objAnswerTmp->selectNbrAnswers(); $answerId++) {
+//                $answer = $objAnswerTmp->selectAnswer($answerId);
+//                $answerComment = $objAnswerTmp->selectComment($answerId);
+//                $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+//                $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
+//
+//                // support for math symbols
+//                $answer = mathfilter($answer, 12, '../../courses/mathimg/');
+//                $answerComment = mathfilter($answerComment, 12, '../../courses/mathimg/');
+//
+//                switch ($answerType) {
+//                    // for unique answer
+//                    case UNIQUE_ANSWER : 
+//                        $studentChoice = ($choice == $answerId) ? 1 : 0;
+//                        if ($studentChoice) {
+//                            $questionScore += $answerWeighting;
+//                        }
+//                        break;
+//                    // for multiple answers
+//                    case MULTIPLE_ANSWER : $studentChoice = @$choice[$answerId];
+//                        if ($studentChoice) {
+//                            $questionScore += $answerWeighting;
+//                        }
+//                        break;
+//                    // for fill in the blanks
+//                    case FILL_IN_BLANKS :
+//                    case FILL_IN_BLANKS_TOLERANT :
+//                        list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);
+//                        // splits weightings that are joined with a comma
+//                        $answerWeighting = explode(',', $answerWeighting);
+//                        // we save the answer because it will be modified
+//                        $temp = $answer;
+//                        $answer = '';
+//                        $j = 1;
+//                        // the loop will stop at the end of the text
+//                        while (1) {
+//                            // quits the loop if there are no more blanks
+//                            if (($pos = strpos($temp, '[')) === false) {
+//                                // adds the end of the text
+//                                $answer .= q($temp);
+//                                break;
+//                            }
+//                            // adds the piece of text that is before the blank and ended by [
+//                            $answer .= substr($temp, 0, $pos + 1);
+//                            $temp = substr($temp, $pos + 1);
+//                            // quits the loop if there are no more blanks
+//                            if (($pos = strpos($temp, ']')) === false) {
+//                                // adds the end of the text
+//                                $answer .= q($temp);
+//                                break;
+//                            }
+//                            $choice[$j] = canonicalize_whitespace($choice[$j]);
+//                            // if the word entered is the same as the one defined by the professor
+//                            $canonical_choice = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($choice[$j], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $choice[$j];
+//                            $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper(substr($temp, 0, $pos), 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : substr($temp, 0, $pos);
+//                            $right_answers = array_map('canonicalize_whitespace',
+//                                preg_split('/\s*\|\s*/', $canonical_match));
+//                            if (in_array($canonical_choice, $right_answers)) {
+//                                // gives the related weighting to the student
+//                                $questionScore += $answerWeighting[$j-1];
+//                                // increments total score
+//                                // adds the word in green at the end of the string
+//                                $answer .= '<b>' . q($choice[$j]) . '</b>';
+//                            }
+//                            // else if the word entered is not the same as the one defined by the professor
+//                            elseif ($choice[$j] !== '') {
+//                                // adds the word in red at the end of the string, and strikes it
+//                                $answer.='<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
+//                            } else {
+//                                // adds a tabulation if no word has been typed by the student
+//                                $answer.='&nbsp;&nbsp;&nbsp;';
+//                            }
+//                            // adds the correct word, followed by ] to close the blank
+//                            $answer .= ' / <span class="text-success"><b>' .
+//                                q(preg_replace('/\s*,\s*/', " $langOr ", substr($temp, 0, $pos))) .
+//                                '</b></span>]';
+//                            $j++;
+//                            $temp = substr($temp, $pos + 1);
+//                        }
+//                        break;
+//                    // for matching
+//                    case MATCHING : if ($answerCorrect) {
+//                            if ($answerCorrect == $choice[$answerId]) {
+//                                $questionScore += $answerWeighting;
+//                                $choice[$answerId] = $matching[$choice[$answerId]];
+//                            } elseif (!$choice[$answerId]) {
+//                                $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
+//                            } else {
+//                                $choice[$answerId] = "<span class='text-danger'>
+//                                                                <del>" . q($matching[$choice[$answerId]]) . "</del>
+//                                                                </span>";
+//                            }
+//                        } else {
+//                            $matching[$answerId] = $answer;
+//                        }
+//                        break;
+//                    case TRUE_FALSE : $studentChoice = ($choice == $answerId) ? 1 : 0;
+//                        if ($studentChoice) {
+//                            $questionScore += $answerWeighting;
+//                        }
+//                        break;
+//                } // end switch()
+//                if ($showResults) {
+//                    if ($answerType != MATCHING || $answerCorrect) {
+//                        if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
+//                            $tool_content .= "
+//                                                <tr class='even'>
+//                                                  <td>
+//                                                  <div align='center'>";
+//
+//                            if ($studentChoice) {
+//                                $icon_choice= "fa-check-square-o";
+//                            } else {
+//                                $icon_choice = "fa-square-o";
+//                            }
+//
+//                            $tool_content .= icon($icon_choice) . "</div>
+//                                                </td>
+//                                                <td><div align='center'>";
+//
+//                            if ($answerCorrect) {
+//                                $icon_choice= "fa-check-square-o";
+//                            } else {
+//                                $icon_choice = "fa-square-o";
+//                            }
+//                            $tool_content .= icon($icon_choice)."</div>";
+//                            $tool_content .= "
+//                                                </td>
+//                                                <td>" . standard_text_escape($answer) . "</td>
+//                                                <td>";
+//                            if ($studentChoice) {
+//                                $tool_content .= standard_text_escape(nl2br(make_clickable($answerComment)));
+//                            } else {
+//                                $tool_content .= '&nbsp;';
+//                            }
+//                            $tool_content .= "</td></tr>";
+//                        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
+//                            $tool_content .= "
+//                                                <tr class='even'>
+//                                                  <td>" . standard_text_escape(nl2br($answer)) . "</td>
+//                                                </tr>";
+//                        } else {
+//                            $tool_content .= "
+//                                                <tr class='even'>
+//                                                  <td>" . standard_text_escape($answer) . "</td>
+//                                                  <td>" . q($choice[$answerId]) ." / <span class='text-success'><b>" . q($matching[$answerCorrect]) . "</b></span></td>
+//                                                </tr>";
+//                        }
+//                    }
+//                } // end of if
+//            } // end for()
+//        } else { // If FREE TEXT type
+//            $tool_content .= "<tr class='even'>
+//                                 <td>" . purify($choice) . "</td>
+//                              </tr>";
+//        }
+//        $tool_content .= "<tr class='active'>
+//                            <th colspan='$colspan'>";
+//        if ($answerType == FREE_TEXT) {
+//            $choice = purify($choice);
+//            if (!empty($choice)) {
+//                if (!$question_graded) {
+//                    $tool_content .= "<span class='text-danger'>$langAnswerUngraded</span>";
+//                } else {
+//                    $questionScore = $question_weight;
+//                }
+//            }
+//        }
+//        if ($showScore) {
+//            if ($choice) {
+//                if ($answerType == FREE_TEXT && $is_editor && isset($question_graded) && !$question_graded) {
+//                 //show input field
+//                 $tool_content .= "<span style='float:right;'>
+//                                   $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore[$row->question_id]'>
+//                                   <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>
+//                                   <b>/$questionWeighting</b></span>";
+//                } else {
+//                $tool_content .= "<span style='float:right;'>
+//                                    $langQuestionScore: <b>$questionScore/$questionWeighting</b></span>";
+//                }
+//            } else {
+//                $tool_content .= "<span style='float:right;'>
+//                                    $langQuestionScore: <b>$question_weight</b></span>";
+//            }
+//
+//        }
+//        $tool_content .= "</th></tr></table>";
+//        // destruction of Answer
+//        unset($objAnswerTmp);
+//        $i++;
+//    } // end foreach()
+//} else {
+//    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+//}
+//
+//
+//draw($tool_content, 2, null, $head_content);

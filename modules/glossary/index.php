@@ -27,7 +27,7 @@ $helpTopic = 'Glossary';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 ModalBoxHelper::loadModalBox();
 
@@ -126,11 +126,11 @@ if ($is_editor) {
                 array('title' => $langConfig,
                       'url' => "$base_url&amp;config=1",                      
                       'icon' => 'fa-gear'),
-                array('title' => "$langGlossaryToCsv (UTF8)",
+                array('title' => "$langGlossaryToCsv",
                       'url' => "dumpglossary.php?course=$course_code",
                       'icon' => 'fa-download'),
-                array('title' => "$langGlossaryToCsv (Windows 1253)",
-                      'url' => "dumpglossary.php?course=$course_code&amp;enc=1253",
+                array('title' => "$langGlossaryToCsv (UTF-8)",
+                      'url' => "dumpglossary.php?course=$course_code&amp;enc=UTF-8",
                       'icon' => 'fa-download'),
                 array('title' => $langCategories,
                       'url' => "categories.php?course=$course_code",
@@ -366,7 +366,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
     }
     $data['glossary_terms'] = $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
                             FROM glossary WHERE course_id = ?d $where
-                            GROUP BY term
+                            GROUP BY term, definition, url, notes, category_id, id 
                             ORDER BY term", $course_id, $terms);    
     view('modules.glossary.index', $data);   
 }

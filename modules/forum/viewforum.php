@@ -24,7 +24,7 @@ $require_login = true;
 $require_help = true;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'include/lib/textLib.inc.php';

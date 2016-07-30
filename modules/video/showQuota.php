@@ -4,7 +4,7 @@
  * Open eClass 
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,20 +20,29 @@
  * ======================================================================== 
  */
 
-function headlink($label, $this_sort) {
-    global $sort, $reverse, $course_code, $themeimg, $langUp, $langDown;
-    $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code;
+// setup
+$require_current_course = true;
+$require_editor = true;
+$require_help = true;
+$helpTopic = 'Video';
 
-    if ($sort == $this_sort) {
-        $this_reverse = !$reverse;
-        $indicator = " <img src='$themeimg/arrow_" .
-                ($reverse ? 'up' : 'down') . ".png' alt='" .
-                ($reverse ? $langUp : $langDown) . "'>";
-    } else {
-        $this_reverse = $reverse;
-        $indicator = '';
-    }
-    return '<a href="' . $base_url .
-            '&amp;sort=' . $this_sort . ($this_reverse ? '&amp;rev=1' : '') .
-            '">' . $label . $indicator . '</a>';
-}
+// dependencies
+require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'include/action.php';
+require_once 'inc/video_functions.php';
+
+$action = new action();
+$action->record('MODULE_ID_VIDEO');
+
+// navigation
+$toolName = $langVideo;
+$pageName = $langQuotaBar;
+$backPath = $urlAppend . "modules/video/index.php?course=" . $course_code;
+$navigation[] = array('url' => $backPath, 'name' => $langVideo);
+
+// data and view
+$data = array();
+list($diskQuotaVideo, $updir, $diskUsed) = getQuotaInfo($course_code, $webDir);
+$data['showQuota'] = showquota($diskQuotaVideo, $diskUsed, $backPath);
+view('modules.video.showQuota', $data);
