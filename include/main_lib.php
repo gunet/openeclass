@@ -95,6 +95,7 @@ define('MODULE_ID_COURSE_WIDGETS', 44);
 define('MODULE_ID_MINDMAP', 45);
 define('MODULE_ID_WALL', 46);
 define('MODULE_ID_LTI_CONSUMER', 47);
+define('MODULE_ID_GAME', 48);
 
 // user modules
 
