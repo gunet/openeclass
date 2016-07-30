@@ -296,6 +296,15 @@ function cleanup_filename($f) {
     return preg_replace('{//}', '/', $f);
 }
 
+function triggerGame($courseId, $uid, $assignId) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = AssignmentEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_ASSIGN;
+    $eventData->resource = intval($assignId);
+    AssignmentEvent::trigger(AssignmentEvent::UPDGRADE, $eventData);
+}
 
 /**
  * @brief Export assignment's grades to CSV file

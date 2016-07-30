@@ -42,6 +42,7 @@ require_once 'include/log.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'include/lib/csv.class.php';
+require_once 'modules/game/AssignmentEvent.php';
 
 // For colorbox, fancybox, shadowbox use
 require_once 'include/lib/modalboxhelper.class.php';
