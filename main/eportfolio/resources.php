@@ -130,13 +130,26 @@ if ($userdata) {
             ));
     }
     
+    $tool_content .= '<ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#blog">'.$langBlogPosts.'</a></li>
+                        <li><a data-toggle="tab" href="#works">'.$langWorks.'</a></li>
+                      </ul>';
+    $tool_content .= '<div class="tab-content">
+                        <div id="blog" class="tab-pane fade in active" style="padding-top:20px">';
+    
     //show blog posts collection
     $blog_posts = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'blog');
     if ($blog_posts) {
+        usort($blog_posts, "cmp");
         $tool_content .= "<div class='row'>";
         $tool_content .= "<div class='col-sm-12'>";
         foreach ($blog_posts as $post) {
             $data = unserialize($post->data);
+            if (!empty($post->course_title)) {
+                $post->course_title = $langCourse.': '.$post->course_title;
+            } else {
+                $post->course_title = $langUserBlog;
+            }
             $tool_content .= "<div class='panel panel-action-btn-default'>
                                 <div class='panel-heading'>
                                     <div class='pull-right'>
@@ -165,10 +178,31 @@ if ($userdata) {
         $tool_content .= "</div></div>";
     }
     
+    $tool_content .= '</div>';
+    
+    
+    $tool_content .= '<div id="works" class="tab-pane fade" style="padding-top:20px">';
+    
+    $tool_content .= '</div>';
+    
+    $tool_content .= '</div>';
 }
 
 if ($uid == $id) {
     draw($tool_content, 1);
 } else {
     draw($tool_content, 2);
+}
+
+function cmp($obj1, $obj2)
+{   
+    $data1 = unserialize($obj1->data);
+    $data1 = strtotime($data1[2]);
+    $data2 = unserialize($obj2->data);
+    $data2 = strtotime($data2[2]);
+    
+    if ($data1 < $data2)
+        return true;
+    else 
+        return false;
 }
