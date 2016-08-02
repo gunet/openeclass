@@ -157,12 +157,7 @@ class Hybrid_Provider_Adapter {
 
 		# for default HybridAuth endpoint url hauth_login_done_url
 		# 	auth.done   required  the IDp ID
-		if ($this->id=="Live") 
-		{ 
-		    $this->params["login_done"] = $HYBRID_AUTH_URL_BASE."live.php"; //openeclass hack to make windows live functional
-		}else {
-		  $this->params["login_done"] = $HYBRID_AUTH_URL_BASE . ( strpos($HYBRID_AUTH_URL_BASE, '?') ? '&' : '?' ) . "hauth.done={$this->id}";
-		}
+		$this->params["login_done"] = $HYBRID_AUTH_URL_BASE . ( strpos($HYBRID_AUTH_URL_BASE, '?') ? '&' : '?' ) . "hauth.done={$this->id}";
 
 		if (isset($this->params["hauth_return_to"])) {
 			Hybrid_Auth::storage()->set("hauth_session.{$this->id}.hauth_return_to", $this->params["hauth_return_to"]);

@@ -32,7 +32,7 @@ from a simple text file.
 ==============================================================================
 */
 /*!
-* HybridAuth 2.5.0
+* HybridAuth 2.6.0
 * http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
 * (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html
 */
