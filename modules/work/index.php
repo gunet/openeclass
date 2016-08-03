@@ -2783,6 +2783,12 @@ function show_student_assignments() {
                                  ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
 
     if (count($result)>0) {
+        if(get_config('eportfolio_enable')) {
+            $add_eportfolio_res_th = "<th class='text-center'>".icon('fa-gears')."</th>";
+        } else {
+            $add_eportfolio_res_th = "";
+        }
+        
         $tool_content .= "
             <div class='row'><div class='col-sm-12'>
             <div class='table-responsive'><table class='table-default'>
@@ -2791,6 +2797,7 @@ function show_student_assignments() {
                                       <th class='text-center' style='width:25%'>$m[deadline]</th>
                                       <th class='text-center'>$m[submitted]</th>
                                       <th class='text-center'>$m[grade]</th>
+                                      $add_eportfolio_res_th
                                   </tr>";
         $k = 0;
         foreach ($result as $row) {
@@ -2832,7 +2839,21 @@ function show_student_assignments() {
                 }
                 $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;'>$grade</div>";
             }
+            
+            if(get_config('eportfolio_enable')) {
+                global $langAddResePortfolio;
+                $add_eportfolio_res_td = "<td width='30' align='center'><a href='$urlServer"."main/eportfolio/resources.php?action=add&amp;type=work&amp;rid=".$row->id."'>".$langAddResePortfolio."</a></td>";
+                $add_eportfolio_res_td = "<td class='option-btn-cell'>".
+                                            action_button(array(
+                                                array('title' => $langAddResePortfolio,
+                                                  'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=work&amp;rid=".$row->id,
+                                                  'icon' => 'fa-star')));
+            } else {
+                $add_eportfolio_res_td = "";
+            }
+            
             $tool_content .= "</td>
+                                $add_eportfolio_res_td
                                   </tr>";
             $k++;
         }
