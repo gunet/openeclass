@@ -1401,6 +1401,7 @@ $langDownloadDir = "Λήψη όλου του καταλόγου";
 $langNew = 'Νέο';
 $langNewAddedSingular = 'Προστέθηκε %d';
 $langNewAddedPlural = 'Προστέθηκαν %d';
+$langCloudFileError = 'Αδυναμία λήψης απομακρυσμένου πόρου - μη συμβατός τύπος αρχείου.';
 
 // Special for group documents
 $langGroupSpace = "Περιοχή ομάδας χρηστών";

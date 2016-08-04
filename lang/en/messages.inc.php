@@ -600,6 +600,7 @@ $langNoSpace = "Upload failed. You have exceeded the maximum available disk spac
 $langUnwantedFiletype = 'Unacceptable file type';
 $langDownloadEnd = "Upload finished";
 $langFileExists = "Operation impossible.<br>A file with this name already exists.";
+$langCloudFileError = 'Error retrieving remote resource - incompatible file type.';
 $langDocCopied = "Document copied";
 $langDocDeleted = "Document deleted";
 $langElRen = "Element renamed";
