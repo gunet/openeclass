@@ -34,3 +34,5 @@ syntax: regexp
 \.git$
 \.gitignore$
 \.travis.yml$
+
+^modules/drives/plugins/googledrive_key.p12

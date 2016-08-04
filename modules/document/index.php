@@ -272,7 +272,11 @@ if ($can_upload) {
         }
         $fileUploadOK = false;
         if (isset($cloudfile)) {
-            $fileUploadOK = ($cloudfile->storeToLocalFile($basedir . $file_path) == CloudDriveResponse::OK);
+            try {
+                $fileUploadOK = ($cloudfile->storeToLocalFile($basedir . $file_path) == CloudDriveResponse::OK);
+            } catch (Exception $e) {
+                Session::Messages($langCloudFileError, 'alert-danger');
+            }
         } elseif (isset($userFile)) {
             $fileUploadOK = @copy($userFile, $basedir . $file_path);
         }
