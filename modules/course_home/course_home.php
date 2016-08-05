@@ -110,8 +110,7 @@ ModalBoxHelper::loadModalBox();
 $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
 <script type='text/javascript'>
     $(document).ready(function() {  "
-//Calendar stuff
-.'Sortable.create(boxlistSort,{
+.($is_editor && $course_info->view_type != 'simple' ? 'Sortable.create(boxlistSort,{
         animation: 350,
         handle: \'.fa-arrows\',
                 animation: 150,
@@ -131,7 +130,8 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
                         }
                     });
                 }
-});'
+});' : '')
+//Calendar stuff
 .'var calendar = $("#bootstrapcalendar").calendar({
                     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
                     events_source: "'.$urlAppend.'main/calendar_data.php?course='.$course_code.'",
@@ -803,7 +803,6 @@ if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple'))
     $cunits_sidebar_subcolumns = 6;
 }
 $tool_content .= "<div class='row'>";
-//if (!$alter_layout or $course_info->view_type != 'simple') {
 if (!$alter_layout) {
     $unititle = ($course_info->view_type == 'weekly')? $langCourseWeeklyFormat : $langCourseUnits ;
     $tool_content .= "
@@ -827,7 +826,7 @@ if (!$alter_layout) {
     $tool_content .= "</div>";
 }
 
-$tool_content .= "<div class='sssssss col-md-$cunits_sidebar_columns'>";
+$tool_content .= "<div class='col-md-$cunits_sidebar_columns'>";
 
 //BEGIN - Get user personal calendar
 $today = getdate();
