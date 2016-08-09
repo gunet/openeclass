@@ -61,13 +61,13 @@ $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_name
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
 
-    if (isset($_POST['toReorder'])){
+    if (isset($_POST['toReorder'])) {
         $toReorder = $_POST['toReorder'];
 
         if (isset($_POST['prevReorder'])) {
-            $prevRank = Database::get()->querySingle("SELECT `order` FROM course_units WHERE id = ?d", $_POST['prevReorder'])->order;
+            $prevRank = Database::get()->querySingle("SELECT `order` AS rank FROM course_units WHERE id = ?d", $_POST['prevReorder'])->rank;
         } else {
             $prevRank = 0;
         }
@@ -76,11 +76,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         Database::get()->query("UPDATE `course_units` SET `order` = ?d WHERE `course_id` = ?d AND id = ?d", $prevRank + 1, $course_id, $toReorder);
         $delta = Database::get()->querySingle("SELECT MIN(`order`) AS minOrder FROM course_units WHERE course_id =?d", $course_id)->minOrder;
         Database::get()->query("UPDATE `course_units` SET `order` = `order` - ?d  + 1 WHERE `course_id` = ?d", $delta, $course_id);
-
     }
 
-    exit();
-
+    exit;
 }
 
 if (isset($_REQUEST['register'])) {
