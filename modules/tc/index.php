@@ -70,10 +70,10 @@ $('input#start_session').datetimepicker({
 $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#BBBEndDate').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-right', 
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
-                autoclose: true    
+                autoclose: true
             }).on('changeDate', function(ev){
                 if($(this).attr('id') === 'BBBEndDate') {
                     $('#answersDispEndDate, #scoreDispEndDate').removeClass('hidden');
@@ -84,7 +84,7 @@ $head_content .= "<script type='text/javascript'>
                     if (end_date === '') {
                         if ($('input[name=\"dispresults\"]:checked').val() == 4) {
                             $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
-                        }                          
+                        }
                         $('#answersDispEndDate, #scoreDispEndDate').addClass('hidden');
                     }
                 }
@@ -100,7 +100,7 @@ $head_content .= "<script type='text/javascript'>
                     $('input#BBB'+dateType).prop('disabled', true);
                     if ($('input[name=\"dispresults\"]:checked').val() == 4) {
                         $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
-                    }                    
+                    }
                     $('#answersDispEndDate, #scoreDispEndDate').addClass('hidden');
                 }
             });
@@ -176,7 +176,7 @@ if ($is_editor) {
 }
 
 if (isset($_GET['add'])) {
-    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);    
+    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);
     bbb_session_form();
 }
 elseif(isset($_POST['update_bbb_session'])) {
@@ -187,7 +187,7 @@ elseif(isset($_POST['update_bbb_session'])) {
     } else {
         $end = NULL;
     }
-    
+
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
     $start = $startDate_obj->format('Y-m-d H:i:s');
     $notifyUsers = 0;
@@ -219,29 +219,31 @@ elseif(isset($_GET['choice']))
         case 'do_enable':
             enable_bbb_session(getDirectReference($_GET['id']));
             break;
-        case 'do_join': 
+        case 'do_join':
             //get info
             $sess = Database::get()->querySingle("SELECT * FROM tc_session WHERE meeting_id=?s",$_GET['meeting_id']);
-            $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);            
+            $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
             if ($tc_type == 'bbb') { // if tc server is `bbb`
                 $mod_pw = $sess->mod_pw;
-                if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting                                       
-                    create_meeting($_GET['title'],$_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $_GET['record']);
+                $record = $sess->record;
+                if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting
+                    create_meeting($_GET['title'],$_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record);
                 }
-                if(isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
-                    header('Location: ' . bbb_join_moderator($_GET['meeting_id'],$_GET['mod_pw'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
-                }                
-                $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $mod_pw);
-                if(($sess->sessionUsers > 0) && ($sess->sessionUsers < $ssUsers)) { // session is full
-                    $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
-                } else { // join users
-                    header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
+                if (isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
+                    header('Location: ' . bbb_join_moderator($_GET['meeting_id'], $_GET['mod_pw'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
+                } else {
+                    $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $mod_pw);
+                    if (($sess->sessionUsers > 0) && ($sess->sessionUsers < $ssUsers)) { // session is full
+                        $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
+                    } else { // join users
+                        header('Location: ' . bbb_join_user($_GET['meeting_id'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
+                    }
                 }
-            } elseif ($tc_type == 'om') { // if tc server is `om`                                 
+            } elseif ($tc_type == 'om') { // if tc server is `om`
                 if (om_session_running($_GET['meeting_id']) == false) { // create meeting
                     create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
-                }                    
-                if(isset($_GET['mod_pw'])) { // join moderator (== $is_editor)                    
+                }
+                if(isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
                     header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1));
                 } else { // join user
                     header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0));
@@ -251,7 +253,7 @@ elseif(isset($_GET['choice']))
                 $webconf_server = $serv->hostname;
                 $screenshare_server = $serv->screenshare;
                 header('Location: ' . get_config('base_url') . '/modules/tc/webconf/webconf.php?user=' . $_SESSION['surname'] . ' ' . $_SESSION['givenname'].'&meeting_id='.$_GET['meeting_id'].'&base_url='. base64_encode(get_config('base_url')).'&webconf_server='. base64_encode($webconf_server).'&screenshare_server='. base64_encode($screenshare_server) .'&course='.$course_code);
-            }            
+            }
             break;
         case 'import_video':
             publish_video_recordings($course_code,getDirectReference($_GET['id']));
