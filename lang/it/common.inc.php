@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2016-07-11 12:00:26
+// Generated 2016-08-11 13:21:14
 
 $langCourse = "Corso";
 $langEclass = 'Open eClass - Piattaforma di eLearning asincrona';
@@ -55,3 +55,4 @@ $langsCourse = "course";
 $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
+$langsOfFaculty = "category";

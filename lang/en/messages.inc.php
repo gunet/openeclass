@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2016-07-13 11:33:15
+// Generated 2016-08-11 13:21:11
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -600,7 +600,6 @@ $langNoSpace = "Upload failed. You have exceeded the maximum available disk spac
 $langUnwantedFiletype = 'Unacceptable file type';
 $langDownloadEnd = "Upload finished";
 $langFileExists = "Operation impossible.<br>A file with this name already exists.";
-$langCloudFileError = 'Error retrieving remote resource - incompatible file type.';
 $langDocCopied = "Document copied";
 $langDocDeleted = "Document deleted";
 $langElRen = "Element renamed";
@@ -4606,3 +4605,4 @@ $langAdminPinnedOn = "Pin announcement";
 $langAdminPinned = "Pinned announcement";
 $langAdminPinnedToTop = "Pin to top";
 $langExportGrades = "Export Grades";
+$langCloudFileError = 'Error retrieving remote resource - incompatible file type.';

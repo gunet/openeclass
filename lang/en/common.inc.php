@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2016-07-11 12:00:23
+// Generated 2016-08-11 13:21:11
 
 $langCourse = "Course";
 $langEclass = "E-Learning Platform";
@@ -27,12 +27,12 @@ $langsOfStudentss = "students";
 $langsstudent_acc = $langsStudent;
 $langGuest = "Guest User";
 $langGuests = "Guest Users";
-$langFaculty = "Faculty";
-$langOfFaculty = "Faculty";
-$langOfFaculties = "Faculties";
-$langFaculties = "Faculties";
-$langsFaculty = "faculty";
-$langsFaculties = "faculties";
+$langFaculty = "Category";
+$langOfFaculty = "Category";
+$langOfFaculties = "Categories";
+$langFaculties = "Categories";
+$langsFaculty = "category";
+$langsFaculties = "categories";
 $langpres = "Undergraduate";
 $langposts = "Postgraduate";
 $langothers = "Other";
@@ -55,3 +55,4 @@ $langsCourse = "course";
 $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
+$langsOfFaculty = "category";

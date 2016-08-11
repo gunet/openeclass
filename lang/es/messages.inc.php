@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2016-07-13 11:33:16
+// Generated 2016-08-11 13:21:11
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -784,6 +784,9 @@ $langExerciseLis = "Lista de ejercicios";
 $langResults = "Resultados";
 $langResultsFailed = "Fallo";
 $langYourTotalScore2 = "Puntuación total";
+$langExerciseScores1 = "HTML";
+$langExerciseScores2 = "Percentages";
+$langExerciseScores3 = "CSV";
 $langNotRecorded = "No grabado";
 $langSubTitle = "<br><strong>Tip: </strong>Si quieres añadir un enlace a una página,<br>
 		ve a la página, corta y pega su dirección en la <br>
@@ -4591,3 +4594,4 @@ $langAdminPinnedOn = "Pin announcement";
 $langAdminPinned = "Pinned announcement";
 $langAdminPinnedToTop = "Pin to top";
 $langExportGrades = "Export Grades";
+$langCloudFileError = 'Error retrieving remote resource - incompatible file type.';

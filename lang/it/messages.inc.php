@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2016-07-13 11:33:18
+// Generated 2016-08-11 13:21:14
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -776,6 +776,9 @@ $langExerciseLis = "Lista di esercizi";
 $langResults = "Risultati";
 $langResultsFailed = "Insuccesso";
 $langYourTotalScore2 = "Punteggio totale";
+$langExerciseScores1 = "HTML";
+$langExerciseScores2 = "Percentages";
+$langExerciseScores3 = "CSV";
 $langNotRecorded = "non registrata";
 $langSubTitle = "<br><strong>Consiglio:</strong>Se vuoi aggiungere un link a una pagina, vai a quella pagina, quindi taglia e incolla l'indirizzo nella barra dell' URL nella parte superiore del browser, e poi  immettilo nel campo 'Link' quaggiù.<br><br>";
 $langLink = "Link";
@@ -4578,3 +4581,4 @@ $langAdminPinnedOn = "Pin announcement";
 $langAdminPinned = "Pinned announcement";
 $langAdminPinnedToTop = "Pin to top";
 $langExportGrades = "Export Grades";
+$langCloudFileError = 'Error retrieving remote resource - incompatible file type.';

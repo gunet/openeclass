@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2016-07-13 11:33:17
+// Generated 2016-08-11 13:21:13
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -756,6 +756,9 @@ $langExerciseLis = "Liste der Übungen";
 $langResults = "Ergebnisse";
 $langResultsFailed = "Misserfolg";
 $langYourTotalScore2 = "Gesamte Benotung";
+$langExerciseScores1 = "HTML";
+$langExerciseScores2 = "Percentages";
+$langExerciseScores3 = "CSV";
 $langNotRecorded = "nicht aufgezeichnet";
 $langSubTitle = "<br><strong>Tip: </strong> Falls Sie einen Verweis zur Seite hinzufügen möchten, gehen Sie zu dieser Seite, schneiden die Adresse aus und fügen diese in das URL Eingabefeld ein im oberen Teil des Web-Browsers und anschließend fügen Sie diese in das \"link\"Feld weiter unten ein .<br><br>";
 $langLink = "Verweis";
@@ -4505,3 +4508,4 @@ $langAdminPinnedOn = "Pin announcement";
 $langAdminPinned = "Pinned announcement";
 $langAdminPinnedToTop = "Pin to top";
 $langExportGrades = "Export Grades";
+$langCloudFileError = 'Error retrieving remote resource - incompatible file type.';

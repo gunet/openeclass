@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2016-07-11 12:00:23
+// Generated 2016-08-11 13:21:11
 
 $langCourse = "Curso";
 $langEclass = "eClass Libre - Sistema de Administración del Curso";
@@ -28,9 +28,9 @@ $langsstudent_acc = $langsStudent;
 $langGuest = "Usuario invitado";
 $langGuests = "Usuarios invitados";
 $langFaculty = "Categoría del curso";
-$langOfFaculty = "Faculty";
-$langOfFaculties = "Faculties";
-$langFaculties = "Faculties";
+$langOfFaculty = "Category";
+$langOfFaculties = "Categories";
+$langFaculties = "Categories";
 $langsFaculty = "facultad";
 $langsFaculties = "facultades";
 $langpres = "Undergraduate";
@@ -55,3 +55,4 @@ $langsCourse = "course";
 $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
+$langsOfFaculty = "category";
