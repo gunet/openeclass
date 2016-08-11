@@ -22,7 +22,7 @@
 $require_login = true;
 $require_current_course = true;
 $require_help = true;
-//$helpTopic = 'Attendance';
+$helpTopic = 'Progress';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
@@ -35,35 +35,8 @@ require_once 'LearningPathEvent.php';
 require_once 'RatingEvent.php';
 require_once 'ViewingEvent.php';
 
-//$toolName = $langAttendance;
-$toolName = "Πιστοποιήσεις";
+$toolName = $langProgress;
 
-/*
-// needed for updating users lists
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-    if (isset($_POST['assign_type'])) {
-        if ($_POST['assign_type'] == 2) {
-            $data = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
-        } else {
-            $data = array();
-            // users who don't participate in attendance
-            $d1 = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
-                                            FROM user, course_user
-                                                WHERE user.id = course_user.user_id
-                                                AND course_user.course_id = ?d
-                                                AND course_user.status = " . USER_STUDENT . "
-                                            AND user.id NOT IN (SELECT uid FROM attendance_users WHERE attendance_id = $_REQUEST[attendance_id]) ORDER BY surname", $course_id);
-            $data[0] = $d1;
-            // users who already participate in attendance
-            $d2 = Database::get()->queryArray("SELECT uid AS id, givenname, surname FROM user, attendance_users
-                                        WHERE attendance_users.uid = user.id AND attendance_id = $_REQUEST[attendance_id] ORDER BY surname");
-            $data[1] = $d2;
-        }
-    }
-    echo json_encode($data);
-    exit;
-}
-*/
 
 //Datepicker
 load_js('tools.js');
@@ -183,20 +156,14 @@ if (isset($_REQUEST['certificate_id'])) {
 
 
 if ($is_editor) {
-    // change attendance visibility
-    if (isset($_GET['vis'])) {
-        Database::get()->query("UPDATE attendance SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $_GET['attendance_id'], $course_id);
-        Session::Messages($langGlossaryUpdated, 'alert-success');
-        redirect_to_home_page("modules/attendance/index.php?course=$course_code");
-    }
 
     //add a new certificate
     if (isset($_POST['newCertificate'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('title', 'start_date', 'end_date', 'autoassign', 'active'));
         $v->rule('date', array('start_date', 'end_date'));
-        $v->rule('numeric', array('autoassign')); //check
-        $v->rule('numeric', array('active')); //check
+        $v->rule('numeric', array('autoassign')); //check - if we have null - it is from a checkbox
+        $v->rule('numeric', array('active')); //check - if we have null
         if (!empty($_POST['end_date'])) {
             $v->rule('dateBefore', 'start_date', $_POST['end_date']);
         }
@@ -204,7 +171,6 @@ if ($is_editor) {
             'title' => "$langTheField $langTitle",
             'start_date' => "$langTheField $langStart",
             'end_date' => "$langTheField $langEnd"//,
-            //'limit' => "$langTheField $langAttendanceLimitNumber"
         ));
         if($v->validate()) {
             $newTitle = $_POST['title'];
@@ -216,7 +182,7 @@ if ($is_editor) {
 
             $certificate_id = Database::get()->query("INSERT INTO certificate SET course = ?d, author = 1, active = ?d, autoassign = ?d, title = ?s, created = ?t, expires = ?t", $course_id, $active, $autoassign, $newTitle, $start_date, $end_date)->lastInsertID;
 
-            Session::Messages("Δημιουργήθηκε το πιστοποιητικό", 'alert-success');
+            Session::Messages("$langNewCertificateSuc", 'alert-success');
             redirect_to_home_page("modules/game/index.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -228,16 +194,7 @@ if ($is_editor) {
     // Top menu
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
 
-    if (isset($_GET['editUsers']) or isset($_GET['Book'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
-        $pageName = isset($_GET['editUsers']) ? $langRefreshList : $langAttendanceManagement;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
-            ));
-    } elseif(isset($_GET['editSettings'])) {
+    if(isset($_GET['editSettings'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id", "name" => $certificate->title);
         $pageName = $langConfig;
         $tool_content .= action_bar(array(
@@ -246,34 +203,12 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
-    } elseif (isset($_GET['attendanceBook'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
-        $pageName = $langAttendanceActiveUsers;
-        $tool_content .= action_bar(array(
-            array('title' => $langRefreshList,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1",
-                  'icon' => 'fa-users',
-                  'level' => 'primary-label'),
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
-                  'icon' => 'fa fa-reply',
-                  'level' => 'primary-label')
-            ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id", "name" => $certificate->title);
         $pageName = $langEditChange;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id",
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
-            ));
-    } elseif (isset($_GET['ins'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
-        $pageName = $langGradebookBook;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
@@ -294,24 +229,9 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
-    } elseif (isset($_GET['book'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
-        $pageName = $langGradebookBook;
-        $tool_content .= action_bar(array(
-            array('title' => $langGradebookBook,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
-                  'icon' => 'fa fa-reply',
-                  'level' => 'primary-label'),
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success')
-            ));
-
     } elseif (isset($_GET['new'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $pageName = "Νέο πιστοποιητικό";//$langNewAttendance;
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
+        $pageName = $langNewAttendance;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -319,10 +239,10 @@ if ($is_editor) {
                   'level' => 'primary-label')));
     } elseif (isset($_GET['certificate_id']) && $is_editor) {
         $pageName = get_certificate_title($certificate_id);
-    }  elseif (!isset($_GET['certificate_id'])) {
+    } elseif (!isset($_GET['certificate_id'])) {
         $tool_content .= action_bar(
             array(
-                array('title' => "Νέο πιστοποιητικό", //$langNewAttendance
+                array('title' => "$langNewAttendance",
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;new=1",
                       'icon' => 'fa-plus',
                       'level' => 'primary-label',
@@ -330,11 +250,13 @@ if ($is_editor) {
     }
     $tool_content .= "</div></div>";
 
+    //end of the top menu
+
+
     // update certificate settings
-    if (isset($_POST['submitAttendanceBookSettings'])) {
+    if (isset($_POST['submitCertificateSettings'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('title', 'start_date', 'end_date'));
-        //$v->rule('numeric', array('limit'));
         $v->rule('date', array('start_date', 'end_date'));
         if (!empty($_POST['end_date'])) {
             $v->rule('dateBefore', 'start_date', $_POST['end_date']);
@@ -345,7 +267,6 @@ if ($is_editor) {
             'end_date' => "$langTheField $langEnd",
         ));
         if($v->validate()) {
-            //$attendance_limit = $_POST['limit'];
             $certificate_title = $_POST['title'];
             if(isset($_POST['autoassign'])) echo $autoassign=1; else $autoassign=0;
             if(isset($_POST['active'])) $active=1; else $active=0;
@@ -355,23 +276,25 @@ if ($is_editor) {
             Database::get()->querySingle("UPDATE certificate SET `title` = ?s,`autoassign` = ?s,`active` = ?s, `created` = ?t, `expires` = ?t WHERE id = ?d ", $certificate_title, $autoassign, $active, $start_date, $end_date, $certificate_id);
 
             Session::Messages($langGradebookEdit,"alert-success");
-            //redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id");
+            redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id&editSettings=1");
         }
     }
+
     //FORM: create / edit new activity
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
         add_certificate_other_activity($certificate_id);
         $display = FALSE;
     }
-    //UPDATE/INSERT DB: new activity from exersices, assignments, learning paths
+
+    //UPDATE/INSERT DB: new activity
     elseif(isset($_GET['addCourseActivity'])) {
         $id = $_GET['addCourseActivity'];
         $type = intval($_GET['type']);
         $lastID = getIndirectReference(add_certificate_activity($certificate_id, $id, $type));
-        Session::Messages("Πραγματοποιήθηκε η εισαγωγή της δραστηριότητας","alert-success");
+        Session::Messages("$langCertificateInsertAct","alert-success");
         if ($lastID == 1) {
           redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id");
         } else {
@@ -428,122 +351,64 @@ if ($is_editor) {
     elseif (isset($_GET['delete'])) {
         delete_certificate_activity($certificate_id, getDirectReference($_GET['delete']));
         redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id");
+    }
 
     // delete certificate
-    } elseif (isset($_GET['delete_at'])) {
+    elseif (isset($_GET['delete_at'])) {
         delete_certificate($_GET['delete_at']);
         redirect_to_home_page("modules/game/index.php?course=$course_code");
     }
 
-    //DISPLAY: list of users and form for each user
-    elseif(isset($_GET['attendanceBook']) or isset($_GET['book'])) {
-        if (isset($_GET['update']) and $_GET['update']) {
-            $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
-        }
-        //record booking
-        if(isset($_POST['bookUser'])) {
-            $userID = intval($_POST['userID']); //user
-            //get all the attendance activies --> for each attendance activity update or insert grade
-            $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d", $attendance_id);
-            if ($result) {
-                foreach ($result as $activity) {
-                    $attend = @ intval($_POST[$activity->id]); //get the record from the teacher (input name is the activity id)
-                    //check if there is record for the user for this activity
-                    $checkForBook = Database::get()->querySingle("SELECT id FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $activity->id, $userID);
-                    if($checkForBook){
-                        //update
-                        Database::get()->query("UPDATE attendance_book SET attend = ?d WHERE id = ?d ", $attend, $checkForBook->id);
-                    } else {
-                        //insert
-                        Database::get()->query("INSERT INTO attendance_book SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ?s", $userID, $activity->id, $attend, '');
-                    }
-                }
-                $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
-            }
-        }
-        // display user grades
-        if(isset($_GET['book'])) {
-            display_user_presences($attendance_id);
-        } else {  // display all users
-            display_all_users_presences($attendance_id);
-        }
-        $display = FALSE;
-    }
-
- elseif (isset($_GET['new'])) {
-        new_certificate(); // create new attendance
-
-        $display = FALSE;
-    } elseif (isset($_GET['editUsers'])) { // edit attendance users
-        user_attendance_settings($attendance_id);
+    elseif (isset($_GET['new'])) {
+        new_certificate(); // create new certificate
         $display = FALSE;
     } elseif (isset($_GET['editSettings'])) { // certificate settings
         certificate_settings($certificate_id);
         $display = FALSE;
-    } elseif (isset($_GET['addActivityAs'])) { //display available assignments
+    } elseif (isset($_GET['addActivityAs'])) { // assignments
         certificate_display_available_assignments($certificate_id);
         $display = FALSE;
-    } elseif (isset($_GET['addActivityEx'])) { // display available exercises
+    } elseif (isset($_GET['addActivityEx'])) { // exercises
         certificate_display_available_exercises($certificate_id);
         $display = FALSE;
-    }elseif (isset($_GET['addActivityBlog'])) { // display available exercises
-        //certificate_display_available_Blog($certificate_id);
+    }elseif (isset($_GET['addActivityBlog'])) { //blog
         add_certificate_other_activity_only_value($certificate_id, MODULE_ID_BLOG);
         $display = FALSE;
-    }elseif (isset($_GET['addActivityCom'])) { // display available exercises
+    }elseif (isset($_GET['addActivityCom'])) { //  comments
         add_certificate_other_activity_only_value($certificate_id, MODULE_ID_COMMENTS);
         $display = FALSE;
-    }elseif (isset($_GET['addActivityComCourse'])) { // display available exercises
+    }elseif (isset($_GET['addActivityComCourse'])) { //
         add_certificate_other_activity_only_value($certificate_id, "38a");
         $display = FALSE;
-    }elseif (isset($_GET['addActivityFor'])) { // display available exercises
+    }elseif (isset($_GET['addActivityFor'])) { // forum
         add_certificate_other_activity_only_value($certificate_id, MODULE_ID_FORUM);
         $display = FALSE;
-    }elseif (isset($_GET['addActivityLp'])) { // display available exercises
+    }elseif (isset($_GET['addActivityLp'])) { // lp
         certificate_display_available_Lp($certificate_id);
         $display = FALSE;
-    }elseif (isset($_GET['addActivityRat'])) { // display available exercises
+    }elseif (isset($_GET['addActivityRat'])) { // rating
         add_certificate_other_activity_only_value($certificate_id, MODULE_ID_RATING);
         $display = FALSE;
-    }elseif (isset($_GET['addActivityRatPosts'])) { // display available exercises
+    }elseif (isset($_GET['addActivityRatPosts'])) { // posts
         add_certificate_other_activity_only_value($certificate_id, "39a");
         $display = FALSE;
-    }elseif (isset($_GET['addActivityDoc'])) { // display available exercises
+    }elseif (isset($_GET['addActivityDoc'])) { // docs
         certificate_display_available_Doc($certificate_id);
         $display = FALSE;
-    }elseif (isset($_GET['addActivityMul'])) { // display available exercises
+    }elseif (isset($_GET['addActivityMul'])) { // multimedia
         certificate_display_available_Mul($certificate_id);
         $display = FALSE;
-    }elseif (isset($_GET['addActivityVid'])) { // display available exercises
+    }elseif (isset($_GET['addActivityVid'])) { // video
         certificate_display_available_Vid($certificate_id);
         $display = FALSE;
-    }elseif (isset($_GET['addActivityBook'])) { // display available exercises
+    }elseif (isset($_GET['addActivityBook'])) { // book
         certificate_display_available_Book($certificate_id);
         $display = FALSE;
-    }elseif (isset($_GET['addActivityQue'])) { // display available exercises
+    }elseif (isset($_GET['addActivityQue'])) { // questions
         certificate_display_available_Que($certificate_id);
         $display = FALSE;
-    }elseif (isset($_GET['addActivityWi'])) { // display available exercises
+    }elseif (isset($_GET['addActivityWi'])) { // wiki
         add_certificate_other_activity_only_value($certificate_id, MODULE_ID_WIKI);
-        $display = FALSE;
-    }
-
-
-
-
-
-
-    //DISPLAY - EDIT DB: insert grades for each activity
-    elseif (isset($_GET['ins'])) {
-        $actID = intval(getDirectReference($_GET['ins']));
-        $error = false;
-        if (isset($_POST['bookUsersToAct'])) {
-            insert_presence($attendance_id, $actID);
-        }
-//        if (isset($_POST['updateUsersToAct'])) {
-//            update_presence($attendance_id, $actID);
-//        }
-        register_user_presences($attendance_id, $actID);
         $display = FALSE;
     }
 
@@ -558,7 +423,7 @@ if (isset($display) and $display == TRUE) {
             $pageName = $certificate->title;
             student_view_certificate($certificate_id); // student view
         }
-    } else { // display all attendances
+    } else { // display all certifcates
         display_certificates();
     }
 }
