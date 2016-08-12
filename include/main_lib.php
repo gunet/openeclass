@@ -2798,7 +2798,10 @@ function getOnlineUsers() {
  * @return boolean
  */
 function faq_exist() {
-    
+    if (!DBHelper::tableExists('faq')) {
+        return false;
+    }
+
     $count_faq = Database::get()->querySingle("SELECT COUNT(*) AS count FROM faq")->count;
     if ($count_faq > 0) {
         return true;
