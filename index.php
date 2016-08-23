@@ -186,7 +186,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     'html' => "<form action='$urlServer' method='post'>
                              <div class='form-group'>
                                 <label for='uname' class='sr-only'>$langUsername</label>
-                                <input type='text' id='uname' name='uname' placeholder='$langUsername'><span class='col-xs-2 col-sm-2 col-md-2 fa fa-user'></span>
+                                <input type='text' id='uname' name='uname' placeholder='$langUsername' autofocus><span class='col-xs-2 col-sm-2 col-md-2 fa fa-user'></span>
                              </div>
                              <div class='form-group'>
                                 <label for='pass' class='sr-only'>$langPass</label>
