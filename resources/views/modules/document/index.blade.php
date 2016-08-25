@@ -2,6 +2,11 @@
 
 @section('content')
     {!! $actionBar !!}
+
+    @if ($dialogBox)
+        @include("modules.document.$dialogBox")
+    @endif
+
     @if (count($fileInfo) or $curDirName)
         <div class='row'>
             <div class='col-md-12'>

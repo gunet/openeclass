@@ -619,38 +619,10 @@ if ($can_upload) {
 
     // step 1: display a field to enter the new dir name
     if (isset($_GET['createDir'])) {
-        $curDirPath = $createDir = q($_GET['createDir']);
+        $dialogBox = 'createDir';
+        $curDirPath = $_GET['createDir'];
         $backLink = documentBackLink($curDirPath);
         $navigation[] = array('url' => $backLink, 'name' => $pageName);
-        $dialogBox .= "
-        <div class='row'>
-            <div class='col-md-12'>
-                <div class='form-wrapper'>
-                    <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-horizontal' role='form'>
-                        $group_hidden_input
-                        <input type='hidden' name='newDirPath' value='$createDir' />
-                        <div class='form-group'>
-                            <label for='newDirName' class='col-sm-2 control-label'>$langNameDir :</label>
-                            <div class='col-xs-10'>
-                                <input type='text' class='form-control' id='newDirName' name='newDirName'>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <div class='col-xs-offset-2 col-xs-10'>".form_buttons(array(
-                                    array(
-                                        'text' => $langCreate
-                                    ),
-                                    array(
-                                        'href' => $backLink,
-                                    )
-                                ))."</div>
-                        </div>
-            ". generate_csrf_token_form_field() ."
-                    </form>
-                    
-                </div>
-            </div>
-        </div>";
     }
 
     // add/update/remove comment
@@ -833,7 +805,6 @@ if ($can_upload) {
 
     // Add comment form
     if (isset($_GET['comment'])) {
-        
         $comment =  getDirectReference($_GET['comment']);
         // Retrieve the old comment and metadata
         $row = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $comment);
@@ -1227,7 +1198,7 @@ foreach ($result as $row) {
 // Display
 // ----------------------------------------------
 
-$data = compact('can_upload', 'is_in_tinymce', 'curDirName', 'curDirPath');
+$data = compact('can_upload', 'is_in_tinymce', 'base_url', 'group_hidden_input', 'curDirName', 'curDirPath', 'dialogBox');
 $data['fileInfo'] = array_merge($dirs, $files);
 
 if ($curDirName) {
@@ -1294,7 +1265,10 @@ if ($can_upload) {
 if (count($data['fileInfo'])) {
     $download_path = empty($curDirPath) ? '/' : $curDirPath;
     $data['downloadPath'] = (!$is_in_tinymce and $uid) ? ("{$base_url}download=" . getIndirectReference($download_path)) : '';
+} else {
+    $data['downloadPath'] = '';
 }
+$data['backUrl'] = isset($backUrl)? $backUrl: documentBackLink($curDirPath);
 
 if (defined('SAVED_COURSE_CODE')) {
     $course_code = SAVED_COURSE_CODE;
@@ -1364,14 +1338,13 @@ function headlink($label, $this_sort) {
     }
     if ($sort == $this_sort) {
         $this_reverse = !$reverse;
-        $indicator = " <img src='$themeimg/arrow_" .
-                ($reverse ? 'up' : 'down') . ".png' alt='" .
-                ($reverse ? $langUp : $langDown) . "'>";
+        $indicator = ' <span class="fa fa-sort-' .
+                ($reverse ? 'asc' : 'desc') . '"><span>';
     } else {
         $this_reverse = $reverse;
         $indicator = '';
     }
-    return '<a href="' . $base_url . 'openDir=' . $path .
+    return '<a class="text-nowrap" href="' . $base_url . 'openDir=' . $path .
             '&amp;sort=' . $this_sort . ($this_reverse ? '&amp;rev=1' : '') .
             '">' . $label . $indicator . '</a>';
 }
