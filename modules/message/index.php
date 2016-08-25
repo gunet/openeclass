@@ -48,7 +48,7 @@ if ($course_id != 0) {
     if (!is_dir($message_dir)) {
         make_dir($message_dir);
     }
-    
+
     // get dropbox quotas from database
     $d = Database::get()->querySingle("SELECT dropbox_quota FROM course WHERE code = ?s", $course_code);
     $diskQuotaDropbox = $d->dropbox_quota;
@@ -89,8 +89,8 @@ $courseParam = ($course_id === 0) ? '' : '?course=' . $course_code;
     } else {
         $msg_id_param = '';
     }
-// action bar 
-if (!isset($_GET['showQuota'])) {   
+// action bar
+if (!isset($_GET['showQuota'])) {
     if (isset($_GET['upload'])) {
         $navigation[] = array('url' => "index.php", 'name' => $langDropBox);
         if (isset($_GET['type'])) {
@@ -105,7 +105,7 @@ if (!isset($_GET['showQuota'])) {
                                   'level' => 'primary-label')
                         ));
     } else {
-        if ($course_id != 0) {            
+        if ($course_id != 0) {
             $tool_content .= action_bar(array(
                                 array('title'   => $langNewCourseMessage,
                                       'url'     => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm",
@@ -139,22 +139,22 @@ if (!isset($_GET['showQuota'])) {
                                       'class' => 'delete_all_in')
                             ));
         }
-    }    
+    }
 }
 
 if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
     $pageName = $langQuotaBar;
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langDropBox);
     $space_released = 0;
-    
-    if ($is_editor && ($diskUsed/$diskQuotaDropbox >= 0.8)) { // 80% of quota        
-        $space_to_free = format_file_size($diskQuotaDropbox*0.8);        
+
+    if ($is_editor && ($diskUsed/$diskQuotaDropbox >= 0.8)) { // 80% of quota
+        $space_to_free = format_file_size($diskQuotaDropbox*0.8);
         if (isset($_GET['free']) && $_GET['free'] == TRUE) { //free some space
             $sql = "SELECT da.filename, da.id, da.filesize FROM dropbox_attachment as da, dropbox_msg as dm
                     WHERE da.msg_id = dm.id
                     AND dm.course_id = ?d
-                    ORDER BY dm.timestamp ASC";   
-            $result = Database::get()->queryArray($sql, $course_id); 
+                    ORDER BY dm.timestamp ASC";
+            $result = Database::get()->queryArray($sql, $course_id);
             foreach ($result as $file) {
                 unlink($message_dir . "/" . $file->filename);
                 $space_released += $file->filesize;
@@ -172,10 +172,10 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] 
                               </div>";
         }
     }
-    
+
     $backPath = "$_SERVER[SCRIPT_NAME]" . (($course_id != 0)? "?course=$course_code" : "");
     $tool_content .= showquota($diskQuotaDropbox, $diskUsed-$space_released, $backPath);
-    
+
     draw($tool_content, 2);
     exit;
 }
@@ -188,7 +188,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             $type = 'pm';
         }
     }
-    
+
     if ($course_id == 0 && $type == 'pm') {
         if (!$personal_msgs_allowed) {
             $tool_content .= "<div class='alert alert-warning'>$langGeneralError</div>";
@@ -211,7 +211,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 </div>
             </div>";
     if ($type == 'cm' && $course_id == 0) {//course message from central interface
-        //find user's courses with dropbox module activated       
+        //find user's courses with dropbox module activated
         $sql = "SELECT course.code code, course.title title
                 FROM course, course_user, course_module
                 WHERE course.id = course_user.course_id
@@ -221,7 +221,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 AND course_user.user_id = ?d
                 ORDER BY title";
         $res = Database::get()->queryArray($sql, MODULE_ID_MESSAGE, 1, $uid);
-        
+
         $head_content .= "<script type='text/javascript'>
                             $(document).on('change','#courseselect',function(){
                               $.ajax({
@@ -246,32 +246,32 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                               });
                             });
                           </script>";
-        
+
         $tool_content .= "
             <div class='form-group'>
                 <label for='title' class='col-sm-2 control-label'>$langCourse:</label>
                 <div class='col-sm-10'>
                     <select id='courseselect' class='form-control' name='course'>
                         <option value='-1'>&nbsp;</option>";
-        foreach ($res as $course) {    
+        foreach ($res as $course) {
             $tool_content .="<option value='".$course->code."'>".q($course->title)."</option>";
         }
         $tool_content .="    </select>
                            </div>
                          </div>";
     }
-    
+
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
     	$tool_content .= "
         <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
             <div class='col-sm-10'>
                 <select name='recipients[]' multiple='multiple' class='form-control' id='select-recipients'>";
-    
+
         if ($course_id != 0) {//course messages
-            
+
             $student_to_student_allow = get_config('dropbox_allow_student_to_student');
-            
+
             if ($is_editor || $student_to_student_allow == 1) {
                 //select all users from this course except yourself
                 $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
@@ -281,18 +281,18 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                         AND cu.status != ?d
                         AND u.id != ?d
                         ORDER BY UPPER(u.surname), UPPER(u.givenname)";
-                
+
                 $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
-                
+
                 if ($is_editor) {
                     $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d";
                     $result_g = Database::get()->queryArray($sql_g, $course_id);
                 } else {//allow students to send messages only to groups they are members of
-                    $sql_g = "SELECT `g`.id, `g`.name FROM `group` as `g`, `group_members` as `gm` 
+                    $sql_g = "SELECT `g`.id, `g`.name FROM `group` as `g`, `group_members` as `gm`
                               WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d";
-                    $result_g = Database::get()->queryArray($sql_g, $course_id, $uid);            
+                    $result_g = Database::get()->queryArray($sql_g, $course_id, $uid);
                 }
-                                    
+
                 foreach ($result_g as $res_g)
                 {
                     if (isset($_GET['group_id']) and $_GET['group_id'] == $res_g->id) {
@@ -311,40 +311,40 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                         AND (cu.status = ?d OR cu.editor = ?d)
                         AND u.id != ?d
                         ORDER BY UPPER(u.surname), UPPER(u.givenname)";
-                
+
                 $res = Database::get()->queryArray($sql, $course_id, USER_TEACHER, 1, $uid);
-                
+
                 //check if user is group tutor
                  $sql_g = "SELECT `g`.id, `g`.name FROM `group` as `g`, `group_members` as `gm`
                 WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d AND `gm`.is_tutor = ?d";
-                
+
                 $result_g = Database::get()->queryArray($sql_g, $course_id, $uid, 1);
                 foreach ($result_g as $res_g)
                 {
                     $tool_content .= "<option value = '_$res_g->id'>".q($res_g->name)."</option>";
                 }
-                
+
                 //find user's group and their tutors
                 $tutors = array();
                 $sql_g = "SELECT `group`.id FROM `group`, group_members
-                          WHERE `group`.course_id = ?d 
-                          AND `group`.id = group_members.group_id 
+                          WHERE `group`.course_id = ?d
+                          AND `group`.id = group_members.group_id
                           AND `group_members`.user_id = ?d";
                 $result_g = Database::get()->queryArray($sql_g, $course_id, $uid);
                 foreach ($result_g as $res_g) {
                     $sql_gt = "SELECT u.id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
                                FROM user u, group_members g
-                               WHERE g.group_id = ?d 
-                               AND g.is_tutor = ?d 
-                               AND g.user_id = u.id 
+                               WHERE g.group_id = ?d
+                               AND g.is_tutor = ?d
+                               AND g.user_id = u.id
                                AND u.id != ?d";
                     $res_gt = Database::get()->queryArray($sql_gt, $res_g->id, 1, $uid);
                     foreach ($res_gt as $t) {
-                        $tutors[$t->id] = q($t->name)." (".q($t->username).")"; 
+                        $tutors[$t->id] = q($t->name)." (".q($t->username).")";
                     }
                 }
             }
-            
+
             foreach ($res as $r) {
                 if (isset($tutors) && !empty($tutors)) {
                     if (isset($tutors[$r->user_id])) {
@@ -358,14 +358,14 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                     $tool_content .= "<option value=" . $key . ">" . q($value) . "</option>";
                 }
             }
-        } 
-    
+        }
+
         $tool_content .= "</select><a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
         </div>";
     } elseif ($type == 'pm' && $course_id == 0) {//personal messages
         load_js('select2');
-        
+
         $head_content .= "<script type='text/javascript'>
                             $(document).ready(function () {
 
@@ -391,8 +391,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                 });
                             });
                            </script>";
-        
-        if (isset($_GET['id'])) {            
+
+        if (isset($_GET['id'])) {
             $q = Database::get()->querySingle("SELECT id, CONCAT_WS(' ',surname,givenname) AS name FROM user WHERE id = ?d", $_GET['id']);
             if ($q) {
                 $u_name = $q->name;
@@ -414,7 +414,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                             </div>";
         }
     }
-    
+
     $tool_content .= "
         <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langSubject:</label>
@@ -422,13 +422,13 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 <input type='text' class='form-control' name='message_title'>
             </div>
         </div>";
-    
+
     $tool_content .= "<div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langMessage:</label>
             <div class='col-sm-10'>
                 ".rich_text_editor('body', 4, 20, '')."
             </div>
-        </div>";        
+        </div>";
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
         enableCheckFileSize();
         $tool_content .= "
@@ -440,10 +440,10 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             </div>
         </div>";
     }
-    
+
 	$tool_content .= "
         <div class='form-group'>
-            <div class='col-xs-10 col-xs-offset-2'>             
+            <div class='col-xs-10 col-xs-offset-2'>
                 <div class='checkbox'>
                   <label>
                     <input type='checkbox' name='mailing' value='1' checked />
@@ -467,7 +467,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 ."
             </div>
         </div>
-        </fieldset>	
+        </fieldset>
         ". generate_csrf_token_form_field() ."
         </form></div>";
 	if ($course_id != 0 || ($type == 'cm' && $course_id == 0)){
@@ -475,7 +475,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         $head_content .= "<script type='text/javascript'>
             $(document).ready(function () {
 
-                $('#select-recipients').select2();       
+                $('#select-recipients').select2();
                 $('#selectAll').click(function(e) {
                     e.preventDefault();
                     var stringVal = [];
@@ -488,14 +488,14 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                     e.preventDefault();
                     var stringVal = [];
                     $('#select-recipients').val(stringVal).trigger('change');
-                });         
+                });
             });
 
             </script>
         ";
 	}
 } else {//mailbox
-    load_js('datatables');    
+    load_js('datatables');
     $head_content .= "<script type='text/javascript'>
                         $(document).ready(function() {
 
@@ -504,7 +504,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                 var contentID = $(e.target).attr('data-target');
                                 var contentURL = $(e.target).attr('href');
                                 $(contentID).load(contentURL);
-                                
+
                                 if(contentID == '#inbox') {
                                     $('.delete_all_out').unbind('click');
                                     $('.delete_all_out').addClass('delete_all_in').removeClass('delete_all_out');
@@ -513,7 +513,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                     $('.delete_all_in').addClass('delete_all_out').removeClass('delete_all_in');
                                 }
                             });
-                            
+
                             // trap links to open inside tabs
                             $('.tab-content').on('click', 'a', function(e) {
                                 if (e.currentTarget.className != 'outtabs' && e.currentTarget.className.indexOf('paginate_button') == -1) {
@@ -521,12 +521,12 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                     $(this).closest('.tab-pane').load(this.href);
                                 }
                             });
-                            
+
                             // show 1st tab
                             $('#dropboxTabs a:first').tab('show');
                         });
                     </script>";
-    
+
     $tool_content .= "<div id='dropboxTabs'>
                         <ul class='nav nav-tabs' role='tablist'>
                             <li role='presentation'><a data-target='#inbox' role='tab' data-toggle='tab' href= 'inbox.php" . $courseParam . $msg_id_param . "'><strong>$langDropBoxInbox</strong></a></li>

@@ -392,83 +392,32 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir) {
 
 /**
  * @brief A page that shows a table with statistic data and a gauge bar
- * @global type $langQuotaUsed
- * @global type $langQuotaPercentage
- * @global type $langQuotaTotal
- * @global type $langBack
- * @global type $langQuotaBar
- * @global type $course_code
- * @global type $subsystem
- * @global type $group_id
- * @global type $ebook_id
+ * @global type $pageName
  * @param type $quota
  * @param type $used
- * @return string
  */
 function showquota($quota, $used, $backPath=null) {
-
-    global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, $langQuotaBar,
-    $course_code, $subsystem, $group_id, $ebook_id, $pageName;
+    global $pageName;
 
     $retstring = '';
     
-    // pososto xrhsimopoioumenou xorou se %
     if ($quota == 0) {
-        $diskUsedPercentage = ($used > 0)? '100%': '0%';
+        $data['diskUsedPercentage'] = ($used > 0)? '100': '0';
     } else {
-        $diskUsedPercentage = round(($used / $quota) * 100) . '%';
+        $data['diskUsedPercentage'] = round(($used / $quota) * 100);
     }
-    // morfopoihsh tou synolikou diathesimou megethous tou quota
-    $quota = format_bytesize($quota / 1024);
-    // morfopoihsh tou synolikou megethous pou xrhsimopoieitai
-    $used = format_bytesize($used / 1024);
-    // telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
-    // ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-    $pageName = $langQuotaBar;
-    if( !is_null($backPath) ){
-        $retstring .= action_bar(array(
-                    array('title' => $langBack,
+    $data['quota'] = format_bytesize($quota / 1024);
+    $data['used'] = format_bytesize($used / 1024);
+    $pageName = trans('langQuotaBar');
+    if (is_null($backPath)) {
+        $backPath = documentBackLink('');
+    }
+    $data['backButton'] = action_bar(array(
+                    array('title' => trans('langBack'),
                           'url' => $backPath,
                           'icon' => 'fa-reply',
                           'level' => 'primary-label')));
-    } else {
-    $retstring .= action_bar(array(
-                    array('title' => $langBack,
-                          'url' => documentBackLink($backPath),
-                          'icon' => 'fa-reply',
-                          'level' => 'primary-label')));
-    }
-    $retstring .= "
-    <div class='row'><div class='col-sm-12'>
-    <div class='form-wrapper'>
-    <form class='form-horizontal' role='form'>
-      <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langQuotaUsed:</label>
-        <div class='col-sm-9'>
-          <p class='form-control-static'>$used</p>
-        </div>
-      </div>
-      <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langQuotaPercentage:</label>
-        <div class='col-sm-9'>
-            <div class='progress'>
-              <p class='progress-bar active from-control-static' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $diskUsedPercentage;'>
-                $diskUsedPercentage
-              </p>
-            </div>
-        </div>
-      </div>
-      <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langQuotaTotal:</label>
-        <div class='col-sm-9'>
-              <p class='form-control-static'>$quota</p>
-        </div>
-      </div>  
-    </form>
-    </div></div></div>";
-    $tmp_cwd = getcwd();
-
-    return $retstring;
+    view('modules.document.quota', $data);
 }
 
 // check for dangerous extensions and file types
