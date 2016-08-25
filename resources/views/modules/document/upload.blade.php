@@ -6,8 +6,8 @@
             <div class='row'>
             <div class='col-md-12'>
                 <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>
-                        <input type='hidden' name='uploadPath' value='$uploadPath'>
+                    <form class='form-horizontal' role='form' action='{{ $upload_target_url }}' method='post' enctype='multipart/form-data'>
+                        <input type='hidden' name='uploadPath' value='{{ $uploadPath }}'>
                         @if ($externalFile)
                             <input type='hidden' name='ext' value='true'>
                         @endif

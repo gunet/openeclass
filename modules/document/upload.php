@@ -59,6 +59,7 @@ if (isset($_GET['uploadPath'])) {
 
 $data['can_upload'] = $can_upload;
 $data['backUrl'] = documentBackLink($data['uploadPath']);
+$data['upload_target_url'] = $upload_target_url;
 
 if ($can_upload) {
     $navigation[] = array('url' => $data['backUrl'], 'name' => $pageName);

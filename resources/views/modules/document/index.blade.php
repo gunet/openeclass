@@ -52,6 +52,11 @@
                             <tr class='{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}'>
                                 <td class='text-center'><span class='fa {{ $file->icon }}'></span></td>
                                 <td>
+                                    @if ($file->updated_message)
+                                        <span class='label label-success pull-right'>
+                                            {{ $file->updated_message }}
+                                        </span>
+                                    @endif
                                     <input type='hidden' value='{{ $file->download_url }}'>
                                     <a href='{{ $file->url }}'>{{ $file->title }}</a>
                                     @if ($can_upload && $file->extra_path)
@@ -64,6 +69,9 @@
                                         @else
                                             {!! icon('fa-external-link', trans('langExternalFile')) !!}
                                         @endif
+                                    @endif
+                                    @if ($can_upload && !$file->public)
+                                        {!! icon('fa-lock', trans('langNonPublicFile')) !!}
                                     @endif
                                     @if ($file->comment)
                                         <br>

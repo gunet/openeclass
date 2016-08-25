@@ -1088,7 +1088,11 @@ foreach ($result as $row) {
                   date_modified > ?t" .
                   ($can_upload? '': ' AND visible=1'), 
             $row->path . '/%', $document_timestamp)->c);
-        $updated_message = sprintf($updated > 1? $langNewAddedPlural: $langNewAddedSingular, $updated);
+        if ($updated > 0) {
+            $updated_message = sprintf($updated > 1? $langNewAddedPlural: $langNewAddedSingular, $updated);
+        } else {
+            $updated_message = '';
+        }
     } else {
         $updated_message = '';
     }
