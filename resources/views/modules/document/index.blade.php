@@ -9,7 +9,7 @@
                     <div class='panel-body'>
                         @if ($curDirName)
                             <div class='pull-right'>
-                                <a href='{{ $parentlink }}' type='button' class='btn btn-success'>
+                                <a href='{{ $parentLink }}' type='button' class='btn btn-success'>
                                     <span class='fa fa-level-up'></span>&nbsp;{{ trans('langUp') }}
                                 </a>
                             </div>
@@ -34,7 +34,7 @@
                     <table class='table-default'>
                         <tr class='list-header'>
                             <th class='text-left' width='60'>{!! headlink(trans('langType'), 'type') !!}</th>
-							<th class='text-left'>{!! headlink(trans('langName'), 'name') !!}</th>
+                            <th class='text-left'>{!! headlink(trans('langName'), 'name') !!}</th>
 
                             <th class='text-left'>{{ trans('langSize') }}</th>
                             <th class='text-left'>{!! headlink(trans('langDate'), 'date') !!}</th>
@@ -43,55 +43,54 @@
                             @endif
                         </tr>
 
-						@forelse ($fileInfo as $file)
-							<tr class='{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}'>
-								<td class='text-center'><span class='fa {{ $file->icon }}'></span></td>
-	                            <td>
-									<input type='hidden' value='{{ $file->download_url }}'>
-									<a href='{{ $file->url }}'>{{ $file->title }}</a>
-									@if ($can_upload && $file->extra_path)
-										@if ($file->common_doc_path)
-											@if ($file->common_doc_visible)
-												{!! icon('common', trans('langCommonDocLink')) !!}
-											@else
-												{!! icon('common-invisible', trans('langCommonDocLinkInvisible')) !!}
-											@endif
-										@else
-											{!! icon('fa-external-link', trans('langExternalFile')) !!}
-										@endif
-									@endif
-									@if ($file->comment)
-                                    	<br>
-										<span class='comment text-muted'>
-											<small>
-												{!! nl2br(e($file->comment)) !!}
-											</small>
-                        				</span>
-									@endif
-								</td>
-								@if ($file->is_dir)
-									<td>&nbsp;</td>
-									<td class='center'>{{ $file->date }}</td>
-								@elseif ($file->format == '.meta')
-									<td>{{ $file->size }}</td>
-									<td class='center'>{{ $file->date }}</td>
-								@else
-									<td>{{ $file->size }}</td>
-									<td title='{{ $file->date_time }}' class='center'>{{ $file->date }}</td>
-								@endif
-								<td class='option-btn-cell'>
-									{!! $file->action_button !!}
-								</td>
-							</tr>
-						@empty
+                        @forelse ($fileInfo as $file)
+                            <tr class='{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}'>
+                                <td class='text-center'><span class='fa {{ $file->icon }}'></span></td>
+                                <td>
+                                    <input type='hidden' value='{{ $file->download_url }}'>
+                                    <a href='{{ $file->url }}'>{{ $file->title }}</a>
+                                    @if ($can_upload && $file->extra_path)
+                                        @if ($file->common_doc_path)
+                                            @if ($file->common_doc_visible)
+                                                {!! icon('common', trans('langCommonDocLink')) !!}
+                                            @else
+                                                {!! icon('common-invisible', trans('langCommonDocLinkInvisible')) !!}
+                                            @endif
+                                        @else
+                                            {!! icon('fa-external-link', trans('langExternalFile')) !!}
+                                        @endif
+                                    @endif
+                                    @if ($file->comment)
+                                        <br>
+                                        <span class='comment text-muted'>
+                                            <small>
+                                                {!! nl2br(e($file->comment)) !!}
+                                            </small>
+                                        </span>
+                                    @endif
+                                </td>
+                                @if ($file->is_dir)
+                                    <td>&nbsp;</td>
+                                    <td class='center'>{{ $file->date }}</td>
+                                @elseif ($file->format == '.meta')
+                                    <td>{{ $file->size }}</td>
+                                    <td class='center'>{{ $file->date }}</td>
+                                @else
+                                    <td>{{ $file->size }}</td>
+                                    <td title='{{ $file->date_time }}' class='center'>{{ $file->date }}</td>
+                                @endif
+                                <td class='option-btn-cell'>
+                                    {!! $file->action_button !!}
+                                </td>
+                            </tr>
+                        @empty
                             <tr>
                                 <td colspan=10>
                                     <p class='not_visible text-center'> - {{ trans('langNoDocuments') }} - </p>
                                 </td>
                             </tr>
                         @endforelse
-                        </table>
-                    </div>
+                    </table>
                 </div>
             </div>
         </div>
@@ -99,7 +98,7 @@
         <div class='alert alert-warning'>{{ trans('langNoDocuments') }}</div>
     @endif
 
-	<script>
+    <script>
     $(function(){
         $('.fileModal').click(function (e)
         {
@@ -139,7 +138,7 @@
             });
         });
     });
-    </script>";
+    </script>
 
 @endsection
 

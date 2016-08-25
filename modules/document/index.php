@@ -1208,7 +1208,7 @@ foreach ($result as $row) {
         $dirs[] = (object) $info;
     } else {
         $info['icon'] = choose_image('.' . $row->format);
-        $info['url'] = file_url($cmdDirName, $entry['filename']);
+        $info['url'] = file_url($cmdDirName, $row->filename);
         if ($row->editable) {
             $info['edit_url'] = "new.php?course=$course_code&editPath=" . $row->path .
                 ($groupset? "&$groupset": '');
