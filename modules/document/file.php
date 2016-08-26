@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -77,6 +77,8 @@ $guest_allowed = true;
 require_once '../../include/init.php';
 require_once 'include/action.php';
 require_once 'include/lib/fileManageLib.inc.php';
+require_once 'include/lib/forcedownload.php';
+require_once 'modules/document/doc_init.php';
 
 if (!(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'))) {
     // check user's access to cours
@@ -91,12 +93,11 @@ if (!(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'))) {
 }
 
 if (defined('MY_DOCUMENTS')) {
-    // temporary change, uid is used to get the full path in doc_init
+    // temporary change, uid is used to get the full path in doc_init()
     $uid = $mydocs_uid;
 }
-require_once 'doc_init.php';
+doc_init();
 $uid = $session->user_id;
-require_once 'include/lib/forcedownload.php';
 
 if (defined('GROUP_DOCUMENTS')) {
     if (!$uid) {
@@ -138,13 +139,13 @@ if (file_exists($disk_path)) {
             not_found(preg_replace('/^.*file\.php/', '', $uri));
             exit();
         }
-        
+
         $is_android = false;
         $useragent=$_SERVER['HTTP_USER_AGENT'];
         if (preg_match('/(android).+mobile/i', $useragent)) {
             $is_android = true;
         }
-        
+
         if ($is_in_lpmode && $is_android) {
             require_once 'include/lib/fileDisplayLib.inc.php';
             //$dl_url = $urlServer . 'modules/document/index.php?course=' . $course_code . '&amp;download=' . getIndirectReference($file_info->path);
@@ -187,7 +188,6 @@ function check_cours_access() {
     }
 
     if ($cours->visible != COURSE_OPEN && !$uid && !isset($_GET['token'])) { // anonymous needs access token for closed courses
-        require_once 'include/lib/forcedownload.php';
         not_found(preg_replace('/^.*\.php/', '', $uri));
         exit(0);
     }

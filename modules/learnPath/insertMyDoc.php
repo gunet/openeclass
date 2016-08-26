@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -42,8 +42,8 @@
   ==============================================================================
  */
 
-$require_current_course = TRUE;
-$require_editor = TRUE;
+$require_current_course = true;
+$require_editor = true;
 
 include '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
@@ -54,6 +54,7 @@ require_once 'modules/document/doc_init.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 
+doc_init();
 ModalBoxHelper::loadModalBox(true);
 $head_content .= <<<EOF
 <script type='text/javascript'>
@@ -78,7 +79,7 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langL
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], 'name' => $langAdm);
 $toolName = $langInsertMyDocToolName;
 
-$tool_content .= 
+$tool_content .=
          action_bar(array(
             array('title' => $langBack,
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
@@ -96,7 +97,7 @@ function buildRequestModules() {
               WHERE LPM.`learnPath_id` = ?d";
 
     $firstResult = Database::get()->queryArray($firstSql, $_SESSION['path_id']);
-    
+
     // 2) We build the request to get the modules we need
     $sql = "SELECT M.*
          FROM `lp_module` AS M
@@ -184,7 +185,7 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                           AND LPM.`learnPath_id` = ?d
                           AND M.`course_id` = ?d";
                 $num = Database::get()->querySingle($sql, $insertDocument, $_SESSION['path_id'], $course_id)->count;
-                
+
                 if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                     // determine the default order of this Learning path
                     $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
@@ -196,10 +197,10 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                             (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
                             VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $thisDocumentModule->module_id, $langDefaultModuleAddedComment, $order);
                     $addedDoc = $filenameDocument;
-                    $InfoBox = $addedDoc . " " . $langDocInsertedAsModule . "<br />";                    
-                    $tool_content .= "<div class='alert alert-success'>$InfoBox</div>";                    
+                    $InfoBox = $addedDoc . " " . $langDocInsertedAsModule . "<br />";
+                    $tool_content .= "<div class='alert alert-success'>$InfoBox</div>";
                 } else {
-                    $InfoBox = "<b>$filenameDocument</b>: " . $langDocumentAlreadyUsed . "<br />";                    
+                    $InfoBox = "<b>$filenameDocument</b>: " . $langDocumentAlreadyUsed . "<br />";
                     $tool_content .= "<div class='alert alert-warning'>$InfoBox</div>";
                 }
             }

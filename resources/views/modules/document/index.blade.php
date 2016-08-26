@@ -58,20 +58,33 @@
                                         </span>
                                     @endif
                                     <input type='hidden' value='{{ $file->download_url }}'>
-                                    <a href='{{ $file->url }}'>{{ $file->title }}</a>
-                                    @if ($can_upload && $file->extra_path)
-                                        @if ($file->common_doc_path)
-                                            @if ($file->common_doc_visible)
-                                                {!! icon('common', trans('langCommonDocLink')) !!}
+                                    @if ($file->is_dir)
+                                        <a href='{{ $file->url }}'>{{ $file->title }}</a>
+                                    @else
+                                        {!! $file->link !!}
+                                    @endif
+                                    @if ($can_upload)
+                                        @if ($file->extra_path)
+                                            @if ($file->common_doc_path)
+                                                @if ($file->common_doc_visible)
+                                                    {!! icon('common', trans('langCommonDocLink')) !!}
+                                                @else
+                                                    {!! icon('common-invisible', trans('langCommonDocLinkInvisible')) !!}
+                                                @endif
                                             @else
-                                                {!! icon('common-invisible', trans('langCommonDocLinkInvisible')) !!}
+                                                {!! icon('fa-external-link', trans('langExternalFile')) !!}
                                             @endif
-                                        @else
-                                            {!! icon('fa-external-link', trans('langExternalFile')) !!}
+                                        @endif
+                                        @if (!$file->public)
+                                            {!! icon('fa-lock', trans('langNonPublicFile')) !!}
+                                        @endif
+                                        @if ($file->editable)
+                                            {!! icon('fa-edit', trans('langEdit'), $file->edit_url) !!}
                                         @endif
                                     @endif
-                                    @if ($can_upload && !$file->public)
-                                        {!! icon('fa-lock', trans('langNonPublicFile')) !!}
+                                    @if ($file->copyrighted)
+                                        {!! icon($file->copyright_icon, $file->copyright_title, $file->copyright_link,
+                                            'target="_blank" style="color:#555555;"') !!}
                                     @endif
                                     @if ($file->comment)
                                         <br>
@@ -92,13 +105,13 @@
                                     <td>{{ $file->size }}</td>
                                     <td title='{{ $file->date_time }}' class='center'>{{ $file->date }}</td>
                                 @endif
-                                <td class='option-btn-cell'>
+                                <td class='{{ $can_upload? 'option-btn-cell': 'text-center'}}'>
                                     {!! $file->action_button !!}
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan=10>
+                                <td colspan='5'>
                                     <p class='not_visible text-center'> - {{ trans('langNoDocuments') }} - </p>
                                 </td>
                             </tr>

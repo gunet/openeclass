@@ -30,6 +30,8 @@ $require_login = true;
 require_once "../../include/baseTheme.php";
 require_once "modules/document/doc_init.php";
 
+doc_init();
+
 if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
     $toolName = $langCommonDocs;

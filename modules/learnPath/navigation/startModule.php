@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -41,16 +41,14 @@
 
 $require_current_course = true;
 require_once '../../../include/init.php';
-
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
-$clarolineRepositoryWeb = $urlServer . "courses/" . $course_code;
-
-// lib of this tool
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/document/doc_init.php';
+
+$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
+$clarolineRepositoryWeb = $urlServer . "courses/" . $course_code;
+doc_init();
 
 function directly_pass_lp_module($table, $userid, $lpmid) {
     // if credit was already set this query changes nothing else it update the query made at the beginning of this script

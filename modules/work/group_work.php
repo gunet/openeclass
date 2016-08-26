@@ -27,10 +27,11 @@ require_once 'work_functions.php';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/forcedownload.php';
+require_once 'modules/document/doc_init.php';
 
 define('GROUP_DOCUMENTS', true);
 $group_id = intval($_REQUEST['group_id']);
-require_once 'modules/document/doc_init.php';
+doc_init();
 
 $coursePath = $webDir . '/courses/' . $course_code;
 $workPath = $coursePath . '/work';

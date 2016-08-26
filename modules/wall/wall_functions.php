@@ -29,6 +29,8 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/document/doc_init.php';
 require_once 'modules/wall/ExtVideoUrlParser.class.php';
 
+doc_init();
+
 function allow_to_post($course_id, $user_id, $is_editor) {
     if ($is_editor) {
         return true;

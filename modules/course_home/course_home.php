@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -45,6 +45,7 @@ require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
 
+doc_init();
 $data['course_info'] = $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
@@ -73,7 +74,7 @@ if ($is_editor) {
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
                 CourseXMLElement::refreshCourse($course_id, $course_code);
                 Session::Messages($langResourceCourseUnitDeleted, 'alert-success');
-                redirect_to_home_page("courses/$course_code/");                
+                redirect_to_home_page("courses/$course_code/");
             }
         }
     } elseif (isset($_REQUEST['vis'])) { // modify visibility
@@ -137,7 +138,7 @@ if (isset($_REQUEST['register'])) {
             if (empty($course_info->password) || $course_info->password == $_POST['password']) {
                 Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
                                     VALUES (?d, ?d, ?d, NOW())", $course_id, $uid, USER_STUDENT);
-                Session::Messages($langNotifyRegUser1, 'alert-success');                
+                Session::Messages($langNotifyRegUser1, 'alert-success');
             } else {
                 Session::Messages($langInvalidCode, 'alert-warning');
             }
@@ -210,20 +211,20 @@ $head_content .= "
                             } else {
                                 var new_modal_id = parseInt(visible_modal_id) + 1;
                             }
-                            var new_modal = $('#hidden_'+new_modal_id);  
+                            var new_modal = $('#hidden_'+new_modal_id);
                             if (new_modal.length) {
                                 hideVisibleModal();
                                 new_modal.modal('show');
                             }
                         }
-                    }                
+                    }
                 });
             });
             function hideVisibleModal(){
                 var visible_modal = $('.modal.in');
                 if (visible_modal) { // modal is active
                     visible_modal.modal('hide'); // close modal
-                }              
+                }
             };
         </script>";
 if (!empty($course_info->password)) {
@@ -236,11 +237,11 @@ if (!empty($course_info->password)) {
                         title: '$langLessonCode',
                         message: '<form class=\"form-horizontal\" role=\"form\" action=\"\" method=\"POST\" id=\"password_form\">'+
                                     '<div class=\"form-group\">'+
-                                        '<div class=\"col-sm-12\">'+                
+                                        '<div class=\"col-sm-12\">'+
                                             '<input type=\"text\" class=\"form-control\" id=\"password\" name=\"password\">'+
                                             '<input type=\"hidden\" class=\"form-control\" id=\"register\" name=\"register\">'+
                                         '</div>'+
-                                    '</div>'+                                
+                                    '</div>'+
                                   '</form>',
                         buttons: {
                             cancel: {
@@ -257,12 +258,12 @@ if (!empty($course_info->password)) {
                                     } else {
                                         $('#password').closest('.form-group').addClass('has-error');
                                         $('#password').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
-                                        return false;                            
+                                        return false;
                                     }
                                 }
-                            }                    
-                        }                          
-                    });                    
+                            }
+                        }
+                    });
                 })
             });
         </script>";
@@ -313,7 +314,7 @@ if(count($course_descriptions)>0){
         $previous_id = '';
         if ($key + 1 < count($course_descriptions)) $next_id = "hidden_" . ($key + 1);
         if ($key > 0) $previous_id = "hidden_" . ($key - 1);
-                
+
         $course_descriptions_modals .=    "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
@@ -327,12 +328,12 @@ if(count($course_descriptions)>0){
                                     <div class='modal-footer'>";
                                         if ($previous_id) {
                                             $course_descriptions_modals .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><span class='fa fa-arrow-left'></span></a>";
-                                        } 
+                                        }
                                         if ($next_id) {
                                             $course_descriptions_modals .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
-                                        }                                                                              
-        $course_descriptions_modals .=    "                                            
-                                    </div>                                        
+                                        }
+        $course_descriptions_modals .=    "
+                                    </div>
                                   </div>
                                 </div>
                               </div>";
@@ -419,7 +420,7 @@ if (isset($level) && !empty($level)) {
 /* <![CDATA[ */
 
     var dialog;
-    
+
     var showMetadata = function(course) {
         $('.modal-body', dialog).load('../../modules/course_metadata/anoninfo.php', {course: course}, function(response, status, xhr) {
             if (status === 'error') {
@@ -428,7 +429,7 @@ if (isset($level) && !empty($level)) {
         });
         dialog.modal('show');
     };
-        
+
     $(document).ready(function() {
         dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><div class='modal-title h4' id='modal-label'>{$langCourseMetadata}</div></div><div class='modal-body'>body</div></div></div></div>\");
     });
@@ -459,7 +460,7 @@ if (isset($level) && !empty($level)) {
 
 if ($is_editor) {
     warnCourseInvalidDepartment(true);
-    
+
 } elseif ($uid) {
     $myCourses = [];
     Database::get()->queryFunc("SELECT course.code course_code, course.public_code public_code,
@@ -471,12 +472,12 @@ if ($is_editor) {
     }, $uid);
     if (!in_array($course_id, array_keys($myCourses))) {
         $action_bar = action_bar(array(
-            array('title' => $langRegister, 
+            array('title' => $langRegister,
                   'url' => "/courses/$course_code?register",
                   'icon' => 'fa-check',
                   'link-attrs' => !empty($course_info->password) ? "id='passwordModal'" : "",
                   'level' => 'primary-label',
-                  'button-class' => 'btn-success')));          
+                  'button-class' => 'btn-success')));
     }
 }
 
@@ -502,7 +503,7 @@ if ($is_editor) {
 }
 
     $data['course_units'] = $sql = Database::get()->queryArray($query, $course_id);
-    $total_cunits = count($sql);    
+    $total_cunits = count($sql);
 
 // Contentbox: Thematikes enotites
 // Contentbox: Calendar
@@ -522,7 +523,7 @@ if (!$alter_layout) {
     $course_home_page_main = new \Widgets\WidgetArea(COURSE_HOME_PAGE_MAIN);
     foreach ($course_home_page_main->getCourseAndAdminWidgets($course_id) as $key => $widget) {
         $data['course_home_main_area_widgets'] .= $widget->run($key);
-    }                    
+    }
 }
 
 //BEGIN - Get user personal calendar

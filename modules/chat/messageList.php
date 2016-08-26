@@ -26,6 +26,7 @@ $require_current_course = TRUE;
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'modules/document/doc_init.php';
 
 $coursePath = $webDir . '/courses/';
 if (isset($_REQUEST['conference_id'])) {
@@ -75,7 +76,7 @@ if (isset($_GET['reset']) && $is_editor) {
 
 // store
 if (isset($_GET['store']) && $is_editor) {
-    require_once 'modules/document/doc_init.php';
+    doc_init();
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     $saveIn = "chat." . date("Y-m-j-his") . ".txt";
     $chat_filename = '/' . safe_filename('txt');
