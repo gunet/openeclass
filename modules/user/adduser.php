@@ -50,7 +50,7 @@ if (isset($_GET['add'])) {
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
                                                                'right' => '+5'));
     if ($result) {
-        Session::Messages( $langTheU . $langAdded, "alert alert-success");
+        Session::Messages($langTheU . ' ' . $langAdded, "alert alert-success");
         // notify user via email
         $email = uid_to_email($uid_to_add);
         if (!empty($email) and Swift_Validate::email($email)) {
