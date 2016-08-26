@@ -47,11 +47,11 @@ load_js('tools.js');
 
 $pageName = $langCreateDoc;
 
-$uploadPath = $editPath = false;
+$uploadPath = $editPath = null;
 if (isset($_GET['uploadPath'])) {
-    $uploadPath = q($_GET['uploadPath']);
+    $uploadPath = $_GET['uploadPath'];
 } elseif (isset($_GET['editPath'])) {
-    $editPath = q($_GET['editPath']);
+    $editPath = $_GET['editPath'];
     $uploadPath = my_dirname($editPath);
 }
 
@@ -61,110 +61,62 @@ if (defined('EBOOK_DOCUMENTS')) {
 
 $backUrl = documentBackLink($uploadPath);
 
-if ($can_upload) {
-    $navigation[] = array('url' => $backUrl, 'name' => $toolName);
-    if ($editPath) {
-        $pageName = $langEditDoc;
-        $info = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $editPath);
-        $htmlFileName = "
-      <div class='form-group'>
-        <label for='file_name' class='col-sm-2 control-label'>$langFileName:</label>
-        <div class='col-sm-10'>
-          <p class='form-control-static'>" . q($info->filename) . "</p>
-        </div>
-      </div>";
-        $htmlTitle = ' value="' . (Session::has('file_title') ? Session::get('file_title') : q($info->title)) . '"';
-        $fileContent = Session::has('file_content') ? Session::get('file_content') : getHtmlBody($basedir . $info->path);
-        $htmlPath = "<input type='hidden' name='editPath' value='$editPath'>";
-    } else {
-        $pageName = $langCreateDoc;
-        $htmlFileName = '';
-        $htmlTitle = '';
-        $fileContent = Session::has('file_content') ? Session::get('file_content') : '';
-        $htmlPath = "<input type='hidden' name='uploadPath' value='$uploadPath'>";
-    }
-    if (isset($_GET['ebook_id'])){
-        $sections = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
-                           WHERE ebook_id = ?d
-                           ORDER BY CONVERT(public_id, UNSIGNED), public_id", $_GET['ebook_id']);
-        $section_id = '';
-        if ($editPath) {
-            $section = Database::get()->querySingle("SELECT section_id
-                FROM ebook_subsection WHERE file_id = ?d", $info->id);
-            if ($section) {
-                $section_id = $section->section_id;
-            }
-        } else {
-            if (count($sections)) {
-                $section_id =  $sections[0]->id;
-            }
-        }
-        $sections_array = array('' => '---');
-        foreach ($sections as $sid => $section){
-            $sid = $section->id;
-            $qsid = q($section->public_id);
-            $sections_array[$sid] = $qsid . '. ' . ellipsize($section->title, 25);
-        }
+$navigation[] = array('url' => $backUrl, 'name' => $toolName);
 
-        $ebook_section_select = "
-                <div class='form-group'>
-                    <label for='section' class='col-sm-2 control-label'>$langSection:</label>
-                    <div class='col-sm-10'>
-                    " . selection($sections_array, 'section_id', $section_id, 'class="form-control"') . "
-                    </div>
-                </div>
-                ";
-    } else {
-        $ebook_section_select = "";
-    }
-    $action = defined('COMMON_DOCUMENTS')? 'commondocs': 'document';
-    $tool_content .= action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $backUrl,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'class' => 'back_btn')
-                            ));
-    $tool_content .= "<div class='form-wrapper'>
-    <form class='form-horizontal' role='form' action='$upload_target_url' method='post'>
-      $htmlPath
-      $group_hidden_input
-      $ebook_section_select
-      $htmlFileName
+$data = compact('can_upload', 'group_hidden_input', 'upload_target_url', 'backUrl');
+$data['backButton'] = action_bar(array(
+    array('title' => $langBack,
+          'url' => $backUrl,
+          'icon' => 'fa-reply',
+          'level' => 'primary-label',
+          'class' => 'back_btn')));
 
-      <div class='form-group".(Session::getError('file_title') ? " has-error" : "")."'>
-        <label for='file_title' class='col-sm-2 control-label'>$langTitle:</label>
-        <div class='col-sm-10'>
-          <input type='text' class='form-control' id='file_title' name='file_title'$htmlTitle>
-          <span class='help-block'>".Session::getError('file_title')."</span>    
-        </div>
-      </div>
-      <div class='form-group'>
-        <label for='file_title' class='col-sm-2 control-label'>$langContent:</label>
-        <div class='col-sm-10'>"
-          . rich_text_editor('file_content', 20, 40, $fileContent) .
-        "</div>
-      </div>
-	
-	<div class='form-group'>
-        <div class='col-xs-offset-2 col-xs-10'>".
-            form_buttons(array(
-                array(
-                    'text' => $langSave,
-                    'value'=> $langSubmit
-                ),
-                array(
-                    'href' => $backUrl,
-                )
-            ))
-            ."</div>
-      </div>
-</form></div>";
+if ($editPath) {
+    $pageName = $langEditDoc;
+    $info = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $editPath);
+    $data['title'] = Session::has('file_title') ? Session::get('file_title') : $info->title;
+    $fileContent = Session::has('file_content') ? Session::get('file_content') : getHtmlBody($basedir . $info->path);
+    $data['pathName'] = 'editPath';
+    $data['pathValue'] = $editPath;
+    $data['filename'] = $info->filename;
 } else {
-	$tool_content .= "<div class='alert alert-danger'>$langNotAllowed</div>";
+    $pageName = $langCreateDoc;
+    $data['title'] = '';
+    $fileContent = Session::has('file_content') ? Session::get('file_content') : '';
+    $data['pathName'] = 'uploadPath';
+    $data['pathValue'] = $uploadPath;
+    $data['filename'] = '';
+}
+$data['rich_text_editor'] = rich_text_editor('file_content', 20, 40, $fileContent);
+
+if (isset($_GET['ebook_id'])){
+    $sections = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
+                       WHERE ebook_id = ?d
+                       ORDER BY CONVERT(public_id, UNSIGNED), public_id", $_GET['ebook_id']);
+    $section_id = '';
+    if ($editPath) {
+        $section = Database::get()->querySingle("SELECT section_id
+            FROM ebook_subsection WHERE file_id = ?d", $info->id);
+        if ($section) {
+            $section_id = $section->section_id;
+        }
+    } else {
+        if (count($sections)) {
+            $section_id =  $sections[0]->id;
+        }
+    }
+    $sections_array = array('' => '---');
+    foreach ($sections as $sid => $section){
+        $sid = $section->id;
+        $qsid = $section->public_id;
+        $sections_array[$sid] = $qsid . '. ' . ellipsize($section->title, 25);
+    }
+    $data['sections'] = $sections_array;
+} else {
+    $data['sections'] = null;
 }
 
-draw($tool_content, $menuTypeID, null, $head_content);
+view('modules.document.new', $data);
 
 
 function getHtmlBody($path) {
