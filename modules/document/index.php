@@ -90,8 +90,7 @@ if (defined('EBOOK_DOCUMENTS')) {
 
 if (isset($_GET['showQuota'])) {
     $navigation[] = array('url' => documentBackLink(''), 'name' => $pageName);
-    $tool_content .= showquota($diskQuotaDocument, $diskUsed);
-    draw($tool_content, $menuTypeID);
+    showquota($diskQuotaDocument, $diskUsed);
     exit;
 }
 
@@ -175,7 +174,7 @@ if ($can_upload) {
       UPLOAD FILE
      * ******************************************************************** */
 
-    $action_message = $dialogBox = '';
+    $dialogBox = '';
     $extra_path = '';
     if (isset($_POST['fileCloudInfo']) or isset($_FILES['userFile'])) {
         if (isset($_POST['fileCloudInfo'])) { // upload cloud file
@@ -633,8 +632,12 @@ if ($can_upload) {
                                              WHERE $group_sql AND
                                                    path=?s", $commentPath);
         if ($res) {
-            $file_language = $session->validate_language_code($_POST['file_language'], $language);
-            Database::get()->query("UPDATE document SET
+            if ($res->format == '.dir') {
+                Database::get()->query("UPDATE document SET comment = ?s
+                     WHERE $group_sql AND path = ?s", $_POST['file_comment'], $commentPath);
+            } else {
+                $file_language = $session->validate_language_code($_POST['file_language'], $language);
+                Database::get()->query("UPDATE document SET
                                                 comment = ?s,
                                                 category = ?d,
                                                 title = ?s,
@@ -645,14 +648,17 @@ if ($can_upload) {
                                                 language = ?s,
                                                 copyrighted = ?d
                                         WHERE $group_sql AND
-                                              path = ?s"
-                    , $_POST['file_comment'], $_POST['file_category'], $_POST['file_title'], $_POST['file_subject']
-                    , $_POST['file_description'], $_POST['file_author'], $file_language, $_POST['file_copyrighted'], $commentPath);
-            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $res->id);
-            Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $commentPath,
-                'filename' => $res->filename,
-                'comment' => $_POST['file_comment'],
-                'title' => $_POST['file_title']));
+                                              path = ?s",
+                    $_POST['file_comment'], $_POST['file_category'],
+                    $_POST['file_title'], $_POST['file_subject'],
+                    $_POST['file_description'], $_POST['file_author'],
+                    $file_language, $_POST['file_copyrighted'], $commentPath);
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $res->id);
+                Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $commentPath,
+                    'filename' => $res->filename,
+                    'comment' => $_POST['file_comment'],
+                    'title' => $_POST['file_title']));
+            }
             $curDirPath = my_dirname($commentPath);
             Session::Messages($langComMod, 'alert-success');
             redirect_to_current_dir();
@@ -804,125 +810,27 @@ if ($can_upload) {
 
     // Add comment form
     if (isset($_GET['comment'])) {
-        $comment =  getDirectReference($_GET['comment']);
+        $comment = getDirectReference($_GET['comment']);
         // Retrieve the old comment and metadata
         $row = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $comment);
         if ($row) {
+            $dialogBox = 'comment';
             $curDirPath = my_dirname($comment);
             $backUrl = documentBackLink($curDirPath);
             $navigation[] = array('url' => $backUrl, 'name' => $pageName);
-            $oldFilename = q($row->filename);
-            $oldComment = q($row->comment);
-            $oldCategory = $row->category;
-            $oldTitle = q($row->title);
-            $oldCreator = q($row->creator);
-            $oldDate = q($row->date);
-            $oldSubject = q($row->subject);
-            $oldDescription = q($row->description);
-            $oldAuthor = q($row->author);
-            $oldLanguage = q($row->language);
-            $oldCopyrighted = $row->copyrighted;
-            $oldFormat = $row->format;
 
-            $is_file = $row->format != '.dir'? 1 : 0 ;
+            copyright_info_init();
 
-            $dialogBox .= "<div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <fieldset>
-                  <input type='hidden' name='commentPath' value='" . q(getIndirectReference($comment)) . "' />
-                  <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
-                  $group_hidden_input
-                  <div class='form-group'>
-                    <label class='col-sm-2 control-label'>".($is_file? $langWorkFile : $langDirectory).":</label>
-                    <div class='col-sm-10'>
-                        <p class='form-control-static'>$oldFilename</p>
-                    </div>
-                  </div>";
-            if ($is_file) { // if we are editing files file info
-                  $dialogBox .= "<div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langTitle:</label>
-                    <div class='col-sm-10'><input class='form-control' type='text' name='file_title' value='$oldTitle'></div>
-                  </div>";
-            }
-                $dialogBox .= "<div class='form-group'>
-                  <label class='col-sm-2 control-label'>$langComment:</label>
-                  <div class='col-sm-10'><input class='form-control' type='text' name='file_comment' value='$oldComment'></div>
-                </div>";
-            if ($is_file) { // if we are editing files file info
-                $dialogBox .= "<div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langCategory:</label>
-                    <div class='col-sm-10'>" .
-                        selection(array('0' => $langCategoryOther,
-                            '1' => $langCategoryExcercise,
-                            '2' => $langCategoryLecture,
-                            '3' => $langCategoryEssay,
-                            '4' => $langCategoryDescription,
-                            '5' => $langCategoryExample,
-                            '6' => $langCategoryTheory), 'file_category', $oldCategory, "class='form-control'") . "</div>
-                  </div>
-                  <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langSubject:</label>
-                    <div class='col-sm-10'><input class='form-control' type='text' name='file_subject' value='$oldSubject'></div>
-                  </div>
-                  <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langDescription:</label>
-                    <div class='col-sm-10'><input class='form-control' type='text' name='file_description' value='$oldDescription'></div>
-                  </div>
-                  <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langAuthor:</label>
-                    <div class='col-sm-10'><input class='form-control' type='text' name='file_author' value='$oldAuthor'></div>
-                  </div>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langCopyrighted:</label>
-                    <div class='col-sm-10'>"
-                         .selection($copyright_titles, 'file_copyrighted', $oldCopyrighted, "class='form-control'") .
-                    "</div>
-                </div>
-                <div class='form-group'>
-                        <label class='col-sm-2 control-label'>$langLanguage:</label>
-                        <div class='col-sm-10'>" .
-                            selection(array('en' => $langEnglish,
-                                'fr' => $langFrench,
-                                'de' => $langGerman,
-                                'el' => $langGreek,
-                                'it' => $langItalian,
-                                'es' => $langSpanish), 'file_language', $oldLanguage, "class='form-control'") .
-                        "</div>
-                </div>";
-            } else {
-                $dialogBox .= "<input type='hidden' size='80' name='file_title' value='$oldTitle'>
-                               <input type='hidden' size='80' name='file_category' value='$oldCategory'>
-                               <input type='hidden' size='80' name='file_subject' value='$oldSubject'>
-                               <input type='hidden' size='80' name='file_description' value='$oldDescription'>
-                               <input type='hidden' size='80' name='file_author' value='$oldAuthor'>
-                               <input type='hidden' size='80' name='file_copyrighted' value='$oldCopyrighted'>
-                               <input type='hidden' size='80' name='file_language' value='$oldLanguage'>";
-            }
-            $dialogBox .= "<div class='form-group'>
-                    <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
-                            array(
-                                'text' => $langSave,
-                                'value'=> $langOkComment
-                            ),
-                            array(
-                                'href' => $backUrl,
-                            )
-                        ))."</div>
-                </div>";
-            if ($is_file) { // if we are editing files file info
-                $dialogBox .= "<div class='form-group'>
-                    <div class='col-sm-offset-2 col-sm-10'>
-                        <span class='help-block'>$langNotRequired</span>
-                    </div>
-                </div>";
-            }
-                $dialogBox .= "<input type='hidden' size='80' name='file_creator' value='$oldCreator'>
-                <input type='hidden' size='80' name='file_date' value='$oldDate'>
-                </fieldset>
-            ". generate_csrf_token_form_field() ."
-                </form></div>";
+            $dialogData = array(
+                'file' => $row,
+                'is_dir' => $row->format == '.dir',
+                'languages' => $fileLanguageNames,
+                'categories' => $fileCategoryNames,
+                'copyrightTitles' => $copyright_titles);
         } else {
-            $action_message = "<div class='alert alert-danger'>$langFileNotFound</div>";
+            Session::Messages($langFileNotFound, 'alert-danger');
+            view('layouts.default', $data);
+            exit;
         }
     }
 
@@ -1132,7 +1040,7 @@ foreach ($result as $row) {
             $xmlCmdDirName = ($row->format == ".meta" && get_file_extension($row->path) == 'xml') ? substr($row->path, 0, -4) : $row->path;
             $info['action_button'] = action_button(array(
                 array('title' => $langEditChange,
-                      'url' => "{$base_url}comment=" . getIndirectReference($cmdDirName),
+                      'url' => "{$base_url}comment=" . $cmdDirName,
                       'icon' => 'fa-edit',
                       'show' => $row->format != '.meta'),
                 array('title' => $langGroupSubmit,
@@ -1214,16 +1122,16 @@ foreach ($result as $row) {
 $data = compact('can_upload', 'is_in_tinymce', 'base_url', 'group_hidden_input', 'curDirName', 'curDirPath', 'dialogBox');
 $data['fileInfo'] = array_merge($dirs, $files);
 
+if (isset($dialogData)) {
+    $data = array_merge($data, $dialogData);
+}
+
 if ($curDirName) {
     $data['dirComment'] = Database::get()->querySingle("SELECT comment FROM document WHERE $group_sql AND path = ?s", $curDirPath)->comment;
     $data['parentLink'] = $base_url . 'openDir=' . $cmdParentDir;
 }
 
 if ($can_upload) {
-    // Action result message
-    if (!empty($action_message)) {
-        $tool_content .= $action_message;
-    }
     // available actions
     if (!$is_in_tinymce) {
         if (isset($_GET['rename'])) {

@@ -97,7 +97,7 @@
                         <div class='form-group'>
                             <label for='inputFileCopyright' class='col-sm-2 control-label'>{{ trans('langCopyrighted') }}:</label>
                             <div class='col-sm-10'>
-                                {!! selection($copyright, 'file_copyrighted') !!}
+                                {!! selection($copyrightTitles, 'file_copyrighted') !!}
                             </div>
                         </div>
 

@@ -311,3 +311,21 @@ function copyright_info_init() {
         '7' => 'http://creativecommons.org/licenses/by-nc-sa/3.0/' . $link_suffix,
         '8' => 'http://creativecommons.org/licenses/by-nc-nd/3.0/' . $link_suffix);
 }
+
+$fileLanguageNames = array(
+    'en' => trans('langEnglish'),
+    'fr' => trans('langFrench'),
+    'de' => trans('langGerman'),
+    'el' => trans('langGreek'),
+    'it' => trans('langItalian'),
+    'es' => trans('langSpanish'));
+
+$fileCategoryNames = array(
+    '0' => trans('langCategoryOther'),
+    '1' => trans('langCategoryExcercise'),
+    '2' => trans('langCategoryLecture'),
+    '3' => trans('langCategoryEssay'),
+    '4' => trans('langCategoryDescription'),
+    '5' => trans('langCategoryExample'),
+    '6' => trans('langCategoryTheory'));
+

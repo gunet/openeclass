@@ -28,11 +28,13 @@ $require_admin = defined('COMMON_DOCUMENTS');
 $require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
 $require_login = true;
 
-require_once "../../include/baseTheme.php";
-require_once "modules/document/doc_init.php";
+require_once '../../include/baseTheme.php';
+require_once 'modules/document/doc_init.php';
 require_once 'modules/drives/clouddrive.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
 
 doc_init();
+copyright_info_init();
 
 if (defined('COMMON_DOCUMENTS')) {
     $data['menuTypeID'] = 3;
@@ -64,23 +66,8 @@ $data['upload_target_url'] = $upload_target_url;
 if ($can_upload) {
     $navigation[] = array('url' => $data['backUrl'], 'name' => $pageName);
 
-    $data['languages'] = array(
-        'en' => trans('langEnglish'),
-        'fr' => trans('langFrench'),
-        'de' => trans('langGerman'),
-        'el' => trans('langGreek'),
-        'it' => trans('langItalian'),
-        'es' => trans('langSpanish'));
-    $data['copyright'] = array(
-        '0' => trans('langCopyrightedUnknown'),
-        '2' => trans('langCopyrightedFree'),
-        '1' => trans('langCopyrightedNotFree'),
-        '3' => trans('langCreativeCommonsCCBY'),
-        '4' => trans('langCreativeCommonsCCBYSA'),
-        '5' => trans('langCreativeCommonsCCBYND'),
-        '6' => trans('langCreativeCommonsCCBYNC'),
-        '7' => trans('langCreativeCommonsCCBYNCSA'),
-        '8' => trans('langCreativeCommonsCCBYNCND'));
+    $data['languages'] = $fileLanguageNames;
+    $data['copyrightTitles'] = $copyright_titles;
 
     $data['pendingCloudUpload'] = CloudDriveManager::getFileUploadPending();
 
