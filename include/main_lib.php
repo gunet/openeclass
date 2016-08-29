@@ -844,21 +844,18 @@ function imap_literal($s) {
  * @return string
  */
 function new_code($fac) {
-
- $gencode = Database::get()->querySingle("SELECT code, MAX(generator) AS generator
-       FROM hierarchy WHERE code = (SELECT code FROM hierarchy WHERE id = ?d) GROUP BY code", $fac);
-   if ($gencode) {
+    $gencode = Database::get()->querySingle("SELECT code, MAX(generator) AS generator
+        FROM hierarchy WHERE code = (SELECT code FROM hierarchy WHERE id = ?d) GROUP BY code", $fac);
+    if ($gencode) {
         do {
-            $code = $gencode->code . $gencode->generator;
             $gencode->generator += 1;
-			$code = $gencode->code . $gencode->generator;
-            Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
-        } while (file_exists("courses/" . $code));
-		Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
-
-    // Make sure the code returned isn't empty!
+            $code = $gencode->code . $gencode->generator;
+            $res = Database::get()->querySingle("SELECT id FROM course WHERE code = ?s", $code);
+        } while (file_exists("courses/" . $code) or $res);
+        Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
     } else {
-        die("Course Code is empty!");
+        Session::Messages(trans('langGeneralError'), 'alert-danger');
+        redirect_to_home_page('main/portfolio.php');
     }
     return $code;
 }
