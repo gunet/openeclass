@@ -172,6 +172,7 @@ function printPollForm() {
                     </div>
                 </div>";
         }
+        $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;        
         $i=1;
         foreach ($questions as $theQuestion) {           
             $pqid = $theQuestion->pqid;
@@ -221,14 +222,15 @@ function printPollForm() {
                         </div>";
                                
                     }
-                } elseif ($qtype == QTYPE_SCALE) {                    
-                        $tool_content .= "
-                        <div style='margin-bottom: 0.5em;'><small>".q($langCollesLegend)."</small></div>
-                        <div class='form-group'>                        
-                            <div class='col-sm-offset-2 col-sm-10' style='padding-top:15px;'>
-                                <input name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
-                            </div>                            
-                        </div>";
+                } elseif ($qtype == QTYPE_SCALE) {
+                    if (($pollType == 1) or ($pollType == 2)) {
+                        $tool_content .= "<div style='margin-bottom: 0.5em;'><small>".q($langCollesLegend)."</small></div>";    
+                    }                    
+                    $tool_content .= "<div class='form-group'>                        
+                        <div class='col-sm-offset-2 col-sm-10' style='padding-top:15px;'>
+                            <input name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
+                        </div>                            
+                    </div>";
                 } elseif ($qtype == QTYPE_FILL) {
                     $tool_content .= "
                         <div class='form-group margin-bottom-fat'>                           
