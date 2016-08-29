@@ -577,14 +577,13 @@ function process_login() {
         if (get_config('login_fail_check') && $r) {
             $auth_allow = 8;
         } else {
-            $sqlLogin = "SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
-                                FROM user WHERE username ";
             if (get_config('case_insensitive_usernames')) {
                 $sqlLogin = "COLLATE utf8_general_ci = ?s";
             } else {
                 $sqlLogin = "COLLATE utf8_bin = ?s";
             }
-            $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
+            $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
+                                    username, status, email, lang, verified_mail, am
                                 FROM user WHERE username $sqlLogin", $posted_uname);
             $guest_user = get_config('course_guest') != 'off' && $myrow && $myrow->status == USER_GUEST;
 
@@ -779,7 +778,7 @@ function hybridauth_login() {
         } elseif ($myrow) {
             $exists = 1;
             if (in_array($auth_id, $auth_methods)) {
-                $auth_allow = login($myrow, null, null, $provider);
+                $auth_allow = login($myrow, null, null, $provider, $user_data);
             } else {
                 Session::Messages($langInvalidAuth, 'alert-danger');
                 redirect_to_home_page();
@@ -842,7 +841,7 @@ function hybridauth_login() {
   Authenticate user via eclass
  * ************************************************************** */
 
-function login($user_info_object, $posted_uname, $pass, $provider=null) {
+function login($user_info_object, $posted_uname, $pass, $provider=null, $user_data=null) {
     global $session;
 
     $_SESSION['canChangePassword'] = false;
@@ -870,6 +869,18 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
         // User was authenticated by HybridAuth
         $pass_match = true;
     }
+
+    $attributes = array();
+    if (!is_null($user_data)) {
+        $attributes['user_data'] = $user_data;
+    }
+    $userObj = new User();
+    $options = login_hook(array(
+        'user_id' => $user_info_object->id,
+        'attributes' => $attributes,
+        'status' => $user_info_object->status,
+        'departments' => $userObj->getDepartmentIds($user_info_object->id),
+        'am' => $user_info_object->am));
 
     if ($pass_match) {
         // check if account is active
@@ -1068,7 +1079,8 @@ function shib_cas_login($type) {
     } else {
         $sqlLogin = "COLLATE utf8_bin = ?s";
     }
-    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, am, lang, verified_mail
+    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname,
+                            status, email, lang, verified_mail, am
 						FROM user WHERE username $sqlLogin", $uname);
 
     if ($info) {
