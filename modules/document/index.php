@@ -530,68 +530,45 @@ if ($can_upload) {
 
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
-        $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s", getDirectReference($_POST['sourceFile']));
+        $sourceFile = getDirectReference($_POST['sourceFile']);
+        $r = Database::get()->querySingle("SELECT id, filename, format FROM document
+            WHERE $group_sql AND path = ?s", $sourceFile);
 
         if ($r->format != '.dir') {
             validateRenamedFile($_POST['renameTo'], $menuTypeID);
         }
 
         Database::get()->query("UPDATE document SET filename = ?s, date_modified = NOW()
-                          WHERE $group_sql AND path=?s"
-                , $_POST['renameTo'], getDirectReference($_POST['sourceFile']));
+                          WHERE $group_sql AND path=?s", $_POST['renameTo'], $sourceFile);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-        Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => getDirectReference($_POST['sourceFile']),
+        Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $sourceFile),
             'filename' => $r->filename,
             'newfilename' => $_POST['renameTo']));
-        if (hasMetaData(getDirectReference($_POST['sourceFile']), $basedir, $group_sql)) {
-            if (Database::get()->query("UPDATE document SET filename=?s WHERE $group_sql AND path = ?s"
-                            , ($_POST['renameTo'] . '.xml'), ($_POST['sourceFile'] . '.xml'))->affectedRows > 0) {
-                metaRenameDomDocument($basedir . getDirectReference($_POST['sourceFile']) . '.xml', $_POST['renameTo']);
+        if (hasMetaData($sourceFile, $basedir, $group_sql)) {
+            if (Database::get()->query("UPDATE document SET filename = ?s WHERE $group_sql AND path = ?s",
+                    $_POST['renameTo'] . '.xml',
+                    $sourceFile . '.xml')->affectedRows > 0) {
+                metaRenameDomDocument($basedir . $sourceFile . '.xml', $_POST['renameTo']);
             }
         }
-        $curDirPath = my_dirname(getDirectReference($_POST['sourceFile']));
+        $curDirPath = my_dirname($sourceFile);
         Session::Messages($langElRen, 'alert-success');
         redirect_to_current_dir();
     }
 
     // Step 1: Show rename dialog box
     if (isset($_GET['rename'])) {
-
-        $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s",  getDirectReference($_GET['rename']));
-
-        $fileName = Database::get()->querySingle("SELECT filename FROM document
-                                             WHERE $group_sql AND
-                                                   path = ?s",  getDirectReference($_GET['rename']))->filename;
-        $curDirPath = my_dirname(getDirectReference($_GET['rename']));
+        $dialogBox = 'rename';
+        $renamePath = getDirectReference($_GET['rename']);
+        $curDirPath = my_dirname($renamePath);
         $backUrl = documentBackLink($curDirPath);
         $navigation[] = array('url' => $backUrl, 'name' => $pageName);
-        $dialogBox .= "
-            <div class='row'>
-                <div class='col-xs-12'>
-                    <div class='form-wrapper'>
-                        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                            <fieldset>
-                                    <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
-                                    $group_hidden_input
-                                    <div class='form-group'>
-                                        <label for='renameTo' class='col-xs-2 control-label' >" . ($r->format != '.dir'? $m['filename'] : $m['dirname'] ). ":</label>
-                                        <div class='col-xs-10'>
-                                            <input class='form-control' type='text' name='renameTo' value='" . q($fileName) . "' />
-                                        </div>
-                                    </div>
-                                    <div class='form-group'>
-                                        <div class='col-xs-offset-2 col-xs-10'>" .
-                                            form_buttons(array(
-                                                array('text' => $langRename, 'value'=> $langRename),
-                                                array('href' => $backUrl))) . "
-                                        </div>
-                                    </div>
-                            </fieldset>
-            ". generate_csrf_token_form_field() ."
-                        </form>
-                    </div>
-                </div>
-            </div>";
+        $r = Database::get()->querySingle("SELECT id, filename, format FROM document
+            WHERE $group_sql AND path = ?s", $renamePath);
+        $dialogData = array(
+            'renamePath' => $_GET['rename'],
+            'filename' => $r->filename,
+            'filenameLabel' => $r->format == '.dir'? $m['dirname'] : $m['filename']);
     }
 
     // create directory
