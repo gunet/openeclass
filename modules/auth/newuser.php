@@ -438,7 +438,7 @@ if (!isset($_POST['submit'])) {
             $givenname = $myrow->givenname;
 
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                             VALUES (?d, ?s, NOW(), 'LOGIN')", $uid, $_SERVER['REMOTE_ADDR']);
+                             VALUES (?d, ?s, NOW(), 'LOGIN')", $uid, Log::get_client_ip());
             $_SESSION['uid'] = $uid;
             $_SESSION['status'] = USER_STUDENT;
             $_SESSION['givenname'] = $givenname_form;

@@ -133,10 +133,10 @@ function check_auth_configured($auth_id) {
 
 function count_auth_users($auth) {
     global $auth_ids;
-    
+
     $auth = intval($auth);
-    if ($auth === 1) {        
-        $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user 
+    if ($auth === 1) {
+        $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user
                                                     WHERE password NOT IN (SELECT auth_name FROM auth WHERE id > 1)");
     } else {
         $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user WHERE password = '" . $auth_ids[$auth] . "'");
@@ -230,8 +230,8 @@ function get_auth_settings($auth) {
  find/return the settings of a HybridAuth provider
 
  $provider : a string value in lowercase which corresponds to a
-             HybridAuth provider (e.g. facebook, twitter, google, 
-             live, yahoo, linkedin) 
+             HybridAuth provider (e.g. facebook, twitter, google,
+             live, yahoo, linkedin)
  return $provider_row
 * ************************************************************** */
 
@@ -565,14 +565,18 @@ function process_login() {
     $pass = isset($_POST['pass']) ? trim($_POST['pass']): '';
     $auth = get_auth_active_methods();
 
+    $ip = Log::get_client_ip();
+
     if (isset($_POST['submit'])) {
         unset($_SESSION['uid']);
         $auth_allow = 0;
 
         if (get_config('login_fail_check')) {
-            $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'
+            $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = ?s 
                                         AND COUNT > " . intval(get_config('login_fail_threshold')) . "
-                                        AND DATE_SUB(CURRENT_TIMESTAMP, interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail");
+                                        AND DATE_SUB(CURRENT_TIMESTAMP,
+                                                interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail",
+                                    $ip);
         }
         if (get_config('login_fail_check') && $r) {
             $auth_allow = 8;
@@ -584,7 +588,8 @@ function process_login() {
             } else {
                 $sqlLogin = "COLLATE utf8_bin = ?s";
             }
-            $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
+            $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
+                                    username, status, email, lang, verified_mail, am
                                 FROM user WHERE username $sqlLogin", $posted_uname);
             $guest_user = get_config('course_guest') != 'off' && $myrow && $myrow->status == USER_GUEST;
 
@@ -657,8 +662,8 @@ function process_login() {
                     break;
             }
         } else {
-            Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action) "
-                    . "VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+            Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+                    VALUES (?d, ?s, NOW(), 'LOGIN')", $_SESSION['uid'], $ip);
             $session->setLoginTimestamp();
             if (get_config('email_verification_required') and
                     get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
@@ -676,7 +681,7 @@ function process_login() {
 }
 
 /* * **************************************************************
- Authenticate user via HybridAuth (Twitter, Google, Facebook, 
+ Authenticate user via HybridAuth (Twitter, Google, Facebook,
  Yahoo, Live accounts)
 * ************************************************************** */
 
@@ -685,20 +690,22 @@ function hybridauth_login($provider=null) {
         $langInvalidId, $langAccountInactive1, $langAccountInactive2,
         $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
         $inactive_uid, $langTooManyFails, $warning;
-    
+
     // include HubridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
-    
+
     $_SESSION['canChangePassword'] = false;
 
     // check for errors and whatnot
     $warning = '';
-    
+
     if (isset($_GET['error'])) {
         Session::Messages(q(trim(strip_tags($_GET['error']))));
     }
+
+    $ip = Log::get_client_ip();
 
     // if user select a provider to login with then include hybridauth config
     // and main class, try to authenticate, finally redirect to profile
@@ -709,23 +716,23 @@ function hybridauth_login($provider=null) {
     if ($provider) {
         try {
             $hybridauth = new Hybrid_Auth($config);
-            
+
             // set selected provider name
             $provider = @trim(strip_tags($_GET['provider']));
-        
+
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate($provider);
-            
+
             // grab the user profile
             $user_data = $adapter->getUserProfile();
-            
+
             // user profile debug print
             // echo '<pre>'; print_r($user_data); echo '</pre>';
-            
+
         } catch (Exception $e) {
             // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
             // let hybridauth forget all about the user so we can try to authenticate again.
-        
+
             // Display the recived error,
             // to know more please refer to Exceptions handling section on the userguide
             switch($e->getCode()) {
@@ -738,30 +745,32 @@ function hybridauth_login($provider=null) {
                 case 6: Session::Messages($GLOBALS['langProviderError7']); $adapter->logout(); break;
                 case 7: Session::Messages($GLOBALS['langProviderError8']); $adapter->logout(); break;
             }
-        
+
             // debug messages for hybridauth errors
             //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
             //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
-        
+
             return false;
         }
     }
-    
-    
+
+
     // from here on an alternative version of proccess_login() runs where
     // instead of a password, the provider uid is used and matched against
     // the corresponding field in the db table.
-    
+
     $pass = $user_data->identifier; // password = provider user id
     // $is_eclass_unique = is_eclass_unique();
-    
+
     unset($_SESSION['uid']);
     $auth_allow = 0;
-    
+
     if (get_config('login_fail_check')) {
-        $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'
+        $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = ?s 
                                        AND COUNT > " . intval(get_config('login_fail_threshold')) . "
-                                       AND DATE_SUB(CURRENT_TIMESTAMP, interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail");
+                                       AND DATE_SUB(CURRENT_TIMESTAMP,
+                                            interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail",
+                                 $ip);
     }
     if (get_config('login_fail_check') && $r) {
         $auth_allow = 8;
@@ -783,7 +792,7 @@ function hybridauth_login($provider=null) {
         } elseif ($myrow) {
             $exists = 1;
             if (in_array($auth_id, $auth_methods)) {
-                $auth_allow = login($myrow, null, null, $provider);
+                $auth_allow = login($myrow, null, null, $provider, $user_data);
             } else {
                 Session::Messages($langInvalidAuth, 'alert-danger');
                 redirect_to_home_page();
@@ -794,7 +803,7 @@ function hybridauth_login($provider=null) {
             redirect_to_home_page('modules/auth/registration.php?provider=' . $provider);
         }
     }
-    
+
     if (!isset($_SESSION['uid'])) {
         switch ($auth_allow) {
             case 1:
@@ -827,7 +836,7 @@ function hybridauth_login($provider=null) {
         }
     } else {
         Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action) "
-                . "VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+                . "VALUES (?d, ?s, NOW(), 'LOGIN')", $_SESSION['uid'], $ip);
         if (get_config('email_verification_required') and
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
             $_SESSION['mail_verification_required'] = 1;
@@ -846,7 +855,7 @@ function hybridauth_login($provider=null) {
   Authenticate user via eclass
  * ************************************************************** */
 
-function login($user_info_object, $posted_uname, $pass, $provider=null) {
+function login($user_info_object, $posted_uname, $pass, $provider=null, $user_data=null) {
     global $session;
 
     $_SESSION['canChangePassword'] = false;
@@ -864,7 +873,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
                 $user_info_object->password = $password_encrypted;
                 Database::core()->query("SET sql_mode = TRADITIONAL");
                 Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $user_info_object->id);
-            } elseif (get_config('course_guest') != 'off' and $user_info_object->status = USER_GUEST and 
+            } elseif (get_config('course_guest') != 'off' and $user_info_object->status = USER_GUEST and
                 $pass === '' and $user_info_object->password === '') {
                 // special case for guest login with empty password
                 $pass_match = true;
@@ -873,6 +882,26 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
     } else {
         // User was authenticated by HybridAuth
         $pass_match = true;
+    }
+
+    $attributes = array();
+    if (!is_null($user_data)) {
+        $attributes['user_data'] = $user_data;
+    }
+    $userObj = new User();
+    $options = login_hook(array(
+        'user_id' => $user_info_object->id,
+        'attributes' => $attributes,
+        'status' => $user_info_object->status,
+        'departments' => $userObj->getDepartmentIds($user_info_object->id),
+        'am' => $user_info_object->am));
+
+    if (!$options['accept']) {
+        foreach (array_keys($_SESSION) as $key) {
+            unset($_SESSION[$key]);
+        }
+        Session::Messages($langRegistrationDenied, 'alert-warning');
+        redirect_to_home_page();
     }
 
     if ($pass_match) {
@@ -896,6 +925,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
             }
         }
         if ($is_active) {
+            $userObj->refresh($info->id, $options['departments']);
             $_SESSION['canChangePassword'] = true;
             $_SESSION['uid'] = $user_info_object->id;
             $_SESSION['uname'] = $user_info_object->username;
@@ -905,6 +935,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
             $_SESSION['email'] = $user_info_object->email;
             $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_object->lang;
             $auth_allow = 1;
+            user_hook($user_info_object->id);
             $session->setLoginTimestamp();
         } else {
             $auth_allow = 3;
@@ -950,6 +981,7 @@ function alt_login($user_info_object, $uname, $pass) {
     if ($auth == 6) {
         return 6; // Redirect to Shibboleth login
     }
+
     if ($user_info_object->password == $auth_method_settings['auth_name']) {
         $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
         if ($is_valid) {
@@ -966,7 +998,7 @@ function alt_login($user_info_object, $uname, $pass) {
             } elseif ($admin_rights == DEPARTMENTMANAGE_USER) {
                 $_SESSION['is_departmentmanage_user'] = 1;
             }
-            if (!empty($is_active)) {
+            if ($is_active) {
                 $auth_allow = 1;
             } else {
                 $auth_allow = 3;
@@ -979,6 +1011,33 @@ function alt_login($user_info_object, $uname, $pass) {
                                                        'pass' => $pass));
         }
         if ($auth_allow == 1) {
+            $userObj = new User();
+
+            $options = login_hook(array(
+                'user_id' => $user_info_object->id,
+                'attributes' => $attributes,
+                'status' => $user_info_object->status,
+                'departments' => $userObj->getDepartmentIds($info->id),
+                'am' => $user_info_object));
+
+            if (!$options['accept']) {
+                foreach (array_keys($_SESSION) as $key) {
+                    unset($_SESSION[$key]);
+                }
+                Session::Messages(trans('langRegistrationDenied'), 'alert-warning');
+                redirect_to_home_page();
+            }
+
+            if ($options['status'] != $user_info_object->status) {
+                // update user status
+                $user_info_object->status = $options['status'];
+                Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d', 
+                    $options['status'], $user_info_object->id);
+            }
+
+            $userObj->refresh($user_info_object->id, $options['departments']);
+            user_hook($user_info_object->id);
+
             $_SESSION['uid'] = $user_info_object->id;
             $_SESSION['uname'] = $user_info_object->username;
             // if ldap entries have changed update database
@@ -1072,7 +1131,8 @@ function shib_cas_login($type) {
     } else {
         $sqlLogin = "COLLATE utf8_bin = ?s";
     }
-    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, am, lang, verified_mail
+    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname,
+                            status, email, lang, verified_mail, am
 						FROM user WHERE username $sqlLogin", $uname);
 
     if ($info) {
@@ -1200,7 +1260,8 @@ function shib_cas_login($type) {
     $_SESSION['shib_user'] = 1; // now we are shibboleth user
 
     Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', " . DBHelper::timeAfter() . ", 'LOGIN')");
+                    VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGIN')",
+                    $_SESSION['uid'], Log::get_client_ip());
     $session->setLoginTimestamp();
     if (get_config('email_verification_required') and
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
@@ -1242,13 +1303,16 @@ function increaseLoginFailure() {
     if (!get_config('login_fail_check'))
         return;
 
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $ip . "'");
+    $ip = Log::get_client_ip();
+    $r = Database::get()->querySingle('SELECT 1 FROM login_failure WHERE ip = ?s', $ip);
 
     if ($r) {
-        Database::get()->query("UPDATE login_failure SET count = count + 1, last_fail = CURRENT_TIMESTAMP WHERE ip = '" . $ip . "'");
+        Database::get()->query('UPDATE login_failure SET
+                count = count + 1, last_fail = CURRENT_TIMESTAMP
+            WHERE ip = ?s', $ip);
     } else {
-        Database::get()->query("INSERT INTO login_failure (id, ip, count, last_fail) VALUES (NULL, '" . $ip . "', 1, CURRENT_TIMESTAMP)");
+        Database::get()->query('INSERT INTO login_failure (id, ip, count, last_fail)
+            VALUES (NULL, ?s, 1, CURRENT_TIMESTAMP)', $ip);
     }
 }
 
@@ -1260,7 +1324,10 @@ function resetLoginFailure() {
     if (!get_config('login_fail_check'))
         return;
 
-    Database::get()->query("DELETE FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL " . intval(get_config('login_fail_forgive_interval')) . " HOUR) >= last_fail"); // de-penalize only after 24 hours
+    Database::get()->query("DELETE FROM login_failure WHERE ip = ?s AND
+        DATE_SUB(CURRENT_TIMESTAMP,
+            INTERVAL " . intval(get_config('login_fail_forgive_interval')) . " HOUR) >= last_fail",
+        Log::get_client_ip()); // de-penalize only after 24 hours
 }
 
 function external_DB_Check_Pass($test_password, $hash, $encryption) {
@@ -1333,7 +1400,7 @@ function update_shibboleth_endpoint($settings) {
             return false;
         }
     }
-   
+
     $indexfile = $path . '/index.php';
     $filecontents = '<?php
 session_start();
