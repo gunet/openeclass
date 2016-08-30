@@ -353,9 +353,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             ));
         }
         $data['aaData'][] = array(
-            '0' => $logs->surname,
-            '1' => $logs->givenname,
-            '2' => $logs->username,
+            '0' => sanitize_utf8($logs->surname),
+            '1' => sanitize_utf8($logs->givenname),
+            '2' => sanitize_utf8($logs->username),
             '3' => $email_icon,
             '4' => icon($icon, $tip),
             '5' => $icon_content
