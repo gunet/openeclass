@@ -63,7 +63,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['iTotalDisplayRecords'] = $filtered_users;
     $data['aaData'] = array();
     foreach ($result as $myrow) {
-        $full_name = $myrow->givenname . " " . $myrow->surname;                        
         $user_roles = array();
         ($myrow->status == '1') ? array_push($user_roles, $langTeacher) : array_push($user_roles, $langStudent);
         if ($myrow->tutor == '1') array_push($user_roles, $langTutor);
@@ -73,7 +72,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $data['aaData'][] = array(
             'DT_RowId' => $myrow->id,
             'DT_RowClass' => 'smaller',
-            '0' => display_user($myrow->id),
+            '0' => sanitize_utf(display_user($myrow->id)),
             '1' => "<small>".implode(', ', $user_roles)."</small>"
         );
     }
