@@ -53,11 +53,11 @@ doc_init();
 $diskUsed = dir_total_space($basedir);
 
 if (defined('COMMON_DOCUMENTS')) {
-    $data['menuTypeID'] = 3;
+    $menuTypeID = 3;
     $toolName = $langCommonDocs;
     $diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
 } elseif (defined('MY_DOCUMENTS')) {
-    $data['menuTypeID'] = 1;
+    $menuTypeID = 1;
     $toolName = $langMyDocs;
     if ($session->status == USER_TEACHER) {
         $diskQuotaDocument = get_config('mydocs_teacher_quota') * 1024 * 1024;
@@ -65,14 +65,14 @@ if (defined('COMMON_DOCUMENTS')) {
         $diskQuotaDocument = get_config('mydocs_student_quota') * 1024 * 1024;
     }
 } else {
-    $data['menuTypeID'] = 2;
+    $menuTypeID = 2;
     $toolName = $langDoc;
     $type = ($subsystem == GROUP) ? 'group_quota' : 'doc_quota';
     $diskQuotaDocument = Database::get()->querySingle("SELECT $type AS quotatype FROM course WHERE id = ?d", $course_id)->quotatype;
 }
 
 if ($is_in_tinymce) {
-    $data['menuTypeID'] = 5;
+    $menuTypeID = 5;
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? 'docsfilter=' . $_REQUEST['docsfilter'] . '&amp;' : '';
     $base_url .= 'embedtype=tinymce&amp;' . $docsfilter;
@@ -541,7 +541,8 @@ if ($can_upload) {
         Database::get()->query("UPDATE document SET filename = ?s, date_modified = NOW()
                           WHERE $group_sql AND path=?s", $_POST['renameTo'], $sourceFile);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-        Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $sourceFile),
+        Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array(
+            'path' => $sourceFile,
             'filename' => $r->filename,
             'newfilename' => $_POST['renameTo']));
         if (hasMetaData($sourceFile, $basedir, $group_sql)) {
@@ -688,6 +689,7 @@ if ($can_upload) {
     if (isset($_POST['replacePath']) and
             isset($_FILES['newFile']) and
             is_uploaded_file($_FILES['newFile']['tmp_name'])) {
+
         validateUploadedFile($_FILES['newFile']['name'], $menuTypeID);
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $replacePath = getDirectReference($_POST['replacePath']);
@@ -695,12 +697,12 @@ if ($can_upload) {
         $result = Database::get()->querySingle("SELECT id, path, format FROM document WHERE
                                         $group_sql AND
                                         format <> '.dir' AND
-                                        path=?s", $replacePath);
+                                        path = ?s", $replacePath);
         if ($result) {
             $docId = $result->id;
             $oldpath = $result->path;
             $oldformat = $result->format;
-            $curDirPath = my_dirname(getDirectReference($_POST['replacePath']));
+            $curDirPath = my_dirname($replacePath);
             // check for disk quota
             if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
                 Session::Messages($langNoSpace, 'alert-danger');
@@ -715,24 +717,25 @@ if ($can_upload) {
                 $newpath = php2phps($newpath);
                 my_delete($basedir . $oldpath);
                 $affectedRows = Database::get()->query("UPDATE document SET path = ?s, format = ?s, filename = ?s, date_modified = NOW()
-                          WHERE $group_sql AND path = ?s"
-                                , $newpath, $newformat, ($_FILES['newFile']['name']), $oldpath)->affectedRows;
+                        WHERE $group_sql AND path = ?s",
+                    $newpath, $newformat, ($_FILES['newFile']['name']), $oldpath)->affectedRows;
                 if (!copy($_FILES['newFile']['tmp_name'], $basedir . $newpath) or $affectedRows == 0) {
                     Session::Messages($langGeneralError, 'alert-danger');
                     redirect_to_current_dir();
                 } else {
                     require_once 'modules/admin/extconfig/externals.php';
                     $connector = AntivirusApp::getAntivirus();
-                    if($connector->isEnabled() == true ){
-                        $output=$connector->check($basedir . $newpath);
-                        if($output->status==$output::STATUS_INFECTED){
+                    if ($connector->isEnabled() == true ){
+                        $output = $connector->check($basedir . $newpath);
+                        if ($output->status==$output::STATUS_INFECTED){
                             AntivirusApp::block($output->output);
                         }
                     }
                     if (hasMetaData($oldpath, $basedir, $group_sql)) {
                         rename($basedir . $oldpath . ".xml", $basedir . $newpath . ".xml");
-                        Database::get()->query("UPDATE document SET path = ?s, filename=?s WHERE $group_sql AND path = ?s"
-                                , ($newpath . ".xml"), ($_FILES['newFile']['name'] . ".xml"), ($oldpath . ".xml"));
+                        Database::get()->query("UPDATE document SET path = ?s, filename=?s
+                                WHERE $group_sql AND path = ?s",
+                            $newpath . '.xml', $_FILES['newFile']['name'] . '.xml', $oldpath . '.xml');
                     }
                     $session->setDocumentTimestamp($course_id);
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $docId);
@@ -753,35 +756,15 @@ if ($can_upload) {
                                                 format <> '.dir' AND
                                                 path = ?s",  getDirectReference($_GET['replace']));
         if ($result) {
+            $dialogBox = 'replace';
             $curDirPath = my_dirname($result->path);
-            $navigation[] = array('url' => documentBackLink($curDirPath), 'name' => $pageName);
-            $filename = q($result->filename);
-            $replacemessage = sprintf($langReplaceFile, '<b>' . $filename . '</b>');
+            $backUrl = documentBackLink($curDirPath);
+            $navigation[] = array('url' => $backUrl, 'name' => $pageName);
             enableCheckFileSize();
-            $dialogBox = "<div class='form-wrapper'>
-                        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>" .
-                        fileSizeHidenInput() . "
-                        <fieldset>
-                        <input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
-                        $group_hidden_input
-                        <div class='form-group'>
-                            <label class='col-sm-5 control-label'>$replacemessage</label>
-                            <div class='col-sm-7'><input type='file' name='newFile' size='35' /></div>
-                        </div>
-                        <div class='form-group'>
-                            <div class='col-sm-offset-4 col-sm-8'>".form_buttons(array(
-                                    array(
-                                        'text' => $langReplace,
-                                        'value'=> $langReplace
-                                    ),
-                                    array(
-                                        'href' => "index.php?course=$course_code",
-                                    )
-                                ))."</div>
-                        </div>
-                        </fieldset>
-            ". generate_csrf_token_form_field() ."
-                        </form></div>";
+            $dialogData = array(
+                'filename' => $result->filename,
+                'replacePath' => $_GET['replace'],
+                'replaceMessage' => sprintf($langReplaceFile, '<b>' . q($result->filename) . '</b>'));
         }
     }
 
@@ -1096,7 +1079,8 @@ foreach ($result as $row) {
 // Display
 // ----------------------------------------------
 
-$data = compact('can_upload', 'is_in_tinymce', 'base_url', 'group_hidden_input', 'curDirName', 'curDirPath', 'dialogBox');
+$data = compact('menuTypeID', 'can_upload', 'is_in_tinymce', 'base_url',
+    'group_hidden_input', 'curDirName', 'curDirPath', 'dialogBox');
 $data['fileInfo'] = array_merge($dirs, $files);
 
 if (isset($dialogData)) {
