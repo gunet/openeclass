@@ -158,6 +158,7 @@ if (!isset($_SESSION['was_validated']) or
 // registration
 // -----------------------------------------
 if ($is_valid) {
+    $ip = Log::get_client_ip();
     $ext_info = !isset($_SESSION['auth_user_info']);
     $ext_mail = !(isset($_SESSION['auth_user_info']['email']) && !empty($_SESSION['auth_user_info']['email']));
     $missing_posted_variables = array();
@@ -330,7 +331,7 @@ if ($is_valid) {
         }
 
         if (!$vmail) {
-            Database::get()->query("INSERT INTO loginout SET id_user = $uid, ip = '$_SERVER[REMOTE_ADDR]',`when` = NOW(), action = 'LOGIN'");
+            Database::get()->query("INSERT INTO loginout SET id_user = ?d, ip = ?s,`when` = NOW(), action = 'LOGIN'", $uid, $ip);
             $_SESSION['uid'] = $uid;
             $_SESSION['status'] = USER_STUDENT;
             $_SESSION['givenname'] = $givenname;
@@ -375,7 +376,7 @@ if ($is_valid) {
                                         date_open = " . DBHelper::timeAfter() . ", comment = ?s, lang = ?s,
                                         request_ip = ?s",
                             $givenname_form, $surname_form, $uname, $password, $email, $depid, $userphone,
-                            $am, $status, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
+                            $am, $status, $verified_mail, $usercomment, $language, $ip);
         $request_id = $q1->lastInsertID;
         // email does not need verification -> mail helpdesk
         if (!$email_verification_required) {
