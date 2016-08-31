@@ -79,7 +79,7 @@ class Notes {
     
     
     /**
-     * Insert new note and logs the action
+     * Inserts new note and logs the action
      * @param string $title note title
      * @param text $content note body
      * @param string $reference_obj_id refernced object by note containing object type (from $ref_object_types) and object id (is in the corresponding db table), e.g., video_link:5  
