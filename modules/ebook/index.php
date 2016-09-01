@@ -99,7 +99,7 @@ if ($is_editor) {
                     <div class='col-sm-10 col-sm-offset-2 '>".
             form_buttons(array(
                 array(
-                    'text'  => $langUpload,
+                    'text'  => $langCreate,
                     'name'  => 'submit',
                     'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify)
                 ),
@@ -175,24 +175,21 @@ draw($tool_content, 2, null, $head_content);
 /**
  * @brief display action button
  * @global type $is_editor
- * @global type $langModify
- * @global type $langDelete
- * @global type $langMove
- * @global type $langDown
- * @global type $langUp
+ * @global type $langEditChange
+ * @global type $langDelete 
  * @global type $langEBookDelConfirm
+ * @global type $langViewShow
  * @global type $course_code
- * @global type $langVisibility
- * @param type $id
- * @param type $title
+ * @global type $langViewHide
+ * @param type $id 
  * @param type $k
  * @param type $num
  * @param type $vis
  * @return string
  */
 function tools($id, $k, $num, $vis) {
-    global $is_editor, $langEditChange, $langDelete, $langMove, $langDown, $langUp, 
-           $langEBookDelConfirm, $course_code, $langViewHide, $langViewShow;
+    global $is_editor, $langEditChange, $langDelete, $langViewShow,
+           $langEBookDelConfirm, $course_code, $langViewHide;
 
     if (!$is_editor) {
         return '';
