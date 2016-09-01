@@ -68,24 +68,24 @@ if ($auth == 7) { // CAS
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
     $provider = $auth_ids[$auth];
-	try {
-		$hybridauth = new Hybrid_Auth($config);
-		$adapter = $hybridauth->authenticate($provider);
-		$user_data = $adapter->getUserProfile();
+    try {
+        $hybridauth = new Hybrid_Auth($config);
+        $adapter = $hybridauth->authenticate($provider);
+        $user_data = $adapter->getUserProfile();
         Session::Messages($langConnYes, 'alert-success');
-		Session::Messages("<p>$langCASRetAttr:<br>" . array2html(get_object_vars($user_data)) . "</p>");
-	} catch (Exception $e) {
-		Session::Messages($e->getMessage(), 'alert-danger');
-		switch($e->getCode()) {
-			case 0: Session::Messages(trans('langProviderError1'); break;
-			case 1: Session::Messages(trans('langProviderError2'); break;
-			case 2: Session::Messages(trans('langProviderError3'); break;
-			case 3: Session::Messages(trans('langProviderError4'); break;
-			case 4: Session::Messages(trans('langProviderError5'); break;
-			case 5: Session::Messages(trans('langProviderError6'); break;
-			case 6: Session::Messages(trans('langProviderError7'); $adapter->logout(); break;
-			case 7: Session::Messages(trans('langProviderError8'); $adapter->logout(); break;
-		}
+        Session::Messages("<p>$langCASRetAttr:<br>" . array2html(get_object_vars($user_data)) . "</p>");
+    } catch (Exception $e) {
+        Session::Messages($e->getMessage(), 'alert-danger');
+        switch($e->getCode()) {
+            case 0: Session::Messages(trans('langProviderError1')); break;
+            case 1: Session::Messages(trans('langProviderError2')); break;
+            case 2: Session::Messages(trans('langProviderError3')); break;
+            case 3: Session::Messages(trans('langProviderError4')); break;
+            case 4: Session::Messages(trans('langProviderError5')); break;
+            case 5: Session::Messages(trans('langProviderError6')); break;
+            case 6: Session::Messages(trans('langProviderError7')); $adapter->logout(); break;
+            case 7: Session::Messages(trans('langProviderError8')); $adapter->logout(); break;
+        }
     }
 }
 
@@ -119,7 +119,7 @@ if ($submit and $test_username !== '' and $data['test_password'] !== '') {
         if (isset($GLOBALS['auth_errors'])) {
             Session::Messages($GLOBALS['auth_errors'], 'alert-info');
         }
-    } 
+    }
 }
 
 $data['action_bar'] = action_bar(array(
