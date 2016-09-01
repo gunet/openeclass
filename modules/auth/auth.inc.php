@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.2
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -581,8 +581,6 @@ function process_login() {
         if (get_config('login_fail_check') && $r) {
             $auth_allow = 8;
         } else {
-            $sqlLogin = "SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
-                                FROM user WHERE username ";
             if (get_config('case_insensitive_usernames')) {
                 $sqlLogin = "COLLATE utf8_general_ci = ?s";
             } else {
@@ -752,7 +750,7 @@ function hybridauth_login($provider=null) {
 
             return false;
         }
-    }
+    } //endif( isset( $_GET["provider"] ) && $_GET["provider"] )
 
 
     // from here on an alternative version of proccess_login() runs where
@@ -897,11 +895,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
         'am' => $user_info_object->am));
 
     if (!$options['accept']) {
-        foreach (array_keys($_SESSION) as $key) {
-            unset($_SESSION[$key]);
-        }
-        Session::Messages($langRegistrationDenied, 'alert-warning');
-        redirect_to_home_page();
+        deny_access();
     }
 
     if ($pass_match) {
@@ -925,7 +919,13 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
             }
         }
         if ($is_active) {
-            $userObj->refresh($info->id, $options['departments']);
+            if ($options['status'] != $user_info_object->status) {
+                // update user status
+                $user_info_object->status = $options['status'];
+                Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d',
+                    $options['status'], $user_info_object->id);
+            }
+            $userObj->refresh($user_info_object->id, $options['departments']);
             $_SESSION['canChangePassword'] = true;
             $_SESSION['uid'] = $user_info_object->id;
             $_SESSION['uname'] = $user_info_object->username;
@@ -943,8 +943,8 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
         }
     } else {
         $auth_allow = 4; // means wrong password
-        Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname,
-                                                   'pass' => $pass));
+        Log::record(0, 0, LOG_LOGIN_FAILURE,
+            array('uname' => $posted_uname, 'pass' => $pass));
     }
 
     return $auth_allow;
@@ -1021,11 +1021,7 @@ function alt_login($user_info_object, $uname, $pass) {
                 'am' => $user_info_object));
 
             if (!$options['accept']) {
-                foreach (array_keys($_SESSION) as $key) {
-                    unset($_SESSION[$key]);
-                }
-                Session::Messages(trans('langRegistrationDenied'), 'alert-warning');
-                redirect_to_home_page();
+                deny_access();
             }
 
             if ($options['status'] != $user_info_object->status) {
@@ -1080,7 +1076,7 @@ function alt_login($user_info_object, $uname, $pass) {
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
         $urlServer, $is_admin, $is_power_user, $is_usermanage_user,
-        $is_departmentmanage_user, $langUserAltAuth, $langRegistrationDenied;
+        $is_departmentmanage_user, $langUserAltAuth;
 
     $_SESSION['canChangePassword'] = false;
     $alt_auth_stud_reg = get_config('alt_auth_stud_reg');
@@ -1163,11 +1159,7 @@ function shib_cas_login($type) {
                 'am' => $am));
 
             if (!$options['accept']) {
-                foreach (array_keys($_SESSION) as $key) {
-                    unset($_SESSION[$key]);
-                }
-                Session::Messages($langRegistrationDenied, 'alert-warning');
-                redirect_to_home_page();
+                deny_access();
             }
 
             $status = $options['status'];
@@ -1218,12 +1210,9 @@ function shib_cas_login($type) {
             'am' => $am));
 
         if (!$options['accept']) {
-            foreach (array_keys($_SESSION) as $key) {
-                unset($_SESSION[$key]);
+            deny_access();
             }
-            Session::Messages($langRegistrationDenied, 'alert-warning');
-            redirect_to_home_page();
-        }
+
         $status = $options['status'];
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
@@ -1461,4 +1450,14 @@ function get_shibboleth_vars($file) {
         $shib_vars['shib_cn'] = $shib_vars['shib_nom'];
     }
     return $shib_vars;
+}
+
+function deny_access() {
+    if (!$options['accept']) {
+        foreach (array_keys($_SESSION) as $key) {
+            unset($_SESSION[$key]);
+        }
+        Session::Messages(trans('langRegistrationDenied'), 'alert-warning');
+        redirect_to_home_page();
+    }
 }
