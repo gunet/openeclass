@@ -63,6 +63,30 @@ if ($auth == 7) { // CAS
         $_SESSION['shib_auth_test'] = false;
         redirect_to_home_page('secure/index.php');
     }
+} elseif (in_array($auth_ids[$auth], $hybridAuthMethods)) {
+    require_once 'modules/auth/methods/hybridauth/config.php';
+    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+    $config = get_hybridauth_config();
+    $provider = $auth_ids[$auth];
+	try {
+		$hybridauth = new Hybrid_Auth($config);
+		$adapter = $hybridauth->authenticate($provider);
+		$user_data = $adapter->getUserProfile();
+        Session::Messages($langConnYes, 'alert-success');
+		Session::Messages("<p>$langCASRetAttr:<br>" . array2html(get_object_vars($user_data)) . "</p>");
+	} catch (Exception $e) {
+		Session::Messages($e->getMessage(), 'alert-danger');
+		switch($e->getCode()) {
+			case 0: Session::Messages($GLOBALS['langProviderError1']); break;
+			case 1: Session::Messages($GLOBALS['langProviderError2']); break;
+			case 2: Session::Messages($GLOBALS['langProviderError3']); break;
+			case 3: Session::Messages($GLOBALS['langProviderError4']); break;
+			case 4: Session::Messages($GLOBALS['langProviderError5']); break;
+			case 5: Session::Messages($GLOBALS['langProviderError6']); break;
+			case 6: Session::Messages($GLOBALS['langProviderError7']); $adapter->logout(); break;
+			case 7: Session::Messages($GLOBALS['langProviderError8']); $adapter->logout(); break;
+		}
+	}
 }
 
 $toolName = $langConnTest . ' (' . $auth_ids[$auth] . ')';
@@ -95,7 +119,7 @@ if ($submit and $test_username !== '' and $test_password !== '') {
         if (isset($GLOBALS['auth_errors'])) {
             Session::Messages($GLOBALS['auth_errors'], 'alert-info');
         }
-    } 
+    }
 }
 
 $tool_content .= action_bar(array(
@@ -110,7 +134,7 @@ if ($auth > 1 and $auth < 6) {
     $tool_content .= "<div class='form-wrapper'>
        <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <input type='hidden' name='auth' value='$auth'>
-        <fieldset>  
+        <fieldset>
 
 
             <div class='alert alert-info'>$langTestAccount ({$auth_ids[$auth]})</div>
