@@ -75,7 +75,7 @@ define('LEARNINGPATHMODULE_', 4);
 
 function commentBox($type, $mode) {
     global $is_editor, $langModify, $langSubmit,
-    $langAdd, $langConfirmYourChoice, $langDefaultLearningPathComment,
+    $langAdd, $langConfirmDelete, $langDefaultLearningPathComment,
     $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $course_code,
     $course_id;
 
@@ -170,12 +170,12 @@ function commentBox($type, $mode) {
             // display edit and delete links if user as the right to see it
             // display comment
             $output .= standard_text_escape($currentComment);
-            if ($is_editor) {
-                $output .= ''
-                        . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "")
-                        . '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=del' . $col_name . '" '
-                        . ' onclick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmYourChoice) . '\')) return false;">' . "\n"
-                        . icon('fa-times', $langDelete)."</a>";
+            
+            if ($is_editor) {                
+                $output .= "&nbsp;&nbsp;&nbsp;" . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "");
+                $output .= "&nbsp;&nbsp;&nbsp";
+                $output .= icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=del$col_name", 'onClick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmDelete) . '\')) return false;"');
+                        
             }            
         }
     }
