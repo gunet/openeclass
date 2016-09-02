@@ -440,6 +440,7 @@ if ($can_upload) {
      **************************************/
     // Move file or directory: Step 2
     if (isset($_POST['moveTo'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $moveTo = getDirectReference($_POST['moveTo']);
         $source = getDirectReference($_POST['movePath']);
         $sourceXml = $source . '.xml';
