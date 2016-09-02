@@ -28,7 +28,7 @@ function doc_init() {
     global $course_id, $course_code, $webDir, $can_upload, $is_editor,
         $is_admin, $navigation, $subsystem, $subsystem_id, $group_id,
         $groupset, $base_url, $upload_target_url, $group_sql,
-        $group_hidden_input, $basedir, $pageName;
+        $group_hidden_input, $basedir, $ebook_id, $pageName;
 
     $can_upload = $is_editor || $is_admin;
     if (defined('GROUP_DOCUMENTS')) {
@@ -51,7 +51,7 @@ function doc_init() {
         $navigation[] = array('url' => $urlAppend . 'modules/group/index.php?course=' . $course_code, 'name' => trans('langGroups'));
         $navigation[] = array('url' => $urlAppend . 'modules/group/group_space.php?course=' . $course_code . '&amp;group_id=' . $group_id, 'name' => q($group_name));
     } elseif (defined('EBOOK_DOCUMENTS')) {
-        if (isset($_REQUEST['ebook_id'])) {
+        if (!isset($ebook_id) and isset($_REQUEST['ebook_id'])) {
             $ebook_id = intval($_REQUEST['ebook_id']);
         }
         $subsystem = EBOOK;
