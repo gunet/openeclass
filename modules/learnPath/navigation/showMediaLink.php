@@ -27,11 +27,16 @@ require_once 'include/lib/mediaresource.factory.php';
 
 $nameTools = $langMediaTypeDesc;
 
-if (isset($_GET['id'])) {    
+if (isset($_GET['id'])) {
+        
     $row = Database::get()->querySingle("SELECT * FROM videolink WHERE course_id = ?d AND url = ?s", $course_id, $_GET['id']);
-
+    $lp_resource_sql = Database::get()->querySingle("SELECT name, comment FROM lp_module WHERE module_id = (SELECT module_id FROM lp_asset WHERE path = ?s)", $_GET['id']);
+    $lp_spec_comment = Database::get()->querySingle("SELECT specificComment FROM lp_rel_learnPath_module WHERE module_id = (SELECT module_id FROM lp_asset WHERE path = ?s)", $_GET['id'])->specificComment;
     if ($row) {        
-        $vObj = MediaResourceFactory::initFromVideoLink($row);
+        echo "<div align='center'>$lp_resource_sql->name</div>";        
+        echo "<div align='center'>$lp_resource_sql->comment</div>";
+        echo "<div align='center'>$lp_spec_comment</div>";
+        $vObj = MediaResourceFactory::initFromVideoLink($row);        
         echo MultimediaHelper::medialinkIframeObject($vObj);
     }
 }

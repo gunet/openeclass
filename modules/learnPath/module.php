@@ -408,40 +408,7 @@ if ($module->contentType != CTLABEL_) { //
     }
 }// end if($module['contentType'] != CTLABEL_)
 $tool_content .= "</div></div>";
-//################################## MODULE NAME BOX #################################\\
 
-
-//####################################################################################\\
-//################################# ADMIN DISPLAY ####################################\\
-//####################################################################################\\
-/*
-  if( $is_editor ) // for teacher only
-  {
-  switch ($module['contentType'])
-  {
-  case CTDOCUMENT_ :
-  require_once("./include/document.inc.php");
-  break;
-  case CTEXERCISE_ :
-  require_once("./include/exercise.inc.php");
-  break;
-  case CTSCORM_ :
-  require_once("./include/scorm.inc.php");
-  break;
-  case CTCLARODOC_ :
-  case CTLABEL_ :
-  case CTCOURSE_DESCRIPTION_ :
-  case CTLINK_:
-  break;
-  }
-  } // if ($is_editor)
- */
-
-$tool_content .= "
-    </div>
-    </div>"
-;
-
-
+$tool_content .= "</div></div>";
 
 draw($tool_content, 2, null, $head_content, $body_action);
