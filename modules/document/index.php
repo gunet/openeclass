@@ -440,12 +440,12 @@ if ($can_upload) {
      **************************************/
     // Move file or directory: Step 2
     if (isset($_POST['moveTo'])) {
-        $moveTo = $_POST['moveTo'];
-        $source = getDirectReference($_POST['source']);
+        $moveTo = getDirectReference($_POST['moveTo']);
+        $source = getDirectReference($_POST['movePath']);
         $sourceXml = $source . '.xml';
         // check if source and destination are the same
-        if ($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
-            $r = Database::get()->querySingle("SELECT filename, extra_path FROM document WHERE $group_sql AND path=?s", $source);
+        if ($source != $moveTo) {
+            $r = Database::get()->querySingle("SELECT filename, extra_path FROM document WHERE $group_sql AND path = ?s", $source);
             $filename = $r->filename;
             $extra_path = $r->extra_path;
             if (empty($extra_path)) {
@@ -462,25 +462,27 @@ if ($can_upload) {
             $curDirPath = $moveTo;
             redirect_to_current_dir();
         } else {
-            $action_message = "<div class='alert alert-danger'>$langImpossible</div><br>";
+            Session::Messages($langImpossible, 'alert-danger');
             // return to step 1
-            $move = $source;
-            unset($moveTo);
+            $_GET['move'] = $source;
         }
     }
 
     // Move file or directory: Step 1
     if (isset($_GET['move'])) {
-        $move = getDirectReference($_GET['move']);
-        $curDirPath = my_dirname($move);
+        $dialogBox = 'move';
+        $movePath = getDirectReference($_GET['move']);
+        $curDirPath = my_dirname($movePath);
         $navigation[] = array('url' => documentBackLink($curDirPath), 'name' => $pageName);
 
         // $move contains file path - search for filename in db
         $q = Database::get()->querySingle("SELECT filename, format FROM document
-                                                WHERE $group_sql AND path=?s", $move);
-        $moveFileNameAlias = $q->filename;
-        $exclude = ($q->format == '.dir')? $move: '';
-        $dialogBox .= directory_selection(getIndirectReference($move), 'moveTo', $curDirPath, $exclude);
+                                                WHERE $group_sql AND path=?s", $movePath);
+        $exclude = ($q->format == '.dir')? $movePath: '';
+        $dialogData = array(
+            'movePath' => $movePath,
+            'filename' => $q->filename,
+            'directories' => directory_selection($movePath, 'moveTo', $curDirPath, $exclude));
     }
 
     // Delete file or directory
@@ -807,7 +809,7 @@ if ($can_upload) {
             $real_filename = $basedir . str_replace('/..', '', q($metadata));
             $dialogBox .= metaCreateForm($metadata, $oldFilename, $real_filename);
         } else {
-            $action_message = "<div class='alert alert-danger'>$langFileNotFound</div>";
+            Session::Messages($langFileNotFound, 'alert-danger');
         }
     }
 
