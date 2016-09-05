@@ -25,10 +25,10 @@
  */
 
 function doc_init() {
-    global $course_id, $course_code, $webDir, $can_upload, $is_editor,
-        $is_admin, $navigation, $subsystem, $subsystem_id, $group_id,
-        $groupset, $base_url, $upload_target_url, $group_sql,
-        $group_hidden_input, $basedir, $ebook_id, $pageName;
+    global $urlAppend, $course_id, $course_code, $webDir, $can_upload,
+        $is_editor, $is_admin, $navigation, $subsystem, $subsystem_id,
+        $group_id, $groupset, $base_url, $upload_target_url, $group_sql,
+        $group_hidden_input, $basedir, $ebook_id, $uid, $session, $pageName;
 
     $can_upload = $is_editor || $is_admin;
     if (defined('GROUP_DOCUMENTS')) {

@@ -89,8 +89,9 @@ if (defined('EBOOK_DOCUMENTS')) {
 }
 
 if (isset($_GET['showQuota'])) {
-    $navigation[] = array('url' => documentBackLink(''), 'name' => $pageName);
-    showquota($diskQuotaDocument, $diskUsed);
+    $backUrl = documentBackLink('');
+    $navigation[] = array('url' => $backUrl, 'name' => $pageName);
+    showquota($diskQuotaDocument, $diskUsed, $backUrl, $menuTypeID);
     exit;
 }
 

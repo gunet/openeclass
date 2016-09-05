@@ -63,7 +63,7 @@ $backUrl = documentBackLink($uploadPath);
 
 $navigation[] = array('url' => $backUrl, 'name' => $toolName);
 
-$data = compact('can_upload', 'group_hidden_input', 'upload_target_url', 'backUrl');
+$data = compact('can_upload', 'group_hidden_input', 'upload_target_url', 'backUrl', 'menuTypeID');
 $data['backButton'] = action_bar(array(
     array('title' => $langBack,
           'url' => $backUrl,
