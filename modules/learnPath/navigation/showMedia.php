@@ -28,10 +28,9 @@ require_once 'include/lib/mediaresource.factory.php';
 $nameTools = $langMediaTypeDesc;
 
 if (isset($_GET['id'])) {
-    
     $row = Database::get()->querySingle("SELECT * FROM video WHERE course_id = ?d AND path = ?s", $course_id, $_GET['id']);
-    $lp_resource_sql = Database::get()->querySingle("SELECT name, comment FROM lp_module WHERE module_id = (SELECT module_id FROM lp_asset WHERE path = ?s)", $_GET['id']);
-    $lp_spec_comment = Database::get()->querySingle("SELECT specificComment FROM lp_rel_learnPath_module WHERE module_id = (SELECT module_id FROM lp_asset WHERE path = ?s)", $_GET['id'])->specificComment;
+    $lp_resource_sql = Database::get()->querySingle("SELECT name, comment FROM lp_module WHERE module_id = ?d", $_GET['viewModule_id']);
+    $lp_spec_comment = Database::get()->querySingle("SELECT specificComment FROM lp_rel_learnPath_module WHERE module_id = ?d", $_GET['viewModule_id'])->specificComment;
     if ($row) {
         echo "<div align='center'>$lp_resource_sql->name</div>";
         echo "<div align='center'>$lp_resource_sql->comment</div>";
