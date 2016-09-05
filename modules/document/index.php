@@ -1060,7 +1060,7 @@ foreach ($result as $row) {
             // use Access/DL URL for non-modable tinymce plugins
             $dObj->setPlayURL($dObj->getAccessURL());
         } else {
-            $dObj->setPlayURL(file_playurl($cmdDirName, $row->filename));
+            $dObj->setPlayURL(file_playurl($row->path, $row->filename));
         }
         $info['link'] = MultimediaHelper::chooseMediaAhref($dObj);
 
@@ -1096,56 +1096,54 @@ if ($curDirName) {
     $data['parentLink'] = $base_url . 'openDir=' . $cmdParentDir;
 }
 
-if ($can_upload) {
+if ($can_upload and !$is_in_tinymce) {
     // available actions
-    if (!$is_in_tinymce) {
-        if (isset($_GET['rename'])) {
-            $pageName = $langRename;
-        }
-        if (isset($_GET['move'])) {
-            $pageName = $langMove;
-        }
-        if (isset($_GET['createDir'])) {
-            $pageName = $langCreateDir;
-        }
-        if (isset($_GET['comment'])) {
-            $pageName = $langAddComment;
-        }
-        if (isset($_GET['replace'])) {
-            $pageName = $langReplace;
-        }
-        $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
-        $data['actionBar'] = action_bar(array(
-            array('title' => $langDownloadFile,
-                  'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
-                  'icon' => 'fa-upload',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success'),
-            array('title' => $langCreateDoc,
-                  'url' => "new.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
-                  'icon' => 'fa-file',
-                  'level' => 'primary'),
-            array('title' => $langCreateDir,
-                  'url' => "{$base_url}createDir=$cmdCurDirPath",
-                  'icon' => 'fa-folder',
-                  'level' => 'primary'),
-            array('title' => $langExternalFile,
-                  'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true",
-                  'icon' => 'fa-link'),
-            array('title' => $langCommonDocs,
-                  'url' => "../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1",
-                  'icon' => 'fa-share-alt',
-                  'show' => !defined('MY_DOCUMENTS') && !defined('COMMON_DOCUMENTS') && get_config('enable_common_docs')),
-            array('title' => $langQuotaBar,
-                  'url' => "{$base_url}showQuota=true",
-                  'icon' => 'fa-pie-chart'),
-            array('title' => $langBack,
-                  'url' => "group_space.php?course=$course_code&group_id=$group_id",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label',
-                  'show' => $subsystem == GROUP)
-            ), false);
+    if (isset($_GET['rename'])) {
+        $pageName = $langRename;
     }
+    if (isset($_GET['move'])) {
+        $pageName = $langMove;
+    }
+    if (isset($_GET['createDir'])) {
+        $pageName = $langCreateDir;
+    }
+    if (isset($_GET['comment'])) {
+        $pageName = $langAddComment;
+    }
+    if (isset($_GET['replace'])) {
+        $pageName = $langReplace;
+    }
+    $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
+    $data['actionBar'] = action_bar(array(
+        array('title' => $langDownloadFile,
+              'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
+              'icon' => 'fa-upload',
+              'level' => 'primary-label',
+              'button-class' => 'btn-success'),
+        array('title' => $langCreateDoc,
+              'url' => "new.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
+              'icon' => 'fa-file',
+              'level' => 'primary'),
+        array('title' => $langCreateDir,
+              'url' => "{$base_url}createDir=$cmdCurDirPath",
+              'icon' => 'fa-folder',
+              'level' => 'primary'),
+        array('title' => $langExternalFile,
+              'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true",
+              'icon' => 'fa-link'),
+        array('title' => $langCommonDocs,
+              'url' => "../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1",
+              'icon' => 'fa-share-alt',
+              'show' => !defined('MY_DOCUMENTS') && !defined('COMMON_DOCUMENTS') && get_config('enable_common_docs')),
+        array('title' => $langQuotaBar,
+              'url' => "{$base_url}showQuota=true",
+              'icon' => 'fa-pie-chart'),
+        array('title' => $langBack,
+              'url' => "group_space.php?course=$course_code&group_id=$group_id",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label',
+              'show' => $subsystem == GROUP)
+        ), false);
 } else {
     $data['actionBar'] = $data['dialogBox'] = '';
 }

@@ -43,7 +43,7 @@
 
                             <th class='text-left'>{{ trans('langSize') }}</th>
                             <th class='text-left'>{!! headlink(trans('langDate'), 'date') !!}</th>
-                            @if (!$is_in_tinymce)
+                            @unless ($is_in_tinymce)
                                 <th class='text-center'>{!! icon('fa-gears', trans('langCommands')) !!}</th>
                             @endif
                         </tr>
@@ -105,9 +105,11 @@
                                     <td>{{ $file->size }}</td>
                                     <td title='{{ $file->date_time }}' class='center'>{{ $file->date }}</td>
                                 @endif
-                                <td class='{{ $can_upload? 'option-btn-cell': 'text-center'}}'>
-                                    {!! $file->action_button !!}
-                                </td>
+                                @unless ($is_in_tinymce)
+                                    <td class='{{ $can_upload? 'option-btn-cell': 'text-center'}}'>
+                                        {!! $file->action_button !!}
+                                    </td>
+                                @endif
                             </tr>
                         @empty
                             <tr>
