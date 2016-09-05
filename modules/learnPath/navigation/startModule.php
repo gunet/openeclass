@@ -161,7 +161,7 @@ switch ($module->contentType) {
         }
 
         if (MultimediaHelper::isSupportedFile($assetPath)) {
-            $moduleStartAssetPage = "showMedia.php?course=$course_code&amp;id=" . $assetPath;
+            $moduleStartAssetPage = "showMedia.php?course=$course_code&amp;id=" . $assetPath . "&amp;viewModule_id=$_SESSION[lp_module_id]";
         } else {
             $moduleStartAssetPage = htmlspecialchars($urlServer
                     . "modules/video/index.php?course=$course_code&action=download&id=" . $assetPath
@@ -174,10 +174,10 @@ switch ($module->contentType) {
         }
 
         if (MultimediaHelper::isEmbeddableMedialink($assetPath)) {
-            $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=" . urlencode($assetPath);
+            $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=" . urlencode($assetPath) . "&amp;viewModule_id=$_SESSION[lp_module_id]";
         } else {
             $moduleStartAssetPage = $assetPath;
-        }
+        }        
         break;
 } // end switch
 
