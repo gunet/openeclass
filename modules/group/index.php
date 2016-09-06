@@ -680,9 +680,9 @@ if ($is_editor) {
         if ($aantalcategories > 0) {
             $tool_content .= "$langCategorisedGroups&nbsp;";
             if (isset($urlview) and abs($urlview) == 0) {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $showall)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $langViewShow)."</a>";
             } else {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $shownone)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $langViewHide)."</a>";
             }
         }
         $tool_content .= "</div>
@@ -709,7 +709,7 @@ if ($is_editor) {
                 $newurlview[$i] = '0';
                 $tool_content .= "<tr class='link-subcategory-title'>
                                     <th class = 'text-left category-link' colspan='4'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>".icon('fa-minus-square-o', $shownone)."&nbsp;&nbsp;". q($myrow->name) . "</a>";
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>".icon('fa-minus-square-o', $langViewHide)."&nbsp;&nbsp;". q($myrow->name) . "</a>";
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span></th>";
                 } else {
@@ -738,7 +738,7 @@ if ($is_editor) {
                         <tr class='link-subcategory-title'>
                             <th class = 'text-left category-link' colspan='4'>&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
                 $tool_content .= is_array($view) ? implode('', $view) : $view;
-                $tool_content .= "' class='open-category'>".icon('fa-plus-square', $showall)
+                $tool_content .= "' class='open-category'>".icon('fa-plus-square', $langViewShow)
                     . "&nbsp;&nbsp;" . q($myrow->name) . "</a>";
                 $description = standard_text_escape($myrow->description);
                 if (!empty($description)) {

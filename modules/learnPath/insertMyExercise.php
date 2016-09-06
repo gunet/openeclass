@@ -75,8 +75,6 @@ $tool_content .=
 // see checked exercises to add
 $resultex = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1", $course_id);
 
-$confirmation = [];
-
 // for each exercise checked, try to add it to the learning path.
 foreach ($resultex as $listex) {
     if (isset($_REQUEST['insertExercise']) && isset($_REQUEST['check_' . $listex->id])) {  //add
@@ -134,10 +132,8 @@ foreach ($resultex as $listex) {
                   AND course_id = ?d", $insertedAsset_id, $insertedExercice_id, $course_id);
 
             insertInLearningPath($insertedExercice_id, $order);
-
-            $confirmation[] = $exercise->title . " :  " . $langExInsertedAsModule;
-            Session::Messages($confirmation);
-
+            Session::Messages($langInsertedAsModule, 'alert-info');
+            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
         } else {
             // exercise is already used as a module in another learning path , so reuse its reference
             // check if this is this LP that used this exercise as a module
@@ -154,33 +150,26 @@ foreach ($resultex as $listex) {
             if ($num == 0) {
                 // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 insertInLearningPath($thisExerciseModule->module_id, $order);
-
-                $confirmation[] = $exercise->title . " : " . $langExInsertedAsModule;
-                Session::Messages($confirmation);
-            } else {
-                $confirmation[] = $listex->title . " : " . $langExAlreadyUsed;
-                Session::Messages($confirmation);
+                Session::Messages($langInsertedAsModule, 'alert-info');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
+            } else {                
+                Session::Messages($langAlreadyUsed, 'alert-warning');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
         }
     } // end if request
 } //end while
 
-if (!empty($confirmation)) {
-    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
-}
-
-//STEP ONE : display form to add an exercise
 $tool_content .= display_my_exercises("", "");
-
-//STEP TWO : display learning path content
-//$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php?course=$course_code">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
-// display list of modules used by this learning path
-//$tool_content .= display_path_content();
-
 
 draw($tool_content, 2, null, $head_content);
 
+/**
+ * @brief insert in LP
+ * @global type $langDefaultModuleAddedComment
+ * @param type $module_id
+ * @param type $rank
+ */
 function insertInLearningPath($module_id, $rank) {
     global $langDefaultModuleAddedComment;
 

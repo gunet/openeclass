@@ -635,8 +635,8 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
         if ($num_of_categories > 0) { // categories found ?
             $tool_content .= "<tr class='list-header'><th>$langCatVideoDirectory&nbsp;&nbsp;&nbsp;" .
                 ($expand_all?
-                    icon('fa-folder-open', $shownone, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=0"):
-                    icon('fa-folder', $showall, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1")) .
+                    icon('fa-folder-open', $langViewHide, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=0"):
+                    icon('fa-folder', $langViewShow, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1")) .
                 "</th>
                  <th class='text-center' style='width:100px;'>$langDate</th>";
             if (!$is_in_tinymce) {
@@ -648,9 +648,9 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
             foreach ($resultcategories as $myrow) {
                 $description = standard_text_escape($myrow->description);
                 if ((isset($_GET['d']) and $_GET['d'] == 1) or ( isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
-                    $folder_icon = icon('fa-folder-open-o', $shownone);
+                    $folder_icon = icon('fa-folder-open-o', $langViewHide);
                 } else {
-                    $folder_icon = icon('fa-folder-o', $showall);
+                    $folder_icon = icon('fa-folder-o', $langViewShow);
                 }
                 $colspan = $display_tools? 2: 3;
                 $tool_content .= "<tr class='link-subcategory-title'><th class='category-link' colspan='$colspan'>$folder_icon ";

@@ -102,7 +102,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             //checking visible status
             if ($myrow->visible == '0') {
                 $visible = 1;
-                $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsNotVis'><span class='fa fa-eye-slash'></span> $langAdminAnNotVis</li>";
+                $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsNotVis'><span class='fa fa-eye-slash'></span> $langInvisible</li>";
                 $vis_class = 'not_visible';
             } else {
                 $visible = 0;
@@ -114,11 +114,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                         $vis_class = 'not_visible';
                         $status_icon_list = "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->start_display'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
                     } else {
-                        $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
+                        $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langVisible</li>";
                         $vis_class = 'visible';
                     }
                 }else{
-                    $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langAdminAnVis</li>";
+                    $status_icon_list = "<li data-toggle='tooltip' data-placement='left' title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langVisible</li>";
                     $vis_class = 'visible';
                 }
             }
@@ -729,7 +729,7 @@ if ($is_editor) {
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
                     <label>
-                        <input type='checkbox' name='show_public' $checked_public> $showall
+                        <input type='checkbox' name='show_public' $checked_public> $langViewShow
                     </label>
                 </div>
             </div>

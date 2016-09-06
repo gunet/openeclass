@@ -118,7 +118,6 @@ if (!isset($style)) {
 }
 
 $iterator = 0;
-$confirmation = [];
 
 if (!isset($_REQUEST['maxDocForm'])) {
     $_REQUEST['maxDocForm'] = 0;
@@ -166,11 +165,10 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                 // finally : insert in learning path
                 Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
-                        VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $langDefaultModuleAddedComment, $order);
-                $addedDoc = $filenameDocument;
+                        VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $langDefaultModuleAddedComment, $order);                
 
-                $confirmation[] = $addedDoc . " : " . $langDocInsertedAsModule;
-                Session::Messages($confirmation);
+                Session::Messages($langInsertedAsModule, 'alert-info');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             } else {
                 // check if this is this LP that used this document as a module
                 $sql = "SELECT count(*) as count FROM `lp_rel_learnPath_module` AS LPM,
@@ -193,21 +191,18 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                     Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                             (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
                             VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $thisDocumentModule->module_id, $langDefaultModuleAddedComment, $order);
-                    $addedDoc = $filenameDocument;
-
-                    $confirmation[] = $addedDoc . " : " . $langDocInsertedAsModule;
-                    Session::Messages($confirmation);
+                    
+                    Session::Messages($langInsertedAsModule, 'alert-info');
+                    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
                 } else {
-                    $confirmation[] = $filenameDocument . " : " . $langDocumentAlreadyUsed;
-                    Session::Messages($confirmation);
+                    Session::Messages($langAlreadyUsed, 'alert-warning');
+                    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
                 }
             }
         }
     }
 }
-if (!empty($confirmation)) {
-    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
-}
+
 
 /* ======================================
   DEFINE CURRENT DIRECTORY
@@ -326,11 +321,5 @@ unset($attribute);
 // display list of available documents
 $tool_content .= display_my_documents($dialogBox, $style);
 
-//################################## MODULES LIST ####################################\\
-//$tool_content .= "<br />";
-//$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php?course=$course_code">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
-// display list of modules used by this learning path
-//$tool_content .= display_path_content();
 chdir($pwd);
 draw($tool_content, 2, null, $head_content);

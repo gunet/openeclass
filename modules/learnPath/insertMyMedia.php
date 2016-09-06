@@ -60,7 +60,6 @@ $(document).ready(function() {
 EOF;
 
 $iterator = 1;
-$confirmation = [];
 
 if (!isset($_POST['maxMediaForm'])) {
     $_POST['maxMediaForm'] = 0;
@@ -92,21 +91,15 @@ while ($iterator <= $_POST['maxMediaForm']) {
             $num = Database::get()->querySingle($sql, $video->path, $_SESSION['path_id'])->count;
 
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                reuse_module($thisLinkModule->module_id);
+                reuse_module($thisLinkModule->module_id);               
+                Session::Messages($langInsertedAsModule, 'alert-info');
 
-                $confirmation[] = $video->title . ': ' . $langMediaInsertedAsModule;
-                Session::Messages($confirmation);
-
-            } else {
-
-                $confirmation[] = q($video->title) . ': ' . $langMediaAlreadyUsed;
-                Session::Messages($confirmation);
+            } else {                
+                Session::Messages($langAlreadyUsed, 'alert-warning');
             }
         } else {
-            create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
-
-            $confirmation[] = $video->title . ': ' . $langMediaInsertedAsModule;
-            Session::Messages($confirmation);
+            create_new_module($video->title, $video->description, $video->path, CTMEDIA_);           
+            Session::Messages($langInsertedAsModule, 'alert-info');
         }
     }
 
@@ -135,28 +128,21 @@ while ($iterator <= $_POST['maxMediaForm']) {
             $num = Database::get()->querySingle($sql, $videolink->url, $_SESSION['path_id'])->count;
 
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                reuse_module($thisLinkModule->module_id);
-
-                $confirmation[] = $video->title . ': ' . $langMediaInsertedAsModule;
-                Session::Messages($confirmation);
-            } else {
-
-                $confirmation[] = q($videolink->title) . " : " . $langMediaAlreadyUsed;
-                Session::Messages($confirmation);
+                reuse_module($thisLinkModule->module_id);               
+                Session::Messages($langInsertedAsModule, 'alert-info');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
+            } else {                
+                Session::Messages($langAlreadyUsed);
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
         } else {
             create_new_module($videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
-
-            $confirmation[] = $video->title . ': ' . $langMediaInsertedAsModule;
-            Session::Messages($confirmation);
+            Session::Messages($langInsertedAsModule, 'alert-info');
+            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
         }
     }
     $iterator++;
 }
-if (!empty($confirmation)) {
-    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
-}
-
 
 $tool_content .= showmedia();
 draw($tool_content, 2, null, $head_content);

@@ -51,7 +51,7 @@ $head_content .= "<script type = 'text/javascript'>
                 hidden_field.show();              
             } else {
                 $(this).closest('tr').siblings('.hidden_row').show('slow');
-                $(this).text('$shownone');
+                $(this).text('$langViewHide');
                 $(this).attr('id', 'hide');
             }
         } else {
@@ -61,7 +61,7 @@ $head_content .= "<script type = 'text/javascript'>
                 hidden_field.prev().show();
             } else {
                 $(this).closest('tr').siblings('.hidden_row').hide('slow');
-                $(this).text('$showall');
+                $(this).text('$langViewShow');
                 $(this).attr('id', 'show');            
             }
         }
@@ -241,7 +241,7 @@ foreach ($result as $theresult){
 
     if($dif_scores>1){
         $connected ++;
-        $tool_content .= $langCKW . "<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$showall</a>";
+        $tool_content .= $langCKW . "<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$langViewShow</a>";
         $tool_content .= "</td><td class='hidden_names' style='display:none;'><table border='1' width='100%'>";
         $answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
                                                                                         WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
@@ -260,11 +260,11 @@ foreach ($result as $theresult){
                 $ans = $lang_rate5;
             $tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
         }
-        $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td>  "; 
+        $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td>  "; 
     }
     else if($dif_scores<-1) {
         $separated ++;
-        $tool_content .= $langSKW ."<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$showall</a>";
+        $tool_content .= $langSKW ."<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$langViewShow</a>";
         $tool_content .= "</td><td class='hidden_names' style='display:none;'><table border='1' width='100%'>";
         $answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
                                                                                         WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
@@ -283,10 +283,10 @@ foreach ($result as $theresult){
                 $ans = $lang_rate5;
             $tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
         }
-        $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td> "; 
+        $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td> "; 
     } else {
         $both_con_sep++;
-        $tool_content .= $langCKW_SKW ."<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$showall</a>";
+        $tool_content .= $langCKW_SKW ."<b>". $lang_ckw . round($ckw,2) . $lang_skw . round($skw,2)."</b>) <a href='#' class='trigger_names' data-type='multiple' id='show'>$langViewShow</a>";
         $tool_content .= "</td><td class='hidden_names' style='display:none;'><table border='1' width='100%'>";
         $answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
                                                                                         WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
@@ -305,7 +305,7 @@ foreach ($result as $theresult){
                 $ans = $lang_rate5;
             $tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
         }
-        $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td> "; 
+        $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td> "; 
     }
     $tool_content .="</td></tr>";	
                             }

@@ -63,7 +63,6 @@ $navigation[] = array("url" => "learningPathAdmin.php?course=$course_code&amp;pa
 $toolName = $langInsertMyLinkToolName;
 
 $iterator = 1;
-$confirmation = [];
 
 if (!isset($_POST['maxLinkForm'])) {
     $_POST['maxLinkForm'] = 0;
@@ -109,8 +108,8 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
 				VALUES (?d, ?d, '', ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $order);
 
-            $confirmation[] = $row->title . " : " . $langDocInsertedAsModule;
-            Session::Messages($confirmation);
+            Session::Messages($langInsertedAsModule, 'alert-info');
+            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
         } else {
             // check if this is this LP that used this document as a module
             $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
@@ -133,22 +132,18 @@ while ($iterator <= $_POST['maxLinkForm']) {
                 Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 					(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
 					VALUES (?d, ?d, '', ?d,'OPEN', 1)", $_SESSION['path_id'], $thisLinkModule->module_id, $order);
-
-                $confirmation[] = $row->title . " : " . $langDocInsertedAsModule;
-                Session::Messages($confirmation);
+                
+                Session::Messages($langInsertedAsModule, 'alert-info');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             } else {
-
-                $confirmation[] = q($row->title) . " : " . $langLinkAlreadyUsed;
-                Session::Messages($confirmation);
+                Session::Messages($langAlreadyUsed, 'alert-warning');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
         }
     }
     $iterator++;
 }
 
-if (!empty($confirmation)) {
-    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
-}
 
 $tool_content .= 
          action_bar(array(

@@ -849,7 +849,7 @@ class Calendar_Events {
       * @return object with `count` attribute containing the number of associated events with the item
      */
    public static function month_calendar($day, $month, $year) {
-       global $uid, $langDay_of_weekNames, $langMonthNames, $langToday, $langDay, $langWeek, $langMonth, $langView;
+       global $uid, $langDay_of_weekNames, $langMonthNames, $langToday, $langDay, $langWeek, $langMonth, $langViewShow;
        $calendar_content = "";
         //Handle leap year
         $numberofdays = array(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -879,7 +879,7 @@ class Calendar_Events {
         $backward = array('month'=>$month == 1 ? 12 : $month - 1, 'year' => $month == 1 ? $year - 1 : $year);
         $foreward = array('month'=>$month == 12 ? 1 : $month + 1, 'year' => $month == 12 ? $year + 1 : $year);
 
-        $calendar_content .= '<div class="right" style="width:100%">'.$langView.':&nbsp;'.
+        $calendar_content .= '<div class="right" style="width:100%">'.$langViewShow.':&nbsp;'.
                 '<a href="#" onclick="show_day(selectedday, selectedmonth, selectedyear);return false;">'.$langDay.'</a>&nbsp;|&nbsp;'.
                 '<a href="#" onclick="show_week(selectedday, selectedmonth, selectedyear);return false;">'.$langWeek.'</a>&nbsp;|&nbsp;'.
                 '<a href="#" onclick="show_month(selectedday, selectedmonth, selectedyear);return false;">'.$langMonth.'</a></div>';
@@ -963,7 +963,7 @@ class Calendar_Events {
       * @return object with `count` attribute containing the number of associated events with the item
       */
     public static function week_calendar($day, $month, $year) {
-        global $langEvents, $langActions, $langCalendar, $langDateNow, $is_editor, $dateFormatLong, $langNoEvents, $langDay, $langWeek, $langMonth, $langView;
+        global $langEvents, $langActions, $langCalendar, $langDateNow, $is_editor, $dateFormatLong, $langNoEvents, $langDay, $langWeek, $langMonth, $langViewShow;
         $calendar_content = "";
         if (is_null($day)) {
             $day = 1;
@@ -984,7 +984,7 @@ class Calendar_Events {
         $backward = array('day'=>$previousweekdate->format('d'), 'month'=>$previousweekdate->format('m'), 'year' => $previousweekdate->format('Y'));
         $foreward = array('day'=>$nextweekdate->format('d'), 'month'=>$nextweekdate->format('m'), 'year' => $nextweekdate->format('Y'));
 
-        $calendar_content .= '<div class="right" style="width:100%">'.$langView.':&nbsp;'.
+        $calendar_content .= '<div class="right" style="width:100%">'.$langViewShow.':&nbsp;'.
                 '<a href="#" onclick="show_day(selectedday, selectedmonth, selectedyear);return false;">'.$langDay.'</a>&nbsp;|&nbsp;'.
                 '<a href="#" onclick="show_week(selectedday, selectedmonth, selectedyear);return false;">'.$langWeek.'</a>&nbsp;|&nbsp;'.
                 '<a href="#" onclick="show_month(selectedday, selectedmonth, selectedyear);return false;">'.$langMonth.'</a></div>';
@@ -1069,7 +1069,7 @@ class Calendar_Events {
       * @return object with `count` attribute containing the number of associated events with the item
      */
    public static function day_calendar($day, $month, $year) {
-       global $langEvents, $langActions, $langCalendar, $langDateNow, $is_editor, $dateFormatLong, $langNoEvents, $langDay, $langWeek, $langMonth, $langView;
+       global $langEvents, $langActions, $langCalendar, $langDateNow, $is_editor, $dateFormatLong, $langNoEvents, $langDay, $langWeek, $langMonth, $langViewShow;
         $calendar_content = "";
         if (is_null($day)) {
             $day = 1;
@@ -1085,7 +1085,7 @@ class Calendar_Events {
         $backward = array('day'=>$previousdaydate->format('d'), 'month'=>$previousdaydate->format('m'), 'year' => $previousdaydate->format('Y'));
         $foreward = array('day'=>$nextdaydate->format('d'), 'month'=>$nextdaydate->format('m'), 'year' => $nextdaydate->format('Y'));
 
-        $calendar_content .= '<div class="right" style="width:100%">'.$langView.':&nbsp;'.
+        $calendar_content .= '<div class="right" style="width:100%">'.$langViewShow.':&nbsp;'.
                 '<a href="#" onclick="show_day(selectedday, selectedmonth, selectedyear);return false;">'.$langDay.'</a>&nbsp;|&nbsp;'.
                 '<a href="#" onclick="show_week(selectedday, selectedmonth, selectedyear);return false;">'.$langWeek.'</a>&nbsp;|&nbsp;'.
                 '<a href="#" onclick="show_month(selectedday, selectedmonth, selectedyear);return false;">'.$langMonth.'</a></div>';
@@ -1189,7 +1189,7 @@ class Calendar_Events {
       * @return html formatted item
      */
     public static function week_calendar_item($event, $class) {
-        global $urlServer,$is_admin,$langVisible, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
+        global $urlServer,$is_admin,$langVisibility, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
         $formatted_calendar_item = "";
         $formatted_calendar_item .= "<tr $class>";
         $formatted_calendar_item .= "<td valign='top'><div class=\"legend_color\" style=\"float:left;margin:3px;height:16px;width:16px;background-color:".Calendar_Events::$calsettings->{$event->event_group."_color"}."\"></div></td>";
@@ -1245,7 +1245,7 @@ class Calendar_Events {
       * @return html formatted item
      */
     public static function day_calendar_item($event, $class) {
-        global $urlServer, $is_admin, $langVisible, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
+        global $urlServer, $is_admin, $langVisibility, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
         $formatted_calendar_item = "";
         $formatted_calendar_item .= "<tr $class>";
         $formatted_calendar_item .= "<td valign='top'><div class=\"legend_color\" style=\"float:left;margin:3px;height:16px;width:16px;background-color:".Calendar_Events::$calsettings->{$event->event_group."_color"}."\"></div></td>";

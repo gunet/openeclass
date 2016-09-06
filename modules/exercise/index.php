@@ -156,7 +156,7 @@ if ($is_editor) {
             . "JOIN exercise b ON a.eid = b.id WHERE a.attempt_status = ?d AND b.course_id = ?d GROUP BY eid", ATTEMPT_PENDING, $course_id);
     if (count($pending_exercises) > 0) {
         foreach ($pending_exercises as $row) {           
-            $tool_content .="<div class='alert alert-info'>$langPendingExercise " . q($row->title) . ". (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langView</a>)</div>";
+            $tool_content .="<div class='alert alert-info'>$langPendingExercise " . q($row->title) . ". (<a href='results.php?course=$course_code&exerciseId=$row->eid&status=2'>$langViewShow</a>)</div>";
         }
     }
     $tool_content .= action_bar(array(
@@ -253,7 +253,7 @@ if (!$nbrExercises) {
             $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count
                 FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
             if ($NumOfResults) {
-                $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langDisplayResults</a> |
+                $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a> |
                 <a href='csv.php?course=$course_code&amp;exerciseId=$eid'>$langExport</a>
                 (<a href='csv.php?course=$course_code&amp;full=true&amp;exerciseId=$eid'>$langExportWithAnswers</a>)</td>";
             } else {
@@ -333,7 +333,7 @@ if (!$nbrExercises) {
                                                 AND eid = ?d", $uid, $row->id)->count;
                     if ($attempts > 0) {
                         $eid = getIndirectReference($row->id);
-                        $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langDisplayResults</a></td>";
+                        $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></td>";
                     } else {
                         $tool_content .= "<td class='text-center''>&dash;</td>";
                     }

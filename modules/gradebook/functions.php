@@ -763,7 +763,7 @@ function student_view_gradebook($gradebook_id) {
  * @global type $langGradebookGradeAlert
  * @global type $langGradebookNoActMessage1
  * @global type $langTitle
- * @global type $langView
+ * @global type $langViewShow
  * @global type $langScore
  * @global type $langGradebookActList
  * @global type $langGradebookActivityDate2
@@ -793,7 +793,7 @@ function student_view_gradebook($gradebook_id) {
 function display_gradebook($gradebook) {
 
     global $course_code, $urlServer, $tool_content, $langGradebookGradeAlert, $langGradebookNoActMessage1,
-           $langTitle, $langView, $langScore, $langGradebookActList, $langAdd,
+           $langTitle, $langViewShow, $langScore, $langGradebookActList, $langAdd,
            $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langType, $langExercise,
            $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity, $langDelete, $langConfirmDelete,
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
@@ -879,7 +879,7 @@ function display_gradebook($gradebook) {
                                             <th>$langTitle</th>
                                             <th>$langGradebookActivityDate2</th>
                                             <th>$langType</th><th>$langGradebookWeight</th>
-                                            <th class='text-center'>$langView</th>
+                                            <th class='text-center'>$langViewShow</th>
                                             <th class='text-center'>$langScore</th>
                                             <th class='text-center'>".icon('fa-cogs')."</i></th>
                                         </tr>";

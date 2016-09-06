@@ -289,7 +289,7 @@ $(document).ready(function() {
 EOF;
 }
 
-$registration_link_options = array('show' => $langShow, 'hide' => $langHide, 'show_text' => $langRegistrationShowText);
+$registration_link_options = array('show' => $langViewShow, 'hide' => $langViewHide, 'show_text' => $langRegistrationShowText);
 
 // Save new `config` table
 if (isset($_POST['submit'])) {

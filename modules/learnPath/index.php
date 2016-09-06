@@ -268,7 +268,7 @@ if ($is_editor) {
                         $style = "caution";
                         $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                         <div class='form-group'>
-                            <label for='newPathName' class='col-sm-2 control-label'>$langLearningPathName:</label>
+                            <label for='newPathName' class='col-sm-2 control-label'>$langName:</label>
                             <div class='col-sm-10'>
                               <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
@@ -307,7 +307,7 @@ if ($is_editor) {
                     ));
                     $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                         <div class='form-group'>
-                            <label for='newPathName' class='col-sm-2 control-label'>$langLearningPathName:</label>
+                            <label for='newPathName' class='col-sm-2 control-label'>$langName:</label>
                             <div class='col-sm-10'>
                               <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
@@ -387,7 +387,7 @@ if ($is_editor) {
                         'icon' => 'fa-plus-circle',
                         'level' => 'primary-label',
                         'button-class' => 'btn-success'),
-                    array('title' => $langimportLearningPathSort,
+                    array('title' => $langInsert,
                         'url' => "importLearningPath.php?course=$course_code",
                         'icon' => 'fa-upload',
                         'level' => 'primary-label',
