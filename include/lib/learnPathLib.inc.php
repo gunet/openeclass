@@ -913,6 +913,19 @@ function delete_module_tree($module_tree) {
 
                 break;
         }
+
+        // auto-delete from modules pool if not used elsewhere
+        $cnt = Database::get()->querySingle("select count(learnPath_module_id) as count "
+                . " from lp_rel_learnPath_module "
+                . " where module_id = ?d "
+                . " and learnPath_id in ("
+                . " select learnPath_id from lp_learnPath where course_id = ?d"
+                . " )", $module['module_id'], $module['course_id'])->count;
+
+        if ($cnt == 0) {
+            Database::get()->query("DELETE FROM `lp_asset` WHERE `module_id` =  ?d", $module['module_id']);
+            Database::get()->query("DELETE FROM `lp_module` WHERE `module_id` =  ?d", $module['module_id']);
+        }
     }
     if (isset($module['children']) && is_array($module['children'])) {
         delete_module_tree($module['children']);
