@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.2
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -46,7 +46,7 @@ $data = array();
 
 // common data for tinymce embedding, custom filtering, sorting, etc..
 $is_in_tinymce = $data['is_in_tinymce'] = isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce';
-$data['menuTypeID'] = ($is_in_tinymce) ? 5 : 2;
+$data['menuTypeID'] = $is_in_tinymce ? 5 : 2;
 list($filterv, $filterl, $compatiblePlugin) = isset($_REQUEST['docsfilter']) 
         ? select_proper_filters($_REQUEST['docsfilter']) 
         : array('WHERE true', 'WHERE true', true);

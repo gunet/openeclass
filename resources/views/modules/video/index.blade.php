@@ -34,7 +34,7 @@
     }
 ?>
 
-@extends('layouts.default')
+@extends($is_in_tinymce ? 'layouts.embed' : 'layouts.default')
 
 @section('content')
     {!! $action_bar or '' !!}
