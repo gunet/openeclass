@@ -51,7 +51,7 @@ $head_content .= "<script type = 'text/javascript'>
                 hidden_field.show();              
             } else {
                 $(this).closest('tr').siblings('.hidden_row').show('slow');
-                $(this).text('$shownone');
+                $(this).text('$langViewHide');
                 $(this).attr('id', 'hide');
             }
         } else {
@@ -61,7 +61,7 @@ $head_content .= "<script type = 'text/javascript'>
                 hidden_field.prev().show();
             } else {
                 $(this).closest('tr').siblings('.hidden_row').hide('slow');
-                $(this).text('$showall');
+                $(this).text('$langViewShow');
                 $(this).attr('id', 'show');            
             }
         }
@@ -227,7 +227,7 @@ $export_box
 
         $tool_content .="<tr><td>".$l_name. " ". $f_name."</td><td>";
 
-        $tool_content .= "<a href='#' class='trigger_names' data-type='multiple' id='show'>$showall</a>";
+        $tool_content .= "<a href='#' class='trigger_names' data-type='multiple' id='show'>$langViewShow</a>";
         $tool_content .= "</td><td class='hidden_names' style='display:none;'><table border='1' width='100%'>";
         $answers = Database::get()->queryArray("SELECT t1.question_text as qt, t2.answer_text as ant FROM poll_question as t1, poll_answer_record as t2
                                                                                         WHERE t1.pqid=t2.qid AND t2.poll_user_record_id = ?d AND t1.pid = ?d", $p_user_id , $pid); 
@@ -246,7 +246,7 @@ $export_box
                     $ans = $lang_rate5;
                 $tool_content .= "<tr><td width='80%'>".$q."</td><td width='20%' align='center'>".$ans."</td></tr>";
         }
-        $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$shownone</a></td>  "; 
+        $tool_content .="</table><a href='#' class='trigger_names' data-type='multiple' id='hide'>$langViewHide</a></td>  "; 
         $tool_content .="</td></tr>";	
     }
     $tool_content .="</tbody></table>";

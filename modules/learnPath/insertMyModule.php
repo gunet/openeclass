@@ -75,51 +75,6 @@ $tool_content .=
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'))) ;
 
-
-// FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
-// 1)  We select first the modules that must not be displayed because
-// as they are already in this learning path
-function buildRequestModules() {
-    global $course_id;
-
-    $firstSql = "SELECT LPM.`module_id`
-              FROM `lp_rel_learnPath_module` AS LPM
-              WHERE LPM.`learnPath_id` = ?d";
-
-    $firstResult = Database::get()->queryArray($firstSql, $_SESSION['path_id']);
-
-    // 2) We build the request to get the modules we need
-
-    $sql = "SELECT M.*, A.`path`
-         FROM `lp_module` AS M
-           LEFT JOIN `lp_asset` AS A ON M.`startAsset_id` = A.`asset_id`
-         WHERE M.`contentType` != \"SCORM\"
-           AND M.`contentType` != \"SCORM_ASSET\"
-           AND M.`contentType` != \"LABEL\"
-           AND M.`course_id` = " . intval($course_id);
-
-    foreach ($firstResult as $list) {
-        $sql .=" AND M.`module_id` != " . intval($list->module_id);
-    }
-
-
-    /* To find which module must displayed we can also proceed  with only one query.
-     * But this implies to use some features of MySQL not available in the version 3.23, so we use
-     * two differents queries to get the right list.
-     * Here is how to proceed with only one
-
-      $query = "SELECT *
-      FROM `".$TABLEMODULE."` AS M
-      WHERE NOT EXISTS(SELECT * FROM `".$TABLELEARNPATHMODULE."` AS TLPM
-      WHERE TLPM.`module_id` = M.`module_id`)";
-     */
-
-    return $sql;
-}
-
-//end function
-//COMMAND ADD SELECTED MODULE(S):
-
 if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) {
     // select all 'addable' modules of this course for this learning path
     $result = Database::get()->queryArray(buildRequestModules());
@@ -142,10 +97,9 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) {
             $nb++;
         }
     }
+    Session::Messages($langInsertedAsModule, 'alert-info');
+    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course='.$course_code);
 } //end if ADD command
-//STEP ONE : display form to add module of the course that are not in this path yet
-// this is the same SELECT as "select all 'addable' modules of this course for this learning path"
-// **BUT** normally there is less 'addable' modules here than in the first one
 
 $result = Database::get()->queryArray(buildRequestModules());
 
@@ -159,9 +113,7 @@ $tool_content .= '<table class="table-default">'
         . '</tr>';
 
 // Display available modules
-
 $atleastOne = FALSE;
-
 
 foreach ($result as $list) {
 
@@ -207,7 +159,6 @@ if (!$atleastOne) {
 }
 
 // Display button to add selected modules
-
 if ($atleastOne) {
     $tool_content .= '<tr>'
             . '<th colspan="2"><div align="right">' . "\n"
@@ -219,13 +170,33 @@ if ($atleastOne) {
 
 $tool_content .= "</table></form>";
 
-//####################################################################################\\
-//################################## MODULES LIST ####################################\\
-//####################################################################################\\
-// display subtitle
-//$tool_content .= disp_tool_title($langPathContentTitle);
-// display back link to return to the LP administration
-// display list of modules used by this learning path
-//$tool_content .= display_path_content();
-
 draw($tool_content, 2, null, $head_content);
+
+
+/**
+ * @brief select available modules
+ * @global type $course_id
+ * @return string
+ */
+function buildRequestModules() {
+    global $course_id;
+
+    $firstSql = "SELECT LPM.`module_id`
+              FROM `lp_rel_learnPath_module` AS LPM
+              WHERE LPM.`learnPath_id` = ?d";
+
+    $firstResult = Database::get()->queryArray($firstSql, $_SESSION['path_id']);
+
+    $sql = "SELECT M.*, A.`path`
+         FROM `lp_module` AS M
+           LEFT JOIN `lp_asset` AS A ON M.`startAsset_id` = A.`asset_id`
+         WHERE M.`contentType` != \"SCORM\"
+           AND M.`contentType` != \"SCORM_ASSET\"
+           AND M.`contentType` != \"LABEL\"
+           AND M.`course_id` = " . intval($course_id);
+
+    foreach ($firstResult as $list) {
+        $sql .=" AND M.`module_id` != " . intval($list->module_id);
+    }   
+    return $sql;
+}

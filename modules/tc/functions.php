@@ -31,8 +31,8 @@ require_once 'bbb-api.php';
  * @global type $course_code
  * @global type $langNewBBBSessionDesc
  * @global type $langNewBBBSessionStart
- * @global type $langNewBBBSessionActive
- * @global type $langNewBBBSessionInActive
+ * @global type $langVisible
+ * @global type $langInvisible
  * @global type $langNewBBBSessionStatus
  * @global type $langBBBSessionAvailable
  * @global type $langBBBMinutesBefore
@@ -47,7 +47,7 @@ function bbb_session_form($session_id = 0) {
     global $course_id, $uid, $tc_type;
     global $tool_content, $langAdd, $course_code;
     global $langNewBBBSessionDesc, $langNewBBBSessionStart;
-    global $langNewBBBSessionActive, $langNewBBBSessionInActive;
+    global $langVisible, $langInvisible;
     global $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore;
     global $start_session, $BBBEndDate;
     global $langTitle, $langBBBNotifyExternalUsersHelpBlock, $langBBBRecordFalse;
@@ -218,13 +218,13 @@ function bbb_session_form($session_id = 0) {
                     <div class='radio'>
                       <label>
                         <input type='radio' id='active_button' name='status' value='1' " . (($status==1) ? "checked" : "") . ">
-                        $langNewBBBSessionActive
+                        $langVisible
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='inactive_button' name='status' value='0' " . (($status==0) ? "checked" : "") .">
-                       $langNewBBBSessionInActive
+                       $langInvisible
                       </label>
                     </div>
             </div>

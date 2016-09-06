@@ -36,9 +36,9 @@
                                 <th class='text-left'>
                                     {{ trans('langSocialCategory')."   " }}
                                     @if (!$socialview)
-                                        <a href='index.php?course={{ $course_code }}&amp;urlview={{ $urlview }}&amp;socialview'>{!! icon('fa-folder', trans('showall')) !!}</a>
+                                        <a href='index.php?course={{ $course_code }}&amp;urlview={{ $urlview }}&amp;socialview'>{!! icon('fa-folder', trans('langViewShow')) !!}</a>
                                     @else
-                                        <a href='index.php?course={{ $course_code }}&amp;urlview={{ $urlview }}'>{!! icon('fa-folder-open', trans('shownone')) !!}</a>
+                                        <a href='index.php?course={{ $course_code }}&amp;urlview={{ $urlview }}'>{!! icon('fa-folder-open', trans('langViewHide')) !!}</a>
                                     @endif
                                 </th>
                                 @if (isset($_SESSION['uid']) && !$is_in_tinymce)
@@ -73,11 +73,11 @@
                             @if ($categories)    
                                 @if (isset($urlview) && abs($urlview) == 0)
                                     <a href='index.php?course={{ $course_code }}&amp;urlview={{ str_repeat('1', count($categories)) . $tinymce_params . $socialview_param }}'>
-                                        {!! icon('fa-folder', trans('showall')) !!}
+                                        {!! icon('fa-folder', trans('langViewShow')) !!}
                                     </a>
                                 @else
                                     <a href='index.php?course={{ $course_code }}&amp;urlview={{ str_repeat('0', count($categories)) . $tinymce_params . $socialview_param }}'>
-                                        {!! icon('fa-folder-open', trans('shownone')) !!}
+                                        {!! icon('fa-folder-open', trans('langViewHide')) !!}
                                     </a>
                                 @endif
                             @endif
@@ -94,7 +94,7 @@
                                     $newurlview[$key] = '0';
                                 ?>
                                 <tr class='link-subcategory-title'>
-                                    <th class = 'text-left category-link'> {!! icon('fa-folder-open-o', trans('shownone')) !!}
+                                    <th class = 'text-left category-link'> {!! icon('fa-folder-open-o', trans('langViewHide')) !!}
                                         <a href='index.php?course={{ $course_code }}&amp;urlview={{ $newurlview.$tinymce_params.$socialview_param }}' class='open-category'>
                                             {{ $category->name }}
                                         </a>
@@ -141,7 +141,7 @@
                                 @endif                            
                             @else
                                 <tr class='link-subcategory-title'>
-                                    <th class = 'text-left category-link'>{!! icon('fa-folder-o', trans('showall')) !!}
+                                    <th class = 'text-left category-link'>{!! icon('fa-folder-o', trans('langViewShow')) !!}
                                         <a href='index.php?course={{ $course_code }}&amp;urlview={{ empty($urlview) ? makedefaultviewcode($key) : substr_replace($urlview, '1', $key, 1) }}{{ $tinymce_params }}' class='open-category'>
                                             {{ $category->name }} 
                                         </a>

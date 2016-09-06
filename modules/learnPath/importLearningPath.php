@@ -1112,7 +1112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                                 fileSizeHidenInput() . "
                                 <input id='uploadedPackage' type='file' name='uploadedPackage'>
                                 <span class='smaller'>$langLearningPathUploadFile</span>
-                                <span class='smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>
+                                <span class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></span>
                             </div>
                         </div>
                         <div class='form-group'>
