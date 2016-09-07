@@ -211,9 +211,22 @@ function widget_css_link($file, $folder) {
     $head_content .= "<link href='$urlAppend{$folder}/css/$file$v' rel='stylesheet' type='text/css'>\n";
 }
 
-// Include a JavaScript file from the main js directory
+/**
+ * @brief include a JavaScript file from the main js directory
+ * @global type $head_content
+ * @global type $language
+ * @global type $langReadMore
+ * @global type $langReadLess
+ * @global type $langViewShow
+ * @global type $langViewHide
+ * @staticvar boolean $loaded
+ * @param type $file
+ * @param type $init
+ * @return type
+ */
 function load_js($file, $init='') {
-    global $head_content, $urlAppend, $theme, $theme_settings, $language, $langReadMore, $langReadLess;
+    global $head_content, $language, 
+            $langReadMore, $langReadLess, $langViewShow, $langViewHide;
     static $loaded;
 
     if (isset($loaded[$file])) {
@@ -223,7 +236,6 @@ function load_js($file, $init='') {
     }
 
     // Load file only if not provided by template
-
         if ($file == 'jstree') {
             $head_content .= js_link('jstree/jquery.cookie.min.js');
             $file = 'jstree/jquery.jstree.min.js';
@@ -326,11 +338,11 @@ function load_js($file, $init='') {
     var readLess = '".js_escape($langReadLess)."';
     $(function () { $('.trunk8').trunk8({
         lines: 3,
-        fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',
+        fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($langViewShow) . "</a>',
     });
 
     $(document).on('click', '.read-more', function (event) {
-        $(this).parent().trunk8('revert').append(' <a class=\"read-less\" href=\"#\">" . js_escape($GLOBALS['shownone']) . "</a>');
+        $(this).parent().trunk8('revert').append(' <a class=\"read-less\" href=\"#\">" . js_escape($langViewHide) . "</a>');
         event.preventDefault();
     });
 
