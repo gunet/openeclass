@@ -492,13 +492,12 @@ if (!isset($_POST['submit'])) {
         } else {
             $user_msg = $langPersonalSettingsLess;
         }
-
         // verification needed
-        if ($vmail) {
-            $user_msg .= "$langMailVerificationSuccess: <strong>$email</strong>";
-        }
-        // login user
-        else {
+        if ($vmail) {            
+                $tool_content .= "<div class='alert alert-info'>$langMailVerificationSuccess
+                                $langMailVerificationSuccess2 <br><br><small>$langMailVerificationNote</small>
+                                 <br><br>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";        
+        } else { // login user
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
             $uid = $myrow->id;
             $surname = $myrow->surname;
@@ -512,19 +511,15 @@ if (!isset($_POST['submit'])) {
             $_SESSION['surname'] = $surname_form;
             $_SESSION['uname'] = $uname;
             $session->setLoginTimestamp();
-            $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
-        }
-        // user msg
-        $tool_content .= "<div class='alert alert-success'><p>$user_msg</p></div>";
-
-        // footer msg
-        if (!$vmail) {
-            $tool_content .= "<p>$langPersonalSettingsMore</p>";
-        } else {
-            $tool_content .=
-                    "<p>$langMailVerificationSuccess2.
-                                 <br /><br />$click <a href='$urlServer'
-                                 class='mainpage'>$langHere</a> $langBackPage</p>";
+        
+            $tool_content .= "<div class='alert alert-success'>$user_msg <br><br>";
+            $tool_content .= "$langClick 
+                                <a href='$urlServer' class='mainpage'>$langHere</a> $langPersonalSettingsMore
+                              <ul>
+                                <li>$langPersonalSettingsMore1</li>
+                                <li>$langPersonalSettingsMore2</li>
+                              </ul>
+                            </div>";            
         }
     } else {
         // errors exist - registration failed
