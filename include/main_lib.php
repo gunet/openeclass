@@ -189,9 +189,23 @@ function css_link($file) {
     return "<link href='{$urlAppend}js/$file$v' rel='stylesheet' type='text/css'>\n";
 }
 
-// Include a JavaScript file from the main js directory
+/**
+ * @brief  include a JavaScript file from the main js directory
+ * @global type $head_content
+ * @global type $theme_settings
+ * @global type $language
+ * @global type $langReadMore
+ * @global type $langReadLess
+ * @global type $langViewHide
+ * @global type $langViewShow
+ * @staticvar boolean $loaded
+ * @param type $file
+ * @param type $init
+ * @return type
+ */
 function load_js($file, $init='') {
-    global $head_content, $urlAppend, $theme, $theme_settings, $language, $langReadMore, $langReadLess;
+    global $head_content, $theme_settings, $language, 
+            $langReadMore, $langReadLess, $langViewHide, $langViewShow;
     static $loaded;
 
     if (isset($loaded[$file])) {
@@ -302,11 +316,11 @@ function load_js($file, $init='') {
     var readLess = '".js_escape($langReadLess)."';
     $(function () { $('.trunk8').trunk8({
         lines: 3,
-        fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',
+        fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($langViewShow) . "</a>',
     });
 
     $(document).on('click', '.read-more', function (event) {
-        $(this).parent().trunk8('revert').append(' <a class=\"read-less\" href=\"#\">" . js_escape($GLOBALS['shownone']) . "</a>');
+        $(this).parent().trunk8('revert').append(' <a class=\"read-less\" href=\"#\">" . js_escape($langViewHide) . "</a>');
         event.preventDefault();
     });
 
