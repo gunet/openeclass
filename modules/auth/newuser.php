@@ -87,8 +87,12 @@ $data['buildusernode'] = $html;
 
 $data['render_profile_fields_form'] = render_profile_fields_form(array('origin' => 'student_register'));
 
-if(!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $provider_id = '';
-
+if(!empty($_GET['provider_id'])) {
+    $provider_id = @q($_GET['provider_id']);
+} else {
+    $provider_id = '';
+}
+        
 // check if it's valid and the provider enabled in the db
 if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and $_GET['auth'] < 14) {
     $auth = $_GET['auth'];
@@ -191,18 +195,7 @@ if (!isset($_POST['submit'])) {
         $data['user_data_displayName'] =  str_replace(' ', '', $user_data->displayName);
         $data['user_data_email'] = $user_data->email;
         $data['user_data_phone'] = $user_data->phone;
-    }     
-    
-    if (@count($registration_errors) != 0) {
-        // errors exist (from hybridauth) - show message
-        $tool_content .= "<div class='alert alert-danger'>";
-        foreach ($registration_errors as $error) {
-            $tool_content .= " $error";
-        }
-        $tool_content .= "</div>";
-        $provider_name = '';
-        $provider_id ='';
-    }       
+    }
     $data['menuTypeID'] = 0;
     view('modules.auth.newuser', $data);
 
@@ -336,7 +329,7 @@ if (!isset($_POST['submit'])) {
     if (count($registration_errors) == 0) {
         if (get_config('email_verification_required') && !empty($email)) {
             $verified_mail = 0;
-            $vmail = TRUE;
+            $vmail = TRUE;            
         } else {
             $verified_mail = 2;
             $vmail = FALSE;
@@ -425,13 +418,8 @@ if (!isset($_POST['submit'])) {
         } else {
             $user_msg = $langPersonalSettingsLess;
         }
-
-        // verification needed
-        if ($vmail) {
-            $user_msg .= "$langMailVerificationSuccess: <strong>$email</strong>";
-        }
-        // login user
-        else {
+        // login user if not verification needed
+        if (!$vmail) {            
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
             $uid = $myrow->id;
             $surname = $myrow->surname;
@@ -444,12 +432,12 @@ if (!isset($_POST['submit'])) {
             $_SESSION['givenname'] = $givenname_form;
             $_SESSION['surname'] = $surname_form;
             $_SESSION['uname'] = $uname;
-            $session->setLoginTimestamp();
-            $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
+            $session->setLoginTimestamp();            
         }
-        $data['vmail'] = $vmail;
+        $data['user_msg'] = $user_msg;
+        $data['vmail'] = $vmail;        
         $data['menuTypeID'] = 0;
-        view('modules.auth.newuser', $data);        
+        view('modules.auth.newuser', $data);
     } else { // errors exist
         $provider_name = '';
         $provider_id ='';
