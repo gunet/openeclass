@@ -908,7 +908,7 @@ function hybridauth_login() {
  * ************************************************************** */
 
 function login($user_info_object, $posted_uname, $pass, $provider=null, $user_data=null) {
-    global $session;
+    global $session, $auth_ids;
 
     $_SESSION['canChangePassword'] = false;
     $pass_match = false;
@@ -980,7 +980,9 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
                     $options['status'], $user_info_object->id);
             }
             $userObj->refresh($user_info_object->id, $options['departments']);
-            $_SESSION['canChangePassword'] = true;
+            if (!array_search($user_info_object->password, $auth_ids)) {
+                $_SESSION['canChangePassword'] = true;
+            }
             $_SESSION['uid'] = $user_info_object->id;
             $_SESSION['uname'] = $user_info_object->username;
             $_SESSION['surname'] = $user_info_object->surname;
