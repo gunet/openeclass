@@ -445,7 +445,7 @@ if ($uid) {
 }
 
 // list available learning paths
-$sql = "SELECT MIN(LP.name) AS name, MIN(UMP.`raw`) AS minRaw,
+$sql = "SELECT MIN(LP.name) AS name, MIN(LP.comment) AS lp_comment, MIN(UMP.`raw`) AS minRaw,
                MIN(LP.`lock`) AS `lock`, MIN(LP.visible) AS visible,
                MIN(LP.learnPath_id) AS learnPath_id
            FROM `lp_learnPath` AS LP
@@ -535,7 +535,11 @@ foreach ($result as $list) { // while ... learning path list
             //}
         }
 
-        $tool_content .= "<td>$play_url<span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathData'>$play_button</span></td>\n";
+        $tool_content .= "
+            <td>
+                <div><strong>$play_url</strong><span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathData'>$play_button</span></div>
+                <div style='padding: 15px; 8px; 10px;'>$list->lp_comment</div>
+            </td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
