@@ -131,7 +131,7 @@ function commentBox($type, $mode) {
             $oldComment = Database::get()->querySingle($sql)->$col_name;
 
             $output .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                " . rich_text_editor('insertCommentBox', 1, 50, $oldComment) . "
+                <textarea class='form-control' name='insertCommentBox' rows='3'>$oldComment</textarea><br>
                 <input type='hidden' name='cmd' value='update$col_name' />
                 <input class='btn btn-primary' type='submit' value=$langSubmit /></form>";
         }
