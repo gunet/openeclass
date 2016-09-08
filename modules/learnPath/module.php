@@ -209,45 +209,8 @@ $tool_content .="
                 $tool_content .= "" . nameBox(MODULE_, DISPLAY_) . "";
             }
 $tool_content .= "</div>
-            </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langComments:</strong>
-                </div>
-                <div class='col-sm-9'>";
-if ($module->contentType != CTLABEL_) {
-
-    //############################### MODULE COMMENT BOX #################################\\
-    //#### COMMENT #### courseAdmin cannot modify this if this is a imported module ####\\
-    // this the comment of the module in ALL learning paths
-    if ($cmd == "updatecomment") {
-        $tool_content .= commentBox(MODULE_, UPDATE_);
-    } elseif ($cmd == "delcomment") {
-        $tool_content .= "" . commentBox(MODULE_, DELETE_) . "";
-    } else {
-        $tool_content .= "" . commentBox(MODULE_, DISPLAY_) . "";
-    }
-    $tool_content .="
-      </div>
-    </div>";
-    $tool_content .="
-    <div class='row margin-bottom-fat'>
-        <div class='col-sm-3'>
-            <strong>$langComments - $langInstructions:<br /><small class='text-muted'>($langModuleComment_inCurrentLP)</small></strong>
-        </div>
-        <div class='col-sm-9'>";
-    //#### ADDED COMMENT #### courseAdmin can always modify this ####\\
-    // this is a comment for THIS module in THIS learning path
-    if ($cmd == "updatespecificComment") {
-        $tool_content .= commentBox(LEARNINGPATHMODULE_, UPDATE_);
-    } elseif ($cmd == "delspecificComment") {
-        $tool_content .= commentBox(LEARNINGPATHMODULE_, DELETE_);
-    } else {
-        $tool_content .= commentBox(LEARNINGPATHMODULE_, DISPLAY_);
-    }
-} //  if($module['contentType'] != CTLABEL_ )
-$tool_content .= "</div>
             </div>";
+
             
 //$tool_content .= "<div class='row'>
 //                <div class='col-sm-3'>
