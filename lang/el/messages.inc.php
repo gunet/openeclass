@@ -4119,11 +4119,6 @@ $langErrorUpdatePostCount = "Αδύνατη η ανανέωση του μετρ�
 /* * ***********************************************************
   vietopic.php
  * ************************************************************ */
-$langErrorConnectPostDatabase = "Παρουσιάστηκε πρόβλημα. Αδύνατη η σύνδεση με τη βάση δεδομένων.";
-
-/* * ***********************************************************
-  vietopic.php
- * ************************************************************ */
 $langAddTime = "Προσθήκη ενεργού χρόνου στους απενεργοποιημένους λογαριασμούς.";
 $langRealised = "Πραγματοποιήθηκαν";
 $langUpdates = "ενημερώσεις";
@@ -5106,6 +5101,7 @@ $langAutoJudgeDetailedReport = 'Αυτόματος κριτής: Αναλυτι�
 $langAutoJudgeResultsFor = 'Αποτελέσματα για';
 $langAutoJudgeNotEnabledForReport = ' Ο αυτόματος κριτής δεν είναι ενεργοποιημένος για την συγκεκριμένη εργασία. ';
 $langAutoJudgeDownloadPdf = 'Λήψη σε μορφή PDF';
+$langAutoJudgeConnectionError = "Error connecting to compilation service. Please report this to dnna@dnna.gr";
 
 // Tags
 $langTag = 'Ετικέτα';

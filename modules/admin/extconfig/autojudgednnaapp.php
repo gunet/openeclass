@@ -77,6 +77,8 @@ class AutojudgeDnnaApp extends AutojudgeApp implements AutoJudgeConnector {
     }
 
     public function getSupportedLanguages() {
+        global $langAutoJudgeConnectionError;
+        
         // Open curl connection
         $ch = curl_init();
         // Set the url, number of POST vars, POST data
@@ -88,7 +90,9 @@ class AutojudgeDnnaApp extends AutojudgeApp implements AutoJudgeConnector {
         // Close curl connection
         curl_close($ch);
 
-        if(!$result) { return array('Error connecting to compilation service. Please report this to dnna@dnna.gr' => 'error'); }
+        if(!$result) {
+            return array("$langAutoJudgeConnectionError" => 'error');             
+        }
 
         return $result;
     }
