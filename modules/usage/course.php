@@ -77,7 +77,7 @@ if (isset($_GET['id'])) {
         <div class='col-xs-12'>
             <div class='panel panel-default'>
                 <div class='panel-body'>
-                    <div class='inner-heading'><strong>$langUserStats: ". uid_to_name($_GET['id'], 'fullname') ."</strong></div>
+                    <div class='inner-heading'>$langUserStats: ". uid_to_name($_GET['id'], 'fullname') ."</div>
                     <div class='row'>
                     <div class='col-sm-6'>
                         <ul class='list-group'>
@@ -101,7 +101,7 @@ if (isset($_GET['id'])) {
         <div class='col-xs-12'>
             <div class='panel panel-default'>
                 <div class='panel-body'>
-                    <div class='inner-heading'><strong>$langPlatformGenStats</strong></div>
+                    <div class='inner-heading'>$langPlatformGenStats</div>
                     <div class='row'>
                     <div class='col-sm-6'>
                         <ul class='list-group'>

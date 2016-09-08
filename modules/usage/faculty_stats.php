@@ -81,7 +81,7 @@ if (isset($_GET['stats_submit'])) {
 
         $tool_content .= "<div class='panel panel-default'>
                              <div class='panel-body'>
-                                <div class='inner-heading'><strong>" . $tree->unserializeLangField($name) . "</strong></div>
+                                <div class='inner-heading'>" . $tree->unserializeLangField($name) . "</div>
                                 <div class='row'>
                                    <div class='col-sm-6'>
                                    <dl>

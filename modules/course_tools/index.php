@@ -149,11 +149,10 @@ $tool_content .= "
         "</div>";
 
 $tool_content .= <<<tForm
-<div class='form-wrapper'>
     <form name="courseTools" action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" enctype="multipart/form-data">
         <div class="table-responsive">    
             <table class="table-default">
-                <tr>
+                <tr class="list-header">
                     <th width="45%" class="text-center">$langInactiveTools</th>
                     <th width="10%" class="text-center">$langMove</th>
                     <th width="45%" class="text-center">$langActiveTools</th>
@@ -162,9 +161,9 @@ $tool_content .= <<<tForm
                     <td class="text-center">
                         <select class="form-control" name="toolStatInactive[]" id='inactive_box' size='17' multiple>$toolSelection[0]</select>
                     </td>
-                    <td class="text-center">
-                        <input class="btn btn-primary" type="button" onClick="move('inactive_box','active_box')" value="   >>   " /><br><br>
-                        <input class="btn btn-primary" type="button" onClick="move('active_box','inactive_box')" value="   <<   " />
+                    <td class="text-center" style="vertical-align: middle;">
+                        <button type="button" class="btn btn-default" onClick="move('inactive_box','active_box')"><span class="fa fa-arrow-right"></span></button><br><br>
+                        <button type="button" class="btn btn-default" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
                     </td>
                     <td class="text-center">
                         <select class="form-control" name="toolStatActive[]" id='active_box' size='17' multiple>$toolSelection[1]</select>
@@ -172,7 +171,7 @@ $tool_content .= <<<tForm
                 </tr>
                 <tr>
                     <td colspan="3" class="text-center">
-                        <input type="submit" class="btn btn-primary" value="$langSubmitChanges" name="toolStatus" onClick="selectAll('active_box',true)" />
+                        <input type="submit" class="btn btn-primary" value="$langSubmit" name="toolStatus" onClick="selectAll('active_box',true)" />
                     </td>
                 </tr>
             </table>
@@ -180,29 +179,26 @@ $tool_content .= <<<tForm
 tForm
 .generate_csrf_token_form_field() .<<<tForm
     </form>
-</div>
 tForm;
+
 
 // display table to edit/delete external links
 $tool_content .= "<table class='table-default'>
-<tr><th colspan='2'>$langOperations</th></tr>
-<tr>  
-  <th width='90%' class='text-left'>$langTitle</th>
-  <th class='text-center'>".icon('fa-gears')."</th>
-</tr>";
-$q = Database::get()->queryArray("SELECT id, title FROM link
+<tr class='list-header'><th colspan='2'>$langOperations</th></tr>";
+$q = Database::get()->queryArray("SELECT id, url, title FROM link
                         WHERE category = -1 AND
                         course_id = ?d", $course_id);
 foreach ($q as $externalLinks) {
-    $tool_content .= "<td class='text-left'>" . q($externalLinks->title) . "</td>";
-    $tool_content .= "<td class='text-center'>";
-    $tool_content .= action_button(array(
-                array('title' => $langDelete,
-                      'url' => "?course=$course_code&amp;delete=".getIndirectReference($externalLinks->id),
-                      'icon' => 'fa-times',
-                      'class' => 'delete',
-                      'confirm' => $langConfirmDelete)
-            ));
+    $tool_content .= "
+        <td class='text-left'>
+            <div style='display:inline-block; width: 80%;'>
+                <strong>" . q($externalLinks->title) . "</strong>
+                <div style='padding-top:8px;'><small class='text-muted'>".q($externalLinks->url)."</small></div>
+            </div>
+            <div class='pull-right' style='font-size: 20px; padding-right: 20px'>
+                <a class='text-danger' href='?course=$course_code&amp;delete=".getIndirectReference($externalLinks->id)."'><span class='fa fa-times'></span></a>
+            </div>
+    ";
     $tool_content .= "</td></tr>";
 }
 $tool_content .= "</table>";
