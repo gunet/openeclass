@@ -687,7 +687,7 @@ function hybridauth_login() {
     global $surname, $givenname, $email, $status, $is_admin, $language,
         $langInvalidId, $langAccountInactive1, $langAccountInactive2,
         $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
-        $inactive_uid, $langTooManyFails, $warning;
+        $inactive_uid, $langTooManyFails, $warning, $langGeneralError;
 
     // include HubridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
@@ -695,6 +695,7 @@ function hybridauth_login() {
     $config = get_hybridauth_config();
 
     $_SESSION['canChangePassword'] = false;
+    $autoregister = get_config('alt_auth_stud_reg') == 2;
 
     // check for errors and whatnot
     $warning = '';
@@ -793,8 +794,65 @@ function hybridauth_login() {
             }
         }
         if (!$exists and !$auth_allow) {
-            // Since HybridAuth was used and there is not user id matched in the db, send the user to the registration form.
-            redirect_to_home_page('modules/auth/registration.php?provider=' . $provider);
+            if ($autoregister and !get_config('am_required') and
+                ($user_data->email or !get_config('email_required')) and
+                ($user_data->emailVerified or !get_config('email_verification_required'))) {
+                $verified_mail = EMAIL_UNVERIFIED;
+                if ($user_data->emailVerified) {
+                    $email = $user_data->email;
+                    $verified_mail = EMAIL_VERIFIED;
+                } else {
+                    $email = $user_data->email;
+                }
+                $options = login_hook(array(
+                    'user_id' => null,
+                    'attributes' => array('user_data' => $user_data),
+                    'am' => ''));
+                if (!$options['accept']) {
+                    deny_access();
+                }
+                $status = $options['status'];
+                if ($user_data->username) {
+                    $uname = $user_data->username;
+                } elseif ($user_data->displayName) {
+                    $uname = $user_data->displayName;
+                } elseif ($user_data->email) {
+                    $uname = $user_data->email;
+                } else {
+                    $uname = $user_data->identifier;
+                }
+                $_SESSION['uid'] = Database::get()->query("INSERT INTO user
+                    SET surname = ?s, givenname = ?s, password = ?s,
+                        username = ?s, email = ?s, status = ?d, lang = ?s,
+                        am = ?s, verified_mail = ?d,
+                        registered_at = " . DBHelper::timeAfter() . ",
+                        expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
+                        whitelist = ''",
+                        $user_data->lastName, $user_data->firstName, $provider, $uname, $email, $status,
+                        $language, $options['am'], $verified_mail)->lastInsertID;
+                if ($_SESSION['uid']) {
+                    $_SESSION['uname'] = $uname;
+                    $_SESSION['surname'] = $user_data->lastName;
+                    $_SESSION['givenname'] = $user_data->firstName;
+                    $_SESSION['email'] = $email;
+                    $_SESSION['status'] = $status;
+                    Database::get()->query('INSERT INTO user_ext_uid
+                        (user_id, auth_id, uid) VALUES (?d, ?d, ?s)',
+                        $_SESSION['uid'], $auth_id, $user_data->identifier);
+                    // update personal calendar info table
+                    Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $_SESSION['uid']);
+                    $userObj = new User();
+                    $userObj->refresh($_SESSION['uid'], $options['departments']);
+                    user_hook($_SESSION['uid']);
+                } else {
+                    Session::Messages($langGeneralError, 'alert-danger');
+                    redirect_to_home_page();
+                }
+            } else {
+                // Since HybridAuth was used and no user id matched
+                // in the DB, send the user to the registration form.
+                redirect_to_home_page('modules/auth/registration.php?provider=' . $provider);
+            }
         }
     }
 
@@ -1075,13 +1133,7 @@ function shib_cas_login($type) {
         $is_departmentmanage_user, $langUserAltAuth;
 
     $_SESSION['canChangePassword'] = false;
-    $alt_auth_stud_reg = get_config('alt_auth_stud_reg');
-
-    if ($alt_auth_stud_reg == 2) {
-        $autoregister = TRUE;
-    } else {
-        $autoregister = FALSE;
-    }
+    $autoregister = get_config('alt_auth_stud_reg') == 2;
 
     if ($type == 'shibboleth') {
         $uname = $_SESSION['shib_uname'];
