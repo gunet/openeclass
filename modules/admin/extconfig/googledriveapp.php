@@ -44,10 +44,13 @@ class GoogleDriveApp extends OAuthDriveApp {
     }
 
     public function validateApp() {
+        global $langErrorGoogleDrive;
+        
         $keyPath = realpath(dirname(__FILE__) . "/../../drives/plugins") . "/googledrive_key.p12";
         if (file_exists($keyPath))
             return null;
-        return "<b>Αδυναμία εύρεσης αρχείου κλειδιού.</b><br/>Προκειμένου να λειτουργήσει η αποθήκευση αρχείων από το GoogleDrive, είναι απαραίτητη η ύπαρξη του αρχείου κλειδιού. Αυτό πρέπει να τοποθετηθεί στη θέση '" . $keyPath . "'. Το αρχείο αυτό λείπει.";
+        
+        return "$langErrorGoogleDrive $keyPath" ;
     }
 
     protected function getURLDefaultValue() {

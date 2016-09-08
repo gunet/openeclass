@@ -29,7 +29,7 @@ require_once 'bbb-api.php';
  * @global type $langAdd
  * @global type $langModify
  * @global type $course_code
- * @global type $langNewBBBSessionDesc
+ * @global type $langUnitDescr
  * @global type $langNewBBBSessionStart
  * @global type $langVisible
  * @global type $langInvisible
@@ -46,7 +46,7 @@ function bbb_session_form($session_id = 0) {
 
     global $course_id, $uid, $tc_type;
     global $tool_content, $langAdd, $course_code;
-    global $langNewBBBSessionDesc, $langNewBBBSessionStart;
+    global $langUnitDescr, $langNewBBBSessionStart;
     global $langVisible, $langInvisible;
     global $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore;
     global $start_session, $BBBEndDate;
@@ -122,7 +122,7 @@ function bbb_session_form($session_id = 0) {
             </div>
         </div>
         <div class='form-group'>
-            <label for='desc' class='col-sm-2 control-label'>$langNewBBBSessionDesc:</label>
+            <label for='desc' class='col-sm-2 control-label'>$langUnitDescr:</label>
             <div class='col-sm-10'>
                 $textarea
             </div>
@@ -492,7 +492,7 @@ function bbb_session_details() {
     global $course_id, $tool_content, $is_editor, $course_code, $uid, $tc_type,
         $langNewBBBSessionStart, $langParticipants,$langConfirmDelete,
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
-        $langActivate, $langDeactivate, $langEditChange, $langDelete, $langNewBBBSessionDesc,
+        $langActivate, $langDeactivate, $langEditChange, $langDelete, $langUnitDescr,
         $langNoBBBSesssions, $langDaysLeft, $m, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
         $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langBBBNoServerForRecording;
 
@@ -522,7 +522,7 @@ function bbb_session_details() {
                            <table class='table-default'>
                              <tr class='list-header'>
                                <th style='width:25%'>$langTitle</th>
-                               <th class='text-center'>$langNewBBBSessionDesc</th>
+                               <th class='text-center'>$langUnitDescr</th>
                                <th class='text-center'>$langNewBBBSessionStart</th>
                                <th class='text-center'>$langNewBBBSessionEnd</th>
                                <th class='text-center'>$langParticipants</th>

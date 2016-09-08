@@ -185,11 +185,6 @@ class secondfaApp extends ExtApp {
         }
     }
 
-
-    //    $tool_content .= "<tr>".secondfaApp::getInitialize("1","tester","test@test.com")."</tr>";
-
-
-
     /* INITIALIZATION FUNCTIONS */
 
     public static function getUnitialize(){
@@ -204,7 +199,8 @@ class secondfaApp extends ExtApp {
     }
 
     public static function getInitialize($userid,$company,$email){
-        global $langSFAadd, $langSFAremove, $langSFAScan, $langSFATypeWYS, $langSFAInsert;
+        global $langSFAadd, $langSFAremove, $langSFAScan, $langSFATypeWYS, $langSFAInsert, $langConfigError;
+        
         $keypack =  self::getsecondfa()->generateSecret($userid,$company,$email);
         if($keypack){
             $sfa_url = $keypack[0];
@@ -233,8 +229,8 @@ class secondfaApp extends ExtApp {
                     </tr>
                     </table>
                     </div>";
-        }else{
-            return "There is a fault in configuration. Please try again.";
+        } else {
+            return "$langConfigError";
         }
     }
 
