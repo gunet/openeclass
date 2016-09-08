@@ -64,9 +64,9 @@ if (isset($_GET['id'])) {
 }
 /**** Summary info    ****/
 if (isset($_GET['id'])) {
-    $visits = course_visits($course_id, $_GET['id']);
+    $hits = course_hits($course_id, $_GET['id']);
 } else {
-    $visits = course_visits($course_id);
+    $hits = course_hits($course_id);    
 }
 if (isset($_GET['id'])) {
     $regdate = Database::get()->querySingle("SELECT DATE_FORMAT(DATE(reg_date),'%e-%c-%Y') AS reg_date
@@ -82,12 +82,12 @@ if (isset($_GET['id'])) {
                     <div class='col-sm-6'>
                         <ul class='list-group'>
                             <li class='list-group-item'><strong>$langCourseRegistrationDate</strong><span class='badge'>".$regdate."</span></li>
-                            <li class='list-group-item'><strong>$langHits</strong><span class='badge'>".$visits['hits']."</span></li>
+                            <li class='list-group-item'><strong>$langHits</strong><span class='badge'>".$hits['hits']."</span></li>
                         </ul>
                         </div>
                         <div class='col-sm-6'>
                             <ul class='list-group'>                            
-                            <li class='list-group-item'><strong>$langDuration</strong><span class='badge'>".$visits['duration']."</span></li>
+                            <li class='list-group-item'><strong>$langDuration</strong><span class='badge'>".$hits['duration']."</span></li>
                         </ul>
                         </div>
                     </div>
@@ -113,8 +113,9 @@ if (isset($_GET['id'])) {
                         <div class='col-sm-6'>
                             <ul class='list-group'>
                             <li class='list-group-item'><strong>$langGroups</strong><span class='badge'>".count_course_groups($course_id)."</span></li>
-                            <li class='list-group-item'><strong>$langHits</strong><span class='badge'>".$visits['hits']."</span></li>
-                            <li class='list-group-item'><strong>$langDuration</strong><span class='badge'>".$visits['duration']."</span></li>
+                            <li class='list-group-item'><strong>$langTotalVisits</strong><span class='badge'>".course_visits($course_id)."</span></li>
+                            <li class='list-group-item'><strong>$langTotalHits</strong><span class='badge'>".$hits['hits']."</span></li>
+                            <li class='list-group-item'><strong>$langTotalDuration</strong><span class='badge'>".$hits['duration']."</span></li>
                         </ul>
                         </div>
                     </div>

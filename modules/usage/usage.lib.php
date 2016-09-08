@@ -35,17 +35,16 @@ require_once 'include/lib/hierarchy.class.php';
 */
 function get_course_stats($start = null, $end = null, $interval, $cid, $user_id = null)
 {
-    global $langHits,$langDuration;
+        
     $formattedr = array('time'=> array(), 'hits'=> array(), 'duration'=> array());
     if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
         $g = build_group_selector_cond($interval);
         $groupby = $g['groupby'];
         $date_components = $g['select'];
-        if(is_numeric($user_id)){
+        if(is_numeric($user_id)) {
             $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end, $user_id);
-        }
-        else{
+        } else {
             $q = "SELECT $date_components, sum(hits) hits, round(sum(duration)/3600,1) dur FROM actions_daily WHERE course_id=?d AND day BETWEEN ?t AND ?t $groupby";
             $r = Database::get()->queryArray($q, $cid, $start, $end);
         }
@@ -613,11 +612,11 @@ function build_group_selector_cond($interval = 'month', $date_field = 'day')
     $select = "";
     switch($interval){
         case 'year':
-            $select = "DATE_FORMAT($date_field, '%Y-06-30') cat_title, DATE_FORMAT($date_field, '%Y') y";
+            $select = "DATE_FORMAT(MAX($date_field), '%Y-06-30') cat_title, DATE_FORMAT($date_field, '%Y') y";
             $groupby = "GROUP BY y";
             break;
         case 'month':
-            $select = "DATE_FORMAT($date_field, '%Y-%m-15') cat_title, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
+            $select = "DATE_FORMAT(MAX($date_field), '%Y-%m-15') cat_title, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
             $groupby = "GROUP BY y, m";
             break;
         case 'week':
@@ -625,7 +624,7 @@ function build_group_selector_cond($interval = 'month', $date_field = 'day')
             $groupby = "GROUP BY y, w";
             break;
         case 'day':
-            $select = "DATE_FORMAT($date_field, '%Y-%m-%d') cat_title, DATE_FORMAT($date_field,'%d') d, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
+            $select = "DATE_FORMAT(MAX($date_field), '%Y-%m-%d') cat_title, DATE_FORMAT($date_field,'%d') d, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
             $groupby = "GROUP BY y, m, d";
             break;
     }
@@ -730,18 +729,30 @@ function count_course_groups($cid){
 }
 
 /**
- * Get the sum of visits with their duration for a course
+ * Get the sum of hits with their duration for a course
  * @param int cid the course id
  * @param int userid the user id
  * @return array(int, string) an array with the number of visits and their duration formatted as h:mm:ss
 */
-function course_visits($cid, $userid = 0){
+function course_hits($cid, $userid = 0){
     $r = Database::get()->querySingle("SELECT SUM(hits) hits, SUM(duration) dur FROM actions_daily WHERE course_id=?d", $cid);
     if ($userid > 0) {
         $r = Database::get()->querySingle("SELECT SUM(hits) hits, SUM(duration) dur FROM actions_daily
                             WHERE course_id = ?d AND user_id = ?d", $cid, $userid);
     }
     return array('hits' => $r->hits, 'duration' => user_friendly_seconds($r->dur));
+}
+
+/**
+ * @brief Get course logins
+ * @param type $cid
+ * @return type
+ */
+function course_visits($cid) {
+    
+    $logins = Database::get()->querySingle("SELECT COUNT(id) AS cnt FROM logins WHERE course_id = ?d", $cid)->cnt;
+    
+    return $logins;
 }
 
 /**
