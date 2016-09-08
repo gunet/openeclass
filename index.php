@@ -202,7 +202,8 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         }
 
         if (count($hybridProviders)) {
-            $authLink[$hybridLinkId]['html'] = '<div>';
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/default/CSS/bootstrap-social.css'>";
+            $authLink[$hybridLinkId]['html'] = '<div style="padding-top: 10px;">';
             $beginHybridHTML = true;
             foreach ($hybridProviders as $provider) {
                 if ($beginHybridHTML) {
@@ -210,8 +211,14 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                 } else {
                     $authLink[$hybridLinkId]['html'] .= '<br>';
                 }
+                $providerClass = $provider;
+                $providerFont = $provider;
+                if ($provider === 'live') {
+                    $providerClass = 'microsoft';
+                    $providerFont = 'windows';
+                }
                 $authLink[$hybridLinkId]['html'] .=
-                    "<a href='{$urlServer}index.php?provider=$provider'><img src='$themeimg/$provider.png' alt='Sign-in with $provider' style='margin-right: 0.5em;'>" . ucfirst($provider) . "</a>";
+                    "<a class='btn btn-block btn-social btn-$providerClass' href='{$urlServer}index.php?provider=$provider'><span class='fa fa-$providerFont'></span>" . ucfirst($provider) . "</a>";
             }
             $authLink[$hybridLinkId]['html'] .= '</div>';
         }
