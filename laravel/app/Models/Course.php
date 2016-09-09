@@ -10,5 +10,11 @@ class Course extends Model {
 	 * @var string
 	 */
 	protected $table = 'course';
-   
+        protected $guarded = ['id'];
+        public $timestamps = false;
+        
+        public function departments()
+        {
+            return $this->belongsToMany('App\Models\Hierarchy', 'course_department', 'course', 'department');
+        }   
 }

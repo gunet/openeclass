@@ -86,7 +86,7 @@ if ($extra_messages) {
     include $extra_messages;
 }
 
-if (file_exists('../config/config.php')) {
+if (file_exists('../laravel/.env')) {
     // title = $langWelcomeWizard
     $tool_content .= "
         <div class='panel panel-info'>
@@ -459,27 +459,32 @@ elseif (isset($_POST['install7'])) {
     // create main database
     require 'install_db.php';
 
-    // create config.php
-    $stringConfig = '<?php
-/* ========================================================
- * Open eClass 3.0 configuration file
- * Created by install on ' . date('Y-m-d H:i') . '
- * ======================================================== */
+    // create .env
+    $stringConfig = '
+# ========================================================
+# Open eClass 3.0 configuration file
+# Created by install on ' . date('Y-m-d H:i') . '
+# ========================================================
 
-$mysqlServer = ' . quote($dbHostForm) . ';
-$mysqlUser = ' . quote($dbUsernameForm) . ';
-$mysqlPassword = ' . quote($dbPassForm) . ';
-$mysqlMainDb = ' . quote($mysqlMainDb) . ';
+APP_ENV=local
+APP_DEBUG=true
+APP_KEY=xpSb5QShq85GM18rCruuzaiqPP1MBu9C
+
+DB_HOST=' . $dbHostForm . '
+DB_DATABASE=' . $mysqlMainDb . '
+DB_USERNAME=' . $dbUsernameForm . '
+DB_PASSWORD=' . $dbPassForm . '
 ';
-    $fd = @fopen("../config/config.php", "w");
+    $fd = @fopen("../laravel/.env", "w");
     if (!$fd) {
-        $config_dir = dirname(__DIR__) . '/config';
+        $config_dir = dirname(__DIR__) . '/laravel';
         $tool_content .= "<p class='alert'>$langErrorConfig</p>" .
                 "<p class='info'>" . sprintf($langErrorConfigAlt, $config_dir) .
                 "</p><pre class='config'>" . q($stringConfig) . "</pre>";
     } else {
         // write to file
         fwrite($fd, $stringConfig);
+        fclose($fd);
         // message
         $tool_content .= "
 	<div class='alert alert-success'>$langInstallSuccess</div>

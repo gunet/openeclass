@@ -8,6 +8,7 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "sorskod/larasponse": "dev-L5",
+        "mews/purifier": "~2.0",
         "ksungcaya/phpass-laravel": "dev-master"
     },
     "require-dev": {

@@ -9,6 +9,7 @@
         "phpids/phpids": "dev-master",
         "pragmarx/google2fa":"dev-master",
         "swiftmailer/swiftmailer": "@stable",
+        "vlucas/phpdotenv": "^2.3",
         "dropbox/dropbox-sdk": "1.1.*",
         "sabre/dav": "~3.2.0",
         "google/apiclient": "1.0.*@beta"

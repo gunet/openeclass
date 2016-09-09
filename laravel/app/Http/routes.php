@@ -21,7 +21,7 @@ Route::group(['prefix' => 'api/v1'], function()
     App::bind('League\Fractal\Serializer\SerializerAbstract', 'League\Fractal\Serializer\DataArraySerializer');
 
     //Using resource Controllers (http://laravel.com/docs/5.0/controllers#restful-resource-controllers)
-    Route::resource('courses', 'Api\V1\CourseController', ['only' => ['index', 'show']]);
+    Route::resource('courses', 'Api\V1\CourseController', ['only' => ['index', 'show', 'store']]);
     Route::resource('courses.assignments', 'Api\V1\AssignmentController');
 });
 
