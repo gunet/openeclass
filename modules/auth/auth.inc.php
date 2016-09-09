@@ -849,19 +849,7 @@ function hybridauth_login() {
                         am = ?s, verified_mail = ?d,
                         registered_at = " . DBHelper::timeAfter() . ",
                         expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
-                        whitelist = ''", function ($e) use ($surname, $givenname, $user_data, $provider, $uname, $email, $status, $language, $options, $verified_mail) {
-echo '<pre>';
-var_dump(array("INSERT INTO user
-                    SET surname = ?s, givenname = ?s, password = ?s,
-                        username = ?s, email = ?s, status = ?d, lang = ?s,
-                        am = ?s, verified_mail = ?d,
-                        registered_at = " . DBHelper::timeAfter() . ",
-                        expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
                         whitelist = ''",
-$surname, $givenname, $provider, $uname, $email, $status,
-                        $language, $options['am'], $verified_mail));
-die($e);
-},
                         $surname, $givenname, $provider, $uname, $email, $status,
                         $language, $options['am'], $verified_mail)->lastInsertID;
                 if ($_SESSION['uid']) {
