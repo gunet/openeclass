@@ -30,8 +30,15 @@ foreach ($q as $l) {
                 <a class='btn btn-primary btn-block' href='$authUrl' style='line-height:40px;'>$langEnter</a>
             </div>", $authTitle);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
-        $hybridProviderHtml = "<a class='' href='{$urlServer}index.php?provider=" .
-            $l->auth_name . "'><img src='$themeimg/$l->auth_name.png' alt='Sign-in with $l->auth_name' title='Sign-in with $l->auth_name' style='margin-right: 0.5em;'>" . ucfirst($l->auth_name) . "</a>";
+        $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/default/CSS/bootstrap-social.css'>";
+        $providerClass = $l->auth_name;
+        $providerFont = $l->auth_name;
+        if ($l->auth_name === 'live') {
+            $providerClass = 'microsoft';
+            $providerFont = 'windows';
+        }
+        $hybridProviderHtml = "<a class='btn btn-block btn-social btn-$providerClass' href='{$urlServer}index.php?provider=" .
+            $l->auth_name . "'><span class='fa fa-$providerFont'></span>" . ucfirst($l->auth_name) . "</a>";
         if (is_null($hybridLinkId)) {
             $authLink[] = array(false, $hybridProviderHtml, $langViaSocialNetwork);
             $hybridLinkId = count($authLink) - 1;
@@ -94,4 +101,4 @@ foreach ($authLink as $authInfo) {
 }
 $tool_content .= "</div></div>";
 
-draw($tool_content, 0);
+draw($tool_content, 0, null, $head_content);
