@@ -630,21 +630,16 @@ function display_my_documents($dialogBox, $style) {
     global $langSize;
     global $langDate;
     global $langAddModulesButton;
-    global $fileList;
+    global $fileList;    
     global $themeimg;
     global $langSelection, $langDirectory, $course_code;
 
     $output = '';
-    /*
-     * DISPLAY
-     */
-
-    $dspCurDirName = htmlspecialchars($curDirName);
-    // $cmdCurDirPath = rawurlencode($curDirPath);
+    
+    $dspCurDirName = htmlspecialchars($curDirName);    
     $cmdParentDir = rawurlencode($parentDir);
-
-    $output .= '<form action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method="POST">';
-
+    
+    $output .= '<form action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method = "post">';
     /* --------------------------------------
       DIALOG BOX SECTION
       -------------------------------------- */
@@ -652,10 +647,7 @@ function display_my_documents($dialogBox, $style) {
     if (!empty($dialogBox)) {
         $output .= disp_message_box($dialogBox, $style) . "<br />";
     }
-    /* --------------------------------------
-      CURRENT DIRECTORY LINE
-      -------------------------------------- */
-
+    
     /* CURRENT DIRECTORY */
     if ($curDirName) {
         $output .= '
@@ -668,53 +660,36 @@ function display_my_documents($dialogBox, $style) {
           and we can't go to a parent dir */ {
             $linkup = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;openDir=$cmdParentDir'>";
             $output .= "<td width='1'>$linkup<img src='$themeimg/folder_up.png' " .
-                    "hspace='5' alt='$langUp' title='langUp' /></a></td>" .
+                    "hspace='5' alt='$langUp' title='$langUp' /></a></td>" .
                     "<td width='10' class='right'><small>$linkup$langUp</a></small></td>";
         }
         $output .= '</tr></table>';
     }
 
+    $output .= '<div class="table-responsive"><table class="table-default" >';
+    $output .= "<tr class='list-header'>
+                    <th colspan='2'><div align='left'>&nbsp;&nbsp;$langName</div></th>
+                    <th>$langSize</th>
+                    <th>$langDate</th>
+                    <th>$langSelection</th>
+                </tr>";
 
-    $output .= '
-    <div class="table-responsive">
-    <table class="table-default" >';
-    $output .= "
-    <tr class='list-header'>
-      <th colspan='2'><div align='left'>&nbsp;&nbsp;$langName</div></th>
-      <th>$langSize</th>
-      <th>$langDate</th>
-      <th>$langSelection</th>
-    </tr>";
-
-
-    /* --------------------------------------
-      DISPLAY FILE LIST
-      -------------------------------------- */
-
+    // display file list
     if ($fileList) {
-        $iterator = 0;
-        $ind = 1;
-        while (list( $fileKey, $fileName ) = each($fileList['name'])) {
-            if ($ind % 2 == 0) {
-                $style = 'class="even"';
-            } else {
-                $style = 'class="odd"';
-            }
-
-            $dspFileName = htmlspecialchars($fileList['filename'][$fileKey]);
+        while (list($fileKey, $fileName) = each($fileList['name'])) {
+            $dspFileName = q($fileList['filename'][$fileKey]);
             $cmdFileName = str_replace("%2F", "/", rawurlencode($curDirPath . "/" . $fileName));
-
             if ($fileList['visible'][$fileKey] == 0) {
-                continue; // skip the display of this file                
+                continue; // skip the display of this file
             }
-
             if ($fileList['type'][$fileKey] == A_FILE) {
                 $image = choose_image($fileName);
                 $size = format_file_size($fileList['size'][$fileKey]);
                 $date = nice_format($fileList['date'][$fileKey]);
-                $file_url = file_url($fileList['path'][$fileKey], $dspFileName);
+                $file_url = file_url($fileList['path'][$fileKey], $dspFileName);                
                 $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
-                $urlFileName = MultimediaHelper::chooseMediaAhrefRaw($file_url, $play_url, $dspFileName, $dspFileName);
+                $urlFileName = MultimediaHelper::chooseMediaAhrefRaw($file_url, $play_url, $dspFileName, $dspFileName);                
+                $file_id = $fileList['id'][$fileKey];                
             } elseif ($fileList['type'][$fileKey] == A_DIRECTORY) {
                 $image = 'fa-folder';
                 $size = '&nbsp;';
@@ -722,56 +697,45 @@ function display_my_documents($dialogBox, $style) {
                 $urlFileName = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;openDir=' . $cmdFileName . '">' . $dspFileName . '</a>';
             }
 
-            $output .= '
-                <tr ' . $style . '>
+            $output .= '<tr>
                 <td class="center" width="1">' . icon($image, '') . '</td>
                 <td align="left">' . $urlFileName . '</td>
                 <td width="80" class="center">' . $size . '</td>
                 <td width="80" class="center">' . $date . '</td>';
 
-            if ($fileList['type'][$fileKey] == A_FILE) {
-                $iterator++;
+            if ($fileList['type'][$fileKey] == A_FILE) {                                
                 $output .= '
-                <td width="10" class="center">
-                        <input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" />
-                        <input type="hidden" name="filenameDocument_' . $iterator . '" id="filenameDocument_' . $iterator . '" value="' . $dspFileName . '" />
-                </td>';
+                    <td width="10" class="center">
+                        <input type="checkbox" name="document[]" value = ' . $file_id . '>
+                    </td>';
             } else {
                 $output .= '<td>&nbsp;</td>';
             }
             $output .= '</tr>';
-
             /* COMMENTS */
             if ($fileList['comment'][$fileKey] != "") {
-                $fileList['comment'][$fileKey] = htmlspecialchars($fileList['comment'][$fileKey]);
+                $fileList['comment'][$fileKey] = q($fileList['comment'][$fileKey]);
                 $fileList['comment'][$fileKey] = parse_user_text($fileList['comment'][$fileKey]);
-
-                $output .= '
-                <tr class="even">
+                $output .= '<tr>
                 <td>&nbsp;</td>
                 <td colspan="' . $colspan . '"><span class="comment">' . $fileList['comment'][$fileKey] . '</span></td>
                 </tr>';
             }
-            $ind++;
         }  // end each ($fileList)
         // form button
 
-
         $output .= '
-    <tr>
-      <th colspan="' . $colspan . '"><div class="pull-right">
-        <input type="hidden" name="openDir" value="' . $curDirPath . '" />
-        <input type="hidden" name="maxDocForm" value ="' . $iterator . '" />
-        <input class="btn btn-primary" type="submit" name="submitInsertedDocument" value="'.$langAddModulesButton.'">        
-      </th>
-    </tr>';
+            <tr>
+              <th colspan="' . $colspan . '"><div class="pull-right">
+                <input type="hidden" name="openDir" value="' . $curDirPath . '" />                
+                <input class="btn btn-primary" type="submit" name="submitInsertedDocument" value="'.$langAddModulesButton.'">        
+              </th>
+            </tr>';
     } // end if ( $fileList)
     else {
         $output .= '<tr><td colspan="4">&nbsp;</td></tr>';
     }
-
     $output .= '</table></div></form>';
-
     return $output;
 }
 
