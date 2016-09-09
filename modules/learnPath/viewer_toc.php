@@ -285,7 +285,7 @@ echo "<!DOCTYPE HTML>
         }
         var fs = window.parent.document.getElementById('colFrameset');
         var fsJQe = $('#colFrameset', window.parent.document);
-        if (leftTOChiddenStatus != fsJQe.hasClass('hidden')) {
+        if (leftTOChiddenStatus = fsJQe.hasClass('hidden')) {
             fsJQe.toggleClass('hidden');
             if (fsJQe.hasClass('hidden')) {
                 fs.cols = '0, *';

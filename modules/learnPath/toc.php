@@ -143,9 +143,7 @@ $unitParam = isset($_GET['unit'])? "&amp;unit=$_GET[unit]": '';
 
 // -------------------------- learning path list header ----------------------------
 
-echo "<ul><li class='category'>$lp_name</li>
-          <li class='help-block'>$lp_comment</li>
-          <li class='category'>$langContents</li>";
+echo "<ul><li class='category'>$lp_name</li>";
 
 // ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
 foreach ($flatElementList as $module) {
