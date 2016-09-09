@@ -118,20 +118,13 @@ if (!isset($style)) {
     $style = '';
 }
 
-$iterator = 0;
-
-if (!isset($_REQUEST['maxDocForm'])) {
-    $_REQUEST['maxDocForm'] = 0;
-}
-
-while ($iterator <= $_REQUEST['maxDocForm']) {
-    $iterator++;
-    if (isset($_REQUEST['submitInsertedDocument']) && isset($_POST['insertDocument_' . $iterator])) {
-        $insertDocument = str_replace('..', '', $_POST['insertDocument_' . $iterator]);
-        $filenameDocument = $_POST['filenameDocument_' . $iterator];
-        $sourceDoc = $baseWorkDir . $insertDocument;
-
-        if (check_name_exist($sourceDoc)) { // source file exists ?
+if (isset($_POST['submitInsertedDocument'])) {
+    foreach ($_POST['document'] as $file_id) {
+        $sql_doc = Database::get()->querySingle("SELECT filename, path FROM document WHERE id = ?d", $file_id);
+        $filenameDocument = $sql_doc->filename;
+        $sourceDoc = $sql_doc->path;        
+        $basename = $webDir . '/courses/' . $course_code . '/document' . $sourceDoc;        
+        if (check_name_exist($basename)) { // source file exists ?
             // check if a module of this course already used the same document
             $sql = "SELECT *
                     FROM `lp_module` AS M, `lp_asset` AS A
@@ -139,10 +132,9 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                       AND A.`path` LIKE ?s
                       AND M.`contentType` = ?s
                       AND M.`course_id` = ?d";
-            $thisDocumentModule = Database::get()->querySingle($sql, $insertDocument, CTDOCUMENT_, $course_id);
-            $basename = substr($insertDocument, strrpos($insertDocument, '/') + 1);
-
+            $thisDocumentModule = Database::get()->querySingle($sql, $sourceDoc, CTDOCUMENT_, $course_id);
             if (!$thisDocumentModule) {
+                
                 // create new module
                 $insertedModule_id = Database::get()->query("INSERT INTO `lp_module`
                         (`course_id`, `name` , `comment`, `contentType`, `launch_data`)
@@ -151,7 +143,7 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                 // create new asset
                 $insertedAsset_id = Database::get()->query("INSERT INTO `lp_asset`
                         (`path` , `module_id` , `comment`)
-                        VALUES (?s, ?d, '')", $insertDocument, $insertedModule_id)->lastInsertID;
+                        VALUES (?s, ?d, '')", $sourceDoc, $insertedModule_id)->lastInsertID;
 
                 Database::get()->query("UPDATE `lp_module`
                         SET `startAsset_id` = ?d
@@ -166,13 +158,11 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                 // finally : insert in learning path
                 Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                         (`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
-                        VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $langDefaultModuleAddedComment, $order);                
-
-                Session::Messages($langInsertedAsModule, 'alert-info');
-                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
-            } else {
+                        VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $langDefaultModuleAddedComment, $order);               
+                Session::Messages($langInsertedAsModule, 'alert-info');               
+            } else {                
                 // check if this is this LP that used this document as a module
-                $sql = "SELECT count(*) as count FROM `lp_rel_learnPath_module` AS LPM,
+                $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
                              `lp_module` AS M,
                              `lp_asset` AS A
                         WHERE M.`module_id` =  LPM.`module_id`
@@ -180,8 +170,8 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                           AND A.`path` = ?s
                           AND LPM.`learnPath_id` = ?d
                           AND M.`course_id` = ?d";
-                $num = Database::get()->querySingle($sql, $insertDocument, $_SESSION['path_id'], $course_id)->count;
-                
+                $num = Database::get()->querySingle($sql, $sourceDoc, $_SESSION['path_id'], $course_id)->count;
+
                 if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                     // determine the default order of this Learning path
                     $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
@@ -192,16 +182,15 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                     Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
                             (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
                             VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $thisDocumentModule->module_id, $langDefaultModuleAddedComment, $order);
-                    
+
                     Session::Messages($langInsertedAsModule, 'alert-info');
-                    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
                 } else {
                     Session::Messages($langAlreadyUsed, 'alert-warning');
-                    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
                 }
             }
         }
     }
+    redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
 }
 
 
@@ -228,27 +217,23 @@ if ($parentDir == '/' or $parentDir == '\\') {
 /* ======================================
   READ CURRENT DIRECTORY CONTENT
   ====================================== */
-
-/* --------------------------------------
-  SEARCHING FILES & DIRECTORIES INFOS
-  ON THE DB
-  -------------------------------------- */
-
 /* Search infos in the DB about the current directory the user is in */
 $result = Database::get()->queryArray("SELECT * FROM document
                  WHERE $group_sql AND
                        path LIKE ?s AND
                        path NOT LIKE ?s",
             $curDirPath . '/%', $curDirPath . '/%/%');
+
 $attribute = array();
+$fileList = array();
 
 foreach ($result as $row) {
     $attribute['path'][] = $row->path;
     $attribute['visible'][] = $row->visible;
     $attribute['comment'][] = $row->comment;
     $attribute['filename'][] = $row->filename;
+    $attribute['id'][] = $row->id;
 }
-
 /* --------------------------------------
   LOAD FILES AND DIRECTORIES INTO ARRAYS
   -------------------------------------- */
@@ -258,15 +243,13 @@ $handle = opendir(".");
 define('A_DIRECTORY', 1);
 define('A_FILE', 2);
 
-$fileList = array();
-
 while ($file = readdir($handle)) {
     if ($file == '.' || $file == '..') {
         continue; // Skip current and parent directories
     }
 
     $fileList['name'][] = $file;
-
+    
     if (is_dir($file)) {
         $fileList['type'][] = A_DIRECTORY;
         $fileList['size'][] = false;
@@ -275,14 +258,12 @@ while ($file = readdir($handle)) {
         $fileList['type'][] = A_FILE;
         $fileList['size'][] = filesize($file);
         $fileList['date'][] = date('Y-m-d', filectime($file));
-    }
-
+    }    
     /*
      * Make the correspondance between
      * info given by the file system
      * and info given by the DB
      */
-
     if (!isset($dirNameList)) {
         $dirNameList = array();
     }
@@ -296,25 +277,18 @@ while ($file = readdir($handle)) {
         }
     }
 
-    if ($keyAttribute !== false) {
+    if ($keyAttribute !== false) {        
         $fileList['comment'][] = $attribute['comment'][$keyAttribute];
         $fileList['visible'][] = $attribute['visible'][$keyAttribute];
         $fileList['filename'][] = $attribute['filename'][$keyAttribute];
         $fileList['path'][] = $attribute['path'][$keyAttribute];
+        $fileList['id'][] = $attribute['id'][$keyAttribute];
     } else {
         $fileList['comment'][] = false;
         $fileList['visible'][] = false;
-        $fileList['filename'][] = false;
+        $fileList['filename'][] = false;                
     }
 } // end while ($file = readdir($handle))
-
-/*
- * Sort alphabetically the File list
- */
-
-if ($fileList) {
-    array_multisort($fileList['type'], $fileList['name'], $fileList['size'], $fileList['date'], $fileList['comment'], $fileList['visible'], $fileList['filename']);
-}
 
 closedir($handle);
 unset($attribute);
