@@ -774,7 +774,7 @@ function hybridauth_login() {
         $auth_methods = get_auth_active_methods();
         $myrow = Database::get()->querySingle("SELECT user.id, surname,
                     givenname, password, username, status, email, lang,
-                    verified_mail, uid
+                    verified_mail, uid, am
                 FROM user, user_ext_uid
                 WHERE user.id = user_ext_uid.user_id AND
                       user_ext_uid.auth_id = ?d AND
