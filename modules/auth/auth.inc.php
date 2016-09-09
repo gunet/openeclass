@@ -804,6 +804,9 @@ function hybridauth_login() {
                 } else {
                     $email = $user_data->email;
                 }
+                if (is_null($email)) {
+                    $email = '';
+                }
                 $options = login_hook(array(
                     'user_id' => null,
                     'attributes' => array('user_data' => $user_data),
@@ -812,14 +815,33 @@ function hybridauth_login() {
                     deny_access();
                 }
                 $status = $options['status'];
-                if ($user_data->username) {
-                    $uname = $user_data->username;
-                } elseif ($user_data->displayName) {
-                    $uname = $user_data->displayName;
-                } elseif ($user_data->email) {
-                    $uname = $user_data->email;
+                $unameSuffix = $uname = null;
+                do {
+                    if (isset($user_data->username) and $user_data->username) {
+                        $uname = $user_data->username;
+                    } elseif ($user_data->email) {
+                        $uname = $user_data->email;
+                    } elseif ($user_data->displayName) {
+                        $uname = $user_data->displayName;
+                    } else {
+                        $uname = $user_data->identifier;
+                    }
+                    $uname .= $unameSuffix++;
+                } while (user_exists($uname));
+                if (!(isset($user_data->lastName) and isset($user_data->firstName) and $user_data->lastName and $user_data->firstName)) {
+                    if (isset($user_data->lastName) and $user_data->lastName) {
+                        $name = $user_data->lastName;
+                    } elseif (isset($user_data->firstName) and $user_data->firstName) {
+                        $name = $user_data->firstName;
+                    } else {
+                        $name = $user_data->displayName;
+                    }
+                    $parts = explode(' ', $name);
+                    $parts[] = '';
+                    list($givenname, $surname) = $parts;
                 } else {
-                    $uname = $user_data->identifier;
+                    $surname = $user_data->lastName;
+                    $givenname = $user_data->firstName;
                 }
                 $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
@@ -827,13 +849,25 @@ function hybridauth_login() {
                         am = ?s, verified_mail = ?d,
                         registered_at = " . DBHelper::timeAfter() . ",
                         expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
+                        whitelist = ''", function ($e) use ($surname, $givenname, $user_data, $provider, $uname, $email, $status, $language, $options, $verified_mail) {
+echo '<pre>';
+var_dump(array("INSERT INTO user
+                    SET surname = ?s, givenname = ?s, password = ?s,
+                        username = ?s, email = ?s, status = ?d, lang = ?s,
+                        am = ?s, verified_mail = ?d,
+                        registered_at = " . DBHelper::timeAfter() . ",
+                        expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
                         whitelist = ''",
-                        $user_data->lastName, $user_data->firstName, $provider, $uname, $email, $status,
+$surname, $givenname, $provider, $uname, $email, $status,
+                        $language, $options['am'], $verified_mail));
+die($e);
+},
+                        $surname, $givenname, $provider, $uname, $email, $status,
                         $language, $options['am'], $verified_mail)->lastInsertID;
                 if ($_SESSION['uid']) {
                     $_SESSION['uname'] = $uname;
-                    $_SESSION['surname'] = $user_data->lastName;
-                    $_SESSION['givenname'] = $user_data->firstName;
+                    $_SESSION['surname'] = $surname;
+                    $_SESSION['givenname'] = $givenname;
                     $_SESSION['email'] = $email;
                     $_SESSION['status'] = $status;
                     Database::get()->query('INSERT INTO user_ext_uid
