@@ -3524,11 +3524,12 @@ $langDatabaseExists = 'Προσοχή: Η βάση δεδομένων "%s" υπ�
  * ****************************************************************** */
 $langTool = "Εργαλείο";
 $langUploadPage = "Ανέβασμα ιστοσελίδας";
-$langAddExtLink = "Προσθήκη εξωτερικού συνδέσμου στο αριστερό μενού";
+$langAddExtLink = "Προσθήκη εξωτερικού συνδέσμou";
 $langConfirmDeleteLink = "Επιβεβαίωση διαγραφής συνδέσμου";
 $langOperations = "Ενέργειες σε εξωτερικούς σύνδεσμους";
 $langInactiveTools = "Ανενεργά εργαλεία";
 $langSubmitChanges = "Υποβολή αλλαγών";
+$langActivateCourseTools = "Διαχείριση εργαλείων";
 $iso639_2_code = "el";
 $langNameOfLang['greek'] = "Ελληνικά";
 $langNameOfLang['english'] = "Αγγλικά";

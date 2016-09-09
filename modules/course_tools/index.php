@@ -138,21 +138,16 @@ foreach ($module_list as $item) {
     $toolSelection[$item->visible] .= "<option value='$mid'>$mtitle</option>\n";
 }
 
-$tool_content .= "
-<div id='operations_container'>" .
-        action_bar(array(
-            array('title' => $langAddExtLink,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=true",
-                'icon' => 'fa-plus-circle',
-                'level' => 'primary-label',
-                'button-class' => 'btn-success'))) .
-        "</div>";
 
 $tool_content .= <<<tForm
+<div class="panel panel-default panel-action-btn-default">
+                    <div class='panel-heading list-header'>
+                        <h3 class='panel-title'>$langActivateCourseTools</h3>
+                    </div>
     <form name="courseTools" action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" enctype="multipart/form-data">
         <div class="table-responsive">    
             <table class="table-default">
-                <tr class="list-header">
+                <tr">
                     <th width="45%" class="text-center">$langInactiveTools</th>
                     <th width="10%" class="text-center">$langMove</th>
                     <th width="45%" class="text-center">$langActiveTools</th>
@@ -179,12 +174,19 @@ $tool_content .= <<<tForm
 tForm
 .generate_csrf_token_form_field() .<<<tForm
     </form>
+</div>
 tForm;
 
 
 // display table to edit/delete external links
-$tool_content .= "<table class='table-default'>
-<tr class='list-header'><th colspan='2'>$langOperations</th></tr>";
+$tool_content .= "<div class='panel panel-default panel-action-btn-default'>
+    <div class='pull-right' style='padding:8px;'>
+        <div id='operations_container'>
+<a class='btn btn-success' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=true'><span class='fa fa-plus-circle'> $langAddExtLink</span></a></div>
+                    </div>
+                    <div class='panel-heading list-header'>
+                        <h3 class='panel-title'>$langOperations</h3>
+                    </div><table class='table-default'>";
 $q = Database::get()->queryArray("SELECT id, url, title FROM link
                         WHERE category = -1 AND
                         course_id = ?d", $course_id);
@@ -201,6 +203,6 @@ foreach ($q as $externalLinks) {
     ";
     $tool_content .= "</td></tr>";
 }
-$tool_content .= "</table>";
+$tool_content .= "</table></div>";
 
 draw($tool_content, 2, null, $head_content);
