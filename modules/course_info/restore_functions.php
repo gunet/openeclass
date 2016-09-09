@@ -371,6 +371,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
 
 function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof) {
     global $webDir, $urlServer, $urlAppend, $langEnter, $langBack, $currentCourseCode;
+    
     require_once 'modules/create_course/functions.php';
     require_once 'modules/course_info/restorehelper.class.php';
     require_once 'include/lib/fileManageLib.inc.php';
@@ -421,14 +422,15 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $course_data = $course_dataArr[0];
             // update course query
             $upd_course_sql = "UPDATE course SET keywords = ?s, doc_quota = ?f, video_quota = ?f, "
-                            . " group_quota = ?f, dropbox_quota = ?f, glossary_expand = ?d ";
+                            . " group_quota = ?f, dropbox_quota = ?f, glossary_expand = ?d, course_license = ?d ";
             $upd_course_args = array(
                 $course_data[$restoreHelper->getField('course', 'keywords')],
                 floatval($course_data['doc_quota']),
                 floatval($course_data['video_quota']),
                 floatval($course_data['group_quota']),
                 floatval($course_data['dropbox_quota']),
-                intval($course_data[$restoreHelper->getField('course', 'glossary_expand')])
+                intval($course_data[$restoreHelper->getField('course', 'glossary_expand')]),
+                intval($course_data[$restoreHelper->getField('course', 'course_license')])
             );
             if (!isset($course_data['course_image'])) {
                 $course_data['course_image'] = null;
@@ -741,8 +743,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         // Wall
         if (file_exists("$restoreThis/wall_post")) {
             $wall_map = restore_table($restoreThis, 'wall_post', array('set' => array('course_id' => $new_course_id),
-            'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
-            
+                    'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        
             restore_table($restoreThis, 'wall_post_resources', array('delete' => array('id'),
             'map' => array('post_id' => $wall_map),
             'map_function' => 'wall_map_function',
