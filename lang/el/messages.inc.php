@@ -5097,11 +5097,11 @@ $langAutoJudgeAssertions = array(
 );
 
 // result report
-$langAutoJudgeDetailedReport = 'Αυτόματος κριτής: Αναλυτική αναφορά ';
+$langAutoJudgeDetailedReport = 'Αυτόματος κριτής: Αναλυτική αναφορά';
 $langAutoJudgeResultsFor = 'Αποτελέσματα για';
-$langAutoJudgeNotEnabledForReport = ' Ο αυτόματος κριτής δεν είναι ενεργοποιημένος για την συγκεκριμένη εργασία. ';
+$langAutoJudgeNotEnabledForReport = 'Ο αυτόματος κριτής δεν είναι ενεργοποιημένος για την συγκεκριμένη εργασία.';
 $langAutoJudgeDownloadPdf = 'Λήψη σε μορφή PDF';
-$langAutoJudgeConnectionError = "Error connecting to compilation service. Please report this to dnna@dnna.gr";
+$langAutoJudgeConnectionError = "Σφάλμα σύνδεσης με την υπηρεσία μεταγλώττισης. Παρακαλούμε αναφέρατε το σφάλμα στη διεύθυνση dnna@dnna.gr";
 
 // Tags
 $langTag = 'Ετικέτα';
