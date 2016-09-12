@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2016-09-12 17:03:33
+// Generated 2016-09-12 17:25:28
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -2381,7 +2381,6 @@ $langErrorEnterPost = "Impossible de saisir le message dans la base de données.
 $langErrorEnterTextPost = "Impossible de saisir le texte !";
 $langErrorEnterTopicTable = "Impossible de mettre à jour le sujet !";
 $langErrorUpdatePostCount = "Impossible de mettre à jour le compteur des messages.";
-$langErrorConnectPostDatabase = "Un problème s'est présenté. Impossible de se connecter avec la base de données des messages.";
 $langAddTime = "Ajouter du temps  aux comptes désactivés.";
 $langRealised = "ont été réalisés";
 $langUpdates = "mises à jours";

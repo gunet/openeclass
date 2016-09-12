@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2016-09-12 17:03:34
+// Generated 2016-09-12 17:25:28
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -2209,7 +2209,6 @@ $langErrorEnterPost = "Impossibile inserire un post nel database.";
 $langErrorEnterTextPost = "Impossibile inserire il testo del post!";
 $langErrorEnterTopicTable = "Impossibile aggiornare l'argomento!";
 $langErrorUpdatePostCount = "Impossibile aggiornare il contatore dei post. ";
-$langErrorConnectPostDatabase = "Si è verificato un errore. Impossibile connettersi al database dei post.";
 $langAddTime = "Attivare i conti inattivi per un periodo di tempo.";
 $langRealised = "Completati";
 $langUpdates = "aggiornamenti";

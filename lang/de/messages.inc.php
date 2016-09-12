@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2016-09-12 17:03:33
+// Generated 2016-09-12 17:25:28
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -2155,7 +2155,6 @@ $langErrorEnterPost = "Die Mitteilung konnte in der Datenbank nicht eingefügt w
 $langErrorEnterTextPost = "Der Text der Mitteilung konnte nicht eingegeben werden.";
 $langErrorEnterTopicTable = "Das Thema konnte nicht aktualisiert werden.";
 $langErrorUpdatePostCount = "Der Zähler der mitteilungen konnte nicht aktualisiert werden.";
-$langErrorConnectPostDatabase = "Ein Fehler ist aufgetreten. Die Verbindung zur Datenbank der Mitteilungen konnte nicht hergestellt werden.";
 $langAddTime = "Zeit hinzufügen zu inaktiven Benutzerkonten";
 $langRealised = "sind ausgeführt worden";
 $langUpdates = "Aktualisierungen (updates)";

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2016-09-12 17:03:31
+// Generated 2016-09-12 17:25:26
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -2229,7 +2229,6 @@ $langErrorEnterPost = "No se ha podido entrar la anotación en la base de datos.
 $langErrorEnterTextPost = "¡No se ha podido entrar el texto de la anotación!";
 $langErrorEnterTopicTable = "¡No se ha podido actualizar los tópicos de la tabla!";
 $langErrorUpdatePostCount = "No se ha podido actualizar el contador de las anotaciones del foro.";
-$langErrorConnectPostDatabase = "Ha ocurrido un error. No se ha podido contectar con la base de datos de las Anotaciones.";
 $langAddTime = "Añadir tiempo a las cuentas inactivas";
 $langRealised = "se ha ido";
 $langUpdates = "actualizaciones";

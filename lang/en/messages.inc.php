@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2016-09-12 17:03:31
+// Generated 2016-09-12 17:25:26
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -2239,7 +2239,6 @@ $langErrorEnterPost = "Couldn't enter post in database.";
 $langErrorEnterTextPost = "Could not enter post text!";
 $langErrorEnterTopicTable = "Could not update topics table!";
 $langErrorUpdatePostCount = "Couldn't update forums post count.";
-$langErrorConnectPostDatabase = "An Error Occured. Could not connect to the Posts database.";
 $langAddTime = "Add time in the inactive accounts";
 $langRealised = "have been done";
 $langUpdates = "updates";
