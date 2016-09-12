@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,7 +21,7 @@
 
 define('UPGRADE', true);
 
-require '../include/baseTheme.php';
+require_once '../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/course_settings.php';
@@ -2439,11 +2439,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
 
         // convert tables to InnoDB storage engine
-        $result = Database::get()->queryArray("SHOW FULL TABLES");
+        $result = Database::get()->queryArray("SELECT Table_name, Engine, Table_type
+            FROM information_schema.TABLES WHERE Table_schema = ?s", $mysqlMainDb);
         foreach ($result as $table) {
-            $value = "Tables_in_$mysqlMainDb";
-            if ($table->Table_type === 'BASE TABLE') {
-                Database::get()->query("ALTER TABLE `" . $table->$value . "` ENGINE = InnoDB");
+            if (($table->Table_type === 'BASE TABLE') && ($table->Engine != 'InnoDB')) {
+                Database::get()->query("ALTER TABLE `" . $table->Table_name . "` ENGINE = InnoDB");
             }
         }
     }
