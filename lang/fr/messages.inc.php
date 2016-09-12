@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2016-08-11 13:21:13
+// Generated 2016-09-12 17:03:33
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -334,7 +334,7 @@ $langAdminAn = "Annonces de l'administrateur";
 $langAdminAddAnn = "Ajouter une annonce de l'administrateur";
 $langAdminModifAnn = "Modifier l'annonce de l'administrateur";
 $langAdminAnnModify = "L'annonce de l'administrateur a été modifiée";
-$langVisible = "Visible";
+$langAdminAnVis = "Visible";
 $langAdminAnnAdd = "L'annonce de l'administrateur a été ajoutée";
 $langAdminAnnDel = "L'annonce de l'administrateur a été supprimée";
 $langAdminAnnMes = "a été posté le";
@@ -633,7 +633,7 @@ $langDate = "Date";
 $langMoveFrom = "Déplacer le fichier";
 $langRename = "Renommer";
 $langOkComment = "Valider les modifications";
-$langVisibility = "Visible/Invisible"
+$langVisible = "Visible/Invisible"
 ;
 $langCopy = "Copier";
 $langNoSpace = "Le téléversement du fichier a échoué. Vous avez dépassé l'espace disque maximal disponible. Pour plus d'informations, veuillez contacter l'administrateur du système."
@@ -1351,7 +1351,7 @@ $langUnamedPath = "Parcours sans nom";
 $langUseOfPool = "This page allows you to view all the modules available in this course. <br /> Any exercise or document that has been added in a learning path will also appear in this list."
 ;
 $langUsedInLearningPaths = "Nombre de parcours d'apprentissage utilisant ce module : ";
-$langViewShow = "Afficher";
+$langView = "Afficher";
 $langViewMode = "Visualiser le mode";
 $langVisibility = "Visible / Invisible";
 $langWork = "Devoirs ".$langOfStudents;
@@ -1388,8 +1388,8 @@ $langGiveURL = "Entrez le URL du lien";
 $langGiveCategoryName = "Nom de la catégorie";
 $langNoCategory = "Liens généraux";
 $langCategorisedLinks = "Liens classés par catégorie";
-$langViewShow = "Show all";
-$langViewHide = "Masquer";
+$showall = "Show all";
+$shownone = "Masquer";
 $langProfNoLinksExist = "Vous pouvez utiliser les fonctions de l'outil pour ajouter des liens.";
 $langNoLinksExist = "Il n'y a pas de liens !";
 $langEmptyLinkURL = "Vous n'avez pas saisi le url du lien";
@@ -1420,7 +1420,7 @@ $lang_email = "e-mail";
 $lang_send = "Envoyer";
 $lang_username = "Nom d'utilisateur";
 $langPassCannotChange1 = "Le mot de passe du compte ne peut pas être modifié.";
-$langPassCannotChange2 = "This account uses an external authentication method. Please contact the administrator at";
+$langPassCannotChange2 = "This account is authenticated via";
 $langPassCannotChange3 = "Veuillez contacter  l'administrateur de la plateforme à l'adresse";
 $langFinalDesc = "Description détaillée du $siteName"
 ;
@@ -1634,8 +1634,7 @@ $langProblem = "En cas de problème, nous contacter.";
 $langFormula = "Cordialement,";
 $langManager = "Responsable";
 $langPersonalSettings = "Vos paramètres personnels ont été enregistrés. Vous recevrez un e-mail vous rappelant votre nom d'utilisateur et votre mot de passe.</p>";
-$langPersonalSettingsMore = "Click <a href='../../index.php'>here</a> to navigate your User Portfolio.<br>
-You can also:<ul><li>navigate the platform and your personal selections,</li><li>select \"$langCourses List\" to review the available $langsCourses.</li><ul>";
+$langPersonalSettingsMore = "to navigate to your Portfolio. You can:";
 $langYourRegTo = "Votre liste des cours contient";
 $langIsReg = "a été mis à jour";
 $langCanEnter = "Entrer dans la salle virtuelle.";
@@ -3455,7 +3454,7 @@ $langBBB = "Teleconference";
 $langNewBBBSession = "Νew Τeleconference";
 $langNewBBBSessionInfo = "New teleconference info";
 $langNewBBBSessionStart = "Start";
-$langUnitDescr = "Short description";
+$langNewBBBSessionDesc = "Short description";
 $langNewBBBSessionType = "Teleconference type";
 $langNewBBBSessionPublic = "All platform users, even if only registered to other $langsCourses, can participate";
 $langNewBBBSessionPrivate = "Only users registered to this $langsCourse can participate";
@@ -3463,8 +3462,8 @@ $langBBBSessionJoin = "Join";
 $langBBBUpdateSuccessful = "Updated sucessfully";
 $langBBBDeleteSuccessful = "Deleted";
 $langNewBBBSessionStatus = "Status";
-$langVisible = "Visible";
-$langInvisible = "Invisible";
+$langNewBBBSessionActive = "Visible";
+$langNewBBBSessionInActive = "Invisible";
 $langBBBAddSuccessful = "New teleconference scheduled successfully";
 $langBBBNoteEnableJoin = "The link to join is active only for currently running teleconferences";
 $langBBBNoteEnableJoinEditor = "The link to join is activated 15 minutes before the scheduled start time";
@@ -4103,8 +4102,8 @@ $langResourceAccessUnlock = 'Unlock';
 $langCancelAndEnter = 'Skip and enter';
 $langNoBlock = 'Unblock';
 $langRestrictedLPath = 'To progress to this and subsequent steps of the Learning Path, you need to have completed the previous steps';
-$langViewShow = 'Show';
-$langViewHide = 'Hide';
+$langViewShow = "View";
+$langViewHide = "Hide";
 $langLinksAdded = "The links have been added";
 $langAssignmentStartHelpBlock = "Click if you want to assign a different (i.e. future) assignment start date";
 $langAssignmentEndHelpBlock = "Click if you want to assign an assignment end date";
@@ -4551,8 +4550,8 @@ $langUnits = "$langCourse Units";
 $langRegistrationLink = 'User registration link';
 $langRegistrationShowText = 'Show instructions instead of links';
 $langRegistrationInfo = 'Registration instructions';
-$langViewShow = 'Show';
-$langViewHide = 'Hide';
+$langShow = 'Show';
+$langHide = 'Hide';
 $langQuestionAlreadyDeleted = "Question has been deleted!";
 $langUpgForVersion = 'Version %s upgrades.';
 $langGroupAllowStudentUnregister = "$langsStudents allow to unregister";
@@ -4598,7 +4597,7 @@ $langAnnouncementIsNotVis = "Is not publicly visible";
 $langAnnouncementWillBeVis = "Will be activated on: ";
 $langAnnouncementWillNotBeVis = "Has been deactivated since: ";
 $langGeneralTutorials = "Guides";
-$langInvisible = "Not visible";
+$langAdminAnNotVis = "Not visible";
 $langAdminExpired = "Expired";
 $langAdminWaiting = "Pending";
 $langEmailSendWarn = 'Warning: For the platform to be able to successfully send announcements via e-mail,
@@ -4658,7 +4657,7 @@ $langBlogPostsDeleted = "Blog posts deleted from $langsCourse";
 $langWallPostsDeleted = "Wall posts deleted from $langsCourse";
 $langMesageNoSent = "The message was not sent because the attachment exceeds the available storage limit.
         Please contact the system administrators for more information.";
-$langViewShow = 'Display';
+$langDisplayResults = 'Display';
 $langExportWithAnswers = 'with full answers';
 $langOpenParticipation = "Participation is open";
 $langGeneralSurvey = "General survey";
@@ -4804,3 +4803,12 @@ $langAdminPinned = "Pinned announcement";
 $langAdminPinnedToTop = "Pin to top";
 $langExportGrades = "Export Grades";
 $langCloudFileError = 'Error retrieving remote resource - incompatible file type.';
+$langInvisible = "Not visible";
+$langInsertedAsModule = "Module has been added.";
+$langAlreadyUsed = "Module already used in this learning path";
+$langPersonalSettingsMore1 = "to have a look in your personal settings";
+$langPersonalSettingsMore2 = "to register to available $langsCourses by clicking in '$langCourses' in left menu.";
+$langMailVerificationNote = "(Note: Check your mailbox junk folder, too)";
+$langActivateCourseTools = "Activate / Deactivate Tools";
+$langTotalDuration = "Total duration";
+$langAutoJudgeConnectionError = "Error connecting to compilation service. Please report this to dnna@dnna.gr";
