@@ -147,7 +147,7 @@ $tool_content .= <<<tForm
     <form name="courseTools" action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" enctype="multipart/form-data">
         <div class="table-responsive">    
             <table class="table-default">
-                <tr">
+                <tr>
                     <th width="45%" class="text-center">$langInactiveTools</th>
                     <th width="10%" class="text-center">$langMove</th>
                     <th width="45%" class="text-center">$langActiveTools</th>
