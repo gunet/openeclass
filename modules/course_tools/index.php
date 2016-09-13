@@ -29,13 +29,9 @@ include '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 
 $toolName = $langToolManagement;
-add_units_navigation(TRUE);
-
-load_js('tools.js');
-$head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
-    $langNoPgTitle . '";</script>';
-
 $page_url = 'modules/course_tools/?course=' . $course_code;
+add_units_navigation(TRUE);
+load_js('tools.js');
 
 if (isset($_REQUEST['toolStatus'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -70,9 +66,6 @@ if (isset($_GET['delete'])) {
     redirect_to_home_page($page_url);
 }
 
-/**
- * Add external link
- */
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $link = isset($_POST['link']) ? $_POST['link'] : '';
@@ -90,7 +83,9 @@ if (isset($_POST['submit'])) {
         'name_link' => $name_link));
     Session::Messages($langLinkAdded, 'alert-success');
     redirect_to_home_page($page_url);
-} elseif (isset($_GET['action'])) { // add external link
+}
+
+if (isset($_GET['action'])) { // add external link
     $pageName = $langAddExtLink;
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -129,80 +124,23 @@ if (isset($_POST['submit'])) {
     exit();
 }
 
-$toolSelection[0] = $toolSelection[1] = '';
+$data['toolSelection'][0] = $data['toolSelection'][1] = array();
 $module_list = Database::get()->queryArray('SELECT module_id, visible
     FROM course_module WHERE course_id = ?d', $course_id);
 foreach ($module_list as $item) {
     $mid = getIndirectReference($item->module_id);
-    $mtitle = q($modules[$item->module_id]['title']);
-    $toolSelection[$item->visible] .= "<option value='$mid'>$mtitle</option>\n";
+    $mtitle = $modules[$item->module_id]['title'];
+    $data['toolSelection'][$item->visible][] = (object) array('id' => $mid, 'title' => $mtitle);
 }
 
 
-$tool_content .= <<<tForm
-<div class="panel panel-default panel-action-btn-default">
-                    <div class='panel-heading list-header'>
-                        <h3 class='panel-title'>$langActivateCourseTools</h3>
-                    </div>
-    <form name="courseTools" action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" enctype="multipart/form-data">
-        <div class="table-responsive">    
-            <table class="table-default">
-                <tr">
-                    <th width="45%" class="text-center">$langInactiveTools</th>
-                    <th width="10%" class="text-center">$langMove</th>
-                    <th width="45%" class="text-center">$langActiveTools</th>
-                </tr>
-                <tr>
-                    <td class="text-center">
-                        <select class="form-control" name="toolStatInactive[]" id='inactive_box' size='17' multiple>$toolSelection[0]</select>
-                    </td>
-                    <td class="text-center" style="vertical-align: middle;">
-                        <button type="button" class="btn btn-default" onClick="move('inactive_box','active_box')"><span class="fa fa-arrow-right"></span></button><br><br>
-                        <button type="button" class="btn btn-default" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
-                    </td>
-                    <td class="text-center">
-                        <select class="form-control" name="toolStatActive[]" id='active_box' size='17' multiple>$toolSelection[1]</select>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3" class="text-center">
-                        <input type="submit" class="btn btn-primary" value="$langSubmit" name="toolStatus" onClick="selectAll('active_box',true)" />
-                    </td>
-                </tr>
-            </table>
-        </div>
-tForm
-    .generate_csrf_token_form_field() .<<<tForm
-    </form>
-</div>
-tForm;
+$data['csrf'] = generate_csrf_token_form_field();
 
-
-// display table to edit/delete external links
-$tool_content .= "<div class='panel panel-default panel-action-btn-default'>
-    <div class='pull-right' style='padding:8px;'>
-        <div id='operations_container'>
-<a class='btn btn-success' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=true'><span class='fa fa-plus-circle'> $langAddExtLink</span></a></div>
-                    </div>
-                    <div class='panel-heading list-header'>
-                        <h3 class='panel-title'>$langOperations</h3>
-                    </div><table class='table-default'>";
-$q = Database::get()->queryArray("SELECT id, url, title FROM link
+$data['q'] = Database::get()->queryArray("SELECT id, url, title FROM link
                         WHERE category = -1 AND
                         course_id = ?d", $course_id);
-foreach ($q as $externalLinks) {
-    $tool_content .= "
-        <td class='text-left'>
-            <div style='display:inline-block; width: 80%;'>
-                <strong>" . q($externalLinks->title) . "</strong>
-                <div style='padding-top:8px;'><small class='text-muted'>".q($externalLinks->url)."</small></div>
-            </div>
-            <div class='pull-right' style='font-size: 20px; padding-right: 20px'>
-                <a class='text-danger' href='?course=$course_code&amp;delete=".getIndirectReference($externalLinks->id)."'><span class='fa fa-times'></span></a>
-            </div>
-    ";
-    $tool_content .= "</td></tr>";
-}
-$tool_content .= "</table></div>";
 
-draw($tool_content, 2, null, $head_content);
+
+
+
+view('modules.course_tools.index', $data);
