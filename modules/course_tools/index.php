@@ -33,7 +33,7 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
-        $langNoPgTitle . '";</script>';
+    $langNoPgTitle . '";</script>';
 
 $page_url = 'modules/course_tools/?course=' . $course_code;
 
@@ -52,7 +52,7 @@ if (isset($_REQUEST['toolStatus'])) {
         $placeholders = join(', ', array_fill(0, count($mids), '?d'));
         Database::get()->query("UPDATE course_module SET visible = 1
                                     WHERE course_id = ?d AND module_id IN ($placeholders)",
-                               $course_id, $mids);
+            $course_id, $mids);
     }
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_MODIFY, array());
     Session::Messages($langRegDone, 'alert-success');
@@ -61,11 +61,11 @@ if (isset($_REQUEST['toolStatus'])) {
 
 if (isset($_GET['delete'])) {
     $delete = getDirectReference($_GET['delete']);
-    $r = Database::get()->querySingle("SELECT url, title, category FROM link WHERE id = ?d", $delete);    
+    $r = Database::get()->querySingle("SELECT url, title, category FROM link WHERE id = ?d", $delete);
     Database::get()->query("DELETE FROM link WHERE id = ?d", $delete);
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
-                                                                   'link' => $r->url,
-                                                                   'name_link' => $r->title));
+        'link' => $r->url,
+        'name_link' => $r->title));
     Session::Messages($langLinkDeleted, 'alert-success');
     redirect_to_home_page($page_url);
 }
@@ -86,19 +86,19 @@ if (isset($_POST['submit'])) {
                             VALUES (?d, ?s, ?s, -1, ' ')", $course_id, $link, $name_link);
     $id = $sql->lastInsertID;
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_INSERT, array('id' => $id,
-                                                                   'link' => $link,
-                                                                   'name_link' => $name_link));
+        'link' => $link,
+        'name_link' => $name_link));
     Session::Messages($langLinkAdded, 'alert-success');
     redirect_to_home_page($page_url);
 } elseif (isset($_GET['action'])) { // add external link
     $pageName = $langAddExtLink;
     $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "index.php?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label'
-                 )));
-        
+        array('title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
+        )));
+
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
     $helpTopic = 'Module';
     $tool_content .= "<div class='form-wrapper'>
@@ -138,22 +138,16 @@ foreach ($module_list as $item) {
     $toolSelection[$item->visible] .= "<option value='$mid'>$mtitle</option>\n";
 }
 
-$tool_content .= "
-<div id='operations_container'>" .
-        action_bar(array(
-            array('title' => $langAddExtLink,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=true",
-                'icon' => 'fa-plus-circle',
-                'level' => 'primary-label',
-                'button-class' => 'btn-success'))) .
-        "</div>";
 
 $tool_content .= <<<tForm
-<div class='form-wrapper'>
+<div class="panel panel-default panel-action-btn-default">
+                    <div class='panel-heading list-header'>
+                        <h3 class='panel-title'>$langActivateCourseTools</h3>
+                    </div>
     <form name="courseTools" action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" enctype="multipart/form-data">
         <div class="table-responsive">    
             <table class="table-default">
-                <tr>
+                <tr">
                     <th width="45%" class="text-center">$langInactiveTools</th>
                     <th width="10%" class="text-center">$langMove</th>
                     <th width="45%" class="text-center">$langActiveTools</th>
@@ -162,9 +156,9 @@ $tool_content .= <<<tForm
                     <td class="text-center">
                         <select class="form-control" name="toolStatInactive[]" id='inactive_box' size='17' multiple>$toolSelection[0]</select>
                     </td>
-                    <td class="text-center">
-                        <input class="btn btn-primary" type="button" onClick="move('inactive_box','active_box')" value="   >>   " /><br><br>
-                        <input class="btn btn-primary" type="button" onClick="move('active_box','inactive_box')" value="   <<   " />
+                    <td class="text-center" style="vertical-align: middle;">
+                        <button type="button" class="btn btn-default" onClick="move('inactive_box','active_box')"><span class="fa fa-arrow-right"></span></button><br><br>
+                        <button type="button" class="btn btn-default" onClick="move('active_box','inactive_box')"><span class="fa fa-arrow-left"></span></button>
                     </td>
                     <td class="text-center">
                         <select class="form-control" name="toolStatActive[]" id='active_box' size='17' multiple>$toolSelection[1]</select>
@@ -172,39 +166,43 @@ $tool_content .= <<<tForm
                 </tr>
                 <tr>
                     <td colspan="3" class="text-center">
-                        <input type="submit" class="btn btn-primary" value="$langSubmitChanges" name="toolStatus" onClick="selectAll('active_box',true)" />
+                        <input type="submit" class="btn btn-primary" value="$langSubmit" name="toolStatus" onClick="selectAll('active_box',true)" />
                     </td>
                 </tr>
             </table>
         </div>
 tForm
-.generate_csrf_token_form_field() .<<<tForm
+    .generate_csrf_token_form_field() .<<<tForm
     </form>
 </div>
 tForm;
 
+
 // display table to edit/delete external links
-$tool_content .= "<table class='table-default'>
-<tr><th colspan='2'>$langOperations</th></tr>
-<tr>  
-  <th width='90%' class='text-left'>$langTitle</th>
-  <th class='text-center'>".icon('fa-gears')."</th>
-</tr>";
-$q = Database::get()->queryArray("SELECT id, title FROM link
+$tool_content .= "<div class='panel panel-default panel-action-btn-default'>
+    <div class='pull-right' style='padding:8px;'>
+        <div id='operations_container'>
+<a class='btn btn-success' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=true'><span class='fa fa-plus-circle'> $langAddExtLink</span></a></div>
+                    </div>
+                    <div class='panel-heading list-header'>
+                        <h3 class='panel-title'>$langOperations</h3>
+                    </div><table class='table-default'>";
+$q = Database::get()->queryArray("SELECT id, url, title FROM link
                         WHERE category = -1 AND
                         course_id = ?d", $course_id);
 foreach ($q as $externalLinks) {
-    $tool_content .= "<td class='text-left'>" . q($externalLinks->title) . "</td>";
-    $tool_content .= "<td class='text-center'>";
-    $tool_content .= action_button(array(
-                array('title' => $langDelete,
-                      'url' => "?course=$course_code&amp;delete=".getIndirectReference($externalLinks->id),
-                      'icon' => 'fa-times',
-                      'class' => 'delete',
-                      'confirm' => $langConfirmDelete)
-            ));
+    $tool_content .= "
+        <td class='text-left'>
+            <div style='display:inline-block; width: 80%;'>
+                <strong>" . q($externalLinks->title) . "</strong>
+                <div style='padding-top:8px;'><small class='text-muted'>".q($externalLinks->url)."</small></div>
+            </div>
+            <div class='pull-right' style='font-size: 20px; padding-right: 20px'>
+                <a class='text-danger' href='?course=$course_code&amp;delete=".getIndirectReference($externalLinks->id)."'><span class='fa fa-times'></span></a>
+            </div>
+    ";
     $tool_content .= "</td></tr>";
 }
-$tool_content .= "</table>";
+$tool_content .= "</table></div>";
 
 draw($tool_content, 2, null, $head_content);
