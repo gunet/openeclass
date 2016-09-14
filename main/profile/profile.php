@@ -599,7 +599,7 @@ $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
           <a href='display_profile.php' class='btn btn-default'>$langCancel</a>
         </div>
       </fieldset>
-      ". generate_csrf_token_form_field() ."  
+      " . generate_csrf_token_form_field() ."  
       </form>
       </div>";
 
