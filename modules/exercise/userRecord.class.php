@@ -94,7 +94,7 @@
             // The only way to get the exact list of questions the moment the exercise was run is though exercise_answer_record
             Database::get()->queryFunc("SELECT DISTINCT question_id "
                     . "FROM exercise_answer_record "
-                    . "WHERE eurid = ?d ORDER BY answer_record_id", 
+                    . "WHERE eurid = ?d ORDER BY question_id", 
                     function($exercise_answer_record) use (&$question_ids) {
                         array_push($question_ids, $exercise_answer_record->question_id);
                     }, $this->id);
