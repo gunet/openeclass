@@ -88,6 +88,21 @@
                         </div>
                     </div>
                 @endif
+                    <div id='profile-departments' class='row'>
+                        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
+                            <div>
+                                <span class='tag'>{{ trans('langFaculty') }} : </span>
+                                @foreach ($user->getDepartmentIds($id) as $i=>$dep) {
+                                {{ $i+1 }}
+                                {{ $tree->getFullPath($dep) }} {{ ($i < count($user->getDepartmentIds($id))) ? '<br/>' : '' }}
+                                @endforeach
+                            </div>
+                            <div>
+                                <span class='tag'>{{ trans('langProfileMemberSince') }} : </span><span class='tag-value'>{{ $userdata->registered_at }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {!! render_profile_fields_content(array('user_id' => $id)) !!}
                 </div>
             </div>
         </div>

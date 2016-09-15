@@ -28,8 +28,8 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'modules/admin/custom_profile_fields_functions.php';
 
-$tree = new Hierarchy();
-$user = new User();
+$data['tree'] = new Hierarchy();
+$data['user'] = new User();
 
 $toolName = $langMyProfile;
 
@@ -104,35 +104,6 @@ if ($data['userdata']) {
     $data['profile_img'] = profile_image($data['id'], IMAGESIZE_LARGE, 'img-responsive img-circle');
 
 
-    if (!empty($data['userdata']->description)) {
-        $tool_content .= "<div id='profile-about-me' class='row'>
-                            <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
-                            <h4>$langProfileAboutMe</h4><div>
-                                ".standard_text_escape($data['userdata']->description)."</div></div></div>";
-    }
-        $tool_content .= "
-    <div id='profile-departments' class='row'>
-        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>            
-            <div><span class='tag'>$langFaculty : </span>";
-            $departments = $user->getDepartmentIds($data['id']);
-                $i = 1;
-                foreach ($departments as $dep) {
-                    $br = ($i < count($departments)) ? '<br/>' : '';
-                    $tool_content .= $tree->getFullPath($dep) . $br;
-                    $i++;
-                }
-        $tool_content .= "</div>
-            <div>
-                <span class='tag'>$langProfileMemberSince : </span><span class='tag-value'>".$data['userdata']->registered_at."</span>
-            </div>
-        </div>
-    </div>";
-//render custom profile fields content
-$tool_content .= render_profile_fields_content(array('user_id' => $data['id']));
-$tool_content .= "</div>
-        </div>
-    </div>
-</div>";
 }
 
 $data['menuTypeID'] = 1;
