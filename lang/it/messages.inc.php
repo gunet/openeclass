@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2016-09-12 17:25:28
+// Generated 2016-09-15 10:27:00
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -1996,7 +1996,7 @@ $langAddV = "Aggiungere file multimediale";
 $langAddVideoLink = "Aggiungere un link di video";
 $langsendV = "Inviare file audio o video";
 $langVideoTitle = "Titolo";
-$langDescr = "Descrizione";
+$langDescr = "Description";
 $langDelList = "Eliminare tutti";
 $langVideoMod = "Il link al video è modificato";
 $langVideoDeleted = "Tutti i link sono eliminati";

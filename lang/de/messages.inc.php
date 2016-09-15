@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2016-09-12 17:25:28
+// Generated 2016-09-15 10:26:59
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -1943,7 +1943,7 @@ $langAddV = "Video hintzfügen";
 $langAddVideoLink = "Link auf Video hinzufügen";
 $langsendV = "Audio oder Video Datei senden";
 $langVideoTitle = "Video Titel";
-$langDescr = "Beschreibung";
+$langDescr = "Description";
 $langDelList = "Löschen der gesamten Liste";
 $langVideoMod = "Der Link auf das Video wurde gelöscht";
 $langVideoDeleted = "Alle Links auf das Video wurden gelöscht";

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2016-09-12 17:25:26
+// Generated 2016-09-15 10:26:58
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -2005,7 +2005,7 @@ $langAddV = "Añade el video ";
 $langAddVideoLink = "Añade un enlace al vídeo";
 $langsendV = "Envia audio/video";
 $langVideoTitle = "Título del documento";
-$langDescr = "Descripción";
+$langDescr = "Description";
 $langDelList = "Borra la lista entera";
 $langVideoMod = "Modificado el enlace al vídeo";
 $langVideoDeleted = "Todos los enlaces al vídeo borrados";
