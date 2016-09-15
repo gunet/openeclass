@@ -206,7 +206,7 @@ if ($is_editor) {
             </div>
          </div>
         <div class='form-group'>
-            <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
+            <label for='description' class='col-sm-2 control-label'>$langInfoAbout:</label>
             <div class='col-sm-10'>". rich_text_editor('description', 3, 30, $form_description) . "</div>
         </div>
         <div class='form-group'>
@@ -264,7 +264,7 @@ if ($is_editor) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
+                            <label for='CatDesc' class='col-sm-2 control-label'>$langInfoAbout:</label>
                             <div class='col-sm-10'>
                                 <textarea class='form-control' rows='5' name='description'>$form_description</textarea>
                             </div>
@@ -391,7 +391,7 @@ if ($is_editor) {
                                             </div>
                                         </div>
                                         <div class='form-group'>
-                                            <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
+                                            <label for='description' class='col-sm-2 control-label'>$langInfoAbout:</label>
                                             <div class='col-sm-10'>". rich_text_editor('description', 3, 30, $form_description) . "</div>
                                         </div>
                                         <div class='form-group'>

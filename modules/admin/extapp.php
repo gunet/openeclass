@@ -144,7 +144,7 @@ if ($appName) {
 
     $tool_content .= "<div class='row extapp'><div class='col-xs-12'>";
     $tool_content .="<table class='table-default dataTable no-footer extapp-table'>";
-    $tool_content .="<thead class='list-header'><td>$langExtAppName</td><td>$langExtAppDescription</td></thead>";    
+    $tool_content .="<thead class='list-header'><td>$langExtAppName</td><td>$langDescription</td></thead>";    
     foreach (ExtAppManager::getApps() as $app) {
         $tool_content .="<tr>";
         // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!

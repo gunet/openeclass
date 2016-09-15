@@ -32,7 +32,7 @@ if (isset($_POST['submitScale'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
     $v->labels(array(
-        'title' => "$langTheField $m[title]",
+        'title' => "$langTheField $langTitle",
         'max_grade' => "$langTheField $m[max_grade]"
     ));
     $scale_id = isset($_POST['grading_scale_id']) ? $_POST['grading_scale_id'] : 0;

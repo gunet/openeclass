@@ -101,7 +101,7 @@ function httpGetRequest($url) {
 }
 
 function displayDelosForm($jsonObj, $currentVideoLinks) {
-    global $course_id, $course_code, $langTitle, $langDescr, $langcreator, $langpublisher, $langDate,
+    global $course_id, $course_code, $langTitle, $langDescription, $langcreator, $langpublisher, $langDate,
     $langSelect, $langAddModulesButton, $langOpenDelosReplaceInfo, $langCategory;
 
     if ($jsonObj === null) {
@@ -116,7 +116,7 @@ function displayDelosForm($jsonObj, $currentVideoLinks) {
         <tbody>
             <tr class="list-header">
                 <th>$langTitle</th>
-                <th>$langDescr</th>
+                <th>$langDescription</th>
                 <th>$langcreator</th>
                 <th>$langpublisher</th>
                 <th>$langDate</th>

@@ -82,7 +82,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $switchLangURL, $theme, $themeimg,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
         $theme_settings, $language, $saved_is_editor, $langProfileImage,
-        $langStudentViewEnable, $langStudentViewDisable, $langNoteTitle, $langEnterNote, $langFieldsRequ;
+        $langStudentViewEnable, $langStudentViewDisable, $langTitle, $langEnterNote, $langFieldsRequ;
 
     // negative course_id might be set in common documents
     if ($course_id < 1) {
@@ -287,7 +287,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('langSave', q($GLOBALS['langSave']));
         $t->set_var('langAllNotes', q($GLOBALS['langAllNotes']));
         $t->set_var('langAllMessages', q($GLOBALS['langAllMessages']));
-        $t->set_var('langNoteTitle', q($langNoteTitle));
+        $t->set_var('langNoteTitle', q($langTitle));
         $t->set_var('langEnterNoteLabel', $langNote);
         $t->set_var('langEnterNote', q($langEnterNote));
         $t->set_var('langFieldsRequ', q($langFieldsRequ));

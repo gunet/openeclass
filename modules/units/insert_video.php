@@ -24,7 +24,7 @@ require_once 'include/lib/multimediahelper.class.php';
 
 function list_videos() {
     global $id, $tool_content, $themeimg, $course_id,
-    $langTitle, $langDescr, $langDate, $langChoice, $langCatVideoDirectory,
+    $langTitle, $langDescription, $langDate, $langChoice, $langCatVideoDirectory,
     $langAddModulesButton, $langNoVideo, $course_code;
     
             
@@ -39,7 +39,7 @@ function list_videos() {
                     $tool_content .= "<table class='table-default'>";
                     $tool_content .= "<tr class='list-header'>" .
                                      "<th width='200' class='text-left'>&nbsp;$langTitle</th>" .
-                                     "<th class='text-left'>$langDescr</th>" .
+                                     "<th class='text-left'>$langDescription</th>" .
                                      "<th width='100'>$langDate</th>" .
                                      "<th width='80'>$langChoice</th>" .
                                      "</tr>";

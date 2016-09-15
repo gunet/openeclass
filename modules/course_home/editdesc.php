@@ -132,7 +132,7 @@ $tool_content = action_bar(array(
                         </div>
                     </div>                  
                     <div class='form-group'>
-                        <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
+                        <label for='description' class='col-sm-2 control-label'>$langInfoAbout:</label>
                         <div class='col-sm-10'>
                             " . rich_text_editor('description', 8, 20, $description) . "
                         </div>

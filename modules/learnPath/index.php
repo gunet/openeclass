@@ -274,7 +274,7 @@ if ($is_editor) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='newComment' class='col-sm-2 control-label'>$langDescr:</label>
+                            <label for='newComment' class='col-sm-2 control-label'>$langDescription:</label>
                             <div class='col-sm-10'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
@@ -313,7 +313,7 @@ if ($is_editor) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='newComment' class='col-sm-2 control-label'>$langDescr:</label>
+                            <label for='newComment' class='col-sm-2 control-label'>$langDescription:</label>
                             <div class='col-sm-10'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>

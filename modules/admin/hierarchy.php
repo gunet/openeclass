@@ -102,7 +102,7 @@ if (!isset($_GET['action'])) {
     <table class='table-default'>
     <tr>
     <td colspan='" . ($maxdepth + 4) . "' class='right'>
-            $langManyExist: <b>$nodesCount</b> $langFaculties
+            $langThereAre: <b>$nodesCount</b> $langFaculties
     </td>
     </tr>";
 

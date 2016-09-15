@@ -220,7 +220,7 @@ hContent;
 							</div>
                         </div>
                         <div class='form-group'>
-                            <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
+                            <label for='CatDesc' class='col-sm-2 control-label'>$langInfoAbout:</label>
                             <div class='col-sm-10'><textarea class='form-control' rows='5' name='description'>$form_description</textarea></div>
                         </div>
                         <div class='form-group'>
@@ -441,7 +441,7 @@ hContent;
                     <div class='col-sm-10'><input class='form-control' type='text' name='title' size='55'></div>
                 </div>
                 <div class='form-group'>
-                    <label for='Desc' class='col-sm-2 control-label'>$langDescr:</label>
+                    <label for='Desc' class='col-sm-2 control-label'>$langDescription:</label>
                     <div class='col-sm-10'><textarea class='form-control' rows='3' name='description'></textarea></div>
                 </div>
                 <div class='form-group'>
@@ -553,7 +553,7 @@ hContent;
                   <div class='col-sm-10'><input class='form-control' type='text' name='title' value= '" . q($title) . "'></div>
                 </div>
                 <div class='form-group'>
-                    <label for='Description' class='col-sm-2 control-label'>$langDescr:</label>
+                    <label for='Description' class='col-sm-2 control-label'>$langDescription:</label>
                     <div class='col-sm-10'><textarea class='form-control' rows='3' name='description'>" . q($description) . "</textarea></div>
                 </div>
                 <div class='form-group'>

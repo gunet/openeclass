@@ -661,7 +661,7 @@ $action_bar
 
             <div class='panel-body'>
                 <div id='course-title-wrapper' class='course-info-title clearfix'>
-                    <div class='pull-left h4'>$langCourseDescriptionShort</div> $edit_link
+                    <div class='pull-left h4'>$langDescription</div> $edit_link
                     <ul class='course-title-actions clearfix pull-right list-inline'>
                         <li class='access pull-right'><a href='javascript:void(0);' style='color: #23527C;''><span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='".q($course_info_popover)."'></span><span class='hidden'>.</span></a></li>
                         <li class='access pull-right'><a href='javascript:void(0);'>$lessonStatus</a></li>

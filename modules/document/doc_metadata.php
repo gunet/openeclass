@@ -25,7 +25,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 
     // lang globals
     global $langAddMetadata, $langWorkFile, $langTitle, $langTitleHelp,
-    $langDescription, $langDescriptionHelp, $langAuthor, $langAuthorHelp,
+    $langInfoAbout, $langDescriptionHelp, $langAuthor, $langAuthorHelp,
     $langLanguage, $langGreek, $langEnglish, $langFrench, $langGerman,
     $langItalian, $langSpanish, $langLanguageHelp, $langLearningResourceType,
     $langLearningResourceTypeHelp, $langKeywords, $langKeywordsHelp, $langTopic,
@@ -88,7 +88,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  </tr>";
 
     $output .= metaTextAreaRow($langTitle, "meta_title", $metaTitle, $langTitleHelp)
-            . metaTextAreaRow($langDescription, "meta_description", $metaDescription, $langDescriptionHelp, 4)
+            . metaTextAreaRow($langInfoAbout, "meta_description", $metaDescription, $langDescriptionHelp, 4)
             . metaCommaTextAreaRow($langAuthor, "meta_author", $metaAuthors, $langAuthorHelp);
 
     $cellLang = selection(array('el' => $langGreek,

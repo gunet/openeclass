@@ -155,7 +155,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<label for='shortname' class='col-sm-2 control-label'>$langCPFShortName <small>($langCPFUniqueShortname)</small></label>
                       <div class='col-sm-10'><input id='shortname' type='text' name='field_shortname'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langCPFFieldDescr</label>
+    $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langDescription</label>
                       <div class='col-sm-10'>".rich_text_editor('fielddescr', 8, 20, '')."</div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
@@ -334,7 +334,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "<label for='shortname' class='col-sm-2 control-label'>$langCPFShortName <small>($langCPFUniqueShortname)</small></label>
                           <div class='col-sm-10'><input id='shortname' type='text' name='field_shortname' value='$shortname'></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langCPFFieldDescr</label>
+        $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langDescription</label>
                           <div class='col-sm-10'>".rich_text_editor('fielddescr', 8, 20, $description)."</div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
@@ -476,7 +476,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $tool_content .= "<thead><tr class='list-header'>
                 <td>$langName</td>
                 <td>$langCPFShortName</td>
-                <td>$langCPFFieldDescr</td>
+                <td>$langDescription</td>
                 <td>$langCPFFieldDatatype</td>
                 <td>$langCPFFieldRequired</td>
                 <td>$langCPFFieldRegistration</td>

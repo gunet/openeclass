@@ -145,9 +145,9 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
     <fieldset>
     <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")."'>
-        <label for='newTitle' class='col-sm-2 control-label'>$langNoteTitle:</label>
+        <label for='newTitle' class='col-sm-2 control-label'>$langTitle:</label>
         <div class='col-sm-10'>
-            <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langNoteTitle'>
+            <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langTitle'>
             <span class='help-block'>".Session::getError('newTitle')."</span>
         </div>
     </div>

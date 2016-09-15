@@ -61,9 +61,9 @@ abstract class OAuthDriveApp extends ExtApp {
     }
 
     public function getLongDescription() {
-        global $langDescr;
+        global $langDescription;
         
-        return "$langDescr " . $this->getDisplayName();
+        return "$langDescription " . $this->getDisplayName();
     }
 
     protected abstract function getURLDefaultValue();

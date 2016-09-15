@@ -648,7 +648,7 @@ if (isset($_POST['submit'])) {
                         <input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1]>
                         <span class='fa fa-lock fa-fw'  style='font-size:23px;'>
                                 <span class='fa fa-pencil text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
-                            </span>&nbsp;$m[legrestricted]
+                            </span>&nbsp;$langTypeRegistration
                         <span class='help-block'><small>$langPrivOpen</small></span>
                       </label>
                     </div>

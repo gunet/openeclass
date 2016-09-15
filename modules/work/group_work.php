@@ -55,10 +55,27 @@ if (isset($_GET['submit'])) {
     header("Location: index.php?course=$course_code");
 }
 
-// show non-expired assignments list to allow selection
+
+/**
+ * @brief show non-expired assignments list to allow selection
+ * @global type $m
+ * @global type $uid
+ * @global type $group_id
+ * @global type $langSubmit
+ * @global type $langNoAssign
+ * @global type $tool_content
+ * @global type $langWorks
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $themeimg
+ * @global type $langCancel
+ * @global type $urlServer
+ * @global type $langTitle
+ * @return type
+ */
 function show_assignments() {
-    global $m, $uid, $group_id, $langSubmit, $langDays, $langNoAssign, $tool_content,
-    $langWorks, $course_id, $course_code, $themeimg, $langCancel, $urlServer;
+    global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content,
+           $langWorks, $course_id, $course_code, $themeimg, $langCancel, $urlServer, $langTitle;
     
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -122,7 +139,7 @@ function show_assignments() {
                         <div class='col-sm-10'>
                             <table class='table-default'>
                                 <tr>
-                                    <th class='left' colspan='2'>$m[title]</th>
+                                    <th class='left' colspan='2'>$langTitle</th>
                                     <th align='center' width='30%'>$m[deadline]</th>
                                     <th align='center' width='10%'>$m[submitted]</th>
                                     <th align='center' width='10%'>$m[select]</th>

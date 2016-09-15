@@ -285,6 +285,8 @@ class Log {
                 break;
             case MODULE_ID_ATTENDANCE: $content = $this->attendance_action_details($details);
                 break;
+            case MODULE_ID_TC: $content = $this->tc_action_details($details);
+                break;
             default: $content = $langUnknownModule;
                 break;
         }
@@ -509,18 +511,18 @@ class Log {
     /**
      * display action details in video
      * @global type $langTitle
-     * @global type $langDescription
+     * @global type $langInfoAbout
      * @param type $details
      * @return string
      */
     private function video_action_details($details) {
 
-        global $langTitle, $langDescription;
+        global $langTitle, $langInfoAbout;
 
         $details = unserialize($details);
         $content = "$langTitle  &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . q($details['description']) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langInfoAbout &laquo" . q($details['description']) . "&raquo";
         }
         if (!empty($details['url'])) {
             $content .= "&nbsp;&mdash;&nbsp; URL &laquo" . q($details['url']) . "&raquo";
@@ -531,19 +533,19 @@ class Log {
     /**
      * display action details in assignments
      * @global type $langTitle
-     * @global type $langDescription
+     * @global type $langInfoAbout
      * @global type $m
      * @param type $details
      * @return string
      */
     private function assignment_action_details($details) {
 
-        global $langTitle, $langDescription, $m;
+        global $langTitle, $langInfoAbout, $m;
 
         $details = unserialize($details);
         $content = "$langTitle  &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . $details['description'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langInfoAbout &laquo" . $details['description'] . "&raquo";
         }
         if (!empty($details['filename'])) {
             $content .= "&nbsp;&mdash;&nbsp; " . q($m['filename']) . " &laquo" . q($details['filename']) . "&raquo";
@@ -598,14 +600,14 @@ class Log {
     /**
      * display action details in link
      * @global type $langTitle
-     * @global type $langDescription
+     * @global type $langInfoAbout
      * @global type $langCategoryName
      * @param type $details
      * @return string
      */
     private function link_action_details($details) {
 
-        global $langTitle, $langDescription, $langCategoryName;
+        global $langTitle, $langInfoAbout, $langCategoryName;
 
         $details = unserialize($details);
         $content = '';
@@ -619,7 +621,7 @@ class Log {
             $content .= " &mdash; $langTitle &laquo" . q($details['title']) . "&raquo";
         }
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . $details['description'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langInfoAbout &laquo" . $details['description'] . "&raquo";
         }
         return $content;
     }
@@ -773,18 +775,18 @@ class Log {
     /**
      * display action details in exercises
      * @global type $langTitle
-     * @global type $langDescription
+     * @global type $langInfoAbout
      * @param type $details
      * @return string
      */
     private function exercise_action_details($details) {
 
-        global $langTitle, $langDescription;
+        global $langTitle, $langInfoAbout;
 
         $details = unserialize($details);
         $content = "$langTitle &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . ellipsize($details['description'], 100) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langInfoAbout &laquo" . ellipsize($details['description'], 100) . "&raquo";
         }
         return $content;
     }
@@ -792,19 +794,19 @@ class Log {
     /**
      * display action details in wiki
      * @global type $langTitle
-     * @global type $langDescription
+     * @global type $langInfoAbout
      * @param type $details
      * @return string
      */
     private function wiki_action_details($details) {
 
-        global $langTitle, $langDescription;
+        global $langTitle, $langInfoAbout;
 
         $details = unserialize($details);
 
         $content = "$langTitle &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . q(ellipsize($details['description'], 100)) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langInfoAbout &laquo" . q(ellipsize($details['description'], 100)) . "&raquo";
         }
         return $content;
     }
@@ -1202,6 +1204,31 @@ class Log {
         return $content;
     }
 
+    /**
+     * @display action details in tc module
+     * @global type $langTitle
+     * @global type $langDescription
+     * @global type $langType
+     * @param type $details
+     * @return string
+     */
+    private function tc_action_details($details) {
+        
+        global $langTitle, $langDescription, $langType;
+        
+        $d = unserialize($details);
+        $content = '';
+        if (isset($d['tc_type'])) {
+            $content .= "$langType " . "&laquo" . $d['tc_type']. "&raquo&nbsp;&mdash;&nbsp;";
+        }
+        $content .= "$langTitle " . "&laquo" . $d['title'] . "&raquo";
+        if (isset($d['desc'])) {
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription " . "&laquo" . $d['desc']. "&raquo";
+        }
+        
+        return $content;
+                
+    }
     /**
      * @global type $langInsert
      * @global type $langModify

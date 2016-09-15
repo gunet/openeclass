@@ -86,7 +86,7 @@ if ($is_editor) {
         $tool_content .= "</div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='description' class='col-sm-2 control-label'>$langDescr:</label>";
+        $tool_content .= "<label for='description' class='col-sm-2 control-label'>$langDescription:</label>";
         $tool_content .= "<div class='col-sm-10'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";
@@ -193,7 +193,7 @@ if ($is_editor) {
         $tool_content .= "</div>";        
         
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='desc' class='col-sm-2 control-label'>$langDescr:</label>";
+        $tool_content .= "<label for='desc' class='col-sm-2 control-label'>$langDescription:</label>";
         $tool_content .= "<div class='col-sm-10'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";

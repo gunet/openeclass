@@ -201,7 +201,7 @@ $tool_content .= "<tr><th width='70'>$langTitle:</th>";
 $tool_content .= "<td>". nameBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
     $tool_content .= "<tr>
-      <th width='90'>$langDescr:</th>
+      <th width='90'>$langDescription:</th>
       ";
     $tool_content .= "<td>". commentBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 }
