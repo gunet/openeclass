@@ -1616,7 +1616,6 @@ $langTitleAssistant = "Βοηθός δημιουργίας ασκήσεων";
 $langQuesList = "Κατάλογος ερωτήσεων";
 $langSaveEx = "Αποθήκευση απάντησης";
 $langClose = "Κλείσιμο";
-$langFinish = "Τέλος";
 $langCancel = "Ακύρωση";
 $langQImage = "Ερώτηση-Εικόνα";
 $langAddQ = "Προσθήκη ερώτησης";
