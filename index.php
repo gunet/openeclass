@@ -59,7 +59,7 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/action.php';
 if (isset($dbname)) {
     $action = new action();
-    $action->record('MODULE_ID_UNITS', 'exit');
+    $action->record(MODULE_ID_UNITS, 'exit');
 }
 unset($dbname);
 

@@ -39,7 +39,7 @@ require_once 'inc/delos_functions.php'; // required by view
 require_once 'inc/video_functions.php';
 
 $action = new action();
-$action->record('MODULE_ID_VIDEO');
+$action->record(MODULE_ID_VIDEO);
 
 $toolName = $langVideo;
 $data = array();
