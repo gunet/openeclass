@@ -3356,6 +3356,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             WHERE id = ?d', $i, $resource->id);
                     }, $unit->unit_id);
             });
+        
+        // fix wrong entries in statistics
+        Database::get()->query("UPDATE actions_daily SET module_id = " .MODULE_ID_VIDEO . " WHERE module_id = 0");
+            
     }
 
     // update eclass version

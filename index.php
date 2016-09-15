@@ -61,7 +61,7 @@ require_once 'include/action.php';
 load_js('trunk8');
 if (isset($dbname)) {
     $action = new action();
-    $action->record('MODULE_ID_UNITS', 'exit');
+    $action->record(MODULE_ID_UNITS, 'exit');
 }
 unset($dbname);
 
