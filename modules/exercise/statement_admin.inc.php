@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.4
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,19 +21,19 @@
 
 load_js('bootstrap-slider');
 load_js('select2');
-   
-$head_content .= " 
+
+$head_content .= "
 <script>
 $(function() {
     $('#questionCat').select2();
     var diffArray = ['$langQuestionNotDefined','$langQuestionVeryEasy', '$langQuestionEasy', '$langQuestionModerate', '$langQuestionDifficult', '$langQuestionVeryDifficult']
     $('#questionDifficulty').slider({
         tooltip: 'hide',
-	formatter: function(value) {
+    formatter: function(value) {
             $('#questionDifficultyValue').text(diffArray[value]);
             removeLabel();
             addLabel(value);
-	}    
+    }
     });
     $('#questionDifficulty').on('slide', function(slideEvt) {
         $('#questionDifficultyValue').text(diffArray[slideEvt.value]);
@@ -46,27 +46,27 @@ $(function() {
         });
     }
     function addLabel(value) {
-        if (value == 0) $('#questionDifficultyValue').addClass('label-default');        
+        if (value == 0) $('#questionDifficultyValue').addClass('label-default');
         else if(value>0  && value < 3) $('#questionDifficultyValue').addClass('label-success');
         else if (value == 3) $('#questionDifficultyValue').addClass('label-warning');
         else if (value > 3 && value <= 5) $('#questionDifficultyValue').addClass('label-danger');
-    }    
+    }
     $('input[name=answerType]').not('#free_text_selector').click(hideGrade);
     $('input[name=answerType]').not('#fill_in_blanks_selector').click(hideFillInChoices);
     $('input[name=answerType]#free_text_selector').click(showGrade);
     $('input[name=answerType]#fill_in_blanks_selector').click(showFillInChoices);
     $('input[name=fillInBlanksOptions]').change(updateFillInBlanksAnswerTypeValue);
     function hideGrade(){
-        $('input[name=questionGrade]').prop('disabled', true).closest('div.form-group').addClass('hide');    
+        $('input[name=questionGrade]').prop('disabled', true).closest('div.form-group').addClass('hide');
     }
     function showGrade(){
-        $('input[name=questionGrade]').prop('disabled', false).closest('div.form-group').removeClass('hide');    
+        $('input[name=questionGrade]').prop('disabled', false).closest('div.form-group').removeClass('hide');
     }
     function showFillInChoices(){
-        $('#fillInBlanksOptions').removeClass('hide');    
+        $('#fillInBlanksOptions').removeClass('hide');
     }
     function hideFillInChoices(){
-        $('#fillInBlanksOptions').addClass('hide');    
+        $('#fillInBlanksOptions').addClass('hide');
     }
     function updateFillInBlanksAnswerTypeValue(){
         $('input[name=answerType]#fill_in_blanks_selector').val($(this).val());
@@ -123,7 +123,7 @@ if (isset($_POST['submitQuestion'])) {
                 $nbrQuestions++;
             }
         }
-        //if the answer type is free text (which means doesn't have predefined answers) 
+        //if the answer type is free text (which means doesn't have predefined answers)
         //redirects to either pool or edit exercise page
         //else it redirect to modifyanswers page in order to add answers to question
         if ($answerType == FREE_TEXT) {
@@ -158,15 +158,15 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         $tool_content .= "<div class='alert alert-danger'>$msgErr</div>\n";
     }
 
-    
+
     if (isset($_GET['newQuestion'])){
         $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;newQuestion=" . urlencode($_GET['newQuestion']);
         $link_back = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
-        
+
     } else {
         $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . urlencode($_GET['modifyQuestion']);
         $link_back = "admin.php?course=$course_code".(isset($exerciseId) ? "&exerciseId=$exerciseId" : "").(isset($_GET['newQuestion']) ? "&editQuestion=$_GET[newQuestion]" : "&editQuestion=$_GET[modifyQuestion]");
-    }  
+    }
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => $link_back,
@@ -175,7 +175,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         )
     ));
     $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
-  
+
     $options = "<option value='0'>-- $langQuestionWithoutCat --</option>\n";
     foreach ($q_cats as $q_cat) {
         $options .= "<option value='$q_cat->question_cat_id' ". (($category == $q_cat->question_cat_id) ? "selected" : "") .">$q_cat->question_cat_name</option>\n";
@@ -191,7 +191,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                         $options
                     </select>
                 </div>
-            </div>        
+            </div>
             <div class='form-group ".(Session::getError('questionName') ? "has-error" : "")."'>
                 <label for='questionName' class='col-sm-2 control-label'>$langQuestion:</label>
                 <div class='col-sm-10'>
@@ -208,27 +208,27 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             <div class='form-group'>
                 <label for='questionDifficulty' class='col-sm-2 control-label'>$langQuestionDiffGrade:</label>
                 <div class='col-sm-10'>
-                    <input id='questionDifficulty' name='difficulty' data-slider-id='ex1Slider' type='text' data-slider-min='0' data-slider-max='5' data-slider-step='1' data-slider-value='$difficulty'/>                      
+                    <input id='questionDifficulty' name='difficulty' data-slider-id='ex1Slider' type='text' data-slider-min='0' data-slider-max='5' data-slider-step='1' data-slider-value='$difficulty'/>
                 </div>
                 <div class='col-sm-1'>
-                <span id='questionDifficultyValue' class='label label-default'></span>  
+                <span id='questionDifficultyValue' class='label label-default'></span>
                 </div>
-            </div>            
+            </div>
             <div class='form-group'>
                 <label for='imageUpload' class='col-sm-2 control-label'>".(($okPicture) ? $langReplacePicture : $langAddPicture).":</label>
                 <div class='col-sm-10'>" .
                   (($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "") .
-                  fileSizeHidenInput() . "  
-                  <input type='file' name='imageUpload' id='imageUpload'> 
+                  fileSizeHidenInput() . "
+                  <input type='file' name='imageUpload' id='imageUpload'>
                 </div>
             </div>";
     if ($okPicture) {
         $tool_content .= "
             <div class='form-group'>
-		<label class='col-sm-2 control-label'>$langDeletePicture:</label>
-                <div class='col-sm-10'>            
+        <label class='col-sm-2 control-label'>$langDeletePicture:</label>
+                <div class='col-sm-10'>
                     <div class='checkbox'>
-                      <label>    
+                      <label>
                         <input type='checkbox' name='deletePicture' value='1' ".(isset($_POST['deletePicture'])? "checked":"").">
                       </label>
                     </div>
@@ -237,7 +237,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     }
 $tool_content .= "<div class='form-group'>
                 <label class='col-sm-2 control-label'>$langAnswerType:</label>
-                <div class='col-sm-10'>            
+                <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
                         <input type='radio' name='answerType' value='1' ". (($answerType == UNIQUE_ANSWER) ? "checked" : "") .">
@@ -271,7 +271,7 @@ $tool_content .= "<div class='form-group'>
                                             <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS_TOLERANT."' ". (($answerType == FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
                                             $langFillBlanksTolerant $langFillBlanksTolerantExample
                                         </label>
-                                    </div>                        
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -293,7 +293,7 @@ $tool_content .= "<div class='form-group'>
                         <input type='radio' id='free_text_selector' name='answerType' value='6' ". (($answerType == FREE_TEXT) ? "checked" : "") .">
                        $langFreeText
                       </label>
-                    </div>                       
+                    </div>
                 </div>
             </div>
             <div class='form-group ".(($answerType != 6) ? "hide": "")."'>
@@ -303,13 +303,13 @@ $tool_content .= "<div class='form-group'>
                 </div>
             </div>
             <div class='row'>
-                <div class='col-sm-10 col-sm-offset-2 '>            
+                <div class='col-sm-10 col-sm-offset-2 '>
                     <input type='submit' class='btn btn-primary' name='submitQuestion' value='$langOk'>
-                    <a href='$link_back' class='btn btn-default'>$langCancel</a>      
+                    <a href='$link_back' class='btn btn-default'>$langCancel</a>
                 </div>
             </div>
           </fieldset>
-	</form>
-    </div>    
+    </form>
+    </div>
     ";
 }
