@@ -1785,7 +1785,7 @@ $langRemainingTime = "Υπολειπόμενος χρόνος";
 
 // exercise result.php
 $langStart = "Έναρξη";
-$langEnd = "Λήξη";
+$langFinish = "Λήξη";
 $langExerciseStartHelpBlock = "Κάντε κλικ για να ορίσετε μια διαφορετική (μελλοντική) Ημερομηνία Εναρξης Άσκησης";
 $langExerciseEndHelpBlock = "Κάντε κλικ για να ορίσετε Ημερομηνία Λήξης Άσκησης";
 $langExerciseDuration = "Διάρκεια Εκτέλεσης";
