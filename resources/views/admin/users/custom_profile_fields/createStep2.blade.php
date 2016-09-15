@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class='form-group'>
-                <label for='fielddescr' class='col-sm-2 control-label'>{{ trans('langCPFFieldDescr') }}</label>
+                <label for='fielddescr' class='col-sm-2 control-label'>{{ trans('langDescription') }}</label>
                 <div class='col-sm-10'>
                     {!! $fielddescr_rich_text !!}
                 </div>

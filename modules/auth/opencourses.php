@@ -161,10 +161,10 @@ if (count($courses) > 0) {
                 <tr class='list-header'><th class='text-left'>" . q($m['lessoncode']) . "</th>";
 
     if ($isInOpenCoursesMode) {
-        $tool_content .= "<th class='text-left' width='220'>" . q($m['professor']) . "</th>
+        $tool_content .= "<th class='text-left' width='220'>" . q($langTeacher) . "</th>
                           <th width='30'>$langOpenCoursesLevel</th>";
     } else {
-        $tool_content .= "<th class='left' width='200'>" . q($m['professor']) . "</th>
+        $tool_content .= "<th class='left' width='200'>" . q($langTeacher) . "</th>
                           <th width='30'>$langType</th>";
     }
 

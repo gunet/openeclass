@@ -1246,7 +1246,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @global type $id
  * @global type $urlServer
  * @global type $langTitle
- * @global type $langDescr
+ * @global type $langDescription
  * @global type $langContents
  * @global type $langModify
  * @global type $course_code
@@ -1254,7 +1254,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @return string
  */
 function edit_res($resource_id) {
-    global $id, $urlServer, $langTitle, $langDescr, $langContents, $langModify, $course_code;
+    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langModify, $course_code;
 
     $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM unit_resources WHERE id = ?d", $resource_id);
     $restitle = " value='" . htmlspecialchars($ru->title, ENT_QUOTES) . "'";
@@ -1271,7 +1271,7 @@ function edit_res($resource_id) {
                 <label class='col-sm-2 control-label'>$langTitle:</label>
                 <div class='col-sm-10'><input class='form-control' type='text' name='restitle' size='50' maxlength='255' $restitle></div>
                 </div>";
-        $message = $langDescr;
+        $message = $langDescription;
     } else {
         $message = $langContents;
     }

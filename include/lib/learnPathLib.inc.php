@@ -318,7 +318,7 @@ function selectImage($contentType) {
 
 function selectAlt($contentType) {
     global $langDoc, $langExercise, $langAltScorm, $langOther,
-           $langLinks, $langCourseDescriptionShort, $langVideo;
+           $langLinks, $langDescription, $langVideo;
 
     $altList[CTDOCUMENT_] = $langDoc;
     $altList[CTCLARODOC_] = $langDoc;
@@ -326,7 +326,7 @@ function selectAlt($contentType) {
     $altList[CTSCORM_] = $langAltScorm;
     $altList[CTSCORMASSET_] = $langAltScorm;
     $altList[CTLINK_] = $langLinks;
-    $altList[CTCOURSE_DESCRIPTION_] = $langCourseDescriptionShort;
+    $altList[CTCOURSE_DESCRIPTION_] = $langDescription;
     $altList[CTMEDIA_] = $langVideo;
     $altList[CTMEDIALINK_] = $langLinks;
 

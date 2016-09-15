@@ -374,7 +374,7 @@ function display_attendance_activities($attendance_id) {
  * @global type $course_code
  * @global type $tool_content
  * @global type $langGradebookActivityDate2
- * @global type $langDescr
+ * @global type $langDescription
  * @global type $langAdd
  * @global type $langAttendanceNoActMessageExe4
  * @global type $langTitle
@@ -383,7 +383,7 @@ function display_attendance_activities($attendance_id) {
 function attendance_display_available_exercises($attendance_id) {
     
     global $course_id, $course_code, $tool_content,
-           $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle;
+           $langGradebookActivityDate2, $langDescription, $langAdd, $langAttendanceNoActMessageExe4, $langTitle;
 
     $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d 
                                 AND exercise.active = 1 AND exercise.id 
@@ -392,7 +392,7 @@ function attendance_display_available_exercises($attendance_id) {
     if ($checkForExerNumber > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescr</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
 
@@ -422,7 +422,7 @@ function attendance_display_available_exercises($attendance_id) {
  * @global type $dateFormatLong
  * @global type $langWorks
  * @global type $m
- * @global type $langDescription
+ * @global type $langInfoAbout
  * @global type $langAttendanceNoActMessageAss4
  * @global type $langAdd
  * @global type $langTitle
@@ -432,7 +432,7 @@ function attendance_display_available_exercises($attendance_id) {
 function attendance_display_available_assignments($attendance_id) {
 
     global $course_id, $course_code, $tool_content, $dateFormatLong, 
-           $langWorks, $m, $langDescription, $langAttendanceNoActMessageAss4, 
+           $langWorks, $m, $langInfoAbout, $langAttendanceNoActMessageAss4, 
            $langAdd, $langTitle, $langHour;
     
     $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d 
@@ -446,7 +446,7 @@ function attendance_display_available_assignments($attendance_id) {
     if ($checkForAssNumber > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
                             <table class='table-default'";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$m[deadline]</th><th>$langDescription</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$m[deadline]</th><th>$langInfoAbout</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>"; 
         $tool_content .= "</tr>";           
         foreach ($checkForAss as $newAssToGradebook) {
@@ -499,7 +499,7 @@ function attendance_display_available_assignments($attendance_id) {
  */
 function add_attendance_other_activity($attendance_id) {
     
-    global $tool_content, $course_code, $langDescription,
+    global $tool_content, $course_code, $langInfoAbout,
            $langTitle, $langAttendanceInsAut, $langAdd,
            $langAdd, $langSave, $langAttendanceActivityDate;
     
@@ -543,7 +543,7 @@ function add_attendance_other_activity($attendance_id) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='actDesc' class='col-sm-2 control-label'>$langDescription:</label>
+                            <label for='actDesc' class='col-sm-2 control-label'>$langInfoAbout:</label>
                             <div class='col-sm-10'>
                                 " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
                             </div>
@@ -1198,7 +1198,7 @@ function user_attendance_settings($attendance_id) {
  * @global type $langGradebookTotalGrade
  * @global type $langTitle
  * @global type $langAttendanceActivityDate2
- * @global type $langDescription
+ * @global type $langInfoAbout
  * @global type $langAttendanceAbsencesYes
  * @global type $langAttendanceAbsencesNo
  * @global type $langBack
@@ -1209,7 +1209,7 @@ function student_view_attendance($attendance_id) {
 
     global $tool_content, $uid, $langAttendanceAbsencesNo, $langAttendanceAbsencesFrom,
            $langAttendanceAbsencesFrom2, $langAttendanceStudentFailure, 
-           $langTitle, $langAttendanceActivityDate2, $langDescription,
+           $langTitle, $langAttendanceActivityDate2, $langInfoAbout,
            $langAttendanceAbsencesYes, $langBack, $course_code;
     
     $attendance_limit = get_attendance_limit($attendance_id);
@@ -1241,7 +1241,7 @@ function student_view_attendance($attendance_id) {
         $tool_content .= "<table class='table-default' >";
         $tool_content .= "<tr><th>$langTitle</th>
                               <th>$langAttendanceActivityDate2</th>
-                              <th>$langDescription</th>
+                              <th>$langInfoAbout</th>
                               <th>$langAttendanceAbsencesYes</th>                              
                           </tr>";
     }

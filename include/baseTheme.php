@@ -318,7 +318,7 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
         $switchLangURL, $theme, $themeimg, $is_course_admin,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
         $theme_settings, $language, $saved_is_editor, $langProfileImage,
-        $langStudentViewEnable, $langStudentViewDisable, $langNoteTitle, $langEnterNote, $langFieldsRequ;
+        $langStudentViewEnable, $langStudentViewDisable, $langTitle, $langEnterNote, $langFieldsRequ;
 
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
     if ($is_embedonce) {
@@ -525,7 +525,7 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
 //        $t->set_var('langSave', q($GLOBALS['langSave']));
 //        $t->set_var('langAllNotes', q($GLOBALS['langAllNotes']));
 //        $t->set_var('langAllMessages', q($GLOBALS['langAllMessages']));
-//        $t->set_var('langNoteTitle', q($langNoteTitle));
+//        $t->set_var('langTitle', q($langTitle));
 //        $t->set_var('langEnterNoteLabel', $langNote);
 //        $t->set_var('langEnterNote', q($langEnterNote));
 //        $t->set_var('langFieldsRequ', q($langFieldsRequ));

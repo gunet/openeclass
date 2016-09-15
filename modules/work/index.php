@@ -591,9 +591,23 @@ draw($tool_content, 2, null, $head_content);
 // end of main program
 //-------------------------------------
 
-// insert the assignment into the database
+/**
+ * @brief insert the assignment into the database
+ * @global type $tool_content
+ * @global string $workPath
+ * @global type $course_id
+ * @global type $uid
+ * @global type $langTheField
+ * @global type $m
+ * @global type $langTitle
+ * @global type $course_code
+ * @global type $langFormErrors
+ * @global type $langNewAssignSuccess
+ * @global type $langScales
+ * @return type
+ */
 function add_assignment() {
-    global $tool_content, $workPath, $course_id, $uid, $langTheField, $m,
+    global $tool_content, $workPath, $course_id, $uid, $langTheField, $m, $langTitle,
         $course_code, $langFormErrors, $langNewAssignSuccess, $langScales;
 
     $v = new Valitron\Validator($_POST);
@@ -609,7 +623,7 @@ function add_assignment() {
         $v->rule('numeric', array('scale'));
         $v->labels(array('scale' => "$langTheField $langScales"));
     }
-    $v->labels(array('title' => "$langTheField $m[title]"));
+    $v->labels(array('title' => "$langTheField $langTitle"));
     if($v->validate()) {
         $title = $_POST['title'];
         $desc = $_POST['desc'];
@@ -709,12 +723,27 @@ function add_assignment() {
     }
 }
 
-// edit assignment
+/**
+ * @brief edit assignment
+ * @global type $tool_content
+ * @global type $langEditSuccess
+ * @global type $m
+ * @global type $langTheField
+ * @global type $course_code
+ * @global type $course_id
+ * @global type $uid
+ * @global string $workPath
+ * @global type $langFormErrors
+ * @global type $langScales
+ * @global type $langTitle
+ * @param type $id
+ * @return type
+ */
 function edit_assignment($id) {
 
-    global $tool_content, $langBackAssignment, $langEditSuccess, $m,
-        $langTheField, $langEditError, $course_code, $works_url, $course_id,
-        $uid, $workPath, $langFormErrors, $langScales;
+    global $tool_content, $langEditSuccess, $m,
+        $langTheField, $course_code, $course_id,
+        $uid, $workPath, $langFormErrors, $langScales, $langTitle;
 
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('title'));
@@ -729,7 +758,7 @@ function edit_assignment($id) {
         $v->rule('numeric', array('scale'));
         $v->labels(array('scale' => "$langTheField $langScales"));
     }
-    $v->labels(array('title' => "$langTheField $m[title]"));
+    $v->labels(array('title' => "$langTheField $langTitle"));
     if($v->validate()) {
         $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
         $title = $_POST['title'];
@@ -1099,17 +1128,57 @@ function submit_work($id, $on_behalf_of = null) {
     }
 }
 
-//  assignment - prof view only
+
+/**
+ * @brief assignment - prof view only
+ * @global type $tool_content
+ * @global type $m
+ * @global type $course_code
+ * @global type $course_id
+ * @global type $answer
+ * @global type $desc
+ * @global type $language
+ * @global string $head_content
+ * @global type $langMoreOptions
+ * @global type $langLessOptions
+ * @global type $langBack
+ * @global type $langSave
+ * @global type $langStudents
+ * @global type $langMove
+ * @global type $langWorkFile
+ * @global type $langAssignmentStartHelpBlock
+ * @global type $langAssignmentEndHelpBlock
+ * @global type $langWorkSubType
+ * @global type $langWorkOnlineText
+ * @global type $langStartDate
+ * @global type $langGradeNumbers
+ * @global type $langGradeScalesSelect
+ * @global type $langGradeType
+ * @global type $langGradeScales
+ * @global type $langAutoJudgeInputNotSupported
+ * @global type $langAutoJudgeSum
+ * @global type $langAutoJudgeNewScenario
+ * @global type $langAutoJudgeEnable
+ * @global type $langAutoJudgeInput
+ * @global type $langAutoJudgeExpectedOutput
+ * @global type $langAutoJudgeOperator
+ * @global type $langAutoJudgeWeight
+ * @global type $langAutoJudgeProgrammingLanguage
+ * @global type $langAutoJudgeAssertions
+ * @global type $langDescription
+ * @global type $langGroups
+ * @global type $langType
+ */
 function new_assignment() {
-    global $tool_content, $m, $langAdd, $course_code, $course_id, $answer;
-    global $desc, $language, $head_content, $langCancel, $langMoreOptions, $langLessOptions;
-    global $langBack, $langSave, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
+    global $tool_content, $m, $course_code, $course_id,
+           $desc, $language, $head_content, $langMoreOptions, $langLessOptions,
+           $langBack, $langSave, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
            $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
            $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales,
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
            $langAutoJudgeOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
-           $langAutoJudgeAssertions, $langGroups;
+           $langAutoJudgeAssertions, $langDescription, $langTitle, $langGroups;
 
     $connector = AutojudgeApp::getAutojudge();
 
@@ -1194,14 +1263,14 @@ function new_assignment() {
         <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
             <div class='form-group ".($title_error ? "has-error" : "")."'>
-                <label for='title' class='col-sm-2 control-label'>$m[title]:</label>
+                <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
                 <div class='col-sm-10'>
-                  <input name='title' type='text' class='form-control' id='title' placeholder='$m[title]'>
+                  <input name='title' type='text' class='form-control' id='title' placeholder='$langTitle'>
                   <span class='help-block'>$title_error</span>
                 </div>
             </div>
             <div class='form-group'>
-                <label for='desc' class='col-sm-2 control-label'>$m[description]:</label>
+                <label for='desc' class='col-sm-2 control-label'>$langDescription:</label>
                 <div class='col-sm-10'>
                 " . rich_text_editor('desc', 4, 20, $desc) . "
                 </div>
@@ -1456,17 +1525,58 @@ function new_assignment() {
         </form></div></div></div>";
 }
 
-//form for editing
+/**
+ * @brief form for editing
+ * @global type $tool_content
+ * @global type $m
+ * @global type $langBack
+ * @global type $course_code
+ * @global type $langSave
+ * @global type $course_id
+ * @global string $head_content
+ * @global type $language
+ * @global type $langAssignmentStartHelpBlock
+ * @global type $langAssignmentEndHelpBlock
+ * @global type $langStudents
+ * @global type $langMove
+ * @global type $langWorkFile
+ * @global type $themeimg
+ * @global type $langStartDate
+ * @global type $langLessOptions
+ * @global type $langMoreOptions
+ * @global type $langWorkOnlineText
+ * @global type $langWorkSubType
+ * @global type $langGradeScalesSelect
+ * @global type $langGradeType
+ * @global type $langGradeNumbers
+ * @global type $langGradeScales
+ * @global type $langLessOptions
+ * @global type $langMoreOptions
+ * @global type $langAutoJudgeInputNotSupported
+ * @global type $langGroups
+ * @global type $langAutoJudgeSum
+ * @global type $langAutoJudgeNewScenario
+ * @global type $langAutoJudgeEnable
+ * @global type $langDescription
+ * @global type $langTitle
+ * @global type $langAutoJudgeInput
+ * @global type $langAutoJudgeExpectedOutput
+ * @global type $langAutoJudgeOperator
+ * @global type $langAutoJudgeWeight
+ * @global type $langAutoJudgeProgrammingLanguage
+ * @global type $langAutoJudgeAssertions
+ * @param type $id
+ */
 function show_edit_assignment($id) {
 
-    global $tool_content, $m, $langBack, $course_code, $langCancel,
-        $urlAppend, $langSave, $works_url, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
+    global $tool_content, $m, $langBack, $course_code,
+        $langSave, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
         $langLessOptions, $langMoreOptions, $langWorkOnlineText, $langWorkSubType,
         $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales,
         $langLessOptions, $langMoreOptions, $langAutoJudgeInputNotSupported, $langGroups,
-        $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable,
-        $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langAutoJudgeOperator,
+        $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable, $langDescription,
+        $langTitle, $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langAutoJudgeOperator,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions;
 
     load_js('bootstrap-datetimepicker');
@@ -1602,14 +1712,14 @@ function show_edit_assignment($id) {
     <input type='hidden' name='choice' value='do_edit' />
     <fieldset>
             <div class='form-group ".($title_error ? "has-error" : "")."'>
-                <label for='title' class='col-sm-2 control-label'>$m[title]:</label>
+                <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
                 <div class='col-sm-10'>
-                  <input name='title' type='text' class='form-control' id='title' value='".q($row->title)."' placeholder='$m[title]'>
+                  <input name='title' type='text' class='form-control' id='title' value='".q($row->title)."' placeholder='$langTitle'>
                   <span class='help-block'>$title_error</span>
                 </div>
             </div>
             <div class='form-group'>
-                <label for='desc' class='col-sm-2 control-label'>$m[description]:</label>
+                <label for='desc' class='col-sm-2 control-label'>$langDescription:</label>
                 <div class='col-sm-10'>
                 " . rich_text_editor('desc', 4, 20, $row->description) . "
                 </div>
@@ -2277,13 +2387,33 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     }
 }
 
-// Print a box with the details of an assignment
+/**
+ * @brief Print a box with the details of an assignment
+ * @global type $tool_content
+ * @global type $is_editor
+ * @global type $course_code
+ * @global type $m
+ * @global type $langDaysLeft
+ * @global type $langEndDeadline
+ * @global type $langDelAssign
+ * @global type $langAddGrade
+ * @global type $langZipDownload
+ * @global type $langTags
+ * @global type $langGraphResults
+ * @global type $langWorksDelConfirm
+ * @global type $langWorkFile
+ * @global type $langEditChange
+ * @global type $langExportGrades
+ * @global type $langDescription
+ * @global type $langTitle
+ * @param type $id
+ * @param type $row
+ */
 function assignment_details($id, $row) {
-    global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft,
-    $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
-    $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
-    $langSaved, $langGraphResults, $langWorksDelConfirm, $langWorkFile, $course_id, 
-    $langEditChange, $langExportGrades;
+    global $tool_content, $is_editor, $course_code, $m, $langDaysLeft,
+           $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
+           $langGraphResults, $langWorksDelConfirm, $langWorkFile, 
+           $langEditChange, $langExportGrades, $langDescription, $langTitle;
 
     if ($is_editor) {
         $tool_content .= action_bar(array(
@@ -2346,7 +2476,7 @@ function assignment_details($id, $row) {
         <div class='panel-body'>
             <div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$m[title]:</strong>
+                    <strong>$langTitle:</strong>
                 </div>
                 <div class='col-sm-9'>
                     " . q($row->title) . "
@@ -2355,7 +2485,7 @@ function assignment_details($id, $row) {
         if (!empty($row->description)) {
             $tool_content .= "<div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$m[description]:</strong>
+                    <strong>$langDescription:</strong>
                 </div>
                 <div class='col-sm-9'>
                     $row->description
@@ -2865,11 +2995,22 @@ function show_non_submitted($id) {
         }
     }
 }
-// show all the assignments - student view only
+
+/**
+ * @brief display all assignments - student view only
+ * @global type $tool_content
+ * @global type $m
+ * @global type $uid
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $langDaysLeft
+ * @global type $langNoAssign
+ * @global type $course_code
+ * @global type $langTitle
+ */
 function show_student_assignments() {
     global $tool_content, $m, $uid, $course_id, $course_code,
-    $langDaysLeft, $langDays, $langNoAssign, $urlServer,
-    $course_code, $themeimg, $langEditChange;
+    $langDaysLeft, $langNoAssign, $course_code, $langTitle;
 
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -2889,7 +3030,7 @@ function show_student_assignments() {
             <div class='row'><div class='col-sm-12'>
             <div class='table-responsive'><table class='table-default'>
                                   <tr class='list-header'>
-                                      <th style='width:45%'>$m[title]</th>
+                                      <th style='width:45%'>$langTitle</th>
                                       <th class='text-center' style='width:25%'>$m[deadline]</th>
                                       <th class='text-center'>$m[submitted]</th>
                                       <th class='text-center'>$m[grade]</th>
@@ -2945,11 +3086,28 @@ function show_student_assignments() {
     }
 }
 
-// show all the assignments
+/**
+ * @brief display all assignments
+ * @global type $tool_content
+ * @global type $m
+ * @global type $langEditChange
+ * @global type $langDelete
+ * @global type $langNoAssign
+ * @global type $langNewAssign
+ * @global type $course_code
+ * @global type $course_id
+ * @global type $langWorksDelConfirm
+ * @global type $langDaysLeft
+ * @global type $m
+ * @global type $langWarnForSubmissions
+ * @global type $langDelSure
+ * @global type $langGradeScales
+ * @global type $langTitle
+ */
 function show_assignments() {
-    global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign, $langNewAssign, $langCommands,
-    $course_code, $themeimg, $course_id, $langWorksDelConfirm, $langDaysLeft, $m,
-    $langWarnForSubmissions, $langDelSure, $langGradeScales;
+    global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign, $langNewAssign,
+           $course_code, $course_id, $langWorksDelConfirm, $langDaysLeft, $m,
+           $langWarnForSubmissions, $langDelSure, $langGradeScales, $langTitle;
 
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
@@ -2972,7 +3130,7 @@ function show_assignments() {
                     <div class='table-responsive'>
                     <table class='table-default'>
                     <tr class='list-header'>
-                      <th style='width:45%;'>$m[title]</th>
+                      <th style='width:45%;'>$langTitle</th>
                       <th class='text-center'>$m[subm]</th>
                       <th class='text-center'>$m[nogr]</th>
                       <th class='text-center'>$m[deadline]</th>
@@ -3034,10 +3192,18 @@ function show_assignments() {
     }
 }
 
-// submit grade and comment for a student submission
+/**
+ * @brief submit grade and comment for student submission
+ * @global type $langGrades
+ * @global type $course_id
+ * @global type $langTheField
+ * @global type $m
+ * @global type $course_code
+ * @global type $langFormErrors
+ * @param type $args
+ */
 function submit_grade_comments($args) {
-    global $tool_content, $langGrades, $langWorkWrongInput, $course_id,
-           $langTheField, $m, $course_code, $langFormErrors;
+    global $langGrades, $course_id, $langTheField, $m, $course_code, $langFormErrors;
 
     $id = $args['assignment'];
     $sid = $args['submission'];
@@ -3094,10 +3260,21 @@ function submit_grade_comments($args) {
 
 }
 
-// submit grades to students
+/**
+ * @brief submit grades to students
+ * @global type $langGrades
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $langFormErrors
+ * @global type $langTheField
+ * @global type $m
+ * @param type $grades_id
+ * @param type $grades
+ * @param type $email
+ */
 function submit_grades($grades_id, $grades, $email = false) {
-    global $tool_content, $langGrades, $langWorkWrongInput, $course_id,
-           $course_code, $langFormErrors, $langTheField, $m;
+    global $langGrades, $course_id, $course_code, $langFormErrors, $langTheField, $m;
+    
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $grades_id);
     $errors = [];
 
@@ -3159,9 +3336,19 @@ function submit_grades($grades_id, $grades, $email = false) {
 
 }
 
-// functions for downloading
+
+
+/**
+ * @brief download function
+ * @global type $uid
+ * @global type $is_editor
+ * @param type $id
+ * @param type $file_type
+ * @return boolean
+ */
 function send_file($id, $file_type) {
-    global $course_code, $uid, $is_editor, $courses;
+    global $uid, $is_editor;
+    
     if (isset($file_type)) {
         $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
         // don't show file if: assignment nonexistent, not editor, not active assignment, module not visible
@@ -3187,9 +3374,16 @@ function send_file($id, $file_type) {
     exit;
 }
 
-// Zip submissions to assignment $id and send it to user
+/**
+ * @brief Zip submissions to assignment $id and send it to user
+ * @global string $workPath
+ * @global type $course_code
+ * @param type $id
+ * @return boolean
+ */
 function download_assignments($id) {
     global $workPath, $course_code;
+    
     $counter = Database::get()->querySingle('SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d', $id)->count;
     if ($counter>0) {
         $secret = work_secret($id);
@@ -3204,7 +3398,7 @@ function download_assignments($id) {
         @readfile($filename);
         @unlink($filename);
         exit;
-    }else{
+    } else {
         return false;
     }
 }

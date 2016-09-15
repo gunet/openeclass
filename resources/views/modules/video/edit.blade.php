@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='Desc' class='col-sm-2 control-label'>{{ trans('langDescr') }}:</label>
+                            <label for='Desc' class='col-sm-2 control-label'>{{ trans('langDescription') }}:</label>
                             <div class='col-sm-10'>
                                 <textarea class='form-control' rows='3' name='description'>@if (isset($_GET['id']) && isset($_GET['table_edit'])){{ $edititem->description }}@endif</textarea>
                             </div>

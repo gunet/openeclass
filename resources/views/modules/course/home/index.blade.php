@@ -8,7 +8,7 @@
 
                 <div class='panel-body'>
                     <div id='course-title-wrapper' class='course-info-title clearfix'>
-                        <div class='pull-left h4'>{{ trans('langCourseDescriptionShort') }}</div> 
+                        <div class='pull-left h4'>{{ trans('langDescription') }}</div> 
                         @if ($is_editor)
                             <div class='access access-edit pull-left'>
                                 <a href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>

@@ -18,7 +18,7 @@
                     <tbody>
                         <tr class="list-header">
                             <th>{{ trans('langTitle') }}</th>
-                            <th>{{ trans('langDescr') }}</th>
+                            <th>{{ trans('langDescription') }}</th>
                             <th>{{ trans('langcreator') }}</th>
                             <th>{{ trans('langpublisher') }}</th>
                             <th>{{ trans('langDate') }}</th>

@@ -42,7 +42,7 @@
                                 <input class='form-control' type='text' name='file_subject' value='{{ $file->subject }}'></div>
                         </div>
                         <div class='form-group'>
-                            <label class='col-sm-2 control-label'>{{ trans('langDescription') }}:</label>
+                            <label class='col-sm-2 control-label'>{{ trans('langInfoAbout') }}:</label>
                             <div class='col-sm-10'>
                                 <input class='form-control' type='text' name='file_description' value='{{ $file->description }}'>
                             </div>

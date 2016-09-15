@@ -460,7 +460,7 @@ $modules = array(
     MODULE_ID_GLOSSARY => array('title' => $langGlossary, 'link' => 'glossary', 'image' => 'fa-list'),
     MODULE_ID_EBOOK => array('title' => $langEBook, 'link' => 'ebook', 'image' => 'fa-book'),
     MODULE_ID_CHAT => array('title' => $langChat, 'link' => 'chat', 'image' => 'fa-exchange'),
-    MODULE_ID_DESCRIPTION => array('title' => $langDescription, 'link' => 'course_description', 'image' => 'fa-info-circle'),
+    MODULE_ID_DESCRIPTION => array('title' => $langInfoAbout, 'link' => 'course_description', 'image' => 'fa-info-circle'),
     MODULE_ID_QUESTIONNAIRE => array('title' => $langQuestionnaire, 'link' => 'questionnaire', 'image' => 'fa-question-circle'),
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'fa-ellipsis-h'),
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'fa-wikipedia'),

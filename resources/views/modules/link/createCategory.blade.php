@@ -16,7 +16,7 @@
                    </div>
                 </div>
                 <div class='form-group'>
-                    <label for='CatDesc' class='col-sm-2 control-label'>{{ trans('langDescription') }}:</label>
+                    <label for='CatDesc' class='col-sm-2 control-label'>{{ trans('langInfoAbout') }}:</label>
                     <div class='col-sm-10'>
                         <textarea class='form-control' rows='5' name='description'>{{ isset($category) ? $category->description : "" }}</textarea>
                     </div>
