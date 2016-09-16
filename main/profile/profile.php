@@ -537,7 +537,7 @@ $tool_content .= "<div class='form-group'>
             <input type='file' name='userimage' size='30'></div>
         </div>
         <div class='form-group'>
-          <label for='desription' class='col-sm-2 control-label'>$langInfoAbout:</label>
+          <label for='desription' class='col-sm-2 control-label'>$langProfileAboutMe:</label>
           <div class='col-sm-10'>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</div>
         </div>";
 //add custom profile fields
