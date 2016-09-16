@@ -460,7 +460,6 @@ $langCode = "Código del curso";
 $langDelCourse = "Borra el curso entero";
 $langDelUsers = "Borra el registro de todos los usuarios";
 $langCourseTitle = "Título";
-$langInfoAbout = "Descripción";
 $langConfidentiality = "Tipo de acceso";
 $langPrivOpen = "Acceso privado, registro abierto";
 $langForbidden = "No permitido";

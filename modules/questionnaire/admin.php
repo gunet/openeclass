@@ -394,7 +394,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               </div>
             </div>              
             <div class='form-group'>
-              <label for='PollDescription' class='col-sm-2 control-label'>$langInfoAbout:</label>
+              <label for='PollDescription' class='col-sm-2 control-label'>$langDescription:</label>
               <div class='col-sm-10'>
                 ".rich_text_editor('PollDescription', 4, 52, $PollDescription)."
               </div>
@@ -822,7 +822,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$langInfoAbout:</strong>
+                    <strong>$langDescription:</strong>
                 </div>
                 <div class='col-sm-9'>
                     $poll->description

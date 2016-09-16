@@ -71,7 +71,7 @@
                         </div>
 
                         <div class='form-group'>
-                            <label for='inputFileDescription' class='col-sm-2 control-label'>{{ trans('langInfoAbout') }}:</label>
+                            <label for='inputFileDescription' class='col-sm-2 control-label'>{{ trans('langDescription') }}:</label>
                             <div class='col-sm-10'>
                                 <input type='text' class='form-control' id='inputFileDescription' name='file_description'>
                             </div>

@@ -63,7 +63,7 @@ $tool_content .= action_bar(array(
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='CatDesc' class='col-sm-2 control-label'>$langInfoAbout:</label>
+                            <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
                             <div class='col-sm-10'>
                                 <textarea class='form-control' rows='5' name='description'></textarea>
                             </div>
@@ -94,7 +94,7 @@ $tool_content .= action_bar(array(
                 </div>
             </div>
             <div class='form-group'>
-                <label for='CatDesc' class='col-sm-2 control-label'>$langInfoAbout:</label>
+                <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
                 <div class='col-sm-10'>
                     <textarea class='form-control' rows='5' name='description'>$form_description</textarea>
                 </div>

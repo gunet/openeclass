@@ -64,7 +64,7 @@ if (isset($_GET['delete'])) {
                 <div class='col-xs-12'>$langGroupDescInfo</div>
             </div>
             <div class='form-group'>
-              <label for='group_desc' class='col-sm-2 control-label'>$langInfoAbout:</label>
+              <label for='group_desc' class='col-sm-2 control-label'>$langDescription:</label>
               <div class='col-sm-10'>
                 <textarea class='form-control' name='group_desc' id='group_desc' rows='10'>" . @$description . "</textarea>
               </div>

@@ -223,7 +223,7 @@ if (isset($_GET['group_as'])) {
                     <div class='col-sm-9'>$tool_content_tutor</div>
                 </div>
                 <div class='row'>
-                    <div class='col-sm-3'><strong>$langInfoAbout:</strong></div>
+                    <div class='col-sm-3'><strong>$langDescription:</strong></div>
                     <div class='col-sm-9'>$tool_content_description</div>
                 </div>
             </div>

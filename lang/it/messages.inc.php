@@ -457,7 +457,6 @@ $langCode = "Codice del corso";
 $langDelCourse = "Eliminare tutto il corso";
 $langDelUsers = "Eliminare utenti";
 $langCourseTitle = "Titolo del corso";
-$langInfoAbout = "Descrizione";
 $langConfidentiality = "Accesso al corso";
 $langPrivOpen = "Accesso privato (con registrazione), a coloro che hanno un conto sulla piattaforma";
 $langForbidden = "Azione non consentita";

@@ -469,7 +469,6 @@ $langCode = "$langCourse code";
 $langDelCourse = "Delete $langsCourse";
 $langDelUsers = "Unregister all users";
 $langCourseTitle = "Title $langOfCourse";
-$langInfoAbout = "Information";
 $langConfidentiality = "Access Type";
 $langPrivOpen = "Private access, registration open";
 $langForbidden = "Not allowed";

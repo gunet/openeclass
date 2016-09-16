@@ -444,7 +444,6 @@ $langCode = "Kursnummer";
 $langDelCourse = "Löschen des Kurses";
 $langDelUsers = "Abmelden aller Benutzer";
 $langCourseTitle = "Kurstitel";
-$langInfoAbout = "Beschreibung";
 $langConfidentiality = "Zugang zum Kurs";
 $langPrivOpen = "Freier Zugang zum Kurs (Registrierung erforderlich)";
 $langForbidden = "Nicht erlaubt";
