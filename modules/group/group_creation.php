@@ -143,7 +143,7 @@ if (isset($_GET['all'])) {
             </div>
         </div>
         <div class='form-group'>
-          <label class='col-sm-2 control-label'>$langInfoAbout $langOptional:</label>
+          <label class='col-sm-2 control-label'>$langDescription $langOptional:</label>
           <div class='col-sm-10'><textarea class='form-control' name='description' rows='2' cols='60'></textarea></div>
         </div>
         <div class='form-group".(Session::getError('group_max') ? " has-error" : "")."'>

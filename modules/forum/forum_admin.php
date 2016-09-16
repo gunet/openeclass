@@ -113,7 +113,7 @@ if (isset($_GET['forumgo'])) {
                 </div>
             </div>
             <div class='form-group'>
-                <label for='forum_desc' class='col-sm-2 control-label'>$langInfoAbout:</label>
+                <label for='forum_desc' class='col-sm-2 control-label'>$langDescription:</label>
                 <div class='col-sm-10'>
                     <textarea class='form-control' name='forum_desc' id='forum_desc' rows='3'></textarea>
                 </div>
@@ -149,7 +149,7 @@ elseif (isset($_GET['forumgoedit'])) {
                     </div>
                 </div>    
                 <div class='form-group'>
-                    <label for='forum_desc' class='col-sm-2 control-label'>$langInfoAbout:</label>
+                    <label for='forum_desc' class='col-sm-2 control-label'>$langDescription:</label>
                     <div class='col-sm-10'>
                         <textarea name='forum_desc' id='forum_desc' class='form-control' cols='47' rows='3'>" . q($forum_desc) . "</textarea>
                     </div>

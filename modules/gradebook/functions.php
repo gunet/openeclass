@@ -1097,7 +1097,7 @@ function display_available_exercises($gradebook_id) {
  * @global type $dateFormatLong
  * @global type $langWorks
  * @global type $m
- * @global type $langInfoAbout
+ * @global type $langDescription
  * @global type $langAttendanceNoActMessageAss4
  * @global type $langAdd
  * @global type $langTitle
@@ -1107,7 +1107,7 @@ function display_available_exercises($gradebook_id) {
 function display_available_assignments($gradebook_id) {
 
     global $course_id, $course_code, $tool_content, $dateFormatLong,
-           $langWorks, $m, $langInfoAbout, $langAttendanceNoActMessageAss4,
+           $langWorks, $m, $langDescription, $langAttendanceNoActMessageAss4,
            $langAdd, $langTitle, $langHour;
 
     $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1 AND gradebook_id = ?d)", $course_id, $gradebook_id);
@@ -1118,7 +1118,7 @@ function display_available_assignments($gradebook_id) {
         $tool_content .= "
             <div class='row'><div class='col-sm-12'><div class='table-responsive'>
                           <table class='table-default'";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>".q($m['deadline'])."</th><th>$langInfoAbout</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>".q($m['deadline'])."</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
         foreach ($checkForAss as $newAssToGradebook) {
@@ -1164,14 +1164,14 @@ function display_available_assignments($gradebook_id) {
  * @global type $langAdd
  * @global type $langAttendanceNoActMessageLp4
  * @global type $langTitle
- * @global type $langInfoAbout
+ * @global type $langDescription
  * @global type $langActions
  * @param type $gradebook_id
  */
 function display_available_lps($gradebook_id) {
 
     global $course_id, $course_code, $tool_content,
-           $langLearningPath, $langAdd, $langAttendanceNoActMessageLp4, $langTitle, $langInfoAbout, $langActions;
+           $langLearningPath, $langAdd, $langAttendanceNoActMessageLp4, $langTitle, $langDescription, $langActions;
 
     $checkForLp = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE course_id = ?d ORDER BY name
                         AND learnPath_id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 3 AND gradebook_id = ?d)", $course_id, $gradebook_id);
@@ -1180,7 +1180,7 @@ function display_available_lps($gradebook_id) {
     if ($checkForLpNumber > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langInfoAbout</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'>$langActions</th>";
         $tool_content .= "</tr>";
         foreach ($checkForLp as $newExerToGradebook) {

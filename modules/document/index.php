@@ -886,7 +886,7 @@ if ($can_upload) {
                     <div class='col-sm-10'><input class='form-control' type='text' name='file_subject' value='$oldSubject'></div>
                   </div>
                   <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langInfoAbout:</label>
+                    <label class='col-sm-2 control-label'>$langDescription:</label>
                     <div class='col-sm-10'><input class='form-control' type='text' name='file_description' value='$oldDescription'></div>
                   </div>
                   <div class='form-group'>

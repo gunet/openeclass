@@ -969,7 +969,6 @@ $langDelCourse = "Διαγραφή του $langsOfCourse";
 $langDelUsers = "Διαγραφή χρηστών";
 $langDelUser = "Διαγραφή χρήστη";
 $langCourseTitle = "Τίτλος $langOfCourse";
-$langInfoAbout = "Πληροφορίες";
 $langConfidentiality = "Πρόσβαση";
 $langPrivOpen = "Ελεύθερη Πρόσβαση (με εγγραφή) σε όσους διαθέτουν λογαριασμό στην πλατφόρμα";
 $langPrivOpenShort = "Ελεύθερη (με εγγραφή)";

@@ -147,7 +147,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
      * @global string $langSearchCriteria
      * @global string $langTitle
      * @global string $langTitle_Descr
-     * @global string $langInfoAbout
+     * @global string $langDescription
      * @global string $langDescription_Descr
      * @global string $langKeywords
      * @global string $langKeywords_Descr
@@ -160,7 +160,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
      * @return string - The form's HTML representation
      */
     public static function getDetailedSearchForm() {
-        global $langSearchCriteria, $langTitle, $langTitle_Descr, $langInfoAbout,
+        global $langSearchCriteria, $langTitle, $langTitle_Descr, $langDescription,
         $langDescription_Descr, $langKeywords, $langKeywords_Descr, $langTeacher,
         $langInstructor_Descr, $langCourseCode, $langCourseCode_Descr, $langDoSearch,
         $langNewSearch;
@@ -173,7 +173,7 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
                 <div class='col-sm-10'><input id='title' class='form-control' name='search_terms_title' type='text' placeholder='$langTitle_Descr'></div>
             </div>
             <div class='form-group'>
-                <label for='description' class='col-sm-2 control-label'>$langInfoAbout:</label>
+                <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
                 <div class='col-sm-10'><input id='description' class='form-control' name='search_terms_description' type='text' placeholder='$langDescription_Descr'></div>                    
             </div>
             <div class='form-group'>

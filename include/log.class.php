@@ -511,18 +511,18 @@ class Log {
     /**
      * display action details in video
      * @global type $langTitle
-     * @global type $langInfoAbout
+     * @global type $langDescription
      * @param type $details
      * @return string
      */
     private function video_action_details($details) {
 
-        global $langTitle, $langInfoAbout;
+        global $langTitle, $langDescription;
 
         $details = unserialize($details);
         $content = "$langTitle  &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langInfoAbout &laquo" . q($details['description']) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . q($details['description']) . "&raquo";
         }
         if (!empty($details['url'])) {
             $content .= "&nbsp;&mdash;&nbsp; URL &laquo" . q($details['url']) . "&raquo";
@@ -533,19 +533,19 @@ class Log {
     /**
      * display action details in assignments
      * @global type $langTitle
-     * @global type $langInfoAbout
+     * @global type $langDescription
      * @global type $m
      * @param type $details
      * @return string
      */
     private function assignment_action_details($details) {
 
-        global $langTitle, $langInfoAbout, $m;
+        global $langTitle, $langDescription, $m;
 
         $details = unserialize($details);
         $content = "$langTitle  &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langInfoAbout &laquo" . $details['description'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . $details['description'] . "&raquo";
         }
         if (!empty($details['filename'])) {
             $content .= "&nbsp;&mdash;&nbsp; " . q($m['filename']) . " &laquo" . q($details['filename']) . "&raquo";
@@ -600,14 +600,14 @@ class Log {
     /**
      * display action details in link
      * @global type $langTitle
-     * @global type $langInfoAbout
+     * @global type $langDescription
      * @global type $langCategoryName
      * @param type $details
      * @return string
      */
     private function link_action_details($details) {
 
-        global $langTitle, $langInfoAbout, $langCategoryName;
+        global $langTitle, $langDescription, $langCategoryName;
 
         $details = unserialize($details);
         $content = '';
@@ -621,7 +621,7 @@ class Log {
             $content .= " &mdash; $langTitle &laquo" . q($details['title']) . "&raquo";
         }
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langInfoAbout &laquo" . $details['description'] . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . $details['description'] . "&raquo";
         }
         return $content;
     }
@@ -775,18 +775,18 @@ class Log {
     /**
      * display action details in exercises
      * @global type $langTitle
-     * @global type $langInfoAbout
+     * @global type $langDescription
      * @param type $details
      * @return string
      */
     private function exercise_action_details($details) {
 
-        global $langTitle, $langInfoAbout;
+        global $langTitle, $langDescription;
 
         $details = unserialize($details);
         $content = "$langTitle &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langInfoAbout &laquo" . ellipsize($details['description'], 100) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . ellipsize($details['description'], 100) . "&raquo";
         }
         return $content;
     }
@@ -794,19 +794,19 @@ class Log {
     /**
      * display action details in wiki
      * @global type $langTitle
-     * @global type $langInfoAbout
+     * @global type $langDescription
      * @param type $details
      * @return string
      */
     private function wiki_action_details($details) {
 
-        global $langTitle, $langInfoAbout;
+        global $langTitle, $langDescription;
 
         $details = unserialize($details);
 
         $content = "$langTitle &laquo" . q($details['title']) . "&raquo";
         if (!empty($details['description'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langInfoAbout &laquo" . q(ellipsize($details['description'], 100)) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription &laquo" . q(ellipsize($details['description'], 100)) . "&raquo";
         }
         return $content;
     }
