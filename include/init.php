@@ -64,39 +64,9 @@ add_xxsfilter_headers();
 add_nosniff_headers();
 
 //add_hsts_headers();
-if (is_readable('laravel/.env')) {
-    $dotenv = new Dotenv\Dotenv('laravel');
-    $dotenv->load();
-    $mysqlServer = getenv('DB_HOST');
-    $mysqlUser = getenv('DB_USERNAME');
-    $mysqlPassword = getenv('DB_PASSWORD');
-    $mysqlMainDb = getenv('DB_DATABASE');    
+if (is_readable('config/config.php')) {
+    require_once 'config/config.php';
 } else {
-    if (is_readable('config/config.php')) {
-        require_once 'config/config.php';
-        $stringConfig = '
-        # ========================================================
-        # Open eClass 3.0 configuration file
-        # Created by install on ' . date('Y-m-d H:i') . '
-        # ========================================================
-
-        APP_ENV=local
-        APP_DEBUG=true
-        APP_KEY=xpSb5QShq85GM18rCruuzaiqPP1MBu9C
-
-        DB_HOST=' . $mysqlServer . '
-        DB_DATABASE=' . $mysqlMainDb . '
-        DB_USERNAME=' . $mysqlUser . '
-        DB_PASSWORD=' . $mysqlPassword . '
-        ';        
-        $fd = fopen("laravel/.env", "w");
-        if ($fd) {
-            fwrite($fd, $stringConfig);
-            fclose($fd);
-            removeDir("$webDir/config/");        
-        }
-        redirect('/');
-    }    
     require_once 'include/not_installed.php';
 }
 if (!isset($mysqlServer)) {

@@ -14,7 +14,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'api/v1'], function()
+Route::group(['prefix' => 'api/v1', 'middleware' => ['apiInit']], function()
 {
     //This line is needed so that Fractal Lib returns collections and items in similar 
     //format (i.e. in a data array)

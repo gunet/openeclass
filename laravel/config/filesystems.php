@@ -50,7 +50,11 @@ return [
         'courses' => [
             'driver' => 'local',
             'root'   => '../courses',
-        ],        
+        ],
+        'config' => [
+            'driver' => 'local',
+            'root'   => '../config',
+        ],          
         'ftp' => [
             'driver'   => 'ftp',
             'host'     => 'ftp.example.com',
