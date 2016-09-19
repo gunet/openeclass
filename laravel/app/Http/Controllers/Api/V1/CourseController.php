@@ -40,8 +40,10 @@ class CourseController extends Controller {
 	{
             $limit = $request->input('limit') ?: 5;
             $courses = $this->courseRepo->getAllCourses($limit, ['departments']);
+            
             return $this->response->paginatedCollection($courses, new CourseTransformer());
 	}
+        
 	public function store(StoreCourseRequest $request)
 	{
 
@@ -49,14 +51,15 @@ class CourseController extends Controller {
             $data['description'] = Purifier::clean($request->input('courseDescription'));
             $data['prof_names'] = $request->input('courseProfessors');
             $data['course_license'] = $request->input('courseLicense');
+            $data['view_type'] = $request->input('courseViewType');
+            $data['visible'] = $request->input('courseVisibility');
             
             $data['doc_quota'] = Config::find('doc_quota')->value * 1024 * 1024;
             $data['group_quota'] = Config::find('group_quota')->value * 1024 * 1024;
             $data['video_quota'] = Config::find('video_quota')->value * 1024 * 1024;
             $data['dropbox_quota'] = Config::find('dropbox_quota')->value * 1024 * 1024;
             
-                        
-            $hierarchy_id = $request->input('courseDepartments')[1];
+            $hierarchy_id = $request->input('courseDepartments')[0];
             $hierarchy = Hierarchy::find($hierarchy_id);
             // The code below covers cases where different courses share a common hierarchy code
             $all_hierarchies_same_code = Hierarchy::where('code', $hierarchy->code)->get();
@@ -67,6 +70,7 @@ class CourseController extends Controller {
                     $code = $hierarchy->code . $hierarchy_generator;                    
                 } while(in_array($code, Storage::disk('courses')->directories()));
             }
+            
             $code = str_replace(' ', '', strtoupper($code));
             
             $data['code'] = $data['public_code'] = $code;
@@ -74,8 +78,26 @@ class CourseController extends Controller {
             $course = $this->courseRepo->storeCourse($data);  
             
             if ($course->id){
-                Storage::disk('courses')->makeDirectory($code);
-                return $this->response->item($course, new CourseTransformer());                
+                $course_folders = [
+                    $code, 
+                    $code.'/image', 
+                    $code.'/document', 
+                    $code.'/dropbox',
+                    $code.'/page',
+                    $code.'/work',
+                    $code.'/group',
+                    $code.'/temp',
+                    $code.'/scormPackages'
+                ];
+                
+                foreach ($course_folders as $course_folder) {
+                    Storage::disk('courses')->makeDirectory($course_folder); 
+                }
+                
+                Storage::disk('videos')->makeDirectory($code);
+                
+                return $this->response->item($course, new CourseTransformer()); 
+                
             } else {
 
             }

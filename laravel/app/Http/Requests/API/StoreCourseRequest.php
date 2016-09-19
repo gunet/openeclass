@@ -31,6 +31,7 @@ class StoreCourseRequest extends Request
             'courseLang' => 'required',
             'courseDepartments' => 'required',
             'courseLicense' => 'required',
+            'courseViewType' => 'required',
         ];
     }
 }

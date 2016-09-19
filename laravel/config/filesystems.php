@@ -51,6 +51,10 @@ return [
             'driver' => 'local',
             'root'   => '../courses',
         ],
+        'videos' => [
+            'driver' => 'local',
+            'root'   => '../videos',
+        ],        
         'config' => [
             'driver' => 'local',
             'root'   => '../config',
