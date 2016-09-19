@@ -3088,6 +3088,8 @@ $langUserAddExplanation = "κάθε γραμμή του αρχείου που θ
         Οι χρήστες θα λάβουν ειδοποίηση μέσω email με το όνομα χρήστη / συνθηματικό.";
 $langDownloadUserList = "Ανέβασμα καταλόγου";
 $langUserNumber = "αριθμός";
+$langGiveRight = "έδωσε δικαίωμα";
+$langRemovedRight = "αφαίρεσε δικαίωμα";
 $langGiveRightTutor = "Δικαίωμα υπεύθυνου ομάδας";
 $langGiveRightEditor = "Δικαίωμα $langsOfEditor";
 $langGiveRightAdmin = "Δικαίωμα $langsOfTeacher";
