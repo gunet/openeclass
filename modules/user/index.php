@@ -54,6 +54,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             Database::get()->query("DELETE FROM course_user
                                             WHERE user_id = ?d AND
                                                 course_id = ?d", $unregister_gid, $course_id);
+            Log::record($course_id, MODULE_ID_USERS, LOG_DELETE, array('uid' => $unregister_gid,
+                                                                       'right' => '-5'));
             if (check_guest($unregister_gid)) {
                 Database::get()->query("DELETE FROM user WHERE id = ?d", $unregister_gid);
             }
@@ -350,6 +352,9 @@ if (isset($_GET['giveAdmin'])) {
     Database::get()->query("UPDATE course_user SET status = " . USER_TEACHER . "
                         WHERE user_id = ?d
                         AND course_id = ?d", $new_admin_gid, $course_id);
+    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
+                                                               'dest_uid' => $new_admin_gid,
+                                                               'right' => '+1'));
 } elseif (isset($_GET['giveTutor'])) {
     if(showSecondFactorChallenge()!=""){
       $_POST['sfaanswer'] = $_GET['sfaanswer'];
@@ -359,6 +364,9 @@ if (isset($_GET['giveAdmin'])) {
     Database::get()->query("UPDATE course_user SET tutor = 1
                         WHERE user_id = ?d
                         AND course_id = ?d", $new_tutor_gid, $course_id);
+    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
+                                                               'dest_uid' => $new_tutor_gid,
+                                                               'right' => '+3'));
     Database::get()->query("UPDATE group_members, `group` SET is_tutor = 0
                         WHERE `group`.id = group_members.group_id AND 
                               `group`.course_id = ?d AND
@@ -372,6 +380,9 @@ if (isset($_GET['giveAdmin'])) {
     Database::get()->query("UPDATE course_user SET editor = 1
                         WHERE user_id = ?d
                         AND course_id = ?d", $new_editor_gid, $course_id);
+    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
+                                                               'dest_uid' => $new_editor_gid,
+                                                               'right' => '+2'));
 } elseif (isset($_GET['removeAdmin'])) {
     if(showSecondFactorChallenge()!=""){
       $_POST['sfaanswer'] = $_GET['sfaanswer'];
@@ -382,6 +393,9 @@ if (isset($_GET['giveAdmin'])) {
                         WHERE user_id <> ?d AND
                               user_id = ?d AND
                               course_id = ?d", $uid, $removed_admin_gid, $course_id);
+    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
+                                                               'dest_uid' => $removed_admin_gid,
+                                                               'right' => '-1'));
 } elseif (isset($_GET['removeTutor'])) {
     if(showSecondFactorChallenge()!=""){
       $_POST['sfaanswer'] = $_GET['sfaanswer'];
@@ -391,6 +405,9 @@ if (isset($_GET['giveAdmin'])) {
     Database::get()->query("UPDATE course_user SET tutor = 0
                         WHERE user_id = ?d 
                               AND course_id = ?d", $removed_tutor_gid, $course_id);
+    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
+                                                               'dest_uid' => $removed_tutor_gid,
+                                                               'right' => '-3'));
 } elseif (isset($_GET['removeEditor'])) {
     if(showSecondFactorChallenge()!=""){
       $_POST['sfaanswer'] = $_GET['sfaanswer'];
@@ -400,6 +417,9 @@ if (isset($_GET['giveAdmin'])) {
     Database::get()->query("UPDATE course_user SET editor = 0
                         WHERE user_id = ?d 
                         AND course_id = ?d", $removed_editor_gid, $course_id);
+    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
+                                                               'dest_uid' => $removed_editor_gid,
+                                                               'right' => '-2'));
 }
 
 if (get_config('opencourses_enable')) {
