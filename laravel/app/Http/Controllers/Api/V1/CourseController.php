@@ -38,10 +38,12 @@ class CourseController extends Controller {
 	 */
 	public function index(Request $request)
 	{
-            $limit = $request->input('limit') ?: 5;
+            $limit = $request->input('limit', 5);
             $courses = $this->courseRepo->getAllCourses($limit, ['departments']);
             
-            return $this->response->paginatedCollection($courses, new CourseTransformer());
+            $this->response->parseIncludes('courseDepartments');
+            return $this->response
+                    ->paginatedCollection($courses, new CourseTransformer());
 	}
         
 	public function store(StoreCourseRequest $request)
@@ -94,8 +96,9 @@ class CourseController extends Controller {
                     Storage::disk('courses')->makeDirectory($course_folder); 
                 }
                 
-                Storage::disk('videos')->makeDirectory($code);
+                Storage::disk('video')->makeDirectory($code);
                 
+                $this->response->parseIncludes('courseDepartments');
                 return $this->response->item($course, new CourseTransformer()); 
                 
             } else {
