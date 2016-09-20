@@ -356,7 +356,7 @@ if (!isset($_POST['create_course'])) {
                     <div class='radio'>
                       <label>
                         <input id='coursewithregistration' type='radio' name='formvisible' value='1'>".
-                        $course_access_icons[COURSE_REGISTRATION]." $m[legrestricted]
+                        $course_access_icons[COURSE_REGISTRATION]." $langRegCourse
                         <span class='help-block'><small>$langPrivOpen</small></span>
                       </label>
                     </div>
