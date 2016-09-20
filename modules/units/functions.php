@@ -140,16 +140,16 @@ function show_resources($unit_id) {
                 handle: '.fa-arrows',
                 animation: 150,
                 onEnd: function (evt) {
-                
+
                 var itemEl = $(evt.item);
-                
+
                 var idReorder = itemEl.attr('data-id');
                 var prevIdReorder = itemEl.prev().attr('data-id');
 
                 $.ajax({
                   type: 'post',
                   dataType: 'text',
-                  data: { 
+                  data: {
                           toReorder: idReorder,
                           prevReorder: prevIdReorder,
                         }
@@ -164,6 +164,28 @@ function show_resources($unit_id) {
                 var fileURL = $(this).attr('href');
                 var downloadURL = $(this).prev('input').val();
                 var fileTitle = $(this).attr('title');
+                var buttons = {};
+                if (downloadURL) {
+                    buttons.download = {
+                            label: '<i class=\"fa fa-download\"></i> $langDownload',
+                            className: 'btn-success',
+                            callback: function (d) {
+                                window.location = downloadURL;
+                            }
+                    };
+                }
+                buttons.print = {
+                            label: '<i class=\"fa fa-print\"></i> $langPrint',
+                            className: 'btn-primary',
+                            callback: function (d) {
+                                var iframe = document.getElementById('fileFrame');
+                                iframe.contentWindow.print();
+                            }
+                        };
+                buttons.cancel = {
+                            label: '$langCancel',
+                            className: 'btn-default'
+                        };
                 bootbox.dialog({
                     size: 'large',
                     title: fileTitle,
@@ -172,27 +194,7 @@ function show_resources($unit_id) {
                                     '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
                                 '</div>'+
                             '</div>',
-                    buttons: {
-                        download: {
-                            label: '<i class=\"fa fa-download\"></i> $langDownload',
-                            className: 'btn-success',
-                            callback: function (d) {
-                                window.location = downloadURL;
-                            }
-                        },
-                        print: {
-                            label: '<i class=\"fa fa-print\"></i> $langPrint',
-                            className: 'btn-primary',
-                            callback: function (d) {
-                                var iframe = document.getElementById('fileFrame');
-                                iframe.contentWindow.print();
-                            }
-                        },
-                        cancel: {
-                            label: '$langCancel',
-                            className: 'btn-default'
-                        }
-                    }
+                    buttons: buttons
                 });
             });
         });
@@ -221,8 +223,8 @@ function show_resources($unit_id) {
  */
 function show_resource($info) {
     global $tool_content, $langUnknownResType, $is_editor;
-      
-    if ($info->visible == 0 and $info->type != 'doc' and ! $is_editor) { // special case handling for old unit resources with type 'doc' . 
+
+    if ($info->visible == 0 and $info->type != 'doc' and ! $is_editor) { // special case handling for old unit resources with type 'doc' .
         return;
     }
     switch ($info->type) {
@@ -296,14 +298,14 @@ function show_resource($info) {
  * @return string
  */
 function show_doc($title, $comments, $resource_id, $file_id) {
-    global $is_editor, $course_id, $langWasDeleted, $urlServer,
+    global $can_upload, $course_id, $langWasDeleted, $urlServer,
            $id, $course_code;
 
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
 
     if (!$file) {
         $download_hidden_link = '';
-        if (!$is_editor) {
+        if (!$can_upload) {
             return '';
         }
         $status = 'del';
@@ -311,7 +313,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
     } else {
         $status = $file->visible;
-        if (!$is_editor and (!resource_access($file->visible, $file->public))) {
+        if (!$can_upload and (!resource_access($file->visible, $file->public))) {
             return '';
         }
         if ($file->format == '.dir') {
@@ -323,7 +325,8 @@ function show_doc($title, $comments, $resource_id, $file_id) {
             $file->title = $title;
             $image = choose_image('.' . $file->format);
             $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
-            $download_hidden_link = "<input type='hidden' value='$download_url'>";
+            $download_hidden_link = ($can_upload || visible_module(MODULE_ID_DOCS))?
+                "<input type='hidden' value='$download_url'>" : '';
             $file_obj = MediaResourceFactory::initFromDocument($file);
             $file_obj->setAccessURL(file_url($file->path, $file->filename));
             $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
@@ -428,7 +431,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         $status = $lp->visible;
         if ($is_editor) {
             $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY rank LIMIT 1", $lp_id)->module_id;
-            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";            
+            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
             if (!$module_visible) {
                 $link .= " <i>($langInactiveModule)</i> ";
             }
@@ -898,7 +901,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
  * @return string
  */
 function show_link($title, $comments, $resource_id, $link_id, $visibility) {
-    
+
     global $is_editor, $langWasDeleted, $course_id, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_LINKS); // checks module visibility
@@ -908,7 +911,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
     }
     $comment_box = $class_vis = $imagelink = $link = '';
     $class_vis = ($visibility == 0 or ! $module_visible) ?
-            ' class="not_visible"' : ' ';    
+            ' class="not_visible"' : ' ';
     $l = Database::get()->querySingle("SELECT * FROM link WHERE course_id = ?d AND id = ?d", $course_id, $link_id);
     if (!$l) { // check if it was deleted
         if (!$is_editor) {
@@ -959,7 +962,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
  * @return string
  */
 function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility) {
-    
+
     global $is_editor, $langWasDeleted, $course_id, $langInactiveModule;
 
     $content = $linkcontent = '';
