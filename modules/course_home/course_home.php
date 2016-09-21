@@ -373,13 +373,8 @@ if (is_sharing_allowed($course_id)) {
     }
 }
 
-units_set_maxorder();
-
-
-
 
 $data['departments'] = $course->getDepartmentIds($course_id);
-
 
 $data['numUsers'] = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
