@@ -378,7 +378,7 @@ if (!isset($_POST['create_course'])) {
                       <label>
                         <input id='courseinactive' type='radio' name='formvisible' value='3'>".
                         $course_access_icons[COURSE_INACTIVE]." $langInactiveCourse
-                        <span class='help-block'><small>$langCourseInactiveShort</small></span>
+                        <span class='help-block'><small>$langCourseInactive</small></span>
                       </label>
                     </div>                   
                 </div>
@@ -557,11 +557,11 @@ if (!isset($_POST['create_course'])) {
     Database::get()->query("INSERT INTO course_user SET
                                         course_id = ?d,
                                         user_id = ?d,
-                                        status = 1,
+                                        status = " . USER_TEACHER . ",
                                         tutor = 1,
                                         reg_date = " . DBHelper::timeAfter() . ",
                                         document_timestamp = " . DBHelper::timeAfter() . "",
-                           intval($new_course_id), intval($uid));
+                           $new_course_id, $uid);
     
     $course->refresh($new_course_id, $departments);
 
