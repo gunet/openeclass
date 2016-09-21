@@ -26,7 +26,7 @@ $helpTopic = 'CreateCourse';
 require_once '../../include/baseTheme.php';
 
 if ($session->status !== USER_TEACHER && !$is_departmentmanage_user) { // if we are not teachers or department managers
-    redirect_to_home_page();
+ //   redirect_to_home_page();
 }
 
 require_once 'include/log.class.php';
@@ -223,184 +223,42 @@ foreach ($departments as $dep) {
         break;
     }
 }
-
-// Check if the teacher is allowed to create in the departments he chose
-if (!$deps_valid) {    
-    $tool_content .= "<div class='alert alert-danger'>$langCreateCourseNotAllowedNode</div>
-                    <p class='pull-right'><a class='btn btn-default' href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
-    draw($tool_content, 1, null, $head_content);
-    exit();
-}
-
+$data['deps_valid'] = $deps_valid;
 
 // display form
 if (!isset($_POST['create_course'])) {
         // set skip_preloaded_defaults in order to not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
-        list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
+        list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));        
         $head_content .= $js;
+        $data['buildusernode'] = $html;
         $public_code = $title = '';
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
                 $cc_license[$id] = $l_info['title'];
             }
         }
-        $tool_content .= action_bar(array(
+        $data['license_0'] = $license[0]['title'];
+        $data['license_10'] = $license[10]['title'];
+        $data['action_bar'] = action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-    $tool_content .= "
-    <div class='form-wrapper'>
-    <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">
-        <fieldset>
-            <div class='form-group'>
-                <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-                <div class='col-sm-10'>
-                  <input name='title' id='title' type='text' class='form-control' value='" . q($title) . "' placeholder='$langTitle'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='title' class='col-sm-2 control-label'>$langCode:</label>
-                <div class='col-sm-10'>
-                  <input name='public_code' id='public_code' type='text' class='form-control' value='" . q($public_code) . "' placeholder='$langOptional'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label  class='col-sm-2 control-label'>$langFaculty:</label>
-                <div class='col-sm-10'>
-                  $html
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='prof_names' class='col-sm-2 control-label'>$langTeachers:</label>
-                <div class='col-sm-10'>
-                      <input class='form-control' type='text' name='prof_names' id='prof_names' value='" . q($prof_names) . "'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='localize' class='col-sm-2 control-label'>$langLanguage:</label>
-                <div class='col-sm-10'>
-                      " . lang_select_options('localize', "class='form-control'") . "
-                </div>
-            </div>
-            <div class='form-group'>
-                <label for='description' class='col-sm-2 control-label'>$langDescrInfo <small>$langOptional</small>:</label>
-                <div class='col-sm-10'>
-                      ".  rich_text_editor('description', 4, 20, @$description)."
-                </div>
-            </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langCourseFormat:</label>
-                <div class='col-sm-10'>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='view_type' value='simple' id='simple'>
-                        $langCourseSimpleFormat
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='view_type' value='units' id='units' checked>
-                        $langWithCourseUnits
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='view_type' value='weekly' id='weekly'>
-                        $langCourseWeeklyFormat
-                      </label>
-                    </div>                         
-                </div>
-            </div>
-            <div class='form-group' id='weeklyDates'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                      $langStartDate <input class='dateInForm form-control' type='text' name='start_date' value='' readonly>
-                </div>
-                <div class='col-sm-10 col-sm-offset-2'>
-                      $langEndDate <input class='dateInForm form-control' type='text' name='finish_date' value='' readonly>
-                </div>                
-            </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langOpenCoursesLicense:</label>
-                <div class='col-sm-10'>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='l_radio' value='0' checked>
-                        {$license[0]['title']}
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='l_radio' value='10'>
-                        {$license[10]['title']}
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input id='cc_license' type='radio' name='l_radio' value='cc'>
-                        $langCMeta[course_license]
-                      </label>
-                    </div>                         
-                </div>
-            </div>
-            <div class='form-group' id='cc'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                      " . selection($cc_license, 'cc_use', "",'class="form-control"') . "
-                </div>              
-            </div>
-            <div class='form-group'>
-                <label for='localize' class='col-sm-2 control-label'>$langAvailableTypes:</label>
-                <div class='col-sm-10'>
-                    <div class='radio'>
-                      <label>
-                        <input id='courseopen' type='radio' name='formvisible' value='2' checked>".
-                        $course_access_icons[COURSE_OPEN]." $langOpenCourse
-                        <span class='help-block'><small>$langPublic</small></span>
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input id='coursewithregistration' type='radio' name='formvisible' value='1'>".
-                        $course_access_icons[COURSE_REGISTRATION]." $m[legrestricted]
-                        <span class='help-block'><small>$langPrivOpen</small></span>
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input id='courseclose' type='radio' name='formvisible' value='0'>".
-                        $course_access_icons[COURSE_CLOSED]." $langClosedCourse
-                        <span class='help-block'><small>$langClosedCourseShort</small></span>
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input id='courseinactive' type='radio' name='formvisible' value='3'>".
-                        $course_access_icons[COURSE_INACTIVE]." $langInactiveCourse
-                        <span class='help-block'><small>$langCourseInactiveShort</small></span>
-                      </label>
-                    </div>                   
-                </div>
-                <div class='form-group'>
-                    <label for='coursepassword' class='col-sm-2 control-label'>$langOptPassword:</label>
-                    <div class='col-sm-10'>
-                          <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>
-                          <input class='btn btn-primary' type='submit' name='create_course' value='".q($langCourseCreate)."'>
-                          <a href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
-                    </div>
-                </div>                 
-            </div>
-            <div class='text-right'><small>$langFieldsOptionalNote</small></div>
-        </fieldset>
-    ". generate_csrf_token_form_field() ."  
-    </form>
-</div>";
-
+        
+        $data['icon_course_open'] = $course_access_icons[COURSE_OPEN];
+        $data['icon_course_registration'] = $course_access_icons[COURSE_REGISTRATION];
+        $data['icon_course_closed'] = $course_access_icons[COURSE_CLOSED];
+        $data['icon_course_inactive'] = $course_access_icons[COURSE_INACTIVE];
+        $data['lang_select_options'] = lang_select_options('localize', "class='form-control'");
+        $data['rich_text_editor'] = rich_text_editor('description', 4, 20, @$description);
+        $data['selection_license'] = selection($cc_license, 'cc_use', "",'class="form-control"');
+        $data['cancel_link'] = "{$urlServer}main/portfolio.php";
+        generate_csrf_token_form_field(); 
+        $data['menuTypeID'] = 1;
+        view('modules.create_course.index', $data);
+        
 } else  { // create the course and the course database
     // validation in case it skipped JS validation
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -557,11 +415,11 @@ if (!isset($_POST['create_course'])) {
     Database::get()->query("INSERT INTO course_user SET
                                         course_id = ?d,
                                         user_id = ?d,
-                                        status = 1,
+                                        status = " . USER_TEACHER . ",
                                         tutor = 1,
                                         reg_date = " . DBHelper::timeAfter() . ",
                                         document_timestamp = " . DBHelper::timeAfter() . "",
-                           intval($new_course_id), intval($uid));
+                                    $new_course_id, $uid);
     
     $course->refresh($new_course_id, $departments);
 
@@ -574,10 +432,8 @@ if (!isset($_POST['create_course'])) {
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
 
     $_SESSION['courses'][$code] = USER_TEACHER;
-
-    $tool_content .= "<div class='alert alert-success'><b>$langJustCreated:</b> " . q($title) . "<br>
-                        <span class='smaller'>$langEnterMetadata</span></div>";
-    $tool_content .= action_bar(array(
+       
+    $data['action_bar'] = action_bar(array(
         array('title' => $langEnter,
               'url' => $urlAppend . "courses/$code/",
               'icon' => 'fa-arrow-right',
@@ -590,6 +446,9 @@ if (!isset($_POST['create_course'])) {
                                                'title' => $title,
                                                'language' => $language,
                                                'visible' => $_POST['formvisible']));
+    $data['title'] = $title;
+    $data['menuTypeID'] = 1;
+    view('modules.create_course.create_course', $data);
 } // end of submit
-draw($tool_content, 1, null, $head_content);
+
 
