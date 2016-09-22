@@ -87,7 +87,7 @@ else if (isset($_POST['submit'])) {
             }
         }
     } else {
-        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, enabled, max_rooms, max_users, weight, all_courses) 
+        $q = Database::get()->query("INSERT INTO tc_servers (`type`, hostname, enabled, max_rooms, max_users, weight, all_courses) 
                                             VALUES ('webconf', ?s, ?s, 0, 0, 1, ?d)", $hostname, $enabled, $allcourses);
         $tc_id = $q->lastInsertID;
         if ($allcourses == 0) {
