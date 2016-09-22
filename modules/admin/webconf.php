@@ -4,7 +4,7 @@
  * Open eClass 
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,8 +20,6 @@
  * ======================================================================== 
  */
 
-// Check if user is administrator and if yes continue
-// Othewise exit with appropriate message
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 
@@ -31,6 +29,26 @@ $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
 load_js('tools.js');
 load_js('validation.js');
+load_js('select2');
+
+$head_content .= "<script type='text/javascript'>
+    $(document).ready(function () {                
+        $('#select-courses').select2();
+        $('#selectAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-courses').find('option').each(function(){
+                stringVal.push($(this).val());
+            });
+            $('#select-courses').val(stringVal).trigger('change');
+        });
+        $('#removeAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-courses').val(stringVal).trigger('change');
+        });
+    });
+</script>";
 
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
@@ -43,23 +61,38 @@ if (isset($_GET['delete_server'])) {
 }
 // Save new config.php
 else if (isset($_POST['submit'])) {
-    $hostname = $_POST['hostname_form'];
-    $screenshare = $_POST['screenshare_form'];
+    $hostname = $_POST['hostname_form'];    
     $enabled = $_POST['enabled'];
-    $allcourses = $_POST['allcourses'];
+    $tc_courses = $_POST['tc_courses'];
+    if (in_array(0, $tc_courses)) {
+        $allcourses = 1; // tc server is assigned to all courses
+    } else {
+        $allcourses = 0; // tc server is assigned to specific courses
+    }
     
     if (isset($_POST['id_form'])) {
         $id = $_POST['id_form'];
         Database::get()->querySingle("UPDATE tc_servers SET 
-                                            hostname = ?s,
-                                            screenshare=?s,
-                                            enabled=?s,
-                                            all_courses=?d
-                                        WHERE id =?d", $hostname, $screenshare, $enabled, $allcourses, $id);
-    } else {
-        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, screenshare, enabled, max_rooms, max_users, weight, all_courses) 
-                                            VALUES ('webconf', ?s, ?s, ?s, 0, 0, 1, ?d)", $hostname, $screenshare, $enabled, $allcourses);
-    }    
+                                    hostname = ?s,
+                                    enabled=?s,
+                                    all_courses=?d
+                            WHERE id =?d", $hostname, $enabled, $allcourses, $id);
+        Database::get()->query("DELETE FROM course_external_server WHERE external_server = ?d", $id);
+        if ($allcourses == 0) {        
+            foreach ($tc_courses as $tc_data) {
+                Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d", $tc_data, $id);
+            }
+        }
+    } else {        
+        $q = Database::get()->query("INSERT INTO tc_servers (`type`, hostname, enabled, max_rooms, max_users, weight, all_courses) 
+                                        VALUES ('webconf', ?s, ?s, 0, 0, 1, ?d)", $hostname, $enabled, $allcourses);
+        $tc_id = $q->lastInsertID;
+        if ($allcourses == 0) {
+            foreach ($tc_courses as $tc_data) {
+                Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d", $tc_data, $tc_id);
+            }
+        }
+    }
     // Display result message
     Session::Messages($langFileUpdatedSuccess, 'alert-success');
     redirect_to_home_page('modules/admin/webconf.php');
@@ -79,7 +112,16 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
         ]);
     $data['enabled'] = true;
     $data['enabled_all_courses'] = true;
-    if (isset($_GET['edit_server'])) {
+    if (isset($_GET['add_server'])) {        
+        $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course 
+                                            WHERE id NOT IN (SELECT course_id FROM course_external_server) 
+                                            AND visible != " . COURSE_INACTIVE . "
+                                            ORDER BY title");        
+        $data['listcourses'] = "<option value='0' selected><h2>$langToAllCourses</h2></option>";
+        foreach ($courses_list as $c) {
+            $data['listcourses'] .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
+        }
+    } else {           
         $data['wc_server'] = $_GET['edit_server'];
         $data['server'] = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $data['wc_server']);
         if ($data['server']->enabled == "false") {
@@ -91,13 +133,33 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
          if ($data['server']->all_courses == "0") {
              $data['enabled_all_courses'] = false;
          }
+         
+         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
+                                                        NOT IN (SELECT course_id FROM course_external_server) 
+                                                        AND visible != " . COURSE_INACTIVE . "
+                                                    ORDER BY title");
+        $listcourses = '';
+        if ($data['server']->all_courses == '1') {
+            $listcourses .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
+        } else {
+            $tc_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
+                                        IN (SELECT course_id FROM course_external_server WHERE external_server = ?d) 
+                                        ORDER BY title", $data['wc_server']);
+            if (count($tc_courses_list) > 0) {
+                foreach($tc_courses_list as $c) {
+                    $listcourses .= "<option value='$c->id' selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
+                }
+                $listcourses .= "<option value='0'><h2>$langToAllCourses</h2></option>";
+            }
+        }
+        foreach($courses_list as $c) {
+            $listcourses .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
+        }        
+        $data['listcourses'] = $listcourses;                 
     }
     $view = 'admin.other.extapps.webconf.create';
-
-
-// Display config.php edit form
-} else {    
-
+    
+} else {    // Display config.php edit form
     //display available WebConf servers
     $data['action_bar'] = action_bar(array(
         array('title' => $langAddServer,

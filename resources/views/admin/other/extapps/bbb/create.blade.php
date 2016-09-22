@@ -84,20 +84,10 @@
             <div class='form-group'>
                 <label class='col-sm-3 control-label'>{{ trans('langUseOfTc') }}:</label>
                 <div class="col-sm-9">
-                    <div class='radio'>
-                        <label>
-                            <input  type='radio' id='enabled_true' name='allcourses' value='1'{{ $enabled_all_courses ? ' checked' : '' }}>                                
-                            {{ trans('langYes') }}
-                            <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title = '{{ trans('langToAllCoursesInfo') }}'></span>
-                        </label>
-                    </div>                
-                    <div class='radio'>
-                        <label>
-                            <input  type='radio' id='enabled_false' name='allcourses' value='o'{{ $enabled_all_courses ? '' : ' checked' }}>
-                            {{ trans('langNo') }}
-                            <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title = '{{ trans('langToSomeCoursesInfo') }}'></span>
-                        </label>
-                    </div>                      
+                    <select class='form-control' name='tc_courses[]' multiple class='form-control' id='select-courses'>                        
+                        {!! $listcourses !!}
+                    </select>            
+                    <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
                 </div>
             </div>
             @if (isset($server))
