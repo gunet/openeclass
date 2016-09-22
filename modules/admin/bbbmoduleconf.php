@@ -127,9 +127,8 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
             ]);
     $data['enabled_recordings'] = true;
     $data['enabled'] = true;
-    $data['enabled_all_courses'] = true;
-    
-    if (isset($_GET['add_server'])) {        
+        
+    if (isset($_GET['add_server'])) {
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course 
                                             WHERE id NOT IN (SELECT course_id FROM course_external_server) 
                                             AND visible != " . COURSE_INACTIVE . "
@@ -147,13 +146,7 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
         if ($data['server']->enabled == "false") {
             $data['enabled'] = false;
         }
-        if ($data['server']->all_courses == "1") {
-            $data['enabled_all_courses'] = true;
-        }
-        if ($data['server']->all_courses == "0") {
-            $data['enabled_all_courses'] = false;
-        }
-        
+                
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
                                                         NOT IN (SELECT course_id FROM course_external_server) 
                                                         AND visible != " . COURSE_INACTIVE . "

@@ -10,7 +10,6 @@
                         <th class='text-center'>{{ trans('langOpenMeetingsServer') }}</th>
                         <th class='text-center'>{{ trans('langOpenMeetingsPort') }}</th>
                         <th class='text-center'>{{ trans('langOpenMeetingsAdminUser') }}</th>
-                        <th class='text-center'>{{ trans('langOpenMeetingsModuleKey') }}</th>
                         <th class='text-center'>{{ trans('langOpenMeetingsWebApp') }}</th>
                         <th class='text-center'>{{ trans('langBBBEnabled') }}</th>
                         <th class='text-center'>{!! icon('fa-gears') !!}</th>
@@ -20,8 +19,7 @@
             <tr>
                 <td>{{ $om_server->hostname }}</td>
                 <td>{{ $om_server->port }}</td>
-                <td>{{ $om_server->username }}</td>
-                <td>{{ $om_server->module_key }}</td>
+                <td>{{ $om_server->username }}</td>                
                 <td>{{ $om_server->webapp }}</td>               
                 <td class='text-center'>{{ $om_server->enabled == 'true' ? trans('langYes') : trans('langNo') }}</td>
                 <td class='option-btn-cell'>
