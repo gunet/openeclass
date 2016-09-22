@@ -241,7 +241,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
             }
         }
     } else {
-        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, port, username, password, webapp, enabled, max_rooms, max_users, enable_recordings, weight, all_courses) VALUES
+        $q = Database::get()->query("INSERT INTO tc_servers (`type`, hostname, port, username, password, webapp, enabled, max_rooms, max_users, enable_recordings, weight, all_courses) VALUES
         ('om', ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d, ?s, ?d, ?d)", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight, $allcourses);
         $tc_id = $q->lastInsertID;
         if ($allcourses == 0) {
