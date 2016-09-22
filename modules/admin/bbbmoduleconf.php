@@ -114,7 +114,9 @@ if (isset($_GET['add_server'])) {
                 <div class='col-sm-9'>                                
                     <select class='form-control' name='tc_courses[]' multiple class='form-control' id='select-courses'>";        
                     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course 
-                                                        WHERE id NOT IN (SELECT course_id FROM course_external_server) ORDER BY title");
+                                                        WHERE id NOT IN (SELECT course_id FROM course_external_server) 
+                                                        AND visible != " . COURSE_INACTIVE . "
+                                                        ORDER BY title");
                     $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
                     foreach($courses_list as $c) {
                         $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
@@ -295,6 +297,7 @@ else {
                     <select class='form-control' name='tc_courses[]' multiple class='form-control' id='select-courses'>";
                     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
                                                                     NOT IN (SELECT course_id FROM course_external_server) 
+                                                                    AND visible != " . COURSE_INACTIVE . "
                                                                 ORDER BY title");
                     if ($server->all_courses == '1') {
                         $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";

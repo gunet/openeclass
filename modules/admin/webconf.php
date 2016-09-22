@@ -153,13 +153,16 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                     <select class='form-control' name='tc_courses[]' multiple class='form-control' id='select-courses'>";
                     $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
                                                                     NOT IN (SELECT course_id FROM course_external_server) 
+                                                                    AND visible != " . COURSE_INACTIVE . "
                                                                 ORDER BY title");
                     if (isset($_GET['edit_server'])) {
                         if ($server->all_courses == '1') {
                             $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
                         } else {
                             $tc_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
-                                                        IN (SELECT course_id FROM course_external_server WHERE external_server = ?d) ORDER BY title", $_GET['edit_server']);
+                                                                            IN (SELECT course_id FROM course_external_server WHERE external_server = ?d) 
+                                                                            AND visible != " . COURSE_INACTIVE . "
+                                                                    ORDER BY title", $_GET['edit_server']);
                             if (count($tc_courses_list) > 0) {
                                 foreach($tc_courses_list as $c) {
                                     $tool_content .= "<option value='$c->id' selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
