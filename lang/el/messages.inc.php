@@ -5135,3 +5135,37 @@ $langUpdateWebConfServer = "Στοιχεία εξυπηρετητή Wowza";
 $langAvailableWebConfServers = "Διαθέσιμοι εξυπηρετητές Wowza";
 $langWebConfServer = "Wowza server";
 $langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της εγκατάστασης Wowza";
+
+// Mindmap
+
+$langMindmap = "Εννοιολογική χαρτογράφηση";
+$langMindMap = "Εννοιολογικός χάρτης";
+$langScreenshot = "Στιγμιότυπο οθόνης";
+$langOpenEx = "Άνοιγμα παραδείγματος";
+$langEditEn = "Ενεργοποίηση τροποποίησης";
+$langEditDis = "Απενενεργοποίηση τροποποίησης";
+$langAddNode = "Προσθήκη κόμβου";
+$langRemoveNode = "Αφαίρεση κόμβου";
+$langSaveFile = "Αποθήκευση αρχείου";
+$langSaveInDoc = "Αποθήκευση στα έγγραφα";
+$langOpenFile = "άνοιγμα αρχείου";
+$langEditMind = "Τροποποίηση";
+$langToggle = "Εναλλαγή";
+$langOpenMind = "Άνοιγμα";
+$langPleaseSelectNode = "Παρακαλώ επιλέξτε ένα κόμβο.";
+$langPlzClickNode = "Προσπαθήστε να κάνετε κλικ σε ένα κόμβο";
+$langPlzDblClickNode = "Προσπαθήστε να κάνετε διπλό κλικ σε ένα κόμβο";
+$langPlzChooseFile = "Παρακαλώ επιλέξτε αρχείο";
+$langThemeDefault = "Προεπιλογή";
+$langThemePrimary = "Βασικό";
+$langThemeWarning = "Προειδοποίηση";
+$langThemeDanger = "Κίνδυνος";
+$langThemeWarning = "Προειδοποίηση";
+$langThemeSuccess = "Επιτυχία";
+$langThemeInfo = "Πληροφορίες";
+$langThemeGreenSea = "Βεραμάν";
+$langThemeOrange = "Πορτοκαλί";
+$langThemePumpkin = "Κολοκύθα";
+$langThemePomegranate = "Ρόδι";
+$langThemeClouds = "Σύννεφα";
+
