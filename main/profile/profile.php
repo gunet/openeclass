@@ -399,9 +399,8 @@ $data['action_bar'] =
             ]
         ]);
 
-$data['access_options'] = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
-                        ACCESS_PROFS => $langProfileInfoProfs,
-                        ACCESS_USERS => $langProfileInfoUsers);
+$data['access_options'] = array(ACCESS_PROFS => $langProfileInfoProfs,
+                                ACCESS_USERS => $langProfileInfoUsers);
 
 
 if (get_user_email_notification_from_courses($uid)) {
@@ -488,7 +487,7 @@ view('main.profile.edit', $data);
  */
 function valid_access($val) {
     $val = intval($val);
-    if (in_array($val, array(ACCESS_PRIVATE, ACCESS_PROFS, ACCESS_USERS))) {
+    if (in_array($val, array(ACCESS_PROFS, ACCESS_USERS))) {
         return $val;
     } else {
         return 0;

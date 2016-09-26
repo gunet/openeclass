@@ -120,7 +120,7 @@ function allow_access($level) {
         
     if ($level == ACCESS_USERS) {        
         return true;
-    } elseif ($level == ACCESS_PROFS and $_SESSION['status'] == USER_TEACHER) {        
+    } elseif ($_SESSION['status'] == USER_TEACHER) {        
         return true;
     } else {
         return false;
