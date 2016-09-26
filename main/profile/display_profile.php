@@ -122,28 +122,7 @@ if ($userdata) {
     } else {
         $perso_blog_html = '';
     }
-    /*if (!empty($userdata->email) and allow_access($userdata->email_public)) { // E-mail
-        $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langEmail :</span> <span class='tag-value'>" . mailto($userdata->email) . "</span></div>";}
-    if (!empty($userdata->phone) and allow_access($userdata->phone_public)) { // Phone Number
-        $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langPhone :</span> <span class='tag-value'>" . q($userdata->phone) . "</span></div>";}
-    if (!empty($userdata->am) and allow_access($userdata->am_public)) { // Register Number
-        $tool_content .= "<div class='profile-pers-info-data'><span class='tag'>$langAm :</span> <span class='tag-value'>" . q($userdata->am) . "</span></div>";}
-    *//*$tool_content .= "
-        <div class='row'>
-            <div class='col-sm-12'>
-            <div class='row'>
-                <div class='col-xs-12 col-sm-2'>
-                    <div id='profile-avatar'>" . profile_image($id, IMAGESIZE_LARGE, 'img-responsive img-circle') . "</div>
-                </div>
-                <div class='col-xs-12 col-sm-10 profile-pers-info'>
-                    <div class='profile-pers-info-name'>" . q("$userdata->givenname $userdata->surname") . "</div>"; // Name & Surname
-                    if (!empty($userdata->email) and allow_access($userdata->email_public)) { // E-mail
-                        $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langEmail :</span> <span class='tag-value'>" . mailto($userdata->email) . "</span></div>";}
-                    if (!empty($userdata->phone) and allow_access($userdata->phone_public)) { // Phone Number
-                        $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langPhone :</span> <span class='tag-value'>" . q($userdata->phone) . "</span></div>";}
-                    if (!empty($userdata->am) and allow_access($userdata->am_public)) { // Register Number
-                        $tool_content .= "<div class='profile-pers-info-data'><span class='tag'>$langAm :</span> <span class='tag-value'>" . q($userdata->am) . "</span></div>";}
-    */$tool_content .= "
+    $tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
                 <div class='panel panel-default'>
@@ -228,12 +207,12 @@ if ($userdata) {
             </div>
         </div>
     </div>";
-//render custom profile fields content
-$tool_content .= render_profile_fields_content(array('user_id' => $id));
-$tool_content .= "</div>
+    //render custom profile fields content
+    $tool_content .= render_profile_fields_content(array('user_id' => $id));
+    $tool_content .= "</div>
+            </div>
         </div>
-    </div>
-</div>";
+    </div>";
 }
 draw($tool_content, 1);
 
@@ -243,12 +222,11 @@ draw($tool_content, 1);
  * @param type $level
  * @return boolean
  */
-
 function allow_access($level) {
         
     if ($level == ACCESS_USERS) {        
         return true;
-    } elseif ($level == ACCESS_PROFS and $_SESSION['status'] == USER_TEACHER) {        
+    } elseif ($_SESSION['status'] == USER_TEACHER) {
         return true;
     } else {
         return false;

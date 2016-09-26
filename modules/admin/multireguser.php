@@ -135,9 +135,8 @@ if (isset($_POST['submit'])) {
     Database::get()->queryFunc("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name", function($n) use(&$facs) {
         $facs[$n->id] = $n->name;
     });
-    $access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
-        ACCESS_PROFS => $langProfileInfoProfs,
-        ACCESS_USERS => $langProfileInfoUsers);
+    $access_options = array(ACCESS_PROFS => $langProfileInfoProfs,
+                            ACCESS_USERS => $langProfileInfoUsers);
     $tool_content .= action_bar(array(
                 array('title' => $langBack,
                     'url' => "index.php",
@@ -222,15 +221,15 @@ if (isset($_POST['submit'])) {
         </div>
         <div class='form-group'>
         <label for='email_public' class='col-sm-3 control-label'>$langEmail</label>
-            <div class='col-sm-9'>" . selection($access_options, 'email_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
+            <div class='col-sm-9'>" . selection($access_options, 'email_public', ACCESS_PROFS, 'class="form-control"') . "</div>
         </div>
         <div class='form-group'>
         <label for='am_public' class='col-sm-3 control-label'>$langAm</label>
-            <div class='col-sm-9'>" . selection($access_options, 'am_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
+            <div class='col-sm-9'>" . selection($access_options, 'am_public', ACCESS_PROFS, 'class="form-control"') . "</div>
         </div>
         <div class='form-group'>
         <label for='phone_public' class='col-sm-3 control-label'>$langPhone</label>
-            <div class='col-sm-9'>" . selection($access_options, 'phone_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
+            <div class='col-sm-9'>" . selection($access_options, 'phone_public', ACCESS_PROFS, 'class="form-control"') . "</div>
         </div>
         <div class='form-group'>
         <label for='send_mail' class='col-sm-3 control-label'>$langInfoMail</label>

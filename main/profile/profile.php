@@ -433,8 +433,7 @@ if ($allow_username_change) {
 }
 $tool_content .= "</div></div>";
 
-$access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
-                        ACCESS_PROFS => $langProfileInfoProfs,
+$access_options = array(ACCESS_PROFS => $langProfileInfoProfs,
                         ACCESS_USERS => $langProfileInfoUsers);
 
 $tool_content .= "<div class='form-group'>
