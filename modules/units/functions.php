@@ -95,7 +95,6 @@ function process_actions() {
             move_order('unit_resources', 'id', $res_id, 'order', 'up', "unit_id=$id");
         }
     }
-    return '';
 }
 
 /**

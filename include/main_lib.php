@@ -2,7 +2,7 @@
 
 /*
  * ========================================================================
- * Open eClass 3.3 - E-learning and Course Management System
+ * Open eClass 4.0 - E-learning and Course Management System
  * ========================================================================
   Copyright(c) 2003-2016  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
@@ -17,7 +17,7 @@
 /**
  * @file main.lib.php
  * @brief General useful functions for eClass
- * @authors many...
+ *
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
@@ -225,7 +225,7 @@ function widget_css_link($file, $folder) {
  * @return type
  */
 function load_js($file, $init='') {
-    global $head_content, $language, 
+    global $head_content, $language,
             $langReadMore, $langReadLess, $langViewShow, $langViewHide;
     static $loaded;
 
@@ -330,7 +330,7 @@ function load_js($file, $init='') {
             $file = "sortable/Sortable.min.js";
         } elseif ($file == 'filetree') {
             $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
-            $file = 'jquery_filetree/jqueryFileTree.js';            
+            $file = 'jquery_filetree/jqueryFileTree.js';
         } elseif ($file == 'trunk8') {
             $head_content .= "
 <script>
@@ -991,7 +991,7 @@ function randomkeys($length) {
 // it returns a formated number string, with unit identifier.
 function format_bytesize($kbytes, $dec_places = 2) {
     global $text;
-    
+
     if ($kbytes > 1048576) {
         $result = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
         $result .= '&nbsp;Gb';
@@ -1610,14 +1610,14 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM exercise WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_module WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_settings WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM tag WHERE id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module WHERE course_id != ?d)", $cid);    
+    Database::get()->query("DELETE FROM tag WHERE id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module WHERE course_id != ?d)", $cid);
     Database::get()->query("DELETE FROM tag_element_module WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id IN 
+    Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id IN
                                     (SELECT id FROM gradebook_activities WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d))", $cid);
     Database::get()->query("DELETE FROM gradebook_activities WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM gradebook_users WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM gradebook WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id IN 
+    Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id IN
                                     (SELECT id FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d))", $cid);
     Database::get()->query("DELETE FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM attendance_users WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
@@ -1625,7 +1625,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM tc_session WHERE course_id = ?d", $cid);
 
     removeDir("$webDir/courses/$course_code");
-    removeDir("$webDir/video/$course_code");    
+    removeDir("$webDir/video/$course_code");
     // refresh index
     require_once 'modules/search/indexer.class.php';
     Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $cid);
@@ -2049,78 +2049,6 @@ function add_unit_resource($unit_id, $type, $res_id, $title, $content, $visibili
     return;
 }
 
-/**
- *
- * @global null $maxorder
- * @global type $course_id
- */
-function units_set_maxorder() {
-
-    global $maxorder, $course_id;
-
-    $q = Database::get()->querySingle("SELECT MAX(`order`) as max_order FROM course_units WHERE course_id = ?d", $course_id);
-
-    $maxorder = $q->max_order;
-
-    if ($maxorder <= 0) {
-        $maxorder = null;
-    }
-}
-
-/**
- *
- * @global type $langCourseUnitModified
- * @global type $langCourseUnitAdded
- * @global null $maxorder
- * @global type $course_id
- * @global type $course_code
- * @global type $webDir
- * @return type
- */
-function handle_unit_info_edit() {
-
-    global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code, $webDir;
-    require_once 'modules/tags/moduleElement.class.php';
-    $title = $_REQUEST['unittitle'];
-    $descr = $_REQUEST['unitdescr'];
-    if (isset($_REQUEST['unit_id'])) { // update course unit
-        $unit_id = $_REQUEST['unit_id'];
-        Database::get()->query("UPDATE course_units SET
-                                        title = ?s,
-                                        comments = ?s
-                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
-        // tags
-        if (isset($_POST['tags'])) {
-            $tagsArray = explode(',', $_POST['tags']);
-            $moduleTag = new ModuleElement($unit_id);
-            $moduleTag->syncTags($tagsArray);
-        }        
-        $successmsg = $langCourseUnitModified;
-    } else { // add new course unit
-        $order = $maxorder + 1;
-        $q = Database::get()->query("INSERT INTO course_units SET
-                                  title = ?s, comments = ?s, visible = 1,
-                                 `order` = ?d, course_id = ?d", $title, $descr, $order, $course_id);
-        $successmsg = $langCourseUnitAdded;
-        $unit_id = $q->lastInsertID;
-        // tags
-        if (isset($_POST['tags'])) {
-            $tagsArray = explode(',', $_POST['tags']);
-            $moduleTag = new ModuleElement($unit_id);
-            $moduleTag->attachTags($tagsArray);
-        }              
-    }
-    // update index
-    require_once 'modules/search/indexer.class.php';
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    // refresh course metadata
-    require_once 'modules/course_metadata/CourseXML.php';
-    CourseXMLElement::refreshCourse($course_id, $course_code);
-
-    Session::Messages($successmsg, 'alert-success');
-    redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
-}
 
 function math_unescape($matches) {
     return html_entity_decode($matches[0]);
@@ -2230,7 +2158,7 @@ function get_glossary_terms($course_id) {
         }
         if (!empty($row->notes)) {
             $_SESSION['glossary_notes'][$term] = $row->notes;
-        }        
+        }
     }
     $_SESSION['glossary_course_id'] = $course_id;
     return true;
@@ -2520,7 +2448,7 @@ function course_status($course_id) {
 }
 
 /**
- * @brief return message concerning course visibility 
+ * @brief return message concerning course visibility
  * @global type $langTypeOpen
  * @global type $langTypeClosed
  * @global type $langTypeInactive
@@ -2529,9 +2457,9 @@ function course_status($course_id) {
  * @return type
  */
 function course_status_message($course_id) {
-   
+
     global $langTypeOpen, $langTypeClosed, $langTypeInactive, $langTypeRegistration;
-    
+
     $status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $course_id)->visible;
     switch ($status) {
         case COURSE_REGISTRATION: $message = $langTypeRegistration; break;
@@ -2844,7 +2772,7 @@ function faq_exist() {
         return true;
     } else {
         return false;
-    }    
+    }
 }
 
 /**
@@ -2938,9 +2866,9 @@ function add_framebusting_headers() {
 }
 
 /**
- * This header enables the Cross-site scripting (XSS) filter built into most 
- * recent web browsers. It's usually enabled by default anyway, so the role of 
- * this header is to re-enable the filter for this particular website if it 
+ * This header enables the Cross-site scripting (XSS) filter built into most
+ * recent web browsers. It's usually enabled by default anyway, so the role of
+ * this header is to re-enable the filter for this particular website if it
  * was disabled by the user.
  */
 
@@ -2950,7 +2878,7 @@ function add_xxsfilter_headers() {
 
 
 /**
- * The nosniff header, prevents Internet Explorer and Google Chrome from 
+ * The nosniff header, prevents Internet Explorer and Google Chrome from
  * MIME-sniffing a response away from the declared content-type.
  */
 
@@ -2959,7 +2887,7 @@ function add_nosniff_headers() {
 }
 
 /**
- * HTTP Strict-Transport-Security (HSTS) enforces secure (HTTP over SSL/TLS) 
+ * HTTP Strict-Transport-Security (HSTS) enforces secure (HTTP over SSL/TLS)
  * connections to the server.
  */
 
@@ -2968,7 +2896,7 @@ function add_hsts_headers() {
 }
 
 /**
- * 
+ *
  * @param int $num_bytes [optional]
  * @return string
 */
@@ -2981,7 +2909,7 @@ function generate_csrf_token($num_bytes = 16) {
 /**
  * Check the validity of the csrf token for the current session.
  *
- * @param string $token 
+ * @param string $token
  * @return Boolean
  */
 function validate_csrf_token($token) {
@@ -3055,29 +2983,29 @@ function arrayKeysToDirect($inputarray){
 
 /**
  * Indirect Reference to Direct Reference Map
- * 
+ *
  * @return ArrayObject
  */
 function getIndirectReferencesMap(){
-    if(!isset($_SESSION['IRMAP']) || !isset($_SESSION['DRMAP'])){  
-        $_SESSION['IRMAP'] = new ArrayObject(); 
-        $_SESSION['DRMAP'] = new ArrayObject(); 
+    if(!isset($_SESSION['IRMAP']) || !isset($_SESSION['DRMAP'])){
+        $_SESSION['IRMAP'] = new ArrayObject();
+        $_SESSION['DRMAP'] = new ArrayObject();
     }
     return $_SESSION['IRMAP'];
-}  
+}
 
 /**
  * Direct Reference to Indirect Reference Map
- * 
+ *
  * @return ArrayObject
  */
 function getDirectReferencesMap(){
-    if(!isset($_SESSION['IRMAP']) || !isset($_SESSION['DRMAP'])){  
-        $_SESSION['IRMAP'] = new ArrayObject(); 
-        $_SESSION['DRMAP'] = new ArrayObject(); 
+    if(!isset($_SESSION['IRMAP']) || !isset($_SESSION['DRMAP'])){
+        $_SESSION['IRMAP'] = new ArrayObject();
+        $_SESSION['DRMAP'] = new ArrayObject();
     }
     return $_SESSION['DRMAP'];
-}    
+}
 
 /**
  * Simple Random Number Generation for indirect References
@@ -3177,24 +3105,24 @@ function forbidden($path = '') {
  * @param array $options options for each entry
  *
  * Each item in array is another array of the attributes for button:
- * 
+ *
  */
 function form_buttons($btnArray) {
-    
+
     global $langCancel;
-    
+
     $buttons = "";
-    
+
     foreach ($btnArray as $btn){
-        
+
         if(!isset($btn['show']) || (isset($btn['show']) && $btn['show'] == true)){
-        
+
         $id = isset($btn['id'])?"id='$btn[id]'": '';
         $custom_field = isset($btn['custom_field'])?"onclick='$btn[custom_field]'": '';
         if (isset($btn['icon'])) {
             $text = "<span class='fa $btn[icon] space-after-icon'></span>" . $text;
         }
-        
+
         if (isset($btn['href'])) {
             $class = isset($btn['class']) ? $btn['class'] : 'btn-default';
             $title = isset($btn['title'])?"title='$btn[title]'": '';
@@ -3220,7 +3148,7 @@ function form_buttons($btnArray) {
         }
     }
     }
-    
+
     return $buttons;
 }
 
@@ -3295,7 +3223,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                $subMenu .= '<li><a class="'.$subOption['class'].'" href="' . $subOption['url'] . '">';
                $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].'"></span>' : '';
                $subMenu .= q($subOption['title']) . '</a></li>';
-               
+
             }
             $subMenu .= '</ul>';
         }
@@ -3724,7 +3652,7 @@ function my_dirname($path) {
 function warnIfExtNotLoaded($extensionName) {
 
     global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
-    
+
     if (extension_loaded($extensionName)) {
         $tool_content .= '<li>' . icon('fa-check') . ' ' . $extensionName . '</li>';
     } else {
@@ -3807,7 +3735,7 @@ function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array) {
             } elseif (isIPv6($ip_or_cidr)) {
                 if ($ip == $ip_or_cidr) return true;
             }
-        }        
+        }
     }
     return false;
 }
@@ -3822,7 +3750,7 @@ function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array) {
 function closest($search, $arr) {
    $closest = null;
    $position = null;
-   
+
    foreach($arr as $key => $item) {
        if ($closest == null || abs($search - $closest) > abs($item - $search)) {
            $closest = $item;
@@ -3973,7 +3901,7 @@ function showSecondFactorUserProfile(){
 function saveSecondFactorUserProfile(){
     $connector = secondfaApp::getsecondfa();
     if($connector->isEnabled() == true ){
-        return secondfaApp::saveUserProfile($_SESSION['uid']); 
+        return secondfaApp::saveUserProfile($_SESSION['uid']);
     } else {
         return "";
     }
@@ -4015,7 +3943,7 @@ function showSecondFactorChallenge(){
 function checkSecondFactorChallenge(){
     $connector = secondfaApp::getsecondfa();
     if($connector->isEnabled() == true ){
-        return secondfaApp::checkChallenge($_SESSION['uid']); 
+        return secondfaApp::checkChallenge($_SESSION['uid']);
     } else {
         return "";
     }
@@ -4031,7 +3959,7 @@ function trans($var_name, $var_array = []) {
             return vsprintf(${$matches[0][0]}[$matches[0][1]], $var_array);
         } else {
             return ${$matches[0][0]}[$matches[0][1]];
-        }        
+        }
     } else {
         global ${$var_name};
 
@@ -4040,5 +3968,5 @@ function trans($var_name, $var_array = []) {
         } else {
             return ${$var_name};
         }
-    }   
+    }
 }

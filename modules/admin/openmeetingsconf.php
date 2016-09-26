@@ -31,132 +31,85 @@ $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
 load_js('tools.js');
 load_js('validation.js');
+load_js('select2');
+
+$head_content .= "<script type='text/javascript'>
+    $(document).ready(function () {                
+        $('#select-courses').select2();
+        $('#selectAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-courses').find('option').each(function(){
+                stringVal.push($(this).val());
+            });
+            $('#select-courses').val(stringVal).trigger('change');
+        });
+        $('#removeAll').click(function(e) {
+            e.preventDefault();
+            var stringVal = [];
+            $('#select-courses').val(stringVal).trigger('change');
+        });
+    });
+</script>";
 
 $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
+    $pageName = isset($_GET['add_server']) ? $langAddServer : $langEdit;        
+    $toolName = $langOpenMeetingsConf;
+    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]", 'name' => $langOpenMeetingsConf);
     
-    $om_id = $hostnamevalue = $portnamevalue = $adminuservalue = $adminpassvalue = $adminwebappvalue = $adminmaxusers = $adminmaxrooms = $weight = '';
-    $adminenrecordings_true = "checked value='true'";
-    $adminenrecordings_false = "value='false'";
-    $adminactivate_true = "checked value='true'";
-    $adminactivate_false = "value='false'";
-    $adminassignall_true = "checked value='1'";
-    $adminassignall_false = "value='0'";
+    $data['enabled_recordings'] = true;
+    $data['enabled'] = true;
+    $data['action_bar'] = action_bar(array(
+                            array('title' => $langBack,
+                                  'url' => "$_SERVER[SCRIPT_NAME]",
+                                  'icon' => 'fa-reply',
+                                  'level' => 'primary-label')));
     
-    if (isset($_GET['edit_server'])) {
-        $pageName = $langEdit;
-        $om_server = $_GET['edit_server'];        
-        $server = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $om_server);    
-        if ($server) {
-            $hostnamevalue = $server->hostname;    
-            $portnamevalue = $server->port;
-            $adminuservalue = $server->username;
-            $adminpassvalue = $server->password;            
-            $adminwebappvalue = $server->webapp;
-            $adminmaxrooms = $server->max_rooms;
-            $adminmaxusers = $server->max_users;
-            $weight = $server->weight;
-            if ($server->enable_recordings == 'true') {        
-                $adminenrecordings_true = "value='true' checked";
-                $adminenrecordings_false = "value='false'";
-            } else {            
-                $adminenrecordings_true = "value='true'";
-                $adminenrecordings_false = "value='false' checked ";
-            }
-            if ($server->enabled == 'true') {
-                $adminactivate_true = "value='true' checked ";
-                $adminactivate_false = "value='false'";
-            } else {
-                $adminactivate_true = "value='true'";
-                $adminactivate_false = "value='false' checked ";
-            }
-            if ($server->all_courses == '1') {
-                $adminassignall_true = "value='1' checked ";
-                $adminassignall_false = "value='0'";
-            } else {
-                $adminassignall_true = "value='1'";
-                $adminassignall_false = "value='0' checked ";
-            }
-            $om_id = "<input class='form-control' type = 'hidden' name = 'id_form' value='$server->id'>";
+    
+    if (isset($_GET['add_server'])) {
+        $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course 
+                                            WHERE id NOT IN (SELECT course_id FROM course_external_server) 
+                                            AND visible != " . COURSE_INACTIVE . "
+                                            ORDER BY title");        
+        $data['listcourses'] = "<option value='0' selected><h2>$langToAllCourses</h2></option>";
+        foreach ($courses_list as $c) {
+            $data['listcourses'] .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
         }
     } else {
-        $pageName = $langAddServer;
-    }
-    $toolName = $langOpenMeetingsConf;
-    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]", 'name' => $langOpenMeetingsConf);    
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-              'url' => "$_SERVER[SCRIPT_NAME]",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
-            
-    $tool_content .= "<div class='form-wrapper'>";
-    $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-    $tool_content .= "<fieldset>";
-    $tool_content .= "<div class='form-group'>";    
-    $tool_content .= "<label for='host' class='col-sm-3 control-label'>$langOpenMeetingsServer:</label>
-        <div class='col-sm-9'><input class='form-control' id='host' type='text' name='hostname_form' value='$hostnamevalue'></div>";
-    $tool_content .= "</div>";    
-    $tool_content .= "<div class='form-group'><label for='port_form' class='col-sm-3 control-label'>$langPort:</label>
-                <div class='col-sm-9'><input class='form-control' type='text' id='port_form' name='port_form' value='$portnamevalue'></div>";
-    $tool_content .= "</div>";    
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='key_form' class='col-sm-3 control-label'>$langOpenMeetingsAdminUser:</label>
-            <div class='col-sm-9'><input class='form-control' type='text' name='username_form' value='$adminuservalue'></div>";
-    $tool_content .= "</div>";    
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='api_url_form' class='col-sm-3 control-label'>$langOpenMeetingsAdminPass:</label>
-            <div class='col-sm-9'><input class='form-control' type='text' name='password_form' value='$adminpassvalue'></div>";
-    $tool_content .= "</div>";    
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='webapp_form' class='col-sm-3 control-label'>$langOpenMeetingsWebApp:</label>
-            <div class='col-sm-9'><input class='form-control' type='text' name='webapp_form' value='$adminwebappvalue'></div>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langMaxRooms:</label>
-            <div class='col-sm-9'><input class='form-control' type='text' id='max_rooms_for' name='max_rooms_form' value='$adminmaxrooms'></div>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>
-                <label for='max_rooms_form' class='col-sm-3 control-label'>$langMaxUsers:</label>
-            <div class='col-sm-9'><input class='form-control' type='text' id='max_users_form' name='max_users_form' value='$adminmaxusers'></div>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBEnableRecordings:</label>
-        <div class='col-sm-9 radio'><label><input type='radio' name='enable_recordings' $adminenrecordings_true>$langYes</label></div>
-        <div class='col-sm-offset-3 col-sm-9 radio'><label><input type='radio' name='enable_recordings' $adminenrecordings_false>$langNo</label></div>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langActivate:</label>
-            <div class='col-sm-9 radio'><label><input type='radio' name='enabled' $adminactivate_true>$langYes</label></div>
-            <div class='col-sm-offset-3 col-sm-9 radio'><label><input type='radio' name='enabled' $adminactivate_false>$langNo</label></div>
-        </div>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
-            <div class='col-sm-9'><input class='form-control' type='text' name='weight' value='$weight'></div>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>
-                <label class='col-sm-3 control-label'>$langUseOfTc:</label>
-                <div class='col-sm-9 radio'><label><input type='radio' name='allcourses' $adminassignall_true>$langToAllCourses</label>
-                    <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToAllCoursesInfo'></span>
-                </div>
-                <div class='col-sm-offset-3 col-sm-9 radio'><label><input type='radio' name='allcourses' $adminassignall_false>$langToSomeCourses</label>
-                    <span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langToSomeCoursesInfo'></span>
-                </div>
-            </div>";
-    $tool_content .= $om_id;
-    $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
-    $tool_content .= "</fieldset></form></div>";
-           
-    $tool_content .='<script language="javaScript" type="text/javascript">        
-                var chkValidator  = new Validator("serverForm");
-                chkValidator.addValidation("hostname_form","req","' . $langBBBServerAlertHostname . '");
-                chkValidator.addValidation("key_form","req","' . $langBBBServerAlertKey . '");
-                chkValidator.addValidation("api_url_form","req","' . $langBBBServerAlertAPIUrl . '");
-                chkValidator.addValidation("max_rooms_form","req","' . $langBBBServerAlertMaxRooms . '");
-                chkValidator.addValidation("weight","req","' . $langBBBServerAlertOrder . '");
-                chkValidator.addValidation("weight","numeric","' . $langBBBServerAlertOrder . '");
-            </script>';
+        $data['om_server'] = getDirectReference($_GET['edit_server']);
+        $data['server'] = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $data['om_server']);
+        if ($data['server']->enable_recordings == "false") {
+            $data['enabled_recordings'] = false;
+        }
+        if ($data['server']->enabled == "false") {
+            $data['enabled'] = false;
+        }
+        $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
+                                                        NOT IN (SELECT course_id FROM course_external_server) 
+                                                        AND visible != " . COURSE_INACTIVE . "
+                                                    ORDER BY title");
+        $listcourses = '';
+        if ($data['server']->all_courses == '1') {
+            $listcourses .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
+        } else {
+            $tc_courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
+                                        IN (SELECT course_id FROM course_external_server WHERE external_server = ?d) 
+                                        ORDER BY title", $data['om_server']);
+            if (count($tc_courses_list) > 0) {
+                foreach($tc_courses_list as $c) {
+                    $listcourses .= "<option value='$c->id' selected>" . q($c->title) . " (" . q($c->code) . ")</option>";
+                }
+                $listcourses .= "<option value='0'><h2>$langToAllCourses</h2></option>";
+            }
+        }
+        foreach($courses_list as $c) {
+            $listcourses .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
+        }        
+        $data['listcourses'] = $listcourses;        
+    }   
+    $view = 'admin.other.extapps.openmeetings.create';
 } else if (isset($_GET['delete_server'])) {
         $id = $_GET['delete_server'];
         Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
@@ -168,18 +121,23 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     $hostname = $_POST['hostname_form'];
     $port = $_POST['port_form'];
     $username = $_POST['username_form'];
-    $password = $_POST['password_form'];    
-    $webapp = $_POST['webapp_form'];    
+    $password = $_POST['password_form'];
+    $webapp = $_POST['webapp_form'];
     $max_rooms = $_POST['max_rooms_form'];
     $max_users = $_POST['max_users_form'];
     $enable_recordings = $_POST['enable_recordings'];
     $enabled = $_POST['enabled'];
     $weight = $_POST['weight'];
-    $allcourses = $_POST['allcourses'];
+    $tc_courses = $_POST['tc_courses'];    
+    if (in_array(0, $tc_courses)) {
+        $allcourses = 1; // tc server is assigned to all courses
+    } else {
+        $allcourses = 0; // tc server is assigned to specific courses
+    }
     
     if (isset($_POST['id_form'])) {        
-        $id = $_POST['id_form'];
-        Database::get()->querySingle("UPDATE tc_servers SET hostname = ?s,
+        $id = getDirectReference($_POST['id_form']);
+            Database::get()->querySingle("UPDATE tc_servers SET hostname = ?s,
                 port = ?s,
                 username = ?s,
                 password = ?s,                
@@ -190,63 +148,42 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                 enable_recordings = ?s,
                 weight = ?d,
                 all_courses = ?d
-                WHERE id = ?d", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight, $allcourses, $id);
+            WHERE id = ?d", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight, $allcourses, $id);
+        Database::get()->query("DELETE FROM course_external_server WHERE external_server = ?d", $id);
+        if ($allcourses == 0) {        
+            foreach ($tc_courses as $tc_data) {
+                Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d", $tc_data, $id);
+            }
+        }
     } else {
-        Database::get()->querySingle("INSERT INTO tc_servers (`type`, hostname, port, username, password, webapp, enabled, max_rooms, max_users, enable_recordings, weight, all_courses) VALUES
+        $q = Database::get()->query("INSERT INTO tc_servers (`type`, hostname, port, username, password, webapp, enabled, max_rooms, max_users, enable_recordings, weight, all_courses) VALUES
         ('om', ?s, ?s, ?s, ?s, ?s, ?s, ?d, ?d, ?s, ?d, ?d)", $hostname, $port, $username, $password, $webapp, $enabled, $max_rooms, $max_users, $enable_recordings, $weight, $allcourses);
-    }    
+        $tc_id = $q->lastInsertID;
+        if ($allcourses == 0) {
+            foreach ($tc_courses as $tc_data) {
+                Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d", $tc_data, $tc_id);
+            }
+        }                
+    }        
     // Display result message
     Session::Messages($langFileUpdatedSuccess,"alert-success");
     redirect_to_home_page("modules/admin/openmeetingsconf.php");        
 } else {
     //display available OpenMeetings servers
-    $tool_content .= action_bar(array(
-    array('title' => $langAddServer,
-        'url' => "$_SERVER[SCRIPT_NAME]?add_server",
-        'icon' => 'fa-plus-circle',
-        'level' => 'primary-label',
-        'button-class' => 'btn-success'),
-    array('title' => $langBack,
-        'url' => "extapp.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
+    $data['action_bar'] = action_bar(array(
+                array('title' => $langAddServer,
+                    'url' => "$_SERVER[SCRIPT_NAME]?add_server",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'),
+                array('title' => $langBack,
+                    'url' => "extapp.php",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')));
 
-    $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'om' ORDER BY weight");
-    if (count($q) > 0) {
-        $tool_content .= "<div class='table-responsive'>";
-        $tool_content .= "<table class='table-default'>
-            <thead>
-            <tr><th class = 'text-center'>$langOpenMeetingsServer</th>
-                <th class = 'text-center'>$langPort</th>
-                <th class = 'text-center'>$langBBBEnabled</th>                    
-                <th class = 'text-center'>$langOpenMeetingsAdminUser</th>                
-                <th class = 'text-center'>$langOpenMeetingsWebApp</th>
-                <th class = 'text-center'>".icon('fa-gears')."</th></tr>
-            </thead>";
-        foreach ($q as $srv) {
-            $enabled_om_server = ($srv->enabled == 'true')? $langYes : $langNo;
-            $tool_content .= "<tr>";
-            $tool_content .= "<td>$srv->hostname</td>";
-            $tool_content .= "<td>$srv->port</td>";
-            $tool_content .= "<td>$enabled_om_server</td>";
-            $tool_content .= "<td>$srv->username</td>";            
-            $tool_content .= "<td>$srv->webapp</td>";
-            $tool_content .= "<td class='option-btn-cell'>".action_button(array(
-                                                array('title' => $langEditChange,
-                                                      'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
-                                                      'icon' => 'fa-edit'),
-                                                array('title' => $langDelete,
-                                                      'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$srv->id",
-                                                      'icon' => 'fa-times',
-                                                      'class' => 'delete',
-                                                      'confirm' => $langConfirmDelete)
-                                                ))."</td>";
-            $tool_content .= "</tr>";
-        }
-        $tool_content .= "</table></div>";
-    } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoAvailableBBBServers</div>";
-    }
+    $data['om_servers'] = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'om' ORDER BY weight");
+    $view = 'admin.other.extapps.openmeetings.index';
 }
 
-draw($tool_content, 3, null, $head_content);
+$data['menuTypeID'] = 3;
+view($view, $data);

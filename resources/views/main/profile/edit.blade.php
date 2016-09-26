@@ -112,12 +112,12 @@
                 <div class='col-sm-10'>{!! lang_select_options('userLanguage', "class='form-control'") !!}</div>
             </div>
             <div class='form-group'>
-                <label for='picture' class='col-sm-2 control-label'>{{ trans('message_pic') }}</label>
+                <label for='picture' class='col-sm-2 control-label'>{{ $message_pic }}</label>
                 <div class='col-sm-10'><span>{{ $picture }}{{$delete }}</span>{!! fileSizeHidenInput() !!}
                     <input type='file' name='userimage' size='30'></div>
             </div>
             <div class='form-group'>
-                <label for='desription' class='col-sm-2 control-label'>{{ trans('langInfoAbout') }}:</label>
+                <label for='desription' class='col-sm-2 control-label'>{{ trans('langProfileAboutMe') }}:</label>
                 <div class='col-sm-10'>{!! $info_text_area !!}</div>
             </div>
             {!! render_profile_fields_form(array('origin' => 'edit_profile')) !!}
