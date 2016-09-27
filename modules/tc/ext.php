@@ -28,9 +28,9 @@ require_once 'om-api.php';
 require_once 'functions.php';
 
 if (isset($_GET['meeting_id'])) {
-	$meeting_id = $_GET['meeting_id'];
+    $meeting_id = $_GET['meeting_id'];
 } else {
-    redirect_to_home_page();    
+    redirect_to_home_page();
     exit;
 }
 
@@ -50,10 +50,10 @@ $r_group = explode(",",$external_users);
 
 $server_type = Database::get()->querySingle("SELECT `type` FROM tc_servers WHERE id = ?d", $server_id)->type;
 
-if ($active <> '1' 
-    or date_diff_in_minutes($start_date,date('Y-m-d H:i:s')) > $unlock_interval 
+if ($active <> '1'
+    or date_diff_in_minutes($start_date,date('Y-m-d H:i:s')) > $unlock_interval
     or !in_array($_GET['username'],$r_group)) {
-	    echo "Ο σύνδεσμος είναι ενεργός μόνο για όσες τηλεσυνεργασίες είναι σε εξέλιξη";
+        echo "Ο σύνδεσμος είναι ενεργός μόνο για όσες τηλεσυνεργασίες είναι σε εξέλιξη";
         exit;
 }
 
@@ -79,7 +79,7 @@ if ($server_type == 'om') { // OM server
         create_om_meeting($title, $meeting_id, $record);
     }
     # Get session capacity
-    $sess = Database::get()->querySingle("SELECT sessionUsers, mod_pw, running_at FROM tc_session where meeting_id=?s",$meeting_id);    
+    $sess = Database::get()->querySingle("SELECT sessionUsers, mod_pw, running_at FROM tc_session where meeting_id=?s",$meeting_id);
     $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
 
     if ($sess->sessionUsers < get_om_connected_users($server_id))
