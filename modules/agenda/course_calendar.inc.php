@@ -756,10 +756,10 @@ require_once 'include/lib/references.class.php';
         if(!empty($q)){
             $q .= " UNION ";
         }
-        $dc = str_replace('start','bbb.start_date',$datecond);
-        $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + time('01:00:00'), '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-special' class, 'teleconference' event_type,  c.code course "
-                . "FROM bbb_session bbb JOIN course c ON bbb.course_id=c.id "
-                . "WHERE bbb.course_id =?d "
+        $dc = str_replace('start','tc.start_date', $datecond);
+        $q .= "SELECT tc.id, tc.title, tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(tc.start_date + time('01:00:00'), '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-special' class, 'teleconference' event_type,  c.code course "
+                . "FROM tc_session tc JOIN course c ON tc.course_id = c.id "
+                . "WHERE tc.course_id = ?d "
                 . $dc;
         $q_args = array_merge($q_args, $q_args_templ);
 
@@ -768,7 +768,7 @@ require_once 'include/lib/references.class.php';
         if(!empty($q)){
             $q .= " UNION ";
         }
-        $dc = str_replace('start','ass.deadline',$datecond);
+        $dc = str_replace('start','ass.deadline', $datecond);
         $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + time('00:00'), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                 . "FROM assignment ass "
                 . "LEFT JOIN course_user cu ON ass.course_id=cu.course_id "

@@ -320,10 +320,10 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                                 $title, $desc, $start_session, $BBBEndDate, 1, $status, $minutes_before,
                                 $external_users, $r_group, $record, $sessionUsers, $session_id);
         // logging
-        Log::record($course_id, MODULE_ID_TC, LOG_MODIFY, array('id' => $session_id, 
-                                                                'title' => $title, 
+        Log::record($course_id, MODULE_ID_TC, LOG_MODIFY, array('id' => $session_id,
+                                                                'title' => $title,
                                                                 'desc' => html2text($desc)));
-        
+
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM tc_session WHERE id = ?d", $session_id);
     } else {
         $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = '$tc_type' and enabled = 'true' ORDER BY weight ASC")->id;
@@ -347,10 +347,10 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                                                         $status, $server_id,
                                                         generateRandomString(), generateRandomString() , generateRandomString() ,
                                                         $minutes_before, $external_users, $r_group, $record, $sessionUsers);
-        
+
         // logging
-        Log::record($course_id, MODULE_ID_TC, LOG_INSERT, array('id' => $q->lastInsertID, 
-                                                                'title' => $_POST['title'], 
+        Log::record($course_id, MODULE_ID_TC, LOG_INSERT, array('id' => $q->lastInsertID,
+                                                                'title' => $_POST['title'],
                                                                 'desc' => html2text($_POST['desc']),
                                                                 'tc_type' => $tc_type));
 
@@ -737,14 +737,14 @@ function enable_bbb_session($id)
  * @return type
  */
 function delete_bbb_session($id)
-{    
+{
     global $langBBBDeleteSuccessful, $course_code, $course_id;
 
     $tc_title = Database::get()->querySingle("SELECT title FROM tc_session WHERE id = ?d", $id)->title;
     Database::get()->querySingle("DELETE FROM tc_session WHERE id = ?d", $id);
-    Log::record($course_id, MODULE_ID_TC, LOG_DELETE, array('id' => $id, 
+    Log::record($course_id, MODULE_ID_TC, LOG_DELETE, array('id' => $id,
                                                             'title' => $tc_title));
-    
+
     Session::Messages($langBBBDeleteSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
 }
