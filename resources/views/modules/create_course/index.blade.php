@@ -55,7 +55,7 @@
     }
 
     var lang = {
-        pwStrengthTooShort: "{{ js_escape(trans('langPwStrengthGood')) }}",
+        pwStrengthTooShort: "{{ js_escape(trans('langPwStrengTooShort')) }}",
         pwStrengthWeak: "{{ js_escape(trans('langPwStrengthWeak')) }}",
         pwStrengthGood: "{{ js_escape(trans('langPwStrengthGood')) }}", 
         pwStrengthStrong: "{{ js_escape(trans('langPwStrengthStrong')) }}"
@@ -119,8 +119,8 @@
             }
         }).change();    
         
-        $('#password').keyup(function() {
-            $('#result').html(checkStrength($('#password').val()))
+        $('#coursepassword').keyup(function() {
+            $('#result').html(checkStrength($('#coursepassword').val()))
         });
 
         displayCoursePassword();
@@ -286,8 +286,12 @@
                 <div class='form-group'>
                     <label for='coursepassword' class='col-sm-2 control-label'>{{ trans('langOptPassword') }}:</label>
                     <div class='col-sm-10'>
-                          <input class='form-control' id='coursepassword' type='text' name='password' value='{{ trans('password') }}' autocomplete='off'>
+                          <input class='form-control' id='coursepassword' type='text' name='password' value='{{ trans('password') }}' autocomplete='off'>                        
                     </div>
+                    <div class='col-sm-2' text-center padding-thin>
+                        <span id='result'></span>
+                    </div>
+                    
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>

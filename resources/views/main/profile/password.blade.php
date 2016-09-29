@@ -3,14 +3,14 @@
 @push('head_scripts')
 <script type='text/javascript' src='{{ $urlAppend }}js/pwstrength.js'></script>
 <script type='text/javascript'>
-    var lang =
-    {
-        pwStrengthTooShort: js_escape({{ trans('langAddPicture') }}),
-        pwStrengthWeak: js_escape({{ trans('langAddPicture') }}),
-        pwStrengthGood: js_escape({{ trans('langAddPicture') }}),
-        pwStrengthStrong: js_escape({{ trans('langAddPicture') }})
-    };
-
+    
+    var lang = {
+        pwStrengthTooShort: "{{ js_escape(trans('langPwStrengTooShort')) }}",
+        pwStrengthWeak: "{{ js_escape(trans('langPwStrengthWeak')) }}",
+        pwStrengthGood: "{{ js_escape(trans('langPwStrengthGood')) }}", 
+        pwStrengthStrong: "{{ js_escape(trans('langPwStrengthStrong')) }}"
+    }
+    
     $(document).ready(function() {
         $('#password_form').keyup(function() {
             $('#result').html(checkStrength($('#password_form').val()))
