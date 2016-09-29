@@ -160,8 +160,8 @@ $head_content .= <<<hContent
             }
         }).change();    
         
-        $('#password').keyup(function() {
-            $('#result').html(checkStrength($('#password').val()))
+        $('#coursepassword').keyup(function() {
+            $('#result').html(checkStrength($('#coursepassword').val()))
         });
 
         displayCoursePassword();
@@ -386,6 +386,9 @@ if (!isset($_POST['create_course'])) {
                     <label for='coursepassword' class='col-sm-2 control-label'>$langOptPassword:</label>
                     <div class='col-sm-10'>
                           <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
+                    </div>
+                    <div class='col-sm-2 text-center padding-thin'>
+                        <span id='result'></span>
                     </div>
                 </div>
                 <div class='form-group'>
