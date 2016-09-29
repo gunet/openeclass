@@ -31,79 +31,60 @@ require_once 'perso_functions.php';
 
 $toolName = $langMyCourses;
 //  Get user's course info
-    if ($session->status == USER_TEACHER) {
-        $myCourses = Database::get()->queryArray("SELECT course.id course_id,
-                             course.code code,
-                             course.public_code,
-                             course.title title,
-                             course.prof_names professor,
-                             course.lang,
-                             course.visible,
-                             course_user.status status
-                       FROM course, course_user, user
-                       WHERE course.id = course_user.course_id AND
-                             course_user.user_id = ?d AND
-                             user.id = ?d
-                       ORDER BY course_user.status, course.visible, course.created DESC", $uid, $uid);
-    } else {
-        $myCourses = Database::get()->queryArray("SELECT course.id course_id,
-                             course.code code,
-                             course.public_code,
-                             course.title title,
-                             course.prof_names professor,
-                             course.lang,
-                             course.visible,
-                             course_user.status status                                
-                       FROM course, course_user, user
-                       WHERE course.id = course_user.course_id AND
-                             course_user.user_id = ?d AND
-                             user.id = ?d AND
-                             course.visible != ?d
-                       ORDER BY course.title, course.prof_names", $uid, $uid, COURSE_INACTIVE);
+if ($session->status == USER_TEACHER) {
+    $myCourses = Database::get()->queryArray("SELECT course.id course_id,
+                         course.code code,
+                         course.public_code,
+                         course.title title,
+                         course.prof_names professor,
+                         course.lang,
+                         course.visible,
+                         course_user.status status
+                   FROM course, course_user, user
+                   WHERE course.id = course_user.course_id AND
+                         course_user.user_id = ?d AND
+                         user.id = ?d
+                   ORDER BY course_user.status, course.visible, course.created DESC", $uid, $uid);
+} else {
+    $myCourses = Database::get()->queryArray("SELECT course.id course_id,
+                         course.code code,
+                         course.public_code,
+                         course.title title,
+                         course.prof_names professor,
+                         course.lang,
+                         course.visible,
+                         course_user.status status                                
+                   FROM course, course_user, user
+                   WHERE course.id = course_user.course_id AND
+                         course_user.user_id = ?d AND
+                         user.id = ?d AND
+                         course.visible != ?d
+                   ORDER BY course.title, course.prof_names", $uid, $uid, COURSE_INACTIVE);
+}
+    
+$data['action_bar'] = action_bar(array(
+    array(
+        'title' => $langBack,
+        'icon' => 'fa-reply',
+        'level' => 'primary-label',
+        'url' => 'portfolio.php'
+    )
+),false);
+
+$data['myCourses'] = $myCourses;
+if ($myCourses) {        
+    foreach ($myCourses as $course) {
+        if ($course->status == USER_STUDENT) { 
+            $action_button = icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
+        } elseif ($course->status == USER_TEACHER) {
+            $action_button = icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $course->code);
+        }      
+        $data['action_button'] = $action_button;
+        $data['actions'] = icon('fa-gears');        
+        //$data['course->title'] =  q($course->title);
+        //$data['course->public_code'] =  q($course->public_code);
+        //$data['course->professor'] = q($course->professor);        
     }
-    $tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'icon' => 'fa-reply',
-            'level' => 'primary-label',
-            'url' => 'portfolio.php'
-        )
-    ),false);
-    if ($myCourses) {
-        $tool_content .= "
-            <div class='table-responsive'>
-                <table class='table-default'>
-                    <thead class='list-header'>
-                        <th>$langTitle</th>
-                        <th>$langTeacher</th>
-                        <th class='text-center'>".icon('fa-gears')."</th>
-                    </thead>
-                    <tbody>";
-        foreach ($myCourses as $course) {
-            if ($course->status == USER_STUDENT) { 
-                $action_button = icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
-            } elseif ($course->status == USER_TEACHER) {
-                $action_button = icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $course->code);
-            }
-            $visclass = '';
-            if ($course->visible == COURSE_INACTIVE) {
-                $visclass = "not_visible";
-            }
-            $tool_content .= "
-                    <tr class='$visclass'>
-                        <td><strong><a href='{$urlServer}courses/$course->code'>".q($course->title)."</a></strong> (".q($course->public_code).")</td>
-                        <td>".q($course->professor)."</td>
-                        <td class='text-center'>
-                            $action_button
-                        </td>
-                    </tr>
-            ";
-        }
-        $tool_content .= "
-                    </tbody>
-                </table>
-            </div>";         
-    } else {
-       $tool_content .= "<div class='alert alert-warning'>$langNoCourses</div>"; 
-    }
-draw($tool_content, 1, null, $head_content, null, null);
+}    
+$data['menuTypeID'] = 1;
+view('main.my_courses.index', $data);
