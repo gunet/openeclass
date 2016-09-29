@@ -1,5 +1,155 @@
 @extends('layouts.default')
 
+@push('head_styles')
+<link href="{{ $urlAppend }}js/jstree3/themes/proton/style.min.css" type='text/css' rel='stylesheet'>
+<link href="{{ $urlAppend }}js/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" type='text/css' rel='stylesheet'>
+@endpush
+
+@push('head_scripts')
+<script type='text/javascript' src='{{ $urlAppend }}js/jstree3/jstree.min.js'></script>
+<script type='text/javascript' src='{{ $urlAppend }}js/pwstrength.js'></script>
+<script type='text/javascript' src='{{ $urlAppend }}js/tools.js'></script>
+<script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/js/bootstrap-datepicker.min.js'></script>
+<script type='text/javascript' src='{{ $urlAppend }}js/bootstrap-datepicker/locales/bootstrap-datepicker.{{ $language }}.min.js'></script>
+
+<script type='text/javascript'>
+
+    function deactivate_input_password () {
+            $('#coursepassword').attr('disabled', 'disabled');
+            $('#coursepassword').closest('div.form-group').addClass('invisible');
+    }
+
+    function activate_input_password () {
+            $('#coursepassword').removeAttr('disabled', 'disabled');
+            $('#coursepassword').closest('div.form-group').removeClass('invisible');
+    }
+
+    function displayCoursePassword() {
+
+            if ($('#courseclose,#courseiactive').is(":checked")) {
+                    deactivate_input_password ();
+            } else {
+                    activate_input_password ();
+            }
+    }
+
+    function checkrequired(which, entry, entry2) {
+            var pass=true;
+            if (document.images) {
+                    for (i=0;i<which.length;i++) {
+                            var tempobj=which.elements[i];
+                            if ((tempobj.name == entry) || (tempobj.name == entry2)) {
+                                    if (tempobj.type=="text"&&tempobj.value=='') {
+                                            pass=false;
+                                            break;
+                                    }
+                            }
+                    }
+            }
+            if (!pass) {
+                    alert("$langFieldsMissing");
+                    return false;
+            } else {
+                    return true;
+            }
+    }
+
+    var lang = {
+        pwStrengthTooShort: "{{ js_escape(trans('langPwStrengthGood')) }}",
+        pwStrengthWeak: "{{ js_escape(trans('langPwStrengthWeak')) }}",
+        pwStrengthGood: "{{ js_escape(trans('langPwStrengthGood')) }}", 
+        pwStrengthStrong: "{{ js_escape(trans('langPwStrengthStrong')) }}"
+    }
+
+    function showCCFields() {
+        $('#cc').show();
+    }
+    function hideCCFields() {
+        $('#cc').hide();
+    }
+
+    $(document).ready(function() {
+        $('input[name=start_date]').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        }).on('changeDate', function(e){
+            var date2 = $('input[name=start_date]').datepicker('getDate');
+            if($('input[name=start_date]').datepicker('getDate')>$('input[name=finish_date]').datepicker('getDate')){
+                date2.setDate(date2.getDate() + 7);
+                $('input[name=finish_date]').datepicker('setDate', date2);
+                $('input[name=finish_date]').datepicker('setStartDate', date2);
+            }else{
+                $('input[name=finish_date]').datepicker('setStartDate', date2);
+            }
+        });
+
+        $('input[name=finish_date]').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true
+        }).on('changeDate', function(e){
+            var dt1 = $('input[name=start_date]').datepicker('getDate');
+            var dt2 = $('input[name=finish_date]').datepicker('getDate');
+            if (dt2 <= dt1) {
+                var minDate = $('input[name=finish_date]').datepicker('startDate');
+                $('input[name=finish_date]').datepicker('setDate', minDate);
+            }            
+        });
+        if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
+            $('input[name=start_date]').datepicker('setDate', new Date());
+            var date2 = $('input[name=start_date]').datepicker('getDate');
+            date2.setDate(date2.getDate() + 7);
+            $('input[name=finish_date]').datepicker('setDate', date2);
+            $('input[name=finish_date]').datepicker('setStartDate', date2);
+        }else{
+            var date2 = $('input[name=finish_date]').datepicker('getDate');
+            $('input[name=finish_date]').datepicker('setStartDate', date2);
+        }
+        
+        if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
+            $('input[name=finish_date]').datepicker("setDate", 7);
+        }
+        
+        $('#weeklyDates').hide();
+        
+        $('input[name=view_type]').change(function () {
+            if ($('#weekly').is(":checked")) {
+                $('#weeklyDates').show();
+            } else {
+                $('#weeklyDates').hide();
+            }
+        }).change();    
+        
+        $('#password').keyup(function() {
+            $('#result').html(checkStrength($('#password').val()))
+        });
+
+        displayCoursePassword();
+
+        $('#courseopen').click(function(event) {
+                activate_input_password();
+        });
+        $('#coursewithregistration').click(function(event) {
+                activate_input_password();
+        });
+        $('#courseclose').click(function(event) {
+                deactivate_input_password();
+        });
+        $('#courseinactive').click(function(event) {
+                deactivate_input_password();
+        });
+
+        $('input[name=l_radio]').change(function () {
+            if ($('#cc_license').is(":checked")) {
+                showCCFields();
+            } else {
+                hideCCFields();
+            }
+        }).change();
+    });
+
+</script>
+@endpush
+
 @section('content')
 
 {!! $action_bar !!}
