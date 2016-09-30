@@ -131,11 +131,15 @@ if (isset($_POST['submit'])) {
 
 $toolSelection[0] = $toolSelection[1] = '';
 $module_list = Database::get()->queryArray('SELECT module_id, visible
-    FROM course_module WHERE course_id = ?d', $course_id);
+                                FROM course_module WHERE course_id = ?d', $course_id);
+
 foreach ($module_list as $item) {
+    if ($item->module_id == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
+        continue;
+    } 
     $mid = getIndirectReference($item->module_id);
     $mtitle = q($modules[$item->module_id]['title']);
-    $toolSelection[$item->visible] .= "<option value='$mid'>$mtitle</option>\n";
+    $toolSelection[$item->visible] .= "<option value='$mid'>$mtitle</option>";    
 }
 
 
