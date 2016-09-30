@@ -135,7 +135,7 @@
 
 {!! $action_bar !!}
     <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">
+        <form class='form-horizontal' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" onsubmit=\"return validateNodePickerForm();\">
         <fieldset>
             <div class='form-group'>
                 <label for='title' class='col-sm-2 control-label'>{{ trans('langTitle') }}:</label>
