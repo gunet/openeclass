@@ -5137,7 +5137,6 @@ $langWebConfServer = "Wowza server";
 $langWebConfServerAlertHostname = "Παρακαλώ πληκτρολογείστε το hostname της εγκατάστασης Wowza";
 
 // Mindmap
-
 $langMindmap = "Εννοιολογική χαρτογράφηση";
 $langMindMap = "Εννοιολογικός χάρτης";
 $langScreenshot = "Στιγμιότυπο οθόνης";
@@ -5168,6 +5167,7 @@ $langThemeOrange = "Πορτοκαλί";
 $langThemePumpkin = "Κολοκύθα";
 $langThemePomegranate = "Ρόδι";
 $langThemeClouds = "Σύννεφα";
+
 
 
 
