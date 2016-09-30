@@ -4366,6 +4366,7 @@ $langUserePortfolioDisabled = 'This user has disabled the e-portfolio feature.';
 $langResume = 'Resume';
 $langePortfolioDisableWarning = 'Your e-portfolio is disabled, therefore it is not accessible to platform\s users and guests';
 $langAddResePortfolio = 'Add to e-Portfolio';
+$langAddGroupWorkSubePortfolio = 'Add submission of group "%s" to e-Portfolio';
 $langResourcesCollection = 'Resources collection';
 $langePortfolioResourceAdded = 'The resource was successfully added to your collection';
 $langePortfolioResourceRemoved = 'The resource was successfully removed from your collection';

@@ -2767,8 +2767,10 @@ function show_non_submitted($id) {
 function show_student_assignments() {
     global $tool_content, $m, $uid, $course_id, $course_code,
     $langDaysLeft, $langDays, $langNoAssign, $urlServer,
-    $course_code, $themeimg, $langEditChange;
-
+    $course_code, $themeimg, $langEditChange, $langAddResePortfolio, $langAddGroupWorkSubePortfolio;
+    
+    $add_eportfolio_res_td = "";
+    
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
         $gids_sql_ready = implode(',',array_keys($gids));
@@ -2819,11 +2821,21 @@ function show_student_assignments() {
             $tool_content .= "</td><td class='text-center'>";
 
             if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids)) {
+                $eportfolio_action_array = array();
                 foreach ($submission as $sub) {
                     if (isset($sub->group_id)) { // if is a group assignment
                         $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;font-size:9px;'>($m[groupsubmit] " .
                                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
+                        
+                        $eportfolio_action_array[] = array('title' => sprintf($langAddGroupWorkSubePortfolio, gid_to_name($sub->group_id)),
+                                'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=work_submission&amp;rid=".$sub->id,
+                                'icon' => 'fa-star');
+                        
+                    } else {
+                        $eportfolio_action_array[] = array('title' => $langAddResePortfolio,
+                                                           'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=work_submission&amp;rid=".$sub->id,
+                                                           'icon' => 'fa-star');
                     }
                     $tool_content .= "<i class='fa fa-check-square-o'></i><br>";
                 }
@@ -2841,15 +2853,8 @@ function show_student_assignments() {
             }
             
             if(get_config('eportfolio_enable')) {
-                global $langAddResePortfolio;
-                $add_eportfolio_res_td = "<td width='30' align='center'><a href='$urlServer"."main/eportfolio/resources.php?action=add&amp;type=work&amp;rid=".$row->id."'>".$langAddResePortfolio."</a></td>";
                 $add_eportfolio_res_td = "<td class='option-btn-cell'>".
-                                            action_button(array(
-                                                array('title' => $langAddResePortfolio,
-                                                  'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=work&amp;rid=".$row->id,
-                                                  'icon' => 'fa-star')));
-            } else {
-                $add_eportfolio_res_td = "";
+                                            action_button($eportfolio_action_array)."</td>";
             }
             
             $tool_content .= "</td>
