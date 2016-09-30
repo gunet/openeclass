@@ -314,7 +314,7 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-datepicker') {
             $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.min.css') .
                 js_link('bootstrap-datepicker/js/bootstrap-datepicker.min.js');
-            $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.min.js";
+                $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
         } elseif ($file == 'bootstrap-validator') {
             $file = "bootstrap-validator/validator.js";
         } elseif ($file == 'bootstrap-slider') {

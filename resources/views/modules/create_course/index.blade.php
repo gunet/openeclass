@@ -32,28 +32,7 @@
                     activate_input_password ();
             }
     }
-
-    function checkrequired(which, entry, entry2) {
-            var pass=true;
-            if (document.images) {
-                    for (i=0;i<which.length;i++) {
-                            var tempobj=which.elements[i];
-                            if ((tempobj.name == entry) || (tempobj.name == entry2)) {
-                                    if (tempobj.type=="text"&&tempobj.value=='') {
-                                            pass=false;
-                                            break;
-                                    }
-                            }
-                    }
-            }
-            if (!pass) {
-                    alert("$langFieldsMissing");
-                    return false;
-            } else {
-                    return true;
-            }
-    }
-
+    
     var lang = {
         pwStrengthTooShort: "{{ js_escape(trans('langPwStrengTooShort')) }}",
         pwStrengthWeak: "{{ js_escape(trans('langPwStrengthWeak')) }}",
@@ -71,6 +50,7 @@
     $(document).ready(function() {
         $('input[name=start_date]').datepicker({
             format: 'yyyy-mm-dd',
+            language: '{{ $language }}',
             autoclose: true
         }).on('changeDate', function(e){
             var date2 = $('input[name=start_date]').datepicker('getDate');
@@ -85,6 +65,7 @@
 
         $('input[name=finish_date]').datepicker({
             format: 'yyyy-mm-dd',
+            language: '{{ $language }}',
             autoclose: true
         }).on('changeDate', function(e){
             var dt1 = $('input[name=start_date]').datepicker('getDate');
