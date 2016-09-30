@@ -165,11 +165,13 @@ if (!isset($_GET['from_other'])) {
         $firstletter = $_GET['first'];
         $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
                     FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-                    WHERE b.course_id = ?d AND LEFT(a.surname,1) = ?s", $course_id, $firstletter);
+                    WHERE b.course_id = ?d AND LEFT(a.surname,1) = ?s
+                    ORDER BY a.surname, a.givenname, a.am", $course_id, $firstletter);
     } else {
         $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
             FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-            WHERE b.course_id = ?d", $course_id);
+            WHERE b.course_id = ?d
+            ORDER BY a.surname, a.givenname, a.am", $course_id);
     }
 
     foreach ($result as $row) {
