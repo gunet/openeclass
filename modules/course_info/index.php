@@ -103,10 +103,10 @@ $head_content .= <<<hContent
         $('#cc').hide();
     }
         
-    $(document).ready(function() {
-        
+    $(document).ready(function() {        
         $('input[name=start_date]').datepicker({
-            format: 'yyyy-mm-dd',
+            format: 'yyyy-mm-dd',            
+            language: '$language',
             autoclose: true
         }).on('changeDate', function(e){
             var date2 = $('input[name=start_date]').datepicker('getDate');
@@ -121,6 +121,7 @@ $head_content .= <<<hContent
         
         $('input[name=finish_date]').datepicker({
             format: 'yyyy-mm-dd',
+            language: '$language',
             autoclose: true
         }).on('changeDate', function(e){
             var dt1 = $('input[name=start_date]').datepicker('getDate');
