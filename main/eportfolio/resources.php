@@ -22,7 +22,8 @@
 $require_login = false;
 $guest_allowed = true;
 
-include '../../include/baseTheme.php';
+require_once '../../include/baseTheme.php';
+require_once 'modules/group/group_functions.php';
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
@@ -93,8 +94,15 @@ if ($userdata) {
                         Session::Messages($langePortfolioResourceAdded, 'alert-success');
                         redirect_to_home_page("main/eportfolio/resources.php");
                     }
-                } elseif ($rtype == 'work') {
-                    
+                } elseif ($rtype == 'work_submission') {
+                    $submission = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $rid);
+                    if($submission) {
+                        $work = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $submission->assignment_id);
+                        if ( ($submission->group_id == 0 && $submission->uid == $uid) ||
+                             ($submission->group_id != 0 && array_key_exists($submission->group_id, user_group_info($uid, $work->course_id))) ) {
+                            //insert to db
+                        }
+                    }
                 }
             }
         } elseif (isset($_GET['action']) && $_GET['action'] == 'remove') {
