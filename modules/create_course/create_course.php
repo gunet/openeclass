@@ -71,27 +71,6 @@ function displayCoursePassword() {
         }
 }
 
-function checkrequired(which, entry, entry2) {
-	var pass=true;
-	if (document.images) {
-		for (i=0;i<which.length;i++) {
-			var tempobj=which.elements[i];
-			if ((tempobj.name == entry) || (tempobj.name == entry2)) {
-				if (tempobj.type=="text"&&tempobj.value=='') {
-					pass=false;
-					break;
-		  		}
-	  		}
-		}
-	}
-	if (!pass) {
-		alert("$langFieldsMissing");
-		return false;
-	} else {
-		return true;
-	}
-}
-
     var lang = {
 hContent;
 $head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
@@ -255,7 +234,7 @@ if (!isset($_POST['create_course'])) {
                             ),false);
     $tool_content .= "
     <div class='form-wrapper'>
-    <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">
+    <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
         <fieldset>
             <div class='form-group'>
                 <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
@@ -415,7 +394,7 @@ if (!isset($_POST['create_course'])) {
         $validationFailed = true;
     }
 
-    if (empty($title) || empty($prof_names)) {
+    if (empty($title)) {
         Session::Messages($langFieldsMissing);
         $validationFailed = true;
     }
