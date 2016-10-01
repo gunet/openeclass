@@ -98,10 +98,10 @@ if ($userdata) {
         
         $tool_content .= action_bar(array(
                                         array('title' => $langBio,
-                                            'url' => "{$urlAppend}courses/userbios/$id"."_bio.pdf",
+                                            'url' => "{$urlAppend}courses/eportfolio/userbios/$id"."_bio.pdf",
                                             'icon' => 'fa-download',
                                             'level' => 'primary-label',
-                                            'show' => file_exists("$webDir/courses/userbios/$id"."_bio.pdf")),
+                                            'show' => file_exists("$webDir/courses/eportfolio/userbios/$id"."_bio.pdf")),
                                         array('title' => $langResume,
                                             'url' => "index.php?id=$id",
                                             'level' => 'primary-label',
@@ -125,10 +125,10 @@ if ($userdata) {
         
         $tool_content .= action_bar(array(
                                         array('title' => $langBio,
-                                            'url' => "{$urlAppend}courses/userbios/$id"."_bio.pdf",
+                                            'url' => "{$urlAppend}courses/eportfolio/userbios/$id"."_bio.pdf",
                                             'icon' => 'fa-download',
                                             'level' => 'primary-label',
-                                            'show' => file_exists("$webDir/courses/userbios/$id"."_bio.pdf")),
+                                            'show' => file_exists("$webDir/courses/eportfolio/userbios/$id"."_bio.pdf")),
                                         array('title' => $langResume,
                                             'url' => "index.php?id=$id",
                                             'level' => 'primary-label',

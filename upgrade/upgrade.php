@@ -170,8 +170,10 @@ touch_or_error('courses/temp/index.php');
 mkdir_or_error('courses/userimg');
 touch_or_error('courses/userimg/index.php');
 touch_or_error($webDir . '/video/index.php');
-mkdir_or_error('courses/userbios');
-touch_or_error('courses/userbios/index.php');
+mkdir_or_error('courses/eportfolio/userbios');
+touch_or_error('courses/eportfolio/userbios/index.php');
+mkdir_or_error('courses/eportfolio/work_submissions');
+touch_or_error('courses/eportfolio/work_submissions/index.php');
 
 // ********************************************
 // upgrade config.php
