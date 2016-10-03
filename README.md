@@ -1,4 +1,4 @@
-# The Open eClass Platform 3.4
+# The Open eClass Platform 3.5
 
 http://www.openeclass.org/
 
