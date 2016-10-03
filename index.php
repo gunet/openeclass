@@ -2,10 +2,10 @@
 
 session_start();
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.4
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -30,9 +30,9 @@ session_start();
 
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
 if (preg_match('|/courses/([a-zA-Z_-]*\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
-	$dbname = $matches[1];
-	if (!@chdir('courses/' . $dbname)) {
-		echo '  <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+    $dbname = $matches[1];
+    if (!@chdir('courses/' . $dbname)) {
+        echo '  <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
                 <html><head>
                 <title>404 Not Found</title>
                 </head><body>
@@ -40,10 +40,10 @@ if (preg_match('|/courses/([a-zA-Z_-]*\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $m
                 <p>The requested URL ',$_SERVER['REQUEST_URI'],' was not found on this server.</p>
                 </body></html>
                 ';
-		exit;
-	}
-	$_SESSION['dbname'] = $dbname;
-	require_once '../../modules/course_home/course_home.php';
+        exit;
+    }
+    $_SESSION['dbname'] = $dbname;
+    require_once '../../modules/course_home/course_home.php';
     exit;
 }
 
@@ -97,14 +97,14 @@ if (isset($_GET['logout']) and $uid) {
     foreach (array_keys($_SESSION) as $key) {
         unset($_SESSION[$key]);
     }
-    
+
     // include HubridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
-	require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
-	$config = get_hybridauth_config();
+    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+    $config = get_hybridauth_config();
     $hybridauth = new Hybrid_Auth( $config );
     $hybridauth->logoutAllProviders();
-    
+
     session_destroy();
     $uid = 0;
     if (defined('CAS')) {
@@ -168,7 +168,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title)),
                     'html' => "<a class='btn btn-default btn-login' href='" . $urlServer .
                               ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$langEnter</a><br>");
-            } elseif (in_array($l->auth_name, $hybridAuthMethods)) { 
+            } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
                 $hybridProviders[] = $l->auth_name;
                 if (is_null($hybridLinkId)) {
                     $authLink[] = array(
@@ -250,13 +250,13 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         <div class='row margin-top-fat'>
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
-                    <div class='row'>";   
-    
-    if (!($upgrade_begin or get_config('dont_display_login_form'))) {        
+                    <div class='row'>";
+
+    if (!($upgrade_begin or get_config('dont_display_login_form'))) {
         $tool_content .= "
                         <div class='col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right login-form'>
                           <div class='wrapper-login-option'>";
-        
+
         $show_seperator = count($authLink) > 1;
         if (count($authLink) > 3) {
             // home page login form with more than 3 buttons not supported
@@ -265,7 +265,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         } else {
             $show_buttons = true;
         }
-            
+
         foreach ($authLink as $i => $l) {
             $tool_content .= "<div class='$l[class]'>
                                 <h2>$langUserLogin</h2>
