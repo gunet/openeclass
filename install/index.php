@@ -550,9 +550,10 @@ elseif (isset($_POST['install1'])) {
     warnIfExtNotLoaded('dom');
     warnIfExtNotLoaded('zlib');
     warnIfExtNotLoaded('pcre');
-    warnIfExtNotLoaded("curl");
+    warnIfExtNotLoaded('curl');    
     $tool_content .= "</ul><h3>$langOptionalPHP</h3>";
     $tool_content .= "<ul class='list-unstyled'>";
+    warnIfExtNotLoaded('soap');
     warnIfExtNotLoaded('ldap');    
     $tool_content .= "</ul>";
     if (ini_get('register_globals')) { // check if register globals is Off
