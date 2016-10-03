@@ -96,10 +96,10 @@ if (isset($_GET['delete'])) {
         $department = array_map(function ($item) { return $item->department; },
             Database::get()->queryArray(
                 'SELECT department FROM autoenroll_rule_department WHERE rule = ?d', $rule));
-     
+
 
         $courses = implode(',',
-            array_map(function ($course) { 
+            array_map(function ($course) {
                 return "{id: '" . getIndirectReference($course->course_id) . "', text: '" .
                     js_escape($course->title . ' (' . $course->public_code . ')') .
                     "'}";
@@ -108,7 +108,7 @@ if (isset($_GET['delete'])) {
                     'SELECT course_id, title, public_code FROM autoenroll_course, course
                          WHERE autoenroll_course.course_id = course.id AND
                                rule = ?d', $rule)));
-        
+
 
         $data['deps'] = array_map(function ($dep) { return getIndirectReference($dep->department_id); },
             Database::get()->queryArray('SELECT department_id
@@ -180,7 +180,7 @@ if (isset($_GET['delete'])) {
                     $('#nodCnt2').append('<p id=\"nd_' + countnd + '\">'
                                      + '<input type=\"hidden\" name=\"rule_deps[]\" value=\"' + newnodeid + '\">'
                                      + newnodename
-                                     + '&nbsp;<a href=\"#nodCnt2\"><span class=\"fa fa-times\" data-toggle=\"tooltip\" data-original-title=\"" . js_escape($langNodeDel) . "\" data-placement=\"top\" title=\"$langNodeDel\"><\/span><\/a>'
+                                     + '&nbsp;<a href=\"#nodCnt2\"><span class=\"fa fa-times\" data-toggle=\"tooltip\" data-original-title=\"" . js_escape($langNodeDel) . "\" data-placement=\"top\" title=\"" . js_escape($langNodeDel) . "\"><\/span><\/a>'
                                      + '<\/p>');
 
                     $('#dialog-set-value').val(newnodename);
@@ -218,11 +218,11 @@ if (isset($_GET['delete'])) {
                       return (priorityA < priorityB) ? 1 : -1;
                   }
               }
-          }); 
+          });
 
         });
       </script>";
-                      
+
     $pageName = isset($_GET['add']) ? $langAutoEnrollNew : $langEditChange;
     $navigation[] = array('url' => 'autoenroll.php', 'name' => $langAutoEnroll);
     $data['action_bar'] = action_bar([
@@ -233,7 +233,7 @@ if (isset($_GET['delete'])) {
                 'level' => 'primary-label'
             ]
         ]);
-    
+
     $view = 'admin.users.autoenroll.create';
 } else {
 
@@ -252,7 +252,7 @@ if (isset($_GET['delete'])) {
               'url' => 'index.php',
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
-    
+
     $data['rules'] = false;
     $i = 0;
     Database::get()->queryFunc('SELECT * FROM autoenroll_rule',
@@ -278,7 +278,7 @@ if (isset($_GET['delete'])) {
             $i++;
         });
     $view = 'admin.users.autoenroll.index';
-        
+
 }
 
 $data['menuTypeID'] = 3;
@@ -338,5 +338,5 @@ function apply_autoenroll($rule) {
                       user_department.department IN ($depsSQL) AND
                       rule = ?d AND status = ?d)",
             USER_STUDENT, $depsParam, $rule, $status);
-    } 
+    }
 }
