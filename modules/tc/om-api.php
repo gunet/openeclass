@@ -42,7 +42,10 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
 
     $res = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $running_server);
 
-    $url = $res->hostname.':'.$res->port;
+    $url = $res->hostname;
+    if (!empty($res->port)) {
+        $url = $res->hostname.':'.$res->port;
+    }
 
     $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
     $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
@@ -98,6 +101,8 @@ function om_join_user($meeting_id, $username, $uid, $email, $surname, $name, $mo
  */
 function om_session_running($meeting_id)
 {
+    global $langOMNotSupported, $course_code;
+    
     $res = Database::get()->querySingle("SELECT running_at FROM tc_session WHERE meeting_id = ?s",$meeting_id);
 
     if (!isset($res->running_at)) {
@@ -112,12 +117,23 @@ function om_session_running($meeting_id)
         return false;
     }    
     
-    $url = $res->hostname.':'.$res->port;
+    $url = $res->hostname;
+    if (!empty($res->port)) {
+        $url = $res->hostname.':'.$res->port;
+    }
     $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
     $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
-
+    
+    if (!in_array('getSession', $soapUsers->__getFunctions())) {        
+        Session::Messages($langOMNotSupported, 'alert-danger');
+        redirect_to_home_page("modules/tc/index.php?course=$course_code");
+    }
+       
     $rs = array();
     $rs = $soapUsers->getSession();
+    
+    
+    
     $session_id = $rs->return->session_id;    
     $params = array(
 	'SID' => $session_id,
@@ -189,7 +205,10 @@ function create_om_meeting($title, $meeting_id, $record)
         // we find the om server that will serve the session
         $res = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d AND `type` = 'om'", $run_to);
         
-        $url = $res->hostname.':'.$res->port;
+        $url = $res->hostname;
+        if (!empty($res->port)) {
+            $url = $res->hostname.':'.$res->port;
+        }
         $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
         $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
 
@@ -236,7 +255,10 @@ function get_om_active_rooms($om_server)
     $active_rooms = 0;
     $res = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $om_server);
     
-    $url = $res->hostname.':'.$res->port;
+    $url = $res->hostname;
+    if (!empty($res->port)) {
+        $url = $res->hostname.':'.$res->port;
+    }
 
     $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
     $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
@@ -283,11 +305,13 @@ function get_om_connected_users($om_server)
     $connected_users = 0;
     $res = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $om_server);
         
-    $url = $res->hostname.':'.$res->port;
-
+    $url = $res->hostname;
+    if (!empty($res->port)) {
+        $url = $res->hostname.':'.$res->port;
+    }
     $soapUsers = new SoapClient($url.'/'.$res->webapp.'/services/UserService?wsdl');
-    $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');
-
+    $roomService = new SoapClient($url.'/'.$res->webapp.'/services/RoomService?wsdl');    
+    
     $rs = array();
     $rs = $soapUsers->getSession();
 
