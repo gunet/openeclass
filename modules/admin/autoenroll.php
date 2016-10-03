@@ -97,7 +97,7 @@ if (isset($_GET['delete'])) {
                 'SELECT department FROM autoenroll_rule_department WHERE rule = ?d', $rule));
 
         $courses = implode(',',
-            array_map(function ($course) { 
+            array_map(function ($course) {
                 return "{id: {$course->course_id}, text: '" .
                     js_escape($course->title . ' (' . $course->public_code . ')') .
                     "'}";
@@ -203,13 +203,13 @@ if (isset($_GET['delete'])) {
             })
             .always(function(dataORjqXHR, textStatus, jqXHRORerrorThrown) {
                 if (newnode === undefined) {
-                    alert('$langEmptyNodeSelect');
+                    alert('" . js_escape($langEmptyNodeSelect) . "');
                 } else {
                     countnd += 1;
                     $('#nodCnt2').append('<p id=\"nd_' + countnd + '\">'
                                      + '<input type=\"hidden\" name=\"rule_deps[]\" value=\"' + newnodeid + '\">'
                                      + newnodename
-                                     + '&nbsp;<a href=\"#nodCnt2\"><span class=\"fa fa-times\" data-toggle=\"tooltip\" data-original-title=\"$langNodeDel\" data-placement=\"top\" title=\"$langNodeDel\"><\/span><\/a>'
+                                     + '&nbsp;<a href=\"#nodCnt2\"><span class=\"fa fa-times\" data-toggle=\"tooltip\" data-original-title=\"$langNodeDel\" data-placement=\"top\" title=\"" . js_escape($langNodeDel) . "\"><\/span><\/a>'
                                      + '<\/p>');
 
                     $('#dialog-set-value').val(newnodename);
@@ -247,7 +247,7 @@ if (isset($_GET['delete'])) {
                       return (priorityA < priorityB) ? 1 : -1;
                   }
               }
-          }); 
+          });
 
         });
       </script>";
@@ -263,21 +263,21 @@ if (isset($_GET['delete'])) {
           <input type='hidden' name='add' value='$type'>$ruleInput
           <fieldset>
             <div class='form-group'>
-              <label class='col-sm-3 control-label'>$langStatus:</label>   
+              <label class='col-sm-3 control-label'>$langStatus:</label>
               <div class='col-sm-9'><p class='form-control-static'>$statusLabel</p></div>
             </div>
             <div class='form-group'>
-              <label for='title' class='col-sm-3 control-label'>$langFaculty:</label>   
+              <label for='title' class='col-sm-3 control-label'>$langFaculty:</label>
               <div class='col-sm-9 form-control-static'>$htmlTree</div>
             </div>
             <div class='form-group'>
-              <label for='title' class='col-sm-3 control-label'>$langAutoEnrollCourse:</label>   
+              <label for='title' class='col-sm-3 control-label'>$langAutoEnrollCourse:</label>
               <div class='col-sm-9'>
                 <input class='form-control' type='hidden' id='courses' name='courses' value=''>
               </div>
             </div>
             <div class='form-group'>
-              <label for='title' class='col-sm-3 control-label'>$langAutoEnrollDepartment:</label>   
+              <label for='title' class='col-sm-3 control-label'>$langAutoEnrollDepartment:</label>
               <div class='col-sm-9 form-control-static'>$htmlTreeCourse</div>
             </div>
             <div class='form-group'>
@@ -291,7 +291,7 @@ if (isset($_GET['delete'])) {
             <div class='form-group'>
               <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                <a href='autoenroll.php' class='btn btn-default'>$langCancel</a>    
+                <a href='autoenroll.php' class='btn btn-default'>$langCancel</a>
               </div>
             </div>
           </fieldset>
@@ -455,5 +455,5 @@ function apply_autoenroll($rule) {
                       user_department.department IN ($depsSQL) AND
                       rule = ?d AND status = ?d)",
             USER_STUDENT, $depsParam, $rule, $status);
-    } 
+    }
 }
