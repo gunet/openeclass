@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.2
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -174,13 +174,13 @@ if (isset($_GET['delete'])) {
             })
             .always(function(dataORjqXHR, textStatus, jqXHRORerrorThrown) {
                 if (newnode === undefined) {
-                    alert('$langEmptyNodeSelect');
+                    alert('" . js_escape($langEmptyNodeSelect) . "');
                 } else {
                     countnd += 1;
                     $('#nodCnt2').append('<p id=\"nd_' + countnd + '\">'
                                      + '<input type=\"hidden\" name=\"rule_deps[]\" value=\"' + newnodeid + '\">'
                                      + newnodename
-                                     + '&nbsp;<a href=\"#nodCnt2\"><span class=\"fa fa-times\" data-toggle=\"tooltip\" data-original-title=\"$langNodeDel\" data-placement=\"top\" title=\"$langNodeDel\"><\/span><\/a>'
+                                     + '&nbsp;<a href=\"#nodCnt2\"><span class=\"fa fa-times\" data-toggle=\"tooltip\" data-original-title=\"" . js_escape($langNodeDel) . "\" data-placement=\"top\" title=\"$langNodeDel\"><\/span><\/a>'
                                      + '<\/p>');
 
                     $('#dialog-set-value').val(newnodename);
