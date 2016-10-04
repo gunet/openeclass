@@ -105,7 +105,7 @@ if ($userdata) {
                             $course_title = $course_info->title;
                             $course_code =  $course_info->code;
                             
-                            $data = array($work->title, $work->description, $work->max_grade, $submission->submission_date, $submission->submission_text, $submission->grade, $submission->group_id, $submission->file_path);
+                            $data = array($work->title, $work->description, $submission->submission_date, $work->max_grade, $submission->submission_text, $submission->grade, $submission->group_id, $submission->file_path);
                             
                             //thelei allagi giati to dest einai to idio an ksanavalei thn idia askisi
                             $file_path_explode = explode("/", $submission->file_path);
@@ -205,6 +205,44 @@ if ($userdata) {
     
     
     $tool_content .= '<div id="works" class="tab-pane fade" style="padding-top:20px">';
+    
+    //show assignment submissions collection
+    $submissions = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'work_submission');
+    if ($submissions) {
+        usort($submissions, "cmp");
+        $tool_content .= "<div class='row'>";
+        $tool_content .= "<div class='col-sm-12'>";
+        foreach ($submissions as $submission) {
+            $data = unserialize($submission->data);
+            $submission->course_title = $langCourse.': '.$submission->course_title;
+            $tool_content .= "<div class='panel panel-action-btn-default'>
+                                <div class='panel-heading'>
+                                    <div class='pull-right'>
+                                        ". action_button(array(
+                                                    array(
+                                                            'title' => $langePortfolioRemoveResource,
+                                                            'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=work_submission&amp;rid=".$submission->resource_id,
+                                                            'icon' => 'fa-times',
+                                                            'class' => 'delete',
+                                                            'confirm' => $langePortfolioSureToRemoveResource,
+                                                            'show' => ($submission->user_id == $uid)
+                                                    )))."
+                                     </div>
+                                        <h3 class='panel-title'>".$langTitle.": ".q($data[0])."</h3>
+                                </div>
+                                <div class='panel-body'>
+                                    <div class='label label-success'>$langSubmit: " . nice_format($data[2], true). "</div><small>".$langBlogPostUser.display_user($post->user_id, false, false)."</small><br><br>
+                                        </div>
+                                        <div class='panel-footer'>
+                                        <div class='row'>
+                                        <div class='col-sm-6'>$submission->course_title</div>
+                                        </div>
+                                        </div>
+                                        </div>";
+        }
+        $tool_content .= "</div></div>";
+    }
+    
     
     $tool_content .= '</div>';
     
