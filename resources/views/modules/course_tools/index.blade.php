@@ -54,7 +54,7 @@
     <div class='panel panel-default panel-action-btn-default'>
         <div class='pull-right' style='padding:8px;'>
             <div id='operations_container'>
-                <a class='btn btn-success' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'> {{ trans('langAddExtLink') }}</span></a>
+                <a class='btn btn-success' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> {{ trans('langAddExtLink') }}</a>
             </div>
         </div>
         <div class='panel-heading list-header'>
