@@ -100,7 +100,22 @@ if ($userdata) {
                         $work = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $submission->assignment_id);
                         if ( ($submission->group_id == 0 && $submission->uid == $uid) ||
                              ($submission->group_id != 0 && array_key_exists($submission->group_id, user_group_info($uid, $work->course_id))) ) {
-                            //insert to db
+                            
+                            $course_info = Database::get()->querySingle("SELECT title,code FROM course WHERE id = ?d", $work->course_id);
+                            $course_title = $course_info->title;
+                            $course_code =  $course_info->code;
+                            
+                            $data = array($work->title, $work->description, $work->max_grade, $submission->submission_date, $submission->submission_text, $submission->grade, $submission->group_id, $submission->file_path);
+                            
+                            //thelei allagi giati to dest einai to idio an ksanavalei thn idia askisi
+                            $file_path_explode = explode("/", $submission->file_path);
+                            copy($urlServer.'courses/'.$course_code.'/work/'.$file_path_explode[0].'/'.rawurlencode($file_path_explode[1]), 'courses/eportfolio/work_submissions/1.pdf');
+                            
+                            Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
+                                VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'work_submission',$work->course_id,$course_title,serialize($data));
+                            Session::Messages($langePortfolioResourceAdded, 'alert-success');
+                            redirect_to_home_page("main/eportfolio/resources.php");
+                            
                         }
                     }
                 }
