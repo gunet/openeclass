@@ -44,7 +44,7 @@
                     <label for='username_form' class='col-sm-2 control-label'>{{ trans('langUsername') }}:</label>
                     <div class='col-sm-10'>
                     @if ($allow_username_change)
-                        <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}' />";
+                        <input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='{{ $username_form }}'>
                     @else
                         [{{ $auth_text }}]
                         <p class='form-control-static'>{{ $username_form }}</p>
@@ -83,12 +83,12 @@
                     <div class='col-sm-10'>
                         <div class='radio'>
                             <label>
-                                <input type='radio' name='subscribe' value='yes' {{ $selectedyes }} />{{ trans('langYes') }}
+                                <input type='radio' name='subscribe' value='yes' {{ $selectedyes }}>{{ trans('langYes') }}
                             </label>
                         </div>
                         <div class='radio'>
                             <label>
-                                <input type='radio' name='subscribe' value='no' {{ $selectedno }} />{{ trans('langNo') }}
+                                <input type='radio' name='subscribe' value='no' {{ $selectedno }}>{{ trans('langNo') }}
                             </label>
                         </div>
                     </div>
