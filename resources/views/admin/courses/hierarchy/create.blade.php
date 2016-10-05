@@ -26,7 +26,21 @@
                             @endif
                     </div>
                 </div>
-            @endforeach            
+            @endforeach
+            @foreach ($session->active_ui_languages as $key => $langcode)
+                <div class='form-group'>
+                    <label class='col-sm-3 control-label'>{{ trans('langNodeDescription') }}:</label>
+                    <div class='col-sm-9'>
+                        @if (isset($desc_is_ser) && $desc_is_ser && isset($names[$langcode]))
+                            {!! rich_text_editor('description-' . $langcode, 8, 20, $descriptions[$langcode]) !!}
+                        @elseif (isset($desc_is_ser) && !$desc_is_ser && $key == 0)
+                            {!! rich_text_editor('description-' . $langcode, 8, 20, $mynode->description) !!}
+                        @else
+                            {!! rich_text_editor('description-' . $langcode, 8, 20, $GLOBALS['langFaculte2'] . " (" . $GLOBALS['langNameOfLang'][langcode_to_name($langcode)] . ")") !!}
+                        @endif
+                    </div>
+                </div>
+            @endforeach
             <div class='form-group'>
                 <label class='col-sm-3 control-label'>{{ trans('langNodeParent') }}:</label>
                 <div class='col-sm-9'>
@@ -63,6 +77,36 @@
                 </span>
             </div>
         </div>
+
+        <div class='form-group'>
+            <label class='col-sm-3 control-label'>{{ trans('langAvailableTypes') }}</label>
+            <div class='col-sm-9'>
+                <div class='radio'>
+                    <label>
+                        <input id='nodeopen' type='radio' name='visible' value='2' {{ $visibleChecked[2] }}>
+                        <span class='fa fa-unlock fa-fw' style='font-size:23px;'></span>&nbsp;{{ trans('langNodePublic') }}
+                        <span class='help-block'><small>{{ trans('langNodePublic2') }}</small></span>
+                    </label>
+                </div>
+                <div class='radio'>
+                    <label>
+                        <input id='nodeforsubscribed' type='radio' name='visible' value='1' {{ $visibleChecked[1] }}>
+                        <span class='fa fa-lock fa-fw'  style='font-size:23px;'>
+                            <span class='fa fa-pencil text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
+                        </span>&nbsp;{{ trans('langNodeSubscribed') }}
+                        <span class='help-block'><small>{{ trans('langNodeSubscribed2') }}</small></span>
+                    </label>
+                </div>
+                <div class='radio'>
+                    <label>
+                        <input id='nodehidden' type='radio' name='visible' value='0' {{ $visibleChecked[0] }}>
+                        <span class='fa fa-lock fa-fw' style='font-size:23px;'></span>&nbsp;{{ trans('langNodeHidden') }}
+                        <span class='help-block'><small>{{ trans('langNodeHidden2') }}</small></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
         @if (isset($mynode))
             <input type='hidden' name='id' value='{{ getIndirectReference($id) }}'>
             <input type='hidden' name='oldparentid' value='{{ getIndirectReference($formOPid) }}'>
