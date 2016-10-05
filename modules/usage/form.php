@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.4
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -30,22 +30,23 @@ $statsIntervalOptions = '<option value="1" >' . $langPerDay . "</option>" .
         '<option value="30" selected>' . $langPerMonth . "</option>" .
         '<option value="365">' . $langPerYear . "</option>";
 
-if($stats_type == 'course'){    
+if($stats_type == 'course'){
     if (isset($_GET['id'])) { // get specific user
-        $u = Database::get()->querySingle("SELECT u.id, CONCAT(givenname,' ',surname,' (',username,')') name FROM course_user cu 
+        $u = Database::get()->querySingle("SELECT u.id, CONCAT(givenname,' ',surname,' (',username,')') name FROM course_user cu
                                                                 JOIN user u ON cu.user_id=u.id
                                                             WHERE course_id=?d AND cu.user_id=?d", $course_id, $_GET['id']);
         $statsUserOptions = '<option value="'.$u->id.'" >' . $u->name . "</option>";
-    } else { /**Get users of course**/    
-        $result = Database::get()->queryArray("SELECT u.id, CONCAT(givenname,' ',surname,' (',username,')') name FROM course_user cu 
+    } else { /**Get users of course**/
+        $result = Database::get()->queryArray("SELECT u.id, CONCAT(givenname,' ',surname,' (',username,')') name FROM course_user cu
                                                                 JOIN user u ON cu.user_id=u.id
-                                                            WHERE course_id=?d", $course_id);
+                                                            WHERE course_id=?d
+                                                            ORDER BY surname, givenname", $course_id);
         $statsUserOptions = '<option value="0" >' . $langUsers . "</option>";
         foreach($result as $u){
             $statsUserOptions .= '<option value="'.$u->id.'" >' . $u->name . "</option>";
         }
-    }    
-    
+    }
+
     $mod_opts = '<option value="-1">' . $langAllModules . "</option>";
     $result = Database::get()->queryArray("SELECT module_id id FROM course_module WHERE visible = 1 AND course_id = ?d", $course_id);
     foreach($result as $m){
@@ -68,13 +69,13 @@ elseif($stats_type == 'admin'){
        $statsDepOptions .= '<option value="'.$d->id.'" >' . $indentation.hierarchy::unserializeLangField($d->name) . "</option>\n";
     }
 }
-else{    
+else{
     /**Get courses of user**/
     if (isset($_GET['u'])) {
         $result = Database::get()->queryArray("SELECT c.id, c.code, c.title FROM course_user cu JOIN course c ON cu.course_id=c.id WHERE user_id=?d", $_GET['u']);
     } else {
         $result = Database::get()->queryArray("SELECT c.id, c.code, c.title FROM course_user cu JOIN course c ON cu.course_id=c.id WHERE user_id=?d", $uid);
-    }    
+    }
     $statsCourseOptions = '<option value="0" >' . $langAllCourses . "</option>\n";
     foreach($result as $c){
        $statsCourseOptions .= '<option value="'.$c->id.'" >' . $c->title . "</option>\n";
@@ -125,7 +126,7 @@ elseif($stats_type == 'user'){
 
 $tool_content .= '<div class="pull-right">
     <div id="toggle-view" class="btn-group">
-    	<a id="plots-view" class="btn btn-info active"  data-placement="top" title="'.$langPlots.'" data-toggle="tooltip" data-original-title="'.$langPlots.'"><span class="fa fa-bar-chart"  data-toggle="tooltip" data-placement="top"></span></a>
+        <a id="plots-view" class="btn btn-info active"  data-placement="top" title="'.$langPlots.'" data-toggle="tooltip" data-original-title="'.$langPlots.'"><span class="fa fa-bar-chart"  data-toggle="tooltip" data-placement="top"></span></a>
         <a id="list-view" class="btn btn-info"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><span class="fa fa-list"  data-toggle="tooltip" data-placement="top"></span></a>';
 $tool_content .= ($stats_type == 'course')? '<a id="logs-view" class="btn btn-primary"  data-placement="top" title="'.$langUsersLog.'" data-toggle="tooltip" data-original-title="'.$langUsersLog.'"><span class="fa fa-list-alt"  data-toggle="tooltip" data-placement="top"></span></a>':'';
 
