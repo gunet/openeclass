@@ -280,7 +280,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                         AND cu.user_id = u.id
                         AND cu.status != ?d
                         AND u.id != ?d
-                        ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+                        ORDER BY name";
                 
                 $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
                 
@@ -310,7 +310,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                         AND cu.user_id = u.id
                         AND (cu.status = ?d OR cu.editor = ?d)
                         AND u.id != ?d
-                        ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+                        ORDER BY name";
                 
                 $res = Database::get()->queryArray($sql, $course_id, USER_TEACHER, 1, $uid);
                 
