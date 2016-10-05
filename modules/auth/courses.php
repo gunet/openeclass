@@ -104,11 +104,15 @@ if (isset($_POST['submit'])) {
             exit();
         } else {
             $tool_content .= '<ul>' .
-                $tree->buildNodesNavigationHtml($roots, 'courses', null, true, $rootSubtrees) .
+                $tree->buildNodesNavigationHtml($roots, 'courses', null, array('showEmpty' => true, 'respectVisibility' => true), $rootSubtrees) .
                 '</ul>';
         }
-    } else {
-        // department exists
+    } else { // department exists
+        // validate department
+        if (!$tree->checkVisibilityRestrictions($fac->id, $fac->visible, array('respectVisibility' => true))) {
+            redirect_to_home_page();
+        }
+
         $numofcourses = getdepnumcourses($fc);
         $tool_content .= action_bar(array(
                                 array('title' => $langBack,
@@ -157,9 +161,9 @@ load_js('tools.js');
 draw($tool_content, 1, null, $head_content);
 
 function getfacfromfc($dep_id) {
-    $fac = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?d", intval($dep_id));
+    $fac = Database::get()->querySingle("SELECT id, name, visible FROM hierarchy WHERE id = ?d", intval($dep_id));
     if ($fac) {
-        return $fac->name;
+        return $fac;
     } else {
         return 0;
     }

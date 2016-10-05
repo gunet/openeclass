@@ -1022,6 +1022,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
     `id` int(11) NOT NULL auto_increment PRIMARY KEY,
     `code` varchar(20),
     `name` text NOT NULL,
+    `description` text NOT NULL,
     `number` int(11) NOT NULL default 1000,
     `generator` int(11) NOT NULL default 100,
     `lft` int(11) NOT NULL,
@@ -1029,6 +1030,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
     `allow_course` boolean not null default false,
     `allow_user` boolean NOT NULL default false,
     `order_priority` int(11) default null,
+    `visible` TINYINT(4) NOT NULL default 2,
     KEY `lftindex` (`lft`),
     KEY `rgtindex` (`rgt`) ) $tbl_options");
 
@@ -1064,9 +1066,9 @@ $db->query("CREATE TABLE `user_department` (
 
 // hierarchy stored procedures
 $db->query("DROP PROCEDURE IF EXISTS `add_node`");
-$db->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN parentlft INT(11),
+$db->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
             IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
-            IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+            IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4))
         LANGUAGE SQL
         BEGIN
             DECLARE lft, rgt INT(11);
@@ -1076,34 +1078,21 @@ $db->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN parentlft
 
             CALL shift_right(parentlft, 2, 0);
 
-            INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
+            INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible);
         END");
 
 $db->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-$db->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT CHARSET utf8, IN parentlft INT(11),
-            IN p_code VARCHAR(20) CHARSET utf8, IN p_number INT(11), IN p_generator INT(11),
-            IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
-        LANGUAGE SQL
-        BEGIN
-            DECLARE lft, rgt INT(11);
-
-            SET lft = parentlft + 1;
-            SET rgt = parentlft + 2;
-
-            CALL shift_right(parentlft, 2, 0);
-
-            INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
-        END");
 
 $db->query("DROP PROCEDURE IF EXISTS `update_node`");
-$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8,
+$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8, IN p_description TEXT CHARSET utf8,
             IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-            IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+            IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
+            IN p_order_priority INT(11), IN p_visible TINYINT(4))
         LANGUAGE SQL
         BEGIN
-            UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
+            UPDATE `hierarchy` SET name = p_name, description = p_description, lft = p_lft, rgt = p_rgt,
                 code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
-                order_priority = p_order_priority WHERE id = p_id;
+                order_priority = p_order_priority, visible = p_visible WHERE id = p_id;
 
             IF nodelft <> parentlft THEN
                 CALL move_nodes(nodelft, p_lft, p_rgt);

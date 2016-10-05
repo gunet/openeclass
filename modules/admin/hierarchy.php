@@ -183,7 +183,7 @@ hContent;
 // Add a new node
 elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (isset($_POST['add'])) {
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
         $code = $_POST['code'];
 
         $names = array();
@@ -193,12 +193,24 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
                 $names[$langcode] = $n;
             }
         }
-
         $name = serialize($names);
+
+        $descriptions = array();
+        foreach ($session->active_ui_languages as $key => $langcode) {
+            $d = (isset($_POST['description-' . $langcode])) ? $_POST['description-' . $langcode] : null;
+            if (!empty($d)) {
+                $descriptions[$langcode] = $d;
+            }
+        }
+        $description = serialize($descriptions);
 
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
         $order_priority = (isset($_POST['order_priority']) && !empty($_POST['order_priority'])) ? intval($_POST['order_priority']) : 'null';
+        $visible = (isset($_POST['visible'])) ? intval($_POST['visible']) : 2;
+        if ($visible < 0 || $visible > 2) {
+            $visible = 2;
+        }
         // Check for empty fields
         if (empty($names)) {
             $tool_content .= "<div class='alert alert-danger'>" . $langEmptyNodeName . "</div><br>";
@@ -220,7 +232,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
             // OK Create the new node
             $pid = intval($_POST['parentid']);
             validateParentId($pid, isDepartmentAdmin());
-            $tree->addNode($name, $tree->getNodeLft($pid), $code, $allow_course, $allow_user, $order_priority);
+            $tree->addNode($name, $description, $tree->getNodeLft($pid), $code, $allow_course, $allow_user, $order_priority, $visible);
             $tool_content .= "<div class='alert alert-success'>" . $langAddSuccess . "</div>";
         }
     } else {
@@ -234,15 +246,28 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
                     <input class='form-control' type='text' name='code' placeholder='$langCodeFaculte2'>
                 </div>
             </div>";
-            $i = 0;
-            foreach ($session->active_ui_languages as $key => $langcode) {
-                $tool_content .= "<div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langNodeName:</label>";
-                $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
-                $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-                $tool_content .= $tdpre . "<input class='form-control' type='text' name='name-" . $langcode . "' placeholder='$placeholder'></div></div>";
-                $i++;
-            }
+
+        // name multi-lang field
+        $i = 0;
+        foreach ($session->active_ui_languages as $key => $langcode) {
+            $tool_content .= "<div class='form-group'>
+                    <label class='col-sm-3 control-label'>$langNodeName:</label>";
+            $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
+            $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
+            $tool_content .= $tdpre . "<input class='form-control' type='text' name='name-" . $langcode . "' placeholder='$placeholder'></div></div>";
+            $i++;
+        }
+
+        // description multi-lang field
+        $j = 0;
+        foreach ($session->active_ui_languages as $key => $langcode) {
+            $tool_content .= "<div class='form-group'>
+                    <label class='col-sm-3 control-label'>$langNodeDescription:</label>";
+            $tdpre = ($j >= 0) ? "<div class='col-sm-9'>" : '';
+            $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
+            $tool_content .= $tdpre . rich_text_editor('description-' . $langcode, 8, 20, $placeholder) . "</div></div>";
+            $j++;
+        }
 
         $tool_content .= "<div class='form-group'>
                         <label class='col-sm-3 control-label'>$langNodeParent:</label>
@@ -253,23 +278,29 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         $tool_content .= "<span class='help-block'><small>$langNodeParent2</small></span>
         </div></div>
         <div class='form-group'>
-          <label class='col-sm-3 control-label'>$langNodeAllowCourse:</label>
+            <label class='col-sm-3 control-label'>$langNodeAllowCourse:</label>
             <div class='col-sm-9'>
                   <input class='form-control' type='checkbox' name='allow_course' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowCourse2</small></span>
           </div>
         </div>
         <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langNodeAllowUser</label>
-          <div class='col-sm-9'>
-              <input class='form-control' type='checkbox' name='allow_user' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowUser2</small></span>
-          </div>
+            <label class='col-sm-3 control-label'>$langNodeAllowUser</label>
+            <div class='col-sm-9'>
+                <input class='form-control' type='checkbox' name='allow_user' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowUser2</small></span>
+            </div>
         </div>
         <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langNodeOrderPriority</label>      
-          <div class='col-sm-9'>
-              <input class='form-control' type='text' name='order_priority'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
-          </div>
-        </div>
+            <label class='col-sm-3 control-label'>$langNodeOrderPriority</label>
+            <div class='col-sm-9'>
+                <input class='form-control' type='text' name='order_priority'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
+            </div>
+        </div>";
+        
+        $visibleChecked = array(NODE_CLOSED => '', NODE_SUBSCRIBED => '', NODE_OPEN => '');
+        $visibleChecked[2] = " checked='checked'";
+        $tool_content .= formVisible($visibleChecked);
+
+        $tool_content .= "
         <div class='form-group'>
           <div class='col-sm-9 col-sm-offset-3'>".form_buttons(array(
                 array(
@@ -336,13 +367,25 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
                 $names[$langcode] = $n;
             }
         }
-
         $name = serialize($names);
+
+        $descriptions = array();
+        foreach ($session->active_ui_languages as $key => $langcode) {
+            $d = (isset($_POST['description-' . $langcode])) ? $_POST['description-' . $langcode] : null;
+            if (!empty($d)) {
+                $descriptions[$langcode] = $d;
+            }
+        }
+        $description = serialize($descriptions);
 
         $code = $_POST['code'];
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
         $order_priority = (isset($_POST['order_priority']) && !empty($_POST['order_priority'])) ? intval($_POST['order_priority']) : 'null';
+        $visible = (isset($_POST['visible'])) ? intval($_POST['visible']) : 2;
+        if ($visible < 0 || $visible > 2) {
+            $visible = 2;
+        }
         if (empty($name)) {
             $tool_content .= "<div class='alert alert-danger'>" . $langEmptyNodeName . "<br>";
             $tool_content .= action_bar(array(
@@ -355,13 +398,13 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
             $oldpid = intval($_POST['oldparentid']);
             $newpid = intval($_POST['newparentid']);
             validateParentId($newpid, isDepartmentAdmin());
-            $tree->updateNode($id, $name, $tree->getNodeLft($newpid), intval($_POST['lft']), intval($_POST['rgt']), $tree->getNodeLft($oldpid), $code, $allow_course, $allow_user, $order_priority);
+            $tree->updateNode($id, $name, $description, $tree->getNodeLft($newpid), intval($_POST['lft']), intval($_POST['rgt']), $tree->getNodeLft($oldpid), $code, $allow_course, $allow_user, $order_priority, $visible);
             $tool_content .= "<div class='alert alert-success'>$langEditNodeSuccess</div><br />";
         }
     } else {
         // Get node information
         $id = intval($_GET['id']);
-        $mynode = Database::get()->querySingle("SELECT name, lft, rgt, code, allow_course, allow_user, order_priority FROM hierarchy WHERE id = ?d", $id);
+        $mynode = Database::get()->querySingle("SELECT name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible FROM hierarchy WHERE id = ?d", $id);
         $parent = $tree->getParent($mynode->lft, $mynode->rgt);
         $check_course = ($mynode->allow_course == 1) ? " checked=1 " : '';
         $check_user = ($mynode->allow_user == 1) ? " checked=1 " : '';
@@ -377,6 +420,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
                             </div>
                         </div>";
 
+        // name multi-lang field
         $is_serialized = false;
         $names = @unserialize($mynode->name);
         if ($names !== false) {
@@ -391,10 +435,31 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
             $tool_content .= "
                         <div class='form-group'>
                             <label class='col-sm-3 control-label'>$langNodeName:</label>";
-             $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
-             $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
+            $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
+            $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
             $tool_content .= $tdpre . "<input class='form-control' type='text' name='name-" . q($langcode) . "' value='" . q($n) . "' placeholder='$placeholder'></div></div>";
             $i++;
+        }
+
+        // description multi-lang field
+        $desc_is_ser = false;
+        $descriptions = @unserialize($mynode->description);
+        if ($descriptions !== false) {
+            $desc_is_ser = true;
+        }
+        $j = 0;
+        foreach ($session->active_ui_languages as $key => $langcode) {
+            $d = ($desc_is_ser && isset($descriptions[$langcode])) ? $descriptions[$langcode] : '';
+            if (!$desc_is_ser && $key == 0) {
+                $d = $mynode->description;
+            }
+            $tool_content .= "
+                        <div class='form-group'>
+                            <label class='col-sm-3 control-label'>$langNodeDescription:</label>";
+            $tdpre = ($j >= 0) ? "<div class='col-sm-9'>" : '';
+            $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
+            $tool_content .= $tdpre . rich_text_editor('description-' . $langcode, 8, 20, $d) . "</div></div>";
+            $j++;
         }
 
         $tool_content .= "<div class='form-group'>
@@ -427,21 +492,28 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         <div class='form-group'>
           <label class='col-sm-3 control-label'>$langNodeAllowCourse:</label>
             <div class='col-sm-9'>
-                  <input type='checkbox' name='allow_course' value='1' $check_course><span class='help-block'><small>$langNodeAllowCourse2</small></span>
+                <input type='checkbox' name='allow_course' value='1' $check_course><span class='help-block'><small>$langNodeAllowCourse2</small></span>
           </div>
         </div>
         <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langNodeAllowUser</label>
-          <div class='col-sm-9'>
-              <input type='checkbox' name='allow_user' value='1' $check_user><span class='help-block'><small>$langNodeAllowUser2</small></span>
-          </div>
+            <label class='col-sm-3 control-label'>$langNodeAllowUser</label>
+            <div class='col-sm-9'>
+                <input type='checkbox' name='allow_user' value='1' $check_user><span class='help-block'><small>$langNodeAllowUser2</small></span>
+            </div>
         </div>
         <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langNodeOrderPriority</label>      
-          <div class='col-sm-9'>
-              <input class='form-control' type='text' name='order_priority' value='" . q($mynode->order_priority) . "'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
-          </div>
-        </div>
+            <label class='col-sm-3 control-label'>$langNodeOrderPriority</label>
+            <div class='col-sm-9'>
+                <input class='form-control' type='text' name='order_priority' value='" . q($mynode->order_priority) . "'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
+            </div>
+        </div>";
+
+        $visible = $mynode->visible;
+        $visibleChecked = array(NODE_CLOSED => '', NODE_SUBSCRIBED => '', NODE_OPEN => '');
+        $visibleChecked[$visible] = " checked='checked'";
+        $tool_content .= formVisible($visibleChecked);
+
+        $tool_content .= "
         <input type='hidden' name='id' value='$id' />
                <input type='hidden' name='oldparentid' value='" . $formOPid . "'/>
                <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
@@ -468,3 +540,36 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
 
 draw($tool_content, 3, null, $head_content);
 
+function formVisible($visibleChecked) {
+    $ret = "
+    <div class='form-group'>
+        <label class='col-sm-3 control-label'>" . $GLOBALS['langAvailableTypes'] . ":</label>
+        <div class='col-sm-9'>
+            <div class='radio'>
+                <label>
+                    <input id='nodeopen' type='radio' name='visible' value='2' $visibleChecked[2]>
+                    <span class='fa fa-unlock fa-fw' style='font-size:23px;'></span>&nbsp;" . $GLOBALS['langNodePublic'] . "
+                    <span class='help-block'><small>" . $GLOBALS['langNodePublic2'] . "</small></span>
+                </label>
+            </div>
+            <div class='radio'>
+                <label>
+                    <input id='nodeforsubscribed' type='radio' name='visible' value='1' $visibleChecked[1]>
+                    <span class='fa fa-lock fa-fw'  style='font-size:23px;'>
+                        <span class='fa fa-pencil text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:13px; left:35px;'></span>
+                    </span>&nbsp;" . $GLOBALS['langNodeSubscribed'] . "
+                    <span class='help-block'><small>" . $GLOBALS['langNodeSubscribed2'] . "</small></span>
+                </label>
+            </div>
+            <div class='radio'>
+                <label>
+                    <input id='nodehidden' type='radio' name='visible' value='0' $visibleChecked[0]>
+                    <span class='fa fa-lock fa-fw' style='font-size:23px;'></span>&nbsp;" . $GLOBALS['langNodeHidden'] . "
+                    <span class='help-block'><small>" . $GLOBALS['langNodeHidden2'] . "</small></span>
+                </label>
+            </div>
+        </div>
+    </div>";
+
+    return $ret;
+}

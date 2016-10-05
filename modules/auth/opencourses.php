@@ -60,9 +60,13 @@ if (isset($fc)) {
     redirect_to_home_page();
 }
 
-$fac = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?d", $fc)->name;
-if (!($fac = $fac[0])) {
+$fac = Database::get()->querySingle("SELECT id, name, visible FROM hierarchy WHERE id = ?d", $fc);
+if (!$fac) {
     die("ERROR: no faculty with id $fc");
+}
+// validate department
+if (!$tree->checkVisibilityRestrictions($fac->id, $fac->visible, array('respectVisibility' => true))) {
+    redirect_to_home_page();
 }
 
 $tool_content .= action_bar(array(
@@ -81,7 +85,7 @@ $tool_content .= "
         <div class='col-xs-12'>
             <ul class='list-group'>
                 <li class='list-group-item list-header'>$langFaculty: <strong>" . $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "</strong>";
-            list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, $showEmpty);
+            list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));
             $tool_content .= $childHTML;
        $tool_content .= "</ul>
            </div>

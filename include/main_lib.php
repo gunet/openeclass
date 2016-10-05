@@ -32,6 +32,11 @@ define('COURSE_REGISTRATION', 1);
 define('COURSE_CLOSED', 0);
 define('COURSE_INACTIVE', 3);
 
+/* hierarchy node status */
+define('NODE_OPEN', 2);
+define('NODE_SUBSCRIBED', 1);
+define('NODE_CLOSED', 0);
+
 /* user status */
 define('USER_TEACHER', 1);
 define('USER_STUDENT', 5);
