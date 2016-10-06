@@ -1153,7 +1153,7 @@ function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, 
  */
 function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $display_id, $visibility, $deleted) {
     global $id, $urlServer, $is_editor,
-    $langWasDeleted, $course_code, $themeimg, $langInactiveModule;
+    $langWasDeleted, $course_code, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_EBOOK); // checks module visibility
 
@@ -1213,9 +1213,9 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
  * @return string
  */
 function actions($res_type, $resource_id, $status, $res_id = false) {
-    global $is_editor, $langEditChange, $langDelete, $langVisibility,
-    $langAddToCourseHome, $langDown, $langUp,
-    $langConfirmDelete, $course_code, $langViewHide, $langViewShow, $langReorder;
+    global $is_editor, $langEditChange, $langDelete,
+    $langAddToCourseHome, $langConfirmDelete, $course_code, 
+    $langViewHide, $langViewShow, $langReorder;
 
     static $first = true;
 

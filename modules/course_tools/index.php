@@ -131,7 +131,8 @@ if (isset($_POST['submit'])) {
 
 $toolSelection[0] = $toolSelection[1] = '';
 $module_list = Database::get()->queryArray('SELECT module_id, visible
-                                FROM course_module WHERE course_id = ?d', $course_id);
+                                FROM course_module WHERE course_id = ?d
+                                AND module_id NOT IN (SELECT module_id FROM module_disable)', $course_id);
 
 foreach ($module_list as $item) {
     if ($item->module_id == MODULE_ID_TC and !is_configured_tc_server()) { // hide teleconference when no tc servers are enabled
