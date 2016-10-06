@@ -439,12 +439,12 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
 if (isset($dialogBox) && $dialogBox != "") {
     $tool_content .= $dialogBox;
 }
-$lp_action_button = action_button(array(    
+$lp_action_button = action_button(array(
     array(
         'title' => "$langLabel2",
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=createLabel",
         'icon' => "fa-tag"
-    ),    
+    ),
     array(
         'title' => "$langDocumentAsModuleLabel",
         'url' => "insertMyDoc.php?course=$course_code",
@@ -474,7 +474,7 @@ $lp_action_button = action_button(array(
         'title' => "$langUsed $langModuleOfMyCourse",
         'url' => "insertMyModule.php?course=$course_code",
         'icon' => "fa-plus-square"
-    )    
+    )
 ),
     array(
         'secondary_title' => $langAdd,
@@ -517,11 +517,11 @@ $extendedList = array();
 $modar = array();
 foreach ($result as $list) {
     $modar['module_id'] = $list->module_id;
-    $modar['course_id'] = $list->course_id;    
+    $modar['course_id'] = $list->course_id;
     if (empty($list->name) and $list->contentType == 'LINK') {
         $modar['name'] = $list->path;
     } else {
-        $modar['name'] = $list->name;    
+        $modar['name'] = $list->name;
     }
     $modar['comment'] = $list->comment;
     $modar['accessibility'] = $list->accessibility;
@@ -536,7 +536,7 @@ foreach ($result as $list) {
     $modar['rank'] = $list->rank;
     $modar['parent'] = $list->parent;
     $modar['raw_to_pass'] = $list->raw_to_pass;
-    $modar['path'] = $list->path;    
+    $modar['path'] = $list->path;
     $extendedList[] = $modar;
 }
 
@@ -567,12 +567,12 @@ foreach ($flatElementList as $module) {
     //-------------visibility-----------------------------
     if ($module['visible'] == 0) {
         if ($is_editor) {
-            $style = " class='not_visible'";            
+            $style = " class='not_visible'";
         } else {
             continue; // skip the display of this file
         }
     } else {
-        $style = "";        
+        $style = "";
     }
     $spacingString = "";
     for ($i = 0; $i < $module['children']; $i++) {
@@ -580,7 +580,7 @@ foreach ($flatElementList as $module) {
     }
 
     $colspan = $maxDeep - $module['children'] + 1;
-   
+
     $tool_content .= "
     <tr " . $style . ">" . $spacingString . "
       <td colspan=\"" . $colspan . "\">&nbsp;&nbsp;&nbsp;";
@@ -645,10 +645,10 @@ foreach ($flatElementList as $module) {
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delModule&amp;cmdid=" . $module['learnPath_module_id'],
                     'class' => 'delete',
                     'confirm' => $langAreYouSureDeleteModule,
-                    'icon' => 'fa-times')               
+                    'icon' => 'fa-times')
             )) .
             "</td>";
-    $tool_content .= "</tr>";   
+    $tool_content .= "</tr>";
 } // end of foreach
 
 $tool_content .= "</table></div>";

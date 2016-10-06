@@ -1304,15 +1304,6 @@ function disp_message_box($message, $style = FALSE) {
     return "$cell $message";
 }
 
-function disp_message_box1($message, $style = FALSE) {
-    if ($style) {
-        $cell = "";
-    } else {
-        $cell = "";
-    }
-    return "$cell $message";
-}
-
 /*
  * Prepare the display of a clickable button
  *
