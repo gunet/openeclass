@@ -99,7 +99,7 @@
                 </div>
             @endif            
             @if (get_config('opencourses_enable'))
-                @if ($openCoursesExtraHTML) {
+                @if ($openCoursesExtraHTML)
                     <div class='panel opencourses'>
                         <div class='panel-body'>
                             {!! $openCoursesExtraHTML !!}
