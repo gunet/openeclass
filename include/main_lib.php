@@ -1043,6 +1043,21 @@ function visible_module($module_id) {
     }
 }
 
+/**
+ * @brief check if a module is disabled
+ * @param type $module_id
+ * @return boolean
+ */
+function is_module_disable($module_id) {
+    
+    $q = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
+    if ($q) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Find the current module id from the script URL
 function current_module_id() {
     global $modules, $urlAppend, $static_modules;
