@@ -4609,3 +4609,36 @@ $langMailVerificationNote = "(Note: Check your mailbox junk folder, too)";
 $langActivateCourseTools = "Activate / Deactivate Tools";
 $langTotalDuration = "Total duration";
 $langAutoJudgeConnectionError = "Error connecting to compilation service. Please report this to dnna@dnna.gr";
+
+// Mindmap
+$langMindmap = "Mind Mapping";
+$langMindMap = "Mind Map";
+$langScreenshot = "Screenshot";
+$langOpenEx = "Open Example";
+$langEditEn = "Activate Edit Mode";
+$langEditDis = "Deactivate Edit Mode";
+$langAddNode = "Add Node";
+$langRemoveNode = "Remove Node";
+$langSaveFile = "Save File";
+$langSaveInDoc = "Save in Documents";
+$langOpenFile = "open file";
+$langEditMind = "Edit";
+$langToggle = "Toggle";
+$langOpenMind = "Open";
+$langPleaseSelectNode = "Please select a node.";
+$langPlzClickNode = "Please click on a node";
+$langPlzDblClickNode = "Please doubleclick on a node";
+$langPlzChooseFile = "Please select a file";
+$langThemeDefault = "Default";
+$langThemePrimary = "Primary";
+$langThemeWarning = "Warning";
+$langThemeDanger = "Danger";
+$langThemeWarning = "Warning";
+$langThemeSuccess = "Success";
+$langThemeInfo = "Information";
+$langThemeGreenSea = "Sea Green";
+$langThemeOrange = "Orange";
+$langThemePumpkin = "Pumkin";
+$langThemePomegranate = "Pomegranate";
+$langThemeClouds = "Clouds";
+
