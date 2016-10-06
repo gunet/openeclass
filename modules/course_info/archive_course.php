@@ -33,14 +33,7 @@ if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_e
 
 doArchive($course_id, $course_code);
 
-$tool_content .= "
-    <div class='alert alert-info'>
-      <ol>
-        <li>$langBUCourseDataOfMainBase $course_code</li>
-        <li>$langBackupOfDataBase $course_code</li>
-      </ol>
-    </div>
-    <div class='alert alert-success'>$langBackupSuccesfull</div>" .
+$data['action_bar'] = 
     action_bar(array(
         array('title' => $langDownloadIt,
               'url' => $urlAppend . "courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip",
@@ -52,4 +45,6 @@ $tool_content .= "
               'icon' => 'fa-reply',
               'level' => 'primary-label')), false);
 
-draw($tool_content, 2);
+
+$data['menuTypeID'] = 2;
+view('modules.course_info.archive_course', $data);

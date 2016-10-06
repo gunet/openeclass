@@ -32,7 +32,7 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langC
 if (isset($_POST['delete'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
         array('title' => "$langBackHome $siteName",
             'url' => '../../index.php',
             'icon' => 'fa-reply',
@@ -57,24 +57,14 @@ if (isset($_POST['delete'])) {
     unset($_SESSION['dbname']);
     redirect_to_home_page('main/portfolio.php');
 } else {
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
               'url' => "index.php?course=" . q($course_code),
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
     
-    $tool_content .= "<div class='alert alert-danger'>
-            $langByDel_A <b>" . q($currentCourseName) . " ($course_code) ;</b></div>
-    <div class='form-wrapper'>
-    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-    ".showSecondFactorChallenge()."
-    <div class='form-group'>
-        <div class='col-sm-10 col-sm-offset-5'>
-            <input class='btn btn-primary' type='submit' name='delete' value='$langDelete'>
-        </div>
-    </div>
-    <span class='help-block'><small>$langByDel</small></span>
-    ". generate_csrf_token_form_field() ."                              
-   </form></div>";
+    $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course=$course_code";
 }
-draw($tool_content, 2);
+
+$data['menuTypeID'] = 2;
+view('modules.course_info.delete_course', $data);

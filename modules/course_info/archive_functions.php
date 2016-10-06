@@ -159,13 +159,14 @@ function archiveTables($course_id, $course_code, $archivedir) {
 
 
 /**
- * Do the main task of archiving a course.
- * 
- * @param int $course_id
- * @param string $course_code
+ * @brief Do the main task of archiving a course.
+ * @global type $webDir
+ * @global type $langError
+ * @param type $course_id
+ * @param type $course_code
  */
 function doArchive($course_id, $course_code) {
-    global $webDir, $urlServer, $urlAppend, $siteName, $tool_content;
+    global $webDir, $langError;
     
     $basedir = "$webDir/courses/archive/$course_code";
     file_exists($basedir) or make_dir($basedir);
@@ -191,10 +192,10 @@ function doArchive($course_id, $course_code) {
     
     removeDir($archivedir);
 
-    if (!$result) {
-        $tool_content .= "Error: " . $zipCourse->errorInfo(true);
-        draw($tool_content, 2);
-        exit;
+    if (!$result) {   
+        $message_zip_error = "$langError: " . $zipCourse->errorInfo(true);
+        Session::Messages($message_zip_error, 'alert-danger');
+        redirect_to_home_page("modules/course_info/index.php?course=$course_code");
     }
 }
 

@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
     }
     if (empty($_POST['title'])) {
         Session::Messages($langNoCourseTitle, 'alert-danger');
-        redirect_to_home_page("modules/course_info/index.php?course=$course_code");        
+        redirect_to_home_page("modules/course_info/index.php?course=$course_code");
     } else {
         // update course settings
         if (isset($_POST['formvisible']) and ($_POST['formvisible'] == '1' or $_POST['formvisible'] == '2')) {
@@ -453,6 +453,6 @@ if (isset($_POST['submit'])) {
     $data['log_course_user_requests_enable'] = $log_course_user_requests_enable;
         
     $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";
-    $data['menuTypeID'] = 1;
+    $data['menuTypeID'] = 2;
     view('modules.course_info.index', $data);    
 }
