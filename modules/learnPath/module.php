@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.4
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -126,11 +126,11 @@ if (empty($learnpath_module->specificComment) || $learnpath_module->specificComm
 // check in DB if user has already browsed this module
 
 $sql = "SELECT `contentType`,
-	`total_time`,
-	`session_time`,
-	`scoreMax`,
-	`raw`,
-	`lesson_status`
+               `total_time`,
+               `session_time`,
+               `scoreMax`,
+               `raw`,
+               `lesson_status`
         FROM `lp_user_module_progress` AS UMP,
              `lp_rel_learnPath_module` AS LPM,
              `lp_module` AS M
@@ -183,14 +183,12 @@ if ($is_editor) {
 } else {
     $pathBack = "./learningPath.php";
 }
-$tool_content .= 
+$tool_content .=
          action_bar(array(
             array('title' => $langBack,
                 'url' => $pathBack . "?course=$course_code",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')),false) ;
-
-$tool_content .="
+                'level' => 'primary-label')),false) . "
     <div class='panel panel-default'>
         <div class='panel-heading'>
             <h3 class='panel-title'>$langLearningObjectData</h3>
@@ -201,26 +199,16 @@ $tool_content .="
                     <strong>$langTitle:</strong>
                 </div>
                 <div class='col-sm-9'>";
-                    $cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) ) ? (string) $_REQUEST['cmd'] : '';
-
-            if ($cmd == "updateName") {
-                $tool_content .= "" . disp_message_box1(nameBox(MODULE_, UPDATE_, $langModify)) . "";
-            } else {
-                $tool_content .= "" . nameBox(MODULE_, DISPLAY_) . "";
-            }
+if (isset($_REQUEST['cmd']) and $_REQUEST['cmd'] == 'updateName') {
+    $tool_content .= nameBox(MODULE_, UPDATE_, $langModify);
+} else {
+    $tool_content .= nameBox(MODULE_, DISPLAY_);
+}
 $tool_content .= "</div>
             </div>";
 
-            
-//$tool_content .= "<div class='row'>
-//                <div class='col-sm-3'>
-//                    <strong>$langProgInModuleTitle:</strong>
-//                </div>
-//                <div class='col-sm-9'>hjgfjhgf
-//                </div>
-//            </div>
-//        ";
-                //############################ PROGRESS  AND  START LINK #############################\\
+
+//############################ PROGRESS  AND  START LINK #############################\\
 
 /* Display PROGRESS */
 
@@ -248,10 +236,10 @@ if ($module->contentType != CTLABEL_) { //
             $contentDescType = $langMediaTypeDesc;
         }
 
-        
+
 
         //display type of the module
-        
+
         $tool_content .= "<div class='row margin-bottom-fat'>
                             <div class='col-sm-3'>
                                 <strong>$langTypeOfModule:</strong>
@@ -261,9 +249,9 @@ if ($module->contentType != CTLABEL_) { //
                             </div>
                         </div>
                 ";
-        
+
         //display total time already spent in the module
-        
+
         $tool_content .= "<div class='row margin-bottom-fat'>
                             <div class='col-sm-3'>
                                 <strong>$langTotalTimeSpent:</strong>
@@ -275,7 +263,7 @@ if ($module->contentType != CTLABEL_) { //
                 ";
 
         //display time passed in last session
-        
+
         $tool_content .= "<div class='row margin-bottom-fat'>
                             <div class='col-sm-3'>
                                 <strong>$langLastSessionTimeSpent:</strong>
@@ -335,7 +323,7 @@ if ($module->contentType != CTLABEL_) { //
         } else {
             $statusToDisplay = $resultBrowsed->lesson_status;
         }
-        
+
         $tool_content .= "<div class='row margin-bottom-fat'>
                             <div class='col-sm-3'>
                                 <strong>$langLessonStatus:</strong>
@@ -354,7 +342,7 @@ if ($module->contentType != CTLABEL_) { //
               FROM `lp_asset`
              WHERE `asset_id` = ?d
                AND `module_id` = ?d", $module->startAsset_id, $_SESSION['lp_module_id']);
-    
+
     $tool_content .="
     <div class='row'>
         <div class='col-sm-3'>

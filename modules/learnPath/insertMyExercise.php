@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.4
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -65,7 +65,7 @@ $messBox = '';
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . intval($_SESSION['path_id']), 'name' => $langAdm);
 $toolName = $langInsertMyExerciseToolName;
-$tool_content .= 
+$tool_content .=
          action_bar(array(
             array('title' => $langBack,
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
@@ -79,7 +79,7 @@ $resultex = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id 
 foreach ($resultex as $listex) {
     if (isset($_REQUEST['insertExercise']) && isset($_REQUEST['check_' . $listex->id])) {  //add
         $insertedExercise = $listex->id;
-        
+
         // check if the exercise is compatible with LP
         $incompatible = false;
         $objExercise = new Exercise();
@@ -94,7 +94,7 @@ foreach ($resultex as $listex) {
             }
         }
         if ($incompatible) {
-            $messBox .= "<p>" . disp_message_box1(q($listex->title) . " : " . $langExIncompatibleWithLP . "<br>", "caution") . "</p>";
+            Session::Messages(q($listex->title) . ": " . $langExIncompatibleWithLP, 'alert-warning');
             continue;
         }
 
@@ -152,7 +152,7 @@ foreach ($resultex as $listex) {
                 insertInLearningPath($thisExerciseModule->module_id, $order);
                 Session::Messages($langInsertedAsModule, 'alert-info');
                 redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
-            } else {                
+            } else {
                 Session::Messages($langAlreadyUsed, 'alert-warning');
                 redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
