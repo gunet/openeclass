@@ -62,20 +62,20 @@ $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_name
                                           FROM course WHERE id = ?d", $course_id);
 
 if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-
+    
+    $max = Database::get()->querySingle("SELECT MAX(`order`) as max_order FROM course_units WHERE course_id = ?d", $course_id)->max_order;
+    
     if (isset($_POST['toReorder'])) {
         $toReorder = $_POST['toReorder'];
-
         if (isset($_POST['prevReorder'])) {
             $prevRank = Database::get()->querySingle("SELECT `order` AS rank FROM course_units WHERE id = ?d", $_POST['prevReorder'])->rank;
         } else {
             $prevRank = 0;
         }
-
-        Database::get()->query("UPDATE `course_units` SET `order` = `order` + 1 WHERE `course_id` = ?d AND `order` > ?d", $course_id, $prevRank);
+  
+        Database::get()->query("UPDATE `course_units` SET `order` = `order` + ?d + 1 WHERE `course_id` = ?d AND `order` > ?d", $max, $course_id, $prevRank);
         Database::get()->query("UPDATE `course_units` SET `order` = ?d WHERE `course_id` = ?d AND id = ?d", $prevRank + 1, $course_id, $toReorder);
-        $delta = Database::get()->querySingle("SELECT MIN(`order`) AS minOrder FROM course_units WHERE course_id =?d", $course_id)->minOrder;
-        Database::get()->query("UPDATE `course_units` SET `order` = `order` - ?d  + 1 WHERE `course_id` = ?d", $delta, $course_id);
+        Database::get()->query("UPDATE `course_units` SET `order` = `order` - ?d WHERE `course_id` = ?d AND `order` > ?d", $max, $course_id, $prevRank+1);        
     }
 
     exit;
