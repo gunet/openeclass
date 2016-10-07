@@ -1093,9 +1093,9 @@ function alt_login($user_info_object, $uname, $pass) {
 
             $options = login_hook(array(
                 'user_id' => $user_info_object->id,
-                'attributes' => $attributes,
+                'attributes' => array(),
                 'status' => $user_info_object->status,
-                'departments' => $userObj->getDepartmentIds($info->id),
+                'departments' => $userObj->getDepartmentIds($user_info_object->id),
                 'am' => $user_info_object));
 
             if (!$options['accept']) {
