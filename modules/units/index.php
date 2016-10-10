@@ -53,25 +53,13 @@ load_js('tools.js');
 load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox(true);
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-
-    if (isset($_POST['toReorder'])){
-        $toReorder = $_POST['toReorder'];
-
-        if (isset($_POST['prevReorder'])) {
-            $prevRank = Database::get()->querySingle("SELECT `order` FROM unit_resources WHERE id = ?d", $_POST['prevReorder'])->order;
-        } else {
-            $prevRank = 0;
-        }
-
-        Database::get()->query("UPDATE `unit_resources` SET `order` = `order` + 1 WHERE `unit_id` = ?d AND `order` > ?d", $id, $prevRank);
-        Database::get()->query("UPDATE `unit_resources` SET `order` = ?d WHERE `unit_id` = ?d AND id = ?d", $prevRank + 1, $id, $toReorder);
-        $delta = Database::get()->querySingle("SELECT MIN(`order`) AS minOrder FROM unit_resources WHERE unit_id =?d", $id)->minOrder;
-        Database::get()->query("UPDATE `unit_resources` SET `order` = `order` - ?d  + 1 WHERE `unit_id` = ?d", $delta, $id);
-
+// Handle unit resource reordering
+if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['toReorder'])) {
+        reorder_table('unit_resources', 'unit_id', $id, $_POST['toReorder'],
+            isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+        exit;
     }
-
-    exit();
 }
 
 if (isset($_REQUEST['edit_submit'])) {
@@ -87,7 +75,7 @@ if ($access) {
     if (!resource_access(1, $access->public)) {
         $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
         draw($tool_content, 2, null, $head_content);
-        exit;    
+        exit;
     }
 }
 
@@ -175,7 +163,7 @@ if (isset($id) and $id !== false) {
     } else {
       $tool_content .= "<br>";
         Session::Messages($langUnknownResType);
-        redirect_to_home_page("courses/$course_code/");        
+        redirect_to_home_page("courses/$course_code/");
     }
 }
 
@@ -183,24 +171,24 @@ if (isset($id) and $id !== false) {
 foreach (array('previous', 'next') as $i) {
     if ($i == 'previous') {
         $op = '<=';
-        $dir = 'DESC';        
+        $dir = 'DESC';
         $arrow1 = "<i class='fa fa-arrow-left space-after-icon'></i>";
         $arrow2 = '';
         $page_btn = 'pull-left';
     } else {
         $op = '>=';
-        $dir = '';      
+        $dir = '';
         $arrow1 = '';
         $arrow2 = "<i class='fa fa-arrow-right space-before-icon'></i>";
         $page_btn = 'pull-right';
     }
-    
+
     if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
             $access_check = "";
     } else {
         $access_check = "AND public = 1";
     }
-        
+
     $q = Database::get()->querySingle("SELECT id, title, public FROM course_units
                        WHERE course_id = ?d
                              AND id <> ?d
@@ -212,7 +200,7 @@ foreach (array('previous', 'next') as $i) {
                        LIMIT 1", $course_id, $id);
     if ($q) {
         $q_id = $q->id;
-        $q_title = htmlspecialchars($q->title);         
+        $q_title = htmlspecialchars($q->title);
         $link[$i] = "<a class='$page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
     } else {
         $link[$i] = '&nbsp;';
@@ -257,7 +245,7 @@ $tool_content .= "
       $tool_content .= "</div>";
 
     $tool_content .= "
-        </div>          
+        </div>
       </div>
     </div>
   </div>";
