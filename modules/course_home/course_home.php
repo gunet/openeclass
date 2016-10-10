@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -61,24 +61,13 @@ $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_name
                                                view_type, start_date, finish_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
 
+// Handle unit reordering
 if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-
     if (isset($_POST['toReorder'])) {
-        $toReorder = $_POST['toReorder'];
-
-        if (isset($_POST['prevReorder'])) {
-            $prevRank = Database::get()->querySingle("SELECT `order` AS rank FROM course_units WHERE id = ?d", $_POST['prevReorder'])->rank;
-        } else {
-            $prevRank = 0;
-        }
-
-        Database::get()->query("UPDATE `course_units` SET `order` = `order` + 1 WHERE `course_id` = ?d AND `order` > ?d", $course_id, $prevRank);
-        Database::get()->query("UPDATE `course_units` SET `order` = ?d WHERE `course_id` = ?d AND id = ?d", $prevRank + 1, $course_id, $toReorder);
-        $delta = Database::get()->querySingle("SELECT MIN(`order`) AS minOrder FROM course_units WHERE course_id =?d", $course_id)->minOrder;
-        Database::get()->query("UPDATE `course_units` SET `order` = `order` - ?d  + 1 WHERE `course_id` = ?d", $delta, $course_id);
+        reorder_table('course_units', 'course_id', $course_id, $_POST['toReorder'],
+            isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
+        exit;
     }
-
-    exit;
 }
 
 if (isset($_REQUEST['register'])) {
@@ -89,7 +78,7 @@ if (isset($_REQUEST['register'])) {
             if (empty($course_info->password) || $course_info->password == $_POST['password']) {
                 Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
                                     VALUES (?d, ?d, ?d, NOW())", $course_id, $uid, USER_STUDENT);
-                Session::Messages($langNotifyRegUser1, 'alert-success');                
+                Session::Messages($langNotifyRegUser1, 'alert-success');
             } else {
                 Session::Messages($langInvalidCode, 'alert-warning');
             }
@@ -113,16 +102,16 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
         handle: \'.fa-arrows\',
                 animation: 150,
                 onEnd: function (evt) {
-                
+
                 var itemEl = $(evt.item);
-                
+
                 var idReorder = itemEl.attr(\'data-id\');
                 var prevIdReorder = itemEl.prev().attr(\'data-id\');
 
                 $.ajax({
                   type: \'post\',
                   dataType: \'text\',
-                  data: { 
+                  data: {
                           toReorder: idReorder,
                           prevReorder: prevIdReorder,
                         }
@@ -171,11 +160,11 @@ if (!empty($course_info->password)) {
                         title: '$langLessonCode',
                         message: '<form class=\"form-horizontal\" role=\"form\" action=\"\" method=\"POST\" id=\"password_form\">'+
                                     '<div class=\"form-group\">'+
-                                        '<div class=\"col-sm-12\">'+                
+                                        '<div class=\"col-sm-12\">'+
                                             '<input type=\"text\" class=\"form-control\" id=\"password\" name=\"password\">'+
                                             '<input type=\"hidden\" class=\"form-control\" id=\"register\" name=\"register\">'+
                                         '</div>'+
-                                    '</div>'+                                
+                                    '</div>'+
                                   '</form>',
                         buttons: {
                             cancel: {
@@ -192,12 +181,12 @@ if (!empty($course_info->password)) {
                                     } else {
                                         $('#password').closest('.form-group').addClass('has-error');
                                         $('#password').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
-                                        return false;                            
+                                        return false;
                                     }
                                 }
-                            }                    
-                        }                          
-                    });                    
+                            }
+                        }
+                    });
                 })
             });
         </script>";
@@ -255,32 +244,32 @@ $head_content .= "
                             } else {
                                 var new_modal_id = parseInt(visible_modal_id) + 1;
                             }
-                            var new_modal = $('#hidden_'+new_modal_id);  
+                            var new_modal = $('#hidden_'+new_modal_id);
                             if (new_modal.length) {
                                 hideVisibleModal();
                                 new_modal.modal('show');
                             }
                         }
-                    }                
+                    }
                 });
             });
             function hideVisibleModal(){
                 var visible_modal = $('.modal.in');
                 if (visible_modal) { // modal is active
                     visible_modal.modal('hide'); // close modal
-                }              
+                }
             };
         </script>";
 
-if(count($res)>0){   
+if(count($res)>0){
     foreach ($res as $key => $row) {
-        $desctype = intval($row->type) - 1;    
+        $desctype = intval($row->type) - 1;
         $hidden_id = "hidden_" . $key;
         $next_id = '';
         $previous_id = '';
         if ($key + 1 < count($res)) $next_id = "hidden_" . ($key + 1);
         if ($key > 0) $previous_id = "hidden_" . ($key - 1);
-                
+
         $tool_content .=    "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
@@ -294,12 +283,12 @@ if(count($res)>0){
                                     <div class='modal-footer'>";
                                         if ($previous_id) {
                                             $tool_content .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><span class='fa fa-arrow-left'></span></a>";
-                                        } 
+                                        }
                                         if ($next_id) {
                                             $tool_content .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><span class='fa fa-arrow-right'></span></a>";
-                                        }                                                                              
-        $tool_content .=    "                                            
-                                    </div>                                        
+                                        }
+        $tool_content .=    "
+                                    </div>
                                   </div>
                                 </div>
                               </div>";
@@ -356,14 +345,14 @@ if (is_sharing_allowed($course_id)) {
 }
 $panel_footer = "";
 if(isset($rating_content) || isset($social_content) || isset($comment_content)) {
-    $panel_footer .= "                
+    $panel_footer .= "
                 <div class='panel-footer'>
                     <div class='row'>";
     if(isset($rating_content)){
      $panel_footer .=
             "<div class='col-sm-6'>
                 $rating_content
-            </div>";       
+            </div>";
     }
     if(isset($social_content) || isset($comment_content)){
 
@@ -384,9 +373,9 @@ if(isset($rating_content) || isset($social_content) || isset($comment_content)) 
             </div>";
     }
 
-    $panel_footer .= "                
+    $panel_footer .= "
                 </div>
-            </div>";          
+            </div>";
 }
 units_set_maxorder();
 
@@ -519,7 +508,7 @@ $tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dial
                             </div>
                             <div class='modal-body'>".
                               standard_text_escape($citation_text)
-                            ."</div>                                
+                            ."</div>
                         </div>
                     </div>
                 </div>";
@@ -543,7 +532,7 @@ if (isset($level) && !empty($level)) {
 /* <![CDATA[ */
 
     var dialog;
-    
+
     var showMetadata = function(course) {
         $('.modal-body', dialog).load('../../modules/course_metadata/anoninfo.php', {course: course}, function(response, status, xhr) {
             if (status === 'error') {
@@ -552,7 +541,7 @@ if (isset($level) && !empty($level)) {
         });
         dialog.modal('show');
     };
-        
+
     $(document).ready(function() {
 
         dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><div class='modal-title h4' id='modal-label'>{$langCourseMetadata}</div></div><div class='modal-body'>body</div></div></div></div>\");
@@ -641,12 +630,12 @@ if ($is_editor) {
     }, $uid);
     if (!in_array($course_id, array_keys($myCourses))) {
         $action_bar = action_bar(array(
-            array('title' => $langRegister, 
+            array('title' => $langRegister,
                   'url' => "/courses/$course_code?register",
                   'icon' => 'fa-check',
                   'link-attrs' => !empty($course_info->password) ? "id='passwordModal'" : "",
                   'level' => 'primary-label',
-                  'button-class' => 'btn-success')));          
+                  'button-class' => 'btn-success')));
     }
 
     $edit_link = " ";
@@ -711,8 +700,8 @@ if ($is_editor) {
 }
 
     $sql = Database::get()->queryArray($query, $course_id);
-    $total_cunits = count($sql);    
-    if ($total_cunits > 0) {        
+    $total_cunits = count($sql);
+    if ($total_cunits > 0) {
         $cunits_content .= "";
         $count_index = 0;
         foreach ($sql as $cu) {
@@ -727,10 +716,10 @@ if ($is_editor) {
             $class_vis = ($vis == 0) ? 'not_visible' : '';
             if ($course_info->view_type == 'weekly') {
                 if (!empty($cu->title)) {
-                    $cwtitle = "" . q($cu->title) . " ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";                    
+                    $cwtitle = "" . q($cu->title) . " ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";
                 } else {
-                    $cwtitle = "$count_index$langor $langsWeek ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")"; 
-                }                
+                    $cwtitle = "$count_index$langor $langsWeek ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";
+                }
                 $href = "<a class = '$class_vis' href='${urlServer}modules/weeks/?course=$course_code&amp;id=$cu->id&amp;cnt=$count_index'>$cwtitle</a>";
             } else {
                 $href = "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
@@ -753,7 +742,7 @@ if ($is_editor) {
                               'url' => "$_SERVER[SCRIPT_NAME]?access=". getIndirectReference($cu->id),
                               'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
                               'show' => $visible == COURSE_OPEN),)) .
-                    '</div>';                    
+                    '</div>';
                 } else {
                     $cunits_content .= "<div class='item-side'>
                                             <div class='reorder-btn'>
@@ -778,11 +767,11 @@ if ($is_editor) {
                     '</div>';
                 }
             }
-                        $cunits_content .= "</div>	
+                        $cunits_content .= "</div>
                                         <div class='item-body'>";
                         $cunits_content .= ($cu->comments == ' ')?'':$cu->comments;
                         $cunits_content .= "</div></div>";
-            $cunits_content .= "</div></div></div>";            
+            $cunits_content .= "</div></div></div>";
         }
     } else {
         $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";
@@ -809,14 +798,14 @@ if (!$alter_layout) {
             <div class='col-md-12'>
                 <h3 class='content-title  pull-left'>$unititle</h3>
             ";
-            
-        if ($is_editor and $course_info->view_type == 'units') {            
+
+        if ($is_editor and $course_info->view_type == 'units') {
             $link = "{$urlServer}modules/units/info.php?course=$course_code";
             $tool_content .= "<a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
                                 <span class='fa fa-plus-circle'></span><span class='hidden'>.</span>
-                            </a>";           
+                            </a>";
         }
-            
+
         $tool_content .= "</div></div>";
         $tool_content .= "<div class='row boxlist no-list' id='boxlistSort'>
             $cunits_content

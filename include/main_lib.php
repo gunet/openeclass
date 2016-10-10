@@ -1374,6 +1374,36 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
     return false;
 }
 
+// Handle reordering of a table (from AJAX drag-and-drop) by
+// updating the `order` field in table $table
+// Limit update to records with value $limitValue in `$limitField`
+function reorder_table($table, $limitField, $limitValue, $toReorder, $prevReorder = null) {
+    Database::get()->transaction(function () use ($table, $limitField, $limitValue, $toReorder, $prevReorder) {
+        $max = Database::get()->querySingle("SELECT MAX(`order`) AS max_order
+            FROM `$table` WHERE `$limitField` = ?d", $limitValue)->max_order;
+
+        if (!is_null($prevReorder)) {
+            $prevRank = Database::get()->querySingle("SELECT `order` AS rank
+                FROM `$table` WHERE id = ?d", $prevReorder)->rank;
+        } else {
+            $prevRank = 0;
+        }
+
+        Database::get()->query("UPDATE `$table`
+            SET `order` = `order` + ?d + 1
+            WHERE `$limitField` = ?d
+                AND `order` > ?d", $max, $limitValue, $prevRank);
+        Database::get()->query("UPDATE `$table`
+            SET `order` = ?d
+            WHERE `$limitField` = ?d
+                AND id = ?d", $prevRank + 1, $limitValue, $toReorder);
+        Database::get()->query("UPDATE `$table`
+            SET `order` = `order` - ?d
+            WHERE `$limitField` = ?d
+                AND `order` > ?d", $max, $limitValue, $prevRank + 1);
+    });
+}
+
 // Add a link to the appropriate course unit if the page was requested
 // with a unit=ID parametere. This happens if the user got to the module
 // page from a unit resource link. If entry_page == true this is the initial page of module
