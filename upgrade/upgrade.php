@@ -3360,6 +3360,23 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         updateInfo(-1, sprintf($langUpgForVersion, '3.5'));
 
         // Fix multiple equal orders for the same unit if needed
+        Database::get()->queryFunc('SELECT course_id FROM course_units
+            GROUP BY course_id, `order` HAVING COUNT(`order`) > 1',
+            function ($course) {
+                $i = 0;
+                Database::get()->queryFunc('SELECT id
+                    FROM course_units WHERE course_id = ?d
+                    ORDER BY `order`',
+                    function ($unit) use (&$i) {
+                        $i++;
+                        Database::get()->query('UPDATE course_units SET `order` = ?d
+                            WHERE id = ?d', $i, $unit->id);
+                    }, $course->course_id);
+            });
+        if (!DBHelper::indexExists('course_units', 'course_units_order')) {
+            Database::get()->query('ALTER TABLE course_units
+                ADD UNIQUE KEY `course_units_order` (`course_id`,`order`)');
+        }
         Database::get()->queryFunc('SELECT unit_id FROM unit_resources
             GROUP BY unit_id, `order` HAVING COUNT(`order`) > 1',
             function ($unit) {
@@ -3373,6 +3390,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             WHERE id = ?d', $i, $resource->id);
                     }, $unit->unit_id);
             });
+        if (!DBHelper::indexExists('unit_resources', 'unit_resources_order')) {
+            Database::get()->query('ALTER TABLE unit_resources
+                ADD UNIQUE KEY `unit_resources_order` (`unit_id`,`order`)');
+        }
         
         // fix wrong entries in statistics
         Database::get()->query("UPDATE actions_daily SET module_id = " .MODULE_ID_VIDEO . " WHERE module_id = 0");
