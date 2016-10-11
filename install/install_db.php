@@ -1378,7 +1378,8 @@ $db->query("CREATE TABLE `course_units` (
     `visible` TINYINT(4),
     `public` TINYINT(4) NOT NULL DEFAULT 1,
     `order` INT(11) NOT NULL DEFAULT 0,
-    `course_id` INT(11) NOT NULL) $tbl_options");
+    `course_id` INT(11) NOT NULL,
+    UNIQUE KEY `course_units_order` (`course_id`,`order`)) $tbl_options");
 
 $db->query("CREATE TABLE `unit_resources` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
@@ -1389,7 +1390,8 @@ $db->query("CREATE TABLE `unit_resources` (
     `type` VARCHAR(255) NOT NULL DEFAULT '',
     `visible` TINYINT(4),
     `order` INT(11) NOT NULL DEFAULT 0,
-    `date` DATETIME NOT NULL) $tbl_options");
+    `date` DATETIME NOT NULL,
+    UNIQUE KEY `unit_resources_order` (`unit_id`,`order`)) $tbl_options");
 
 $db->query("CREATE TABLE `actions_daily` (
     `id` int(11) NOT NULL auto_increment,
