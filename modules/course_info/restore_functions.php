@@ -245,132 +245,20 @@ function get_option($options, $name) {
 }
 
 /**
- * @param string $code
- * @param string $title
- * @param string $prof
- * @param string $lang
- * @param string $type - can be null
- * @param int $vis
- * @param string $desc
- * @param mixed $faculty - can be null
+ * @brief create restored course
+ * @global type $webDir
+ * @global type $urlServer
+ * @global type $urlAppend
+ * @param type $restoreThis
+ * @param type $course_code
+ * @param type $course_lang
+ * @param type $course_title
+ * @param type $course_desc
+ * @param type $course_vis
+ * @param type $course_prof
  */
-function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $faculty) {
-    global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
-    $langCourseDescription, $langFaculty, $langCourseVis,
-    $langTeacher, $langUsersWillAdd,
-    $langOk, $langAll, $langsTeachers, $langMultiRegType,
-    $langNone, $langOldValue, $treeObj, $langBack, $course_code;
-
-    list($tree_js, $tree_html) = $treeObj->buildCourseNodePickerIndirect();
-    if ($type) {
-        if (isset($GLOBALS['lang' . $type])) {
-            $type_label = ' (' . $GLOBALS['lang' . $type] . ')';
-        } else {
-            $type_label = ' (' . $type . ')';
-        }
-    } else {
-        $type_label = '';
-    }
-    if (is_array($faculty)) {
-        foreach ($faculty as $entry) {
-            $old_faculty_names[] = q(Hierarchy::unserializeLangField($entry['name']));
-        }
-        $old_faculty = implode('<br>', $old_faculty_names);
-    } else {
-        $old_faculty = q(Hierarchy::unserializeLangField($faculty) . $type_label);
-    }
-    $formAction = $_SERVER['SCRIPT_NAME'];
-    if (isset($GLOBALS['course_code'])) {
-        $formAction .= '?course=' . $GLOBALS['course_code'];
-    }
-    return action_bar(array(
-        array('title' => $langBack,
-              'url' => "index.php?course=$course_code",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label'))) . "
-        <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>
-                <div class='row'>
-                <div class='col-md-12'>
-                <div class='form-wrapper' >
-                <form class='form-horizontal' role='form' action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
-
-                    <div class='form-group'>
-                        <label for='course_code' class='col-sm-3 control-label'>$langCourseCode:</label>
-                        <div class='col-sm-9'>
-                            <input type='text' class='form-control' id='course_code' name='course_code' value='" . q($code) . "'>
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <label for='course_code' class='col-sm-3 control-label'>$langLanguage:</label>
-                        <div class='col-sm-9'>
-                            " . lang_select_options('course_lang') . "
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <label for='course_title' class='col-sm-3 control-label'>$langTitle:</label>
-                        <div class='col-sm-9'>
-                            <input class='form-control' type='text' id='course_title' name='course_title' value='" . q($title) . "' />
-                        </div>
-                    </div>
-
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langCourseDescription:</label>
-                        <div class='col-sm-9'>
-                            " . rich_text_editor('course_desc', 10, 40, purify($desc)) . "
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langFaculty:</label>
-                        <div class='col-sm-9'>
-                            " . $tree_html . "<br>$langOldValue: <i>$old_faculty</i>
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langCourseVis:</label>
-                        <div class='col-sm-9'>
-                            " . visibility_select($vis) . "
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <label for='course_prof' class='col-sm-3 control-label'>$langTeacher:</label>
-                        <div class='col-sm-9'>
-                            <input class='form-control' type='text' id='course_prof' name='course_prof' value='" . q($prof) . "' size='50' />
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                    <label class='col-sm-3 control-label'>$langUsersWillAdd:</label>
-
-                        <div class='col-sm-9'>
-                            <input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
-                           $langAll<br>
-                           <input type='radio' name='add_users' value='prof' id='add_users_prof'>
-                           $langsTeachers<br>
-                           <input type='radio' name='add_users' value='none' id='add_users_none'>
-                           $langNone
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langMultiRegType:</label>
-                        <div class='col-sm-9'>
-                            <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
-                        </div>
-                    </div>
-                    <div class='form-group'>
-                        <div class='col-sm-offset-3 col-sm-9'>
-                        <input class='btn btn-primary' type='submit' name='create_restored_course' value='$langOk' />
-                      <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
-                          </div>
-                    </div>
-                " . generate_csrf_token_form_field() . "
-                </form>
-                </div>
-                </div>
-                </div>
-    ";
-}
-
-function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof) {
-    global $webDir, $urlServer, $urlAppend, $langEnter, $langBack, $currentCourseCode;
+function create_restored_course($restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof) {
+    global $webDir, $urlServer, $urlAppend;
     
     require_once 'modules/create_course/functions.php';
     require_once 'modules/course_info/restorehelper.class.php';
@@ -378,7 +266,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
     $new_course_code = null;
     $new_course_id = null;
 
-    Database::get()->transaction(function() use (&$new_course_code, &$new_course_id, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $webDir, &$tool_content, $urlServer, $urlAppend) {
+    Database::get()->transaction(function() use (&$new_course_code, &$new_course_id, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $webDir, $urlServer, $urlAppend) {
         $departments = array();
         if (isset($_POST['department'])) {
             $_POST['department'] = arrayValuesDirect($_POST['department']);
@@ -395,9 +283,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $r = $restoreThis . '/html';
         list($new_course_code, $new_course_id) = create_course($course_code, $course_lang, $course_title, $course_desc, $departments, $course_vis, $course_prof);
         if (!$new_course_code) {
-            $tool_content = "<div class='alert alert-warning'>" . $GLOBALS['langError'] . "</div>";
-            draw($tool_content, 3);
-            exit;
+            Session::Messages($GLOBALS['langError'], 'alert-warning');
+            redirect_to_home_page("modules/course_info/index.php?course=$course_code");            
         }
 
         if (!file_exists($restoreThis)) {
@@ -480,8 +367,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         if (is_dir($restoreThis . '/video_files')) {
             move_dir($restoreThis . '/video_files', $videodir);
         }
-        course_index($new_course_code);
-        $tool_content .= "<div class='alert alert-info'>" . $GLOBALS['langCopyFiles'] . " $coursedir</div>";
+        course_index($new_course_code);        
 
         require_once 'upgrade/functions.php';
         load_global_messages();
@@ -1044,23 +930,25 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 unlink($videodir . "/" . $videofile);
             }
         }
-        $backUrl = $urlAppend . (isset($currentCourseCode)? "courses/$currentCourseCode/": 'modules/admin/');
-        $tool_content .= action_bar(array(
-            array('title' => $langEnter,
-                  'url' => $urlAppend . "courses/$new_course_code/",
-                  'icon' => 'fa-arrow-right',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success'),
-            array('title' => $langBack,
-                  'url' => $backUrl,
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label')), false);
-
-    }
+    }    
+    return $new_course_code;    
 }
 
+
+/**
+ * @brief restore users
+ * @global type $langRestoreUserExists
+ * @global type $langRestoreUserNew
+ * @global type $uid
+ * @global type $message_restore_users
+ * @param type $users
+ * @param type $cours_user
+ * @param type $departments
+ * @param type $restoreHelper
+ * @return type
+ */
 function restore_users($users, $cours_user, $departments, $restoreHelper) {
-    global $tool_content, $langRestoreUserExists, $langRestoreUserNew, $uid;
+    global $langRestoreUserExists, $langRestoreUserNew, $uid, $message_restore_users;
 
     $userid_map = array();
     if ($_POST['add_users'] == 'none') {
@@ -1092,13 +980,12 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
         $u = Database::get()->querySingle("SELECT * FROM user WHERE BINARY username = ?s", $data['username']);
         if ($u) {
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $u->id;
-            $tool_content .= "<div class='alert alert-info'>" .
-                sprintf($langRestoreUserExists,
-                    '<b>' . q($data['username']) . '</b>',
-                    '<i>' . q(trim($u->givenname . ' ' . $u->surname)) . '</i>',
-                    '<i>' . q(trim($data[$restoreHelper->getField('user', 'givenname')] .
-                        ' ' . $data[$restoreHelper->getField('user', 'surname')])) . '</i>') .
-                "</div>\n";
+            
+            $message_restore_users .= "<p>" . sprintf($langRestoreUserExists,
+                                            '<b>' . q($data['username']) . '</b>',
+                                            '<i>' . q(trim($u->givenname . ' ' . $u->surname)) . '</i>',
+                                            '<i>' . q(trim($data[$restoreHelper->getField('user', 'givenname')] .
+                                                ' ' . $data[$restoreHelper->getField('user', 'surname')])) . '</i>') . "</p>";
         } elseif (isset($_POST['create_users'])) {
             $now = date('Y-m-d H:i:s', time());
             $user_id = Database::get()->query("INSERT INTO user SET surname = ?s, "
@@ -1120,19 +1007,25 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
             $user = new User();
             $user->refresh($user_id, $departments);
             user_hook($user_id);
-            $tool_content .= "<div class='alert alert-info'>" .
+            $message_restore_users .= "<p>" . 
                 sprintf($langRestoreUserNew,
-                    '<b>' . q($data['username']) . '</b>',
-                    '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] .
-                        ' ' . $data[$restoreHelper->getField('user', 'surname')]) . '</i>') .
-                "</div>\n";
+                            '<b>' . q($data['username']) . '</b>',
+                            '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] .
+                                ' ' . $data[$restoreHelper->getField('user', 'surname')]) . '</i>') . "</p>";
         }
     }
     return $userid_map;
 }
 
+
+/**
+ * @brief register new users
+ * @param type $course_id
+ * @param type $userid_map
+ * @param type $cours_user
+ * @param type $restoreHelper
+ */
 function register_users($course_id, $userid_map, $cours_user, $restoreHelper) {
-    global $langPrevId, $langNewId, $tool_content;
 
     foreach ($cours_user as $cudata) {
         $old_id = $cudata['user_id'];
