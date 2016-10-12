@@ -101,7 +101,7 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
         animation: 350,
         handle: \'.fa-arrows\',
                 animation: 150,
-                onEnd: function (evt) {
+                onUpdate: function (evt) {
 
                 var itemEl = $(evt.item);
 

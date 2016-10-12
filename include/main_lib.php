@@ -1379,8 +1379,12 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 // Limit update to records with value $limitValue in `$limitField`
 function reorder_table($table, $limitField, $limitValue, $toReorder, $prevReorder = null) {
     Database::get()->transaction(function () use ($table, $limitField, $limitValue, $toReorder, $prevReorder) {
+
         $max = Database::get()->querySingle("SELECT MAX(`order`) AS max_order
             FROM `$table` WHERE `$limitField` = ?d", $limitValue)->max_order;
+
+        $thisRank = Database::get()->querySingle("SELECT `order` AS rank
+                FROM `$table` WHERE id = ?d", $toReorder)->rank;
 
         if (!is_null($prevReorder)) {
             $prevRank = Database::get()->querySingle("SELECT `order` AS rank
@@ -1389,18 +1393,26 @@ function reorder_table($table, $limitField, $limitValue, $toReorder, $prevReorde
             $prevRank = 0;
         }
 
+        if ($thisRank < $prevRank) {
+            $prevRank--;
+        }
+
         Database::get()->query("UPDATE `$table`
-            SET `order` = `order` + ?d + 1
+            SET `order` = `order` -1
+            WHERE `$limitField` = ?d
+                AND `order` > ?d", $limitValue, $thisRank);
+        Database::get()->query("UPDATE `$table`
+            SET `order` = `order` + ?d
             WHERE `$limitField` = ?d
                 AND `order` > ?d", $max, $limitValue, $prevRank);
         Database::get()->query("UPDATE `$table`
-            SET `order` = ?d
+            SET `order` = ?d + 1
             WHERE `$limitField` = ?d
-                AND id = ?d", $prevRank + 1, $limitValue, $toReorder);
+                AND id = ?d", $prevRank, $limitValue, $toReorder);
         Database::get()->query("UPDATE `$table`
-            SET `order` = `order` - ?d
+            SET `order` = `order` - (?d - 1)
             WHERE `$limitField` = ?d
-                AND `order` > ?d", $max, $limitValue, $prevRank + 1);
+                AND `order` > ?d + 1", $max, $limitValue, $prevRank);
     });
 }
 
