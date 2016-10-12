@@ -2968,9 +2968,7 @@ td.forum-response-column {
     .forum-post-message {
         margin: 5px 10px;
         padding-bottom: 32px;
-        word-break: break-all;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
+        text-align: justify;
     }
     .forum-post-footer {
         margin: 20px 0px 0px;
