@@ -121,7 +121,6 @@ $data['categories'] = Database::get()->queryArray("SELECT * FROM `video_category
 // js and view
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
-    load_js('jquery-' . JQUERY_VERSION . '.min');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 add_units_navigation(TRUE); // TODO: test
