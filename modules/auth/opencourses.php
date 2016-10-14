@@ -23,10 +23,10 @@ include '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 
 $countCallback = null;
-$isInOpenCoursesMode = (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA');
+$data['isInOpenCoursesMode'] = (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA');
 $showEmpty = true;
 
-if ($isInOpenCoursesMode) {
+if ($data['isInOpenCoursesMode']) {
     require_once 'modules/course_metadata/CourseXML.php';
     $countCallback = CourseXMLElement::getCountCallback();
     $showEmpty = false;
@@ -37,68 +37,59 @@ if ($isInOpenCoursesMode) {
     }
 }
 
-$tree = new Hierarchy();
+$data['tree'] = new Hierarchy();
 
 $toolName = $langListCourses;
-if ($isInOpenCoursesMode) {
+if ($data['isInOpenCoursesMode']) {
     $navigation[] = array('url' => '../auth/listfaculte.php', 'name' => $langSelectFac);
 } else {
     $navigation[] = array('url' => 'listfaculte.php', 'name' => $langSelectFac);
 }
 
 if (isset($_GET['fc'])) {
-    $fc = intval($_GET['fc']);
+    $data['fc'] = intval($_GET['fc']);
 }
 
 // parse the faculte id in a session
 // This is needed in case the user decides to switch language.
-if (isset($fc)) {
-    $_SESSION['fc_memo'] = $fc;
+if (isset($data['fc'])) {
+    $_SESSION['fc_memo'] = $data['fc'];
 } else {
-    $fc = $_SESSION['fc_memo'];
+    $data['fc'] = $_SESSION['fc_memo'];
 }
 
 
-$fac = Database::get()->querySingle("SELECT id, name, visible FROM hierarchy WHERE id = ?d", $fc);
+$fac = Database::get()->querySingle("SELECT id, name, visible FROM hierarchy WHERE id = ?d", $data['fc']);
 if (!$fac) {
-    die("ERROR: no faculty with id $fc");
+    die("ERROR: no faculty with id $data[fc]");
 }
 // validate department
-if (!$tree->checkVisibilityRestrictions($fac->id, $fac->visible, array('respectVisibility' => true))) {
+if (!$data['tree']->checkVisibilityRestrictions($fac->id, $fac->visible, array('respectVisibility' => true))) {
     redirect_to_home_page();
 }
 
 
 // use the following array for the legend icons
-$icons = array(
+$data['icons'] = array(
     2 => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' width='16' height='16' />",
     1 => "<img src='$themeimg/lock_registration.png' alt='" . $langRegCourse . "' title='" . $langRegCourse . "' width='16' height='16' />",
     0 => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
 );
 
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-if (count($tree->buildRootsArray()) > 1) {
-    $tool_content .= $tree->buildRootsSelectForm($fc);
+if (count($data['tree']->buildRootsArray()) > 1) {
+    $data['buildRoots'] = $data['tree']->buildRootsSelectForm($data['fc']);
 }
 
-$tool_content .= "
-    <div class='row'>
-        <div class='col-xs-12'>
-            <ul class='list-group'>
-                <li class='list-group-item list-header'>$langFaculty: <strong>" . $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "</strong>";
-            list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));
-            $tool_content .= $childHTML;
-       $tool_content .= "</ul>
-           </div>
-    </div>";
 
-
+list($childCount, $childHTML) = $data['tree']->buildDepartmentChildrenNavigationHtml($data['fc'], 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true));;
+$data['childHTML'] = $childHTML;
 
 $queryCourseIds = '';
 $queryExtraSelect = '';
@@ -106,7 +97,7 @@ $queryExtraJoin = '';
 $queryExtraJoinWhere = '';
 $runQuery = true;
 
-if ($isInOpenCoursesMode) {
+if ($data['isInOpenCoursesMode']) {
     // find subnode's certified opencourses
     $opencourses = array();
     Database::get()->queryFunc("SELECT course.id, course.code
@@ -116,7 +107,7 @@ if ($isInOpenCoursesMode) {
                                    AND course_department.department = ?d
                                    AND course_review.is_certified = 1", function($course) use (&$opencourses) {
         $opencourses[$course->id] = $course->code;
-    }, $fc);
+    }, $data['fc']);
 
     // construct comma seperated string with open courses ids
     $commaIds = "";
@@ -139,10 +130,10 @@ if ($isInOpenCoursesMode) {
     }
 }
 
-$courses = array();
+$data['courses'] = array();
 
 if ($runQuery) {
-    Database::get()->queryFunc("SELECT course.code k,
+    $data['courses'] = Database::get()->queryArray("SELECT course.code k,
                                course.public_code c,
                                course.title i,
                                course.visible visible,
@@ -155,107 +146,26 @@ if ($runQuery) {
                            AND course_department.department = ?d
                            AND course.visible != " . COURSE_INACTIVE . "
                            $queryCourseIds
-                      ORDER BY course.title, course.prof_names", function ($course) use (&$courses) {
-        $courses[] = $course;
-    }, $fc);
+                      ORDER BY course.title, course.prof_names", $data['fc']);
 }
 
-if (count($courses) > 0) {
-    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='table-responsive'><table class='table-default'>        
-                <tr class='list-header'><th class='text-left'>" . q($m['lessoncode']) . "</th>";
+$data['course_data'] = array();
+if (count($data['courses']) > 0) {
 
-    if ($isInOpenCoursesMode) {
-        $tool_content .= "<th class='text-left' width='220'>" . q($langTeacher) . "</th>
-                          <th width='30'>$langOpenCoursesLevel</th>";
-    } else {
-        $tool_content .= "<th class='left' width='200'>" . q($langTeacher) . "</th>
-                          <th width='30'>$langType</th>";
-    }
+    $data['displayGuestLoginLinks'] = ($uid == 0) && (get_config('course_guest') == 'link');
 
-    $tool_content .= "</tr>";
+    foreach ($data['courses'] as $mycours) {
 
-    $displayGuestLoginLinks = $uid == 0 && get_config('course_guest') == 'link';    
-    foreach ($courses as $mycours) {
-        if ($mycours->visible == COURSE_OPEN) {
-            $codelink = "<a href='../../courses/" . urlencode($mycours->k) . "/'>" . q($mycours->i) . "</a>&nbsp;<small>(" . q($mycours->c) . ")</small>";
-        } else {
-            $codelink = q($mycours->i) . "&nbsp;<small>(" . q($mycours->c) . ")</small>";
-        }
-
-        if ($displayGuestLoginLinks) {
-            $guestUser = Database::get()->querySingle('SELECT username, password FROM course_user, user
+        if ($data['displayGuestLoginLinks']) {
+            $data['course_data'][$mycours->id]['userguest'] =  Database::get()->querySingle('SELECT username, password FROM course_user, user
                 WHERE course_user.user_id = user.id AND user.status = ?d and course_id = ?d',
                 USER_GUEST, $mycours->id);
-            if ($guestUser) {
-                $codelink .= " <div class='pull-right'>";
-                if ($guestUser->password === '') {
-                    $codelink .= "
-                        <form method='post' action='$urlAppend'>
-                            <input type='hidden' name='uname' value='{$guestUser->username}'>
-                            <input type='hidden' name='pass' value=''>
-                            <input type='hidden' name='next' value='/courses/{$mycours->k}/'>
-                            <button class='btn btn-default' type='submit' title='" . q($langGuestLogin) .
-                                "' name='submit' data-toggle='tooltip'><span class='fa fa-plane'></span></button>
-                        </form>";
-                } else {
-                    $codelink .= "<a class='btn btn-default' role='button' href='" .
-                        "{$urlAppend}main/login_form.php?user=" . urlencode($guestUser->username) . "&amp;next=%2Fcourses%2F" .
-                            $mycours->k . "%2F' title='" . q($langGuestLogin) . "' data-toggle='tooltip'>
-                                <span class='fa fa-plane'></span></a>";
-                }
-                $codelink .= "</div>";
-            }
         }
-                
-        $tool_content .= "<td>" . $codelink . "</td>";
-        $tool_content .= "<td>" . q($mycours->t) . "</td>";
-        $tool_content .= "<td class='text-center'>";
-
-        if ($isInOpenCoursesMode) {
-            $tool_content .= CourseXMLElement::getLevel($mycours->level) . "&nbsp;";
-            $tool_content .= "<a href='javascript:showMetadata(\"" . $mycours->k . "\");'><img src='${themeimg}/lom.png'/></a>";
-        } else {
-            // show the necessary access icon
-            foreach ($icons as $visible => $image) {
-                if ($visible == $mycours->visible) {
-                    $tool_content .= $image;
-                }
-            }
-        }
-        $tool_content .= "</td>";
-        $tool_content .= "</tr>";        
     }
-    $tool_content .= "</table></div></div></div>";
-} else if ($childCount <= 0) {
-    $tool_content .= "<div class='alert alert-warning text-center'>- $langNoCourses -</div>\n";
 }
 
-if ($isInOpenCoursesMode) {
-    $head_content .= <<<EOF
-<link rel="stylesheet" type="text/css" href="{$urlAppend}modules/course_metadata/course_metadata.css">
-<style type="text/css"></style>
-<script type="text/javascript">
-/* <![CDATA[ */
 
-    var dialog;
-    
-    var showMetadata = function(course) {
-        $('.modal-body', dialog).load('anoninfo.php', {course: course}, function(response, status, xhr) {
-            if (status === "error") {
-                $('.modal-body', dialog).html("Sorry but there was an error, please try again");
-                //console.debug("jqxhr Request Failed, status: " + xhr.status + ", statusText: " + xhr.statusText);
-            }
-        });
-        dialog.modal('show');
-    };
-        
-    $(document).ready(function() {
-        dialog = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-label" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{$langCancel}</span></button><h4 class="modal-title" id="modal-label">{$langCourseMetadata}</h4></div><div class="modal-body">body</div></div></div></div>');
-    });
 
-/* ]]> */
-</script>
-EOF;
-}
+$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
+view('modules.auth.opencourses', $data);
 
-draw($tool_content, (isset($uid) and $uid) ? 1 : 0, null, $head_content);

@@ -1299,7 +1299,7 @@ $langDepartmentsList = "Es folgt eine Liste der Fachbereiche der Institution. W√
 $langWrongPassCourse = "Falsches Passwort f√ºr diesen Kurs";
 $langAvCourses = "vorhandene Kurse";
 $langAvCours = "vorhandener Kurs";
-$m['lessoncode'] = 'Kursname (Kursnummer)';
+$langLessonCode = 'Kursname (Kursnummer)';
 $m['tomeas'] = 'Abteilung';
 $m['open'] = 'Offene Kurse (Freier Zugang)';
 $m['closed'] = 'Geschlossene kurse';$m['legend'] = 'Legende';
