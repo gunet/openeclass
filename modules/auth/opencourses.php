@@ -195,7 +195,8 @@ if (count($courses) > 0) {
                 $codelink .= "</div>";
             }
         }
-                
+
+        $tool_content .= "<tr>";
         $tool_content .= "<td>" . $codelink . "</td>";
         $tool_content .= "<td>" . q($mycours->t) . "</td>";
         $tool_content .= "<td class='text-center'>";
