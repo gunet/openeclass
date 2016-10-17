@@ -36,30 +36,6 @@ include 'auth.inc.php';
 include 'include/sendMail.inc.php';
 $pageName = $lang_remind_pass;
 
-// javascript
-load_js('pwstrength.js');
-$head_content .= <<<hContent
-<script type="text/javascript">
-/* <![CDATA[ */
-
-    var lang = {
-hContent;
-$head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
-$head_content .= "pwStrengthWeak: '" . js_escape($langPwStrengthWeak) . "', ";
-$head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
-$head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
-$head_content .= <<<hContent
-    };
-
-    $(document).ready(function() {
-        $('#password').keyup(function() {
-            $('#result').html(checkStrength($('#password').val()))
-        });
-    });
-
-/* ]]> */
-</script>
-hContent;
 
 // Password reset link is valid for 1 hour = 3600 sec
 define('TOKEN_VALID_TIME', 3600);
@@ -249,36 +225,15 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     }
 } else {
     /*     * *** Email address entry form **** */
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-    $tool_content .= "<div class='alert alert-info'>$lang_pass_intro</div><br>";
-    $tool_content .= "
-<div class='form-wrapper'>
-    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
-            <div class='row'><div class='col-sm-8'><legend>$langUserData</legend></div></div>
-            <div class='form-group'>
-                <div class='col-sm-8'>
-                    <input class='form-control' type='text' name='userName' id='userName' autocomplete='off' placeholder='$lang_username'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <div class='col-sm-8'>
-                    <input class='form-control' type='text' name='email' id='email' autocomplete='off' placeholder='$lang_email'>
-                </div>
-            </div>
-            <div class='form-group'>
-                <div class='col-sm-8'>
-                    <button class='btn btn-primary' type='submit' name='send_link' value='$lang_pass_submit'>$lang_pass_submit</button>
-                    <button class='btn btn-default' href='$urlServer'>$langCancel</button>
-                </div>
-            </div>
-    </form>
-</div>";
 }
 
-draw($tool_content, 0, null, $head_content);
+$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
+
+view('modules.auth.lostpass', $data);
