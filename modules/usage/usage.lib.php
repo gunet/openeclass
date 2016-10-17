@@ -464,7 +464,10 @@ function get_popular_courses_stats($start = null, $end = null, $root_department 
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
 function get_department_user_stats($root_department = 1, $total = false){
-    global $langStatsUserStatus;
+    global $langTeachers, $langStudents, $langVisitors;
+
+    $statsUserStatus = array(USER_TEACHER => $langTeachers,
+        USER_STUDENT => $langStudents, USER_GUEST => $langVisitors);
     /*Simple case to get total users of the platform*/
     $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
@@ -490,7 +493,7 @@ function get_department_user_stats($root_department = 1, $total = false){
         GROUP BY ".$group_field.", status ORDER BY did";
     }
     $r = Database::get()->queryArray($q);
-    $formattedr = array('department'=>array(),$langStatsUserStatus[USER_TEACHER]=>array(),$langStatsUserStatus[USER_STUDENT]=>array());
+    $formattedr = array('department'=>array(),$statsUserStatus[USER_TEACHER]=>array(),$statsUserStatus[USER_STUDENT]=>array());
     $depids = array();
     $leaves = array();
     $d = '';
@@ -502,12 +505,12 @@ function get_department_user_stats($root_department = 1, $total = false){
             $leaves[] = $record->leaf;
             $formattedr['department'][] = hierarchy::unserializeLangField($record->dname);
             $d = $record->dname;
-            $formattedr[$langStatsUserStatus[USER_TEACHER]][] = 0;
-            $formattedr[$langStatsUserStatus[USER_STUDENT]][] = 0;
-            $formattedr[$langStatsUserStatus[USER_GUEST]][] = 0;
+            $formattedr[$statsUserStatus[USER_TEACHER]][] = 0;
+            $formattedr[$statsUserStatus[USER_STUDENT]][] = 0;
+            $formattedr[$statsUserStatus[USER_GUEST]][] = 0;
        }
        if(!is_null($record->status)){
-           $formattedr[$langStatsUserStatus[$record->status]][$i] = $record->users_count;
+           $formattedr[$statsUserStatus[$record->status]][$i] = $record->users_count;
        }
     }
     return array('deps'=>$depids,'leafdeps'=>$leaves,'chartdata'=>$formattedr);
@@ -521,7 +524,11 @@ function get_department_user_stats($root_department = 1, $total = false){
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
 function get_department_course_stats($root_department = 1){
-    global $langCourseVisibility;
+    global $langTypesInactive, $langTypesAccessControlled, $langTypesOpen, $langTypesClosed;
+    $courseVisibility = array(COURSE_CLOSED => $langTypesClosed,
+        COURSE_REGISTRATION => $langTypesAccessControlled,
+        COURSE_OPEN => $langTypesOpen,
+        COURSE_INACTIVE => $langTypesInactive);
     $q = "SELECT lft, rgt INTO @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
 
@@ -542,7 +549,7 @@ function get_department_course_stats($root_department = 1){
      ON ch.lft>=toph.lft AND ch.lft<=toph.rgt
     GROUP BY toph.id, ch.visible ORDER BY did";
     $r = Database::get()->queryArray($q);
-    $formattedr = array('department'=>array(),$langCourseVisibility[COURSE_CLOSED]=>array(),$langCourseVisibility[COURSE_REGISTRATION]=>array(), $langCourseVisibility[COURSE_OPEN]=>array(), $langCourseVisibility[COURSE_INACTIVE]=>array());
+    $formattedr = array('department'=>array(),$courseVisibility[COURSE_CLOSED]=>array(),$courseVisibility[COURSE_REGISTRATION]=>array(), $courseVisibility[COURSE_OPEN]=>array(), $courseVisibility[COURSE_INACTIVE]=>array());
     $depids = array();
     $leaves = array();
     $d = '';
@@ -554,13 +561,13 @@ function get_department_course_stats($root_department = 1){
             $leaves[] = $record->leaf;
             $formattedr['department'][] = hierarchy::unserializeLangField($record->dname);
             $d = $record->dname;
-            $formattedr[$langCourseVisibility[COURSE_CLOSED]][] = 0;
-            $formattedr[$langCourseVisibility[COURSE_REGISTRATION]][] = 0;
-            $formattedr[$langCourseVisibility[COURSE_OPEN]][] = 0;
-            $formattedr[$langCourseVisibility[COURSE_INACTIVE]][] = 0;
+            $formattedr[$courseVisibility[COURSE_CLOSED]][] = 0;
+            $formattedr[$courseVisibility[COURSE_REGISTRATION]][] = 0;
+            $formattedr[$courseVisibility[COURSE_OPEN]][] = 0;
+            $formattedr[$courseVisibility[COURSE_INACTIVE]][] = 0;
         }
         if(!is_null($record->visible)){
-           $formattedr[$langCourseVisibility[$record->visible]][$i] = $record->courses_count;
+           $formattedr[$courseVisibility[$record->visible]][$i] = $record->courses_count;
         }
     }
     return array('deps'=>$depids,'leafdeps'=>$leaves,'chartdata'=>$formattedr);
