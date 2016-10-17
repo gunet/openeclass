@@ -4489,10 +4489,10 @@ $scolles22 = "students understand me";
 $scolles23 = "I understand the tutor";
 $scolles24 = "tutor understands me";
 
-$colles_desc = "The COLLES(Constructive On Line Learning Environment Survey) questionnaire is used in order to widen the perceptions for the 
+$colles_desc = "The COLLES(Constructive On Line Learning Environment Survey) questionnaire is used in order to widen the perceptions for the
 				learning environment which has been shaped from the participants. It consists from 24 questions. Each question has as answer a number from 1 (Almost never) to 5 (Almost always)";
 $colles_detail_answer = "Here you can see the student's replies";
-				
+
 //ATTLS survey
 $question1 = "In evaluating what someone says, I focus on the quality of their argument, not on the person who's presenting it.";
 $question2 = "I like playing devil's advocate - arguing the opposite of what someone is saying.";
@@ -4530,3 +4530,14 @@ $lang_rate5 ="Strongly agree";
 $lang_result_summary = "Summarized results";
 $lang_ckw_skw_chart = "Here you can see which students learn connected / separated /  both";
 
+
+$langCertificate = "Certificate";
+$langCertificates = "Certificates";
+$langNewCertificateSuc = "New certificate created";
+$langNewCertificate = "New certificate";
+$langNewCertificateAuto = "Auto asiignment";
+$langCertificateInsertAct = "New activity inserted";
+$langAvailCert = "Available certificates";
+$langNoActivCert = "No activities in the certificate.";
+$langNoInsCert = "No available activities";
+$lanfCertNoValMes  = "If you do not choose value, the certicficate will take into account the completion of the activity";

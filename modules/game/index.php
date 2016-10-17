@@ -162,8 +162,8 @@ if ($is_editor) {
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('title', 'start_date', 'end_date', 'autoassign', 'active'));
         $v->rule('date', array('start_date', 'end_date'));
-        $v->rule('numeric', array('autoassign')); //check - if we have null - it is from a checkbox
-        $v->rule('numeric', array('active')); //check - if we have null
+        //$v->rule('numeric', array('autoassign')); //check - if we have null - it is from a checkbox
+        //$v->rule('numeric', array('active')); //check - if we have null
         if (!empty($_POST['end_date'])) {
             $v->rule('dateBefore', 'start_date', $_POST['end_date']);
         }

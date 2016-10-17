@@ -1052,8 +1052,8 @@ function new_certificate() {
     $start_date = Session::has('start_date') ? Session::get('start_date') : '';
     $end_date_error = Session::getError('end_date');
     $end_date = Session::has('end_date') ? Session::get('end_date') : '';
-    $limit_error  = Session::getError('limit');
-    $limit = Session::has('limit') ? Session::get('limit') : '';
+    //$limit_error  = Session::getError('limit');
+    //$limit = Session::has('limit') ? Session::get('limit') : '';
 
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
@@ -1207,7 +1207,7 @@ function certificate_settings($certificate_id) {
 }
 
 
-function delete_certificate($attendance_id) {
+function delete_certificate($certificate_id) {
 
     global $course_id, $langAttendanceDeleted;
 
