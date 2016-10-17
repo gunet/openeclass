@@ -148,7 +148,6 @@ $langLastStudNone = "Δεν υπάρχουν εγγραφές";
 $langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρμα:";
 $langAfterLastLoginInfo = "Στοιχεία μετά την τελευταία σας είσοδο:";
 $langOtherActions = "Άλλες Ενέργειες";
-$langTutorialDesc = "Επίσης, στον παρακάτω σύνδεσμο, θα βρείτε χρήσιμους οδηγούς λειτουργίας και διαχείρισης της πλατφόρμας Open eClass με πρακτικά παραδείγματα που διευκολύνουν τόσο τους εκπαιδευτές και τους εκπαιδευόμενους όσο και τους υπεύθυνους διαχειριστές. Οι οδηγοί αυτοί είναι διαθέσιμοι σε 3 διαφορετικές μορφές: α) εικονογραφημένοι οδηγοί, β) βιντεοπαρουσιάσεις και γ) SCORM Packages.";
 $langTeacherTutorials = "Χρήσιμοι Οδηγοί $langsOfTeacher";
 $langStudentTutorials = "Χρήσιμοι Οδηγοί $langsOfStudent";
 $langGeneralTutorials = "Εγχειρίδια χρήσης";
@@ -1621,11 +1620,11 @@ $langAmong = "μεταξύ";
 $langTake = "διάλεξε";
 $langAnswersNotDisp = "Απόκρυψη απαντήσεων μετά το τέλος της άσκησης";
 $langAnswersDisp = "Εμφάνιση απαντήσεων μετά το τέλος της άσκησης";
-$langAnswersDispLastAttempt = "Εμφάνιση απαντήσεων μετά το τέλος της τελευταίας προσπάθειας του εκπαιδευόμενου";
+$langAnswersDispLastAttempt = "Εμφάνιση απαντήσεων μετά το τέλος της τελευταίας προσπάθειας του $langsOfStudent";
 $langAnswersDispEndDate = "Εμφάνιση απαντήσεων μετά την Ημερομηνία Λήξης της άσκησης";
 $langScoreNotDisp = "Απόκρυψη βαθμολογίας μετά το τέλος της άσκησης";
 $langScoreDisp = "Εμφάνιση βαθμολογίας μετά το τέλος της άσκησης";
-$langScoreDispLastAttempt = "Εμφάνιση βαθμολογίας μετά το τέλος της τελευταίας προσπάθειας του εκπαιδευόμενου";
+$langScoreDispLastAttempt = "Εμφάνιση βαθμολογίας μετά το τέλος της τελευταίας προσπάθειας του $langsOfStudent";
 $langScoreDispEndDate = "Εμφάνιση βαθμολογίας μετά την Ημερομηνία Λήξης της άσκησης";
 $langInfoGrades = "βαθμοί";
 $langInfoGrade = "βαθμός";
@@ -1796,7 +1795,7 @@ $langExerciseLis = "Λίστα ασκήσεων";
 $langResults = "Αποτελέσματα";
 $langResults2="αποτελέσματα";
 $langResultsFailed = "Αποτυχία";
-$langStudentTotalScore = "Βαθμολογία εκπαιδευόμενου";
+$langStudentTotalScore = "Βαθμολογία $langsOfStudent";
 $langTotalScore = "Συνολική βαθμολογία";
 $langNotRecorded = "μη καταγεγραμμένη";
 
@@ -1934,15 +1933,11 @@ $langGroupCancel = "Ακύρωση";
 $langGroupSettingsModified = "Οι ρυθμίσεις της ομάδας χρηστών έχουν αλλάξει";
 $langNameSurname = "Όνομα Επίθετο";
 $langEmail = "E-mail";
-$langGroupStudentsInGroup = " " . $langsStudents . " εγγεγραμμένοι σε ομάδες χρηστών";
-$langGroupStudentsRegistered = " " . $langsStudents . " εγγεγραμμένοι στο $langsCourse";
-$langGroupNoGroup = "μη εγγεγραμμένοι " . $langsStudents . " ";
-$langGroupUsersList = "Χρήστες";
 $langGroupTooManyMembers = "Ο αριθμός που προτάθηκε υπερβαίνει το μέγιστο επιτρεπόμενο (μπορείτε να το αλλάξετε παρακάτω).
 	Η σύνθεση της ομάδας δεν άλλαξε";
 $langGroupNoTutor = "κανένας";
 $langGroupNone = "δεν υπάρχει";
-$langGroupNoneMasc = "Δεν υπάρχουν εκπαιδευόμενοι στην ομάδα";
+$langGroupNoneMasc = "Δεν υπάρχουν $langsStudents στην ομάδα";
 $langAddTutors = "Διαχείριση καταλόγου χρηστών";
 $langForumGroup = "Περιοχή συζητήσεων της ομάδας";
 $langMyGroup = "η ομάδα μου";
@@ -3095,8 +3090,8 @@ $langGiveRightEditor = "Δικαίωμα $langsOfEditor";
 $langGiveRightAdmin = "Δικαίωμα $langsOfTeacher";
 $langGiveRightReviewer = "Δικαίωμα δικαιώματος OpenCourses Reviewer";
 $langRemoveRightTutor = "Αφαίρεση δικαιώματος υπεύθυνου ομάδας";
-$langRemoveRightEditor = "Αφαίρεση δικαιώματος βοηθού εκπαιδευτή";
-$langRemoveRightAdmin = "Αφαίρεση δικαιώματος εκπαιδευτή";
+$langRemoveRightEditor = "Αφαίρεση δικαιώματος $langsOfEditor";
+$langRemoveRightAdmin = "Αφαίρεση δικαιώματος $langsOfTeacher";
 $langRemoveRightReviewer = "Αφαίρεση δικαιώματος OpenCourses Reviewer";
 $langRemoveRight = "Αφαίρεση δικαιώματος";
 $langUserOneByOneExplanation = "Αυτός (αυτή) θα λάβει ειδοποίηση μέσω email με όνομα χρήστη και συνθηματικό";
@@ -3398,6 +3393,8 @@ $langTypeClosed = "Κλειστό";
 $langTypesClosed = "Κλειστά";
 $langTypeOpen = "Ανοικτό";
 $langTypesOpen = "Ανοικτά";
+$langTypesInactive = 'Ανενεργά';
+$langTypesAccessControlled = 'Ελεγχόμενης πρόσβασης';
 $langTypeRegistration = "Ανοικτό με εγγραφή";
 $langTypesRegistration = "Ανοικτά με εγγραφή";
 $langTypeInactive = "Ανενεργό";
@@ -3653,8 +3650,6 @@ $langPerDay = "ανά ημέρα";
 $langPerWeek = "ανά εβδομάδα";
 $langPerMonth = "ανά μήνα";
 $langPerYear = "ανά έτος";
-$langStatsUserStatus = array(1=>"Εκπαιδευτές",5=>"Εκπαιδευόμενοι",10=>"Επισκέπτες");
-$langCourseVisibility = array(0=>'Ανενεργά',1=>'Ελεγχόμενης πρόσβασης',2=>'Ανοικτά',3=>'Κλειστά');
 $langRegisterActions = "Εγγραφές";
 $langUnregisterActions = "Απεγγραφές";
 $langMonthlyCourseRegistrations = "Εγγραφές χρηστών στο $langsCourse";
@@ -3966,8 +3961,8 @@ $m['WorkSubsDelete']= 'Διαγραφή υποβολών εργασίας';
 $m['WorkDeleteAssignmentFile'] = 'Διαγραφή αρχείου εργασίας';
 $m['WorkDeleteAssignmentFileConfirm'] = 'Επιβεβαίωση διαγραφής αρχείου εργασίας';
 $m['WorkEdit'] = 'Τροποποίηση εργασίας';
-$m['WorkToAllUsers'] = 'Σε όλους τους Εκπαιδευόμενους';
-$m['WorkToUser'] = 'Συγκεκριμένους Εκπαιδευόμενους';
+$m['WorkToAllUsers'] = "Σε όλους τους $langsOfStudentss";
+$m['WorkToUser'] = "Συγκεκριμένους $langsOfStudentss";
 $m['WorkToAllGroups'] = 'Σε όλες τις  '.$langGroups;
 $m['WorkToGroup'] = 'Συγκεκριμένες '.$langGroups;
 $m['WorkAssignTo'] = 'Ανάθεση σε';
@@ -4291,7 +4286,7 @@ $langRepeat = "Επανάληψη";
 $langSelectFromMenu = "Επιλέξτε...";
 $langShowTo = "Εμφάνιση σε";
 $langShowToAdminsOnly = "διαχειριστές μόνο";
-$langShowToAdminsandProfs = "διαχειριστές κι εκπαιδευτές";
+$langShowToAdminsandProfs = "διαχειριστές και $langsTeachers";
 $langShowToAllregistered = "όλους τους εγγεγραμμένους";
 $langShowToAll = "όλους τους χρήστες";
 $langSureToDelEvent = "Θέλετε σίγουρα να διαγραφεί το γεγονός;";
@@ -4645,7 +4640,7 @@ $langBBBAddSuccessful = "Ο προγραμματισμός της νέας τη�
 $langBBBNoteEnableJoin = "Ο σύνδεσμος είναι ενεργός μόνο για όσες τηλεσυνεργασίες είναι σε εξέλιξη.";
 $langBBBNoteEnableJoinEditor = "Ο σύνδεσμος ενεργοποιείται 15 λεπτά πριν την καθορισμένη ώρα έναρξης.";
 
-$langBBBNotifyUsers = "Ειδοποίηση εκπαιδευόμενων για τον προγραμματισμό της τηλεδιάσκεψης";
+$langBBBNotifyUsers = "Ειδοποίηση $langsOfStudents για τον προγραμματισμό της τηλεδιάσκεψης";
 $langBBBNotifyExternalUsers = "Ειδοποίηση εξωτερικών συμμετεχόντων";
 $langBBBNotifyExternalUsersHelpBlock = "Συμπληρώστε τις email διευθύνσεις των εξωτερικών συμμετεχόντων";
 
@@ -4657,7 +4652,7 @@ $langBBBScheduleSessionInfo = "Η τηλεσυνεργασία με τίτλο "
 $langBBBScheduleSessionInfo2 = "προγραμματίστηκε για τις ";
 $langBBBScheduleSessionInfoJoin = "Συνδεθείτε για να την παρακολουθήσετε κάνοντας κλικ παρακάτω ";
 
-$langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον εκπαιδευτή του $langsOfCourse.";
+$langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον $langsTeacher του $langsOfCourse.";
 $langBBBNotServerAvailableTeacher = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";
 $langBBBServerOrder = "Σειρά προτίμησης κατά την επιλογή εξυπηρέτη";
 $langBBBConnectionError = "Η σύνδεση με τον εξυπηρέτη τηλεσυνεργασιών δεν είναι δυνατή";
@@ -5095,7 +5090,7 @@ $langAnalyticsDescription = '<p>Μπορείτε να συνδέσετε την 
     για τους επισκέπτες.</p>';
 $langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
 <p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών $langOfCourses</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης $langsOfCourses που επίσης αναπτύσσει το GUNET.</p>";
-$langBBBDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p>
+$langBBBDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
 <p>Το BigBlueButton ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p>";
 $langAutojudgeDescription = "<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα συνδέεται με τρίτες υπηρεσίες μεταγλώττισης οι οποίες μπορούν να επιλεχθούν στις <a href=\"autojudgemoduleconf.php\">Ρυθμίσεις</a>.</p>";
 $langFtpShortDescription = "Σύνδεση με υπηρεσία FTP";
@@ -5112,9 +5107,9 @@ $langWebDAVShortDescription = "Υποστήριξη λειτουργίας κα�
 $langWebDAVLongDescription = "Long Description about web dav";
 $langAntivirusDescription = "<p>Σύνδεση με εγκατεστημένο λογισμικό προστασίας έναντι ιών</p>";
 $langWafDescription = "<p>Ενεργοποίηση τείχους προστασίας εφαρμογής ιστού</p>";
-$langOpenMeetingsDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://openmeetings.apache.org/\" target=\"_blank\">Apache OpenMeetings</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p>
+$langOpenMeetingsDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://openmeetings.apache.org/\" target=\"_blank\">Apache OpenMeetings</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
 <p>Το OpenMeetings ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα OpenMeetings επιλέξτε <a href=\"openmeetingsconf.php\">Ρυθμίσεις</a>.</p>";
-$langWebConfDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p>
+$langWebConfDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
 <p>Το WebConf ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα WebConf επιλέξτε <a href=\"webconf.php\">Ρυθμίσεις</a>.</p>";
 
 // Messages for OpenMeetings
