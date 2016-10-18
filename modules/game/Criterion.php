@@ -35,7 +35,7 @@ class Criterion extends CriterionAbstract {
         $resource = (!is_null($this->resource)) ? 'resource = ' . $this->resource : null;
         
         $threshold = null;
-        if (!is_null($this->threshold) && !is_null($this->operator)) {
+        if (!empty($this->threshold) && !empty($this->operator)) {
             $threshold = 'threshold ' . constant("Operator::{$this->operator}") . ' ' . $this->threshold;
         }
         
