@@ -86,7 +86,7 @@ if ($is_editor) {
         $tool_content .= "</div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='description' class='col-sm-2 control-label'>$langDescr:</label>";
+        $tool_content .= "<label for='description' class='col-sm-2 control-label'>$langDescription:</label>";
         $tool_content .= "<div class='col-sm-10'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";
@@ -95,7 +95,7 @@ if ($is_editor) {
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
                     <label>
-                        <input type='checkbox' name='status' checked> $langShow
+                        <input type='checkbox' name='status' checked> $langViewShow
                     </label>
                 </div>
             </div>
@@ -193,7 +193,7 @@ if ($is_editor) {
         $tool_content .= "</div>";        
         
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='desc' class='col-sm-2 control-label'>$langDescr:</label>";
+        $tool_content .= "<label for='desc' class='col-sm-2 control-label'>$langDescription:</label>";
         $tool_content .= "<div class='col-sm-10'>";
         $tool_content .= "$textarea";
         $tool_content .= "</div>";
@@ -244,7 +244,7 @@ if ($is_editor) {
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
                     <label>
-                        <input type='checkbox' name='status' $checked_status> $langShow
+                        <input type='checkbox' name='status' $checked_status> $langViewShow
                     </label>
                 </div>
             </div>
@@ -287,7 +287,7 @@ if ($display == TRUE) {
         }
         $tool_content .="</tr></thead>";
         foreach ($q as $conf) {
-            $enabled_conference = ($conf->status == 'active')? "<span class='text-success'><span class='fa fa-eye'></span> $langAdminAnVis</span>" : "<span class='text-danger'><span class='fa fa-eye-slash'></span> $langAdminAnNotVis</span>";
+            $enabled_conference = ($conf->status == 'active')? "<span class='text-success'><span class='fa fa-eye'></span> $langVisible</span>" : "<span class='text-danger'><span class='fa fa-eye-slash'></span> $langInvisible</span>";
             ($conf->status == 'active')? $tool_content .= "<tr>" : $tool_content .= "<tr class='not_visible'>";
             $tool_content .= "<td>";
             if (is_valid_chat_user($uid, $conf->conf_id, $conf->status)) { // chat access control

@@ -374,7 +374,7 @@ function display_attendance_activities($attendance_id) {
  * @global type $course_code
  * @global type $tool_content
  * @global type $langGradebookActivityDate2
- * @global type $langDescr
+ * @global type $langDescription
  * @global type $langAdd
  * @global type $langAttendanceNoActMessageExe4
  * @global type $langTitle
@@ -383,7 +383,7 @@ function display_attendance_activities($attendance_id) {
 function attendance_display_available_exercises($attendance_id) {
     
     global $course_id, $course_code, $tool_content,
-           $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle;
+           $langGradebookActivityDate2, $langDescription, $langAdd, $langAttendanceNoActMessageExe4, $langTitle;
 
     $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d 
                                 AND exercise.active = 1 AND exercise.id 
@@ -392,7 +392,7 @@ function attendance_display_available_exercises($attendance_id) {
     if ($checkForExerNumber > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescr</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
 

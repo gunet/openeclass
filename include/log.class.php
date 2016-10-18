@@ -285,6 +285,8 @@ class Log {
                 break;
             case MODULE_ID_ATTENDANCE: $content = $this->attendance_action_details($details);
                 break;
+            case MODULE_ID_TC: $content = $this->tc_action_details($details);
+                break;
             default: $content = $langUnknownModule;
                 break;
         }
@@ -814,44 +816,65 @@ class Log {
      * @global type $langUnCourse
      * @global type $langOfUser
      * @global type $langToUser
-     * @global type $langOneByOne
-     * @global type $langGiveRightAdmin
-     * @global type $langGiveRightΕditor
-     * @global type $langGiveRightTutor
+     * @global type $langAddGUser,
+     * @global type $langsOfTeacher
+     * @global type $langsOfEditor
+     * @global type $langsOfGroupTutor
+     * @global type $langGiveRight
+     * @global type $langRemovedRight
+     * @global type $langRemoveRightAdmin    
      * @global type $langRemoveRightAdmin
-     * @global type $langRemoveRightEditor
-     * @global type $langRemoveRightAdmin
+     * @global type $langUnCourse
+     * @global type $langTheU
      * @param type $details
      * @return string
      */
     private function course_user_action_details($details) {
 
-        global $langUnCourse, $langOfUser, $langToUser, $langNewUser,
-        $langGiveRightAdmin, $langGiveRightEditor, $langGiveRightTutor,
-        $langRemoveRightAdmin, $langRemoveRightEditor, $langRemoveRightAdmin;
+        global $langUnCourse, $langOfUser, $langToUser,
+        $langsOfTeacher, $langsOfEditor, $langNewUser, $langAddGUser,
+        $langRemoveRightAdmin, $langRemoveRightAdmin, $langUnCourse,
+        $langTheU, $langGiveRight, $langRemovedRight, $langsOfGroupTutor;
 
         $details = unserialize($details);
-
+        
         switch ($details['right']) {
             case '+5': $content = $langNewUser;
+                       $content .= "&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo";
+                break;
+            case '-5': $content = $langUnCourse;
+                       $content .= "&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo";
                 break;
             case '0': $content = "$langUnCourse $langOfUser";
+                      $content .= "&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo";
                 break;
-            case '+1': $content = "$langGiveRightAdmin $langToUser";
+            case '+1': $content = "$langTheU &nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo;&nbsp;";
+                       $content .= "$langGiveRight $langsOfTeacher $langToUser";
+                       $content .= "&nbsp;&laquo" . display_user($details['dest_uid'], false, false) . "&raquo";
                 break;
-            case '+2': $content = "$langGiveRightEditor $langToUser";
+            case '+2': $content = "$langTheU &nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
+                       $content .= "$langGiveRight $langsOfEditor $langToUser";
+                       $content .= "&nbsp;&laquo" . display_user($details['dest_uid'], false, false) . "&raquo";
                 break;
-            case '+3': $content = "$langGiveRightTutor $langToUser";
+            case '+3': $content = "$langTheU &nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
+                       $content .= "$langGiveRight $langsOfGroupTutor $langToUser";
+                       $content .= "&nbsp;&laquo" . display_user($details['dest_uid'], false, false) . "&raquo";
                 break;
-            case '-1': $content = "$langRemoveRightAdmin $langToUser";
+            case '-1': $content = "$langTheU &nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
+                       $content .= "$langRemovedRight $langsOfTeacher $langToUser";
+                       $content .= "&nbsp;&laquo" . display_user($details['dest_uid'], false, false) . "&raquo";
                 break;
-            case '-2': $content = "$langRemoveRightEditor $langToUser";
+            case '-2': $content = "$langTheU &nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
+                       $content .= "$langRemovedRight $langsOfEditor $langToUser";
+                       $content .= "&nbsp;&laquo" . display_user($details['dest_uid'], false, false) . "&raquo";
                 break;
-            case '-3': $content = "$langRemoveRightAdmin $langToUser";
+            case '-3': $content = "$langTheU &nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
+                       $content .= "$langRemovedRight $langsOfGroupTutor $langToUser";
+                       $content .= "&nbsp;&laquo" . display_user($details['dest_uid'], false, false) . "&raquo";
                 break;
-        }
-        $content .= "&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo";
-
+            case '+10': $content = "$langAddGUser&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
+                break;
+        }        
         return $content;
     }
 
@@ -1202,6 +1225,31 @@ class Log {
         return $content;
     }
 
+    /**
+     * @display action details in tc module
+     * @global type $langTitle
+     * @global type $langDescription
+     * @global type $langType
+     * @param type $details
+     * @return string
+     */
+    private function tc_action_details($details) {
+        
+        global $langTitle, $langDescription, $langType;
+        
+        $d = unserialize($details);
+        $content = '';
+        if (isset($d['tc_type'])) {
+            $content .= "$langType " . "&laquo" . $d['tc_type']. "&raquo&nbsp;&mdash;&nbsp;";
+        }
+        $content .= "$langTitle " . "&laquo" . $d['title'] . "&raquo";
+        if (isset($d['desc'])) {
+            $content .= "&nbsp;&mdash;&nbsp; $langDescription " . "&laquo" . $d['desc']. "&raquo";
+        }
+        
+        return $content;
+                
+    }
     /**
      * @global type $langInsert
      * @global type $langModify

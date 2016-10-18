@@ -119,9 +119,13 @@ if (isset($_GET['stats_submit'])) {
         $tool_content .= "<tr class='list-header'><th class='col-xs-6'>$langMonth</th><th class='col-xs-2'>$langVisits</th><th class='col-xs-2'>$langUsers</th></tr>";
         $q1 = Database::get()->queryArray("SELECT MONTH(day) AS month, YEAR(day) AS year, COUNT(*) AS visits, COUNT(DISTINCT user_id) AS users FROM actions_daily
                         WHERE (day BETWEEN '$u_date_start' AND '$u_date_end') AND course_id = ?d GROUP BY month,year ORDER BY year, month ASC", $_GET['c']);
+        $total_visits = $total_users = 0;
         foreach ($q1 as $data) {
             $tool_content .= "<tr><td>$data->month-$data->year</td><td>$data->visits</td><td>$data->users</td></tr>";
+            $total_visits += $data->visits;
+            $total_users += $data->users;
         }
+        $tool_content .= "<tr><td><h5>$langTotal</h5></td><td><h5>$total_visits</h5></td><td><h5>$total_users</h5></td></tr>";
         $tool_content .= "</table></div>";
 
         // visits per module per month

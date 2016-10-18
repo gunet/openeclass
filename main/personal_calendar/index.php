@@ -353,13 +353,13 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         <input type='hidden' id='id' name='id' value='$eventToModify'>
         <input type='hidden' name='rep' id='rep' value='$applytogroup'>
         <div class='form-group'>
-          <label for='newTitle' class='col-sm-2 control-label'>$langEventTitle:</label>
+          <label for='newTitle' class='col-sm-2 control-label'>$langTitle:</label>
           <div class='col-sm-10'>
-               <input class='form-control' type='text' name='newTitle' id='newTitle' value='$titleToModify' placeholder='$langEventTitle'>
+               <input class='form-control' type='text' name='newTitle' id='newTitle' value='$titleToModify' placeholder='$langTitle'>
           </div>
         </div>
         <div class='form-group'>
-          <label for='newContent' class='col-sm-2 control-label'>$langEventBody:</label>
+          <label for='newContent' class='col-sm-2 control-label'>$langDescription:</label>
           <div class='col-sm-10'>
                " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
           </div>

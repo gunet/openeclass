@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.2
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -39,14 +39,14 @@ require_once 'inc/delos_functions.php'; // required by view
 require_once 'inc/video_functions.php';
 
 $action = new action();
-$action->record('MODULE_ID_VIDEO');
+$action->record(MODULE_ID_VIDEO);
 
 $toolName = $langVideo;
 $data = array();
 
 // common data for tinymce embedding, custom filtering, sorting, etc..
 $is_in_tinymce = $data['is_in_tinymce'] = isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce';
-$data['menuTypeID'] = ($is_in_tinymce) ? 5 : 2;
+$data['menuTypeID'] = $is_in_tinymce ? 5 : 2;
 list($filterv, $filterl, $compatiblePlugin) = isset($_REQUEST['docsfilter']) 
         ? select_proper_filters($_REQUEST['docsfilter']) 
         : array('WHERE true', 'WHERE true', true);
@@ -121,7 +121,6 @@ $data['categories'] = Database::get()->queryArray("SELECT * FROM `video_category
 // js and view
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
-    load_js('jquery-' . JQUERY_VERSION . '.min');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 add_units_navigation(TRUE); // TODO: test

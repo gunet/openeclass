@@ -34,7 +34,7 @@
  */
 function list_exercises() {
     global $id, $course_id, $tool_content, $urlServer,
-    $langDescr, $langAddModulesButton, $langChoice, $langNoExercises, $langExercices, $course_code;
+    $langDescription, $langAddModulesButton, $langChoice, $langNoExercises, $langExercices, $course_code;
 
 
     $result = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d", $course_id);
@@ -53,7 +53,7 @@ function list_exercises() {
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th width='50%' class='text-left'>$langExercices</th>" .
-                "<th class='text-left'>$langDescr</th>" .
+                "<th class='text-left'>$langDescription</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
         foreach ($quizinfo as $entry) {

@@ -1,4 +1,4 @@
-gem 'bootstrap-sass', '=3.3.6'
+gem 'bootstrap-sass', '=3.3.7'
 require 'bootstrap-sass'
 # Require any additional compass plugins here.
 
@@ -7,7 +7,7 @@ require 'bootstrap-sass'
 css_dir = "CSS"
 sass_dir = "SASS"
 images_dir = "images"
-javascripts_dir = "javascripts"
+javascripts_dir = "js"
 
 # You can select your preferred output style here (can be overridden via the command line):
 output_style = :compressed # :expanded or :nested or :compact or :compressed

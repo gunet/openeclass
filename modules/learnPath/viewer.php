@@ -93,7 +93,7 @@ if ($displayFull == 0) {
             . "      <a href=\"module.php?course=$course_code\">" . $langBack . "</a>" . "\n"
             . "      </iframe>" . "\n";
     draw($tool_content, 2, null, $head_content);
-} else {
+} else {       
     echo
     "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Frameset//EN\""
     . "   \"http://www.w3.org/TR/html4/frameset.dtd\">" . "\n"

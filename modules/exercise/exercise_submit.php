@@ -479,7 +479,7 @@ $head_content .= "<script type='text/javascript'>
                     date.setTime(date.getTime()+(30*1000));
                     var expires = '; expires='+date.toGMTString();                
                     document.cookie = 'inExercise=$exerciseId'+expires;
-                    return '$langLeaveExerciseWarning';
+                    return '" . js_escape($langLeaveExerciseWarning) ."';
                 });
                 $(window).bind('unload', function(){ 
                     $.ajax({

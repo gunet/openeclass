@@ -116,12 +116,12 @@ function createCoursesDom($coursesArr) {
 }
 
 function getVisibleName($value) {
-    global $m;
+    global $langRegCourse, $langTypeInactive, $langTypeOpen, $langTypeClosed;
 
-    $visibles = array(3 => $m['linactive'],
-        2 => $m['legopen'],
-        1 => $m['legrestricted'],
-        0 => $m['legclosed']);
+    $visibles = array(COURSE_INACTIVE => $langTypeInactive,
+                      COURSE_OPEN => $langTypeOpen,
+                      COURSE_REGISTRATION => $langRegCourse,
+                      COURSE_CLOSED => $langTypeClosed);
 
     return $visibles[$value];
 }

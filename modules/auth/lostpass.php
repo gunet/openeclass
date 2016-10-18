@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.4
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -36,30 +36,6 @@ include 'auth.inc.php';
 include 'include/sendMail.inc.php';
 $pageName = $lang_remind_pass;
 
-// javascript
-load_js('pwstrength.js');
-$head_content .= <<<hContent
-<script type="text/javascript">
-/* <![CDATA[ */
-
-    var lang = {
-hContent;
-$head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
-$head_content .= "pwStrengthWeak: '" . js_escape($langPwStrengthWeak) . "', ";
-$head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
-$head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
-$head_content .= <<<hContent
-    };
-
-    $(document).ready(function() {
-        $('#password').keyup(function() {
-            $('#result').html(checkStrength($('#password').val()))
-        });
-    });
-
-/* ]]> */
-</script>
-hContent;
 
 // Password reset link is valid for 1 hour = 3600 sec
 define('TOKEN_VALID_TIME', 3600);
@@ -164,11 +140,11 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     $userName = isset($_POST['userName']) ? canonicalize_whitespace($_POST['userName']) : '';
     /*     * *** If valid e-mail address was entered, find user and send email **** */
     $res = Database::get()->querySingle("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
-	                LEFT JOIN admin a ON (a.user_id = u.id)
-	                WHERE u.email = ?s AND
-	                BINARY u.username = ?s AND 
-	                a.user_id IS NULL AND  
-	                (u.last_passreminder IS NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) >= u.last_passreminder)", $email, $userName); //exclude admins and currently pending requests
+                    LEFT JOIN admin a ON (a.user_id = u.id)
+                    WHERE u.email = ?s AND
+                    BINARY u.username = ?s AND
+                    a.user_id IS NULL AND
+                    (u.last_passreminder IS NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) >= u.last_passreminder)", $email, $userName); //exclude admins and currently pending requests
 
     $found_editable_password = false;
     if ($res) {
@@ -205,7 +181,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
 
             $plainText = html2text($text);
             // store the timestamp of this action (password reminding and token generation)
-            Database::get()->query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ?d" , $res->id);            
+            Database::get()->query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ?d" , $res->id);
         } else { //other type of auth...
             $auth = array_search($res->password, $auth_ids) or 1;
             $tool_content = "<div class='alert alert-danger'>
@@ -231,11 +207,11 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
         }
     } else {
         $res = Database::get()->querySingle("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
-	                LEFT JOIN admin a ON (a.user_id = u.id)
-	                WHERE u.email = ?s AND
-	                BINARY u.username = ?s AND 
-	                a.user_id IS NULL AND  
-	                (u.last_passreminder IS NOT NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) < u.last_passreminder)", $email, $userName);
+                    LEFT JOIN admin a ON (a.user_id = u.id)
+                    WHERE u.email = ?s AND
+                    BINARY u.username = ?s AND
+                    a.user_id IS NULL AND
+                    (u.last_passreminder IS NOT NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) < u.last_passreminder)", $email, $userName);
         if ($res) {
             $tool_content .= "<div class='alert alert-danger'>
                         <p>$langLostPassPending</p></div>
@@ -249,36 +225,15 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     }
 } else {
     /*     * *** Email address entry form **** */
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-    $tool_content .= "<div class='alert alert-info'>$lang_pass_intro</div><br>";
-    $tool_content .= "
-<div class='form-wrapper'>        
-    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
-            <div class='row'><div class='col-sm-8'><legend>$langUserData</legend></div></div>
-            <div class='form-group'>
-                <div class='col-sm-8'>
-                    <input class='form-control' type='text' name='userName' id='userName' autocomplete='off' placeholder='$lang_username'>
-                </div>
-            </div>       
-            <div class='form-group'>
-                <div class='col-sm-8'>
-                    <input class='form-control' type='text' name='email' id='email' autocomplete='off' placeholder='$lang_email'>
-                </div>
-            </div>   
-            <div class='form-group'>
-                <div class='col-sm-8'>
-                    <button class='btn btn-primary' type='submit' name='send_link' value='$lang_pass_submit'>$lang_pass_submit</button> 
-                    <button class='btn btn-default' href='$urlServer'>$langCancel</button>
-                </div>
-            </div> 
-    </form>
-</div>";
 }
 
-draw($tool_content, 0, null, $head_content);
+$data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
+
+view('modules.auth.lostpass', $data);

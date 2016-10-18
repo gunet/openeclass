@@ -37,23 +37,33 @@ abstract class OAuthDriveApp extends ExtApp {
     }
 
     protected function getAppParamName() {
-        return "Κωδικός εφαρμογής";
+        global $langAppCode;
+        
+        return $langAppCode;
     }
 
     protected function getKeyParamName() {
-        return "Κλειδί εφαρμογής";
+        global $langAppKey;
+        
+        return $langAppKey;
     }
 
     protected function getURLParamName() {
-        return "Διεύθυνση επιστροφής";
+        global $langReturnAddress;
+        
+        return $langReturnAddress;
     }
 
     public function getShortDescription() {
-        return "Short description about " . $this->getDisplayName();
+        global $langUnitDescr;
+                
+        return "$langUnitDescr " . $this->getDisplayName();
     }
 
     public function getLongDescription() {
-        return "Long description about " . $this->getDisplayName();
+        global $langDescription;
+        
+        return "$langDescription " . $this->getDisplayName();
     }
 
     protected abstract function getURLDefaultValue();

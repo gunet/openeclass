@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -67,14 +67,13 @@ if (isset($_GET['action'])) {
 }
 
 $is_in_tinymce = $data['is_in_tinymce'] = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
-$menuTypeID = ($is_in_tinymce) ? 5 : 2;
+$data['menuTypeID'] = $is_in_tinymce ? 5 : 2;
 $tinymce_params = $data['tinymce_params'] = '';
 
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&amp;docsfilter=' . $_REQUEST['docsfilter'] : '';
     $tinymce_params = $data['tinymce_params'] = '&amp;embedtype=tinymce' . $docsfilter;
-    load_js('jquery-' . JQUERY_VERSION . '.min');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
@@ -145,7 +144,7 @@ if ($is_editor) {
     } elseif (isset($_GET['cup'])) {
         move_order('link_category', 'id', intval(getDirectReference($_GET['cup'])), 'order', 'up', "course_id = $course_id");
     }
-    
+
     switch ($action) {
         case 'deletelink':
             delete_link($id);
@@ -222,12 +221,12 @@ if ($is_editor) {
     // Edit Settings
     } elseif ($action == 'settings') {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
-        
+
         $data['social_enabled'] = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
-        
-        view('modules.link.settings', $data);       
+
+        view('modules.link.settings', $data);
     }
-// If the user !$is_editor and social bookmarks are enabled    
+// If the user !$is_editor and social bookmarks are enabled
 } elseif ($social_bookmarks_enabled) {
     if (isset($_SESSION['uid'])) {
         //check if user is course member
@@ -255,14 +254,14 @@ if ($is_editor) {
                     redirect_to_home_page("modules/link/index.php");
                     break;
             }
-            
+
             if (isset($_GET['action'])) {
                 $data['action_bar'] = action_bar(array(
                         array('title' => $langBack,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                               'icon' => 'fa-reply',
                               'level' => 'primary-label')));
-            
+
             } else {
                 $ext = (isset($urlview)? "&amp;urlview=$urlview": '');
                 $data['action_bar'] = action_bar(array(
@@ -272,7 +271,7 @@ if ($is_editor) {
                               'button-class' => 'btn-success',
                               'level' => 'primary-label')));
             }
-            
+
             if (in_array($action, array('addlink', 'editlink'))) {
                 if ((isset($id) && is_link_creator($id)) || !isset($id)) {
                     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
@@ -283,7 +282,7 @@ if ($is_editor) {
                             $description = purify(trim($data['link']->description));
                         } else {
                             $description = '';
-                        }                        
+                        }
                         $data['submit_label'] = $langLinkModify;
                     } else {
                         $description = '';
@@ -291,7 +290,7 @@ if ($is_editor) {
                     }
                     $data['urlLinkError'] = Session::getError('urllink') ? " has-error" : "";
                     $data['description_textarea'] = rich_text_editor('description', 3, 30, $description);
-                    
+
                     view('modules.link.create', $data);
                 }
             }
@@ -304,26 +303,26 @@ if ($is_editor) {
 $data['display_tools'] = $display_tools = $is_editor && !$is_in_tinymce;
 
 if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory', 'settings'))) {
-    
+
     if ($social_bookmarks_enabled == 1) {
         $data['countlinks'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d", $course_id, -1)->cnt;
     } else {
         $data['countlinks'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d AND category <> ?d", $course_id, -1, -2)->cnt;
     }
-    
+
     add_units_navigation(true);
-    
+
     $head_content .= abuse_report_add_js();
 
     //Uncategorized Links
-    $general_links = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, 0);    
+    $general_links = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, 0);
     $data['general_category'] = (object) ['id' => 0, 'links' => $general_links];
 
     //Social Links
-    $social_links = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, -2);      
+    $social_links = Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, -2);
     $data['social_category'] = (object) ['id' => -2, 'links' => $social_links];
 
-    //Other Categories                
+    //Other Categories
     $data['categories'] = FALSE;
     DataBase::get()->queryFunc("SELECT * FROM `link_category` WHERE course_id = ?d ORDER BY `order`", function($category) use (&$data) {
         $links = Database::get()->queryArray("SELECT * FROM `link`
@@ -332,10 +331,10 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
         $category->links = $links;
         $data['categories'][] = $category;
 
-    }, $course_id);        
+    }, $course_id);
 
     // making the show none / show all links. Show none means urlview=0000 (number of zeros depending on the
-    // number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).         
+    // number of categories). Show all means urlview=1111 (number of 1 depending on teh number of categories).
     if ($urlview === '') {
         $urlview = $data['urlview'] = str_repeat('0', count($data['categories']));
     }

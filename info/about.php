@@ -46,7 +46,7 @@ foreach ($userCounts as $item) {
 $data['count_total'] = $count_total;
 $data['count_status'] = $count_status;
 $data['institution'] = $Institution;
-$data['institution_url'] = $InstitutionUrl;
+$data['institution_url'] = canonicalize_url($InstitutionUrl);
 $data['siteName'] = $siteName;
 $data['eclass_version'] = ECLASS_VERSION;
 $data['admin_name'] = get_config('admin_name');

@@ -473,13 +473,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 ';
     $fd = @fopen("../config/config.php", "w");
     if (!$fd) {
-        $config_dir = dirname(__DIR__) . '/config';
+        $config_dir = dirname(__DIR__) . '/laravel';
         $tool_content .= "<p class='alert'>$langErrorConfig</p>" .
                 "<p class='info'>" . sprintf($langErrorConfigAlt, $config_dir) .
                 "</p><pre class='config'>" . q($stringConfig) . "</pre>";
     } else {
         // write to file
         fwrite($fd, $stringConfig);
+        fclose($fd);
         // message
         $tool_content .= "
 	<div class='alert alert-success'>$langInstallSuccess</div>
@@ -549,9 +550,10 @@ elseif (isset($_POST['install1'])) {
     warnIfExtNotLoaded('dom');
     warnIfExtNotLoaded('zlib');
     warnIfExtNotLoaded('pcre');
-    warnIfExtNotLoaded("curl");
+    warnIfExtNotLoaded('curl');    
     $tool_content .= "</ul><h3>$langOptionalPHP</h3>";
     $tool_content .= "<ul class='list-unstyled'>";
+    warnIfExtNotLoaded('soap');
     warnIfExtNotLoaded('ldap');    
     $tool_content .= "</ul>";
     if (ini_get('register_globals')) { // check if register globals is Off

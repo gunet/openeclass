@@ -478,10 +478,11 @@ $(document).ready(function () {
                     }, 2500);
                 } else {
                     note_text = $('<p/>').text(note_text).wrap('<div/>').parent().html();
+                    ssc = (sidebarConfig.courseId == "")? 0:1;
                     $.ajax({
                         type: "POST",
                         url: sidebarConfig.notesLink,
-                        data: {newTitle: note_title, newContent: note_text, refobjgentype: 0, refcourse: 0, refobjtype: 0, refobjid: 0, submitNote: 1},
+                        data: {newTitle: note_title, newContent: note_text, refobjgentype: 0, refcourse: 0, refobjtype: 0, refobjid: 0, submitNote: 1, setsessioncourse: ssc},
                         success: function (data) {
                             $(".spinner-div p").text(data);
                             $(".spinner-div img").toggleClass("hidden");

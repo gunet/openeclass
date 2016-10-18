@@ -64,7 +64,6 @@ add_xxsfilter_headers();
 add_nosniff_headers();
 
 //add_hsts_headers();
-
 if (is_readable('config/config.php')) {
     require_once 'config/config.php';
 } else {

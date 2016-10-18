@@ -145,11 +145,11 @@
     var readLess = '".js_escape($langReadLess)."';
     $(function () { $('.trunk8').trunk8({
         lines: 3,
-        fill: '&hellip; <a class="read-more" href="#">{{ js_escape($GLOBALS['showall']) }}</a>',
+        fill: '&hellip; <a class="read-more" href="#">{{ js_escape($GLOBALS['langViewShow']) }}</a>',
     });
 
         $(document).on('click', '.read-more', function (event) {
-            $(this).parent().trunk8('revert').append(' <a class="read-less" href="#">{{ js_escape($GLOBALS['shownone']) }}</a>');
+            $(this).parent().trunk8('revert').append(' <a class="read-less" href="#">{{ js_escape($GLOBALS['langViewHide']) }}</a>');
             event.preventDefault();
         });
 

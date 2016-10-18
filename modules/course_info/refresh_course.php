@@ -32,25 +32,15 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/work/work_functions.php';
 require_once 'include/lib/fileManageLib.inc.php';
 
-load_js('bootstrap-datepicker');
+$data['action_bar'] = action_bar(array(
+            array('title' => $langBack,
+                  'url' => "#",
+                  'class' => 'back_btn',
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label'
+                 )));
 
-$head_content .= "
-<script type='text/javascript'>
-$(function() {
-$('#reg_date').datepicker({
-        format: 'dd-mm-yyyy',
-        language: '".$language."',
-        autoclose: true
-    });
-});
-</script>";
-
-$from_user = FALSE;
-if (isset($_GET['from_user'])) { // checks if we are coming from /modules/user/index.php
-    $from_user = $_GET['from_user'];
-}
-
-if (!$from_user) {
+if (isset($_GET['from_user'])) {
     $toolName = $langCourseInfo;
     $pageName = $langRefreshCourse;
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
@@ -68,7 +58,7 @@ if (isset($_POST['reg_flag'])) {
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     checkSecondFactorChallenge();
-    if (!$from_user) {
+    if (!isset($_GET['from_user'])) {
         $url = "$_SERVER[SCRIPT_NAME]?course=$course_code";
     } else {
         $url = "../user/index.php?course=$course_code";
@@ -93,8 +83,7 @@ if (isset($_POST['submit'])) {
     }
     if (isset($_POST['delannounces'])) {
         $output[] = delete_announcements();
-    }
-    
+    }    
     if (isset($_POST['delagenda'])) {
         $output[] = delete_agenda();
     }
@@ -116,97 +105,23 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['delwallposts'])) {
         $output[] = del_wall_posts();
     }
-
+    // output results
     if (($count_events = count($output)) > 0) {
-        $tool_content .= "<div class='alert alert-success'>";
-        if (!$from_user) {
-            $tool_content .= $langRefreshSuccess;
-        }
-        $tool_content .= "<ul class='listBullet'>";
-        for ($i = 0; $i < $count_events; $i++) {
-            $tool_content .= "<li>$output[$i]</li>";
-        }
-        $tool_content .= "</ul></div>";
+        $data['count_events'] = $count_events;
+        $data['output'] = $output;
+        $data['menuTypeID'] = 2;
+        view('modules.course_info.refresh_course_results', $data);
     }    
-} else {
+} else { // display form                 
+    $data['selection_date'] = selection(array('before' => $langBefore, 'after' => $langAfter), 'reg_flag', $reg_flag, 'class="form-control"');
+    $data['date_format'] = date("d-m-Y", time());
+        
+    $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course_code=$course_code";
+    $data['form_url_from_user'] = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;from_user=true";
     
-    $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "#",
-                  'class' => 'back_btn',
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label'
-                 )));
-    
-    if (!$from_user) {
-        $tool_content .= "<div class='alert alert-info'>$langRefreshInfo $langRefreshInfo_A</div>";
-    }
-    $tool_content .= "<div class='form-wrapper'>";
-            if (!$from_user) {
-                $tool_content .= "<form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
-            } else {
-                $tool_content .= "<form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;from_user=true' method='post'>";
-            }
-             $tool_content .= "<fieldset>
-            <div class='form-group'>
-                <label for='delusers' class='col-sm-2 control-label'>$langUsers</label>
-                <div class='col-sm-4 checkbox'>
-                    <label><input type='checkbox' name='delusers'>$langUserDelCourse:</label>
-                </div>
-                <div class='col-sm-3'>
-                    " . selection(array('before' => $langBefore, 'after' => $langAfter), 'reg_flag', $reg_flag, 'class="form-control"') . "
-                </div>
-                <div class='col-sm-3'>
-                    <input type='text' name='reg_date' id='reg_date' value='" .date("d-m-Y", time()) ."'>
-                </div>                
-            </div>";
-    if (!$from_user) {
-            $tool_content .= "<div class='form-group'>
-                <label for='delannounces' class='col-sm-2 control-label'>$langAnnouncements</label>
-                <div class='col-sm-10 checkbox'><label><input type='checkbox' name='delannounces'>$langAnnouncesDel</label></div>
-            </div>
-            <div class='form-group'>
-              <label for-'delagenda' class='col-sm-2 control-label'>$langAgenda</label>
-              <div class='col-sm-10 checkbox'><label><input type='checkbox' name='delagenda'>$langAgendaDel</label></div>
-            </div>
-            <div class='form-group'>
-              <label for='hideworks' class='col-sm-2 control-label'>$langWorks</label>
-                <div class='col-sm-10 checkbox'>
-                    <label><input type='checkbox' name='hideworks'>$langHideWork</label>
-                  </div>
-                <div class='col-sm-offset-2 col-sm-10 checkbox'>
-                    <label><input type='checkbox' name='delworkssubs'>$langDelAllWorkSubs</label>
-                </div>
-            </div>
-            <div class='form-group'>
-              <label for='purgeexercises' class='col-sm-2 control-label'>$langExercises</label>
-              <div class='col-sm-10 checkbox'><label><input type='checkbox' name='purgeexercises'>$langPurgeExercisesResults</label></div>
-            </div>
-            <div class='form-group'>
-              <label for='clearstats' class='col-sm-2 control-label'>$langUsage</label>
-              <div class='col-sm-10 checkbox'><label><input type='checkbox' name='clearstats'>$langClearStats</label></div>
-            </div>
-            <div class='form-group'>
-              <label for='delblogposts' class='col-sm-2 control-label'>$langBlog</label>
-              <div class='col-sm-10 checkbox'><label><input type='checkbox' name='delblogposts'>$langDelBlogPosts</label></div>
-            </div>
-            <div class='form-group'>
-              <label for='delwallposts' class='col-sm-2 control-label'>$langWall</label>
-              <div class='col-sm-10 checkbox'><label><input type='checkbox' name='delwallposts'>$langDelWallPosts</label></div>
-            </div>";
-            }
-        $tool_content .= "
-            ".showSecondFactorChallenge()."
-            <div class='col-sm-offset-2 col-sm-10'>
-            <input class='btn btn-primary' type='submit' value='$langSubmitActions' name='submit'>
-            </div>
-            </fieldset>
-            ". generate_csrf_token_form_field() ."                              
-            </form>
-            </div>";    
+    $data['menuTypeID'] = 2;
+    view('modules.course_info.refresh_course', $data);
 }
-
-draw($tool_content, 2, null, $head_content);
 
 /**
  * 
@@ -236,7 +151,7 @@ function delete_users($date = '', $duration = '') {
                          WHERE group_id IN (SELECT id FROM `group` WHERE course_id = ?d) AND
                                user_id NOT IN (SELECT user_id FROM course_user WHERE course_id = ?d)", $course_id, $course_id);
     
-    return "<p>$langUsersDeleted</p>";
+    return "$langUsersDeleted";
 }
 
 /**
@@ -249,7 +164,7 @@ function delete_announcements() {
     global $course_id, $langAnnDeleted;
 
     Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $course_id);
-    return "<p>$langAnnDeleted</p>";
+    return "$langAnnDeleted";
 }
 
 /**
@@ -262,7 +177,7 @@ function delete_agenda() {
     global $langAgendaDeleted, $course_id;
 
     Database::get()->query("DELETE FROM agenda WHERE course_id = ?d", $course_id);
-    return "<p>$langAgendaDeleted</p>";
+    return "$langAgendaDeleted";
 }
 
 /**
@@ -275,7 +190,7 @@ function hide_doc() {
     global $langDocsDeleted, $course_id;
 
     Database::get()->query("UPDATE document SET visible=0, public=0 WHERE course_id = ?d", $course_id);
-    return "<p>$langDocsDeleted</p>";
+    return "$langDocsDeleted";
 }
 
 /**
@@ -288,7 +203,7 @@ function hide_work() {
     global $langWorksDeleted, $course_id;
 
     Database::get()->query("UPDATE assignment SET active=0 WHERE course_id = ?d", $course_id);
-    return "<p>$langWorksDeleted</p>";
+    return "$langWorksDeleted";
 }
 /**
  * 
@@ -318,7 +233,7 @@ function del_work_subs()  {
             Database::get()->query("DELETE FROM assignment_submit WHERE assignment_id = ?d", $row->id);
         }
     }
-    return "<p>$langAllAssignmentSubsDeleted</p>";
+    return "$langAllAssignmentSubsDeleted";
 }
 
 /**
@@ -335,7 +250,7 @@ function purge_exercises() {
     Database::get()->query("DELETE FROM exercise_user_record WHERE eid IN
                                 (SELECT id FROM exercise WHERE course_id = ?d)",$course_id);
 
-    return "<p>$langPurgeExercisesResults</p>";
+    return "$langPurgeExercisesResults";
 }
 
 /**
@@ -350,7 +265,7 @@ function clear_stats() {
     $action = new action();
     $action->summarizeAll();
 
-    return "<p>$langStatsCleared</p>";
+    return "$langStatsCleared";
 }
 
 /**
@@ -369,7 +284,7 @@ function del_blog_posts() {
                             WHERE `rating_cache`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $course_id);
     Database::get()->query("DELETE FROM `blog_post` WHERE `course_id` = ?d", $course_id);
     
-    return "<p>$langBlogPostsDeleted</p>";
+    return "$langBlogPostsDeleted";
 }
 
 /**
@@ -391,6 +306,6 @@ function del_wall_posts() {
     Database::get()->query("DELETE FROM abuse_report WHERE rtype = ?s AND course_id = ?d", 'wallpost', $course_id);
     Database::get()->query("DELETE FROM `wall_post` WHERE `course_id` = ?d", $course_id);
 
-    return "<p>$langWallPostsDeleted</p>";
+    return "$langWallPostsDeleted";
 }
 

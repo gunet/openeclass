@@ -24,7 +24,7 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 
 function list_videos($id = NULL) {
-    global $themeimg, $course_id, $langTitle, $langDescr, $langDate, 
+    global $themeimg, $course_id, $langTitle, $langDescription, $langDate, 
     $langChoice, $langCatVideoDirectory, $langNoVideo, $course_code;
     
     $ret_string = '';
@@ -53,7 +53,7 @@ function list_videos($id = NULL) {
         $ret_string .= "<table class='table-default'>";
         $ret_string .= "<tr class='list-header'>" .
                          "<th width='200' class='text-left'>&nbsp;$langTitle</th>" .
-                         "<th class='text-left'>$langDescr</th>" .
+                         "<th class='text-left'>$langDescription</th>" .
                          "<th width='100'>$langDate</th>" .
                          "<th width='80'>$langChoice</th>" .
                          "</tr>";

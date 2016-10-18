@@ -51,7 +51,7 @@ $head_content .= "<script type = 'text/javascript'>
                 hidden_field.show();              
             } else {
                 $(this).closest('tr').siblings('.hidden_row').show('slow');
-                $(this).text('$shownone');
+                $(this).text('$langViewHide');
                 $(this).attr('id', 'hide');
             }
         } else {
@@ -61,7 +61,7 @@ $head_content .= "<script type = 'text/javascript'>
                 hidden_field.prev().show();
             } else {
                 $(this).closest('tr').siblings('.hidden_row').hide('slow');
-                $(this).text('$showall');
+                $(this).text('$langViewShow');
                 $(this).attr('id', 'show');            
             }
         }
@@ -268,7 +268,7 @@ if ($PollType == 0) {
                     $answers_table .= "
                         <tr>
                                 <td>".$q_answer."</td>
-                                <td>$answer->count</td>".(($thePoll->anonymized == 1)?'':'<td>'.$ellipsized_names_str.(($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').'</td><td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a></td>')."</tr>";     
+                                <td>$answer->count</td>".(($thePoll->anonymized == 1)?'':'<td>'.$ellipsized_names_str.(($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').'</td><td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a></td>')."</tr>";     
                     unset($names_array);
                 }
                 $answers_table .= "</table><br>";
@@ -336,11 +336,11 @@ if ($PollType == 0) {
                             . (($thePoll->anonymized == 1) ? 
                             '' :
                             '<td>'.$ellipsized_names_str.
-                                (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').
+                                (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
                             '</td>
                             <td class="hidden_names" style="display:none;">'
                                 . q($names_str) .
-                                ' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a>
+                                ' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a>
                             </td>').
                         "</tr>";     
                     unset($names_array);                
@@ -400,11 +400,11 @@ if ($PollType == 0) {
                     $extra_column = !$thePoll->anonymized ? 
                             "<td>"
                             . $ellipsized_names_str
-                            . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').
+                            . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
                             "</td>
                             <td class='hidden_names' style='display:none;'>'
                                . q($names_str) .
-                               ' <a href='#' class='trigger_names' data-type='multiple' id='hide'>'.$shownone.'</a>
+                               ' <a href='#' class='trigger_names' data-type='multiple' id='hide'>'.$langViewHide.'</a>
                            </td>" : "";                       
                     $tool_content .= "
                     <tr $row_class>
@@ -418,7 +418,7 @@ if ($PollType == 0) {
                 if ($k>4) {
                  $tool_content .= "
                     <tr>
-                            <td colspan='".($thePoll->anonymized ? 2 : 3)."'><a href='#' class='trigger_names' data-type='fill' id='show'>$showall</a></td>
+                            <td colspan='".($thePoll->anonymized ? 2 : 3)."'><a href='#' class='trigger_names' data-type='fill' id='show'>$langViewShow</a></td>
                     </tr>";                       
                 }             
 

@@ -34,7 +34,7 @@
                                         @if ($announcement->visible == 1)
                                             <span class='fa fa-eye'></span> {{ trans('langAdminAnVis') }}
                                         @else
-                                            <span class='fa fa-eye-slash'></span> {{ trans('langAdminAnNotVis') }}
+                                            <span class='fa fa-eye-slash'></span> {{ trans('langInvisible') }}
                                         @endif
                                     </li>
                                     @if (!is_null($announcement->end) && ($announcement->end <= date("Y-m-d H:i:s") ))

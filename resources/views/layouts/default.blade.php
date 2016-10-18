@@ -175,7 +175,7 @@
                             <div class="col-xs-9">
                                 <h1 class='page-title'>
                                     @if ($menuTypeID == 2 && $pageName)
-                                        <a href='{{ $urlServer }}courses/{{ $course_code }}/'> {!! $section_title !!}</a>
+                                        <a href='{{ $urlServer }}courses/{{ $course_code }}/'>{!! $section_title !!}</a>
                                     @else
                                         {!! $section_title !!}
                                     @endif                                    
@@ -262,7 +262,7 @@
                                 </div>
                             </div>
                         </a>
-                        <div id="collapse{{ $key }}" class="panel-collapse list-group collapse{{ $tool_group[0]['class'] }}">
+                        <div id="collapse{{ $key }}" class="panel-collapse list-group collapse {{ $tool_group[0]['class'] }}">
                             @foreach ($tool_group[1] as $key2 => $tool)
                             <a href="{{ $tool_group[2][$key2] }}" class="list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}" {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                                 <span class="fa {{ $tool_group[3][$key2] }} fa-fw"></span>

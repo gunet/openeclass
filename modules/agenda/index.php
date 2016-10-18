@@ -62,7 +62,6 @@ if (isset($_GET['v'])) {
 }
  
 // list view if we want a specific event 
-
         
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');

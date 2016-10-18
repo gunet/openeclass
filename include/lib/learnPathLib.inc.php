@@ -77,7 +77,7 @@ define('LEARNINGPATHMODULE_', 4);
 
 function commentBox($type, $mode) {
     global $is_editor, $langModify, $langSubmit,
-    $langAdd, $langConfirmYourChoice, $langDefaultLearningPathComment,
+    $langAdd, $langConfirmDelete, $langDefaultLearningPathComment,
     $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $course_code,
     $course_id;
 
@@ -172,12 +172,12 @@ function commentBox($type, $mode) {
             // display edit and delete links if user as the right to see it
             // display comment
             $output .= standard_text_escape($currentComment);
-            if ($is_editor) {
-                $output .= ''
-                        . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "")
-                        . '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=del' . $col_name . '" '
-                        . ' onclick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmYourChoice) . '\')) return false;">' . "\n"
-                        . icon('fa-times', $langDelete)."</a>";
+            
+            if ($is_editor) {                
+                $output .= "&nbsp;&nbsp;&nbsp;" . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "");
+                $output .= "&nbsp;&nbsp;&nbsp";
+                $output .= icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=del$col_name", 'onClick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmDelete) . '\')) return false;"');
+                        
             }            
         }
     }
@@ -320,7 +320,7 @@ function selectImage($contentType) {
 
 function selectAlt($contentType) {
     global $langDoc, $langExercise, $langAltScorm, $langOther,
-           $langLinks, $langCourseDescriptionShort, $langVideo;
+           $langLinks, $langDescription, $langVideo;
 
     $altList[CTDOCUMENT_] = $langDoc;
     $altList[CTCLARODOC_] = $langDoc;
@@ -328,7 +328,7 @@ function selectAlt($contentType) {
     $altList[CTSCORM_] = $langAltScorm;
     $altList[CTSCORMASSET_] = $langAltScorm;
     $altList[CTLINK_] = $langLinks;
-    $altList[CTCOURSE_DESCRIPTION_] = $langCourseDescriptionShort;
+    $altList[CTCOURSE_DESCRIPTION_] = $langDescription;
     $altList[CTMEDIA_] = $langVideo;
     $altList[CTMEDIALINK_] = $langLinks;
 
@@ -632,21 +632,16 @@ function display_my_documents($dialogBox, $style) {
     global $langSize;
     global $langDate;
     global $langAddModulesButton;
-    global $fileList;
+    global $fileList;    
     global $themeimg;
     global $langSelection, $langDirectory, $course_code;
 
     $output = '';
-    /*
-     * DISPLAY
-     */
-
-    $dspCurDirName = htmlspecialchars($curDirName);
-    // $cmdCurDirPath = rawurlencode($curDirPath);
+    
+    $dspCurDirName = htmlspecialchars($curDirName);    
     $cmdParentDir = rawurlencode($parentDir);
-
-    $output .= '<form action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method="POST">';
-
+    
+    $output .= '<form action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '" method = "post">';
     /* --------------------------------------
       DIALOG BOX SECTION
       -------------------------------------- */
@@ -654,10 +649,7 @@ function display_my_documents($dialogBox, $style) {
     if (!empty($dialogBox)) {
         $output .= disp_message_box($dialogBox, $style) . "<br />";
     }
-    /* --------------------------------------
-      CURRENT DIRECTORY LINE
-      -------------------------------------- */
-
+    
     /* CURRENT DIRECTORY */
     if ($curDirName) {
         $output .= '
@@ -670,53 +662,36 @@ function display_my_documents($dialogBox, $style) {
           and we can't go to a parent dir */ {
             $linkup = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;openDir=$cmdParentDir'>";
             $output .= "<td width='1'>$linkup<img src='$themeimg/folder_up.png' " .
-                    "hspace='5' alt='$langUp' title='langUp' /></a></td>" .
+                    "hspace='5' alt='$langUp' title='$langUp' /></a></td>" .
                     "<td width='10' class='right'><small>$linkup$langUp</a></small></td>";
         }
         $output .= '</tr></table>';
     }
 
+    $output .= '<div class="table-responsive"><table class="table-default" >';
+    $output .= "<tr class='list-header'>
+                    <th colspan='2'><div align='left'>&nbsp;&nbsp;$langName</div></th>
+                    <th>$langSize</th>
+                    <th>$langDate</th>
+                    <th>$langSelection</th>
+                </tr>";
 
-    $output .= '
-    <div class="table-responsive">
-    <table class="table-default" >';
-    $output .= "
-    <tr class='list-header'>
-      <th colspan='2'><div align='left'>&nbsp;&nbsp;$langName</div></th>
-      <th>$langSize</th>
-      <th>$langDate</th>
-      <th>$langSelection</th>
-    </tr>";
-
-
-    /* --------------------------------------
-      DISPLAY FILE LIST
-      -------------------------------------- */
-
+    // display file list
     if ($fileList) {
-        $iterator = 0;
-        $ind = 1;
-        while (list( $fileKey, $fileName ) = each($fileList['name'])) {
-            if ($ind % 2 == 0) {
-                $style = 'class="even"';
-            } else {
-                $style = 'class="odd"';
-            }
-
-            $dspFileName = htmlspecialchars($fileList['filename'][$fileKey]);
+        while (list($fileKey, $fileName) = each($fileList['name'])) {
+            $dspFileName = q($fileList['filename'][$fileKey]);
             $cmdFileName = str_replace("%2F", "/", rawurlencode($curDirPath . "/" . $fileName));
-
             if ($fileList['visible'][$fileKey] == 0) {
-                continue; // skip the display of this file                
+                continue; // skip the display of this file
             }
-
             if ($fileList['type'][$fileKey] == A_FILE) {
                 $image = choose_image($fileName);
                 $size = format_file_size($fileList['size'][$fileKey]);
                 $date = nice_format($fileList['date'][$fileKey]);
-                $file_url = file_url($fileList['path'][$fileKey], $dspFileName);
+                $file_url = file_url($fileList['path'][$fileKey], $dspFileName);                
                 $play_url = file_playurl($fileList['path'][$fileKey], $dspFileName);
-                $urlFileName = MultimediaHelper::chooseMediaAhrefRaw($file_url, $play_url, $dspFileName, $dspFileName);
+                $urlFileName = MultimediaHelper::chooseMediaAhrefRaw($file_url, $play_url, $dspFileName, $dspFileName);                
+                $file_id = $fileList['id'][$fileKey];                
             } elseif ($fileList['type'][$fileKey] == A_DIRECTORY) {
                 $image = 'fa-folder';
                 $size = '&nbsp;';
@@ -724,56 +699,45 @@ function display_my_documents($dialogBox, $style) {
                 $urlFileName = '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;openDir=' . $cmdFileName . '">' . $dspFileName . '</a>';
             }
 
-            $output .= '
-                <tr ' . $style . '>
+            $output .= '<tr>
                 <td class="center" width="1">' . icon($image, '') . '</td>
                 <td align="left">' . $urlFileName . '</td>
                 <td width="80" class="center">' . $size . '</td>
                 <td width="80" class="center">' . $date . '</td>';
 
-            if ($fileList['type'][$fileKey] == A_FILE) {
-                $iterator++;
+            if ($fileList['type'][$fileKey] == A_FILE) {                                
                 $output .= '
-                <td width="10" class="center">
-                        <input type="checkbox" name="insertDocument_' . $iterator . '" id="insertDocument_' . $iterator . '" value="' . $curDirPath . "/" . $fileName . '" />
-                        <input type="hidden" name="filenameDocument_' . $iterator . '" id="filenameDocument_' . $iterator . '" value="' . $dspFileName . '" />
-                </td>';
+                    <td width="10" class="center">
+                        <input type="checkbox" name="document[]" value = ' . $file_id . '>
+                    </td>';
             } else {
                 $output .= '<td>&nbsp;</td>';
             }
             $output .= '</tr>';
-
             /* COMMENTS */
             if ($fileList['comment'][$fileKey] != "") {
-                $fileList['comment'][$fileKey] = htmlspecialchars($fileList['comment'][$fileKey]);
+                $fileList['comment'][$fileKey] = q($fileList['comment'][$fileKey]);
                 $fileList['comment'][$fileKey] = parse_user_text($fileList['comment'][$fileKey]);
-
-                $output .= '
-                <tr class="even">
+                $output .= '<tr>
                 <td>&nbsp;</td>
                 <td colspan="' . $colspan . '"><span class="comment">' . $fileList['comment'][$fileKey] . '</span></td>
                 </tr>';
             }
-            $ind++;
         }  // end each ($fileList)
         // form button
 
-
         $output .= '
-    <tr>
-      <th colspan="' . $colspan . '"><div class="pull-right">
-        <input type="hidden" name="openDir" value="' . $curDirPath . '" />
-        <input type="hidden" name="maxDocForm" value ="' . $iterator . '" />
-        <input class="btn btn-primary" type="submit" name="submitInsertedDocument" value="'.$langAddModulesButton.'">        
-      </th>
-    </tr>';
+            <tr>
+              <th colspan="' . $colspan . '"><div class="pull-right">
+                <input type="hidden" name="openDir" value="' . $curDirPath . '" />                
+                <input class="btn btn-primary" type="submit" name="submitInsertedDocument" value="'.$langAddModulesButton.'">        
+              </th>
+            </tr>';
     } // end if ( $fileList)
     else {
         $output .= '<tr><td colspan="4">&nbsp;</td></tr>';
     }
-
     $output .= '</table></div></form>';
-
     return $output;
 }
 
@@ -917,6 +881,19 @@ function delete_module_tree($module_tree) {
                                               WHERE `learnPath_module_id` = ?d", $module['learnPath_module_id']);
 
                 break;
+        }
+
+        // auto-delete from modules pool if not used elsewhere
+        $cnt = Database::get()->querySingle("select count(learnPath_module_id) as count "
+                . " from lp_rel_learnPath_module "
+                . " where module_id = ?d "
+                . " and learnPath_id in ("
+                . " select learnPath_id from lp_learnPath where course_id = ?d"
+                . " )", $module['module_id'], $module['course_id'])->count;
+
+        if ($cnt == 0) {
+            Database::get()->query("DELETE FROM `lp_asset` WHERE `module_id` =  ?d", $module['module_id']);
+            Database::get()->query("DELETE FROM `lp_module` WHERE `module_id` =  ?d", $module['module_id']);
         }
     }
     if (isset($module['children']) && is_array($module['children'])) {

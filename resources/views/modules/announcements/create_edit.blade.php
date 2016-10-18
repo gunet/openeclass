@@ -73,7 +73,7 @@
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
                                     <label>
-                                        <input type='checkbox' name='show_public' {{  $checked_public }}> {{ trans('showall') }}
+                                        <input type='checkbox' name='show_public' {{  $checked_public }}> {{ trans('langViewShow') }}
                                     </label>
                                 </div>
                             </div>

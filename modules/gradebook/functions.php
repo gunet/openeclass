@@ -763,7 +763,7 @@ function student_view_gradebook($gradebook_id) {
  * @global type $langGradebookGradeAlert
  * @global type $langGradebookNoActMessage1
  * @global type $langTitle
- * @global type $langView
+ * @global type $langViewShow
  * @global type $langScore
  * @global type $langGradebookActList
  * @global type $langGradebookActivityDate2
@@ -793,7 +793,7 @@ function student_view_gradebook($gradebook_id) {
 function display_gradebook($gradebook) {
 
     global $course_code, $urlServer, $tool_content, $langGradebookGradeAlert, $langGradebookNoActMessage1,
-           $langTitle, $langView, $langScore, $langGradebookActList, $langAdd,
+           $langTitle, $langViewShow, $langScore, $langGradebookActList, $langAdd,
            $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langType, $langExercise,
            $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity, $langDelete, $langConfirmDelete,
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
@@ -879,7 +879,7 @@ function display_gradebook($gradebook) {
                                             <th>$langTitle</th>
                                             <th>$langGradebookActivityDate2</th>
                                             <th>$langType</th><th>$langGradebookWeight</th>
-                                            <th class='text-center'>$langView</th>
+                                            <th class='text-center'>$langViewShow</th>
                                             <th class='text-center'>$langScore</th>
                                             <th class='text-center'>".icon('fa-cogs')."</i></th>
                                         </tr>";
@@ -1049,7 +1049,7 @@ function display_gradebooks() {
  * @global type $course_code
  * @global type $tool_content
  * @global type $langGradebookActivityDate2
- * @global type $langDescr
+ * @global type $langDescription
  * @global type $langAdd
  * @global type $langAttendanceNoActMessageExe4
  * @global type $langTitle
@@ -1058,7 +1058,7 @@ function display_gradebooks() {
 function display_available_exercises($gradebook_id) {
 
     global $course_id, $course_code, $tool_content,
-           $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle;
+           $langGradebookActivityDate2, $langDescription, $langAdd, $langAttendanceNoActMessageExe4, $langTitle;
 
     $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
                                 AND exercise.active = 1 AND exercise.id
@@ -1067,7 +1067,7 @@ function display_available_exercises($gradebook_id) {
     if ($checkForExerNumber > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescr</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
 

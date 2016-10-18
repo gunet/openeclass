@@ -38,7 +38,7 @@
                     <tr class='list-header'>
                         <td>{{ trans('langName') }}</td>
                         <td>{{ trans('langCPFShortName') }}</td>
-                        <td>{{ trans('langCPFFieldDescr') }}</td>
+                        <td>{{ trans('langDescription') }}</td>
                         <td>{{ trans('langCPFFieldDatatype') }}</td>
                         <td>{{ trans('langCPFFieldRequired') }}</td>
                         <td>{{ trans('langCPFFieldRegistration') }}</td>

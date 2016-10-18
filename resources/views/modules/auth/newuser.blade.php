@@ -9,14 +9,19 @@
             {{ trans('langStudentCannotRegister') }}
         </div>    
     @else 
-        @if (isset($_POST['submit']))
+        @if (isset($_POST['submit']))          
             @if ($vmail)
+                <div class='alert alert-info'> {{ trans('langMailVerificationSuccess') }} {{ trans('langMailVerificationSuccess2') }} <br><br><small> {{ trans('langMailVerificationNote') }} </small> <br><br>{{ trans('langClick') }} <a href='{{ $urlServer }}' class='mainpage'>{{ trans('langHere') }}</a> {{ trans('langBackPage') }}</div>
+            @else              
                 <div class='alert alert-success'>
                     <p>{{ $user_msg }}</p>
+                    <p>{{ trans('langClick') }} <a href='../../'>{{ trans('langHere') }}</a> {{ trans('langPersonalSettingsMore') }}
+                    <ul>
+                        <li>{{ trans('langPersonalSettingsMore1') }}</li>
+                        <li>{{ trans('langPersonalSettingsMore2') }}</li>
+                    </ul>
+                    </p>
                 </div>
-                <p>{{ trans('langMailVerificationSuccess2') }}  <br><br>{{ trans('langClick') }} <a href='{{ $urlServer }}' class='mainpage'>{{ trans('langHere') }}</a> {{ trans('langBackPage') }}</p>
-            @else
-                <p>{{ trans('langPersonalSettingsMore') }}</p>
             @endif
         @else
             <div class='form-wrapper'>

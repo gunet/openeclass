@@ -225,31 +225,22 @@ if ($all_set) {
     }
 
     // register user request
+    $ip = Log::get_client_ip();
     $status = $prof ? USER_TEACHER : USER_STUDENT;
-    if ($provider and !empty($user_data->identifier)) {
-        $res = Database::get()->query("INSERT INTO user_request
-            SET givenname = ?s, surname = ?s, username = ?s, email = ?s,
-                am = ?s, faculty_id = ?d, phone = ?s,
-                state = 1, status = $status,
-                verified_mail = ?d, date_open = " . DBHelper::timeAfter() . ",
-                comment = ?s, lang = ?s, request_ip = ?s",
-            $givenname, $surname, $username, $usermail, $am, $department, $userphone,
-            $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
-        if ($res) {
-            Database::get()->query('INSERT INTO user_request_ext_uid
-                SET auth_id = ?d, user_request_id = ?d, uid = ?s',
-                $auth_id, $res->lastInsertID, $user_data->identifier);
-        }
-    } else {
-        $res = Database::get()->query("INSERT INTO user_request SET
-    			givenname = ?s, surname = ?s, username = ?s, email = ?s,
-    			am = ?s, faculty_id = ?d, phone = ?s,
-    			state = 1, status = $status,
-    			verified_mail = ?d, date_open = " . DBHelper::timeAfter() . ",
-    			comment = ?s, lang = ?s, request_ip = ?s",
-                $givenname, $surname, $username, $usermail, $am, $department, $userphone, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
+    $res = Database::get()->query("INSERT INTO user_request
+        SET givenname = ?s, surname = ?s, username = ?s, email = ?s,
+            am = ?s, faculty_id = ?d, phone = ?s,
+            state = 1, status = $status,
+            verified_mail = ?d, date_open = " . DBHelper::timeAfter() . ",
+            comment = ?s, lang = ?s, request_ip = ?s",
+            $givenname, $surname, $username, $usermail, $am, $department,
+            $userphone, $verified_mail, $usercomment, $language, $ip);
+    $request_id = $res? $res->lastInsertID: null;
+    if ($res and $provider and !empty($user_data->identifier)) {
+        Database::get()->query('INSERT INTO user_request_ext_uid
+            SET auth_id = ?d, user_request_id = ?d, uid = ?s',
+            $auth_id, $request_id, $user_data->identifier);
     }
-    $request_id = $res->lastInsertID;
     
     //save custom profile fields values in pending table
     process_profile_fields_data(array('user_request_id' => $request_id, 'pending' => true));

@@ -62,7 +62,7 @@ if (count($roots) <= 0) {
             <div class='list-group'>
                 <a href='#' class='list-group-item list-header'><b>$langFaculty</b></a>
             ";
-    $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, $showEmpty, $subtrees);
+    $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true), $subtrees);
     $tool_content .= "
             </div>
         </div>

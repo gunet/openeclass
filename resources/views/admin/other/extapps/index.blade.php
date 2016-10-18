@@ -7,7 +7,7 @@
             <table class="table-default dataTable no-footer extapp-table">
                 <thead class='list-header'>
                     <td>{{ trans('langExtAppName') }}</td>
-                    <td>{{ trans('langExtAppDescription') }}</td>
+                    <td>{{ trans('langDescription') }}</td>
                 </thead>
                 @foreach (ExtAppManager::getApps() as $app)
                     <tr>

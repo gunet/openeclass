@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.2
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -133,10 +133,10 @@ function check_auth_configured($auth_id) {
 
 function count_auth_users($auth) {
     global $auth_ids;
-    
+
     $auth = intval($auth);
-    if ($auth === 1) {        
-        $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user 
+    if ($auth === 1) {
+        $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user
                                                     WHERE password NOT IN (SELECT auth_name FROM auth WHERE id > 1)");
     } else {
         $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user WHERE password = '" . $auth_ids[$auth] . "'");
@@ -230,8 +230,8 @@ function get_auth_settings($auth) {
  find/return the settings of a HybridAuth provider
 
  $provider : a string value in lowercase which corresponds to a
-             HybridAuth provider (e.g. facebook, twitter, google, 
-             live, yahoo, linkedin) 
+             HybridAuth provider (e.g. facebook, twitter, google,
+             live, yahoo, linkedin)
  return $provider_row
 * ************************************************************** */
 
@@ -565,26 +565,29 @@ function process_login() {
     $pass = isset($_POST['pass']) ? trim($_POST['pass']): '';
     $auth = get_auth_active_methods();
 
+    $ip = Log::get_client_ip();
+
     if (isset($_POST['submit'])) {
         unset($_SESSION['uid']);
         $auth_allow = 0;
 
         if (get_config('login_fail_check')) {
-            $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'
+            $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = ?s 
                                         AND COUNT > " . intval(get_config('login_fail_threshold')) . "
-                                        AND DATE_SUB(CURRENT_TIMESTAMP, interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail");
+                                        AND DATE_SUB(CURRENT_TIMESTAMP,
+                                                interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail",
+                                    $ip);
         }
         if (get_config('login_fail_check') && $r) {
             $auth_allow = 8;
         } else {
-            $sqlLogin = "SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
-                                FROM user WHERE username ";
             if (get_config('case_insensitive_usernames')) {
                 $sqlLogin = "COLLATE utf8_general_ci = ?s";
             } else {
                 $sqlLogin = "COLLATE utf8_bin = ?s";
             }
-            $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
+            $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password,
+                                    username, status, email, lang, verified_mail, am
                                 FROM user WHERE username $sqlLogin", $posted_uname);
             $guest_user = get_config('course_guest') != 'off' && $myrow && $myrow->status == USER_GUEST;
 
@@ -657,8 +660,8 @@ function process_login() {
                     break;
             }
         } else {
-            Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action) "
-                    . "VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+            Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+                    VALUES (?d, ?s, NOW(), 'LOGIN')", $_SESSION['uid'], $ip);
             $session->setLoginTimestamp();
             if (get_config('email_verification_required') and
                     get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
@@ -676,7 +679,7 @@ function process_login() {
 }
 
 /* * **************************************************************
- Authenticate user via HybridAuth (Twitter, Google, Facebook, 
+ Authenticate user via HybridAuth (Twitter, Google, Facebook,
  Yahoo, Live accounts)
 * ************************************************************** */
 
@@ -684,21 +687,24 @@ function hybridauth_login($provider=null) {
     global $surname, $givenname, $email, $status, $is_admin, $language,
         $langInvalidId, $langAccountInactive1, $langAccountInactive2,
         $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
-        $inactive_uid, $langTooManyFails, $warning;
-    
+        $inactive_uid, $langTooManyFails, $warning, $langGeneralError;
+
     // include HubridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
-    
+
     $_SESSION['canChangePassword'] = false;
+    $autoregister = get_config('alt_auth_stud_reg') == 2;
 
     // check for errors and whatnot
     $warning = '';
-    
+
     if (isset($_GET['error'])) {
         Session::Messages(q(trim(strip_tags($_GET['error']))));
     }
+
+    $ip = Log::get_client_ip();
 
     // if user select a provider to login with then include hybridauth config
     // and main class, try to authenticate, finally redirect to profile
@@ -709,23 +715,23 @@ function hybridauth_login($provider=null) {
     if ($provider) {
         try {
             $hybridauth = new Hybrid_Auth($config);
-            
+
             // set selected provider name
             $provider = @trim(strip_tags($_GET['provider']));
-        
+
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate($provider);
-            
+
             // grab the user profile
             $user_data = $adapter->getUserProfile();
-            
+
             // user profile debug print
             // echo '<pre>'; print_r($user_data); echo '</pre>';
-            
+
         } catch (Exception $e) {
             // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
             // let hybridauth forget all about the user so we can try to authenticate again.
-        
+
             // Display the recived error,
             // to know more please refer to Exceptions handling section on the userguide
             switch($e->getCode()) {
@@ -738,30 +744,32 @@ function hybridauth_login($provider=null) {
                 case 6: Session::Messages($GLOBALS['langProviderError7']); $adapter->logout(); break;
                 case 7: Session::Messages($GLOBALS['langProviderError8']); $adapter->logout(); break;
             }
-        
+
             // debug messages for hybridauth errors
             //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
             //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
-        
+
             return false;
         }
-    }
-    
-    
+    } //endif( isset( $_GET["provider"] ) && $_GET["provider"] )
+
+
     // from here on an alternative version of proccess_login() runs where
     // instead of a password, the provider uid is used and matched against
     // the corresponding field in the db table.
-    
+
     $pass = $user_data->identifier; // password = provider user id
     // $is_eclass_unique = is_eclass_unique();
-    
+
     unset($_SESSION['uid']);
     $auth_allow = 0;
-    
+
     if (get_config('login_fail_check')) {
-        $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'
+        $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = ?s 
                                        AND COUNT > " . intval(get_config('login_fail_threshold')) . "
-                                       AND DATE_SUB(CURRENT_TIMESTAMP, interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail");
+                                       AND DATE_SUB(CURRENT_TIMESTAMP,
+                                            interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail",
+                                 $ip);
     }
     if (get_config('login_fail_check') && $r) {
         $auth_allow = 8;
@@ -770,7 +778,7 @@ function hybridauth_login($provider=null) {
         $auth_methods = get_auth_active_methods();
         $myrow = Database::get()->querySingle("SELECT user.id, surname,
                     givenname, password, username, status, email, lang,
-                    verified_mail, uid
+                    verified_mail, uid, am
                 FROM user, user_ext_uid
                 WHERE user.id = user_ext_uid.user_id AND
                       user_ext_uid.auth_id = ?d AND
@@ -783,18 +791,97 @@ function hybridauth_login($provider=null) {
         } elseif ($myrow) {
             $exists = 1;
             if (in_array($auth_id, $auth_methods)) {
-                $auth_allow = login($myrow, null, null, $provider);
+                $auth_allow = login($myrow, null, null, $provider, $user_data);
             } else {
                 Session::Messages($langInvalidAuth, 'alert-danger');
                 redirect_to_home_page();
             }
         }
         if (!$exists and !$auth_allow) {
-            // Since HybridAuth was used and there is not user id matched in the db, send the user to the registration form.
-            redirect_to_home_page('modules/auth/registration.php?provider=' . $provider);
+            if ($autoregister and !get_config('am_required') and
+                ($user_data->email or !get_config('email_required')) and
+                ($user_data->emailVerified or !get_config('email_verification_required'))) {
+                $verified_mail = EMAIL_UNVERIFIED;
+                if ($user_data->emailVerified) {
+                    $email = $user_data->email;
+                    $verified_mail = EMAIL_VERIFIED;
+                } else {
+                    $email = $user_data->email;
+                }
+                if (is_null($email)) {
+                    $email = '';
+                }
+                $options = login_hook(array(
+                    'user_id' => null,
+                    'attributes' => array('user_data' => $user_data),
+                    'am' => ''));
+                if (!$options['accept']) {
+                    deny_access();
+                }
+                $status = $options['status'];
+                $unameSuffix = $uname = null;
+                do {
+                    if (isset($user_data->username) and $user_data->username) {
+                        $uname = $user_data->username;
+                    } elseif ($user_data->email) {
+                        $uname = $user_data->email;
+                    } elseif ($user_data->displayName) {
+                        $uname = $user_data->displayName;
+                    } else {
+                        $uname = $user_data->identifier;
+                    }
+                    $uname .= $unameSuffix++;
+                } while (user_exists($uname));
+                if (!(isset($user_data->lastName) and isset($user_data->firstName) and $user_data->lastName and $user_data->firstName)) {
+                    if (isset($user_data->lastName) and $user_data->lastName) {
+                        $name = $user_data->lastName;
+                    } elseif (isset($user_data->firstName) and $user_data->firstName) {
+                        $name = $user_data->firstName;
+                    } else {
+                        $name = $user_data->displayName;
+                    }
+                    $parts = explode(' ', $name);
+                    $parts[] = '';
+                    list($givenname, $surname) = $parts;
+                } else {
+                    $surname = $user_data->lastName;
+                    $givenname = $user_data->firstName;
+                }
+                $_SESSION['uid'] = Database::get()->query("INSERT INTO user
+                    SET surname = ?s, givenname = ?s, password = ?s,
+                        username = ?s, email = ?s, status = ?d, lang = ?s,
+                        am = ?s, verified_mail = ?d,
+                        registered_at = " . DBHelper::timeAfter() . ",
+                        expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
+                        whitelist = ''",
+                        $surname, $givenname, $provider, $uname, $email, $status,
+                        $language, $options['am'], $verified_mail)->lastInsertID;
+                if ($_SESSION['uid']) {
+                    $_SESSION['uname'] = $uname;
+                    $_SESSION['surname'] = $surname;
+                    $_SESSION['givenname'] = $givenname;
+                    $_SESSION['email'] = $email;
+                    $_SESSION['status'] = $status;
+                    Database::get()->query('INSERT INTO user_ext_uid
+                        (user_id, auth_id, uid) VALUES (?d, ?d, ?s)',
+                        $_SESSION['uid'], $auth_id, $user_data->identifier);
+                    // update personal calendar info table
+                    Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $_SESSION['uid']);
+                    $userObj = new User();
+                    $userObj->refresh($_SESSION['uid'], $options['departments']);
+                    user_hook($_SESSION['uid']);
+                } else {
+                    Session::Messages($langGeneralError, 'alert-danger');
+                    redirect_to_home_page();
+                }
+            } else {
+                // Since HybridAuth was used and no user id matched
+                // in the DB, send the user to the registration form.
+                redirect_to_home_page('modules/auth/registration.php?provider=' . $provider);
+            }
         }
     }
-    
+
     if (!isset($_SESSION['uid'])) {
         switch ($auth_allow) {
             case 1:
@@ -827,7 +914,7 @@ function hybridauth_login($provider=null) {
         }
     } else {
         Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action) "
-                . "VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+                . "VALUES (?d, ?s, NOW(), 'LOGIN')", $_SESSION['uid'], $ip);
         if (get_config('email_verification_required') and
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
             $_SESSION['mail_verification_required'] = 1;
@@ -846,8 +933,8 @@ function hybridauth_login($provider=null) {
   Authenticate user via eclass
  * ************************************************************** */
 
-function login($user_info_object, $posted_uname, $pass, $provider=null) {
-    global $session;
+function login($user_info_object, $posted_uname, $pass, $provider=null, $user_data=null) {
+    global $session, $auth_ids;
 
     $_SESSION['canChangePassword'] = false;
     $pass_match = false;
@@ -864,7 +951,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
                 $user_info_object->password = $password_encrypted;
                 Database::core()->query("SET sql_mode = TRADITIONAL");
                 Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $user_info_object->id);
-            } elseif (get_config('course_guest') != 'off' and $user_info_object->status = USER_GUEST and 
+            } elseif (get_config('course_guest') != 'off' and $user_info_object->status = USER_GUEST and
                 $pass === '' and $user_info_object->password === '') {
                 // special case for guest login with empty password
                 $pass_match = true;
@@ -873,6 +960,22 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
     } else {
         // User was authenticated by HybridAuth
         $pass_match = true;
+    }
+
+    $attributes = array();
+    if (!is_null($user_data)) {
+        $attributes['user_data'] = $user_data;
+    }
+    $userObj = new User();
+    $options = login_hook(array(
+        'user_id' => $user_info_object->id,
+        'attributes' => $attributes,
+        'status' => $user_info_object->status,
+        'departments' => $userObj->getDepartmentIds($user_info_object->id),
+        'am' => $user_info_object->am));
+
+    if (!$options['accept']) {
+        deny_access();
     }
 
     if ($pass_match) {
@@ -896,7 +999,16 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
             }
         }
         if ($is_active) {
-            $_SESSION['canChangePassword'] = true;
+            if ($options['status'] != $user_info_object->status) {
+                // update user status
+                $user_info_object->status = $options['status'];
+                Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d',
+                    $options['status'], $user_info_object->id);
+            }
+            $userObj->refresh($user_info_object->id, $options['departments']);
+            if (!array_search($user_info_object->password, $auth_ids)) {
+                $_SESSION['canChangePassword'] = true;
+            }
             $_SESSION['uid'] = $user_info_object->id;
             $_SESSION['uname'] = $user_info_object->username;
             $_SESSION['surname'] = $user_info_object->surname;
@@ -905,6 +1017,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
             $_SESSION['email'] = $user_info_object->email;
             $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_object->lang;
             $auth_allow = 1;
+            user_hook($user_info_object->id);
             $session->setLoginTimestamp();
         } else {
             $auth_allow = 3;
@@ -912,8 +1025,8 @@ function login($user_info_object, $posted_uname, $pass, $provider=null) {
         }
     } else {
         $auth_allow = 4; // means wrong password
-        Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname,
-                                                   'pass' => $pass));
+        Log::record(0, 0, LOG_LOGIN_FAILURE,
+            array('uname' => $posted_uname, 'pass' => $pass));
     }
 
     return $auth_allow;
@@ -950,6 +1063,7 @@ function alt_login($user_info_object, $uname, $pass) {
     if ($auth == 6) {
         return 6; // Redirect to Shibboleth login
     }
+
     if ($user_info_object->password == $auth_method_settings['auth_name']) {
         $is_valid = auth_user_login($auth, $uname, $pass, $auth_method_settings);
         if ($is_valid) {
@@ -966,7 +1080,7 @@ function alt_login($user_info_object, $uname, $pass) {
             } elseif ($admin_rights == DEPARTMENTMANAGE_USER) {
                 $_SESSION['is_departmentmanage_user'] = 1;
             }
-            if (!empty($is_active)) {
+            if ($is_active) {
                 $auth_allow = 1;
             } else {
                 $auth_allow = 3;
@@ -979,6 +1093,29 @@ function alt_login($user_info_object, $uname, $pass) {
                                                        'pass' => $pass));
         }
         if ($auth_allow == 1) {
+            $userObj = new User();
+
+            $options = login_hook(array(
+                'user_id' => $user_info_object->id,
+                'attributes' => array(),
+                'status' => $user_info_object->status,
+                'departments' => $userObj->getDepartmentIds($user_info_object->id),
+                'am' => $user_info_object));
+
+            if (!$options['accept']) {
+                deny_access();
+            }
+
+            if ($options['status'] != $user_info_object->status) {
+                // update user status
+                $user_info_object->status = $options['status'];
+                Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d', 
+                    $options['status'], $user_info_object->id);
+            }
+
+            $userObj->refresh($user_info_object->id, $options['departments']);
+            user_hook($user_info_object->id);
+
             $_SESSION['uid'] = $user_info_object->id;
             $_SESSION['uname'] = $user_info_object->username;
             // if ldap entries have changed update database
@@ -1021,16 +1158,10 @@ function alt_login($user_info_object, $uname, $pass) {
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
         $urlServer, $is_admin, $is_power_user, $is_usermanage_user,
-        $is_departmentmanage_user, $langUserAltAuth, $langRegistrationDenied;
+        $is_departmentmanage_user, $langUserAltAuth;
 
     $_SESSION['canChangePassword'] = false;
-    $alt_auth_stud_reg = get_config('alt_auth_stud_reg');
-
-    if ($alt_auth_stud_reg == 2) {
-        $autoregister = TRUE;
-    } else {
-        $autoregister = FALSE;
-    }
+    $autoregister = get_config('alt_auth_stud_reg') == 2;
 
     if ($type == 'shibboleth') {
         $uname = $_SESSION['shib_uname'];
@@ -1072,7 +1203,8 @@ function shib_cas_login($type) {
     } else {
         $sqlLogin = "COLLATE utf8_bin = ?s";
     }
-    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, am, lang, verified_mail
+    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname,
+                            status, email, lang, verified_mail, am
 						FROM user WHERE username $sqlLogin", $uname);
 
     if ($info) {
@@ -1103,11 +1235,7 @@ function shib_cas_login($type) {
                 'am' => $am));
 
             if (!$options['accept']) {
-                foreach (array_keys($_SESSION) as $key) {
-                    unset($_SESSION[$key]);
-                }
-                Session::Messages($langRegistrationDenied, 'alert-warning');
-                redirect_to_home_page();
+                deny_access();
             }
 
             $status = $options['status'];
@@ -1158,12 +1286,9 @@ function shib_cas_login($type) {
             'am' => $am));
 
         if (!$options['accept']) {
-            foreach (array_keys($_SESSION) as $key) {
-                unset($_SESSION[$key]);
+            deny_access();
             }
-            Session::Messages($langRegistrationDenied, 'alert-warning');
-            redirect_to_home_page();
-        }
+
         $status = $options['status'];
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
@@ -1200,7 +1325,8 @@ function shib_cas_login($type) {
     $_SESSION['shib_user'] = 1; // now we are shibboleth user
 
     Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', " . DBHelper::timeAfter() . ", 'LOGIN')");
+                    VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGIN')",
+                    $_SESSION['uid'], Log::get_client_ip());
     $session->setLoginTimestamp();
     if (get_config('email_verification_required') and
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
@@ -1242,13 +1368,16 @@ function increaseLoginFailure() {
     if (!get_config('login_fail_check'))
         return;
 
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $ip . "'");
+    $ip = Log::get_client_ip();
+    $r = Database::get()->querySingle('SELECT 1 FROM login_failure WHERE ip = ?s', $ip);
 
     if ($r) {
-        Database::get()->query("UPDATE login_failure SET count = count + 1, last_fail = CURRENT_TIMESTAMP WHERE ip = '" . $ip . "'");
+        Database::get()->query('UPDATE login_failure SET
+                count = count + 1, last_fail = CURRENT_TIMESTAMP
+            WHERE ip = ?s', $ip);
     } else {
-        Database::get()->query("INSERT INTO login_failure (id, ip, count, last_fail) VALUES (NULL, '" . $ip . "', 1, CURRENT_TIMESTAMP)");
+        Database::get()->query('INSERT INTO login_failure (id, ip, count, last_fail)
+            VALUES (NULL, ?s, 1, CURRENT_TIMESTAMP)', $ip);
     }
 }
 
@@ -1260,7 +1389,10 @@ function resetLoginFailure() {
     if (!get_config('login_fail_check'))
         return;
 
-    Database::get()->query("DELETE FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL " . intval(get_config('login_fail_forgive_interval')) . " HOUR) >= last_fail"); // de-penalize only after 24 hours
+    Database::get()->query("DELETE FROM login_failure WHERE ip = ?s AND
+        DATE_SUB(CURRENT_TIMESTAMP,
+            INTERVAL " . intval(get_config('login_fail_forgive_interval')) . " HOUR) >= last_fail",
+        Log::get_client_ip()); // de-penalize only after 24 hours
 }
 
 function external_DB_Check_Pass($test_password, $hash, $encryption) {
@@ -1333,7 +1465,7 @@ function update_shibboleth_endpoint($settings) {
             return false;
         }
     }
-   
+
     $indexfile = $path . '/index.php';
     $filecontents = '<?php
 session_start();
@@ -1394,4 +1526,14 @@ function get_shibboleth_vars($file) {
         $shib_vars['shib_cn'] = $shib_vars['shib_nom'];
     }
     return $shib_vars;
+}
+
+function deny_access() {
+    if (!$options['accept']) {
+        foreach (array_keys($_SESSION) as $key) {
+            unset($_SESSION[$key]);
+        }
+        Session::Messages(trans('langRegistrationDenied'), 'alert-warning');
+        redirect_to_home_page();
+    }
 }

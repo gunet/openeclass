@@ -34,7 +34,7 @@
     }
 ?>
 
-@extends('layouts.default')
+@extends($is_in_tinymce ? 'layouts.embed' : 'layouts.default')
 
 @section('content')
     {!! $action_bar or '' !!}
@@ -67,9 +67,9 @@
                             <tr class='list-header'>
                                 <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
                                 @if ($expand_all)
-                                    {!! icon('fa-folder-open', $GLOBALS['shownone'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=0") !!}
+                                    {!! icon('fa-folder-open', $GLOBALS['langViewHide'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=0") !!}
                                 @else
-                                    {!! icon('fa-folder', $GLOBALS['showall'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
+                                    {!! icon('fa-folder', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
                                 @endif
                                 </th>
                                 <th class='text-center' style='width:100px;'>{{ trans('langDate') }}</th>
@@ -81,9 +81,9 @@
                             <?php
                                 $description = standard_text_escape($myrow->description);
                                 if ((isset($_GET['d']) and $_GET['d'] == 1) or ( isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
-                                    $folder_icon = icon('fa-folder-open-o', $GLOBALS['shownone']);
+                                    $folder_icon = icon('fa-folder-open-o', $GLOBALS['langViewHide']);
                                 } else {
-                                    $folder_icon = icon('fa-folder-o', $GLOBALS['showall']);
+                                    $folder_icon = icon('fa-folder-o', $GLOBALS['langViewShow']);
                                 }
                             ?>
                             <tr class='link-subcategory-title'><th class='category-link' colspan='{{ $colspan }}'>{!! $folder_icon !!}&nbsp;

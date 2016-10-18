@@ -368,9 +368,9 @@ function enough_size($fileSize, $dir, $maxDirSpace) {
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @param int local max allowed file size e.g. remaining place in
- * 	an allocated course directory
+ *  an allocated course directory
  * @return int lower value between php.ini values of upload_max_filesize and
- * 	post_max_size and the claroline value of size left in directory
+ *  post_max_size and the claroline value of size left in directory
  * @see    - get_max_upload_size() uses  dir_total_space() function
  */
 
@@ -392,83 +392,34 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir) {
 
 /**
  * @brief A page that shows a table with statistic data and a gauge bar
- * @global type $langQuotaUsed
- * @global type $langQuotaPercentage
- * @global type $langQuotaTotal
- * @global type $langBack
- * @global type $langQuotaBar
- * @global type $course_code
- * @global type $subsystem
- * @global type $group_id
- * @global type $ebook_id
+ * @global type $pageName
  * @param type $quota
  * @param type $used
- * @return string
  */
-function showquota($quota, $used, $backPath=null) {
+function showquota($quota, $used, $backPath=null, $menuTypeID=null) {
+    global $pageName;
 
-    global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, $langQuotaBar,
-    $course_code, $subsystem, $group_id, $ebook_id, $pageName;
-
-    $retstring = '';
-    
-    // pososto xrhsimopoioumenou xorou se %
-    if ($quota == 0) {
-        $diskUsedPercentage = ($used > 0)? '100%': '0%';
-    } else {
-        $diskUsedPercentage = round(($used / $quota) * 100) . '%';
+    if ($menuTypeID) {
+        $data['menuTypeID'] = $menuTypeID;
     }
-    // morfopoihsh tou synolikou diathesimou megethous tou quota
-    $quota = format_bytesize($quota / 1024);
-    // morfopoihsh tou synolikou megethous pou xrhsimopoieitai
-    $used = format_bytesize($used / 1024);
-    // telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
-    // ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-    $pageName = $langQuotaBar;
-    if( !is_null($backPath) ){
-        $retstring .= action_bar(array(
-                    array('title' => $langBack,
+
+    if ($quota == 0) {
+        $data['diskUsedPercentage'] = ($used > 0)? '100': '0';
+    } else {
+        $data['diskUsedPercentage'] = round(($used / $quota) * 100);
+    }
+    $data['quota'] = format_bytesize($quota / 1024);
+    $data['used'] = format_bytesize($used / 1024);
+    $pageName = trans('langQuotaBar');
+    if (is_null($backPath)) {
+        $backPath = documentBackLink('');
+    }
+    $data['backButton'] = action_bar(array(
+                    array('title' => trans('langBack'),
                           'url' => $backPath,
                           'icon' => 'fa-reply',
                           'level' => 'primary-label')));
-    } else {
-    $retstring .= action_bar(array(
-                    array('title' => $langBack,
-                          'url' => documentBackLink($backPath),
-                          'icon' => 'fa-reply',
-                          'level' => 'primary-label')));
-    }
-    $retstring .= "
-    <div class='row'><div class='col-sm-12'>
-    <div class='form-wrapper'>
-    <form class='form-horizontal' role='form'>
-      <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langQuotaUsed:</label>
-        <div class='col-sm-9'>
-          <p class='form-control-static'>$used</p>
-        </div>
-      </div>
-      <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langQuotaPercentage:</label>
-        <div class='col-sm-9'>
-            <div class='progress'>
-              <p class='progress-bar active from-control-static' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $diskUsedPercentage;'>
-                $diskUsedPercentage
-              </p>
-            </div>
-        </div>
-      </div>
-      <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langQuotaTotal:</label>
-        <div class='col-sm-9'>
-              <p class='form-control-static'>$quota</p>
-        </div>
-      </div>  
-    </form>
-    </div></div></div>";
-    $tmp_cwd = getcwd();
-
-    return $retstring;
+    view('modules.document.quota', $data);
 }
 
 // check for dangerous extensions and file types
@@ -517,7 +468,7 @@ function process_extracted_file($p_event, &$p_header) {
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
         return 0;
     } else {
-        // Check if file already exists        
+        // Check if file already exists
         $result = Database::get()->querySingle("SELECT id, path, visible FROM document
                                            WHERE $group_sql AND
                                                  path REGEXP ?s AND
@@ -540,7 +491,7 @@ function process_extracted_file($p_event, &$p_header) {
                 $backup_n = 1;
                 do {
                     $backup = preg_replace('/\.[a-zA-Z0-9_-]+$/', '', $filename) .
-                            '_backup_' . $backup_n . '.' . $format;                    
+                            '_backup_' . $backup_n . '.' . $format;
                     $n = Database::get()->querySingle("SELECT COUNT(*) as count FROM document
                                                               WHERE $group_sql AND
                                                                     path REGEXP ?s AND
@@ -554,7 +505,7 @@ function process_extracted_file($p_event, &$p_header) {
             }
         }
 
-        $path .= '/' . safe_filename($format);        
+        $path .= '/' . safe_filename($format);
         $id = Database::get()->query("INSERT INTO document SET
                                  course_id = ?d,
                                  subsystem = ?d,
@@ -598,7 +549,7 @@ function make_path($path, $path_components) {
 
     $path_already_exists = true;
     $depth = 1 + substr_count($path, '/');
-    foreach ($path_components as $component) {        
+    foreach ($path_components as $component) {
         $q = Database::get()->querySingle("SELECT path, visible, format,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
@@ -615,7 +566,7 @@ function make_path($path, $path_components) {
             make_dir($basedir . $path);
             $id = Database::get()->query("INSERT INTO document SET
                                           course_id = ?d,
-					  subsystem = ?d,
+                      subsystem = ?d,
                                           subsystem_id = ?d,
                                           path = ?s,
                                           filename = ?s,
@@ -636,7 +587,7 @@ function make_path($path, $path_components) {
 
 /**
  * Validate a given uploaded filename against the whitelist and error if necessary.
- * 
+ *
  * @param string  $filename   - The given filename.
  * @param integer $menuTypeID - The menu type to display in case of error.
  */
@@ -668,7 +619,7 @@ function validateRenamedFile($filename, $menuTypeID = 2) {
 
 /**
  * Validate a given uploaded zip archive contents against the whitelist and error if necessary.
- * 
+ *
  * @param array   $listContent - The list contents of the zip arhive, preferably by directly wiring PclZip::listContent().
  * @param integer $menuTypeID  - The menu type to display in case of error.
  */
@@ -695,7 +646,7 @@ function validateUploadedZipFile($listContent, $menuTypeID = 2) {
 
 /**
  * Check whether a filename is allowed by the whitelist or not.
- * 
+ *
  * @param  string  $filename - The filename to check against the whitelist.
  * @return boolean           - Whether the whitelist allows the specific filename extension or not.
  */
@@ -721,7 +672,7 @@ function isWhitelistAllowed($filename) {
 
 /**
  * Fetch a user's whitelist.
- * 
+ *
  * @param  integer $uid - The userId whose whitelist we want.
  * @return string       - The given user's whitelist.
  */
@@ -732,9 +683,9 @@ function fetchUserWhitelist($uid) {
 
 /**
  * Mimic get_file_extension from main lib.
- * 
- * @param  string $filename - The filename whose extension we want. 
- * @return string           - The given filename's extension. 
+ *
+ * @param  string $filename - The filename whose extension we want.
+ * @return string           - The given filename's extension.
  */
 function getPureFileExtension($filename) {
     $matches = array();

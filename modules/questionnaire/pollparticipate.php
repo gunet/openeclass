@@ -80,6 +80,7 @@ draw($tool_content, 2, null, $head_content);
  * @global type $langBack
  * @global type $langQuestion
  * @global type $langCancel
+ * @global type $langCollesLegend
  * @global type $head_content
  * @global type $pageName
  * @global type $langPollParticipantInfo
@@ -88,7 +89,8 @@ function printPollForm() {
     global $course_id, $course_code, $tool_content,
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
-    $langCancel, $head_content, $langPollParticipantInfo, $pageName;
+    $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
+    $pageName;
     
     $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
     $head_content .= " 
@@ -173,10 +175,11 @@ function printPollForm() {
                     </div>
                 </div>";
         }
+        $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;        
         $i=1;
         foreach ($questions as $theQuestion) {           
             $pqid = $theQuestion->pqid;
-            $qtype = $theQuestion->qtype;
+            $qtype = $theQuestion->qtype;            
             if($qtype==QTYPE_LABEL) {
                 $tool_content .= "    
                     <div class='alert alert-info' role='alert'>
@@ -223,13 +226,14 @@ function printPollForm() {
                                
                     }
                 } elseif ($qtype == QTYPE_SCALE) {
-                        $tool_content .= "
-                        <div class='form-group'>
-                            <div class='col-sm-offset-2 col-sm-10'>
-                                <input name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
-                            </div>
-                            
-                        </div>";
+                    if (($pollType == 1) or ($pollType == 2)) {
+                        $tool_content .= "<div style='margin-bottom: 0.5em;'><small>".q($langCollesLegend)."</small></div>";    
+                    }                    
+                    $tool_content .= "<div class='form-group'>                        
+                        <div class='col-sm-offset-2 col-sm-10' style='padding-top:15px;'>
+                            <input name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
+                        </div>                            
+                    </div>";
                 } elseif ($qtype == QTYPE_FILL) {
                     $tool_content .= "
                         <div class='form-group margin-bottom-fat'>                           

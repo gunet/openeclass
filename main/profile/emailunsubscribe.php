@@ -61,46 +61,47 @@ if (isset($_POST['submit'])) {
     }
     redirect_to_home_page("main/profile/display_profile.php");
 } else {
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-          'url' => 'display_profile.php',
-          'icon' => 'fa-reply',
-          'level' => 'primary-label')));
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
+$data['action_bar'] = action_bar(
+    [
+        [
+            'title' => $langBack,
+            'url' => 'display_profile.php',
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
+        ]
+    ]);
+
     if (get_config('email_verification_required') or get_config('dont_mail_unverified_mails')) {
         $user_email_status = get_mail_ver_status($uid);
         if ($user_email_status == EMAIL_VERIFICATION_REQUIRED or
                 $user_email_status == EMAIL_UNVERIFIED) {
-            $link = "<a href = '{$urlAppend}modules/auth/mail_verify_change.php?from_profile=true'>$langHere</a>.";
-            $tool_content .= "<div class='alert alert-warning'>$langMailNotVerified $link</div>";
+            $data['mailNotVerified'] = true;
         }
     }
+
     if (!get_user_email_notification_from_courses($uid)) {
-        $head_content .= '<script type="text/javascript">$(control_deactivate);</script>';
-        $tool_content .= "<div class='alert alert-info'>$langEmailUnsubscribeWarning</div>
-                                  <input type='checkbox' id='unsub' name='unsub' value='1'>&nbsp;$langEmailFromCourses";
+        $data['mail_notification'] = true;
     }
+
     $tool_content .= "<div class='alert alert-info'>$langInfoUnsubscribe</div>
                           <div id='unsubscontrols'>";
     if (isset($_REQUEST['cid'])) { // one course only
         $cid = intval($_REQUEST['cid']);
-        $course_title = course_id_to_title($cid);
-        $selected = get_user_email_notification($uid, $cid) ? 'checked' : '';
-        $tool_content .= "<input type='checkbox' name='c_unsub' value='1' $selected>&nbsp;" . q($course_title) . "<br />";
-        $tool_content .= "<input type='hidden' name='cid' value='" . getIndirectReference($cid) . "'>";
+        $data['course_title'] = course_id_to_title($cid);
+        $data['selected'] = get_user_email_notification($uid, $cid) ? 'checked' : '';
     } else { // displays all courses
         foreach ($_SESSION['courses'] as $code => $status) {
-            $title = course_code_to_title($code);
+            $data['title'] = course_code_to_title($code);
             $cid = course_code_to_id($code);
-            $selected = get_user_email_notification($uid, $cid) ? 'checked' : '';
-            $tool_content .= "<input type='checkbox' name='c_unsub[$code]' value='1' $selected>&nbsp;" . q($title) . "<br />";
+            $data['selected'] = get_user_email_notification($uid, $cid) ? 'checked' : '';
         }
     }
-    $tool_content .= "</div>
+    $tool_content .= "
                     <br>
                         <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                         <a class='btn btn-default' href='display_profile.php'>$langCancel<a>";
     $tool_content .= generate_csrf_token_form_field() ."</form>";
 }
 
-draw($tool_content, 1, null, $head_content);
+$data['menuTypeID'] = 1;
+view('main.profile.subscribe', $data);

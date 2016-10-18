@@ -59,15 +59,15 @@
         </div>
         <div class='form-group'>
         <label for='email_public' class='col-sm-3 control-label'>{{ trans('langEmail') }}</label>
-            <div class='col-sm-9'>{!! selection($access_options, 'email_public', ACCESS_PRIVATE, 'class="form-control"') !!}</div>
+            <div class='col-sm-9'>{!! selection($access_options, 'email_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
         </div>
         <div class='form-group'>
         <label for='am_public' class='col-sm-3 control-label'>{{ trans('langAm') }}</label>
-            <div class='col-sm-9'>{!! selection($access_options, 'am_public', ACCESS_PRIVATE, 'class="form-control"') !!}</div>
+            <div class='col-sm-9'>{!! selection($access_options, 'am_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
         </div>
         <div class='form-group'>
         <label for='phone_public' class='col-sm-3 control-label'>{{ trans('langPhone') }}</label>
-            <div class='col-sm-9'>{!! selection($access_options, 'phone_public', ACCESS_PRIVATE, 'class="form-control"') !!}</div>
+            <div class='col-sm-9'>{!! selection($access_options, 'phone_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
         </div>
         <div class='form-group'>
         <label for='send_mail' class='col-sm-3 control-label'>{{ trans('langInfoMail') }}</label>
