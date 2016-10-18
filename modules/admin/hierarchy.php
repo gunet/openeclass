@@ -227,7 +227,6 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         $head_content .= $js;
         $data['html'] = $html;
         $view = 'admin.courses.hierarchy.create';
-        ".showSecondFactorChallenge()."
     }    
 }
 // Delete node
