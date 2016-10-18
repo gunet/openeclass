@@ -124,7 +124,7 @@ function create_modules($cid) {
         MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
         MODULE_ID_CHAT, MODULE_ID_QUESTIONNAIRE,
         MODULE_ID_LP, MODULE_ID_WIKI, MODULE_ID_BLOG, 
-        MODULE_ID_TC, MODULE_ID_WALL, MODULE_ID_LTI_CONSUMER);
+        MODULE_ID_TC, MODULE_ID_WALL, MODULE_ID_LTI_CONSUMER, MODULE_ID_GAME);
 
     $vis_placeholders = array();
     $vis_args = array();

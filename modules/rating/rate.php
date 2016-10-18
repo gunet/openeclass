@@ -23,9 +23,11 @@ $require_current_course = TRUE;
 require_once 'class.rating.php';
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
+require_once 'modules/game/RatingEvent.php';
 
 $is_link = false;
 $is_wallpost = false;
+$rateEventActivity = null;
 
 if ($_GET['rtype'] == 'blogpost') {
 	$setting_id = SETTING_BLOG_RATING_ENABLE;
@@ -33,8 +35,10 @@ if ($_GET['rtype'] == 'blogpost') {
     $setting_id = SETTING_COURSE_RATING_ENABLE;
 } elseif ($_GET['rtype'] == 'forum_post') {
     $setting_id = SETTING_FORUM_RATING_ENABLE;
+    $rateEventActivity = RatingEvent::FORUM_ACTIVITY;
 } elseif ($_GET['rtype'] == 'link') {
     $is_link = true; //there is no rating setting for social bookmarks, rating is always enabled
+    $rateEventActivity = RatingEvent::SOCIALBOOKMARK_ACTIVITY;
 } elseif ($_GET['rtype'] == 'wallpost') {
     $is_wallpost = true; //there is no rating setting for wall posts, rating is always enabled
 }
@@ -52,6 +56,7 @@ if ($is_link || $is_wallpost || setting_get($setting_id, $course_id) == 1) {
         $rating = new Rating($widget, $rtype, $rid);
         $had_rated = $rating->userHasRated($uid);
         $action = $rating->castRating($value, $uid);
+        triggerGame($course_id, $uid, $rateEventActivity);
         
         if ($widget == 'up_down') {
             $up_value = $rating->getUpRating();
@@ -116,5 +121,17 @@ if ($is_link || $is_wallpost || setting_get($setting_id, $course_id) == 1) {
         }
         
         echo json_encode($response);
+    }
+}
+
+function triggerGame($courseId, $uid, $rateEventActivity) {
+    if ($rateEventActivity !== null) {
+        $eventData = new stdClass();
+        $eventData->courseId = $courseId;
+        $eventData->uid = $uid;
+        $eventData->activityType = $rateEventActivity;
+        $eventData->module = MODULE_ID_RATING;
+
+        RatingEvent::trigger(RatingEvent::RATECAST, $eventData);
     }
 }

@@ -83,15 +83,16 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
     global $m;
 
     $return = '';
-    $res = Database::get()->queryArray("SELECT id, file_path, file_name, uid, group_id
-				FROM assignment_submit
-                                WHERE assignment_id = ?d AND
-				      (uid = ?d OR group_id = ?d)", $id, $uid, $gid);
+    $res = Database::get()->queryArray("SELECT s.id, s.file_path, s.file_name, s.uid, s.group_id, a.course_id
+				FROM assignment_submit s JOIN assignment a ON (a.id = s.assignment_id)
+                                WHERE s.assignment_id = ?d AND
+				      (s.uid = ?d OR s.group_id = ?d)", $id, $uid, $gid);
     foreach ($res as $row) {
         if ($row->file_path != $new_filename) {
             @unlink("$GLOBALS[workPath]/$row->file_path");
         }
         Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $row->id);
+        triggerGame($row->course_id, $row->uid, $id);
         if ($GLOBALS['uid'] == $row->uid) {
             $return .= $m['deleted_work_by_user'];
         } else {
@@ -295,6 +296,15 @@ function cleanup_filename($f) {
     return preg_replace('{//}', '/', $f);
 }
 
+function triggerGame($courseId, $uid, $assignId) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = AssignmentEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_ASSIGN;
+    $eventData->resource = intval($assignId);
+    AssignmentEvent::trigger(AssignmentEvent::UPDGRADE, $eventData);
+}
 
 /**
  * @brief Export assignment's grades to CSV file

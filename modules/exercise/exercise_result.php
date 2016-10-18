@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,8 +17,8 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== */
-
+ * ======================================================================== 
+ */
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
@@ -27,6 +27,7 @@ $require_current_course = TRUE;
 $guest_allowed = true;
 include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'game.php';
 
 $pageName = $langExercicesResult;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
@@ -59,6 +60,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             SET total_score = total_score + ?d WHERE eurid = ?d",
             $grade, $eurid);
     }
+    $eur = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
+    triggerGame($course_id, $uid, $eur->eid);
     exit();
 }
 require_once 'include/lib/modalboxhelper.class.php';

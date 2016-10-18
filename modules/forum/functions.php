@@ -18,10 +18,12 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
+
+require_once 'modules/game/ForumEvent.php';
+
 /*
  * Return the total number of topics in a forum
  */
-
 function get_total_topics($forum_id) {
     return Database::get()->querySingle("SELECT COUNT(*) AS total FROM forum_topic WHERE forum_id = ?d", $forum_id)->total;
 }
@@ -239,4 +241,14 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
         }
     }
     send_mail_multipart('', '', '', $email, $subject_notify, $plain_topic_notify, $html_topic_notify, $charset);
+}
+
+function triggerGame($courseId, $uid, $eventName) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = ForumEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_FORUM;
+
+    CommentEvent::trigger($eventName, $eventData);
 }
