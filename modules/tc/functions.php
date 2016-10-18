@@ -404,7 +404,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
             }
             if (count($recipients) > 0) {
                 $emailsubject = $langBBBScheduledSession;
-                $bbblink = $urlServer . "modules/tc/index.php?course=$course_code&amp;choice=do_join&amp;meeting_id=$new_meeting_id&amp;title=" . urlencode($new_title) . "&amp;att_pw=$new_att_pw";
+                $bbblink = $urlServer . "modules/tc/index.php?course=$course_code";
                 $emailheader = "
                     <div id='mail-header'>
                         <div>
