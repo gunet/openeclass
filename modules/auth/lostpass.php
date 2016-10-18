@@ -40,8 +40,8 @@ $pageName = $lang_remind_pass;
 // Password reset link is valid for 1 hour = 3600 sec
 define('TOKEN_VALID_TIME', 3600);
 
-$emailhelpdesk = q(get_config('email_helpdesk'));
-$homelink = "<br><p><a href='$urlAppend'>$langHome</a></p>\n";
+$data['emailhelpdesk'] = q(get_config('email_helpdesk'));
+$data['homelink'] = "<br><p><a href='$urlAppend'>$langHome</a></p>\n";
 
 function password_is_editable($password) {
     global $auth_ids;
@@ -75,7 +75,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                       'button-class' => 'btn-default')
                             ),false);
                 $tool_content = "<div class='alert alert-success'><p>$langAccountResetSuccess1</p></div>
-                                                       $homelink";
+                                                       $data[homelink]";
                 $change_ok = true;
             }
         } elseif (count($error_messages)) {
@@ -132,37 +132,37 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                       'button-class' => 'btn-default')
                             ),false);
         $tool_content = "<div class='alert alert-danger'>$langAccountResetInvalidLink</div>
-                                 $homelink";
+                                 $data[homelink]";
     }
 } elseif (isset($_POST['send_link'])) {
 
-    $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
-    $userName = isset($_POST['userName']) ? canonicalize_whitespace($_POST['userName']) : '';
+    $data['email'] = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
+    $data['userName'] = isset($_POST['userName']) ? canonicalize_whitespace($_POST['userName']) : '';
     /*     * *** If valid e-mail address was entered, find user and send email **** */
-    $res = Database::get()->querySingle("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
+    $data['res_first_attempt'] = Database::get()->querySingle("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
                     LEFT JOIN admin a ON (a.user_id = u.id)
                     WHERE u.email = ?s AND
                     BINARY u.username = ?s AND
                     a.user_id IS NULL AND
-                    (u.last_passreminder IS NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) >= u.last_passreminder)", $email, $userName); //exclude admins and currently pending requests
+                    (u.last_passreminder IS NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) >= u.last_passreminder)", $data['email'], $data['userName']); //exclude admins and currently pending requests
 
-    $found_editable_password = false;
-    if ($res) {
-        if (password_is_editable($res->password)) {
-            $found_editable_password = true;
+    $data['found_editable_password'] = false;
+    if ($data['res_first_attempt']) {
+        if (password_is_editable($data['res_first_attempt']->password)) {
+            $data['found_editable_password'] = true;
             //prepare instruction for password reset
-            $text = $langPassResetIntro . $emailhelpdesk;
+            $text = $langPassResetIntro . $data['emailhelpdesk'];
             $text .= $langHowToResetTitle;
             $text .= $langPassResetGoHere;
-            $text .= $urlServer . "modules/auth/lostpass.php?u=$res->id&h=" .
-                    token_generate('password' . $res->id, true);
+            $text .= $urlServer . "modules/auth/lostpass.php?u=$data[res_first_attempt]->id&h=" .
+                    token_generate('password' . $data['res_first_attempt']->id, true);
 
             $header_html_topic_notify = "<!-- Header Section -->
             <div id='mail-header'>
                 <br>
                 <div>
                     <div id='header-title'>$langPassResetIntro</div>
-                    <div>$langPassResetIntro2 $emailhelpdesk</div>
+                    <div>$langPassResetIntro2 $data[emailhelpdesk]</div>
                 </div>
             </div>";
 
@@ -171,9 +171,9 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                 <br>
                 <div><b>$langHowToResetTitle</b></div><br>
                 <div id='mail-body-inner'>
-                    $langPassResetGoHere<br><br><a href='$urlServer"."modules/auth/lostpass.php?u=$res->id&h=" .
-                token_generate('password' . $res->id, true)."'>$urlServer"."modules/auth/lostpass.php?u=$res->id&h=" .
-                    token_generate('password' . $res->id, true)."</a>
+                    $langPassResetGoHere<br><br><a href='$urlServer"."modules/auth/lostpass.php?u=$data[res_first_attempt]->id&h=" .
+                token_generate('password' . $data['res_first_attempt']->id, true)."'>$urlServer"."modules/auth/lostpass.php?u=$data[res_first_attempt]->id&h=" .
+                    token_generate('password' . $data['res_first_attempt']->id, true)."</a>
                 </div>
             </div>";
 
@@ -181,47 +181,23 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
 
             $plainText = html2text($text);
             // store the timestamp of this action (password reminding and token generation)
-            Database::get()->query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ?d" , $res->id);
+            Database::get()->query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ?d" , $data['res_first_attempt']->id);
         } else { //other type of auth...
-            $auth = array_search($res->password, $auth_ids) or 1;
-            $tool_content = "<div class='alert alert-danger'>
-                                <p><strong>$langPassCannotChange1</strong></p>
-                                <p>$langPassCannotChange2 " . get_auth_info($auth) .
-                    ". $langPassCannotChange3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange4</p>
-                                $homelink</div>";
+            $data['auth'] = array_search($data['res_first_attempt']->password, $auth_ids) or 1;
         }
 
         /*         * *** Account details found, now send e-mail **** */
-        if ($found_editable_password) {
+        if ($data['found_editable_password']) {
             $emailsubject = $lang_remind_pass;
-            if (!send_mail_multipart('', '', '', $email, $emailsubject, $plainText, $text, $charset)) {
-                $tool_content = "<div class='alert alert-danger'>
-                                <p><strong>$langAccountEmailError1</strong></p>
-                                <p>$langAccountEmailError2 $email.</p>
-                                <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
-                                $homelink";
-            } elseif (!isset($auth)) {
-                $tool_content .= "<div class='alert alert-success'>$lang_pass_email_ok <strong>" .
-                        q($email) . "</strong></div>$homelink";
-            }
+            $data['mail_sent'] = send_mail_multipart('', '', '', $data['email'], $emailsubject, $plainText, $text, $charset);
         }
     } else {
-        $res = Database::get()->querySingle("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
+        $data['res_second_attempt'] = Database::get()->querySingle("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
                     LEFT JOIN admin a ON (a.user_id = u.id)
                     WHERE u.email = ?s AND
                     BINARY u.username = ?s AND
                     a.user_id IS NULL AND
-                    (u.last_passreminder IS NOT NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) < u.last_passreminder)", $email, $userName);
-        if ($res) {
-            $tool_content .= "<div class='alert alert-danger'>
-                        <p>$langLostPassPending</p></div>
-                        $homelink";
-        } else {
-            $tool_content .= "<div class='alert alert-danger'>
-                        <p><strong>$langAccountNotFound1 (" . q("$userName / $email") . ")</strong></p>
-                        <p>$langAccountNotFound2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p></div>
-                        $homelink";
-        }
+                    (u.last_passreminder IS NOT NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) < u.last_passreminder)", $data['email'], $data['userName']);
     }
 } else {
     /*     * *** Email address entry form **** */

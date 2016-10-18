@@ -27,6 +27,60 @@
 
 @if(isset($_REQUEST['u']) and isset($_REQUEST['h']))
 @elseif(isset($_POST['send_link']))
+    @if($res_first_attempt)
+        @if(!password_is_editable($res_first_attempt->password))
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class='alert alert-danger'>
+                        <p><strong>{!! trans('langPassCannotChange1') !!}</strong></p>
+                        <p>{!! trans('langPassCannotChange2') !!} {!! get_auth_info($auth) !!}
+                            {!! trans('langPassCannotChange3') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a> {!! trans('langPassCannotChange4') !!}</p>
+                        $homelink
+                    </div>
+                </div>
+            </div>
+        @endif
+        @if($found_editable_password)
+            @if(!$mail_sent)
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class='alert alert-danger'>
+                            <p><strong>{!! trans('langAccountEmailError1') !!}</strong></p>
+                            <p>{!! trans('langAccountEmailError2') !!} {{ $email }}.</p>
+                            <p>{!! trans('langAccountEmailError3') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}'</a>.</p></div>
+                        {{ $homelink }}
+                    </div>
+                </div>
+            @elseif(!isset($auth))
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class='alert alert-success'>{!! trans('lang_pass_email_ok') !!} <strong>{!! q($email) !!}</strong>
+                        </div>{{ $homelink }}
+                    </div>
+                </div>
+            @endif
+        @endif
+    @else
+        @if(isset($res_second_attempt) && $res_second_attempt)
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class='alert alert-danger'>
+                        <p>{!! trans('langLostPassPending') !!}</p>
+                    </div>
+                    {{ $homelink }}
+                </div>
+            </div>
+        @else
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class='alert alert-danger'>
+                        <p><strong>{!! trans('langAccountNotFound1') !!} ({!! q("$userName / $email") !!}")</strong></p>
+                        <p>{!! trans('langAccountNotFound2') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a>, {!! trans('langAccountNotFound3') !!}</p></div>
+                    {{ $homelink }}
+                </div>
+            </div>
+        @endif
+    @endif
 @else
     <div class="row">
         <div class="col-xs-12">
