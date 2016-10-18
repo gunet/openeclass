@@ -30,6 +30,13 @@ $toolName = "Game Progress All";
 
 $data = array();
 $iter = array('certificate', 'badge');
+
+// initialize data vars for template
+foreach ($iter as $key) {
+    $data['game_' . $key] = array();
+}
+
+// populate with data
 foreach ($iter as $key) {
     $gameQ = "select a.*, "
             . " b.title, b.description, b.active, b.created, "
