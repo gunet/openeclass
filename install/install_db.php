@@ -1645,10 +1645,18 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     PRIMARY KEY (`conf_id`,`course_id`)) $tbl_options");
 
 // Gamification Tables
+$db->query("CREATE TABLE `certificate_template` (
+    `id` mediumint(8) not null auto_increment primary key,
+    `name` varchar(255) not null,
+    `description` text,
+    `preview_image` varchar(255)
+)");
+
 $db->query("CREATE TABLE `certificate` (
   `id` int(11) not null auto_increment primary key,
   `course` int(11) not null,
   `author` int(11) not null,
+  `template` mediumint(8),
   `title` varchar(255) not null,
   `description` text,
   `autoassign` tinyint(1) not null default 1,
@@ -1657,7 +1665,8 @@ $db->query("CREATE TABLE `certificate` (
   `expires` datetime,
   index `certificate_course` (`course`),
   foreign key (`course`) references `course` (`id`),
-  foreign key (`author`) references `user`(`id`)
+  foreign key (`author`) references `user`(`id`),
+  foreign key (`template`) references `certificate_template`(`id`)
 )");
 
 $db->query("CREATE TABLE `badge` (
