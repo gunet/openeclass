@@ -26,6 +26,47 @@
 {!! $action_bar !!}
 
 @if(isset($_REQUEST['u']) and isset($_REQUEST['h']))
+    @if(isset($is_valid))
+        @if(isset($user_pass_updated))
+            <div class="alert alert-success"><p>{!! trans('langAccountResetSuccess1') !!}</p></div>
+            {{ $homelink }}
+        @elseif(isset($user_pass_notupdate))
+            <div class='alert alert-warning'>
+                <ul>
+                    <li>{!! implode("</li>\n<li>", $error_messages) !!}
+                    </li>
+                </ul>
+            </div>
+        @endif
+        @if(!$change_ok)
+            <div class='form-wrapper'>
+                <form method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
+                    <input type='hidden' name='u' value='{{ $userUID }}'>
+                    <input type='hidden' name='h' value='{{ q($_REQUEST['h']) }}'>
+                    <fieldset>
+                        <legend>{!! trans('langPassword') !!}</legend>
+                        <table class='table-default'>
+                            <tr>
+                                <th>{!! trans('langNewPass1') !!}</th>
+                                <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>
+                            </tr>
+                            <tr>
+                                <th>{!! trans('langNewPass2') !!}</th>
+                                <td><input type='password' size='40' name='newpass1' value='' autocomplete='off'></td>
+                            </tr>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <td><input class='btn btn-primary' type='submit' name='submit' value='{!! trans('langModify') !!}'></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </form>
+            </div>
+        @endif
+    @else
+        <div class='alert alert-danger'>{!! trans('langAccountResetInvalidLink') !!}</div>
+        {{ $homelink }}
+    @endif
 @elseif(isset($_POST['send_link']))
     @if($res_first_attempt)
         @if(!password_is_editable($res_first_attempt->password))

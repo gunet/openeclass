@@ -54,85 +54,57 @@ function password_is_editable($password) {
 }
 
 if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
-    $change_ok = false;
-    $userUID = intval($_REQUEST['u']);
-    $valid = token_validate('password' . $userUID, $_REQUEST['h'], TOKEN_VALID_TIME);
-    $res = Database::get()->querySingle("SELECT id FROM user WHERE id = ?d AND password NOT IN ('" . implode("', '", $auth_ids) . "')", $userUID);
+    $data['change_ok'] = false;
+    $data['userUID'] = intval($_REQUEST['u']);
+    $valid = token_validate('password' . $data['userUID'], $_REQUEST['h'], TOKEN_VALID_TIME);
+    $res = Database::get()->querySingle("SELECT id FROM user WHERE id = ?d AND password NOT IN ('" . implode("', '", $auth_ids) . "')", $data['userUID']);
     $error_messages = array();
     if ($valid and $res) {
+        $data['is_valid'] = true;
         if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
                 count($error_messages = acceptable_password($_POST['newpass'], $_POST['newpass1'])) == 0) {
             $hasher = new PasswordHash(8, false);
             $q1 = Database::get()->query("UPDATE user SET password = ?s
                                                       WHERE id = ?d",
-                    $hasher->HashPassword($_POST['newpass']), $userUID);
+                    $hasher->HashPassword($_POST['newpass']), $data['userUID']);
             if ($q1->affectedRows > 0) {
-                $tool_content .= action_bar(array(
+                $data['user_pass_updated'] = true;
+                $data['action_bar'] = action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-                $tool_content = "<div class='alert alert-success'><p>$langAccountResetSuccess1</p></div>
-                                                       $data[homelink]";
-                $change_ok = true;
+                $data['change_ok'] = true;
             }
         } elseif (count($error_messages)) {
-            $tool_content .= action_bar(array(
+            $data['$user_pass_notupdate'] = true;
+            $data['action_bar'] = action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-            $tool_content .= "<div class='alert alert-warning'><ul><li>" .
-                    implode("</li>\n<li>", $error_messages) .
-                    "</li></ul></div>";
         }
-        if (!$change_ok) {
-            $tool_content .= action_bar(array(
+        if (!$data['change_ok']) {
+            $data['action_bar'] = action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-            $tool_content .= "
-            <div class='form-wrapper'>
-                <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-                <input type='hidden' name='u' value='$userUID'>
-                <input type='hidden' name='h' value='" . q($_REQUEST['h']) . "'>
-                <fieldset>
-                <legend>$langPassword</legend>
-                <table class='table-default'>
-                <tr>
-                   <th>$langNewPass1</th>
-                   <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>
-                </tr>
-                <tr>
-                   <th>$langNewPass2</th>
-                   <td><input type='password' size='40' name='newpass1' value='' autocomplete='off'></td>
-                </tr>
-                <tr>
-                   <th>&nbsp;</th>
-                   <td><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td>
-                </tr>
-                </table>
-                </fieldset>
-                </form>
-            </div>";
         }
     } else {
-        $tool_content .= action_bar(array(
+        $data['action_bar'] = action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-        $tool_content = "<div class='alert alert-danger'>$langAccountResetInvalidLink</div>
-                                 $data[homelink]";
     }
 } elseif (isset($_POST['send_link'])) {
 
