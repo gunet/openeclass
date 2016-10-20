@@ -3276,13 +3276,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
         
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
+                        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                         `resource_id` INT(11) NOT NULL,
                         `resource_type` VARCHAR(50) NOT NULL,
                         `course_id` INT(11) NOT NULL,
                         `course_title` VARCHAR(250) NOT NULL DEFAULT '',
                         `data` TEXT NOT NULL,
-                        PRIMARY KEY (`user_id`, `resource_id`, `resource_type`)) $charset_spec");
+                        INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $charset_spec");
                 
         // Conference table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `conference` (

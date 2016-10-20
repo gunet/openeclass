@@ -145,11 +145,11 @@ if ($userdata) {
                 }
             }
         } elseif (isset($_GET['action']) && $_GET['action'] == 'remove') {
-            if (isset($_GET['type']) && isset($_GET['rid'])) {
+            if (isset($_GET['type']) && isset($_GET['er_id'])) {
                 //TODO delete files if existing when deleting work submissions
                 $rtype = $_GET['type'];
-                $rid = $_GET['rid'];
-                Database::get()->query("DELETE FROM eportfolio_resource WHERE user_id = ?d AND resource_id = ?d AND resource_type = ?d", $uid, $rid, $rtype);
+                $er_id = $_GET['er_id'];
+                Database::get()->query("DELETE FROM eportfolio_resource WHERE user_id = ?d AND id = ?d", $uid, $er_id);
                 Session::Messages($langePortfolioResourceRemoved, 'alert-success');
                 redirect_to_home_page("main/eportfolio/resources.php");
             }
@@ -204,7 +204,7 @@ if ($userdata) {
                                         ". action_button(array(
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
-                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;rid=".$post->resource_id,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;er_id=".$post->id,
                                                     'icon' => 'fa-times',
                                                     'class' => 'delete',
                                                     'confirm' => $langePortfolioSureToRemoveResource,
@@ -248,7 +248,7 @@ if ($userdata) {
                                         ". action_button(array(
                                                     array(
                                                             'title' => $langePortfolioRemoveResource,
-                                                            'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=work_submission&amp;rid=".$submission->resource_id,
+                                                            'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
                                                             'icon' => 'fa-times',
                                                             'class' => 'delete',
                                                             'confirm' => $langePortfolioSureToRemoveResource,
