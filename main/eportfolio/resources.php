@@ -78,7 +78,7 @@ if ($userdata) {
                 $rid = $_GET['rid'];
                 
                 if ($rtype == 'blog') {
-                    $post = Database::get()->querySingle("SELECT * FROM blog_post WHERE id = ?d", $rid);
+                    $post = Database::get()->querySingle("SELECT * FROM blog_post WHERE id = ?d AND user_id = ?d", $rid, $uid);
                     if ($post) {
                         if ($post->user_id == $uid){
                             if ($post->course_id == 0) { //personal blog post
@@ -95,7 +95,7 @@ if ($userdata) {
                         redirect_to_home_page("main/eportfolio/resources.php");
                     }
                 } elseif ($rtype == 'work_submission') {
-                    $submission = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $rid);
+                    $submission = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d AND uid = ?d", $rid, $uid);
                     if($submission) {
                         $work = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $submission->assignment_id);
                         if ( ($submission->group_id == 0 && $submission->uid == $uid) ||
@@ -116,7 +116,7 @@ if ($userdata) {
                             if (!empty($work->file_path)) {
                                 $ass_file_path_explode = explode("/", $work->file_path);
                                 $ass_file_extension = pathinfo($webDir.'courses/'.$course_code.'/work/'.$ass_file_path_explode[0].'/'.rawurlencode($ass_file_path_explode[1]), PATHINFO_EXTENSION);
-                                $ass_source = $urlServer.'courses/'.$course_code.'/work/'.$ass_file_path_explode[0].'/'.rawurlencode($ass_file_path_explode[1]);
+                                $ass_source = $urlServer.'courses/'.$course_code.'/work/admin_files/'.$ass_file_path_explode[0].'/'.rawurlencode($ass_file_path_explode[1]);
                                 $ass_dest = 'courses/eportfolio/work_submissions/'.$uid.'/'.uniqid().'.'.$ass_file_extension;
                                 copy($ass_source,$ass_dest);
                                 $data[] = $ass_dest;
