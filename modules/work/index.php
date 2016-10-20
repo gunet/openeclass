@@ -2851,8 +2851,8 @@ function show_student_assignments() {
                 }
                 $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;'>$grade</div>";
             }
-            
-            if(get_config('eportfolio_enable')) {
+
+            if(get_config('eportfolio_enable') && !empty($submission)) {
                 $add_eportfolio_res_td = "<td class='option-btn-cell'>".
                                             action_button($eportfolio_action_array)."</td>";
             }
