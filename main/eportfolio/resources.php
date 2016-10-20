@@ -75,7 +75,7 @@ if ($userdata) {
         if (isset($_GET['action']) && $_GET['action'] == 'add') {
             if (isset($_GET['type']) && isset($_GET['rid'])) {
                 $rtype = $_GET['type'];
-                $rid = $_GET['rid'];
+                $rid = intval($_GET['rid']);
                 
                 if ($rtype == 'blog') {
                     $post = Database::get()->querySingle("SELECT * FROM blog_post WHERE id = ?d AND user_id = ?d", $rid, $uid);
@@ -131,6 +131,7 @@ if ($userdata) {
                                 $subm_source = $urlServer.'courses/'.$course_code.'/work/'.$subm_file_path_explode[0].'/'.rawurlencode($subm_file_path_explode[1]);
                                 $subm_dest = 'courses/eportfolio/work_submissions/'.$uid.'/'.uniqid().'.'.$subm_file_extension;
                                 copy($subm_source,$subm_dest);
+                                $data[] = $subm_dest;
                             } else {
                                 $data[] = $submission->file_path;
                             }
@@ -148,7 +149,7 @@ if ($userdata) {
             if (isset($_GET['type']) && isset($_GET['er_id'])) {
                 //TODO delete files if existing when deleting work submissions
                 $rtype = $_GET['type'];
-                $er_id = $_GET['er_id'];
+                $er_id = intval($_GET['er_id']);
                 Database::get()->query("DELETE FROM eportfolio_resource WHERE user_id = ?d AND id = ?d", $uid, $er_id);
                 Session::Messages($langePortfolioResourceRemoved, 'alert-success');
                 redirect_to_home_page("main/eportfolio/resources.php");
