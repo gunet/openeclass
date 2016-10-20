@@ -118,20 +118,15 @@ if (isset($_POST['submit'])) {
     $result = Database::get()->query("UPDATE forum SET num_posts = num_posts+1,
                     last_post_id = ?d
 		WHERE id = ?d
-                    AND course_id = ?d", $this_post, $forum_id, $course_id);
-    if (!$result) {
-        $tool_content .= $langErrorUpadatePostCount;
-        draw($tool_content, 2, null, $head_content);
-        exit();
-    }
+                    AND course_id = ?d", $this_post, $forum_id, $course_id);    
 
     $subject = Database::get()->querySingle('SELECT title FROM forum_topic WHERE id = ?d', $topic)->title;
     notify_users($forum_id, $forum_name, $topic, $subject, $message, $time);
 
     $page = "modules/forum/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id";
     $total_posts = get_total_posts($topic);
-    if ($total_posts > $posts_per_page) {
-        $page .= '&start=' . ($posts_per_page * intval(($total_posts - 1) / $posts_per_page));
+    if ($total_posts > POSTS_PER_PAGE) {
+        $page .= '&start=' . (POSTS_PER_PAGE * intval(($total_posts - 1) / POSTS_PER_PAGE));
     }
     Session::Messages($langStored, 'alert-success');
     redirect_to_home_page($page);
@@ -146,11 +141,17 @@ if (isset($_POST['submit'])) {
     if (!isset($reply)) {
         $reply = '';
     }
-    $tool_content .= "
-    <div class='form-wrapper'>
+    
+    if (isset($_GET['parent_post'])) {
+        $parent_post_text = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $parent_post)->post_text;
+        $tool_content .= "<blockquote><p><h5>$parent_post_text</h5></p></blockquote>";
+    }
+    
+    $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
             <input type='hidden' name='parent_post' value='$parent_post'>
             <fieldset>
+            
             <div class='form-group'>
               <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
               <div class='col-sm-10'>

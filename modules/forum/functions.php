@@ -18,12 +18,15 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-require_once 'modules/game/ForumEvent.php';
-
 /*
  * Return the total number of topics in a forum
  */
+
+define('POSTS_PER_PAGE', 20);
+define('TOPICS_PER_PAGE', 10);
+define('HOT_THRESHOLD', 20);
+define('PAGINATION_CONTEXT', 3);
+
 function get_total_topics($forum_id) {
     return Database::get()->querySingle("SELECT COUNT(*) AS total FROM forum_topic WHERE forum_id = ?d", $forum_id)->total;
 }
@@ -161,16 +164,44 @@ function init_forum_group_info($forum_id) {
 
 function add_topic_link($pagenr, $total_reply_pages) {
 
-    global $pagination, $posts_per_page, $topiclink;
+    global $pagination, $topiclink;
 
-    $start = $pagenr * $posts_per_page;
+    $start = $pagenr * POSTS_PER_PAGE;
     $pagenr++;
     $pagination .= "<a href='$topiclink&amp;start=$start'>$pagenr</a>" .
             (($pagenr < $total_reply_pages) ? "<span class='page-sep'>,&nbsp;</span>" : '');
 }
 
-
-/* Send an e-mail notification for new messages to subscribed users
+/**
+ * @brief Send an e-mail notification for new messages to subscribed users
+ * @global type $logo
+ * @global type $langNewForumNotify
+ * @global type $course_code
+ * @global type $course_code
+ * @global type $course_id
+ * @global type $langForumFrom
+ * @global type $uid
+ * @global type $langBodyForumNotify
+ * @global type $langInForums
+ * @global type $urlServer
+ * @global type $langdate
+ * @global type $langSender
+ * @global type $langCourse
+ * @global type $langCategory
+ * @global type $langForum
+ * @global type $langSubject
+ * @global type $langNote
+ * @global type $langLinkUnsubscribe
+ * @global type $langHere
+ * @global type $charset
+ * @global type $langMailBody
+ * @global type $langMailSubject
+ * @param type $forum_id
+ * @param type $forum_name
+ * @param type $topic_id
+ * @param type $subject
+ * @param type $message
+ * @param type $topic_date
  */
 function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $topic_date) {
     global $logo, $langNewForumNotify, $course_code, $course_code, $course_id, $langForumFrom,
@@ -241,14 +272,4 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
         }
     }
     send_mail_multipart('', '', '', $email, $subject_notify, $plain_topic_notify, $html_topic_notify, $charset);
-}
-
-function triggerGame($courseId, $uid, $eventName) {
-    $eventData = new stdClass();
-    $eventData->courseId = $courseId;
-    $eventData->uid = $uid;
-    $eventData->activityType = ForumEvent::ACTIVITY;
-    $eventData->module = MODULE_ID_FORUM;
-
-    CommentEvent::trigger($eventName, $eventData);
 }
