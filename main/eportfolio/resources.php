@@ -23,6 +23,7 @@ $require_login = false;
 $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/forcedownload.php';
 require_once 'modules/group/group_functions.php';
 
 if (!get_config('eportfolio_enable')) {
@@ -87,7 +88,7 @@ if ($userdata) {
                                 $course_title = Database::get()->querySingle("SELECT title FROM course WHERE id = ?d", $post->course_id)->title;
                             }
                         }
-                        $data = array($post->title,$post->content,$post->time);
+                        $data = array('title' => $post->title, 'content' => $post->content, 'timestamp' => $post->time);
                         
                         Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
                                 VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'blog',$post->course_id,$course_title,serialize($data));
@@ -105,7 +106,9 @@ if ($userdata) {
                             $course_title = $course_info->title;
                             $course_code =  $course_info->code;
                             
-                            $data = array($work->title, $work->description, $submission->submission_date, $work->max_grade, $submission->submission_text, $submission->grade, $submission->group_id);
+                            $data = array('title' => $work->title, 'descr' => $work->description, 'subm_date' => $submission->submission_date, 
+                                          'max_grade' => $work->max_grade, 'subm_text' => $submission->submission_text, 'grade' => $submission->grade, 
+                                          'group_id' => $submission->group_id);
                             
                             //create dir for user
                             if (!file_exists($webDir."/courses/eportfolio/work_submissions/".$uid)) {
@@ -119,9 +122,9 @@ if ($userdata) {
                                 $ass_source = $urlServer.'courses/'.$course_code.'/work/admin_files/'.$ass_file_path_explode[0].'/'.rawurlencode($ass_file_path_explode[1]);
                                 $ass_dest = 'courses/eportfolio/work_submissions/'.$uid.'/'.uniqid().'.'.$ass_file_extension;
                                 copy($ass_source,$ass_dest);
-                                $data[] = $ass_dest;
+                                $data['assignment_file'] = $ass_dest;
                             } else {
-                                $data[] = $work->file_path;
+                                $data['assignment_file'] = $work->file_path;
                             }
                             
                             //submission file
@@ -131,9 +134,9 @@ if ($userdata) {
                                 $subm_source = $urlServer.'courses/'.$course_code.'/work/'.$subm_file_path_explode[0].'/'.rawurlencode($subm_file_path_explode[1]);
                                 $subm_dest = 'courses/eportfolio/work_submissions/'.$uid.'/'.uniqid().'.'.$subm_file_extension;
                                 copy($subm_source,$subm_dest);
-                                $data[] = $subm_dest;
+                                $data['submission_file'] = $subm_dest;
                             } else {
-                                $data[] = $submission->file_path;
+                                $data['submission_file'] = $submission->file_path;
                             }
                             
                             Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
@@ -153,6 +156,22 @@ if ($userdata) {
                 Database::get()->query("DELETE FROM eportfolio_resource WHERE user_id = ?d AND id = ?d", $uid, $er_id);
                 Session::Messages($langePortfolioResourceRemoved, 'alert-success');
                 redirect_to_home_page("main/eportfolio/resources.php");
+            }
+        } elseif (isset($_GET['action']) && $_GET['action'] == 'get') {
+            if (isset($_GET['type']) && isset($_GET['er_id'])) {
+                    $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d 
+                                AND resource_type = ?d AND id = ?d", $uid, 'work_submission', intval($_GET['er_id']));
+                if ($info) {
+                    $data_array = unserialize($info->data);
+                    if ($_GET['type'] == 'assignment') {
+                       $file_info = $data_array['assignment_file'];
+                    } else if ($_GET['type'] == 'submission') {
+                        $file_info = $data_array['submission_file'];
+                    }
+                    $file = str_replace('\\', '/', $webDir)."/".$file_info;
+                    $extension = pathinfo($file, PATHINFO_EXTENSION);
+                    send_file_to_client($file, 'file.'.$extension, null, true);
+                }
             }
         }
         
@@ -177,6 +196,25 @@ if ($userdata) {
                       'level' => 'primary-label',
                       'button-class' => 'btn-info'),
             ));
+        
+        if (isset($_GET['action']) && $_GET['action'] == 'get') {
+            if (isset($_GET['type']) && isset($_GET['er_id'])) {
+                $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d
+                                AND resource_type = ?d AND id = ?d", $id, 'work_submission', intval($_GET['er_id']));
+                if ($info) {
+                    $data_array = unserialize($info->data);
+                    if ($_GET['type'] == 'assignment') {
+                        $file_info = $data_array['assignment_file'];
+                    } else if ($_GET['type'] == 'submission') {
+                        $file_info = $data_array['submission_file'];
+                    }
+                    $file = str_replace('\\', '/', $webDir)."/".$file_info;
+                    $extension = pathinfo($file, PATHINFO_EXTENSION);
+                    send_file_to_client($file, 'file.'.$extension, null, true);
+                }
+            }
+        }
+        
     }
     
     $tool_content .= '<ul class="nav nav-tabs">
@@ -212,10 +250,10 @@ if ($userdata) {
                                                     'show' => ($post->user_id == $uid)
                                                 )))."
                                      </div>
-                                        <h3 class='panel-title'>".q($data[0])."</h3>
+                                        <h3 class='panel-title'>".q($data['title'])."</h3>
                                 </div>
                                 <div class='panel-body'>
-                                    <div class='label label-success'>" . nice_format($data[2], true). "</div><small>".$langBlogPostUser.display_user($post->user_id, false, false)."</small><br><br>".standard_text_escape($data[1])."
+                                    <div class='label label-success'>" . nice_format($data['timestamp'], true). "</div><small>".$langBlogPostUser.display_user($post->user_id, false, false)."</small><br><br>".standard_text_escape($data['content'])."
                                                 </div>
                                                 <div class='panel-footer'>
                                                 <div class='row'>
@@ -256,10 +294,10 @@ if ($userdata) {
                                                             'show' => ($submission->user_id == $uid)
                                                     )))."
                                      </div>
-                                        <h3 class='panel-title'>".$langTitle.": ".q($data[0])."</h3>
+                                        <h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3>
                                 </div>
                                 <div class='panel-body'>
-                                    <div class='label label-success'>$langSubmit: " . nice_format($data[2], true). "</div><small>".$langBlogPostUser.display_user($post->user_id, false, false)."</small><br><br>
+                                    <div class='label label-success'>$langSubmit: " . nice_format($data['subm_date'], true). "</div><small>".$langBlogPostUser.display_user($post->user_id, false, false)."</small><br><br>
                                         </div>
                                         <div class='panel-footer'>
                                         <div class='row'>
