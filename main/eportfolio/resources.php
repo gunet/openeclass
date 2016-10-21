@@ -38,8 +38,13 @@ if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
     $toolName = $langUserePortfolio;
 } else {
-    $id = $uid;
-    $toolName = $langMyePortfolio;
+    if ($uid == 0) {
+        redirect_to_home_page();
+        exit;
+    } else {
+        $id = $uid;
+        $toolName = $langMyePortfolio;
+    }
 }
 
 $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable
@@ -148,12 +153,16 @@ if ($userdata) {
                     }
                 }
             }
-        } elseif (isset($_GET['action']) && $_GET['action'] == 'remove') {
-            if (isset($_GET['type']) && isset($_GET['er_id'])) {
-                //TODO delete files if existing when deleting work submissions
-                $rtype = $_GET['type'];
-                $er_id = intval($_GET['er_id']);
-                Database::get()->query("DELETE FROM eportfolio_resource WHERE user_id = ?d AND id = ?d", $uid, $er_id);
+        } elseif (isset($_GET['action']) && $_GET['action'] == 'remove' && isset($_GET['er_id'])) {
+            $er_id = intval($_GET['er_id']);
+            $info = Database::get()->querySingle("SELECT resource_type, data FROM eportfolio_resource WHERE user_id = ?d AND id = ?d", $uid, $er_id);
+            if ($info) {
+                if ($info->resource_type == 'work_submission') {
+                    $data_array = unserialize($info->data);
+                    @unlink($webDir.'/'.$data_array["assignment_file"]);
+                    @unlink($webDir.'/'.$data_array["submission_file"]);
+                }
+                Database::get()->query("DELETE FROM eportfolio_resource WHERE id = ?d", $er_id);
                 Session::Messages($langePortfolioResourceRemoved, 'alert-success');
                 redirect_to_home_page("main/eportfolio/resources.php");
             }
