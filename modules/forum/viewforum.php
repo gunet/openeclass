@@ -28,13 +28,11 @@ require_once 'include/log.class.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'modules/forum/functions.php';
 
 if (!add_units_navigation(true)) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 }
-
-require_once 'modules/forum/config.php';
-require_once 'modules/forum/functions.php';
 
 if ($is_editor) {
     load_js('tools.js');
