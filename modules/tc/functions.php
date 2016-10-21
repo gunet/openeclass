@@ -505,7 +505,7 @@ function bbb_session_details() {
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langUnitDescr,
         $langNoBBBSesssions, $langDaysLeft, $m, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
-        $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langBBBNoServerForRecording;
+        $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langBBBNoServerForRecording, $langdate;
 
 
     if (!is_active_tc_server($tc_type, $course_id)) { // check availability
@@ -532,10 +532,7 @@ function bbb_session_details() {
                          <div class='table-responsive'>
                            <table class='table-default'>
                              <tr class='list-header'>
-                               <th style='width:25%'>$langTitle</th>
-                               <th class='text-center'>$langUnitDescr</th>
-                               <th class='text-center'>$langNewBBBSessionStart</th>
-                               <th class='text-center'>$langNewBBBSessionEnd</th>
+                               <th>$langTitle</th>
                                <th class='text-center'>$langParticipants</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
@@ -569,7 +566,7 @@ function bbb_session_details() {
                 $timeLabel = nice_format($end_date, TRUE);
             } else {
                 $timeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
-                $timeLabel = '';
+                $timeLabel = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;';
             }
             if ($timeLeft > 0) {
                 $timeLabel .= "<br><span class='label label-warning'><small>$langDaysLeft " .
@@ -615,11 +612,18 @@ function bbb_session_details() {
                     $headingsSent = true;
                 }
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
-                    <td class='text-left'>$joinLink $warning_message_record</td>
-                    <td>$desc</td>
-                    <td class='text-center'>".nice_format($start_date, TRUE)."</td>
-                    <td class='text-center'>$timeLabel</td>
-                    <td style='width: 30%'>$participants</td>
+                    <td>
+                        <h4>$joinLink</h4> $warning_message_record
+                        <div>  
+                            <u class='text-muted'>$langNewBBBSessionStart</u>: ".nice_format($start_date, TRUE)."<br/>
+                            <u class='text-muted'>$langNewBBBSessionEnd</u>: $timeLabel</br></br>
+                        </div>
+                        <div>
+                            $desc
+                        </div>
+                    </td>
+                    
+                    <td style='width: 20%'>$participants</td>
                     <td class='option-btn-cell'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
@@ -667,11 +671,15 @@ function bbb_session_details() {
                         $headingsSent = true;
                     }
                     $tool_content .= "<tr>
-                        <td class='text-center'>$joinLink $warning_message_record</td>
-                        <td>$desc</td>
-                        <td class='text-center'>".nice_format($start_date, TRUE)."</td>
-                        <td class='text-center'>$timeLabel</td>
-                        <td style='width: 30%'>$participants</td>
+                        <td> <h4>$joinLink</h4> $warning_message_record
+                        <div>  
+                            <u class='text-muted'>$langNewBBBSessionStart</u>: ".nice_format($start_date, TRUE)."<br/>
+                            <u class='text-muted'>$langNewBBBSessionEnd</u>: $timeLabel</br></br>
+                        </div>
+                        <div>
+                            $desc
+                        </div></td>
+                        <td style='width: 20%'>$participants</td>
                         <td class='text-center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($canJoin) {
