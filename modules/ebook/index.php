@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -65,16 +64,16 @@ $head_content .= "
                 handle: '.fa-arrows',
                 animation: 150,
                 onEnd: function (evt) {
-                
+
                 var itemEl = $(evt.item);
-                
+
                 var idReorder = itemEl.attr('data-id');
                 var prevIdReorder = itemEl.prev().attr('data-id');
 
                 $.ajax({
                   type: 'post',
                   dataType: 'text',
-                  data: { 
+                  data: {
                           toReorder: idReorder,
                           prevReorder: prevIdReorder,
                         }
@@ -93,7 +92,7 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')
-            ));        
+            ));
     } else {
         $tool_content .= action_bar(array(
             array('title' => $langCreate,
@@ -131,12 +130,12 @@ if ($is_editor) {
                 <div class='form-group'>
                     <label for='ebook_title' class='col-sm-2 control-label'>$langTitle: </label>
                     <div class='col-sm-10'>
-                        <input type='text' class='form-control' id='ebook_title' name='title' placeholder='$langTitle'>                    
+                        <input type='text' class='form-control' id='ebook_title' name='title' placeholder='$langTitle'>
                     </div>
                 </div>
                 <div class='form-group'>
                     <label for='fileUpload' class='col-sm-2 control-label'>$langZipFile:</label>
-                    <div class='col-sm-10'>                    
+                    <div class='col-sm-10'>
                       <input type='file' name='file' id='fileUpload'>
  $langOptional
                     </div>
@@ -156,9 +155,9 @@ if ($is_editor) {
                     'href' => "index.php?course=$course_code",
                 )
             ))
-            ."    
+            ."
                     </div>
-                </div>                         
+                </div>
             </form>
         </div>";
     } elseif (isset($_GET['vis'])) {
@@ -178,7 +177,7 @@ $q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebo
                            LEFT JOIN ebook_subsection ON ebook_section.id = section_id
                       WHERE course_id = ?d
                             $visibility_check
-                      GROUP BY ebook.id
+                      GROUP BY ebook.id, ebook.title, visible
                       ORDER BY `order`", $course_id);
 
 if (!$q && !isset($_GET['create'])) {
@@ -205,7 +204,7 @@ if (!$q && !isset($_GET['create'])) {
         $warning = is_null($r->sid) ? " <i>($langInactive)</i>" : '';
         $tool_content .= "<tr class = '$vis_class' data-id='$r->id'>
                 <td>$title_link</td>".
-                   tools($r->id, $k, $num, $r->visible) . 
+                   tools($r->id, $k, $num, $r->visible) .
                 "</tr>";
         $k++;
     }
@@ -220,12 +219,12 @@ draw($tool_content, 2, null, $head_content);
  * @brief display action button
  * @global type $is_editor
  * @global type $langEditChange
- * @global type $langDelete 
+ * @global type $langDelete
  * @global type $langEBookDelConfirm
  * @global type $langViewShow
  * @global type $course_code
  * @global type $langViewHide
- * @param type $id 
+ * @param type $id
  * @param type $k
  * @param type $num
  * @param type $vis
@@ -237,7 +236,7 @@ function tools($id, $k, $num, $vis) {
 
     if (!$is_editor) {
         return '';
-    } else {        
+    } else {
         $num--;
         $content = "<td class='option-btn-cell' style='width: 90px;'><div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer;
                 vertical-align: bottom;'><span class='fa fa-arrows' style='cursor: pointer;'></span></div><div class='pull-left'>";
@@ -248,13 +247,13 @@ function tools($id, $k, $num, $vis) {
                     array('title' => $vis ? $langViewHide : $langViewShow,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id",
                           'icon' => $vis ? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langDelete,                          
+                    array('title' => $langDelete,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$id",
                           'icon' => 'fa-times',
                           'class' => 'delete',
                           'confirm' => $langEBookDelConfirm)
         ));
         $content .= "</div></td>";
-        return "$content";        
+        return "$content";
     }
 }
