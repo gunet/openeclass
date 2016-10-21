@@ -2514,26 +2514,26 @@ function check_username_sensitivity($posted, $dbuser) {
  */
 function get_user_email_notification($user_id, $course_id = null) {
     // check if user is active
-    if (!Database::get()->querySingle('SELECT expires_at < NOW() FROM user WHERE id = ?d', $user_id)) {
+    if (Database::get()->querySingle('SELECT expires_at < NOW() AS expired FROM user WHERE id = ?d', $user_id)->expired) {
         return false;
     }
-    // checks if a course is active or not
+    // check if course is active or not
     if (isset($course_id) and course_status($course_id) == COURSE_INACTIVE) {
         return false;
     }
-    // checks if user has verified his email address
+    // check if user's email address is verified
     if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
         $verified_mail = get_mail_ver_status($user_id);
         if ($verified_mail == EMAIL_VERIFICATION_REQUIRED or $verified_mail == EMAIL_UNVERIFIED) {
             return false;
         }
     }
-    // checks if user has choosen not to be notified by email from all courses
+    // check if user has chosen not to be notified by email from all courses
     if (!get_user_email_notification_from_courses($user_id)) {
         return false;
     }
     if (isset($course_id)) {
-        // finally checks if user has choosen not to be notified from a specific course
+        // finally check if user has choosen not to be notified from a specific course
         $r = Database::get()->querySingle("SELECT receive_mail FROM course_user
                                             WHERE user_id = ?d
                                             AND course_id = ?d", $user_id, $course_id);
