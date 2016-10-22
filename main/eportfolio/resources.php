@@ -34,7 +34,7 @@ if (!get_config('eportfolio_enable')) {
 
 $userdata = array();
 
-if (isset($_GET['id'])) {
+if (isset($_GET['id']) && intval($_GET['id']) != 0) {
     $id = intval($_GET['id']);
     $toolName = $langUserePortfolio;
 } else {
@@ -59,22 +59,22 @@ if ($userdata) {
         
         $tool_content .= action_bar(array(
                 array('title' => $langBio,
-                      'url' => "{$urlAppend}courses/eportfolio/userbios/$id"."_bio.pdf",
+                      'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id",
                       'icon' => 'fa-download',
                       'level' => 'primary-label',
-                      'show' => file_exists("$webDir/courses/eportfolio/userbios/$id"."_bio.pdf")),
+                      'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
                 array('title' => $langResume,
-                      'url' => "index.php?id=$id",
+                      'url' => "{$urlAppend}main/eportfolio/index.php?id=$id",
                       'level' => 'primary-label'),
                 array('title' => $langResourcesCollection,
-                      'url' => "resources.php?id=$id",
+                      'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id",
                       'level' => 'primary-label',
                       'button-class' => 'btn-info'),
                 array('title' => $langEditResume,
-                      'url' => "edit_eportfolio.php",
+                      'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                       'icon' => 'fa-edit'),
                 array('title' => $langUploadBio,
-                      'url' => "bio_upload.php",
+                      'url' => "{$urlAppend}main/eportfolio/bio_upload.php",
                       'icon' => 'fa-upload')
             ));
         
@@ -166,24 +166,7 @@ if ($userdata) {
                 Session::Messages($langePortfolioResourceRemoved, 'alert-success');
                 redirect_to_home_page("main/eportfolio/resources.php");
             }
-        } elseif (isset($_GET['action']) && $_GET['action'] == 'get') {
-            if (isset($_GET['type']) && isset($_GET['er_id'])) {
-                    $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d 
-                                AND resource_type = ?d AND id = ?d", $uid, 'work_submission', intval($_GET['er_id']));
-                if ($info) {
-                    $data_array = unserialize($info->data);
-                    if ($_GET['type'] == 'assignment') {
-                       $file_info = $data_array['assignment_file'];
-                    } else if ($_GET['type'] == 'submission') {
-                        $file_info = $data_array['submission_file'];
-                    }
-                    $file = str_replace('\\', '/', $webDir)."/".$file_info;
-                    $extension = pathinfo($file, PATHINFO_EXTENSION);
-                    send_file_to_client($file, 'file.'.$extension, null, true);
-                }
-            }
         }
-        
     } else {
         if ($userdata->eportfolio_enable == 0) {
             $tool_content = "<div class='alert alert-danger'>$langUserePortfolioDisabled</div>";
@@ -193,37 +176,36 @@ if ($userdata) {
         
         $tool_content .= action_bar(array(
                 array('title' => $langBio,
-                      'url' => "{$urlAppend}courses/eportfolio/userbios/$id"."_bio.pdf",
+                      'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id",
                       'icon' => 'fa-download',
                       'level' => 'primary-label',
-                      'show' => file_exists("$webDir/courses/eportfolio/userbios/$id"."_bio.pdf")),
+                      'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
                 array('title' => $langResume,
-                      'url' => "index.php?id=$id",
+                      'url' => "{$urlAppend}main/eportfolio/index.php?id=$id",
                       'level' => 'primary-label'),
                 array('title' => $langResourcesCollection,
-                      'url' => "resources.php?id=$id",
+                      'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id",
                       'level' => 'primary-label',
                       'button-class' => 'btn-info'),
             ));
-        
-        if (isset($_GET['action']) && $_GET['action'] == 'get') {
-            if (isset($_GET['type']) && isset($_GET['er_id'])) {
-                $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d
+    }
+    
+    if (isset($_GET['action']) && $_GET['action'] == 'get') {
+        if (isset($_GET['type']) && isset($_GET['er_id'])) {
+            $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d
                                 AND resource_type = ?d AND id = ?d", $id, 'work_submission', intval($_GET['er_id']));
-                if ($info) {
-                    $data_array = unserialize($info->data);
-                    if ($_GET['type'] == 'assignment') {
-                        $file_info = $data_array['assignment_file'];
-                    } else if ($_GET['type'] == 'submission') {
-                        $file_info = $data_array['submission_file'];
-                    }
-                    $file = str_replace('\\', '/', $webDir)."/".$file_info;
-                    $extension = pathinfo($file, PATHINFO_EXTENSION);
-                    send_file_to_client($file, 'file.'.$extension, null, true);
+            if ($info) {
+                $data_array = unserialize($info->data);
+                if ($_GET['type'] == 'assignment') {
+                    $file_info = $data_array['assignment_file'];
+                } else if ($_GET['type'] == 'submission') {
+                    $file_info = $data_array['submission_file'];
                 }
+                $file = str_replace('\\', '/', $webDir)."/".$file_info;
+                $extension = pathinfo($file, PATHINFO_EXTENSION);
+                send_file_to_client($file, 'file.'.$extension, null, true);
             }
         }
-        
     }
     
     $tool_content .= '<ul class="nav nav-tabs">

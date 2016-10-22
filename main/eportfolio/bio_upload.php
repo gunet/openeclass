@@ -39,19 +39,18 @@ if (!get_config('eportfolio_enable')) {
 
 if (isset($_GET['delete_bio'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
-    @unlink("$webDir/courses/eportfolio/userbios/$uid"."_bio.pdf");
+    @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
     redirect_to_home_page('main/eportfolio/bio_upload.php');
 }
 elseif (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    if (!file_exists($webDir . '/courses/eportfolio/userbios/')) {
-        make_dir($webDir . '/courses/eportfolio/userbios/');
-        touch($webDir."/courses/eportfolio/userbios/index.php");
+    if (!file_exists($webDir . '/courses/eportfolio/userbios/'.$uid)) {
+        @mkdir($webDir . '/courses/eportfolio/userbios/'.$uid, 0777);
     }
     if (isset($_FILES['bio']) && is_uploaded_file($_FILES['bio']['tmp_name'])) {
         if ($_FILES['bio']['type'] == 'application/pdf') {
-            @unlink("$webDir/courses/eportfolio/userbios/$uid"."_bio.pdf");
-            move_uploaded_file($_FILES['bio']['tmp_name'], "$webDir/courses/eportfolio/userbios/$uid"."_bio.pdf");
+            @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
+            move_uploaded_file($_FILES['bio']['tmp_name'], "$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
         }
     }
 }
@@ -60,7 +59,7 @@ elseif (isset($_POST['submit'])) {
 $tool_content .=
     action_bar(array(
         array('title' => $langBack,
-            'url' => "index.php",
+            'url' => "{$urlAppend}main/eportfolio/index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
         
@@ -71,9 +70,9 @@ $tool_content .=
                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='' onsubmit='return validateNodePickerForm();'>
                     <fieldset>";
 enableCheckFileSize();
-if (file_exists("$webDir/courses/eportfolio/userbios/$uid"."_bio.pdf")) {
+if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $label = $langReplace;
-    $bio = "<a href='{$urlAppend}courses/eportfolio/userbios/$uid"."_bio.pdf'>$langBio</a>&nbsp;&nbsp;<a class='btn btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_bio=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>";
+    $bio = "<a href='{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$uid'>$langBio</a>&nbsp;&nbsp;<a class='btn btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_bio=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>";
 } else {
     $label = $langPathUploadFile;
     $bio = '';

@@ -24,7 +24,8 @@ $require_login = false;
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
-include 'main/eportfolio/eportfolio_functions.php';
+require_once 'include/lib/forcedownload.php';
+require_once 'main/eportfolio/eportfolio_functions.php';
 require_once 'modules/sharing/sharing.php';
 
 if (!get_config('eportfolio_enable')) {
@@ -35,18 +36,29 @@ if (!get_config('eportfolio_enable')) {
 
 $userdata = array();
 
-if (isset($_GET['id'])) {
+if (isset($_GET['id']) && intval($_GET['id']) != 0) {
     $id = intval($_GET['id']);
     $toolName = $langUserePortfolio;
 } else {
-    $id = $uid;
-    $toolName = $langMyePortfolio;
+    if ($uid == 0) {
+        redirect_to_home_page();
+        exit;
+    } else {
+        $id = $uid;
+        $toolName = $langMyePortfolio;
+    }
 }
 
 $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable
                                           FROM user WHERE id = ?d", $id);
 
 if ($userdata) {
+    if (isset($_GET['action']) && $_GET['action'] == 'get_bio') {
+        if (file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
+            send_file_to_client(str_replace('\\', '/', $webDir)."/courses/eportfolio/userbios/$id/bio.pdf", 'bio.pdf', null, true);
+        }
+    }
+    
     if ($uid == $id) {
         
         if (isset($_POST['toggle_val'])) {
@@ -98,22 +110,22 @@ if ($userdata) {
         
         $tool_content .= action_bar(array(
                                         array('title' => $langBio,
-                                            'url' => "{$urlAppend}courses/eportfolio/userbios/$id"."_bio.pdf",
+                                            'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id",
                                             'icon' => 'fa-download',
                                             'level' => 'primary-label',
-                                            'show' => file_exists("$webDir/courses/eportfolio/userbios/$id"."_bio.pdf")),
+                                            'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
                                         array('title' => $langResume,
-                                            'url' => "index.php?id=$id",
+                                            'url' => "{$urlAppend}main/eportfolio/index.php?id=$id",
                                             'level' => 'primary-label',
                                             'button-class' => 'btn-info'),
                                         array('title' => $langResourcesCollection,
-                                              'url' => "resources.php?id=$id",
+                                              'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id",
                                               'level' => 'primary-label'),
                                         array('title' => $langEditResume,
-                                            'url' => "edit_eportfolio.php",
+                                            'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                                             'icon' => 'fa-edit'),
                                         array('title' => $langUploadBio,
-                                            'url' => "bio_upload.php",
+                                            'url' => "{$urlAppend}main/eportfolio/bio_upload.php",
                                             'icon' => 'fa-upload')
                                     ));    
     } else {
@@ -125,16 +137,16 @@ if ($userdata) {
         
         $tool_content .= action_bar(array(
                                         array('title' => $langBio,
-                                            'url' => "{$urlAppend}courses/eportfolio/userbios/$id"."_bio.pdf",
+                                            'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id",
                                             'icon' => 'fa-download',
                                             'level' => 'primary-label',
-                                            'show' => file_exists("$webDir/courses/eportfolio/userbios/$id"."_bio.pdf")),
+                                            'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
                                         array('title' => $langResume,
-                                            'url' => "index.php?id=$id",
+                                            'url' => "{$urlAppend}main/eportfolio/index.php?id=$id",
                                             'level' => 'primary-label',
                                             'button-class' => 'btn-info'),
                                         array('title' => $langResourcesCollection,
-                                              'url' => "resources.php?id=$id",
+                                              'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id",
                                               'level' => 'primary-label'),
                                     ));
     }

@@ -113,7 +113,7 @@ $sec = $urlServer . 'main/eportfolio/edit_eportfolio.php';
 $tool_content .=
         action_bar(array(
             array('title' => $langBack,
-                'url' => "index.php",
+                'url' => "{$urlAppend}main/eportfolio/index.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
         $tool_content .=
@@ -130,7 +130,7 @@ $tool_content .= $ret_str['panels'];
 $tool_content .= "<div class='form-group'>
                       <div class='col-sm-12'>
                           <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-                          <a href='index.php' class='btn btn-default'>$langCancel</a>
+                          <a href='{$urlAppend}main/eportfolio/index.php' class='btn btn-default'>$langCancel</a>
                       </div>
                   </div>
       ". generate_csrf_token_form_field() ."  
