@@ -289,7 +289,36 @@ if ($userdata) {
         $tool_content .= "<div class='col-sm-12'>";
         foreach ($submissions as $submission) {
             $data = unserialize($submission->data);
+            if (is_null($data['grade'])) {
+                $data['grade'] = '-';
+            }
+            if ($data['group_id'] == 0) {
+                $assignment_type = $m['user_work'];
+            } else {
+                $assignment_type = $m['group_work'];
+            }
+            $submission_header_content = "<div><h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3></div>";
             $submission->course_title = $langCourse.': '.$submission->course_title;
+            $submission_content = "<div><button type='button' class='btn btn-primary btn-xs' data-toggle='collapse' data-target='#header_more_$submission->id'>$langMore</button></div>
+                                   <div id='header_more_$submission->id' class='collapse'>";
+            if (!empty($data['descr'])) {
+                $submission_content .= "<div><b>".$langDescr."</b>:</div><div>".$data['descr']."</div>";
+            }
+            $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;type=assignment&er_id=$submission->id'>$langWorkFile</a></div>";
+            $submission_content .= "</div>";
+            $submission_content .= "<div><b>$langSubmit</b>: " . nice_format($data['subm_date'], true). "</div>
+                                   <div><b>".$m['grade']."</b>: ".$data['grade']." / ".$data['max_grade']."</div>
+                                   <div><b>".$m['group_or_user']."</b>: ".$assignment_type."</div>";
+            if (!is_null($data['subm_text'])) {
+                $submission_content .= "<div><b>$langWorkOnlineText</b>: <br>".$data['subm_text']."</div>";
+            } else {
+               $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;type=submission&er_id=$submission->id'>$langWorkFile</a></div>"; 
+            }
+            $submission_footer = "<div class='panel-footer'>
+                                      <div class='row'>
+                                          <div class='col-sm-6'>$submission->course_title</div>
+                                      </div>
+                                  </div>";
             $tool_content .= "<div class='panel panel-action-btn-default'>
                                 <div class='panel-heading'>
                                     <div class='pull-right'>
@@ -303,17 +332,13 @@ if ($userdata) {
                                                             'show' => ($submission->user_id == $uid)
                                                     )))."
                                      </div>
-                                        <h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3>
+                                        $submission_header_content
                                 </div>
                                 <div class='panel-body'>
-                                    <div class='label label-success'>$langSubmit: " . nice_format($data['subm_date'], true). "</div><small>".$langBlogPostUser.display_user($post->user_id, false, false)."</small><br><br>
-                                        </div>
-                                        <div class='panel-footer'>
-                                        <div class='row'>
-                                        <div class='col-sm-6'>$submission->course_title</div>
-                                        </div>
-                                        </div>
-                                        </div>";
+                                $submission_content    
+                                </div>
+                                $submission_footer
+                            </div>";
         }
         $tool_content .= "</div></div>";
     } else {
