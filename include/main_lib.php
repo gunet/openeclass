@@ -1669,6 +1669,8 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN `link` ON abuse_report.rid = `link`.id
                                     WHERE abuse_report.rtype = ?s AND `link`.user_id = ?d", 'link', $u);
             Database::get()->query("DELETE FROM `link` WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM eportfolio_resource WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM eportfolio_fields_data WHERE user_id = ?d", $u);
             return true;
         } else {
             return false;
