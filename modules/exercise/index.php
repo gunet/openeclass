@@ -203,7 +203,7 @@ if (!$nbrExercises) {
     if ($is_editor) {
         $tool_content .= "
                 <th>$langExerciseName</th>
-                <th class='text-center'>$langResults</th>
+                <th style='width: 190px;' class='text-center'>$langResults</th>
                 <th class='text-center'>".icon('fa-gears')."</th>
               </tr>";
     } else { // student view
