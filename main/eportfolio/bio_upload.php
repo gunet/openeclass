@@ -61,6 +61,15 @@ elseif (isset($_POST['submit'])) {
     } 
 }
 
+$head_content .= "<script>
+                    function confirmDel(url) {
+                      bootbox.confirm('$langConfirmDelete', function(okay) {
+                        if(okay)
+                          location.href = url;
+                      });
+                      return false;
+                    } 
+                  </script>";
 
 $tool_content .=
     action_bar(array(
@@ -78,7 +87,8 @@ $tool_content .=
 enableCheckFileSize();
 if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $label = $langReplace;
-    $bio = "<a href='{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$uid'>$langBio</a>&nbsp;&nbsp;<a class='btn btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_bio=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>";
+    $bio = "<a href='{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$uid'>$langBio</a>&nbsp;&nbsp;
+        <a class='btn btn-danger' onclick='return confirmDel(this.href)' href='$_SERVER[SCRIPT_NAME]?delete_bio=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>";
 } else {
     $label = $langPathUploadFile;
     $bio = '';
