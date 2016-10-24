@@ -185,7 +185,7 @@ function printPolls() {
     $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
-    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langNoAccessPrivilages;
+    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langdate, $langNoAccessPrivilages;
     
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
@@ -253,10 +253,9 @@ function printPolls() {
         $tool_content .= "<div class='row'><div class='col-md-12'>
                     <div class='table-responsive'>
 		      <table class='table-default'>
-		      <tr class='list-header'>
-			<th><div align='left'>&nbsp;$langTitle</div></th>
-			<th class='text-center'>$langPollStart</th>
-			<th class='text-center'>$langPollEnd</th>";
+		        <tr class='list-header'>
+			        <th style='min-width: 45%;'><div align='left'>&nbsp;$langTitle</div></th>
+			        <th class='text-center'>$langdate</th>";
 
         if ($is_editor) {
             $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>";
@@ -311,26 +310,31 @@ function printPolls() {
                 } else if ($temp_CurrentDate >= $temp_EndDate) {
                     $poll_ended = 1;
                 }
-                
+
+                $tool_content .= "<td><div class='table_td'><div class='table_td_header clearfix'>";
                 if ($is_editor) {
                     $lock_icon = "";
                     if (!$thepoll->public) {
                         $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
-                    }                    
+                    }
                     $tool_content .= "
-                        <td><a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>$lock_icon";
+                        <a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>$lock_icon";
                 } else {
-                    $tool_content .= "
-                        <td>";
                     if ($uid == 0 || $has_participated == 0 && $poll_ended == 0) {
                         $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>";
                     } else {
                         $tool_content .= q($thepoll->name);
                     }
                 }
-                $tool_content .= "                       
-                        <td class='text-center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->start_date)), true) . "</td>
-                        <td class='text-center'>" . nice_format(date("Y-m-d H:i", strtotime($thepoll->end_date)), true) . "</td>";
+
+                $tool_content .= "</div>
+                                    <div class='table_td_body'>$thepoll->description</div>
+                                    </div></td>";
+                $tool_content .= "
+                        <td class='text-center'>
+                            <div style='padding-top: 7px;'><span class='text-success'>$langPollStart</span>: &nbsp;&nbsp;" . nice_format(date("d/m/Y H:i", strtotime($thepoll->start_date)), true) . "</div>
+                            <div style='padding-top: 7px;'><span class='text-danger'>$langPollEnd</span>: &nbsp;&nbsp;" . nice_format(date("d/m/Y H:i", strtotime($thepoll->end_date)), true) . "</div>
+                        </td>";
 
                 if ($is_editor) {
 				
