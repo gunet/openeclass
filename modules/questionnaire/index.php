@@ -254,7 +254,7 @@ function printPolls() {
                     <div class='table-responsive'>
 		      <table class='table-default'>
 		        <tr class='list-header'>
-			        <th style='min-width: 45%;'><div align='left'>&nbsp;$langTitle</div></th>
+			        <th style='min-width: 55%;'><div align='left'>&nbsp;$langTitle</div></th>
 			        <th class='text-center'>$langdate</th>";
 
         if ($is_editor) {
