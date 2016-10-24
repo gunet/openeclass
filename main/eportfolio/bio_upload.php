@@ -40,6 +40,7 @@ if (!get_config('eportfolio_enable')) {
 if (isset($_GET['delete_bio'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
+    Session::Messages($langBioDeletedSuccess, 'alert-success');
     redirect_to_home_page('main/eportfolio/bio_upload.php');
 }
 elseif (isset($_POST['submit'])) {
@@ -52,8 +53,12 @@ elseif (isset($_POST['submit'])) {
         if (finfo_file($finfo, $_FILES['bio']['tmp_name']) == 'application/pdf') {
             @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
             move_uploaded_file($_FILES['bio']['tmp_name'], "$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
+            Session::Messages($langUploadBioSuccess, 'alert-success');
+        } else {
+            Session::Messages($langUploadBioFailType, 'alert-danger');
         }
-    }
+        redirect_to_home_page('main/eportfolio/bio_upload.php');
+    } 
 }
 
 
@@ -79,7 +84,8 @@ if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $bio = '';
 }
 $tool_content .= 
-    "<div class='form-group'>
+    "<div class='alert alert-info'>$langBioPermFileType</div>
+     <div class='form-group'>
         <label for='bio' class='col-sm-2 control-label'>$label</label>
         <div class='col-sm-10'>
             $bio" . fileSizeHidenInput() . "
