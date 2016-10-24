@@ -678,14 +678,22 @@ function bbb_session_details() {
                         $headingsSent = true;
                     }
                     $tool_content .= "<tr>
-                        <td> <h4>$joinLink</h4> $warning_message_record
-                        <div>  
-                            <u class='text-muted'>$langNewBBBSessionStart</u>: ".nice_format($start_date, TRUE)."<br/>
-                            <u class='text-muted'>$langNewBBBSessionEnd</u>: $timeLabel</br></br>
+                        <td>
+                        <div class='table_td'>
+                            <div class='table_td_header clearfix'>$joinLink</div> $warning_message_record
+                            <div class='table_td_body'>
+                                $desc
+                            </div>
                         </div>
-                        <div>
-                            $desc
-                        </div></td>
+                    </td>
+                    <td class='text-center'>
+                        <div style='padding-top: 7px;'>  
+                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."<br/>
+                        </div>
+                        <div style='padding-top: 7px;'>
+                            <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
+                        </div>
+                    </td>
                         <td style='width: 20%'>$participants</td>
                         <td class='text-center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
