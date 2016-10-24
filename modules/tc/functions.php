@@ -505,7 +505,7 @@ function bbb_session_details() {
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langUnitDescr,
         $langNoBBBSesssions, $langDaysLeft, $m, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
-        $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langBBBNoServerForRecording, $langdate;
+        $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langdate, $langBBBNoServerForRecording;
 
 
     if (!is_active_tc_server($tc_type, $course_id)) { // check availability
@@ -532,7 +532,8 @@ function bbb_session_details() {
                          <div class='table-responsive'>
                            <table class='table-default'>
                              <tr class='list-header'>
-                               <th>$langTitle</th>
+                               <th style='width: 50%'>$langTitle</th>
+                               <th class='text-center'>$langdate</th>
                                <th class='text-center'>$langParticipants</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
@@ -613,13 +614,19 @@ function bbb_session_details() {
                 }
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
                     <td>
-                        <h4>$joinLink</h4> $warning_message_record
-                        <div>  
-                            <u class='text-muted'>$langNewBBBSessionStart</u>: ".nice_format($start_date, TRUE)."<br/>
-                            <u class='text-muted'>$langNewBBBSessionEnd</u>: $timeLabel</br></br>
+                        <div class='table_td'>
+                            <div class='table_td_header clearfix'>$joinLink</div> $warning_message_record
+                            <div class='table_td_body'>
+                                $desc
+                            </div>
                         </div>
-                        <div>
-                            $desc
+                    </td>
+                    <td class='text-center'>
+                        <div style='padding-top: 7px;'>  
+                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."<br/>
+                        </div>
+                        <div style='padding-top: 7px;'>
+                            <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
                         </div>
                     </td>
                     
