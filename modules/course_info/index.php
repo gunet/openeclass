@@ -682,7 +682,7 @@ if (isset($_POST['submit'])) {
             </div>                        
 	    <div class='form-group'>
                 <label for='Options' class='col-sm-2 control-label'>$langLanguage:</label>
-                <div class='col-sm-10'>" . lang_select_options('localize', 'class="form-control"') . "</div>	        
+                <div class='col-sm-10'>" . lang_select_options('localize', 'class="form-control"', $language) . "</div>	        
 	    </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseUserRequests:</label>
