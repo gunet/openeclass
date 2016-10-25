@@ -1034,19 +1034,19 @@ $db->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
     KEY `lftindex` (`lft`),
     KEY `rgtindex` (`rgt`) ) $tbl_options");
 
-$db->query("INSERT INTO `hierarchy` (code, name, lft, rgt)
-    VALUES ('', ?s, 1, 68)", $institutionForm);
+$db->query("INSERT INTO `hierarchy` (code, name, description, lft, rgt)
+    VALUES ('', ?s, '', 1, 68)", $institutionForm);
 
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA', ?s, '10', '100', 2, 23, true, true)", $langHierarchyTestDepartment);
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMAPRE', ?s, '10', '100', 3, 20, true, true)", $langHierarchyTestCategory . ' 1');
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA1', ?s, '10', '100', 4, 5, true, true)", $langHierarchyTestSubCategory . ' 1');
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA2', ?s, '10', '100', 6, 7, true, true)", $langHierarchyTestSubCategory . ' 2');
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMAPOST', ?s, '10', '100', '21', '22', true, true)", $langHierarchyTestCategory . ' 2');
+$db->query("INSERT INTO `hierarchy` (code, name, description, number, generator, lft, rgt, allow_course, allow_user)
+    VALUES ('TMA', ?s, '', '10', '100', 2, 23, true, true)", $langHierarchyTestDepartment);
+$db->query("INSERT INTO `hierarchy` (code, name, description, number, generator, lft, rgt, allow_course, allow_user)
+    VALUES ('TMAPRE', ?s, '', '10', '100', 3, 20, true, true)", $langHierarchyTestCategory . ' 1');
+$db->query("INSERT INTO `hierarchy` (code, name, description, number, generator, lft, rgt, allow_course, allow_user)
+    VALUES ('TMA1', ?s, '', '10', '100', 4, 5, true, true)", $langHierarchyTestSubCategory . ' 1');
+$db->query("INSERT INTO `hierarchy` (code, name, description, number, generator, lft, rgt, allow_course, allow_user)
+    VALUES ('TMA2', ?s, '', '10', '100', 6, 7, true, true)", $langHierarchyTestSubCategory . ' 2');
+$db->query("INSERT INTO `hierarchy` (code, name, description, number, generator, lft, rgt, allow_course, allow_user)
+    VALUES ('TMAPOST', ?s, '', '10', '100', '21', '22', true, true)", $langHierarchyTestCategory . ' 2');
 
 $db->query("CREATE TABLE `course_department` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
