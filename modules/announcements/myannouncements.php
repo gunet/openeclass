@@ -116,7 +116,7 @@ if (!getUserAnnouncements($lesson_ids)) {
                     $('.table_td_body').each(function() {
                         $(this).trunk8({
                             lines: '3',
-                            fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME] ? an_id = '+ $(this).data('id')+'\">$langMore</div>'
+                            fill: '&hellip;<div class=\"clearfix\"></div><a style=\"float:right;\" href=\"$_SERVER[SCRIPT_NAME]?an_id='+ $(this).data('id')+'\">$langMore</div>'
                         })
                     });
                     $('#ann_table_admin_logout_filter label input').attr({

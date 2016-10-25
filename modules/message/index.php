@@ -495,7 +495,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         ";
 	}
 } else {//mailbox
-    load_js('datatables');    
+    load_js('datatables');
+    load_js('trunk8');
     $head_content .= "<script type='text/javascript'>
                         $(document).ready(function() {
 
@@ -525,6 +526,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                             // show 1st tab
                             $('#dropboxTabs a:first').tab('show');
                         });
+                      
                     </script>";
     
     $tool_content .= "<div id='dropboxTabs'>

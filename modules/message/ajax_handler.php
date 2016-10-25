@@ -137,10 +137,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $recipients = '';
             foreach ($msg->recipients as $r) {
                 if ($r != $msg->author_id) {
-                    $recipients .= display_user($r, false, false, "outtabs").'<br/>';
+                    //$recipients .= display_user($r, false, false, "outtabs").'<br>';
+                    $recipients .= display_user($r, false, false, "outtabs").' , &nbsp;';
                 }
             }
-            $td[$i++] = $recipients;
+            $td[$i++] = "<div><p class='recipients'>$recipients</p></div>";
         }
         $td[$i++] = nice_format(date('Y-m-d H:i:s',$msg->timestamp), true);
             
