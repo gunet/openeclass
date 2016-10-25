@@ -1640,24 +1640,34 @@ function delete_course($cid) {
 }
 
 /**
- * Delete a user and all his dependencies.
+ * @brief Delete a user and all his dependencies.
  *
  * @param  integer $id - the id of the user.
  * @return boolean     - returns true if deletion was successful, false otherwise.
  */
 function deleteUser($id, $log) {
 
+    global $webDir;
+
     $u = intval($id);
 
     if ($u == 1) {
         return false;
-    } else {
+    } else {        
         // validate if this is an existing user
-        if (Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $u)) {
-            // delete everything
+        if (Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $u)) {            
             Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $u);
+            // delete user assignments (if any)
+            $assignment_data = Database::get()->queryArray("SELECT assignment_id, file_path FROM assignment_submit WHERE uid = ?d", $u);            
+            if (count($assignment_data) > 0) { // if assignments found
+                foreach ($assignment_data as $data) {
+                    $courseid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = $data->assignment_id")->course_id;
+                    unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);                
+                }
+            }
             Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);
+            
             Database::get()->query("DELETE FROM course_user WHERE user_id = ?d", $u);
             Database::get()->query("DELETE dropbox_attachment FROM dropbox_attachment INNER JOIN dropbox_msg ON dropbox_attachment.msg_id = dropbox_msg.id
                                     WHERE dropbox_msg.author_id = ?d", $u);
@@ -1701,6 +1711,11 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN `link` ON abuse_report.rid = `link`.id
                                     WHERE abuse_report.rtype = ?s AND `link`.user_id = ?d", 'link', $u);
             Database::get()->query("DELETE FROM `link` WHERE user_id = ?d", $u);
+            
+            // delete user images (if any)
+            array_map('unlink', glob("$webDir/courses/userimg/{$u}_256.*"));
+            array_map('unlink', glob("$webDir/courses/userimg/{$u}_32.*"));
+            
             return true;
         } else {
             return false;
