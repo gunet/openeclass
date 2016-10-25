@@ -55,8 +55,20 @@ $toolName = $langNotes;
 ModalBoxHelper::loadModalBox();
 load_js('tools.js');
 load_js('references.js');
+load_js('trunk8');
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
         $langEmptyNoteTitle . '";</script>';
+$head_content .= "<script>
+    $(document).ready(function(){
+            $('.note-content').each(function() {
+                $(this).trunk8({
+                    lines: '4',
+                    fill: '&hellip;<div class=\"announcements-more\"><a href=\"$_SERVER[SCRIPT_NAME]?nid=' +
+                        $(this).data('id') + '\">$langMore</a></div>'
+                });
+            })
+        });
+</script>";
 
 $noteNumber = Notes::count_user_notes();
 
@@ -260,7 +272,8 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             $tool_content .= "<br><small>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</small>";
         }
 
-        $tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?nid=" . getIndirectReference($note->id)."'> <span class='smaller'>[$langMore]</span></a></strong>"));
+        //$tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?nid=" . getIndirectReference($note->id)."'><span class='smaller'>[$langMore]</span></a></strong>"));
+        $tool_content .= "<div class = 'note-content' data-id= '" . getIndirectReference($note->id) . "'>$content</div>";
         $tool_content .= "</td>";
 
         $tool_content .= "<td class='option-btn-cell'>" .
