@@ -85,7 +85,11 @@ function genPassRandom($length = 8, $requireNum = false) {
     return $pass;
 }
 
-// Create a random password
+
+/**
+ * @brief Create an 'easy' to remember random password
+ * @return type
+ */
 function create_pass() {
     $parts = array('a', 'ba', 'fa', 'ga', 'ka', 'la', 'ma', 'xa',
         'e', 'be', 'fe', 'ge', 'ke', 'le', 'me', 'xe',
@@ -97,4 +101,18 @@ function create_pass() {
     $max = count($parts) - 1;
     $num = crypto_rand_secure(10, 499);
     return $parts[crypto_rand_secure(0, $max)] . $parts[crypto_rand_secure(0, $max)] . $num;
+}
+
+
+/**
+ * @brief choose generated password function
+ * @return string
+ */
+function choose_password_strength() {    
+    if (get_config('enable_strong_passwords')) {
+        $p = genPass();
+    } else {
+        $p = create_pass();
+    }
+    return $p;
 }

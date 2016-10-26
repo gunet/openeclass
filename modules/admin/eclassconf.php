@@ -366,6 +366,7 @@ if (isset($_POST['submit'])) {
         'enable_search' => true,
         'enable_common_docs' => true,
         'enable_social_sharing_links' => true,
+        'enable_strong_passwords' => true,
         'login_fail_check' => true,
         'login_fail_threshold' => true,
         'login_fail_deny_interval' => true,
@@ -819,6 +820,7 @@ else {
     $mydocs_student_quota = floatval(get_config('mydocs_student_quota'));
     $mydocs_teacher_quota = floatval(get_config('mydocs_teacher_quota'));
     $cbox_enable_social_sharing_links = get_config('enable_social_sharing_links') ? 'checked' : '';
+    $cbox_enable_strong_passwords = get_config('enable_strong_passwords') ? 'checked' : '';
     $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
     $id_enable_mobileapi = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
 
@@ -919,6 +921,12 @@ else {
                                     <label>
                                         <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' $cbox_enable_social_sharing_links>
                                         $langEnableSocialSharingLiks
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='strong_passwords' type='checkbox' name='enable_strong_passwords' value='1' $cbox_enable_strong_passwords>
+                                        $langEnableStrongPasswords
                                     </label>
                                 </div>
                            </div>

@@ -338,7 +338,7 @@ if ($eclass_method_unique) {
 
 formGroup('passsword_form', $langPass,
     "<input class='form-control' type='text' name='password'" .
-        getValue('password', genPass()) . " id='password' autocomplete='off' placeholder='" . q($langPass) . "'><span id='result'></span>");
+        getValue('password', choose_password_strength()) . " id='password' autocomplete='off' placeholder='" . q($langPass) . "'><span id='result'></span>");
 if (get_config('email_required')) {
     $email_message = "$langEmail $langCompulsory";
 } else {

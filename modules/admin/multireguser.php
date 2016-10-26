@@ -101,7 +101,7 @@ if (isset($_POST['submit'])) {
                     $info['username'] = create_username($newstatus, $departments, $surname, $givenname, $_POST['prefix']);
                 }
                 if (!isset($info['password'])) {
-                    $info['password'] = genPass();
+                    $info['password'] = choose_password_strength();
                 }
                 $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, @$info['email'], $departments, @$info['id'], @$info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public);
                 if ($new === false) {
