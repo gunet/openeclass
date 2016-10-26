@@ -444,6 +444,12 @@
                                             {{ trans('langEnableSocialSharingLiks') }}
                                         </label>
                                     </div>
+                                   <div class='checkbox'>
+                                        <label>
+                                            <input id='strong_passwords' type='checkbox' name='enable_strong_passwords' value='1' {!! $cbox_enable_strong_passwords !!}>
+                                            {{ trans('langEnableStrongPasswords') }}
+                                        </label>
+                                    </div>
                                </div>
                             </div>
                             <hr><br>

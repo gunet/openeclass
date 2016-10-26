@@ -48,7 +48,7 @@
             <div class="form-group{{ Session::hasError('password') ? ' has-error' : '' }}">
                 <label for="passsword_form" class="col-sm-2 control-label">{{ trans('langPass') }}:</label>
                 <div class="col-sm-10">
-                    <input class='form-control' id='passsword_form' type='text' name='password' value='{{ getValue('password', genPass()) }}' autocomplete='off' placeholder="{{ trans('langPass') }}">
+                    <input class='form-control' id='passsword_form' type='text' name='password' value='{{ getValue('password', choose_password_strength()) }}' autocomplete='off' placeholder="{{ trans('langPass') }}">
                     @if (Session::hasError('password'))
                     <span class="help-block">{{ Session::getError('password') }}</span>
                     @endif
