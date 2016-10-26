@@ -1252,7 +1252,6 @@ function register_user_grades($gradebook_id, $actID) {
                 </tr>
             </thead>
             <tbody>";
-
         $cnt = 0;
         foreach ($resultUsers as $resultUser) {
             $cnt++;
@@ -1261,8 +1260,8 @@ function register_user_grades($gradebook_id, $actID) {
                                                         AND uid = ?d", $actID, $resultUser->userID);
             $user_grade = $q ? $q->grade : '-';
             $user_ind_id = getIndirectReference($resultUser->userID);
-            $grade = Session::has($user_ind_id) ? Session::get($user_ind_id) : ($q ? $q->grade * $gradebook_range : '');
-            $total_grade = is_numeric($grade) ? $grade * $result->weight / 100 : ' - ';
+            $grade = Session::has($user_ind_id) ? Session::get($user_ind_id) : ($q ? round($q->grade * $gradebook_range, 2) : '');
+            $total_grade = is_numeric($grade) ? round($grade * $result->weight / 100, 2) : ' - ';
             $tool_content .= "
             <tr>
                 <td>$cnt</td>
@@ -1677,11 +1676,11 @@ function insert_grades($gradebook_id, $actID) {
         foreach ($_POST['usersgrade'] as $userID => $userInp) {
             if ($userInp == '') {
                 Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getDirectReference($userID));
-            } else {               
+            } else {
                 // //check if there is record for the user for this activity
-                $checkForBook = Database::get()->querySingle("SELECT COUNT(id) AS count, id FROM gradebook_book
-                                            WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getDirectReference($userID));
-                if ($checkForBook->count) { // update
+                $checkForBook = Database::get()->querySingle("SELECT id FROM gradebook_book
+                                            WHERE gradebook_activity_id = ?d AND uid = ?d LIMIT 1", $actID, getDirectReference($userID));
+                if ($checkForBook) { // update                    
                     Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d", $userInp/$gradebook->range, $checkForBook->id);
                 } else { // insert
                     Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", getDirectReference($userID), $actID, $userInp/$gradebook->range, '');
