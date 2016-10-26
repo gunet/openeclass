@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -45,7 +45,7 @@ require_once 'videoindexer.class.php';
 require_once 'videolinkindexer.class.php';
 
 class Indexer {
-    
+
     const REQUEST_REMOVE = 'remove';
     const REQUEST_REMOVEALLBYCOURSE = 'removeAllByCourse';
     const REQUEST_REMOVEBYFORUM = 'removeByForum';
@@ -54,7 +54,7 @@ class Indexer {
     const REQUEST_REMOVEBYUSER = 'removeByUser';
     const REQUEST_STORE = 'store';
     const REQUEST_STOREALLBYCOURSE = 'storeAllByCourse';
-    
+
     const RESOURCE_AGENDA = 'agenda';
     const RESOURCE_ANNOUNCEMENT = 'announcement';
     const RESOURCE_COURSE = 'course';
@@ -70,7 +70,7 @@ class Indexer {
     const RESOURCE_UNITRESOURCE = 'unitresource';
     const RESOURCE_VIDEO = 'video';
     const RESOURCE_VIDEOLINK = 'videolink';
-    
+
     const DOCTYPE_AGENDA = 'agenda';
     const DOCTYPE_ANNOUNCEMENT = 'announce';
     const DOCTYPE_DOCUMENT = 'doc';
@@ -83,9 +83,9 @@ class Indexer {
     const DOCTYPE_UNITRESOURCE = 'unitresource';
     const DOCTYPE_VIDEO = 'video';
     const DOCTYPE_VIDEOLINK = 'vlink';
-    
+
     const SESSION_PROCESS_AT_NEXT_DRAW = 'SESSION_PROCESS_AT_NEXT_DRAW';
-    
+
     private $__index = null;
     private static $_index_dir = '/courses/idx';
     private static $_resultSetLimit = 100;
@@ -126,7 +126,7 @@ class Indexer {
 
     /**
      * Convert an input string to its phonetic representation.
-     * 
+     *
      * @param  string $text
      * @param  int    $ignoreCase
      * @return string
@@ -141,12 +141,12 @@ class Indexer {
 
     /**
      * Clear/filter Lucene operators.
-     * 
+     *
      * @param  string $inputStr
      * @return string
      */
     public static function filterQuery($inputStr) {
-        $terms = explode(' ', str_replace(self::$specials, '', self::phonetics($inputStr)));
+        $terms = explode(' ', str_replace(self::$specials, '', self::phonetics(trim($inputStr))));
         $clearTerms = array();
         foreach ($terms as $term) {
             if (!in_array($term, self::$specialkeywords)) {
@@ -158,12 +158,12 @@ class Indexer {
 
     /**
      * Indexer Constructor.
-     * 
+     *
      * @global type $webDir
      */
     public function __construct() {
         global $webDir, $errorMessage;
-        
+
         if (!get_config('enable_indexing')) {
             return;
         }
@@ -198,10 +198,10 @@ class Indexer {
             touch($index_path . '/index.php');
         }
     }
-    
+
     /**
      * Checks if a lucene index path exists.
-     * 
+     *
      * @param  string  $path The lucene index path.
      * @return boolean       TRUE if the lucene index path exists else FALSE.
      */
@@ -211,7 +211,7 @@ class Indexer {
 
     /**
      * Return the index object.
-     * 
+     *
      * @return Zend_Search_Lucene_Interface
      */
     public function getIndex() {
@@ -220,7 +220,7 @@ class Indexer {
 
     /**
      * Filtered Search in the index.
-     * 
+     *
      * @param  string $inputStr - A Lucene Query, it is filtered for Lucene operators
      * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects
      */
@@ -228,14 +228,14 @@ class Indexer {
         if (!get_config('enable_indexing')) {
             return;
         }
-        
+
         $queryStr = self::filterQuery($inputStr);
         return $this->searchRaw($queryStr);
     }
 
     /**
      * Raw Search in the index.
-     * 
+     *
      * @param  string $inputStr - A Lucene Query, it is NOT filtered for Lucene operators
      * @return array            - array of Zend_Search_Lucene_Search_QueryHit objects
      */
@@ -243,7 +243,7 @@ class Indexer {
         if (!get_config('enable_indexing')) {
             return;
         }
-        
+
         try {
             $query = Zend_Search_Lucene_Search_QueryParser::parse($inputStr, 'utf-8');
             return $this->__index->find($query);
@@ -255,14 +255,14 @@ class Indexer {
 
     /**
      * Batch store all index contents related to a Course.
-     * 
+     *
      * @param int $courseId
      */
     public function storeAllByCourse($courseId) {
         if (!get_config('enable_indexing')) {
             return;
         }
-        
+
         $cidx = new CourseIndexer($this);
         $cidx->store($courseId);
 
@@ -301,21 +301,21 @@ class Indexer {
 
         $urdx = new UnitResourceIndexer($this);
         $urdx->storeByCourse($courseId);
-        
+
         $ndx = new NoteIndexer($this);
         $ndx->storeByCourse($courseId);
     }
 
     /**
      * Batch remove all index contents related to a Course.
-     * 
+     *
      * @param int $courseId
      */
     public function removeAllByCourse($courseId) {
         if (!get_config('enable_indexing')) {
             return;
         }
-        
+
         $cidx = new CourseIndexer($this);
         $cidx->remove($courseId);
 
@@ -354,7 +354,7 @@ class Indexer {
 
         $urdx = new UnitResourceIndexer($this);
         $urdx->removeByCourse($courseId);
-        
+
         $ndx = new NoteIndexer($this);
         $ndx->removeByCourse($courseId);
     }
@@ -364,11 +364,11 @@ class Indexer {
      */
     public static function deleteAll() {
         global $webDir;
-        
+
         if (!get_config('enable_indexing')) {
             return;
         }
-        
+
         $index_path = $webDir . self::$_index_dir;
         if (is_dir($index_path)) {
             $files = array_diff(scandir($index_path), array('.', '..'));
@@ -378,10 +378,10 @@ class Indexer {
             rmdir($index_path);
         }
     }
-    
+
     /**
      * Schedule Asynchronous Indexing.
-     * 
+     *
      * @global int    $uid          - user id
      * @param  string $requestType  - type of async request
      * @param  string $resourceType - type of resource
@@ -389,15 +389,15 @@ class Indexer {
      */
     public static function queueAsync($requestType, $resourceType, $resourceId) {
         global $uid;
-        Database::get()->query("INSERT INTO idx_queue_async 
-            (user_id, request_type, resource_type, resource_id) 
+        Database::get()->query("INSERT INTO idx_queue_async
+            (user_id, request_type, resource_type, resource_id)
             VALUES (?d, ?s, ?s, ?d)", $uid, $requestType, $resourceType, $resourceId);
         $_SESSION[self::SESSION_PROCESS_AT_NEXT_DRAW] = true;
     }
-    
+
     /**
      * Return JS Code for triggering Asynchronous Indexing.
-     * 
+     *
      * @global string $urlAppend
      * @return string
      */
@@ -412,10 +412,10 @@ class Indexer {
         })
         </script>";
     }
-    
+
     /**
      * Process Asynchronous Indexing Requests.
-     * 
+     *
      * @global int $uid
      */
     public function queueAsyncProcess() {
@@ -476,10 +476,10 @@ class Indexer {
             Database::get()->query("DELETE FROM idx_queue_async WHERE id = ?d", $resource->id);
         }
     }
-    
+
     /**
      * Calling helper for variable indexers and methods.
-     * 
+     *
      * @param AbstractBaseIndexer $idxObj
      * @param string              $method
      * @param mixed               $arg
@@ -489,10 +489,10 @@ class Indexer {
             $idxObj->$method($arg);
         }
     }
-    
+
     /**
      * Build a Lucene Query.
-     * 
+     *
      * @param  array   $data      - The data (normally $_POST), needs specific array keys
      * @return string             - the returned query string
      */
@@ -519,7 +519,7 @@ class Indexer {
 
     /**
      * Unit test for phonetic conversion.
-     * 
+     *
      * @return int - returns 0 if test failed or 1 if test succeeds, should always return 1
      */
     public function test() {
