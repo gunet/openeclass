@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -92,7 +92,7 @@ function printPollForm() {
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
     $pageName;
     
-    $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
+    $refresh_time = 10 * 60 * 1000; // 10 min
     $head_content .= " 
     <script>
         $(function() {
