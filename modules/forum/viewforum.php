@@ -24,17 +24,15 @@ $require_login = true;
 $require_help = true;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'modules/forum/functions.php';
 
 if (!add_units_navigation(true)) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 }
-
-require_once 'modules/forum/config.php';
-require_once 'modules/forum/functions.php';
 
 if ($is_editor) {
     load_js('tools.js');
@@ -85,11 +83,11 @@ $total_topics = Database::get()->querySingle("SELECT num_topics FROM forum
                 WHERE id = ?d
                 AND course_id = ?d", $forum_id, $course_id)->num_topics;
 
-if ($total_topics > $topics_per_page) {
-    if(($total_topics % $topics_per_page) == 0) {
-        $pages = intval($total_topics / $topics_per_page); // get total number of pages
+if ($total_topics > TOPICS_PER_PAGE) {
+    if(($total_topics % TOPICS_PER_PAGE) == 0) {
+        $pages = intval($total_topics / TOPICS_PER_PAGE); // get total number of pages
     } else {
-        $pages = intval($total_topics / $topics_per_page) + 1; // get total number of pages
+        $pages = intval($total_topics / TOPICS_PER_PAGE) + 1; // get total number of pages
     }
 }
 
@@ -99,22 +97,22 @@ if (isset($_GET['start'])) {
     $first_topic = 0;
 }
 
-if ($total_topics > $topics_per_page) { // navigation
+if ($total_topics > TOPICS_PER_PAGE) { // navigation
     $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=";
     $paging = array();
 
-    $current_page = $first_topic / $topics_per_page + 1; // current page
+    $current_page = $first_topic / TOPICS_PER_PAGE + 1; // current page
     for ($x = 1; $x <= $pages; $x++) { // display navigation numbers
         if ($current_page == $x) {
             $paging[] = "<li class='active'><a href='#'>$x</a></li>";
         } else {
-            $start = ($x - 1) * $topics_per_page;
+            $start = ($x - 1) * TOPICS_PER_PAGE;
             $paging[] = "<li><a href='$base_url&amp;start=$start'>$x</a></li>";
         }
     }
 
-    $next = $first_topic + $topics_per_page;
-    $prev = $first_topic - $topics_per_page;
+    $next = $first_topic + TOPICS_PER_PAGE;
+    $prev = $first_topic - TOPICS_PER_PAGE;
     if ($prev < 0) {
         $prev = 0;
     }
@@ -123,12 +121,12 @@ if ($total_topics > $topics_per_page) { // navigation
         $privurlclass = "class='disabled'";
         $nexturl = $base_url.$next;
         $prevurl = "#";
-    } elseif ($first_topic + $topics_per_page < $total_topics) {
+    } elseif ($first_topic + TOPICS_PER_PAGE < $total_topics) {
         $nexturlclass = "";
         $privurlclass = "";
         $prevurl = $base_url.$prev;
         $nexturl = $base_url.$next;
-    } elseif ($start - $topics_per_page < $total_topics) { // end
+    } elseif ($start - TOPICS_PER_PAGE < $total_topics) { // end
         $nexturlclass = "class='disabled'";
         $privurlclass = "";
         $nexturl = "#";
@@ -184,6 +182,7 @@ if (($is_editor) and isset($_GET['topicdel'])) {
         Database::get()->query("DELETE FROM rating WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);
         Database::get()->query("DELETE FROM rating_cache WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);
         Database::get()->query("DELETE FROM forum_post WHERE id = $r->id");
+        triggerGame($course_id, $uid, ForumEvent::DELPOST);
     }
     $post_authors = array_unique($post_authors);
     foreach ($post_authors as $author) {
@@ -248,7 +247,7 @@ $result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS p
         FROM forum_topic t
         LEFT JOIN forum_post p ON t.last_post_id = p.id
         WHERE t.forum_id = ?d
-        ORDER BY topic_time DESC LIMIT $first_topic, $topics_per_page", $forum_id);
+        ORDER BY topic_time DESC LIMIT $first_topic, " . TOPICS_PER_PAGE . "", $forum_id);
 
 
 if (count($result) > 0) { // topics found    
@@ -280,14 +279,14 @@ if (count($result) > 0) { // topics found
         if ($topic_locked) {
             $image = icon('fa-lock');
         } else {
-            if ($replies >= $hot_threshold) {
+            if ($replies >= HOT_THRESHOLD) {
                 $image = icon('fa-fire');
             } else {
                 $image = icon('fa-comments');
             }
         }        
-        if ($replies > $posts_per_page) {
-            $total_reply_pages = ceil($replies / $posts_per_page);
+        if ($replies > POSTS_PER_PAGE) {
+            $total_reply_pages = ceil($replies / POSTS_PER_PAGE);
             $pagination .= "<strong class='pagination'><span>&nbsp;".icon('fa-arrow-circle-right')." ";
             add_topic_link(0, $total_reply_pages);
             if ($total_reply_pages > PAGINATION_CONTEXT + 1) {

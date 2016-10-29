@@ -123,7 +123,7 @@ if (!isset($_SESSION['was_validated']) or
             // try to authenticate user
             $auth_method_settings = get_auth_settings($auth);
             if ($auth == 6) {
-                redirect_to_home_page('secure/index_reg.php' . ($prof ? '?p=1' : ''));
+                redirect_to_home_page('secure/index.php?reg=1' . ($prof ? '&p=1' : ''));
             }
             $is_valid = auth_user_login($auth, $uname, $passwd, $auth_method_settings);
         }
@@ -158,6 +158,7 @@ if (!isset($_SESSION['was_validated']) or
 // registration
 // -----------------------------------------
 if ($is_valid) {
+    $ip = Log::get_client_ip();
     $ext_info = !isset($_SESSION['auth_user_info']);
     $ext_mail = !(isset($_SESSION['auth_user_info']['email']) && !empty($_SESSION['auth_user_info']['email']));
     $missing_posted_variables = array();
@@ -198,7 +199,7 @@ if ($is_valid) {
             $email = $_SESSION['auth_user_info']['email'];
         }
     }
-    if (!empty($email) and !email_seems_valid($email)) {
+    if (!empty($email) and !Swift_Validate::email($email)) {
         $ok = NULL;
         $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
     } else {
@@ -264,6 +265,9 @@ if ($is_valid) {
                           whitelist='',
                           description = ''", $surname_form, $givenname_form, $uname, $password, $email, $am, $language, $verified_mail);
         $last_id = $q1->lastInsertID;
+        // update personal calendar info table
+        // we don't check if trigger exists since it requires `super` privilege
+        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $last_id);
         $userObj->refresh($last_id, array(intval($depid)));
         user_hook($last_id);
 
@@ -327,7 +331,7 @@ if ($is_valid) {
         }
 
         if (!$vmail) {
-            Database::get()->query("INSERT INTO loginout SET id_user = $uid, ip = '$_SERVER[REMOTE_ADDR]',`when` = NOW(), action = 'LOGIN'");
+            Database::get()->query("INSERT INTO loginout SET id_user = ?d, ip = ?s,`when` = NOW(), action = 'LOGIN'", $uid, $ip);
             $_SESSION['uid'] = $uid;
             $_SESSION['status'] = USER_STUDENT;
             $_SESSION['givenname'] = $givenname;
@@ -355,7 +359,7 @@ if ($is_valid) {
         }
 
         // check if mail address is valid
-        if (!empty($email) and !email_seems_valid($email)) {
+        if (!empty($email) and !Swift_Validate::email($email)) {
             $tool_content .= "<div class='alert alert-danger'>$langEmailWrong</div>";
             user_info_form();
             draw($tool_content, 0, null, $head_content);
@@ -372,7 +376,7 @@ if ($is_valid) {
                                         date_open = " . DBHelper::timeAfter() . ", comment = ?s, lang = ?s,
                                         request_ip = ?s",
                             $givenname_form, $surname_form, $uname, $password, $email, $depid, $userphone,
-                            $am, $status, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
+                            $am, $status, $verified_mail, $usercomment, $language, $ip);
         $request_id = $q1->lastInsertID;
         // email does not need verification -> mail helpdesk
         if (!$email_verification_required) {

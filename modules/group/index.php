@@ -33,7 +33,7 @@ $helpTopic = 'Group';
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
 require_once 'group_functions.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 /* * ***Required classes for wiki creation*** */
 require_once 'modules/wiki/lib/class.wiki.php';
 require_once 'modules/wiki/lib/class.wikipage.php';
@@ -166,7 +166,7 @@ if ($is_editor) {
                 // Create a unique path to group documents to try (!)
                 // avoiding groups entering other groups area
                 $secretDirectory = uniqid('');
-                mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
+                make_dir("courses/$course_code/group/$secretDirectory");
                 touch("courses/$course_code/group/index.php");
                 touch("courses/$course_code/group/$secretDirectory/index.php");
                 
@@ -347,10 +347,10 @@ if ($is_editor) {
         // Move all groups to garbage collector and re-create an empty work directory
         $groupGarbage = $course_code . '_groups_' . uniqid(20);
 
-        @mkdir("courses/garbage");
+        make_dir("courses/garbage");
         @touch("courses/garbage/index.php");
         rename("courses/$course_code/group", "courses/garbage/$groupGarbage");
-        mkdir("courses/$course_code/group", 0777);
+        make_dir("courses/$course_code/group");
         touch("courses/$course_code/group/index.php");
 
         $message = $langGroupsDeleted;
@@ -359,7 +359,7 @@ if ($is_editor) {
 
         // move group directory to garbage collector
         if (!file_exists("courses/garbage")) {
-            mkdir("courses/garbage", 0777);
+            make_dir("courses/garbage");
         }
         $groupGarbage = "courses/garbage/{$course_code}_group_{$id}_" . uniqid(20);
         $myDir = Database::get()->querySingle("SELECT secret_directory, forum_id, name FROM `group` WHERE id = ?d", $id);
@@ -609,7 +609,7 @@ if ($is_editor) {
                 </tr>
                 <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
                 </tr></table></div></div></div>";
-    } else {
+    } else {        
         $tool_content .= "<div class='table-responsive'>
             <table class='table-default'>
                 <tr class='list-header'>
@@ -618,7 +618,7 @@ if ($is_editor) {
                   <th width='50'>$langGroupMembersNum</th>
                   <th width='50'>$langMax</th>
                   <th class='text-center' style='width:45px;'>".icon('fa-gears', $langActions)."</th>
-                </tr>";
+                </tr>";        
         foreach ($q as $row) {
             $group_id = $row->id;
             
@@ -626,7 +626,7 @@ if ($is_editor) {
             
             $tool_content .= "<td class='text-left'>";
             // Allow student to enter group only if he's a member
-            if ($is_member) {
+            if ($is_member or $is_tutor) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
                         "</a> <span style='color:#900; weight:bold;'>($langMyGroup)</span>";
             } else {
@@ -680,9 +680,9 @@ if ($is_editor) {
         if ($aantalcategories > 0) {
             $tool_content .= "$langCategorisedGroups&nbsp;";
             if (isset($urlview) and abs($urlview) == 0) {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $showall)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $langViewShow)."</a>";
             } else {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $shownone)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $langViewHide)."</a>";
             }
         }
         $tool_content .= "</div>
@@ -709,7 +709,7 @@ if ($is_editor) {
                 $newurlview[$i] = '0';
                 $tool_content .= "<tr class='link-subcategory-title'>
                                     <th class = 'text-left category-link' colspan='4'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>".icon('fa-minus-square-o', $shownone)."&nbsp;&nbsp;". q($myrow->name) . "</a>";
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>".icon('fa-minus-square-o', $langViewHide)."&nbsp;&nbsp;". q($myrow->name) . "</a>";
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span></th>";
                 } else {
@@ -738,7 +738,7 @@ if ($is_editor) {
                         <tr class='link-subcategory-title'>
                             <th class = 'text-left category-link' colspan='4'>&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
                 $tool_content .= is_array($view) ? implode('', $view) : $view;
-                $tool_content .= "' class='open-category'>".icon('fa-plus-square', $showall)
+                $tool_content .= "' class='open-category'>".icon('fa-plus-square', $langViewShow)
                     . "&nbsp;&nbsp;" . q($myrow->name) . "</a>";
                 $description = standard_text_escape($myrow->description);
                 if (!empty($description)) {

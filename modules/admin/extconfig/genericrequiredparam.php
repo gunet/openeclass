@@ -30,14 +30,15 @@ require_once 'genericparam.php';
 class GenericRequiredParam extends GenericParam {
 
     public function validateParam() {
+        global $langEmptyParameter;
+        
         $value = $this->value();
         if (is_null($value) || trim($value) === '')
-            return "Δεν είναι δυνατόν να είναι κενή η παράμετρος: " . $this->display();
+            return "$langEmptyParameter " . $this->display();
         return null;
     }
 
     function isRequired() {
         return true;
     }
-
 }

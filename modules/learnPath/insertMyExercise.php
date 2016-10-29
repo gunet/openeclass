@@ -132,8 +132,8 @@ foreach ($resultex as $listex) {
                   AND course_id = ?d", $insertedAsset_id, $insertedExercice_id, $course_id);
 
             insertInLearningPath($insertedExercice_id, $order);
-
-            $messBox .= "<p>" . disp_message_box1($exercise->title . " :  " . $langExInsertedAsModule . "<br>", "success") . "</p>";
+            Session::Messages($langInsertedAsModule, 'alert-info');
+            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
         } else {
             // exercise is already used as a module in another learning path , so reuse its reference
             // check if this is this LP that used this exercise as a module
@@ -150,32 +150,26 @@ foreach ($resultex as $listex) {
             if ($num == 0) {
                 // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 insertInLearningPath($thisExerciseModule->module_id, $order);
-                $messBox .= "<p>" . disp_message_box1(q($exercise->title) . " : " . $langExInsertedAsModule . "<br>", "success") . "</p>";
-            } else {
-                $messBox .= "<p>" . disp_message_box1(q($listex->title) . " : " . $langExAlreadyUsed . "<br>", "caution") . "</p>";
+                Session::Messages($langInsertedAsModule, 'alert-info');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
+            } else {                
+                Session::Messages($langAlreadyUsed, 'alert-warning');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
         }
     } // end if request
 } //end while
 
-if(!empty($messBox)) {
-    $tool_content .= "<div class='alert alert-warning'>";
-    $tool_content .= $messBox;
-    $tool_content .= "</div>";
-}
-
-//STEP ONE : display form to add an exercise
 $tool_content .= display_my_exercises("", "");
-
-//STEP TWO : display learning path content
-//$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php?course=$course_code">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
-// display list of modules used by this learning path
-//$tool_content .= display_path_content();
-
 
 draw($tool_content, 2, null, $head_content);
 
+/**
+ * @brief insert in LP
+ * @global type $langDefaultModuleAddedComment
+ * @param type $module_id
+ * @param type $rank
+ */
 function insertInLearningPath($module_id, $rank) {
     global $langDefaultModuleAddedComment;
 

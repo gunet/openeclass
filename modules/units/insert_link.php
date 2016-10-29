@@ -38,7 +38,7 @@ require_once 'include/course_settings.php';
  */
 function list_links() {
     global $id, $course_id, $course_code, $tool_content,
-    $langNoCategory, $langCategorisedLinks, $langDescr, $langAddModulesButton,
+    $langNoCategory, $langCategorisedLinks, $langDescription, $langAddModulesButton,
     $langChoice, $langNoLinksExist, $langLinks, $course_code, $langSocialCategory;
     
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $course_id);
@@ -50,7 +50,7 @@ function list_links() {
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left' style='width:'>&nbsp;$langLinks</th>" .
-                "<th class='text-left'>$langDescr</th>" .
+                "<th class='text-left'>$langDescription</th>" .
                 "<th width='10'>$langChoice</th>" .
                 "</tr>";
         $sql = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d", $course_id);

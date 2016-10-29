@@ -30,8 +30,9 @@
  *
  */
 
-require_once 'modules/bbb/functions.php';
-require_once 'modules/dropbox/class.mailbox.php';
+
+require_once 'modules/tc/functions.php';
+require_once 'modules/message/class.mailbox.php';
 
 /*
  * Function getSideMenu
@@ -40,23 +41,24 @@ require_once 'modules/dropbox/class.mailbox.php';
  * create the needed tools array
  *
  * @param int $menuTypeID Type of menu to generate
+ * @param bool $rich Whether to include rich text notifications in title
  *
  */
 
-function getSideMenu($menuTypeID) {
+function getSideMenu($menuTypeID, $rich=true) {
     switch ($menuTypeID) {
         case 0: { //logged out
                 $menu = loggedOutMenu();
                 break;
             }
 
-        case 1: { //logged in                      
-                $menu = loggedInMenu();
+        case 1: { //logged in
+                $menu = loggedInMenu($rich);
                 break;
             }
 
         case 2: { //course home (lesson tools)
-                $menu = lessonToolsMenu();
+                $menu = lessonToolsMenu($rich);
                 break;
             }
 
@@ -101,7 +103,7 @@ function getToolsArray($cat) {
                         course_id = $cid AND
                         module_id NOT IN (" . MODULE_ID_CHAT . ",
                                           " . MODULE_ID_ASSIGN . ",
-                                          " . MODULE_ID_DROPBOX . ",
+                                          " . MODULE_ID_MESSAGE . ",
                                           " . MODULE_ID_FORUM . ",
                                           " . MODULE_ID_GROUPS . ",
                                           " . MODULE_ID_ATTENDANCE . ",
@@ -164,15 +166,17 @@ function getExternalLinks() {
  *
  * (student | professor | platform administrator)
  *
+ * @param bool $rich Whether to include rich text notifications in title
+ *
  * @return array
  */
-function loggedInMenu() {
+function loggedInMenu($rich=true) {
     global $uid, $is_admin, $is_power_user, $is_usermanage_user,
     $is_departmentmanage_user, $urlServer, $course_code, $session;
 
     $sideMenuGroup = array();
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
-      
+
     if ((isset($is_admin) and $is_admin) or
             (isset($is_power_user) and $is_power_user) or
             (isset($is_usermanage_user) and ($is_usermanage_user)) or
@@ -190,7 +194,7 @@ function loggedInMenu() {
             $arrMenuType['class'] = ' in';
         } else {
             $arrMenuType['class'] = '';
-        }          
+        }
         array_push($sideMenuSubGroup, $arrMenuType);
 
         if ((isset($is_admin) and $is_admin) or
@@ -232,6 +236,12 @@ function loggedInMenu() {
     array_push($sideMenuLink, $urlServer . "info/about.php");
     array_push($sideMenuImg, "fa-credit-card");
 
+    if (faq_exist()) {
+        array_push($sideMenuText, $GLOBALS['langFaq']);
+        array_push($sideMenuLink, $urlServer . "info/faq.php");
+        array_push($sideMenuImg, "fa-question-circle");
+    }
+
     array_push($sideMenuText, $GLOBALS['langContact']);
     array_push($sideMenuLink, $urlServer . "info/contact.php");
     array_push($sideMenuImg, "fa-phone");
@@ -239,7 +249,7 @@ function loggedInMenu() {
     foreach ($sideMenuLink as $module_link) {
         if ($current_module_dir == module_path($module_link)) {
             $sideMenuSubGroup[0]['class'] = ' in';
-        }        
+        }
     }
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
@@ -267,7 +277,7 @@ function loggedInMenu() {
         array_push($sideMenuImg, "fa-plus-circle");
     }
 
-    require_once 'modules/dropbox/class.mailbox.php';
+    require_once 'modules/message/class.mailbox.php';
 
     array_push($sideMenuText, $GLOBALS['langMyCourses']);
     array_push($sideMenuLink, $urlServer . "main/my_courses.php");
@@ -275,12 +285,12 @@ function loggedInMenu() {
 
     $mbox = new Mailbox($uid, 0);
     $new_msgs = $mbox->unreadMsgsNumber();
-    if ($new_msgs == 0) {
+    if (!$rich or $new_msgs == 0) {
         array_push($sideMenuText, $GLOBALS['langMyDropBox']);
     } else {
         array_push($sideMenuText, "<b>$GLOBALS[langMyDropBox]<span class='badge pull-right'>$new_msgs</span></b>");
     }
-    array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
+    array_push($sideMenuLink, $urlServer . "modules/message/index.php");
     array_push($sideMenuImg, "fa-envelope-o");
 
     array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
@@ -328,15 +338,15 @@ function loggedInMenu() {
     array_push($sideMenuText, $GLOBALS['langMyWidgets']);
     array_push($sideMenuLink, $urlServer . "main/my_widgets.php");
     array_push($sideMenuImg, "fa-magic");
-    
+
     array_push($sideMenuText, $GLOBALS['langMyStats']);
     array_push($sideMenuLink, $urlServer . "modules/usage/?t=u");
     array_push($sideMenuImg, "fa-area-chart");
-    
+
     foreach ($sideMenuLink as $module_link) {
         if ($current_module_dir == module_path($module_link)) {
             $sideMenuSubGroup[0]['class'] = ' in';
-        }        
+        }
     }
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
@@ -393,6 +403,12 @@ function loggedOutMenu() {
     array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
     array_push($sideMenuLink, $urlServer . "info/about.php");
     array_push($sideMenuImg, "fa-credit-card");
+
+    if (faq_exist()) {
+        array_push($sideMenuText, $GLOBALS['langFaq']);
+        array_push($sideMenuLink, $urlServer . "info/faq.php");
+        array_push($sideMenuImg, "fa-question-circle");
+    }
 
     array_push($sideMenuText, $GLOBALS['langContact']);
     array_push($sideMenuLink, $urlServer . "info/contact.php");
@@ -504,7 +520,7 @@ function adminMenu() {
     foreach ($sideMenuLink as $module_link) {
         if ($current_module_dir == module_path($module_link)) {
             $sideMenuSubGroup[0]['class'] = ' in';
-        }        
+        }
     }
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
@@ -544,13 +560,13 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langAutoEnroll']);
         array_push($sideMenuLink, '../admin/autoenroll.php');
         array_push($sideMenuImg, 'fa-caret-right');
-        
+
         foreach ($sideMenuLink as $module_link) {
             if ($current_module_dir == module_path($module_link)) {
                 $sideMenuSubGroup[0]['class'] = ' in';
-            }        
+            }
         }
-        
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
@@ -592,13 +608,13 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
         array_push($sideMenuLink, $urlServer . "upgrade/");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         foreach ($sideMenuLink as $module_link) {
             if ($current_module_dir == module_path($module_link)) {
                 $sideMenuSubGroup[0]['class'] = ' in';
-            }        
+            }
         }
-        
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
@@ -626,15 +642,19 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langExtAppConfig']);
         array_push($sideMenuLink, "../admin/extapp.php");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
+        array_push($sideMenuText, $GLOBALS['langAdminCreateFaq']);
+        array_push($sideMenuLink, "../admin/faq_create.php");
+        array_push($sideMenuImg, "fa-caret-right");
+
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);
         array_push($sideMenuLink, "../admin/theme_options.php");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         array_push($sideMenuText, $GLOBALS['langWidgets']);
         array_push($sideMenuLink, "../admin/widgets.php");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         array_push($sideMenuText, $GLOBALS['langDisableModules']);
         array_push($sideMenuLink, "../admin/modules.php");
         array_push($sideMenuImg, "fa-caret-right");
@@ -642,7 +662,7 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langUsage']);
         array_push($sideMenuLink, "../../modules/usage/?t=a");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         array_push($sideMenuText, $GLOBALS['langRecordLog']);
         array_push($sideMenuLink, "../admin/otheractions.php");
         array_push($sideMenuImg, "fa-caret-right");
@@ -661,13 +681,13 @@ function adminMenu() {
         $manual_language = ($language == 'el')? $language: 'en';
         array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=$manual_language:admin_doc");
         array_push($sideMenuImg, "fa-caret-right");
-        
+
         foreach ($sideMenuLink as $module_link) {
             if ($current_module_dir == module_path($module_link)) {
                 $sideMenuSubGroup[0]['class'] = ' in';
-            }        
+            }
         }
-        
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
@@ -684,9 +704,11 @@ function adminMenu() {
  * in regard to the user's user level
  * (student | professor | platform administrator)
  *
+ * @param bool $rich Whether to include rich text notifications in title
+ *
  * @return array
  */
-function lessonToolsMenu() {
+function lessonToolsMenu($rich=true) {
     global $uid, $is_editor, $is_course_admin, $courses,
            $course_code, $langAdministrationTools, $langExternalLinks,
            $modules, $admin_modules, $urlAppend, $status, $course_id;
@@ -698,7 +720,7 @@ function lessonToolsMenu() {
     $sideMenuImg = array();
     $sideMenuID = array();
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
-    
+
     $arrMenuType = array();
     $arrMenuType['type'] = 'none';
 
@@ -753,14 +775,15 @@ function lessonToolsMenu() {
                 continue;
             }
 
-            // hide teleconference when no BBB servers are enabled
-            if ($mid == MODULE_ID_BBB and !get_total_bbb_servers()) {
+
+            // hide teleconference when no BBB, OpenMeetings or WebConf servers are enabled
+            if ($mid == MODULE_ID_TC and !is_configured_tc_server()) {
                 continue;
             }
 
             // if we are in dropbox or announcements add (if needed) mail address status
-            if ($mid == MODULE_ID_DROPBOX or $mid == MODULE_ID_ANNOUNCE) {
-                if ($mid == MODULE_ID_DROPBOX) {
+            if ($rich and ($mid == MODULE_ID_MESSAGE or $mid == MODULE_ID_ANNOUNCE)) {
+                if ($mid == MODULE_ID_MESSAGE) {
                     $mbox = new Mailbox($uid, course_code_to_id($course_code));
                     $new_msgs = $mbox->unreadMsgsNumber();
                     if ($new_msgs != 0) {
@@ -772,7 +795,7 @@ function lessonToolsMenu() {
                 } else {
                     array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
                 }
-            } elseif ($mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
+            } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
                 array_push($sideMenuText, '<b>' . q($modules[$mid]['title']) .
                     "<span class='badge pull-right'>$new_docs</span></b>");
             } else {
@@ -831,7 +854,7 @@ function lessonToolsMenu() {
                             '/?course=' . $course_code;
             if (module_path($module_link) == $current_module_dir) {
                 $sideMenuSubGroup[0]['class'] = ' in';
-            }            
+            }
             array_push($sideMenuText, $adm_mod['title']);
             array_push($sideMenuLink, q($module_link));
             array_push($sideMenuImg, $adm_mod['image']);

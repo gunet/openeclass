@@ -22,7 +22,7 @@
 
 $require_login = TRUE;
 include '../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 $pageName = $langUnregCourse;
 

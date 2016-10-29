@@ -26,6 +26,7 @@ $require_help = TRUE;
 $helpTopic = 'Guest';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/log.class.php';
 
 if (get_config('course_guest') == 'off') {
     redirect_to_home_page('modules/user/?course=' . $course_code);
@@ -145,7 +146,7 @@ draw($tool_content, 2, null, $head_content);
  * @return none
  */
 function createguest($username, $course_id, $password) {
-    global $langGuestName, $langGuestSurname, $langGuestFail;
+    global $langGuestName, $langGuestSurname;
 
     $hasher = new PasswordHash(8, false);
     if ($password !== '') {
@@ -161,9 +162,14 @@ function createguest($username, $course_id, $password) {
                                         VALUES (?s, ?s, ?s, ?s, " . USER_GUEST . ", ".DBHelper::timeAfter().", ".DBHelper::timeAfter(get_config('account_duration')).", '','')",
                                             $langGuestSurname, $langGuestName, $username, $password);
         $guest_id = $q->lastInsertID;
+        // update personal calendar info table
+        // we don't check if trigger exists since it requires `super` privilege
+        Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $guest_id);
     }
     Database::get()->query("INSERT IGNORE INTO course_user (course_id, user_id, status, reg_date)
                   VALUES (?d, ?d, " . USER_GUEST . ", ".DBHelper::timeAfter().")", $course_id, $guest_id);
+    Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $guest_id,
+                                                               'right' => '+10'));
     return;
 }
 

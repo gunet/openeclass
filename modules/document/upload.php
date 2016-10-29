@@ -28,18 +28,22 @@ $require_admin = defined('COMMON_DOCUMENTS');
 $require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
 $require_login = true;
 
-require_once "../../include/baseTheme.php";
-require_once "modules/document/doc_init.php";
+require_once '../../include/baseTheme.php';
+require_once 'modules/document/doc_init.php';
 require_once 'modules/drives/clouddrive.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+
+doc_init();
+copyright_info_init();
 
 if (defined('COMMON_DOCUMENTS')) {
-    $menuTypeID = 3;
+    $data['menuTypeID'] = 3;
     $toolName = $langCommonDocs;
 } elseif (defined('MY_DOCUMENTS')) {
-    $menuTypeID = 1;
+    $data['menuTypeID'] = 1;
     $toolName = $langMyDocs;
 } else {
-    $menuTypeID = 2;
+    $data['menuTypeID'] = 2;
     $toolName = $langDoc;
 }
 
@@ -50,198 +54,37 @@ if (defined('EBOOK_DOCUMENTS')) {
 }
 
 if (isset($_GET['uploadPath'])) {
-    $uploadPath = q($_GET['uploadPath']);
+    $data['uploadPath'] = q($_GET['uploadPath']);
 } else {
-    $uploadPath = '';
+    $data['uploadPath'] = '';
 }
 
-$backUrl = documentBackLink($uploadPath);
+$data['can_upload'] = $can_upload;
+$data['backUrl'] = documentBackLink($data['uploadPath']);
+$data['upload_target_url'] = $upload_target_url;
 
 if ($can_upload) {
-    $navigation[] = array('url' => $backUrl, 'name' => $pageName);
-    $pendingCloudUpload = CloudDriveManager::getFileUploadPending();
+    $navigation[] = array('url' => $data['backUrl'], 'name' => $pageName);
 
-    if ($pendingCloudUpload) {
-        $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
+    $data['languages'] = $fileLanguageNames;
+    $data['copyrightTitles'] = $copyright_titles;
+
+    $data['pendingCloudUpload'] = CloudDriveManager::getFileUploadPending();
+
+    $data['externalFile'] = false;
+    if ($data['pendingCloudUpload']) {
         $pageName = $langDownloadFile;
-        $fileinput = "
-        <div class='form-group'>
-          <label for='fileCloudName' class='col-sm-2 control-label'>$langCloudFile</label>
-          <div class='col-sm-10'>
-            <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='".q($pendingCloudUpload)."'>
-            <input type='text' class='form-control' name='fileCloudName' value='" . q(CloudFile::fromJSON($pendingCloudUpload)->name()) . "' readonly>
-          </div>
-        </div>";
     } else if (isset($_GET['ext'])) {
-        $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
+        $data['externalFile'] = true;
         $pageName = $langExternalFile;
-        $fileinput = "
-        <div class='form-group'>
-          <label for='fileURL' class='col-sm-2 control-label'>$langExternalFileInfo:</label>
-          <div class='col-sm-10'>
-            <input type='text' class='form-control' id='fileURL' name='fileURL'>
-          </div>
-        </div>";
     } else {
         $pageName = $langDownloadFile;
-        $fileinput = "
-        <div class='form-group'>
-          <label for='userFile' class='col-sm-2 control-label'>$langPathUploadFile:</label>
-          <div class='col-sm-10'>" .
-                fileSizeHidenInput() .
-                CloudDriveManager::renderAsButtons() . "<input type='file' id='userFile' name='userFile'></span>
-          </div>
-        </div>";
     }
-    $tool_content .= action_bar(array(
+    $data['backButton'] = action_bar(array(
         array('title' => $langBack,
-            'url' => $backUrl,
+            'url' => $data['backUrl'],
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
-    $tool_content .= "
-        <div class='row'>
-            <div class='col-md-12'>
-                <div class='form-wrapper'>
-
-        <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>      
-          <input type='hidden' name='uploadPath' value='$uploadPath' />
-          $group_hidden_input
-          $fileinput
-      <div class='form-group'>
-        <label for='inputFileTitle' class='col-sm-2 control-label'>$langTitle:</label>
-        <div class='col-sm-10'>
-          <input type='text' class='form-control' id='inputFileTitle' name='file_title'>
-        </div>
-      </div>
-
-      <div class='form-group'>
-        <label for='inputFileComment' class='col-sm-2 control-label'>$langComment:</label>
-        <div class='col-sm-10'>
-          <input type='text' class='form-control' id='inputFileComment' name='file_comment'>
-        </div>
-      </div>
-
-      <div class='form-group'>
-        <label for='inputFileCategory' class='col-sm-2 control-label'>$langCategory:</label>
-        <div class='col-sm-10'>
-          <select class='form-control' name='file_category'>
-            <option selected='selected' value='0'>$langCategoryOther</option>
-            <option value='1'>$langCategoryExcercise</option>
-            <option value='2'>$langCategoryLecture</option>
-            <option value='3'>$langCategoryEssay</option>
-            <option value='4'>$langCategoryDescription</option>
-            <option value='5'>$langCategoryExample</option>
-            <option value='6'>$langCategoryTheory</option>
-          </select>
-        </div>
-
-        <input type='hidden' name='file_creator' value='" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "' size='40' />
-
-      </div>
-
-      <div class='form-group'>
-        <label for='inputFileSubject' class='col-sm-2 control-label'>$langSubject:</label>
-        <div class='col-sm-10'>
-          <input type='text' class='form-control' id='inputFileSubject' name='file_subject'>
-        </div>
-      </div>
-
-      <div class='form-group'>
-        <label for='inputFileDescription' class='col-sm-2 control-label'>$langDescription:</label>
-        <div class='col-sm-10'>
-          <input type='text' class='form-control' id='inputFileDescription' name='file_description'>
-        </div>
-      </div>
-
-      <div class='form-group'>
-        <label for='inputFileAuthor' class='col-sm-2 control-label'>$langAuthor:</label>
-        <div class='col-sm-10'>
-          <input type='text' class='form-control' id='inputFileAuthor' name='file_author'>
-        </div>
-      </div>
-
-      <div class='form-group'>
-        <input type='hidden' name='file_date' value='' size='40' />
-        <input type='hidden' name='file_format' value='' size='40' />
-
-        <label for='inputFileLanguage' class='col-sm-2 control-label'>$langLanguage:</label>
-        <div class='col-sm-10'>
-          <select class='form-control' name='file_language'>
-                <option value='en'>$langEnglish</option>
-                <option value='fr'>$langFrench</option>
-                <option value='de'>$langGerman</option>
-                <option value='el' selected>$langGreek</option>
-                <option value='it'>$langItalian</option>
-                <option value='es'>$langSpanish</option>
-            </select>
-        </div>
-      </div>
-
-      <div class='form-group'>
-        <label for='inputFileCopyright' class='col-sm-2 control-label'>$langCopyrighted:</label>
-        <div class='col-sm-10'>
-          " .
-            selection(array('0' => $langCopyrightedUnknown,
-                '2' => $langCopyrightedFree,
-                '1' => $langCopyrightedNotFree,
-                '3' => $langCreativeCommonsCCBY,
-                '4' => $langCreativeCommonsCCBYSA,
-                '5' => $langCreativeCommonsCCBYND,
-                '6' => $langCreativeCommonsCCBYNC,
-                '7' => $langCreativeCommonsCCBYNCSA,
-                '8' => $langCreativeCommonsCCBYNCND), 'file_copyrighted', '', 'class="form-control"') . "
-        </div>
-      </div>";
-
-    if (!isset($_GET['ext'])) {
-        $tool_content .= "
-        <div class='form-group'>
-            <div class='col-sm-offset-2 col-sm-10'>
-                <div class='checkbox'>
-                    <label>
-                        <input type='checkbox' name='uncompress' value='1'>
-                        <strong>$langUncompress</strong>
-                    </label>
-                </div>          
-              </div>
-        </div>";
-    }
-
-    $tool_content .= "
-      <div class='form-group'>
-        <div class='col-sm-offset-2 col-sm-10'>
-            <div class='checkbox'>
-                <label>
-                    <input type='checkbox' name='replace' value='1'>
-                    <strong>$langReplaceSameName</strong>
-                </label>
-            </div>         
-        </div>
-      </div>      
-
-    <div class='row'>
-        <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
-    </div>";
-
-    $tool_content .= "
-      <div class='form-group'>
-        <div class='col-xs-offset-2 col-xs-10'>".
-            form_buttons(array(
-                array(
-                    'text' => $langUpload
-                ),
-                array(
-                    'href' => "index.php?course=$course_code",
-                )
-            ))
-            ."
-        </div>
-      </div>
-    </form>
-
-    </div></div></div>";
-} else {
-    $tool_content .= "<div class='alert alert-warning'>$langNotAllowed</div>";
 }
 
-draw($tool_content, $menuTypeID, null, $head_content);
+view('modules.document.upload', $data);

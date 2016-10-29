@@ -27,17 +27,21 @@ require_once 'work_functions.php';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/forcedownload.php';
+require_once 'modules/document/doc_init.php';
 
 define('GROUP_DOCUMENTS', true);
 $group_id = intval($_REQUEST['group_id']);
-require_once 'modules/document/doc_init.php';
+doc_init();
 
 $coursePath = $webDir . '/courses/' . $course_code;
-if (!file_exists($coursePath))
-    mkdir($coursePath, 0777);
-
 $workPath = $coursePath . '/work';
 $groupPath = $coursePath . '/group/' . group_secret($group_id);
+if (!file_exists($workPath)) {
+    make_dir($workPath);
+}
+if (!file_exists($groupPath)) {
+    make_dir($groupPath);
+}
 
 $pageName = $langGroupSubmit;
 
@@ -52,10 +56,27 @@ if (isset($_GET['submit'])) {
     header("Location: index.php?course=$course_code");
 }
 
-// show non-expired assignments list to allow selection
+
+/**
+ * @brief show non-expired assignments list to allow selection
+ * @global type $m
+ * @global type $uid
+ * @global type $group_id
+ * @global type $langSubmit
+ * @global type $langNoAssign
+ * @global type $tool_content
+ * @global type $langWorks
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $themeimg
+ * @global type $langCancel
+ * @global type $urlServer
+ * @global type $langTitle
+ * @return type
+ */
 function show_assignments() {
-    global $m, $uid, $group_id, $langSubmit, $langDays, $langNoAssign, $tool_content,
-    $langWorks, $course_id, $course_code, $themeimg, $langCancel, $urlServer;
+    global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content,
+           $langWorks, $course_id, $course_code, $themeimg, $langCancel, $urlServer, $langTitle;
     
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -119,7 +140,7 @@ function show_assignments() {
                         <div class='col-sm-10'>
                             <table class='table-default'>
                                 <tr>
-                                    <th class='left' colspan='2'>$m[title]</th>
+                                    <th class='left' colspan='2'>$langTitle</th>
                                     <th align='center' width='30%'>$m[deadline]</th>
                                     <th align='center' width='10%'>$m[submitted]</th>
                                     <th align='center' width='10%'>$m[select]</th>

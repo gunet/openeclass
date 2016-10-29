@@ -342,7 +342,7 @@ $view_data = recursiveWidgetIterator('Widgets', $view_data);
 $view_data['menuTypeID'] = 3;
 $pageName = $langWidgets;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-echo view('admin.widgets.index', $view_data);
+view('admin.widgets.index', $view_data);
 
 function recursiveWidgetIterator ($directory = null, $view_data = array()) {
     global $installed_widgets_arr;

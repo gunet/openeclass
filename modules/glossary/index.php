@@ -27,7 +27,7 @@ $helpTopic = 'Glossary';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 ModalBoxHelper::loadModalBox();
 
@@ -54,6 +54,7 @@ Database::get()->queryFunc("SELECT id, name, description, `order`
                       ORDER BY name", function ($cat) use (&$categories) {
     $categories[intval($cat->id)] = $cat->name;
 }, $course_id);
+$data['categories'] = $categories;
 
 $indirectcategories = array();
 foreach ($categories as $k => $v) {
@@ -125,11 +126,11 @@ if ($is_editor) {
                 array('title' => $langConfig,
                       'url' => "$base_url&amp;config=1",                      
                       'icon' => 'fa-gear'),
-                array('title' => "$langGlossaryToCsv (UTF8)",
+                array('title' => "$langGlossaryToCsv",
                       'url' => "dumpglossary.php?course=$course_code",
                       'icon' => 'fa-download'),
-                array('title' => "$langGlossaryToCsv (Windows 1253)",
-                      'url' => "dumpglossary.php?course=$course_code&amp;enc=1253",
+                array('title' => "$langGlossaryToCsv (UTF-8)",
+                      'url' => "dumpglossary.php?course=$course_code&amp;enc=UTF-8",
                       'icon' => 'fa-download'),
                 array('title' => $langCategories,
                       'url' => "categories.php?course=$course_code",
@@ -257,7 +258,7 @@ if ($is_editor) {
                                 'href' => $base_url
                             )
                         ));
-        echo view('modules.glossary.config', $data);
+        view('modules.glossary.config', $data);
     }
 
     // display form for adding or editing a glossary term
@@ -293,9 +294,10 @@ if ($is_editor) {
         $data['definition'] = Session::has('definition') ? Session::get('definition') : (isset($_GET['add']) ? "" : $glossary_item->definition );
         $notes = Session::has('notes') ? Session::get('notes') : (isset($_GET['add']) ? "" : $glossary_item->notes );
         $data['category_selection'] = '';
+
         if ($categories) {
             $categories[0] = '-';
-            $indirectcategories[0] = '-';
+            array_unshift($indirectcategories, "-");
             $data['category_selection'] = "
                         <div class='form-group'>
                              <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
@@ -318,7 +320,7 @@ if ($is_editor) {
                         'href' => $base_url,
                     )
                 ));
-        echo view('modules.glossary.create', $data);
+        view('modules.glossary.create', $data);
     }
     $data['total_glossary_terms'] = Database::get()->querySingle("SELECT COUNT(*) AS count FROM glossary
                                                           WHERE course_id = ?d", $course_id)->count;       
@@ -364,9 +366,9 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
     }
     $data['glossary_terms'] = $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
                             FROM glossary WHERE course_id = ?d $where
-                            GROUP BY term
+                            GROUP BY term, definition, url, notes, category_id, id 
                             ORDER BY term", $course_id, $terms);    
-    echo view('modules.glossary.index', $data);   
+    view('modules.glossary.index', $data);   
 }
 
 /**

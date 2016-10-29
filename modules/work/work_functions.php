@@ -53,11 +53,7 @@ function work_secret($id) {
             $s = $id;
         }
         if (!is_dir("$workPath/$s")) {
-            if (!file_exists($coursePath)) {
-                @mkdir("$coursePath", 0777);
-            }
-            @mkdir("$workPath", 0777);
-            mkdir("$workPath/$s", 0777);
+            make_dir("$workPath/$s");
         }
         return $s;
     } else {
@@ -87,15 +83,16 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
     global $m;
 
     $return = '';
-    $res = Database::get()->queryArray("SELECT id, file_path, file_name, uid, group_id
-				FROM assignment_submit
-                                WHERE assignment_id = ?d AND
-				      (uid = ?d OR group_id = ?d)", $id, $uid, $gid);
+    $res = Database::get()->queryArray("SELECT s.id, s.file_path, s.file_name, s.uid, s.group_id, a.course_id
+				FROM assignment_submit s JOIN assignment a ON (a.id = s.assignment_id)
+                                WHERE s.assignment_id = ?d AND
+				      (s.uid = ?d OR s.group_id = ?d)", $id, $uid, $gid);
     foreach ($res as $row) {
         if ($row->file_path != $new_filename) {
             @unlink("$GLOBALS[workPath]/$row->file_path");
         }
         Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $row->id);
+        triggerGame($row->course_id, $row->uid, $id);
         if ($GLOBALS['uid'] == $row->uid) {
             $return .= $m['deleted_work_by_user'];
         } else {
@@ -297,4 +294,59 @@ function cleanup_filename($f) {
     }
     $f = preg_replace('{^/+}', '', $f);
     return preg_replace('{//}', '/', $f);
+}
+
+function triggerGame($courseId, $uid, $assignId) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = AssignmentEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_ASSIGN;
+    $eventData->resource = intval($assignId);
+    AssignmentEvent::trigger(AssignmentEvent::UPDGRADE, $eventData);
+}
+
+/**
+ * @brief Export assignment's grades to CSV file
+ * @global type $course_code
+ * @global type $course_id
+ * @global type $langSurname
+ * @global type $langName
+ * @global type $langAm
+ * @global type $langUsername
+ * @global type $langEmail
+ * @global type $langGradebookGrade
+ * @param type $id
+ */
+function export_grades_to_csv($id) {
+    
+    global $course_code, $course_id,
+           $langSurname, $langName, $langAm, 
+           $langUsername, $langEmail, $langGradebookGrade;
+    
+    $csv = new CSV();    
+    $csv->filename = $course_code . "_" . $id . "_grades_list.csv";
+    $csv->outputHeaders();
+    // additional security
+    $q = Database::get()->querySingle("SELECT id, title FROM assignment 
+                            WHERE id = ?d AND course_id = ?d", $id, $course_id);
+    if ($q) {
+        $assignment_id = $q->id;
+        $title = $q->title;
+        $csv->outputRecord($title);
+        $csv->outputRecord();
+        $csv->outputRecord($langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade);
+        $sql = Database::get()->queryArray("SELECT uid, grade FROM assignment_submit
+                        WHERE assignment_id = ?d", $assignment_id);
+        foreach ($sql as $data) {
+            $entries = Database::get()->querySingle('SELECT surname, givenname, username, am, email 
+                        FROM user
+                        WHERE id = ?d',
+                        $data->uid);
+            $csv->outputRecord($entries->surname, $entries->givenname, $entries->am,
+                    $entries->username, $entries->email, $data->grade);
+            $csv->outputRecord();
+        }
+    }
+    exit;
 }

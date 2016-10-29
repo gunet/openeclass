@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -29,11 +29,11 @@ $helpTopic = 'Questionnaire';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
+require_once 'modules/game/ViewingEvent.php';
 
 load_js('bootstrap-slider');
 
 $toolName = $langQuestionnaire;
-$pageName = $langParticipate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
 //Identifying ajax request that cancels an active attempt
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -42,10 +42,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             exit();
         } 
 }
-if (!isset($_REQUEST['UseCase']))
+if (!isset($_REQUEST['UseCase'])) {
     $_REQUEST['UseCase'] = "";
-if (!isset($_REQUEST['pid']))
+}
+if (!isset($_REQUEST['pid'])) {
     die();
+}
 $p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $_REQUEST['pid']);
 if(!$p){
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -64,13 +66,33 @@ switch ($_REQUEST['UseCase']) {
 
 draw($tool_content, 2, null, $head_content);
 
+/**
+ * @brief display poll form
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $tool_content
+ * @global type $langSubmit
+ * @global type $langPollInactive
+ * @global type $langPollUnknown
+ * @global type $uid
+ * @global type $langPollAlreadyParticipated
+ * @global type $is_editor
+ * @global type $langBack
+ * @global type $langQuestion
+ * @global type $langCancel
+ * @global type $langCollesLegend
+ * @global type $head_content
+ * @global type $pageName
+ * @global type $langPollParticipantInfo
+ */
 function printPollForm() {
     global $course_id, $course_code, $tool_content,
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
-    $langCancel, $head_content, $langPollParticipantInfo;
+    $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
+    $pageName;
     
-    $refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
+    $refresh_time = 10 * 60 * 1000; // 10 min
     $head_content .= " 
     <script>
         $(function() {
@@ -106,6 +128,8 @@ function printPollForm() {
     $temp_CurrentDate = mktime(substr($temp_CurrentDate, 11, 2), substr($temp_CurrentDate, 14, 2), 0, substr($temp_CurrentDate, 5, 2), substr($temp_CurrentDate, 8, 2), substr($temp_CurrentDate, 0, 4));
     
     if ($is_editor || ($temp_CurrentDate >= $temp_StartDate) && ($temp_CurrentDate < $temp_EndDate)) {
+        
+        $pageName = $thePoll->name;
         $tool_content .= action_bar(array(
             array(
                 'title' => $langBack,
@@ -114,19 +138,15 @@ function printPollForm() {
                 'level' => 'primary-label'
             )
         ));
-        $tool_content .= "
-            <div class='panel panel-primary'>
-                <div class='panel-heading'>
-                    <h3 class='panel-title'>$thePoll->name</h3>
-                </div>";
+        
         if ($thePoll->description) {
-            $tool_content .= "
+            $tool_content .= "<div class='panel panel-primary'>            
                 <div class='panel-body'>
                     <p>$thePoll->description</p>
-                </div>";
+                </div>
+            </div>";
         }
-        $tool_content .= "
-            </div>
+        $tool_content .= "            
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='poll' method='post'>
             <input type='hidden' value='2' name='UseCase'>
             <input type='hidden' value='$pid' name='pid'>";     
@@ -155,14 +175,15 @@ function printPollForm() {
                     </div>
                 </div>";
         }
+        $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;        
         $i=1;
         foreach ($questions as $theQuestion) {           
             $pqid = $theQuestion->pqid;
-            $qtype = $theQuestion->qtype;
+            $qtype = $theQuestion->qtype;            
             if($qtype==QTYPE_LABEL) {
                 $tool_content .= "    
                     <div class='alert alert-info' role='alert'>
-                        $theQuestion->question_text
+                        <strong>$theQuestion->question_text</strong>
                     </div>";                
             } else {
                 $tool_content .= "
@@ -171,7 +192,7 @@ function printPollForm() {
                             $langQuestion $i
                         </div>
                         <div class='panel-body'>
-                            <h4>".q($theQuestion->question_text)."</h4>
+                            <h5>".q($theQuestion->question_text)."</h5>
                             <input type='hidden' name='question[$pqid]' value='$qtype'>";
                 if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
                     $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
@@ -205,13 +226,14 @@ function printPollForm() {
                                
                     }
                 } elseif ($qtype == QTYPE_SCALE) {
-                        $tool_content .= "
-                        <div class='form-group'>
-                            <div class='col-sm-offset-2 col-sm-10'>
-                                <input name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
-                            </div>
-                            
-                        </div>";
+                    if (($pollType == 1) or ($pollType == 2)) {
+                        $tool_content .= "<div style='margin-bottom: 0.5em;'><small>".q($langCollesLegend)."</small></div>";    
+                    }                    
+                    $tool_content .= "<div class='form-group'>                        
+                        <div class='col-sm-offset-2 col-sm-10' style='padding-top:15px;'>
+                            <input name='answer[$pqid]' class='grade_bar' data-slider-id='ex1Slider' type='text' data-slider-min='1' data-slider-max='$theQuestion->q_scale' data-slider-step='1' data-slider-value='1'>
+                        </div>                            
+                    </div>";
                 } elseif ($qtype == QTYPE_FILL) {
                     $tool_content .= "
                         <div class='form-group margin-bottom-fat'>                           
@@ -238,10 +260,25 @@ function printPollForm() {
     }	
 }
 
+/**
+ * @brief submit poll
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $uid
+ * @global type $langPollSubmitted
+ * @global type $langBack
+ * @global type $langUsage
+ * @global type $langTheField
+ * @global type $langFormErrors
+ * @global type $charset
+ * @global type $urlServer
+ * @global type $langPollEmailUsed
+ * @global type $langPollParticipateConfirmation
+ */
 function submitPoll() {
     global $tool_content, $course_code, $uid, $langPollSubmitted, $langBack,
            $langUsage, $langTheField, $langFormErrors, $charset, $urlServer,
-           $langPollEmailUsed;
+           $langPollEmailUsed, $langPollParticipateConfirmation, $course_id;
     
     $pid = intval($_POST['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
@@ -258,15 +295,23 @@ function submitPoll() {
     if($v->validate()) {
         // first populate poll_answer
         $CreationDate = date("Y-m-d H:i");
-        $answer = $_POST['answer'];
+        $answer = isset($_POST['answer'])? $_POST['answer']: array();
         if ($uid) {
+            $eventData = new stdClass();
+            $eventData->courseId = $course_id;
+            $eventData->uid = $uid;
+            $eventData->activityType = ViewingEvent::QUESTIONNAIRE_ACTIVITY;
+            $eventData->module = MODULE_ID_QUESTIONNAIRE;
+            $eventData->resource = intval($pid);
+            ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
+            
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid) VALUES (?d, ?d)", $pid, $uid)->lastInsertID;
         } else {
             require_once 'include/sendMail.inc.php';
             $participantEmail = $_POST['participantEmail'];
             $verification_code = randomkeys(255);
             $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, $participantEmail, 0, $verification_code)->lastInsertID;
-            $subject = "Επιβεβαίωση Συμμετοχής σε Ερωτηματολόγιο";
+            $subject = $langPollParticipateConfirmation;
             $body_html = "
              <!-- Header Section -->
             <div id='mail-header'>
@@ -286,7 +331,8 @@ function submitPoll() {
             send_mail_multipart('', '', '', $participantEmail, $subject, $body_plain, $body_html, $charset);
         }
 
-        foreach ($_POST['question'] as $pqid => $qtype) {
+        $question = isset($_POST['question'])? $_POST['question']: array();
+        foreach ($question as $pqid => $qtype) {
             $pqid = intval($pqid);
             if ($qtype == QTYPE_MULTIPLE) {
                 if(is_array($answer[$pqid])){

@@ -1245,7 +1245,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @global type $id
  * @global type $urlServer
  * @global type $langTitle
- * @global type $langDescr
+ * @global type $langDescription
  * @global type $langEditForum
  * @global type $langContents
  * @global type $langModify
@@ -1254,7 +1254,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @return string
  */
 function edit_res($resource_id) {
-    global $id, $urlServer, $langTitle, $langDescr, $langEditForum, 
+    global $id, $urlServer, $langTitle, $langDescription, $langEditForum, 
            $langContents, $langModify, $course_code, $cnt;
 
     $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM course_weekly_view_activities WHERE id = ?d", $resource_id);   
@@ -1277,7 +1277,7 @@ function edit_res($resource_id) {
                         <input class='form-control' type='text' name='restitle' size='50' maxlength='255' $restitle>
                     </div>
                 </div>";
-        $message = $langDescr;
+        $message = $langDescription;
     } else {
         $message = $langContents;
     }

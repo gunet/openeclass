@@ -47,23 +47,6 @@ validateCourseNodes($cId, isDepartmentAdmin());
 
 load_js('jstree3');
 
-$toolName = $langCourseInfo;
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);
-
-if (isset($_GET['c'])) {
-    $tool_content .= action_bar(array(
-     array('title' => $langBack,
-           'url' => "editcours.php?c=".q($_GET['c']),
-           'icon' => 'fa-reply',
-           'level' => 'primary-label')));
-} else {
-    $tool_content .= action_bar(array(
-        array('title' => $langBackAdmin,
-              'url' => "index.php",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
-  }
 // Update course basic information
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -92,55 +75,39 @@ if (isset($_POST['submit'])) {
                     prof_names = ?s
                     WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_GET['c']);
     $course->refresh($cId, $departments);
-    $tool_content .= "<div class='alert alert-success'>$langModifDone</div>";
+    
+    Session::Messages($langModifDone, 'alert-success');
+    redirect_to_home_page('modules/admin/infocours.php?c='.$_GET['c']);
 }
-// Display edit form for course basic information
-else {
-    $row = Database::get()->querySingle("SELECT course.code AS code, course.title AS title, course.prof_names AS prof_name, course.id AS id
-                                            FROM course
-                                           WHERE course.code = ?s" ,$_GET['c']);
-    $tool_content .= "<div class='form-wrapper'>
-	<form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "?c=" . q($_GET['c']) . "' method='post' onsubmit='return validateNodePickerForm();'>
-	<fieldset>
-        <div class='form-group'>
-	    <label for='Faculty' class='col-sm-2 control-label'>$langFaculty:</label>
-            <div class='col-sm-10'>";    
 
-        if (isDepartmentAdmin()) {
-            list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($row->id), 'allowables' => $user->getDepartmentIds($uid)));
-        } else {
-            list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($row->id)));
-        }
-        $head_content .= $js;
-        $tool_content .= $html;
-        $tool_content .= "</div></div>";
-        $tool_content .= "<div class='form-group'>
-            <label for='fcode' class='col-sm-2 control-label'>$langCode</label>
-            <div class='col-sm-10'>
-                <input type='text' class='form-control' name='fcode' id='fcode' value='$row->code' size='60' />
-            </div>
-        </div>
-        <div class='form-group'>
-            <label for='title' class='col-sm-2 control-label'>$langCourseTitle:</label>
-            <div class='col-sm-10'>
-		<input type='text' class='form-control' name='title' id='title' value='" . q($row->title) . "' size='60' />
-	    </div>
-        </div>
-        <div class='form-group'>
-            <label for='titulary' class='col-sm-2 control-label'>$langTeachers:</label>
-            <div class='col-sm-10'>
-		<input type='text' class='form-control' name='titulary' id='titulary' value='" . q($row->prof_name) . "' size='60' />
-	    </div>
-        </div>
-            ".showSecondFactorChallenge()."
-            ". generate_csrf_token_form_field() ."    
-        <div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-4'>
-                <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
-            </div>
-        </div>
-        </fieldset>
-	</form>
-        </div>";
+$data['course'] = Database::get()->querySingle("SELECT course.code AS code, course.title AS title, course.prof_names AS prof_name, course.id AS id
+                                        FROM course
+                                       WHERE course.code = ?s" ,$_GET['c']);
+$toolName = $langCourseInfo;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);
+
+if (isset($_GET['c'])) {
+    $data['action_bar'] = action_bar(array(
+     array('title' => $langBack,
+           'url' => "editcours.php?c=".q($_GET['c']),
+           'icon' => 'fa-reply',
+           'level' => 'primary-label')));
+} else {
+    $data['action_bar'] = action_bar(array(
+        array('title' => $langBackAdmin,
+              'url' => "index.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
 }
-draw($tool_content, 3, null, $head_content);
+
+if (isDepartmentAdmin()) {
+    list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($data['course']->id), 'allowables' => $user->getDepartmentIds($uid)));
+} else {
+    list($js, $html) = $tree->buildCourseNodePickerIndirect(array('defaults' => $course->getDepartmentIds($data['course']->id)));
+}
+$head_content .= $js;
+$data['node_picker'] = $html;
+    
+$data['menuTypeID'] = 3;
+view ('admin.courses.infocours', $data);

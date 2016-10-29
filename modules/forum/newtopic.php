@@ -29,8 +29,6 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
-
-require_once 'config.php';
 require_once 'functions.php';
 
 $toolName = $langForums;
@@ -93,6 +91,7 @@ if (isset($_POST['submit'])) {
 
     $post_id = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip) VALUES (?d, ?s, ?d, ?t, ?s)"
                     , $topic_id, $message, $uid, $time, $poster_ip)->lastInsertID;
+    triggerGame($course_id, $uid, ForumEvent::NEWPOST);
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
     $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post 

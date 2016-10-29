@@ -128,7 +128,7 @@ class QNX extends OS
      *
      * @return void
      */
-    private function _users()
+    protected function _users()
     {
         $this->sys->setUsers(1);
     }
@@ -148,24 +148,6 @@ class QNX extends OS
                 if ($ip != $result) {
                     $this->sys->setHostname(gethostbyaddr($ip));
                 }
-            }
-        }
-    }
-
-    /**
-     * IP of the Virtual Host Name
-     *
-     *  @return void
-     */
-    private function _ip()
-    {
-        if (PSI_USE_VHOST === true) {
-            $this->sys->setIp(gethostbyname($this->sys->getHostname()));
-        } else {
-            if (!($result = getenv('SERVER_ADDR'))) {
-                $this->sys->setIp(gethostbyname($this->sys->getHostname()));
-            } else {
-                $this->sys->setIp($result);
             }
         }
     }
@@ -207,20 +189,20 @@ class QNX extends OS
     {
         if (CommonFunctions::executeProgram('ifconfig', '', $bufr, PSI_DEBUG)) {
             $lines = preg_split("/\n/", $bufr, -1, PREG_SPLIT_NO_EMPTY);
-            $notwas = true;
+            $was = false;
             foreach ($lines as $line) {
                 if (preg_match("/^([^\s:]+)/", $line, $ar_buf)) {
-                    if (!$notwas) {
+                    if ($was) {
                         $this->sys->setNetDevices($dev);
                     }
                     $dev = new NetDevice();
                     $dev->setName($ar_buf[1]);
-                    $notwas = false;
+                    $was = true;
                 } else {
-                    if (!$notwas) {
+                    if ($was) {
                         if (defined('PSI_SHOW_NETWORK_INFOS') && (PSI_SHOW_NETWORK_INFOS)) {
                             if (preg_match('/^\s+address:\s*(\S+)/i', $line, $ar_buf2)) {
-                                    $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').$ar_buf2[1]);
+                                    $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').preg_replace('/:/', '-', strtoupper($ar_buf2[1])));
                             } elseif (preg_match('/^\s+inet\s+(\S+)\s+netmask/i', $line, $ar_buf2))
                                 $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').$ar_buf2[1]);
 
@@ -228,7 +210,7 @@ class QNX extends OS
                     }
                 }
             }
-            if (!$notwas) {
+            if ($was) {
                 $this->sys->setNetDevices($dev);
             }
         }
@@ -244,7 +226,6 @@ class QNX extends OS
         $this->error->addError("WARN", "The QNX version of phpSysInfo is a work in progress, some things currently don't work");
         $this->_distro();
         $this->_hostname();
-        $this->_ip();
         $this->_kernel();
         $this->_uptime();
         $this->_users();

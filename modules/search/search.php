@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -59,7 +59,7 @@ $hits = $idx->searchRaw(CourseIndexer::buildQuery($_POST));
 // exit if not results
 if (count($hits) <= 0) {
     Session::Messages($langNoResult);
-    redirect_to_home_page('modules/search/search.php');  
+    redirect_to_home_page('modules/search/search.php');
 }
 
 // Additional Access Rights
@@ -72,11 +72,11 @@ foreach ($hits as $hit) {
 }
 $subscribed = array();
 if ($uid > 1) {
-    $res = Database::get()->queryArray("SELECT course.id 
-                           FROM course 
-                           JOIN course_user ON course.id = course_user.course_id 
+    $res = Database::get()->queryArray("SELECT course.id
+                           FROM course
+                           JOIN course_user ON course.id = course_user.course_id
                             AND course_user.user_id = ?d", $uid);
-        
+
     foreach ($res as $row) {
         $subscribed[] = $row->id;
     }
@@ -92,7 +92,7 @@ $courses = Database::get()->queryArray("select c.*, cd.department "
         . " from course c left "
         . " join (select course, max(department) as department from course_department group by course) cd on (c.id = cd.course) "
         . " where c.id in " . $inIds);
- 
+
 //////// PRINT RESULTS ////////
 $tool_content .= action_bar(array(
                     array('title' => $langAdvancedSearch,
@@ -104,7 +104,8 @@ $tool_content .= action_bar(array(
 $tool_content .= "
     <div class='alert alert-info'>$langDoSearch";
 if (isset($_POST['search_terms'])) {
-    $tool_content .= ":&nbsp;<label> '$_POST[search_terms]'</label>";
+    $search_terms = q(canonicalize_whitespace($_POST['search_terms']));
+    $tool_content .= ":&nbsp;<label> '$search_terms'</label>";
 }
 $tool_content .= "<br><small>" . $cnthits . " $langResults2</small></div>
     <table class='table-default'>
@@ -125,40 +126,40 @@ $icons = array(
     COURSE_CLOSED => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
 );
 
-foreach ($courses as $course) {    
+foreach ($courses as $course) {
     $courseHref = "../../courses/" . q($course->code) . "/";
     $courseUrl = "<span id='cid" . $course->id . "'><a href='$courseHref'>" . q($course->title) . "</a></span> (" . q($course->public_code) . ")";
     $skipincourse = false;
     $courses_list[$course->id] = array($course->code, $course->visible);
-    
+
     // anonymous see only title for reg/closed courses
     if (($course->visible == COURSE_CLOSED || $course->visible == COURSE_REGISTRATION) && $anonymous) {
         $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
     }
-    
+
     // closed courses url displays contact form for logged in users
     if ($course->visible == COURSE_CLOSED && $uid > 1 && !in_array($course->id, $subscribed)) {
         $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
         $courseUrl .= "<br/><small><em><a href='../contact/index.php?course_id=" . intval($course->id) . "'>$langLabelCourseUserRequest</a></em></small>";
         $skipincourse = true;
     }
-    
+
     // reg courses url displays just title and subscription url for logged in non-subscribed users
     if ($course->visible == COURSE_REGISTRATION && $uid > 1 && !in_array($course->id, $subscribed)) {
         $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
         $skipincourse = true;
     }
-    
+
     // logged in users have extended search options
     if (!$anonymous && !$skipincourse && isset($_POST['search_terms'])) {
         $courseUrl .= "<br/><small><em><a href='$courseHref?from_search=" . urlencode($_POST['search_terms']) . "'>$langSearchInCourse</a></em></small>";
     }
-    
+
     //  inactive courses are hidden from anyone except admin
     if ($course->visible == COURSE_INACTIVE && $uid != 1) {
         continue;
     }
-    
+
     $requirepassword = '';
     $tool_content .= "<tr>";
     if ($uid > 0) {
@@ -168,7 +169,7 @@ foreach ($courses as $course) {
             if (!empty($course->password) && ($course->visible == COURSE_REGISTRATION || $course->visible == COURSE_OPEN)) {
                 $requirepassword = "<br />$m[code]: <input type='password' name='pass" . $course->id . "' autocomplete='off' />";
             }
-            
+
             $disabled = ($course->visible == COURSE_CLOSED) ? 'disabled' : '';
             $vis_class = ($course->visible == COURSE_CLOSED) ? 'class="reg_closed"' : '';
             $tool_content .= "<td align='center'><input type='checkbox' name='selectCourse[]' value='" . $course->id . "' $disabled $vis_class />"

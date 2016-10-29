@@ -28,15 +28,6 @@ require_once 'hierarchy_validations.php';
 
 $user = new User();
 
-$toolName = $langSendInfoMail;
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-
-// Display link back to index.php
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 /* * ***************************************************************************
   MAIN BODY
  * **************************************************************************** */
@@ -126,43 +117,20 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
     if (count($recipients) > 0) {
         send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset);
     }
-    // Display result and close table correctly
-    $tool_content .= "<div class='alert alert-success'>$emailsuccess</div>";
-} else {
-    $body_mail = $email_title = '';
-    // Display form to administrator
-    $tool_content .= "<div class='form-wrapper'>
-    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-    <fieldset>
-        <div class='form-group'>
-            <label for='email_title' class='col-sm-2 control-label'>$langTitle</label>
-            <div class='col-sm-10'>
-                <input class='form-control' type='text' name='email_title' value='$email_title' size='50' />
-            </div>
-        </div>
-	<div class='form-group'>
-	  <label for='body_mail' class='col-sm-2 control-label'>$typeyourmessage</label>
-              <div class='col-sm-10'>
-	      ".rich_text_editor('body_mail', 10, 20, $body_mail)."
-              </div/>
-	</div>
-	<div class='form-group'>
-	  <label for='sendTo' class='col-sm-2 control-label'>$langSendMessageTo</label>
-            <div class='col-sm-10'>
-                <select class='form-control' name='sendTo' id='sendTo'>
-                    <option value='1'>$langProfOnly</option>
-                    <option value='2'>$langStudentsOnly</option>
-                    <option value='0'>$langToAllUsers</option>
-                </select>	    
-            </div>
-        </div>
-    ".showSecondFactorChallenge()."
-	<div class='col-sm-offset-2 col-sm-10'>	
-	  <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>          
-        </div>	
-    </fieldset>
-    ". generate_csrf_token_form_field() ."
-    </form>
-    </div>";
+    Session::Messages($emailsuccess, 'alert-success');
+    redirect_to_home_page('modules/admin/mailtoprof.php');
 }
-draw($tool_content, 3, null, $head_content);
+$toolName = $langSendInfoMail;
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
+// Display link back to index.php
+$data['action_bar'] = action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
+
+$data['body_mail_rich_text'] = rich_text_editor('body_mail', 10, 20, '');
+$data['menuTypeID'] = 3;
+
+view('admin.users.mailtoprof', $data);

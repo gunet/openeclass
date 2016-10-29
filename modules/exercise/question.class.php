@@ -56,7 +56,7 @@ if (!class_exists('Question')):
             $this->category = 0;
             $this->exerciseList = array();
         }
-        
+
         /**
          * reads question informations from the data base
          *
@@ -67,7 +67,7 @@ if (!class_exists('Question')):
         function read($id) {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT question, description, weight, q_position, type, difficulty, category 
+            $object = Database::get()->querySingle("SELECT question, description, weight, q_position, type, difficulty, category
                         FROM `exercise_question` WHERE course_id = ?d AND id = ?d", $course_id, $id);
             // if the question has been found
             if ($object) {
@@ -122,6 +122,10 @@ if (!class_exists('Question')):
         function selectDescription() {
             return $this->description;
         }
+        
+        function selectParsedDescription() {
+            return mathfilter(nl2br(make_clickable($this->description)), 12, "../../courses/mathimg/");
+        }        
 
         /**
          * returns the question weighting
@@ -151,7 +155,7 @@ if (!class_exists('Question')):
          */
         function selectType() {
             return $this->type;
-        }      
+        }
         /**
          * returns the question difficulty
          */
@@ -163,15 +167,15 @@ if (!class_exists('Question')):
          */
         function selectCategory() {
             return $this->category;
-        }            
+        }
         /**
          * returns the relative verbal answer type
          */
         function selectTypeWord($answerTypeId) {
-            global $langUniqueSelect, $langMultipleSelect, $langFillBlanks, 
-                   $langMatching, $langTrueFalse, $langFreeText, 
+            global $langUniqueSelect, $langMultipleSelect, $langFillBlanks,
+                   $langMatching, $langTrueFalse, $langFreeText,
                    $langFillBlanksStrict, $langFillBlanksTolerant;
-                   
+
             switch ($answerTypeId) {
                 case UNIQUE_ANSWER:
                     return $langUniqueSelect;
@@ -181,13 +185,13 @@ if (!class_exists('Question')):
                     return "$langFillBlanks ($langFillBlanksStrict)";
                 case MATCHING:
                     return $langMatching;
-                case TRUE_FALSE:    
+                case TRUE_FALSE:
                     return $langTrueFalse;
-                case FREE_TEXT:    
+                case FREE_TEXT:
                     return $langFreeText;
                 case FILL_IN_BLANKS_TOLERANT:
-                    return "$langFillBlanks ($langFillBlanksTolerant)";                    
-            }            
+                    return "$langFillBlanks ($langFillBlanksTolerant)";
+            }
         }
         /**
          * returns the array with the exercise ID list
@@ -268,7 +272,7 @@ if (!class_exists('Question')):
                 $this->type = $type;
             }
         }
-        
+
         /**
          * changes the question difficulty
          */
@@ -280,7 +284,7 @@ if (!class_exists('Question')):
          */
         function updateCategory($category_id) {
             $this->category = $category_id;
-        }        
+        }
         /**
          * adds a picture to the question
          *
@@ -364,7 +368,7 @@ if (!class_exists('Question')):
          */
         function save($exerciseId = 0) {
             global $course_id;
-            
+
             $id = $this->id;
             $question = $this->question;
             $description = $this->description;
@@ -454,7 +458,7 @@ if (!class_exists('Question')):
                 Database::get()->query("DELETE FROM `exercise_answer` WHERE question_id = ?d", $id);
                 $this->removePicture();
                 // resets the object
-                $this->Question();
+                $this->__construct();
             }
             // just removes the exercise from the list
             else {
@@ -467,7 +471,7 @@ if (!class_exists('Question')):
         function get_answers_record($eurid) {
             $type = $this->type;
             $question_id = $this->id;
-            $answers = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $question_id);    
+            $answers = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $question_id);
             if ($answers) {
                 $i = 1;
                 foreach ($answers as $row) {
@@ -489,6 +493,32 @@ if (!class_exists('Question')):
                 return $choice;
             }
         }
+        function get_answers_record_new($eurid) {
+            $type = $this->type;
+            $question_id = $this->id;
+            $answers = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $question_id);
+            $choice = [];
+            if ($answers) {
+                $i = 1;
+                foreach ($answers as $row) {
+
+                    if ($type == UNIQUE_ANSWER || $type == TRUE_FALSE) {
+                        $choice[] = $row->answer_id;
+                    } elseif ($type == MULTIPLE_ANSWER) {
+                        $choice[] = $row->answer_id;
+                    } elseif ($type == FREE_TEXT) {
+                        $choice[] = $row->answer;
+                    } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT) {
+                        $choice[$row->answer_id] = $row->answer;
+                    } elseif ($type == MATCHING) {
+                        $choice[$row->answer] = $row->answer_id;
+                    }
+
+                    $i++;
+                }
+                return $choice;
+            }
+        }        
         /**
          * duplicates the question
          *
@@ -517,34 +547,34 @@ if (!class_exists('Question')):
         /**
          *
          * Calculate Question success rate
-         */        
+         */
         function successRate($exerciseId = NULL) {
             $id = $this->id;
-            $type = $this->type;           
+            $type = $this->type;
             $objAnswerTmp = new Answer($id);
-            $nbrAnswers = $objAnswerTmp->selectNbrAnswers();               
+            $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
             $q_correct_answers_sql = '';
             $q_incorrect_answers_sql = '';
             $extra_sql = '';
-            $query_vars = array($id, ATTEMPT_COMPLETED);         
+            $query_vars = array($id, ATTEMPT_COMPLETED);
             if(isset($exerciseId)) {
                 $extra_sql = " AND b.eid = ?d";
                 $query_vars[] = $exerciseId;
-            }         
+            }
             $total_answer_attempts = Database::get()->querySingle("SELECT COUNT(DISTINCT a.eurid) AS count
                     FROM exercise_answer_record a, exercise_user_record b
                     WHERE a.eurid = b.eurid AND a.question_id = ?d AND b.attempt_status=?d$extra_sql", $query_vars)->count;
-            
+
             //BUILDING CORRECT ANSWER QUERY BASED ON QUESTION TYPE
-            if($type == UNIQUE_ANSWER || $type == MULTIPLE_ANSWER || $type == TRUE_FALSE){ //works wrong for MULTIPLE_ANSWER                           
+            if($type == UNIQUE_ANSWER || $type == MULTIPLE_ANSWER || $type == TRUE_FALSE){ //works wrong for MULTIPLE_ANSWER
                 $i=1;
                 for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
                     if ($objAnswerTmp->isCorrect($answerId)) {
                         $q_correct_answers_sql .= ($i!=1) ? ' OR ' : '';
                         $q_correct_answers_sql .= 'a.answer_id = '.$objAnswerTmp->selectPosition($answerId);
-                        $q_incorrect_answers_sql .= ($i!=1) ? ' AND ' : '';  
-                        $q_incorrect_answers_sql .= 'a.answer_id != '.$objAnswerTmp->selectPosition($answerId);                                         
-                        $i++;                        
+                        $q_incorrect_answers_sql .= ($i!=1) ? ' AND ' : '';
+                        $q_incorrect_answers_sql .= 'a.answer_id != '.$objAnswerTmp->selectPosition($answerId);
+                        $i++;
                     }
                 }
                 $q_correct_answers_cnt = $i-1;
@@ -557,50 +587,48 @@ if (!class_exists('Question')):
                             $q_correct_answers_sql .= ($i!=1) ? " OR " : "";
                             $q_correct_answers_sql .= "(a.answer = $answerId AND a.answer_id = $answerCorrect)";
                             $q_incorrect_answers_sql .= ($i!=1) ? " OR " : "";
-                            $q_incorrect_answers_sql .= "(a.answer = $answerId AND a.answer_id != $answerCorrect)";                            
+                            $q_incorrect_answers_sql .= "(a.answer = $answerId AND a.answer_id != $answerCorrect)";
                             $i++;
                         }
                     }
                     $q_correct_answers_cnt = $i-1;
-            } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT) { // Works Great                              
+            } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT) { // Works Great
                $answer_field = $objAnswerTmp->selectAnswer($nbrAnswers);
-               //splits answer string from weighting string
-               list($answer, $answerWeighting) = explode('::', $answer_field);
-               //getting all matched strings between [ and ] delimeters ignoring [m][/m] math tags
-               preg_match_all('#(?<=\[)(?!/?m])[^\]]+#', $answer, $match);
-               $i=1;
+               list($answer, $answerWeighting) = $this::blanksSplitAnswer($answer_field);
+               $blanks = $this::getBlanks($answer);
+               $i = 1;
                $sql_binary_comparison = $type == FILL_IN_BLANKS ? 'BINARY ' : '';
-               foreach ($match[0] as $answers){
+               foreach ($blanks as $answers) {
                     $correct_answers = preg_split('/\s*,\s*/', $answers);
-                    $j=1;
+                    $j = 1;
                     $q_correct_answers_sql .= ($i!=1) ? ' OR ' : '';
                     $q_incorrect_answers_sql .= ($i!=1) ? ' OR ' : '';
-                    foreach ($correct_answers as $value){
+                    foreach ($correct_answers as $value) {
                         $q_correct_answers_sql .= ($j!=1) ? ' OR ' : '';
                         $q_correct_answers_sql .= "(a.answer = $sql_binary_comparison'$value' AND a.answer_id = $i)";
-                        $q_incorrect_answers_sql .= ($j!=1) ? ' AND ' : '';                     
+                        $q_incorrect_answers_sql .= ($j!=1) ? ' AND ' : '';
                         $q_incorrect_answers_sql .= "(a.answer != $sql_binary_comparison'$value' AND a.answer_id = $i)";
                         $j++;
-                    }                    
+                    }
                     $i++;
                }
-               $q_correct_answers_cnt = $i-1;
+               $q_correct_answers_cnt = $i - 1;
             }
             //FIND CORRECT ANSWER ATTEMPTS
             if ($type == FREE_TEXT) {
                 // This query gets answers which where graded with queston maximum grade
                 $correct_answer_attempts = Database::get()->querySingle("SELECT COUNT(DISTINCT a.eurid) AS count
                         FROM exercise_answer_record a, exercise_user_record b, exercise_question c
-                        WHERE a.eurid = b.eurid AND a.question_id = c.id AND a.weight=c.weight AND a.question_id = ?d AND b.attempt_status=?d$extra_sql", $query_vars)->count;                           
+                        WHERE a.eurid = b.eurid AND a.question_id = c.id AND a.weight=c.weight AND a.question_id = ?d AND b.attempt_status=?d$extra_sql", $query_vars)->count;
             } else {
                 // One Query to Rule Them All (except free text questions)
                 // This query groups attempts and counts correct and incorrect answers
                 // then counts attempts where (correct answers == total anticipated correct attempts)
-                // and (incorrect answers == 0) (this control is necessary mostly in cases of MULTIPLE ANSWER type)               
+                // and (incorrect answers == 0) (this control is necessary mostly in cases of MULTIPLE ANSWER type)
                 if ($q_correct_answers_cnt > 0) {
                     $correct_answer_attempts = Database::get()->querySingle("
                         SELECT COUNT(*) AS counter FROM (
-                            SELECT a.eurid, 
+                            SELECT a.eurid,
                             SUM($q_correct_answers_sql) as correct_answer_cnt,
                             SUM($q_incorrect_answers_sql) as incorrect_answer_cnt
                             FROM exercise_answer_record a, exercise_user_record b
@@ -618,9 +646,115 @@ if (!class_exists('Question')):
             }
             return $successRate;
         }
+        function colspanByType() {
+            if (in_array($this->selectType(), [UNIQUE_ANSWER, MULTIPLE_ANSWER, TRUE_FALSE]))
+                return 4;
+            elseif (in_array($this->selectType(), [MATCHING]))
+                return 2;
+            else
+                return 1;
+        }
+        function getUserRecordWeight($eurid) {
+            return Database::get()->querySingle("SELECT SUM(weight) AS weight "
+                    . "FROM exercise_answer_record "
+                    . "WHERE question_id = ?d AND eurid =?d", 
+                    $this->selectId, $eurid)->weight;
+        }         
+        /**
+         * Split answer string from weighting string for fill-in-blanks answers
+         */
+        static function blanksSplitAnswer($str) {
+            $parts = explode('::', $str);
+            $answerWeighting = array_pop($parts);
+            $answer = implode('::', $parts);
+            return array($answer, $answerWeighting);
+        }
+       
+        function getBlanksAnswer($answer, $eurid) {
+            global $langOr;
+            list($answer, $answerWeighting) = self::blanksSplitAnswer($answer);
+
+            $choice = $this->get_answers_record($eurid);
+
+            // splits weightings that are joined with a comma
+            $answerWeighting = explode(',', $answerWeighting);
+            // we save the answer because it will be modified
+            $temp = $answer;
+            $answer = '';
+            $j = 1;
+            
+            // the loop will stop at the end of the text
+            while (1) {
+                // quits the loop if there are no more blanks
+                if (($pos = strpos($temp, '[')) === false) {
+                    // adds the end of the text
+                    $answer .= q($temp);
+                    break;
+                }
+                // adds the piece of text that is before the blank and ended by [
+                $answer .= substr($temp, 0, $pos + 1);
+                $temp = substr($temp, $pos + 1);
+                // quits the loop if there are no more blanks
+                if (($pos = strpos($temp, ']')) === false) {
+                    // adds the end of the text
+                    $answer .= q($temp);
+                    break;
+                }
+                $choice[$j] = trim($choice[$j]);
+                // if the word entered is the same as the one defined by the professor
+                $canonical_choice = $this->type == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($choice[$j], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $choice[$j];
+                $canonical_match = $this->type == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper(substr($temp, 0, $pos), 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : substr($temp, 0, $pos);
+                $right_answers = preg_split('/\s*\|\s*/', $canonical_match);
+                if (in_array($canonical_choice, $right_answers)) {
+                    // adds the word in green at the end of the string
+                    $answer .= '<b>' . q($choice[$j]) . '</b>';
+                }
+                // else if the word entered is not the same as the one defined by the professor
+                elseif (!empty($choice[$j])) {
+                    // adds the word in red at the end of the string, and strikes it
+                    $answer.='<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
+                } else {
+                    // adds a tabulation if no word has been typed by the student
+                    $answer.='&nbsp;&nbsp;&nbsp;';
+                }
+                // adds the correct word, followed by ] to close the blank
+                $answer .= ' / <span class="text-success"><b>' .
+                    q(preg_replace('/\s*,\s*/', " $langOr ", substr($temp, 0, $pos))) .
+                    '</b></span>]';
+                $j++;
+                $temp = substr($temp, $pos + 1);
+            }
+            return $answer;
+        }
+        /**
+         * Get array of answers from blanks in fill-in-blanks answers
+         */
+        static function getBlanks($string) {
+            $blanks = Array();
+
+            // remove math tags [m]...[/m]
+            $temp = preg_replace('/\[m\].*?\[\\m\]/', '', $string);
+
+            // the loop will stop at the end of the string
+            while (1) {
+                if (($pos = strpos($temp, '[')) === false) {
+                    break;
+                }
+                // remove characters till '['
+                $temp = substr($temp, $pos + 1);
+
+                // quit the loop if there are no more blanks
+                if (($pos = strpos($temp, ']')) === false) {
+                    break;
+                }
+                // store the found blank answer
+                $blanks[] = substr($temp, 0, $pos);
+
+                // remove the character ']'
+                $temp = substr($temp, $pos + 1);
+            }
+            return $blanks;
+        }
     }
 
-    
-
-    
 endif;

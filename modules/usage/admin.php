@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,11 +17,11 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 
-$head_content .= 
+$head_content .=
     "<script type='text/javascript'>
         startdate = null;
         interval = 1;
@@ -37,6 +37,10 @@ $head_content .=
 $tool_content .= action_bar(array(
                 array('title' => $langStatOfFaculty,
                     'url' => "faculty_stats.php",
+                    'icon' => 'fa-bar-chart',
+                    'level' => 'primary-label'),
+                array('title' => $langMonthlyReport,
+                    'url' => "../admin/monthlyReport.php",
                     'icon' => 'fa-bar-chart',
                     'level' => 'primary-label'),
                 array('title' => $langOldStats,
@@ -81,12 +85,12 @@ $tool_content .= "
 
 
 /****   Form   ****/
-require_once('form.php');
+require_once 'modules/usage/form.php';
 
 /****   Plots   ****/
 $tool_content .= "<div class='row plotscontainer'>";
 $tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
-$tool_content .= plot_placeholder("userlogins_stats", $langNbLogin);
+$tool_content .= plot_placeholder("userlogins_stats", $langNbLogin.' '.$langAndTotalCourseVisits);
 $tool_content .= "</div>";
 $tool_content .= "<div id='favcourses_container' class='col-lg-12'>";
 $tool_content .= plot_placeholder("popular_courses", $langFavouriteCourses);

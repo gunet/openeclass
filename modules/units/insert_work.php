@@ -31,14 +31,14 @@
  * @global type $langNoAssign
  * @global type $langActive
  * @global type $langInactive
- * @global type $langVisible
+ * @global type $langVisibility
  * @global type $course_id
  * @global type $course_code
  */
 function list_assignments() {
     global $id, $tool_content, $langTitle, $langChoice, $langGroupWorkDeadline_of_Submission,
     $langAddModulesButton, $langNoAssign, $langActive, $langInactive,
-    $langVisible, $course_id, $course_code;
+    $langVisibility, $course_id, $course_code;
 
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY active, title", $course_id);
     if (count($result) == 0) {

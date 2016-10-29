@@ -21,14 +21,19 @@ namespace App\Repositories;
  */
 use App\Models\Course;
 class CourseRepository {
-    
-    public function getAllCourses($limit) {
-        return Course::paginate($limit);
+    public function __construct(Course $course)
+    {
+        $this->course = $course;
+    }     
+    public function getAllCourses($limit, $with = []) {
+        return $this->course->with($with)->paginate($limit);
     }
-    
+    public function storeCourse($input) {
+        return $this->course->create($input);
+    }    
     //This allows normal eloquent methods applied to repository    
     public function __call($method, $args)
     {
-        return call_user_func_array([$this->user, $method], $args);
+        return call_user_func_array([$this->course, $method], $args);
     }       
 }

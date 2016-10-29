@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -41,18 +41,18 @@
 
 $require_current_course = true;
 require_once '../../../include/init.php';
-
-$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
-
-$clarolineRepositoryWeb = $urlServer . "courses/" . $course_code;
-
-// lib of this tool
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/document/doc_init.php';
 
+$TABLEUSERMODULEPROGRESS = "lp_user_module_progress";
+$clarolineRepositoryWeb = $urlServer . "courses/" . $course_code;
+doc_init();
+
 function directly_pass_lp_module($table, $userid, $lpmid) {
+    global $course_id;
+    
     // if credit was already set this query changes nothing else it update the query made at the beginning of this script
     $sql = "UPDATE `" . $table . "`
                SET `credit` = 1,
@@ -63,6 +63,7 @@ function directly_pass_lp_module($table, $userid, $lpmid) {
              WHERE `user_id` = ?d
                AND `learnPath_module_id` = ?d";
     Database::get()->query($sql, $userid, $lpmid);
+    triggerLPGame($course_id, $userid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
 }
 
 if (isset($_GET['viewModule_id']) && !empty($_GET['viewModule_id'])) {
@@ -91,6 +92,7 @@ if ($uid) { // if not anonymous
         Database::get()->query("INSERT INTO `lp_user_module_progress`
 	            ( `user_id` , `learnPath_id` , `learnPath_module_id`, `lesson_location`, `suspend_data` )
 	            VALUES (?d , ?d, ?d, '', '')", $uid, $_SESSION['path_id'], $learnPathModuleId);
+        triggerLPGame($course_id, $uid, $_SESSION['path_id'], LearningPathEvent::UPDPROGRESS);
     }
 }  // else anonymous : record nothing !
 // Get info about launched module
@@ -116,6 +118,7 @@ switch ($module->contentType) {
         }
 
         $moduleStartAssetPage = $furl;
+        $_SESSION['FILE_PHP__LP_MODE'] = true;
         break;
 
     case CTEXERCISE_ :
@@ -162,7 +165,7 @@ switch ($module->contentType) {
         }
 
         if (MultimediaHelper::isSupportedFile($assetPath)) {
-            $moduleStartAssetPage = "showMedia.php?course=$course_code&amp;id=" . $assetPath;
+            $moduleStartAssetPage = "showMedia.php?course=$course_code&amp;id=" . $assetPath . "&amp;viewModule_id=$_SESSION[lp_module_id]";
         } else {
             $moduleStartAssetPage = htmlspecialchars($urlServer
                     . "modules/video/index.php?course=$course_code&action=download&id=" . $assetPath
@@ -175,10 +178,10 @@ switch ($module->contentType) {
         }
 
         if (MultimediaHelper::isEmbeddableMedialink($assetPath)) {
-            $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=" . $assetPath;
+            $moduleStartAssetPage = "showMediaLink.php?course=$course_code&amp;id=" . urlencode($assetPath) . "&amp;viewModule_id=$_SESSION[lp_module_id]";
         } else {
             $moduleStartAssetPage = $assetPath;
-        }
+        }        
         break;
 } // end switch
 

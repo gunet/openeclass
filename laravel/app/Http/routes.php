@@ -10,18 +10,27 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::group(['prefix' => 'api/v1'], function()
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+Route::group(['prefix' => 'api/v1', 'middleware' => ['api']], function()
 {
     //This line is needed so that Fractal Lib returns collections and items in similar 
     //format (i.e. in a data array)
     App::bind('League\Fractal\Serializer\SerializerAbstract', 'League\Fractal\Serializer\DataArraySerializer');
 
     //Using resource Controllers (http://laravel.com/docs/5.0/controllers#restful-resource-controllers)
-    Route::resource('courses', 'Api\V1\CourseController', ['only' => ['index', 'show']]);
+    Route::resource('routes', 'Api\V1\RouteController', ['only' => ['index']]);
+});
+
+Route::group(['prefix' => 'api/v1', 'middleware' => ['apiInit']], function()
+{
+    //This line is needed so that Fractal Lib returns collections and items in similar 
+    //format (i.e. in a data array)
+    App::bind('League\Fractal\Serializer\SerializerAbstract', 'League\Fractal\Serializer\DataArraySerializer');
+
+    //Using resource Controllers (http://laravel.com/docs/5.0/controllers#restful-resource-controllers)
+    Route::resource('courses', 'Api\V1\CourseController', ['only' => ['index', 'show', 'store']]);
     Route::resource('courses.assignments', 'Api\V1\AssignmentController');
 });
 
@@ -47,7 +56,7 @@ Route::bind('courses', function($value)
 */
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get('test', function () {     
-        return view('welcome');
-    });    
+//    Route::get('test', function () {     
+//        return view('welcome');
+//    });    
 });

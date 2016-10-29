@@ -22,10 +22,14 @@
 require_once '../include/baseTheme.php';
 
 $nameTools = $langCopyright;
-$tool_content .= "<p align=justify>$langCopyrightNotice</p>";
 
-if (isset($_SESSION['uid'])) {
-    draw($tool_content, 1);
-} else {
-    draw($tool_content, 0);
-}
+$data['menuTypeID'] = isset($_SESSION['uid'])? 1: 0;
+$data['action_bar'] = action_bar(array(
+    array('title' => $langBack,
+          'url' => $urlServer,
+          'icon' => 'fa-reply',
+          'level' => 'primary-label',
+          'button-class' => 'btn-default')), false);
+
+
+view('info.copyright', $data);

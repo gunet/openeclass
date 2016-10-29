@@ -37,12 +37,12 @@ require_once 'modules/blog/class.blog.php';
 require_once 'modules/blog/class.blogpost.php';
 require_once 'include/course_settings.php';
 require_once 'modules/sharing/sharing.php';
+require_once 'modules/game/BlogEvent.php';
 
 if ($blog_type == 'course_blog') {
     $user_id = 0;
     
     define_rss_link();
-    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
     $toolName = $langBlog;
     
     //check if commenting is enabled for course blogs
@@ -124,10 +124,12 @@ $num_chars_teaser_break = 500;//chars before teaser break
 
 if ($blog_type == 'course_blog' && $is_editor) {
     if ($action == "settings") {
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langGeneralSettings;
     } elseif ($action == "createPost") {
         $pageName = $langBlogAddPost;
     } elseif ($action == "editPost") {
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBlog);
         $pageName = $langEditChange;
     }
     $tool_content .= action_bar(array(
@@ -319,6 +321,7 @@ if ($action == "delPost") {
         if ($allow_to_edit) {
             if($post->delete()) {
                 Session::Messages($langBlogPostDelSucc, 'alert-success');
+                triggerGame($course_id, $uid, BlogEvent::DELPOST);
             } else {
                 Session::Messages($langBlogPostDelFail);
             }
@@ -406,6 +409,8 @@ if ($action == "editPost") {
         if ($blog_type == 'course_blog') {
             $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
         } elseif ($blog_type == 'perso_blog') {
+            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]", 'name' => $langBlog);
+            $pageName = $langEditChange;
             $allow_to_edit = $is_blog_editor;
         }
         if ($allow_to_edit) {
@@ -497,6 +502,7 @@ if ($action == "savePost") {
             }
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id, $commenting)) {
                 Session::Messages($langBlogPostSaveSucc, 'alert-success');
+                triggerGame($course_id, $uid, BlogEvent::NEWPOST);
             } else {
                 Session::Messages($langBlogPostSaveFail);
             }
@@ -754,4 +760,14 @@ if ($blog_type == 'course_blog') {
     draw($tool_content, 2, null, $head_content);
 } elseif ($blog_type == 'perso_blog') {
     draw($tool_content, 1, null, $head_content);
+}
+
+function triggerGame($courseId, $uid, $eventName) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = BlogEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_BLOG;
+    
+    BlogEvent::trigger($eventName, $eventData);
 }

@@ -47,8 +47,6 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = "Path";
 
-define('CLARO_FILE_PERMISSIONS', 0777);
-
 include "../../include/baseTheme.php";
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
@@ -59,7 +57,7 @@ require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_LP);
 /* * *********************************** */
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 $style = "";
 
@@ -256,13 +254,13 @@ if ($is_editor) {
                         $style = "caution";
                         $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                         <div class='form-group'>
-                            <label for='newPathName' class='col-sm-2 control-label'>$langLearningPathName:</label>
+                            <label for='newPathName' class='col-sm-2 control-label'>$langName:</label>
                             <div class='col-sm-10'>
                               <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='newComment' class='col-sm-2 control-label'>$langDescr:</label>
+                            <label for='newComment' class='col-sm-2 control-label'>$langDescription:</label>
                             <div class='col-sm-10'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
@@ -295,13 +293,13 @@ if ($is_editor) {
                     ));
                     $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                         <div class='form-group'>
-                            <label for='newPathName' class='col-sm-2 control-label'>$langLearningPathName:</label>
+                            <label for='newPathName' class='col-sm-2 control-label'>$langName:</label>
                             <div class='col-sm-10'>
                               <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='newComment' class='col-sm-2 control-label'>$langDescr:</label>
+                            <label for='newComment' class='col-sm-2 control-label'>$langDescription:</label>
                             <div class='col-sm-10'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
@@ -390,7 +388,7 @@ if ($is_editor) {
                         'icon' => 'fa-plus-circle',
                         'level' => 'primary-label',
                         'button-class' => 'btn-success'),
-                    array('title' => $langimportLearningPathSort,
+                    array('title' => $langInsert,
                         'url' => "importLearningPath.php?course=$course_code",
                         'icon' => 'fa-upload',
                         'level' => 'primary-label',
@@ -447,7 +445,9 @@ if ($uid) {
 }
 
 // list available learning paths
-$sql = "SELECT LP.* , MIN(UMP.`raw`) AS minRaw, LP.`lock`
+$sql = "SELECT MIN(LP.name) AS name, MIN(UMP.`raw`) AS minRaw,
+               MIN(LP.`lock`) AS `lock`, MIN(LP.visible) AS visible,
+               MIN(LP.learnPath_id) AS learnPath_id
            FROM `lp_learnPath` AS LP
      LEFT JOIN `lp_rel_learnPath_module` AS LPM
             ON LPM.`learnPath_id` = LP.`learnPath_id`
@@ -457,7 +457,7 @@ $sql = "SELECT LP.* , MIN(UMP.`raw`) AS minRaw, LP.`lock`
          WHERE 1=1
              $visibility
          AND LP.`course_id` = ?d
-      GROUP BY LP.`learnPath_id`
+      GROUP BY LP.`learnPath_id`, LP.`course_id`
       ORDER BY LP.`rank`";
 
 $result = Database::get()->queryArray($sql, $course_id);

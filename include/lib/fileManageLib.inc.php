@@ -56,13 +56,13 @@ function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "") {
                                  WHERE $group_sql AND
                                        path LIKE ?s", ($oldPath . '%'));
         if ($subsystem == COMMON) {
-            // For common documents, delete all references            
+            // For common documents, delete all references
             Database::get()->query("DELETE FROM `$dbTable`
                                          WHERE extra_path LIKE ?s", ('common:' . $oldPath . '%'));
         }
         Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
                                                                   'filename' => $filename));
-    } elseif ($action == "update") {        
+    } elseif ($action == "update") {
         Database::get()->query("UPDATE `$dbTable`
                                  SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
                                  WHERE $group_sql AND path LIKE ?s", ($oldPath . '%'));
@@ -203,7 +203,7 @@ function move_dir($src, $dest) {
             die("<br>Error! a file named $dest already exists\n");
         }
     } else {
-        mkdir($dest, 0775, true);
+        make_dir($dest);
     }
 
     $handle = opendir($src);
@@ -241,7 +241,7 @@ function move_dir($src, $dest) {
 function copyDirTo($origDirPath, $destination) {
     // extract directory name - create it at destination - update destination trail
     $dirName = my_basename($origDirPath);
-    mkdir($destination . "/" . $dirName, 0775);
+    make_dir($destination . '/' . $dirName);
     $destinationTrail = $destination . "/" . $dirName;
 
     $cwd = getcwd();
@@ -275,7 +275,7 @@ function copyDirTo($origDirPath, $destination) {
 function directory_list() {
     global $group_sql;
 
-    $dirArray = array();
+    $sortedDirs = $dirArray = array();
 
     $r = Database::get()->queryArray("SELECT filename, path FROM document WHERE $group_sql AND format = '.dir'");
     foreach ($r as $row) {
@@ -293,63 +293,25 @@ function directory_list() {
 }
 
 /*
- * Returns HTML form select element listing all directories in current course documents
- * excluding the one with path $entryToExclude and all under $directoryToExclude
+ * Return a list of info for directories in the current course documents
+ * excluding the one with path $entryToExclude and all under $directoryToExclude.
+ * Each entry contains filename, path, disabled and depth attributes.
  */
 function directory_selection($source_value, $command, $entryToExclude, $directoryToExclude) {
-    global $langParentDir, $langTo, $langMove, $langCancel;
-    global $groupset;
-
-    $backUrl = documentBackLink($entryToExclude);
-    
-    if (!empty($groupset)) {
-        $groupset = '?' . $groupset;
-    }
     $dirList = directory_list();
-    $dialogBox = "
-        <div class='row'>
-            <div class='col-xs-12'>
-                <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]$groupset' method='post'>
-                        <fieldset>
-                                <input type='hidden' name='source' value='".q($source_value)."'>
-                                <div class='form-group'>
-                                    <label for='$command' class='col-sm-2 control-label' >$langMove $langTo:</label>
-                                    <div class='col-sm-10'>
-                                        <select name='$command' class='form-control'>";
-                                        if ($entryToExclude !== '/' and $entryToExclude !== '') {
-                                            $dialogBox .= "<option value=''>$langParentDir</option>";
-                                        }
-
-                                        /* build html form inputs */
-                                        foreach ($dirList as $path => $filename) {
-                                            $disabled = '';
-                                            $depth = substr_count($path, '/');
-                                            $tab = str_repeat('&nbsp;&nbsp;&nbsp;', $depth);
-                                            if ($directoryToExclude !== '/' and $directoryToExclude !== '') {
-                                                $disabled = (strpos($path, $directoryToExclude) === 0)? ' disabled': '';
-                                            }
-                                            if ($disabled === '' and $entryToExclude !== '/' and $entryToExclude !== '') {
-                                                $disabled = ($path === $entryToExclude)? ' disabled': '';
-                                            }
-                                            $dialogBox .= "<option$disabled value='".q($path)."'>$tab".q($filename)."</option>";
-                                        }
-                                    $dialogBox .= "</select>
-                                        </div>
-                                </div>
-                                <div class='form-group'>
-                                    <div class='col-sm-offset-2 col-sm-10'>
-                                        <input class='btn btn-primary' type='submit' value='$langMove' >
-                                        <a href='$backUrl' class='btn btn-default' >$langCancel</a>
-                                    </div>
-                                </div>
-                        </fieldset>
-                    </form>
-                </div>
-            </div>
-        </div>";
-        
-    return $dialogBox;
+    $items = array();
+    foreach ($dirList as $path => $filename) {
+        $disabled = false;
+        $depth = substr_count($path, '/');
+        if ($directoryToExclude !== '/' and $directoryToExclude !== '') {
+            $disabled = (strpos($path, $directoryToExclude) === 0);
+        }
+        if (!$disabled and $entryToExclude !== '/' and $entryToExclude !== '') {
+            $disabled = ($path === $entryToExclude);
+        }
+        $items[] = (object) compact('disabled', 'path', 'filename', 'depth');
+    }
+    return $items;
 }
 
 
@@ -373,7 +335,7 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
     if ($v === 0) {
         die("error: " . $zipfile->errorInfo(true));
     }
-    
+
     $real_paths = array();
     if (isset($GLOBALS['common_docs'])) {
         foreach ($GLOBALS['common_docs'] as $path => $real_path) {
@@ -402,17 +364,17 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
     $prefix = strlen(preg_replace('|[^/]*$|', '', $downloadDir)) - 1;
     $encoded_filenames = $decoded_filenames = $filename = array();
 
-    $hidden_dirs = array();    
+    $hidden_dirs = array();
     $sql = Database::get()->queryArray("SELECT path, filename, visible, format, extra_path, public FROM document
                                 WHERE $group_sql AND
                                       path LIKE '$downloadDir%'");
     foreach ($sql as $files) {
-        if ($cpath = common_doc_path($files->extra_path, true)) {            
+        if ($cpath = common_doc_path($files->extra_path, true)) {
             if ($GLOBALS['common_doc_visible'] and ($include_invisible or $files->visible == 1)) {
                 $GLOBALS['common_docs'][$files->path] = $cpath;
             }
         }
-        $GLOBALS['path_visibility'][$files->path] = ($include_invisible or resource_access($files->visible, $files->public));        
+        $GLOBALS['path_visibility'][$files->path] = ($include_invisible or resource_access($files->visible, $files->public));
         array_push($encoded_filenames, $files->path);
         array_push($filename, $files->filename);
         if (!$include_invisible and $files->format == '.dir' and !resource_access($files->visible, $files->public)) {
@@ -452,7 +414,7 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
 
 /**
  * Check if a path (from document table extra_path field) points to a common
- * document and if so return the full path on disk, else return false. 
+ * document and if so return the full path on disk, else return false.
  * Sets global $common_doc_visible = false if file pointed to is invisible
  *
  * @global string $webDir
@@ -600,7 +562,7 @@ function claro_copy_file($sourcePath, $targetPath) {
         if (preg_match('|^' . $sourcePath . '/|', $targetPath . '/'))
             return false;
 
-        if (!claro_mkdir($targetPath . '/' . $fileName, CLARO_FILE_PERMISSIONS))
+        if (!make_dir($targetPath . '/' . $fileName))
             return false;
 
         $dirHandle = opendir($sourcePath);
@@ -627,55 +589,6 @@ function claro_copy_file($sourcePath, $targetPath) {
 
         return true;
     } // end elseif is_dir()
-}
-
-/*
- * create directory
- *
- * @param string  $pathname
- * @param int     $mode directory permission (optional)
- * @param boolean $recursive (optional)
- * @return boolean TRUE if succeed, false otherwise
- */
-
-function claro_mkdir($pathName, $mode = 0777, $recursive = false) {
-    global $webDir;
-
-    if ($recursive) {
-        if (strstr($pathName, $webDir) !== false) {
-            /* Remove rootSys path from pathName for system with safe_mode or open_basedir restrictions
-              Functions (like file_exists, mkdir, ...) return false for files inaccessible with these restrictions
-             */
-
-            $pathName = str_replace($webDir, '', $pathName);
-            $dirTrail = $webDir;
-        } else {
-            $dirTrail = '';
-        }
-
-        $dirList = explode('/', str_replace('\\', '/', $pathName));
-        $dirList[0] = empty($dirList[0]) ? '/' : $dirList[0];
-        foreach ($dirList as $thisDir) {
-            $dirTrail .= empty($dirTrail) ? $thisDir : '/' . $thisDir;
-
-            if (file_exists($dirTrail)) {
-                if (is_dir($dirTrail)) {
-                    continue;
-                } else {
-                    return false;
-                }
-            }
-            else {
-                if (!mkdir($dirTrail, $mode)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-    else {
-        return mkdir($pathName, $mode);
-    }
 }
 
 /* ----------- end of backported functions from Claroline 1.7.x ----------- */

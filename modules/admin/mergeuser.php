@@ -34,23 +34,22 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
 
 if (isset($_REQUEST['u'])) {
-    $u = intval(getDirectReference($_REQUEST['u']));
+    $data['u'] = $u = intval(getDirectReference($_REQUEST['u']));
     $navigation[] = array('url' => "edituser.php?u=$u", 'name' => $langEditUser);
     if ($u == 1 or get_admin_rights($u) >= 0) {
-        $tool_content = "<div class='alert alert-danger'>$langUserMergeAdminForbidden</div>";
-        draw($tool_content, 3);
-        exit;
+        Session::Messages($langUserMergeAdminForbidden, 'alert-danger');
+        redirect_to_home_page("modules/admin/edituser.php?u=$u");
     }
     $info = Database::get()->querySingle("SELECT * FROM user WHERE id = ?s", $u);
     if ($info) {
         $info = (array) $info;
-        $auth_id = isset($auth_ids[$info['password']]) ? $auth_ids[$info['password']] : 1;
+        $data['auth_id'] = isset($auth_ids[$info['password']]) ? $auth_ids[$info['password']] : 1;
         $legend = q(sprintf($langUserMergeLegend, $info['username']));
-        $status_names = array(USER_GUEST => $langGuest, USER_TEACHER => $langTeacher, USER_STUDENT => $langStudent);
+        $data['status_names'] = $status_names = array(USER_GUEST => $langGuest, USER_TEACHER => $langTeacher, USER_STUDENT => $langStudent);
         $target = false;
         
         $pageName = $legend;
-        $tool_content .= action_bar(array(            
+        $data['action_bar'] = action_bar(array(            
             array('title' => $langBack,
                 'url' => "index.php",
                 'icon' => 'fa-reply',
@@ -63,11 +62,11 @@ if (isset($_REQUEST['u'])) {
             else
                 $target = false;
         }
-        $target_field = $target_user_input = '';
-        $submit_button = $langSearch;
+        $data['target_field'] = $data['target_user_input'] = '';
+        $data['submit_button'] = $langSearch;
         if ($target) {
             $target_auth_id = isset($auth_ids[$target['password']]) ? $auth_ids[$target['password']] : 1;
-            $target_field .= "<div class='form-group'><label class='col-sm-3 control-label'>$langUserMergeTarget:</label>
+            $data['target_field'] .= "<div class='form-group'><label class='col-sm-3 control-label'>$langUserMergeTarget:</label>
                                               <div class='col-sm-9'>" . display_user($target['id']) .
                     " (" . q($target['username']) . ")</div></div>
                                     <div class='form-group'><label class='col-sm-3 control-label'>$langEditAuthMethod:</label>
@@ -76,53 +75,27 @@ if (isset($_REQUEST['u'])) {
                                               <div class='col-sm-9'>" . q($status_names[$target['status']]) . "</div></div>";
             if ($info['status'] == USER_TEACHER and $target['status'] != USER_TEACHER) {
                 $target = false;
-                $target_field .= "<div class='alert alert-warning'>$langUserMergeForbidden</div>";
+                $data['target_field'] .= "<div class='alert alert-warning'>$langUserMergeForbidden</div>";
             } else {
                 if ($_POST['submit'] == $langUserMerge) {
                     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
                     checkSecondFactorChallenge();
                     do_user_merge($info, $target);
                 }
-                $submit_button = $langUserMerge;
-                $target_user_input = '<input type="hidden" name="target" value="' .
+                $data['submit_button'] = $langUserMerge;
+                $data['target_user_input'] = '<input type="hidden" name="target" value="' .
                         q($target['username']) . '">';
             }
         }
         if (!$target) {
-            $target_field .= "<div class='form-group'><label class='col-sm-3 control-label'>$langUserMergeTarget:</label>
+            $data['target_field'] .= "<div class='form-group'><label class='col-sm-3 control-label'>$langUserMergeTarget:</label>
                                               <div class='col-sm-9'><input type='text' name='target' size='50'></div></div>";
         }                
-        $tool_content = "<div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
-                 <fieldset>                                    
-                   <div class='form-group'>
-                     <label class='col-sm-3 control-label'>$langUser:</label>
-                        <div class='col-sm-9'>" . display_user($info['id']) . "</div>
-                    </div>
-                    <div class='form-group'>
-                    <label class='col-sm-3 control-label'>$langEditAuthMethod:</label>
-                         <div class='col-sm-9'>" . get_auth_info($auth_id) . "</div>
-                    </div>
-                    <div class='form-group'>
-                    <label class='col-sm-3 control-label'>$langProperty:</label>                     
-                         <div class='col-sm-9'>" . q($status_names[$info['status']]) . "</div>
-                    </div>                    
-                     $target_field
-                    <input type='hidden' name='u' value='" . getIndirectReference($u) . "'>
-                    ".showSecondFactorChallenge()."
-                     <div class='col-sm-offset-3 col-sm-9'>                                                  
-                           <input class='btn btn-primary' type='submit' name='submit' value='$submit_button'>
-                    </div>                                                  
-                 </fieldset>
-                 $target_user_input
-                 ". generate_csrf_token_form_field() ."
-               </form></div>";
     }
-} else {
-    $tool_content .= "<div class='alert alert-danger'>$langError<br><a href='search_user.php'>$langBack</div>";
+    $data['info'] = $info;
 }
-
-draw($tool_content, 3, null, $head_content);
+$data['menuTypeID'] = 3;
+view('admin.users.mergeuser', $data);
 
 
 /**
@@ -187,11 +160,8 @@ function do_user_merge($source, $target) {
         fix_table('user_department', 'user', $source_id, $target_id);
         fix_table('custom_profile_fields_data', 'user_id', $source_id, $target_id);
 
-        $tool_content = sprintf('<div class="alert alert-success">' . $langUserMergeSuccess . '</div>', '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>') .
-                "<p><a href='search_user.php'>$langBack</p>";
-
-        draw($tool_content, 3);
-        exit;
+        Session::Messages(sprintf($langUserMergeSuccess, '<b>' . q($source['username']) . '</b>', '<b>' . q($target['username']) . '</b>'), 'alert-success');
+        redirect_to_home_page('modules/admin/search_user.php');
     }
 }
 

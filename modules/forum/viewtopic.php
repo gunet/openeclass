@@ -25,13 +25,12 @@ $require_login = true;
 $require_help = true;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
-require_once 'modules/forum/config.php';
 require_once 'modules/forum/functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/course_settings.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/abuse_report/abuse_report.php';
@@ -111,6 +110,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     }
     Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $post_id, 'forum_post');   
     Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
+    triggerGame($course_id, $uid, ForumEvent::DELPOST);
     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
     //orphan replies get -1 to parent_post_id
@@ -158,9 +158,9 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
 
 
 
-if ($paging and $total > $posts_per_page) {
+if ($paging and $total > POSTS_PER_PAGE) {
     $times = 0;
-    for ($x = 0; $x < $total; $x += $posts_per_page) {
+    for ($x = 0; $x < $total; $x += POSTS_PER_PAGE) {
         $times++;
     }
     $pages = $times;
@@ -196,12 +196,12 @@ if ($topic_locked == 1) {
                 ),false);
 }
 
-if ($paging and $total > $posts_per_page) {
+if ($paging and $total > POSTS_PER_PAGE) {
     $times = 1;
     if (isset($post_id)) {
         $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post WHERE topic_id = ?d AND post_time <= ?t", $topic, $myrow->post_time);
         $num = $result->c;
-        $_GET['start'] = (ceil($num / $posts_per_page) - 1) * $posts_per_page;
+        $_GET['start'] = (ceil($num / POSTS_PER_PAGE) - 1) * POSTS_PER_PAGE;
     }
 
     if (isset($_GET['start'])) {
@@ -210,13 +210,13 @@ if ($paging and $total > $posts_per_page) {
         $start = 0;
     }
 
-    $last_page = $start - $posts_per_page;
+    $last_page = $start - POSTS_PER_PAGE;
     if (isset($start) && $start > 0) {
         $pagination_btns = "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'><span aria-hidden='true'>&laquo;</span></a></li>";
     } else {
         $pagination_btns = "<li class='disabled'><a href='#'><span aria-hidden='true'>&laquo;</span></a></li>";
     }    
-    for ($x = 0; $x < $total; $x += $posts_per_page) {
+    for ($x = 0; $x < $total; $x += POSTS_PER_PAGE) {
         if ($start && ($start == $x)) {
             $pagination_btns .= "<li class='active'><a href='#'>$times</a></li>";
         } else if ($start == 0 && $x == 0) {
@@ -226,8 +226,8 @@ if ($paging and $total > $posts_per_page) {
         }
         $times++;
     }
-    if (($start + $posts_per_page) < $total) {
-        $next_page = $start + $posts_per_page;
+    if (($start + POSTS_PER_PAGE) < $total) {
+        $next_page = $start + POSTS_PER_PAGE;
         $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'><span aria-hidden='true'>&raquo;</span></a></li>";
     } else {
         $pagination_btns .= "<li class='disabled'><a href='#'><span aria-hidden='true'>&raquo;</span></a></li>";
@@ -243,7 +243,7 @@ if ($paging and $total > $posts_per_page) {
           </nav>
         ";
 } else {
-    if ($total > $posts_per_page) {
+    if ($total > POSTS_PER_PAGE) {
         $tool_content .= "
         <div class='clearfix margin-bottom-fat'>
           <nav>  
@@ -271,12 +271,12 @@ if (isset($_GET['all'])) {
     $result = Database::get()->queryArray("SELECT * FROM forum_post
 		WHERE topic_id = ?d
 		ORDER BY id
-                LIMIT $start, $posts_per_page", $topic);
+                LIMIT $start, " . POSTS_PER_PAGE . "", $topic);
 } else {
     $result = Database::get()->queryArray("SELECT * FROM forum_post
 		WHERE topic_id = ?d
 		ORDER BY id
-                LIMIT $posts_per_page", $topic);
+                LIMIT " . POSTS_PER_PAGE . "", $topic);
 }
 
 $count = 0;
@@ -373,7 +373,7 @@ Database::get()->query("UPDATE forum_topic SET num_views = num_views + 1
 
 $tool_content .= "</table></div>";
 
-if ($paging and $total > $posts_per_page) {
+if ($paging and $total > POSTS_PER_PAGE) {
     $tool_content .= "
         <nav>
             <ul class='pagination'>
@@ -385,7 +385,7 @@ if ($paging and $total > $posts_per_page) {
           </nav>
         ";    
 } else {
-    if ($total > $posts_per_page) {
+    if ($total > POSTS_PER_PAGE) {
         $tool_content .= "
         <div class='clearfix margin-bottom-fat'>
           <nav>  

@@ -42,59 +42,29 @@ class Hierarchy {
      * Add a node to the tree.
      *
      * @param  string $name           - The new node name
+     * @param  string $description    - The new node description
      * @param  int    $parentlft      - The new node's parent lft
      * @param  string $code           - The new node code
      * @param  int    $allow_course   - Flag controlling if courses are allowed to belong to this new node
-     * @param  int    $allow_user     - Flag controllinf if users are allowed to belong to this new node
+     * @param  int    $allow_user     - Flag controlling if users are allowed to belong to this new node
      * @param  int    $order_priority - Special order priority for the node, the higher the value the higher place in the displayed order
+     * @param  int    $visible        - Visibility flag for the new node
      * @return int    $ret            - The new node id
      */
-    public function addNode($name, $parentlft, $code, $allow_course, $allow_user, $order_priority) {
+    public function addNode($name, $description, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible) {
         $ret = null;
 
         if ($this->useProcedures()) {
-            $ret = Database::get()->query("CALL add_node(?s, ?d, ?s, ?d, ?d, ?d)", $name, $parentlft, $code, $allow_course, $allow_user, $order_priority)->lastInsertID;
+            $ret = Database::get()->query("CALL add_node(?s, ?s, ?d, ?s, ?d, ?d, ?d, ?d)", $name, $description, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible)->lastInsertID;
         } else {
             $lft = $parentlft + 1;
             $rgt = $parentlft + 2;
 
             $this->shiftRight($parentlft);
 
-            $query = "INSERT INTO hierarchy (name, lft, rgt, code, allow_course, allow_user, order_priority) "
-                    . "VALUES (?s, ?d, ?d, ?s, ?d, ?d, ?d)";
-            $ret = Database::get()->query($query, $name, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority)->lastInsertID;
-        }
-
-        return $ret;
-    }
-
-    /**
-     * Add a node to the tree requiring extra arguments (number and generator).
-     *
-     * @param  string $name           - The new node name
-     * @param  int    $parentlft      - The new node's parent lft
-     * @param  string $code           - The new node code
-     * @param  int    $number         - The new node number
-     * @param  int    $generator      - The new node generator
-     * @param  int    $allow_course   - Flag controlling if courses are allowed to belong to this new node
-     * @param  int    $allow_user     - Flag controllinf if users are allowed to belong to this new node
-     * @param  int    $order_priority - Special order priority for the node, the higher the value the higher place in the displayed order
-     * @return int    $ret            - The new node id
-     */
-    public function addNodeExt($name, $parentlft, $code, $number, $generator, $allow_course, $allow_user, $order_priority) {
-        $ret = null;
-
-        if ($this->useProcedures()) {
-            $ret = Database::get()->query("CALL add_node_ext(?s, ?d, ?s, ?d, ?d, ?d, ?d, ?d)", $name, $parentlft, $code, $number, $generator, $allow_course, $allow_user, $order_priority)->lastInsertID;
-        } else {
-            $lft = $parentlft + 1;
-            $rgt = $parentlft + 2;
-
-            $this->shiftRight($parentlft);
-
-            $query = "INSERT INTO hierarchy (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) "
-                    . "VALUES (?s, ?d, ?d, ?s, ?d, ?d, ?d, ?d, ?d)";
-            $ret = Database::get()->query($query, $name, $lft, $rgt, $code, $number, $generator, $allow_course, $allow_user, $order_priority)->lastInsertID;
+            $query = "INSERT INTO hierarchy (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) "
+                    . "VALUES (?s, ?s, ?d, ?d, ?s, ?d, ?d, ?d, ?d)";
+            $ret = Database::get()->query($query, $name, $description, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority, $visible)->lastInsertID;
         }
 
         return $ret;
@@ -105,23 +75,25 @@ class Hierarchy {
      *
      * @param int    $id             - The id of the node to update
      * @param string $name           - The new name for the node
+     * @param string $description    - The new description for the node
      * @param int    $nodelft        - The new parent lft value
      * @param int    $lft            - The node's current lft value
      * @param int    $rgt            - The node's current rgt value
      * @param int    $parentlft      - The old parent lft value
      * @param string $code           - The new code for the node
-     * @param int    $allow_course   - Flag controlling if courses are allowed to belong to this new node
-     * @param int    $allow_user     - Flag controllinf if users are allowed to belong to this new node
+     * @param int    $allow_course   - Flag controlling if courses are allowed to belong to this node
+     * @param int    $allow_user     - Flag controlling if users are allowed to belong to this node
      * @param int    $order_priority - Special order priority for the node, the higher the value the higher place in the displayed order
+     * @param int    $visible        - Visibility flag for the new node
      */
-    public function updateNode($id, $name, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority) {
+    public function updateNode($id, $name, $description, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible) {
         if ($this->useProcedures()) {
-            Database::get()->query("CALL update_node(?d, ?s, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?d)", $id, $name, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority);
+            Database::get()->query("CALL update_node(?d, ?s, ?s, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?d, ?d)", $id, $name, $description, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority, $visible);
         } else {
-            $query = "UPDATE hierarchy SET name = ?s, lft = ?d, rgt = ?d,
+            $query = "UPDATE hierarchy SET name = ?s, description = ?s, lft = ?d, rgt = ?d,
                     code = ?s, allow_course = ?d, allow_user = ?d,
-                    order_priority = ?d WHERE id = ?d";
-            Database::get()->query($query, $name, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority, $id);
+                    order_priority = ?d, visible = ?d WHERE id = ?d";
+            Database::get()->query($query, $name, $description, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority, $visible, $id);
 
             if ($nodelft != $parentlft) {
                 $this->moveNodes($nodelft, $lft, $rgt);
@@ -641,7 +613,7 @@ jContent;
 
             $html .= '<input id="dialog-set-key" type="hidden" ' . $params . ' value="' . $defs[0] . '" />';
             $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#' . $defs[0] . '\', true, null);' : '';
-            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . $def . '" />&nbsp;';
+            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . js_escape($def) . '" />&nbsp;';
         }
 
         $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">
@@ -687,8 +659,8 @@ jContent;
                 $i = 0;
                 foreach ($defaults as $def) {
                     $html .= '<p id="nd_' . $i . '">';
-                    $html .= '<input type="hidden" ' . $params . ' value="' . $def . '" />';
-                    $html .= $this->getFullPath(getDirectReference($def));
+                    $html .= '<input type="hidden" ' . $params . ' value="' . getIndirectReference($def) . '" />';
+                    $html .= $this->getFullPath($def);
                     $html .= '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></span></a></p>';
                     $i++;
                 }
@@ -720,7 +692,7 @@ jContent;
 
             $html .= '<input id="dialog-set-key" type="hidden" ' . $params . ' value="' . getIndirectReference($defs[0]) . '" />';
             $onclick = (!empty($defs[0])) ? '$( \'#js-tree\' ).jstree(\'select_node\', \'#' . getIndirectReference($defs[0]) . '\', true, null);' : '';
-            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . $def . '" />&nbsp;';
+            $html .= '<input class="form-control" id="dialog-set-value" type="text" onclick="' . $onclick . ' $( \'#treeModal\' ).modal(\'show\');" onfocus="' . $onclick . ' $(\'#treeModal\').modal(\'show\');" value="' . js_escape($def) . '" />&nbsp;';
         }
 
         $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">
@@ -1073,10 +1045,10 @@ jContent;
      * @param  array    $nodes         - The nodes (full sql row) whose children we want to navigate to
      * @param  string   $url           - The php script to call in the navigational URLs
      * @param  function $countCallback - An optional closure that will be used for the counting
-     * @param  bool     $showEmpty     - Whether to display nodes with count == 0
+     * @param  array    $options       - Display options (showEmpty => whether to display nodes with count == 0, respectVisibility => whether to hide nodes according to visible setting)
      * @return string   $ret           - The returned HTML output
      */
-    public function buildNodesNavigationHtml($nodes, $url, $countCallback = null, $showEmpty = true, $subtrees = array()) {
+    public function buildNodesNavigationHtml($nodes, $url, $countCallback = null, $options = array('showEmpty' => true, 'respectVisibility' => true), $subtrees = array()) {
         global $langAvCours, $langAvCourses;
         $ret = '';
 
@@ -1121,6 +1093,7 @@ jContent;
                 $id = intval($key);
                 $code = $node->code;
                 $name = self::unserializeLangField($node->name);
+                $description = self::unserializeLangField($node->description);
                 $count = 0;
                 
                 if (isset($subtrees[$id])) {
@@ -1135,10 +1108,16 @@ jContent;
                     }
                 }
                 
-                if ($showEmpty || $count > 0) {
+                if ($options['showEmpty'] || $count > 0) {
+                    if (!$this->checkVisibilityRestrictions($id, $node->visible, $options)) {
+                        continue;
+                    }
+
                     $ret .= "<li class='list-group-item' ><a href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
                     $ret .= (strlen(q($code)) > 0) ? "&nbsp;(" . q($code) . ")" : '';
-                    $ret .= "<small>&nbsp;&nbsp;-&nbsp;&nbsp;" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</small></li>";
+                    $ret .= "<small>&nbsp;&nbsp;-&nbsp;&nbsp;" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</small>";
+                    $ret .= (strlen(q($description)) > 0) ? "<br/><br/> " . $description : '';
+                    $ret .= "</li>";
                 }
             }
         }
@@ -1152,10 +1131,10 @@ jContent;
      * @param  int      $depid         - The node's id whose children we want to navigate to
      * @param  string   $url           - The php script to call in the navigational URLs
      * @param  function $countCallback - An optional closure that will be used for the counting
-     * @param  bool     $showEmpty     - Whether to display nodes with count == 0
+     * @param  array    $options       - Display options (showEmpty => whether to display nodes with count == 0, respectVisibility => whether to hide nodes according to visible setting)
      * @return array    $ret           - An array containing the children count and the HTML output
      */
-    public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null, $showEmpty = true) {
+    public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null, $options = array('showEmpty' => true, 'respectVisibility' => true)) {
         $parent = Database::get()->querySingle("select lft, rgt from hierarchy where id = ?d", $depid);
         if (!$parent) {
             return " ";
@@ -1166,7 +1145,7 @@ jContent;
         $chCnt = count($children);
         
         if ($chCnt > 0) {
-            return array($chCnt, $this->buildNodesNavigationHtml($children, $url, $countCallback, $showEmpty, $subtrees));
+            return array($chCnt, $this->buildNodesNavigationHtml($children, $url, $countCallback, $options, $subtrees));
         } else {
             return array($chCnt, " ");
         }
@@ -1176,11 +1155,14 @@ jContent;
      * Build an HTML Select box for selecting among the root nodes.
      *
      * @param  int    $currentNode - The id of the current node
+     * @param  array  $options     - Display options (respectVisibility => whether to hide nodes according to visible setting)
      * @return string $ret         - The returned HTML output
      */
-    public function buildRootsSelection($currentNode, $params = '') {
+    public function buildRootsSelection($currentNode, $params = '', $options = array('respectVisibility' => true)) {
+        global $uid;
+        
         // select root nodes
-        $res = Database::get()->queryArray("SELECT node.id, node.name
+        $res = Database::get()->queryArray("SELECT node.id, node.name, node.visible
                           FROM hierarchy AS node
                          WHERE node.id IN (" . implode(', ', $this->buildRootIdsArray()) . ")");
 
@@ -1194,6 +1176,9 @@ jContent;
             // construct array with names
             $nodenames = array();
             foreach ($res as $node) {
+                if (!$this->checkVisibilityRestrictions($node->id, $node->visible, $options)) {
+                    continue;
+                }
                 $nodenames[$node->id] = self::unserializeLangField($node->name);
             }
             asort($nodenames);
@@ -1213,18 +1198,51 @@ jContent;
      * Build an HTML Form/Header box for selecting among the root nodes.
      *
      * @param  int    $currentNode - The id of the current node
+     * @param  array  $options     - Display options (respectVisibility => whether to hide nodes according to visible setting)
      * @return string $ret         - The returned HTML output
      */
-    public function buildRootsSelectForm($currentNode) {
+    public function buildRootsSelectForm($currentNode, $options = array('respectVisibility' => true)) {
         global $langSelectFac;
 
         $ret  = "<div class='row'><div class='col-xs-12'>";
         $ret .= "<div class='form-wrapper'><form class='form-horizontal' role='form' name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>";
         $ret .= "<div class='form-group' style='margin-bottom: 0px;'>";
         $ret .= "<label class='col-sm-3 control-label'>$langSelectFac:</label>";
-        $ret .= $this->buildRootsSelection($currentNode, "name='fc' onChange='document.depform.submit();'");
+        $ret .= $this->buildRootsSelection($currentNode, "name='fc' onChange='document.depform.submit();'", $options);
         $ret .= "</div></form></div></div></div>";
         return $ret;
+    }
+
+    /**
+     * Check if a user can view or access a hierarchy node.
+     *
+     * @global int     $uid
+     * @param  int     $nodeId
+     * @param  int     $nodeVisibility
+     * @param  array   $options         - Display options (respectVisibility => whether to hide nodes according to visible setting)
+     * @return boolean $allow
+     */
+    public function checkVisibilityRestrictions($nodeId, $nodeVisibility, $options = array('respectVisibility' => true)) {
+        global $uid;
+        $allow = true;
+
+        // check access restrictions
+        if ($options['respectVisibility'] && ($uid != 1) && $nodeVisibility != NODE_OPEN) {
+            // hide if anonymous user or eponymous but node is hidden
+            if ($uid < 1 || $nodeVisibility == NODE_CLOSED) {
+                $allow = false;
+            } else {
+                // for eponymous users check subscription status
+                require_once('include/lib/user.class.php');
+                $user = new User();
+                $depIds = $user->getDepartmentIds($uid);
+                if (!in_array($nodeId, $depIds)) {
+                    $allow = false;
+                }
+            }
+        }
+
+        return $allow;
     }
 
 }

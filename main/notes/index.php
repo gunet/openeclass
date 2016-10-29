@@ -37,6 +37,9 @@ $require_login = true;
 $require_help = TRUE;
 $helpTopic = 'Notes';
 
+if(isset($_POST['setsessioncourse']) && $_POST['setsessioncourse'] == 1)
+    $require_current_course = TRUE;
+
 include '../../include/baseTheme.php';
 $require_valid_uid = true;
 require_once 'include/lib/textLib.inc.php';
@@ -55,11 +58,22 @@ $toolName = $langNotes;
 ModalBoxHelper::loadModalBox();
 load_js('tools.js');
 load_js('references.js');
+load_js('trunk8');
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
         $langEmptyNoteTitle . '";</script>';
+$head_content .= "<script>
+    $(document).ready(function(){
+            $('.note-content').each(function() {
+                $(this).trunk8({
+                    lines: '4',
+                    fill: '&hellip;<div class=\"announcements-more\"><a href=\"$_SERVER[SCRIPT_NAME]?nid=' +
+                        $(this).data('id') + '\">$langMore</a></div>'
+                });
+            })
+        });
+</script>";
 
 $noteNumber = Notes::count_user_notes();
-
 $displayForm = true;
 /* up and down commands */
 if (isset($_GET['down'])) {
@@ -83,7 +97,8 @@ if (isset($_POST['submitNote'])) {
     if($v->validate()) {
         $newTitle = $_POST['newTitle'];
         $newContent = $_POST['newContent'];
-        $refobjid = ($_POST['refobjid'] == "0") ? $_POST['refcourse'] : $_POST['refobjid'];
+        $refCourseId = (isset($_POST['setsessioncourse']) &&  $_POST['setsessioncourse'] == 1) ? "course:".$course_id:$_POST['refcourse'];
+        $refobjid = ($_POST['refobjid'] == "0") ? $refCourseId : $_POST['refobjid'];
         if (!empty($_POST['id'])) { //existing note
             $id = intval(getDirectReference($_POST['id']));
             Notes::update_note($id, $newTitle, $newContent, $refobjid);
@@ -145,9 +160,9 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
     <fieldset>
     <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")."'>
-        <label for='newTitle' class='col-sm-2 control-label'>$langNoteTitle:</label>
+        <label for='newTitle' class='col-sm-2 control-label'>$langTitle:</label>
         <div class='col-sm-10'>
-            <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langNoteTitle'>
+            <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langTitle'>
             <span class='help-block'>".Session::getError('newTitle')."</span>
         </div>
     </div>
@@ -260,7 +275,8 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             $tool_content .= "<br><small>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</small>";
         }
 
-        $tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?nid=" . getIndirectReference($note->id)."'> <span class='smaller'>[$langMore]</span></a></strong>"));
+        //$tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?nid=" . getIndirectReference($note->id)."'><span class='smaller'>[$langMore]</span></a></strong>"));
+        $tool_content .= "<div class = 'note-content' data-id= '" . getIndirectReference($note->id) . "'>$content</div>";
         $tool_content .= "</td>";
 
         $tool_content .= "<td class='option-btn-cell'>" .

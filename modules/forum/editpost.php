@@ -25,7 +25,6 @@ $require_login = TRUE;
 $require_help = FALSE;
 $require_editor = TRUE;
 require_once '../../include/baseTheme.php';
-require_once 'config.php';
 require_once 'functions.php';
 require_once 'modules/search/indexer.class.php';
 

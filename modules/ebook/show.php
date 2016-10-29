@@ -1,9 +1,8 @@
 <?php
 
 // playmode is used in order to re-use this script's logic via play.php
-$is_in_playmode = false;
-if (defined('SHOW_PHP__PLAY_MODE'))
-    $is_in_playmode = true;
+$is_in_playmode = defined('SHOW_PHP__PLAY_MODE');
+}
 
 if (stripos($_SERVER['REQUEST_URI'], '%5c') !== false) {
     header('HTTP/1.1 301 Moved Permanently');
@@ -57,6 +56,10 @@ if (count($path_components) >= 4) {
     $ebook_id = 0;
 }
 
+if ($not_found) {
+    not_found($uri);
+}
+
 $require_current_course = true;
 $guest_allowed = true;
 define('EBOOK_DOCUMENTS', true);
@@ -65,18 +68,17 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/document/doc_init.php';
+require_once 'modules/game/ViewingEvent.php';
 
-if ($not_found) {
-    not_found($uri);
-}
-
+doc_init();
+triggerGame($ebook_id);
 $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/";
 
 if ($show_orphan_file and $file_path) {
     if (!preg_match('/\.html?$/i', $file_path)) {
-        if (!$is_in_playmode)
+        if (!$is_in_playmode) {
             send_file_by_url_file_path($file_path);
-        else {
+        } else {
             require_once 'include/lib/multimediahelper.class.php';
 
             $path_components = explode('/', str_replace('//', chr(1), $file_path));
@@ -295,4 +297,17 @@ function send_file_by_url_file_path($file_path, $initial_path = '') {
         not_found($file_path);
     }
     exit;
+}
+
+function triggerGame($ebookId) {
+    global $course_id, $uid;
+    
+    $eventData = new stdClass();
+    $eventData->courseId = $course_id;
+    $eventData->uid = $uid;
+    $eventData->activityType = ViewingEvent::EBOOK_ACTIVITY;
+    $eventData->module = MODULE_ID_EBOOK;
+    $eventData->resource = intval($ebookId);
+    
+    ViewingEvent::trigger(ViewingEvent::NEWVIEW, $eventData);
 }

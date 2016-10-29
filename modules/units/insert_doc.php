@@ -23,6 +23,8 @@
 require_once 'modules/document/doc_init.php';
 require_once 'include/lib/mediaresource.factory.php';
 
+doc_init();
+
 /**
  * helper function to get a file path from get variable
  * @param string $name

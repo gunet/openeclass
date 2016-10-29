@@ -23,33 +23,23 @@ $require_current_course = true;
 $require_course_admin = true;
 
 include '../../include/init.php';
+require_once 'include/lib/csv.class.php';
 
-if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
-    $charset = 'Windows-1253';
-    $sendSep = true;
-} else {
-    $charset = 'UTF-8';
-    $sendSep = false;
+$csv = new CSV();
+if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
+    $csv->setEncoding('UTF-8');
 }
+$csv->filename = $course_code . '_users.csv';
 
-$crlf = "\r\n";
+$csv->outputRecord($langSurname, $langName, $langEmail, $langAm, $langUsername, $langGroups);
 
-header("Content-Type: text/csv; charset=$charset");
-header("Content-Disposition: attachment; filename=listusers.csv");
-
-if ($sendSep) {
-    echo 'sep=;', $crlf;
-}
-
-echo join(';', array_map("csv_escape", array($langSurname, $langName, $langEmail, $langAm, $langUsername, $langGroups)));
-echo $crlf;
-echo $crlf;
-$sql = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.username
+$sql = Database::get()->queryFunc("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.username
                         FROM course_user, user
                         WHERE `user`.`id` = `course_user`.`user_id` AND
                               `course_user`.`course_id` = ?d
-                        ORDER BY user.surname, user.givenname", $course_id);
-foreach ($sql as $a) {
-    echo join(';', array_map("csv_escape", array($a->surname, $a->givenname, $a->email, $a->am, $a->username, user_groups($course_id, $a->id, 'txt'))));    
-    echo "$crlf";
-}
+                        ORDER BY user.surname, user.givenname",
+            function ($item) use ($csv, $course_id) {
+                $csv->outputRecord($item->surname, $item->givenname,
+                    $item->email, $item->am, $item->username,
+                    user_groups($course_id, $item->id, 'txt'));
+            }, $course_id);

@@ -32,7 +32,7 @@ $tool_content .= "
       <form class='form-horizontal' role='form' action='$urlServer' method='post'>
         <div class='form-group'>
           <div class='col-xs-12'>
-            <input class='form-control' name='uname' placeholder='$langUsername'>
+            <input class='form-control' name='uname' placeholder='$langUsername' autofocus>
           </div>
         </div>
         <div class='form-group'>

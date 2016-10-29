@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api\V1\Transformers;
 use League\Fractal;
 use App\Models\Course;
 class CourseTransformer extends Fractal\TransformerAbstract {
-        public function transform(Course $course) {
+        protected $availableIncludes = [
+            'courseDepartments'
+        ];     
+        public function transform( Course $course ) {
             //Mapping database fields to API names
             return [
                 'courseID' => $course->id,
@@ -13,8 +16,14 @@ class CourseTransformer extends Fractal\TransformerAbstract {
                 'courseLang' => $course->lang,
                 'courseTitle' => $course->title,
                 'courseProfessors' => $course->prof_names,
-                'courseDescription' => $course->description
+                'courseDescription' => $course->description,
+                'courseLicenseType' => $course->course_license,
+                'courseVisibility' => $course->visible,
             ];
+        }
+        
+        public function includeCourseDepartments( Course $course )
+        {
+            return $this->collection( $course->departments, new DepartmentTransformer() );
         }           
 }
-

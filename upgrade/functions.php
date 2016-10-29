@@ -1010,6 +1010,20 @@ function upgrade_course_3_0($code, $course_id) {
                                 `q_position`, `type`
                            FROM questions ORDER BY id") != null) && $ok;
 
+        // Rename exercise question images
+        $imageBase = $webDir . '/courses/' . $code . '/image/quiz-';
+        $idList = array();
+        foreach (glob($imageBase . '*') as $imageFile) {
+            $parts = explode('-', $imageFile);
+            $idList[] = end($parts);
+        }
+        if (count($idList)) {
+            sort($idList, SORT_NUMERIC);
+            foreach (array_reverse($idList) as $id) {
+                rename($imageBase . $id, $imageBase . ($id + $questionid_offset));
+            }
+        }
+
         // ----- reponses DB Table ----- //
         $answerid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.exercise_answer")->max;
         if (is_null($answerid_offset)) {
@@ -1101,7 +1115,9 @@ function upgrade_course_3_0($code, $course_id) {
     Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
                                     VALUES (".MODULE_ID_BLOG.", 0, $course_id)");
     Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
-                                    VALUES (".MODULE_ID_BBB.", 0, $course_id)");
+                                    VALUES (".MODULE_ID_TC.", 0, $course_id)");
+    Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
+                                    VALUES (".MODULE_ID_LTI_CONSUMER.", 0, $course_id)");
 
     if ($q1 and $q2) { // if everything ok drop course db
         // finally drop database
@@ -1604,7 +1620,7 @@ function move_group_documents_to_main_db($code, $course_id) {
             if (file_exists($group_document_dir)) {
                 unlink($group_document_dir);
             }
-            mkdir($group_document_dir, 0775);
+            make_dir($group_document_dir);
         } else {
             traverseDirTree($group_document_dir, 'group_documents_main_db_file', 'group_documents_main_db_dir', array($course_id, $new_group_id));
         }
@@ -1640,7 +1656,7 @@ function group_documents_main_db($path, $course_id, $group_id, $type) {
 function mkdir_or_error($dirname) {
     global $langErrorCreatingDirectory;
     if (!is_dir($dirname)) {
-        if (!mkdir($dirname, 0775)) {
+        if (!make_dir($dirname)) {
             echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $dirname</div>";
         }
     }
@@ -1732,7 +1748,7 @@ function importThemes($themes = null) {
     global $webDir;
     if (!isset($themes) || isset($themes) && !empty($themes)) {
         $themesDir = "$webDir/template/$_SESSION[theme]/themes";
-        if(!is_dir("$webDir/courses/theme_data")) mkdir("$webDir/courses/theme_data", 0755, true);
+        if(!is_dir("$webDir/courses/theme_data")) make_dir("$webDir/courses/theme_data");
         if (is_dir($themesDir) && $handle = opendir($themesDir)) {
             if (!isset($themes)) {
                 while (false !== ($file_name = readdir($handle))) {
@@ -1783,6 +1799,39 @@ function setGlobalContactInfo() {
     }
     if (!isset($fax)) {
         $fax = get_config('fax');
+    }
+}
+
+function updateAnnouncementSticky( $table ) {
+    $arr_date = Database::get()->queryArray("SELECT id FROM $table ORDER BY `date` ASC");
+    $arr_order_objects = Database::get()->queryArray("SELECT id FROM $table ORDER BY `order` ASC");
+    $arr_order = [];
+    foreach ($arr_order_objects as $key=>$value) {
+        $arr_order[$key] = $value->id;
+    }
+
+    $length = count($arr_order);
+
+    $offset = 0;
+    for ($i = 0; $i < $length; $i++) {
+        if ($arr_date[$i]->id != $arr_order[$i-$offset]) {
+            $offset++;
+        }
+    }
+
+    $zero = $length - $offset;
+    $arr_sticky = array_slice($arr_order, -$offset);
+    $arr_default = array_slice($arr_order, 0, $zero);
+
+    $default_placeholders = implode(',', array_fill(0, count($arr_default), '?d'));
+    if (!empty($default_placeholders)) {
+        Database::get()->query("UPDATE $table SET `order` = 0 WHERE `id` IN ($default_placeholders)", $arr_default);
+    }
+
+    $ordering = 0;
+    foreach ($arr_sticky as $announcement_id) {
+        $ordering++;
+        Database::get()->query("UPDATE $table SET `order` = ?d where `id`= ?d", $ordering, $announcement_id);
     }
 }
 

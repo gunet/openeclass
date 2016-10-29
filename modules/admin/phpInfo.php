@@ -31,22 +31,13 @@ $pageName = $langPHPInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // Display link to go back to index.php
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => "index.php",
         'icon' => 'fa-reply',
         'level' => 'primary-label')));
 
-
-// Display phpinfo
-$tool_content .= "<div class='alert alert-info'>";
-ob_start();
-phpinfo();
-$tool_content .= standard_text_escape(ob_get_contents());
-ob_end_clean();
-$tool_content .= '</div>';
-
-$local_head_contents = '<style type="text/css">
+$head_content .= '<style type="text/css">
         pre {margin: 0px; font-family: monospace;}
         table {border-collapse: collapse;}
         .center {text-align: center;}
@@ -64,6 +55,6 @@ $local_head_contents = '<style type="text/css">
         hr {width: 600px; background-color: #cccccc; border: 0px; height: 1px; color: #000000;}
         </style>
         ';
-
-draw($tool_content, 3, '', $local_head_contents);
+$data['menuTypeID'] = 3;
+view('admin.server.phpInfo', $data);
 

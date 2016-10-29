@@ -18,7 +18,7 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'modules/abuse_report/abuse_report.php';
 
 /**

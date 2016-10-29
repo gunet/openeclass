@@ -1,6 +1,6 @@
 <!-- BEGIN mainBlock -->
 <!DOCTYPE HTML>
-<html style="height: 100%;">
+<html style="height: 100%;" lang="{{ $language }}">
 <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -38,6 +38,8 @@
     @endif
     {!! $head_content !!}
 
+    @stack('head_styles')
+
 </head>
 <body style="height: 100%;">
     <div class="container" style="height: 100%;">
@@ -48,22 +50,22 @@
                     <div class="col-md-12 add-gutter">
                         @if ($messages)
                             <div class='row'>
-                                <div class='col-xs-12'>{!! $messages !!}</div>                                   
+                                <div class='col-xs-12'>{!! $messages !!}</div>
                             </div>
                         @endif
-                        {!! $tool_content !!}
+                        @yield('content')
                     </div>
                 </div>
             </div>
             <div id="leftnav" class="col-xs-2 col-xs-pull-10 sidebar embeded" style="top: 0px; height: 100%; overflow: visible;">
-                <div class="panel-group" id="sidebar-accordion">                   
+                <div class="panel-group" id="sidebar-accordion">
                     <div class="panel">
                         @foreach ($toolArr as $key => $tool_group)
                         <div id="collapse{{ $key }}" class="panel-collapse list-group collapse{{ $tool_group[0]['class'] }}">
                             @foreach ($tool_group[1] as $key2 => $tool)
                             <a href="{{ $tool_group[2][$key2] }}" class="list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}">
-                                <span class="fa {{ $tool_group[3][$key2] }}"></span>
-                                <span class="">{!! $tool !!}</span>
+                                <span class="fa {{ $tool_group[3][$key2] }} fa-fw"></span>
+                                <span>{!! $tool !!}</span>
                             </a>
                             @endforeach
                         </div>

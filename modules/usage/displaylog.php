@@ -35,14 +35,14 @@ if (isset($_GET['from_admin'])) {
 
 $require_course_admin = true;
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 load_js('datatables');
 load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#log_results_table').DataTable ({                                
+            $('#log_results_table').DataTable ({
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
@@ -74,11 +74,11 @@ $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#user_date_start, #user_date_end').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-left',
+                pickerPosition: 'bottom-right',
                 language: '".$language."',
                 autoclose: true,
                 minuteStep: 20
-            });            
+            });
         });
     </script>";
 
@@ -87,7 +87,7 @@ if (!isset($_REQUEST['course_code'])) {
 }
 
 
-if (isset($_GET['from_other'])) {    
+if (isset($_GET['from_other'])) {
     $toolName = $langSystemActions;
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
     $navigation[] = array('url' => '../admin/otheractions.php', 'name' => $langRecordLog);
@@ -115,28 +115,28 @@ $logtype = isset($_REQUEST['logtype']) ? intval($_REQUEST['logtype']) : '0';
 $u_user_id = isset($_REQUEST['u_user_id']) ? intval($_REQUEST['u_user_id']) : '-1';
 $u_module_id = isset($_REQUEST['u_module_id']) ? intval($_REQUEST['u_module_id']) : '-1';
 
-if (isset($_POST['user_date_start'])) {    
+if (isset($_POST['user_date_start'])) {
     $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
-    $u_date_start = $uds->format('Y-m-d H:i');    
+    $u_date_start = $uds->format('Y-m-d H:i');
     $user_date_start = $uds->format('d-m-Y H:i');
 } else {
     $date_start = new DateTime();
-    $date_start->sub(new DateInterval('P30D'));    
+    $date_start->sub(new DateInterval('P30D'));
     $u_date_start = $date_start->format('Y-m-d H:i');
-    $user_date_start = $date_start->format('d-m-Y H:i');       
+    $user_date_start = $date_start->format('d-m-Y H:i');
 }
 if (isset($_POST['user_date_end'])) {
-    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);    
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);
     $u_date_end = $ude->format('Y-m-d H:i');
-    $user_date_end = $ude->format('d-m-Y H:i');        
+    $user_date_end = $ude->format('d-m-Y H:i');
 } else {
     $date_end = new DateTime();
     $u_date_end = $date_end->format('Y-m-d H:i');
     $date_end->add(new DateInterval('P1D'));
-    $user_date_end = $date_end->format('d-m-Y H:i');        
+    $user_date_end = $date_end->format('d-m-Y H:i');
 }
 
-if (isset($_REQUEST['submit'])) {   
+if (isset($_REQUEST['submit'])) {
     $log = new Log();
     $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
 
@@ -160,11 +160,13 @@ if (!isset($_GET['from_other'])) {
         $firstletter = $_GET['first'];
         $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
                     FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-                    WHERE b.course_id = ?d AND LEFT(a.surname,1) = ?s", $course_id, $firstletter);
+                    WHERE b.course_id = ?d AND LEFT(a.surname,1) = ?s
+                    ORDER BY a.surname, a.givenname, a.am", $course_id, $firstletter);
     } else {
         $result = Database::get()->queryArray("SELECT a.id, a.surname, a.givenname, a.username, a.email, b.status
             FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-            WHERE b.course_id = ?d", $course_id);
+            WHERE b.course_id = ?d
+            ORDER BY a.surname, a.givenname, a.am", $course_id);
     }
 
     foreach ($result as $row) {
@@ -179,14 +181,14 @@ if (!isset($_GET['from_other'])) {
 }
 
 $tool_content .= '<div class="form-wrapper">';
-if (isset($_GET['from_other'])) { 
+if (isset($_GET['from_other'])) {
     $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?from_other=TRUE">';
 } else {
     $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
 }
 
 // if we haven't choose 'system actions'
-if (!isset($_GET['from_other'])) { 
+if (!isset($_GET['from_other'])) {
     $tool_content .= '<div class="form-group">
             <label class="col-sm-2 control-label">' . $langLogModules . ':</label>
             <div class="col-sm-10"><select name="u_module_id" class="form-control">';
@@ -214,7 +216,7 @@ if (!isset($_GET['from_other'])) {
 }
 
 $tool_content .= '<div class="form-group">
-        <label class="col-sm-2 control-label">' . $langLogTypes . ':</label>        
+        <label class="col-sm-2 control-label">' . $langLogTypes . ':</label>
          <div class="col-sm-10">';
 
 if (isset($_GET['from_other'])) {   // system actions
@@ -231,14 +233,14 @@ $tool_content .= selection($log_types, 'logtype', $logtype, "class='form-control
 $tool_content .= "</div></div>";
 $tool_content .= "<div class='input-append date form-group' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
 <label class='col-sm-2 control-label' for='user_date_start'>$langStartDate:</label>
-<div class='col-xs-10 col-sm-9'>               
+<div class='col-xs-10 col-sm-9'>
     <input class='form-control' id='user_date_start' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
 </div>
 <div class='col-xs-2 col-sm-1'>
     <span class='add-on'><i class='fa fa-times'></i></span>
     <span class='add-on'><i class='fa fa-calendar'></i></span>
 </div>
-</div>";        
+</div>";
 $tool_content .= "<div class='input-append date form-group' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
         <label class='col-sm-2 control-label' for='user_date_end'>$langEndDate:</label>
             <div class='col-xs-10 col-sm-9'>
@@ -253,11 +255,11 @@ $tool_content .= "<div class='input-append date form-group' data-date= '" . q($u
 
 // if we haven't choose 'system actions'
 if (!isset($_GET['from_other'])) {
-    $tool_content .= '<div class="form-group">  
+    $tool_content .= '<div class="form-group">
     <label class="col-sm-2 control-label">' . $langFirstLetterUser . ':</label>
         <div class="col-sm-10">' . $letterlinks . '</div>
       </div>
-      <div class="form-group">  
+      <div class="form-group">
         <label class="col-sm-2 control-label">' . $langUser . ':</label>
          <div class="col-sm-10"><select name="u_user_id" class="form-control">' . $user_opts . '</select></div>
       </div>';

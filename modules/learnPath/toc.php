@@ -89,7 +89,11 @@ $modar = array();
 foreach ($result as $list) {
     $modar['module_id'] = $list->module_id;
     $modar['course_id'] = $list->course_id;
-    $modar['name'] = $list->name;
+    if (empty($list->name) and $list->contentType == 'LINK') {
+        $modar['name'] = $list->path;
+    } else {
+        $modar['name'] = $list->name;    
+    }
     $modar['comment'] = $list->comment;
     $modar['accessibility'] = $list->accessibility;
     $modar['startAsset_id'] = $list->startAsset_id;
@@ -108,6 +112,12 @@ foreach ($result as $list) {
     $modar['credit'] = $list->credit;
     $extendedList[] = $modar;
 }
+
+// get LP name and comments
+$q = Database::get()->querySingle("SELECT name, comment FROM lp_learnPath 
+                                WHERE learnpath_id = ?d AND course_id = ?d", $modar['learnPath_id'], $modar['course_id']);
+$lp_name = $q->name;
+$lp_comment = $q->comment;
 
 // build the array of modules
 // build_element_list return a multi-level array, where children is an array with all nested modules
@@ -128,7 +138,10 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 $unitParam = isset($_GET['unit'])? "&amp;unit=$_GET[unit]": '';
 
 // -------------------------- learning path list header ----------------------------
-echo "<ul><li class='category'>$langContents</li>";
+
+echo "<ul><li class='category'>$lp_name</li>
+          <li class='help-block'>$lp_comment</li>
+          <li class='category'>$langContents</li>";
 
 // ----------------------- LEARNING PATH LIST DISPLAY ---------------------------------
 foreach ($flatElementList as $module) {

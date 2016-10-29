@@ -90,8 +90,15 @@ function draw($toolContent, $options=null, $head_content ='') {
                 $t->clear_var('leftNavLink'); //clear inner block
             }
 
-            $t->set_var('THIRD_BAR_TEXT', $langInstallProgress);
+            $t->set_block('mainBlock', 'breadCrumbLinkBlock', 'breadCrumbLink');
+            $t->set_block('mainBlock', 'breadCrumbEntryBlock', 'breadCrumbEntry');
+            $t->set_var('BREAD_HREF',  '#');
             $t->set_var('BREAD_TEXT',  $langStep);
+            $t->parse('breadCrumbLink', 'breadCrumbLinkBlock', true);
+            $t->set_var('BREAD_TEXT',  $langStepTitle);
+            $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
+            
+            $t->set_var('THIRD_BAR_TEXT', $langInstallProgress);
             $t->set_var('FOUR_BAR_TEXT', $langTitleInstall);
 
             $pageTitle = "$langTitleInstall - " . $langStepTitle . " (" . $langStep . ")";
@@ -115,9 +122,10 @@ function draw($toolContent, $options=null, $head_content ='') {
  * @global type $langInstallEnd
  * @return array
  */
-function installerMenu(){
-	global $langRequirements, $langLicense, $langDBSetting;
-	global $langBasicCfgSetting, $langLastCheck, $langInstallEnd;
+function installerMenu() {
+    global $langRequirements, $langLicense, $langDBSetting,
+        $langBasicCfgSetting, $langLastCheck, $langInstallEnd,
+        $langEmailSettings;
 
 	$sideMenuGroup = array();
 
@@ -125,6 +133,10 @@ function installerMenu(){
 	$sideMenuText 	= array();
 	$sideMenuLink 	= array();
 	$sideMenuImg	= array();
+
+    $stepTitles = array($langRequirements, $langLicense, $langDBSetting,
+        $langBasicCfgSetting, $langEmailSettings, $langLastCheck,
+        $langInstallEnd);
 
 	for($i = 0; $i < 7; $i++) {
 		if ($i < $_SESSION['step'] - 1) {
@@ -138,31 +150,10 @@ function installerMenu(){
 			}
             $stepImg[$i] = "fa-angle-double-right";
 		}
+        array_push($sideMenuText, $stepTitles[$i]);
+        array_push($sideMenuLink, $currentStep[$i]);
+        array_push($sideMenuImg, $stepImg[$i]);
 	}
-
-	array_push($sideMenuText, $langRequirements);
-	array_push($sideMenuLink, $currentStep[0]);
-	array_push($sideMenuImg, $stepImg[0]);
-
-	array_push($sideMenuText, $langLicense);
-	array_push($sideMenuLink, $currentStep[1]);
-	array_push($sideMenuImg, $stepImg[1]);
-
-	array_push($sideMenuText, $langDBSetting);
-	array_push($sideMenuLink, $currentStep[2]);
-	array_push($sideMenuImg, $stepImg[2]);
-
-	array_push($sideMenuText, $langBasicCfgSetting);
-	array_push($sideMenuLink, $currentStep[3]);
-	array_push($sideMenuImg, $stepImg[3]);
-
-	array_push($sideMenuText, $langLastCheck);
-	array_push($sideMenuLink, $currentStep[4]);
-	array_push($sideMenuImg, $stepImg[4]);
-
-	array_push($sideMenuText, $langInstallEnd);
-	array_push($sideMenuLink, $currentStep[5]);
-	array_push($sideMenuImg, $stepImg[5]);
 
 	array_push($sideMenuSubGroup, $sideMenuText);
 	array_push($sideMenuSubGroup, $sideMenuLink);
@@ -183,7 +174,7 @@ function mkdir_try($dirname) {
     global $errorContent, $configErrorExists, $langWarningInstall3;
     
     if (!is_dir('../' . $dirname)) {
-        if (!@mkdir('../' . $dirname, 0775)) {
+        if (!make_dir('../' . $dirname)) {
             $errorContent[] = sprintf("<p>$langWarningInstall3</p>", $dirname);
             $configErrorExists = true;
         }

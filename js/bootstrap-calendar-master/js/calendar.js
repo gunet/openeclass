@@ -1175,7 +1175,8 @@ if(!String.prototype.formatNum) {
 		}, 400);
 	}
 
-	function getEasterDate(year, offsetDays) {
+	function getEasterDate(year, offsetDays) {                
+            /*
 		var a = year % 19;
 		var b = Math.floor(year / 100);
 		var c = year % 100;
@@ -1190,8 +1191,33 @@ if(!String.prototype.formatNum) {
 		var m = Math.floor((a + 11 * h + 22 * l) / 451);
 		var n0 = (h + l + 7 * m + 114)
 		var n = Math.floor(n0 / 31) - 1;
-		var p = n0 % 31 + 1;
-		return new Date(year, n, p + (offsetDays ? offsetDays : 0), 0, 0, 0);
+		var p = n0 % 31 + 1; */
+            
+            /* calculation of the Orthodox Easter
+             based upon https://en.wikipedia.org/wiki/Computus#Meeus_Julian_algorithm
+            */
+                var a = year % 4;
+                var b = year % 7;
+                var c = year % 19;
+                var d = (19 * c + 15) % 30;
+                var e = (2 * a + 4 * b - d + 34) % 7;
+                var m = Math.floor((d + e + 114) / 31);
+                var p = ((d + e + 114) % 31) + 1;
+                p = p + 13;                
+                if (m == 3) {
+                    if (p > 31) {
+                        m = m + 1;
+                        p = p % 31;
+                    }
+                }
+                if (m == 4) {
+                    if (p > 30) {
+                        m = m + 1;
+                        p = p % 30;
+                    }
+                }
+                return new Date(year, m-1, p + (offsetDays ? offsetDays : 0), 0, 0, 0);                
+		//return new Date(year, n, p + (offsetDays ? offsetDays : 0), 0, 0, 0);
 	}
 
 	$.fn.calendar = function(params) {

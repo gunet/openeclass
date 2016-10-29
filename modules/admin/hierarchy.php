@@ -67,7 +67,7 @@ if (!in_array($language, $session->active_ui_languages)) {
 
 // link to add a new node
 if (!isset($_REQUEST['action'])) {
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
             array('title' => $langAdd,
                 'url' => "$_SERVER[SCRIPT_NAME]?action=add",
                 'icon' => 'fa-plus-circle',
@@ -78,7 +78,7 @@ if (!isset($_REQUEST['action'])) {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 } else {
-    $tool_content .= action_bar(array(            
+    $data['action_bar'] = action_bar(array(            
             array('title' => $langBack,
                 'url' => "$_SERVER[SCRIPT_NAME]",
                 'icon' => 'fa-reply',
@@ -88,23 +88,14 @@ if (!isset($_REQUEST['action'])) {
 // Display all available nodes
 if (!isset($_GET['action'])) {
     // Count available nodes
-    $nodesCount = Database::get()->querySingle("SELECT COUNT(*) as count from hierarchy")->count;
+    $data['nodesCount'] = Database::get()->querySingle("SELECT COUNT(*) as count from hierarchy")->count;
 
     $query = "SELECT max(depth) as maxdepth FROM (SELECT  COUNT(parent.id) - 1 AS depth
                 FROM `hierarchy` AS node, `hierarchy` AS parent
                     WHERE node.lft BETWEEN parent.lft AND parent.rgt
                     GROUP BY node.id
                     ORDER BY node.lft) AS hierarchydepth";
-    $maxdepth = Database::get()->querySingle($query)->maxdepth;
-
-    // Construct a table
-    $tool_content .= "
-    <table class='table-default'>
-    <tr>
-    <td colspan='" . ($maxdepth + 4) . "' class='right'>
-            $langManyExist: <b>$nodesCount</b> $langHierarchyNodes
-    </td>
-    </tr>";
+    $data['maxdepth'] = Database::get()->querySingle($query)->maxdepth;
 
     $options = array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin));
     $joptions = json_encode($options);
@@ -178,12 +169,13 @@ function customMenu(node) {
 </script>
 hContent;
 
-    $tool_content .= "<tr><td colspan='" . ($maxdepth + 4) . "'><div id='js-tree'></div></td></tr></table>";
+    $view = 'admin.courses.hierarchy.index';
 }
 // Add a new node
 elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (isset($_POST['add'])) {
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
         $code = $_POST['code'];
 
         $names = array();
@@ -193,101 +185,48 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
                 $names[$langcode] = $n;
             }
         }
-
         $name = serialize($names);
+
+        $descriptions = array();
+        foreach ($session->active_ui_languages as $key => $langcode) {
+            $d = (isset($_POST['description-' . $langcode])) ? $_POST['description-' . $langcode] : null;
+            if (!empty($d)) {
+                $descriptions[$langcode] = $d;
+            }
+        }
+        $description = serialize($descriptions);
 
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
         $order_priority = (isset($_POST['order_priority']) && !empty($_POST['order_priority'])) ? intval($_POST['order_priority']) : 'null';
+        $visible = (isset($_POST['visible'])) ? intval($_POST['visible']) : 2;
+        if ($visible < 0 || $visible > 2) {
+            $visible = 2;
+        }
         // Check for empty fields
         if (empty($names)) {
-            $tool_content .= "<div class='alert alert-danger'>" . $langEmptyNodeName . "</div><br>";
-            $tool_content .= action_bar(array(
-                array('title' => $langReturnToAddNode,
-                    'url' => $_SERVER['SCRIPT_NAME'] . "?a=1",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')));
+            Session::Messages($langEmptyNodeName, 'alert-danger');
+            redirect_to_home_page($_SERVER['SCRIPT_NAME'] . "?a=1");
         }
         // Check for greek letters
         elseif (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
-            $tool_content .= "<div class='alert alert-danger'>" . $langGreekCode . "</div><br>";
-            $tool_content .= action_bar(array(
-                array('title' => $langReturnToAddNode,
-                    'url' => $_SERVER['SCRIPT_NAME'] . "?a=1",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')));
+            Session::Messages($langGreekCode, 'alert-danger');
+            redirect_to_home_page($_SERVER['SCRIPT_NAME'] . "?a=1");            
         } else {
             // OK Create the new node
             $pid = intval(getDirectReference($_POST['parentid']));
             validateParentId($pid, isDepartmentAdmin());
-            $tree->addNode($name, $tree->getNodeLft($pid), $code, $allow_course, $allow_user, $order_priority);
-            $tool_content .= "<div class='alert alert-success'>" . $langAddSuccess . "</div>";
+            $tree->addNode($name, $description, $tree->getNodeLft($pid), $code, $allow_course, $allow_user, $order_priority, $visible);
+            Session::Messages($langAddSuccess, 'alert-success');
+            redirect_to_home_page("modules/admin/hierarchy.php");               
         }
     } else {
-        // Display form for new node information
-        $tool_content .= "<div class='form-wrapper'>
-            <form role='form' class='form-horizontal' method=\"post\" action=\"" . $_SERVER['SCRIPT_NAME'] . "?action=add\" onsubmit=\"return validateNodePickerForm();\">
-            <fieldset>
-            <div class='form-group'>
-                <label class='col-sm-3 control-label'>$langNodeCode1:</label>
-                <div class='col-sm-9'>
-                    <input class='form-control' type='text' name='code' placeholder='$langCodeFaculte2'>
-                </div>
-            </div>";
-            $i = 0;
-            foreach ($session->active_ui_languages as $key => $langcode) {
-                $tool_content .= "<div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langNodeName:</label>";
-                $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
-                $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-                $tool_content .= $tdpre . "<input class='form-control' type='text' name='name-" . $langcode . "' placeholder='$placeholder'></div></div>";
-                $i++;
-            }
-
-        $tool_content .= "<div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langNodeParent:</label>
-                        <div class='col-sm-9'>";
+        $data['visibleChecked'] = array(NODE_CLOSED => '', NODE_SUBSCRIBED => '', NODE_OPEN => '');
+        $data['visibleChecked'][intval(NODE_OPEN)] = " checked='checked'";
         list($js, $html) = $tree->buildNodePickerIndirect(array('params' => 'name="parentid"', 'tree' => array('0' => 'Top'), 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
         $head_content .= $js;
-        $tool_content .= $html;
-        $tool_content .= "<span class='help-block'><small>$langNodeParent2</small></span>
-        </div></div>
-        <div class='form-group'>
-          <label class='col-sm-3 control-label'>$langNodeAllowCourse:</label>
-            <div class='col-sm-9'>
-                  <input class='form-control' type='checkbox' name='allow_course' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowCourse2</small></span>
-          </div>
-        </div>
-        <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langNodeAllowUser</label>
-          <div class='col-sm-9'>
-              <input class='form-control' type='checkbox' name='allow_user' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowUser2</small></span>
-          </div>
-        </div>
-        <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langNodeOrderPriority</label>      
-          <div class='col-sm-9'>
-              <input class='form-control' type='text' name='order_priority'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
-          </div>
-        </div>
-        ".showSecondFactorChallenge()."
-        <div class='form-group'>
-          <div class='col-sm-9 col-sm-offset-3'>".form_buttons(array(
-                array(
-                    'text' => $langSave,
-                    'name' => 'add',
-                    'value'=> $langAdd
-                ),
-                array(
-                    'href' => "$_SERVER[SCRIPT_NAME]"
-                )
-            ))."
-          </div>
-        </div>
-        </fieldset>
-        ". generate_csrf_token_form_field() ."
-        </form>
-        </div>";
+        $data['html'] = $html;
+        $view = 'admin.courses.hierarchy.create';
     }    
 }
 // Delete node
@@ -327,7 +266,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
     validateNode($id, isDepartmentAdmin());
 
     if (isset($_POST['edit'])) {
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
         checkSecondFactorChallenge();
         // Check for empty fields
 
@@ -338,71 +277,61 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
                 $names[$langcode] = $n;
             }
         }
-
         $name = serialize($names);
+
+        $descriptions = array();
+        foreach ($session->active_ui_languages as $key => $langcode) {
+            $d = (isset($_POST['description-' . $langcode])) ? $_POST['description-' . $langcode] : null;
+            if (!empty($d)) {
+                $descriptions[$langcode] = $d;
+            }
+        }
+        $description = serialize($descriptions);
 
         $code = $_POST['code'];
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
         $order_priority = (isset($_POST['order_priority']) && !empty($_POST['order_priority'])) ? intval($_POST['order_priority']) : 'null';
+        $visible = (isset($_POST['visible'])) ? intval($_POST['visible']) : 2;
+        if ($visible < 0 || $visible > 2) {
+            $visible = 2;
+        }
         if (empty($name)) {
-            $tool_content .= "<div class='alert alert-danger'>" . $langEmptyNodeName . "<br>";
-            $tool_content .= action_bar(array(
-                array('title' => $langReturnToEditNode,
-                    'url' => $_SERVER['SCRIPT_NAME'] . "?action=edit&amp;id=" . getIndirectReference($id),
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')));
+            Session::Messages($langEmptyNodeName, 'alert-danger');
+            redirect_to_home_page("modules/admin/hierarchy.php?action=edit&amp;id=" . getIndirectReference($id));            
         } else {
             // OK Update the node
             $oldpid = intval(getDirectReference($_POST['oldparentid']));
             $newpid = intval(getDirectReference($_POST['newparentid']));
             validateParentId($newpid, isDepartmentAdmin());
-            $tree->updateNode($id, $name, $tree->getNodeLft($newpid), intval($_POST['lft']), intval($_POST['rgt']), $tree->getNodeLft($oldpid), $code, $allow_course, $allow_user, $order_priority);
-            $tool_content .= "<div class='alert alert-success'>$langEditNodeSuccess</div><br />";
+            $tree->updateNode($id, $name, $description, $tree->getNodeLft($newpid), intval($_POST['lft']), intval($_POST['rgt']), $tree->getNodeLft($oldpid), $code, $allow_course, $allow_user, $order_priority, $visible);
+            Session::Messages($langEditNodeSuccess, 'alert-success');
+            redirect_to_home_page('modules/admin/hierarchy.php');
         }
     } else {
         // Get node information
-        $id = intval(getDirectReference($_GET['id']));
-        $mynode = Database::get()->querySingle("SELECT name, lft, rgt, code, allow_course, allow_user, order_priority FROM hierarchy WHERE id = ?d", $id);
+        $data['id'] = $id = intval(getDirectReference($_GET['id']));
+        $data['mynode'] = $mynode = Database::get()->querySingle("SELECT name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible FROM hierarchy WHERE id = ?d", $id);
         $parent = $tree->getParent($mynode->lft, $mynode->rgt);
-        $check_course = ($mynode->allow_course == 1) ? " checked=1 " : '';
         $check_user = ($mynode->allow_user == 1) ? " checked=1 " : '';
-        // Display form for edit node information
-        $tool_content .= "
-            <div class='form-wrapper'>
-                <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?action=edit' onsubmit='return validateNodePickerForm();'>
-                    <fieldset>
-                        <div class='form-group'>
-                            <label class='col-sm-3 control-label'>$langNodeCode1:</label>
-                            <div class='col-sm-9'>
-                                <input class='form-control' type='text' name='code' value='" . q($mynode->code) . "' />&nbsp;<i>" . $langCodeFaculte2 . "</i>
-                            </div>
-                        </div>";
 
-        $is_serialized = false;
+        // name multi-lang field
+        $data['is_serialized'] = false;
         $names = @unserialize($mynode->name);
         if ($names !== false) {
-            $is_serialized = true;
-        }
-        $i = 0;
-        foreach ($session->active_ui_languages as $key => $langcode) {
-            $n = ($is_serialized && isset($names[$langcode])) ? $names[$langcode] : '';
-            if (!$is_serialized && $key == 0) {
-                $n = $mynode->name;
-            }
-            $tool_content .= "
-                        <div class='form-group'>
-                            <label class='col-sm-3 control-label'>$langNodeName:</label>";
-             $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
-             $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-            $tool_content .= $tdpre . "<input class='form-control' type='text' name='name-" . q($langcode) . "' value='" . q($n) . "' placeholder='$placeholder'></div></div>";
-            $i++;
+            $data['names'] = $names;
+            $data['is_serialized'] = true;
         }
 
-        $tool_content .= "<div class='form-group'>
-                        <label class='col-sm-3 control-label'>$langNodeParent:</label>
-                        <div class='col-sm-9'>";
+        // description multi-lang field
+        $data['desc_is_ser'] = false;
+        $descriptions = @unserialize($mynode->description);
+        if ($descriptions !== false) {
+            $data['descriptions'] = $descriptions;
+            $data['desc_is_ser'] = true;
+        }
 
+        $data['formOPid'] = 0;
         $treeopts = array(
             'params' => 'name="newparentid"',
             'exclude' => getIndirectReference($id),
@@ -410,9 +339,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
             'multiple' => false);
         if (isset($parent) && isset($parent->id)) {
             $treeopts['defaults'] = $parent->id;
-            $formOPid = $parent->id;
-        } else {
-            $formOPid = 0;
+            $data['formOPid'] = $parent->id;
         }
         
         if ($is_admin) {
@@ -421,52 +348,17 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
             $treeopts['allowables'] = $user->getDepartmentIds($uid);
             list($js, $html) = $tree->buildNodePickerIndirect($treeopts);
         }
+
+        $data['visibleChecked'] = array(NODE_CLOSED => '', NODE_SUBSCRIBED => '', NODE_OPEN => '');
+        $data['visibleChecked'][intval($mynode->visible)] = " checked='checked'";
         
         $head_content .= $js;
-        $tool_content .= $html;
-        $tool_content .= "<span class='help-block'><small>$langNodeParent2</small></span>
-        </div></div>        
-        <div class='form-group'>
-          <label class='col-sm-3 control-label'>$langNodeAllowCourse:</label>
-            <div class='col-sm-9'>
-                  <input type='checkbox' name='allow_course' value='1' $check_course><span class='help-block'><small>$langNodeAllowCourse2</small></span>
-          </div>
-        </div>
-        <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langNodeAllowUser</label>
-          <div class='col-sm-9'>
-              <input type='checkbox' name='allow_user' value='1' $check_user><span class='help-block'><small>$langNodeAllowUser2</small></span>
-          </div>
-        </div>
-        <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langNodeOrderPriority</label>      
-          <div class='col-sm-9'>
-              <input class='form-control' type='text' name='order_priority' value='" . q($mynode->order_priority) . "'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
-          </div>
-        </div>
-        <input type='hidden' name='id' value='" . getIndirectReference($id) . "' />
-               <input type='hidden' name='oldparentid' value='" . getIndirectReference($formOPid) . "'/>
-               <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
-               <input type='hidden' name='rgt' value='" . q($mynode->rgt) . "'/>
-        <div class='form-group'>
-          <div class='col-sm-9 col-sm-offset-3'>".form_buttons(array(
-                array(
-                    'text' => $langSave,
-                    'name' => 'edit',
-                    'value'=> $langAcceptChanges
-                ),
-                array(
-                    'href' => "$_SERVER[SCRIPT_NAME]"
-                )
-            ))."
-          </div>
-        </div>        
-        </fieldset>
-        ". generate_csrf_token_form_field() ."
-        </form>
-        </div>";           
+        $data['html'] = $html;
+        $view = 'admin.courses.hierarchy.create';
     }
 }
 
-draw($tool_content, 3, null, $head_content);
-
+// prepare javascript in head_content for rich_text_editor and for calling rich_text_editor via the view
+rich_text_editor(null, null, null, null);
+$data['menuTypeID'] = 3;
+view($view, $data);

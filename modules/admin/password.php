@@ -32,6 +32,35 @@ $require_valid_uid = TRUE;
 
 include '../../include/baseTheme.php';
 
+check_uid();
+
+if (isset($_POST['changePass'])) {
+    $userid = intval(getDirectReference($_POST['userid']));
+
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    checkSecondFactorChallenge();
+    
+    if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
+        Session::Messages($langFieldsMissing);
+        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode(getIndirectReference($userid)));
+    }
+    if ($_POST['password_form1'] !== $_POST['password_form']) {
+        Session::Messages($langPassTwo);
+        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode(getIndirectReference($userid)));        
+    }
+    // All checks ok. Change password!
+    $hasher = new PasswordHash(8, false);
+    $new_pass = $hasher->HashPassword($_POST['password_form']);
+    Database::get()->query("UPDATE `user` SET `password` = ?s WHERE `id` = ?d", $new_pass, $userid);
+    Session::Messages($langPassChanged, 'alert-sucess');
+    redirect_to_home_page("modules/admin/edituser.php?u=" . urlencode($userid));    
+}
+
+if (!isset($_GET['userid'])) {
+    header("Location: {$urlServer}modules/admin/");
+    exit;
+}
+
 $toolName = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'edituser.php', 'name' => $langEditUser);
@@ -61,66 +90,11 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
-check_uid();
-
-$passurl = $urlServer . 'modules/admin/password.php';
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
             array('title' => $langBack,
                 'url' => "{$urlServer}modules/admin/edituser.php?u=" . urlencode(getDirectReference($_REQUEST['userid'])),
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')
                 ));
-
-if (!isset($_POST['changePass'])) {       
-    if (!isset($_GET['userid'])) {
-        header("Location: {$urlServer}modules/admin/");
-        exit;
-    }
-    $tool_content .= "<div class='form-wrapper'>
-    <form class='form-horizontal' role='form' method='post' action='$passurl'>
-    <fieldset>      
-      <input type='hidden' name='userid' value='" . q(getIndirectReference(getDirectReference($_GET['userid']))) . "' />
-      <div class='form-group'>
-      <label class='col-sm-3 control-label'>$langNewPass1</label>
-        <div class='col-sm-9'>
-            <input class='form-control' type='password' size='40' name='password_form' value='' id='password' autocomplete='off' />&nbsp;<span id='result'></span>
-        </div>
-      </div>
-      <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langNewPass2</label>
-        <div class='col-sm-9'>
-            <input class='form-control' type='password' size='40' name='password_form1' value='' autocomplete='off' />
-        </div>
-      </div>
-      <div class='col-sm-offset-3 col-sm-9'>
-      ".showSecondFactorChallenge()."
-        <input class='btn btn-primary' type='submit' name='changePass' value='$langModify'>
-        <a class='btn btn-default' href='{$urlServer}modules/admin/edituser.php?u=" . urlencode(getDirectReference($_REQUEST['userid'])) . "'>$langCancel</a>
-      </div>      
-    </fieldset>
-    ". generate_csrf_token_form_field() ."    
-    </form>
-    </div>";
-} else {
-    $userid = intval(getDirectReference($_POST['userid']));
-
-    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    checkSecondFactorChallenge();
-    
-    if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
-        Session::Messages($langFieldsMissing);
-        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode(getIndirectReference($userid)));
-    }
-    if ($_POST['password_form1'] !== $_POST['password_form']) {
-        Session::Messages($langPassTwo);
-        redirect_to_home_page("modules/admin/password.php?userid=" . urlencode(getIndirectReference($userid)));        
-    }
-    // All checks ok. Change password!
-    $hasher = new PasswordHash(8, false);
-    $new_pass = $hasher->HashPassword($_POST['password_form']);
-    Database::get()->query("UPDATE `user` SET `password` = ?s WHERE `id` = ?d", $new_pass, $userid);
-    Session::Messages($langPassChanged);
-    redirect_to_home_page("modules/admin/edituser.php?u=" . urlencode($userid));    
-}
-
-draw($tool_content, 3, null, $head_content);
+$data['menuTypeID'] = 3;
+view('admin.users.password', $data);                

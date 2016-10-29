@@ -30,7 +30,7 @@ $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/action.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/search/agendaindexer.class.php';
@@ -62,7 +62,6 @@ if (isset($_GET['v'])) {
 }
  
 // list view if we want a specific event 
-
         
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
@@ -138,7 +137,7 @@ function checkenableenddate(){
 }
 $(function() {
     $('#startdate').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-right', 
         language: '".$language."',
         autoclose: true
     });

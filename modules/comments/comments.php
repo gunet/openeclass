@@ -23,13 +23,17 @@ require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
 require_once 'class.comment.php';
 require_once 'class.commenting.php';
+require_once 'modules/game/CommentEvent.php';
 
 $wall_commenting = false;
 
+$commentEventActivity = null;
 if ($_POST['rtype'] == 'blogpost') {
     $setting_id = SETTING_BLOG_COMMENT_ENABLE;
+    $commentEventActivity = CommentEvent::BLOG_ACTIVITY;
 } elseif ($_POST['rtype'] == 'course') {
     $setting_id = SETTING_COURSE_COMMENT_ENABLE;
+    $commentEventActivity = CommentEvent::COURSE_ACTIVITY;
 } elseif ($_POST['rtype'] == 'wallpost') {
     $wall_commenting = true;
 }
@@ -70,6 +74,7 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                     </div>
                 </div>                    
                 ";
+                triggerGame($course_id, $uid, CommentEvent::NEWCOMMENT, $commentEventActivity);
             } else {
                 $response[0] = 'ERROR';
                 $response[1] = "<div class='alert alert-warning'>".$langCommentsSaveFail."</div>";
@@ -85,7 +90,8 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
             if ($comment->permEdit($is_editor, $uid)) {
                 if ($comment->delete()) {
                     $response[0] = 'OK';
-                    $response[1] = "<div class='alert alert-success'>".$langCommentsDelSuccess."</div>"; 
+                    $response[1] = "<div class='alert alert-success'>".$langCommentsDelSuccess."</div>";
+                    triggerGame($course_id, $uid, CommentEvent::DELCOMMENT, $commentEventActivity);
                 } else {
                     $response[0] = 'ERROR';
                     $response[1] = "<div class='alert alert-warning'>".$langCommentsDelFail."</div>";
@@ -137,5 +143,17 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
             $response[1] = "<div class='alert alert-warning'>".$langCommentsLoadFail."</div>";
         }
         echo json_encode($response);
+    }
+}
+
+function triggerGame($courseId, $uid, $eventName, $commentEventActivity) {
+    if ($commentEventActivity !== null) {
+        $eventData = new stdClass();
+        $eventData->courseId = $courseId;
+        $eventData->uid = $uid;
+        $eventData->activityType = $commentEventActivity;
+        $eventData->module = MODULE_ID_COMMENTS;
+
+        CommentEvent::trigger($eventName, $eventData);
     }
 }

@@ -34,6 +34,12 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
         ],
+        
+        'apiInit' => [
+            'api',
+            'apiConfig',
+            'apiAuth',
+        ],
     ];
 
     /**
@@ -48,5 +54,7 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'apiConfig' => \App\Http\Middleware\ApiConfig::class,
+        'apiAuth' => \App\Http\Middleware\ApiAuth::class,
     ];
 }

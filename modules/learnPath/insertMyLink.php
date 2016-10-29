@@ -108,7 +108,8 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
 				VALUES (?d, ?d, '', ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $order);
 
-            $dialogBox .= "<div class='alert alert-success'>".q($row->title) . " : " . $langLinkInsertedAsModule . "</div>";
+            Session::Messages($langInsertedAsModule, 'alert-info');
+            redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
         } else {
             // check if this is this LP that used this document as a module
             $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
@@ -131,19 +132,18 @@ while ($iterator <= $_POST['maxLinkForm']) {
                 Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
 					(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
 					VALUES (?d, ?d, '', ?d,'OPEN', 1)", $_SESSION['path_id'], $thisLinkModule->module_id, $order);
-
-                $dialogBox .= "<div class='alert alert-success'>".q($row->title) . " : " . $langLinkInsertedAsModule . "</div>";                
+                
+                Session::Messages($langInsertedAsModule, 'alert-info');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             } else {
-                $dialogBox .= "<div class='alert alert-warning'>".q($row->title) . " : " . $langLinkAlreadyUsed . "</div>";
+                Session::Messages($langAlreadyUsed, 'alert-warning');
+                redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
         }
     }
     $iterator++;
 }
 
-if (isset($dialogBox) && $dialogBox != "") {    
-    $tool_content .= $dialogBox;
-}
 
 $tool_content .= 
          action_bar(array(
@@ -152,12 +152,6 @@ $tool_content .=
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'))) ;
 $tool_content .= showlinks();
-//$tool_content .= "<br />";
-//$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php?course=$course_code">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
-// display list of modules used by this learning path
-//$tool_content .= display_path_content();
-
 
 draw($tool_content, 2, null, $head_content);
 
@@ -172,7 +166,7 @@ draw($tool_content, 2, null, $head_content);
  * @return string
  */
 function showlinks() {
-    global $langName, $langSelection, $langAddModulesButton, $course_id, $course_code;
+    global $langName, $langSelection, $langAddModulesButton, $course_id, $course_code, $langNoLinksExist;
 
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d ORDER BY `order` DESC", $course_id);
 
@@ -183,19 +177,35 @@ function showlinks() {
                         <th>$langName</th>
                         <th width='50'>$langSelection</th>
                       </tr></thead>
-                      <tbody>
-                      
-                      ";
+                      <tbody>";
+
     $i = 1;
-    foreach ($result as $myrow) {
+
+    if ( empty($result) ){
+
         $output .= "
-                <tr>                
-                <td align='left' valign='top'><a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>
-                <br>
-                <small class='comments'>" . $myrow->description . "</small></td>";
-        $output .= "<td><div align='center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
-                </tr>";
-        $i++;
+            <tr>
+                <td class='text-grey' align='center'>$langNoLinksExist</td>
+                <td></td>
+            </tr>
+        ";
+
+    } else {
+
+        foreach ($result as $myrow) {
+            $output .= "
+            <tr>                
+            <td align='left' valign='top'>";
+            if (empty($myrow->title)) {
+                $output .= "<a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->url) . "</a>";
+            } else {
+                $output .= "<a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>";
+            }
+            $output .= "<br><small class='comments'>" . $myrow->description . "</small></td>";
+            $output .= "<td><div align='center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
+            </tr>";
+            $i++;
+        }
     }
     $output .= "</tbody>
         <tfooter>

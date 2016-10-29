@@ -21,7 +21,7 @@ function process_actions() {
     global $tool_content, $id, $langResourceCourseUnitDeleted,
         $langResourceUnitModified, $course_id, $course_code, $webDir,
         $head_content, $langBack, $urlAppend, $navigation, $pageName,
-        $langEditChange;
+        $langEditChange, $langViMod;
 
     // update index and refresh course metadata
     require_once 'modules/search/indexer.class.php';
@@ -69,7 +69,8 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
-            $tool_content .= "<div class='alert alert-success'>$langResourceCourseUnitDeleted</div>";
+            Session::Messages($langResourceCourseUnitDeleted, 'alert-success');
+            redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
         }
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
         $res_id = intval($_REQUEST['vis']);
@@ -80,6 +81,8 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
+            Session::Messages($langViMod, 'alert-success');
+            redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
         }
     } elseif (isset($_REQUEST['down'])) { // change order down
         $res_id = intval($_REQUEST['down']);
@@ -92,7 +95,6 @@ function process_actions() {
             move_order('unit_resources', 'id', $res_id, 'order', 'up', "unit_id=$id");
         }
     }
-    return '';
 }
 
 /**
@@ -1243,7 +1245,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @global type $id
  * @global type $urlServer
  * @global type $langTitle
- * @global type $langDescr
+ * @global type $langDescription
  * @global type $langContents
  * @global type $langModify
  * @global type $course_code
@@ -1251,7 +1253,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @return string
  */
 function edit_res($resource_id) {
-    global $id, $urlServer, $langTitle, $langDescr, $langContents, $langModify, $course_code;
+    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langModify, $course_code;
 
     $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM unit_resources WHERE id = ?d", $resource_id);
     $restitle = " value='" . htmlspecialchars($ru->title, ENT_QUOTES) . "'";
@@ -1268,7 +1270,7 @@ function edit_res($resource_id) {
                 <label class='col-sm-2 control-label'>$langTitle:</label>
                 <div class='col-sm-10'><input class='form-control' type='text' name='restitle' size='50' maxlength='255' $restitle></div>
                 </div>";
-        $message = $langDescr;
+        $message = $langDescription;
     } else {
         $message = $langContents;
     }

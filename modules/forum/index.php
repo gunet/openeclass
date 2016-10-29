@@ -36,7 +36,6 @@ $action = new action();
 $action->record(MODULE_ID_FORUM);
 /* * *********************************** */
 
-require_once 'config.php';
 require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 

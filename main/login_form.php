@@ -45,7 +45,7 @@ foreach ($q as $l) {
             $next
             <div class='form-group'>
               <div class='col-xs-12'>
-                <input class='form-control' name='uname' placeholder='$langUsername'$userValue>
+                <input class='form-control' name='uname' placeholder='$langUsername'$userValue autofocus>
               </div>
             </div>
             <div class='form-group'>

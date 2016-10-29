@@ -32,7 +32,7 @@ require_once 'include/lib/pwgen.inc.php';
 
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 
 require_once 'modules/auth/methods/hybridauth/config.php';
 require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
@@ -50,11 +50,6 @@ $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
 
 load_js('jstree3');
 load_js('tools.js');
-$head_content .= "<script type='text/javascript'>
-var lang = {
-        addPicture: '" . js_escape($langAddPicture) . "',
-        confirmDelete: '" . js_escape($langConfirmDelete) . "'};
-$(profile_init);</script>";
 
 $myrow = Database::get()->querySingle("SELECT surname, givenname, username, email, am, phone,
                                             lang, status, has_icon, description,
@@ -66,20 +61,20 @@ $auth = array_search($password, $auth_ids);
 if (!$auth) {
     $auth = 1;
 }
-$auth_text = get_auth_info($auth);
+$data['auth_text'] = get_auth_info($auth);
 
 if ($auth != 1) {
-    $allow_username_change = false;
+    $data['allow_username_change'] = false;
     $allow_password_change = false;
 } else {
-    $allow_username_change = !get_config('block_username_change');
+    $data['allow_username_change'] = !get_config('block_username_change');
     $allow_password_change = true;
 }
 
 if (in_array($password, array('shibboleth', 'cas', 'ldap'))) {
-    $allow_name_change = false;
+    $data['allow_name_change'] = false;
 } else {
-    $allow_name_change = true;
+    $data['allow_name_change'] = true;
 }
 
 
@@ -99,7 +94,7 @@ if (isset($_POST['submit'])) {
     checkSecondFactorChallenge();
     saveSecondFactorUserProfile();
     if (!file_exists($webDir . '/courses/userimg/')) {
-        mkdir($webDir . '/courses/userimg/', 0775);
+        make_dir($webDir . '/courses/userimg/');
         touch($webDir."courses/userimg/index.php");
     }
     $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes') ? '1' : '0';
@@ -121,8 +116,7 @@ if (isset($_POST['submit'])) {
     //add custom profile fields required variables
     augment_registered_posted_variables_arr($var_arr);
     
-    $all_ok = register_posted_variables($var_arr, 'all');
-
+    $all_ok = register_posted_variables($var_arr, 'all');    
     $departments = null;
     if (!get_config('restrict_owndep')) {
         if (!isset($_POST['department']) and !$is_admin) {
@@ -157,9 +151,9 @@ if (isset($_POST['submit'])) {
                                              'imagetype' => $type));
     }
 
+    
     // check if email is valid
-    if ((get_config('email_required') or get_config('email_verification_required')) and !email_seems_valid($email_form)) {
-
+    if ((get_config('email_required') or get_config('email_verification_required')) and !Swift_Validate::email($email_form)) { 
         Session::Messages($langEmailWrong);
         redirect_to_home_page("main/profile/profile.php");
     }
@@ -379,177 +373,88 @@ if (isset($_GET['msg'])) {
     $tool_content .= "<table width='100%'><tbody><tr><td class='alert alert-danger'>$message$urlText</td></tr></tbody></table><br /><br />";
 }
 
-$surname_form = q($myrow->surname);
-$givenname_form = q($myrow->givenname);
-$username_form = q($myrow->username);
-$email_form = q($myrow->email);
-$am_form = q($myrow->am);
-$phone_form = q($myrow->phone);
-$desc_form = $myrow->description;
-$userLang = $myrow->lang;
-$icon = $myrow->has_icon;
+$data['surname_form'] = q($myrow->surname);
+$data['givenname_form'] = q($myrow->givenname);
+$data['username_form'] = q($myrow->username);
+$data['email_public'] = q($myrow->email_public);
+$data['am_public'] = q($myrow->am_public);
+$data['email_form'] = q($myrow->email);
+$data['am_form'] = q($myrow->am);
+$data['phone_form'] = q($myrow->phone);
+$data['phone_public'] = q($myrow->phone_public);
+$data['desc_form'] = $myrow->description;
+$data['userLang'] = $myrow->lang;
+$data['icon'] = $myrow->has_icon;
 
-$sec = $urlServer . 'main/profile/profile.php';
+$data['sec'] = $urlServer . 'main/profile/profile.php';
 $passurl = $urlServer . 'main/profile/password.php';
 
-$tool_content .=
-        action_bar(array(
-            array('title' => $langBack,
+$data['action_bar'] =
+        action_bar(
+        [
+            ['title' => $langBack,
                 'url' => "display_profile.php",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')));
-        $tool_content .=
-            "<div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>
-                <fieldset>
-                    <div class='form-group'>
-                    <label for='givenname_form' class='col-sm-2 control-label'>$langName:</label>
-                        <div class='col-sm-10'>";
+                'level' => 'primary-label'
+            ]
+        ]);
 
-if ($allow_name_change) {
-    $tool_content .= "<input type='text' class='form-control' name='givenname_form' id='givenname_form' value='$givenname_form'>";
-} else {
-    $tool_content .= "
-            <p class='form-control-static'>$givenname_form</p>";
-}
+$data['access_options'] = array(ACCESS_PROFS => $langProfileInfoProfs,
+                                ACCESS_USERS => $langProfileInfoUsers);
 
-$tool_content .= "</div></div>";
-$tool_content .= "<div class='form-group'><label for='surname_form' class='col-sm-2 control-label'>$langSurname:</label>";
-$tool_content .= "<div class='col-sm-10'>";
-if ($allow_name_change) {
-    $tool_content .= "<input type='text' class='form-control' name='surname_form' id='surname_form' value='$surname_form'>";
-} else {
-    $tool_content .= "<p class='form-control-static'>$surname_form</p>";
-}
-$tool_content .= "</div></div>";
-$tool_content .= "<div class='form-group'><label for='username_form' class='col-sm-2 control-label'>$langUsername:</label>";
-$tool_content .= "<div class='col-sm-10'>";
-if ($allow_username_change) {
-    $tool_content .= "<input class='form-control' class='form-control' type='text' name='username_form' id='username_form' value='$username_form' />";
-} else {
-    // means that it is external auth method, so the user cannot change this password
-    $tool_content .= " [$auth_text]
-            <p class='form-control-static'>$username_form</p>";
-}
-$tool_content .= "</div></div>";
-
-$access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
-                        ACCESS_PROFS => $langProfileInfoProfs,
-                        ACCESS_USERS => $langProfileInfoUsers);
-
-$tool_content .= "<div class='form-group'>
-                    <label for='email_form' class='col-sm-2 control-label'>$langEmail:</label>
-                    <div class='col-sm-5'>
-                        <input class='form-control' type='text' name='email_form' id='email_form' value='$email_form'>
-                    </div>
-                    <div class='col-sm-5'>
-                        " . selection($access_options, 'email_public', $myrow->email_public, "class='form-control'") . "
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <label for='am_form' class='col-sm-2 control-label'>$langAm:</label>
-                    <div class='col-sm-5'>
-                        <input type='text' class='form-control' name='am_form' id='am_form' value='$am_form'>
-                    </div>
-                    <div class='col-sm-5'>
-                        " . selection($access_options, 'am_public', $myrow->am_public, "class='form-control'") . "
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <label for='phone_form' class='col-sm-2 control-label'>$langPhone</label>
-                    <div class='col-sm-5'>
-                        <input type='text' class='form-control' name='phone_form' id='phone_form' value='$phone_form'>
-                    </div>
-                    <div class='col-sm-5'>
-                        " . selection($access_options, 'phone_public', $myrow->phone_public, "class='form-control'") . "
-                    </div>
-                </div>";
 
 if (get_user_email_notification_from_courses($uid)) {
-    $selectedyes = 'checked';
-    $selectedno = '';
+    $data['selectedyes'] = 'checked';
+    $data['selectedno'] = '';
 } else {
-    $selectedyes = '';
-    $selectedno = 'checked';
+    $data['selectedyes'] = '';
+    $data['selectedno'] = 'checked';
 }
-$tool_content .= "<div class='form-group'>
-                <label for='emailfromcourses' class='col-sm-2 control-label'>$langEmailFromCourses:</label>
-                  <div class='col-sm-10'>
-                  <div class='radio'>
-                    <label>
-                        <input type='radio' name='subscribe' value='yes' $selectedyes />$langYes
-                    </label>
-                   </div>
-                   <div class='radio'>
-                    <label>
-                        <input type='radio' name='subscribe' value='no' $selectedno />$langNo
-                    </label>
-                   </div>
-                  </div>
-                </div>";
 
 if (get_config('email_verification_required')) {
     $user_email_status = get_mail_ver_status($uid);
-    $messageClass = '';
+    $data['messageClass'] = '';
     switch ($user_email_status) {
         case EMAIL_VERIFICATION_REQUIRED:
         case EMAIL_UNVERIFIED:
             $messageClass = ' alert alert-warning';
             $link = "<a href = '{$urlAppend}modules/auth/mail_verify_change.php?from_profile=true'>$langHere</a>.";
-            $message = "$langMailNotVerified $link";
+            $data['message'] = "$langMailNotVerified $link";
             break;
         case EMAIL_VERIFIED:
-            $message = icon('fa-check', $langMailVerificationYesU);
+            $data['message'] = icon('fa-check', $langMailVerificationYesU);
             break;
         default:
             break;
     }
-    $tool_content .= "<div class='form-group$messageClass'>
-        <label class='col-sm-2 control-label'>$langVerifiedMail</label>
-        <div class='col-sm-10 form-control-static'>$message</div>
-      </div>";
 }
 if (!get_config('restrict_owndep')) {
-    $tool_content .= "<div class='form-group'><label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>";
-    $tool_content .= "<div class='col-sm-10 form-control-static'>";
     list($js, $html) = $tree->buildUserNodePickerIndirect(array('defaults' => $userObj->getDepartmentIds($uid)));
     $head_content .= $js;
-    $tool_content .= $html;
-    $tool_content .= "</div></div>";
+    $data['html'] = $html;
 }
 
-$tool_content .= "<div class='form-group'><label for='language' class='col-sm-2 control-label'>$langLanguage:</label>
-                      <div class='col-sm-10'>" . lang_select_options('userLanguage', "class='form-control'") . "</div>
-                  </div>";
 
-if ($icon) {
-    $message_pic = $langReplacePicture;
-    $picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
-    $delete = '&nbsp;' . icon('fa-times', $langDelete, '#', 'id="delete"') . '&nbsp;';
+if ($data['icon']) {
+    $data['message_pic'] = $langReplacePicture;
+    $data['picture'] = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
+    $data['delete'] = '&nbsp;' . icon('fa-times', $langDelete, '#', 'id="delete"') . '&nbsp;';
 } else {
-    $picture = $delete = '';
-    $message_pic = $langAddPicture;
+    $data['picture'] = $data['delete'] = '';
+    $data['message_pic'] = $langAddPicture;
 }
 enableCheckFileSize();
-$tool_content .= "<div class='form-group'>
-        <label for='picture' class='col-sm-2 control-label'>$message_pic</label>
-            <div class='col-sm-10'><span>$picture$delete</span>" . fileSizeHidenInput() . "
-            <input type='file' name='userimage' size='30'></div>
-        </div>
-        <div class='form-group'>
-          <label for='desription' class='col-sm-2 control-label'>$langDescription:</label>
-          <div class='col-sm-10'>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</div>
-        </div>";
-//add custom profile fields
-$tool_content .= render_profile_fields_form(array('origin' => 'edit_profile'));
+
+$data['info_text_area'] = rich_text_editor('desc_form', 5, 20, $data['desc_form']);
+
 
 foreach ($hybridAuthMethods as $provider) {
-    $userProviders[$provider] = false;
+    $data['userProviders'][$provider] = false;
 }
 Database::get()->queryFunc('SELECT auth_id FROM user_ext_uid WHERE user_id = ?d',
     function ($item) {
-        global $userProviders, $auth_ids;
-        $userProviders[$auth_ids[$item->auth_id]] = true;
+        global $data, $auth_ids;
+        $data['userProviders'][$auth_ids[$item->auth_id]] = true;
     }, $uid);
 
 // HybridAuth settings and links
@@ -558,52 +463,21 @@ Database::get()->queryFunc('SELECT auth_id FROM user_ext_uid WHERE user_id = ?d'
 $config = get_hybridauth_config();
 
 $hybridauth = new Hybrid_Auth($config);
-$allProviders = $hybridauth->getProviders();
+$data['allProviders'] = $hybridauth->getProviders();
 $activeAuthMethods = get_auth_active_methods();
-foreach ($allProviders as $provider => $settings) {
+foreach ($data['allProviders'] as $provider => $settings) {
     $aid = array_search(strtolower($provider), $auth_ids);
-    if (array_search($aid, $activeAuthMethods) === false) {
-        unset($allProviders[$provider]);
+    if (array_search($aid, $data['allProviders']) === false) {
+        unset($data['allProviders'][$provider]);
     }
 }
 
-if (count($allProviders)) {
-    $tool_content .= "<div class='form-group'>
-        <label class='col-sm-2 control-label'>$langProviderConnectWith:</label>
-        <div class='col-sm-10'>
-          <div class='row'>";
-    foreach ($allProviders as $provider => $settings) {
-        $lcProvider = strtolower($provider);
-        $tool_content .= "
-                <div class='col-xs-2 text-center'>
-                  <img src='$themeimg/$lcProvider.png' alt='$langLoginVia'><br>$provider<br>";
-        if ($userProviders[$lcProvider]) {
-            $tool_content .= "
-                  <img src='$themeimg/tick.png' alt='$langProviderConnectWith $provider'>
-                  <a href='$sec?action=delete&provider=$provider'>$langProviderDeleteConnection</a>";
-        } else {
-            $tool_content .= "<a href='$sec?action=connect&provider=$provider'>$langProviderConnect</a>";
-        }
-        $tool_content .= "</div>";
-    }
-    $tool_content .= "</div>
-      </div></div>";
-} //endif(count($allProviders)) - in case no providers are enabled, do not show anything
+$data['SecFactorProfile'] = showSecondFactorUserProfile();
 
-$tool_content .= showSecondFactorUserProfile();
+$data['SecFactorChallenge'] = showSecondFactorChallenge();
 
-$tool_content .= showSecondFactorChallenge();
-
-$tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
-          <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-          <a href='display_profile.php' class='btn btn-default'>$langCancel</a>
-        </div>
-      </fieldset>
-      ". generate_csrf_token_form_field() ."  
-      </form>
-      </div>";
-
-draw($tool_content, 1, null, $head_content);
+$data['menuTypeID'] = 1;
+view('main.profile.edit', $data);
 
 
 /**
@@ -613,7 +487,7 @@ draw($tool_content, 1, null, $head_content);
  */
 function valid_access($val) {
     $val = intval($val);
-    if (in_array($val, array(ACCESS_PRIVATE, ACCESS_PROFS, ACCESS_USERS))) {
+    if (in_array($val, array(ACCESS_PROFS, ACCESS_USERS))) {
         return $val;
     } else {
         return 0;

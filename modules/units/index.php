@@ -34,11 +34,13 @@ $helpTopic = 'AddCourseUnitscontent';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/action.php';
-require_once 'functions.php';
+require_once 'modules/units/functions.php';
 require_once 'modules/document/doc_init.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+
+doc_init();
 
 $action = new action();
 $action->record(MODULE_ID_UNITS);
@@ -52,218 +54,143 @@ $lang_editor = $language;
 load_js('tools.js');
 ModalBoxHelper::loadModalBox(true);
 
-if (isset($_REQUEST['edit_submit'])) {
-    units_set_maxorder();
-    $tool_content .= handle_unit_info_edit();
+if (isset($_POST['edit_submit'])) {
+    handle_unit_info_edit();
 }
 
-$form = process_actions();
+process_actions();
 
 // check if we are trying to access a protected resource directly
 $access = Database::get()->querySingle("SELECT public FROM course_units WHERE id = ?d", $id);
 if ($access) {
     if (!resource_access(1, $access->public)) {
-        $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
-        draw($tool_content, 2, null, $head_content);
-        exit;    
+        Session::Messages($langForbidden, 'alert-danger');
+        redirect_to_home_page("courses/$course_code/");
     }
 }
 
 if ($is_editor) {
-    $base_url = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
-    $tool_content .= "
-    <div class='row'>
-        <div class='col-md-12'>" .
-        action_bar(array(
-            array('title' => $langEditUnitSection,
-                  'url' => "info.php?course=$course_code&amp;edit=$id&amp;next=1",
-                  'icon' => 'fa fa-edit',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success'),
-            array('title' => $langAdd.' '.$langInsertExercise,
-                  'url' => $base_url . 'exercise',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary'),
-            array('title' => $langAdd.' '.$langInsertDoc,
-                  'url' => $base_url . 'doc',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary'),
-            array('title' => $langAdd.' '.$langInsertText,
-                  'url' => $base_url . 'text',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary'),
-            array('title' => $langAdd.' '.$langInsertLink,
-                  'url' => $base_url . 'link',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary'),
-            array('title' => $langAdd.' '.$langLearningPath1,
-                  'url' => $base_url . 'lp',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary'),
-            array('title' => $langAdd.' '.$langInsertVideo,
-                  'url' => $base_url . 'video',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary'),
-            array('title' => $langAdd.' '.$langInsertForum,
-                  'url' => $base_url . 'forum',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary'),
-            array('title' => $langAdd.' '.$langInsertEBook,
-                  'url' => $base_url . 'ebook',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary'),
-            array('title' => $langAdd.' '.$langInsertWork,
-                  'url' => $base_url . 'work',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary'),
-            array('title' => $langAdd.' '.$langInsertPoll,
-                  'url' => $base_url . 'poll',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary'),
-            array('title' => $langAdd.' '.$langInsertWiki,
-                  'url' => $base_url . 'wiki',
-                  'icon' => 'fa fa-paste',
-                  'level' => 'secondary'),
-            )) .
-    "
-    </div>
-  </div>";
-}
-
-if ($is_editor) {
+    $data['editUrl'] = "info.php?course=$course_code&amp;edit=$id&amp;next=1";
+    $data['insertBaseUrl'] = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
     $visibility_check = '';
 } else {
     $visibility_check = "AND visible=1";
 }
 if (isset($id) and $id !== false) {
-    $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
+    $info = Database::get()->querySingle("SELECT * FROM course_units
+        WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
     if ($info) {
-        $pageName = $info->title;
-        $comments = trim($info->comments);
+        $data['pageName'] = $info->title;
+        $data['comments'] = trim($info->comments);
+        $data['unitId'] = $info->id;
     } else {
         Session::Messages($langUnknownResType);
-        redirect_to_home_page("courses/$course_code/");        
+        redirect_to_home_page("courses/$course_code/");
     }
 }
 
+
 // Links for next/previous unit
+if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
+    $access_check = '';
+} else {
+    $access_check = "AND public = 1";
+}
 foreach (array('previous', 'next') as $i) {
     if ($i == 'previous') {
         $op = '<=';
-        $dir = 'DESC';        
-        $arrow1 = "<i class='fa fa-arrow-left space-after-icon'></i>";
-        $arrow2 = '';
-        $page_btn = 'pull-left';
+        $dir = 'DESC';
     } else {
         $op = '>=';
-        $dir = '';      
-        $arrow1 = '';
-        $arrow2 = "<i class='fa fa-arrow-right space-before-icon'></i>";
-        $page_btn = 'pull-right';
+        $dir = '';
     }
-    
-    if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
-            $access_check = "";
-    } else {
-        $access_check = "AND public = 1";
-    }
-        
     $q = Database::get()->querySingle("SELECT id, title, public FROM course_units
                        WHERE course_id = ?d
                              AND id <> ?d
-                             AND `order` $op $info->order
+                             AND `order` $op ?d
                              AND `order` >= 0
                              $visibility_check
                              $access_check
                        ORDER BY `order` $dir
-                       LIMIT 1", $course_id, $id);
+                       LIMIT 1", $info->order, $course_id, $id);
     if ($q) {
-        $q_id = $q->id;
-        $q_title = htmlspecialchars($q->title);         
-        $link[$i] = "<a class='btn btn-default $page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
+        $data[$i . 'Title'] = $q->title;
+        $data[$i . 'Link'] = $urlAppend . "?course=$course_code&id=" . $q->id;
     } else {
-        $link[$i] = '&nbsp;';
+        $data[$i . 'Link'] = null;
     }
 }
 
-if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
-    $tool_content .= "
-        <div class='row'>
-            <div class='col-md-12'>
-                <div class='panel panel-default'>
-                    <div class='panel-body'>
-                        $link[previous]
-                        $link[next]
-                    </div>
-                </div>
-            </div>
-        </div>";
-}
 $moduleTag = new ModuleElement($id);
-$tags_list = $moduleTag->showTags();
-$tool_content .= "<div class='row margin-bottom'>
-      <div class='col-md-12'>
-        
-      </div>
-    </div>
-
-    <div class='row'>
-      <div class='col-md-12'>
-        <div class='panel panel-default'>
-            <div class='panel-heading'>
-                <div class='panel-title h3'>".q($pageName)."</div>
-            </div>
-            <div class='panel-body'>$comments";
-if (!empty($tags_list)) {
-    $tool_content .= "
-                    <div>
-                        $langTags: $tags_list
-                    </div>
-                    ";
-}
-    $tool_content .= "    
-            </div>          
-        </div>
-      </div>
-    </div>
-    <div class='row'>
-  <div class='col-md-12'>
-    <div class='panel padding'>";
-show_resources($id);
-$tool_content .= "
-    </div>
-  </div>
-</div>";
-$q = Database::get()->queryArray("SELECT id, title FROM course_units
+$data['tags'] = $moduleTag->showTags();
+$data['units'] = Database::get()->queryArray("SELECT id, title FROM course_units
              WHERE course_id = ?d AND `order` > 0
                    $visibility_check
              ORDER BY `order`", $course_id);
-$course_units_options ='';
-foreach ($q as $info) {
-    $selected = ($info->id == $id) ? ' selected ' : '';
-    $course_units_options .= "<option value='$info->id'$selected>" .
-            htmlspecialchars(ellipsize($info->title, 50)) .
-                '</option>';
-}
-$tool_content .= "
-    <div class='row'>
-        <div class='col-md-12'>
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
-                        <div class='form-group'>
-                            <label class='col-sm-8 control-label'>$langCourseUnits</label>
-                            <div class='col-sm-4'>
-                                <label class='sr-only' for='id'>$langCourseUnits</label>
-                                <select name='id' id='id' class='form-control' onChange='document.unitselect.submit();'>
-                                    $course_units_options
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>";
 
-draw($tool_content, 2, null, $head_content);
+view('modules.units.index', $data);
+
+
+/**
+ *
+ * @global type $langCourseUnitModified
+ * @global type $langCourseUnitAdded
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $webDir
+ * @return type
+ */
+function handle_unit_info_edit() {
+    global $course_id, $course_code, $webDir;
+
+    $title = $_REQUEST['unittitle'];
+    $descr = $_REQUEST['unitdescr'];
+    if (isset($_REQUEST['unit_id'])) { // update course unit
+        $unit_id = $_REQUEST['unit_id'];
+        Database::get()->query("UPDATE course_units SET
+                                        title = ?s,
+                                        comments = ?s
+                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
+        // tags
+        if (isset($_POST['tags'])) {
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($unit_id);
+            $moduleTag->syncTags($tagsArray);
+        }
+        $successmsg = trans('langCourseUnitModified');
+    } else { // add new course unit
+        $order = units_maxorder(course_id) + 1;
+        $q = Database::get()->query("INSERT INTO course_units SET
+                                  title = ?s, comments = ?s, visible = 1,
+                                 `order` = ?d, course_id = ?d", $title, $descr, $order, $course_id);
+        $successmsg = trans('langCourseUnitAdded');
+        $unit_id = $q->lastInsertID;
+        // tags
+        if (isset($_POST['tags'])) {
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($unit_id);
+            $moduleTag->attachTags($tagsArray);
+        }
+    }
+    // update index
+    require_once 'modules/search/indexer.class.php';
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    // refresh course metadata
+    require_once 'modules/course_metadata/CourseXML.php';
+    CourseXMLElement::refreshCourse($course_id, $course_code);
+}
+
+/**
+ * Return the maximum order for course units in a course
+ */
+function units_maxorder($course_id) {
+    $maxorder = Database::get()->querySingle("SELECT MAX(`order`) AS max_order
+                    FROM course_units WHERE course_id = ?d", $course_id)->max_order;
+
+    if ($maxorder <= 0) {
+        return 0;
+    }
+    return $maxorder;
+}
+

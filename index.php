@@ -30,10 +30,9 @@ session_start();
 
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
 if (preg_match('|/courses/([a-zA-Z_-]*\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
-	$dbname = $matches[1];
-    @mkdir('courses/' . $dbname);
-	if (!@chdir('courses/' . $dbname)) {
-		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+    $dbname = $matches[1];
+    if (!@chdir('courses/' . $dbname)) {
+        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
 <title>404 Not Found</title>
 </head><body>
@@ -41,10 +40,10 @@ if (preg_match('|/courses/([a-zA-Z_-]*\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $m
 <p>The requested URL ',$_SERVER['REQUEST_URI'],' was not found on this server.</p>
 </body></html>
 ';
-		exit;
-	}
-	$_SESSION['dbname'] = $dbname;
-	require_once '../../modules/course_home/course_home.php';
+        exit;
+    }
+    $_SESSION['dbname'] = $dbname;
+    require_once '../../modules/course_home/course_home.php';
     exit;
 }
 
@@ -60,7 +59,7 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/action.php';
 if (isset($dbname)) {
     $action = new action();
-    $action->record('MODULE_ID_UNITS', 'exit');
+    $action->record(MODULE_ID_UNITS, 'exit');
 }
 unset($dbname);
 
@@ -97,14 +96,14 @@ if (isset($_GET['logout']) and $uid) {
     foreach (array_keys($_SESSION) as $key) {
         unset($_SESSION[$key]);
     }
-    
+
     // include HubridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
-	require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
-	$config = get_hybridauth_config();
+    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+    $config = get_hybridauth_config();
     $hybridauth = new Hybrid_Auth( $config );
     $hybridauth->logoutAllProviders();
-    
+
     session_destroy();
     $uid = 0;
     if (defined('CAS')) {
@@ -167,16 +166,17 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title)),
                     'html' => "<a class='btn btn-default btn-login' href='" . $urlServer .
                               ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$langEnter</a><br>");
-            } elseif (in_array($l->auth_name, $hybridAuthMethods)) { 
+            } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
                 $hybridProviders[] = $l->auth_name;
                 if (is_null($hybridLinkId)) {
                     $authLinks[] = array(
                         'showTitle' => true,
                         'class' => 'login-option',
                         'title' => $langViaSocialNetwork);
-                    $hybridLinkId = count($authLink) - 1;
+                    $hybridLinkId = count($authLinks) - 1;
                 }
             } elseif (!$loginFormEnabled) {
+                $autofocus = count($authLinks)? '' : 'autofocus' ;
                 $loginFormEnabled = true;
                 $authLinks[] = array(
                     'showTitle' => false,
@@ -185,7 +185,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     'html' => "<form action='$urlServer' method='post'>
                              <div class='form-group'>
                                 <label for='uname' class='sr-only'>$langUsername</label>
-                                <input type='text' id='uname' name='uname' placeholder='$langUsername'><span class='col-xs-2 col-sm-2 col-md-2 fa fa-user'></span>
+                                <input type='text' id='uname' name='uname' placeholder='$langUsername' $autofocus><span class='col-xs-2 col-sm-2 col-md-2 fa fa-user'></span>
                              </div>
                              <div class='form-group'>
                                 <label for='pass' class='sr-only'>$langPass</label>
@@ -226,12 +226,12 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
       </script>
       <link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='{$urlServer}rss.php'>";
     }
-    
-    if (!($upgrade_begin or get_config('dont_display_login_form'))) {        
+
+    if (!($upgrade_begin or get_config('dont_display_login_form'))) {
         if (count($authLinks) > 3) {
             // home page login form with more than 3 buttons not supported
             $data['authLinks'] = array($authLinks[0]);
-        } 
+        }
 
     }
 
@@ -247,7 +247,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     $data['home_main_area_widgets'] = '';
     foreach ($home_main_area->getWidgets() as $key => $widget) {
         $data['home_main_area_widgets'] .= $widget->run($key);
-    }   
+    }
 
     // display extras right
     $data['extra_right'] = $langExtrasRight ?:false;
@@ -260,13 +260,13 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         setOpenCoursesExtraHTML();
         $data['openCoursesExtraHTML'] = $openCoursesExtraHTML;
     }
-    
+
     $home_page_sidebar = new \Widgets\WidgetArea(HOME_PAGE_SIDEBAR);
     $data['home_page_sidebar_widgets'] = '';
     foreach ($home_page_sidebar->getWidgets() as $key => $widget) {
         $data['home_page_sidebar_widgets'] .= $widget->run($key);
-    }  
+    }
     $data['menuTypeID'] = 0;
-    
-    echo view('home.index', $data);
+
+    view('home.index', $data);
 }

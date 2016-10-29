@@ -31,10 +31,9 @@ $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'modules/document/doc_init.php';
 
 $toolName = $langEBook;
-
-
 
 if (!$is_editor) {
     redirect_to_home_page();
@@ -47,7 +46,7 @@ if (isset($_REQUEST['id'])) {
 }
 
 define('EBOOK_DOCUMENTS', true);
-require_once 'modules/document/doc_init.php';
+doc_init();
 
 if (isset($_GET['delete'])) {
     Database::get()->query("DELETE FROM ebook_section WHERE ebook_id = ?d AND id = ?d", $ebook_id, $_GET['delete']);

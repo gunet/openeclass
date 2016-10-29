@@ -39,43 +39,17 @@ $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#id_user_registered_at').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                pickerPosition: 'bottom-right', 
                 language: '" . $language . "',
                 autoclose: true    
             });
         });
     </script>";
 
-$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = ['url' => 'index.php', 'name' => $langAdmin];
 $toolName = $langSearchUser;
-
-// get the incoming values
-$inactive_checked = (isset($_GET['search']) and $_GET['search'] == 'inactive') ?
-        ' checked' : '';
-$lname = isset($_GET['lname']) ? $_GET['lname'] : '';
-$fname = isset($_GET['fname']) ? $_GET['fname'] : '';
-$uname = isset($_GET['uname']) ? canonicalize_whitespace($_GET['uname']) : '';
-$am = isset($_GET['am']) ? $_GET['am'] : '';
-$verified_mail = isset($_GET['verified_mail']) ? intval($_GET['verified_mail']) : 3;
-$user_type = isset($_GET['user_type']) ? intval($_GET['user_type']) : '';
-$auth_type = isset($_GET['auth_type']) ? intval($_GET['auth_type']) : '';
-$email = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
-$reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
-$user_registered_at = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
-
-if (isset($_GET['department'])) {
-    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'defaults' => array_map('intval', arrayValuesDirect($_GET['department'])));
-} else {
-    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false);
-}
-
-if (isDepartmentAdmin()) {
-    $allowables = array('allowables' => $user->getDepartmentIds($uid));
-    $depts_defaults = array_merge($depts_defaults, $allowables);
-}
-
 // Display Actions Toolbar
-$tool_content .= action_bar(array(
+$data['action_bar'] = action_bar(array(
             array('title' => $langAllUsers,
                 'url' => "listusers.php?search=yes",
                 'icon' => 'fa-search',
@@ -89,121 +63,48 @@ $tool_content .= action_bar(array(
                 'icon' => 'fa-reply',
                 'level' => 'primary')));
 
+// get the incoming values
+$data['inactive_checked'] = isset($_GET['search']) && $_GET['search'] == 'inactive';
+$data['lname'] = isset($_GET['lname']) ? $_GET['lname'] : '';
+$data['fname'] = isset($_GET['fname']) ? $_GET['fname'] : '';
+$data['uname'] = isset($_GET['uname']) ? canonicalize_whitespace($_GET['uname']) : '';
+$data['am'] = isset($_GET['am']) ? $_GET['am'] : '';
+$data['verified_mail'] = isset($_GET['verified_mail']) ? intval($_GET['verified_mail']) : 3;
+//$user_type = isset($_GET['user_type']) ? intval($_GET['user_type']) : '';
+//$auth_type = isset($_GET['auth_type']) ? intval($_GET['auth_type']) : '';
+$data['email'] = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
+$data['reg_flag'] = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
+$data['user_registered_at'] = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
+
 //Preparing form data
-$usertype_data = array(
+$data['usertype_data'] = array(
     0 => $langAllUsers,
     USER_TEACHER => $langTeacher,
     USER_STUDENT => $langStudent,
     USER_GUEST => $langGuest);
-$verified_mail_data = array(
+$data['verified_mail_data'] = array(
     EMAIL_VERIFICATION_REQUIRED => $m['pending'],
     EMAIL_VERIFIED => $m['yes'],
     EMAIL_UNVERIFIED => $m['no'],
     3 => $langAllUsers);
-$authtype_data = $auth_ids;
-$authtype_data[0] = $langAllAuthTypes;
+$data['authtype_data'] = $auth_ids;
+$data['authtype_data'][0] = $langAllAuthTypes;
 
+if (isset($_GET['department'])) {
+    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'defaults' => array_map('intval', arrayValuesDirect($_GET['department'])));
+} else {
+    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false);
+}
+
+if (isDepartmentAdmin()) {
+    $allowables = array('allowables' => $user->getDepartmentIds($uid));
+    $depts_defaults = array_merge($depts_defaults, $allowables);
+}
 $tree = new Hierarchy();
 list($js, $html) = $tree->buildNodePickerIndirect($depts_defaults);
 $head_content .= $js;
+$data['html'] = $html; 
 
-// display the search form
-$tool_content .= "
-<div class='form-wrapper'>
-<form class='form-horizontal' role='form' action='listusers.php' method='get' name='user_search'>
-<fieldset>
-    <div class='form-group'>
-        <label for='uname' class='col-sm-2 control-label'>$langUsername:</label>
-        <div class='col-sm-10'>
-            <input class='form-control' type='text' name='uname' id='uname' value='" . q($uname) . "'>
-        </div>
-    </div>
-    <div class='form-group'>
-        <label for='fname' class='col-sm-2 control-label'>$langName:</label>
-        <div class='col-sm-10'>
-            <input class='form-control' type='text' name='fname' id='fname' value='" . q($fname) . "'>
-        </div>
-    </div>
-    <div class='form-group'>
-        <label for='lname' class='col-sm-2 control-label'>$langSurname:</label>
-        <div class='col-sm-10'>
-            <input class='form-control' type='text' name='lname' id='lname' value='" . q($lname) . "'>
-        </div>
-    </div>
-    <div class='form-group'>
-        <label for='email' class='col-sm-2 control-label'>$langEmail:</label>
-        <div class='col-sm-10'>
-            <input class='form-control' type='text' name='email' id='email' value='" . q($email) . "'>
-        </div>
-    </div>  
-    <div class='form-group'>
-        <label for='am' class='col-sm-2 control-label'>$langAm:</label>
-        <div class='col-sm-10'>
-            <input class='form-control' type='text' name='am' id='am' value='" . q($am) . "'>
-        </div>
-    </div>
-    <div class='form-group'>
-        <label class='col-sm-2 control-label'>$langUserType:</label>
-        <div class='col-sm-10'>
-            " . selection($usertype_data, 'user_type', 0, 'class="form-control"') . "
-        </div>
-    </div>
-    <div class='form-group'>
-        <label class='col-sm-2 control-label'>$langAuthMethod:</label>
-        <div class='col-sm-10'>
-            " . selection($authtype_data, 'auth_type', 0, 'class="form-control"') . "
-        </div>
-    </div>
-    <div class='form-group'>
-        <label class='col-sm-2 control-label'>$langRegistrationDate:</label>
-        <div class='col-sm-5'>
-            " . selection(array('1' => $langAfter, '2' => $langBefore), 'reg_flag', $reg_flag, 'class="form-control"') . "
-        </div>
-        <div class='col-sm-5'>       
-            <input class='form-control' name='user_registered_at' id='id_user_registered_at' type='text' value='$user_registered_at' data-date-format='dd-mm-yyyy' placeholder='$langRegistrationDate'>
-        </div>   
-    </div>
-    <div class='form-group'>
-        <label class='col-sm-2 control-label'>$langEmailVerified:</label>
-        <div class='col-sm-10'>
-            " . selection($verified_mail_data, 'verified_mail', $verified_mail, 'class="form-control"') . "
-        </div>
-    </div>
-    <div class='form-group'>
-        <label for='dialog-set-value' class='col-sm-2 control-label'>$langFaculty:</label>
-        <div class='col-sm-10'>
-            $html
-        </div>
-    </div>
-    <div class='form-group'>
-        <label for='search_type' class='col-sm-2 control-label'>$langSearchFor:</label>
-        <div class='col-sm-10'>
-            <select class='form-control' name='search_type' id='search_type'>
-              <option value='exact'>$langSearchExact</option>
-              <option value='begin'>$langSearchStartsWith</option>
-              <option value='contains' selected>$langSearchSubstring</option>
-            </select>
-        </div>
-    </div>
-    <div class='form-group'>
-        <div class='col-sm-10 col-sm-offset-2'>
-            <div class='checkbox'>
-              <label>
-                <input type='checkbox' name='search' value='inactive'$inactive_checked>
-                $langInactiveUsers
-              </label>
-            </div> 
-        </div>
-    </div>    
-    <div class='form-group'>
-        <div class='col-sm-10 col-sm-offset-2'>
-            <input class='btn btn-primary' type='submit' value='$langSearch'>
-            <a class='btn btn-default' href='index.php'>$langCancel</a>
-        </div>
-    </div>
-</fieldset>
-</form></div>";
-// end form
+$data['menuTypeID'] = 3;
+view('admin.users.search_user', $data);
 
-// display administrator menu
-draw($tool_content, 3, null, $head_content);

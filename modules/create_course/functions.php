@@ -101,7 +101,7 @@ function create_course_dirs($code) {
     foreach (array($base, "$base/image", "$base/document", "$base/dropbox",
                    "$base/page", "$base/work", "$base/group", "$base/temp",
                    "$base/scormPackages", "video/$code") as $dir) {
-       if (!(mkdir($dir))) {
+       if (!make_dir($dir)) {
             Session::Messages(sprintf($langDirectoryCreateError, $dir));
             return false;
        } 
@@ -116,14 +116,15 @@ function create_course_dirs($code) {
  */
 function create_modules($cid) {
     $vis_module_ids = array(MODULE_ID_AGENDA, MODULE_ID_LINKS, MODULE_ID_DOCS,
-        MODULE_ID_ANNOUNCE, MODULE_ID_DESCRIPTION, MODULE_ID_DROPBOX,);
+        MODULE_ID_ANNOUNCE, MODULE_ID_DESCRIPTION, MODULE_ID_MESSAGE,);
 
     $invis_module_ids = array(MODULE_ID_VIDEO, MODULE_ID_ASSIGN,
         MODULE_ID_FORUM, MODULE_ID_EXERCISE,
         MODULE_ID_GRADEBOOK, MODULE_ID_ATTENDANCE, MODULE_ID_GROUPS,
         MODULE_ID_GLOSSARY, MODULE_ID_EBOOK,
         MODULE_ID_CHAT, MODULE_ID_QUESTIONNAIRE,
-        MODULE_ID_LP, MODULE_ID_WIKI, MODULE_ID_BLOG, MODULE_ID_BBB, MODULE_ID_WALL);
+        MODULE_ID_LP, MODULE_ID_WIKI, MODULE_ID_BLOG, 
+        MODULE_ID_TC, MODULE_ID_WALL, MODULE_ID_LTI_CONSUMER, MODULE_ID_GAME);
 
     $vis_placeholders = array();
     $vis_args = array();

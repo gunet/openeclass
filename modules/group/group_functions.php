@@ -39,7 +39,7 @@ function initialize_group_id($param = 'group_id') {
  * @global type $tutors
  * @global type $member_count
  * @global type $is_tutor
- * @global type $is_edito
+ * @global type $is_editor
  * @global type $is_member
  * @global type $uid
  * @global type $urlServer
@@ -60,8 +60,7 @@ function initialize_group_info($group_id) {
     $has_forum = $grp_property_item->forum;
     $private_forum = $grp_property_item->private_forum;
     $documents = $grp_property_item->documents;
-    $wiki = $grp_property_item->wiki;
-    
+    $wiki = $grp_property_item->wiki;    
    
     // Guest users aren't allowed to register / unregister
     if ($status == USER_GUEST) {
@@ -79,14 +78,32 @@ function initialize_group_info($group_id) {
     $forum_id = $res->forum_id;
     $max_members = Session::has('maxStudent') ? Session::get('maxStudent') : $res->max_members;
     $secret_directory = $res->secret_directory;
-    $member_count = Database::get()->querySingle("SELECT COUNT(*) as count FROM group_members
+    $group_category = $res->category_id;
+    
+    $member_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM group_members
                                                                     WHERE group_id = ?d
                                                                     AND is_tutor = 0", $group_id)->count;
-    $group_category = $res->category_id;
-
+    
     $tutors = group_tutors($group_id);
-    $is_tutor = $is_member = $user_group_description = false;
-
+    
+    $is_tutor = $is_member = FALSE;
+    $user_group_description = NULL;
+    
+    if (isset($uid)) { // check if we are group_member
+        $res = Database::get()->querySingle("SELECT user_id FROM group_members
+                                     WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
+        if ($res) {
+            $is_member = TRUE;
+        }
+        // check if we are group tutor
+        $res = Database::get()->querySingle("SELECT is_tutor FROM group_members
+                                     WHERE group_id = ?d AND user_id = ?d AND is_tutor = 1", $group_id, $uid);
+        if ($res) {
+            $is_tutor = $res->is_tutor;
+        }
+    }
+    
+    // check description
     if ($is_tutor || $is_editor) {
         $res = Database::get()->queryArray("SELECT description,user_id FROM group_members
                                      WHERE group_id = ?d", $group_id);
@@ -97,11 +114,9 @@ function initialize_group_info($group_id) {
         }
     } else {
         if (isset($uid)) {
-            $res = Database::get()->querySingle("SELECT is_tutor, description FROM group_members
+            $res = Database::get()->querySingle("SELECT description FROM group_members
                                          WHERE group_id = ?d AND user_id = ?d AND is_tutor != 1", $group_id, $uid);
-            if ($res) {
-                $is_member = true;
-                $is_tutor = $res->is_tutor;
+            if ($res) {                
                 $user_group_description .= $res->description;
             }
         }        

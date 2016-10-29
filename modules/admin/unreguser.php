@@ -33,17 +33,17 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // get the incoming values and initialize them
 $u = isset($_GET['u']) ? intval($_GET['u']) : false;
-$c = isset($_GET['c']) ? intval($_GET['c']) : false;
+$data['c'] = $c = isset($_GET['c']) ? intval($_GET['c']) : false;
 $doit = isset($_GET['doit']);
 
 if (isset($doti)) {
-    $tool_content .= action_bar(array(    
+    $data['action_bar'] = action_bar(array(    
         array('title' => $langBackAdmin,
               'url' => "index.php",
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
 } else {
-    $tool_content .= action_bar(array(
+    $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
               'url' => "edituser.php?u=$u",
               'icon' => 'fa-reply',
@@ -58,38 +58,26 @@ if (isDepartmentAdmin()) {
     validateUserNodes(intval($u), true);
 }
 
-$u_account = $u ? q(uid_to_name($u, 'username')) : '';
-$u_realname = $u ? q(uid_to_name($u)) : '';
+$data['u_account'] = $u ? q(uid_to_name($u, 'username')) : '';
+$data['u_realname'] = $u ? q(uid_to_name($u)) : '';
 $userdata = user_get_data($u);
 $u_status = $userdata->status;
 
-if (!$doit) {
-    if ($u_account && $c) {
-        $tool_content .= "<div class='alert alert-warning'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>
-    	$langConfirmDeleteQuestion2 <em>" . q(course_id_to_title($c)) . "</em>
-        </div>
-        <div class='col-sm-offset-5 btn btn-primary'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a></div>";
-    } else {
-        $tool_content .= "<div class='alert alert-danger'>$langErrorUnreguser</div>";
-    }
-   
-} else {
+if ($doit) {
     if ($c and $u) {
         $q = Database::get()->query("DELETE from course_user WHERE user_id = ?d AND course_id = ?d", $u, $c);
         if ($q->affectedRows>0) {
             Database::get()->query("DELETE FROM group_members
                             WHERE user_id = ?d AND
                             group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $u, $c);
-            $tool_content .= "<div class='alert alert-info'>$langWithUsername \"$u_account\" $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em></div>";
-            $m = 1;
+            $message = "$langWithUsername $u_accoun $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em>";
+            Session::Messages($message, 'alert-info');
         }
     } else {
-        $tool_content .= "<div class='alert alert-danger'>$langErrorDelete</div>";
+        Session::Messages($langErrorDelete, 'alert-danger');
     }
-    $tool_content .= "<br>&nbsp;";
-    if ((isset($m)) && (!empty($m))) {
-        $tool_content .= "<br><a href='edituser.php?u=$u'>$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
-    }    
+    redirect_to_home_page("edituser.php?u=$u");
 }
 
-draw($tool_content, 3);
+$data['menuTypeID'] = 3;
+view('admin.users.unreguser', $data);

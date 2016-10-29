@@ -1,0 +1,64 @@
+/* CSS file */
+
+.closeButton
+{
+	icon: 						Embed(source="/../assets/images/icon_close_up.png");
+	up-icon: 					Embed(source="/../assets/images/icon_close_up.png");
+	over-icon: 					Embed(source="/../assets/images/icon_close_over.png");
+	down-icon: 					Embed(source="/../assets/images/icon_close_down.png");
+	disabled-skin: 				Embed(source="/../assets/images/clear.png");
+	selected-up-skin: 			Embed(source="/../assets/images/clear.png");
+	selected-over-skin: 		Embed(source="/../assets/images/clear.png");
+	selected-down-skin: 		Embed(source="/../assets/images/clear.png");
+    down-skin: 					Embed(source="/../assets/images/clear.png");
+    over-skin: 					Embed(source="/../assets/images/clear.png");
+    up-skin: 					Embed(source="/../assets/images/clear.png");
+	padding-right:10px;
+}
+
+.maximizeButton
+{
+	icon: 						Embed(source="/../assets/images/icon_expand_up.png");
+	up-icon: 					Embed(source="/../assets/images/icon_expand_up.png");
+	over-icon: 					Embed(source="/../assets/images/icon_expand_over.png");
+	selected-over-icon: 		Embed(source="/../assets/images/icon_expand_over.png");
+	down-icon: 					Embed(source="/../assets/images/icon_expand_down.png");
+	selected-down-icon: 		Embed(source="/../assets/images/icon_expand_down.png");
+	disabled-skin: 				Embed(source="/../assets/images/clear.png");
+	selected-up-skin: 			Embed(source="/../assets/images/clear.png");
+	selected-over-skin: 		Embed(source="/../assets/images/clear.png");
+	selected-down-skin: 		Embed(source="/../assets/images/clear.png");
+    down-skin: 					Embed(source="/../assets/images/clear.png");
+    over-skin: 					Embed(source="/../assets/images/clear.png");
+    up-skin: 					Embed(source="/../assets/images/clear.png");	
+
+}
+
+.minimizeButton
+{
+	icon: 						Embed(source="/../assets/images/icon_minimize_up.png");
+	up-icon: 					Embed(source="/../assets/images/icon_minimize_up.png");
+	over-icon: 					Embed(source="/../assets/images/icon_minimize_over.png");
+	selected-over-icon: 		Embed(source="/../assets/images/icon_minimize_over.png");
+	down-icon: 					Embed(source="/../assets/images/icon_minimize_down.png");
+	selected-down-icon: 		Embed(source="/../assets/images/icon_minimize_down.png");
+	disabled-skin: 				Embed(source="/../assets/images/clear.png");
+	selected-up-skin: 			Embed(source="/../assets/images/clear.png");
+	selected-over-skin: 		Embed(source="/../assets/images/clear.png");
+	selected-down-skin: 		Embed(source="/../assets/images/clear.png");
+    down-skin: 					Embed(source="/../assets/images/clear.png");
+    over-skin: 					Embed(source="/../assets/images/clear.png");
+    up-skin: 					Embed(source="/../assets/images/clear.png");
+}
+
+.mypanelTitle
+{
+	font-weight:				bold;
+    color: 						#ffffff;
+}
+
+.mypanelInactiveTitle
+{
+	font-weight:				bold;
+    color: 						#bbbbbb;
+}

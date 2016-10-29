@@ -65,15 +65,17 @@ if ($uid) {
 }
 
 // get the list of available modules
-$sql = "SELECT LPM.`learnPath_module_id` ,
-	LPM.`parent`,
-	LPM.`lock`,
-          M.`module_id`,
-          M.`contentType`,
-          M.`name`,
-        UMP.`lesson_status`, UMP.`raw`,
-        UMP.`scoreMax`, UMP.`credit`,
-          A.`path`
+$sql = "SELECT MIN(LPM.`learnPath_module_id`) AS learnPath_module_id,
+               MIN(LPM.`parent`) AS parent,
+               MIN(LPM.`lock`) AS `lock`,
+               MIN(M.`module_id`) AS module_id,
+               MIN(M.`contentType`) AS contentType,
+               MIN(M.`name`) AS name,
+               MIN(UMP.`lesson_status`) AS lesson_status,
+               MIN(UMP.`raw`) AS `raw`,
+               MIN(UMP.`scoreMax`) AS scoreMax,
+               MIN(UMP.`credit`) AS credit,
+               MIN(A.`path`) AS path
        FROM (`lp_rel_learnPath_module` AS LPM,
              `lp_module` AS M)
    LEFT JOIN `lp_user_module_progress` AS UMP

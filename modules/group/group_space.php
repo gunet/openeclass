@@ -30,7 +30,7 @@ $require_help = true;
 $helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
-require_once 'include/log.php';
+require_once 'include/log.class.php';
 require_once 'group_functions.php';
 
 initialize_group_id();
@@ -40,7 +40,7 @@ $toolName = $langGroups;
 $pageName = $group_name;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 
-if (!$is_editor) {
+if (!$is_editor) {    
     if ((!$is_member) and (!$self_reg)) { // check if we are group member
         Session::Messages($langForbidden, 'alert-danger');
         redirect_to_home_page("modules/group/index.php?course=$course_code");       
@@ -96,7 +96,7 @@ if (isset($_GET['group_as'])) {
                 <div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
-                  <th style='width:45%;'>$m[title]</th>
+                  <th style='width:45%;'>$langTitle</th>
                   <th class='text-center'>$m[subm]</th>
                   <th class='text-center'>$m[nogr]</th>
                   <th class='text-center'>$m[deadline]</th>
@@ -133,7 +133,7 @@ if (isset($_GET['group_as'])) {
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }	     
-} else {
+} else {        
     $tool_content .= action_bar(array(
                 array('title' => $langModify,
                       'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
@@ -164,16 +164,16 @@ if (isset($_GET['group_as'])) {
                       'url' => "index.php?course=$course_code",
                       'icon' => 'fa-reply',
                       'level' => 'primary'),
-                array('title' => $langEmailGroup,
-                      'url' => "group_email.php?course=$course_code&amp;group_id=$group_id",
+                array('title' => $langEmailGroup,                    
+                      'url' => "../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
                       'icon' => 'fa-envelope',                  
                       'show' => $is_editor or $is_tutor),
-                array('title' => "$langDumpUser ( $langcsvenc1 )",
-                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1&amp;enc=1253",
+                array('title' => "$langDumpUser",
+                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1",
                       'icon' => 'fa-file-archive-o',
                       'show' => $is_editor),
-                array('title' => "$langDumpUser ( $langcsvenc2 )",
-                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1",
+                array('title' => "$langDumpUser ($langcsvenc2)",
+                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1&amp;enc=UTF-8",
                       'icon' => 'fa-file-archive-o',
                       'show' => $is_editor)));
 

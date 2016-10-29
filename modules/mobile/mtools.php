@@ -27,7 +27,7 @@ require_once('minit.php');
 require_once('include/tools.php');
 
 
-$toolArr = getSideMenu(2);
+$toolArr = getSideMenu(2, false);
 
 $groupsArr = array();
 $toolsArr = array();

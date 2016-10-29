@@ -369,12 +369,14 @@ function public_path_to_disk_path($path_components, $path = '') {
     $depth = substr_count($path, '/') + 1;
     foreach ($path_components as $component) {
         $component = urldecode(str_replace(chr(1), '/', $component));
-        $r = Database::get()->querySingle("SELECT path, visible, public, format, extra_path,
+        $r = Database::get()->querySingle("SELECT id, path, visible, public, format, extra_path,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
                                       WHERE $group_sql AND
                                             filename = ?s AND
-                                            path LIKE '$path%' HAVING depth = $depth", $component);
+                                            path LIKE ?s 
+                                            AND (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) = ?d",
+                                    $component, $path . '%', $depth);
         if (!$r) {
             not_found('/' . implode('/', $path_components));
         }        

@@ -21,7 +21,7 @@
  */
 
 require_once 'oauthdrive.php';
-require_once 'Dropbox/autoload.php';
+require_once 'vendor/autoload.php';
 
 use Dropbox as dbx;
 

@@ -35,7 +35,7 @@ class LockManager {
     /**
      * Constructor
      */
-    function LockManager() {
+    public function __construct() {
     	$this->curr_time = time();
     }
     

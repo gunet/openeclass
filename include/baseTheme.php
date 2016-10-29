@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -23,14 +23,10 @@
  * Base Theme Component, eClass Core
  *
  * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
  *
  * @abstract This component is the core of eclass. Each and every file that
  * requires output to the user's browser must include this file and use
  * the draw method to output the UI to the user's browser.
- *
- * An exception of this scenario is when the user uses the personalised
- * interface. In that case function drawPerso needs to be called.
  *
  */
 use Philo\Blade\Blade;
@@ -58,14 +54,15 @@ function view($view_file, $view_data = array()) {
     global $webDir, $is_editor, $course_code, $course_id, $language, $siteName,
     $urlAppend, $urlServer, $theme, $pageName, $currentCourseName, $uid, $session, $toolName,
     $require_help, $professor, $helpTopic, $head_content, $toolName, $themeimg, $navigation,
-    $require_current_course, $saved_is_editor, $require_course_admin, $require_editor;
+    $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
+    $require_editor;
 
         // negative course_id might be set in common documents
     if ($course_id < 1) {
         unset($course_id);
         unset($course_code);
     }
-    
+
     $pageTitle = $siteName;
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
 
@@ -86,7 +83,7 @@ function view($view_file, $view_data = array()) {
     }
     if (isset($GLOBALS['leftNavExtras'])) {
         $eclass_leftnav_extras = $GLOBALS['leftNavExtras'];
-    }    
+    }
 
     //Check if there are any messages to display
     $messages = Session::getMessages();
@@ -96,7 +93,7 @@ function view($view_file, $view_data = array()) {
     } elseif (!$pageName and $toolName) {
         $pageName = $toolName;
     }
-    
+
     // set the text and icon on the third bar (header)
     if ($menuTypeID == 2) {
         $section_title = $currentCourseName;
@@ -107,13 +104,13 @@ function view($view_file, $view_data = array()) {
     } else {
         $section_title = trans('langEclass');
     }
-    
+
     //set the appropriate search action for the searchBox form
     if ($menuTypeID == 2) {
         $search_action = "search_incourse.php?all=true";
     } else {
         $search_action = "search.php";
-    }    
+    }
     // breadcrumb and page title
     $breadcrumbs = array();
     if (!$is_embedonce and !$is_mobile and $current_module_dir != '/') {
@@ -158,7 +155,7 @@ function view($view_file, $view_data = array()) {
             array_push($breadcrumbs, $item);
         }
     }
-    
+
     //Get the Current Module ID
     if ($is_editor and isset($course_code)) {
         $module_id = current_module_id();
@@ -168,7 +165,7 @@ function view($view_file, $view_data = array()) {
             $module_visibility = false;
         }
     }
-    
+
     //Construct the after login redirect url
     $nextParam = '';
     if (!$uid) {
@@ -205,11 +202,7 @@ function view($view_file, $view_data = array()) {
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
-        
-        if (isset($theme_options_styles['siteTitle']) && $theme_options_styles['siteTitle']) {
-            $section_title = $theme_options_styles['siteTitle'];
-        }
-        
+
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         $styles_str = '';
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
@@ -256,13 +249,13 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['imageUpload'])) $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
         if (isset($theme_options_styles['imageUploadSmall'])) $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
     }
-    
+
     $sidebar_courses = Database::get()->queryArray("SELECT id, code, title, prof_names, public_code
         FROM course, course_user
         WHERE course.id = course_id AND course.visible != " . COURSE_INACTIVE . " AND user_id = ?d
-        ORDER BY reg_date DESC", $uid); 
-        
-    $show_toggle_student_view = isset($require_current_course) && 
+        ORDER BY reg_date DESC", $uid);
+
+    $show_toggle_student_view = isset($require_current_course) &&
                                 ($is_editor || isset($saved_is_editor) && $saved_is_editor) &&
                                 !(isset($require_course_admin) && $require_course_admin) &&
                                 !(isset($require_editor) && $require_editor);
@@ -271,28 +264,28 @@ function view($view_file, $view_data = array()) {
     $cache = $webDir . '/storage/views';
     $blade = new Blade($views, $cache);
 
-    $global_data = compact('is_editor', 'course_code', 'course_id', 'language', 
+    $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
             'pageTitle', 'urlAppend', 'urlServer', 'eclass_version', 'template_base', 'toolName',
-            'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam', 
+            'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam',
             'require_help', 'helpTopic', 'head_content', 'toolArr', 'module_id',
             'module_visibility', 'professor', 'pageName', 'menuTypeID', 'section_title',
             'messages', 'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
             'is_mobile', 'current_module_dir','search_action', 'require_current_course',
-            'saved_is_editor', 'require_course_admin', 'require_editor', 'sidebar_courses',
-            'show_toggle_student_view', 'themeimg');
+            'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
+            'show_toggle_student_view', 'themeimg', 'currentCourseName');
     $data = array_merge($global_data, $view_data);
-    return $blade->view()->make($view_file, $data)->render();
+    echo $blade->view()->make($view_file, $data)->render();
 }
 function widget_view($view_file, $view_data = array()) {
     global $webDir, $is_editor, $course_code, $course_id, $language, $siteName,
     $urlAppend, $theme, $pageName, $currentCourseName, $uid, $session, $toolName,
     $require_help, $professor, $helpTopic, $head_content, $toolName, $themeimg, $navigation,
     $require_current_course, $saved_is_editor, $require_course_admin, $require_editor;
-    
+
     $views = $webDir."/$view_data[widget_folder]/views";
     $cache = $webDir . '/storage/views';
     $blade = new Blade($views, $cache);
-    
+
     $global_data = [];
     $data = array_merge($global_data, $view_data);
     return $blade->view()->make($view_file, $data)->render();
@@ -322,23 +315,23 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
         $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_course_admin, $require_help, $siteName, $siteName,
-        $switchLangURL, $theme, $themeimg,
+        $switchLangURL, $theme, $themeimg, $is_course_admin,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
         $theme_settings, $language, $saved_is_editor, $langProfileImage,
-        $langStudentViewEnable, $langStudentViewDisable, $langNoteTitle, $langEnterNote, $langFieldsRequ;
+        $langStudentViewEnable, $langStudentViewDisable, $langTitle, $langEnterNote, $langFieldsRequ;
 
-    $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);    
+    $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
     if ($is_embedonce) {
         unset($_SESSION['embedonce']);
-        echo view('layouts.embed', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
+        view('legacy.embed', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
     } else {
-        echo view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
+        view('legacy.index', compact('tool_content', 'menuTypeID', 'perso_tool_content'));
     }
     // FOR REFERENCE ONLY (SHOULD BE REMOVED)
-    
+
     // get blocks content from $toolContent array
 //    if ($perso_tool_content) {
-//        $lesson_content = $perso_tool_content ['lessons_content'];        
+//        $lesson_content = $perso_tool_content ['lessons_content'];
 //        $personal_calendar_content = $perso_tool_content ['personal_calendar_content'];
 //    }
 //
@@ -396,8 +389,8 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
 //    }
 //
 //
-//    //	BEGIN constructing of left navigation
-//    //	----------------------------------------------------------------------
+//    //    BEGIN constructing of left navigation
+//    //    ----------------------------------------------------------------------
 //    $t->set_block('mainBlock', 'leftNavBlock', 'leftNav');
 //    $t->set_block('leftNavBlock', 'leftNavCategoryBlock', 'leftNavCategory');
 //    $t->set_block('leftNavCategoryBlock', 'leftNavCategoryTitleBlock', 'leftNavCategoryTitle');
@@ -500,7 +493,7 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
 //        $t->set_var('LANG_MESSAGES', q($GLOBALS['langMyDropBox']));
 //        $t->set_var('MESSAGES_LINK', $urlAppend . 'modules/dropbox/index.php');
 //        $t->set_var('LANG_COURSES', q($GLOBALS['langMyCourses']));
-//        $t->set_var('COURSES_LINK', $urlAppend . 'main/my_courses.php');        
+//        $t->set_var('COURSES_LINK', $urlAppend . 'main/my_courses.php');
 //        $t->set_var('LANG_AGENDA', q($langMyAgenda));
 //        $t->set_var('AGENDA_LINK', $urlAppend . 'main/personal_calendar/index.php');
 //        $t->set_var('LANG_NOTES', q($GLOBALS['langNotes']));
@@ -532,7 +525,7 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
 //        $t->set_var('langSave', q($GLOBALS['langSave']));
 //        $t->set_var('langAllNotes', q($GLOBALS['langAllNotes']));
 //        $t->set_var('langAllMessages', q($GLOBALS['langAllMessages']));
-//        $t->set_var('langNoteTitle', q($langNoteTitle));
+//        $t->set_var('langTitle', q($langTitle));
 //        $t->set_var('langEnterNoteLabel', $langNote);
 //        $t->set_var('langEnterNote', q($langEnterNote));
 //        $t->set_var('langFieldsRequ', q($langFieldsRequ));
@@ -806,7 +799,7 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
 //        <a id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\">
 //            <i class='fa fa-question-circle tiny-icon' data-toggle='tooltip' data-placement='top' title='$langHelp'></i>
 //        </a>";
-//        
+//
 //        $t->set_var('HELP_LINK_ICON', $help_link_icon);
 //        $t->set_var('LANG_HELP', $langHelp);
 //    } else {
@@ -836,10 +829,10 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
 //    }
 //
 //    if ($perso_tool_content) {
-//        $t->set_var('LANG_MY_PERSO_LESSONS', $langMyCourses);        
+//        $t->set_var('LANG_MY_PERSO_LESSONS', $langMyCourses);
 //        $t->set_var('LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements);
 //        $t->set_var('LANG_MY_PERSONAL_CALENDAR', $langMyAgenda);
-//        $t->set_var('LESSON_CONTENT', $lesson_content);        
+//        $t->set_var('LESSON_CONTENT', $lesson_content);
 //        $t->set_var('URL_PATH', $urlAppend);
 //        $t->set_var('TOOL_PATH', $urlAppend);
 //        $t->set_var('PERSONAL_CALENDAR_CONTENT', $personal_calendar_content);
@@ -866,8 +859,8 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
 //        $t->set_var('HTML_FOOTER', $html_footer);
 //    }
 //
-//    //	At this point all variables are set and we are ready to send the final output
-//    //	back to the browser
+//    //    At this point all variables are set and we are ready to send the final output
+//    //    back to the browser
 //    $t->parse('main', 'mainBlock', false);
 //
 //    $t->pparse('Output', 'fh');
@@ -911,7 +904,7 @@ function dumpArray($arr) {
  * @param array $arr
  */
 function print_a($TheArray) {
-    
+
     echo "<table border=1>";
     if (is_object($TheArray)) {
         $TheArray = (array)($TheArray);
@@ -934,18 +927,6 @@ function print_a($TheArray) {
         echo "</tr>";
     }
     echo "</table>";
-}
-
-/**
- * Function print_html_r
- *
- * Used for debugging purposes. Dumps array to browser
- *
- * @param array $arr
- */
-function print_html_r($TheArray) {
-    echo nl2br(eregi_replace(" ", " ", print_r($TheArray, TRUE)));
-    echo "<br /><br />";
 }
 
 /**
@@ -984,7 +965,7 @@ function lang_selections() {
     global $session, $native_language_names_init;
     if (count($session->active_ui_languages) < 2) {
         return ('&nbsp;');
-    }    
+    }
     $lang_select = "<li class='dropdown'>
       <a href='#' class='dropdown-toggle' role='button' id='dropdownMenuLang' data-toggle='dropdown'>
           <span class='fa fa-globe'></span><span class='sr-only'>" . trans('langChooseLang') . "</span>
@@ -1042,11 +1023,11 @@ function module_path($path) {
             return 'listreq';
         }
     }
-    
+
     if (strpos($path, '/usage/') !== false && strpos($path, 't=u') !== false && strpos($path, 'u=') !== false && $is_admin) {
         return '/admin/search_user.php';
     }
-    
+
     $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
     $path = str_replace(array($urlServer, $urlAppend, 'index.php'),
                         array('/', '/', ''), $path);
@@ -1075,7 +1056,7 @@ function module_path($path) {
     } elseif (isset($GLOBALS['course_code']) and
               strpos($path, '/courses/' . $GLOBALS['course_code']) !== false) {
         return 'course_home';
-    } 
+    }
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
 

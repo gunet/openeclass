@@ -8,6 +8,25 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Favicon for various devices -->
+    <link rel="shortcut icon" href="{{ $urlAppend }}template/favicon/favicon.ico" />
+    <link rel="apple-touch-icon-precomposed" href="{{ $urlAppend }}template/favicon/openeclass_128x128.png" />
+    <link rel="icon" type="image/png" href="{{ $urlAppend }}template/favicon/openeclass_128x128.png" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{{ $template_base }}/CSS/bootstrap-custom.css?v={{ $eclass_version }}">
+
+    <!-- Font Awesome - A font of icons -->
+    <link href="{{ $template_base }}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
+
+    @if (isset($styles_str) && $styles_str)
+        <style>
+            {!! $styles_str !!}
+        </style>
+    @endif
+
+    @stack('head_styles')
+
     <!-- jQuery -->
     <script type="text/javascript" src="{{ $urlAppend }}js/jquery-2.1.1.min.js"></script>
 
@@ -37,28 +56,15 @@
     <!-- Our javascript -->
     <script type="text/javascript" src="{{ $template_base }}/js/main.js?v={{ $eclass_version }}"></script>
 
-    <!-- Favicon for various devices -->
-    <link rel="shortcut icon" href="{{ $urlAppend }}template/favicon/favicon.ico" />
-    <link rel="apple-touch-icon-precomposed" href="{{ $urlAppend }}template/favicon/openeclass_128x128.png" />
-    <link rel="icon" type="image/png" href="{{ $urlAppend }}template/favicon/openeclass_128x128.png" />
-    
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="{{ $template_base }}/CSS/bootstrap-custom.css?v={{ $eclass_version }}">
 
-    <!-- Font Awesome - A font of icons -->
-    <link href="{{ $template_base }}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
-    
     <!--[if lt IE 9]>
       <script type="text/javascript" src="{{ $template_base }}/js/html5shiv.min.js"></script>
       <script type="text/javascript" src="{{ $template_base }}/js/respond.min.js"></script>
     <![endif]-->
 
-    @if (isset($styles_str) && $styles_str)
-    <style>
-        {!! $styles_str !!}
-    </style>
-    @endif
     {!! $head_content !!}
+
+    @stack('head_scripts')
 
 </head>
 
@@ -78,31 +84,37 @@
                         </a>
                         <ul class="nav navbar-nav navbar-right">
                             @if ($uid && !defined('UPGRADE'))
-                                <li><a href="{{ $urlAppend }}main/portfolio.php"><span class="fa fa-home"></span><span class="sr-only">{{ trans('langPortfolio') }}</span></a></li>
+                                <li>
+                                    <a href="{{ $urlAppend }}main/portfolio.php">
+                                        <span class="fa fa-home"></span>
+                                        <span class="sr-only">{!! trans('langPortfolio') !!}</span>
+                                    </a>
+                                </li>
                                 <li id="profile_menu_dropdown" class="dropdown">
                                    <a class="dropdown-toggle clearfix" role="button" id="dropdownMenu1" data-toggle="dropdown">
-                                       <img alt="{{ trans('langProfileMenu') }}" class="img-circle user-icon" src="{{ user_icon($uid) }}" style="display: block; float: left; max-height: 20px;"><div style="display: block; float: left;">{{ $uname }}</div>
+                                       <img alt="{{ trans('langProfileMenu') }}" class="img-circle user-icon" src="{{ user_icon($uid) }}" style="display: block; float: left; max-height: 20px;">
+                                       <div style="display: block; float: left;">{{ $uname }}</div>
                                     </a>
 
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_courses.php"><span class="fa fa-graduation-cap fa-fw"></span>{{ trans('langMyCourses') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_courses.php"><span class="fa fa-graduation-cap fa-fw"></span>{!! trans('langMyCourses') !!}</a>
                                         </li>                                    
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/dropbox/index.php"><span class="fa fa-envelope-o fa-fw"></span>{{ trans('langMyDropBox') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/dropbox/index.php"><span class="fa fa-envelope-o fa-fw"></span>{!! trans('langMyDropBox') !!}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><span class="fa fa-bullhorn fa-fw"></span>{{ trans('langMyAnnouncements') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><span class="fa fa-bullhorn fa-fw"></span>{!! trans('langMyAnnouncements') !!}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/personal_calendar/index.php"><span class="fa fa-calendar fa-fw"></span>{{ trans('langMyAgenda') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/personal_calendar/index.php"><span class="fa fa-calendar fa-fw"></span>{!! trans('langMyAgenda') !!}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/notes/index.php"><span class="fa fa-edit fa-fw"></span>{{ trans('langNotes') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/notes/index.php"><span class="fa fa-edit fa-fw"></span>{!! trans('langNotes') !!}</a>
                                         </li>
                                         @if (get_config('personal_blog')) 
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/blog/index.php"><span class="fa fa-columns fa-fw"></span>{{ trans('langMyBlog') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/blog/index.php"><span class="fa fa-columns fa-fw"></span>{!! trans('langMyBlog') !!}</a>
                                         </li>
                                         @endif
                                         @if (get_config('eportfolio_enable')) 
@@ -112,20 +124,20 @@
                                         @endif
                                         @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')))
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/mydocs/index.php"><span class="fa fa-folder-open-o fa-fw"></span>{{ trans('langMyDocs') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/mydocs/index.php"><span class="fa fa-folder-open-o fa-fw"></span>{!! trans('langMyDocs') !!}</a>
                                         </li>
                                         @endif
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/profile/display_profile.php"><span class="fa fa-user fa-fw"></span>{{ trans('langMyProfile') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/profile/display_profile.php"><span class="fa fa-user fa-fw"></span>{!! trans('langMyProfile') !!}</a>
                                         </li>
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_widgets.php"><span class="fa fa-magic fa-fw"></span>{{ trans('langMyWidgets') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_widgets.php"><span class="fa fa-magic fa-fw"></span>{!! trans('langMyWidgets') !!}</a>
                                         </li>                                        
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/usage/?t=u"><span class="fa fa-area-chart fa-fw"></span>{{ trans('langMyStats') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/usage/?t=u"><span class="fa fa-area-chart fa-fw"></span>{!! trans('langMyStats') !!}</a>
                                         </li>
                                         <li role="presentation" style="border-top: 1px solid #ddd">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}index.php?logout=yes"><span class="fa fa-unlock fa-fw"></span>{{ trans('langLogout') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}index.php?logout=yes"><span class="fa fa-unlock fa-fw"></span>{!! trans('langLogout') !!}</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -133,7 +145,12 @@
                                 @else
                                 {!! lang_selections() !!}
                                 @if (!get_config('hide_login_link'))
-                                    <li><a href="{{ $urlAppend }}main/login_form.php{{ $nextParam }}"><span class="fa fa-lock"></span><span class="sr-only">{{ trans('langLogin') }}</span></a></li>
+                                    <li>
+                                        <a href="{{ $urlAppend }}main/login_form.php{{ $nextParam }}">
+                                            <span class="fa fa-lock"></span>
+                                            <span class="sr-only">{!! trans('langLogin') !!}</span>
+                                        </a>
+                                    </li>
                                 @endif
                             @endif    
                         </ul>
@@ -163,13 +180,13 @@
                             <div class="col-xs-9">
                                 <h1 class='page-title'>
                                     @if ($menuTypeID == 2 && $pageName)
-                                        <a href='{{ $urlServer }}courses/{{ $course_code }}/'> {{ $section_title }}</a>
+                                        <a href='{{ $urlServer }}courses/{{ $course_code }}/'>{!! $section_title !!}</a>
                                     @else
-                                        {{ $section_title }}
+                                        {!! $section_title !!}
                                     @endif                                    
                                 </h1>
                                 @if (isset($course_id) && isset($professor))
-                                    <h2 class='page-subtitle'>{{ $professor }}</h2>
+                                    <h2 class='page-subtitle'>{!! $professor !!}</h2>
                                 @endif
                                 @if (!defined('HIDE_TOOL_TITLE'))
                                 <div class='row'>
@@ -250,7 +267,7 @@
                                 </div>
                             </div>
                         </a>
-                        <div id="collapse{{ $key }}" class="panel-collapse list-group collapse{{ $tool_group[0]['class'] }}">
+                        <div id="collapse{{ $key }}" class="panel-collapse list-group collapse {{ $tool_group[0]['class'] }}">
                             @foreach ($tool_group[1] as $key2 => $tool)
                             <a href="{{ $tool_group[2][$key2] }}" class="list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}" {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                                 <span class="fa {{ $tool_group[3][$key2] }} fa-fw"></span>
@@ -365,12 +382,13 @@
                     <span class='fa fa-caret-square-o-up fa-2x'></span>
                 </div>
                 <footer class="footer">
-                    <span>Open eClass © 2003-{{ date('Y') }} &mdash; <a href="{{ $urlAppend }}info/terms.php">{{ trans('langUsageTerms') }}</a></span>
+                    <span><a href='{{ $urlAppend }}info/copyright.php'>Open eClass © 2003-{{ date('Y') }}</a> &mdash; <a href="{{ $urlAppend }}info/terms.php">{{ trans('langUsageTerms') }}</a></span>
                 </footer>
             </div>
         </div>
     </div>
 
+    @stack('footer_scripts')
     @if (get_config('ext_analytics_enabled') and $html_footer = get_config('ext_analytics_code')) {
         {!! get_config('ext_analytics_code') !!}
     @endif
