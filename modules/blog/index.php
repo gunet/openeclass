@@ -591,7 +591,13 @@ if ($action == "showPost") {
                                             'class' => 'delete',
                                             'confirm' => $langSureToDelBlogPost,
                                             'show' => $allow_to_edit
-                                        )                                        
+                                        ),
+                                        array(
+                                            'title' => $langAddResePortfolio,
+                                            'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=blog&amp;rid=".$post->getId(),
+                                            'icon' => 'fa-star',
+                                            'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
+                                        ),
                                     ))."
                                 </div>
                                 <h3 class='panel-title'>
@@ -706,7 +712,13 @@ if ($action == "showBlog") {
                                                 'class' => 'delete',
                                                 'confirm' => $langSureToDelBlogPost,
                                                 'show' => $allow_to_edit
-                                            )                                        
+                                            ),
+                                            array(
+                                                'title' => $langAddResePortfolio,
+                                                'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=blog&amp;rid=".$post->getId(),
+                                                'icon' => 'fa-star',
+                                                'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
+                                            ),
                                         ))."
                                     </div>
                                     <h3 class='panel-title'>

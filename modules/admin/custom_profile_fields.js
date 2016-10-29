@@ -94,7 +94,7 @@ function submitSortOrderForm() {
 	//fields
 	var field_tbodys = document.getElementsByClassName('tile__list');
 	for (var i=0; i<field_tbodys.length; i++) {
-		var cat = field_tbodys[i].parentElement.parentElement.id;		
+		var cat = field_tbodys[i].parentElement.parentElement.id;
 		var trs = field_tbodys[i].childNodes;
 		for (var j=0; j<trs.length; j++) {
 			if (trs[j].className != 'ignore-item') {

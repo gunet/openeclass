@@ -334,6 +334,7 @@ if (isset($_POST['submit'])) {
         'hide_login_link' => true,
         'dropbox_allow_student_to_student' => true,
         'dropbox_allow_personal_messages' => true,
+        'eportfolio_enable' => true,
         'personal_blog' => true,
         'personal_blog_commenting' => true,
         'personal_blog_rating' => true,
@@ -523,7 +524,14 @@ else {
     $data['cbox_course_metadata']  = get_config('course_metadata') ? 'checked' : '';
     $data['cbox_opencourses_enable']  = get_config('opencourses_enable') ? 'checked' : '';
 
+    $cbox_eportfolio_enable = get_config('eportfolio_enable') ? 'checked' : '';
   
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' $cbox_eportfolio_enable>
+                                        $lang_eportfolio_enable
 
         
     $data['cbox_case_insensitive_usernames'] = get_config('case_insensitive_usernames') ? 'checked' : '';
