@@ -284,7 +284,7 @@ if ($userdata) {
             $submission_content = "<div><button type='button' class='btn btn-primary btn-xs' data-toggle='collapse' data-target='#header_more_$submission->id'>$langMore</button></div>
                                    <div id='header_more_$submission->id' class='collapse'>";
             if (!empty($data['descr'])) {
-                $submission_content .= "<div><b>".$langDescr."</b>:</div><div>".$data['descr']."</div>";
+                $submission_content .= "<div><b>".$langDescription."</b>:</div><div>".$data['descr']."</div>";
             }
             $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;type=assignment&er_id=$submission->id'>$langWorkFile</a></div>";
             $submission_content .= "</div>";
@@ -342,9 +342,14 @@ if ($uid == $id) {
 function cmp($obj1, $obj2)
 {   
     $data1 = unserialize($obj1->data);
-    $data1 = strtotime($data1[2]);
+    if (array_key_exists('subm_date', $data1)) {
+        $key = 'subm_date';
+    } elseif (array_key_exists('timestamp', $data1)) {
+        $key = 'timestamp';
+    }
+    $data1 = strtotime($data1[$key]);
     $data2 = unserialize($obj2->data);
-    $data2 = strtotime($data2[2]);
+    $data2 = strtotime($data2[$key]);
     
     if ($data1 < $data2)
         return true;
