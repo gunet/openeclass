@@ -3021,7 +3021,7 @@ function show_non_submitted($id) {
  * @global type $langTitle
  */
 function show_student_assignments() {
-    global $tool_content, $m, $uid, $course_id, $course_code,
+    global $tool_content, $m, $uid, $course_id, $course_code, $urlServer,
     $langDaysLeft, $langNoAssign, $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio;
     
     $add_eportfolio_res_td = "";
