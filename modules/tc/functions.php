@@ -326,7 +326,13 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
 
         $q = Database::get()->querySingle("SELECT meeting_id, title, mod_pw, att_pw FROM tc_session WHERE id = ?d", $session_id);
     } else {
-        $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = '$tc_type' and enabled = 'true' ORDER BY weight ASC")->id;
+        // check if course uses specific tc_server
+        $t = Database::get()->querySingle("SELECT external_server FROM course_external_server WHERE course_id = ?d", $course_id);
+        if ($t) {
+            $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE id = $t->external_server AND `type` = '$tc_type' AND enabled = 'true' ORDER BY weight ASC")->id;
+        } else { // else course will use default tc_server            
+            $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = '$tc_type' and enabled = 'true' ORDER BY weight ASC")->id;
+        }
         $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
                                                             description = ?s,
@@ -1191,30 +1197,27 @@ function is_tc_server_enabled_for_all($tc_type) {
  * @param type $tc_type
  * @return boolean
  */
-function is_active_tc_server($tc_type, $course_id)
-{
-    $found = false;
+function is_active_tc_server($tc_type, $course_id) {    
+    
     $q = Database::get()->queryArray("SELECT id, all_courses FROM tc_servers WHERE enabled='true'
                                 AND `type` = '$tc_type' ORDER BY weight");
+    
     if (count($q) > 0) {
         foreach ($q as $data) {
             if ($data->all_courses == 1) { // tc_server is enabled for all courses
                 return true;
-            } else { // check if tc_server is enabled for specific course
+            } else { // check if tc_server is enabled for specific course                
                 $q = Database::get()->querySingle("SELECT * FROM course_external_server
                                     WHERE course_id = ?d AND external_server = $data->id", $course_id);
                 if ($q) {
-                    $found = true;
-                } else {
-                    $found = false;
+                    return true;
                 }
             }
         }
-        return $found;
+        return false;
     } else { // no active tc_servers
         return false;
     }
-
 }
 
 /**
