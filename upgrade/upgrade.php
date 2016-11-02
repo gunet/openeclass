@@ -3407,6 +3407,31 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 END");
     }
 
+    if (version_compare($oldversion, '3.6', '<')) {
+        // Course Category tables
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `category` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` TEXT NOT NULL,
+            `multiple` BOOLEAN NOT NULL DEFAULT TRUE,
+            `searchable` BOOLEAN NOT NULL DEFAULT TRUE,
+            `active` BOOLEAN NOT NULL DEFAULT TRUE
+            ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `category_value` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `category_id` INT(11) NOT NULL REFERENCES category(id)
+            `name` TEXT NOT NULL,
+            `ordering` INT(11),
+            `active` BOOLEAN NOT NULL DEFAULT TRUE
+            ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `course_category` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `course_id` INT(11) NOT NULL REFERENCES course(id),
+            `category_value_id` INT(11) NOT NULL REFERENCES category_value(id)
+            ) $tbl_options");
+    }
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 
