@@ -608,7 +608,7 @@ function bbb_session_details() {
             }
 
             if ($record == 'true' and has_enable_recordings($server_id) == 'false') {
-                $warning_message_record = "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBNoServerForRecording'></span>";
+                $warning_message_record = "<span class='fa fa-info-circle pull-right' data-toggle='tooltip' data-placement='right' title='$langBBBNoServerForRecording'></span>";
             } else {
                 $warning_message_record = '';
             }
@@ -621,7 +621,7 @@ function bbb_session_details() {
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
                     <td>
                         <div class='table_td'>
-                            <div class='table_td_header clearfix'>$joinLink</div> $warning_message_record
+                            <div class='table_td_header clearfix'>$joinLink $warning_message_record</div>
                             <div class='table_td_body'>
                                 $desc
                             </div>
