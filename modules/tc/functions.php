@@ -511,7 +511,7 @@ function bbb_session_details() {
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langUnitDescr,
         $langNoBBBSesssions, $langDaysLeft, $m, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
-        $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langBBBNoServerForRecording;
+        $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langdate, $langBBBNoServerForRecording;
 
 
     if (!is_active_tc_server($tc_type, $course_id)) { // check availability
@@ -538,10 +538,8 @@ function bbb_session_details() {
                          <div class='table-responsive'>
                            <table class='table-default'>
                              <tr class='list-header'>
-                               <th style='width:25%'>$langTitle</th>
-                               <th class='text-center'>$langUnitDescr</th>
-                               <th class='text-center'>$langNewBBBSessionStart</th>
-                               <th class='text-center'>$langNewBBBSessionEnd</th>
+                               <th style='width: 50%'>$langTitle</th>
+                               <th class='text-center'>$langdate</th>
                                <th class='text-center'>$langParticipants</th>
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
@@ -575,7 +573,7 @@ function bbb_session_details() {
                 $timeLabel = nice_format($end_date, TRUE);
             } else {
                 $timeLeft = date_diff_in_minutes($start_date, date('Y-m-d H:i:s'));
-                $timeLabel = '';
+                $timeLabel = '&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;';
             }
             if ($timeLeft > 0) {
                 $timeLabel .= "<br><span class='label label-warning'><small>$langDaysLeft " .
@@ -610,7 +608,7 @@ function bbb_session_details() {
             }
 
             if ($record == 'true' and has_enable_recordings($server_id) == 'false') {
-                $warning_message_record = "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langBBBNoServerForRecording'></span>";
+                $warning_message_record = "<span class='fa fa-info-circle pull-right' data-toggle='tooltip' data-placement='right' title='$langBBBNoServerForRecording'></span>";
             } else {
                 $warning_message_record = '';
             }
@@ -621,11 +619,24 @@ function bbb_session_details() {
                     $headingsSent = true;
                 }
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
-                    <td class='text-left'>$joinLink $warning_message_record</td>
-                    <td>$desc</td>
-                    <td class='text-center'>".nice_format($start_date, TRUE)."</td>
-                    <td class='text-center'>$timeLabel</td>
-                    <td style='width: 30%'>$participants</td>
+                    <td>
+                        <div class='table_td'>
+                            <div class='table_td_header clearfix'>$joinLink $warning_message_record</div>
+                            <div class='table_td_body'>
+                                $desc
+                            </div>
+                        </div>
+                    </td>
+                    <td class='text-center'>
+                        <div style='padding-top: 7px;'>  
+                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."<br/>
+                        </div>
+                        <div style='padding-top: 7px;'>
+                            <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
+                        </div>
+                    </td>
+                    
+                    <td style='width: 20%'>$participants</td>
                     <td class='option-btn-cell'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
@@ -673,11 +684,23 @@ function bbb_session_details() {
                         $headingsSent = true;
                     }
                     $tool_content .= "<tr>
-                        <td class='text-center'>$joinLink $warning_message_record</td>
-                        <td>$desc</td>
-                        <td class='text-center'>".nice_format($start_date, TRUE)."</td>
-                        <td class='text-center'>$timeLabel</td>
-                        <td style='width: 30%'>$participants</td>
+                        <td>
+                        <div class='table_td'>
+                            <div class='table_td_header clearfix'>$joinLink</div> $warning_message_record
+                            <div class='table_td_body'>
+                                $desc
+                            </div>
+                        </div>
+                    </td>
+                    <td class='text-center'>
+                        <div style='padding-top: 7px;'>  
+                            <span class='text-success'>$langNewBBBSessionStart</span>: ".nice_format($start_date, TRUE)."<br/>
+                        </div>
+                        <div style='padding-top: 7px;'>
+                            <span class='text-danger'>$langNewBBBSessionEnd</span>: $timeLabel</br></br>
+                        </div>
+                    </td>
+                        <td style='width: 20%'>$participants</td>
                         <td class='text-center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($canJoin) {
