@@ -13,7 +13,7 @@ syntax: regexp
 ^vendor/
 
 ^nbproject/private/
-^.sass-cache/
+^template/default/.sass-cache/
 
 ^\.buildpath$
 ^\.project$
