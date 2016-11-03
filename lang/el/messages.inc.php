@@ -1279,6 +1279,8 @@ $langChangeGradebook2 = "(επιλογή ενεργού βαθμολογίου �
 $langGradebookNoTitle2 = "Βαθμολόγιο χωρίς τίτλο";
 $langGradebookDeleted = "To βαθμολόγιο διαγράφηκε με επιτυχία";
 $langSpecificUsers = "συγκεκριμένοι $langsStudents";
+$langExportGradebookWithUsers = "Εξαγωγή αποτελεσμάτων χρηστών";
+$langExportGradebook = "Εξαγωγή αποτελεσμάτων βαθμολογίων";
 
 $langCertificate = "Πιστοποιητικό";
 $langCertificates = "Πιστοποιητικά";

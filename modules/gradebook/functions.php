@@ -745,11 +745,12 @@ function student_view_gradebook($gradebook_id) {
             $tool_content .= "</td>
             </tr>";
         } // end of while
+        $s_grade = userGradeTotal($gradebook_id, $uid);
         $tool_content .= "            
             <tr>
                 <th colspan='5' class='text-right'>$langGradebookSum:</th>
-                <th class='text-center'>".($sql ? userGradeTotal($gradebook_id, $uid) . " / $range" : "&mdash;")."</th>
-            </tr>";
+                <th class='text-center'>". (($s_grade != "&mdash;") ? $s_grade . " / $range" : "$s_grade"). "</th>
+            </tr>";        
     }
     $tool_content .= "</table>";
 }
@@ -780,9 +781,7 @@ function student_view_gradebook($gradebook_id) {
  * @global type $langConfirmDelete
  * @global type $langEditChange
  * @global type $langYes
- * @global type $langNo
- * @global type $langConfig
- * @global type $langUsers
+ * @global type $langNo 
  * @global type $langGradebookAddActivity
  * @global type $langInsertWorkCap
  * @global type $langInsertExerciseCap
@@ -793,13 +792,13 @@ function student_view_gradebook($gradebook_id) {
 function display_gradebook($gradebook) {
 
     global $course_code, $urlServer, $tool_content, $langGradebookGradeAlert, $langGradebookNoActMessage1,
-           $langTitle, $langViewShow, $langScore, $langGradebookActList, $langAdd,
+           $langTitle, $langViewShow, $langScore, $langGradebookActList, $langAdd, $langHere,
            $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langType, $langExercise,
            $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity, $langDelete, $langConfirmDelete,
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
-           $langConfig, $langUsers, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap, $langLearningPath,
-           $langExport, $langcsvenc1, $langcsvenc2, $langBack, $langToA, $langNoRegStudent, $langHere, $langStudents;
+           $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap, $langLearningPath,
+           $langExport, $langcsvenc2, $langBack, $langNoRegStudent, $langStudents, $langExportGradebook, $langExportGradebookWithUsers;
 
     $tool_content .= action_bar(
         array(
@@ -831,8 +830,11 @@ function display_gradebook($gradebook) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;gradebookBook=1",
                   'icon' => 'fa-users',
                   'level' => 'primary-label'),
-            array('title' => $langExport,
-                  'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id),
+            array('title' => $langExportGradebook,
+                  'url' => "dumpgradebook.php?course=$course_code&amp;t=1&amp;gradebook_id=" . getIndirectReference($gradebook->id),
+                  'icon' => 'fa-file-excel-o'),
+            array('title' => $langExportGradebookWithUsers,
+                  'url' => "dumpgradebook.php?course=$course_code&amp;&amp;t=2&amp;gradebook_id=" . getIndirectReference($gradebook->id),
                   'icon' => 'fa-file-excel-o'),
             array('title' => "$langExport ($langcsvenc2)",
                   'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;enc=UTF-8",
@@ -1885,26 +1887,26 @@ function attendForAutoGrades($userID, $exeID, $exeType, $range) {
  * @brief get total number of user attend in a course gradebook
  * @param type $gradebook_id
  * @param type $userID
+ * @param type $csv_output
  * @return string
  */
-function userGradeTotal ($gradebook_id, $userID, $student_view = 'false') {
-
-    if ($student_view) {
-        $visible = 1;
-    }
+function userGradeTotal($gradebook_id, $userID, $csv_output = false) {
+    
+    $character = ($csv_output)? "-": "&mdash;";
+    
     $range = Database::get()->querySingle("SELECT * FROM gradebook WHERE id = ?d", $gradebook_id)->range;
     $userGradeTotal = Database::get()->querySingle("SELECT SUM(gradebook_activities.weight / 100 * gradebook_book.grade * $range) AS count FROM gradebook_book, gradebook_activities, gradebook
                                                     WHERE gradebook_book.uid = ?d
                                                         AND gradebook_book.gradebook_activity_id = gradebook_activities.id
                                                         AND gradebook.id = gradebook_activities.gradebook_id
                                                         AND gradebook_activities.gradebook_id = ?d
-                                                        AND gradebook_activities.visible = ?d", $userID, $gradebook_id, $visible)->count;
+                                                        AND gradebook_activities.visible = 1", $userID, $gradebook_id)->count;
 
     if ($userGradeTotal) {
         return round($userGradeTotal, 2);
     } else {
-        return false;
-    }
+        return $character;
+    }    
 }
 
 /**
