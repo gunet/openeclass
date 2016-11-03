@@ -527,6 +527,10 @@ function adminMenu() {
         array_push($sideMenuLink, '../admin/autoenroll.php');
         array_push($sideMenuImg, 'arrow.png');
 
+        array_push($sideMenuText, $GLOBALS['langCourseCategoryActions']);
+        array_push($sideMenuLink, '../admin/coursecategory.php');
+        array_push($sideMenuImg, 'arrow.png');
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);

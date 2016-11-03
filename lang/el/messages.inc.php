@@ -5172,7 +5172,23 @@ $langThemePumpkin = "Κολοκύθα";
 $langThemePomegranate = "Ρόδι";
 $langThemeClouds = "Σύννεφα";
 
-
-
-
- 
+/* * *********************************************
+ * coursecategory.php
+ * ********************************************* */
+$langCourseCategoryActions = "Κατηγορίες Μεταδεδομένων";
+$langCourseCategoryAdd = "Προσθήκη κατηγορίας";
+$langCourseCategoryDel = "Διαγραφή κατηγορίας";
+$langCourseCategoryEdit = "Επεξεργασία κατηγορίας";
+$langAllCourseCategories = "Κατηγορίες Μεταδεδομένων";
+$langEmptyCourseCategoryName = "Αφήσατε το όνομα κενό! Δοκιμάστε ξανά";
+$langCourseCategoryProErase = "Υπάρχουν τιμές που ανήκουν σε αυτή την κατηγορία μεταδεδομένων";
+$langCourseCategoryNoErase = "Η διαγραφή της κατηγορίας μεταδεδομένων δεν είναι δυνατή.";
+$langCourseCategoryErase = "Η κατηγορία μεταδεδομένων διαγράφηκε!";
+$langEditCourseCategorySuccess = "Η επεξεργασία πραγματοποιήθηκε επιτυχώς";
+$langCourseCategory2 = "(π.χ. Μέγεθος Ομάδας)";
+$langCourseCategoryMultiple = "Πολλαπλότητα";
+$langCourseCategoryMultiple2 = "Η κατηγορία μεταδεδομένων θα έχει πολλαπλές τιμές";
+$langCourseCategorySearchable = "Αναζητήσιμη";
+$langCourseCategorySearchable2 = "Η κατηγορία μεταδεδομένων θα συμμετέχει στην ειδική εργαλειοθήκη αναζήτησης";
+$langCourseCategoryActive = "Ενεργή";
+$langCourseCategoryActive2 = "Η κατηγορία μεταδεδομένων θα εμφανίζεται στους χρήστες";
