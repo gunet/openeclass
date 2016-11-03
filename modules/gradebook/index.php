@@ -638,10 +638,14 @@ if (isset($display) and $display == TRUE) {
     // display gradebook
     if (isset($gradebook)) {
         if ($is_editor) {
-            display_gradebook($gradebook);
+            if (isset($_GET['u'])) {
+                student_view_gradebook($gradebook_id, $_GET['u']); // teacher view
+            } else {
+                display_gradebook($gradebook);    
+            }            
         } else {
             $pageName = $gradebook->title;            
-            student_view_gradebook($gradebook_id); // student view
+            student_view_gradebook($gradebook_id, $uid); // student view
         }
     } else { // display all gradebooks
         display_gradebooks();

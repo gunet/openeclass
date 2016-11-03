@@ -67,11 +67,11 @@ if ($t == 1) { // display gradebook activities results
     // data header
     $data_header = array();
     array_push($data_header, $langSurname, $langName, $langAm, $langUsername, $langEmail);
+    array_push($data_header, $langGradebookTotalGrade);
     $activities = Database::get()->queryArray("SELECT title FROM gradebook_activities WHERE visible = 1 AND gradebook_id = ?d", $gid);
     foreach ($activities as $act_title) {
         array_push($data_header, $act_title->title);
-    }
-    array_push($data_header, $langGradebookTotalGrade);
+    }    
     $csv->outputRecord($data_header);
     
     // user grades
@@ -84,14 +84,14 @@ if ($t == 1) { // display gradebook activities results
                                       uid_to_name($data->uid, 'username'),
                                       uid_to_am($data->uid), 
                                       uid_to_email($data->uid));
+        array_push($data_user_grades, userGradeTotal($gid, $data->uid, true)); // total grade
         $sql_grades = Database::get()->queryArray("SELECT grade FROM gradebook_book
                                             WHERE gradebook_activity_id IN 
                                         (SELECT id FROM gradebook_activities WHERE gradebook_activities.visible = 1 AND gradebook_id = ?d)
                                             AND uid = ?d", $gid, $data->uid);
         foreach ($sql_grades as $g) {
             array_push($data_user_grades, round($g->grade * $range, 2)); // activities grade
-        }
-        array_push($data_user_grades, userGradeTotal($gid, $data->uid, true)); // total grade
+        }        
         $csv->outputRecord($data_user_grades);
     }
 }
