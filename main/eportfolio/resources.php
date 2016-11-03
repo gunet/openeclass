@@ -336,7 +336,7 @@ if ($userdata) {
 if ($uid == $id) {
     draw($tool_content, 1);
 } else {
-    draw($tool_content, 2);
+    draw($tool_content, 0);
 }
 
 function cmp($obj1, $obj2)
