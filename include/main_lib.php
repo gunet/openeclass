@@ -1718,6 +1718,16 @@ function deleteUser($id, $log) {
             array_map('unlink', glob("$webDir/courses/userimg/{$u}_256.*"));
             array_map('unlink', glob("$webDir/courses/userimg/{$u}_32.*"));
             
+            //delete user e-portfolio files (if any)
+            array_map('unlink', glob("$webDir/courses/eportfolio/userbios/{$u}/bio.pdf"));
+            array_map('unlink', glob("$webDir/courses/eportfolio/work_submissions/{$u}/*"));
+            if (is_dir("$webDir/courses/eportfolio/userbios/{$u}")) {
+                rmdir("$webDir/courses/eportfolio/userbios/{$u}");
+            }
+            if (is_dir("$webDir/courses/eportfolio/work_submissions/{$u}")) {
+                rmdir("$webDir/courses/eportfolio/work_submissions/{$u}");
+            }            
+            
             return true;
         } else {
             return false;
