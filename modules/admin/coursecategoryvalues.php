@@ -25,21 +25,26 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 
+$catId = intval($_GET['category']);
+if ($catId <= 0) {
+    redirect_to_home_page('modules/admin/index.php');
+}
 
-$toolName = $langCourseCategoryActions;
+$toolName = $langCourseCategoryValues;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'coursecategory.php', 'name' => $langCourseCategoryActions);
 
 if (isset($_GET['action'])) {
-    $navigation[] = array('url' => $_SERVER['SCRIPT_NAME'], 'name' => $langCourseCategoryActions);
+    $navigation[] = array('url' => $_SERVER['SCRIPT_NAME'] . '?category=' . $catId, 'name' => $langCourseCategoryValues);
     switch ($_GET['action']) {
         case 'add':
-            $pageName = $langCourseCategoryAdd;
+            $pageName = $langCourseCategoryValueAdd;
             break;
         case 'delete':
-            $pageName = $langCourseCategoryDel;
+            $pageName = $langCourseCategoryValueDel;
             break;
         case 'edit':
-            $pageName = $langCourseCategoryEdit;
+            $pageName = $langCourseCategoryValueEdit;
             break;
     }
 }
@@ -49,127 +54,113 @@ if (!in_array($language, $session->active_ui_languages)) {
     array_unshift($session->active_ui_languages, $language);
 }
 
-// link to add a new course category
+// link to add a new category value
 if (!isset($_REQUEST['action'])) {
     $tool_content .= action_bar(array(
             array('title' => $langAdd,
-                'url' => "$_SERVER[SCRIPT_NAME]?action=add",
+                'url' => $_SERVER['SCRIPT_NAME'] . "?category=" . $catId . "&amp;action=add",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'),
         array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]",
+                'url' => $_SERVER['SCRIPT_NAME'] . "?category=" . $catId,
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 } else {
     $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]",
+                'url' => $_SERVER['SCRIPT_NAME'] . "?category=" . $catId,
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 }
 
-// Display all available course categories
+// Display all available course category values
 if (!isset($_GET['action'])) {
-    $categories = Database::get()->queryArray("SELECT * FROM category ORDER BY ordering, id");
-    if (count($categories) == 0) {
+    $values = Database::get()->queryArray("SELECT * FROM category_value WHERE category_id = ?d ORDER BY ordering, id", $catId);
+    if (count($values) == 0) {
         $tool_content .= "<div class='alert alert-warning'>" . $langNoResult . "</div>";
     } else {
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<th>$langAllCourseCategories</th><th class='text-right'>".icon('fa-gears', $langActions)."</th>";
-        foreach ($categories as $category) {
-            $name = Hierarchy::unserializeLangField($category->name);
-            $visibility = $category->active ? '' : ' class=not_visible';
+        $tool_content .= "<th>$langAllCourseCategoryValues</th><th class='text-right'>".icon('fa-gears', $langActions)."</th>";
+        foreach ($values as $value) {
+            $name = Hierarchy::unserializeLangField($value->name);
+            $visibility = $value->active ? '' : ' class=not_visible';
             $tool_content .= "<tr><td$visibility>" . $name . "</td><td class='option-btn-cell'>";
             $tool_content .= action_button(array(
                 array(
                     'title' => $langEditChange,
                     'icon' => 'fa-edit',
-                    'url' => "coursecategory.php?action=edit&amp;id=" . $category->id
-                ),
-                array(
-                    'title' => $langEditCourseCategoryValues,
-                    'icon' => 'fa-list',
-                    'url' => "coursecategoryvalues.php?category=" . $category->id
+                    'url' => "coursecategoryvalues.php?category=" . $catId . "&amp;action=edit&amp;id=" . $value->id
                 ),
                 array(
                     'title' => $langDelete,
                     'icon' => 'fa-times',
-                    'url' => "coursecategory.php?action=delete&amp;id=" . $category->id
+                    'url' => "coursecategoryvalues.php?category=" . $catId . "&amp;action=delete&amp;id=" . $value->id
                 )));
                 $tool_content .= "</td><tr>";
         }
         $tool_content .= "</table></div>";
     }
 }
-// Add a new course category
+// Add a new course category value
 elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (isset($_POST['add'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
         
-        list($names, $name, $ordering, $multiple, $searchable, $active) = prepareDataFromPost();
+        list($names, $name, $ordering, $active) = prepareDataFromPost();
 
         if (empty($names)) {
-            Session::Messages($langEmptyCourseCategoryName, 'alert alert-danger');
-            redirect_to_home_page('modules/admin/coursecategory.php?action=add');
+            Session::Messages($langEmptyCourseCategoryValueName, 'alert alert-danger');
+            redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId . '&action=add');
         } else {
-            // OK Create the new course category
-            $q = "INSERT INTO category (name, ordering, multiple, searchable, active) VALUES (?s, ?d, ?d, ?d, ?d)";
-            Database::get()->query($q, $name, $ordering, $multiple, $searchable, $active);
+            // OK Create the new course category value
+            $q = "INSERT INTO category_value (category_id, name, ordering, active) VALUES (?d, ?s, ?d, ?d)";
+            Database::get()->query($q, $catId, $name, $ordering, $active);
             Session::Messages($langAddSuccess, 'alert alert-success');
-            redirect_to_home_page('modules/admin/coursecategory.php');
+            redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
         }
     } else {
-        // Display form for new course category information
+        // Display form for new course category value information
         $tool_content .= displayForm();
     }
 }
-// Delete course category
+// Delete course category value
 elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
     $id = intval($_GET['id']);
 
     // locate the category we want to delete
-    $category = Database::get()->querySingle("SELECT * from category WHERE id = ?d", $id);
+    $value = Database::get()->querySingle("SELECT * from category_value WHERE id = ?d", $id);
 
-    if ($category !== false) {
-        // locate any category values belonging to this category
-        $c = 0;
-        $c += Database::get()->querySingle("SELECT COUNT(*) AS count FROM category_value WHERE category_id = ?d", $id)->count;
-
-        if ($c > 0) {
-            // The category cannot be deleted
-            Session::Messages("$langCourseCategoryProErase<br>$langCourseCategoryNoErase", 'alert-danger');
-        } else {
-            // The category can be deleted
-            Database::get()->query("DELETE FROM category WHERE id = ?d", $id);
-            Session::Messages($langCourseCategoryErase, 'alert alert-success');
-        }
-        redirect_to_home_page('modules/admin/coursecategory.php');
+    if ($value !== false) {
+        // The category value can be deleted
+        Database::get()->query("DELETE FROM category_value WHERE id = ?d", $id);
+        Session::Messages($langCourseCategoryValueErase, 'alert alert-success');
+        redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
     }
 }
-// Edit a course category
+// Edit a course category value
 elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
     $id = intval($_REQUEST['id']);
 
     if (isset($_POST['edit'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
 
-        list($names, $name, $ordering, $multiple, $searchable, $active) = prepareDataFromPost();
+        list($names, $name, $ordering, $active) = prepareDataFromPost();
 
         if (empty($names)) {
-            Session::Messages($langEmptyCourseCategoryName, 'alert alert-danger');
-            redirect_to_home_page('modules/admin/coursecategory.php?action=edit&id=' . $id);
+            Session::Messages($langEmptyCourseCategoryValueName, 'alert alert-danger');
+            redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId . '&action=edit&id=' . $id);
         } else {
-            // OK Update the course category
-            $q = "UPDATE category SET name = ?s, ordering = ?d, multiple = ?d, searchable = ?d, active = ?d WHERE id = ?d";
-            Database::get()->query($q, $name, $ordering, $multiple, $searchable, $active, $id);
-            Session::Messages($langEditCourseCategorySuccess, 'alert alert-success');
-            redirect_to_home_page('modules/admin/coursecategory.php');
+            // OK Update the course category value
+            $q = "UPDATE category_value SET name = ?s, ordering = ?d, active = ?d WHERE id = ?d";
+            Database::get()->query($q, $name, $ordering, $active, $id);
+            Session::Messages($langEditCourseCategoryValueSuccess, 'alert alert-success');
+            redirect_to_home_page('modules/admin/coursecategoryvalues.php?category=' . $catId);
         }
     } else {
         // Display form for edit course category information
-        $mycat = Database::get()->querySingle("SELECT name, ordering, multiple, searchable, active FROM category WHERE id = ?d", $id);
-        $tool_content .= displayForm($id, $mycat->name, $mycat->ordering, $mycat->multiple, $mycat->searchable, $mycat->active);
+        $myval = Database::get()->querySingle("SELECT name, ordering, active FROM category_value WHERE id = ?d", $id);
+        $tool_content .= displayForm($id, $myval->name, $myval->ordering, $myval->active);
     }
 }
 
@@ -189,22 +180,20 @@ function prepareDataFromPost() {
     $name = serialize($names);
 
     $ordering = (isset($_POST['ordering'])) ? intval($_POST['ordering']) : 0;
-    $multiple = (isset($_POST['multiple'])) ? 1 : 0;
-    $searchable = (isset($_POST['searchable'])) ? 1 : 0;
     $active = (isset($_POST['active'])) ? 1 : 0;
 
-    return array($names, $name, $ordering, $multiple, $searchable, $active);
+    return array($names, $name, $ordering, $active);
 }
 
-function displayForm($id = null, $name = null, $ordering = null, $multiple = null, $searchable = null, $active = null) {
-    global $session, $langNameOfLang;
+function displayForm($id = null, $name = null, $ordering = null, $active = null) {
+    global $catId, $session, $langNameOfLang;
 
     $html = '';
     $action = ($id == null) ? 'add' : 'edit';
     $actionValue = ($id == null) ? $GLOBALS['langAdd'] : $GLOBALS['langAcceptChanges'];
 
     $html .= "<div class='form-wrapper'>
-        <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?action=" . $action . "'>
+        <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?category=" . $catId . "&amp;action=" . $action . "'>
         <fieldset>";
 
     // name multi-lang field
@@ -230,7 +219,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
         $langSuffix = " (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
         $html .= "<div class='form-group'><label class='col-sm-3 control-label'>" . $GLOBALS['langName'] . $langSuffix . ":</label>";
         $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
-        $placeholder = $GLOBALS['langCourseCategory2'] . $langSuffix;
+        $placeholder = $GLOBALS['langCourseCategoryValue2'] . $langSuffix;
         $html .= $tdpre . "<input class='form-control' type='text' name='name-" . q($langcode) . "' " . $nameValue . " placeholder='$placeholder'></div></div>";
         $i++;
     }
@@ -239,41 +228,25 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     $orderingValue = ($id != null) ? "value='" . $ordering . "'" : '';
     $html .= "
     <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryOrdering'] . ":</label>
+        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryValueOrdering'] . ":</label>
         <div class='col-sm-9'>
-            <input class='form-control' type='text' name='ordering' " . $orderingValue . " placeholder='". $GLOBALS['langCourseCategoryOrdering2'] . "'>
+            <input class='form-control' type='text' name='ordering' " . $orderingValue . " placeholder='". $GLOBALS['langCourseCategoryValueOrdering2'] . "'>
         </div>
     </div>";
 
     // checkboxes
     $checked = " checked='checked' ";
-    $check_multiple = $check_searchable = $check_active = $checked;
+    $check_active = $checked;
     if ($id != null) {
-        $check_multiple = ($multiple == 1) ? $checked : '';
-        $check_searchable = ($searchable == 1) ? $checked : '';
         $check_active = ($active == 1) ? $checked : '';
     }
 
     $html .= "
     <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryMultiple'] . ":</label>
-        <div class='col-sm-9'>
-            <input class='form-control' type='checkbox' name='multiple' value='1' " . $check_multiple . ">
-            <span class='help-block'><small>" . $GLOBALS['langCourseCategoryMultiple2'] . "</small></span>
-        </div>
-    </div>
-    <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategorySearchable'] . ":</label>
-        <div class='col-sm-9'>
-            <input class='form-control' type='checkbox' name='searchable' value='1' " . $check_searchable . ">
-            <span class='help-block'><small>" . $GLOBALS['langCourseCategorySearchable2'] . "</small></span>
-        </div>
-    </div>
-    <div class='form-group'>
-        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryActive'] . ":</label>
+        <label class='col-sm-3 control-label'>" . $GLOBALS['langCourseCategoryValueActive'] . ":</label>
         <div class='col-sm-9'>
             <input class='form-control' type='checkbox' name='active' value='1' " . $check_active . ">
-            <span class='help-block'><small>" . $GLOBALS['langCourseCategoryActive2'] . "</small></span>
+            <span class='help-block'><small>" . $GLOBALS['langCourseCategoryValueActive2'] . "</small></span>
         </div>
     </div>";
 
@@ -290,7 +263,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
                 'value'=> $actionValue
             ),
             array(
-                'href' => $_SERVER['SCRIPT_NAME']
+                'href' =>  $_SERVER['SCRIPT_NAME'] . "?category=" . $catId
             )
         )) . "
         </div>
