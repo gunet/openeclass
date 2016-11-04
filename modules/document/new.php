@@ -57,7 +57,11 @@ if (defined('EBOOK_DOCUMENTS')) {
     $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
 }
 
-$backUrl = documentBackLink($uploadPath);
+if (defined('EBOOK_DOCUMENTS') and isset($_GET['back']) and $_GET['back'] == 'edit') {
+    $backUrl = $urlAppend . 'modules/ebook/edit.php?course=' . $course_code . '&amp;id=' . $ebook_id;
+} else {
+    $backUrl = documentBackLink($uploadPath);
+}
 
 if ($can_upload) {
     $navigation[] = array('url' => $backUrl, 'name' => $toolName);
@@ -123,6 +127,9 @@ if ($can_upload) {
                                       'level' => 'primary-label',
                                       'class' => 'back_btn')
                             ));
+    if (defined('EBOOK_DOCUMENTS') and isset($_GET['back']) and $_GET['back'] == 'edit') {
+        $group_hidden_input .= '<input type="hidden" name="back" value="edit">';
+    }
     $tool_content .= "<div class='form-wrapper'>
     <form class='form-horizontal' role='form' action='$upload_target_url' method='post'>
       $htmlPath
@@ -134,7 +141,7 @@ if ($can_upload) {
         <label for='file_title' class='col-sm-2 control-label'>$langTitle:</label>
         <div class='col-sm-10'>
           <input type='text' class='form-control' id='file_title' name='file_title'$htmlTitle>
-          <span class='help-block'>".Session::getError('file_title')."</span>    
+          <span class='help-block'>".Session::getError('file_title')."</span>
         </div>
       </div>
       <div class='form-group'>
@@ -143,8 +150,8 @@ if ($can_upload) {
           . rich_text_editor('file_content', 20, 40, $fileContent) .
         "</div>
       </div>
-	
-	<div class='form-group'>
+
+    <div class='form-group'>
         <div class='col-xs-offset-2 col-xs-10'>".
             form_buttons(array(
                 array(
@@ -159,7 +166,7 @@ if ($can_upload) {
       </div>
 </form></div>";
 } else {
-	$tool_content .= "<div class='alert alert-danger'>$langNotAllowed</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langNotAllowed</div>";
 }
 
 draw($tool_content, $menuTypeID, null, $head_content);
