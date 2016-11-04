@@ -201,7 +201,9 @@ if (!$q && !isset($_GET['create'])) {
         } else {
             $title_link = "<a href='show.php/$course_code/$r->id/'>" . q($r->title) . "</a>";
         }
-        $warning = is_null($r->sid) ? " <i>($langInactive)</i>" : '';
+        if ($is_editor) {
+            $title_link .= '&nbsp;' . icon('fa-edit', $langEditChange, "edit.php?course=$course_code&amp;id=" . $r->id);
+        }
         $tool_content .= "<tr class = '$vis_class' data-id='$r->id'>
                 <td>$title_link</td>".
                    tools($r->id, $k, $num, $r->visible) .
