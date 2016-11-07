@@ -169,6 +169,8 @@ mkdir_or_error('courses/eportfolio/userbios');
 touch_or_error('courses/eportfolio/userbios/index.php');
 mkdir_or_error('courses/eportfolio/work_submissions');
 touch_or_error('courses/eportfolio/work_submissions/index.php');
+mkdir_or_error('courses/eportfolio/mydocs');
+touch_or_error('courses/eportfolio/mydocs/index.php');
 
 // ********************************************
 // upgrade config.php

@@ -151,6 +151,30 @@ if ($userdata) {
                             
                         }
                     }
+                } elseif ($rtype == 'mydocs') {
+                    $document = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND subsystem = ?d AND subsystem_id = ?d AND format <> ?s", $rid, MYDOCS, $uid, '.dir');
+                    
+                    if ($document) {
+                        $data = array('title' => $document->title, 'filename' => $document->filename, 'comment' => $document->comment, 
+                                      'subject' => $document->subject, 'description' => $document->description);
+                        
+                        //create dir for user
+                        if (!file_exists($webDir."/courses/eportfolio/mydocs/".$uid)) {
+                            @mkdir($webDir."/courses/eportfolio/mydocs/".$uid, 0777);
+                        }
+                        
+                        $file_source = $urlServer.'courses/mydocs/'.$uid.$document->path;
+                        $path_extension = pathinfo($file_source, PATHINFO_EXTENSION);
+                        $file_dest = 'courses/eportfolio/mydocs/'.$uid.'/'.uniqid().'.'.$path_extension;
+                        copy($file_source,$file_dest);
+                        $data['file_path'] = $file_dest;
+                        
+                        Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
+                                VALUES (?d,?d,?s,?d,?s,?s)", $uid, $rid, 'mydocs', 0 ,'', serialize($data));
+                    }
+                    
+                    Session::Messages($langePortfolioResourceAdded, 'alert-success');
+                    redirect_to_home_page("main/eportfolio/resources.php");
                 }
             }
         } elseif (isset($_GET['action']) && $_GET['action'] == 'remove' && isset($_GET['er_id'])) {

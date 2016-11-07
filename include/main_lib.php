@@ -1726,7 +1726,10 @@ function deleteUser($id, $log) {
             }
             if (is_dir("$webDir/courses/eportfolio/work_submissions/{$u}")) {
                 rmdir("$webDir/courses/eportfolio/work_submissions/{$u}");
-            }            
+            }
+            if (is_dir("$webDir/courses/eportfolio/mydocs/{$u}")) {
+                rmdir("$webDir/courses/eportfolio/mydocs/{$u}");
+            }
             
             return true;
         } else {
