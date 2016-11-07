@@ -181,7 +181,7 @@ function printPolls() {
     $langTitle, $langCancel, $langOpenParticipation,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
     $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
-    $langDeactivate, $langPollHasEnded, $langActivate, $langResourceAccessUnlock,
+    $langDeactivate, $langHasExpired, $langActivate, $langResourceAccessUnlock,
     $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
@@ -543,7 +543,7 @@ function printPolls() {
                 } else {                    
                     $tool_content .= "<td class='text-center'>";
                     if ($poll_ended == 1) {
-                        $tool_content .= $langPollHasEnded;
+                        $tool_content .= $langHasExpired;
                     } else if ($poll_not_started == 1) {
                         $tool_content .= $langSurveyNotStarted;
                     } elseif ($has_participated > 0) {

@@ -2919,11 +2919,12 @@ function show_non_submitted($id) {
  * @global type $langDaysLeft
  * @global type $langNoAssign
  * @global type $course_code
+ * @global type $langHasExpiredS
  * @global type $langTitle
  */
 function show_student_assignments() {
     global $tool_content, $m, $uid, $course_id, $course_code,
-    $langDaysLeft, $langNoAssign, $course_code, $langTitle;
+    $langDaysLeft, $langNoAssign, $course_code, $langTitle, $langHasExpiredS;
 
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -2963,7 +2964,7 @@ function show_student_assignments() {
             if ($row->time > 0) {
                 $tool_content .= "<br>(<small>$langDaysLeft" . format_time_duration($row->time) . "</small>)";
             } else if($row->deadline){
-                $tool_content .= "<br> (<small><span class='expired'>$m[expired]</span></small>)";
+                $tool_content .= "<br> (<small><span class='expired'>$langHasExpiredS</span></small>)";
             }
             $tool_content .= "</td><td class='text-center'>";
 
@@ -3019,7 +3020,7 @@ function show_student_assignments() {
  */
 function show_assignments() {
     global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign, $langNewAssign,
-           $course_code, $course_id, $langWorksDelConfirm, $langDaysLeft, $m,
+           $course_code, $course_id, $langWorksDelConfirm, $langDaysLeft, $m, $langHasExpiredS,
            $langWarnForSubmissions, $langDelSure, $langGradeScales, $langTitle;
 
 
@@ -3074,7 +3075,7 @@ function show_assignments() {
             if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
             } else if((int)$row->deadline){
-                $tool_content .= " <br><span class='label label-danger'><small>$m[expired]</small></span>";
+                $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
             }
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .
