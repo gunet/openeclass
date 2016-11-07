@@ -98,7 +98,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 if (isset($myrow->begin)) {
                     if (isset($myrow->end) && $myrow->end < $now) {
                         $vis_class = 'not_visible';
-                        $status_icon_list = "<li class='text-danger'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillNotBeVis$myrow->end'><span class='fa fa-clock-o'></span> $langAdminExpired</li>";
+                        $status_icon_list = "<li class='text-danger'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillNotBeVis$myrow->end'><span class='fa fa-clock-o'></span> $langHasExpired</li>";
                     } elseif ($myrow->begin > $now) {
                         $vis_class = 'not_visible';
                         $status_icon_list = "<li class='text-success'  data-toggle='tooltip' data-placement='left' title='$langAnnouncementWillBeVis$myrow->begin'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";

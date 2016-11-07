@@ -181,7 +181,7 @@ function printPolls() {
     $langTitle, $langCancel, $langOpenParticipation, $langHasExpired,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
     $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
-    $langDeactivate, $langPollHasEnded, $langActivate, $langResourceAccessUnlock,
+    $langDeactivate, $langHasExpired, $langActivate, $langResourceAccessUnlock,
     $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
