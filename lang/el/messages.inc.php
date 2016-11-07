@@ -4998,6 +4998,7 @@ $langePortfolioRemoveResource = 'Αφαίρεση';
 $langePortfolioSureToRemoveResource = 'Είστε σίγουροι ότι θέλετε να αφαιρέσετε αυτόν τον πόρο από τη συλλογή σας;';
 $langePortfolioResourceNoBlog = 'Δεν υπάρχουν αναρτήσεις ιστολογίου αναρτημένες στο e-portfolio';
 $langePortfolioResourceNoWork = 'Δεν υπάρχουν εργασίες αναρτημένες στο e-portfolio';
+$langePortfolioResourceNoDocs = 'Δεν υπάρχουν έγγραφα αναρτημένα στο e-portfolio';
 
 /* * ******************************************
   Widgets

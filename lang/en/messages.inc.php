@@ -4321,6 +4321,7 @@ $langePortfolioRemoveResource = 'Remove';
 $langePortfolioSureToRemoveResource = 'Are you sure you want to remove this resource from your collection?';
 $langePortfolioResourceNoBlog = 'There are no blog posts attached to this e-portfolio';
 $langePortfolioResourceNoWork = 'There are no work submissions attached to this e-portfolio';
+$langePortfolioResourceNoDocs = 'There are no documents attached to this e-portfolio';
 $langCommentsUser = "User comments";
 $langUserRequests = "User requests";
 $langsUserRequests = "user requests";

@@ -24,6 +24,7 @@ $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/group/group_functions.php';
 
 if (!get_config('eportfolio_enable')) {
@@ -250,6 +251,7 @@ if ($userdata) {
     $tool_content .= '<ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#blog">'.$langBlogPosts.'</a></li>
                         <li><a data-toggle="tab" href="#works">'.$langWorks.'</a></li>
+                        <li><a data-toggle="tab" href="#mydocs">'.$langDoc.'</a></li>
                       </ul>';
     $tool_content .= '<div class="tab-content">
                         <div id="blog" class="tab-pane fade in active" style="padding-top:20px">';
@@ -366,6 +368,52 @@ if ($userdata) {
         $tool_content .= '<div class="alert alert-warning">'.$langePortfolioResourceNoWork.'</div>';
     }
     
+    $tool_content .= '</div>';
+    
+    $tool_content .= '<div id="mydocs" class="tab-pane fade" style="padding-top:20px">';
+    //show mydocs collection
+    $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'mydocs');
+    if ($docs) {
+        $tool_content .= "<div class='table-responsive'>
+                            <table class='table-default'>
+                              <tbody>
+                                <tr class='list-header'>
+                                  <th class='text-left'>$langName</th>
+                                  <th class='text-left'>$langSize</th>";
+        if ($id == $uid) {
+            $tool_content .= "<th class='text-center'>".icon('fa-gears', $langCommands)."</th>";
+        }
+                                  
+        $tool_content .= "</tr>";
+        foreach ($docs as $doc) {
+            $data = unserialize($doc->data);
+            if (empty($data['title'])) {
+                $filename = q($data['filename']);
+            } else {
+                $filename = q($data['title']);
+            }
+            $tool_content .= "<tr>
+                                <td><a href='resources.php?action=get&amp;id=$id&amp;type=mydocs&er_id=$doc->id'>$filename</a></td>
+                                <td>".format_file_size(filesize($data['file_path']))."</td>
+                                <td class='option-btn-cell'>
+                                   ". action_button(array(
+                                                array(
+                                                        'title' => $langePortfolioRemoveResource,
+                                                        'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=my_docs&amp;er_id=".$doc->id,
+                                                        'icon' => 'fa-times',
+                                                        'class' => 'delete',
+                                                        'confirm' => $langePortfolioSureToRemoveResource,
+                                                        'show' => ($doc->user_id == $uid)
+                                                )))." 
+                                </td>
+                              </tr>";
+        }      
+        $tool_content .= "    </tbody>
+                            </table>
+                          </div>";
+    } else {
+        $tool_content .= '<div class="alert alert-warning">'.$langePortfolioResourceNoDocs.'</div>';
+    }
     
     $tool_content .= '</div>';
     
