@@ -3369,7 +3369,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // fix wrong entries in statistics
         Database::get()->query("UPDATE actions_daily SET module_id = " .MODULE_ID_VIDEO . " WHERE module_id = 0");
 
-
         // hierarchy extra fields
         Database::get()->query("ALTER TABLE hierarchy ADD `description` TEXT AFTER name");
         Database::get()->query("ALTER TABLE hierarchy ADD `visible` tinyint(4) not null default 2 AFTER order_priority");
@@ -3405,6 +3404,26 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         CALL move_nodes(nodelft, p_lft, p_rgt);
                     END IF;
                 END");
+
+        // fix invalid agenda durations
+        Database::get()->queryFunc("SELECT DISTINCT duration FROM agenda WHERE duration NOT LIKE '%:%'",
+            function ($item) {
+                $d = $item->duration;
+                if (preg_match('/(\d*)[.,:](\d+)/', $d, $matches)) {
+                    $fixed = sprintf('%02d:%02d', intval($matches[0]), intval($matches[1]));
+                } else {
+                    $val = intval($d);
+                    if ($val <= 10) {
+                        $fixed = sprintf('%02d:00', $val);
+                    } else {
+                        $h = floor($val / 60);
+                        $m = $val % 60;
+                        $fixed = sprintf('%02d:%02d', $h, $m);
+                    }
+                }
+                Database::get()->query('UPDATE agenda
+                    SET duration = ?s WHERE duration = ?s', $fixed, $d);
+            });
     }
 
     // update eclass version
