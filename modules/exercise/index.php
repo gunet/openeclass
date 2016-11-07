@@ -111,7 +111,7 @@ if ($is_editor) {
         // destruction of Exercise
         unset($objExerciseTmp);
     }
-    $result = Database::get()->queryArray("SELECT id, title, description, type, active, public, ip_lock, password_lock FROM exercise WHERE course_id = ?d ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
+    $result = Database::get()->queryArray("SELECT id, title, description, type, active, public, end_date, attempts_allowed, ip_lock, password_lock FROM exercise WHERE course_id = ?d ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
 } else {
         $gids = user_group_info($uid, $course_id);
@@ -243,12 +243,23 @@ if (!$nbrExercises) {
         }
         // prof only
         if ($is_editor) {
+            $currentDate = new DateTime('NOW');            
+            $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;                                   
             if (!empty($row->description)) {
                 $descr = "<br/>$row->description";
             } else {
                 $descr = '';
             }
-            $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
+            $attempts_allowed = '';
+            if ($row->attempts_allowed > 0) {
+                $attempts_allowed = "&nbsp;<span class='small'>($langExerciseAttemptsAllowed: $row->attempts_allowed)</span>";
+            }
+            $expired = '';            
+            if (isset($temp_EndDate) and ($currentDate > $temp_EndDate)) {
+                $expired = "&nbsp;&nbsp;(<font color='red'>$langHasExpiredS</font>)";
+                $attempts_allowed = '';
+            }
+            $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$expired$attempts_allowed$descr</td>";
             $eid = getIndirectReference($row->id);
             $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count
                 FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
