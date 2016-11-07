@@ -185,6 +185,9 @@ if ($userdata) {
                     $data_array = unserialize($info->data);
                     @unlink($webDir.'/'.$data_array["assignment_file"]);
                     @unlink($webDir.'/'.$data_array["submission_file"]);
+                } elseif ($info->resource_type == 'mydocs') {
+                    $data_array = unserialize($info->data);
+                    @unlink($webDir.'/'.$data_array["file_path"]);
                 }
                 Database::get()->query("DELETE FROM eportfolio_resource WHERE id = ?d", $er_id);
                 Session::Messages($langePortfolioResourceRemoved, 'alert-success');
@@ -216,18 +219,30 @@ if ($userdata) {
     
     if (isset($_GET['action']) && $_GET['action'] == 'get') {
         if (isset($_GET['type']) && isset($_GET['er_id'])) {
-            $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d
-                                AND resource_type = ?d AND id = ?d", $id, 'work_submission', intval($_GET['er_id']));
-            if ($info) {
-                $data_array = unserialize($info->data);
-                if ($_GET['type'] == 'assignment') {
-                    $file_info = $data_array['assignment_file'];
-                } else if ($_GET['type'] == 'submission') {
-                    $file_info = $data_array['submission_file'];
+            if ($_GET['type'] == 'assignment' || $_GET['type'] == 'submission') {
+                $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d
+                                    AND resource_type = ?d AND id = ?d", $id, 'work_submission', intval($_GET['er_id']));
+                if ($info) {
+                    $data_array = unserialize($info->data);
+                    if ($_GET['type'] == 'assignment') {
+                        $file_info = $data_array['assignment_file'];
+                    } elseif ($_GET['type'] == 'submission') {
+                        $file_info = $data_array['submission_file'];
+                    }
+                    $file = str_replace('\\', '/', $webDir)."/".$file_info;
+                    $extension = pathinfo($file, PATHINFO_EXTENSION);
+                    send_file_to_client($file, 'file.'.$extension, null, true);
                 }
-                $file = str_replace('\\', '/', $webDir)."/".$file_info;
-                $extension = pathinfo($file, PATHINFO_EXTENSION);
-                send_file_to_client($file, 'file.'.$extension, null, true);
+            } elseif ($_GET['type'] == 'mydocs') {
+                $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d
+                                    AND resource_type = ?d AND id = ?d", $id, 'mydocs', intval($_GET['er_id']));
+                
+                if ($info) {
+                    $data_array = unserialize($info->data);
+                    $file = str_replace('\\', '/', $webDir)."/".$data_array['file_path'];
+                    $extension = pathinfo($file, PATHINFO_EXTENSION);
+                    send_file_to_client($file, 'file.'.$extension, null, true);
+                }
             }
         }
     }
