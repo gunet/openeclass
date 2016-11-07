@@ -93,12 +93,12 @@ $tool_content .= "</table>
 </div><br>";
 $status = (isset($_GET['status'])) ? intval($_GET['status']) : ''; 
 $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId'>--- $langCurrentStatus ---</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_ACTIVE."' ".(($status === 0)? 'selected' : '').">$langAttemptActive</option>               
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_COMPLETED."' ".(($status === 1)? 'selected' : '').">$langAttemptCompleted</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PENDING."' ".(($status === 2)? 'selected' : '').">$langAttemptPending</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PAUSED."' ".(($status === 3)? 'selected' : '').">$langAttemptPaused</option>
-        <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_CANCELED."' ".(($status === 4)? 'selected' : '').">$langAttemptCanceled</option>
+        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "'>--- $langCurrentStatus ---</option>
+        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "&status=".ATTEMPT_ACTIVE."' ".(($status === 0)? 'selected' : '').">$langAttemptActive</option>
+        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "&status=".ATTEMPT_COMPLETED."' ".(($status === 1)? 'selected' : '').">$langAttemptCompleted</option>
+        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "&status=".ATTEMPT_PENDING."' ".(($status === 2)? 'selected' : '').">$langAttemptPending</option>
+        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "&status=".ATTEMPT_PAUSED."' ".(($status === 3)? 'selected' : '').">$langAttemptPaused</option>
+        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "&status=".ATTEMPT_CANCELED."' ".(($status === 4)? 'selected' : '').">$langAttemptCanceled</option>
         </select>";
 //This part of the code could be improved
 if ($is_editor) {
@@ -132,9 +132,9 @@ foreach ($result as $row) {
         $tool_content .= "</td>
                 </tr>
                 <tr>
-                  <th class='text-center'>" . $langStart . "</td>
-                  <th class='text-center'>" . $langExerciseDuration . "</td>
-                  <th class='text-center'>" . $langTotalScore . "</td>
+                  <th class='text-center'>" . $langStart . "</th>
+                  <th class='text-center'>" . $langExerciseDuration . "</th>
+                  <th class='text-center'>" . $langTotalScore . "</th>
                   <th class='text-center'>" . $langCurrentStatus. "</th>
                   ". ($is_editor ? "<th class='text-center'>" . icon('fa-gears'). "</th>" : "") ."
                 </tr>";
