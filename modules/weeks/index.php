@@ -57,14 +57,14 @@ ModalBoxHelper::loadModalBox(true);
 
 if (isset($_REQUEST['edit_submitW'])) { //update title and comments for week
     $title = $_REQUEST['weektitle'];
-    $descr = $_REQUEST['weekdescr'];
+    $descr = purify($_REQUEST['weekdescr']);
     $unit_id = $_REQUEST['week_id'];
     // tags
     if (isset($_POST['tags'])) {
         $tagsArray = explode(',', $_POST['tags']);
         $moduleTag = new ModuleElement($unit_id);
         $moduleTag->syncTags($tagsArray);
-    }          
+    }
     Database::get()->query("UPDATE course_weekly_view SET
                                     title = ?s,
                                     comments = ?s
@@ -141,7 +141,7 @@ if ($is_editor) {
             )) .
     "
     </div>
-  </div>";            
+  </div>";
 }
 
 if ($is_editor) {
@@ -172,7 +172,7 @@ foreach (array('previous', 'next') as $i) {
         $op = '<=';
         $dir = 'DESC';
         $arrow1 = "<i class='fa fa-arrow-left space-after-icon'></i>";
-        $arrow2 = '';        
+        $arrow2 = '';
         $link_count = $cnt - 1;
         $page_btn = 'pull-left';
     } else {
@@ -183,13 +183,13 @@ foreach (array('previous', 'next') as $i) {
         $link_count = $cnt + 1;
         $page_btn = 'pull-right';
     }
-    
+
     if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
         $access_check = '';
     } else {
         $access_check = "AND public = 1";
     }
-    
+
     $q = Database::get()->querySingle("SELECT id, start_week, finish_week FROM course_weekly_view
                        WHERE course_id = ?d
                              AND id <> ?d
@@ -199,7 +199,7 @@ foreach (array('previous', 'next') as $i) {
                              $access_check
                        ORDER BY `order` $dir
                        LIMIT 1", $course_id, $id);
-                             
+
 
     if ($q) {
         $q_id = $q->id;
@@ -233,15 +233,15 @@ $tool_content .= "
                     <h3 class='panel-title'>$pageName</h3>
                 </div>
                 <div class='panel-body'>$comments";
-                    
-if (!empty($tags_list)) {                            
-    $tool_content .= "                            
+
+if (!empty($tags_list)) {
+    $tool_content .= "
                     <div>
                         $langTags: $tags_list
                     </div>
                 ";
 }
-$tool_content .= "                            
+$tool_content .= "
                 </div>
             </div>
         </div>
