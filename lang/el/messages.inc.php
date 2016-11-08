@@ -5208,3 +5208,5 @@ $langCourseCategoryValueOrdering = "Ταξινόμηση";
 $langCourseCategoryValueOrdering2 = "(π.χ. 1, 2, κ.ο.κ.)";
 $langCourseCategoryValueActive = "Ενεργή";
 $langCourseCategoryValueActive2 = "Η τιμή κατηγορίας μεταδεδομένων θα εμφανίζεται στους χρήστες";
+$langInactiveCourseCategories = "Ανενεργές κατηγορίες";
+$langActiveCourseCategories = "Ενεργές κατηγορίες";

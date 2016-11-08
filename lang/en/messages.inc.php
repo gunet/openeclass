@@ -4682,3 +4682,5 @@ $langCourseCategoryValueOrdering = "Ordering";
 $langCourseCategoryValueOrdering2 = "(i.e. 1, 2, etc.)";
 $langCourseCategoryValueActive = "Active";
 $langCourseCategoryValueActive2 = "The category value will be visible to the users";
+$langInactiveCourseCategories = "Inactive categories";
+$langActiveCourseCategories = "Active categories";
