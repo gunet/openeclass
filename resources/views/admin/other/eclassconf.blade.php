@@ -428,6 +428,12 @@
                                     </div>
                                     <div class='checkbox'>
                                         <label>
+                                            <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' {!! $cbox_eportfolio_enable !!}>
+                                            {{ trans('lang_eportfolio_enable') }}
+                                        </label>
+                                    </div>
+                                    <div class='checkbox'>
+                                        <label>
                                             <input type='checkbox' name='block_username_change' value='1' {!! $cbox_block_username_change !!}>
                                             {{ trans('lang_block_username_change') }}
                                         </label>
