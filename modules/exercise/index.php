@@ -211,9 +211,8 @@ if (!$nbrExercises) {
         $resultsHeader = $previousResultsAllowed ? "<th class='text-center'>$langResults</th>" : "";
         $tool_content .= "
                 <th>$langExerciseName</th>
-                <th class='text-center'>$langStart / $langFinish</th>
-                <th class='text-center'>$langExerciseConstrain</th>
-                <th class='text-center'>$langExerciseAttemptsAllowed</th>
+                <th class='text-center' style='width: 150px;'>$langStart / $langFinish</th>
+                <th class='text-center' style='width: 150px;'>$langRestrictions</th>
                 $resultsHeader
               </tr>";
     }
@@ -321,20 +320,20 @@ if (!$nbrExercises) {
             } else { // exercise has expired
                 $tool_content .= "<td><div class='table_td'><div class='table_td_header'> " . q($row->title) . "$lock_icon&nbsp;&nbsp;(<span class='text-danger'>$langHasExpiredS</span>)</div>";
             }
-            $tool_content .= "<div class='table_td_body'>".$row->description . "</div></div></td><td class='smaller' align='center'>
-                                " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
-                                " . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</td>";
+            $tool_content .= "<div class='table_td_body'>".$row->description . "</div></div></td><td class='text-left'>
+                                <p class='text-success'>" . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</p>
+                                <p class='text-danger'>" . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</p></td>";
             if ($row->time_constraint > 0) {
-                $tool_content .= "<td class='text-center'>{$row->time_constraint} $langExerciseConstrainUnit</td>";
+                $tool_content .= "<td class='text-left'><p>$langTimeConstraint: {$row->time_constraint} $langExerciseConstrainUnit</p>";
             } else {
-                $tool_content .= "<td class='text-center'> - </td>";
+                $tool_content .= "<td class='text-left'><p>$langTimeConstraint: -</p>";
             }
             // how many attempts we have.
             $currentAttempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid = ?d", $row->id, $uid)->count;
             if ($row->attempts_allowed > 0) {
-                $tool_content .= "<td class='text-center'>$currentAttempt/$row->attempts_allowed</td>";
+                $tool_content .= "<p>$langHitConstraint: $currentAttempt/$row->attempts_allowed</p></td>";
             } else {
-                $tool_content .= "<td class='text-center'> - </td>";
+                $tool_content .= "<p>$langHitConstraint: - </p></td>";
             }
             if ($previousResultsAllowed) {
                 if ($row->score) {
