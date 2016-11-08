@@ -542,12 +542,12 @@ function printPolls() {
                         }
                 } else {                    
                     $tool_content .= "<td class='text-center'>";
-                    if ($poll_ended == 1) {
-                        $tool_content .= $langHasExpired;
-                    } else if ($poll_not_started == 1) {
+                    if ($poll_not_started == 1) {
                         $tool_content .= $langSurveyNotStarted;
                     } elseif ($has_participated > 0) {
                         $tool_content .= $uid ? $langHasParticipated : $langOpenParticipation;
+                    } else if ($poll_ended == 1) {
+                        $tool_content .= $langHasExpired;
                     } else {
                         $tool_content .= $uid ? $langHasNotParticipated : $langOpenParticipation;
                     }                                        
