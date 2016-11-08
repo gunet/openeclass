@@ -378,7 +378,6 @@ switch ($action) {
                     $tool_content .= "
                                     <tr class='list-header'>
                                         <th class='text-left'>$langTitle</th>
-                                        <th class='text-center'>$langDescription</th>
                                         <th class='text-center'>$langPages</th>
                                         <th class='text-center'>" .icon('fa-gears'). "</th>
                                     </tr>";
@@ -388,8 +387,7 @@ switch ($action) {
                     $tool_content .= "
                                     <tr class='list-header'>
                                         <th class='text-left'>$langTitle</th>
-                                        <th class='text-center'>$langDescription</th>
-                                        <th class='text-center'>$langWikiNumberOfPages</th>
+                                        <th class='text-center'>$langPages</th>
                                         <th class='text-center'>$langWikiLastModification</th>
                                     </tr>";
                 }
@@ -398,21 +396,18 @@ switch ($action) {
                     // display title for all users
 
 
-                    $tool_content .= '<tr><td>';
+                    $tool_content .= '<tr><td><div class="table_td"><div class="table_td_header">';
                     // display direct link to main page
                     $tool_content .= '<a class="item" href="page.php?course=' . $course_code . '&amp;wikiId='
                             . $entry->id . '&amp;action=show'
                             . '">'
-                            . $entry->title . '</a>';
-                    $tool_content .= '</td>' . "\n";
+                            . $entry->title . '</div></a>';
 
-                    $tool_content .= '<td class="text-center">';
+                    $tool_content .= '';
                     if (!empty($entry->description)) {
-                        $tool_content .= $entry->description;
-                    } else {
-                        $tool_content .= "<span class='not_visible'>$langWikiNoDescription</span>";
+                        $tool_content .= "<div class='table_td_body'>".$entry->description."</div>";
                     }
-                    $tool_content .= "  </td>
+                    $tool_content .= " </div></td>
                                         <td class='text-center'>
                                             <a href='page.php?course=$course_code&amp;wikiId=$entry->id&amp;action=all'>
                                                 " . $wikiStore->getNumberOfPagesInWiki($entry->id) . "
