@@ -59,7 +59,13 @@ if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
     $toolName = $langCommonDocs;
     $diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
-} elseif (defined('MY_DOCUMENTS')) {
+} elseif (defined('MY_DOCUMENTS')) {    
+    if (!get_config('mydocs_teacher_enable')) {
+        redirect_to_home_page();        
+    }
+    if (!get_config('mydocs_student_enable')) {
+        redirect_to_home_page();        
+    }
     $menuTypeID = 1;
     $toolName = $langMyDocs;
     if ($session->status == USER_TEACHER) {
