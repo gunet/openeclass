@@ -402,9 +402,9 @@ if ($PollType == 0) {
                             . $ellipsized_names_str
                             . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
                             "</td>
-                            <td class='hidden_names' style='display:none;'>'
+                            <td class='hidden_names' style='display:none;'>"
                                . q($names_str) .
-                               ' <a href='#' class='trigger_names' data-type='multiple' id='hide'>'.$langViewHide.'</a>
+                               " <a href='#' class='trigger_names' data-type='multiple' id='hide'>".$langViewHide."</a>
                            </td>" : "";                       
                     $tool_content .= "
                     <tr $row_class>
