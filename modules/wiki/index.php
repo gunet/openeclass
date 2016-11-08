@@ -378,7 +378,7 @@ switch ($action) {
                     $tool_content .= "
                                     <tr class='list-header'>
                                         <th class='text-left'>$langTitle</th>
-                                        <th class='text-center'>$langPages</th>
+                                        <th class='text-center' style='width: 50px;'>$langPages</th>
                                         <th class='text-center'>" .icon('fa-gears'). "</th>
                                     </tr>";
                 }
@@ -387,7 +387,7 @@ switch ($action) {
                     $tool_content .= "
                                     <tr class='list-header'>
                                         <th class='text-left'>$langTitle</th>
-                                        <th class='text-center'>$langPages</th>
+                                        <th class='text-center' style='width: 50px;'>$langPages</th>
                                         <th class='text-center'>$langWikiLastModification</th>
                                     </tr>";
                 }
