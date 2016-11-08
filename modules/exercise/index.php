@@ -252,16 +252,12 @@ if (!$nbrExercises) {
             } else {
                 $descr = '';
             }
-            $attempts_allowed = '';
-            if ($row->attempts_allowed > 0) {
-                $attempts_allowed = "&nbsp;<span class='small'>($langExerciseAttemptsAllowed: $row->attempts_allowed)</span>";
-            }
             $expired = '';            
             if (isset($temp_EndDate) and ($currentDate > $temp_EndDate)) {
                 $expired = "&nbsp;&nbsp;(<span class='text-danger'>$langHasExpiredS</span>)";
                 $attempts_allowed = '';
             }
-            $tool_content .= "<td><div class='table_td'><div class='table_td_header'><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$expired$attempts_allowed</div><div class='table_td_body'>$descr</div></div></td>";
+            $tool_content .= "<td><div class='table_td'><div class='table_td_header'><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$expired</div><div class='table_td_body'>$descr</div></div></td>";
             $tool_content .= "<td class='text-center'><div class='table_td'><div class='table_td_header'>
                                 <p class='text-success'>" . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</p>
                                 <p class='text-danger'>" . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</p></div></div></td>";
