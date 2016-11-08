@@ -549,8 +549,8 @@ if ($is_editor) {
         foreach ($groupSelect as $group) {
             initialize_group_info($group->id);
             $tool_content .= "<tr>";
-            $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
-                    <br><p>$group_description</p>";
+            $tool_content .= "<td><div class='table_td'><div class='table_td_header'><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
+                    </div><div class='table_td_body'>$group_description</div></div>";
             if ($user_group_description && $student_desc) {
                 $tool_content .= "<small><a href = 'javascirpt:void(0);' data-toggle = 'modal' data-content='".q($user_group_description)."' data-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
             }
