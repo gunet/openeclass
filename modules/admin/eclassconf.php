@@ -344,6 +344,7 @@ if (isset($_POST['submit'])) {
         'insert_xml_metadata' => true,
         'enable_mobileapi' => true,
         'doc_quota' => true,
+        'bio_quota' => true,
         'group_quota' => true,
         'video_quota' => true,
         'dropbox_quota' => true,

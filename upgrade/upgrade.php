@@ -3466,7 +3466,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `data` TEXT NOT NULL,
                         INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $charset_spec");
                 
-        
+        Database::get()->query("INSERT INTO `config` (`key`, `value`) VALUES ('bio_quota', '4')");
+                
         // fix wrong entries in statistics
         Database::get()->query("UPDATE actions_daily SET module_id = " .MODULE_ID_VIDEO . " WHERE module_id = 0");
 

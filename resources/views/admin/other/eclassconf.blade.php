@@ -517,6 +517,12 @@
                                     </label>
                                </div>
                             </div>
+                            <div class='form-group'>
+                               <label for='bio_quota' class='col-sm-4 control-label'>{{ trans('langBioQuota') }} (MB):</label>
+                               <div class='col-sm-4'>
+                                    <input class='form-control' type='text' name='bio_quota' id='bio_quota' value='{{ get_config('bio_quota') }}'>
+                               </div>
+                            </div>
                             <div class='checkbox'>
                                 <label>
                                     <input type='checkbox' name='enable_common_docs' value='1' {!! $cbox_enable_common_docs !!}>

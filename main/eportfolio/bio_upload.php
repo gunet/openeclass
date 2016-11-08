@@ -51,9 +51,13 @@ elseif (isset($_POST['submit'])) {
     if (isset($_FILES['bio']) && is_uploaded_file($_FILES['bio']['tmp_name'])) {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         if (finfo_file($finfo, $_FILES['bio']['tmp_name']) == 'application/pdf') {
-            @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
-            move_uploaded_file($_FILES['bio']['tmp_name'], "$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
-            Session::Messages($langUploadBioSuccess, 'alert-success');
+            if ($_FILES['bio']['size'] <= get_config('bio_quota')*1024*1024) {
+                @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
+                move_uploaded_file($_FILES['bio']['tmp_name'], "$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
+                Session::Messages($langUploadBioSuccess, 'alert-success');
+            } else {
+                Session::Messages(sprintf($langUploadBioFailSize, get_config('bio_quota')), 'alert-danger');
+            }
         } else {
             Session::Messages($langUploadBioFailType, 'alert-danger');
         }

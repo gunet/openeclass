@@ -1377,6 +1377,7 @@ $default_config = array(
     'display_captcha', 0,
     'insert_xml_metadata', 0,
     'doc_quota', 500,
+    'bio_quota', 4,
     'video_quota', 500,
     'group_quota', 500,
     'dropbox_quota', 500,
