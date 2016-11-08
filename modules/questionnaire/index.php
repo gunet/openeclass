@@ -185,7 +185,7 @@ function printPolls() {
     $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
-    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langdate, $langNoAccessPrivilages;
+    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langStart, $langFinish, $langdate, $langNoAccessPrivilages;
     
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
@@ -254,8 +254,8 @@ function printPolls() {
                     <div class='table-responsive'>
 		      <table class='table-default'>
 		        <tr class='list-header'>
-			        <th style='min-width: 55%;'><div align='left'>&nbsp;$langTitle</div></th>
-			        <th class='text-center'>$langdate</th>";
+			        <th class='text-left'>$langTitle</th>
+			        <th class='text-center' style='width: 150px;'>$langStart / $langFinish</th>";
 
         if ($is_editor) {
             $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>";
@@ -331,10 +331,10 @@ function printPolls() {
                                     <div class='table_td_body'>$thepoll->description</div>
                                     </div></td>";
                 $tool_content .= "
-                        <td class='text-center'>
-                            <div style='padding-top: 7px;'><span class='text-success'>$langPollStart</span>: &nbsp;&nbsp;" . nice_format(date("d/m/Y H:i", strtotime($thepoll->start_date)), true) . "</div>
-                            <div style='padding-top: 7px;'><span class='text-danger'>$langPollEnd</span>: &nbsp;&nbsp;" . nice_format(date("d/m/Y H:i", strtotime($thepoll->end_date)), true) . "</div>
-                        </td>";
+                        <td class='text-left'><div class='table_td text-center'><div class='table_td_header'>
+                            <p><span class='text-success'>" . nice_format(date("d/m/Y H:i", strtotime($thepoll->start_date)), true) . "</span></p>
+                            <p><span class='text-danger'>" . nice_format(date("d/m/Y H:i", strtotime($thepoll->end_date)), true) . "</span></p>
+                        </div></div></td>";
 
                 if ($is_editor) {
 				
