@@ -111,7 +111,7 @@ if ($is_editor) {
         // destruction of Exercise
         unset($objExerciseTmp);
     }
-    $result = Database::get()->queryArray("SELECT id, title, description, type, active, public, end_date, attempts_allowed, ip_lock, password_lock FROM exercise WHERE course_id = ?d ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
+    $result = Database::get()->queryArray("SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed, ip_lock, password_lock FROM exercise WHERE course_id = ?d ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
 } else {
         $gids = user_group_info($uid, $course_id);
@@ -203,12 +203,14 @@ if (!$nbrExercises) {
     if ($is_editor) {
         $tool_content .= "
                 <th>$langExerciseName</th>
-                <th style='width: 190px;' class='text-center'>$langResults</th>
+                <th class='text-center' style='width: 150px;'>$langStart / $langFinish</th>
+                <th class='text-center' style='width: 150px;'>$langRestrictions</th>
+                <th class='text-center' style='width: 100px;'>$langResults</th>
                 <th class='text-center'>".icon('fa-gears')."</th>
               </tr>";
     } else { // student view
         $previousResultsAllowed = !(course_status($course_id) == COURSE_OPEN && $uid ==0);
-        $resultsHeader = $previousResultsAllowed ? "<th class='text-center'>$langResults</th>" : "";
+        $resultsHeader = $previousResultsAllowed ? "<th class='text-center' style='width: 100px;'>$langResults</th>" : "";
         $tool_content .= "
                 <th>$langExerciseName</th>
                 <th class='text-center' style='width: 150px;'>$langStart / $langFinish</th>
@@ -242,8 +244,9 @@ if (!$nbrExercises) {
         }
         // prof only
         if ($is_editor) {
-            $currentDate = new DateTime('NOW');            
-            $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;                                   
+            $currentDate = new DateTime('NOW');
+            $temp_StartDate = new DateTime($row->start_date);
+            $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;
             if (!empty($row->description)) {
                 $descr = "<div class='table_td_body'>$row->description</div>";
             } else {
@@ -259,6 +262,21 @@ if (!$nbrExercises) {
                 $attempts_allowed = '';
             }
             $tool_content .= "<td><div class='table_td'><div class='table_td_header'><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$expired$attempts_allowed</div><div class='table_td_body'>$descr</div></div></td>";
+            $tool_content .= "<td class='text-center'><div class='table_td'><div class='table_td_header'>
+                                <p class='text-success'>" . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</p>
+                                <p class='text-danger'>" . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</p></div></div></td>";
+            if ($row->time_constraint > 0) {
+                $tool_content .= "<td class='text-left'><p>$langTimeConstraint: {$row->time_constraint} $langExerciseConstrainUnit</p>";
+            } else {
+                $tool_content .= "<td class='text-left'><p>$langTimeConstraint: -</p>";
+            }
+            // how many attempts we have.
+            $currentAttempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid = ?d", $row->id, $uid)->count;
+            if ($row->attempts_allowed > 0) {
+                $tool_content .= "<p>$langHitConstraint: $currentAttempt/$row->attempts_allowed</p></td>";
+            } else {
+                $tool_content .= "<p>$langHitConstraint: - </p></td>";
+            }
             $eid = getIndirectReference($row->id);
             $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count
                 FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
@@ -327,7 +345,8 @@ if (!$nbrExercises) {
             } else { // exercise has expired
                 $tool_content .= "<td><div class='table_td'><div class='table_td_header'> " . q($row->title) . "$lock_icon&nbsp;&nbsp;(<span class='text-danger'>$langHasExpiredS</span>)</div>";
             }
-            $tool_content .= "<div class='table_td_body'>".$row->description . "</div></div></td><td class='text-center'><div class='table_td'><div class='table_td_header'>
+            $tool_content .= "<div class='table_td_body'>".$row->description . "</div></div></td>
+                                <td class='text-center'><div class='table_td'><div class='table_td_header'>
                                 <p class='text-success'>" . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</p>
                                 <p class='text-danger'>" . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</p></div></div></td>";
             if ($row->time_constraint > 0) {
