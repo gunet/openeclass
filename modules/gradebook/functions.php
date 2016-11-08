@@ -978,7 +978,7 @@ function display_gradebooks() {
     global $course_id, $tool_content, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
            $langAvailableGradebooks, $langNoGradeBooks, $is_editor,
-           $langViewShow, $langViewHide, $langStart, $langEnd, $uid;
+           $langViewShow, $langViewHide, $langStart, $langEnd, $uid, $langFinish;
 
     if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
@@ -998,20 +998,24 @@ function display_gradebooks() {
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'>
                             <th>$langAvailableGradebooks</th>
-                            <th>$langStart</th>
-                            <th>$langEnd</th>";
+                            <th style='width: 150px;'>$langStart</th>
+                            <th style='width: 150px;'>$langFinish</th>";
         if( $is_editor) {
             $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr>";
         foreach ($result as $g) {
-            $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $g->start_date)->format('d-m-Y H:i');
-            $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $g->end_date)->format('d-m-Y H:i');
+            $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $g->start_date)->format('d/m/Y H:i');
+            $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $g->end_date)->format('d/m/Y H:i');
             $row_class = !$g->active ? "class='not_visible'" : "";
             $tool_content .= "
                     <tr $row_class>
                         <td>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "'>" . q($g->title) . "</a>
+                            <div class='table_td'>
+                                <div class='tahle_td_header'>
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "'>" . q($g->title) . "</a>
+                                </div>
+                            </div>
                         </td>
                         <td>$start_date</td>
                         <td>$end_date</td>
