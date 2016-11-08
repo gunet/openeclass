@@ -36,7 +36,8 @@ $pageName = $langResults;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
-    $exerciseId = getDirectReference($_GET['exerciseId']);
+    $exerciseId = getDirectReference($_GET['exerciseId']);    
+    $exerciseIdIndirect = $_GET['exerciseId'];    
 }
 
 // if the object is not in the session
@@ -55,14 +56,15 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
 }
 
 if (isset($_SESSION['objExercise'][$exerciseId])) {
+    
     $objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
-if ($is_editor && isset($_GET['purgeAttempID'])) {
-    $eurid = $_GET['purgeAttempID'];
-    $objExercise->purgeAttempt($eurid);
-    Session::Messages($langPurgeExerciseResultsSuccess);
-    redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=$exerciseId");  
+if ($is_editor && isset($_GET['purgeAttempID'])) {    
+    $eurid = $_GET['purgeAttempID'];    
+    $objExercise->purgeAttempt($exerciseIdIndirect, $eurid);
+    Session::Messages($langPurgeExerciseResultsSuccess);    
+    redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=" . getIndirectReference($_GET['exerciseId']));
 }
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
@@ -93,12 +95,12 @@ $tool_content .= "</table>
 </div><br>";
 $status = (isset($_GET['status'])) ? intval($_GET['status']) : ''; 
 $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
-        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "'>--- $langCurrentStatus ---</option>
-        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "&status=".ATTEMPT_ACTIVE."' ".(($status === 0)? 'selected' : '').">$langAttemptActive</option>
-        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "&status=".ATTEMPT_COMPLETED."' ".(($status === 1)? 'selected' : '').">$langAttemptCompleted</option>
-        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "&status=".ATTEMPT_PENDING."' ".(($status === 2)? 'selected' : '').">$langAttemptPending</option>
-        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "&status=".ATTEMPT_PAUSED."' ".(($status === 3)? 'selected' : '').">$langAttemptPaused</option>
-        <option value='results.php?course=$course_code&exerciseId=" . getIndirectReference($exerciseId) . "&status=".ATTEMPT_CANCELED."' ".(($status === 4)? 'selected' : '').">$langAttemptCanceled</option>
+        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect'>--- $langCurrentStatus ---</option>
+        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_ACTIVE."' ".(($status === 0)? 'selected' : '').">$langAttemptActive</option>
+        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_COMPLETED."' ".(($status === 1)? 'selected' : '').">$langAttemptCompleted</option>
+        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_PENDING."' ".(($status === 2)? 'selected' : '').">$langAttemptPending</option>
+        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_PAUSED."' ".(($status === 3)? 'selected' : '').">$langAttemptPaused</option>
+        <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_CANCELED."' ".(($status === 4)? 'selected' : '').">$langAttemptCanceled</option>
         </select>";
 //This part of the code could be improved
 if ($is_editor) {
@@ -219,7 +221,7 @@ foreach ($result as $row) {
                             'title' => $langDelete,
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",
                             'icon' => "fa-times",
-                            'confirm' => $langQuestionCatDelConfirrm,
+                            'confirm' => $langConfirmPurgeExercises,
                             'class' => 'delete'
                         )
                     )) : "") . "</td>";
