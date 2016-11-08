@@ -263,9 +263,7 @@ if (!$nbrExercises) {
             $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count
                 FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
             if ($NumOfResults) {
-                $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a><br>
-                <a href='csv.php?course=$course_code&amp;exerciseId=$eid'>$langExport</a>
-                (<a href='csv.php?course=$course_code&amp;full=true&amp;exerciseId=$eid'>$langExportWithAnswers</a>)</td>";
+                $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></td>";
             } else {
                 $tool_content .= "<td class='text-center'>  &mdash; </td>";
             }
@@ -292,10 +290,19 @@ if (!$nbrExercises) {
                           'icon-extra' => "data-exerciseid='$row->id'",
                           'url' => "#",
                           'icon' => 'fa-copy'),
+                    array('title' => $langExport,
+                          'url' => "csv.php?course=$course_code&amp;exerciseId=$eid",
+                          'icon' => 'fa-download',
+                          'show' => $NumOfResults),
+                    array('title' => $langExport . $langExportWithAnswers,
+                          'url' => "csv.php?course=$course_code&amp;full=true&amp;exerciseId=$eid",
+                          'icon' => 'fa-download',
+                          'show' => $NumOfResults),
                     array('title' => $langPurgeExerciseResults,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
                           'icon' => 'fa-eraser',
-                          'confirm' => $langConfirmPurgeExerciseResults),
+                          'confirm' => $langConfirmPurgeExerciseResults,
+                          'show' => $NumOfResults),
                     array('title' => $langDelete,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
                           'icon' => 'fa-times',
@@ -320,9 +327,9 @@ if (!$nbrExercises) {
             } else { // exercise has expired
                 $tool_content .= "<td><div class='table_td'><div class='table_td_header'> " . q($row->title) . "$lock_icon&nbsp;&nbsp;(<span class='text-danger'>$langHasExpiredS</span>)</div>";
             }
-            $tool_content .= "<div class='table_td_body'>".$row->description . "</div></div></td><td class='text-left'>
+            $tool_content .= "<div class='table_td_body'>".$row->description . "</div></div></td><td class='text-center'><div class='table_td'><div class='table_td_header'>
                                 <p class='text-success'>" . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . "</p>
-                                <p class='text-danger'>" . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</p></td>";
+                                <p class='text-danger'>" . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</p></div></div></td>";
             if ($row->time_constraint > 0) {
                 $tool_content .= "<td class='text-left'><p>$langTimeConstraint: {$row->time_constraint} $langExerciseConstrainUnit</p>";
             } else {
