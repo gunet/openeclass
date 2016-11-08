@@ -48,9 +48,9 @@ if (isset($_GET['exerciseId'])) {
 }
 if ($is_editor && isset($_GET['purgeAttempID'])) {
     $eurid = $_GET['purgeAttempID'];
-    $objExercise->purgeAttempt($eurid);
+    $objExercise->purgeAttempt($exerciseIdIndirect, $eurid);
     Session::Messages($langPurgeExerciseResultsSuccess);
-    redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=$exerciseIdIndirect");
+    redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=" . getIndirectReference($_GET['exerciseId']));
 }
 
 $pageName = $langResults;
