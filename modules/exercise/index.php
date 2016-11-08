@@ -246,7 +246,7 @@ if (!$nbrExercises) {
             $currentDate = new DateTime('NOW');            
             $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;                                   
             if (!empty($row->description)) {
-                $descr = "<br/>$row->description";
+                $descr = "<div class='table_td_body'>$row->description</div>";
             } else {
                 $descr = '';
             }
@@ -256,15 +256,15 @@ if (!$nbrExercises) {
             }
             $expired = '';            
             if (isset($temp_EndDate) and ($currentDate > $temp_EndDate)) {
-                $expired = "&nbsp;&nbsp;(<font color='red'>$langHasExpiredS</font>)";
+                $expired = "&nbsp;&nbsp;(<span class='text-danger'>$langHasExpiredS</span>)";
                 $attempts_allowed = '';
             }
-            $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$expired$attempts_allowed$descr</td>";
+            $tool_content .= "<td><div class='table_td'><div class='table_td_header'><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$expired$attempts_allowed</div><div class='table_td_body'>$descr</div></div></td>";
             $eid = getIndirectReference($row->id);
             $NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count
                 FROM exercise_user_record WHERE eid = ?d", $row->id)->count;
             if ($NumOfResults) {
-                $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a> |
+                $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a><br>
                 <a href='csv.php?course=$course_code&amp;exerciseId=$eid'>$langExport</a>
                 (<a href='csv.php?course=$course_code&amp;full=true&amp;exerciseId=$eid'>$langExportWithAnswers</a>)</td>";
             } else {
@@ -319,9 +319,9 @@ if (!$nbrExercises) {
              } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                 $tool_content .= "<td class='not_visible'>" . q($row->title) . "$lock_icon&nbsp;&nbsp;";
             } else { // exercise has expired
-                $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<font color='red'>$langHasExpiredS</font>)";
+                $tool_content .= "<td><div class='table_td'><div class='table_td_header'> " . q($row->title) . "$lock_icon&nbsp;&nbsp;(<span class='text-danger'>$langHasExpiredS</span>)</div>";
             }
-            $tool_content .= $row->description . "</td><td class='smaller' align='center'>
+            $tool_content .= "<div class='table_td_body'>".$row->description . "</div></div></td><td class='smaller' align='center'>
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
                                 " . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</td>";
             if ($row->time_constraint > 0) {
