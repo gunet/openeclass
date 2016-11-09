@@ -864,12 +864,12 @@ switch ($action) {
                                           $style.'</head><body>';
                     $printable_content .="<div class='container'>
                                             <div class='row'>
-                                                <div class='col-xs-10 col-xs-offset-1'> ";
+                                                <div class='col-xs-12'> ";
                     $printable_content .= '<h2>'.$htmltitle. '</h2>'."\n";
                     
                     $printable_content .= '<h3>'.$toolTitle['mainTitle'].'</h3><hr/></div></div>'."\n";
                     //remove the toc script (if it exists) with preg_replace
-                    $printable_content .="<div class='row'><div class='col-xs-10 col-xs-offset-1'>". preg_replace('#<script(.*?)>(.*?)</script>#is', '', $wikiRenderer->render($wikiPage->getContent()));
+                    $printable_content .="<div class='row'><div class='col-xs-12'>". preg_replace('#<script(.*?)>(.*?)</script>#is', '', $wikiRenderer->render($wikiPage->getContent()));
                     $printable_content .= '<hr>';
                 		
                     $editorInfo = user_get_data($wikiPage->getEditorId());
