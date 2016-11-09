@@ -40,7 +40,7 @@ if (!get_config('eportfolio_enable')) {
 
 $userdata = array();
 
-if (isset($_GET['id']) && intval($_GET['id']) != 0) {
+if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     $id = intval($_GET['id']);
     $toolName = $langUserePortfolio;
 } else {
