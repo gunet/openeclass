@@ -3427,7 +3427,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
     if (version_compare($oldversion, '3.5.1', '<')) {
-        // E-book and learning path unique indexes
+        // FAQ, E-book and learning path unique indexes
+        if (!DBHelper::indexExists('faq', 'faq_order')) {
+            Database::get()->query('ALTER TABLE faq
+                ADD UNIQUE KEY `faq_order` (`order`)');
+        }
         if (!DBHelper::indexExists('ebook', 'ebook_order')) {
             Database::get()->query('ALTER TABLE ebook
                 ADD UNIQUE KEY `ebook_order` (`course_id`, `order`)');

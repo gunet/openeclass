@@ -813,7 +813,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `faq` (
                             `title` text NOT NULL,
                             `body` text NOT NULL,
                             `order` int(11) NOT NULL,
-                            PRIMARY KEY (`id`)) $tbl_options");
+                            PRIMARY KEY (`id`),
+                            UNIQUE KEY `faq_order` (`order`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wall_post` (
         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

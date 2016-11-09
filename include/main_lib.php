@@ -1380,8 +1380,20 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 function reorder_table($table, $limitField, $limitValue, $toReorder, $prevReorder = null, $idField = 'id', $orderField = 'order') {
     Database::get()->transaction(function ()
             use ($table, $limitField, $limitValue, $toReorder, $prevReorder, $idField, $orderField) {
+        if ($limitField) {
+            $where = "WHERE `$limitField` = ?d";
+        } else {
+            $where = '';
+            $limitValue = array();
+        }
         $max = Database::get()->querySingle("SELECT MAX(`$orderField`) AS max_order
-            FROM `$table` WHERE `$limitField` = ?d", $limitValue)->max_order;
+            FROM `$table` $where", $limitValue)->max_order;
+
+        if ($where) {
+            $where .= ' AND';
+        } else {
+            $where = 'WHERE';
+        }
 
         if (!is_null($prevReorder)) {
             $prevRank = Database::get()->querySingle("SELECT `$orderField` AS rank
@@ -1392,16 +1404,13 @@ function reorder_table($table, $limitField, $limitValue, $toReorder, $prevReorde
 
         Database::get()->query("UPDATE `$table`
             SET `$orderField` = `$orderField` + ?d + 1
-            WHERE `$limitField` = ?d
-                AND `$orderField` > ?d", $max, $limitValue, $prevRank);
+            $where `$orderField` > ?d", $max, $limitValue, $prevRank);
         Database::get()->query("UPDATE `$table`
             SET `$orderField` = ?d
-            WHERE `$limitField` = ?d
-                AND `$idField` = ?d", $prevRank + 1, $limitValue, $toReorder);
+            $where `$idField` = ?d", $prevRank + 1, $limitValue, $toReorder);
         Database::get()->query("UPDATE `$table`
             SET `$orderField` = `$orderField` - ?d
-            WHERE `$limitField` = ?d
-                AND `$orderField` > ?d", $max, $limitValue, $prevRank + 1);
+            $where `$orderField` > ?d", $max, $limitValue, $prevRank + 1);
     });
 }
 

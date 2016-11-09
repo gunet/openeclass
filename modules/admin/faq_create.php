@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -24,32 +24,15 @@ $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
-
-
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-
-  if (isset($_POST['toDelete'])){
-    Database::get()->query("UPDATE `faq` SET `order`=`order` - 1 WHERE `order`>?d", $_POST['oldOrder']);
-    Database::get()->query("DELETE FROM faq WHERE `id`=?d", $_POST['toDelete']);
-  }
-    
-    if (isset($_POST['toReorder'])){
-        $toReorder = $_POST['toReorder'];
-
-        if (isset($_POST['prevReorder'])) {
-            $prevRank = Database::get()->querySingle("SELECT `order` FROM faq WHERE id = ?d", $_POST['prevReorder'])->order;
-        } else {
-            $prevRank = 0;
-        }
-
-        Database::get()->query("UPDATE `faq` SET `order` = `order` + 1 WHERE `order` > ?d", $prevRank);
-        Database::get()->query("UPDATE `faq` SET `order` = ?d WHERE id = ?d", $prevRank + 1, $toReorder);
-        $delta = Database::get()->querySingle("SELECT MIN(`order`) AS minOrder FROM faq ")->minOrder;
-        Database::get()->query("UPDATE `faq` SET `order` = `order` - ?d  + 1", $delta);
-
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['toDelete'])) {
+        Database::get()->query("UPDATE `faq` SET `order` = `order` - 1 WHERE `order` > ?d", $_POST['oldOrder']);
+        Database::get()->query("DELETE FROM faq WHERE `id` = ?d", $_POST['toDelete']);
+    } elseif (isset($_POST['toReorder'])) {
+        reorder_table('faq', null, null, $_POST['toReorder'],
+            isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
     }
-
-  exit();
+    exit;
 }
 
 if (isset($_POST['submitFaq'])) {
