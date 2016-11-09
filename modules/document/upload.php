@@ -40,12 +40,12 @@ if (defined('COMMON_DOCUMENTS')) {
     $data['menuTypeID'] = 3;
     $toolName = $langCommonDocs;
 } elseif (defined('MY_DOCUMENTS')) {
-    if (!get_config('mydocs_teacher_enable')) {
-        redirect_to_home_page();        
-    }
-    if (!get_config('mydocs_student_enable')) {
+    if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {
         redirect_to_home_page();        
     }    
+    if ($session->status == USER_STUDENT and !get_config('mydocs_student_enable')) {
+        redirect_to_home_page();
+    }
     $data['menuTypeID'] = 1;
     $toolName = $langMyDocs;
 } else {
