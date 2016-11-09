@@ -3426,6 +3426,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             });
     }
 
+    if (version_compare($oldversion, '3.5.1', '<')) {
+        // E-book and learning path unique indexes
+        if (!DBHelper::indexExists('ebook', 'ebook_order')) {
+            Database::get()->query('ALTER TABLE ebook
+                ADD UNIQUE KEY `ebook_order` (`course_id`, `order`)');
+        }
+        if (!DBHelper::indexExists('lp_learnPath', 'learnPath_order')) {
+            Database::get()->query('ALTER TABLE lp_learnPath
+                ADD UNIQUE KEY `learnPath_order` (`course_id`, `order`)');
+        }
+    }
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 
