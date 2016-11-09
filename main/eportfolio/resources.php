@@ -234,9 +234,13 @@ if ($userdata) {
                     } elseif ($_GET['type'] == 'submission') {
                         $file_info = $data_array['submission_file'];
                     }
-                    $file = str_replace('\\', '/', $webDir)."/".$file_info;
-                    $extension = pathinfo($file, PATHINFO_EXTENSION);
-                    send_file_to_client($file, 'file.'.$extension, null, true);
+                    if (!empty($file_info)) {
+                        $file = str_replace('\\', '/', $webDir)."/".$file_info;
+                        $extension = pathinfo($file, PATHINFO_EXTENSION);
+                        if (file_exists($file)) {
+                            send_file_to_client($file, 'file.'.$extension, null, true);
+                        }
+                    }
                 }
             } elseif ($_GET['type'] == 'mydocs') {
                 $info = Database::get()->querySingle("SELECT data FROM eportfolio_resource WHERE user_id = ?d
