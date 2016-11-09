@@ -29,7 +29,11 @@ require_once 'modules/group/group_functions.php';
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
-    draw($tool_content, 1);
+    if ($uid == 0) {
+        draw($tool_content, 0);
+    } else {
+        draw($tool_content, 1);
+    }
     exit;
 }
 
