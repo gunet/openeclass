@@ -648,12 +648,12 @@ switch ($action) {
     case "all": {
             // handle main page
 
-            $tool_content .= '<div class="list-group"><a class="list-group-item" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
+            $tool_content .= '<ul class="list-group"><li class="list-group-item"><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
                     . '&amp;wikiId=' . $wikiId
                     . '&amp;title=' . rawurlencode("__MainPage__")
                     . '&amp;action=show">'
                     . $langWikiMainPage
-                    . '</a>'
+                    . '</a></li>'
             ;
 
             // other pages
@@ -668,14 +668,14 @@ switch ($action) {
 
                     $pgtitle = rawurlencode($page->title);
 
-                    $link = '<a class="list-group-item" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
+                    $link = '<li class="list-group-item"><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
                             . $wikiId . '&amp;title=' . $pgtitle . '&amp;action=show"'
-                            . '>' . $page->title . '</a>'
+                            . '>' . $page->title . '</a></li>'
                     ;
 
                     $tool_content .= $link . "\n";
                 }
-                $tool_content .= '</div>' . "\n";
+                $tool_content .= '</ul>' . "\n";
             }
             break;
         }
