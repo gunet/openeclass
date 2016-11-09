@@ -854,19 +854,22 @@ switch ($action) {
                     
                     $htmltitle = ($wiki_title=='__MainPage__') ? $langWikiMainPage : $wiki_title;
                     
-                    $style = '<style type="text/css">
-                            table { border: black solid 1px; }
-                            td { border: black solid 1px; }
-                              </style>';
+                    $style = "<link href='{$urlAppend}template/default/CSS/bootstrap-custom.css' rel='stylesheet' type='text/css'>";
+                    $style .= "<style>
+                                    body{background-color: #fff;}
+                                    h1,h2,h3,h4,h5,h6{font-family: Roboto, san-serif;}
+                                </style>";
                     $printable_content = '<html><head><meta charset="utf-8"><title>'.
                                           $htmltitle.'</title>'.
                                           $style.'</head><body>';
-                    
+                    $printable_content .="<div class='container'>
+                                            <div class='row'>
+                                                <div class='col-xs-10 col-xs-offset-1'> ";
                     $printable_content .= '<h2>'.$htmltitle. '</h2>'."\n";
                     
-                    $printable_content .= '<h3>'.$toolTitle['mainTitle'].'</h3><hr/>'."\n";
+                    $printable_content .= '<h3>'.$toolTitle['mainTitle'].'</h3><hr/></div></div>'."\n";
                     //remove the toc script (if it exists) with preg_replace
-                    $printable_content .= preg_replace('#<script(.*?)>(.*?)</script>#is', '', $wikiRenderer->render($wikiPage->getContent()))."\n";
+                    $printable_content .="<div class='row'><div class='col-xs-10 col-xs-offset-1'>". preg_replace('#<script(.*?)>(.*?)</script>#is', '', $wikiRenderer->render($wikiPage->getContent()));
                     $printable_content .= '<hr>';
                 		
                     $editorInfo = user_get_data($wikiPage->getEditorId());
@@ -880,7 +883,7 @@ switch ($action) {
                 
                 	$versionInfo = sprintf($langWikiVersionInfoPattern, $mtime, $editorUrl);
                 	$printable_content .= $versionInfo;
-                	$printable_content .= '</body></html>';
+                	$printable_content .= '</div></div></div></body></html>';
                 }
                 else {           
                     $wiki_content = "<div id='mainContent' class='wiki2xhtml'>
