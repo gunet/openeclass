@@ -59,7 +59,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $terms[] = '%' . $searchcode . '%';
     }
     if ($searchtype != "-1") {
-        $query .= ' AND visible = ?d';
+        $query .= ' AND course.visible = ?d';
         $terms[] = $searchtype;
     }
     if ($searchfaculte) {
