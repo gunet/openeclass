@@ -20,7 +20,7 @@
 
 
 /*
- *  	Authors:	Giannis Kapetanakis <bilias@edu.physics.uoc.gr>
+ * Authors: Giannis Kapetanakis <bilias@edu.physics.uoc.gr>
  */
 
 require_once '../../include/baseTheme.php';
@@ -47,8 +47,12 @@ if (phpCAS::checkAuthentication()) {
         $_SESSION['cas_email'] = $attrs['email'];
     }
     if (!empty($attrs['studentid'])) {
-    	$_SESSION['cas_userstudentid'] = $attrs['studentid'];
+        $_SESSION['cas_userstudentid'] = $attrs['studentid'];
     }
 }
 
-header("Location: $urlServer");
+if (isset($_GET['next'])) {
+    header("Location: $urlServer?next=" . urlencode($_GET['next']));
+} else {
+    header("Location: $urlServer");
+}

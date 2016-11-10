@@ -1329,6 +1329,12 @@ function shib_cas_login($type) {
         $_SESSION['mail_verification_required'] = 1;
         // init.php is already loaded so redirect from here
         redirect_to_home_page('modules/auth/mail_verify_change.php');
+    } else {
+        if (isset($_GET['next'])) {
+            redirect_to_home_page($_GET['next']);
+        } else {
+            redirect_to_home_page('main/portfolio.php');
+        }
     }
 }
 
