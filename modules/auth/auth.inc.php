@@ -1001,6 +1001,12 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
                 Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d',
                     $options['status'], $user_info_object->id);
             }
+            if ($options['am'] != $user_info_object->am) {
+                // update student ID
+                $user_info_object->am = $options['am'];
+                Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
+                    $options['am'], $user_info_object->id);
+            }
             $userObj->refresh($user_info_object->id, $options['departments']);
             if (!array_search($user_info_object->password, $auth_ids)) {
                 $_SESSION['canChangePassword'] = true;
@@ -1107,6 +1113,12 @@ function alt_login($user_info_object, $uname, $pass) {
                 $user_info_object->status = $options['status'];
                 Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d',
                     $options['status'], $user_info_object->id);
+            }
+            if ($options['am'] != $user_info_object->am) {
+                // update student ID
+                $user_info_object->am = $options['am'];
+                Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
+                    $options['am'], $user_info_object->id);
             }
 
             $userObj->refresh($user_info_object->id, $options['departments']);
@@ -1235,6 +1247,7 @@ function shib_cas_login($type) {
             }
 
             $status = $options['status'];
+            $am = $options['am'];
 
             // update user information
             Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s,
