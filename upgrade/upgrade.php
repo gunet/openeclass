@@ -3438,7 +3438,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         if (!DBHelper::indexExists('lp_learnPath', 'learnPath_order')) {
             Database::get()->query('ALTER TABLE lp_learnPath
-                ADD UNIQUE KEY `learnPath_order` (`course_id`, `order`)');
+                ADD UNIQUE KEY `learnPath_order` (`course_id`, `rank`)');
         }
     }
 

@@ -648,7 +648,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
     `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
     `visible` TINYINT(4) NOT NULL DEFAULT 0,
     `rank` INT(11) NOT NULL DEFAULT 0,
-    UNIQUE KEY `learnPath_order` (`course_id`,`order`)) $tbl_options");
+    UNIQUE KEY `learnPath_order` (`course_id`,`rank`)) $tbl_options");
 
 // COMMENT='This table links module to the learning path using them';
 $db->query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
