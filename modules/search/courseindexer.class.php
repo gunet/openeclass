@@ -198,16 +198,32 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
     }
 
     /**
-     * Build a Lucene Query.
+     * Build one or more Lucene Queries.
      * 
      * @param  array   $data      - The data (normally $_POST), needs specific array keys, @see getDetailedSearchForm()
      * @return string             - the returned query string
      */
-    public static function buildQuery($data) {
+    public static function buildQueries($data) {
+        $queryStrings = array();
+        $andCourse = ' AND doctype:course';
+
         if (isset($data['search_terms']) && !empty($data['search_terms'])) {
-            $terms = explode(' ', Indexer::filterQuery($data['search_terms']));
+            $clearTerms = Indexer::filterQuery($data['search_terms']);
+
+            if (strpos($clearTerms, ' ') !== false) {
+                $queryFull = 'title:"' . $clearTerms . '"' . $andCourse;
+                $queryStrings[] = $queryFull;
+                $querySemi = 'title:"' . $clearTerms . '*"' . $andCourse;
+                $queryStrings[] = $querySemi;
+            }
+
             $queryStr = '(';
+            $terms = explode(' ', $clearTerms);
             foreach ($terms as $term) {
+                // ignore short terms
+                if (strlen($term) <= 2) {
+                    continue;
+                }
                 $queryStr .= 'title:' . $term . '* ';
                 $queryStr .= 'keywords:' . $term . '* ';
                 $queryStr .= 'prof_names:' . $term . '* ';
@@ -215,7 +231,8 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
                 $queryStr .= 'public_code:' . $term . '* ';
                 $queryStr .= 'units:' . $term . '* ';
             }
-            $queryStr .= ')';
+            $queryStr .= ')' . $andCourse;
+            $queryStrings[] = $queryStr;
         } else {
             $queryStr = '(';
             $needsOR = false;
@@ -225,10 +242,10 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
             list($queryStr, $needsOR) = self::appendQuery($data, 'search_terms_coursecode', 'code', $queryStr, $needsOR);
             list($queryStr, $needsOR) = self::appendQuery($data, 'search_terms_coursecode', 'public_code', $queryStr, $needsOR);
             list($queryStr, $needsOR) = self::appendQuery($data, 'search_terms_description', 'units', $queryStr, $needsOR);
-            $queryStr .= ')';
+            $queryStr .= ')' . $andCourse;
+            $queryStrings[] = $queryStr;
         }
-        $queryStr .= ' AND doctype:course';
-        return $queryStr;
+        return $queryStrings;
     }
 
     /**
