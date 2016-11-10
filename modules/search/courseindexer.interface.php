@@ -39,10 +39,10 @@ interface CourseIndexerInterface {
     public function remove($id, $existCheck, $optimize);
 
     /**
-     * Build a Lucene Query.
-     * 
-     * @param array   $data      - The data (normally $_POST), needs specific array keys
-     * @return string            - the returned query string
+     * Build one or more Lucene Queries.
+     *
+     * @param  array   $data      - The data (normally $_POST), needs specific array keys, @see getDetailedSearchForm()
+     * @return string             - the returned query string
      */
-    public static function buildQuery($data);
+    public static function buildQueries($data);
 }
