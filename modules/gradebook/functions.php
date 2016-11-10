@@ -642,14 +642,23 @@ function display_all_users_grades($gradebook_id) {
 /**
  * @brief display user grades (student view)
  * @global type $tool_content
+ * @global type $course_code
+ * @global type $is_editor
  * @global type $langGradebookTotalGradeNoInput
  * @global type $langGradebookTotalGrade
+ * @global type $langGradebookSum
  * @global type $langTitle
  * @global type $langGradebookActivityDate2
- * @global type $langGradebookActivityDescription
+ * @global type $langGradebookNoTitle
+ * @global type $langType
  * @global type $langGradebookActivityWeight
  * @global type $langGradebookGrade
  * @global type $langGradebookAlertToChange
+ * @global type $langBack
+ * @global type $langAssignment
+ * @global type $langExercise
+ * @global type $langGradebookActivityAct
+ * @global type $langAttendanceActivity
  * @param type $gradebook_id
  * @param type $uid
  */
@@ -692,6 +701,7 @@ function student_view_gradebook($gradebook_id, $uid) {
         if(weightleft($gradebook_id, 0) != 0) {
             $tool_content .= "<div class='alert alert-warning'>$langGradebookAlertToChange</div>";
         }
+        $tool_content .= "<div style='padding: 15px;'>" . display_user($uid, false, false) . "</div>";
         $tool_content .= "<table class='table-default' >";
         $tool_content .= "<tr class='list-header'><th>$langTitle</th>
                               <th>$langGradebookActivityDate2</th>
@@ -702,8 +712,7 @@ function student_view_gradebook($gradebook_id, $uid) {
                           </tr>";
     }
     if ($result) {
-        foreach ($result as $details) {
-            //$content = standard_text_escape($details->description);
+        foreach ($result as $details) {            
             $tool_content .= "
                 <tr>
                     <td>
