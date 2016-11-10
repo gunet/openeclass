@@ -91,95 +91,125 @@ if ($userdata) {
                 if ($rtype == 'blog') {
                     $post = Database::get()->querySingle("SELECT * FROM blog_post WHERE id = ?d AND user_id = ?d", $rid, $uid);
                     if ($post) {
-                        if ($post->user_id == $uid){
-                            if ($post->course_id == 0) { //personal blog post
-                                $course_title = '';
+                        if ($post->course_id > 0) {
+                            $course_status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $post->course_id)->visible;
+                            $module_status = Database::get()->querySingle("SELECT visible FROM course_module WHERE id = ?d AND module_id = ?d", $post->course_id, MODULE_ID_BLOG)->visible;
+                            if ($course_status != COURSE_INACTIVE AND $module_status) {
+                                $course_post_proceed = TRUE;
                             } else {
-                                $course_title = Database::get()->querySingle("SELECT title FROM course WHERE id = ?d", $post->course_id)->title;
+                                $course_post_proceed = FALSE; 
                             }
                         }
-                        $data = array('title' => $post->title, 'content' => $post->content, 'timestamp' => $post->time);
                         
-                        Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
-                                VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'blog',$post->course_id,$course_title,serialize($data));
-                        Session::Messages($langePortfolioResourceAdded, 'alert-success');
-                        redirect_to_home_page("main/eportfolio/resources.php");
+                        if ($course_post_proceed || ($post->course_id == 0 && get_config('personal_blog'))) {
+                            if ($post->user_id == $uid){
+                                if ($post->course_id == 0) { //personal blog post
+                                    $course_title = '';
+                                } else {
+                                    $course_title = Database::get()->querySingle("SELECT title FROM course WHERE id = ?d", $post->course_id)->title;
+                                }
+                            }
+                            $data = array('title' => $post->title, 'content' => $post->content, 'timestamp' => $post->time);
+                            
+                            Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
+                                    VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'blog',$post->course_id,$course_title,serialize($data));
+                            Session::Messages($langePortfolioResourceAdded, 'alert-success');
+                            redirect_to_home_page("main/eportfolio/resources.php");
+                        }
                     }
+                    
+                    Session::Messages($langGeneralError, 'alert-danger');
+                    redirect_to_home_page("main/eportfolio/resources.php");
+                    
                 } elseif ($rtype == 'work_submission') {
                     $submission = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d AND uid = ?d", $rid, $uid);
                     if($submission) {
                         $work = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $submission->assignment_id);
-                        if ( ($submission->group_id == 0 && $submission->uid == $uid) ||
-                             ($submission->group_id != 0 && array_key_exists($submission->group_id, user_group_info($uid, $work->course_id))) ) {
-                            
-                            $course_info = Database::get()->querySingle("SELECT title,code FROM course WHERE id = ?d", $work->course_id);
-                            $course_title = $course_info->title;
-                            $course_code =  $course_info->code;
-                            
-                            $data = array('title' => $work->title, 'descr' => $work->description, 'subm_date' => $submission->submission_date, 
-                                          'max_grade' => $work->max_grade, 'subm_text' => $submission->submission_text, 'grade' => $submission->grade, 
-                                          'group_id' => $submission->group_id);
+                        $course_status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $work->course_id)->visible;
+                        $module_status = Database::get()->querySingle("SELECT visible FROM course_module WHERE id = ?d AND module_id = ?d", $work->course_id, MODULE_ID_ASSIGN)->visible;
+                        if ($module_status AND $course_status != COURSE_INACTIVE) {
+                            if ( ($submission->group_id == 0 && $submission->uid == $uid) ||
+                                 ($submission->group_id != 0 && array_key_exists($submission->group_id, user_group_info($uid, $work->course_id))) ) {
+                                
+                                $course_info = Database::get()->querySingle("SELECT title,code FROM course WHERE id = ?d", $work->course_id);
+                                $course_title = $course_info->title;
+                                $course_code =  $course_info->code;
+                                
+                                $data = array('title' => $work->title, 'descr' => $work->description, 'subm_date' => $submission->submission_date, 
+                                              'max_grade' => $work->max_grade, 'subm_text' => $submission->submission_text, 'grade' => $submission->grade, 
+                                              'group_id' => $submission->group_id);
+                                
+                                //create dir for user
+                                if (!file_exists($webDir."/courses/eportfolio/work_submissions/".$uid)) {
+                                    @mkdir($webDir."/courses/eportfolio/work_submissions/".$uid, 0777);
+                                }
+                                
+                                //assignment file
+                                if (!empty($work->file_path)) {
+                                    $ass_file_path_explode = explode("/", $work->file_path);
+                                    $ass_file_extension = pathinfo($webDir.'courses/'.$course_code.'/work/'.$ass_file_path_explode[0].'/'.rawurlencode($ass_file_path_explode[1]), PATHINFO_EXTENSION);
+                                    $ass_source = $urlServer.'courses/'.$course_code.'/work/admin_files/'.$ass_file_path_explode[0].'/'.rawurlencode($ass_file_path_explode[1]);
+                                    $ass_dest = 'courses/eportfolio/work_submissions/'.$uid.'/'.uniqid().'.'.$ass_file_extension;
+                                    copy($ass_source,$ass_dest);
+                                    $data['assignment_file'] = $ass_dest;
+                                } else {
+                                    $data['assignment_file'] = $work->file_path;
+                                }
+                                
+                                //submission file
+                                if (!empty($submission->file_path)) {
+                                    $subm_file_path_explode = explode("/", $submission->file_path);
+                                    $subm_file_extension = pathinfo($webDir.'courses/'.$course_code.'/work/'.$subm_file_path_explode[0].'/'.rawurlencode($subm_file_path_explode[1]), PATHINFO_EXTENSION);
+                                    $subm_source = $urlServer.'courses/'.$course_code.'/work/'.$subm_file_path_explode[0].'/'.rawurlencode($subm_file_path_explode[1]);
+                                    $subm_dest = 'courses/eportfolio/work_submissions/'.$uid.'/'.uniqid().'.'.$subm_file_extension;
+                                    copy($subm_source,$subm_dest);
+                                    $data['submission_file'] = $subm_dest;
+                                } else {
+                                    $data['submission_file'] = $submission->file_path;
+                                }
+                                
+                                Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
+                                    VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'work_submission',$work->course_id,$course_title,serialize($data));
+                                Session::Messages($langePortfolioResourceAdded, 'alert-success');
+                                redirect_to_home_page("main/eportfolio/resources.php");
+                                
+                            }
+                        }
+                    }
+                    
+                    Session::Messages($langGeneralError, 'alert-danger');
+                    redirect_to_home_page("main/eportfolio/resources.php");
+                    
+                } elseif ($rtype == 'mydocs') {
+                    if (($session->status == USER_TEACHER && get_config('mydocs_teacher_enable')) || ($session->status == USER_STUDENT && get_config('mydocs_student_enable'))) {
+                        $document = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND subsystem = ?d AND subsystem_id = ?d AND format <> ?s", $rid, MYDOCS, $uid, '.dir');
+                        
+                        if ($document) {
+                            $data = array('title' => $document->title, 'filename' => $document->filename, 'comment' => $document->comment, 
+                                          'subject' => $document->subject, 'description' => $document->description);
                             
                             //create dir for user
-                            if (!file_exists($webDir."/courses/eportfolio/work_submissions/".$uid)) {
-                                @mkdir($webDir."/courses/eportfolio/work_submissions/".$uid, 0777);
+                            if (!file_exists($webDir."/courses/eportfolio/mydocs/".$uid)) {
+                                @mkdir($webDir."/courses/eportfolio/mydocs/".$uid, 0777);
                             }
                             
-                            //assignment file
-                            if (!empty($work->file_path)) {
-                                $ass_file_path_explode = explode("/", $work->file_path);
-                                $ass_file_extension = pathinfo($webDir.'courses/'.$course_code.'/work/'.$ass_file_path_explode[0].'/'.rawurlencode($ass_file_path_explode[1]), PATHINFO_EXTENSION);
-                                $ass_source = $urlServer.'courses/'.$course_code.'/work/admin_files/'.$ass_file_path_explode[0].'/'.rawurlencode($ass_file_path_explode[1]);
-                                $ass_dest = 'courses/eportfolio/work_submissions/'.$uid.'/'.uniqid().'.'.$ass_file_extension;
-                                copy($ass_source,$ass_dest);
-                                $data['assignment_file'] = $ass_dest;
-                            } else {
-                                $data['assignment_file'] = $work->file_path;
-                            }
-                            
-                            //submission file
-                            if (!empty($submission->file_path)) {
-                                $subm_file_path_explode = explode("/", $submission->file_path);
-                                $subm_file_extension = pathinfo($webDir.'courses/'.$course_code.'/work/'.$subm_file_path_explode[0].'/'.rawurlencode($subm_file_path_explode[1]), PATHINFO_EXTENSION);
-                                $subm_source = $urlServer.'courses/'.$course_code.'/work/'.$subm_file_path_explode[0].'/'.rawurlencode($subm_file_path_explode[1]);
-                                $subm_dest = 'courses/eportfolio/work_submissions/'.$uid.'/'.uniqid().'.'.$subm_file_extension;
-                                copy($subm_source,$subm_dest);
-                                $data['submission_file'] = $subm_dest;
-                            } else {
-                                $data['submission_file'] = $submission->file_path;
-                            }
+                            $file_source = $urlServer.'courses/mydocs/'.$uid.$document->path;
+                            $path_extension = pathinfo($file_source, PATHINFO_EXTENSION);
+                            $file_dest = 'courses/eportfolio/mydocs/'.$uid.'/'.uniqid().'.'.$path_extension;
+                            copy($file_source,$file_dest);
+                            $data['file_path'] = $file_dest;
                             
                             Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
-                                VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'work_submission',$work->course_id,$course_title,serialize($data));
+                                    VALUES (?d,?d,?s,?d,?s,?s)", $uid, $rid, 'mydocs', 0 ,'', serialize($data));
+                            
                             Session::Messages($langePortfolioResourceAdded, 'alert-success');
                             redirect_to_home_page("main/eportfolio/resources.php");
-                            
                         }
                     }
-                } elseif ($rtype == 'mydocs') {
-                    $document = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d AND subsystem = ?d AND subsystem_id = ?d AND format <> ?s", $rid, MYDOCS, $uid, '.dir');
                     
-                    if ($document) {
-                        $data = array('title' => $document->title, 'filename' => $document->filename, 'comment' => $document->comment, 
-                                      'subject' => $document->subject, 'description' => $document->description);
-                        
-                        //create dir for user
-                        if (!file_exists($webDir."/courses/eportfolio/mydocs/".$uid)) {
-                            @mkdir($webDir."/courses/eportfolio/mydocs/".$uid, 0777);
-                        }
-                        
-                        $file_source = $urlServer.'courses/mydocs/'.$uid.$document->path;
-                        $path_extension = pathinfo($file_source, PATHINFO_EXTENSION);
-                        $file_dest = 'courses/eportfolio/mydocs/'.$uid.'/'.uniqid().'.'.$path_extension;
-                        copy($file_source,$file_dest);
-                        $data['file_path'] = $file_dest;
-                        
-                        Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
-                                VALUES (?d,?d,?s,?d,?s,?s)", $uid, $rid, 'mydocs', 0 ,'', serialize($data));
-                    }
-                    
-                    Session::Messages($langePortfolioResourceAdded, 'alert-success');
+                    Session::Messages($langGeneralError, 'alert-danger');
                     redirect_to_home_page("main/eportfolio/resources.php");
+                    
                 }
             }
         } elseif (isset($_GET['action']) && $_GET['action'] == 'remove' && isset($_GET['er_id'])) {
@@ -196,6 +226,9 @@ if ($userdata) {
                 }
                 Database::get()->query("DELETE FROM eportfolio_resource WHERE id = ?d", $er_id);
                 Session::Messages($langePortfolioResourceRemoved, 'alert-success');
+                redirect_to_home_page("main/eportfolio/resources.php");
+            } else {
+                Session::Messages($langGeneralError, 'alert-danger');
                 redirect_to_home_page("main/eportfolio/resources.php");
             }
         }
