@@ -54,7 +54,7 @@ if (!register_posted_variables(array('search_terms' => false,
 
 // search in the index
 $idx = new Indexer();
-$hits = $idx->searchRaw(CourseIndexer::buildQuery($_POST));
+$hits = $idx->multiSearchRaw(CourseIndexer::buildQueries($_POST));
 
 // exit if not results
 if (count($hits) <= 0) {
@@ -87,11 +87,11 @@ $hitIds = array();
 foreach ($hits as $hit) {
     $hitIds[] = intval($hit->pkid);
 }
-$inIds = "(" . implode(",", $hitIds) . ")";
+$inIds = implode(",", $hitIds);
 $courses = Database::get()->queryArray("select c.*, cd.department "
         . " from course c left "
         . " join (select course, max(department) as department from course_department group by course) cd on (c.id = cd.course) "
-        . " where c.id in " . $inIds);
+        . " where c.id in (" . $inIds . ") order by field(id," . $inIds . ")");
  
 //////// PRINT RESULTS ////////
 $tool_content .= action_bar(array(
@@ -106,7 +106,7 @@ $tool_content .= "
 if (isset($_POST['search_terms'])) {
     $tool_content .= ":&nbsp;<label> '$_POST[search_terms]'</label>";
 }
-$tool_content .= "<br><small>" . $cnthits . " $langResults2</small></div>
+$tool_content .= "<br><small>" . count($courses) . " $langResults2</small></div>
     <table class='table-default'>
     <tr>";
 if ($uid > 0) {
