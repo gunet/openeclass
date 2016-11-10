@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2016-11-01 13:01:31
+// Generated 2016-11-10 14:37:51
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -333,7 +333,6 @@ $langAdminAn = "Annonces de l'administrateur";
 $langAdminAddAnn = "Ajouter une annonce de l'administrateur";
 $langAdminModifAnn = "Modifier l'annonce de l'administrateur";
 $langAdminAnnModify = "L'annonce de l'administrateur a été modifiée";
-$langAdminAnVis = "Visible";
 $langAdminAnnAdd = "L'annonce de l'administrateur a été ajoutée";
 $langAdminAnnDel = "L'annonce de l'administrateur a été supprimée";
 $langAdminAnnMes = "a été posté le";
@@ -1592,7 +1591,6 @@ $langPollSubmitted = "Merci pour votre participation !";
 $langPollTotalAnswers = "Nombre total des réponses";
 $langPollNone = "Il n'y a pas de questionnaires disponibles en ce moment.";
 $langPollInactive = "<p class='caution'>Le questionnaire a expiré ou n'a pas encore été activé.</p>";
-$langHasExpired = "A expiré";
 $langPollCharts = "Résultats du questionnaire";
 $langPollUnknown = "Je ne sais pas/Je ne réponds pas";
 $langIndividuals = "Résultats par utilisateur";
@@ -2231,7 +2229,6 @@ $lang_footer_p_CourseManager = "Responsable pour %s";
 $lang_p_platformManager = "Administrateur pour le %s";
 $langWikiUrl = "Saisissez le lien";
 $langWikiUrlLang = "Langue du lien";
-$langHasExpiredS = "a expiré";
 $wiki_toolbar['Strongemphasis'] = "Caractères gras";
 $wiki_toolbar['Emphasis'] = "Caractères italiques";
 $wiki_toolbar['Inserted'] = "Insertion";
@@ -4590,7 +4587,6 @@ $langAnnouncementWillBeVis = "Will be activated on: ";
 $langAnnouncementWillNotBeVis = "Has been deactivated since: ";
 $langGeneralTutorials = "Guides";
 $langAdminAnNotVis = "Not visible";
-$langHasExpired = "Expired";
 $langAdminWaiting = "Pending";
 $langEmailSendWarn = 'Warning: For the platform to be able to successfully send announcements via e-mail,
 you should either select the SMTP or sendmail sending method or enter an announcement
@@ -4846,3 +4842,5 @@ $langThemeOrange = "Orange";
 $langThemePumpkin = "Pumkin";
 $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
+$langHasExpiredS = "a expiré";
+$langHasExpired = "Expiré";

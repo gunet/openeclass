@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2016-11-01 13:01:31
+// Generated 2016-11-10 14:37:51
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -301,7 +301,6 @@ $langAdminAn = "Annunci del Gestore";
 $langAdminAddAnn = "Aggiungere un annuncio del gestore";
 $langAdminModifAnn = "Modificare un annuncio del gestore";
 $langAdminAnnModify = "L'annuncio del è modificato";
-$langAdminAnVis = "Visibile";
 $langAdminAnnAdd = "L' annuncio del gestore è aggiunto";
 $langAdminAnnDel = "L' annuncio del gestore è eliminato";
 $langAdminAnnMes = "annunciato in";
@@ -1472,7 +1471,6 @@ $langPollSubmitted = "Grazie per la tua partecipazione!";
 $langPollTotalAnswers = "Numero totale di risposte";
 $langPollNone = "Non ci sono Questionari per questo corso.";
 $langPollInactive = "<p class='caution'>Il questionario è scaduto o non è ancora attivato.</p>";
-$langHasExpired = "È scaduto";
 $langPollCharts = "Risultati del questionario";
 $langPollUnknown = "Non so / non rispondo";
 $langIndividuals = "Risultati per ogni utente";
@@ -2078,7 +2076,6 @@ $lang_footer_p_CourseManager = "Manager per %s";
 $lang_p_platformManager = "Gestore per %s";
 $langWikiUrl = "Nome del Link";
 $langWikiUrlLang = "Lingua del link";
-$langHasExpiredS = "è scaduto";
 $wiki_toolbar['Strongemphasis'] = "Grassetto";
 $wiki_toolbar['Emphasis'] = "Corsivo";
 $wiki_toolbar['Inserted'] = "Inseriti";
@@ -4369,7 +4366,6 @@ $langAnnouncementWillBeVis = "Will be activated on: ";
 $langAnnouncementWillNotBeVis = "Has been deactivated since: ";
 $langGeneralTutorials = "Guides";
 $langAdminAnNotVis = "Not visible";
-$langHasExpired = "Expired";
 $langAdminWaiting = "Pending";
 $langEmailSendWarn = 'Warning: For the platform to be able to successfully send announcements via e-mail,
 you should either select the SMTP or sendmail sending method or enter an announcement
@@ -4625,3 +4621,5 @@ $langThemeOrange = "Orange";
 $langThemePumpkin = "Pumkin";
 $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
+$langHasExpiredS = "è scaduto";
+$langHasExpired = "È scaduto";

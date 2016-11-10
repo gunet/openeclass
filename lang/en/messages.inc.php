@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2016-11-01 13:01:29
+// Generated 2016-11-10 14:37:48
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -305,7 +305,6 @@ $langAdminAn = "Admin Announcements";
 $langAdminAddAnn = "Add Admin Announcement";
 $langAdminModifAnn = "Modify Admin Announcement";
 $langAdminAnnModify = "Admin Anouncement modified";
-$langAdminAnVis = "Visible";
 $langAdminAnnAdd = "Admin Announcement added";
 $langAdminAnnDel = "Admin Announcement deleted";
 $langAdminAnnMes = "announced in";
@@ -1495,7 +1494,6 @@ $langPollSubmitted = "Thanks for your participating!";
 $langPollTotalAnswers = "Total number of contributions";
 $langPollNone = "There are no Questionnaires for the current $langsCourse.";
 $langPollInactive = "The Questionnaire has expired or is not active yet.";
-$langHasExpired = "Has ended";
 $langPollCharts = "Questionnaire results";
 $langPollUnknown = "Don't know / No answer";
 $langIndividuals = "Results per user";
@@ -2098,7 +2096,6 @@ $lang_footer_p_CourseManager = "Manager(s) for %s";
 $lang_p_platformManager = "Administrator for %s";
 $langWikiUrl = "Type your URL";
 $langWikiUrlLang = "Language Link";
-$langHasExpiredS = "has expired";
 $wiki_toolbar['Strongemphasis'] = "Strong Emphasis";
 $wiki_toolbar['Emphasis'] = "Emphasis";
 $wiki_toolbar['Inserted'] = "Inserted";
@@ -4392,7 +4389,6 @@ $langAnnouncementWillBeVis = "Will be activated on: ";
 $langAnnouncementWillNotBeVis = "Has been deactivated since: ";
 $langGeneralTutorials = "Guides";
 $langAdminAnNotVis = "Not visible";
-$langHasExpired = "Expired";
 $langAdminWaiting = "Pending";
 $langEmailSendWarn = 'Warning: For the platform to be able to successfully send announcements via e-mail,
 you should either select the SMTP or sendmail sending method or enter an announcement
@@ -4648,3 +4644,5 @@ $langThemeOrange = "Orange";
 $langThemePumpkin = "Pumkin";
 $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
+$langHasExpiredS = "has expired";
+$langHasExpired = "Expired";
