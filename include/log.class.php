@@ -369,9 +369,9 @@ class Log {
      * @global type $langActivate
      * @global type $langDeactivate
      * @global type $langBlogComment
-     * @global type $langBlogRating
+     * @global type $langBlogRatingLog
      * @global type $langsCourseSharing
-     * @global type $langBlogSharing
+     * @global type $langBlogSharingLog
      * @global type $langsCourseSharing
      * @global type $langCourseComment
      * @global type $langCourseAnonymousRating
@@ -386,8 +386,8 @@ class Log {
 
         global $langCourseStatusChange, $langIn, $langClosedCourse,
                $langRegCourse, $langOpenCourse, $langInactiveCourse,
-               $langActivate, $langDeactivate, $langBlogComment, $langBlogRating,
-               $langsCourseSharing, $langBlogSharing, $langCourseSharing,
+               $langActivate, $langDeactivate, $langBlogComment, $langBlogRatingLog,
+               $langsCourseSharing, $langBlogSharingLog, $langCourseSharing,
                $langCourseComment, $langsCourseAnonymousRating, $langsCourseRating,
                $langForumRating, $langCourseSocialBookmarks, $langCourseAbuseReport;
 
@@ -395,13 +395,13 @@ class Log {
 
         if (isset($details['visible'])) {
             switch ($details['visible']) {
-                case COURSE_CLOSED: $mes = "".q($langIn). "&nbsp;&laquo;". q($langClosedCourse) . "&raquo;";
+                case COURSE_CLOSED: $mes = q($langIn). "&nbsp;&laquo;". q($langClosedCourse) . "&raquo;";
                     break;
-                case COURSE_REGISTRATION: $mes = "".q($langIn). "&nbsp;&laquo;". q($langRegCourse) . "&raquo;";
+                case COURSE_REGISTRATION: $mes = q($langIn). "&nbsp;&laquo;". q($langRegCourse) . "&raquo;";
                     break;
-                case COURSE_OPEN: $mes = "".q($langIn). "&nbsp;&laquo;". q($langOpenCourse) . "&raquo;";
+                case COURSE_OPEN: $mes = q($langIn). "&nbsp;&laquo;". q($langOpenCourse) . "&raquo;";
                     break;
-                case COURSE_INACTIVE: $mes = "".q($langIn). "&nbsp;&laquo;". q($langInactiveCourse) . "&raquo;";
+                case COURSE_INACTIVE: $mes = q($langIn). "&nbsp;&laquo;". q($langInactiveCourse) . "&raquo;";
                     break;
                 default: $mes = '';
                     break;
@@ -415,10 +415,10 @@ class Log {
                     $mes = "$lm $langBlogComment";
                     break;
                 case SETTING_BLOG_RATING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
-                    $mes = "$lm $langBlogRating";
+                    $mes = "$lm $langBlogRatingLog";
                     break;
                 case SETTING_BLOG_SHARING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
-                    $mes = "$lm $langBlogSharing";
+                    $mes = "$lm $langBlogSharingLog";
                     break;
                 case SETTING_COURSE_SHARING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
                     $mes = "$lm $langsCourseSharing";
