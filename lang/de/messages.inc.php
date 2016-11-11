@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2016-11-10 14:37:51
+// Generated 2016-11-11 11:57:38
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -4550,3 +4550,10 @@ $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
 $langHasExpiredS = "ist abgelaufen";
 $langHasExpired = "Abgelaufen";
+$langExportGradebookWithUsers = "Extract user results";
+$langExportGradebook = "Extract gradebook results";
+$langRestrictions = "Restrictions";
+$langTimeConstraint = "Time";
+$langHitConstraint = "Attempts";
+$langBlogRatingLog = "of blog rating";
+$langBlogSharingLog = "of blog sharing";

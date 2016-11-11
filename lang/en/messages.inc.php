@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2016-11-10 14:37:48
+// Generated 2016-11-11 11:57:37
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -2074,7 +2074,7 @@ $langWikiNoWiki = "No Wiki has been created";
 $langWikiNotAllowedToCreate = "You are not allowed to create pages";
 $langWikiNotAllowedToEdit = "You are not allowed to edit this page";
 $langWikiNotAllowedToRead = "You are not allowed to read this page";
-$langWikiNumberOfPages = "Number of pages";
+$langWikiNumberOfPages = "Num. of pages";
 $langWikiOtherUsers = "Others (*)";
 $langWikiOtherUsersText = "(*) anonymous users, users who are not members of this $langsCourse...";
 $langWikiPageHistory = "History";
@@ -4646,3 +4646,10 @@ $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
 $langHasExpiredS = "has expired";
 $langHasExpired = "Expired";
+$langExportGradebookWithUsers = "Extract user results";
+$langExportGradebook = "Extract gradebook results";
+$langRestrictions = "Restrictions";
+$langTimeConstraint = "Time";
+$langHitConstraint = "Attempts";
+$langBlogRatingLog = "of blog rating";
+$langBlogSharingLog = "of blog sharing";

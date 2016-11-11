@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2016-11-10 14:37:51
+// Generated 2016-11-11 11:57:39
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -4844,3 +4844,10 @@ $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
 $langHasExpiredS = "a expiré";
 $langHasExpired = "Expiré";
+$langExportGradebookWithUsers = "Extract user results";
+$langExportGradebook = "Extract gradebook results";
+$langRestrictions = "Restrictions";
+$langTimeConstraint = "Time";
+$langHitConstraint = "Attempts";
+$langBlogRatingLog = "of blog rating";
+$langBlogSharingLog = "of blog sharing";
