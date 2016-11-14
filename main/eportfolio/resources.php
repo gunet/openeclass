@@ -418,6 +418,7 @@ if ($userdata) {
     //show mydocs collection
     $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'mydocs');
     if ($docs) {
+        usort($docs, "cmp");
         $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'>
                               <tbody>
