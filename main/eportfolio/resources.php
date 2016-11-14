@@ -62,6 +62,11 @@ if ($userdata) {
             $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
         }
         
+        $tool_content .= "<div class='alert alert-info fade in'>
+                            <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>
+                            $langePortfolioCollectionUserInfo
+                          </div>";
+        
         $tool_content .= action_bar(array(
                 array('title' => $langBio,
                       'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id",
@@ -93,7 +98,7 @@ if ($userdata) {
                     if ($post) {
                         if ($post->course_id > 0) {
                             $course_status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $post->course_id)->visible;
-                            $module_status = Database::get()->querySingle("SELECT visible FROM course_module WHERE id = ?d AND module_id = ?d", $post->course_id, MODULE_ID_BLOG)->visible;
+                            $module_status = Database::get()->querySingle("SELECT visible FROM course_module WHERE course_id = ?d AND module_id = ?d", $post->course_id, MODULE_ID_BLOG)->visible;
                             if ($course_status != COURSE_INACTIVE AND $module_status) {
                                 $course_post_proceed = TRUE;
                             } else {
@@ -126,7 +131,7 @@ if ($userdata) {
                     if($submission) {
                         $work = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $submission->assignment_id);
                         $course_status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $work->course_id)->visible;
-                        $module_status = Database::get()->querySingle("SELECT visible FROM course_module WHERE id = ?d AND module_id = ?d", $work->course_id, MODULE_ID_ASSIGN)->visible;
+                        $module_status = Database::get()->querySingle("SELECT visible FROM course_module WHERE course_id = ?d AND module_id = ?d", $work->course_id, MODULE_ID_ASSIGN)->visible;
                         if ($module_status AND $course_status != COURSE_INACTIVE) {
                             if ( ($submission->group_id == 0 && $submission->uid == $uid) ||
                                  ($submission->group_id != 0 && array_key_exists($submission->group_id, user_group_info($uid, $work->course_id))) ) {
@@ -290,181 +295,217 @@ if ($userdata) {
         }
     }
     
-    $tool_content .= '<ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#blog">'.$langBlogPosts.'</a></li>
-                        <li><a data-toggle="tab" href="#works">'.$langWorks.'</a></li>
-                        <li><a data-toggle="tab" href="#mydocs">'.$langDoc.'</a></li>
-                      </ul>';
-    $tool_content .= '<div class="tab-content">
-                        <div id="blog" class="tab-pane fade in active" style="padding-top:20px">';
-    
-    //show blog posts collection
     $blog_posts = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'blog');
-    if ($blog_posts) {
-        usort($blog_posts, "cmp");
-        $tool_content .= "<div class='row'>";
-        $tool_content .= "<div class='col-sm-12'>";
-        foreach ($blog_posts as $post) {
-            $data = unserialize($post->data);
-            if (!empty($post->course_title)) {
-                $post->course_title = $langCourse.': '.$post->course_title;
-            } else {
-                $post->course_title = $langUserBlog;
-            }
-            $tool_content .= "<div class='panel panel-action-btn-default'>
-                                <div class='panel-heading'>
-                                    <div class='pull-right'>
-                                        ". action_button(array(
-                                                array(
-                                                    'title' => $langePortfolioRemoveResource,
-                                                    'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;er_id=".$post->id,
-                                                    'icon' => 'fa-times',
-                                                    'class' => 'delete',
-                                                    'confirm' => $langePortfolioSureToRemoveResource,
-                                                    'show' => ($post->user_id == $uid)
-                                                )))."
-                                     </div>
-                                        <h3 class='panel-title'>".q($data['title'])."</h3>
-                                </div>
-                                <div class='panel-body'>
-                                    <div class='label label-success'>" . nice_format($data['timestamp'], true). "</div><small>".$langBlogPostUser.display_user($post->user_id, false, false)."</small><br><br>".standard_text_escape($data['content'])."
-                                                </div>
-                                                <div class='panel-footer'>
-                                                <div class='row'>
-                                                <div class='col-sm-6'>$post->course_title</div>
-                                                </div>
-                                                </div>
-                                                </div>";
-        }
-        $tool_content .= "</div></div>";
-    } else {
-        $tool_content .= '<div class="alert alert-warning">'.$langePortfolioResourceNoBlog.'</div>';
-    }
-    
-    $tool_content .= '</div>';
-    
-    
-    $tool_content .= '<div id="works" class="tab-pane fade" style="padding-top:20px">';
-    
-    //show assignment submissions collection
     $submissions = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'work_submission');
-    if ($submissions) {
-        usort($submissions, "cmp");
-        $tool_content .= "<div class='row'>";
-        $tool_content .= "<div class='col-sm-12'>";
-        foreach ($submissions as $submission) {
-            $data = unserialize($submission->data);
-            if (is_null($data['grade'])) {
-                $data['grade'] = '-';
-            }
-            if ($data['group_id'] == 0) {
-                $assignment_type = $m['user_work'];
-            } else {
-                $assignment_type = $m['group_work'];
-            }
-            $submission_header_content = "<div><h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3></div>";
-            $submission->course_title = $langCourse.': '.$submission->course_title;
-            $submission_content = "<div style='border:dotted; margin:10px 0 10px 0; padding:10px 0 10px 0; background:#f1f1f1;'>"; 
-            $submission_content .= "<div><button type='button' class='btn btn-primary btn-xs' data-toggle='collapse' data-target='#header_more_$submission->id'>$langMore</button></div>
-                                   <div id='header_more_$submission->id' class='collapse'>";
-            if (!empty($data['descr'])) {
-                $submission_content .= "<div><b>".$langDescription."</b>:</div><div>".$data['descr']."</div>";
-            }
-            $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;type=assignment&er_id=$submission->id'>$langWorkFile</a></div>";
-            $submission_content .= "</div>";
-            $submission_content .= "</div>";
-            $submission_content .= "<div><b>$langSubmit</b>: " . nice_format($data['subm_date'], true). "</div>
-                                   <div><b>".$m['grade']."</b>: ".$data['grade']." / ".$data['max_grade']."</div>
-                                   <div><b>".$m['group_or_user']."</b>: ".$assignment_type."</div>";
-            if (!is_null($data['subm_text'])) {
-                $submission_content .= "<div><b>$langWorkOnlineText</b>: <br>".$data['subm_text']."</div>";
-            } else {
-               $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;type=submission&er_id=$submission->id'>$langWorkFile</a></div>"; 
-            }
-            $submission_footer = "<div class='panel-footer'>
-                                      <div class='row'>
-                                          <div class='col-sm-6'>$submission->course_title</div>
-                                      </div>
-                                  </div>";
-            $tool_content .= "<div class='panel panel-action-btn-default'>
-                                <div class='panel-heading'>
-                                    <div class='pull-right'>
-                                        ". action_button(array(
-                                                    array(
-                                                            'title' => $langePortfolioRemoveResource,
-                                                            'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
-                                                            'icon' => 'fa-times',
-                                                            'class' => 'delete',
-                                                            'confirm' => $langePortfolioSureToRemoveResource,
-                                                            'show' => ($submission->user_id == $uid)
-                                                    )))."
-                                     </div>
-                                        $submission_header_content
-                                </div>
-                                <div class='panel-body'>
-                                $submission_content    
-                                </div>
-                                $submission_footer
-                            </div>";
-        }
-        $tool_content .= "</div></div>";
-    } else {
-        $tool_content .= '<div class="alert alert-warning">'.$langePortfolioResourceNoWork.'</div>';
-    }
-    
-    $tool_content .= '</div>';
-    
-    $tool_content .= '<div id="mydocs" class="tab-pane fade" style="padding-top:20px">';
-    //show mydocs collection
     $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'mydocs');
-    if ($docs) {
-        usort($docs, "cmp");
-        $tool_content .= "<div class='table-responsive'>
-                            <table class='table-default'>
-                              <tbody>
-                                <tr class='list-header'>
-                                  <th class='text-left'>$langName</th>
-                                  <th class='text-left'>$langDate</th>
-                                  <th class='text-left'>$langSize</th>";
-        if ($id == $uid) {
-            $tool_content .= "<th class='text-center'>".icon('fa-gears', $langCommands)."</th>";
-        }
-                                  
-        $tool_content .= "</tr>";
-        foreach ($docs as $doc) {
-            $data = unserialize($doc->data);
-            if (empty($data['title'])) {
-                $filename = q($data['filename']);
+    
+    //hide tabs when there are no resources
+    if (!$blog_posts && !$submissions && !$docs) {
+        $tool_content .= "<div class='alert alert-warning'>$langePortfolioNoResInCollection</div>";
+    } else {
+        
+        $active_class = ' class="active"';
+        
+        if ($blog_posts) {
+            $blog_li = '<li'.$active_class.'><a data-toggle="tab" href="#blog">'.$langBlogPosts.'</a></li>';
+            if ($active_class != '') {
+                $blog_div_class = 'tab-pane fade in active';
             } else {
-                $filename = q($data['title']);
+                $blog_div_class = 'tab-pane fade';
             }
-            $tool_content .= "<tr>
-                                <td><a href='resources.php?action=get&amp;id=$id&amp;type=mydocs&er_id=$doc->id'>$filename</a></td>
-                                <td>".nice_format($data['date_modified'], true, true)."</td>
-                                <td>".format_file_size(filesize($data['file_path']))."</td>
-                                <td class='option-btn-cell'>
-                                   ". action_button(array(
-                                                array(
+            $active_class = '';
+        } else {
+            $blog_li = '';
+        }
+        
+        if ($submissions) {
+            $work_li = '<li'.$active_class.'><a data-toggle="tab" href="#works">'.$langWorks.'</a></li>';
+            if ($active_class != '') {
+                $work_div_class = 'tab-pane fade in active';
+            } else {
+                $work_div_class = 'tab-pane fade';
+            }
+            $active_class = '';
+        } else {
+            $work_li = '';
+        }
+        
+        if ($docs) {
+            $mydocs_li = '<li'.$active_class.'><a data-toggle="tab" href="#mydocs">'.$langDoc.'</a></li>';
+            if ($active_class != '') {
+                $mydocs_div_class = 'tab-pane fade in active';
+            } else {
+                $mydocs_div_class = 'tab-pane fade';
+            }
+            $active_class = '';
+        } else {
+            $mydocs_li = '';    
+        }
+        
+        $tool_content .= '<ul class="nav nav-tabs">
+                            '.$blog_li.'
+                            '.$work_li.'
+                            '.$mydocs_li.'
+                          </ul>';
+        $tool_content .= '<div class="tab-content">';
+
+        //show blog_posts    
+        if ($blog_posts) {
+            $tool_content .= '<div id="blog" class="'.$blog_div_class.'" style="padding-top:20px">';
+            usort($blog_posts, "cmp");
+            $tool_content .= "<div class='row'>";
+            $tool_content .= "<div class='col-sm-12'>";
+            foreach ($blog_posts as $post) {
+                $data = unserialize($post->data);
+                if (!empty($post->course_title)) {
+                    $post->course_title = $langCourse.': '.$post->course_title;
+                } else {
+                    $post->course_title = $langUserBlog;
+                }
+                $tool_content .= "<div class='panel panel-action-btn-default'>
+                                    <div class='panel-heading'>
+                                        <div class='pull-right'>
+                                            ". action_button(array(
+                                                    array(
                                                         'title' => $langePortfolioRemoveResource,
-                                                        'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=my_docs&amp;er_id=".$doc->id,
+                                                        'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;er_id=".$post->id,
                                                         'icon' => 'fa-times',
                                                         'class' => 'delete',
                                                         'confirm' => $langePortfolioSureToRemoveResource,
-                                                        'show' => ($doc->user_id == $uid)
-                                                )))." 
-                                </td>
-                              </tr>";
-        }      
-        $tool_content .= "    </tbody>
-                            </table>
+                                                        'show' => ($post->user_id == $uid)
+                                                    )))."
+                                         </div>
+                                            <h3 class='panel-title'>".q($data['title'])."</h3>
+                                    </div>
+                                    <div class='panel-body'>
+                                        <div class='label label-success'>" . nice_format($data['timestamp'], true). "</div><small>".$langBlogPostUser.display_user($post->user_id, false, false)."</small><br><br>".standard_text_escape($data['content'])."
+                                                    </div>
+                                                    <div class='panel-footer'>
+                                                    <div class='row'>
+                                                    <div class='col-sm-6'>$post->course_title</div>
+                                                    </div>
+                                                    </div>
+                                                    </div>";
+            }
+            $tool_content .= "</div>
+                            </div>
                           </div>";
-    } else {
-        $tool_content .= '<div class="alert alert-warning">'.$langePortfolioResourceNoDocs.'</div>';
+        }
+        
+        //show assignment submissions
+        if ($submissions) {
+            $tool_content .= '<div id="works" class="'.$work_div_class.'" style="padding-top:20px">';
+            usort($submissions, "cmp");
+            $tool_content .= "<div class='row'>";
+            $tool_content .= "<div class='col-sm-12'>";
+            foreach ($submissions as $submission) {
+                $data = unserialize($submission->data);
+                if (is_null($data['grade'])) {
+                    $data['grade'] = '-';
+                }
+                if ($data['group_id'] == 0) {
+                    $assignment_type = $m['user_work'];
+                } else {
+                    $assignment_type = $m['group_work'];
+                }
+                $submission_header_content = "<div><h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3></div>";
+                $submission->course_title = $langCourse.': '.$submission->course_title;
+                $submission_content = "<div style='border:dotted; margin:10px 0 10px 0; padding:10px 0 10px 0; background:#f1f1f1;'>"; 
+                $submission_content .= "<div><button type='button' class='btn btn-primary btn-xs' data-toggle='collapse' data-target='#header_more_$submission->id'>$langMore</button></div>
+                                       <div id='header_more_$submission->id' class='collapse'>";
+                if (!empty($data['descr'])) {
+                    $submission_content .= "<div><b>".$langDescription."</b>:</div><div>".$data['descr']."</div>";
+                }
+                $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a></div>";
+                $submission_content .= "</div>";
+                $submission_content .= "</div>";
+                $submission_content .= "<div><b>$langSubmit</b>: " . nice_format($data['subm_date'], true). "</div>
+                                       <div><b>".$m['grade']."</b>: ".$data['grade']." / ".$data['max_grade']."</div>
+                                       <div><b>".$m['group_or_user']."</b>: ".$assignment_type."</div>";
+                if (!is_null($data['subm_text'])) {
+                    $submission_content .= "<div><b>$langWorkOnlineText</b>: <br>".$data['subm_text']."</div>";
+                } else {
+                   $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>"; 
+                }
+                $submission_footer = "<div class='panel-footer'>
+                                          <div class='row'>
+                                              <div class='col-sm-6'>$submission->course_title</div>
+                                          </div>
+                                      </div>";
+                $tool_content .= "<div class='panel panel-action-btn-default'>
+                                    <div class='panel-heading'>
+                                        <div class='pull-right'>
+                                            ". action_button(array(
+                                                        array(
+                                                                'title' => $langePortfolioRemoveResource,
+                                                                'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
+                                                                'icon' => 'fa-times',
+                                                                'class' => 'delete',
+                                                                'confirm' => $langePortfolioSureToRemoveResource,
+                                                                'show' => ($submission->user_id == $uid)
+                                                        )))."
+                                         </div>
+                                            $submission_header_content
+                                    </div>
+                                    <div class='panel-body'>
+                                    $submission_content    
+                                    </div>
+                                    $submission_footer
+                                </div>";
+            }
+            $tool_content .= "</div>
+                            </div>
+                          </div>";
+        }
+        
+        //show mydocs collection
+        if ($docs) {
+            $tool_content .= '<div id="mydocs" class="'.$mydocs_div_class.'" style="padding-top:20px">';
+            usort($docs, "cmp");
+            $tool_content .= "<div class='table-responsive'>
+                                <table class='table-default'>
+                                  <tbody>
+                                    <tr class='list-header'>
+                                      <th class='text-left'>$langName</th>
+                                      <th class='text-left'>$langDate</th>
+                                      <th class='text-left'>$langSize</th>";
+            if ($id == $uid) {
+                $tool_content .= "<th class='text-center'>".icon('fa-gears', $langCommands)."</th>";
+            }
+                                      
+            $tool_content .= "</tr>";
+            foreach ($docs as $doc) {
+                $data = unserialize($doc->data);
+                if (empty($data['title'])) {
+                    $filename = q($data['filename']);
+                } else {
+                    $filename = q($data['title']);
+                }
+                $tool_content .= "<tr>
+                                    <td><a href='resources.php?action=get&amp;id=$id&amp;type=mydocs&amp;er_id=$doc->id'>$filename</a></td>
+                                    <td>".nice_format($data['date_modified'], true, true)."</td>
+                                    <td>".format_file_size(filesize($data['file_path']))."</td>
+                                    <td class='option-btn-cell'>
+                                       ". action_button(array(
+                                                    array(
+                                                            'title' => $langePortfolioRemoveResource,
+                                                            'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=my_docs&amp;er_id=".$doc->id,
+                                                            'icon' => 'fa-times',
+                                                            'class' => 'delete',
+                                                            'confirm' => $langePortfolioSureToRemoveResource,
+                                                            'show' => ($doc->user_id == $uid)
+                                                    )))." 
+                                    </td>
+                                  </tr>";
+            }      
+            $tool_content .= "    </tbody>
+                                </table>
+                              </div>
+                            </div>";
+        }
+        
+        $tool_content .= '</div>';
     }
-    
-    $tool_content .= '</div>';
-    
-    $tool_content .= '</div>';
 }
 
 if ($uid == $id) {

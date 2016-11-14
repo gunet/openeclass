@@ -4997,9 +4997,9 @@ $langePortfolioResourceAdded = 'Ο πόρος προστέθηκε επιτυχ�
 $langePortfolioResourceRemoved = 'Ο πόρος αφαιρέθηκε επιτυχώς από τη συλλογή σας';
 $langePortfolioRemoveResource = 'Αφαίρεση';
 $langePortfolioSureToRemoveResource = 'Είστε σίγουροι ότι θέλετε να αφαιρέσετε αυτόν τον πόρο από τη συλλογή σας;';
-$langePortfolioResourceNoBlog = 'Δεν υπάρχουν αναρτήσεις ιστολογίου αναρτημένες στο e-portfolio';
-$langePortfolioResourceNoWork = 'Δεν υπάρχουν εργασίες αναρτημένες στο e-portfolio';
-$langePortfolioResourceNoDocs = 'Δεν υπάρχουν έγγραφα αναρτημένα στο e-portfolio';
+$langePortfolioCollectionUserInfo = 'Στη συλλογή πόρων του e-Portfolio μπορείτε να προσθέσετε πόρους από τα υποσυστήματα: ιστολόγιο (προσωπικό και μαθημάτων), εργασίες μαθημάτων και προσωπικά έγγραφα, εφόσον αυτά είναι ενεργοποιημένα.
+Οι αντίστοιχες καρτέλες εμφανίζονται μόνο αν έχουν προστεθεί πόροι από τα σχετικά υποσυστήματα στη συλλογή.';
+$langePortfolioNoResInCollection = 'Δεν έχουν προστεθεί πόροι στη συλλογή';
 
 /* * ******************************************
   Widgets
