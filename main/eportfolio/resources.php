@@ -186,7 +186,8 @@ if ($userdata) {
                         
                         if ($document) {
                             $data = array('title' => $document->title, 'filename' => $document->filename, 'comment' => $document->comment, 
-                                          'subject' => $document->subject, 'description' => $document->description);
+                                          'subject' => $document->subject, 'description' => $document->description, 'date' => $document->date, 
+                                          'date_modified' => $document->date_modified);
                             
                             //create dir for user
                             if (!file_exists($webDir."/courses/eportfolio/mydocs/".$uid)) {
@@ -363,12 +364,14 @@ if ($userdata) {
             }
             $submission_header_content = "<div><h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3></div>";
             $submission->course_title = $langCourse.': '.$submission->course_title;
-            $submission_content = "<div><button type='button' class='btn btn-primary btn-xs' data-toggle='collapse' data-target='#header_more_$submission->id'>$langMore</button></div>
+            $submission_content = "<div style='border:dotted; margin:10px 0 10px 0; padding:10px 0 10px 0; background:#f1f1f1;'>"; 
+            $submission_content .= "<div><button type='button' class='btn btn-primary btn-xs' data-toggle='collapse' data-target='#header_more_$submission->id'>$langMore</button></div>
                                    <div id='header_more_$submission->id' class='collapse'>";
             if (!empty($data['descr'])) {
                 $submission_content .= "<div><b>".$langDescription."</b>:</div><div>".$data['descr']."</div>";
             }
             $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;type=assignment&er_id=$submission->id'>$langWorkFile</a></div>";
+            $submission_content .= "</div>";
             $submission_content .= "</div>";
             $submission_content .= "<div><b>$langSubmit</b>: " . nice_format($data['subm_date'], true). "</div>
                                    <div><b>".$m['grade']."</b>: ".$data['grade']." / ".$data['max_grade']."</div>
@@ -420,6 +423,7 @@ if ($userdata) {
                               <tbody>
                                 <tr class='list-header'>
                                   <th class='text-left'>$langName</th>
+                                  <th class='text-left'>$langDate</th>
                                   <th class='text-left'>$langSize</th>";
         if ($id == $uid) {
             $tool_content .= "<th class='text-center'>".icon('fa-gears', $langCommands)."</th>";
@@ -435,6 +439,7 @@ if ($userdata) {
             }
             $tool_content .= "<tr>
                                 <td><a href='resources.php?action=get&amp;id=$id&amp;type=mydocs&er_id=$doc->id'>$filename</a></td>
+                                <td>".nice_format($data['date_modified'], true, true)."</td>
                                 <td>".format_file_size(filesize($data['file_path']))."</td>
                                 <td class='option-btn-cell'>
                                    ". action_button(array(
@@ -474,6 +479,8 @@ function cmp($obj1, $obj2)
         $key = 'subm_date';
     } elseif (array_key_exists('timestamp', $data1)) {
         $key = 'timestamp';
+    } elseif (array_key_exists('date_modified', $data1)) {
+        $key = 'date_modified';
     }
     $data1 = strtotime($data1[$key]);
     $data2 = unserialize($obj2->data);
