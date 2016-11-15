@@ -188,12 +188,14 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
 
     $('#personal_blog_enable').change(function(event) {
         if ($('#personal_blog_enable').is(":checked")) {
+            $('#personal_blog_public').prop('disabled', false);
             $('#personal_blog_commenting_enable').prop('disabled', false);
             $('#personal_blog_rating_enable').prop('disabled', false);
             if ($('#social_sharing_links').is(":checked")) {
                 $('#personal_blog_sharing_enable').prop('disabled', false);
             }
         } else {
+            $('#personal_blog_public').prop('disabled', true);
             $('#personal_blog_commenting_enable').prop('disabled', true);
             $('#personal_blog_rating_enable').prop('disabled', true);
             $('#personal_blog_sharing_enable').prop('disabled', true);
@@ -201,6 +203,7 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
     });
 
     if (!$('#personal_blog_enable').is(":checked")) {
+        $('#personal_blog_public').prop('disabled', true);
         $('#personal_blog_commenting_enable').prop('disabled', true);
         $('#personal_blog_rating_enable').prop('disabled', true);
         $('#personal_blog_sharing_enable').prop('disabled', true);
@@ -336,6 +339,7 @@ if (isset($_POST['submit'])) {
         'dropbox_allow_personal_messages' => true,
         'eportfolio_enable' => true,
         'personal_blog' => true,
+        'personal_blog_public' => true,
         'personal_blog_commenting' => true,
         'personal_blog_rating' => true,
         'personal_blog_sharing' => true,
@@ -532,6 +536,7 @@ else {
     $data['cbox_dropbox_allow_student_to_student'] = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
     $data['cbox_dropbox_allow_personal_messages'] = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
     $data['cbox_personal_blog'] = get_config('personal_blog') ? 'checked' : '';
+    $data['cbox_personal_blog_public'] = get_config('personal_blog_public') ? 'checked' : '';
     $data['cbox_personal_blog_commenting'] = get_config('personal_blog_commenting') ? 'checked' : '';
     $data['cbox_personal_blog_rating'] = get_config('personal_blog_rating') ? 'checked' : '';
     $data['cbox_personal_blog_sharing'] = get_config('personal_blog_sharing') ? 'checked' : '';

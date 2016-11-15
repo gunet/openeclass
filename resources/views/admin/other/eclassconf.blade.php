@@ -410,6 +410,12 @@
                                     </div>
                                     <div class='checkbox'>
                                         <label>
+                                            <input id='personal_blog_public' type='checkbox' name='personal_blog_public' value='1' {{ $cbox_personal_blog_public }}>
+                                            {{ trans('lang_personal_blog_public') }}
+                                        </label>
+                                    </div>
+                                    <div class='checkbox'>
+                                        <label>
                                             <input id='personal_blog_commenting_enable' type='checkbox' name='personal_blog_commenting' value='1' {{ $cbox_personal_blog_commenting }}>
                                             {{ trans('lang_personal_blog_commenting') }}
                                         </label>

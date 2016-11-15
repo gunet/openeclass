@@ -3936,6 +3936,7 @@ $langOpenDelosReplaceInfo = "<p>Already existing links will be refreshed with cu
 $langWorkSubType = "Submission Type";
 $langWorkOnlineText = "Online Text";
 $lang_personal_blog = "Activate personal blog";
+$lang_personal_blog_public = "Personal blogs accessible to guests";
 $lang_personal_blog_commenting = "Activate commenting on personal blog posts";
 $lang_personal_blog_rating = "Activate rating on personal blog posts";
 $lang_personal_blog_sharing = "Activate sharing on personal blog posts";
