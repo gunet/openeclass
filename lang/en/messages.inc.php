@@ -4314,6 +4314,7 @@ $langePortfolioDisabled = 'e-portfolio feature is disabled by the platform\'s ad
 $langUserePortfolioDisabled = 'This user has disabled the e-portfolio feature.';
 $langResume = 'Resume';
 $langePortfolioDisableWarning = 'Your e-portfolio is disabled, therefore it is not accessible to platform\s users and guests';
+$langePortfolioEnableInfo = 'You can enable it from the <a href="%s">home page</a> of the module.';
 $langAddResePortfolio = 'Add to e-Portfolio';
 $langAddGroupWorkSubePortfolio = 'Add submission of group "%s" to e-Portfolio';
 $langResourcesCollection = 'Resources collection';
@@ -4321,9 +4322,9 @@ $langePortfolioResourceAdded = 'The resource was successfully added to your coll
 $langePortfolioResourceRemoved = 'The resource was successfully removed from your collection';
 $langePortfolioRemoveResource = 'Remove';
 $langePortfolioSureToRemoveResource = 'Are you sure you want to remove this resource from your collection?';
-$langePortfolioResourceNoBlog = 'There are no blog posts attached to this e-portfolio';
-$langePortfolioResourceNoWork = 'There are no work submissions attached to this e-portfolio';
-$langePortfolioResourceNoDocs = 'There are no documents attached to this e-portfolio';
+$langePortfolioCollectionUserInfo = 'In the resource collection of e-Portfolio you can add resources from the following modules (if they are enabled): blog (personal and course), course assignments and personal documents.
+The respective tabs appear only if resources have been added from the relevant module to the collection.';
+$langePortfolioNoResInCollection = 'There are no resources in this collection';
 $langCommentsUser = "User comments";
 $langUserRequests = "User requests";
 $langsUserRequests = "user requests";
