@@ -1102,7 +1102,7 @@ function alt_login($user_info_object, $uname, $pass) {
                 'attributes' => array(),
                 'status' => $user_info_object->status,
                 'departments' => $userObj->getDepartmentIds($user_info_object->id),
-                'am' => $user_info_object));
+                'am' => $user_info_object->am));
 
             if (!$options['accept']) {
                 deny_access();
