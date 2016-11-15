@@ -38,8 +38,6 @@ if (!get_config('eportfolio_enable')) {
     exit;
 }
 
-$userdata = array();
-
 if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     $id = intval($_GET['id']);
     $toolName = $langUserePortfolio;
@@ -57,11 +55,6 @@ $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_
                                           FROM user WHERE id = ?d", $id);
 
 if ($userdata) {
-    if (isset($_GET['action']) && $_GET['action'] == 'get_bio') {
-        if (file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
-            send_file_to_client(str_replace('\\', '/', $webDir)."/courses/eportfolio/userbios/$id/bio.pdf", 'bio.pdf', null, true);
-        }
-    }
     
     if ($uid == $id) {
         
@@ -157,6 +150,12 @@ if ($userdata) {
                                               'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id",
                                               'level' => 'primary-label'),
                                     ));
+    }
+    
+    if (isset($_GET['action']) && $_GET['action'] == 'get_bio') {
+        if (file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
+            send_file_to_client(str_replace('\\', '/', $webDir)."/courses/eportfolio/userbios/$id/bio.pdf", 'bio.pdf', null, true);
+        }
     }
     
     $tool_content .= "
