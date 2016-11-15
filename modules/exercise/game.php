@@ -20,7 +20,7 @@
  * ======================================================================== 
  */
 
-require_once 'modules/game/ExerciseEvent.php';
+require_once 'modules/progress/ExerciseEvent.php';
 
 function triggerGame($courseId, $uid, $exerciseId) {
     $eventData = new stdClass();

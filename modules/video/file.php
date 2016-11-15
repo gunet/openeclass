@@ -22,7 +22,7 @@
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/mediaresource.factory.php';
-require_once 'modules/game/ViewingEvent.php';
+require_once 'modules/progress/ViewingEvent.php';
 
 if (!isset($_GET['course']) || !isset($_GET['id'])) {
     header("Location: ${urlServer}");

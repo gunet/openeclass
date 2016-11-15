@@ -83,7 +83,7 @@ require_once 'modules/wiki/lib/class.lockmanager.php';
 require_once 'modules/wiki/lib/lib.requestfilter.php';
 require_once 'modules/wiki/lib/lib.wikidisplay.php';
 require_once 'modules/wiki/lib/lib.javascript.php';
-require_once 'modules/game/WikiEvent.php';
+require_once 'modules/progress/WikiEvent.php';
 
 // set request variables
 $wikiId = (isset($_REQUEST['wikiId'])) ? intval($_REQUEST['wikiId']) : 0;

@@ -5,7 +5,7 @@ require_once 'vendor/autoload.php';
 
 $mpdf = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);
 
-$html_certificate = file_get_contents($urlServer.'modules/game/certificate_float_mm.html');
+$html_certificate = file_get_contents($urlServer.'modules/progress/certificate_float_mm.html');
 
 $certificate_title = "Πιστοποιητικό παρακολούθησης";
 $student_name = $_SESSION['givenname']." ".$_SESSION['surname'];

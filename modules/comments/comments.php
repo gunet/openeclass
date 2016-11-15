@@ -23,7 +23,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
 require_once 'class.comment.php';
 require_once 'class.commenting.php';
-require_once 'modules/game/CommentEvent.php';
+require_once 'modules/progress/CommentEvent.php';
 
 $wall_commenting = false;
 

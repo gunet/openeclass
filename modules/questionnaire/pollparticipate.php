@@ -29,7 +29,7 @@ $helpTopic = 'Questionnaire';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
-require_once 'modules/game/ViewingEvent.php';
+require_once 'modules/progress/ViewingEvent.php';
 
 load_js('bootstrap-slider');
 

@@ -37,7 +37,7 @@ require_once 'modules/blog/class.blog.php';
 require_once 'modules/blog/class.blogpost.php';
 require_once 'include/course_settings.php';
 require_once 'modules/sharing/sharing.php';
-require_once 'modules/game/BlogEvent.php';
+require_once 'modules/progress/BlogEvent.php';
 
 if ($blog_type == 'course_blog') {
     $user_id = 0;

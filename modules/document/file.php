@@ -78,7 +78,7 @@ require_once '../../include/init.php';
 require_once 'include/action.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/forcedownload.php';
-require_once 'modules/game/ViewingEvent.php';
+require_once 'modules/progress/ViewingEvent.php';
 require_once 'modules/document/doc_init.php';
 
 if (!(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'))) {

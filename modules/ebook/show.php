@@ -67,7 +67,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/document/doc_init.php';
-require_once 'modules/game/ViewingEvent.php';
+require_once 'modules/progress/ViewingEvent.php';
 
 doc_init();
 triggerGame($ebook_id);

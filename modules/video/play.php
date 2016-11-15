@@ -26,7 +26,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/action.php';
-require_once 'modules/game/ViewingEvent.php';
+require_once 'modules/progress/ViewingEvent.php';
 
 $action = new action();
 $action->record(MODULE_ID_VIDEO);
