@@ -338,12 +338,6 @@
                                             {{ trans('lang_opencourses_enable') }}
                                         </label>
                                     </div>
-                                    <div class='checkbox'>
-                                        <label>
-                                            <input type='checkbox' id='eportfolio_enable' name='eportfolio_enable' value='1' {{ $cbox_eportfolio_enable }}>
-                                            {{ trans('lang_opencourses_enable') }}
-                                        </label>
-                                    </div>
                                 </div>
                             </div>
                         </fieldset>
