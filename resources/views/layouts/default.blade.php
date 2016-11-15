@@ -101,7 +101,7 @@
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/my_courses.php"><span class="fa fa-graduation-cap fa-fw"></span>{!! trans('langMyCourses') !!}</a>
                                         </li>                                    
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/dropbox/index.php"><span class="fa fa-envelope-o fa-fw"></span>{!! trans('langMyDropBox') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/message/index.php"><span class="fa fa-envelope-o fa-fw"></span>{!! trans('langMyDropBox') !!}</a>
                                         </li>
                                         <li role="presentation">
                                             <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><span class="fa fa-bullhorn fa-fw"></span>{!! trans('langMyAnnouncements') !!}</a>
@@ -327,7 +327,7 @@
                                     <ul class="sidebar-mymessages">
                                     </ul>
                                     <div style="padding-top: 5px; border-top: 1px solid #ccc; margin-top: 15px;">
-                                        <a class="goto" href="{{ $urlAppend }}modules/dropbox/index.php">{{ trans('langAllMessages') }}</a>
+                                        <a class="goto" href="{{ $urlAppend }}modules/message/index.php">{{ trans('langAllMessages') }}</a>
                                     </div>
                                 </div>
                             </div>
