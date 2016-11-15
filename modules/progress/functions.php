@@ -25,7 +25,7 @@ function display_certificates() {
 
     global $course_id, $tool_content, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
-           $langActivate, $langAvailableAttendances, $langNoAttendances, $is_editor,
+           $langActivate, $langAvailableAttendances, $langNoCertificates, $is_editor,
            $langViewHide, $langViewShow, $langEditChange, $langStart, $langEnd, $uid, $langAvailCert;
 
     if ($is_editor) {
@@ -37,8 +37,8 @@ function display_certificates() {
                 . "AND attendance.course_id = ?d "
                 . "AND attendance.id = attendance_users.attendance_id AND attendance_users.uid = ?d", $course_id, $uid);
     }
-    if (count($result) == 0) { // no attendances
-        $tool_content .= "<div class='alert alert-info'>$langNoAttendances</div>";
+    if (count($result) == 0) { // no certificates
+        $tool_content .= "<div class='alert alert-info'>$langNoCertificates</div>";
     } else {
         $tool_content .= "<div class='row'>";
         $tool_content .= "<div class='col-sm-12'>";
@@ -1027,184 +1027,85 @@ function add_certificate_activity($certificate_id, $id, $type) {
 
 }
 
+/**
+ * @brief add / edit certificate settings
+ * @global string $tool_content
+ * @global type $course_code
+ * @global type $langTitle
+ * @global type $langSave
+ * @global type $langInsert
+ * @global type $langActivate
+ * @global type $langDescription
+ * @global type $langpublisher
+ * @global type $langMessage
+ * @global type $langTemplate
+ * @param type $certificate_id
+ */
+function certificate_settings($certificate_id = 0) {
 
-function new_certificate() {
-
-    global $tool_content, $course_code, $langNewAttendance2, $head_content,
-           $langTitle, $langSave, $langInsert, $langAttendanceLimitNumber,
-           $attendance_limit, $langStart, $langEnd, $language, $langNewCertificate, $langNewCertificateAuto, $langActive;
-
-    load_js('bootstrap-datetimepicker');
-    $head_content .= "
-    <script type='text/javascript'>
-        $(function() {
-            $('#start_date, #end_date').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-left',
-                language: '".$language."',
-                autoclose: true
-            });
-        });
-    </script>";
-    $title_error = Session::getError('title');
-    $title = Session::has('title') ? Session::get('title') : '';
-    $start_date_error = Session::getError('start_date');
-    $start_date = Session::has('start_date') ? Session::get('start_date') : '';
-    $end_date_error = Session::getError('end_date');
-    $end_date = Session::has('end_date') ? Session::get('end_date') : '';
-    //$limit_error  = Session::getError('limit');
-    //$limit = Session::has('limit') ? Session::get('limit') : '';
-
+    global $tool_content, $course_code, $langTemplate,
+           $langTitle, $langSave, $langInsert, $langMessage,
+           $langActivate, $langDescription, $langpublisher;
+       
+    
+    $description = '';
+    $message = '';
+    
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group'>
-                    <label class='col-xs-12'>$langNewCertificate</label></div>
-                    <div class='form-group".($title_error ? " has-error" : "")."'>
-                        <div class='col-xs-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title'>
-                            <span class='help-block'>$title_error</span>
-                        </div>
+                    <label for='title' class='col-sm-2 control-label'>$langTitle</label>            
+                    <div class='col-sm-10'>
+                        <input class='form-control' type='text' placeholder='$langTitle' name='title'>                        
                     </div>
-                    <div class='form-group".($start_date_error ? " has-error" : "")."'>
-                        <div class='col-xs-12'>
-                            <label>$langStart</label>
+                </div>
+                <div class='form-group'>
+                    <label for='description' class='col-sm-2 control-label'>$langDescription: </label>
+                        <div class='col-sm-10'>
+                            " . rich_text_editor('description', 2, 60, $description) . "
                         </div>
-                        <div class='col-xs-12'>
-                            <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
-                            <span class='help-block'>$start_date_error</span>
-                        </div>
+                </div>
+                <div class='form-group'>
+                    <label for='title' class='col-sm-2 control-label'>$langTemplate</label>
+                    <div class='col-sm-10'>
+                    " . selection(array('template 1', 'template 2', 'template 3'), 'template') . "
                     </div>
-                    <div class='form-group".($end_date_error ? " has-error" : "")."'>
-                        <div class='col-xs-12'>
-                            <label>$langEnd</label>
-                        </div>
-                        <div class='col-xs-12'>
-                            <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
-                            <span class='help-block'>$end_date_error</span>
-                        </div>
+                </div>
+                <div class='form-group'>
+                    <label for='message' class='col-sm-2 control-label'>$langMessage</label>
+                    <div class='col-sm-10'>                        
+                        " . rich_text_editor('message', 4, 60, $message) . "                        
                     </div>
-                    <div class='form-group'>
-                        <label class='col-xs-12'>$langNewCertificateAuto <input class='' type='checkbox' name='autoassign' value='1'></label>
+                </div>
+                <div class='form-group'>
+                    <label for='title' class='col-sm-2 control-label'>$langpublisher</label>
+                    <div class='col-sm-10'>
+                        <input class='form-control' type='text' name='title' value='" . q(get_config('institution')) . "'>
                     </div>
-                    <div class='form-group'>
-                        <label class='col-xs-12'>$langActive <input class='' type='checkbox' name='active' value='1'></label>
+                </div>
+                 <div class='form-group'>
+                    <label for='activate' class='col-sm-2 control-label'>$langActivate</label>
+                    <div class='col-sm-10'>
+                        <input class='form-control' type='checkbox' name='active' value='1'></label>
                     </div>
+                </div>
 
-                    <div class='form-group'>
-                        <div class='col-xs-12'>".form_buttons(array(
-                            array(
-                                    'text' => $langSave,
-                                    'name' => 'newCertificate',
-                                    'value'=> $langInsert
-                                ),
-                            array(
-                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                )
-                            ))."</div>
-                    </div>
+                <div class='form-group'>
+                    <div class='col-xs-12'>".form_buttons(array(
+                        array(
+                                'text' => $langSave,
+                                'name' => 'newCertificate',
+                                'value'=> $langInsert
+                            ),
+                        array(
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                            )
+                        ))."</div>
+                </div>
             </form>
         </div>";
 }
 
-
-
-function certificate_settings($certificate_id) {
-
-    global $tool_content, $course_code, $language,
-           $langTitle, $langSave, $langAttendanceLimitNumber,
-           $langAttendanceUpdate, $langSave, $head_content,
-           $certificate, $langStart, $langEnd, $langNewCertificateAuto, $langActive;
-    load_js('bootstrap-datetimepicker');
-    $head_content .= "
-    <script type='text/javascript'>
-        $(function() {
-            $('#start_date, #end_date').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-left',
-                language: '".$language."',
-                autoclose: true
-            });
-        });
-    </script>";
-    $title_error = Session::getError('title');
-    $title = Session::has('title') ? Session::get('title') : $certificate->title;
-    $start_date_error = Session::getError('start_date');
-    $start_date = Session::has('start_date') ? Session::get('start_date') : DateTime::createFromFormat('Y-m-d H:i:s', $certificate->created)->format('d-m-Y H:i');
-    $end_date_error = Session::getError('end_date');
-    $end_date = Session::has('end_date') ? Session::get('end_date') : DateTime::createFromFormat('Y-m-d H:i:s', $certificate->expires)->format('d-m-Y H:i');
-    //$limit_error  = Session::getError('limit');
-    //$limit = Session::has('limit') ? Session::get('limit') : get_certificate_limit($attendance_id);
-
-    $autoassign = Session::has('autoassign') ? Session::get('autoassign') : $certificate->autoassign;
-    $active = Session::has('active') ? Session::get('active') : $certificate->active;
-
-    $tool_content .= "<div class='row'>
-        <div class='col-sm-12'>
-            <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&certificate_id=$certificate_id'>
-                    <div class='form-group".($title_error ? " has-error" : "")."'>
-                        <label class='col-xs-12'>$langTitle</label>
-                        <div class='col-xs-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title' value='".q($title)."'>
-                            <span class='help-block'>$title_error</span>
-                        </div>
-                    </div>
-                    <div class='form-group".($start_date_error ? " has-error" : "")."'>
-                        <div class='col-xs-12'>
-                            <label>$langStart</label>
-                        </div>
-                        <div class='col-xs-12'>
-                            <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
-                            <span class='help-block'>$start_date_error</span>
-                        </div>
-                    </div>
-                    <div class='form-group".($end_date_error ? " has-error" : "")."'>
-                        <div class='col-xs-12'>
-                            <label>$langEnd</label>
-                        </div>
-                        <div class='col-xs-12'>
-                            <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
-                            <span class='help-block'>$end_date_error</span>
-                        </div>
-                    </div>
-
-                    <div class='form-group'>
-                        <label class='col-xs-12'>$langNewCertificateAuto <input class='' type='checkbox' name='autoassign' value = 1 ";
-
-                    if($autoassign == 1) {
-                        $tool_content .= " checked ";
-                    }
-
-                    $tool_content .= "></label>
-                    </div>
-                    <div class='form-group'>
-                        <label class='col-xs-12'>$langActive <input class='' type='checkbox' name='active' value = 1 ";
-
-                    if($active == 1) {
-                        $tool_content .= " checked ";
-                    }
-
-                    $tool_content .= "></label>
-                    </div>
-
-                    <div class='form-group'>
-                        <div class='col-xs-12'>".form_buttons(array(
-                            array(
-                                'text' => $langSave,
-                                'name' => 'submitCertificateSettings',
-                                'value'=> $langAttendanceUpdate
-                            ),
-                            array(
-                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id"
-                            )
-                        ))."</div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-    </div>";
-}
 
 
 function delete_certificate($certificate_id) {

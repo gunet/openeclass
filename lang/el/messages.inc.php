@@ -1281,15 +1281,20 @@ $langSpecificUsers = "συγκεκριμένοι $langsStudents";
 $langExportGradebookWithUsers = "Εξαγωγή αποτελεσμάτων χρηστών";
 $langExportGradebook = "Εξαγωγή αποτελεσμάτων βαθμολογίων";
 
+// ------------------
+// Certification - Badge
+// ------------------
 $langCertificate = "Πιστοποιητικό";
 $langCertificates = "Πιστοποιητικά";
 $langNewCertificateSuc = "Δημιουργήθηκε το πιστοποιητικό";
 $langNewCertificate = "Νέο πιστοποιητικό";
+$langBadge = "Διακριτικό";
+$langBadges = "Διακριτικά";
 $langNewCertificateAuto = "Αυτόματη ανάθεση";
 $langCertificateInsertAct = "Πραγματοποιήθηκε η εισαγωγή της δραστηριότητας";
 $langAvailCert = "Διαθέσιμα πιστοποιητικά";
 $langCommentsBlog = "Σχόλια σε blogs";
-$langCommentsCourse = "Σχόλια στο μάθημα";
+$langCommentsCourse = "Σχόλια στο $langsCourse";
 $langForum = "Forum";
 $langLP = "Γραμμή μάθησης";
 $langLikesSocial = "Likes στους κοινωνικούς συνδέσμους";
@@ -1304,6 +1309,10 @@ $langAllActivities = "Όλες οι δραστηριότητες";
 $langNoActivCert = "Δεν υπάρχουν δραστηριότητες στο πιστοποιητικό. Κάντε κλικ στο 'Προσθήκη' για να εισάγετε.";
 $langNoInsCert = "Δεν υπάρχουν δραστηριότητες για εισαγωγή";
 $lanfCertNoValMes  = "Αν δεν επιλέξετε τιμή, λαμβάνεται υπόψη η ολοκλήρωση της δραστηριότητας";
+$langNoCertificates = "Δεν έχουν οριστεί πιστοποιητικά";
+$langTemplate = "Πρότυπο";
+//------------------------------------
+
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";

@@ -35,8 +35,7 @@ require_once 'LearningPathEvent.php';
 require_once 'RatingEvent.php';
 require_once 'ViewingEvent.php';
 
-$toolName = $langProgress;
-
+$toolName = $langCertificates;
 
 //Datepicker
 load_js('tools.js');
@@ -183,10 +182,10 @@ if ($is_editor) {
             $certificate_id = Database::get()->query("INSERT INTO certificate SET course = ?d, author = 1, active = ?d, autoassign = ?d, title = ?s, created = ?t, expires = ?t", $course_id, $active, $autoassign, $newTitle, $start_date, $end_date)->lastInsertID;
 
             Session::Messages("$langNewCertificateSuc", 'alert-success');
-            redirect_to_home_page("modules/game/index.php?course=$course_code");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            redirect_to_home_page("modules/game/index.php?course=$course_code&new=1");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
         }
     }
 
@@ -231,7 +230,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['new'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
-        $pageName = $langNewAttendance;
+        $pageName = $langNewCertificate;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -242,7 +241,7 @@ if ($is_editor) {
     } elseif (!isset($_GET['certificate_id'])) {
         $tool_content .= action_bar(
             array(
-                array('title' => "$langNewAttendance",
+                array('title' => "$langNewCertificate",
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;new=1",
                       'icon' => 'fa-plus',
                       'level' => 'primary-label',
@@ -276,10 +275,10 @@ if ($is_editor) {
             Database::get()->querySingle("UPDATE certificate SET `title` = ?s,`autoassign` = ?s,`active` = ?s, `created` = ?t, `expires` = ?t WHERE id = ?d ", $certificate_title, $autoassign, $active, $start_date, $end_date, $certificate_id);
 
             Session::Messages($langGradebookEdit,"alert-success");
-            redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id&editSettings=1");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id&editSettings=1");
         }
     }
 
@@ -296,9 +295,9 @@ if ($is_editor) {
         $lastID = getIndirectReference(add_certificate_activity($certificate_id, $id, $type));
         Session::Messages("$langCertificateInsertAct","alert-success");
         if ($lastID == 1) {
-          redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id");
+          redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id");
         } else {
-          redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id&modify=$lastID");
+          redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id&modify=$lastID");
         }
         $display = FALSE;
     }
@@ -343,26 +342,26 @@ if ($is_editor) {
             Database::get()->query("UPDATE certificate_criterion SET `operator` = ?s, threshold = ?f
                                         WHERE id = ?d", $operator, $threshold, $id);
             Session::Messages("$langGradebookEdit", "alert-success");
-            redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id");
         }
 
     }
 
     elseif (isset($_GET['delete'])) {
         delete_certificate_activity($certificate_id, getDirectReference($_GET['delete']));
-        redirect_to_home_page("modules/game/index.php?course=$course_code&certificate_id=$certificate_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id");
     }
 
     // delete certificate
     elseif (isset($_GET['delete_at'])) {
         delete_certificate($_GET['delete_at']);
-        redirect_to_home_page("modules/game/index.php?course=$course_code");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code");
     }
 
     elseif (isset($_GET['new'])) {
-        new_certificate(); // create new certificate
+        certificate_settings(); // create new certificate
         $display = FALSE;
-    } elseif (isset($_GET['editSettings'])) { // certificate settings
+    } elseif (isset($_GET['editSettings'])) { // edit certificate settings
         certificate_settings($certificate_id);
         $display = FALSE;
     } elseif (isset($_GET['addActivityAs'])) { // assignments
