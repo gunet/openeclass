@@ -5,7 +5,7 @@
     @if (Session::get('scheduleIndexing'))
         <!--schedule indexing if necessary-->
         <div class='alert alert-warning'>
-            {{ trans('langIndexingNeeded') }} 
+            {{ trans('langIndexingNeeded') }}
             <a id='idxpbut' href='../search/idxpopup.php' onclick="return idxpopup('../search/idxpopup.php', 600, 500)">
                {{ trans('langHere') }}.
             </a>
@@ -106,11 +106,11 @@
                                <div class='col-sm-9'>
                                     {!! selection(
                                                     [
-                                                    '1' => trans('langActivate'), 
+                                                    '1' => trans('langActivate'),
                                                     '0' => trans('langDeactivate')
-                                                    ], 
-                                                    'user_registration', 
-                                                    get_config('user_registration'), 
+                                                    ],
+                                                    'user_registration',
+                                                    get_config('user_registration'),
                                                     "class='form-control' id='user_registration'"
                                                 ) !!}
                                </div>
@@ -119,9 +119,9 @@
                                <label for='registration_link' class='col-sm-3 control-label'>{{ trans('langRegistrationLink') }}:</label>
                                <div class='col-sm-9'>
                                     {!! selection(
-                                                    $registration_link_options, 
-                                                    'registration_link', 
-                                                    get_config('registration_link', 'show'), 
+                                                    $registration_link_options,
+                                                    'registration_link',
+                                                    get_config('registration_link', 'show'),
                                                     "class='form-control' id='registration_link'"
                                                 ) !!}
                                </div>
@@ -137,12 +137,12 @@
                                <div class='col-sm-9'>
                                     {!! selection(
                                                     [
-                                                        '0' => trans('langDisableEclassStudReg'), 
-                                                        '1' => trans('langReqRegUser'), 
+                                                        '0' => trans('langDisableEclassStudReg'),
+                                                        '1' => trans('langReqRegUser'),
                                                         '2' => trans('langDisableEclassStudRegType')
-                                                    ], 
-                                                    'eclass_stud_reg', 
-                                                    get_config('eclass_stud_reg'), 
+                                                    ],
+                                                    'eclass_stud_reg',
+                                                    get_config('eclass_stud_reg'),
                                                     "class='form-control' id='eclass_stud_reg'"
                                                 ) !!}
                                </div>
@@ -152,12 +152,12 @@
                                <div class='col-sm-9'>
                                     {!! selection(
                                                 [
-                                                    '0' => trans('langDisableEclassStudReg'), 
-                                                    '1' => trans('langReqRegUser'), 
+                                                    '0' => trans('langDisableEclassStudReg'),
+                                                    '1' => trans('langReqRegUser'),
                                                     '2' => trans('langDisableEclassStudRegType')
-                                                ], 
-                                                'alt_auth_stud_reg', 
-                                                get_config('alt_auth_stud_reg'), 
+                                                ],
+                                                'alt_auth_stud_reg',
+                                                get_config('alt_auth_stud_reg'),
                                                 "class='form-control' id='alt_auth_stud_reg'"
                                             ) !!}
                                </div>
@@ -200,7 +200,7 @@
                                 <label class='col-sm-3 control-label'>{{ trans('lang_display_captcha_label') }}:</label>
                                 <div class='checkbox col-sm-9'>
                                     <label>
-                                        <input type='checkbox' name='display_captcha' value='1' {!! $cbox_display_captcha !!} {!! $disable_display_captcha !!}>
+                                        <input type='checkbox' name='display_captcha' value='1' {{ $cbox_display_captcha }} {{ $disable_display_captcha }}>
                                         {{ trans('lang_display_captcha') }}
                                     </label>
                                     {!! $message_display_captcha !!}
@@ -233,8 +233,8 @@
                                <label for='default_language' class='col-sm-3 control-label'>{{ trans('langMainLang') }}: </label>
                                <div class='col-sm-9'>
                                    {!! selection(
-                                                    $selectable_langs, 
-                                                    'default_language', 
+                                                    $selectable_langs,
+                                                    'default_language',
                                                     get_config('default_language'),
                                                     "class='form-control' id='default_language'"
                                                 ) !!}
@@ -251,13 +251,13 @@
                                <div class='col-sm-9'>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form>
+                                            <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' {{ $cbox_dont_display_login_form }}>
                                             {{ trans('lang_dont_display_login_form') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' $cbox_hide_login_link>
+                                            <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' {{ $cbox_hide_login_link }}>
                                             {{ trans('lang_hide_login_link') }}
                                         </label>
                                     </div>
@@ -265,7 +265,7 @@
                             </div>
                         </fieldset>
                     </div>
-                </div>            
+                </div>
 
                 {!! mail_settings_form() !!}
 
@@ -279,31 +279,31 @@
                                <div class='col-sm-12'>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='course_multidep' value='1' $cbox_course_multidep>
+                                            <input type='checkbox' name='course_multidep' value='1' {{ $cbox_course_multidep }}>
                                             {{ trans('lang_course_multidep') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='user_multidep' value='1' $cbox_user_multidep>
+                                            <input type='checkbox' name='user_multidep' value='1' {{ $cbox_user_multidep }}>
                                             {{ trans('lang_user_multidep') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='uown' type='checkbox' name='restrict_owndep' value='1' $cbox_restrict_owndep>
+                                            <input id='uown' type='checkbox' name='restrict_owndep' value='1' {{ $cbox_restrict_owndep }}>
                                             {{ trans('lang_restrict_owndep') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' $town_dis $cbox_restrict_teacher_owndep>
+                                            <input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' {{ $town_dis }} {{ $cbox_restrict_teacher_owndep }}>
                                             {{ trans('lang_restrict_teacher_owndep') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='allow_teacher_clone_course' value='1' $cbox_allow_teacher_clone_course>
+                                            <input type='checkbox' name='allow_teacher_clone_course' value='1' {{ $cbox_allow_teacher_clone_course }}>
                                             {{ trans('lang_allow_teacher_clone_course') }}
                                         </label>
                                     </div>
@@ -322,19 +322,25 @@
                                <div class='col-sm-12'>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata>
+                                            <input type='checkbox' name='insert_xml_metadata' value='1' {{ $cbox_insert_xml_metadata }}>
                                             {{ trans('lang_insert_xml_metadata') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' id='course_metadata' name='course_metadata' value='1' $cbox_course_metadata>
+                                            <input type='checkbox' id='course_metadata' name='course_metadata' value='1' {{ $cbox_course_metadata }}>
                                             {{ trans('lang_course_metadata') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' $cbox_opencourses_enable>
+                                            <input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' {{ $cbox_opencourses_enable }}>
+                                            {{ trans('lang_opencourses_enable') }}
+                                        </label>
+                                    </div>
+                                    <div class='checkbox'>
+                                        <label>
+                                            <input type='checkbox' id='eportfolio_enable' name='eportfolio_enable' value='1' {{ $cbox_eportfolio_enable }}>
                                             {{ trans('lang_opencourses_enable') }}
                                         </label>
                                     </div>
@@ -356,103 +362,103 @@
                                <div class='col-sm-12'>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='case_insensitive_usernames' value='1' {!! $cbox_case_insensitive_usernames !!}>
+                                            <input type='checkbox' name='case_insensitive_usernames' value='1' {{ $cbox_case_insensitive_usernames }}>
                                             {{ trans('langCaseInsensitiveUsername') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='email_required' value='1' {!! $cbox_email_required !!}>
+                                            <input type='checkbox' name='email_required' value='1' {{ $cbox_email_required }}>
                                             {{ trans('lang_email_required') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='email_verification_required' value='1' {!! $cbox_email_verification_required !!}>
+                                            <input type='checkbox' name='email_verification_required' value='1' {{ $cbox_email_verification_required }}>
                                             {{ trans('lang_email_verification_required') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='am_required' value='1' {!! $cbox_am_required !!}>
+                                            <input type='checkbox' name='am_required' value='1' {{ $cbox_am_required }}>
                                             {{ trans('lang_am_required') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='index_enable' type='checkbox' name='enable_indexing' value='1' {!! $cbox_enable_indexing !!}>
+                                            <input id='index_enable' type='checkbox' name='enable_indexing' value='1' {{ $cbox_enable_indexing }}>
                                             {{ trans('langEnableIndexing') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='search_enable' type='checkbox' name='enable_search' value='1' {!! $cbox_enable_search !!}>
+                                            <input id='search_enable' type='checkbox' name='enable_search' value='1' {{ $cbox_enable_search }}>
                                             {{ trans('langEnableSearch') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='dropbox_allow_student_to_student' value='1' {!! $cbox_dropbox_allow_student_to_student !!}>
+                                            <input type='checkbox' name='dropbox_allow_student_to_student' value='1' {{ $cbox_dropbox_allow_student_to_student }}>
                                             {{ trans('lang_dropbox_allow_student_to_student') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='dropbox_allow_personal_messages' value='1' {!! $cbox_dropbox_allow_personal_messages !!}>
+                                            <input type='checkbox' name='dropbox_allow_personal_messages' value='1' {{ $cbox_dropbox_allow_personal_messages }}>
                                             {{ trans('lang_dropbox_allow_personal_messages') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='personal_blog_enable' type='checkbox' name='personal_blog' value='1' {!! $cbox_personal_blog !!}>
+                                            <input id='personal_blog_enable' type='checkbox' name='personal_blog' value='1' {{ $cbox_personal_blog }}>
                                             {{ trans('lang_personal_blog') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='personal_blog_commenting_enable' type='checkbox' name='personal_blog_commenting' value='1' {!! $cbox_personal_blog_commenting !!}>
+                                            <input id='personal_blog_commenting_enable' type='checkbox' name='personal_blog_commenting' value='1' {{ $cbox_personal_blog_commenting }}>
                                             {{ trans('lang_personal_blog_commenting') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='personal_blog_rating_enable' type='checkbox' name='personal_blog_rating' value='1' {!! $cbox_personal_blog_rating !!}>
+                                            <input id='personal_blog_rating_enable' type='checkbox' name='personal_blog_rating' value='1' {{ $cbox_personal_blog_rating }}>
                                             {{ trans('lang_personal_blog_rating') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='personal_blog_sharing_enable' type='checkbox' name='personal_blog_sharing' value='1' {!! $cbox_personal_blog_sharing !!}>
+                                            <input id='personal_blog_sharing_enable' type='checkbox' name='personal_blog_sharing' value='1' {{ $cbox_personal_blog_sharing }}>
                                             {{ trans('lang_personal_blog_sharing') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' {!! $cbox_eportfolio_enable !!}>
+                                            <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' {{ $cbox_eportfolio_enable }}>
                                             {{ trans('lang_eportfolio_enable') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='block_username_change' value='1' {!! $cbox_block_username_change !!}>
+                                            <input type='checkbox' name='block_username_change' value='1' {{ $cbox_block_username_change }}>
                                             {{ trans('lang_block_username_change') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input {!! $id_enable_mobileapi !!} type='checkbox' name='enable_mobileapi' value='1' {!! $cbox_enable_mobileapi !!}>
+                                            <input {!! $id_enable_mobileapi !!} type='checkbox' name='enable_mobileapi' value='1' {{ $cbox_enable_mobileapi }}>
                                             {{ trans('lang_enable_mobileapi') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' {!! $cbox_enable_social_sharing_links !!}>
+                                            <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' {{ $cbox_enable_social_sharing_links }}>
                                             {{ trans('langEnableSocialSharingLiks') }}
                                         </label>
                                     </div>
                                    <div class='checkbox'>
                                         <label>
-                                            <input id='strong_passwords' type='checkbox' name='enable_strong_passwords' value='1' {!! $cbox_enable_strong_passwords !!}>
+                                            <input id='strong_passwords' type='checkbox' name='enable_strong_passwords' value='1' {{ $cbox_enable_strong_passwords }}>
                                             {{ trans('langEnableStrongPasswords') }}
                                         </label>
                                     </div>
@@ -492,13 +498,13 @@
                                <div class='col-sm-8'>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='mydocs_teacher_enable' id='mydocs_teacher_enable_id' value='1' {!! $cbox_mydocs_teacher_enable !!}>
+                                            <input type='checkbox' name='mydocs_teacher_enable' id='mydocs_teacher_enable_id' value='1' {{ $cbox_mydocs_teacher_enable }}>
                                             {{ trans('langTeachers') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='mydocs_student_enable' id='mydocs_student_enable_id' value='1' {!! $cbox_mydocs_student_enable !!}>
+                                            <input type='checkbox' name='mydocs_student_enable' id='mydocs_student_enable_id' value='1' {{ $cbox_mydocs_student_enable }}>
                                             {{ trans('langStudents') }}
                                         </label>
                                     </div>
@@ -525,7 +531,7 @@
                             </div>
                             <div class='checkbox'>
                                 <label>
-                                    <input type='checkbox' name='enable_common_docs' value='1' {!! $cbox_enable_common_docs !!}>
+                                    <input type='checkbox' name='enable_common_docs' value='1' {{ $cbox_enable_common_docs }}>
                                     {{ trans('langEnableCommonDocs') }}
                                 </label>
                             </div>
@@ -586,7 +592,7 @@
                             </div>
                         </fieldset>
                     </div>
-                </div>           
+                </div>
 
 
                 <div class='panel panel-default' id='eleven'>
@@ -599,19 +605,19 @@
                                <div class='col-sm-12'>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='disable_log_actions' value='1' {!! $cbox_disable_log_actions !!}>
+                                            <input type='checkbox' name='disable_log_actions' value='1' {{ $cbox_disable_log_actions }}>
                                             {{ trans('lang_disable_log_actions') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='disable_log_course_actions' value='1' {!! $cbox_disable_log_course_actions !!}>
+                                            <input type='checkbox' name='disable_log_course_actions' value='1' {{ $cbox_disable_log_course_actions }}>
                                             {{ trans('lang_disable_log_course_actions') }}
                                         </label>
                                     </div>
                                     <div class='checkbox'>
                                         <label>
-                                            <input type='checkbox' name='disable_log_system_actions' value='1' {!! $cbox_disable_log_system_actions !!}>
+                                            <input type='checkbox' name='disable_log_system_actions' value='1' {{ $cbox_disable_log_system_actions }}>
                                             {{ trans('lang_disable_log_system_actions') }}
                                         </label>
                                     </div>
@@ -643,7 +649,7 @@
                                <div class='col-sm-12'>
                                     <div class='checkbox'>
                                         <label>
-                                            <input id='login_fail_check' type='checkbox' name='login_fail_check' value='1' {!! $cbox_login_fail_check !!}>
+                                            <input id='login_fail_check' type='checkbox' name='login_fail_check' value='1' {{ $cbox_login_fail_check }}>
                                             {{ trans('langEnableLoginFailCheck') }}
                                         </label>
                                     </div>
@@ -677,7 +683,7 @@
                         <a class='btn btn-default' href='index.php'>{{ trans('langCancel') }}</a>
                     </div>
                 </div>
-                {!! generate_csrf_token_form_field() !!}            
+                {!! generate_csrf_token_form_field() !!}
 
 
             </form>
@@ -702,5 +708,5 @@
 
     </div>
     {!! modalConfirmation('confirmIndexDialog', 'confirmIndexLabel', trans('langConfirmEnableIndexTitle'), trans('langConfirmEnableIndex'), 'confirmIndexCancel', 'confirmIndexOk') !!}
-    {!! modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', trans('langConfirmEnableMobileAPITitle'), trans('langConfirmEnableMobileAPI'), 'confirmMobileAPICancel', 'confirmMobileAPIOk') !!}    
+    {!! modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', trans('langConfirmEnableMobileAPITitle'), trans('langConfirmEnableMobileAPI'), 'confirmMobileAPICancel', 'confirmMobileAPIOk') !!}
 @endsection

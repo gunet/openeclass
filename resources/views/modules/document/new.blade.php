@@ -7,7 +7,9 @@
             <form class='form-horizontal' role='form' action='{{ $upload_target_url }}' method='post'>
                 <input type='hidden' name='{{ $pathName }}' value='{{ $pathValue }}'>
                 {!! $group_hidden_input !!}
-                    
+                @if ($back)
+                    <input type='hidden' name='back' value='{{ $back }}'>
+                @endif
                 @if ($sections)
                     <div class='form-group'>
                         <label for='section' class='col-sm-2 control-label'>{{ trans('langSection') }}:</label>
@@ -30,7 +32,7 @@
                     <label for='file_title' class='col-sm-2 control-label'>{{ trans('langTitle') }}:</label>
                     <div class='col-sm-10'>
                         <input type='text' class='form-control' id='file_title' name='file_title' value='{{ $title }}'>
-                        <span class='help-block'>{{ Session::getError('file_title') }}</span>    
+                        <span class='help-block'>{{ Session::getError('file_title') }}</span>
                     </div>
                 </div>
                 <div class='form-group'>

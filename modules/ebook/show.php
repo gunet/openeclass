@@ -2,7 +2,6 @@
 
 // playmode is used in order to re-use this script's logic via play.php
 $is_in_playmode = defined('SHOW_PHP__PLAY_MODE');
-}
 
 if (stripos($_SERVER['REQUEST_URI'], '%5c') !== false) {
     header('HTTP/1.1 301 Moved Permanently');

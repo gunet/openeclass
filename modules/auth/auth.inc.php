@@ -23,7 +23,7 @@
   auth.inc.php
   @last update: 29-07-2015 by Sakis Agorastos
   @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  				 Vagelis Pitsioygas <vagpits@uom.gr>
+                 Vagelis Pitsioygas <vagpits@uom.gr>
   ==============================================================================
   @Description: Functions Library for authentication purposes
 
@@ -572,7 +572,7 @@ function process_login() {
         $auth_allow = 0;
 
         if (get_config('login_fail_check')) {
-            $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = ?s 
+            $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = ?s
                                         AND COUNT > " . intval(get_config('login_fail_threshold')) . "
                                         AND DATE_SUB(CURRENT_TIMESTAMP,
                                                 interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail",
@@ -765,7 +765,7 @@ function hybridauth_login($provider=null) {
     $auth_allow = 0;
 
     if (get_config('login_fail_check')) {
-        $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = ?s 
+        $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = ?s
                                        AND COUNT > " . intval(get_config('login_fail_threshold')) . "
                                        AND DATE_SUB(CURRENT_TIMESTAMP,
                                             interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail",
@@ -1100,7 +1100,7 @@ function alt_login($user_info_object, $uname, $pass) {
                 'attributes' => array(),
                 'status' => $user_info_object->status,
                 'departments' => $userObj->getDepartmentIds($user_info_object->id),
-                'am' => $user_info_object));
+                'am' => $user_info_object->am));
 
             if (!$options['accept']) {
                 deny_access();
@@ -1109,7 +1109,7 @@ function alt_login($user_info_object, $uname, $pass) {
             if ($options['status'] != $user_info_object->status) {
                 // update user status
                 $user_info_object->status = $options['status'];
-                Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d', 
+                Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d',
                     $options['status'], $user_info_object->id);
             }
 
@@ -1205,7 +1205,7 @@ function shib_cas_login($type) {
     }
     $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname,
                             status, email, lang, verified_mail, am
-						FROM user WHERE username $sqlLogin", $uname);
+                        FROM user WHERE username $sqlLogin", $uname);
 
     if ($info) {
         // if user found
@@ -1273,11 +1273,11 @@ function shib_cas_login($type) {
         }
     } elseif ($autoregister and !(get_config('am_required') and empty($am))) {
         // if user not found and autoregister enabled, create user
-	    $verified_mail = EMAIL_UNVERIFIED;
-    	if (isset($_SESSION['cas_email'])) {
-    	    $verified_mail = EMAIL_VERIFIED;
-    	} else { // redirect user to mail_verify_change.php
-	    	$_SESSION['mail_verification_required'] = 1;
+        $verified_mail = EMAIL_UNVERIFIED;
+        if (isset($_SESSION['cas_email'])) {
+            $verified_mail = EMAIL_VERIFIED;
+        } else { // redirect user to mail_verify_change.php
+            $_SESSION['mail_verification_required'] = 1;
         }
 
         $options = login_hook(array(

@@ -65,11 +65,17 @@ if (defined('EBOOK_DOCUMENTS')) {
     $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
 }
 
-$backUrl = documentBackLink($uploadPath);
+if (defined('EBOOK_DOCUMENTS') and isset($_GET['back']) and $_GET['back'] == 'edit') {
+    $backUrl = $urlAppend . 'modules/ebook/edit.php?course=' . $course_code . '&amp;id=' . $ebook_id;
+    $back = 'edit';
+} else {
+    $backUrl = documentBackLink($uploadPath);
+    $back = '';
+}
 
 $navigation[] = array('url' => $backUrl, 'name' => $toolName);
 
-$data = compact('can_upload', 'group_hidden_input', 'upload_target_url', 'backUrl', 'menuTypeID');
+$data = compact('can_upload', 'group_hidden_input', 'upload_target_url', 'backUrl', 'menuTypeID', 'back');
 $data['backButton'] = action_bar(array(
     array('title' => $langBack,
           'url' => $backUrl,

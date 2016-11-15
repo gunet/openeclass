@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.3
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2016  Greek Universities Network - GUnet
@@ -524,7 +524,7 @@ else {
     $data['cbox_insert_xml_metadata']  = get_config('insert_xml_metadata') ? 'checked' : '';
     $data['cbox_course_metadata']  = get_config('course_metadata') ? 'checked' : '';
     $data['cbox_opencourses_enable']  = get_config('opencourses_enable') ? 'checked' : '';
-    $data['cbox_eportfolio_enable']  = get_config('eportfolio_enable') ? 'checked' : '';
+    $data['cbox_eportfolio_enable'] = get_config('eportfolio_enable') ? 'checked' : '';
     $data['cbox_case_insensitive_usernames'] = get_config('case_insensitive_usernames') ? 'checked' : '';
     $data['cbox_email_required'] = get_config('email_required') ? 'checked' : '';
     $data['cbox_email_verification_required'] = get_config('email_verification_required') ? 'checked' : '';

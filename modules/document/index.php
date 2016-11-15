@@ -1282,8 +1282,12 @@ function make_clickable_path($path) {
  * @global type $curDirPath
  */
 function redirect_to_current_dir() {
-    global $base_url, $curDirPath;
+    global $base_url, $curDirPath, $course_code, $ebook_id;
 
+    if (defined('EBOOK_DOCUMENTS') and isset($_POST['back']) and $_POST['back'] == 'edit') {
+        redirect_to_home_page('modules/ebook/edit.php?course=' .
+            $course_code . '&id=' . $ebook_id);
+    }
     $redirect_base_url = str_replace('&amp;', '&', $base_url);
     if (isset($curDirPath) and $curDirPath) {
         $redirect_base_url .= 'openDir=' . $curDirPath;
