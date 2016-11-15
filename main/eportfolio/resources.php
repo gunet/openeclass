@@ -241,7 +241,11 @@ if ($userdata) {
     } else {
         if ($userdata->eportfolio_enable == 0) {
             $tool_content = "<div class='alert alert-danger'>$langUserePortfolioDisabled</div>";
-            draw($tool_content, 1);
+            if ($uid == 0) {
+                draw($tool_content, 0);
+            } else {
+                draw($tool_content, 1);
+            }
             exit;
         }
         
