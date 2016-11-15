@@ -59,7 +59,7 @@ if ($userdata) {
     if ($uid == $id) {
         
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning ".sprintf($langePortfolioEnableInfo, $urlAppend.'main/eportfolio/index.php')."</div>";
         }
         
         $tool_content .= "<div class='alert alert-info fade in'>
@@ -410,7 +410,7 @@ if ($userdata) {
                 }
                 $submission_header_content = "<div><h3 class='panel-title'>".$langTitle.": ".q($data['title'])."</h3></div>";
                 $submission->course_title = $langCourse.': '.$submission->course_title;
-                $submission_content = "<div style='border:dotted; margin:10px 0 10px 0; padding:10px 0 10px 0; background:#f1f1f1;'>"; 
+                $submission_content = "<div class='well'>"; 
                 $submission_content .= "<div><button type='button' class='btn btn-primary btn-xs' data-toggle='collapse' data-target='#header_more_$submission->id'>$langMore</button></div>
                                        <div id='header_more_$submission->id' class='collapse'>";
                 if (!empty($data['descr'])) {

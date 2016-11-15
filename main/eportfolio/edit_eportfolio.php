@@ -38,6 +38,12 @@ if (!get_config('eportfolio_enable')) {
     exit;
 }
 
+$userdata = Database::get()->querySingle("SELECT eportfolio_enable FROM user WHERE id = ?d", $uid);
+
+if ($userdata->eportfolio_enable == 0) {
+    $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning ".sprintf($langePortfolioEnableInfo, $urlAppend.'main/eportfolio/index.php')."</div>";
+}
+
 load_js('tools.js');
 
 if (isset($_POST['submit'])) {
