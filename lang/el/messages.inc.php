@@ -4770,6 +4770,9 @@ $langReturnBlog = "Επιστροφή στο ιστολόγιο";
 $langBlogPerm = "Δικαιώματα σύνταξης αναρτήσεων ιστολογίου";
 $langBlogPermStudents = "Ο $langsTeacher και οι $langsStudents έχουν δικαίωμα σύνταξης";
 $langBlogPermTeacher = "Ο $langsTeacher μόνο έχει δικαίωμα σύνταξης";
+$langUserBlogNotPublic = "Για να αποκτήσετε πρόσβαση στο προσωπικό ιστολόγιο αυτού του χρήστη πρέπει να συνδεθείτε στην πλατφόρμα";
+$langPublicBlogDisableWarning = "Το ιστολόγιό σας δεν είναι ορατό σε επισκέπτες της πλατφόρμας, παρά μόνο σε συνδεδεμένους χρήστες";
+$langPublicBlogButtonsLabel = "Ιστολόγιο δημόσια προσβάσιμο";
 
 /* * ***********************************************************
  * personal blog

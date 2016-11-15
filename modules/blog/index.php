@@ -22,10 +22,12 @@ if (isset($_GET['course'])) { //course blog
     $require_current_course = TRUE;
     $blog_type = 'course_blog';
 } else { //personal blog
-    $require_login = true;
-    $require_valid_uid = TRUE;
+    $require_login = false;
+    $guest_allowed = true;
     $require_current_course = FALSE;
     $blog_type = 'perso_blog';
+    
+    
 }
 $require_help = TRUE;
 $helpTopic = 'Blog';
@@ -57,7 +59,11 @@ if ($blog_type == 'course_blog') {
 } elseif ($blog_type == 'perso_blog') {
     if (!get_config('personal_blog')) {
         $tool_content = "<div class='alert alert-danger'>$langPersoBlogDisabled</div>";
-        draw($tool_content, 1);
+        if ($uid == 0) {
+            draw($tool_content, 0);
+        } else {
+            draw($tool_content, 1);
+        }    
         exit;
     }
     
@@ -65,28 +71,90 @@ if ($blog_type == 'course_blog') {
     
     $is_blog_editor = false;
     
-    if (isset($_GET['user_id'])) {
+    if (isset($_GET['user_id']) && intval($_GET['user_id']) > 0) {
         $user_id = intval($_GET['user_id']);
-        if ($user_id == $_SESSION['uid']) {
+        if ($user_id == $uid) {
             $is_blog_editor = true;
         } elseif (isset($is_admin) && $is_admin) {
             $is_blog_editor = true;
         }
     } else {
-        $user_id = $_SESSION['uid']; //current user's blog
-        $is_blog_editor = true;
+        if ($uid == 0) {
+            redirect_to_home_page();
+            exit;
+        } else {
+            $user_id = $uid; //current user's blog
+            $is_blog_editor = true;
+        }
     }
     
-    $db_user = Database::get()->querySingle("SELECT surname, givenname FROM user WHERE id = ?d", $user_id);
+    $db_user = Database::get()->querySingle("SELECT surname, givenname, public_blog FROM user WHERE id = ?d", $user_id);
     if (!$db_user) {
         $tool_content = "<div class='alert alert-danger'>$langBlogUserNotExist</div>";
         draw($tool_content, 1);
         exit;
     }
     
-    if ($user_id == $_SESSION['uid']) {
+    if ($user_id == $uid) {
         $toolName = $langMyBlog;
+        
+        if (get_config('personal_blog_public')) {
+            if (isset($_POST['toggle_val'])) {
+                if ($_POST['toggle_val'] == 'on') {
+                    Database::get()->query("UPDATE user SET public_blog = ?d WHERE id = ?d", 1, $uid);
+                    $db_user->public_blog = 1;
+                } elseif ($_POST['toggle_val'] == 'off') {
+                    Database::get()->query("UPDATE user SET public_blog = ?d WHERE id = ?d", 0, $uid);
+                    $db_user->public_blog = 0;
+                }
+            }
+            
+            $head_content .= "<script type='text/javascript'>//<![CDATA[
+                                  $(function(){
+                                      $('#toggle_event_editing button').click(function(){
+    	                                  if($(this).hasClass('locked_active') || $(this).hasClass('unlocked_inactive')){
+    		                                  /* code to do when unlocking */
+                                              $('#enable-public-blog-form input').val('on');
+                                              $('#enable-public-blog-form').submit();
+    	                                  }else{
+    		                                  /* code to do when locking */
+                                              $('#enable-public-blog-form input').val('off');
+                                              $('#enable-public-blog-form').submit();
+    	                                  }
+            
+    	                                  /* reverse locking status */
+    	                                  $('#toggle_event_editing button').eq(0).toggleClass('locked_inactive locked_active btn-default btn-info');
+    	                                  $('#toggle_event_editing button').eq(1).toggleClass('unlocked_inactive unlocked_active btn-info btn-default');
+                                      });
+                                  });//]]>
+                              </script>";
+            
+            if ($db_user->public_blog == 0) {
+                $off_class = "btn btn-info locked_active";
+                $on_class = "btn btn-default unlocked_inactive";
+                $tool_content .= "<div class='alert alert-warning'>$langPublicBlogDisableWarning</div>";
+            } elseif ($db_user->public_blog == 1) {
+                $off_class = "btn btn-default locked_inactive";
+                $on_class = "btn btn-info unlocked_active";
+            }
+            
+            $tool_content .= '<div class="btn-group" id="toggle_event_editing">
+                                  <form method="post" action="" id="enable-public-blog-form">
+                                      <input type="hidden" name="toggle_val">
+                                  </form>
+                                  <b>'.$langPublicBlogButtonsLabel.'</b><br/>
+    	                          <button type="button" class="'.$off_class.'">OFF</button>
+    	                          <button type="button" class="'.$on_class.'">ON</button>
+                              </div>';
+        }
     } else {
+        if ($uid == 0) {
+            if (!get_config('personal_blog_public') || $db_user->public_blog == 0) {
+                $tool_content = "<div class='alert alert-danger'>$langUserBlogNotPublic</div>";
+                draw($tool_content, 0);
+                exit;
+            }
+        }
         $toolName = $langBlog." - ".$db_user->surname." ".$db_user->givenname;
     }    
     
@@ -759,7 +827,11 @@ if ($action == "showBlog") {
 if ($blog_type == 'course_blog') {
     draw($tool_content, 2, null, $head_content);
 } elseif ($blog_type == 'perso_blog') {
-    draw($tool_content, 1, null, $head_content);
+    if ($uid > 0) {
+        draw($tool_content, 1, null, $head_content);
+    } else {
+        draw($tool_content, 0, null, $head_content);
+    }
 }
 
 function triggerGame($courseId, $uid, $eventName) {
