@@ -275,7 +275,8 @@ $db->query("CREATE TABLE `user` (
     am_public TINYINT(1) NOT NULL DEFAULT 0,
     whitelist TEXT,
     last_passreminder DATETIME DEFAULT NULL,
-    eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0) $tbl_options");
+    eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0,
+    public_blog TINYINT(1) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE `admin` (
     user_id INT(11) NOT NULL PRIMARY KEY,

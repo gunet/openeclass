@@ -143,9 +143,6 @@ if (!DBHelper::fieldExists('user', 'id')) {
                         DROP doc_flag");
     Database::get()->query("ALTER TABLE admin
                         CHANGE idUser user_id INT(11) NOT NULL PRIMARY KEY");
-    if (!DBHelper::fieldExists('user', 'eportfolio_enable')) {
-        Database::get()->query("ALTER TABLE `user` ADD eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0");
-    }
 }
 
 // Make sure 'video' subdirectory exists and is writable
@@ -3467,6 +3464,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $charset_spec");
                 
         Database::get()->query("INSERT INTO `config` (`key`, `value`) VALUES ('bio_quota', '4')");
+        
+        if (!DBHelper::fieldExists('user', 'eportfolio_enable')) {
+            Database::get()->query("ALTER TABLE `user` ADD eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0");
+        }
+        
+        if (!DBHelper::fieldExists('user', 'public_blog')) {
+            Database::get()->query("ALTER TABLE `user` ADD public_blog TINYINT(1) NOT NULL DEFAULT 0");
+        }
                 
         // fix wrong entries in statistics
         Database::get()->query("UPDATE actions_daily SET module_id = " .MODULE_ID_VIDEO . " WHERE module_id = 0");
