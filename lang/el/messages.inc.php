@@ -1286,7 +1286,7 @@ $langExportGradebook = "Εξαγωγή αποτελεσμάτων βαθμολο
 // ------------------
 $langCertificate = "Πιστοποιητικό";
 $langCertificates = "Πιστοποιητικά";
-$langNewCertificateSuc = "Δημιουργήθηκε το πιστοποιητικό";
+$langNewCertificateSuc = "Το πιστοποιητικό δημιουργήθηκε με επιτυχία";
 $langNewCertificate = "Νέο πιστοποιητικό";
 $langBadge = "Διακριτικό";
 $langBadges = "Διακριτικά";
@@ -1311,6 +1311,7 @@ $langNoInsCert = "Δεν υπάρχουν δραστηριότητες για ε
 $lanfCertNoValMes  = "Αν δεν επιλέξετε τιμή, λαμβάνεται υπόψη η ολοκλήρωση της δραστηριότητας";
 $langNoCertificates = "Δεν έχουν οριστεί πιστοποιητικά";
 $langTemplate = "Πρότυπο";
+$langProgress = "Πρόοδος";
 //------------------------------------
 
 

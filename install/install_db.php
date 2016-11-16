@@ -1719,16 +1719,18 @@ $db->query("CREATE TABLE `certificate_template` (
 
 $db->query("CREATE TABLE `certificate` (
   `id` int(11) not null auto_increment primary key,
-  `course` int(11) not null,
+  `course_id` int(11) not null,
   `author` int(11) not null,
   `template` mediumint(8),
   `title` varchar(255) not null,
   `description` text,
+  `message` text,
   `autoassign` tinyint(1) not null default 1,
   `active` tinyint(1) not null default 1,
   `created` datetime,
   `expires` datetime,
-  index `certificate_course` (`course`),
+  `bundle` int(11) not null default 0,
+  index `certificate_course` (`course_id`),
   foreign key (`course`) references `course` (`id`),
   foreign key (`author`) references `user`(`id`),
   foreign key (`template`) references `certificate_template`(`id`)

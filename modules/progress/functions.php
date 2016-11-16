@@ -29,15 +29,12 @@ function display_certificates() {
            $langViewHide, $langViewShow, $langEditChange, $langStart, $langEnd, $uid, $langAvailCert;
 
     if ($is_editor) {
-        $result = Database::get()->queryArray("SELECT * FROM certificate WHERE course = ?d", $course_id);
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM certificate WHERE course_id = ?d", $course_id);
     } else {
-        $result = Database::get()->queryArray("SELECT attendance.* "
-                . "FROM attendance, attendance_users "
-                . "WHERE attendance.active = 1 "
-                . "AND attendance.course_id = ?d "
-                . "AND attendance.id = attendance_users.attendance_id AND attendance_users.uid = ?d", $course_id, $uid);
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM certificate WHERE course_id = ?d AND active = 1", $course_id);
     }
-    if (count($result) == 0) { // no certificates
+    
+    if (count($sql_cer) == 0) { // no certificates
         $tool_content .= "<div class='alert alert-info'>$langNoCertificates</div>";
     } else {
         $tool_content .= "<div class='row'>";
@@ -45,35 +42,32 @@ function display_certificates() {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'>
-                            <th>$langAvailCert</th>
-                            <th>$langStart</th>
-                            <th>$langEnd</th>";
+                            <th>$langAvailCert</th>";
         if( $is_editor) {
             $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr>";
-        foreach ($result as $a) {
-            $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $a->created)->format('d-m-Y H:i');
-            $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $a->expires)->format('d-m-Y H:i');
-            $row_class = !$a->active ? "class='not_visible'" : "";
+        foreach ($sql_cer as $data) {            
+            $row_class = !$data->active ? "class='not_visible'" : "";
             $tool_content .= "
                     <tr $row_class>
                         <td>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$a->id'>".q($a->title)."</a>
-                        </td>
-                        <td>$start_date</td>
-                        <td>$end_date</td>";
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a>
+                        </td>";
             if( $is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$a->id&amp;editSettings=1",
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
                                           'icon' => 'fa-cogs'),
                                     array('title' => $langDelete,
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_at=$a->id",
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_at=$data->id",
                                           'icon' => 'fa-times',
                                           'class' => 'delete',
-                                          'confirm' => $langConfirmDelete))
+                                          'confirm' => $langConfirmDelete)),
+                                    array('title' => $langCreateDuplicate,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;dup=1",
+                                          'icon' => 'fa-cogs')
                                         );
                 $tool_content .= "</td>";
             }
@@ -1068,7 +1062,9 @@ function certificate_settings($certificate_id = 0) {
                 <div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langTemplate</label>
                     <div class='col-sm-10'>
-                    " . selection(array('template 1', 'template 2', 'template 3'), 'template') . "
+                    " . selection(array('1' => 'template 1', 
+                                        '2' => 'template 2', 
+                                        '3' => 'template 3'), 'template') . "
                     </div>
                 </div>
                 <div class='form-group'>
@@ -1080,7 +1076,7 @@ function certificate_settings($certificate_id = 0) {
                 <div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langpublisher</label>
                     <div class='col-sm-10'>
-                        <input class='form-control' type='text' name='title' value='" . q(get_config('institution')) . "'>
+                        <input class='form-control' type='text' name='issuer' value='" . q(get_config('institution')) . "'>
                     </div>
                 </div>
                  <div class='form-group'>
@@ -1140,4 +1136,33 @@ function get_certificate_title($certificate_id) {
     $at_title = Database::get()->querySingle("SELECT title FROM certificate WHERE id = ?d", $certificate_id)->title;
 
     return $at_title;
+}
+
+
+
+/**
+ * @brief add certificate in DB
+ * @global type $course_id
+ * @param type $title
+ * @param type $description
+ * @param type $message
+ * @param type $template
+ * @param type $issuer
+ * @param type $active
+ * @return type
+ */
+function add_certificate($title, $description, $message, $template, $issuer, $active) {
+    
+    global $course_id;
+    
+    $new_cert_id = Database::get()->query("INSERT INTO certificate 
+                                SET course_id = ?d,
+                                title = ?s,
+                                description = ?s,
+                                message = ?s,
+                                template = ?d,
+                                issuer = ?s,
+                                active = ?d", $course_id, $title, $description, $message, $template, $issuer, $active)->lastInsertID;
+    return $new_cert_id;
+    
 }

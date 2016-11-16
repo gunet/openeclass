@@ -441,7 +441,7 @@ $modules = array(
     MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-exchange'),
     MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'fa-map'),
     MODULE_ID_LTI_CONSUMER => array('title' => $langLtiConsumer, 'link' => 'lti_consumer', 'image' => 'fa-link'),
-    MODULE_ID_PROGRESS => array('title' => $langCertificate, 'link' => 'progress', 'image' => 'fa-trophy'),
+    MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-trophy'),
 );
 // ----------------------------------------
 // course admin modules

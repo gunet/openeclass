@@ -154,33 +154,17 @@ if (isset($_REQUEST['certificate_id'])) {
 }
 
 
-if ($is_editor) {
-
-    //add a new certificate
-    if (isset($_POST['newCertificate'])) {
+if ($is_editor) {    
+    if (isset($_POST['newCertificate'])) {  //add a new certificate
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title', 'start_date', 'end_date', 'autoassign', 'active'));
-        $v->rule('date', array('start_date', 'end_date'));
-        //$v->rule('numeric', array('autoassign')); //check - if we have null - it is from a checkbox
-        //$v->rule('numeric', array('active')); //check - if we have null
-        if (!empty($_POST['end_date'])) {
-            $v->rule('dateBefore', 'start_date', $_POST['end_date']);
-        }
+        $v->rule('required', array('title', 'active'));                        
         $v->labels(array(
             'title' => "$langTheField $langTitle",
-            'start_date' => "$langTheField $langStart",
-            'end_date' => "$langTheField $langEnd"//,
         ));
         if($v->validate()) {
-            $newTitle = $_POST['title'];
-            $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
-            $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');
-
-            $autoassign = $_POST['autoassign'];
-            $active = $_POST['active'];
-
-            $certificate_id = Database::get()->query("INSERT INTO certificate SET course = ?d, author = 1, active = ?d, autoassign = ?d, title = ?s, created = ?t, expires = ?t", $course_id, $active, $autoassign, $newTitle, $start_date, $end_date)->lastInsertID;
-
+            
+            add_certificate($_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $_POST['active']);
+            
             Session::Messages("$langNewCertificateSuc", 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
@@ -188,7 +172,6 @@ if ($is_editor) {
             redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
         }
     }
-
 
     // Top menu
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
