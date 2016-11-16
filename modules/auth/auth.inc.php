@@ -1038,7 +1038,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
   Authenticate user via alternate defined methods
  * ************************************************************** */
 
-function alt_login($user_info_object, $uname, $pass) {
+function alt_login($user_info_object, $uname, $pass, $mobile = false) {
     global $warning, $auth_ids;
 
     $_SESSION['canChangePassword'] = false;
@@ -1049,10 +1049,13 @@ function alt_login($user_info_object, $uname, $pass) {
     // a CAS user might enter a username/password in the form, instead of doing CAS login
     // check auth according to the defined alternative authentication method of CAS
     if ($auth == 7) {
-        $cas = explode('|', $auth_method_settings['auth_settings']);
-        $cas_altauth = intval(str_replace('cas_altauth=', '', $cas[7]));
-        // check if alt auth is valid and configured
-        if (($cas_altauth > 0) && check_auth_configured($cas_altauth)) {
+        $cas_settings = get_auth_settings($auth);
+        $cas_altauth = intval($cas_settings['cas_altauth']);
+        $use_altauth = $mobile ||
+            (isset($cas_settings['cas_altauth_use']) &&
+             $cas_settings['cas_altauth_use'] == 'all');
+        if ($use_altauth and $cas_altauth > 0 and
+                check_auth_configured($cas_altauth)) {
             $auth = $cas_altauth;
             // fetch settings of alt auth
             $auth_method_settings = get_auth_settings($auth);
