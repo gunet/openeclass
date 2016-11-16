@@ -80,7 +80,7 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
 
     $sqlLogin = (get_config('case_insensitive_usernames')) ? "COLLATE utf8_general_ci = ?s" : "COLLATE utf8_bin = ?s";
     $myrow = Database::get()->querySingle("SELECT * FROM user WHERE username $sqlLogin", $uname);
-    
+
     if (get_config('login_fail_check')) {
         $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'
                                     AND COUNT > " . intval(get_config('login_fail_threshold')) . "
@@ -90,7 +90,7 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
         $ok = 8;
     } else {
         if (in_array($myrow->password, $auth_ids)) {
-            $ok = alt_login($myrow, $uname, $pass);
+            $ok = alt_login($myrow, $uname, $pass, true);
         } else {
             $ok = login($myrow, $uname, $pass);
         }
