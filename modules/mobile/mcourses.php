@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -24,37 +24,28 @@ $require_mlogin = true;
 $require_noerrors = true;
 require_once('minit.php');
 
-
 $courses = array();
 
-$from = "SELECT course.code,
+if ($_SESSION['status'] == USER_TEACHER or $_SESSION['status'] == USER_STUDENT) {
+    $courses = Database::get()->queryArray("
+        SELECT course.code,
                course.lang,
                course.title,
                course.keywords,
                course.visible,
                course.prof_names,
                course.public_code,
-               course_user.status as status
+               course_user.status AS status
           FROM course JOIN course_user ON course.id = course_user.course_id
-         WHERE course_user.user_id = ?d ";
-$visible = " AND course.visible != ?d ";
-$order = " ORDER BY status, course.title, course.prof_names";
-
-$callback = function($course) use (&$courses) {
-    $courses[] = $course;
-};
-
-if ($_SESSION['status'] == 1) {
-    $sql = $from . $order;
-    Database::get()->queryFunc($sql, $callback, intval($uid));
-} else if ($_SESSION['status'] == 5) {
-    $sql = $from . $visible . $order;
-    Database::get()->queryFunc($sql, $callback, intval($uid), intval(COURSE_INACTIVE));
+         WHERE course_user.user_id = ?d 
+           AND (course.visible != ?d
+                OR course_user.status = ?d)
+      ORDER BY status, course.title, course.prof_names",
+        $uid, COURSE_INACTIVE, USER_TEACHER);
 } else {
     echo RESPONSE_FAILED;
     exit();
 }
-
 
 list($coursesDom, $coursesDomRoot) = createCoursesDom($courses);
 
