@@ -192,18 +192,22 @@ if ($userdata) {
                         if ($document) {
                             $data = array('title' => $document->title, 'filename' => $document->filename, 'comment' => $document->comment, 
                                           'subject' => $document->subject, 'description' => $document->description, 'date' => $document->date, 
-                                          'date_modified' => $document->date_modified);
+                                          'date_modified' => $document->date_modified, 'format' => $document->format);
                             
                             //create dir for user
                             if (!file_exists($webDir."/courses/eportfolio/mydocs/".$uid)) {
                                 @mkdir($webDir."/courses/eportfolio/mydocs/".$uid, 0777);
                             }
                             
-                            $file_source = $urlServer.'courses/mydocs/'.$uid.$document->path;
-                            $path_extension = pathinfo($file_source, PATHINFO_EXTENSION);
-                            $file_dest = 'courses/eportfolio/mydocs/'.$uid.'/'.uniqid().'.'.$path_extension;
-                            copy($file_source,$file_dest);
-                            $data['file_path'] = $file_dest;
+                            if ($document->extra_path) {
+                                $data['extra_path'] = $document->extra_path;
+                            } else {
+                                $file_source = $urlServer.'courses/mydocs/'.$uid.$document->path;
+                                $path_extension = pathinfo($file_source, PATHINFO_EXTENSION);
+                                $file_dest = 'courses/eportfolio/mydocs/'.$uid.'/'.uniqid().'.'.$path_extension;
+                                copy($file_source,$file_dest);
+                                $data['file_path'] = $file_dest;
+                            }
                             
                             Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
                                     VALUES (?d,?d,?s,?d,?s,?s)", $uid, $rid, 'mydocs', 0 ,'', serialize($data));
@@ -470,6 +474,7 @@ if ($userdata) {
                                 <table class='table-default'>
                                   <tbody>
                                     <tr class='list-header'>
+                                      <th class='text-left' width='60'>$langType</th>
                                       <th class='text-left'>$langName</th>
                                       <th class='text-left'>$langDate</th>
                                       <th class='text-left'>$langSize</th>";
@@ -485,10 +490,20 @@ if ($userdata) {
                 } else {
                     $filename = q($data['title']);
                 }
-                $tool_content .= "<tr>
-                                    <td><a href='resources.php?action=get&amp;id=$id&amp;type=mydocs&amp;er_id=$doc->id'>$filename</a></td>
+                if (isset($data['extra_path'])) {
+                    $row_class = 'not_visible';
+                    $file_link = '<a href="'.$data['extra_path'].'">'.$filename.'</a> '.icon('fa-external-link', $langExternalFile);
+                    $filesize = '0 B';
+                } else {
+                    $row_class = 'visible';
+                    $file_link = "<a href='resources.php?action=get&amp;id=$id&amp;type=mydocs&amp;er_id=$doc->id'>$filename</a>";
+                    $filesize = format_file_size(filesize($data['file_path']));
+                }
+                $tool_content .= "<tr class='$row_class'>
+                                    <td class='text-center'><span class='fa ".choose_image('.' . $data['format'])."'></span></td>
+                                    <td>$file_link</td>
                                     <td>".nice_format($data['date_modified'], true, true)."</td>
-                                    <td>".format_file_size(filesize($data['file_path']))."</td>
+                                    <td>$filesize</td>
                                     <td class='option-btn-cell'>
                                        ". action_button(array(
                                                     array(
