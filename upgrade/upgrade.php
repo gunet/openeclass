@@ -3460,6 +3460,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `resource_type` VARCHAR(50) NOT NULL,
                         `course_id` INT(11) NOT NULL,
                         `course_title` VARCHAR(250) NOT NULL DEFAULT '',
+                        `time_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                         `data` TEXT NOT NULL,
                         INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $charset_spec");
                 
