@@ -154,7 +154,13 @@ if (isset($_REQUEST['certificate_id'])) {
 }
 
 
-if ($is_editor) {    
+if ($is_editor) {
+    if (isset($_GET['vis'])) { // activate or deactivate certificate
+        modify_certificate_visility($certificate_id, $_GET['vis']);        
+        Session::Messages($langGlossaryUpdated, 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code");
+    }
+        
     if (isset($_POST['newCertificate'])) {  //add a new certificate
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('title', 'active'));                        
@@ -162,9 +168,7 @@ if ($is_editor) {
             'title' => "$langTheField $langTitle",
         ));
         if($v->validate()) {
-            
-            add_certificate($_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $_POST['active']);
-            
+            add_certificate($_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $_POST['active']);            
             Session::Messages("$langNewCertificateSuc", 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {

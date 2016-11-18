@@ -54,12 +54,16 @@ function display_certificates() {
                         <td>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a>
                         </td>";
-            if( $is_editor) {
+            if($is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
                                           'icon' => 'fa-cogs'),
+                                    array('title' => $data->active ? $langViewHide : $langViewShow,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" .
+                                                  ($data->active ? '0' : '1'),
+                                          'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
                                     array('title' => $langDelete,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_at=$data->id",
                                           'icon' => 'fa-times',
@@ -1164,5 +1168,20 @@ function add_certificate($title, $description, $message, $template, $issuer, $ac
                                 issuer = ?s,
                                 active = ?d", $course_id, $title, $description, $message, $template, $issuer, $active)->lastInsertID;
     return $new_cert_id;
+    
+}
+
+
+/**
+ * @brief modify certificate visibility
+ * @global type $course_id
+ * @param type $certificate_id
+ * @param type $visibility
+ */
+function modify_certificate_visility($certificate_id, $visibility) {
+    
+    global $course_id;
+    
+    Database::get()->query("UPDATE certificate SET active = ?d WHERE id = ?d AND course_id = ?d", $visibility, $certificate_id, $course_id);
     
 }
