@@ -326,7 +326,7 @@ if (isset($require_current_course) and $require_current_course) {
         // The admin and power users can see all courses as adminOfCourse
         if ($is_admin or $is_power_user) {
             $status = USER_TEACHER;
-        } else {
+        } elseif ($uid) {
             $stat = Database::get()->querySingle("SELECT status FROM course_user
                                                            WHERE user_id = ?d AND
                                                            course_id = ?d", $uid, $course_id);
@@ -360,13 +360,12 @@ if (isset($require_current_course) and $require_current_course) {
                     }
                 }
             }
-
         }
 
         if ($visible != COURSE_OPEN) {
             if (!$uid) {
                 $toolContent_ErrorExists = $langNoAdminAccess;
-            } elseif ($status == 0 and ( $visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
+            } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
                 $toolContent_ErrorExists = $langLoginRequired;
             } elseif ($status == 5 and $visible == COURSE_INACTIVE) {
                 $toolContent_ErrorExists = $langCheckProf;
@@ -427,7 +426,7 @@ $modules = array(
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
     MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'conference'),
-	MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'mindmap')
+    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'mindmap')
 );
 // ----------------------------------------
 // course admin modules

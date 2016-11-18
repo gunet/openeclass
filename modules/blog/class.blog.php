@@ -9,7 +9,7 @@
 *
 * Open eClass is an open platform distributed in the hope that it will
 * be useful (without any warranty), under the terms of the GNU (General
-		* Public License) as published by the Free Software Foundation.
+        * Public License) as published by the Free Software Foundation.
 * The full license can be read in "/info/license/license_gpl.txt".
 *
 * Contact address: GUnet Asynchronous eLearning Group,
@@ -24,7 +24,7 @@
 Class Blog {
     private $course_id;
     private $user_id;
-    
+
     /**
      * Constructor
      * @param course_id the id of the course in case of a course blog
@@ -39,7 +39,7 @@ Class Blog {
             $this->course_id = 0;
         }
     }
-    
+
     /**
      * Get the number of blog posts in a blog
      * @return int
@@ -58,7 +58,7 @@ Class Blog {
         $numPosts = Database::get()->querySingle($sql, $params)->c;
         return $numPosts;
     }
-    
+
     /**
      * Get blog posts from DB with pagination
      * @param page the page of the blog
@@ -82,11 +82,11 @@ Class Blog {
         $result = Database::get()->queryArray($sql, $params);
         $ret = array();
         if (is_array($result)) {
-        	$ret = BlogPost::loadFromPDOArr($result);
+            $ret = BlogPost::loadFromPDOArr($result);
         }
         return $ret;
     }
-    
+
     /**
      * Get the most popular blog posts in a blog from DB
      * @param num the number of blog posts to get
@@ -96,12 +96,12 @@ Class Blog {
         $sql = 'SELECT * FROM `blog_post` WHERE ';
         $params = array();
         if ($this->course_id != 0) {//course blog
-        	$sql .= '`course_id` = ?d ORDER BY `views` DESC LIMIT ?d';
-        	$params[] = $this->course_id;
+            $sql .= '`course_id` = ?d ORDER BY `views` DESC LIMIT ?d';
+            $params[] = $this->course_id;
         } else {//user blog
-        	$sql .= '`course_id` = ?d AND `user_id` = ?d ORDER BY `views` DESC LIMIT ?d';
-        	$params[] = 0;
-        	$params[] = $this->user_id;
+            $sql .= '`course_id` = ?d AND `user_id` = ?d ORDER BY `views` DESC LIMIT ?d';
+            $params[] = 0;
+            $params[] = $this->user_id;
         }
         $params[] = $num;
         $result = Database::get()->queryArray($sql, $params);
@@ -111,7 +111,7 @@ Class Blog {
         }
         return $ret;
     }
-    
+
     /**
      * HTML code for the most popular blog posts
      * @param num the number of blog posts to show
@@ -134,7 +134,7 @@ Class Blog {
         $out .= "</div>";
         return $out;
     }
-    
+
     /**
      * HTML code for the navigation links
      * @param page the number of blog page show
@@ -149,32 +149,32 @@ Class Blog {
         } else { //user blog
             $url_params = "user_id=$this->user_id";
         }
-        
+
         $num_posts = $this->blogPostsNumber();
-        
+
         if ($page < ceil($num_posts/$postsPerPage)-1) {
-        	$older = TRUE;
+            $older = TRUE;
         } elseif ($page == ceil($num_posts/$postsPerPage)-1) {
-        	$older = FALSE;
+            $older = FALSE;
         }
-         
+
         if($page > 0)
-        	$newer = TRUE;
+            $newer = TRUE;
         $out = '';
         if ((isset($newer) && $newer) || (isset($older) && $older)) {
             $out = "<ul class='pager'>";
             if(isset($older) && $older) {
-            	$out .= "<li class='previous'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page+1)."'>&larr; ".$langBlogOlderPosts."</a></li>";
+                $out .= "<li class='previous'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page+1)."'>&larr; ".$langBlogOlderPosts."</a></li>";
             }
             if(isset($newer) && $newer) {
                 $out .= "<li class='next'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page-1)."'>".$langBlogNewerPosts." &rarr;</a></li>";
             }
             $out .= "</ul>";
         }
-        
+
         return $out;
     }
-    
+
     /**
      * HTML code for the chronological tree of blog posts
      * @param tree_month the month of the most recent blog post
@@ -190,7 +190,7 @@ Class Blog {
             $url_params = "user_id=$this->user_id";
         }
         $out = '';
-        
+
         if ($this->blogPostsNumber()>0) {
             if ($this->course_id != 0) { //course blog
                 $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ?d ORDER BY `time` DESC";
@@ -209,7 +209,7 @@ Class Blog {
                                         'name': 'proton',
                                         'responsive': true
                                     }
-                                }                            
+                                }
                             })
                             .bind('select_node.jstree', function (e, data) {
                                 var href = data.node.a_attr.href
@@ -222,7 +222,7 @@ Class Blog {
             foreach ($result as $obj) {
                 $tree[$obj->y][$obj->m][$obj->id] = $obj->title;
             }
-            
+
             $out .= "
                     <h5><strong>$langBlogPostHistory</strong></h5>
                     <div id='blog_tree'>
@@ -236,9 +236,9 @@ Class Blog {
                     $count_id = 0;
                     $out_p = "";
                     foreach ($monthard as $id => $title) {
-                    	$count_id += 1;
-                    	$out_p .= "<li data-jstree='{\"icon\":\"fa fa-file-text-o\"}'><a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=$id'>".q($title)."</a></li>";
-            	    }                    
+                        $count_id += 1;
+                        $out_p .= "<li data-jstree='{\"icon\":\"fa fa-file-text-o\"}'><a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=$id'>".q($title)."</a></li>";
+                    }
                     $out_m .= "<li data-jstree='{\"icon\":\"fa fa-folder-o\"".(($month == $tree_month && $year == $tree_year)? ",\"opened\":true,\"selected\":true" :"")."}'>$m ($count_id)
                                     <ul>
                                         $out_p
@@ -254,26 +254,26 @@ Class Blog {
             $out .= "</ul>
                         </div>";
         }
-        
+
         return $out;
     }
-    
+
     /**
      * Get blog course id
      * @return int, 0 if a user's blog
      */
     public function getCourse() {
-    	return $this->course_id;
+        return $this->course_id;
     }
-    
+
     /**
      * Get blog user id
      * @return int, 0 if a course's blog
      */
     public function getUser() {
-    	return $this->user_id;
+        return $this->user_id;
     }
-    
+
     /**
      * Check if a user has permission to create blog posts in course blogs
      * @param isEditor boolean showing if user is teacher
@@ -282,6 +282,9 @@ Class Blog {
      * @return boolean
      */
     public function permCreate($isEditor, $studConfigVal, $uid) {
+        if (!$uid) {
+            return false;
+        }
         if ($isEditor) {//teacher is always allowed to create
             return true;
         } else {
@@ -289,9 +292,9 @@ Class Blog {
                 $sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ?d AND `user_id` = ?d";
                 $result = Database::get()->querySingle($sql, $this->course_id, $uid);
                 if ($result->c > 0) {//user is course member
-                	return true;
+                    return true;
                 } else {//user is not course member
-                	return false;
+                    return false;
                 }
             } else {//students are not allowed to create
                 return false;

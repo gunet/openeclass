@@ -681,11 +681,14 @@ function check_guest($id = FALSE) {
 function check_editor($user_id = null, $cid = null) {
     global $uid, $course_id, $is_admin;
 
+    if (is_null($user_id) and isset($uid)) {
+        $user_id = $uid;
+    }
+    if (!$user_id) {
+        return false;
+    }
     if ($is_admin) {
         return true;
-    }
-    if (!isset($user_id) and isset($uid)) {
-        $user_id = $uid;
     }
     if (!isset($cid) and isset($course_id)) {
         $cid = $course_id;
