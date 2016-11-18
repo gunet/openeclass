@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2016-11-18 16:10:41
+// Generated 2016-11-18 17:25:49
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -4079,8 +4079,7 @@ $langEBookPages = $langEBook. ' ' .$langPages;
 $langNewEBookPage = "New Page";
 $langEBookInfoEdit = "Edit e-Books' Info/Sections";
 $langDisableModules = 'Modules';
-$langDisableModulesHelp = 'You can select which modules will be disabled
-    for all $langsCourses platform-wide.';
+$langDisableModulesHelp = "You can select which modules will be disabled for all $langsCourses platform-wide.";
 $langldap_id_attr = "Attribute for student ID";
 $langcasuserstudentid = "CAS SAML attribute for student ID";
 $langPrint = "Print";

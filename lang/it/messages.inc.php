@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2016-11-18 16:10:41
+// Generated 2016-11-18 17:25:50
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -3858,8 +3858,7 @@ $langEBookPages = $langEBook. ' ' .$langPages;
 $langNewEBookPage = "New Page";
 $langEBookInfoEdit = "Edit e-Books' Info/Sections";
 $langDisableModules = 'Modules';
-$langDisableModulesHelp = 'You can select which modules will be disabled
-    for all $langsCourses platform-wide.';
+$langDisableModulesHelp = "You can select which modules will be disabled for all $langsCourses platform-wide.";
 $langldap_id_attr = "Attribute for student ID";
 $langcasuserstudentid = "CAS SAML attribute for student ID";
 $langPrint = "Print";
