@@ -71,7 +71,7 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         $emailTo = $m->email;
         $user_id = $m->id;
         // checks if user is notified by email
-        if (get_user_email_notification($user_id)) {
+        if (Swift_Validate::email($emailTo) and get_user_email_notification($user_id)) {
             array_push($recipients, $emailTo);
         }
 
