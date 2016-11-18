@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2016-11-11 11:57:37
+// Generated 2016-11-18 16:10:38
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -2294,9 +2294,6 @@ $langcas_port = 'CAS port';
 $langcas_context = 'Entry page address';
 $langcas_cachain = 'CAS server Certificate Chain file';
 $langcas_altauth = 'Alternative authentication method';
-$langcas_altauth_use = "Use alternative authentication method";
-$langcas_altauth_use_all = "For all access methods (via web or mobile apps)";
-$langcas_altauth_use_mobile = "Only for access via mobile apps";
 $langcasusermailattr = "CAS SAML attribute for e-mail";
 $langcasuserfirstattr = "CAS SAML attribute for First Name";
 $langcasuserlastattr = "CAS SAML attribute for Last Name";
@@ -4656,3 +4653,6 @@ $langTimeConstraint = "Time";
 $langHitConstraint = "Attempts";
 $langBlogRatingLog = "of blog rating";
 $langBlogSharingLog = "of blog sharing";
+$langcas_altauth_use = "Use alternative authentication method";
+$langcas_altauth_use_all = "For all access methods (via web or mobile apps)";
+$langcas_altauth_use_mobile = "Only for access via mobile apps";

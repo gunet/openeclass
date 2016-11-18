@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2016-11-11 11:57:37
+// Generated 2016-11-18 16:10:39
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -4643,3 +4643,6 @@ $langTimeConstraint = "Time";
 $langHitConstraint = "Attempts";
 $langBlogRatingLog = "of blog rating";
 $langBlogSharingLog = "of blog sharing";
+$langcas_altauth_use = "Use alternative authentication method";
+$langcas_altauth_use_all = "For all access methods (via web or mobile apps)";
+$langcas_altauth_use_mobile = "Only for access via mobile apps";

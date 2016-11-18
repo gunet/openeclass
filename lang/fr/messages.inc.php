@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2016-11-11 11:57:39
+// Generated 2016-11-18 16:10:41
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -4851,3 +4851,6 @@ $langTimeConstraint = "Time";
 $langHitConstraint = "Attempts";
 $langBlogRatingLog = "of blog rating";
 $langBlogSharingLog = "of blog sharing";
+$langcas_altauth_use = "Use alternative authentication method";
+$langcas_altauth_use_all = "For all access methods (via web or mobile apps)";
+$langcas_altauth_use_mobile = "Only for access via mobile apps";

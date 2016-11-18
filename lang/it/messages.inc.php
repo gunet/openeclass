@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2016-11-11 11:57:39
+// Generated 2016-11-18 16:10:41
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -4630,3 +4630,6 @@ $langTimeConstraint = "Time";
 $langHitConstraint = "Attempts";
 $langBlogRatingLog = "of blog rating";
 $langBlogSharingLog = "of blog sharing";
+$langcas_altauth_use = "Use alternative authentication method";
+$langcas_altauth_use_all = "For all access methods (via web or mobile apps)";
+$langcas_altauth_use_mobile = "Only for access via mobile apps";
