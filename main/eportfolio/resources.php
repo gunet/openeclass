@@ -303,6 +303,50 @@ if ($userdata) {
         }
     }
     
+    if (isset($_GET['action']) && $_GET['action'] == 'showBlogPost' && isset($_GET['er_id'])) {
+        $post = Database::get()->querySingle("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s AND id = ?d", $id, 'blog', intval($_GET['er_id']));
+        if ($post) {
+            $data = unserialize($post->data);
+            if (!empty($post->course_title)) {
+                $post->course_title = $langCourse.': '.$post->course_title;
+            } else {
+                $post->course_title = $langUserBlog;
+            }
+            $tool_content .= "<div class='panel panel-action-btn-default'>
+                                    <div class='panel-heading'>
+                                        <div class='pull-right'>
+                                            ". action_button(array(
+                                                                array(
+                                                                        'title' => $langePortfolioRemoveResource,
+                                                                        'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;er_id=".$post->id,
+                                                                        'icon' => 'fa-times',
+                                                                        'class' => 'delete',
+                                                                        'confirm' => $langePortfolioSureToRemoveResource,
+                                                                        'show' => ($post->user_id == $uid)
+                                                                )))."
+                                         </div>
+                                            <h3 class='panel-title'>".q($data['title'])."</h3>
+                                    </div>
+                                    <div class='panel-body'>
+                                        <div class='label label-success'>" . nice_format($data['timestamp'], true). "</div><br><br>".standard_text_escape($data['content'])."
+                                    </div>
+                                    <div class='panel-footer'>
+                                        <div class='row'>
+                                            <div class='col-sm-6'>$post->course_title</div>
+                                        </div>
+                                    </div>
+                                </div>";
+            }
+            
+            if ($uid == 0) {
+                draw($tool_content, 0);
+            } else {
+                draw($tool_content, 1);
+            }
+            exit;
+            
+        }
+    
     $blog_posts = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'blog');
     $submissions = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'work_submission');
     $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'mydocs');
@@ -386,7 +430,7 @@ if ($userdata) {
                                             <h3 class='panel-title'>".q($data['title'])."</h3>
                                     </div>
                                     <div class='panel-body'>
-                                        <div class='label label-success'>" . nice_format($data['timestamp'], true). "</div><small>".$langBlogPostUser.display_user($post->user_id, false, false)."</small><br><br>".standard_text_escape($data['content'])."
+                                        <div class='label label-success'>" . nice_format($data['timestamp'], true). "</div><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                                     </div>
                                                     <div class='panel-footer'>
                                                     <div class='row'>
