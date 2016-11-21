@@ -65,7 +65,7 @@ function display_certificates() {
                                                   ($data->active ? '0' : '1'),
                                           'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
                                     array('title' => $langDelete,
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_at=$data->id",
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert_id=$data->id",
                                           'icon' => 'fa-times',
                                           'class' => 'delete',
                                           'confirm' => $langConfirmDelete)),
@@ -165,7 +165,7 @@ function display_certificate_activities($certificate_id) {
                   'icon' => 'fa-reply',
                   'level' => 'primary-label'),
                 array('title' => $langConfig,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;editSettings=1",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;edit=1",
                       'icon' => 'fa-cog'),
                 array('title' => "$langExport $langToA $langcsvenc1",
                         'url' => "dumpcertificatebook.php?course=$course_code&amp;certificate_id=$certificate_id&amp;enc=1253",
@@ -1029,6 +1029,7 @@ function add_certificate_activity($certificate_id, $id, $type) {
  * @brief add / edit certificate settings
  * @global string $tool_content
  * @global type $course_code
+ * @global type $course_id
  * @global type $langTitle
  * @global type $langSave
  * @global type $langInsert
@@ -1041,20 +1042,41 @@ function add_certificate_activity($certificate_id, $id, $type) {
  */
 function certificate_settings($certificate_id = 0) {
 
-    global $tool_content, $course_code, $langTemplate,
+    global $tool_content, $course_code, $langTemplate, $course_id, 
            $langTitle, $langSave, $langInsert, $langMessage,
            $langActivate, $langDescription, $langpublisher;
        
-    
-    $description = '';
-    $message = '';
+        
+    if ($certificate_id > 0) {      // edit
+        $data = Database::get()->querySingle("SELECT issuer, template, title, description, message, active, bundle 
+                                FROM certificate WHERE id = ?d AND course_id = ?d", $certificate_id, $course_id);
+        $issuer = $data->issuer;
+        $template = $data->template;
+        $title = $data->title;
+        $description = $data->description;
+        $message = $data->message;
+        $active = $data->active;
+        $checked = ($active) ? ' checked': '';
+        $cert_id = "<input type='hidden' name='certificate_id' value='$certificate_id'>";
+        $name = 'editCertificate';
+    } else {        // add
+        $issuer = q(get_config('institution'));
+        $template = '';
+        $title = '';
+        $description = '';
+        $message = '';
+        $active = 1;
+        $checked = 'checked';
+        $cert_id = '';
+        $name = 'newCertificate';
+    }
     
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langTitle</label>            
                     <div class='col-sm-10'>
-                        <input class='form-control' type='text' placeholder='$langTitle' name='title'>                        
+                        <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
                     </div>
                 </div>
                 <div class='form-group'>
@@ -1068,7 +1090,7 @@ function certificate_settings($certificate_id = 0) {
                     <div class='col-sm-10'>
                     " . selection(array('1' => 'template 1', 
                                         '2' => 'template 2', 
-                                        '3' => 'template 3'), 'template') . "
+                                        '3' => 'template 3'), 'template', $template) . "
                     </div>
                 </div>
                 <div class='form-group'>
@@ -1080,21 +1102,21 @@ function certificate_settings($certificate_id = 0) {
                 <div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langpublisher</label>
                     <div class='col-sm-10'>
-                        <input class='form-control' type='text' name='issuer' value='" . q(get_config('institution')) . "'>
+                        <input class='form-control' type='text' name='issuer' value='$issuer'>
                     </div>
                 </div>
                  <div class='form-group'>
                     <label for='activate' class='col-sm-2 control-label'>$langActivate</label>
                     <div class='col-sm-10'>
-                        <input class='form-control' type='checkbox' name='active' value='1'></label>
+                        <input class='form-control' type='checkbox' name='active' value='$active' $checked></label>
                     </div>
                 </div>
-
+                $cert_id
                 <div class='form-group'>
                     <div class='col-xs-12'>".form_buttons(array(
                         array(
                                 'text' => $langSave,
-                                'name' => 'newCertificate',
+                                'name' => $name,
                                 'value'=> $langInsert
                             ),
                         array(
@@ -1106,21 +1128,6 @@ function certificate_settings($certificate_id = 0) {
         </div>";
 }
 
-
-
-function delete_certificate($certificate_id) {
-
-    global $course_id, $langAttendanceDeleted;
-
-    $r = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate_id = ?d", $certificate_id);
-    foreach ($r as $act) {
-        delete_certificate_activity($certificate_id, $act->id);
-    }
-    $action = Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $certificate_id, $course_id);
-    if ($action) {
-        Session::Messages("Επιτυχής διαγραφή", "alert-success");
-    }
-}
 
 function delete_certificate_activity($certificate_id, $activity_id) {
 
@@ -1171,9 +1178,35 @@ function add_certificate($title, $description, $message, $template, $issuer, $ac
     
 }
 
+/**
+ * @brief modify certificate settings in DB
+ * @global type $course_id
+ * @param type $certificate_id
+ * @param type $title
+ * @param type $description
+ * @param type $message
+ * @param type $template
+ * @param type $issuer
+ * @param type $active
+ */
+function modify_certificate($certificate_id, $title, $description, $message, $template, $issuer, $active) {    
+    
+    global $course_id;
+    
+    Database::get()->query("UPDATE certificate SET title = ?s, 
+                                                   description = ?s,
+                                                   message = ?s,
+                                                   template = ?d,
+                                                   issuer = ?s,
+                                                   active = ?d
+                                                WHERE id = ?d AND course_id = ?d",
+                                    $title, $description, $message, $template, $issuer, $active, $certificate_id, $course_id);
+    
+}
+
 
 /**
- * @brief modify certificate visibility
+ * @brief modify certificate visibility in DB
  * @global type $course_id
  * @param type $certificate_id
  * @param type $visibility
@@ -1184,4 +1217,22 @@ function modify_certificate_visility($certificate_id, $visibility) {
     
     Database::get()->query("UPDATE certificate SET active = ?d WHERE id = ?d AND course_id = ?d", $visibility, $certificate_id, $course_id);
     
+}
+
+/**
+ * @brief delete certificate in DB
+ * @global type $course_id
+ * @param type $certificate_id
+ */
+function delete_certificate($certificate_id) {
+
+    global $course_id;
+
+ /**   $r = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate_id = ?d", $certificate_id);
+    foreach ($r as $act) {
+        delete_certificate_activity($certificate_id, $act->id);
+    } */
+    
+    Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $certificate_id, $course_id);
+
 }

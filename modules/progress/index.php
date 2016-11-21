@@ -149,7 +149,7 @@ $display = TRUE;
 if (isset($_REQUEST['certificate_id'])) {
     $certificate_id = $_REQUEST['certificate_id'];
     $certificate = Database::get()->querySingle("SELECT * FROM certificate WHERE id = ?d", $certificate_id);
-    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
+    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
     $pageName = $langEditChange;
 }
 
@@ -163,24 +163,39 @@ if ($is_editor) {
         
     if (isset($_POST['newCertificate'])) {  //add a new certificate
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title', 'active'));                        
+        $v->rule('required', array('title'));                        
         $v->labels(array(
             'title' => "$langTheField $langTitle",
         ));
         if($v->validate()) {
-            add_certificate($_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $_POST['active']);            
+            add_certificate($_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $_POST['active']);
             Session::Messages("$langNewCertificateSuc", 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/progress/index.php?course=$course_code&new=1");
         }
+    } elseif (isset($_POST['editCertificate'])) { // modify certificate
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('title'));                        
+        $v->labels(array(
+            'title' => "$langTheField $langTitle",
+        ));
+        if($v->validate()) {
+            $active = isset($_POST['active']) ? 1 : 0;
+            modify_certificate($certificate_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $active);
+            Session::Messages("$langQuotaSuccess", 'alert-success');
+            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+        } else {
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&edit=1");
+        }
     }
 
     // Top menu
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
 
-    if(isset($_GET['editSettings'])) {
+    if(isset($_GET['edit'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id", "name" => $certificate->title);
         $pageName = $langConfig;
         $tool_content .= action_bar(array(
@@ -237,37 +252,7 @@ if ($is_editor) {
     $tool_content .= "</div></div>";
 
     //end of the top menu
-
-
-    // update certificate settings
-    if (isset($_POST['submitCertificateSettings'])) {
-        $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title', 'start_date', 'end_date'));
-        $v->rule('date', array('start_date', 'end_date'));
-        if (!empty($_POST['end_date'])) {
-            $v->rule('dateBefore', 'start_date', $_POST['end_date']);
-        }
-        $v->labels(array(
-            'title' => "$langTheField $langTitle",
-            'start_date' => "$langTheField $langStart",
-            'end_date' => "$langTheField $langEnd",
-        ));
-        if($v->validate()) {
-            $certificate_title = $_POST['title'];
-            if(isset($_POST['autoassign'])) echo $autoassign=1; else $autoassign=0;
-            if(isset($_POST['active'])) $active=1; else $active=0;
-            $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
-            $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');
-
-            Database::get()->querySingle("UPDATE certificate SET `title` = ?s,`autoassign` = ?s,`active` = ?s, `created` = ?t, `expires` = ?t WHERE id = ?d ", $certificate_title, $autoassign, $active, $start_date, $end_date, $certificate_id);
-
-            Session::Messages($langGradebookEdit,"alert-success");
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id");
-        } else {
-            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id&editSettings=1");
-        }
-    }
+   
 
     //FORM: create / edit new activity
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
@@ -338,17 +323,16 @@ if ($is_editor) {
         delete_certificate_activity($certificate_id, getDirectReference($_GET['delete']));
         redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id");
     }
-
-    // delete certificate
-    elseif (isset($_GET['delete_at'])) {
-        delete_certificate($_GET['delete_at']);
+   
+    elseif (isset($_GET['del_cert_id'])) {  //  delete certificate
+        delete_certificate($_GET['del_cert_id']);
+        Session::Messages("$langGlossaryDeleted", "alert-success");
         redirect_to_home_page("modules/progress/index.php?course=$course_code");
     }
-
     elseif (isset($_GET['new'])) {
         certificate_settings(); // create new certificate
         $display = FALSE;
-    } elseif (isset($_GET['editSettings'])) { // edit certificate settings
+    } elseif (isset($_GET['edit'])) { // edit certificate settings
         certificate_settings($certificate_id);
         $display = FALSE;
     } elseif (isset($_GET['addActivityAs'])) { // assignments
