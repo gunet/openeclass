@@ -347,9 +347,9 @@ if ($userdata) {
             
         }
     
-    $blog_posts = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'blog');
-    $submissions = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'work_submission');
-    $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s", $id, 'mydocs');
+    $blog_posts = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'blog');
+    $submissions = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'work_submission');
+    $docs = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'mydocs');
     
     //hide tabs when there are no resources
     if (!$blog_posts && !$submissions && !$docs) {
@@ -404,7 +404,7 @@ if ($userdata) {
         //show blog_posts    
         if ($blog_posts) {
             $tool_content .= '<div id="blog" class="'.$blog_div_class.'" style="padding-top:20px">';
-            usort($blog_posts, "cmp");
+            //usort($blog_posts, "cmp");
             $tool_content .= "<div class='row'>";
             $tool_content .= "<div class='col-sm-12'>";
             foreach ($blog_posts as $post) {
@@ -447,7 +447,7 @@ if ($userdata) {
         //show assignment submissions
         if ($submissions) {
             $tool_content .= '<div id="works" class="'.$work_div_class.'" style="padding-top:20px">';
-            usort($submissions, "cmp");
+            //usort($submissions, "cmp");
             $tool_content .= "<div class='row'>";
             $tool_content .= "<div class='col-sm-12'>";
             foreach ($submissions as $submission) {
@@ -513,7 +513,7 @@ if ($userdata) {
         //show mydocs collection
         if ($docs) {
             $tool_content .= '<div id="mydocs" class="'.$mydocs_div_class.'" style="padding-top:20px">';
-            usort($docs, "cmp");
+            //usort($docs, "cmp");
             $tool_content .= "<div class='table-responsive'>
                                 <table class='table-default'>
                                   <tbody>
