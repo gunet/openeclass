@@ -4329,6 +4329,7 @@ $langePortfolioSureToRemoveResource = 'Are you sure you want to remove this reso
 $langePortfolioCollectionUserInfo = 'In the resource collection of e-Portfolio you can add resources from the following modules (if they are enabled): blog (personal and course), course assignments and personal documents.
 The respective tabs appear only if resources have been added from the relevant module to the collection.';
 $langePortfolioNoResInCollection = 'There are no resources in this collection';
+$langEnabledePortfolioButtonsLabel = 'Enabled e-Portfolio';
 $langCommentsUser = "User comments";
 $langUserRequests = "User requests";
 $langsUserRequests = "user requests";

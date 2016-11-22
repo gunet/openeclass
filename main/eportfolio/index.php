@@ -66,6 +66,7 @@ if ($userdata) {
                 Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 0, $id);
                 $userdata->eportfolio_enable = 0;
             }
+            redirect_to_home_page("main/eportfolio/index.php?id=$id");
         }
         
         $head_content .= "<script type='text/javascript'>//<![CDATA[
@@ -97,10 +98,11 @@ if ($userdata) {
             $on_class = "btn btn-info unlocked_active";
         }
         
-        $tool_content .= '<div class="btn-group" id="toggle_event_editing">
+        $tool_content .= '<div style="margin-top:10px" class="btn-group" id="toggle_event_editing">
                               <form method="post" action="" id="enable-eportfolio-form">
                                   <input type="hidden" name="toggle_val">
                               </form>
+                              <b>'.$langEnabledePortfolioButtonsLabel.'</b><br/>
 	                          <button type="button" class="'.$off_class.'">OFF</button>
 	                          <button type="button" class="'.$on_class.'">ON</button>
                           </div>';
