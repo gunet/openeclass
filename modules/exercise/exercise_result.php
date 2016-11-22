@@ -510,7 +510,7 @@ if (count($exercise_question_ids)>0){
                                    <b>/$questionWeighting</b></span>";
                 } else {
                 $tool_content .= "<span style='float:right;'>
-                                    $langQuestionScore: <b>$questionScore/$questionWeighting</b></span>";
+                                    $langQuestionScore: <b>".round($questionScore, 2). " / $questionWeighting</b></span>";
                 }
             } else {
                 $tool_content .= "<span style='float:right;'>
