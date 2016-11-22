@@ -104,7 +104,7 @@ if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $bio = '';
 }
 $tool_content .= 
-    "<div class='alert alert-info'>$langBioPermFileType</div>
+    "<div class='alert alert-info'>$langBioPermFileType ".sprintf($langBioMaxSize, get_config('bio_quota'))."</div>
      <div class='form-group'>
         <label for='bio' class='col-sm-2 control-label'>$label</label>
         <div class='col-sm-10'>

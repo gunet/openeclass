@@ -4313,6 +4313,7 @@ $langUploadBioFailType = 'The uploaded file is not a PDF file';
 $langBioDeletedSuccess = 'The CV file was succesfully deleted';
 $langUploadBio = 'Upload CV';
 $langBioPermFileType = 'Users are allowed to upload only PDF files';
+$langBioMaxSize = 'The maximum allowed file size is %s MB.';
 $lang_eportfolio_enable = 'Enable users\' e-portfolio';
 $langePortfolioDisabled = 'e-portfolio feature is disabled by the platform\'s administrators.';
 $langUserePortfolioDisabled = 'This user has disabled the e-portfolio feature.';
