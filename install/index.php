@@ -516,6 +516,8 @@ elseif (isset($_POST['install1'])) {
     touch_try('video/index.php');
     mkdir_try('storage');
     mkdir_try('storage/views');
+    mkdir_try('courses/eportfolio');
+    touch_try('courses/eportfolio/index.php');
     mkdir_try('courses/eportfolio/userbios');
     touch_try('courses/eportfolio/userbios/index.php');
     mkdir_try('courses/eportfolio/work_submissions');
