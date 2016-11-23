@@ -21,7 +21,7 @@
  */
 
 require_once 'AbstractEventTest.php';
-require_once 'modules/game/ExerciseEvent.php';
+require_once 'modules/progress/ExerciseEvent.php';
 
 class ExerciseEventTest extends AbstractEventTest {
     

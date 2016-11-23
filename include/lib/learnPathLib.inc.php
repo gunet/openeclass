@@ -35,7 +35,7 @@
   ==============================================================================
  */
 
-require_once 'modules/game/LearningPathEvent.php';
+require_once 'modules/progress/LearningPathEvent.php';
 
 /*
  * content type

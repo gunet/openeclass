@@ -21,7 +21,7 @@
  */
 
 require_once 'AbstractEventTest.php';
-require_once 'modules/game/ViewingEvent.php';
+require_once 'modules/progress/ViewingEvent.php';
 
 class ViewingEventTest extends AbstractEventTest {
     

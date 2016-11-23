@@ -82,81 +82,140 @@ function display_certificates() {
 }
 
 
-
+/**
+ * @brief aisplay all certificate activities
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $course_id
+ * @global type $langNoActivCert
+ * @global type $langAttendanceActList
+ * @global type $langTitle
+ * @global type $langType
+ * @global type $langOfAssignment
+ * @global type $langExerciseAsModuleLabel
+ * @global type $langOfBlog
+ * @global type $langDocumentAsModuleLabel
+ * @global type $langMediaAsModuleLabel
+ * @global type $langOfMultimediaLinks
+ * @global type $langOfEBook
+ * @global type $langOfPoll
+ * @global type $langWiki
+ * @global type $langOfForums
+ * @global type $langOfBlogComments
+ * @global type $langOfCourseComments
+ * @global type $langOfLikesForum
+ * @global type $langOfLikesSocial
+ * @global type $langOfLearningPath
+ * @global type $langDelete
+ * @global type $langEditChange
+ * @global type $langConfirmDelete
+ * @global type $langConfig
+ * @global type $langInsertWorkCap
+ * @global type $langLearningPath
+ * @global type $langAdd
+ * @global type $langExport
+ * @global type $langBack
+ * @global type $langInsertWorkCap
+ * @global type $langCommentsBlog
+ * @global type $langCommentsCourse
+ * @global type $langWikis
+ * @global type $langCategoryExcercise
+ * @global type $langValue
+ * @global type $langsetvideo
+ * @global type $langEBook
+ * @global type $langMetaQuestionnaire
+ * @global type $langBlog
+ * @global type $langBlogPosts
+ * @global type $langPersoValue
+ * @global type $langCourseSocialBookmarks
+ * @global type $langPersoValue
+ * @global type $langForumRating
+ * @global type $langPersoValue
+ * @global type $langWikiPages
+ * @global type $langCategoryEssay
+ * @global type $langDocument
+ * @global type $langAllActivities
+ * @param type $certificate_id
+ */
 function display_certificate_activities($certificate_id) {
 
-    global $tool_content, $course_code, $attendance,
-           $langAttendanceActList, $langTitle, $langType, $langAttendanceActivityDate, $langAttendanceAbsences,
-           $langGradebookNoTitle, $langExercise, $langAssignment,$langAttendanceInsAut, $langAttendanceInsMan,
-           $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1, $langAttendanceActivity,
-           $langHere, $langAttendanceNoActMessage3, $langToA, $langcsvenc1, $langcsvenc2,
-           $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap,
-           $langAdd, $langExport, $langBack, $langNoRegStudent, $course_id, $langInsertWorkCap, $langInsertExerciseCap, $langBlog, $langCommentsBlog, $langCommentsCourse, $langForum, $langLP, $langLikesSocial, $langLikesforum, $langDoc, $langMult, $langVideoLink, $langEbook, $langAnsQuest, $langWikiPages, $langValue,
-           $langVideo, $langsetvideo, $langEBook,$langMetaQuestionnaire, $langBlog, $langBlogPosts, $langComments, $langCommentsBlog, $langComments, $langCommentsCourse, $langForums, $langComments, $langForu, $langPersoValue, $langCourseSocialBookmarks, $langPersoValue, $langForumRating, $langPersoValue, $langWikiPages, $langWikis, $langCategoryExcercise, $langCategoryEssay, $langLearningPath, $langDocument, $langAllActivities;
+    global $tool_content, $course_code, $course_id, 
+           $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
+           $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog, $langDocumentAsModuleLabel,
+           $langMediaAsModuleLabel, $langOfMultimediaLinks, $langOfEBook, $langOfPoll, $langWiki,
+           $langOfForums, $langOfBlogComments, $langOfCourseComments, $langOfLikesForum, $langOfLikesSocial,
+           $langOfLearningPath, $langDelete, $langEditChange, $langConfirmDelete,           
+           $langConfig, $langInsertWorkCap, $langLearningPath,
+           $langAdd, $langExport, $langBack, $langInsertWorkCap, 
+           $langCommentsBlog, $langCommentsCourse, $langWikis, $langCategoryExcercise,           
+           $langValue, $langsetvideo, $langEBook, $langMetaQuestionnaire, $langBlog, 
+           $langBlogPosts, $langPersoValue, $langCourseSocialBookmarks,
+           $langPersoValue, $langForumRating, $langPersoValue, $langWikiPages, 
+           $langCategoryEssay, $langDocument, $langAllActivities;
 
     $tool_content .= action_bar(
             array(
                 array('title' => $langAdd,
                       'level' => 'primary-label',
                       'options' => array(
-                          array('title' => "$langInsertWorkCap",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityAs=1",
+                          array('title' => "$langOfAssignment",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=assignment",
                                 'icon' => 'fa fa-flask space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langInsertExerciseCap",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityEx=1",
+                          array('title' => "$langExerciseAsModuleLabel",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=exercise",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langBlog",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityBlog=1",
+                          array('title' => "$langOfBlog",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=blog",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langCommentsBlog",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityCom=1",
+                          array('title' => "$langOfBlogComments",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=blogcomments",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langCommentsCourse",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityComCourse=1",
+                          array('title' => "$langOfCourseComments",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=coursecomments",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langForum",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityFor=1",
+                          array('title' => "$langOfForums",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=forum",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langLP",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityLp=1",
+                          array('title' => "$langOfLearningPath",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=lp",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langLikesSocial",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityRat=1",
+                          array('title' => "$langOfLikesSocial",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=likesocial",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langLikesforum",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityRatPosts=1",
+                          array('title' => "$langOfLikesForum",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=likeforum",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langDoc",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityDoc=1",
+                          array('title' => "$langDocumentAsModuleLabel",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=document",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langMult",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityMul=1",
+                          array('title' => "$langMediaAsModuleLabel",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=video",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langVideoLink",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityVid=1",
+                          array('title' => "$langOfMultimediaLinks",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=videolinks",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langEbook",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityBook=1",
+                          array('title' => "$langOfEBook",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=ebook",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langAnsQuest",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityQue=1",
+                          array('title' => "$langOfPoll",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=poll",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langWikiPages",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addActivityWi=1",
+                          array('title' => "$langWiki",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=wiki",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => '')),
                      'icon' => 'fa-plus'),
@@ -167,19 +226,15 @@ function display_certificate_activities($certificate_id) {
                 array('title' => $langConfig,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;edit=1",
                       'icon' => 'fa-cog'),
-                array('title' => "$langExport $langToA $langcsvenc1",
+                array('title' => "$langExport",
                         'url' => "dumpcertificatebook.php?course=$course_code&amp;certificate_id=$certificate_id&amp;enc=1253",
-                    'icon' => 'fa-file-excel-o'),
-                array('title' => "$langExport $langToA $langcsvenc2",
-                        'url' => "dumpcertificatebook.php?course=$course_code&amp;certificate_id=$certificate_id",
-                        'icon' => 'fa-file-excel-o'),
+                    'icon' => 'fa-file-excel-o'),                
             ),
             true
         );
 
-
     //get all the available activities
-    $result = Database::get()->queryArray("SELECT * FROM certificate_criterion WHERE certificate = ?d  ORDER BY `id` DESC", $certificate_id);
+    $result = Database::get()->queryArray("SELECT * FROM certificate_criterion WHERE certificate = ?d ORDER BY `id` DESC", $certificate_id);
 
     if (count($result) > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
@@ -192,157 +247,153 @@ function display_certificate_activities($certificate_id) {
                             <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>";
         foreach ($result as $details) {
-
-        	if($details->activity_type == "exercise"){
-        		$checkForExer = Database::get()->queryArray("SELECT title FROM exercise WHERE exercise.course_id = ?d AND exercise.id = ?d", $course_id, $details->resource);
-        		foreach ($checkForExer as $newExerToCertificate) {
-        			$title = $newExerToCertificate->title;
-        		}
-        		$type = "$langCategoryExcercise";
-        	  if($details->resource == ""){
-              $title = "$langAllActivities";
+            if ($details->activity_type == "exercise") {
+                $checkForExer = Database::get()->queryArray("SELECT title FROM exercise WHERE exercise.course_id = ?d AND exercise.id = ?d", $course_id, $details->resource);
+                foreach ($checkForExer as $newExerToCertificate) {
+                    $title = $newExerToCertificate->title;
+                }
+                $type = "$langCategoryExcercise";
+                if ($details->resource == "") {
+                    $title = "$langAllActivities";
+                }
             }
-          }
-
-          if($details->activity_type == "assignment"){
-        		$checkForExer = Database::get()->queryArray("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $details->resource);
-        		foreach ($checkForExer as $newExerToCertificate) {
-        			$title = $newExerToCertificate->title;
-        		}
-        		$type = "$langCategoryEssay";
-            if($details->resource == ""){
-              $title = "$langAllActivities";
+            if ($details->activity_type == "assignment") {
+                $checkForExer = Database::get()->queryArray("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $details->resource);
+                foreach ($checkForExer as $newExerToCertificate) {
+                        $title = $newExerToCertificate->title;
+                }
+                $type = "$langCategoryEssay";
+                if ($details->resource == "") {
+                    $title = "$langAllActivities";
+                }
             }
-        	}
 
-          if($details->activity_type == LearningPathEvent::ACTIVITY){
-        		$checkForExer = Database::get()->queryArray("SELECT name FROM  lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $details->resource);
-            foreach ($checkForExer as $newExerToCertificate) {
-        			$title = $newExerToCertificate->name;
+            if ($details->activity_type == LearningPathEvent::ACTIVITY) {
+                $checkForExer = Database::get()->queryArray("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $details->resource);
+                foreach ($checkForExer as $newExerToCertificate) {
+                        $title = $newExerToCertificate->name;
+                }
+                $type = "$langLearningPath";
+                if ($details->resource == "") {
+                    $title = "$langAllActivities";
+                }
             }
-        		$type = "$langLearningPath";
-            if($details->resource == ""){
-              $title = "$langAllActivities";
+
+            if ($details->activity_type == ViewingEvent::DOCUMENT_ACTIVITY) {
+                $checkForExer = Database::get()->queryArray("SELECT title FROM document WHERE document.course_id = ?d AND document.id = ?d", $course_id, $details->resource);
+                foreach ($checkForExer as $newExerToCertificate) {
+                    $title = $newExerToCertificate->title;
+                }
+                $type = "$langDocument";
+                if ($details->resource == "") {
+                    $title = "$langAllActivities";
+                }
             }
-        	}
 
-          if($details->activity_type == ViewingEvent::DOCUMENT_ACTIVITY){
-        		$checkForExer = Database::get()->queryArray("SELECT title FROM document WHERE document.course_id = ?d AND document.id = ?d", $course_id, $details->resource);
-            foreach ($checkForExer as $newExerToCertificate) {
-        			$title = $newExerToCertificate->title;
+            if ($details->activity_type == ViewingEvent::VIDEO_ACTIVITY){
+                $checkForExer = Database::get()->queryArray("SELECT title FROM video WHERE video.course_id = ?d AND video.id = ?d", $course_id, $details->resource);
+                foreach ($checkForExer as $newExerToCertificate) {
+                    $title = $newExerToCertificate->title;
+                }
+                $type = "$langVideo";
+                if ($details->resource == "") {
+                  $title = "$langAllActivities";
+                }
             }
-        		$type = "$langDocument";
-            if($details->resource == ""){
-              $title = "$langAllActivities";
+
+            if ($details->activity_type == ViewingEvent::VIDEOLINK_ACTIVITY){
+                $checkForExer = Database::get()->queryArray("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $details->resource);
+                foreach ($checkForExer as $newExerToCertificate) {
+                    $title = $newExerToCertificate->title;
+                }
+                $type = "$langsetvideo";
+                if($details->resource == ""){
+                  $title = "$langAllActivities";
+                }
             }
-        	}
 
-          if($details->activity_type == ViewingEvent::VIDEO_ACTIVITY){
-        		$checkForExer = Database::get()->queryArray("SELECT title FROM video WHERE video.course_id = ?d AND video.id = ?d", $course_id, $details->resource);
-            foreach ($checkForExer as $newExerToCertificate) {
-        			$title = $newExerToCertificate->title;
+            if ($details->activity_type == ViewingEvent::EBOOK_ACTIVITY){
+                $checkForExer = Database::get()->queryArray("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $details->resource);
+                foreach ($checkForExer as $newExerToCertificate) {
+                    $title = $newExerToCertificate->title;
+                }
+                $type = "$langEBook";
+                if ($details->resource == "") {
+                  $title = "$langAllActivities";
+                }
             }
-        		$type = "$langVideo";
-            if($details->resource == ""){
-              $title = "$langAllActivities";
+
+            if ($details->activity_type == ViewingEvent::QUESTIONNAIRE_ACTIVITY){
+                $checkForExer = Database::get()->queryArray("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $details->resource);
+                foreach ($checkForExer as $newExerToCertificate) {
+                    $title = $newExerToCertificate->name;
+                }
+                $type = "$langMetaQuestionnaire";
+                if ($details->resource == "") {
+                  $title = "$langAllActivities";
+                }
             }
-        	}
 
-          if($details->activity_type == ViewingEvent::VIDEOLINK_ACTIVITY){
-        		$checkForExer = Database::get()->queryArray("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $details->resource);
-            foreach ($checkForExer as $newExerToCertificate) {
-        			$title = $newExerToCertificate->title;
+            if ($details->activity_type == BlogEvent::ACTIVITY) {
+                $type = "$langBlog";
+                $title = "$langBlogPosts";
             }
-        		$type = "$langsetvideo";
-            if($details->resource == ""){
-              $title = "$langAllActivities";
+
+            if ($details->activity_type == CommentEvent::BLOG_ACTIVITY && $details->module == MODULE_ID_COMMENTS) {
+                $type = "$langComments";
+                $title = "$langCommentsBlog";
             }
-        	}
 
-          if($details->activity_type == ViewingEvent::EBOOK_ACTIVITY){
-        		$checkForExer = Database::get()->queryArray("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $details->resource);
-            foreach ($checkForExer as $newExerToCertificate) {
-        			$title = $newExerToCertificate->title;
+            if ($details->activity_type == CommentEvent::COURSE_ACTIVITY && $details->module == MODULE_ID_COMMENTS) {
+                $type = "$langComments";
+                $title = "$langCommentsCourse";
             }
-        		$type = "$langEBook";
-            if($details->resource == ""){
-              $title = "$langAllActivities";
+
+            if ($details->activity_type == ForumEvent::ACTIVITY) {
+                $type = "$langForums";
+                $title = "$langComments $langForums";
             }
-        	}
 
-          if($details->activity_type == ViewingEvent::QUESTIONNAIRE_ACTIVITY){
-        		$checkForExer = Database::get()->queryArray("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $details->resource);
-            foreach ($checkForExer as $newExerToCertificate) {
-        			$title = $newExerToCertificate->name;
+            if ($details->activity_type == RatingEvent::SOCIALBOOKMARK_ACTIVITY && $details->module == MODULE_ID_RATING) {
+                $type = "$langPersoValue $langCourseSocialBookmarks";
+                $title = "$langPersoValue";
             }
-        		$type = "$langMetaQuestionnaire";
-            if($details->resource == ""){
-              $title = "$langAllActivities";
+
+            if ($details->activity_type == RatingEvent::FORUM_ACTIVITY && $details->module == MODULE_ID_RATING) {
+                $type = "$langForumRating";
+                $title = "$langPersoValue";
             }
-        	}
-
-          if($details->activity_type == BlogEvent::ACTIVITY){
-        		$type = "$langBlog";
-            $title = "$langBlogPosts";
-        	}
-
-          if($details->activity_type == CommentEvent::BLOG_ACTIVITY && $details->module == MODULE_ID_COMMENTS){
-        		$type = "$langComments";
-            $title = "$langCommentsBlog";
-        	}
-
-          if($details->activity_type == CommentEvent::COURSE_ACTIVITY && $details->module == MODULE_ID_COMMENTS){
-        		$type = "$langComments";
-            $title = "$langCommentsCourse";
-        	}
-
-          if($details->activity_type == ForumEvent::ACTIVITY){
-        		$type = "$langForums";
-            $title = "$langComments $langForums";
-        	}
-
-          if($details->activity_type == RatingEvent::SOCIALBOOKMARK_ACTIVITY && $details->module == MODULE_ID_RATING){
-        		$type = "$langPersoValue $langCourseSocialBookmarks";
-            $title = "$langPersoValue";
-        	}
-
-          if($details->activity_type == RatingEvent::FORUM_ACTIVITY && $details->module == MODULE_ID_RATING){
-        		$type = "$langForumRating";
-            $title = "$langPersoValue";
-        	}
-          if($details->activity_type == WikiEvent::ACTIVITY){
-        		$type = "$langWikiPages";
-            $title = "$langWikis";
-        	}
-
-
+           
+            if ($details->activity_type == WikiEvent::ACTIVITY) {
+                $type = "$langWikiPages";
+                $title = "$langWikis";
+            }
 
             //$content = ellipsize_html($details->description, 50);
             $tool_content .= "<tr><td>";
             $tool_content .= $title;
             $tool_content .= "</td><td>".$type."</td><td>";
 
-            if($details->operator=='eq') $tool_content .=" = ";
-            if($details->operator=='lt') $tool_content .=" < ";
-            if($details->operator=='gt') $tool_content .=" > ";
-            if($details->operator=='let') $tool_content .=" <= ";
-            if($details->operator=='get') $tool_content .=" >= ";
-            if($details->operator=='neq') $tool_content .=" != ";
-
+            if ($details->operator=='eq') $tool_content .=" = ";
+            if ($details->operator=='lt') $tool_content .=" < ";
+            if ($details->operator=='gt') $tool_content .=" > ";
+            if ($details->operator=='let') $tool_content .=" <= ";
+            if ($details->operator=='get') $tool_content .=" >= ";
+            if ($details->operator=='neq') $tool_content .=" != ";
 
             $tool_content .= " $details->threshold </td>";
 
             $tool_content .= "<td class='text-center option-btn-cell'>".
                     action_button(array(
-                                array('title' => $langEditChange,
-                                    'icon' => 'fa-edit',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;modify=" . getIndirectReference($details->id)
-                                    ),
-                                array('title' => $langDelete,
-                                    'icon' => 'fa-times',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;certificate_id=$certificate_id&amp;delete=" .getIndirectReference($details->id),
-                                    'confirm' => $langConfirmDelete,
-                                    'class' => 'delete'))).
+                        array('title' => $langEditChange,
+                            'icon' => 'fa-edit',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;modify=" . getIndirectReference($details->id)
+                            ),
+                        array('title' => $langDelete,
+                            'icon' => 'fa-times',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;certificate_id=$certificate_id&amp;delete=" .getIndirectReference($details->id),
+                            'confirm' => $langConfirmDelete,
+                            'class' => 'delete'))).
                     "</td></tr>";
         } // end of while
         $tool_content .= "</table></div></div></div>";
@@ -352,142 +403,269 @@ function display_certificate_activities($certificate_id) {
 }
 
 
-function certificate_display_available_exercises($certificate_id) {
+/**
+ * @brief choose activity for inserting in certificate
+ * @param type $certificate_id
+ * @param type $activity
+ */
+function insert_activity($certificate_id, $activity) {
+                            
+    switch ($activity) {
+        case 'assignment':        
+            display_available_assignments($certificate_id);
+            break;
+        case 'exercise':
+            display_available_exercises($certificate_id);
+            break;
+        case 'blog';
+            display_available_blogs($certificate_id);
+            break;
+        case 'blogcomments':
+            certificate_display_available_Com($certificate_id);
+            break;
+        case 'coursecomments':
+            certificate_display_available_Com($certificate_id);
+            break;
+        case 'forum':
+            certificate_display_available_For($certificate_id);
+            break;
+        case 'lp':
+            display_available_lps($certificate_id);
+            break;
+        case 'likesocial';
+            break;
+        case 'likeforum';
+            break;
+        case 'document':
+            display_available_documents($certificate_id);
+            break;
+        case 'video':
+            certificate_display_available_Vid($certificate_id);
+            break;
+        case 'videolinks':
+            certificate_display_available_Mul($certificate_id);
+            break;
+        case 'ebook':
+            display_available_ebooks($certificate_id);
+            break;
+        case 'poll':
+            display_available_polls($certificate_id);
+            break;
+        case 'wiki':
+            certificate_display_available_Wi($certificate_id);
+            break;
+        default: break;
+        }        
+}
 
-    global $course_id, $course_code, $tool_content,
-           $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle;
+/**
+ * @brief assignments display form
+ * @global type $course_id
+ * @global type $tool_content
+ * @global type $langNoAssign
+ * @global type $course_code
+ * @global type $langTitle
+ * @global type $langGroupWorkDeadline_of_Submission
+ * @global type $langChoice
+ * @global type $langActive
+ * @global type $langInactive
+ * @global type $langAddModulesButton
+ * @param type $certificate_id
+ */
+function display_available_assignments($certificate_id) {
 
-    $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
-                                AND exercise.active = 1 AND exercise.id
-                                NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'exercise' AND module = 10)", $course_id, $certificate_id);
-    $checkForExerNumber = count($checkForExer);
-    if ($checkForExerNumber > 0) {
-        $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
-
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langJQCheckAll</th>";
-        $tool_content .= "<th class='text-center'>". icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=&amp;type=2")."</th></table>";
-
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescr</th>";
-        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-        $tool_content .= "</tr>";
-
-        foreach ($checkForExer as $newExerToCertificate) {
-            $content = ellipsize_html($newExerToCertificate->description, 50);
-            $tool_content .= "<tr><td><b>";
-            if (!empty($newExerToCertificate->title)) {
-                $tool_content .= q($newExerToCertificate->title);
-            }
-            $tool_content .= "</b>";
-            $tool_content .= "</td>"
-                    . "<td><div class='smaller'><span class='day'>" . nice_format($newExerToCertificate->start_date, true, true) . " </div></td>"
-                    . "<td>" . $content . "</td>";
-            $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=" . $newExerToCertificate->id . "&amp;type=1");
-        }
-        $tool_content .= "</td></tr></table></div></div></div>";
+    global $course_id, $tool_content, $langNoAssign, $course_code, $langTitle, 
+           $langGroupWorkDeadline_of_Submission, $langChoice, 
+           $langActive, $langInactive, $langAddModulesButton;
+               
+            
+    $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d AND active = 1 AND id NOT IN 
+                                (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                    AND resource != ''
+                                    AND activity_type = 'assignment' 
+                                    AND module = 5) 
+                                ORDER BY title", $course_id, $certificate_id);    
+    if (count($result) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageExe4</div>";
-    }
-}
-
-
-function certificate_display_available_assignments($certificate_id) {
-
-    global $course_id, $course_code, $tool_content,
-           $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $langNoInsCert;
-
-    $checkForExer = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d
-                                                AND assignment.active = 1
-                                                AND assignment.id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'assignment' AND module = 5)", $course_id, $certificate_id);
-    $checkForExerNumber = count($checkForExer);
-    if ($checkForExerNumber > 0) {
-        $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langJQCheckAll</th>";
-        $tool_content .= "<th class='text-center'>". icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=&amp;type=2")."</th></table>";
-
-        $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescr</th>";
-        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-        $tool_content .= "</tr>";
-
-        foreach ($checkForExer as $newExerToCertificate) {
-            $content = ellipsize_html($newExerToCertificate->description, 50);
-            $tool_content .= "<tr><td><b>";
-            if (!empty($newExerToCertificate->title)) {
-                $tool_content .= q($newExerToCertificate->title);
-            }
-            $tool_content .= "</b>";
-            $tool_content .= "</td>"
-                    . "<td><div class='smaller'><span class='day'>" . nice_format($newExerToCertificate->submission_date, true, true) . " </div></td>"
-                    . "<td>" . $newExerToCertificate->description . "</td>";
-            $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=" . $newExerToCertificate->id . "&amp;type=2");
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<table class='table-default'>" .
+                "<tr class='list-header'>" .
+                "<th class='text-left'>&nbsp;$langTitle</th>" .
+                "<th width='120'>$langGroupWorkDeadline_of_Submission</th>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "</tr>";        
+        foreach ($result as $row) {
+            
+            if ($row->active) {
+                $visible = icon('fa-eye', $langActive);
+            } else {
+                $visible = icon('fa-eye-slash', $langInactive);
+            }            
+            $description = empty($row->description) ? '' :
+                    "<div>$row->description</div>";            
+            $tool_content .= "<tr>" .
+                    "<td> " . q($row->title) . "<br><br><div class='text-muted'>$description</div></td>" .
+                    "<td class='text-center'>".nice_format($row->submission_date, true)."</td>" .
+                    "<td class='text-center'><input name='assignment[]' value='$row->id' type='checkbox' /></td>" .
+                    "</tr>";            
         }
-        $tool_content .= "</td></tr></table></div></div></div>";
-    } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoInsCert</div>";
+        $tool_content .= "</table>" .
+                "<div align='right'><input class='btn btn-primary' type='submit' name='add_assignment' value='$langAddModulesButton'></div></th></form>";
+    }        
+}
+
+
+/**
+ * @brief exercises display form
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $tool_content
+ * @global type $urlServer
+ * @global type $langExercices
+ * @global type $langNoExercises
+ * @global type $langDescription
+ * @global type $langChoice
+ * @global type $langAddModulesButton
+ * @param type $certificate_id
+ */
+function display_available_exercises($certificate_id) {
+
+    global $course_id, $course_code, $tool_content, $urlServer, $langExercices,
+            $langNoExercises, $langDescription, $langChoice, $langAddModulesButton;
+    
+    $result = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
+                                    AND exercise.active = 1 AND exercise.id NOT IN 
+                                    (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                            AND resource != '' 
+                                            AND activity_type = 'exercise' 
+                                            AND module = 10) ORDER BY title", $course_id, $certificate_id);
+    $quizinfo = array();
+    foreach ($result as $row) {
+        $quizinfo[] = array(
+            'id' => $row->id,
+            'name' => $row->title,
+            'comment' => $row->description,
+            'visibility' => $row->active);
     }
+    if (count($quizinfo) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoExercises</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" . 
+                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<table class='table-default'>" .
+                "<tr class='list-header'>" .
+                "<th width='50%' class='text-left'>$langExercices</th>" .
+                "<th class='text-left'>$langDescription</th>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "</tr>";        
+        foreach ($quizinfo as $entry) {
+            if ($entry['visibility'] == '0') {
+                $vis = 'not_visible';
+            } else {
+                $vis = '';
+            }
+            $tool_content .= "<tr class='$vis'>";
+            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
+            $tool_content .= "<td class='text-left'>" . $entry['comment'] . "</td>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
+            $tool_content .= "</tr>";            
+        }
+        $tool_content .= "</table><div class='text-right'>";
+        $tool_content .= "<input class='btn btn-primary' type='submit' name='add_exercise' value='$langAddModulesButton'></div>
+                </form>";
+    }        
 }
 
 
-function certificate_display_available_Blog($certificate_id){
+
+function display_available_blogs($certificate_id) {
 
 }
-function certificate_display_available_Com($certificate_id){
+function certificate_display_available_Com($certificate_id) {
 
 }
-function certificate_display_available_For($certificate_id){
+function certificate_display_available_For($certificate_id) {
 
 }
 
-function certificate_display_available_Lp($certificate_id){
+/**
+ * @brief learning paths display form
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $urlServer
+ * @global type $langNoLearningPath
+ * @global type $langLearningPaths
+ * @global type $langComments
+ * @global type $langChoice
+ * @global type $langAddModulesButton
+ * @param type $certificate_id
+ */
+function display_available_lps($certificate_id) {
 
-  global $course_id, $course_code, $tool_content,
-         $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle;
-
-  //$checkForLp = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.visible = 1 AND lp_learnPath.learnPath_id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' )", $course_id, $certificate_id);
-
-  global $course_id, $course_code, $tool_content,
-         $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $langNoInsCert, $langJQCheckAll;
-
-  $checkForLp = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d
-                                              AND lp_learnPath.visible = 1
-                                              AND lp_learnPath.learnPath_id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'learning path' AND module = 23)", $course_id, $certificate_id);
-  $checkForLpNumber = count($checkForLp);
-  if ($checkForLpNumber > 0) {
-      $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>$langJQCheckAll</th>";
-      $tool_content .= "<th class='text-center'>". icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=&amp;type=23")."</th></table>";
-
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescr</th>";
-      $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-      $tool_content .= "</tr>";
-
-      foreach ($checkForLp as $newExerToCertificate) {
-          //$content = ellipsize_html($newExerToCertificate->description, 50);
-          $tool_content .= "<tr><td><b>";
-          if (!empty($newExerToCertificate->name)) {
-              $tool_content .= q($newExerToCertificate->name);
-          }
-          $tool_content .= "</b>";
-          $tool_content .= "</td>"
-                  . "<td>" . $newExerToCertificate->comment . "</td>";
-          $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=" . $newExerToCertificate->learnPath_id . "&amp;type=23");
-      }
-      $tool_content .= "</td></tr></table></div></div></div>";
-  } else {
-      $tool_content .= "<div class='alert alert-warning'>$langNoInsCert</div>";
-  }
+    global $course_id, $course_code, $urlServer, $tool_content, 
+           $langNoLearningPath, $langLearningPaths, $langComments, $langChoice, 
+           $langAddModulesButton;
+    
+  $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d
+                                            AND lp_learnPath.visible = 1
+                                            AND lp_learnPath.learnPath_id NOT IN 
+                                        (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                                    AND resource!='' 
+                                                    AND activity_type = 'learning path' 
+                                                    AND module = 23)", $course_id, $certificate_id);
+    $lpinfo = array(); 
+    foreach ($result as $row) {
+        $lpinfo[] = array(
+            'id' => $row->learnPath_id,
+            'name' => $row->name,
+            'comment' => $row->comment,
+            'visible' => $row->visible,
+            'rank' => $row->rank);
+    }
+    if (count($lpinfo) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<table class='table-default'>" .
+                "<tr class='list-header'>" .
+                "<th><div align='left'>&nbsp;$langLearningPaths</div></th>" .
+                "<th><div align='left'>$langComments</div></th>" .
+                "<th width='80'>$langChoice</th>" .
+                "</tr>";        
+        foreach ($lpinfo as $entry) {
+            if ($entry['visible'] == 0) {
+                $vis = 'not_visible';
+                $disabled = 'disabled';
+            } else {
+                $vis = '';
+                $disabled = '';
+            }            
+            $m_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d 
+                                                    AND rank = (SELECT MIN(rank) FROM lp_rel_learnPath_module WHERE learnPath_id = ?d)", 
+                                                $entry['id'], $entry['id']);
+            if (($m_id) and $m_id->module_id > 0) {
+                $tool_content .= "<tr class='$vis'>";
+                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a></td>";
+                $tool_content .= "<td>" . $entry['comment'] . "</td>";
+                $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled></td>";
+                $tool_content .= "</tr>";            
+            }
+        }
+        $tool_content .= "</table>\n";
+        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<input class='btn btn-primary' type='submit' name='add_lp' value='$langAddModulesButton'></div></form>";
+        
+    }      
 }
 
 function certificate_display_available_Rat($certificate_id){
 
 }
 
-function certificate_display_available_Doc($certificate_id){
+function display_available_documents($certificate_id){
 
   global $course_id, $course_code, $tool_content,
          $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $langNoDocuments;
@@ -600,7 +778,7 @@ function certificate_display_available_Vid($certificate_id){
   }
 }
 
-function certificate_display_available_Book($certificate_id){
+function display_available_ebooks($certificate_id){
 
   global $course_id, $course_code, $tool_content,
          $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $langNoInsCert;
@@ -637,7 +815,7 @@ function certificate_display_available_Book($certificate_id){
   }
 }
 
-function certificate_display_available_Que($certificate_id){
+function display_available_polls($certificate_id){
 
   global $course_id, $course_code, $tool_content,
          $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $langNoInsCert;
@@ -831,82 +1009,7 @@ function add_certificate_other_activity_only_value($certificate_id, $type) {
 function add_certificate_activity($certificate_id, $id, $type) {
 
     global $course_id;
-
-    if ($type == 1) { // add exercises
-
-       //check if it is for a sing exe
-       if($id!=""){
-            //checking if it is new or not
-            $checkForExe = Database::get()->querySingle("SELECT * FROM exercise WHERE exercise.course_id = ?d
-                                                                AND exercise.active = 1 AND exercise.id
-                                                        NOT IN (SELECT resource FROM certificate_criterion
-                                                                    WHERE  certificate = ?d AND resource!='' AND activity_type = 'exercise' AND module = 10)
-                                                        AND exercise.id = ?d", $course_id, $certificate_id, $id);
-            if ($checkForExe) {
-                $module_auto_id = $checkForExe->id;
-                $module_auto_type = "exercise";
-
-                return Database::get()->query("INSERT INTO certificate_criterion
-                                            SET certificate = ?d, module=10, resource = ?d, activity_type = ?s",
-                                        $certificate_id, $module_auto_id, $module_auto_type)->lastInsertID;
-            }
-       }else{
-           Database::get()->query("INSERT INTO certificate_criterion
-                                            SET certificate = ?d, module=10, activity_type = 'exercise'",
-                                        $certificate_id);
-            return 1;
-       }
-    }
-    if ($type == 2) { // assignents
-
-       //check if it is for a sing exe
-       if($id!=""){
-            //checking if it is new or not
-            $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d
-                                                                AND assignment.active = 1 AND assignment.id
-                                                        NOT IN (SELECT resource FROM certificate_criterion
-                                                                    WHERE  certificate = ?d AND resource!='' AND activity_type = 'assignment' AND module = 5)
-                                                        AND assignment.id = ?d", $course_id, $certificate_id, $id);
-
-            if ($checkForAss) {
-                $module_auto_id = $checkForAss->id;
-                $module_auto_type = "assignment";
-
-                return Database::get()->query("INSERT INTO certificate_criterion
-                                            SET certificate = ?d, module=5, resource = ?d, activity_type = ?s",
-                                        $certificate_id, $module_auto_id, $module_auto_type)->lastInsertID;
-            }
-       }else{
-           Database::get()->query("INSERT INTO certificate_criterion
-                                            SET certificate = ?d, module=5, activity_type = 'assignment'",
-                                        $certificate_id);
-            return 1;
-       }
-    }
-    if ($type == 23) { // LP
-
-       //check if it is for a sing exe
-       if($id!=""){
-            //checking if it is new or not
-            $checkForLp = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d
-                                                        AND lp_learnPath.visible = 1
-                                                        AND lp_learnPath.learnPath_id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'learning path' AND module = 23) AND lp_learnPath.learnPath_id = ?d", $course_id, $certificate_id, $id);
-
-            if ($checkForLp) {
-                $module_auto_id = $id;
-                $module_auto_type = "learning path";
-
-                return Database::get()->query("INSERT INTO certificate_criterion
-                                            SET certificate = ?d, module=23, resource = ?d, activity_type = ?s",
-                                        $certificate_id, $module_auto_id, $module_auto_type)->lastInsertID;
-            }
-       }else{
-           Database::get()->query("INSERT INTO certificate_criterion
-                                            SET certificate = ?d, module=23, activity_type = 'learning path'",
-                                        $certificate_id);
-            return 1;
-       }
-    }
+    
     if ($type == 3) { // docs
 
        //check if it is for a sing exe
@@ -1126,113 +1229,4 @@ function certificate_settings($certificate_id = 0) {
                 </div>
             </form>
         </div>";
-}
-
-
-function delete_certificate_activity($certificate_id, $activity_id) {
-
-    global $langAttendanceDel, $langAttendanceDelFailure;
-
-    $delAct = Database::get()->query("DELETE FROM certificate_criterion WHERE id = ?d AND certificate = ?d", $activity_id, $certificate_id)->affectedRows;
-    if($delAct) {
-        Session::Messages("$langAttendanceDel", "alert-success");
-    } else {
-        Session::Messages("$langAttendanceDelFailure", "alert-danger");
-    }
-}
-
-
-function get_certificate_title($certificate_id) {
-
-    $at_title = Database::get()->querySingle("SELECT title FROM certificate WHERE id = ?d", $certificate_id)->title;
-
-    return $at_title;
-}
-
-
-
-/**
- * @brief add certificate in DB
- * @global type $course_id
- * @param type $title
- * @param type $description
- * @param type $message
- * @param type $template
- * @param type $issuer
- * @param type $active
- * @return type
- */
-function add_certificate($title, $description, $message, $template, $issuer, $active) {
-    
-    global $course_id;
-    
-    $new_cert_id = Database::get()->query("INSERT INTO certificate 
-                                SET course_id = ?d,
-                                title = ?s,
-                                description = ?s,
-                                message = ?s,
-                                template = ?d,
-                                issuer = ?s,
-                                active = ?d", $course_id, $title, $description, $message, $template, $issuer, $active)->lastInsertID;
-    return $new_cert_id;
-    
-}
-
-/**
- * @brief modify certificate settings in DB
- * @global type $course_id
- * @param type $certificate_id
- * @param type $title
- * @param type $description
- * @param type $message
- * @param type $template
- * @param type $issuer
- * @param type $active
- */
-function modify_certificate($certificate_id, $title, $description, $message, $template, $issuer, $active) {    
-    
-    global $course_id;
-    
-    Database::get()->query("UPDATE certificate SET title = ?s, 
-                                                   description = ?s,
-                                                   message = ?s,
-                                                   template = ?d,
-                                                   issuer = ?s,
-                                                   active = ?d
-                                                WHERE id = ?d AND course_id = ?d",
-                                    $title, $description, $message, $template, $issuer, $active, $certificate_id, $course_id);
-    
-}
-
-
-/**
- * @brief modify certificate visibility in DB
- * @global type $course_id
- * @param type $certificate_id
- * @param type $visibility
- */
-function modify_certificate_visility($certificate_id, $visibility) {
-    
-    global $course_id;
-    
-    Database::get()->query("UPDATE certificate SET active = ?d WHERE id = ?d AND course_id = ?d", $visibility, $certificate_id, $course_id);
-    
-}
-
-/**
- * @brief delete certificate in DB
- * @global type $course_id
- * @param type $certificate_id
- */
-function delete_certificate($certificate_id) {
-
-    global $course_id;
-
- /**   $r = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate_id = ?d", $certificate_id);
-    foreach ($r as $act) {
-        delete_certificate_activity($certificate_id, $act->id);
-    } */
-    
-    Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $certificate_id, $course_id);
-
 }

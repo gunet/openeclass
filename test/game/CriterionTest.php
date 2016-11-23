@@ -20,7 +20,7 @@
  * ======================================================================== 
  */
 
-require_once 'modules/game/Criterion.php';
+require_once 'modules/progress/Criterion.php';
 
 class CriterionTest extends PHPUnit_Framework_TestCase {
     

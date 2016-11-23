@@ -21,7 +21,7 @@
  */
 
 require_once 'AbstractEventTest.php';
-require_once 'modules/game/ForumEvent.php';
+require_once 'modules/progress/ForumEvent.php';
 
 class ForumEventTest extends AbstractEventTest {
     
