@@ -592,3 +592,22 @@ function claro_copy_file($sourcePath, $targetPath) {
 }
 
 /* ----------- end of backported functions from Claroline 1.7.x ----------- */
+
+
+/**
+ * helper function to get a file path from get variable
+ * @param string $name
+ * @global array $_GET
+ * @return string
+ */
+function get_dir_path($name) {
+    if (isset($_GET[$name])) {
+        $path = q($_GET[$name]);
+        if ($path == '/' or $path == '\\') {
+            $path = '';
+        }
+    } else {
+        $path = '';
+    }
+    return $path;
+}

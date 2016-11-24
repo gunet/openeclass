@@ -20,13 +20,28 @@
  * ========================================================================
  */
 
-
+/**
+ * @brief display all certificates -- initial screen
+ * @global type $course_id
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $is_editor
+ * @global type $langDelete
+ * @global type $langConfirmDelete
+ * @global type $langCreateDuplicate
+ * @global type $langNoCertificates
+ * @global type $langEditChange
+ * @global type $langAvailCert
+ * @global type $langViewHide
+ * @global type $langViewShow
+ * @global type $langEditChange
+ */
 function display_certificates() {
 
-    global $course_id, $tool_content, $course_code, $langEditChange,
-           $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
-           $langActivate, $langAvailableAttendances, $langNoCertificates, $is_editor,
-           $langViewHide, $langViewShow, $langEditChange, $langStart, $langEnd, $uid, $langAvailCert;
+    global $course_id, $tool_content, $course_code, $is_editor,
+           $langDelete, $langConfirmDelete, $langCreateDuplicate,
+           $langNoCertificates, $langEditChange, $langAvailCert,
+           $langViewHide, $langViewShow, $langEditChange;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM certificate WHERE course_id = ?d", $course_id);
@@ -83,7 +98,7 @@ function display_certificates() {
 
 
 /**
- * @brief aisplay all certificate activities
+ * @brief display all certificate activities
  * @global type $tool_content
  * @global type $course_code
  * @global type $course_id
@@ -95,8 +110,7 @@ function display_certificates() {
  * @global type $langExerciseAsModuleLabel
  * @global type $langOfBlog
  * @global type $langDocumentAsModuleLabel
- * @global type $langMediaAsModuleLabel
- * @global type $langOfMultimediaLinks
+ * @global type $langMediaAsModuleLabel 
  * @global type $langOfEBook
  * @global type $langOfPoll
  * @global type $langWiki
@@ -142,10 +156,10 @@ function display_certificate_activities($certificate_id) {
     global $tool_content, $course_code, $course_id, 
            $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog, $langDocumentAsModuleLabel,
-           $langMediaAsModuleLabel, $langOfMultimediaLinks, $langOfEBook, $langOfPoll, $langWiki,
+           $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langOfForums, $langOfBlogComments, $langOfCourseComments, $langOfLikesForum, $langOfLikesSocial,
            $langOfLearningPath, $langDelete, $langEditChange, $langConfirmDelete,           
-           $langConfig, $langInsertWorkCap, $langLearningPath,
+           $langConfig, $langInsertWorkCap, $langLearningPath, $langVideo,
            $langAdd, $langExport, $langBack, $langInsertWorkCap, 
            $langCommentsBlog, $langCommentsCourse, $langWikis, $langCategoryExcercise,           
            $langValue, $langsetvideo, $langEBook, $langMetaQuestionnaire, $langBlog, 
@@ -199,13 +213,9 @@ function display_certificate_activities($certificate_id) {
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langMediaAsModuleLabel",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=video",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=multimedia",
                                 'icon' => 'fa fa-edit space-after-icon',
-                                'class' => ''),
-                          array('title' => "$langOfMultimediaLinks",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=videolinks",
-                                'icon' => 'fa fa-edit space-after-icon',
-                                'class' => ''),
+                                'class' => ''),                          
                           array('title' => "$langOfEBook",
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=ebook",
                                 'icon' => 'fa fa-edit space-after-icon',
@@ -233,7 +243,7 @@ function display_certificate_activities($certificate_id) {
             true
         );
 
-    //get all the available activities
+    //get available activities
     $result = Database::get()->queryArray("SELECT * FROM certificate_criterion WHERE certificate = ?d ORDER BY `id` DESC", $certificate_id);
 
     if (count($result) > 0) {
@@ -247,7 +257,7 @@ function display_certificate_activities($certificate_id) {
                             <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>";
         foreach ($result as $details) {
-            if ($details->activity_type == "exercise") {
+            if ($details->activity_type == ExerciseEvent::ACTIVITY) {
                 $checkForExer = Database::get()->queryArray("SELECT title FROM exercise WHERE exercise.course_id = ?d AND exercise.id = ?d", $course_id, $details->resource);
                 foreach ($checkForExer as $newExerToCertificate) {
                     $title = $newExerToCertificate->title;
@@ -257,7 +267,7 @@ function display_certificate_activities($certificate_id) {
                     $title = "$langAllActivities";
                 }
             }
-            if ($details->activity_type == "assignment") {
+            if ($details->activity_type == AssignmentEvent::ACTIVITY) {
                 $checkForExer = Database::get()->queryArray("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $details->resource);
                 foreach ($checkForExer as $newExerToCertificate) {
                         $title = $newExerToCertificate->title;
@@ -427,7 +437,7 @@ function insert_activity($certificate_id, $activity) {
             certificate_display_available_Com($certificate_id);
             break;
         case 'forum':
-            certificate_display_available_For($certificate_id);
+            display_available_forums($certificate_id);
             break;
         case 'lp':
             display_available_lps($certificate_id);
@@ -439,12 +449,9 @@ function insert_activity($certificate_id, $activity) {
         case 'document':
             display_available_documents($certificate_id);
             break;
-        case 'video':
-            certificate_display_available_Vid($certificate_id);
-            break;
-        case 'videolinks':
-            certificate_display_available_Mul($certificate_id);
-            break;
+        case 'multimedia':
+            display_available_multimedia($certificate_id);
+            break;        
         case 'ebook':
             display_available_ebooks($certificate_id);
             break;
@@ -452,7 +459,7 @@ function insert_activity($certificate_id, $activity) {
             display_available_polls($certificate_id);
             break;
         case 'wiki':
-            certificate_display_available_Wi($certificate_id);
+            display_available_wiki($certificate_id);
             break;
         default: break;
         }        
@@ -578,6 +585,165 @@ function display_available_exercises($certificate_id) {
     }        
 }
 
+/**
+ * @brief document display form
+ * @global type $id
+ * @global type $webDir
+ * @global type $course_code
+ * @global type $tool_content
+ * @global type $langDirectory
+ * @global type $langUp
+ * @global type $langName
+ * @global type $langSize
+ * @global type $langDate
+ * @global type $langAddModulesButton
+ * @global type $langChoice
+ * @global type $langNoDocuments
+ * @global type $course_code
+ * @global type $group_sql
+ * @param type $certificate_id
+ */
+function display_available_documents($certificate_id) {
+    
+    global $id, $webDir, $course_code, $tool_content, 
+            $langDirectory, $langUp, $langName, $langSize,
+            $langDate, $langAddModulesButton, $langChoice,
+            $langNoDocuments, $course_code, $group_sql;
+    
+    require_once 'modules/document/doc_init.php';
+    require_once 'include/lib/mediaresource.factory.php';
+    require_once 'include/lib/fileManageLib.inc.php';
+    require_once 'include/lib/fileDisplayLib.inc.php';
+    //require_once 'include/lib/modalboxhelper.class.php';
+    require_once 'include/lib/multimediahelper.class.php';
+    //require_once 'include/lib/mediaresource.factory.php';
+
+    doc_init();
+    
+    $common_docs = false;
+    $basedir = $webDir . '/courses/' . $course_code . '/document';
+    $path = get_dir_path('path');
+    $dir_param = get_dir_path('dir');
+    $dir_setter = $dir_param ? ('&amp;dir=' . $dir_param) : '';
+    $dir_html = $dir_param ? "<input type='hidden' name='dir' value='$dir_param'>" : '';
+    
+    $result = Database::get()->queryArray("SELECT id, course_id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
+                                     WHERE $group_sql AND visible = 1 AND
+                                          path LIKE ?s AND
+                                          path NOT LIKE ?s AND id NOT IN 
+                                        (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'document' AND module = 3)
+                                ORDER BY sort_key COLLATE utf8_unicode_ci",
+                                "$path/%", "$path/%/%", $certificate_id);
+
+    $fileinfo = array();
+    $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code$dir_setter&amp;type=doc&amp;id=$id&amp;path=";
+
+    foreach ($result as $row) {
+        $fullpath = $basedir . $row->path;
+        if ($row->extra_path) {
+            $size = 0;
+        } else {
+            $size = file_exists($fullpath)? filesize($fullpath): 0;
+        }
+        $fileinfo[] = array(
+            'id' => $row->id,
+            'is_dir' => is_dir($fullpath),
+            'size' => $size,
+            'title' => $row->title,
+            'name' => htmlspecialchars($row->filename),
+            'format' => $row->format,
+            'path' => $row->path,
+            'visible' => $row->visible,
+            'comment' => $row->comment,
+            'copyrighted' => $row->copyrighted,
+            'date' => $row->date_modified,
+            'object' => MediaResourceFactory::initFromDocument($row));
+    }
+    if (count($fileinfo) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoDocuments</div>";
+    } else {
+        if (!empty($path)) {
+            $dirname = Database::get()->querySingle("SELECT filename FROM document WHERE $group_sql AND path = ?s", $path);
+            $parentpath = dirname($path);
+            $dirname =  htmlspecialchars($dirname->filename);
+            $parentlink = $urlbase . $parentpath;
+            $parenthtml = "<span class='pull-right'><a href='$parentlink'>$langUp " .
+                    icon('fa-level-up') . "</a></span>";
+            $colspan = 4;
+        }
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />" .
+                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<table class='table-default'>";
+        if( !empty($path)) {
+        $tool_content .=
+                "<tr>" .
+                "<th colspan='$colspan'><div class='text-left'>$langDirectory: $dirname$parenthtml</div></th>" .
+                "</tr>" ;
+        }
+        $tool_content .=
+                "<tr class='list-header'>" .
+                "<th class='text-left'>$langName</th>" .
+                "<th class='text-center'>$langSize</th>" .
+                "<th class='text-center'>$langDate</th>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "</tr>";
+        $counter = 0;
+        foreach (array(true, false) as $is_dir) {
+            foreach ($fileinfo as $entry) {
+                if ($entry['is_dir'] != $is_dir) {
+                    continue;
+                }
+                $dir = $entry['path'];
+                if ($is_dir) {
+                    $image = 'fa-folder-o';
+                    $file_url = $urlbase . $dir;
+                    $link_text = $entry['name'];
+
+                    $link_href = "<a href='$file_url'>$link_text</a>";
+                } else {
+                    $image = choose_image('.' . $entry['format']);
+                    $file_url = file_url($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code);
+
+                    $dObj = $entry['object'];
+                    $dObj->setAccessURL($file_url);
+                    $dObj->setPlayURL(file_playurl($entry['path'], $entry['name'], $common_docs ? 'common' : $course_code));
+
+                    $link_href = MultimediaHelper::chooseMediaAhref($dObj);
+                }
+                if ($entry['visible'] == 'i') {
+                    $vis = 'invisible';
+                } else {
+                    $vis = '';                    
+                }
+                $tool_content .= "<tr class='$vis'>";
+                $tool_content .= "<td>" . icon($image, '')."&nbsp;&nbsp;&nbsp;$link_href";
+
+                /* * * comments ** */
+                if (!empty($entry['comment'])) {
+                    $tool_content .= "<br /><div class='comment'>" .
+                            standard_text_escape($entry['comment']) .
+                            "</div>";
+                }
+                $tool_content .= "</td>";
+                if ($is_dir) {
+                    // skip display of date and time for directories
+                    $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
+                } else {
+                    $size = format_file_size($entry['size']);
+                    $date = nice_format($entry['date'], true, true);
+                    $tool_content .= "<td class='text-right'>$size</td><td class='text-center'>$date</td>";
+                }
+                $tool_content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
+                $tool_content .= "</tr>";
+                $counter++;
+            }
+        }
+        $tool_content .= "</table>";
+        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<input class='btn btn-primary' type='submit' name='add_document' value='$langAddModulesButton' /></div>$dir_html</form>";        
+    }
+}
+
 
 
 function display_available_blogs($certificate_id) {
@@ -586,7 +752,7 @@ function display_available_blogs($certificate_id) {
 function certificate_display_available_Com($certificate_id) {
 
 }
-function certificate_display_available_For($certificate_id) {
+function display_available_forums($certificate_id) {
 
 }
 
@@ -661,201 +827,137 @@ function display_available_lps($certificate_id) {
     }      
 }
 
-function certificate_display_available_Rat($certificate_id){
+function display_available_ratings($certificate_id){
 
 }
+  
 
-function display_available_documents($certificate_id){
+/**
+ * @brief multimedia display form
+ * @global type $tool_content
+ * @global type $themeimg
+ * @global type $course_id
+ * @global type $langTitle
+ * @global type $langDescription
+ * @global type $langDate
+ * @global type $langChoice
+ * @global type $langAddModulesButton
+ * @global type $langNoVideo
+ * @global type $course_code
+ * @param type $certificate_id
+ */
+function display_available_multimedia($certificate_id) {
+          
+    require_once 'include/lib/mediaresource.factory.php';
+    require_once 'include/lib/multimediahelper.class.php';
 
-  global $course_id, $course_code, $tool_content,
-         $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $langNoDocuments;
-
-  $checkForDoc = Database::get()->queryArray("SELECT * FROM document WHERE document.course_id = ?d
-                                              AND document.visible = 1
-                                              AND document.id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'document' AND module = 3)", $course_id, $certificate_id);
-  $checkForDocNumber = count($checkForDoc);
-  if ($checkForDocNumber > 0) {
-      $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>$langJQCheckAll</th>";
-      $tool_content .= "<th class='text-center'>". icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=&amp;type=3")."</th></table>";
-
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescr</th>";
-      $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-      $tool_content .= "</tr>";
-
-      foreach ($checkForDoc as $newExerToCertificate) {
-          //$content = ellipsize_html($newExerToCertificate->description, 50);
-          $tool_content .= "<tr><td><b>";
-          if (!empty($newExerToCertificate->title)) {
-              $tool_content .= q($newExerToCertificate->title);
-          }
-          $tool_content .= "</b>";
-          $tool_content .= "</td>"
-                  . "<td>" . $newExerToCertificate->comment . "</td>";
-          $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=" . $newExerToCertificate->id . "&amp;type=3");
-      }
-      $tool_content .= "</td></tr></table></div></div></div>";
-  } else {
-      $tool_content .= "<div class='alert alert-warning'>$langNoDocuments</div>";
-  }
+    global  $tool_content, $themeimg, $course_id,
+                $langTitle, $langDescription, $langDate, $langChoice,
+                $langAddModulesButton, $langNoVideo, $course_code;
+               
+    $count = 0;
+    $video_found = FALSE;
+    $cnt1 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM video WHERE course_id = ?d", $course_id)->cnt;
+    $cnt2 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE course_id = ?d", $course_id)->cnt;
+    $count = $cnt1 + $cnt2;    
+    if ($count > 0) {
+        $video_found = TRUE;
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" . 
+                        "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+        $tool_content .= "<table class='table-default'>";
+        $tool_content .= "<tr class='list-header'>" .
+                         "<th width='200' class='text-left'>&nbsp;$langTitle</th>" .
+                         "<th class='text-left'>$langDescription</th>" .
+                         "<th width='100'>$langDate</th>" .
+                         "<th width='80'>$langChoice</th>" .
+                         "</tr>";
+        foreach (array('video', 'videolink') as $table) {
+            $result = Database::get()->queryArray("SELECT * FROM $table WHERE (category IS NULL OR category = 0) 
+                                                        AND course_id = ?d
+                                                        AND visible = 1
+                                                        AND id NOT IN 
+                                                (SELECT resource FROM certificate_criterion 
+                                                    WHERE certificate = ?d 
+                                                    AND resource!=''
+                                                    AND activity_type IN ('video','videolink') AND module = 4)", $course_id, $certificate_id);
+            foreach ($result as $row) {
+                $row->course_id = $course_id;
+                if ($table == 'video') {
+                    $vObj = MediaResourceFactory::initFromVideo($row);
+                    $videolink = MultimediaHelper::chooseMediaAhref($vObj);
+                } else {
+                    $vObj = MediaResourceFactory::initFromVideoLink($row);
+                    $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
+                }                
+                $tool_content .= "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . "</td>".
+                                 "<td>" . q($row->description) . "</td>".
+                                 "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
+                                 "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id' /></td>" .
+                                 "</tr>";                
+            }
+        }
+        $sql = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY name", $course_id);
+        if ($sql) {
+            foreach ($sql as $videocat) {
+                $tool_content .= "<tr>";
+                $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;" .
+                                 q($videocat->name) . "</td>";
+                $tool_content .= "<td colspan='2'>" . standard_text_escape($videocat->description) . "</td>";
+                $tool_content .= "<td align='center'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /></td>";
+                $tool_content .= "</tr>";
+                foreach (array('video', 'videolink') as $table) {
+                    $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d
+                                                        AND visible = 1
+                                                        AND id NOT IN 
+                                                    (SELECT resource FROM certificate_criterion 
+                                                        WHERE certificate = ?d 
+                                                        AND resource!=''
+                                                        AND activity_type IN ('video','videolink') AND module = 4)", $videocat->id, $certificate_id);
+                    foreach ($sql2 as $linkvideocat) {
+                            $tool_content .= "<tr>";
+                            $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
+                                    q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
+                            $tool_content .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
+                            $tool_content .= "<td class='text-center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
+                            $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /></td>";
+                            $tool_content .= "</tr>";	
+                    }
+                }
+            }
+        }
+        $tool_content .= "</table><div class='text-right'><input class='btn btn-primary' type='submit' name='add_multimedia' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></form>";
+    }
+    if (!$video_found) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoVideo</div>";
+    }   
 }
 
-function certificate_display_available_Mul($certificate_id){
-  global $course_id, $course_code, $tool_content,
-         $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $langNoInsCert;
-
-  $checkForMul = Database::get()->queryArray("SELECT * FROM video WHERE video.course_id = ?d
-                                              AND video.visible = 1
-                                              AND video.id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'video' AND module = 4)", $course_id, $certificate_id);
-
-  $checkForMulNumber = count($checkForMul);
-  if ($checkForMulNumber > 0) {
-      $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>Επιλογή όλων</th>";
-      $tool_content .= "<th class='text-center'>". icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=&amp;type=4")."</th></table>";
-
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescr</th>";
-      $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-      $tool_content .= "</tr>";
-
-      foreach ($checkForMul as $newExerToCertificate) {
-          //$content = ellipsize_html($newExerToCertificate->description, 50);
-          $tool_content .= "<tr><td><b>";
-          if (!empty($newExerToCertificate->title)) {
-              $tool_content .= q($newExerToCertificate->title);
-          }
-          $tool_content .= "</b>";
-          $tool_content .= "</td>"
-                  . "<td>" . $newExerToCertificate->description . "</td>";
-          $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=" . $newExerToCertificate->id . "&amp;type=4");
-      }
-      $tool_content .= "</td></tr></table></div></div></div>";
-  } else {
-      $tool_content .= "<div class='alert alert-warning'>$langNoInsCert</div>";
-  }
-}
-
-
-function certificate_display_available_Vid($certificate_id){
-
-  global $course_id, $course_code, $tool_content,
-         $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $langNoInsCert;
-
-  $checkForVid = Database::get()->queryArray("SELECT * FROM videolink WHERE videolink.course_id = ?d
-                                              AND videolink.visible = 1
-                                              AND videolink.id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'videolink' AND module = 4)", $course_id, $certificate_id);
-
-  $checkForVidNumber = count($checkForVid);
-  if ($checkForVidNumber > 0) {
-      $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>Επιλογή όλων</th>";
-      $tool_content .= "<th class='text-center'>". icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=&amp;type=4a")."</th></table>";
-
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescr</th>";
-      $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-      $tool_content .= "</tr>";
-
-      foreach ($checkForVid as $newExerToCertificate) {
-          //$content = ellipsize_html($newExerToCertificate->description, 50);
-          $tool_content .= "<tr><td><b>";
-          if (!empty($newExerToCertificate->title)) {
-              $tool_content .= q($newExerToCertificate->title);
-          }
-          $tool_content .= "</b>";
-          $tool_content .= "</td>"
-                  . "<td>" . $newExerToCertificate->description . "</td>";
-          $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=" . $newExerToCertificate->id . "&amp;type=4a");
-      }
-      $tool_content .= "</td></tr></table></div></div></div>";
-  } else {
-      $tool_content .= "<div class='alert alert-warning'>$langNoInsCert</div>";
-  }
-}
 
 function display_available_ebooks($certificate_id){
 
-  global $course_id, $course_code, $tool_content,
-         $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $langNoInsCert;
-
+  /*
   $checkForBook = Database::get()->queryArray("SELECT * FROM ebook WHERE ebook.course_id = ?d
                                               AND ebook.visible = 1
                                               AND ebook.id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'ebook' AND module = 18)", $course_id, $certificate_id);
-
-  $checkForBookNumber = count($checkForBook);
-  if ($checkForBookNumber > 0) {
-      $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>Επιλογή όλων</th>";
-      $tool_content .= "<th class='text-center'>". icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=&amp;type=18")."</th></table>";
-
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>$langTitle</th>";
-      $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-      $tool_content .= "</tr>";
-
-      foreach ($checkForBook as $newExerToCertificate) {
-          //$content = ellipsize_html($newExerToCertificate->description, 50);
-          $tool_content .= "<tr><td><b>";
-          if (!empty($newExerToCertificate->title)) {
-              $tool_content .= q($newExerToCertificate->title);
-          }
-          $tool_content .= "</b>";
-          $tool_content .= "</td>";
-          $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=" . $newExerToCertificate->id . "&amp;type=18");
-      }
-      $tool_content .= "</td></tr></table></div></div></div>";
-  } else {
-      $tool_content .= "<div class='alert alert-warning'>$langNoInsCert</div>";
-  }
+*/
+  $tool_content .= ".. still working on this ..";
 }
 
 function display_available_polls($certificate_id){
 
-  global $course_id, $course_code, $tool_content,
-         $langGradebookActivityDate2, $langDescr, $langAdd, $langAttendanceNoActMessageExe4, $langTitle, $langNoInsCert;
-
-  $checkForPol = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
+  
+  /*$checkForPol = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
                                               AND poll.active = 1
                                               AND poll.pid NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'questionnaire' AND module = 21)", $course_id, $certificate_id);
-
-  $checkForPolNumber = count($checkForPol);
-  if ($checkForPolNumber > 0) {
-      $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>Επιλογή όλων</th>";
-      $tool_content .= "<th class='text-center'>". icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=&amp;type=21")."</th></table>";
-
-      $tool_content .= "<table class='table-default'>";
-      $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescr</th>";
-      $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-      $tool_content .= "</tr>";
-
-      foreach ($checkForPol as $newExerToCertificate) {
-          //$content = ellipsize_html($newExerToCertificate->description, 50);
-          $tool_content .= "<tr><td><b>";
-          if (!empty($newExerToCertificate->name)) {
-              $tool_content .= q($newExerToCertificate->name);
-          }
-          $tool_content .= "</b>";
-          $tool_content .= "</td>"
-                  . "<td>" . $newExerToCertificate->description . "</td>";
-          $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;addCourseActivity=" . $newExerToCertificate->pid . "&amp;type=21");
-      }
-      $tool_content .= "</td></tr></table></div></div></div>";
-  } else {
-      $tool_content .= "<div class='alert alert-warning'>$langNoInsCert</div>";
-  }
+*/
+  $tool_content .= ".. still working on this ..";
 
 }
 
-function certificate_display_available_Wi($certificate_id){
-
+function display_available_wiki($certificate_id) {
+    global $tool_content;
+    
+    $tool_content .= ".. still working on this ..";
 }
 
 
@@ -1005,129 +1107,6 @@ function add_certificate_other_activity_only_value($certificate_id, $type) {
                 </div>";
 }
 
-
-function add_certificate_activity($certificate_id, $id, $type) {
-
-    global $course_id;
-    
-    if ($type == 3) { // docs
-
-       //check if it is for a sing exe
-       if($id!=""){
-            $checkForDoc = Database::get()->queryArray("SELECT * FROM document WHERE document.course_id = ?d
-                                                        AND document.visible = 1
-                                                        AND document.id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'document' AND module = 3) AND document.id = ?d", $course_id, $certificate_id, $id);
-
-            if ($checkForDoc) {
-                $module_auto_id = $id;
-                $module_auto_type = "document";
-
-                return Database::get()->query("INSERT INTO certificate_criterion
-                                            SET certificate = ?d, module=3, resource = ?d, activity_type = ?s",
-                                        $certificate_id, $module_auto_id, $module_auto_type)->lastInsertID;
-            }
-       }else{
-           Database::get()->query("INSERT INTO certificate_criterion
-                                            SET certificate = ?d, module=3, activity_type = 'document'",
-                                        $certificate_id);
-            return 1;
-       }
-    }
-    if ($type == 4){ //mul
-      if($id!=""){
-
-           $checkForMul = Database::get()->queryArray("SELECT * FROM video WHERE video.course_id = ?d
-                                                       AND video.visible = 1
-                                                       AND video.id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'video' AND module = 4) AND video.id = ?d", $course_id, $certificate_id, $id);
-
-           if ($checkForMul) {
-               $module_auto_id = $id;
-               $module_auto_type = "video";
-
-               return Database::get()->query("INSERT INTO certificate_criterion
-                                           SET certificate = ?d, module=4, resource = ?d, activity_type = ?s",
-                                       $certificate_id, $module_auto_id, $module_auto_type)->lastInsertID;
-           }
-      }else{
-          Database::get()->query("INSERT INTO certificate_criterion
-                                           SET certificate = ?d, module=4, activity_type = 'video'",
-                                       $certificate_id);
-           return 1;
-      }
-    }
-    if ($type == "4a"){ //video
-      if($id!=""){
-
-        $checkForVid = Database::get()->queryArray("SELECT * FROM videolink WHERE videolink.course_id = ?d
-                                                    AND videolink.visible = 1
-                                                    AND videolink.id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'videolink' AND module = 4)", $course_id, $certificate_id);
-
-           $checkForVid = Database::get()->queryArray("SELECT * FROM videolink WHERE videolink.course_id = ?d
-                                                       AND videolink.visible = 1
-                                                       AND videolink.id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'videolink' AND module = 4) AND videolink.id = ?d", $course_id, $certificate_id, $id);
-
-           if ($checkForVid) {
-               $module_auto_id = $id;
-               $module_auto_type = "videolink";
-
-               return Database::get()->query("INSERT INTO certificate_criterion
-                                           SET certificate = ?d, module=4, resource = ?d, activity_type = ?s",
-                                       $certificate_id, $module_auto_id, $module_auto_type)->lastInsertID;
-           }
-      }else{
-          Database::get()->query("INSERT INTO certificate_criterion
-                                           SET certificate = ?d, module=4, activity_type = 'videolink'",
-                                       $certificate_id);
-           return 1;
-      }
-    }
-    if ($type == 18){ //ebbok
-      if($id!=""){
-
-          $checkForEbook = Database::get()->queryArray("SELECT * FROM ebook WHERE ebook.course_id = ?d
-                                                    AND ebook.visible = 1
-                                                    AND ebook.id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'ebook' AND module = 18)", $course_id, $certificate_id);
-
-           if ($checkForEbook) {
-               $module_auto_id = $id;
-               $module_auto_type = "ebook";
-
-               return Database::get()->query("INSERT INTO certificate_criterion
-                                           SET certificate = ?d, module=18, resource = ?d, activity_type = ?s",
-                                       $certificate_id, $module_auto_id, $module_auto_type)->lastInsertID;
-           }
-      }else{
-          Database::get()->query("INSERT INTO certificate_criterion
-                                           SET certificate = ?d, module=18, activity_type = 'ebook'",
-                                       $certificate_id);
-           return 1;
-      }
-    }
-    if ($type == 21){ //quest
-      if($id!=""){
-
-          $checkForEbook = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
-                                                    AND poll.active = 1
-                                                    AND poll.pid NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'questionnaire' AND module = 21)", $course_id, $certificate_id);
-
-           if ($checkForEbook) {
-               $module_auto_id = $id;
-               $module_auto_type = "questionnaire";
-
-               return Database::get()->query("INSERT INTO certificate_criterion
-                                           SET certificate = ?d, module=21, resource = ?d, activity_type = ?s",
-                                       $certificate_id, $module_auto_id, $module_auto_type)->lastInsertID;
-           }
-      }else{
-          Database::get()->query("INSERT INTO certificate_criterion
-                                           SET certificate = ?d, module=21, activity_type = 'questionnaire'",
-                                       $certificate_id);
-           return 1;
-      }
-    }
-
-}
-
 /**
  * @brief add / edit certificate settings
  * @global string $tool_content
@@ -1229,4 +1208,41 @@ function certificate_settings($certificate_id = 0) {
                 </div>
             </form>
         </div>";
+}
+
+
+/**
+ * @brief student view certificates
+ * @global type $uid
+ * @global type $course_id
+ */
+function student_view_certificate() {
+    
+    global $uid, $course_id;
+    
+    require_once 'Game.php';
+
+    // check for completeness in order to refresh user data
+    Game::checkCompleteness($uid, $course_id);
+
+    $data = array();
+    $iter = array('certificate', 'badge');
+
+    // initialize data vars for template
+    foreach ($iter as $key) {
+        $data['game_' . $key] = array();
+    }
+
+    // populate with data
+    foreach ($iter as $key) {
+        $gameQ = "select a.*, b.title, "
+                . " b.description, b.active, b.created "
+                . " from user_{$key} a "
+                . " join {$key} b on (a.{$key} = b.id) "
+                . " where a.user = ?d and b.course_id = ?d";
+        Database::get()->queryFunc($gameQ, function($game) use ($key, &$data) {
+            $data['game_' . $key][] = $game;
+        }, $uid, $course_id);
+    }
+    view('modules.game.progress', $data);        
 }

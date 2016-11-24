@@ -22,29 +22,12 @@
 
 require_once 'modules/document/doc_init.php';
 require_once 'include/lib/mediaresource.factory.php';
+require_once 'include/lib/fileManageLib.inc.php';
 
 doc_init();
 
 /**
- * helper function to get a file path from get variable
- * @param string $name
- * @global array $_GET
- * @return string
- */
-function get_dir_path($name) {
-    if (isset($_GET[$name])) {
-        $path = q($_GET[$name]);
-        if ($path == '/' or $path == '\\') {
-            $path = '';
-        }
-    } else {
-        $path = '';
-    }
-    return $path;
-}
-
-/**
- * list documents while inserting them in course unit
+ * @brief list documents while inserting them in course unit
  * @global type $id
  * @global type $webDir
  * @global type $course_code
@@ -54,8 +37,7 @@ function get_dir_path($name) {
  * @global type $langUp
  * @global type $langName
  * @global type $langSize
- * @global type $langDate
- * @global type $langType
+ * @global type $langDate 
  * @global type $langAddModulesButton
  * @global type $langChoice
  * @global type $langNoDocuments
@@ -64,7 +46,7 @@ function get_dir_path($name) {
 function list_docs() {
     global $id, $webDir, $course_code, $tool_content,
     $group_sql, $langDirectory, $langUp, $langName, $langSize,
-    $langDate, $langType, $langAddModulesButton, $langChoice,
+    $langDate, $langAddModulesButton, $langChoice,
     $langNoDocuments, $course_code, $langCommonDocs, $pageName;
 
     $basedir = $webDir . '/courses/' . $course_code . '/document';

@@ -22,9 +22,23 @@
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/multimediahelper.class.php';
 
+/**
+ * @brief list multimedia while inserting them in course unit
+ * @global type $id
+ * @global type $tool_content
+ * @global type $themeimg
+ * @global type $course_id
+ * @global type $langTitle
+ * @global type $langDescription
+ * @global type $langDate
+ * @global type $langChoice
+ * @global type $langAddModulesButton
+ * @global type $langNoVideo
+ * @global type $course_code
+ */
 function list_videos() {
     global $id, $tool_content, $themeimg, $course_id,
-    $langTitle, $langDescription, $langDate, $langChoice, $langCatVideoDirectory,
+    $langTitle, $langDescription, $langDate, $langChoice,
     $langAddModulesButton, $langNoVideo, $course_code;
     
             

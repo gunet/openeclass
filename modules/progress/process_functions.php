@@ -57,7 +57,55 @@ function add_exercise_to_certificate($certificate_id) {
 }
 
 
+/**
+ * @brief add document db entries in certificate criterion
+ * @param type $certificate_id
+ * @return type
+ */
+function add_document_to_certificate($certificate_id) {
+    
+    if (isset($_POST['document'])) {
+        foreach ($_POST['document'] as $data) {           
+           Database::get()->query("INSERT INTO certificate_criterion
+                            SET certificate = ?d, module=3, resource = ?d, activity_type = 'document'",
+                        $certificate_id, $data);              
+            }
+        }
+    return;
+}
 
+
+/**
+ * @brief add multimedia db entries in certificate criterion
+ * @param type $certificate_id
+ */
+function add_multimedia_to_certificate($certificate_id) {
+                
+    if (isset($_POST['video'])) {
+        $d = array();
+        foreach ($_POST['video'] as $data) {
+            $d = explode(":", $data);
+            Database::get()->query("INSERT INTO certificate_criterion
+                                SET certificate = ?d, module=4, resource = ?d, activity_type = ?s",
+                            $certificate_id, $d[1], $d[0])->lastInsertID;
+        }
+    }
+    if (isset($_POST['videocatlink'])) {
+        $d = array();
+        foreach ($_POST['videocatlink'] as $data) {
+            $d = explode(":", $data);
+            Database::get()->query("INSERT INTO certificate_criterion
+                                SET certificate = ?d, module=4, resource = ?d, activity_type = ?s",
+                            $certificate_id, $d[1], $d[0])->lastInsertID;
+        }
+    }
+}
+
+
+/**
+ * @brief add lp db entries in certificate_criterion
+ * @param type $certificate_id
+ */
 function add_lp_to_certificate($certificate_id) {
     
     if (isset($_POST['lp'])) {
@@ -67,6 +115,39 @@ function add_lp_to_certificate($certificate_id) {
                 $certificate_id, $data);
         }
     }
+}
+
+function add_wiki_to_certificate($certificate_id) {
+    
+          
+    if (isset($_POST['wiki'])) {
+        foreach ($_POST['wiki'] as $data) {
+            Database::get()->query("INSERT INTO certificate_criterion
+                        SET certificate = ?d, module=18, resource = ?d, activity_type = 'ebook'",
+                    $certificate_id, $data);
+        }
+    }    
+}
+
+function add_poll_to_certificate($certificate_id) {
+    
+    if (isset($_POST['poll'])) {
+        foreach ($_POST['poll'] as $data) {      
+          Database::get()->query("INSERT INTO certificate_criterion
+                                    SET certificate = ?d, module=21, resource = ?d, activity_type = 'questionnaire'",
+                            $certificate_id, $data);
+        }
+    }
+}
+
+
+function add_ebook_to_certificate($certificate_id) {
+     echo ".. still working...";
+}
+
+
+function add_forum_to_certificate($certificate_id) {
+    echo ".. still working...";
 }
 
 
