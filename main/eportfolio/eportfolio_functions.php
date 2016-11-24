@@ -302,7 +302,7 @@ function process_eportfolio_fields_data() {
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 4) == 'epf_') { //e-portfolio fields input names start with epf_
             $field_name = substr($key, 4);
-            $result = Database::get()->querySingle("SELECT id, required FROM eportfolio_fields WHERE shortname = ?s", $field_name);
+            $result = Database::get()->querySingle("SELECT id, required, datatype FROM eportfolio_fields WHERE shortname = ?s", $field_name);
             $field_id = $result->id;
             $required = $result->required;
             //delete old values if exist
@@ -313,6 +313,9 @@ function process_eportfolio_fields_data() {
             }
             
             if (!empty($value)) {
+                if ($result->datatype == EPF_TEXTAREA) {
+                    $value = purify($value);
+                }
                 Database::get()->query("INSERT INTO eportfolio_fields_data (user_id, field_id, data) VALUES (?d,?d,?s)", $uid, $field_id, $value);
             }
             $updated = true;

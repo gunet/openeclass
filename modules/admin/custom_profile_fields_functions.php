@@ -236,8 +236,11 @@ function process_profile_fields_data($context) {
         foreach ($_POST as $key => $value) {
             if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
                 $field_name = substr($key, 4);
-                $field_id = Database::get()->querySingle("SELECT id FROM custom_profile_fields WHERE shortname = ?s", $field_name)->id;
-                Database::get()->query("INSERT INTO custom_profile_fields_data_pending (user_request_id, field_id, data) VALUES (?d,?d,?s)", $user_request_id, $field_id, $value);
+                $field = Database::get()->querySingle("SELECT id, datatype FROM custom_profile_fields WHERE shortname = ?s", $field_name);
+                if ($field->datatype == CPF_TEXTAREA) {
+                    $value = purify($value);
+                }
+                Database::get()->query("INSERT INTO custom_profile_fields_data_pending (user_request_id, field_id, data) VALUES (?d,?d,?s)", $user_request_id, $field->id, $value);
                 $updated = true;
             }
         }
@@ -246,7 +249,7 @@ function process_profile_fields_data($context) {
         foreach ($_POST as $key => $value) {
             if (substr($key, 0, 4) == 'cpf_') { //custom profile fields input names start with cpf_
                 $field_name = substr($key, 4);
-                $result = Database::get()->querySingle("SELECT id, required FROM custom_profile_fields WHERE shortname = ?s", $field_name);
+                $result = Database::get()->querySingle("SELECT id, required, datatype FROM custom_profile_fields WHERE shortname = ?s", $field_name);
                 $field_id = $result->id;
                 $required = $result->required;
                 if (isset($context['origin']) && ($context['origin'] == 'edit_profile' || $context['origin'] == 'admin_edit_profile')) { //delete old values if exist
@@ -257,6 +260,9 @@ function process_profile_fields_data($context) {
                     }
                 }
                 if (!empty($value)) {
+                    if ($result->datatype == CPF_TEXTAREA) {
+                        $value = purify($value);
+                    }
                     Database::get()->query("INSERT INTO custom_profile_fields_data (user_id, field_id, data) VALUES (?d,?d,?s)", $uid, $field_id, $value);
                 }
                 $updated = true;
