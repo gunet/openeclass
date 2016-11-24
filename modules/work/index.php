@@ -1125,7 +1125,7 @@ function new_assignment() {
            $desc, $language, $head_content, $langMoreOptions, $langLessOptions,
            $langBack, $langSave, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
            $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
-           $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales,
+           $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales, $langGradeRubric,
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
            $langAutoJudgeOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
@@ -1262,6 +1262,12 @@ function new_assignment() {
                             $langGradeScales
                           </label>
                         </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='grading_type' value='2'". ($grading_type ? " checked" : "") .">
+                            $langGradeRubric
+                          </label>
+                        </div>
                     </div>
                 </div>
                 <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
@@ -1271,6 +1277,15 @@ function new_assignment() {
                             $scale_options
                       </select>
                       <span class='help-block'>$scale_error</span>
+                    </div>
+                </div>
+                <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
+                    <label for='title' class='col-sm-2 control-label'>$langGradeRubric:</label>
+                    <div class='col-sm-10'>
+                      <select name='scale' class='form-control' id='rubric' disabled>
+                            $rubric_options
+                      </select>
+                      <span class='help-block'>$rubric_error</span>
                     </div>
                 </div>
                 <div class='form-group".($max_grade_error ? " has-error" : "").($grading_type ? " hidden" : "")."'>
@@ -2919,12 +2934,11 @@ function show_non_submitted($id) {
  * @global type $langDaysLeft
  * @global type $langNoAssign
  * @global type $course_code
- * @global type $langHasExpiredS
  * @global type $langTitle
  */
 function show_student_assignments() {
     global $tool_content, $m, $uid, $course_id, $course_code,
-    $langDaysLeft, $langNoAssign, $course_code, $langTitle, $langHasExpiredS;
+    $langDaysLeft, $langNoAssign, $course_code, $langTitle;
 
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -2964,7 +2978,7 @@ function show_student_assignments() {
             if ($row->time > 0) {
                 $tool_content .= "<br>(<small>$langDaysLeft" . format_time_duration($row->time) . "</small>)";
             } else if($row->deadline){
-                $tool_content .= "<br> (<small><span class='expired'>$langHasExpiredS</span></small>)";
+                $tool_content .= "<br> (<small><span class='expired'>$m[expired]</span></small>)";
             }
             $tool_content .= "</td><td class='text-center'>";
 
@@ -3020,8 +3034,8 @@ function show_student_assignments() {
  */
 function show_assignments() {
     global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign, $langNewAssign,
-           $course_code, $course_id, $langWorksDelConfirm, $langDaysLeft, $m, $langHasExpiredS,
-           $langWarnForSubmissions, $langDelSure, $langGradeScales, $langTitle;
+           $course_code, $course_id, $langWorksDelConfirm, $langDaysLeft, $m,
+           $langWarnForSubmissions, $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics;
 
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
@@ -3035,6 +3049,9 @@ function show_assignments() {
             array('title' => $langGradeScales,
                   'url' => "grading_scales.php?course=$course_code",
                   'icon' => 'fa-sort-alpha-asc',
+                  'level' => 'primary-label'),
+			array('title' => $langGradeRubrics,
+                  'url' => "rubrics.php?course=$course_code",
                   'level' => 'primary-label'),
             ),false);
 
@@ -3075,7 +3092,7 @@ function show_assignments() {
             if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
             } else if((int)$row->deadline){
-                $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
+                $tool_content .= " <br><span class='label label-danger'><small>$m[expired]</small></span>";
             }
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .

@@ -424,9 +424,6 @@ $langcas_logout = "Διεύθυνση σελίδας εξόδου";
 $langcas_ssout = "Ενεργοποίηση CAS Single Sign Out";
 $langcas_cachain = "Αρχείο Αλυσίδας Πιστοποιητικών του εξυπηρετητή CAS";
 $langcas_altauth = "Εναλλακτικός τρόπος πιστοποίησης";
-$langcas_altauth_use = "Χρήση εναλλακτικού τρόπου πιστοποίησης";
-$langcas_altauth_use_all = "Για όλους τους τρόπους πρόσβασης (μέσω web ή mobile app)";
-$langcas_altauth_use_mobile = "Μόνο για επικοινωνία με κινητές συσκευές (mobile app)";
 $langcasusermailattr = "CAS SAML attribute για το e-mail";
 $langcasuserfirstattr = "CAS SAML attribute για το Όνομα";
 $langcasuserlastattr = "CAS SAML attribute για το Επώνυμο";
@@ -4074,6 +4071,21 @@ $langDelWarnUserAssignment = 'Επιβεβαίωση διαγραφής εργα
 $langMyPersoDeadlines = "Οι διορίες μου";
 $langAssignmentWillBeActive = 'Η εργασία θα είναι ενεργή στις';
 $langExportGrades = "Εξαγωγή βαθμολογιών";
+
+$langGradeRubric = "Ρουμπρίκα";
+$langGradeRubrics = "Ρουμπρίκες";
+$langNewGradeRubric = "Δημιουργία ρουμπρίκας";
+$langNoGradeRubrics = 'Δεν έχουν καταχωρηθεί ρουμπρίκες.';
+$langTitleRubric = "Όνομα ρουμπρίκας";
+$langRubricDesc = "Περιγραφή ρουμπρίκας";
+$langRubricCrit = "Κριτήριο";
+$langAddRubricCriteria ="Νέο κριτήριο";
+$langRubricOptions = "Επιλογές ρουμπρίκας";
+$langRubricOption1 = "Να επιτρέπεται η προεπισκόπηση της ρουμπρίκας από τον εκπαιδευόμενο πριν τη βαθμολόγηση";
+$langRubricOption2 = "Προβολή της περιγραφής της ρουμπρίκας κατά τη διάρκεια της βαθμολόγησης";
+$langRubricOption3 = "Προβολή της περιγραφής της ρουμπρίκας σε αυτούς που θα βαθμολογηθούν";
+$langRubricOption4 = "Προβολή των βαθμών κάθε κριτηρίου κατά τη διάρκεια της βαθμολόγησης";
+$langRubricOption5 = "Προβολή των βαθμών κάθε κριτηρίου στα άτομα προς βαθμολόγηση";
 
 /* * ***********************************************************
  * listerqusers.php
