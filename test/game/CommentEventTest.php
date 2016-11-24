@@ -21,7 +21,7 @@
  */
 
 require_once 'AbstractEventTest.php';
-require_once 'modules/game/CommentEvent.php';
+require_once 'modules/progress/CommentEvent.php';
 
 class CommentEventTest extends AbstractEventTest {
     

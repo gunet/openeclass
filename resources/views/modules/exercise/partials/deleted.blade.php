@@ -13,7 +13,7 @@
                     <th>                                              
                     @if ($showScore)
                             <span style='float:right;'>
-                                {{ trans('langQuestionScore') }}: <b>{{ $question->user_score }}</b>
+                                {{ trans('langQuestionScore') }}: <b>{{ round($question->user_score,2) }}</b>
                             </span>
                     @endif
                     </th>

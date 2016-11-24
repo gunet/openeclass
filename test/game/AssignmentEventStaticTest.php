@@ -22,7 +22,7 @@
 
 require_once 'config/config.php';
 require_once 'modules/db/database.php';
-require_once 'modules/game/AssignmentEvent.php';
+require_once 'modules/progress/AssignmentEvent.php';
 
 class AssignmentEventStaticTest extends PHPUnit_Framework_TestCase {
     

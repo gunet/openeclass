@@ -1739,7 +1739,7 @@ $db->query("CREATE TABLE `certificate` (
 
 $db->query("CREATE TABLE `badge` (
   `id` int(11) not null auto_increment primary key,
-  `course` int(11) not null,
+  `course_id` int(11) not null,
   `author` int(11) not null,
   `title` varchar(255) not null,
   `description` text,
@@ -1748,7 +1748,7 @@ $db->query("CREATE TABLE `badge` (
   `created` datetime,
   `expires` datetime,
   index `badge_course` (`course`),
-  foreign key (`course`) references `course` (`id`),
+  foreign key (`course_id`) references `course` (`id`),
   foreign key (`author`) references `user`(`id`)
 )");
 

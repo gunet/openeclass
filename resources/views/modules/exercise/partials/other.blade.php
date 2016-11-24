@@ -96,7 +96,7 @@
                     @if ($showScore)
                         @if (!empty($question->user_choice))
                             <span style='float:right;'>
-                                {{ trans('langQuestionScore') }}: <b>{{ $question->user_score }}/{{ $question->weighting }}</b>
+                                {{ trans('langQuestionScore') }}: <b>{{ round($question->user_score, 2) }}/{{ $question->weighting }}</b>
                             </span>
                         @else
                             <span style='float:right;'>

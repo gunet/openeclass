@@ -21,7 +21,7 @@
  */
 
 require_once 'AbstractEventTest.php';
-require_once 'modules/game/RatingEvent.php';
+require_once 'modules/progress/RatingEvent.php';
 
 class RatingEventTest extends AbstractEventTest {
     

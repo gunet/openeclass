@@ -44,7 +44,7 @@ foreach ($iter as $key) {
             . " from user_{$key} a "
             . " join {$key} b on (a.{$key} = b.id) "
             . " join user u on (u.id = a.user) "
-            . " where b.course = ?d";
+            . " where b.course_id = ?d";
     Database::get()->queryFunc($gameQ, function($game) use ($key, &$data) {
         $data['game_' . $key][] = $game;
     }, $course_id);

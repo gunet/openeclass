@@ -20,7 +20,7 @@
  * ======================================================================== 
  */
 
-require_once 'modules/game/Game.php';
+require_once 'modules/progress/Game.php';
 
 class GameTest extends PHPUnit_Framework_TestCase {
     

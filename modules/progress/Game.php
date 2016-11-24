@@ -73,7 +73,7 @@ class Game extends GameAbstract {
 
         $iter = array('certificate', 'badge');
         foreach ($iter as $key) {
-            $gameQ = "select g.*, '$key' as type from $key g where course = ?d and active = 1 and (expires is null or expires > ?t)";
+            $gameQ = "select g.*, '$key' as type from $key g where course_id = ?d and active = 1 and (expires is null or expires > ?t)";
             Database::get()->queryFunc($gameQ, function($game) use ($key, $uid, &$context) {
                 // get game child-criterion ids
                 $criterionIds = array();

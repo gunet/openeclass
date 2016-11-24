@@ -329,7 +329,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         echo ("
                 <tr class='even'>
                   <th colspan='$colspan' class='odd'><div align='right'>
-                            $langQuestionScore: <b>$questionScore/$questionWeighting</b></div>
+                            $langQuestionScore: <b>" . round($questionScore, 2) . " / $questionWeighting</b></div>
                   </th>
                 </tr>");
     }

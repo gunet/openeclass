@@ -49,12 +49,12 @@
                                 </span>
                             @else
                                 <span style='float:right;'>
-                                    {{ trans('langQuestionScore') }}: <b>{{ $question->user_score }}/{{  $question->weighting }}</b>
+                                    {{ trans('langQuestionScore') }}: <b>{{ round($question->user_score,2) }}/{{  $question->weighting }}</b>
                                 </span>
                             @endif
                         @else
                             <span style='float:right;'>
-                                {{ trans('langQuestionScore') }}: <b>{{ $question->user_score }}/{{  $question->weighting }}</b>
+                                {{ trans('langQuestionScore') }}: <b>{{ round($question->user_score,2) }}/{{  $question->weighting }}</b>
                             </span>
                         @endif
                     @endif

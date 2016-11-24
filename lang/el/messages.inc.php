@@ -1297,8 +1297,8 @@ $langCommentsBlog = "Σχόλια σε blogs";
 $langCommentsCourse = "Σχόλια στο $langsCourse";
 $langForum = "Forum";
 $langLP = "Γραμμή μάθησης";
-$langLikesSocial = "Likes στους κοινωνικούς συνδέσμους";
-$langLikesforum = "Likes στα forum posts";
+$langOfLikesSocial = "Likes στους κοινωνικούς συνδέσμους";
+$langOfLikesForum = "Likes στις περιοχές συζητήσεων";
 $langDoc = "Προβολή εγγράφου";
 $langMult = "Προβολή πολυμέσου";
 $langVideoLink = "Προβολή video link";
@@ -1312,6 +1312,15 @@ $lanfCertNoValMes  = "Αν δεν επιλέξετε τιμή, λαμβάνετ�
 $langNoCertificates = "Δεν έχουν οριστεί πιστοποιητικά";
 $langTemplate = "Πρότυπο";
 $langProgress = "Πρόοδος";
+$langOfAssignment = "Εργασίας";
+$langOfBlog = "Ιστολογίου";
+$langOfMultimediaLinks = "Πολυμεσικών συνδέσμων";
+$langOfEBook = "Ηλεκτρονικού βιβλίου";
+$langOfPoll = "Ερωτηματολογίου";
+$langOfForums = "Περιοχής συζητήσεων";
+$langOfBlogComments = "Σχολίων ιστολογίου";
+$langOfCourseComments = "Σχολίων στο $langsCourse";
+$langOfLearningPath = "Γραμμής μάθησης";
 //------------------------------------
 
 
@@ -2329,7 +2338,7 @@ $langInstructions = "Οδηγίες";
 $langModuleComment_inCurrentLP = "<u>Μόνο</u> για τη συγκεκριμένη γρ. μάθησης";
 $langModuleComment_inCourse = "Εμφανίζεται με την <u>επαναχρησιμοποίηση</u> του αντικειμένου σε άλλη γραμμή μάθησης";
 $langDescriptionCours = "Περιγραφή $langsOfCourse";
-$langDocumentAsModule = "Χρήση Εγγράφου";
+$langDocumentAsModule = "Χρήση Εγγράφο";
 $langDocumentAsModuleLabel = "Εγγράφου";
 $langDocumentInModule = "Έγγραφο σε ενότητα";
 $langEXERCISETypeDesc = "Άσκηση πλατφόρμας";
