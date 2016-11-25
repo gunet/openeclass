@@ -114,6 +114,18 @@ function view($view_file, $view_data = array()) {
     // breadcrumb and page title
     $breadcrumbs = array();
     if (!$is_embedonce and !$is_mobile and $current_module_dir != '/') {
+        // Breadcrumb landing page link
+        if ($landingUrl = get_config('landing_url')) {
+            $landingPageName = get_config('landing_name');
+            if (!$landingPageName) {
+                $landingPageName = trans('langHomePage');
+            }
+            $item['bread_text'] = $landingPageName;
+            $item['bread_href'] = $landingUrl;
+        }
+        array_push($breadcrumbs, $item);
+        unset($item);
+
         // Breadcrumb first entry (home / portfolio)
         if ($session->status != USER_GUEST) {
             if (isset($_SESSION['uid'])) {
@@ -122,13 +134,16 @@ function view($view_file, $view_data = array()) {
                     $item['bread_href'] = $urlAppend . 'main/portfolio.php';
                 }
             } else {
+                $hideStart = true;
                 $item['bread_text'] = trans('langHomePage');
                 if (isset($require_current_course) or $pageName) {
                     $item['bread_href'] = $urlAppend;
                 }
             }
-            array_push($breadcrumbs, $item);
-            unset($item);
+            if (!isset($hideStart)) {
+                array_push($breadcrumbs, $item);
+                unset($item);
+            }
         }
 
         // Breadcrumb course home entry

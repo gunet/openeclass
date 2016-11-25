@@ -92,6 +92,18 @@
                                    <input class='form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='{{ get_config('institution_url') }}'>
                                </div>
                             </div>
+                            <div class='form-group'>
+                               <label for='formLandingName' class='col-sm-2 control-label'>{{ trans('langLandingPageName') }}:</label>
+                               <div class='col-sm-10'>
+                                   <input class='form-control' type='text' name='formLandingName' id='formLandingName' value='{{ get_config('landing_name') }}'>
+                               </div>
+                            </div>
+                            <div class='form-group'>
+                               <label for='formLandingUrl' class='col-sm-2 control-label'>{{ trans('langLandingPageUrl') }}:</label>
+                               <div class='col-sm-10'>
+                                   <input class='form-control' type='text' name='formLandingUrl' id='formLandingUrl' value='{{ get_config('landing_url') }}'>
+                               </div>
+                            </div>
                         </fieldset>
                     </div>
                 </div>

@@ -323,6 +323,8 @@ if (isset($_POST['submit'])) {
     set_config('email_helpdesk', $_POST['formemailhelpdesk']);
     set_config('institution', $_POST['formInstitution']);
     set_config('institution_url', $_POST['formInstitutionUrl']);
+    set_config('landing_url', $_POST['formLandingUrl']);
+    set_config('landing_name', $_POST['formLandingName']);
     set_config('postaddress', $_POST['formpostaddress']);
     set_config('fax', $_POST['formfax']);
     set_config('account_duration', MONTHS * $_POST['formdurationAccount']);
@@ -473,9 +475,9 @@ else {
               }
             })
         });
-        </script>";    
+        </script>";
     // Display link to index.php
-    $data['action_bar'] = 
+    $data['action_bar'] =
         action_bar([
                         [
                             'title' => $langBack,
@@ -495,29 +497,29 @@ else {
     }
 
 
-        $active_ui_languages = explode(' ', get_config('active_ui_languages'));
-        $langdirs = active_subdirs($webDir . '/lang', 'messages.inc.php');
-        $data['sel'] = [];
-        $data['selectable_langs'] = [];
-        $data['cbox_dont_display_login_form'] = get_config('dont_display_login_form') ? 'checked' : '';
-        $data['cbox_hide_login_link'] = get_config('hide_login_link') ? 'checked' : '';
-        foreach ($language_codes as $langcode => $langname) {
-            if (in_array($langcode, $langdirs)) {
-                $loclangname = $langNameOfLang[$langname];
-                if (in_array($langcode, $active_ui_languages)) {
-                    $data['selectable_langs'][$langcode] = $loclangname;
-                }
-                $checked = in_array($langcode, $active_ui_languages) ? ' checked' : '';
-                $data['sel'][] = "<div class='checkbox'>
+    $active_ui_languages = explode(' ', get_config('active_ui_languages'));
+    $langdirs = active_subdirs($webDir . '/lang', 'messages.inc.php');
+    $data['sel'] = [];
+    $data['selectable_langs'] = [];
+    $data['cbox_dont_display_login_form'] = get_config('dont_display_login_form') ? 'checked' : '';
+    $data['cbox_hide_login_link'] = get_config('hide_login_link') ? 'checked' : '';
+    foreach ($language_codes as $langcode => $langname) {
+        if (in_array($langcode, $langdirs)) {
+            $loclangname = $langNameOfLang[$langname];
+            if (in_array($langcode, $active_ui_languages)) {
+                $data['selectable_langs'][$langcode] = $loclangname;
+            }
+            $checked = in_array($langcode, $active_ui_languages) ? ' checked' : '';
+            $data['sel'][] = "
+                        <div class='checkbox'>
                             <label>
                                 <input type='checkbox' name='av_lang[]' value='$langcode'$checked>
                                 $loclangname
                             </label>
                         </div>";
 
-            }
         }
-
+    }
 
     $data['cbox_course_multidep'] = get_config('course_multidep') ? 'checked' : '';
     $data['cbox_user_multidep']  = get_config('user_multidep') ? 'checked' : '';
@@ -555,12 +557,9 @@ else {
     $data['cbox_login_fail_check'] = get_config('login_fail_check') ? 'checked' : '';
     $data['id_enable_mobileapi'] = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
 
-
-
     $data['cbox_disable_log_actions'] = get_config('disable_log_actions') ? 'checked' : '';
     $data['cbox_disable_log_course_actions'] = get_config('disable_log_course_actions') ? 'checked' : '';
     $data['cbox_disable_log_system_actions'] = get_config('disable_log_system_actions') ? 'checked' : '';
-
 
 }
 $data['menuTypeID'] = 3;
