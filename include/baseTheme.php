@@ -385,6 +385,18 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_block('mainBlock', 'breadCrumbLinkBlock', 'breadCrumbLink');
         $t->set_block('mainBlock', 'breadCrumbEntryBlock', 'breadCrumbEntry');
 
+        // Breadcrumb landing page link
+        $showStart = true; 
+        if ($landingUrl = get_config('landing_url')) {
+            $landingPageName = get_config('landing_name');
+            if (!$landingPageName) {
+                $landingPageName = $langHomePage;
+            }
+            $t->set_var('BREAD_TEXT', $landingPageName);
+            $t->set_var('BREAD_HREF', $landingUrl);
+            $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
+        }
+
         // Breadcrumb first entry (home / portfolio)
         if ($session->status != USER_GUEST) {
             if (isset($_SESSION['uid'])) {
@@ -393,12 +405,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             } else {
                 $t->set_var('BREAD_TEXT', $langHomePage);
                 $t->set_var('BREAD_HREF', $urlAppend);
+                $showStart = false;
             }
 
-            if (isset($require_current_course) or $pageName) {
-                $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
-            } else {
-                $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
+            if ($showStart) {
+                if (isset($require_current_course) or $pageName) {
+                    $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
+                } else {
+                    $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
+                }
             }
         }
 

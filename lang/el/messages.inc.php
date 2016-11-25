@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2016  Greek Universities Network - GUnet
@@ -2140,6 +2140,8 @@ $langCampusName = "Όνομα Πλατφόρμας";
 $langInstituteShortName = "Όνομα Ιδρύματος - Οργανισμού";
 $langInstituteName = "Website Ιδρύματος - Οργανισμού";
 $langInstitutePostAddress = "Ταχ. Διεύθυνση Ιδρύματος - Οργανισμού";
+$langLandingPageUrl = 'URL αρχικής σελίδας πλατφόρμας';
+$langLandingPageName = 'Τίτλος αρχικής σελίδας πλατφόρμας';
 $langWarnHelpDesk = "Προσοχή: στο \"Email Helpdesk\" στέλνονται οι αιτήσεις καθηγητών για λογαριασμό στην πλατφόρμα";
 $langDBSettingIntro = "Το πρόγραμμα εγκατάστασης θα δημιουργήσει την βάση δεδομένων της πλατφόρμας αν δεν υπάρχει.";
 $langStep1 = "Βήμα %d από %d";

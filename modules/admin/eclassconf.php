@@ -321,6 +321,8 @@ if (isset($_POST['submit'])) {
     set_config('email_helpdesk', $_POST['formemailhelpdesk']);
     set_config('institution', $_POST['formInstitution']);
     set_config('institution_url', $_POST['formInstitutionUrl']);
+    set_config('landing_url', $_POST['formLandingUrl']);
+    set_config('landing_name', $_POST['formLandingName']);
     set_config('postaddress', $_POST['formpostaddress']);
     set_config('fax', $_POST['formfax']);
     set_config('account_duration', MONTHS * $_POST['formdurationAccount']);
@@ -551,6 +553,18 @@ else {
                            <label for='formInstitutionUrl' class='col-sm-2 control-label'>$langInstituteName:</label>
                            <div class='col-sm-10'>
                                <input class='form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='" . $InstitutionUrl . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formLandingName' class='col-sm-2 control-label'>$langLandingPageName:</label>
+                           <div class='col-sm-10'>
+                               <input class='form-control' type='text' name='formLandingName' id='formLandingName' value='" . q(get_config('landing_name')) . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formLandingUrl' class='col-sm-2 control-label'>$langLandingPageUrl:</label>
+                           <div class='col-sm-10'>
+                               <input class='form-control' type='text' name='formLandingUrl' id='formLandingUrl' value='" . q(get_config('landing_url')) . "'>
                            </div>
                         </div>
                     </fieldset>
