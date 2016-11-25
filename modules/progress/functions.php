@@ -258,9 +258,9 @@ function display_certificate_activities($certificate_id) {
                         </tr>";
         foreach ($result as $details) {
             if ($details->activity_type == ExerciseEvent::ACTIVITY) {
-                $checkForExer = Database::get()->queryArray("SELECT title FROM exercise WHERE exercise.course_id = ?d AND exercise.id = ?d", $course_id, $details->resource);
-                foreach ($checkForExer as $newExerToCertificate) {
-                    $title = $newExerToCertificate->title;
+                $cer_res = Database::get()->queryArray("SELECT title FROM exercise WHERE exercise.course_id = ?d AND exercise.id = ?d", $course_id, $details->resource);
+                foreach ($cer_res as $res_data) {
+                    $title = $res_data->title;
                 }
                 $type = "$langCategoryExcercise";
                 if ($details->resource == "") {
@@ -268,9 +268,9 @@ function display_certificate_activities($certificate_id) {
                 }
             }
             if ($details->activity_type == AssignmentEvent::ACTIVITY) {
-                $checkForExer = Database::get()->queryArray("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $details->resource);
-                foreach ($checkForExer as $newExerToCertificate) {
-                        $title = $newExerToCertificate->title;
+                $cer_res = Database::get()->queryArray("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $details->resource);
+                foreach ($cer_res as $res_data) {
+                        $title = $res_data->title;
                 }
                 $type = "$langCategoryEssay";
                 if ($details->resource == "") {
@@ -279,9 +279,9 @@ function display_certificate_activities($certificate_id) {
             }
 
             if ($details->activity_type == LearningPathEvent::ACTIVITY) {
-                $checkForExer = Database::get()->queryArray("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $details->resource);
-                foreach ($checkForExer as $newExerToCertificate) {
-                        $title = $newExerToCertificate->name;
+                $cer_res = Database::get()->queryArray("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $details->resource);
+                foreach ($cer_res as $res_data) {
+                        $title = $res_data->name;
                 }
                 $type = "$langLearningPath";
                 if ($details->resource == "") {
@@ -290,9 +290,10 @@ function display_certificate_activities($certificate_id) {
             }
 
             if ($details->activity_type == ViewingEvent::DOCUMENT_ACTIVITY) {
-                $checkForExer = Database::get()->queryArray("SELECT title FROM document WHERE document.course_id = ?d AND document.id = ?d", $course_id, $details->resource);
-                foreach ($checkForExer as $newExerToCertificate) {
-                    $title = $newExerToCertificate->title;
+                $cer_res = Database::get()->queryArray("SELECT IF(title = '', filename, title) AS file_details FROM document 
+                        WHERE document.course_id = ?d AND document.id = ?d", $course_id, $details->resource);                
+                foreach ($cer_res as $res_data) {
+                    $title = $res_data->file_details;
                 }
                 $type = "$langDocument";
                 if ($details->resource == "") {
@@ -301,9 +302,9 @@ function display_certificate_activities($certificate_id) {
             }
 
             if ($details->activity_type == ViewingEvent::VIDEO_ACTIVITY){
-                $checkForExer = Database::get()->queryArray("SELECT title FROM video WHERE video.course_id = ?d AND video.id = ?d", $course_id, $details->resource);
-                foreach ($checkForExer as $newExerToCertificate) {
-                    $title = $newExerToCertificate->title;
+                $cer_res = Database::get()->queryArray("SELECT title FROM video WHERE video.course_id = ?d AND video.id = ?d", $course_id, $details->resource);
+                foreach ($cer_res as $res_data) {
+                    $title = $res_data->title;
                 }
                 $type = "$langVideo";
                 if ($details->resource == "") {
@@ -312,9 +313,9 @@ function display_certificate_activities($certificate_id) {
             }
 
             if ($details->activity_type == ViewingEvent::VIDEOLINK_ACTIVITY){
-                $checkForExer = Database::get()->queryArray("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $details->resource);
-                foreach ($checkForExer as $newExerToCertificate) {
-                    $title = $newExerToCertificate->title;
+                $cer_res = Database::get()->queryArray("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $details->resource);
+                foreach ($cer_res as $res_data) {
+                    $title = $res_data->title;
                 }
                 $type = "$langsetvideo";
                 if($details->resource == ""){
@@ -323,9 +324,9 @@ function display_certificate_activities($certificate_id) {
             }
 
             if ($details->activity_type == ViewingEvent::EBOOK_ACTIVITY){
-                $checkForExer = Database::get()->queryArray("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $details->resource);
-                foreach ($checkForExer as $newExerToCertificate) {
-                    $title = $newExerToCertificate->title;
+                $cer_res = Database::get()->queryArray("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $details->resource);
+                foreach ($cer_res as $res_data) {
+                    $title = $res_data->title;
                 }
                 $type = "$langEBook";
                 if ($details->resource == "") {
@@ -334,9 +335,9 @@ function display_certificate_activities($certificate_id) {
             }
 
             if ($details->activity_type == ViewingEvent::QUESTIONNAIRE_ACTIVITY){
-                $checkForExer = Database::get()->queryArray("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $details->resource);
-                foreach ($checkForExer as $newExerToCertificate) {
-                    $title = $newExerToCertificate->name;
+                $cer_res = Database::get()->queryArray("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $details->resource);
+                foreach ($cer_res as $res_data) {
+                    $title = $res_data->name;
                 }
                 $type = "$langMetaQuestionnaire";
                 if ($details->resource == "") {
@@ -419,9 +420,9 @@ function display_certificate_activities($certificate_id) {
  * @param type $activity
  */
 function insert_activity($certificate_id, $activity) {
-                            
+                                
     switch ($activity) {
-        case 'assignment':        
+        case 'assignment':            
             display_available_assignments($certificate_id);
             break;
         case 'exercise':

@@ -254,7 +254,7 @@ if ($is_editor) {
             ));
     } elseif(isset($_GET['add'])) {
             $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id", "name" => $certificate->title);        
-            $pageName = $langGradebookAddActivity;        
+            $pageName = "$langAdd $langOfGradebookActivity";
             $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id",
@@ -328,7 +328,6 @@ if ($is_editor) {
             Session::Messages("$langGradebookEdit", "alert-success");
             redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id");
         }
-
     }
 
     elseif (isset($_GET['delete'])) { // delete certificate activity
@@ -362,7 +361,8 @@ if (isset($display) and $display == TRUE) {
             display_certificates();
         }
     } else {
-        student_view_certificate(); // student view
+        student_view_certificate();
+        exit;// student view
     }
 }
 
