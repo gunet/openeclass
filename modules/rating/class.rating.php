@@ -586,6 +586,11 @@ Class Rating {
             }
         }
         
+        global $session;
+        if (!$session->status) {//anonymous (this rule is checked after previous check on anonymous users being allowed to rate course home)
+            return false;
+        }
+        
         if ($isEditor) {//teacher is always allowed to rate
         	return true;
         } else {

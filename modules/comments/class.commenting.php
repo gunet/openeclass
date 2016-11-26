@@ -195,6 +195,10 @@ Class Commenting {
      * @return boolean
      */
     public static function permCreate($isEditor, $uid, $courseId) {
+        global $session;
+        if (!$session->status) {//anonymous
+            return false;
+        }
         if ($isEditor) {//teacher is always allowed to create
             return true;
         } else {
