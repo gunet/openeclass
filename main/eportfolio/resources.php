@@ -26,6 +26,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/group/group_functions.php';
+require_once 'modules/sharing/sharing.php';
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
@@ -567,7 +568,13 @@ if ($userdata) {
                             </div>";
         }
         
-        $tool_content .= '</div>';
+        if ($userdata->eportfolio_enable == 1) {
+            $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/resources.php?id=".$id, $langUserePortfolio)."</div>";
+        } else {
+            $social_share = '';
+        }
+        
+        $tool_content .= $social_share.'</div>';
     }
 }
 
