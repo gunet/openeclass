@@ -15,8 +15,8 @@ $head_content .= "<script type='text/javascript'>
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-right',
                 language: '".$language."',
-                autoclose: true    
-            });            
+                autoclose: true
+            });
         });
     </script>";
 
@@ -179,13 +179,13 @@ if (isset($_GET['stats_submit'])) {
                                               <th class='col-xs-3'>$langCreationDate</th>
                                               <th class='col-xs-1'>$langActions</th>";
         if (!empty($query)) {
-            $sql = Database::get()->queryArray("SELECT course.id, course.code, visible, title, prof_names, DATE_FORMAT(created, '%d-%m-%Y %h:%m') AS creation_time
+            $sql = Database::get()->queryArray("SELECT course.id, course.code, course.visible, title, prof_names, DATE_FORMAT(created, '%d-%m-%Y %h:%m') AS creation_time
                                             FROM course, course_department, hierarchy
                                                 WHERE course.id = course_department.course
                                                 AND hierarchy.id = course_department.department $query
                                                 ORDER by creation_time DESC", $terms);
         } else { // get all courses
-            $sql = Database::get()->queryArray("SELECT course.id, course.code, visible, title, prof_names, DATE_FORMAT(created, '%d-%m-%Y %h:%m') AS creation_time
+            $sql = Database::get()->queryArray("SELECT course.id, course.code, course.visible, title, prof_names, DATE_FORMAT(created, '%d-%m-%Y %h:%m') AS creation_time
                                 FROM course, course_department, hierarchy
                                     WHERE course.id = course_department.course
                                     AND hierarchy.id = course_department.department
@@ -252,7 +252,7 @@ if (isset($_GET['stats_submit'])) {
     $tool_content .= "<div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>
                             <input class='btn btn-primary' type='submit' name='stats_submit' value='$langSubmit'>
-                            <a href='index.php' class='btn btn-default'>$langCancel</a>        
+                            <a href='index.php' class='btn btn-default'>$langCancel</a>
                         </div>
           </div>";
     $tool_content .= "</fieldset></form></div>";
