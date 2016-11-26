@@ -252,6 +252,10 @@ Class BlogPost {
      * @return boolean
      */
     public function permEdit($isEditor, $studConfigVal, $uid) {
+        global $session;
+        if (!$session->status) {
+            return false;
+        }
         if ($isEditor) {//teacher is always allowed to edit
             return true;
         } else {

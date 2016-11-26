@@ -204,6 +204,10 @@ Class Comment {
      * @return boolean
      */
     public function permEdit($isEditor, $uid) {
+        global $session;
+        if (!$session->status) {//anonymous
+            return false;
+        }
         if ($isEditor) {//teacher is always allowed to edit
             return true;
         } else {
