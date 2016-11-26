@@ -30,6 +30,10 @@ require_once 'modules/document/doc_init.php';
 require_once 'modules/wall/ExtVideoUrlParser.class.php';
 
 function allow_to_post($course_id, $user_id, $is_editor) {
+    global $session;
+    if (!$session->status) {
+        return false;
+    }
     if ($is_editor) {
         return true;
     } else {
@@ -44,6 +48,10 @@ function allow_to_post($course_id, $user_id, $is_editor) {
 }
 
 function allow_to_edit($post_id, $user_id, $is_editor) {
+    global $session;
+    if (!$session->status) {
+        return false;
+    }
     if ($is_editor) {
         global $course_id;
         $sql = "SELECT COUNT(`id`) as c FROM `wall_post` WHERE `id` = ?d AND `course_id` = ?d";

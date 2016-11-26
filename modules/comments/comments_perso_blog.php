@@ -29,7 +29,7 @@ if (get_config('personal_blog_commenting')) {
     $response = array();
     
     if ($_POST['action'] == 'new') {
-        if (isset($_SESSION['uid'])) {
+        if (isset($_SESSION['uid']) && $session->status) {
             $comment = new Comment();
             if ($comment->create($_POST['commentText'], $uid, $_POST['rtype'], intval($_POST['rid']))) {
                 $post_actions = '<div class="pull-right">';
@@ -72,7 +72,7 @@ if (get_config('personal_blog_commenting')) {
         $comment = new Comment();
         if ($comment->loadFromDB(intval($_POST['cid']))) {
             $permEdit = false;
-            if (isset($_SESSION['uid'])) {
+            if (isset($_SESSION['uid']) && $session->status) {
                 if ($comment->getAuthor() == $uid) {
                     $permEdit = true;
                 }
@@ -105,7 +105,7 @@ if (get_config('personal_blog_commenting')) {
         $comment = new Comment();
         if ($comment->loadFromDB(intval($_POST['cid']))) {
             $permEdit = false;
-            if (isset($_SESSION['uid'])) {
+            if (isset($_SESSION['uid']) && $session->status) {
                 if ($comment->getAuthor() == $uid) {
                     $permEdit = true;
                 }
@@ -135,7 +135,7 @@ if (get_config('personal_blog_commenting')) {
         $comment = new Comment();
         if ($comment->loadFromDB(intval($_POST['cid']))) {
             $permEdit = false;
-            if (isset($_SESSION['uid'])) {
+            if (isset($_SESSION['uid']) && $session->status) {
                 if ($comment->getAuthor() == $uid) {
                     $permEdit = true;
                 }

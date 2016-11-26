@@ -282,7 +282,8 @@ Class Blog {
      * @return boolean
      */
     public function permCreate($isEditor, $studConfigVal, $uid) {
-        if (!$uid) {
+        global $session;
+        if (!$session->status) {//anonymous user
             return false;
         }
         if ($isEditor) {//teacher is always allowed to create
