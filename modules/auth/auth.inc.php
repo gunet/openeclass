@@ -1162,6 +1162,7 @@ function shib_cas_login($type) {
 
     $_SESSION['canChangePassword'] = false;
     $autoregister = get_config('alt_auth_stud_reg') == 2;
+    $verified_mail = EMAIL_UNVERIFIED;
 
     if ($type == 'shibboleth') {
         $uname = $_SESSION['shib_uname'];
@@ -1181,6 +1182,10 @@ function shib_cas_login($type) {
         $givenname = $_SESSION['cas_givenname'];
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
         $am = isset($_SESSION['cas_userstudentid']) ? $_SESSION['cas_userstudentid'] : '';
+    }
+    if ($email) {
+        // Email is considered verified if it came from CAS or Shibboleth
+        $verified_mail = EMAIL_VERIFIED;
     }
 
     // Attributes passed to login_hook()
@@ -1273,10 +1278,8 @@ function shib_cas_login($type) {
         }
     } elseif ($autoregister and !(get_config('am_required') and empty($am))) {
         // if user not found and autoregister enabled, create user
-        $verified_mail = EMAIL_UNVERIFIED;
-        if (isset($_SESSION['cas_email'])) {
-            $verified_mail = EMAIL_VERIFIED;
-        } else { // redirect user to mail_verify_change.php
+        if (!$verified_mail) {
+            // redirect user to mail_verify_change.php
             $_SESSION['mail_verification_required'] = 1;
         }
 
