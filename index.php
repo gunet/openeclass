@@ -65,22 +65,6 @@ if (isset($dbname)) {
 }
 unset($dbname);
 
-// if we try to login... then authenticate user.
-$warning = '';
-if (isset($_SESSION['shib_uname'])) {
-    // authenticate via shibboleth
-    shib_cas_login('shibboleth');
-} elseif (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) {
-    // authenticate via cas
-    shib_cas_login('cas');
-} elseif (isset($_GET['provider'])) {
-    //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
-    hybridauth_login();
-} else {
-    // normal authentication
-    process_login();
-}
-
 if (isset($_SESSION['uid'])) {
     $uid = $_SESSION['uid'];
 } else {
@@ -114,6 +98,22 @@ if (isset($_GET['logout']) and $uid) {
             phpCAS::logoutWithRedirectService($urlServer);
         }
     }
+}
+
+// if we try to login... then authenticate user.
+$warning = '';
+if (isset($_SESSION['shib_uname'])) {
+    // authenticate via shibboleth
+    shib_cas_login('shibboleth');
+} elseif (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) {
+    // authenticate via cas
+    shib_cas_login('cas');
+} elseif (isset($_GET['provider'])) {
+    //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
+    hybridauth_login();
+} else {
+    // normal authentication
+    process_login();
 }
 
 // if the user logged in include the correct language files
