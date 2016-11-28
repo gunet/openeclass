@@ -1242,8 +1242,8 @@ function shib_cas_login($type) {
 
             // update user information
             Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s,
-                                           status = ?d WHERE id = ?d",
-                                        $surname, $givenname, $email, $status, $info->id);
+                                           status = ?d, verified_mail = ?d WHERE id = ?d",
+                    $surname, $givenname, $email, $status, $info->id, $verified_mail);
             if (!empty($am) and $info->am != $am) {
                 Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
                     $am, $info->id);
