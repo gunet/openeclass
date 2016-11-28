@@ -1,11 +1,9 @@
 <?php
-
-session_start();
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -27,6 +25,8 @@ session_start();
  * is not logged in.
  *
  */
+
+session_start();
 
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
 if (preg_match('|/courses/([a-zA-Z_-]*\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
@@ -63,23 +63,6 @@ if (isset($dbname)) {
 }
 unset($dbname);
 
-// if we try to login... then authenticate user.
-$warning = '';
-if (isset($_SESSION['shib_uname'])) {
-    // authenticate via shibboleth
-    shib_cas_login('shibboleth');
-} elseif (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) {
-    // authenticate via cas
-    shib_cas_login('cas');
-} elseif (isset($_GET['provider'])) {
-    //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
-    hybridauth_login();
-} else {
-    // normal authentication
-    process_login();
-}
-$data['warning'] = $warning;
-
 if (isset($_SESSION['uid'])) {
     $uid = $_SESSION['uid'];
 } else {
@@ -114,6 +97,23 @@ if (isset($_GET['logout']) and $uid) {
         }
     }
 }
+
+// if we try to login... then authenticate user.
+$warning = '';
+if (isset($_SESSION['shib_uname'])) {
+    // authenticate via shibboleth
+    shib_cas_login('shibboleth');
+} elseif (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) {
+    // authenticate via cas
+    shib_cas_login('cas');
+} elseif (isset($_GET['provider'])) {
+    //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
+    hybridauth_login();
+} else {
+    // normal authentication
+    process_login();
+}
+$data['warning'] = $warning;
 
 // if the user logged in include the correct language files
 // in case he has a different language set in his/her profile
