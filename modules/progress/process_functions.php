@@ -28,11 +28,19 @@
  */
 function add_assignment_to_certificate($certificate_id) {
             
-    if (isset($_POST['assignment'])) {
-        foreach ($_POST['assignment'] as $data) {
+    if (isset($_POST['assignment'])) {        
+        foreach ($_POST['assignment'] as $datakey => $data) {
             Database::get()->query("INSERT INTO certificate_criterion
-                    SET certificate = ?d, module=5, resource = ?d, activity_type = 'assignment'",
-                $certificate_id, $data);
+                                    SET certificate = ?d, 
+                                        module= " . MODULE_ID_ASSIGN . ", 
+                                        resource = ?d, 
+                                        activity_type = 'assignment', 
+                                        operator = ?s, 
+                                        threshold = ?f",
+                                    $certificate_id, 
+                                    $_POST['assignment'][$datakey], 
+                                    $_POST['operator'][$datakey], 
+                                    $_POST['threshold'][$datakey]);
         }
     }
     return;    
@@ -47,10 +55,18 @@ function add_assignment_to_certificate($certificate_id) {
 function add_exercise_to_certificate($certificate_id) {
     
     if (isset($_POST['exercise'])) {
-        foreach ($_POST['exercise'] as $data) {    
+        foreach ($_POST['exercise'] as $datakey => $data) {    
             Database::get()->query("INSERT INTO certificate_criterion
-                    SET certificate = ?d, module = 10, resource = ?d, activity_type = 'exercise'",
-                $certificate_id, $data);
+                                    SET certificate = ?d, 
+                                        module = " . MODULE_ID_EXERCISE . ", 
+                                        resource = ?d, 
+                                        activity_type = 'exercise', 
+                                        operator = ?s, 
+                                        threshold = ?f",
+                                    $certificate_id, 
+                                    $_POST['exercise'][$datakey],
+                                    $_POST['operator'][$datakey],
+                                    $_POST['threshold'][$datakey]);
         }
     }
     return;
@@ -67,7 +83,10 @@ function add_document_to_certificate($certificate_id) {
     if (isset($_POST['document'])) {
         foreach ($_POST['document'] as $data) {           
            Database::get()->query("INSERT INTO certificate_criterion
-                            SET certificate = ?d, module=3, resource = ?d, activity_type = 'document'",
+                            SET certificate = ?d, 
+                                module= " . MODULE_ID_DOCS . ",
+                                resource = ?d, 
+                                activity_type = 'document'",
                         $certificate_id, $data);              
             }
         }
@@ -86,7 +105,7 @@ function add_multimedia_to_certificate($certificate_id) {
         foreach ($_POST['video'] as $data) {
             $d = explode(":", $data);
             Database::get()->query("INSERT INTO certificate_criterion
-                                SET certificate = ?d, module=4, resource = ?d, activity_type = ?s",
+                                SET certificate = ?d, module= " . MODULE_ID_VIDEO . ", resource = ?d, activity_type = ?s",
                             $certificate_id, $d[1], $d[0])->lastInsertID;
         }
     }
@@ -95,10 +114,11 @@ function add_multimedia_to_certificate($certificate_id) {
         foreach ($_POST['videocatlink'] as $data) {
             $d = explode(":", $data);
             Database::get()->query("INSERT INTO certificate_criterion
-                                SET certificate = ?d, module=4, resource = ?d, activity_type = ?s",
+                                SET certificate = ?d, module = " . MODULE_ID_VIDEO . ", resource = ?d, activity_type = ?s",
                             $certificate_id, $d[1], $d[0])->lastInsertID;
         }
     }
+    return;
 }
 
 
@@ -109,24 +129,33 @@ function add_multimedia_to_certificate($certificate_id) {
 function add_lp_to_certificate($certificate_id) {
     
     if (isset($_POST['lp'])) {
-        foreach ($_POST['lp'] as $data) {
+        foreach ($_POST['lp'] as $datakey => $data) {
             Database::get()->query("INSERT INTO certificate_criterion
-                    SET certificate = ?d, module = 23, resource = ?d ,activity_type = 'learning path'",
-                $certificate_id, $data);
+                                SET certificate = ?d, 
+                                module = " . MODULE_ID_LP . ", 
+                                resource = ?d,
+                                activity_type = 'learning path',
+                                operator = ?s, 
+                                threshold = ?f",
+                            $certificate_id, 
+                            $_POST['lp'][$datakey],
+                            $_POST['operator'][$datakey],
+                            $_POST['threshold'][$datakey]);                
         }
     }
+    return;
 }
 
 function add_wiki_to_certificate($certificate_id) {
-    
-          
+              
     if (isset($_POST['wiki'])) {
         foreach ($_POST['wiki'] as $data) {
             Database::get()->query("INSERT INTO certificate_criterion
                         SET certificate = ?d, module=18, resource = ?d, activity_type = 'ebook'",
                     $certificate_id, $data);
         }
-    }    
+    }
+    return;
 }
 
 function add_poll_to_certificate($certificate_id) {
@@ -138,6 +167,7 @@ function add_poll_to_certificate($certificate_id) {
                             $certificate_id, $data);
         }
     }
+    return;
 }
 
 

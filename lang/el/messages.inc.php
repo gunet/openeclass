@@ -1263,8 +1263,8 @@ $langMaxValue = "Μέγιστη";
 $langRefreshList = "Ανανέωση λίστας";
 $langStudLastSemester = "$langStudents μόνο τελευταίου τριμήνου";
 $langAllRegStudents = "Όλοι οι εγγεγραμμένοι";
-$langNoRegStudent = "Δεν υπάρχουν εκπαιδευόμενοι που συμμετέχουν στο βαθμολόγιο. Μπορείτε να προσθέσετε εκπαιδευόμενους κάνοντας κλικ";
-$langNoStudents = "Δεν υπάρχουν εκπαιδευόμενοι στο διάστημα που επιλέξατε";
+$langNoRegStudent = "Δεν υπάρχουν $langsStudents που συμμετέχουν στο βαθμολόγιο. Μπορείτε να προσθέσετε εκπαιδευόμενους κάνοντας κλικ";
+$langNoStudents = "Δεν υπάρχουν $langsStudents στο διάστημα που επιλέξατε";
 $langNoStudentsInAttendance = "Δεν υπάρχουν $langsStudents στο παρουσιολόγιο";
 $langUsersGradebook = "$langStudents βαθμολογίου";
 $langNoGradebook = "Δεν συμμετέχετε σε $langsCourses με βαθμολόγηση.";
@@ -1321,6 +1321,7 @@ $langOfForums = "Περιοχής συζητήσεων";
 $langOfBlogComments = "Σχολίων ιστολογίου";
 $langOfCourseComments = "Σχολίων στο $langsCourse";
 $langOfLearningPath = "Γραμμής μάθησης";
+$langNoCertificateUsers = "Δεν υπάρχουν $langsStudents που συμμετέχουν στο συγκεκριμένο πιστοποιητικό.";
 //------------------------------------
 
 

@@ -50,4 +50,4 @@ foreach ($iter as $key) {
     }, $course_id);
 }
 
-view('modules.game.progressall', $data);
+view('modules.progress.progressall', $data);

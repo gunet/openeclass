@@ -40,22 +40,14 @@ require_once 'ViewingEvent.php';
 
 $toolName = $langCertificates;
 
-//Datepicker
 load_js('tools.js');
 load_js('jquery');
-load_js('bootstrap-datetimepicker');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 
 @$head_content .= "
 <script type='text/javascript'>
-$(function() {
-    $('#startdatepicker, #enddatepicker').datetimepicker({
-            format: 'dd-mm-yyyy',
-            pickerPosition: 'bottom-left',
-            language: '".$language."',
-            autoclose: true
-        });
+$(function() {    
     var oTable = $('#users_table{$course_id}').DataTable ({
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -282,55 +274,8 @@ if ($is_editor) {
     }
     $tool_content .= "</div></div>";
     //end of the top menu
-   
-
-    //FORM: create / edit new activity
-    if(isset($_GET['addActivity']) OR isset($_GET['modify'])) {
-        add_certificate_other_activity($certificate_id);
-        $display = FALSE;
-    }        
-    elseif(isset($_POST['submitCertificateActivity'])) {
-        $threshold = isset($_POST['threshold']) ? $_POST['threshold'] : 0;
-        $operator = isset($_POST['operator']) ? $_POST['operator'] : 0;
-        if(isset($_POST['type'])){
-          $type = $_POST['type'];
-          if($type == MODULE_ID_BLOG){
-            $activity = "blog";
-          }
-          if($type == MODULE_ID_COMMENTS){
-            $activity = CommentEvent::BLOG_ACTIVITY;
-          }
-          if($type == "38a"){
-            $type = MODULE_ID_COMMENTS;
-            $activity = CommentEvent::COURSE_ACTIVITY;
-          }
-          if($type == MODULE_ID_FORUM){
-            $activity = "forum";
-          }
-          if($type == MODULE_ID_RATING){
-            $activity = RatingEvent::SOCIALBOOKMARK_ACTIVITY;
-          }
-          if($type == "39a"){
-            $type = MODULE_ID_RATING;
-            $activity = RatingEvent::FORUM_ACTIVITY;
-          }
-          if($type == MODULE_ID_WIKI){
-            $activity = "wiki";
-          }
-          Database::get()->query("INSERT INTO certificate_criterion
-                                      SET certificate = ?d, activity_type = ?s, module = ?s, `operator` = ?s, threshold = ?f",
-                                  $certificate_id, $activity, $type, $operator, $threshold);
-        }elseif ($_POST['id']) {
-            //update
-            $id = $_POST['id'];
-            Database::get()->query("UPDATE certificate_criterion SET `operator` = ?s, threshold = ?f
-                                        WHERE id = ?d", $operator, $threshold, $id);
-            Session::Messages("$langGradebookEdit", "alert-success");
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id");
-        }
-    }
-
-    elseif (isset($_GET['delete'])) { // delete certificate activity
+                   
+    if (isset($_GET['delete'])) { // delete certificate activity
         delete_certificate_activity($certificate_id, $_GET['delete']);
         redirect_to_home_page("modules/progress/index.php?course=$course_code&certificate_id=$certificate_id");
     }   
@@ -347,6 +292,9 @@ if ($is_editor) {
         $display = FALSE;
     } elseif (isset($_GET['add'])) { // insert certificate activity
         insert_activity($certificate_id, $_GET['act']);
+        $display = FALSE;
+    } elseif (isset($_GET['progressall'])) {
+        display_users_progress($certificate_id);
         $display = FALSE;
     }
 }
