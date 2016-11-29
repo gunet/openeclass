@@ -51,7 +51,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>
 
     <!-- Font Awesome - A font of icons -->
-    <link href='{$urlAppend}template/default/CSS/font-awesome-4.2.0/css/font-awesome.css' rel='stylesheet'>  
+    <link href='{$urlAppend}template/default/CSS/font-awesome/css/font-awesome.css' rel='stylesheet'>  
         
     <link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet' type='text/css' />
 </head>

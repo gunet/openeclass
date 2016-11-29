@@ -1258,8 +1258,8 @@ function display_users_progress($certificate_id) {
             if ($user_data->completed == 1) {
                 $icon = icon('fa-check-circle');
             } else {
-                $icon = icon('fa-hourglass-2');                
-            }            
+                $icon = icon('fa-hourglass-2');
+            }
             $tool_content .= "<tr>
                     <td>". $cnt++ . "</td>
                     <td>" . display_user($user_data->user). "<br>" .
