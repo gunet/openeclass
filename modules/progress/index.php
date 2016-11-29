@@ -183,9 +183,12 @@ if ($is_editor) {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/progress/index.php?course=$course_code&edit=1");
         }
+    } elseif (isset($_POST['mod_cert_activity'])) { // modify certificate activity
+        modify_certificate_activity($certificate_id, $_POST['activity_id']);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;certificate_id=$certificate_id");
     }
-    
-    
+        
     elseif(isset($_POST['add_assignment'])) { // add assignment activity in certificate
         add_assignment_to_certificate($certificate_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
@@ -235,7 +238,7 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
-    } elseif (isset($_GET['modify'])) {
+    } elseif (isset($_GET['act_mod'])) { // modify certificate activity
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id", "name" => $certificate->title);
         $pageName = $langEditChange;
         $tool_content .= action_bar(array(
@@ -244,7 +247,7 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
-    } elseif(isset($_GET['add'])) {
+    } elseif(isset($_GET['add'])) { // add certificate activity
             $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id", "name" => $certificate->title);        
             $pageName = "$langAdd $langOfGradebookActivity";
             $tool_content .= action_bar(array(
@@ -253,7 +256,7 @@ if ($is_editor) {
                       'icon' => 'fa fa-reply',
                       'level' => 'primary-label')
                 ));
-    } elseif (isset($_GET['new'])) {
+    } elseif (isset($_GET['new'])) { // new certificate activity
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
         $pageName = $langNewCertificate;
         $tool_content .= action_bar(array(
@@ -290,8 +293,11 @@ if ($is_editor) {
     } elseif (isset($_GET['edit'])) { // edit certificate settings
         certificate_settings($certificate_id);
         $display = FALSE;
-    } elseif (isset($_GET['add'])) { // insert certificate activity
+    } elseif (isset($_GET['add']) and isset($_GET['act'])) { // insert certificate activity
         insert_activity($certificate_id, $_GET['act']);
+        $display = FALSE;
+    } elseif (isset($_GET['act_mod'])) { // modify certificate activity
+        display_modification_activity($certificate_id, $_GET['act_mod']);
         $display = FALSE;
     } elseif (isset($_GET['progressall'])) {
         display_users_progress($certificate_id);

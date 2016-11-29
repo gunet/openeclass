@@ -193,6 +193,19 @@ function delete_certificate_activity($certificate_id, $activity_id) {
     }
 }
 
+/**
+ * @brief modify certificate resource activity
+ * @param type $activity_id
+ */
+function modify_certificate_activity($certificate_id, $activity_id) {
+
+    Database::get()->query("UPDATE certificate_criterion 
+                                SET threshold = ?f, 
+                                    operator = ?s 
+                                WHERE id = ?d 
+                                AND certificate = ?d",
+                            $_POST['cert_threshold'], $_POST['cert_operator'], $activity_id, $certificate_id);
+}
 
 
 function get_certificate_title($certificate_id) {

@@ -399,17 +399,17 @@ function display_certificate_activities($certificate_id) {
             if ($details->operator=='get') $tool_content .=" >= ";
             if ($details->operator=='neq') $tool_content .=" != ";
             
-            $tool_content .= " $details->threshold </td>";
+            $tool_content .= " $details->threshold</td>";
             
             $tool_content .= "<td class='text-center option-btn-cell'>".
                     action_button(array(
                         array('title' => $langEditChange,
                             'icon' => 'fa-edit',
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;modify=" . getIndirectReference($details->id)
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;act_mod=$details->id"
                             ),
                         array('title' => $langDelete,
                             'icon' => 'fa-times',
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;certificate_id=$certificate_id&amp;delete=" .getIndirectReference($details->id),
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;certificate_id=$certificate_id&amp;delete=$details->id",
                             'confirm' => $langConfirmDelete,
                             'class' => 'delete'))).
                     "</td></tr>";
@@ -471,6 +471,38 @@ function insert_activity($certificate_id, $activity) {
             break;
         default: break;
         }        
+}
+
+
+/**
+ * @brief display editing form about certificate resource
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $langModify
+ * @global type $langAutoJudgeOperator
+ * @param type $certificate_id
+ * @param type $activity_id
+ */
+function display_modification_activity($certificate_id, $activity_id) {
+    
+    global $tool_content, $course_code, $langModify, $langAutoJudgeOperator;
+    
+    $data = Database::get()->querySingle("SELECT threshold, operator FROM certificate_criterion 
+                                        WHERE id = ?d AND certificate = ?d", $activity_id, $certificate_id);
+    $operators = get_operators();
+    
+    $tool_content .= "<form action='index.php?course=$course_code' method='post'>";
+    $tool_content .= "<input type='hidden' name='certificate_id' value='$certificate_id'>";
+    $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label for='name' class='col-sm-1 control-label'>$langAutoJudgeOperator:</label>";    
+    $tool_content .= "<span class='col-sm-1'>" . selection($operators, 'cert_operator', $operators[$data->operator]) . "</span>";
+    $tool_content .= "<span class='col-sm-2'><input class='form-control' type='text' name='cert_threshold' value='$data->threshold'></span>";    
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='col-sm-5 col-sm-offset-5'>";
+    $tool_content .= "<input class='btn btn-primary' type='submit' name='mod_cert_activity' value='$langModify'>";
+    $tool_content .= "</div>";
+    $tool_content .= "</form>";            
 }
 
 /**
@@ -1129,6 +1161,18 @@ function student_view_certificate() {
 }
 
 
+/**
+ * @brief display users progress (teacher view)
+ * @global type $tool_content
+ * @global type $course_id
+ * @global type $langNoCertificateUsers
+ * @global type $langName
+ * @global type $langSurname
+ * @global type $langAmShort
+ * @global type $langID
+ * @global type $langProgress
+ * @param type $certificate_id
+ */
 function display_users_progress($certificate_id) {
     
     global $tool_content, $course_id, $langNoCertificateUsers, $langName, 
