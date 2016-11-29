@@ -2988,7 +2988,7 @@ $langUsername = "Όνομα χρήστη (username)";
 $langConfirmation = "Επιβεβαίωση συνθηματικού";
 $langUserNotice = "Μέχρι 30 χαρακτήρες";
 $langEmailInfo = "Μπορείτε να δηλώσετε μια διεύθυνση email στη παρακάτω φόρμα.";
-$langEmailNotice = "Η διεύθυνση email δεν είναι απαραίτητη, αλτελελά χωρίς αυτή δε θα μπορείτε να λαμβάνετε
+$langEmailNotice = "Η διεύθυνση email δεν είναι απαραίτητη, αλλά χωρίς αυτή δε θα μπορείτε να λαμβάνετε
 ανακοινώσεις και ειδοποιήσεις.";
 $langAm = "Αριθμός μητρώου";
 $langAmShort = "Α.Μ.";
@@ -5199,7 +5199,7 @@ $langAutoJudgeAssertions = array(
     "integer" => "είναι ακέραιος",
     "float" => "είναι δεκαδικός",
     "digit" => "είναι ψηφίο",
-    "boolean" => "είναιboolean",
+    "boolean" => "είναι boolean",
     "notEmpty" => "δεν είναι κενό",
     "notNull" => "δεν είναι Null",
     "string" => "είναι string",

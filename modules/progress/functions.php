@@ -243,8 +243,8 @@ function display_certificate_activities($certificate_id) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;edit=1",
                       'icon' => 'fa-cog'),
                 array('title' => "$langExport",
-                        'url' => "dumpcertificatebook.php?course=$course_code&amp;certificate_id=$certificate_id&amp;enc=1253",
-                    'icon' => 'fa-file-excel-o'),                
+                      'url' => "dumpcertificatebook.php?course=$course_code&amp;certificate_id=$certificate_id&amp;enc=1253",
+                      'icon' => 'fa-file-excel-o'),                
             ),
             true
         );
@@ -439,10 +439,10 @@ function insert_activity($certificate_id, $activity) {
             display_available_blogs($certificate_id);
             break;
         case 'blogcomments':
-            certificate_display_available_Com($certificate_id);
+            display_available_blogcomments($certificate_id);
             break;
         case 'coursecomments':
-            certificate_display_available_Com($certificate_id);
+            display_available_coursecomments($certificate_id);
             break;
         case 'forum':
             display_available_forums($certificate_id);
@@ -459,7 +459,7 @@ function insert_activity($certificate_id, $activity) {
             break;
         case 'multimedia':
             display_available_multimedia($certificate_id);
-            break;        
+            break;
         case 'ebook':
             display_available_ebooks($certificate_id);
             break;
@@ -542,9 +542,9 @@ function display_available_assignments($certificate_id) {
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langTitle</th>" .
-                "<th width='160'>$langGroupWorkDeadline_of_Submission</th>" .
-                "<th width='5'>$langAutoJudgeOperator</th>" .
-                "<th style='width:10px;'>$langValue</th>" . 
+                "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>" .
+                "<th style='width:5px;'>$langAutoJudgeOperator</th>" .
+                "<th style='width:50px;'>$langValue</th>" . 
                 "<th style='width:10px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
         foreach ($result as $row) {            
@@ -559,7 +559,7 @@ function display_available_assignments($certificate_id) {
                     "<td> " . q($row->title) . "<br><br><div class='text-muted'>$description</div></td>" .
                     "<td class='text-center'>".nice_format($row->submission_date, true)."</td>
                     <td>". selection(get_operators(), 'operator[]') . "</td>".
-                    "<td class='text-center'><input type='text' name='threshold[]' value=''></td>" .
+                    "<td class='text-center'><input style='width:50px;' type='text' name='threshold[]' value=''></td>" .
                     "<td class='text-center'><input name='assignment[]' value='$row->id' type='checkbox'></td>" .
                     "</tr>";            
         }
@@ -595,7 +595,7 @@ function display_available_exercises($certificate_id) {
                                     (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
                                             AND resource != '' 
                                             AND activity_type = 'exercise' 
-                                            AND module = 10) ORDER BY title", $course_id, $certificate_id);
+                                            AND module = " . MODULE_ID_EXERCISE . ") ORDER BY title", $course_id, $certificate_id);
     $quizinfo = array();
     foreach ($result as $row) {
         $quizinfo[] = array(
@@ -613,8 +613,8 @@ function display_available_exercises($certificate_id) {
                 "<tr class='list-header'>" .
                 "<th width='50%' class='text-left'>$langExercices</th>" .
                 "<th class='text-left'>$langDescription</th>" .
-                "<th width='5'>$langAutoJudgeOperator</th>" .
-                "<th style='width:10px;'>$langValue</th>" . 
+                "<th style='width:5px;'>$langAutoJudgeOperator</th>" .
+                "<th style='width:50px;'>$langValue</th>" . 
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
         foreach ($quizinfo as $entry) {
@@ -627,7 +627,7 @@ function display_available_exercises($certificate_id) {
             $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
             $tool_content .= "<td class='text-left'>" . $entry['comment'] . "</td>";
             $tool_content .= "<td>". selection(get_operators(), 'operator[]') . "</td>";
-            $tool_content .= "<td class='text-center'><input type='text' name='threshold[]' value=''></td>";
+            $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[]' value=''></td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
             $tool_content .= "</tr>";            
         }
@@ -683,7 +683,7 @@ function display_available_documents($certificate_id) {
                                      WHERE $group_sql AND visible = 1 AND
                                           path LIKE ?s AND
                                           path NOT LIKE ?s AND id NOT IN 
-                                        (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'document' AND module = 3)
+                                        (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'document' AND module = " . MODULE_ID_DOCS . ")
                                 ORDER BY sort_key COLLATE utf8_unicode_ci",
                                 "$path/%", "$path/%/%", $certificate_id);
 
@@ -800,13 +800,23 @@ function display_available_documents($certificate_id) {
 
 
 function display_available_blogs($certificate_id) {
-
+    global $tool_content;
+    
+    $tool_content .= "still working on this";
 }
-function certificate_display_available_Com($certificate_id) {
 
+function display_available_blogcomments($certificate_id) {
+    global $tool_content;
+    
+    $tool_content .= "still working on this";
 }
+
+
 function display_available_forums($certificate_id) {
 
+    global $tool_content;
+    
+    $tool_content .= "still working on this";
 }
 
 /**
@@ -852,11 +862,11 @@ function display_available_lps($certificate_id) {
                 "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th><div align='left'>&nbsp;$langLearningPaths</div></th>" .
-                "<th><div align='left'>$langComments</div></th>" .
-                "<th width='5'>$langAutoJudgeOperator</th>" .
-                "<th style='width:10px;'>$langValue</th>" . 
-                "<th width='80'>$langChoice</th>" .
+                "<th width='50%'>$langLearningPaths</th>" .
+                "<th class='text-left'>$langComments</th>" .
+                "<th style='width:5px;'>$langAutoJudgeOperator</th>" .
+                "<th style='width:50px;'>$langValue</th>" . 
+                "<th style='width:10px;' class='text-center'>$langChoice</th>" .                                
                 "</tr>";        
         foreach ($lpinfo as $entry) {
             if ($entry['visible'] == 0) {
@@ -874,12 +884,12 @@ function display_available_lps($certificate_id) {
                 $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a></td>";
                 $tool_content .= "<td>" . $entry['comment'] . "</td>";
                 $tool_content .= "<td>". selection(get_operators(), 'operator[]') . "</td>";
-                $tool_content .= "<td class='text-center'><input type='text' name='threshold[]' value=''></td>";
+                $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[]' value=''></td>";
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled></td>";
                 $tool_content .= "</tr>";            
             }
         }
-        $tool_content .= "</table>\n";
+        $tool_content .= "</table>";
         $tool_content .= "<div class='text-right'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='add_lp' value='$langAddModulesButton'></div></form>";
         
@@ -910,7 +920,7 @@ function display_available_multimedia($certificate_id) {
     require_once 'include/lib/mediaresource.factory.php';
     require_once 'include/lib/multimediahelper.class.php';
 
-    global  $tool_content, $themeimg, $course_id,
+    global $tool_content, $themeimg, $course_id,
                 $langTitle, $langDescription, $langDate, $langChoice,
                 $langAddModulesButton, $langNoVideo, $course_code;
                
@@ -922,7 +932,7 @@ function display_available_multimedia($certificate_id) {
     if ($count > 0) {
         $video_found = TRUE;
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" . 
-                        "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                         "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'>" .
                          "<th width='200' class='text-left'>&nbsp;$langTitle</th>" .
@@ -938,7 +948,7 @@ function display_available_multimedia($certificate_id) {
                                                 (SELECT resource FROM certificate_criterion 
                                                     WHERE certificate = ?d 
                                                     AND resource!=''
-                                                    AND activity_type IN ('video','videolink') AND module = 4)", $course_id, $certificate_id);
+                                                    AND activity_type IN ('video','videolink') AND module = ". MODULE_ID_VIDEO . ")", $course_id, $certificate_id);
             foreach ($result as $row) {
                 $row->course_id = $course_id;
                 if ($table == 'video') {
@@ -951,7 +961,7 @@ function display_available_multimedia($certificate_id) {
                 $tool_content .= "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . "</td>".
                                  "<td>" . q($row->description) . "</td>".
                                  "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
-                                 "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id' /></td>" .
+                                 "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id'></td>" .
                                  "</tr>";                
             }
         }
@@ -971,7 +981,7 @@ function display_available_multimedia($certificate_id) {
                                                     (SELECT resource FROM certificate_criterion 
                                                         WHERE certificate = ?d 
                                                         AND resource!=''
-                                                        AND activity_type IN ('video','videolink') AND module = 4)", $videocat->id, $certificate_id);
+                                                        AND activity_type IN ('video','videolink') AND module = " . MODULE_ID_VIDEO . ")", $videocat->id, $certificate_id);
                     foreach ($sql2 as $linkvideocat) {
                             $tool_content .= "<tr>";
                             $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
@@ -984,7 +994,7 @@ function display_available_multimedia($certificate_id) {
                 }
             }
         }
-        $tool_content .= "</table><div class='text-right'><input class='btn btn-primary' type='submit' name='add_multimedia' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></form>";
+        $tool_content .= "</table><div class='text-right'><input class='btn btn-primary' type='submit' name='add_multimedia' value='".q($langAddModulesButton)."'>&nbsp;&nbsp;</div></form>";
     }
     if (!$video_found) {
         $tool_content .= "<div class='alert alert-warning'>$langNoVideo</div>";
@@ -994,6 +1004,7 @@ function display_available_multimedia($certificate_id) {
 
 function display_available_ebooks($certificate_id){
 
+    global $tool_content;
   /*
   $checkForBook = Database::get()->queryArray("SELECT * FROM ebook WHERE ebook.course_id = ?d
                                               AND ebook.visible = 1
@@ -1002,15 +1013,64 @@ function display_available_ebooks($certificate_id){
   $tool_content .= ".. still working on this ..";
 }
 
-function display_available_polls($certificate_id){
 
-  
-  /*$checkForPol = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
-                                              AND poll.active = 1
-                                              AND poll.pid NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'questionnaire' AND module = 21)", $course_id, $certificate_id);
-*/
-  $tool_content .= ".. still working on this ..";
-
+/**
+ * @brief poll display form
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $urlServer
+ * @global type $tool_content 
+ * @global type $langPollNone
+ * @global type $langQuestionnaire
+ * @global type $langChoice
+ * @global type $langAddModulesButton
+ * @global type $langValue
+ * @global type $langAutoJudgeOperator
+ * @param type $certificate_id
+ */
+function display_available_polls($certificate_id) {
+    
+    global $course_id, $course_code, $urlServer, $tool_content,
+            $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton,
+            $langAutoJudgeOperator, $langValue;
+      
+    $result = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
+                                    AND poll.active = 1
+                                    AND poll.pid NOT IN 
+                                (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource != '' AND activity_type = 'questionnaire' AND module = " . MODULE_ID_QUESTIONNAIRE . ")", 
+                        $course_id, $certificate_id);
+    
+    $pollinfo = array();
+    foreach ($result as $row) {
+        $pollinfo[] = array(
+            'id' => $row->pid,
+            'title' => $row->name,
+            'active' => $row->active);
+    }
+    if (count($pollinfo) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langPollNone</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .                
+                "<table class='table-default'>" .
+                "<tr class='list-header'>" .
+                "<th class='text-left'>&nbsp;$langQuestionnaire</th>" .
+                "<th style='width:5px;'>$langAutoJudgeOperator</th>" .
+                "<th style='width:5px;'>$langValue</th>" .                 
+                "<th style='width:80px;' class='text-center'>$langChoice</th>" .
+                "</tr>";        
+        foreach ($pollinfo as $entry) {            
+            $tool_content .= "<tr>";
+            $tool_content .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a></td>";
+            $tool_content .= "<td>". selection(get_operators(), 'operator[]') . "</td>";
+            $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[]' value=''></td>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='poll[]' value='$entry[id]'></td>";            
+            $tool_content .= "</tr>";            
+        }
+        $tool_content .= "</table>";
+        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<input class='btn btn-primary' type='submit' name='add_poll' value='$langAddModulesButton'></div></form>";
+    }      
 }
 
 function display_available_wiki($certificate_id) {
@@ -1189,22 +1249,22 @@ function display_users_progress($certificate_id) {
                         <tr>
                           <th style='width:5%'>$langID</th>
                           <th>$langName $langSurname</th>                          
-                          <th>$langProgress</th>            
+                          <th style='width:10%;'>$langProgress</th>            
                         </tr>
                     </thead>
                     <tbody>";
         $cnt = 1;
         foreach ($sql as $user_data) {
             if ($user_data->completed == 1) {
-                $icon = icon('fa-check');
+                $icon = icon('fa-check-circle');
             } else {
-                $icon = icon('fa-hourglass');
-            }
+                $icon = icon('fa-hourglass-2');                
+            }            
             $tool_content .= "<tr>
                     <td>". $cnt++ . "</td>
                     <td>" . display_user($user_data->user). "<br>" .
                     "($langAmShort: ". uid_to_am($user_data->user) . ")</td>
-                    <td>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%$icon</td>
+                    <td>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%&nbsp;&nbsp;$icon</td>
                     </tr>";            
         }
         $tool_content .= "</tbody></table>";

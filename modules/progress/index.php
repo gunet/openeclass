@@ -225,6 +225,10 @@ if ($is_editor) {
         add_forum_to_certificate($certificate_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;certificate_id=$certificate_id");
+    } elseif (isset($_POST['add_poll'])) {
+        add_poll_to_certificate($certificate_id);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;certificate_id=$certificate_id");
     }
 
     // Top menu

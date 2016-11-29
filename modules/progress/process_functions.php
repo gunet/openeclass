@@ -140,7 +140,7 @@ function add_lp_to_certificate($certificate_id) {
                             $certificate_id, 
                             $_POST['lp'][$datakey],
                             $_POST['operator'][$datakey],
-                            $_POST['threshold'][$datakey]);                
+                            $_POST['threshold'][$datakey]);
         }
     }
     return;
@@ -158,13 +158,26 @@ function add_wiki_to_certificate($certificate_id) {
     return;
 }
 
+/**
+ * @brief add poll db entries in certificate criterion
+ * @param type $certificate_id
+ * @return type
+ */
 function add_poll_to_certificate($certificate_id) {
     
     if (isset($_POST['poll'])) {
-        foreach ($_POST['poll'] as $data) {      
+        foreach ($_POST['poll'] as $datakey => $data) {      
           Database::get()->query("INSERT INTO certificate_criterion
-                                    SET certificate = ?d, module=21, resource = ?d, activity_type = 'questionnaire'",
-                            $certificate_id, $data);
+                                    SET certificate = ?d, 
+                                    module= " . MODULE_ID_QUESTIONNAIRE . ", 
+                                    resource = ?d, 
+                                    activity_type = 'questionnaire',
+                                    operator = ?s,
+                                    threshold = ?f",
+                            $certificate_id,
+                            $_POST['poll'][$datakey],
+                            $_POST['operator'][$datakey],
+                            $_POST['threshold'][$datakey]);                            
         }
     }
     return;
