@@ -81,7 +81,7 @@ function display_certificates() {
                                                   ($data->active ? '0' : '1'),
                                           'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
                                     array('title' => $langDelete,
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert_id=$data->id",
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
                                           'icon' => 'fa-times',
                                           'class' => 'delete',
                                           'confirm' => $langConfirmDelete)),
@@ -409,7 +409,7 @@ function display_certificate_activities($certificate_id) {
                             ),
                         array('title' => $langDelete,
                             'icon' => 'fa-times',
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;certificate_id=$certificate_id&amp;delete=$details->id",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;certificate_id=$certificate_id&amp;del_cert_res=$details->id",
                             'confirm' => $langConfirmDelete,
                             'class' => 'delete'))).
                     "</td></tr>";
@@ -480,29 +480,35 @@ function insert_activity($certificate_id, $activity) {
  * @global type $course_code
  * @global type $langModify
  * @global type $langAutoJudgeOperator
+ * @global type $langUsedCertRes
  * @param type $certificate_id
  * @param type $activity_id
  */
 function display_modification_activity($certificate_id, $activity_id) {
     
-    global $tool_content, $course_code, $langModify, $langAutoJudgeOperator;
+    global $tool_content, $course_code, $langModify, $langAutoJudgeOperator, $langUsedCertRes;
     
-    $data = Database::get()->querySingle("SELECT threshold, operator FROM certificate_criterion 
-                                        WHERE id = ?d AND certificate = ?d", $activity_id, $certificate_id);
-    $operators = get_operators();
-    
-    $tool_content .= "<form action='index.php?course=$course_code' method='post'>";
-    $tool_content .= "<input type='hidden' name='certificate_id' value='$certificate_id'>";
-    $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='name' class='col-sm-1 control-label'>$langAutoJudgeOperator:</label>";    
-    $tool_content .= "<span class='col-sm-1'>" . selection($operators, 'cert_operator', $operators[$data->operator]) . "</span>";
-    $tool_content .= "<span class='col-sm-2'><input class='form-control' type='text' name='cert_threshold' value='$data->threshold'></span>";    
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='col-sm-5 col-sm-offset-5'>";
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='mod_cert_activity' value='$langModify'>";
-    $tool_content .= "</div>";
-    $tool_content .= "</form>";            
+    if (certificate_resource_usage($activity_id)) { // check if resource has been used by user
+        Session::Messages("$langUsedCertRes", "alert-warning");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;certificate_id=$certificate_id");
+    } else { // otherwise editing is not allowed
+        $data = Database::get()->querySingle("SELECT threshold, operator FROM certificate_criterion 
+                                            WHERE id = ?d AND certificate = ?d", $activity_id, $certificate_id);
+        $operators = get_operators();
+
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>";
+        $tool_content .= "<input type='hidden' name='certificate_id' value='$certificate_id'>";
+        $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='name' class='col-sm-1 control-label'>$langAutoJudgeOperator:</label>";    
+        $tool_content .= "<span class='col-sm-1'>" . selection($operators, 'cert_operator', $operators[$data->operator]) . "</span>";
+        $tool_content .= "<span class='col-sm-2'><input class='form-control' type='text' name='cert_threshold' value='$data->threshold'></span>";    
+        $tool_content .= "</div>";
+        $tool_content .= "<div class='col-sm-5 col-sm-offset-5'>";
+        $tool_content .= "<input class='btn btn-primary' type='submit' name='mod_cert_activity' value='$langModify'>";
+        $tool_content .= "</div>";
+        $tool_content .= "</form>";
+    }
 }
 
 /**
@@ -1051,12 +1057,12 @@ function display_available_polls($certificate_id) {
         $tool_content .= "<div class='alert alert-warning'>$langPollNone</div>";
     } else {
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .                
+                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langQuestionnaire</th>" .
                 "<th style='width:5px;'>$langAutoJudgeOperator</th>" .
-                "<th style='width:5px;'>$langValue</th>" .                 
+                "<th style='width:5px;'>$langValue</th>" .
                 "<th style='width:80px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
         foreach ($pollinfo as $entry) {            
@@ -1073,10 +1079,67 @@ function display_available_polls($certificate_id) {
     }      
 }
 
+/**
+ * @brief wiki display form
+ * @global type $course_id
+ * @global type $tool_content
+ * @global type $urlServer
+ * @global type $langWikis
+ * @global type $langAddModulesButton
+ * @global type $langChoice
+ * @global type $langWikiNoWiki
+ * @global type $langWikiDescriptionForm
+ * @global type $course_code
+ * @global type $langValue
+ * @global type $langAutoJudgeOperator
+ * @param type $certificate_id
+ */
 function display_available_wiki($certificate_id) {
-    global $tool_content;
     
-    $tool_content .= ".. still working on this ..";
+    global $course_id, $tool_content, $urlServer,
+    $langWikis, $langAddModulesButton, $langChoice, $langWikiNoWiki,
+    $langWikiDescriptionForm, $course_code, $langAutoJudgeOperator, $langValue;
+
+
+    $result = Database::get()->queryArray("SELECT * FROM wiki_properties 
+                                        WHERE group_id = 0 
+                                        AND course_id = ?d
+                                        AND id NOT IN 
+                                    (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource != '' AND activity_type = 'wiki' AND module = " . MODULE_ID_WIKI . ")", $course_id, $certificate_id);
+    $wikiinfo = array();
+    foreach ($result as $row) {
+        $wikiinfo[] = array(
+            'id' => $row->id,
+            'title' => $row->title,
+            'description' => $row->description);
+    }
+    if (count($wikiinfo) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langWikiNoWiki</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>
+                <input type='hidden' name='certificate_id' value='$certificate_id'>
+                <table class='table-default'>
+                    <tr class='list-header'>
+                        <th class='text-leftt'>$langWikis</th>
+                        <th>$langWikiDescriptionForm</th>
+                        <th style='width:5px;'>$langAutoJudgeOperator</th>
+                        <th style='width:5px;'>$langValue</th>
+                        <th>$langChoice</th>
+                    </tr>";
+        foreach ($wikiinfo as $entry) {
+            $tool_content .= "<tr><td>&nbsp;".icon('fa-wikipedia')."&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a></td>
+                                <td>$entry[description]</td>
+                                <td>". selection(get_operators(), 'operator[]') . "</td>
+                                <td class='text-center'><input style='width:50px;' type='text' name='threshold[]' value=''></td>
+                                <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>
+                            </tr>";            
+        }
+        $tool_content .= "
+                    </table>
+                <div class='text-right'>
+                    <input class='btn btn-primary' type='submit' name='add_wiki' value='$langAddModulesButton'>
+                </div></form>";
+    }
 }
 
 
