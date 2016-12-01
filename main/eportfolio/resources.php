@@ -30,7 +30,7 @@ require_once 'modules/sharing/sharing.php';
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
-    if ($uid == 0) {
+    if ($session->status == 0) {
         draw($tool_content, 0);
     } else {
         draw($tool_content, 1);
@@ -38,13 +38,11 @@ if (!get_config('eportfolio_enable')) {
     exit;
 }
 
-$userdata = array();
-
 if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     $id = intval($_GET['id']);
     $toolName = $langUserePortfolio;
 } else {
-    if ($uid == 0) {
+    if ($session->status == 0) {
         redirect_to_home_page();
         exit;
     } else {
@@ -53,6 +51,12 @@ if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     }
 }
 
+if (!token_validate('eportfolio' . $id, $_GET['token'])) {
+    redirect_to_home_page();
+}
+
+$token = token_generate('eportfolio' . $id);
+
 $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable
                                           FROM user WHERE id = ?d", $id);
 
@@ -60,7 +64,7 @@ if ($userdata) {
     if ($uid == $id) {
         
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning ".sprintf($langePortfolioEnableInfo, $urlAppend.'main/eportfolio/index.php')."</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning ".sprintf($langePortfolioEnableInfo, $urlAppend."main/eportfolio/index.php?id=$uid&amp;token=$token")."</div>";
         }
         
         $tool_content .= "<div class='alert alert-info fade in'>
@@ -70,15 +74,15 @@ if ($userdata) {
         
         $tool_content .= action_bar(array(
                 array('title' => $langBio,
-                      'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id",
+                      'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
                       'icon' => 'fa-download',
                       'level' => 'primary-label',
                       'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
                 array('title' => $langResume,
-                      'url' => "{$urlAppend}main/eportfolio/index.php?id=$id",
+                      'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
                       'level' => 'primary-label'),
                 array('title' => $langResourcesCollection,
-                      'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id",
+                      'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
                       'level' => 'primary-label',
                       'button-class' => 'btn-info'),
                 array('title' => $langEditResume,
@@ -120,12 +124,12 @@ if ($userdata) {
                             Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
                                     VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'blog',$post->course_id,$course_title,serialize($data));
                             Session::Messages($langePortfolioResourceAdded, 'alert-success');
-                            redirect_to_home_page("main/eportfolio/resources.php");
+                            redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                         }
                     }
                     
                     Session::Messages($langGeneralError, 'alert-danger');
-                    redirect_to_home_page("main/eportfolio/resources.php");
+                    redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                     
                 } elseif ($rtype == 'work_submission') {
                     $submission = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d AND uid = ?d", $rid, $uid);
@@ -177,14 +181,14 @@ if ($userdata) {
                                 Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
                                     VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'work_submission',$work->course_id,$course_title,serialize($data));
                                 Session::Messages($langePortfolioResourceAdded, 'alert-success');
-                                redirect_to_home_page("main/eportfolio/resources.php");
+                                redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                                 
                             }
                         }
                     }
                     
                     Session::Messages($langGeneralError, 'alert-danger');
-                    redirect_to_home_page("main/eportfolio/resources.php");
+                    redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                     
                 } elseif ($rtype == 'mydocs') {
                     if (($session->status == USER_TEACHER && get_config('mydocs_teacher_enable')) || ($session->status == USER_STUDENT && get_config('mydocs_student_enable'))) {
@@ -214,12 +218,12 @@ if ($userdata) {
                                     VALUES (?d,?d,?s,?d,?s,?s)", $uid, $rid, 'mydocs', 0 ,'', serialize($data));
                             
                             Session::Messages($langePortfolioResourceAdded, 'alert-success');
-                            redirect_to_home_page("main/eportfolio/resources.php");
+                            redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                         }
                     }
                     
                     Session::Messages($langGeneralError, 'alert-danger');
-                    redirect_to_home_page("main/eportfolio/resources.php");
+                    redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                     
                 }
             }
@@ -237,16 +241,16 @@ if ($userdata) {
                 }
                 Database::get()->query("DELETE FROM eportfolio_resource WHERE id = ?d", $er_id);
                 Session::Messages($langePortfolioResourceRemoved, 'alert-success');
-                redirect_to_home_page("main/eportfolio/resources.php");
+                redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
             } else {
                 Session::Messages($langGeneralError, 'alert-danger');
-                redirect_to_home_page("main/eportfolio/resources.php");
+                redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
             }
         }
     } else {
         if ($userdata->eportfolio_enable == 0) {
             $tool_content = "<div class='alert alert-danger'>$langUserePortfolioDisabled</div>";
-            if ($uid == 0) {
+            if ($session->status == 0) {
                 draw($tool_content, 0);
             } else {
                 draw($tool_content, 1);
@@ -256,15 +260,15 @@ if ($userdata) {
         
         $tool_content .= action_bar(array(
                 array('title' => $langBio,
-                      'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id",
+                      'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
                       'icon' => 'fa-download',
                       'level' => 'primary-label',
                       'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
                 array('title' => $langResume,
-                      'url' => "{$urlAppend}main/eportfolio/index.php?id=$id",
+                      'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
                       'level' => 'primary-label'),
                 array('title' => $langResourcesCollection,
-                      'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id",
+                      'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
                       'level' => 'primary-label',
                       'button-class' => 'btn-info'),
             ));
@@ -339,7 +343,7 @@ if ($userdata) {
                                 </div>";
             }
             
-            if ($uid == 0) {
+            if ($session->status == 0) {
                 draw($tool_content, 0);
             } else {
                 draw($tool_content, 1);
@@ -469,7 +473,7 @@ if ($userdata) {
                 if (!empty($data['descr'])) {
                     $submission_content .= "<div><b>".$langDescription."</b>:</div><div>".$data['descr']."</div>";
                 }
-                $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a></div>";
+                $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 $submission_content .= "</div>";
                 $submission_content .= "</div>";
                 $submission_content .= "<div><b>$langSubmit</b>: " . nice_format($data['subm_date'], true). "</div>
@@ -478,7 +482,7 @@ if ($userdata) {
                 if (!is_null($data['subm_text'])) {
                     $submission_content .= "<div><b>$langWorkOnlineText</b>: <br>".$data['subm_text']."</div>";
                 } else {
-                   $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>"; 
+                   $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>"; 
                 }
                 $submission_footer = "<div class='panel-footer'>
                                           <div class='row'>
@@ -541,7 +545,7 @@ if ($userdata) {
                     $filesize = '0 B';
                 } else {
                     $row_class = 'visible';
-                    $file_link = "<a href='resources.php?action=get&amp;id=$id&amp;type=mydocs&amp;er_id=$doc->id'>$filename</a>";
+                    $file_link = "<a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=mydocs&amp;er_id=$doc->id'>$filename</a>";
                     $filesize = format_file_size(filesize($data['file_path']));
                 }
                 $tool_content .= "<tr class='$row_class'>
@@ -569,7 +573,7 @@ if ($userdata) {
         }
         
         if ($userdata->eportfolio_enable == 1) {
-            $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/resources.php?id=".$id, $langUserePortfolio)."</div>";
+            $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/resources.php?id=$id&token=$token", $langUserePortfolio)."</div>";
         } else {
             $social_share = '';
         }

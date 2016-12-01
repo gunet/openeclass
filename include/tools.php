@@ -319,7 +319,7 @@ function loggedInMenu($rich=true) {
     
     if (get_config('eportfolio_enable')) {
         array_push($sideMenuText, $GLOBALS['langMyePortfolio']);
-        array_push($sideMenuLink, $urlServer . "main/eportfolio/index.php");
+        array_push($sideMenuLink, $urlServer . "main/eportfolio/index.php?id=$uid&amp;token=".token_generate('eportfolio' . $uid));
         array_push($sideMenuImg, "fa-star");
     }
 

@@ -119,7 +119,7 @@
                                         @endif
                                         @if (get_config('eportfolio_enable')) 
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/eportfolio/index.php"><span class="fa fa-star fa-fw"></span>{{ trans('langMyePortfolio') }}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}main/eportfolio/index.php?id={{ $uid }}&token={{ token_generate('eportfolio' . $uid) }}"><span class="fa fa-star fa-fw"></span>{{ trans('langMyePortfolio') }}</a>
                                         </li>
                                         @endif
                                         @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')))

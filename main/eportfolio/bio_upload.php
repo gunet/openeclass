@@ -29,7 +29,8 @@ check_guest();
 
 $toolName = $langMyePortfolio;
 $pageName = $langUploadBio;
-$navigation[] = array('url' => 'index.php', 'name' => $langMyePortfolio);
+$token = token_generate('eportfolio' . $uid);
+$navigation[] = array('url' => "index.php?id=$uid&amp;token=$token", 'name' => $langMyePortfolio);
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
@@ -40,7 +41,7 @@ if (!get_config('eportfolio_enable')) {
 $userdata = Database::get()->querySingle("SELECT eportfolio_enable FROM user WHERE id = ?d", $uid);
 
 if ($userdata->eportfolio_enable == 0) {
-    $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning ".sprintf($langePortfolioEnableInfo, $urlAppend.'main/eportfolio/index.php')."</div>";
+    $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning ".sprintf($langePortfolioEnableInfo, $urlAppend."main/eportfolio/index.php?id=$uid&amp;token=$token")."</div>";
 }
 
 if (isset($_GET['delete_bio'])) {
@@ -84,7 +85,7 @@ $head_content .= "<script>
 $tool_content .=
     action_bar(array(
         array('title' => $langBack,
-            'url' => "{$urlAppend}main/eportfolio/index.php",
+            'url' => "{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token",
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
         
@@ -97,7 +98,7 @@ $tool_content .=
 enableCheckFileSize();
 if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $label = $langReplace;
-    $bio = "<a href='{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$uid'>$langBio</a>&nbsp;&nbsp;
+    $bio = "<a href='{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$uid&amp;token=$token'>$langBio</a>&nbsp;&nbsp;
         <a class='btn btn-danger btn-sm' onclick='return confirmDel(this.href)' href='$_SERVER[SCRIPT_NAME]?delete_bio=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>";
 } else {
     $label = $langPathUploadFile;
@@ -115,7 +116,7 @@ $tool_content .=
     <div class='form-group'>
         <div class='col-sm-10 col-sm-offset-2'>
             <input class='btn btn-primary btn-sm' type='submit' name='submit' value='$langSubmit'>
-            <a href='{$urlAppend}main/eportfolio/index.php' class='btn btn-default btn-sm'>$langCancel</a>
+            <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-default btn-sm'>$langCancel</a>
         </div>
     </div>";
 

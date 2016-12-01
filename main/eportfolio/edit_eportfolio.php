@@ -30,7 +30,8 @@ check_guest();
 
 $toolName = $langMyePortfolio;
 $pageName = $langEditResume;
-$navigation[] = array('url' => 'index.php', 'name' => $langMyePortfolio);
+$token = token_generate('eportfolio' . $uid);
+$navigation[] = array('url' => "index.php?id=$uid&amp;token=$token", 'name' => $langMyePortfolio);
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
@@ -41,7 +42,7 @@ if (!get_config('eportfolio_enable')) {
 $userdata = Database::get()->querySingle("SELECT eportfolio_enable FROM user WHERE id = ?d", $uid);
 
 if ($userdata->eportfolio_enable == 0) {
-    $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning ".sprintf($langePortfolioEnableInfo, $urlAppend.'main/eportfolio/index.php')."</div>";
+    $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning ".sprintf($langePortfolioEnableInfo, $urlAppend."main/eportfolio/index.php?id=$uid&amp;token=$token")."</div>";
 }
 
 load_js('tools.js');
@@ -61,7 +62,7 @@ if (isset($_POST['submit'])) {
         process_eportfolio_fields_data();
     
         Session::Messages($langePortfolioChangeSucc, 'alert-success');
-        redirect_to_home_page("main/eportfolio/index.php");
+        redirect_to_home_page("main/eportfolio/index.php?id=$uid&token=$token");
     }
 }
 
@@ -119,7 +120,7 @@ $sec = $urlServer . 'main/eportfolio/edit_eportfolio.php';
 $tool_content .=
         action_bar(array(
             array('title' => $langBack,
-                'url' => "{$urlAppend}main/eportfolio/index.php",
+                'url' => "{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
         $tool_content .=
@@ -136,7 +137,7 @@ $tool_content .= $ret_str['panels'];
 $tool_content .= "<div class='form-group'>
                       <div class='col-sm-12'>
                           <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-                          <a href='{$urlAppend}main/eportfolio/index.php' class='btn btn-default'>$langCancel</a>
+                          <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn btn-default'>$langCancel</a>
                       </div>
                   </div>
       ". generate_csrf_token_form_field() ."  
