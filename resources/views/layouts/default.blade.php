@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{{ $template_base }}/CSS/bootstrap-custom.css?v={{ $eclass_version }}">
 
     <!-- Font Awesome - A font of icons -->
-    <link href="{{ $template_base }}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ $template_base }}/CSS/font-awesome/css/font-awesome.css" rel="stylesheet">
 
     @if (isset($styles_str) && $styles_str)
         <style>

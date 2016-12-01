@@ -122,9 +122,10 @@ function view($view_file, $view_data = array()) {
             }
             $item['bread_text'] = $landingPageName;
             $item['bread_href'] = $landingUrl;
+            array_push($breadcrumbs, $item);
+            unset($item);
         }
-        array_push($breadcrumbs, $item);
-        unset($item);
+        
 
         // Breadcrumb first entry (home / portfolio)
         if ($session->status != USER_GUEST) {
