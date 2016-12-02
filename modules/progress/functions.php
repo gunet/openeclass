@@ -264,20 +264,14 @@ function display_certificate_activities($certificate_id) {
                         </tr>";
         foreach ($result as $details) {
             if ($details->activity_type == ExerciseEvent::ACTIVITY) {
-                $cer_res = Database::get()->queryArray("SELECT title FROM exercise WHERE exercise.course_id = ?d AND exercise.id = ?d", $course_id, $details->resource);
-                foreach ($cer_res as $res_data) {
-                    $title = $res_data->title;
-                }
+                $title = Database::get()->querySingle("SELECT title FROM exercise WHERE exercise.course_id = ?d AND exercise.id = ?d", $course_id, $details->resource)->title;
                 $type = "$langCategoryExcercise";
                 if ($details->resource == "") {
                     $title = "$langAllActivities";
                 }
             }
             if ($details->activity_type == AssignmentEvent::ACTIVITY) {
-                $cer_res = Database::get()->queryArray("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $details->resource);
-                foreach ($cer_res as $res_data) {
-                        $title = $res_data->title;
-                }
+                $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $details->resource)->title;
                 $type = "$langCategoryEssay";
                 if ($details->resource == "") {
                     $title = "$langAllActivities";
@@ -285,10 +279,7 @@ function display_certificate_activities($certificate_id) {
             }
 
             if ($details->activity_type == LearningPathEvent::ACTIVITY) {
-                $cer_res = Database::get()->queryArray("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $details->resource);
-                foreach ($cer_res as $res_data) {
-                        $title = $res_data->name;
-                }
+                $title = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $details->resource)->name;                
                 $type = "$langLearningPath";
                 if ($details->resource == "") {
                     $title = "$langAllActivities";
@@ -308,10 +299,7 @@ function display_certificate_activities($certificate_id) {
             }
 
             if ($details->activity_type == ViewingEvent::VIDEO_ACTIVITY){
-                $cer_res = Database::get()->queryArray("SELECT title FROM video WHERE video.course_id = ?d AND video.id = ?d", $course_id, $details->resource);
-                foreach ($cer_res as $res_data) {
-                    $title = $res_data->title;
-                }
+                $title = Database::get()->querySingle("SELECT title FROM video WHERE video.course_id = ?d AND video.id = ?d", $course_id, $details->resource)->title;                
                 $type = "$langVideo";
                 if ($details->resource == "") {
                   $title = "$langAllActivities";
@@ -319,21 +307,15 @@ function display_certificate_activities($certificate_id) {
             }
 
             if ($details->activity_type == ViewingEvent::VIDEOLINK_ACTIVITY){
-                $cer_res = Database::get()->queryArray("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $details->resource);
-                foreach ($cer_res as $res_data) {
-                    $title = $res_data->title;
-                }
+                $title = Database::get()->querySingle("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $details->resource)->title;                
                 $type = "$langsetvideo";
-                if ($details->resource == ""){
+                if ($details->resource == "") {
                   $title = "$langAllActivities";
                 }
             }
 
             if ($details->activity_type == ViewingEvent::EBOOK_ACTIVITY){
-                $cer_res = Database::get()->queryArray("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $details->resource);
-                foreach ($cer_res as $res_data) {
-                    $title = $res_data->title;
-                }
+                $title = Database::get()->querySingle("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $details->resource)->title;                
                 $type = "$langEBook";
                 if ($details->resource == "") {
                   $title = "$langAllActivities";
@@ -341,10 +323,7 @@ function display_certificate_activities($certificate_id) {
             }
 
             if ($details->activity_type == ViewingEvent::QUESTIONNAIRE_ACTIVITY){
-                $cer_res = Database::get()->queryArray("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $details->resource);
-                foreach ($cer_res as $res_data) {
-                    $title = $res_data->name;
-                }
+                $title = Database::get()->querySingle("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $details->resource)->name;                
                 $type = "$langMetaQuestionnaire";
                 if ($details->resource == "") {
                   $title = "$langAllActivities";
@@ -1367,6 +1346,7 @@ function student_view_certificate() {
  * @brief display users progress (teacher view)
  * @global type $tool_content
  * @global type $course_id
+ * @global type $course_code
  * @global type $langNoCertificateUsers
  * @global type $langName
  * @global type $langSurname
@@ -1377,8 +1357,8 @@ function student_view_certificate() {
  */
 function display_users_progress($certificate_id) {
     
-    global $tool_content, $course_id, $langNoCertificateUsers, $langName, 
-           $langSurname, $langAmShort, $langID, $langProgress;
+    global $tool_content, $course_id, $course_code, $langNoCertificateUsers, $langName, 
+           $langSurname, $langAmShort, $langID, $langProgress, $langDetails;
         
     $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate 
                                             WHERE certificate = ?d", $certificate_id);
@@ -1406,13 +1386,59 @@ function display_users_progress($certificate_id) {
                     <td>". $cnt++ . "</td>
                     <td>" . display_user($user_data->user). "<br>" .
                     "($langAmShort: ". uid_to_am($user_data->user) . ")</td>
-                    <td>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%&nbsp;&nbsp;$icon</td>
+                    <td>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%&nbsp;&nbsp;$icon"
+                          . "<small><a href='index.php?course=$course_code&amp;certificate_id=$certificate_id&amp;u=$user_data->user'>$langDetails</a></small>
+                    </td>
                     </tr>";            
         }
         $tool_content .= "</tbody></table>";
     } else {
         $tool_content .= "<div class='alert alert-info'>$langNoCertificateUsers</div>";
     }        
+}
+
+
+
+function display_user_progress_details($certificate_id, $user_id) {
+    
+    global $tool_content, $langNoUserActivity, $langAttendanceActivity, 
+           $langInstallEnd, $langTotalPercentCompleteness;
+    
+    $resource_data = array();
+    
+    $tool_content .= "<h5>" .  uid_to_name($user_id) . "</h5>";
+    
+    $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion WHERE user = ?d", $user_id);
+    if (count($sql) > 0) {
+        $tool_content .= "<table class='table-default custom_list_order'>";
+        $tool_content .= "<thead>
+                    <tr>
+                      <th>$langAttendanceActivity</th>
+                      <th style='width:10px;'>$langInstallEnd</th>
+                    </tr>
+                </thead>
+                <tbody>";            
+            foreach ($sql as $user_criterion) {
+                $resource_data = get_resource_details($user_criterion);
+                //print_a($resource_data);
+                //$data = Database::get()->querySingle("SELECT activity_type FROM certificate_criterion WHERE id = ?d", $user_criterion);
+                //$activity = $data->activity_type;
+                $activity = $resource_data[1] . "&nbsp;<small>(" .$resource_data[0] . ")</small>";
+                $tool_content .= "<tr>                       
+                        <td>" . $activity . "</td>
+                        <td class='text-center'>" . icon('fa-check-circle') . "</td>
+                        </tr>";
+            }
+            $user_data = Database::get()->querySingle("SELECT completed, completed_criteria, total_criteria FROM user_certificate 
+                                            WHERE certificate = ?d AND user = ?d", $certificate_id, $user_id);
+            $tool_content .= "<tr>
+                    <td><strong>$langTotalPercentCompleteness</strong></td>
+                    <td class='text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></td>                      
+                    </tr>";
+        $tool_content .= "</tbody></table>";
+    } else {
+        $tool_content .= "<div class='alert alert-info'>$langNoUserActivity</div>";
+    }
 }
 
 

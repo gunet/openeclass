@@ -356,3 +356,101 @@ function certificate_resource_usage($certificate_resource_id) {
         return false;
     }    
 }
+
+
+function get_resource_details($resource_id) {
+    
+    global $course_id, $langCategoryExcercise, $langCategoryEssay, $langLearningPath,
+            $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire, 
+            $langBlogPosts, $langBlog, $langForums, $langComments, $langForums, $langWikiPages,
+            $langWikis, $langAllActivities;
+    
+    $data = array('type' => '', 'title' => '');
+    
+    $res_data = Database::get()->querySingle("SELECT activity_type, module, resource FROM certificate_criterion WHERE id = ?d", $resource_id);
+    $resource = $res_data->resource;
+    $resource_type = $res_data->activity_type;
+    
+    switch ($resource_type) {
+        case ExerciseEvent::ACTIVITY: 
+                $title = Database::get()->querySingle("SELECT title FROM exercise WHERE exercise.course_id = ?d AND exercise.id = ?d", $course_id, $resource)->title;
+                $type = "$langCategoryExcercise";                
+                break;
+        case AssignmentEvent::ACTIVITY:
+                $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $resource)->title;
+                $type = "$langCategoryEssay";                
+            break;
+        case LearningPathEvent::ACTIVITY: 
+                $title = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource)->name;
+                $type = "$langLearningPath";
+            break;
+        case ViewingEvent::DOCUMENT_ACTIVITY: 
+                $cer_res = Database::get()->queryArray("SELECT IF(title = '', filename, title) AS file_details FROM document 
+                                    WHERE document.course_id = ?d AND document.id = ?d", $course_id, $resource);                
+                foreach ($cer_res as $res_data) {
+                    $title = $res_data->file_details;
+                }
+                $type = "$langDocument";
+            break;
+        case ViewingEvent::VIDEO_ACTIVITY:
+                $title = Database::get()->querySingle("SELECT title FROM video WHERE video.course_id = ?d AND video.id = ?d", $course_id, $resource)->title;
+                $type = "$langVideo";                
+            break;
+        case ViewingEvent::VIDEOLINK_ACTIVITY:
+                $title = Database::get()->querySingle("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $resource)->title;                
+                $type = "$langsetvideo";                
+            break;
+        case ViewingEvent::EBOOK_ACTIVITY:
+                $title = Database::get()->querySingle("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $resource)->title;                
+                $type = "$langEBook";
+            break;
+        case ViewingEvent::QUESTIONNAIRE_ACTIVITY: 
+                $title = Database::get()->querySingle("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $resource)->name;                
+                $type = "$langMetaQuestionnaire";
+            break;
+        case BlogEvent::ACTIVITY: 
+                $type = "$langBlog";
+                $title = "$langBlogPosts";
+            break;
+        case ForumEvent::ACTIVITY:
+                $type = "$langForums";
+                $title = "$langComments $langForums";
+            break;
+        case WikiEvent::ACTIVITY:
+                $type = "$langWikiPages";
+                $title = "$langWikis";
+            break;
+        default: 
+                $title = "$langAllActivities";
+            break;
+    }
+    
+    array_push($data, $type, $title);
+    
+    return $data;
+    
+    
+    /*if ($details->activity_type == CommentEvent::BLOG_ACTIVITY && $details->module == MODULE_ID_COMMENTS) {
+        $type = "$langComments";
+        $title = "$langCommentsBlog";
+    }
+
+    if ($details->activity_type == CommentEvent::COURSE_ACTIVITY && $details->module == MODULE_ID_COMMENTS) {
+        $type = "$langComments";
+        $title = "$langCommentsCourse";
+    }
+
+    
+
+    if ($details->activity_type == RatingEvent::SOCIALBOOKMARK_ACTIVITY && $details->module == MODULE_ID_RATING) {
+        $type = "$langPersoValue $langCourseSocialBookmarks";
+        $title = "$langPersoValue";
+    }
+
+    if ($details->activity_type == RatingEvent::FORUM_ACTIVITY && $details->module == MODULE_ID_RATING) {
+        $type = "$langForumRating";
+        $title = "$langPersoValue";
+    }
+*/
+    
+}

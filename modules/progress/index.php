@@ -186,6 +186,15 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')));
+    } elseif (isset($_GET['u'])) {
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id", "name" => $certificate_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;progressall=true", "name" => $langUsers);
+        $pageName = "$langProgress $langsOfStudent";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;progressall=true",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label')));
     } elseif (!isset($_REQUEST['certificate_id'])) {
         $tool_content .= action_bar(
             array(
@@ -316,13 +325,16 @@ if ($is_editor) {
     } elseif (isset($_GET['progressall'])) { // display users progress (teacher view)
         display_users_progress($certificate_id);
         $display = FALSE;
+    } elseif (isset($_GET['u'])) { // display detailed user progress
+        display_user_progress_details($certificate_id, $_GET['u']);
+        $display = FALSE;
     }
 }
 
-if (isset($display) and $display == TRUE) {    
+if (isset($display) and $display == TRUE) {
     if ($is_editor) {
         if (isset($certificate_id)) {
-            $pageName = $certificate_title;
+            $pageName = $certificate_title;            
             // display certificate resources
             display_certificate_activities($certificate_id);
         } else { // display all certificates

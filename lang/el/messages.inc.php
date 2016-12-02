@@ -1323,6 +1323,8 @@ $langOfCourseComments = "Σχολίων στο $langsCourse";
 $langOfLearningPath = "Γραμμής μάθησης";
 $langNoCertificateUsers = "Δεν υπάρχουν $langsStudents που συμμετέχουν στο συγκεκριμένο πιστοποιητικό.";
 $langUsedCertRes = "Η δραστηριότητα έχει ήδη χρησιμοποιηθεί από κάποιον $langsstudent_acc";
+$langNoUserActivity = "Ο $langsStudent δεν έχει εκτελέσει καμμία δραστηριότητα.";
+$langTotalPercentCompleteness = "Συνολικό ποσοστό ολοκλήρωσης";
 //------------------------------------
 
 
