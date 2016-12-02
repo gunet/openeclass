@@ -26,7 +26,7 @@
                                 <div class='row'>
                                     <div class='col-xs-12'>
                                         <div>
-                                            <a href='{{ $urlServer }}modules/blog/index.php?user_id={{ $id }}'>{{ trans('langUserBlog') }}</a>
+                                            <a href='{{ $urlServer }}modules/blog/index.php?user_id={{ $id }}&token={{ token_generate("personal_blog" . $id) }}'>{{ trans('langUserBlog') }}</a>
                                         </div>
                                     </div>
                                 </div>

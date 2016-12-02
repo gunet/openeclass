@@ -313,7 +313,7 @@ function loggedInMenu($rich=true) {
 
     if (get_config('personal_blog')) {
         array_push($sideMenuText, $GLOBALS['langMyBlog']);
-        array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
+        array_push($sideMenuLink, $urlServer . "modules/blog/index.php?user_id=$uid&amp;token=".token_generate('personal_blog' . $uid));
         array_push($sideMenuImg, "fa-columns");
     }
     

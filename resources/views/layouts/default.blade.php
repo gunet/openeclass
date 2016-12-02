@@ -114,7 +114,7 @@
                                         </li>
                                         @if (get_config('personal_blog')) 
                                         <li role="presentation">
-                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/blog/index.php"><span class="fa fa-columns fa-fw"></span>{!! trans('langMyBlog') !!}</a>
+                                            <a role="menuitem" tabindex="-1" href="{{ $urlAppend }}modules/blog/index.php?user_id={{ $uid }}&token={{ token_generate('personal_blog' . $uid) }}"><span class="fa fa-columns fa-fw"></span>{!! trans('langMyBlog') !!}</a>
                                         </li>
                                         @endif
                                         @if (get_config('eportfolio_enable')) 

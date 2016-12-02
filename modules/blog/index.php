@@ -26,9 +26,8 @@ if (isset($_GET['course'])) { //course blog
     $guest_allowed = true;
     $require_current_course = FALSE;
     $blog_type = 'perso_blog';
-    
-    
 }
+
 $require_help = TRUE;
 $helpTopic = 'Blog';
 require_once '../../include/baseTheme.php';
@@ -59,7 +58,7 @@ if ($blog_type == 'course_blog') {
 } elseif ($blog_type == 'perso_blog') {
     if (!get_config('personal_blog')) {
         $tool_content = "<div class='alert alert-danger'>$langPersoBlogDisabled</div>";
-        if ($uid == 0) {
+        if ($session->status == 0) {
             draw($tool_content, 0);
         } else {
             draw($tool_content, 1);
@@ -79,13 +78,17 @@ if ($blog_type == 'course_blog') {
             $is_blog_editor = true;
         }
     } else {
-        if ($uid == 0) {
+        if ($session->status == 0) {
             redirect_to_home_page();
             exit;
         } else {
             $user_id = $uid; //current user's blog
             $is_blog_editor = true;
         }
+    }
+    
+    if (!token_validate('personal_blog' . $user_id, $_GET['token'])) {
+        redirect_to_home_page();
     }
     
     $db_user = Database::get()->querySingle("SELECT surname, givenname, public_blog FROM user WHERE id = ?d", $user_id);
@@ -148,7 +151,7 @@ if ($blog_type == 'course_blog') {
                               </div>';
         }
     } else {
-        if ($uid == 0) {
+        if ($session->status == 0) {
             if (!get_config('personal_blog_public') || $db_user->public_blog == 0) {
                 $tool_content = "<div class='alert alert-danger'>$langUserBlogNotPublic</div>";
                 draw($tool_content, 0);
@@ -166,7 +169,9 @@ if ($blog_type == 'course_blog') {
     $sharing_allowed = get_config('enable_social_sharing_links');
     $sharing_enabled = get_config('personal_blog_sharing');
     
-    $url_params = "user_id=$user_id";
+    $token = token_generate('personal_blog' . $user_id);
+    
+    $url_params = "user_id=$user_id&amp;token=$token";
 }
 
 
@@ -366,7 +371,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
 } elseif ($blog_type == 'perso_blog' && $is_blog_editor) {
     $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?user=$user_id&amp;action=showBlog",
+                  'url' => "$_SERVER[SCRIPT_NAME]?user_id=$user_id&amp;token=".token_generate('personal_blog' . $user_id)."&amp;action=showBlog",
                   'icon' => 'fa-reply',
                   'level' => 'primary-label',
                   'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
@@ -477,7 +482,7 @@ if ($action == "editPost") {
         if ($blog_type == 'course_blog') {
             $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
         } elseif ($blog_type == 'perso_blog') {
-            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]", 'name' => $langBlog);
+            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?$url_params", 'name' => $langBlog);
             $pageName = $langEditChange;
             $allow_to_edit = $is_blog_editor;
         }
