@@ -439,7 +439,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $tool_content .= "<thead><tr class='list-header'>
                 <td>$langName</td>
                 <td>$langCPFShortName</td>
-                <td>$langCPFFieldDescr</td>
+                <td>$langDescription</td>
                 <td>$langCPFFieldDatatype</td>
                 <td>$langCPFFieldRequired</td>
                 <td>" . icon('fa-gears') . "</td>
