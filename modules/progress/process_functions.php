@@ -179,26 +179,38 @@ function add_wiki_to_certificate($certificate_id) {
 function add_poll_to_certificate($certificate_id) {
     
     if (isset($_POST['poll'])) {
-        foreach ($_POST['poll'] as $datakey => $data) {      
+        foreach ($_POST['poll'] as $data) {      
           Database::get()->query("INSERT INTO certificate_criterion
                                     SET certificate = ?d, 
                                     module= " . MODULE_ID_QUESTIONNAIRE . ", 
                                     resource = ?d, 
-                                    activity_type = 'questionnaire',
-                                    operator = ?s,
-                                    threshold = ?f",
+                                    activity_type = 'questionnaire'",
                             $certificate_id,
-                            $_POST['poll'][$datakey],
-                            $_POST['operator'][$datakey],
-                            $_POST['threshold'][$datakey]);                            
+                            $data);
         }
     }
     return;
 }
 
 
+/**
+ * @brief add ebook db entries in certificate criterion
+ * @param type $certificate_id
+ * @return type
+ */
 function add_ebook_to_certificate($certificate_id) {
-     echo ".. still working...";
+     if (isset($_POST['ebook'])) {
+        foreach ($_POST['ebook'] as $data) {      
+          Database::get()->query("INSERT INTO certificate_criterion
+                                    SET certificate = ?d, 
+                                    module= " . MODULE_ID_EBOOK . ", 
+                                    resource = ?d, 
+                                    activity_type = 'ebook'",
+                            $certificate_id,
+                            $data);
+        }
+    }
+    return;
 }
 
 

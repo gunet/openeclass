@@ -259,7 +259,7 @@ function display_certificate_activities($certificate_id) {
                         <tr class='list-header'>
                             <th>$langTitle</th>
                             <th>$langType</th>
-                            <th>$langValue</th>
+                            <th class='text-center'>$langValue</th>
                             <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>";
         foreach ($result as $details) {
@@ -324,7 +324,7 @@ function display_certificate_activities($certificate_id) {
                     $title = $res_data->title;
                 }
                 $type = "$langsetvideo";
-                if($details->resource == ""){
+                if ($details->resource == ""){
                   $title = "$langAllActivities";
                 }
             }
@@ -385,27 +385,27 @@ function display_certificate_activities($certificate_id) {
                 $type = "$langWikiPages";
                 $title = "$langWikis";
             }
-
-            //$content = ellipsize_html($details->description, 50);
+            
             $tool_content .= "<tr><td>";
             $tool_content .= $title;
-            $tool_content .= "</td><td>".$type."</td><td>";
+            $tool_content .= "</td><td>".$type."</td>";
             
-            // display operators and thresholds
-            if ($details->operator=='eq') $tool_content .=" = ";
-            if ($details->operator=='lt') $tool_content .=" < ";
-            if ($details->operator=='gt') $tool_content .=" > ";
-            if ($details->operator=='let') $tool_content .=" <= ";
-            if ($details->operator=='get') $tool_content .=" >= ";
-            if ($details->operator=='neq') $tool_content .=" != ";
-            
-            $tool_content .= " $details->threshold</td>";
+            // display operators and thresholds            
+            $tool_content .= "<td class='text-center'>";
+            if (!empty($details->operator)) {
+                $op = get_operators();
+                $tool_content .= $op[$details->operator];
+            } else {
+                $tool_content .= "&mdash;";
+            }
+            $tool_content .= "&nbsp;$details->threshold</td>";
             
             $tool_content .= "<td class='text-center option-btn-cell'>".
                     action_button(array(
                         array('title' => $langEditChange,
                             'icon' => 'fa-edit',
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;act_mod=$details->id"
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;act_mod=$details->id",
+                            'show' => in_array($details->activity_type, criteria_with_operators())
                             ),
                         array('title' => $langDelete,
                             'icon' => 'fa-times',
@@ -1008,15 +1008,101 @@ function display_available_multimedia($certificate_id) {
 }
 
 
-function display_available_ebooks($certificate_id){
+/**
+ * @brief ebook display form
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $tool_content
+ * @global type $urlServer
+ * @global type $langAddModulesButton
+ * @global type $langChoice
+ * @global type $langNoEBook
+ * @global type $langEBook
+ * @global type $course_code
+ * @param type $certificate_id
+ */
+function display_available_ebooks($certificate_id) {
+  
+  global $course_id, $course_code, $tool_content, $urlServer,
+    $langAddModulesButton, $langChoice, $langNoEBook,
+    $langEBook, $course_code;
+    
+    $result = Database::get()->queryArray("SELECT * FROM ebook WHERE ebook.course_id = ?d
+                                                AND ebook.visible = 1
+                                                AND ebook.id NOT IN 
+                                        (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'ebook' AND module = " . MODULE_ID_EBOOK . ")", $course_id, $certificate_id);
+    if (count($result) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<table class='table-default'>" .
+                "<tr class='list-header'>" .
+                "<th class='text-left'>&nbsp;$langEBook</th>" .                
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "</tr>";
+        $unit_parameter = 'unit=' . $id;
+        foreach ($result as $catrow) {        
+            $tool_content .= "<tr>";
+            $tool_content .= "<td class='bold'>".icon('fa-book')."&nbsp;&nbsp;" .
+                    q($catrow->title) . "</td>";
+            $tool_content .= "<td class='text-center'>
+                            <input type='checkbox' name='ebook[]' value='$catrow->id' />
+                            <input type='hidden' name='ebook_title[$catrow->id]'
+                               value='" . q($catrow->title) . "'></td>";
+            $tool_content .= "</tr>";
+            $q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
+                                    ebook_section.public_id AS psid,
+                                    ebook_section.title AS section_title,
+                                    ebook_subsection.id AS ssid,
+                                    ebook_subsection.public_id AS pssid,
+                                    ebook_subsection.title AS subsection_title,
+                                    document.path,
+                                    document.filename
+                                    FROM ebook, ebook_section, ebook_subsection, document
+                                    WHERE ebook.id = ?d AND
+                                        ebook.course_id = ?d AND
+                                        ebook_section.ebook_id = ebook.id AND
+                                        ebook_section.id = ebook_subsection.section_id AND
+                                        document.id = ebook_subsection.file_id AND
+                                        document.course_id = ?d AND
+                                        document.subsystem = " . EBOOK . "
+                                        ORDER BY CONVERT(psid, UNSIGNED), psid,
+                                                 CONVERT(pssid, UNSIGNED), pssid", $catrow->id, $course_id, $course_id);
 
-    global $tool_content;
-  /*
-  $checkForBook = Database::get()->queryArray("SELECT * FROM ebook WHERE ebook.course_id = ?d
-                                              AND ebook.visible = 1
-                                              AND ebook.id NOT IN (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'ebook' AND module = 18)", $course_id, $certificate_id);
-*/
-  $tool_content .= ".. still working on this ..";
+            $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$catrow->id/";
+            $old_sid = false;            
+            foreach ($q as $row) {                
+                $sid = $row->sid;
+                $ssid = $row->ssid;
+                $display_id = $sid . ',' . $ssid;
+                $surl = $ebook_url_base . $display_id . '/' . $unit_parameter;
+                if ($old_sid != $sid) {
+                    $tool_content .= "<tr>
+                                    <td class='section'>".icon('fa-link')."&nbsp;&nbsp;
+                                        " . q($row->section_title) . "</td>
+                                    <td align='center'><input type='checkbox' name='section[]' value='$sid' />
+                                        <input type='hidden' name='section_title[$sid]'
+                                               value='" . q($row->section_title) . "'></td></tr>";
+                }
+                $tool_content .= "<tr>
+                                <td class='subsection'>".icon('fa-link')."&nbsp;&nbsp;
+                                <a href='" . q($surl) . "' target='_blank'>" . q($row->subsection_title) . "</a></td>
+                                <td align='center'><input type='checkbox' name='subsection[]' value='$ssid' />
+                                   <input type='hidden' name='subsection_title[$ssid]'
+                                          value='" . q($row->subsection_title) . "'></td>
+                            </tr>";
+                $old_sid = $sid;
+            }
+        }
+        $tool_content .= 
+                "</table>
+                <div class='text-right'>
+                <input class='btn btn-primary' type='submit' name='add_ebook' value='$langAddModulesButton' /></div></form>";
+    }
+  
+  
+  
 }
 
 
@@ -1029,16 +1115,13 @@ function display_available_ebooks($certificate_id){
  * @global type $langPollNone
  * @global type $langQuestionnaire
  * @global type $langChoice
- * @global type $langAddModulesButton
- * @global type $langValue
- * @global type $langAutoJudgeOperator
+ * @global type $langAddModulesButton 
  * @param type $certificate_id
  */
 function display_available_polls($certificate_id) {
     
     global $course_id, $course_code, $urlServer, $tool_content,
-            $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton,
-            $langAutoJudgeOperator, $langValue;
+            $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton;            
       
     $result = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
                                     AND poll.active = 1
@@ -1060,16 +1143,12 @@ function display_available_polls($certificate_id) {
                 "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-left'>&nbsp;$langQuestionnaire</th>" .
-                "<th style='width:5px;'>$langAutoJudgeOperator</th>" .
-                "<th style='width:5px;'>$langValue</th>" .
+                "<th class='text-left'>&nbsp;$langQuestionnaire</th>" .                
                 "<th style='width:80px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
         foreach ($pollinfo as $entry) {            
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a></td>";
-            $tool_content .= "<td>". selection(get_operators(), 'operator[]') . "</td>";
-            $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[]' value=''></td>";
+            $tool_content .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a></td>";            
             $tool_content .= "<td class='text-center'><input type='checkbox' name='poll[]' value='$entry[id]'></td>";            
             $tool_content .= "</tr>";            
         }
@@ -1350,4 +1429,19 @@ function get_operators() {
                  'let' => '<=',
                  'eq' => '=',
                  'neq' => '!=');
+}
+
+
+/**
+ * @brief return array with criteria having operators
+ * @return type
+ */
+function criteria_with_operators() {
+    
+    return array('assignment', 
+                 'exercise', 
+                 'learning path',
+                 'wiki',
+                 'blogpost',
+                 'forum-post');
 }

@@ -282,7 +282,11 @@ if ($is_editor) {
         add_wiki_to_certificate($certificate_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;certificate_id=$certificate_id");
-    } 
+    } elseif (isset($_GET['add_ebook'])) {
+        add_ebook_to_certificate($certificate_id);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;certificate_id=$certificate_id");
+    }
     
     elseif (isset($_GET['del_cert_res'])) { // delete certificate activity
         if (certificate_resource_usage($_GET['del_cert_res'])) { // check if resource has been used by user
