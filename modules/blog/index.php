@@ -788,7 +788,7 @@ if ($action == "showBlog") {
                                             ),
                                             array(
                                                 'title' => $langAddResePortfolio,
-                                                'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=blog&amp;rid=".$post->getId(),
+                                                'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=blog&amp;rid=".$post->getId(),
                                                 'icon' => 'fa-star',
                                                 'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
                                             ),

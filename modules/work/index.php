@@ -3086,12 +3086,12 @@ function show_student_assignments() {
                                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
                         
                         $eportfolio_action_array[] = array('title' => sprintf($langAddGroupWorkSubePortfolio, gid_to_name($sub->group_id)),
-                                'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=work_submission&amp;rid=".$sub->id,
+                                'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=work_submission&amp;rid=".$sub->id,
                                 'icon' => 'fa-star');
                         
                     } else {
                         $eportfolio_action_array[] = array('title' => $langAddResePortfolio,
-                                                           'url' => "$urlServer"."main/eportfolio/resources.php?action=add&amp;type=work_submission&amp;rid=".$sub->id,
+                                                           'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=work_submission&amp;rid=".$sub->id,
                                                            'icon' => 'fa-star');
                     }
                     $tool_content .= "<i class='fa fa-check-square-o'></i><br>";

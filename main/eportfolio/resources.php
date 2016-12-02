@@ -323,7 +323,7 @@ if ($userdata) {
                                             ". action_button(array(
                                                                 array(
                                                                         'title' => $langePortfolioRemoveResource,
-                                                                        'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;er_id=".$post->id,
+                                                                        'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
                                                                         'icon' => 'fa-times',
                                                                         'class' => 'delete',
                                                                         'confirm' => $langePortfolioSureToRemoveResource,
@@ -425,7 +425,7 @@ if ($userdata) {
                                             ". action_button(array(
                                                     array(
                                                         'title' => $langePortfolioRemoveResource,
-                                                        'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=blog&amp;er_id=".$post->id,
+                                                        'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
                                                         'icon' => 'fa-times',
                                                         'class' => 'delete',
                                                         'confirm' => $langePortfolioSureToRemoveResource,
@@ -495,7 +495,7 @@ if ($userdata) {
                                             ". action_button(array(
                                                         array(
                                                                 'title' => $langePortfolioRemoveResource,
-                                                                'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
+                                                                'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
                                                                 'icon' => 'fa-times',
                                                                 'class' => 'delete',
                                                                 'confirm' => $langePortfolioSureToRemoveResource,
@@ -557,7 +557,7 @@ if ($userdata) {
                                        ". action_button(array(
                                                     array(
                                                             'title' => $langePortfolioRemoveResource,
-                                                            'url' => "$_SERVER[SCRIPT_NAME]?action=remove&amp;type=my_docs&amp;er_id=".$doc->id,
+                                                            'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=my_docs&amp;er_id=".$doc->id,
                                                             'icon' => 'fa-times',
                                                             'class' => 'delete',
                                                             'confirm' => $langePortfolioSureToRemoveResource,
