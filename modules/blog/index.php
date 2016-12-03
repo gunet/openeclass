@@ -404,7 +404,7 @@ if ($action == "delPost") {
     } else {
         Session::Messages($langBlogPostNotFound);      
     }
-    redirect_to_home_page("modules/blog/index.php?$url_params");
+    redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
 }
 
 //create blog post form
@@ -469,7 +469,7 @@ if ($action == "createPost") {
         </div>";
     } else {
         Session::Messages($langBlogPostNotAllowedCreate);
-        redirect_to_home_page("modules/blog/index.php?$url_params");
+        redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));
     }
     
 }
@@ -548,11 +548,11 @@ if ($action == "editPost") {
         </div>";
         } else {
             Session::Messages($langBlogPostNotAllowedEdit);
-            redirect_to_home_page("modules/blog/index.php?$url_params");            
+            redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));            
         }
     } else {
         Session::Messages($langBlogPostNotFound);
-        redirect_to_home_page("modules/blog/index.php?$url_params");        
+        redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));        
     }
 }
 
@@ -609,7 +609,7 @@ if ($action == "savePost") {
             Session::Messages($langBlogPostNotFound);                      
         }
     } 
-    redirect_to_home_page("modules/blog/index.php?$url_params");      
+    redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));      
 }
 
 if (isset($message) && $message) {
@@ -700,7 +700,7 @@ if ($action == "showPost") {
         
     } else {
         Session::Messages($langBlogPostNotFound);
-        redirect_to_home_page("modules/blog/index.php?$url_params");  
+        redirect_to_home_page("modules/blog/index.php?".str_replace('&amp;', '&', $url_params));  
     }
 
 }
@@ -832,7 +832,7 @@ if ($action == "showBlog") {
 if ($blog_type == 'course_blog') {
     draw($tool_content, 2, null, $head_content);
 } elseif ($blog_type == 'perso_blog') {
-    if ($uid > 0) {
+    if ($session->status) {
         draw($tool_content, 1, null, $head_content);
     } else {
         draw($tool_content, 0, null, $head_content);

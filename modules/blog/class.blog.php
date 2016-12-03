@@ -123,7 +123,7 @@ Class Blog {
             global $course_code;
             $url_params = "course=$course_code";
         } else { //user blog
-            $url_params = "user_id=$this->user_id";
+            $url_params = "token=".token_generate('personal_blog' . $this->user_id)."&amp;user_id=$this->user_id";
         }
         $posts = $this->getPopularBlogPostsDB($num);
         $out = "<h5><strong>$langBlogPopular</strong></h5>
@@ -147,7 +147,7 @@ Class Blog {
             global $course_code;
             $url_params = "course=$course_code";
         } else { //user blog
-            $url_params = "user_id=$this->user_id";
+            $url_params = "token=".token_generate('personal_blog' . $this->user_id)."&amp;user_id=$this->user_id";
         }
         
         $num_posts = $this->blogPostsNumber();
@@ -187,7 +187,7 @@ Class Blog {
             global $course_code;
             $url_params = "course=$course_code";
         } else { //user blog
-            $url_params = "user_id=$this->user_id";
+            $url_params = "token=".token_generate('personal_blog' . $this->user_id)."&amp;user_id=$this->user_id";
         }
         $out = '';
         
