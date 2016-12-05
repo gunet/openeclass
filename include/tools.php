@@ -51,7 +51,7 @@ function getSideMenu($menuTypeID, $rich=true) {
                 break;
             }
 
-        case 1: { //logged in                      
+        case 1: { //logged in
                 $menu = loggedInMenu($rich);
                 break;
             }
@@ -198,7 +198,7 @@ function loggedInMenu($rich=true) {
             array_push($sideMenuLink, $urlServer . 'modules/admin/');
         }
 
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
@@ -432,60 +432,60 @@ function adminMenu() {
 
     array_push($sideMenuText, $GLOBALS['langSearchUser']);
     array_push($sideMenuLink, "../admin/search_user.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-caret-right");
 
     array_push($sideMenuText, $GLOBALS['langProfOpen']);
     array_push($sideMenuLink, "../admin/listreq.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-caret-right");
 
     // check for close user registration
     if ((get_config('eclass_stud_reg') == 1) or get_config('alt_auth_stud_reg') == 0) {
         array_push($sideMenuText, $GLOBALS['langUserOpen']);
         array_push($sideMenuLink, "../admin/listreq.php?type=user");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
     } else {
         array_push($sideMenuText, $GLOBALS['langUserDetails']);
         array_push($sideMenuLink, "../admin/newuseradmin.php?type=user");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
     }
 
     if (isset($is_admin) and $is_admin) {
         array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
         array_push($sideMenuLink, "../admin/auth.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langMailVerification']);
         array_push($sideMenuLink, "../admin/mail_ver_settings.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langChangeUser']);
         array_push($sideMenuLink, "../admin/change_user.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
         array_push($sideMenuText, $GLOBALS['langCPFAdminSideMenuLink']);
         array_push($sideMenuLink, "../admin/custom_profile_fields.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
     }
 
     array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
     array_push($sideMenuLink, "../admin/multireguser.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-caret-right");
 
     array_push($sideMenuText, $GLOBALS['langMultiRegCourseUser']);
     array_push($sideMenuLink, "../admin/multicourseuser.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-caret-right");
 
     array_push($sideMenuText, $GLOBALS['langMultiDelUser']);
     array_push($sideMenuLink, "../admin/multiedituser.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-caret-right");
 
     array_push($sideMenuText, $GLOBALS['langInfoMail']);
     array_push($sideMenuLink, "../admin/mailtoprof.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-caret-right");
 
     if (isset($is_admin) and $is_admin) {
         array_push($sideMenuText, $GLOBALS['langAdmins']);
         array_push($sideMenuLink, "../admin/addadmin.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
     }
 
     array_push($sideMenuSubGroup, $sideMenuText);
@@ -509,23 +509,27 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langSearchCourse']);
         array_push($sideMenuLink, '../admin/searchcours.php');
-        array_push($sideMenuImg, 'arrow.png');
+        array_push($sideMenuImg, 'fa-caret-right');
 
         array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
         array_push($sideMenuLink, '../course_info/restore_course.php');
-        array_push($sideMenuImg, 'arrow.png');
+        array_push($sideMenuImg, 'fa-caret-right');
 
         array_push($sideMenuText, $GLOBALS['langHierarchy']);
         array_push($sideMenuLink, '../admin/hierarchy.php');
-        array_push($sideMenuImg, 'arrow.png');
+        array_push($sideMenuImg, 'fa-caret-right');
 
         array_push($sideMenuText, $GLOBALS['langMultiCourse']);
         array_push($sideMenuLink, '../admin/multicourse.php');
-        array_push($sideMenuImg, 'arrow.png');
+        array_push($sideMenuImg, 'fa-caret-right');
 
         array_push($sideMenuText, $GLOBALS['langAutoEnroll']);
         array_push($sideMenuLink, '../admin/autoenroll.php');
-        array_push($sideMenuImg, 'arrow.png');
+        array_push($sideMenuImg, 'fa-caret-right');
+
+        array_push($sideMenuText, $GLOBALS['langActivityCourse']);
+        array_push($sideMenuLink, '../admin/activity.php');
+        array_push($sideMenuImg, 'fa-caret-right');
 
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
@@ -548,27 +552,27 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langCleanUp']);
         array_push($sideMenuLink, "../admin/cleanup.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         if (get_config('phpSysInfoURL')) {
             array_push($sideMenuText, $GLOBALS['langSysInfo']);
             array_push($sideMenuLink, get_config('phpSysInfoURL'));
-            array_push($sideMenuImg, "arrow.png");
+            array_push($sideMenuImg, "fa-caret-right");
         }
 
         array_push($sideMenuText, $GLOBALS['langPHPInfo']);
         array_push($sideMenuLink, "../admin/phpInfo.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         if (get_config('phpMyAdminURL')) {
             array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
             array_push($sideMenuLink, get_config('phpMyAdminURL'));
-            array_push($sideMenuImg, "arrow.png");
+            array_push($sideMenuImg, "fa-caret-right");
         }
 
         array_push($sideMenuText, $GLOBALS['langUpgradeBase']);
         array_push($sideMenuLink, $urlServer . "upgrade/");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
@@ -592,28 +596,28 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langConfig']);
         array_push($sideMenuLink, "../admin/eclassconf.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langExtAppConfig']);
         array_push($sideMenuLink, "../admin/extapp.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langAdminCreateFaq']);
         array_push($sideMenuLink, "../admin/faq_create.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);
         array_push($sideMenuLink, "../admin/theme_options.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langDisableModules']);
         array_push($sideMenuLink, "../admin/modules.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langUsage']);
         array_push($sideMenuLink, "../../modules/usage/?t=a");
-        array_push($sideMenuImg, "arrow.png");
-        
+        array_push($sideMenuImg, "fa-caret-right");
+
         array_push($sideMenuText, $GLOBALS['langRecordLog']);
         array_push($sideMenuLink, "../admin/otheractions.php");
         array_push($sideMenuImg, "fa-caret-right");
@@ -621,17 +625,17 @@ function adminMenu() {
         if (get_config('enable_common_docs')) {
             array_push($sideMenuText, $GLOBALS['langCommonDocs']);
             array_push($sideMenuLink, "../admin/commondocs.php");
-            array_push($sideMenuImg, "arrow.png");
+            array_push($sideMenuImg, "fa-caret-right");
         }
 
         array_push($sideMenuText, $GLOBALS['langAdminAn']);
         array_push($sideMenuLink, "../admin/adminannouncements.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuText, $GLOBALS['langAdminManual']);
         $manual_language = ($language == 'el')? $language: 'en';
         array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=$manual_language:admin_doc");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);

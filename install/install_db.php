@@ -1645,6 +1645,12 @@ $db->query("CREATE TABLE IF NOT EXISTS `autoenroll_department` (
     FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
     FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `activity_title` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `order` INT(11) NOT NULL DEFAULT 0,
+    `title` TEXT NOT NULL,
+    `required` BOOL NOT NULL DEFAULT 0) $tbl_options");
+
 // Conference table
 $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `conf_id` int(11) NOT NULL AUTO_INCREMENT,

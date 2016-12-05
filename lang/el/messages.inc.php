@@ -179,6 +179,10 @@ $langNoRules = 'Δεν υπάρχουν κανόνες';
 $langApplyRule = 'Εφαρμογή του κανόνα στους υπάρχοντες χρήστες κατά την αποθήκευση';
 $langRuleApplied = 'Ο κανόνας εφαρμόστηκε σε όλους τους υπάρχοντες χρήστες';
 $langSureToDelRule = "Θέλετε σίγουρα να διαγραφεί ο κανόνας;";
+$langActivityCourse = 'Μαθήματα-Δραστηριότητες';
+$langNoActivityHeadings = 'Δεν υπάρχουν τίτλοι κατηγοριών δραστηριοτήτων';
+$langActivityCourseAdd = 'Προσθήκη τίτλου κατηγορίας δραστηριότητας';
+$langOptional = 'Προαιρετικό';
 
 // FAQ
 $langAdminCreateFaq = "Δημιουργία FAQ";
