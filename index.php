@@ -150,6 +150,11 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     // if user is not guest redirect him to portfolio
     header("Location: {$urlServer}main/portfolio.php");
 } else {
+    // redirect to landing page if defined
+    if ($landingUrl = get_config('landing_url')) {
+        header('Location: ' . $landingUrl);
+        exit;
+    }
     // check authentication methods
     $aid = null;
     $hybridLinkId = null;
