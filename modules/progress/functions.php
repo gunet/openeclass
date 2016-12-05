@@ -102,7 +102,6 @@ function display_certificates() {
  * @brief display all certificate activities
  * @global type $tool_content
  * @global type $course_code
- * @global type $course_id
  * @global type $langNoActivCert
  * @global type $langAttendanceActList
  * @global type $langTitle
@@ -111,7 +110,7 @@ function display_certificates() {
  * @global type $langExerciseAsModuleLabel
  * @global type $langOfBlog
  * @global type $langDocumentAsModuleLabel
- * @global type $langMediaAsModuleLabel 
+ * @global type $langMediaAsModuleLabel
  * @global type $langOfEBook
  * @global type $langOfPoll
  * @global type $langWiki
@@ -126,48 +125,26 @@ function display_certificates() {
  * @global type $langConfirmDelete
  * @global type $langConfig
  * @global type $langInsertWorkCap
- * @global type $langLearningPath
  * @global type $langAdd
  * @global type $langExport
  * @global type $langBack
  * @global type $langInsertWorkCap
- * @global type $langCommentsBlog
- * @global type $langCommentsCourse
- * @global type $langWikis
- * @global type $langCategoryExcercise
- * @global type $langValue
- * @global type $langsetvideo
- * @global type $langEBook
- * @global type $langMetaQuestionnaire
- * @global type $langBlog
- * @global type $langBlogPosts
- * @global type $langPersoValue
- * @global type $langCourseSocialBookmarks
- * @global type $langPersoValue
- * @global type $langForumRating
- * @global type $langPersoValue
- * @global type $langWikiPages
- * @global type $langCategoryEssay
- * @global type $langDocument
  * @global type $langUsers
- * @global type $langAllActivities
+ * @global type $langValue
+ * @global type $langPersoValue
  * @param type $certificate_id
  */
 function display_certificate_activities($certificate_id) {
 
-    global $tool_content, $course_code, $course_id, 
+    global $tool_content, $course_code,
            $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
-           $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog, $langDocumentAsModuleLabel,
+           $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
-           $langOfForums, $langOfBlogComments, $langOfCourseComments, $langOfLikesForum, $langOfLikesSocial,
+           $langOfForums, $langOfBlogComments, $langOfCourseComments, $langOfLikesForum,
            $langOfLearningPath, $langDelete, $langEditChange, $langConfirmDelete,           
-           $langConfig, $langInsertWorkCap, $langLearningPath, $langVideo,
+           $langConfig, $langInsertWorkCap, $langDocumentAsModuleLabel,
            $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
-           $langCommentsBlog, $langCommentsCourse, $langWikis, $langCategoryExcercise,           
-           $langValue, $langsetvideo, $langEBook, $langMetaQuestionnaire, $langBlog, 
-           $langBlogPosts, $langPersoValue, $langCourseSocialBookmarks,
-           $langPersoValue, $langForumRating, $langPersoValue, $langWikiPages, 
-           $langCategoryEssay, $langDocument, $langAllActivities;
+           $langValue, $langPersoValue, $langOfLikesSocial;
 
     $tool_content .= action_bar(
             array(
@@ -250,7 +227,7 @@ function display_certificate_activities($certificate_id) {
         );
 
     //get available activities
-    $result = Database::get()->queryArray("SELECT * FROM certificate_criterion WHERE certificate = ?d ORDER BY `id` DESC", $certificate_id);
+    $result = Database::get()->queryArray("SELECT * FROM certificate_criterion WHERE certificate = ?d ORDER BY `id` DESC", $certificate_id);    
 
     if (count($result) > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
@@ -263,111 +240,10 @@ function display_certificate_activities($certificate_id) {
                             <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>";
         foreach ($result as $details) {
-            if ($details->activity_type == ExerciseEvent::ACTIVITY) {
-                $title = Database::get()->querySingle("SELECT title FROM exercise WHERE exercise.course_id = ?d AND exercise.id = ?d", $course_id, $details->resource)->title;
-                $type = "$langCategoryExcercise";
-                if ($details->resource == "") {
-                    $title = "$langAllActivities";
-                }
-            }
-            if ($details->activity_type == AssignmentEvent::ACTIVITY) {
-                $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $details->resource)->title;
-                $type = "$langCategoryEssay";
-                if ($details->resource == "") {
-                    $title = "$langAllActivities";
-                }
-            }
-
-            if ($details->activity_type == LearningPathEvent::ACTIVITY) {
-                $title = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $details->resource)->name;                
-                $type = "$langLearningPath";
-                if ($details->resource == "") {
-                    $title = "$langAllActivities";
-                }
-            }
-
-            if ($details->activity_type == ViewingEvent::DOCUMENT_ACTIVITY) {
-                $cer_res = Database::get()->queryArray("SELECT IF(title = '', filename, title) AS file_details FROM document 
-                        WHERE document.course_id = ?d AND document.id = ?d", $course_id, $details->resource);                
-                foreach ($cer_res as $res_data) {
-                    $title = $res_data->file_details;
-                }
-                $type = "$langDocument";
-                if ($details->resource == "") {
-                    $title = "$langAllActivities";
-                }
-            }
-
-            if ($details->activity_type == ViewingEvent::VIDEO_ACTIVITY){
-                $title = Database::get()->querySingle("SELECT title FROM video WHERE video.course_id = ?d AND video.id = ?d", $course_id, $details->resource)->title;                
-                $type = "$langVideo";
-                if ($details->resource == "") {
-                  $title = "$langAllActivities";
-                }
-            }
-
-            if ($details->activity_type == ViewingEvent::VIDEOLINK_ACTIVITY){
-                $title = Database::get()->querySingle("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $details->resource)->title;                
-                $type = "$langsetvideo";
-                if ($details->resource == "") {
-                  $title = "$langAllActivities";
-                }
-            }
-
-            if ($details->activity_type == ViewingEvent::EBOOK_ACTIVITY){
-                $title = Database::get()->querySingle("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $details->resource)->title;                
-                $type = "$langEBook";
-                if ($details->resource == "") {
-                  $title = "$langAllActivities";
-                }
-            }
-
-            if ($details->activity_type == ViewingEvent::QUESTIONNAIRE_ACTIVITY){
-                $title = Database::get()->querySingle("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $details->resource)->name;                
-                $type = "$langMetaQuestionnaire";
-                if ($details->resource == "") {
-                  $title = "$langAllActivities";
-                }
-            }
-
-            if ($details->activity_type == BlogEvent::ACTIVITY) {
-                $type = "$langBlog";
-                $title = "$langBlogPosts";
-            }
-
-            if ($details->activity_type == CommentEvent::BLOG_ACTIVITY && $details->module == MODULE_ID_COMMENTS) {
-                $type = "$langComments";
-                $title = "$langCommentsBlog";
-            }
-
-            if ($details->activity_type == CommentEvent::COURSE_ACTIVITY && $details->module == MODULE_ID_COMMENTS) {
-                $type = "$langComments";
-                $title = "$langCommentsCourse";
-            }
-
-            if ($details->activity_type == ForumEvent::ACTIVITY) {
-                $type = "$langForums";
-                $title = "$langComments $langForums";
-            }
-
-            if ($details->activity_type == RatingEvent::SOCIALBOOKMARK_ACTIVITY && $details->module == MODULE_ID_RATING) {
-                $type = "$langPersoValue $langCourseSocialBookmarks";
-                $title = "$langPersoValue";
-            }
-
-            if ($details->activity_type == RatingEvent::FORUM_ACTIVITY && $details->module == MODULE_ID_RATING) {
-                $type = "$langForumRating";
-                $title = "$langPersoValue";
-            }
-           
-            if ($details->activity_type == WikiEvent::ACTIVITY) {
-                $type = "$langWikiPages";
-                $title = "$langWikis";
-            }
-            
-            $tool_content .= "<tr><td>";
-            $tool_content .= $title;
-            $tool_content .= "</td><td>".$type."</td>";
+            $resource_data = get_resource_details($details->id);            
+            $tool_content .= "<tr><td>";            
+            $tool_content .= $resource_data['title'];
+            $tool_content .= "</td><td>" . $resource_data['type'] ."</td>";
             
             // display operators and thresholds            
             $tool_content .= "<td class='text-center'>";
@@ -1398,7 +1274,16 @@ function display_users_progress($certificate_id) {
 }
 
 
-
+/**
+ * @brief detailed view of user progress in various subsystems
+ * @global type $tool_content
+ * @global type $langNoUserActivity
+ * @global type $langAttendanceActivity
+ * @global type $langInstallEnd
+ * @global type $langTotalPercentCompleteness
+ * @param type $certificate_id
+ * @param type $user_id
+ */
 function display_user_progress_details($certificate_id, $user_id) {
     
     global $tool_content, $langNoUserActivity, $langAttendanceActivity, 
@@ -1420,11 +1305,9 @@ function display_user_progress_details($certificate_id, $user_id) {
                 <tbody>";            
             foreach ($sql as $user_criterion) {
                 $resource_data = get_resource_details($user_criterion);
-                //print_a($resource_data);
-                //$data = Database::get()->querySingle("SELECT activity_type FROM certificate_criterion WHERE id = ?d", $user_criterion);
-                //$activity = $data->activity_type;
-                $activity = $resource_data[1] . "&nbsp;<small>(" .$resource_data[0] . ")</small>";
-                $tool_content .= "<tr>                       
+                //print_a($resource_data);                
+                $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+                $tool_content .= "<tr>
                         <td>" . $activity . "</td>
                         <td class='text-center'>" . icon('fa-check-circle') . "</td>
                         </tr>";

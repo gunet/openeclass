@@ -357,13 +357,41 @@ function certificate_resource_usage($certificate_resource_id) {
     }    
 }
 
-
+/**
+ * @brief get resource details given a certificate resource
+ * @global type $course_id
+ * @global type $langCategoryExcercise
+ * @global type $langCategoryEssay
+ * @global type $langLearningPath
+ * @global type $langDocument
+ * @global type $langVideo
+ * @global type $langsetvideo
+ * @global type $langEBook
+ * @global type $langMetaQuestionnaire
+ * @global type $langBlogPosts
+ * @global type $langBlog
+ * @global type $langForums
+ * @global type $langComments
+ * @global type $langForums
+ * @global type $langWikiPages
+ * @global type $langWikis
+ * @global type $langComments
+ * @global type $langCommentsBlog
+ * @global type $langCommentsCourse
+ * @global type $langPersoValue
+ * @global type $langCourseSocialBookmarks
+ * @global type $langForumRating
+ * @global type $langAllActivities
+ * @param type $resource_id
+ * @return type
+ */
 function get_resource_details($resource_id) {
     
     global $course_id, $langCategoryExcercise, $langCategoryEssay, $langLearningPath,
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire, 
             $langBlogPosts, $langBlog, $langForums, $langComments, $langForums, $langWikiPages,
-            $langWikis, $langAllActivities;
+            $langWikis, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
+            $langPersoValue, $langCourseSocialBookmarks, $langForumRating;
     
     $data = array('type' => '', 'title' => '');
     
@@ -412,9 +440,25 @@ function get_resource_details($resource_id) {
                 $type = "$langBlog";
                 $title = "$langBlogPosts";
             break;
+        case CommentEvent::BLOG_ACTIVITY:
+                $type = "$langComments";
+                $title = "$langCommentsBlog";
+            break;
+        case CommentEvent::COURSE_ACTIVITY:
+                $type = "$langComments";
+                $title = "$langCommentsCourse";
+            break;
+        case RatingEvent::SOCIALBOOKMARK_ACTIVITY:
+                $type = "$langPersoValue $langCourseSocialBookmarks";
+                $title = "$langPersoValue";
+            break;
         case ForumEvent::ACTIVITY:
                 $type = "$langForums";
                 $title = "$langComments $langForums";
+            break;
+        case RatingEvent::FORUM_ACTIVITY:
+                $type = "$langForumRating";
+                $title = "$langPersoValue";
             break;
         case WikiEvent::ACTIVITY:
                 $type = "$langWikiPages";
@@ -424,33 +468,8 @@ function get_resource_details($resource_id) {
                 $title = "$langAllActivities";
             break;
     }
-    
-    array_push($data, $type, $title);
-    
-    return $data;
-    
-    
-    /*if ($details->activity_type == CommentEvent::BLOG_ACTIVITY && $details->module == MODULE_ID_COMMENTS) {
-        $type = "$langComments";
-        $title = "$langCommentsBlog";
-    }
-
-    if ($details->activity_type == CommentEvent::COURSE_ACTIVITY && $details->module == MODULE_ID_COMMENTS) {
-        $type = "$langComments";
-        $title = "$langCommentsCourse";
-    }
-
-    
-
-    if ($details->activity_type == RatingEvent::SOCIALBOOKMARK_ACTIVITY && $details->module == MODULE_ID_RATING) {
-        $type = "$langPersoValue $langCourseSocialBookmarks";
-        $title = "$langPersoValue";
-    }
-
-    if ($details->activity_type == RatingEvent::FORUM_ACTIVITY && $details->module == MODULE_ID_RATING) {
-        $type = "$langForumRating";
-        $title = "$langPersoValue";
-    }
-*/
-    
+    $data['type'] = $type;
+    $data['title'] = $title;
+        
+    return $data;    
 }
