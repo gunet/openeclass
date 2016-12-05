@@ -3439,10 +3439,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
     if (version_compare($oldversion, '3.6', '<')) {
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_title` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `order` INT(11) NOT NULL DEFAULT 0,
-            `title` TEXT NOT NULL,
+            `heading` TEXT NOT NULL,
             `required` BOOL NOT NULL DEFAULT 0) $tbl_options");
     }
 

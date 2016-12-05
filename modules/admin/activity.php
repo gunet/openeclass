@@ -25,14 +25,14 @@ $toolName = $langActivityCourse;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_POST['toReorder'])) {
-    reorder_table('activity_title', null, null, getDirectReference($_POST['toReorder']),
+    reorder_table('activity_heading', null, null, getDirectReference($_POST['toReorder']),
         isset($_POST['prevReorder'])? getDirectReference($_POST['prevReorder']): null);
     exit;
 } elseif (isset($_POST['action']) and $_POST['action'] == 'delete') {
     if (isset($_GET['delete'])) {
         $id = getDirectReference($_GET['delete']);
         if ($id) {
-            Database::get()->query('DELETE FROM activity_title WHERE id = ?d', $id);
+            Database::get()->query('DELETE FROM activity_heading WHERE id = ?d', $id);
             Session::Messages($langGlossaryDeleted, 'alert-success');
         }
     }
@@ -42,34 +42,34 @@ if (isset($_POST['toReorder'])) {
     if (isset($_POST['id'])) {
         $id = getDirectReference($_POST['id']);
     }
-    $titles = array();
+    $headings = array();
     foreach ($session->active_ui_languages as $key => $langcode) {
-        $titles[$langcode] = isset($_POST['title'][$langcode])?
-            canonicalize_whitespace($_POST['title'][$langcode]): '';
+        $headings[$langcode] = isset($_POST['heading'][$langcode])?
+            canonicalize_whitespace($_POST['heading'][$langcode]): '';
     }
     if (isset($id)) {
-        Database::get()->query('UPDATE activity_title SET required = ?d, title = ?s WHERE id = ?d',
-            intval(!!$_POST['required']), serialize($titles), $id);
+        Database::get()->query('UPDATE activity_heading SET required = ?d, heading = ?s WHERE id = ?d',
+            intval(!!$_POST['required']), serialize($headings), $id);
     } else {
-        $maxOrder = Database::get()->querySingle('SELECT MAX(`order`) AS maxOrder FROM activity_title')->maxOrder;
-        Database::get()->query('INSERT INTO activity_title SET required = ?d, title = ?s, `order` = ?d',
-            intval(!!$_POST['required']), serialize($titles), $maxOrder + 1);
+        $maxOrder = Database::get()->querySingle('SELECT MAX(`order`) AS maxOrder FROM activity_heading')->maxOrder;
+        Database::get()->query('INSERT INTO activity_heading SET required = ?d, heading = ?s, `order` = ?d',
+            intval(!!$_POST['required']), serialize($headings), $maxOrder + 1);
     }
     Session::Messages($langFaqEditSuccess, 'alert-success');
     redirect_to_home_page('modules/admin/activity.php');
 } elseif (isset($_GET['add']) or isset($_GET['edit'])) {
     $idInput = '';
-    $titles = array();
+    $headings = array();
     $checked = '';
     if (isset($_GET['edit'])) {
         $id = getDirectReference($_GET['edit']);
         $idInput = "<input type='hidden' name='id' value='$_GET[edit]'>";
-        $item = Database::get()->querySingle('SELECT * FROM activity_title WHERE id = ?d', $id);
+        $item = Database::get()->querySingle('SELECT * FROM activity_heading WHERE id = ?d', $id);
         if (!$item) {
             Session::Messages($langGeneralError, 'alert-danger');
             redirect_to_home_page('modules/admin/activity.php');
         }
-        $titles = unserialize($item->title);
+        $headings = unserialize($item->heading);
         $checked = $item->required? ' checked': '';
     }
     $navigation[] = array('url' => 'activity.php', 'name' => $langActivityCourse);
@@ -85,16 +85,16 @@ if (isset($_POST['toReorder'])) {
           <fieldset>";
 
     foreach ($session->active_ui_languages as $key => $langcode) {
-        if (isset($titles[$langcode])) {
-            $value = q($titles[$langcode]);
+        if (isset($headings[$langcode])) {
+            $value = q($headings[$langcode]);
         } else {
             $value = '';
         }
         $tool_content .= "
             <div class='form-group'>
-              <label class='col-sm-3 control-label' for='title-$langcode'>$langTitle (" . $langNameOfLang[langcode_to_name($langcode)] . "):</label>
+              <label class='col-sm-3 control-label' for='heading-$langcode'>$langTitle (" . $langNameOfLang[langcode_to_name($langcode)] . "):</label>
               <div class='col-sm-9'>
-                <input class='form-control' type='text' name='title[$langcode]' id='name-$langcode' value='$value'>
+                <input class='form-control' type='text' name='heading[$langcode]' id='heading-$langcode' value='$value'>
               </div>
             </div>";
     }
@@ -145,7 +145,7 @@ $(function() {
         });
     });
 
-    Sortable.create(document.getElementById('titles'), {
+    Sortable.create(document.getElementById('headings'), {
         handle: '.fa-arrows',
         animation: 150,
         onEnd: function (evt) {
@@ -181,27 +181,27 @@ $(function() {
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
 
-    $titles = Database::get()->queryArray('SELECT * FROM activity_title ORDER BY `order`');
-    if (count($titles)) {
-        $tool_content .= "<div class='panel-group' id='titles'>";
-        foreach ($titles as $item) {
+    $headings = Database::get()->queryArray('SELECT * FROM activity_heading ORDER BY `order`');
+    if (count($headings)) {
+        $tool_content .= "<div class='panel-group' id='headings'>";
+        foreach ($headings as $item) {
             $type = $item->required? $langCMeta['compulsory']: $langOptional;
-            $titles = unserialize($item->title);
-            if ($titles[$language]) {
-                $title = $titles[$language];
-            } elseif ($titles['en']) {
-                $title = $titles['en'];
-            } elseif ($titles['el']) {
-                $title = $titles['el'];
+            $headings = unserialize($item->heading);
+            if ($headings[$language]) {
+                $heading = $headings[$language];
+            } elseif ($headings['en']) {
+                $heading = $headings['en'];
+            } elseif ($headings['el']) {
+                $heading = $headings['el'];
             } else {
-                $title = $titles[array_keys($titles)[0]];
+                $heading = $headings[array_keys($headings)[0]];
             }
-            $title = q($title);
+            $heading = q($heading);
             $indirectId = getIndirectReference($item->id);
             $tool_content .= "
       <div class='panel panel-default' data-id='$indirectId'>
         <div class='panel-heading'>
-          $title
+          $heading
           <div class='pull-right'>$type " .
             icon('fa-edit', $langEdit, 'activity.php?edit=' . $indirectId) . "
             <a class='confirm-delete' href='activity.php?delete=$indirectId' title='$langDelete' data-toggle='tooltip'>
@@ -210,7 +210,7 @@ $(function() {
           </div>
         </div>
         <div class='panel-body'>";
-            foreach ($titles as $lang => $msg) {
+            foreach ($headings as $lang => $msg) {
                 $tool_content .= "
           <div class='row'>
             <div class='col-xs-2 text-right'>
