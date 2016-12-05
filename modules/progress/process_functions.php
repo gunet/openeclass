@@ -389,7 +389,7 @@ function get_resource_details($resource_id) {
     
     global $course_id, $langCategoryExcercise, $langCategoryEssay, $langLearningPath,
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire, 
-            $langBlogPosts, $langBlog, $langForums, $langComments, $langForums, $langWikiPages,
+            $langBlogPosts, $langBlog, $langForums, $langWikiPages,
             $langWikis, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating;
     

@@ -1188,7 +1188,7 @@ function certificate_settings($certificate_id = 0) {
  */
 function student_view_certificate() {
     
-    global $uid, $course_id;
+    global $uid, $course_id, $course_code;
     
     require_once 'Game.php';
 
@@ -1211,9 +1211,10 @@ function student_view_certificate() {
                 . " join {$key} b on (a.{$key} = b.id) "
                 . " where a.user = ?d and b.course_id = ?d";
         Database::get()->queryFunc($gameQ, function($game) use ($key, &$data) {
-            $data['game_' . $key][] = $game;
+            $data['game_' . $key][] = $game;            
         }, $uid, $course_id);
     }
+    
     view('modules.progress.progress', $data);        
 }
 
@@ -1304,8 +1305,7 @@ function display_user_progress_details($certificate_id, $user_id) {
                 </thead>
                 <tbody>";            
             foreach ($sql as $user_criterion) {
-                $resource_data = get_resource_details($user_criterion);
-                //print_a($resource_data);                
+                $resource_data = get_resource_details($user_criterion);                
                 $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
                 $tool_content .= "<tr>
                         <td>" . $activity . "</td>
@@ -1313,10 +1313,10 @@ function display_user_progress_details($certificate_id, $user_id) {
                         </tr>";
             }
             $user_data = Database::get()->querySingle("SELECT completed, completed_criteria, total_criteria FROM user_certificate 
-                                            WHERE certificate = ?d AND user = ?d", $certificate_id, $user_id);
+                                            WHERE certificate = ?d AND user = ?d", $certificate_id, $user_id);            
             $tool_content .= "<tr>
                     <td><strong>$langTotalPercentCompleteness</strong></td>
-                    <td class='text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></td>                      
+                    <td class='text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></td>
                     </tr>";
         $tool_content .= "</tbody></table>";
     } else {

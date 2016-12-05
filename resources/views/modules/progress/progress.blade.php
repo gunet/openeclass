@@ -115,13 +115,13 @@
             <strong>Certificates</strong><hr/>
 
             @foreach ($game_certificate as $key => $certificate)
-                <?php
+                <?php                
                     $dateAssigned = ($certificate->completed == 1) ? $certificate->assigned : '-';
                 ?>
                 <div class="certificate_panel">
                     <div class="certificate_panel_title">{{ $certificate->title }}</div>
                     <div class="certificate_panel_date">{{ $dateAssigned }}</div>
-                    <div class="certificate_panel_viewdetails">View details</div>
+                    <div class="certificate_panel_viewdetails"><a href="index.php?course={{$course_code}}&amp;certificate_id={{$certificate->certificate}}&amp;u={{$certificate->user}}">{{  trans('langDetails') }}</a></div>
 
                     @if ($certificate->completed == 1)
                         <div class="certificate_panel_state">

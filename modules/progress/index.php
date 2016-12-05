@@ -341,9 +341,15 @@ if (isset($display) and $display == TRUE) {
             display_certificates();
         }
     } else {
-        // display certificate (student view)
-        student_view_certificate();
-        exit;
+        if (isset($certificate_id)) {
+            $pageName = $certificate_title;
+            // display detailed user progress
+            display_user_progress_details($certificate_id, $uid);            
+        } else {
+            // display certificate (student view)
+            student_view_certificate();
+            exit;
+        }
     }
 }
 
