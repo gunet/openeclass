@@ -121,7 +121,12 @@
                 <div class="certificate_panel">
                     <div class="certificate_panel_title">{{ $certificate->title }}</div>
                     <div class="certificate_panel_date">{{ $dateAssigned }}</div>
-                    <div class="certificate_panel_viewdetails"><a href="index.php?course={{$course_code}}&amp;certificate_id={{$certificate->certificate}}&amp;u={{$certificate->user}}">{{  trans('langDetails') }}</a></div>
+                    <div class="certificate_panel_viewdetails">
+                        <a href="index.php?course={{$course_code}}&amp;certificate_id={{$certificate->certificate}}&amp;u={{$certificate->user}}">{{  trans('langDetails') }}</a>
+                        @if ($certificate->completed == 1)
+                            &nbsp;&nbsp;<a href="index.php?course={{$course_code}}&amp;certificate_id={{$certificate->certificate}}&amp;u={{$certificate->user}}&amp;p=1">{{  trans('langPrintVers') }}</a>
+                        @endif
+                    </div>
 
                     @if ($certificate->completed == 1)
                         <div class="certificate_panel_state">

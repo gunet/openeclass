@@ -1293,8 +1293,11 @@ function display_user_progress_details($certificate_id, $user_id) {
     $resource_data = array();
     
     $tool_content .= "<h5>" .  uid_to_name($user_id) . "</h5>";
-    
-    $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion WHERE user = ?d", $user_id);
+        
+    $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
+                                                        ON user_certificate_criterion.certificate_criterion = certificate_criterion.id 
+                                                            AND certificate_criterion.certificate = ?d 
+                                                            AND user = ?d", $certificate_id, $user_id);
     if (count($sql) > 0) {
         $tool_content .= "<table class='table-default custom_list_order'>";
         $tool_content .= "<thead>
@@ -1323,7 +1326,6 @@ function display_user_progress_details($certificate_id, $user_id) {
         $tool_content .= "<div class='alert alert-info'>$langNoUserActivity</div>";
     }
 }
-
 
 
 /**

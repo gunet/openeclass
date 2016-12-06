@@ -232,6 +232,51 @@ function get_certificate_title($certificate_id) {
     return $cert_title;
 }
 
+/**
+ * @brief get certiticate issuer
+ * @param type $certificate_id
+ * @return type
+ */
+function get_certificate_issuer($certificate_id) {
+
+    $cert_issuer =  Database::get()->querySingle("SELECT issuer FROM certificate WHERE id = ?d", $certificate_id)->issuer;
+    
+    return $cert_issuer;
+}
+
+/**
+ * @brief check if we are trying to access other user details
+ * @param type $uid
+ */
+function check_user_details($uid) {
+    
+    if (isset($_REQUEST['u'])) {
+        if ($uid != $_REQUEST['u']) {
+            redirect_to_home_page();
+        }
+    }
+}
+
+
+/**
+ * @brief check if we are trying to access other user certificate
+ * @param type $uid
+ * @param type $certificate_id
+ * @return type
+ */
+function check_cert_details($uid, $certificate_id) {
+        
+    $sql = Database::get()->querySingle("SELECT completed FROM user_certificate WHERE certificate = ?d AND user = ?d", $certificate_id, $uid);
+    if ($sql) {
+        if (!$sql->completed) {
+            redirect_to_home_page();
+        }
+    } else {
+        redirect_to_home_page();
+    }
+    return;    
+}
+
 
 /**
  * @brief add certificate in DB
@@ -472,4 +517,33 @@ function get_resource_details($resource_id) {
     $data['title'] = $title;
         
     return $data;    
+}
+
+
+/**
+ * @brief certificate pdf output 
+ * @global type $urlServer
+ * @param type $user_id
+ */
+function output_to_pdf($certificate_id, $user_id) {
+    
+    global $urlServer;
+    
+    require_once 'vendor/autoload.php';
+
+    $mpdf = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);
+
+    $html_certificate = file_get_contents($urlServer . 'modules/progress/certificate_float_mm.html');
+
+    $certificate_title = get_certificate_title($certificate_id);
+    $certificate_issuer = get_certificate_issuer($certificate_id);
+    $student_name = uid_to_name($user_id);
+
+    $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);
+    $html_certificate = preg_replace('(%student_name%)', $student_name, $html_certificate);
+    $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);
+    
+    $mpdf->WriteHTML($html_certificate);
+
+    $mpdf->Output();
 }
