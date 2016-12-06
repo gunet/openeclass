@@ -295,6 +295,10 @@ if ($is_editor) {
         add_ebook_to_certificate($certificate_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;certificate_id=$certificate_id");
+    } elseif (isset($_GET['forum'])) {
+        add_forum_to_certificate($certificate_id);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;certificate_id=$certificate_id");
     }
     
     elseif (isset($_GET['del_cert_res'])) { // delete certificate activity

@@ -413,15 +413,16 @@ function display_available_assignments($certificate_id) {
                 $visible = icon('fa-eye', $langActive);
             } else {
                 $visible = icon('fa-eye-slash', $langInactive);
-            }            
+            }
+            $assignment_id = $row->id;
             $description = empty($row->description) ? '' :
                     "<div>$row->description</div>";            
             $tool_content .= "<tr>" .
                     "<td> " . q($row->title) . "<br><br><div class='text-muted'>$description</div></td>" .
                     "<td class='text-center'>".nice_format($row->submission_date, true)."</td>
-                    <td>". selection(get_operators(), 'operator[]') . "</td>".
-                    "<td class='text-center'><input style='width:50px;' type='text' name='threshold[]' value=''></td>" .
-                    "<td class='text-center'><input name='assignment[]' value='$row->id' type='checkbox'></td>" .
+                    <td>". selection(get_operators(), "operator[$assignment_id]") . "</td>".
+                    "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$assignment_id]' value=''></td>" .
+                    "<td class='text-center'><input name='assignment[]' value='$assignment_id' type='checkbox'></td>" .
                     "</tr>";            
         }
         $tool_content .= "</table>" .
@@ -484,12 +485,13 @@ function display_available_exercises($certificate_id) {
             } else {
                 $vis = '';
             }
+            $exercise_id = $entry['id'];
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
-            $tool_content .= "<td class='text-left'>" . $entry['comment'] . "</td>";
-            $tool_content .= "<td>". selection(get_operators(), 'operator[]') . "</td>";
-            $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[]' value=''></td>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
+            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a></td>";
+            $tool_content .= "<td class='text-left'>" . $entry['comment'] . "</td>";            
+            $tool_content .= "<td>". selection(get_operators(), "operator[$exercise_id]") . "</td>";
+            $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$exercise_id]' value=''></td>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$exercise_id'></td>";
             $tool_content .= "</tr>";            
         }
         $tool_content .= "</table><div class='text-right'>";
@@ -673,11 +675,95 @@ function display_available_blogcomments($certificate_id) {
 }
 
 
+/**
+ * @brief forum display form
+ * @global type $tool_content
+ * @global type $urlServer
+ * @global type $course_id
+ * @global type $langComments
+ * @global type $langAddModulesButton
+ * @global type $langChoice
+ * @global type $langNoForums
+ * @global type $langForums
+ * @global type $course_code
+ * @global type $langAutoJudgeOperator
+ * @global type $langValue
+ * @param type $certificate_id
+ */
 function display_available_forums($certificate_id) {
+      
+    global $tool_content, $urlServer, $course_id,
+           $langComments, $langAddModulesButton, $langChoice, $langNoForums, 
+           $langForums, $course_code, $langAutoJudgeOperator, $langValue;
 
-    global $tool_content;
-    
-    $tool_content .= "still working on this";
+    $result = Database::get()->queryArray("SELECT * FROM forum WHERE course_id = ?d 
+                                        AND forum.id NOT IN 
+                                        (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                            AND resource != '' 
+                                            AND activity_type = 'forum' 
+                                            AND module = " . MODULE_ID_FORUM . ")", $course_id, $certificate_id);
+    $foruminfo = array();
+    foreach ($result as $row) {
+        $foruminfo[] = array(
+            'id' => $row->id,
+            'name' => $row->name,
+            'comment' => $row->desc,
+            'topics' => $row->num_topics);
+    }
+    if (count($foruminfo) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoForums</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<table class='table-default'>" .
+                "<tr class='list-header'>" .
+                "<th>$langForums</th>" .
+                "<th>$langComments</th>" .
+                "<th style='width:5px;'>$langAutoJudgeOperator</th>" .
+                "<th style='width:50px;'>$langValue</th>" . 
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "</tr>";
+
+        foreach ($foruminfo as $entry) {
+            $forum_id = $entry['id'];
+            $tool_content .= "<tr>";
+            $tool_content .= "<td><a href='${urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>" . q($entry['name']). "</a></td>";
+            $tool_content .= "<td>" . q($entry['comment']) . "</td>";            
+            $tool_content .= "<td>". selection(get_operators(), "operator[$forum_id]") . "</td>";
+            $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$forum_id]' value=''></td>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='forum[]' value='$forum_id'></td>";
+            $tool_content .= "</tr>";
+            $r = Database::get()->queryArray("SELECT * FROM forum_topic WHERE forum_id = ?d 
+                                                AND forum_topic.id NOT IN 
+                                            (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                                AND resource != '' 
+                                                AND activity_type = 'forumtopic' 
+                                                AND module = " . MODULE_ID_FORUM . ")", $forum_id, $certificate_id);
+            if (count($r) > 0) { // if forum topics found
+                $topicinfo = array();
+                foreach ($r as $topicrow) {
+                    $topicinfo[] = array(
+                        'topic_id' => $topicrow->id,
+                        'topic_title' => $topicrow->title,
+                        'topic_time' => $topicrow->topic_time);
+                }
+                foreach ($topicinfo as $topicentry) {
+                    $topic_id = $topicentry['topic_id'];
+                    $tool_content .= "<tr>";
+                    $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$entry[id]'>" . q($topicentry['topic_title']) . "</a></td>";
+                    $tool_content .= "<td>&nbsp;</td>";
+                    $tool_content .= "<td>". selection(get_operators(), "operator[$topic_id]") . "</td>";
+                    $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$topic_id]' value=''></td>";
+                    $tool_content .= "<td class='text-center'><input type='checkbox' name='forumtopic[]' value='$topic_id'></td>";
+                    $tool_content .= "</tr>";
+                }
+            }
+        }
+        $tool_content .= "</table>";
+        $tool_content .= "<div class='text-right'>
+                            <input class='btn btn-primary' type='submit' name='add_forum' value='$langAddModulesButton'>
+                        </div></form>";        
+    }
 }
 
 /**
@@ -741,12 +827,13 @@ function display_available_lps($certificate_id) {
                                                     AND rank = (SELECT MIN(rank) FROM lp_rel_learnPath_module WHERE learnPath_id = ?d)", 
                                                 $entry['id'], $entry['id']);
             if (($m_id) and $m_id->module_id > 0) {
+                $lp_id = $entry['id'];
                 $tool_content .= "<tr class='$vis'>";
-                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a></td>";
+                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a></td>";
                 $tool_content .= "<td>" . $entry['comment'] . "</td>";
-                $tool_content .= "<td>". selection(get_operators(), 'operator[]') . "</td>";
-                $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[]' value=''></td>";
-                $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled></td>";
+                $tool_content .= "<td>". selection(get_operators(), "operator[$lp_id]") . "</td>";
+                $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$lp_id]' value=''></td>";
+                $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$lp_id' $disabled></td>";
                 $tool_content .= "</tr>";            
             }
         }
@@ -954,10 +1041,7 @@ function display_available_ebooks($certificate_id) {
                 "</table>
                 <div class='text-right'>
                 <input class='btn btn-primary' type='submit' name='add_ebook' value='$langAddModulesButton' /></div></form>";
-    }
-  
-  
-  
+    }  
 }
 
 
@@ -1061,10 +1145,11 @@ function display_available_wiki($certificate_id) {
                         <th>$langChoice</th>
                     </tr>";
         foreach ($wikiinfo as $entry) {
-            $tool_content .= "<tr><td>&nbsp;".icon('fa-wikipedia')."&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a></td>
+            $wiki_id = $entry['id'];
+            $tool_content .= "<tr><td>&nbsp;".icon('fa-wikipedia')."&nbsp;&nbsp;<a href='${urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$wiki_id&amp;action=show'>$entry[title]</a></td>
                                 <td>$entry[description]</td>
-                                <td>". selection(get_operators(), 'operator[]') . "</td>
-                                <td class='text-center'><input style='width:50px;' type='text' name='threshold[]' value=''></td>
+                                <td>". selection(get_operators(), "operator[$wiki_id]") . "</td>
+                                <td class='text-center'><input style='width:50px;' type='text' name='threshold[$wiki_id]' value=''></td>
                                 <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>
                             </tr>";            
         }
@@ -1353,6 +1438,8 @@ function criteria_with_operators() {
                  'exercise', 
                  'learning path',
                  'wiki',
+                 'forum',
+                 'forumtopic',
                  'blogpost',
                  'forum-post');
 }

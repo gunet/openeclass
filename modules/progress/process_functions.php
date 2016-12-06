@@ -39,8 +39,8 @@ function add_assignment_to_certificate($certificate_id) {
                                         threshold = ?f",
                                     $certificate_id, 
                                     $_POST['assignment'][$datakey], 
-                                    $_POST['operator'][$datakey], 
-                                    $_POST['threshold'][$datakey]);
+                                    $_POST['operator'][$data], 
+                                    $_POST['threshold'][$data]);
         }
     }
     return;    
@@ -53,7 +53,7 @@ function add_assignment_to_certificate($certificate_id) {
  * @return type
  */
 function add_exercise_to_certificate($certificate_id) {
-    
+        
     if (isset($_POST['exercise'])) {
         foreach ($_POST['exercise'] as $datakey => $data) {    
             Database::get()->query("INSERT INTO certificate_criterion
@@ -65,8 +65,8 @@ function add_exercise_to_certificate($certificate_id) {
                                         threshold = ?f",
                                     $certificate_id, 
                                     $_POST['exercise'][$datakey],
-                                    $_POST['operator'][$datakey],
-                                    $_POST['threshold'][$datakey]);
+                                    $_POST['operator'][$data],
+                                    $_POST['threshold'][$data]);
         }
     }
     return;
@@ -139,8 +139,8 @@ function add_lp_to_certificate($certificate_id) {
                                 threshold = ?f",
                             $certificate_id, 
                             $_POST['lp'][$datakey],
-                            $_POST['operator'][$datakey],
-                            $_POST['threshold'][$datakey]);
+                            $_POST['operator'][$data],
+                            $_POST['threshold'][$data]);
         }
     }
     return;
@@ -164,8 +164,8 @@ function add_wiki_to_certificate($certificate_id) {
                                 threshold = ?f",
                             $certificate_id, 
                             $_POST['wiki'][$datakey],
-                            $_POST['operator'][$datakey],
-                            $_POST['threshold'][$datakey]);
+                            $_POST['operator'][$data],
+                            $_POST['threshold'][$data]);
         }
     }
     return;
@@ -213,9 +213,44 @@ function add_ebook_to_certificate($certificate_id) {
     return;
 }
 
-
+/**
+ * @brief add forum db entries in certificate criterion
+ * @param type $certificate_id
+ * @return type
+ */
 function add_forum_to_certificate($certificate_id) {
-    echo ".. still working...";
+           
+    if (isset($_POST['forum'])) {
+        foreach ($_POST['forum'] as $datakey => $data) {        
+            Database::get()->query("INSERT INTO certificate_criterion
+                                SET certificate = ?d, 
+                                module = " . MODULE_ID_FORUM . ", 
+                                resource = ?d, 
+                                activity_type = 'forum',
+                                operator = ?s,
+                                threshold = ?f",
+                            $certificate_id, 
+                            $_POST['forum'][$datakey],
+                            $_POST['operator'][$data],
+                            $_POST['threshold'][$data]);
+        }        
+    }
+    if (isset($_POST['forumtopic'])) {
+        foreach ($_POST['forumtopic'] as $datakey => $data) {        
+            Database::get()->query("INSERT INTO certificate_criterion
+                                SET certificate = ?d, 
+                                module = " . MODULE_ID_FORUM . ", 
+                                resource = ?d, 
+                                activity_type = 'forumtopic',
+                                operator = ?s,
+                                threshold = ?f",
+                            $certificate_id, 
+                            $_POST['forumtopic'][$datakey],
+                            $_POST['operator'][$data],
+                            $_POST['threshold'][$data]);
+        }        
+    }
+    return;
 }
 
 
@@ -416,8 +451,6 @@ function certificate_resource_usage($certificate_resource_id) {
  * @global type $langBlogPosts
  * @global type $langBlog
  * @global type $langForums
- * @global type $langComments
- * @global type $langForums
  * @global type $langWikiPages
  * @global type $langWikis
  * @global type $langComments
@@ -474,11 +507,11 @@ function get_resource_details($resource_id) {
                 $type = "$langsetvideo";                
             break;
         case ViewingEvent::EBOOK_ACTIVITY:
-                $title = Database::get()->querySingle("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $resource)->title;                
+                $title = Database::get()->querySingle("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $resource)->title;
                 $type = "$langEBook";
             break;
         case ViewingEvent::QUESTIONNAIRE_ACTIVITY: 
-                $title = Database::get()->querySingle("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $resource)->name;                
+                $title = Database::get()->querySingle("SELECT name FROM poll WHERE poll.course_id = ?d AND poll.pid = ?d", $course_id, $resource)->name;
                 $type = "$langMetaQuestionnaire";
             break;
         case BlogEvent::ACTIVITY: 
@@ -498,8 +531,12 @@ function get_resource_details($resource_id) {
                 $title = "$langPersoValue";
             break;
         case ForumEvent::ACTIVITY:
-                $type = "$langForums";
-                $title = "$langComments $langForums";
+                $title = Database::get()->querySingle("SELECT name FROM forum WHERE course_id = ?d AND id = ?d", $course_id, $resource)->name;
+                $type = "$langForums";                
+            break;
+        case 'forumtopic':
+                $title = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $resource)->title;
+                $type = "$langForums";                
             break;
         case RatingEvent::FORUM_ACTIVITY:
                 $type = "$langForumRating";

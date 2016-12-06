@@ -273,3 +273,14 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
     }
     send_mail_multipart('', '', '', $email, $subject_notify, $plain_topic_notify, $html_topic_notify, $charset);
 }
+
+
+function triggerGame($courseId, $uid, $eventName) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = ForumEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_FORUM;
+
+    CommentEvent::trigger($eventName, $eventData);
+}
