@@ -5191,7 +5191,7 @@ $langThemeOrange = "Πορτοκαλί";
 $langThemePumpkin = "Κολοκύθα";
 $langThemePomegranate = "Ρόδι";
 $langThemeClouds = "Σύννεφα";
-
+$langPlzEnterName = "Παρακαλώ εισάγετε όνομα"; 
 
 
 

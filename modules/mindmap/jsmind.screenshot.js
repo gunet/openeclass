@@ -242,7 +242,8 @@
         _download:function(){
             var c = this.canvas_elem;
             var name = this.jm.mind.name;
-
+			var mind_name = prompt("langPlzEnterName", "FileName");
+			
             if (navigator.msSaveBlob && (!!c.msToBlob)) {
                 var blob = c.msToBlob();
                 navigator.msSaveBlob(blob,name);
@@ -252,7 +253,8 @@
                 if ('download' in anchor) {
                     anchor.style.visibility = 'hidden';
                     anchor.href = bloburl;
-                    anchor.download = this.jm.mind.name;
+                    //anchor.download = this.jm.mind.name;
+					anchor.download = mind_name ;
                     $d.body.appendChild(anchor);
                     var evt = $d.createEvent('MouseEvents');
                     evt.initEvent('click', true, true);

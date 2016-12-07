@@ -60,6 +60,34 @@ $action = new action();
 $action->record(MODULE_ID_MINDMAP);
 /* * *********************************** */
 
+/*.jm */
+$json = file_get_contents('php://input');
+if($json != ""){
+
+	function outputJSON($msg, $status = 'error'){
+		header('Content-Type: application/json');
+		die(json_encode(array(
+			'data' => $msg,
+			'status' => $status
+		)));
+	}
+
+
+	$json_decode = json_decode($json, true); 
+	$mind_s1r=$_POST["mind_str"];
+
+	$file_path=$mind_s1r+".jm";
+	$fileName="jsmind.jm";
+	$file_format = get_file_extension($fileName);
+
+
+	echo '<script language="javascript">';
+	echo 'alert("message successfully sent")';
+	echo '</script>';
+
+
+}
+
 
 
 $toolName = $langMindmap;
@@ -129,7 +157,10 @@ $tool_content .= "
         </ol>
         <div>4. $langSave</div>
 			<ol type='i'>
-		        <li><button class='sub' onclick='screen_shot();'>$langScreenshot</button></li>";
+		        <li><button class='sub' onclick='screen_shot();'>$langScreenshot</button></li>
+				<li><button class='sub' onclick='save_file();'>$langSaveFile</button></li>
+				<li><button class='sub' onclick='show_data();'>show data</button></li>";
+				
 				
 				
 		if($is_editor)	{			
@@ -138,7 +169,8 @@ $tool_content .= "
 		}				
 				
 				
-		$tool_content .="                
+		$tool_content .="<li><button class='sub' onclick='open_file();'>$langOpenFile</button></li>
+                <li><input id='file_input' class='sub' type='file'/></li>                 
 			</ol>
 	</div>
 			<div id='jsmind_container'></div>
@@ -194,10 +226,10 @@ $tool_content .= '
 
     function screen_shot(){
 	//console.log();
-		var curtheme = _jm.options.theme;
-		set_theme("clouds");
+		//var curtheme = _jm.options.theme;
+		//set_theme("clouds");
         _jm.shoot();
-		set_theme(curtheme);
+		//set_theme(curtheme);
     }
 
     function show_data(){
@@ -208,33 +240,28 @@ $tool_content .= '
 
     function save_file(){
         var mind_data = _jm.get_data();
-        var mind_name = mind_data.meta.name;
+        var mind_name = prompt("'.$langPlzEnterName.'", "Name");
         var mind_str = jsMind.util.json.json2string(mind_data);
         jsMind.util.file.save(mind_str,"text/jsmind",mind_name+".jm");
     }
     
 	function save_file_in_doc(){
-		 //prompt_info("nothingsasda")
         var mind_data = _jm.get_data();
         var mind_name = mind_data.meta.name;
         var data = jsMind.util.json.json2string(mind_data);		
 		
-		var request= new XMLHttpRequest();
-		request.open("POST", "save.php", true);
-		request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-		request.send(data);
-		 request.onreadystatechange = function() {
-			if (this.readyState == 4 && this.status == 200) {
-			 console.log( this.responseText);
-			}
-		  };
+		var x = prompt("'.$langPlzEnterName.'", "Name");
 		
+		/////// 03/11/2016
+	
+		if (x!=null){
+		window.location.href = "../document/index.php?mindmap=" + data +"& mindtitle=" + x; 
 		
+		}
 		
 	}
 	
 
-	
     function open_file(){
         var file_input = document.getElementById("file_input");
         var files = file_input.files;

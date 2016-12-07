@@ -531,8 +531,8 @@
                 },
                 "format":"node_array",
                 "data":[
-                    {"id":"root","topic":"Εννοιολογικός χάρτης", "isroot":true}
-                ]
+                     {"id":"root","topic":"jsMind Example", "isroot":true}
+               ]
             },
 
             get_mind:function(source){
@@ -951,7 +951,7 @@
                     var bloburl = URL.createObjectURL(blob);
                     var anchor = $c('a');
                     if ('download' in anchor) {
-						alert('here');
+						//alert('here');
                         anchor.style.visibility = 'hidden';
                         anchor.href = bloburl;
                         anchor.download = name;
@@ -961,6 +961,7 @@
                         anchor.dispatchEvent(evt);
                         $d.body.removeChild(anchor);
                     } else {
+					    alert('here1');
                         location.href = bloburl;
                     }
                 }

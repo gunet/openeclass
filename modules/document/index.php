@@ -105,6 +105,66 @@ if (isset($_GET['showQuota'])) {
 }
 
 // ---------------------------
+//mindmap save button
+// ---------------------------
+
+if(isset($_GET["mindmap"])){
+	
+	
+	$mindmap = $_GET['mindmap'];
+	$title = $_GET['mindtitle'];
+	
+	//$uploadPath = " ";
+	$filename = $title . ".jm";
+	$safe_fileName = safe_filename(get_file_extension($filename));
+    $file_path = '/' . $safe_fileName;
+    $file_date = date("Y\-m\-d G\:i\:s");
+    $file_format = get_file_extension($filename);
+
+	echo $basedir . $file_path;
+	//echo $file_path;
+	
+	$myfile = fopen($basedir . $file_path, "w") or die("Unable to open file!");
+	$txt = $mindmap;
+	
+	fwrite($myfile, $txt);
+	fclose($myfile);
+
+	move_uploaded_file($myfile , $basedir . $file_path);
+
+    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+    Database::get()->query("INSERT INTO document SET
+            course_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            extra_path = '',
+            filename = ?s,
+            visible = 1,
+            comment = '',
+            category = 0,
+            title = ?s,
+            creator = ?s,
+            date = ?s,
+            date_modified = ?s,
+            subject = '',
+            description = '',
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = 0,
+            editable = 1",
+            $course_id, $subsystem, $subsystem_id, $file_path,
+            $filename, $title, $file_creator,
+            $file_date, $file_date, $file_creator, $file_format,
+            $language);
+
+
+	redirect_to_current_dir();
+		
+}
+
+// ---------------------------
 // download directory or file
 // ---------------------------
 if (isset($_GET['download'])) {
