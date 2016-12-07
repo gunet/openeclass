@@ -280,6 +280,21 @@ function get_certificate_issuer($certificate_id) {
 }
 
 /**
+ * @brief get available certificate templates
+ * @return type
+ */
+function get_certificate_templates() {
+    
+    $templates = array();
+    
+    $t = Database::get()->queryArray("SELECT id, name FROM certificate_template");
+    foreach ($t as $data) {
+        $templates[$data->id] = $data->name;
+    }
+    return $templates;    
+}
+
+/**
  * @brief check if we are trying to access other user details
  * @param type $uid
  */
@@ -559,18 +574,17 @@ function get_resource_details($resource_id) {
 
 /**
  * @brief certificate pdf output 
- * @global type $urlServer
  * @param type $user_id
  */
-function output_to_pdf($certificate_id, $user_id) {
+function cert_output_to_pdf($certificate_id, $user_id) {
+           
+    $cert_file = Database::get()->querySingle("SELECT filename FROM certificate_template 
+                                                    JOIN certificate ON certificate_template.id = certificate.template
+                                               AND certificate.id = ?d", $certificate_id)->filename;
     
-    global $urlServer;
-    
-    require_once 'vendor/autoload.php';
-
     $mpdf = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);
-
-    $html_certificate = file_get_contents($urlServer . 'modules/progress/certificate_float_mm.html');
+    
+    $html_certificate = file_get_contents(CERT_TEMPLATE_PATH . $cert_file . ".html");
 
     $certificate_title = get_certificate_title($certificate_id);
     $certificate_issuer = get_certificate_issuer($certificate_id);

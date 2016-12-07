@@ -20,7 +20,9 @@
  * ========================================================================
  */
 
-
+define('CERT_TEMPLATE_PATH', $webDir . "/courses/user_progress_data/cert_templates/");
+define('BADGE_TEMPLATE_PATH', $webDir . "/courses/user_progress_data/badge_templates/");
+        
 /**
  * @brief display all certificates -- initial screen
  * @global type $course_id
@@ -1225,9 +1227,7 @@ function certificate_settings($certificate_id = 0) {
                 <div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langTemplate</label>
                     <div class='col-sm-10'>
-                    " . selection(array('1' => 'template 1', 
-                                        '2' => 'template 2', 
-                                        '3' => 'template 3'), 'template', $template) . "
+                    " . selection(get_certificate_templates(), 'template', $template) . "
                     </div>
                 </div>
                 <div class='form-group'>
