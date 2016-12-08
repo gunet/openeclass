@@ -202,8 +202,9 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
-        
+                  'level' => 'primary-label')));        
+    } elseif (isset($_GET['preview'])) { // certificate preview
+        cert_output_to_pdf($certificate_id, $uid);
     } elseif (!isset($_REQUEST['certificate_id'])) {
         $tool_content .= action_bar(
             array(

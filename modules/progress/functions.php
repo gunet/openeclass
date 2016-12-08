@@ -38,13 +38,14 @@ define('BADGE_TEMPLATE_PATH', $webDir . "/courses/user_progress_data/badge_templ
  * @global type $langViewHide
  * @global type $langViewShow
  * @global type $langEditChange
+ * @global type $langSee
  */
 function display_certificates() {
 
     global $course_id, $tool_content, $course_code, $is_editor,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
            $langNoCertificates, $langEditChange, $langAvailCert,
-           $langViewHide, $langViewShow, $langEditChange;
+           $langViewHide, $langViewShow, $langEditChange, $langSee;
 
     if ($is_editor) {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM certificate WHERE course_id = ?d", $course_id);
@@ -86,11 +87,11 @@ function display_certificates() {
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
                                           'icon' => 'fa-times',
                                           'class' => 'delete',
-                                          'confirm' => $langConfirmDelete)),
-                                    array('title' => $langCreateDuplicate,
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;dup=1",
-                                          'icon' => 'fa-cogs')
-                                        );
+                                          'confirm' => $langConfirmDelete),
+                                    array('title' => $langSee,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1",
+                                          'icon' => 'fa-search')
+                                        ));
                 $tool_content .= "</td>";
             }
             $tool_content .= "</tr>";

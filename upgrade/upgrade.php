@@ -3526,7 +3526,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `id` mediumint(8) not null auto_increment primary key,
             `name` varchar(255) not null,
             `description` text,
-            `preview_image` varchar(255)
+            `filename` varchar(255)
         )");
 
         Database::get()->query("CREATE TABLE `certificate` (

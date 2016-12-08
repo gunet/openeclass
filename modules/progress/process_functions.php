@@ -588,11 +588,16 @@ function cert_output_to_pdf($certificate_id, $user_id) {
 
     $certificate_title = get_certificate_title($certificate_id);
     $certificate_issuer = get_certificate_issuer($certificate_id);
+    $sql = Database::get()->querySingle("SELECT message FROM certificate WHERE id = ?d", $certificate_id);
+    if ($sql) {
+        $certificate_message = $sql->message;
+    }
     $student_name = uid_to_name($user_id);
 
     $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);
     $html_certificate = preg_replace('(%student_name%)', $student_name, $html_certificate);
     $html_certificate = preg_replace('(%issuer%)', $certificate_issuer, $html_certificate);
+    $html_certificate = preg_replace('(%message%)', $certificate_message, $html_certificate);
     
     $mpdf->WriteHTML($html_certificate);
 
