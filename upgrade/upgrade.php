@@ -3420,7 +3420,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `category_value` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `category_id` INT(11) NOT NULL REFERENCES category(id)
+            `category_id` INT(11) NOT NULL REFERENCES category(id),
             `name` TEXT NOT NULL,
             `ordering` INT(11),
             `active` BOOLEAN NOT NULL DEFAULT TRUE
