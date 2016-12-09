@@ -1,0 +1,492 @@
+<!DOCTYPE HTML>
+<html style="height: 100%;">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>!!! TOOLBOX !!!</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="select2/css/select2.min.css">
+    <link rel="stylesheet" href="select2/css/select2-bootstrap.min.css">
+    <link rel="stylesheet" href="../CSS/font-awesome-4.2.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="css/toolbox_styles.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js">
+    </script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Our javascript -->
+
+    <script src="select2/js/select2.full.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $(".loginModal").click(function () {
+                if( $("#registerModalContent").hasClass('in') ){
+                    $('#registerModalContent').modal('toggle');
+                }
+                $("#loginModalContent").modal();
+            });
+            $(".registerModal").click(function () {
+                if( $("#loginModalContent").hasClass('in') ) {
+                    $('#loginModalContent').modal('toggle');
+                }
+                $("#registerModalContent").modal();
+            });
+
+            $("select").select2({
+                theme: "bootstrap",
+                placeholder: "Select an option"
+            });
+        });
+    </script>
+
+</head>
+
+<body style="height: 100%;">
+<div class="top-bar-sct">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="loginModal reg-btns pull-right">
+                    <span>
+                        Register / Login
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="banner-sct">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="logo-area hidden-xs hidden-sm">
+                    <img class="img-responsive" src="Logo.png">
+                </div>
+                <div class="logo-area visible-xs visible-sm">
+                    <img class="img-responsive center-block" src="Logo.png">
+                </div>
+            </div>
+            <div class="col-md-6 menu-nav">
+                <ul class="hidden-xs hidden-sm list-inline pull-right">
+                    <li>Platform</li>
+                    <li>Project</li>
+                    <li>FAQ</li>
+                </ul>
+                <ul class="visible-xs visible-sm list-inline text-center">
+                    <li>Platform</li>
+                    <li>Project</li>
+                    <li>FAQ</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="description-sct">
+    <div class="container">
+        <div class="row">
+            <div class="jumbotron">
+                <h2>Welcome to Toolbox</h2>
+                <p>The Toolbox for Social Literacy in the Public Sector is an on-line database that contains a range of training materials for trainers as well as other professionals for training social literacy. Social literacy means the presence of social skills, knowledge and positive human values that support the ability in people to act positively and responsibly in social settings, and also their ability to successfully and deliberately mediate their world as family members, workers, citizens and lifelong learners.</p>
+                <img src="googleplus.png" class="img-responsive" style="width: 200px;">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="search-sct">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default criterias">
+                    <div class="panel-body">
+                        <div class="inner-heading text-center">Search form</div>
+                        <div class="row">
+                            <form>
+                                <div class="col-xs-6 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="modules">Modules</label>
+                                        <select id="modules" class="form-control" multiple="multiple">
+                                            <option>OneOneOneOne</option>
+                                            <option>TwoTwoTwoTwo</option>
+                                            <option>ThreeThreeThreeThree</option>
+                                            <option>FourFourFourFour</option>
+                                            <option>OneOneOneOne</option>
+                                            <option>TwoTwoTwoTwo</option>
+                                            <option>ThreeThreeThreeThree</option>
+                                            <option>FourFourFourFour</option>
+                                            <option>OneOneOneOne</option>
+                                            <option>TwoTwoTwoTwo</option>
+                                            <option>ThreeThreeThreeThree</option>
+                                            <option>FourFourFourFour</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="duration">Duration</label>
+                                        <select id="duration" class="form-control" multiple="multiple">
+                                            <option>One</option>
+                                            <option>Two</option>
+                                            <option>Three</option>
+                                            <option>Four</option>
+                                            <option>OneOneOneOne</option>
+                                            <option>TwoTwoTwoTwo</option>
+                                            <option>ThreeThreeThreeThree</option>
+                                            <option>FourFourFourFour</option>
+                                            <option>OneOneOneOne</option>
+                                            <option>TwoTwoTwoTwo</option>
+                                            <option>ThreeThreeThreeThree</option>
+                                            <option>FourFourFourFour</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="group-size">Group Size</label>
+                                        <select id="group-size" class="form-control" multiple="multiple">
+                                            <option>One</option>
+                                            <option>Two</option>
+                                            <option>Three</option>
+                                            <option>Four</option>
+                                            <option>OneOneOneOne</option>
+                                            <option>TwoTwoTwoTwo</option>
+                                            <option>ThreeThreeThreeThree</option>
+                                            <option>FourFourFourFour</option>
+                                            <option>OneOneOneOne</option>
+                                            <option>TwoTwoTwoTwo</option>
+                                            <option>ThreeThreeThreeThree</option>
+                                            <option>FourFourFourFour</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="language">Language</label>
+                                        <select id="language" class="form-control" multiple="multiple">
+                                            <option>One</option>
+                                            <option>Two</option>
+                                            <option>Three</option>
+                                            <option>Four</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12" style="padding-top: 50px; padding-bottom: 20px;">
+                                <button class="btn btn-success center-block">Search</button>
+                            </div>
+                            </form>
+                        </div>
+                        <div class="col-xs-12 panel-inner-footer">
+                            <div class="row text-center">
+                                <div class="col-sm-4">
+                                    <b>Total Exercises : </b> 43
+                                </div>
+                                <div class="col-sm-4">
+                                    <b>Total Users : </b> 543
+                                </div>
+                                <div class="col-sm-4">
+                                    <b>Total Visits : </b> 552
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="result-sct">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="inner-heading text-center">Search Results</div>
+                    <div class="search-count text-center"><span class="text-muted"><b>32 entries</b> found matching your search</span></div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="panel panel-success result-wrapper">
+                                <div class="panel-heading">
+                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-8 result-content">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
+                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
+                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
+                                        </div>
+                                        <div class="col-xs-4 result-meta">
+                                            <ul class="list-unstyled">
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="panel panel-success result-wrapper">
+                                <div class="panel-heading">
+                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-8 result-content">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
+                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
+                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
+                                        </div>
+                                        <div class="col-xs-4 result-meta">
+                                            <ul class="list-unstyled">
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="panel panel-success result-wrapper">
+                                <div class="panel-heading">
+                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-8 result-content">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
+                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
+                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
+                                        </div>
+                                        <div class="col-xs-4 result-meta">
+                                            <ul class="list-unstyled">
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="panel panel-success result-wrapper">
+                                <div class="panel-heading">
+                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-8 result-content">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
+                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
+                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
+                                        </div>
+                                        <div class="col-xs-4 result-meta">
+                                            <ul class="list-unstyled">
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="panel panel-success result-wrapper">
+                                <div class="panel-heading">
+                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-8 result-content">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
+                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
+                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
+                                        </div>
+                                        <div class="col-xs-4 result-meta">
+                                            <ul class="list-unstyled">
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="panel panel-success result-wrapper">
+                                <div class="panel-heading">
+                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-8 result-content">
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
+                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
+                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
+                                        </div>
+                                        <div class="col-xs-4 result-meta">
+                                            <ul class="list-unstyled">
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer-sct">
+    <footer class="footer">
+        <div class="container">
+            <div class="row footer-main">
+                <div class="col-sm-6">
+                    <img src="Logo.png" class="img-responsive center-block">
+                </div>
+                <div class="col-sm-6">
+                    <p> This project has been funded with support from the European Commission. This publication [communication] reflects the views only of the author, and the Commission cannot be held responsible for any use which may be made of the information contained therein.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="copyright-note">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="text-center">
+                        Copyright &copy; 2016 | YCARE all rights reserved
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="loginModalContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Login</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <form>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputEmail1">Enter username</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter username">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputPassword1">Enter password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter password">
+                            </div>
+                            <button type="button" class="btn btn-primary btn-block">Log in</button>
+                        </form>
+                    </div>
+                    <div class="col-sm-1 login-seperator"></div>
+                    <div class="col-sm-5 alt-login">
+                        <h5 class="text-center">Or log in with:</h5>
+                        <img class="img-responsive" src="googleplus.png" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                Not having an account? Please <a class="registerModal">Register</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="registerModalContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabelRegister">Login</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputEmail1">Name</label>
+                                <input type="email" class="form-control" id="exampleInputEmailRegister" placeholder="Name">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputPassword1">Last name</label>
+                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Last name">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputEmail1">Enter username</label>
+                                <input type="email" class="form-control" id="exampleInputEmailRegister" placeholder="Enter username">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputPassword1">Enter password</label>
+                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Enter password">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputPassword1">Retype Password</label>
+                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Retype password">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputPassword1">Email</label>
+                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Email">
+                            </div>
+                            <button type="button" class="btn btn-primary btn-block">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                Already have an accont? <a class="loginModal" href="#">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<!-- END mainBlock -->
