@@ -60,42 +60,54 @@ $action = new action();
 $action->record(MODULE_ID_MINDMAP);
 /* * *********************************** */
 
-/*.jm */
+
+
+////////////////////////////
 $json = file_get_contents('php://input');
 if($json != ""){
 
-	function outputJSON($msg, $status = 'error'){
-		header('Content-Type: application/json');
-		die(json_encode(array(
-			'data' => $msg,
-			'status' => $status
-		)));
-	}
+function outputJSON($msg, $status = 'error'){
+    header('Content-Type: application/json');
+    die(json_encode(array(
+        'data' => $msg,
+        'status' => $status
+    )));
+}
 
 
-	$json_decode = json_decode($json, true); 
-	$mind_s1r=$_POST["mind_str"];
-
-	$file_path=$mind_s1r+".jm";
-	$fileName="jsmind.jm";
-	$file_format = get_file_extension($fileName);
 
 
-	echo '<script language="javascript">';
-	echo 'alert("message successfully sent")';
-	echo '</script>';
+$json_decode = json_decode($json, true); 
+$mind_s1r=$_POST["mind_str"];
+
+$file_path=$mind_s1r+".jm";
+$fileName="jsmind.jm";
+$file_format = get_file_extension($fileName);
+
+
+echo '<script language="javascript">';
+echo 'alert("message successfully sent")';
+echo '</script>';
+
+
 
 
 }
+
+
 
 
 
 $toolName = $langMindmap;
 // guest user not allowed
 if (check_guest()) {
+
     $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
     draw($tool_content, 2, 'mindmap');
 }
+
+
+
 
 $head_content .= '
 
@@ -120,60 +132,64 @@ $head_content .= '
     </style>';
 
 
+
+
 $tool_content .= "
 
 
 <div id='layout'>
     <div id='jsmind_nav'>
         <div>1. $langOpenMind</div>
-        <ol type='i'>
+        <ol type='A'>
             <li><button class='jsmind' onclick='open_json();'>$langOpenEx</button></li>
             
         </ol>
         </ol>
         <div>2. $langEditMind</div>
-        <ol type='i'>
+        <ol type='A'>
             <li><button class='jsmind' onclick='toggle_editable(this);'>$langEditDis</button></li>
             <li><button class='jsmind' onclick='add_node();'>$langAddNode</button></li>
             <li><button class='jsmind' onclick='remove_node();'>$langRemoveNode</button></li>
         </ol>
         <div>3. $langThemes</div>
-        <ol type='i'>
+        <ol type='A'>
         <li>
         <select onchange='set_theme(this.value);'>
-            <option value=''>$langThemeDefault</option>
-            <option value='primary' selected='selected'>$langThemePrimary</option>
-            <option value='warning'>$langThemeWarning</option>
-            <option value='danger'>$langThemeDanger</option>
-            <option value='success'>$langThemeSuccess</option>
-            <option value='info'>$langThemeInfo</option>
-            <option value='greensea'>$langThemeGreenSea</option>
-            <option value='orange'>$langThemeOrange</option>
-            <option value='pumpkin'>$langThemePumpkin</option>
-            <option value='pomegranate'>$langThemePomegranate</option>
-            <option value='clouds'>$langThemeClouds</option>
+            <option value=''>default</option>
+            <option value='primary' selected='selected'>primary</option>
+            <option value='warning'>warning</option>
+            <option value='danger'>danger</option>
+            <option value='success'>success</option>
+            <option value='info'>info</option>
+            <option value='greensea'>greensea</option>
+            <option value='nephrite'>nephrite</option>
+            <option value='belizehole'>belizehole</option>
+            <option value='wisteria'>wisteria</option>
+            <option value='asphalt'>asphalt</option>
+            <option value='orange'>orange</option>
+            <option value='pumpkin'>pumpkin</option>
+            <option value='pomegranate'>pomegranate</option>
+            <option value='clouds'>clouds</option>
+            <option value='asbestos'>asbestos</option>
         </select>
         </li>
         </ol>
         <div>4. $langSave</div>
-			<ol type='i'>
+        <ol type='A'>
 		        <li><button class='sub' onclick='screen_shot();'>$langScreenshot</button></li>
-				<li><button class='sub' onclick='save_file();'>$langSaveFile</button></li>
-				<li><button class='sub' onclick='show_data();'>show data</button></li>";
+                <li><button class='sub' onclick='save_file();'>$langSaveFile</button></li>";
+				//<li><button class='sub' onclick='show_data();'>show data</button></li>
+				
+if($is_editor)	{			
+$tool_content .="<li><button class='sub' onclick='save_file_in_doc();'>$langSaveInDoc</button></li>";				
+				
+}				
 				
 				
-				
-		if($is_editor)	{			
-		$tool_content .="<li><button class='sub' onclick='save_file_in_doc();'>$langSaveInDoc</button></li>";				
-						
-		}				
-				
-				
-		$tool_content .="<li><button class='sub' onclick='open_file();'>$langOpenFile</button></li>
-                <li><input id='file_input' class='sub' type='file'/></li>                 
-			</ol>
-	</div>
-			<div id='jsmind_container'></div>
+$tool_content .="<li><input id='file_input' class='sub' type='file' onchange='open_file();'/></li>                
+        </ol>
+    </div>
+    <div id='jsmind_container'></div>
 </div>";
    
 
@@ -203,15 +219,15 @@ $tool_content .= '
             },
             "format":"node_tree",
             "data":{"id":"root","topic":"Κεντρική ιδέα","children":[
-                {"id":"easy","topic":"Κόμβος #1","direction":"left","children":[
-                    {"id":"easy1","topic":"Χαρακτηριστικό #1"},
-                    {"id":"easy2","topic":"Χαρακτηριστικό #2"},
-                    {"id":"easy3","topic":"Χαρακτηριστικό #3"},
-                    {"id":"easy4","topic":"Χαρακτηριστικό #4"}
+                {"id":"easy","topic":"Κόμβος 1","direction":"left","children":[
+                    {"id":"easy1","topic":"Χαρακτηριστικό 1"},
+                    {"id":"easy2","topic":"Χαρακτηριστικό 2"},
+                    {"id":"easy3","topic":"Χαρακτηριστικό 3"},
+                    {"id":"easy4","topic":"Χαρακτηριστικό 4"}
                 ]},
-                {"id":"open","topic":"Κόμβος #2","direction":"right","children":[
-                    {"id":"open1","topic":"Χαρακτηριστικό #1"},
-                    {"id":"open2","topic":"Χαρακτηριστικό #2"}
+                {"id":"open","topic":"Κόμβος 2","direction":"right","children":[
+                    {"id":"open1","topic":"Χαρακτηριστικό 1"},
+                    {"id":"open2","topic":"Χαρακτηριστικό 2"}
                 ]},
                 {"id":"other","topic":"Δοκιμαστικός κόμβος","direction":"left","children":[
                     {"id":"other1","topic":"Δοκιμή 1"},
@@ -225,11 +241,9 @@ $tool_content .= '
 
 
     function screen_shot(){
-	//console.log();
-		//var curtheme = _jm.options.theme;
-		//set_theme("clouds");
-        _jm.shoot();
-		//set_theme(curtheme);
+		var x = prompt("'.$langPlzEnterName.'", "Name");
+        _jm.shoot(x);
+		
     }
 
     function show_data(){
@@ -246,22 +260,23 @@ $tool_content .= '
     }
     
 	function save_file_in_doc(){
+		
         var mind_data = _jm.get_data();
-        var mind_name = mind_data.meta.name;
         var data = jsMind.util.json.json2string(mind_data);		
 		
-		var x = prompt("'.$langPlzEnterName.'", "Name");
-		
-		/////// 03/11/2016
-	
+				
+ var x = prompt("'.$langPlzEnterName.'", "Name");
+			
 		if (x!=null){
+		_jm.shootAsDataURL(x);
 		window.location.href = "../document/index.php?mindmap=" + data +"& mindtitle=" + x; 
 		
 		}
 		
 	}
 	
-
+		
+	
     function open_file(){
         var file_input = document.getElementById("file_input");
         var files = file_input.files;
@@ -319,11 +334,6 @@ $tool_content .= '
         var node = _jm.add_node(selected_node, nodeid, topic);
     }
 
-
-    function move_node(){
-        // move a node before another
-        _jm.move_node("other","open");
-    }
 
     function remove_node(){
         var selected_id = get_selected_nodeid();

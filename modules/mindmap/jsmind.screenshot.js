@@ -101,19 +101,31 @@
             this.resize();
         },
 
-        shoot:function(){
+        shoot:function(mind_name){
             this.init();
             this._draw();
             this._watermark();
-            this._download();
+            this._download(mind_name);
             this.clean();
         },
 
-        shootAsDataURL:function(){
+        shootAsDataURL:function(name){
             this.init();
             this._draw();
             this._watermark();
             var url = this.canvas_elem.toDataURL();
+		
+		//image post in document in base64 format//
+			$.ajax({
+			  type: "POST",
+			  url: "../document/index.php",
+			  data: { 
+				 imgBase64: url,
+				 imgname: name
+			  }
+			}).done(function(o) {
+			 // console.log('saved'); 
+			});
             this.clean();
             return url;
         },
@@ -174,7 +186,7 @@
             if(!is_visible(ncs)){ return; }
 
             var bgcolor = css(ncs,'background-color');
-			console.log(bgcolor);
+			//console.log(bgcolor);
             var round_radius = parseInt(css(ncs,'border-radius'));
             var color = css(ncs,'color');
             var font = css(ncs,'font');
@@ -239,10 +251,10 @@
             ctx.stroke();
         },
 
-        _download:function(){
+        _download:function(mind_name){
             var c = this.canvas_elem;
             var name = this.jm.mind.name;
-			var mind_name = prompt("langPlzEnterName", "FileName");
+
 			
             if (navigator.msSaveBlob && (!!c.msToBlob)) {
                 var blob = c.msToBlob();
@@ -276,8 +288,11 @@
     var screenshot_plugin = new jsMind.plugin('screenshot',function(jm){
         var jss = new jsMind.screenshot(jm);
         jm.screenshot = jss;
-        jm.shoot = function(){
-            jss.shoot();
+        jm.shoot = function(mind_name){
+            jss.shoot(mind_name);
+		};
+		jm.shootAsDataURL = function(test){
+			jss.shootAsDataURL(test);
         };
         jm.add_event_listener(function(type,data){
             jss.jm_event_handle.call(jss,type,data);

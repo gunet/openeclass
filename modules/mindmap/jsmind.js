@@ -531,8 +531,8 @@
                 },
                 "format":"node_array",
                 "data":[
-                     {"id":"root","topic":"jsMind Example", "isroot":true}
-               ]
+                    {"id":"root","topic":"jsMind Example", "isroot":true}
+                ]
             },
 
             get_mind:function(source){
@@ -961,7 +961,7 @@
                         anchor.dispatchEvent(evt);
                         $d.body.removeChild(anchor);
                     } else {
-					    alert('here1');
+						alert('edw');
                         location.href = bloburl;
                     }
                 }

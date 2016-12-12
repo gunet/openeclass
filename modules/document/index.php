@@ -160,9 +160,66 @@ if(isset($_GET["mindmap"])){
             $language);
 
 
-	redirect_to_current_dir();
+	//redirect_to_current_dir();
 		
 }
+
+//*** mindmap screenshot save ***//
+
+
+
+if(isset($_POST["imgBase64"])){
+
+
+	$shootname = $_POST['imgname'];
+	$img = $_POST['imgBase64'];
+	$img = str_replace('data:image/png;base64,', '', $img);
+	$img = str_replace(' ', '+', $img);
+	$fileData = base64_decode($img);
+
+	$filename = $shootname . ".png";
+	$safe_fileName = safe_filename(get_file_extension($filename));
+    $file_path = '/' . $safe_fileName;
+    $file_date = date("Y\-m\-d G\:i\:s");
+    $file_format = get_file_extension($filename);
+
+
+//**save**//
+
+file_put_contents($basedir . $file_path, $fileData);
+
+
+
+    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+    Database::get()->query("INSERT INTO document SET
+            course_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            extra_path = '',
+            filename = ?s,
+            visible = 1,
+            comment = '',
+            category = 0,
+            title = ?s,
+            creator = ?s,
+            date = ?s,
+            date_modified = ?s,
+            subject = '',
+            description = '',
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = 0,
+            editable = 0",
+            $course_id, $subsystem, $subsystem_id, $file_path,
+            $filename, $shootname, $file_creator,
+            $file_date, $file_date, $file_creator, $file_format,
+            $language);
+        
+
+}
+
 
 // ---------------------------
 // download directory or file
