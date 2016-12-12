@@ -1384,6 +1384,11 @@ $default_config = array(
     'opencourses_enable', 0,
     'enable_indexing', 1,
     'enable_search', 1,
+    'enable_social_sharing_links', 1,
+    'personal_blog', 1,
+    'personal_blog_commenting', 1,
+    'personal_blog_rating', 1,
+    'personal_blog_sharing', 1,
     'course_guest', 'link',
     'version', ECLASS_VERSION);
 
