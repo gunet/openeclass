@@ -1299,7 +1299,6 @@ $langForum = "Forum";
 $langLP = "Γραμμή μάθησης";
 $langOfLikesSocial = "Likes στους κοινωνικούς συνδέσμους";
 $langOfLikesForum = "Likes στις περιοχές συζητήσεων";
-$langDoc = "Προβολή εγγράφου";
 $langMult = "Προβολή πολυμέσου";
 $langVideoLink = "Προβολή video link";
 $langEbook = "Προσπέλαση ηλ. βιβλίου";

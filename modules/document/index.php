@@ -994,7 +994,7 @@ foreach ($result as $row) {
         'updated_message' => $updated_message);
 
     if ($row->extra_path) {
-        $info['common_doc_path'] = common_doc_path($entry['extra_path']); // sets global $common_doc_visible
+        $info['common_doc_path'] = common_doc_path($row->extra_path); // sets global $common_doc_visible
         $info['common_doc_visible'] = $common_doc_visible;
     }
 
