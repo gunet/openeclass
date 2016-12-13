@@ -1379,11 +1379,17 @@ function display_user_progress_details($certificate_id, $user_id) {
     $resource_data = array();
     
     $tool_content .= "<h5>" .  uid_to_name($user_id) . "</h5>";
-        
+    // completed user resources
     $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
                                                         ON user_certificate_criterion.certificate_criterion = certificate_criterion.id 
                                                             AND certificate_criterion.certificate = ?d 
                                                             AND user = ?d", $certificate_id, $user_id);
+    // incomplete user resources
+    $sql2 = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d 
+                                                AND id NOT IN 
+                                        (SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
+                                            ON user_certificate_criterion.certificate_criterion = certificate_criterion.id 
+                                            AND certificate_criterion.certificate = ?d AND user = ?d)", $certificate_id, $certificate_id, $user_id);
     if (count($sql) > 0) {
         $tool_content .= "<table class='table-default custom_list_order'>";
         $tool_content .= "<thead>
@@ -1399,6 +1405,14 @@ function display_user_progress_details($certificate_id, $user_id) {
                 $tool_content .= "<tr>
                         <td>" . $activity . "</td>
                         <td class='text-center'>" . icon('fa-check-circle') . "</td>
+                        </tr>";
+            }
+            foreach ($sql2 as $user_criterion) {
+                $resource_data = get_resource_details($user_criterion);                
+                $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+                $tool_content .= "<tr class='not_visible'>
+                        <td>" . $activity . "</td>
+                        <td class='text-center'>" . icon('fa-hourglass-2') . "</td>
                         </tr>";
             }
             $user_data = Database::get()->querySingle("SELECT completed, completed_criteria, total_criteria FROM user_certificate 
