@@ -253,6 +253,29 @@ function add_forum_to_certificate($certificate_id) {
     return;
 }
 
+/**
+ * @brief add blog db entries in certificate criterion
+ * @param type $certificate_id
+ */
+function add_blog_to_certificate($certificate_id) {
+    
+    if (isset($_POST['blog'])) {
+        foreach ($_POST['blog'] as $datakey => $data) {
+            Database::get()->query("INSERT INTO certificate_criterion
+                                SET certificate = ?d, 
+                                module = " . MODULE_ID_BLOG . ", 
+                                resource = ?d, 
+                                activity_type = 'blog',
+                                operator = ?s,
+                                threshold = ?f",
+                            $certificate_id, 
+                            $_POST['blog'][$datakey],
+                            $_POST['operator'][$data],
+                            $_POST['threshold'][$data]);
+        }
+    }
+}
+
 
 
 /**
@@ -530,8 +553,8 @@ function get_resource_details($resource_id) {
                 $type = "$langMetaQuestionnaire";
             break;
         case BlogEvent::ACTIVITY: 
-                $type = "$langBlog";
-                $title = "$langBlogPosts";
+                $title = Database::get()->querySingle("SELECT title FROM blog_post WHERE blog_post.course_id = ?d AND blog_post.id = ?d", $course_id, $resource)->title;
+                $type = "$langBlog";                
             break;
         case CommentEvent::BLOG_ACTIVITY:
                 $type = "$langComments";

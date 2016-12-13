@@ -1324,6 +1324,7 @@ $langNoCertificateUsers = "Δεν υπάρχουν $langsStudents που συμ�
 $langUsedCertRes = "Η δραστηριότητα έχει ήδη χρησιμοποιηθεί από κάποιον $langsstudent_acc";
 $langNoUserActivity = "Ο $langsStudent δεν έχει εκτελέσει καμμία δραστηριότητα.";
 $langTotalPercentCompleteness = "Συνολικό ποσοστό ολοκλήρωσης";
+$langUsersCertResults = "Το πιστοποιητικό το έχουν ολοκληρώσει ";
 //------------------------------------
 
 

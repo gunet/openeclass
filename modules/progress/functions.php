@@ -504,8 +504,7 @@ function display_available_exercises($certificate_id) {
 }
 
 /**
- * @brief document display form
- * @global type $id
+ * @brief document display form 
  * @global type $webDir
  * @global type $course_code
  * @global type $tool_content
@@ -523,7 +522,7 @@ function display_available_exercises($certificate_id) {
  */
 function display_available_documents($certificate_id) {
     
-    global $id, $webDir, $course_code, $tool_content, 
+    global $webDir, $course_code, $tool_content, 
             $langDirectory, $langUp, $langName, $langSize,
             $langDate, $langAddModulesButton, $langChoice,
             $langNoDocuments, $course_code, $group_sql;
@@ -554,7 +553,7 @@ function display_available_documents($certificate_id) {
                                 "$path/%", "$path/%/%", $certificate_id);
 
     $fileinfo = array();
-    $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code$dir_setter&amp;type=doc&amp;id=$id&amp;path=";
+    $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=document$dir_setter&amp;type=doc&amp;path=";
 
     foreach ($result as $row) {
         $fullpath = $basedir . $row->path;
@@ -589,8 +588,7 @@ function display_available_documents($certificate_id) {
                     icon('fa-level-up') . "</a></span>";
             $colspan = 4;
         }
-        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='id' value='$id'>" .
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .                
                 "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
                 "<table class='table-default'>";
         if( !empty($path)) {
@@ -664,11 +662,59 @@ function display_available_documents($certificate_id) {
 }
 
 
-
+/**
+ * @brief blog display form
+ * @global type $tool_content
+ * @global type $langAddModulesButton
+ * @global type $langBlogEmpty
+ * @global type $urlServer
+ * @global type $course_code
+ * @global type $langTitle
+ * @global type $langValue
+ * @global type $langChoice
+ * @global type $langDate
+ * @global type $course_id
+ * @global type $langAutoJudgeOperator
+ * @param type $certificate_id
+ */
 function display_available_blogs($certificate_id) {
-    global $tool_content;
     
-    $tool_content .= "still working on this";
+    global $tool_content, $langAddModulesButton, $langBlogEmpty, 
+           $urlServer, $course_code, $langTitle, $langValue,
+           $langChoice, $langDate, $course_id, $langAutoJudgeOperator;
+    
+    $result = Database::get()->queryArray("SELECT * FROM blog_post WHERE course_id = ?d AND id NOT IN 
+                                (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                    AND resource != ''
+                                    AND activity_type = 'blog' 
+                                    AND module = " . MODULE_ID_BLOG . ") 
+                                ORDER BY title", $course_id, $certificate_id);    
+    if (count($result) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langBlogEmpty</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<table class='table-default'>" .
+                "<tr class='list-header'>" .
+                "<th class='text-left' style='width:50%;'>&nbsp;$langTitle</th>" .
+                "<th class='text-left'>&nbsp;$langDate</th>" .
+                "<th style='width:5px;'>&nbsp;$langAutoJudgeOperator</th>" .
+                "<th style='width:50px;'>$langValue</th>" . 
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "</tr>";        
+        foreach ($result as $row) {                        
+            $blog_id = $row->id;            
+            $tool_content .= "<tr>" .
+                    "<td><a href='${urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id'>" . q($row->title) . "</a></td>" .
+                    "<td class='text-center'>" . nice_format($row->time, true) . "</td>
+                    <td>". selection(get_operators(), "operator[$blog_id]") . "</td>".
+                    "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$blog_id]' value=''></td>" .
+                    "<td class='text-center'><input name='blog[]' value='$blog_id' type='checkbox'></td>" .
+                    "</tr>";            
+        }
+        $tool_content .= "</table>" .
+                "<div align='right'><input class='btn btn-primary' type='submit' name='add_blog' value='$langAddModulesButton'></div></th></form>";
+    }        
 }
 
 function display_available_blogcomments($certificate_id) {
@@ -1307,34 +1353,42 @@ function student_view_certificate() {
 
 /**
  * @brief display users progress (teacher view)
- * @global type $tool_content
- * @global type $course_id
+ * @global type $tool_content 
  * @global type $course_code
+ * @global type $course_id
  * @global type $langNoCertificateUsers
  * @global type $langName
  * @global type $langSurname
  * @global type $langAmShort
  * @global type $langID
  * @global type $langProgress
+ * @global type $langUsersCertResults
+ * @global type $langUsersS
  * @param type $certificate_id
  */
 function display_users_progress($certificate_id) {
     
-    global $tool_content, $course_id, $course_code, $langNoCertificateUsers, $langName, 
-           $langSurname, $langAmShort, $langID, $langProgress, $langDetails;
+    global $tool_content, $course_code, $course_id, $langNoCertificateUsers, $langName, $langUsersS,
+           $langSurname, $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults;
         
     $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate 
                                             WHERE certificate = ?d", $certificate_id);
     
+    $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user, user 
+                                                WHERE `user`.`id` = `course_user`.`user_id`
+                                                AND `course_user`.`course_id` = ?d", $course_id)->total;
+    $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_certificate WHERE 
+                                                    completed = 1 AND certificate = ?d", $certificate_id)->t;
     if (count($sql) > 0) {
+        $tool_content .= "<div class='alert alert-info'>$langUsersCertResults $certified_users / $all_users $langUsersS.</div>";
         /*              <th class='text-center'>".icon('fa-cogs')."</th> */
             //$tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>";            
         $tool_content .= "<table class='table-default custom_list_order'>";
             $tool_content .= "<thead>
                         <tr>
                           <th style='width:5%'>$langID</th>
-                          <th>$langName $langSurname</th>                          
-                          <th style='width:10%;'>$langProgress</th>            
+                          <th>$langName $langSurname</th>
+                          <th style='width:10%;'>$langProgress</th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -1455,6 +1509,6 @@ function criteria_with_operators() {
                  'wiki',
                  'forum',
                  'forumtopic',
-                 'blogpost',
+                 'blog',
                  'forum-post');
 }
