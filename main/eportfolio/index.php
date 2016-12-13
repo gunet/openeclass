@@ -28,7 +28,6 @@ require_once 'include/lib/forcedownload.php';
 require_once 'main/eportfolio/eportfolio_functions.php';
 require_once 'modules/sharing/sharing.php';
 
-
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
     if ($session->status == 0) {
@@ -60,6 +59,8 @@ $token = token_generate('eportfolio' . $id);
 
 $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_enable
                                           FROM user WHERE id = ?d", $id);
+
+$pageName = q("$userdata->givenname $userdata->surname");
 
 if ($userdata) {
     
@@ -170,17 +171,7 @@ if ($userdata) {
     $tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
-                <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <div id='pers_info' class='row'>
-                        <div class='col-xs-12 col-sm-10 profile-pers-info'>
-                            <div class='row profile-pers-info-name'>
-                                <div class='col-xs-12'>
-                                    <div>" . q("$userdata->givenname $userdata->surname") . "</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>";
+                   ";
 
     $head_content .= "<script type='text/javascript'>
     $(document).ready(function() {
@@ -245,9 +236,7 @@ if ($userdata) {
         $social_share = '';
     }
     $tool_content .= "$social_share</div>
-            </div>
-        </div>
-    </div>";
+            </div>";
 }
 if ($uid == $id) {
     draw($tool_content, 1);

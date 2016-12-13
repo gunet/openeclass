@@ -4956,29 +4956,29 @@ $langCPFLinkValidFail = 'Το πεδίο %s δεν είναι έγκυρη δι�
 $langCPFDateValidFail = 'Το πεδίο %s δεν είναι έγκυρη ημερομηνία. ';
 
 /**************************************************************
- * E-portfolio
+ * e-Portfolio
  * ************************************************************ */
-$langEPFAdmin = 'Διαχείριση πεδίων e-portfolio χρήστη';
-$langEPFAdminSideMenuLink = 'Πεδία e-portfolio χρήστη';
-$langEPFCatDelSuccess = 'Η κατηγορία των πεδίων e-portfolio διαγράφηκε επιτυχώς';
-$langEPFCatModSuccess = 'Η κατηγορία των πεδίων e-portfolio τροποποιήθηκε επιτυχώς';
-$langEPFUniqueShortname = 'Το σύντομο όνομα του πεδίου e-portfolio πρέπει να είναι μοναδικό στην πλατφόρμα';
-$langEPFFieldNameAlert = 'Το όνομα του πεδίου e-portfolio πρέπει να συμπληρωθεί υποχρεωτικά';
-$langEPFFieldShortNameAlert = 'Το σύντομο όνομα του πεδίου e-portfolio πρέπει να συμπληρωθεί υποχρεωτικά';
-$langEPFFieldEditSuccess = 'Η επεξεργασία του πεδίου e-portfolio έγινε επιτυχώς';
-$langEPFEditUniqueShortnameError = 'Το σύντομο όνομα του πεδίου e-portfolio που συμπληρώσατε έχει ξαναχρησιμοποιηθεί στην πλατφόρμα. Η διαδικασία επεξεργασίας του πεδίου e-portfolio ακυρώθηκε.';
-$langEPFFieldAddSuccess = 'Το πεδίο e-portfolio προστέθηκε επιτυχώς';
-$langEPFCreateUniqueShortnameError = 'Το σύντομο όνομα του πεδίου e-portfolio που συμπληρώσατε έχει ξαναχρησιμοποιηθεί στην πλατφόρμα. Η διαδικασία δημιουργίας του πεδίου e-portfolio ακυρώθηκε.';
-$langEPFFieldDelSuccess = 'Το πεδίο e-portfolio διαγράφηκε επιτυχώς';
-$langEPFCatAddedSuccess = 'Η κατηγορία πεδίων e-portfolio προστέθηκε επιτυχώς';
-$langEPFNoCats = 'Δεν υπάρχουν κατηγορίες πεδίων e-portfolio';
-$langEPFNewField = 'Προσθήκη πεδίου e-portfolio';
-$langEPFConfirmCatDelete = 'Διαγράφοντας αυτή την κατηγορία θα διαγραφούν και τα πεδία του e-portfolio που ανήκουν σε αυτή, καθώς και τα αντίστοιχα δεδομένα από το e-portfolio των χρηστών. Είστε σίγουροι ότι θέλετε να προχωρήσετε στη διαγραφή;';
-$langEPFConfirmFieldDelete = 'Διαγράφοντας αυτό το πεδίο θα διαγραφούν και τα αντίστοιχα δεδομένα από το e-portfolio των χρηστών. Είστε σίγουροι ότι θέλετε να προχωρήσετε στη διαγραφή;';
-$langMyePortfolio = 'Το e-portfolio μου';
+$langEPFAdmin = 'Διαχείριση πεδίων e-Portfolio χρήστη';
+$langEPFAdminSideMenuLink = 'Πεδία e-Portfolio χρήστη';
+$langEPFCatDelSuccess = 'Η κατηγορία των πεδίων e-Portfolio διαγράφηκε επιτυχώς';
+$langEPFCatModSuccess = 'Η κατηγορία των πεδίων e-Portfolio τροποποιήθηκε επιτυχώς';
+$langEPFUniqueShortname = 'Το σύντομο όνομα του πεδίου e-Portfolio πρέπει να είναι μοναδικό στην πλατφόρμα';
+$langEPFFieldNameAlert = 'Το όνομα του πεδίου e-Portfolio πρέπει να συμπληρωθεί υποχρεωτικά';
+$langEPFFieldShortNameAlert = 'Το σύντομο όνομα του πεδίου e-Portfolio πρέπει να συμπληρωθεί υποχρεωτικά';
+$langEPFFieldEditSuccess = 'Η επεξεργασία του πεδίου e-Portfolio έγινε επιτυχώς';
+$langEPFEditUniqueShortnameError = 'Το σύντομο όνομα του πεδίου e-Portfolio που συμπληρώσατε έχει ξαναχρησιμοποιηθεί στην πλατφόρμα. Η διαδικασία επεξεργασίας του πεδίου e-Portfolio ακυρώθηκε.';
+$langEPFFieldAddSuccess = 'Το πεδίο e-Portfolio προστέθηκε επιτυχώς';
+$langEPFCreateUniqueShortnameError = 'Το σύντομο όνομα του πεδίου e-Portfolio που συμπληρώσατε έχει ξαναχρησιμοποιηθεί στην πλατφόρμα. Η διαδικασία δημιουργίας του πεδίου e-Portfolio ακυρώθηκε.';
+$langEPFFieldDelSuccess = 'Το πεδίο e-Portfolio διαγράφηκε επιτυχώς';
+$langEPFCatAddedSuccess = 'Η κατηγορία πεδίων e-Portfolio προστέθηκε επιτυχώς';
+$langEPFNoCats = 'Δεν υπάρχουν κατηγορίες πεδίων e-Portfolio';
+$langEPFNewField = 'Προσθήκη πεδίου e-Portfolio';
+$langEPFConfirmCatDelete = 'Διαγράφοντας αυτή την κατηγορία θα διαγραφούν και τα πεδία του e-Portfolio που ανήκουν σε αυτή, καθώς και τα αντίστοιχα δεδομένα από το e-Portfolio των χρηστών. Είστε σίγουροι ότι θέλετε να προχωρήσετε στη διαγραφή;';
+$langEPFConfirmFieldDelete = 'Διαγράφοντας αυτό το πεδίο θα διαγραφούν και τα αντίστοιχα δεδομένα από το e-Portfolio των χρηστών. Είστε σίγουροι ότι θέλετε να προχωρήσετε στη διαγραφή;';
+$langMyePortfolio = 'Το e-Portfolio μου';
 $langEditResume = 'Επεξεργασία του resume';
-$langUserePortfolio = 'e-portfolio χρήστη';
-$langePortfolioChangeSucc = 'Οι αλλαγές στο e-portfolio αποθηκεύθηκαν επιτυχώς';
+$langUserePortfolio = 'e-Portfolio χρήστη';
+$langePortfolioChangeSucc = 'Οι αλλαγές στο e-Portfolio αποθηκεύθηκαν επιτυχώς';
 $langPersInfo = 'Προσωπικά στοιχεία';
 $langEduEmpl = 'Εκπαίδευση και εργασία';
 $langAchievements = 'Διακρίσεις - επιτεύγματα';
@@ -5015,11 +5015,11 @@ $langUploadBioSuccess = 'Το αρχείο του βιογραφικού ανέ�
 $langUploadBioFailType = 'Το αρχείου που προσπαθήσατε να ανεβάσετε δεν είναι PDF';
 $langBioPermFileType = 'Επιτρέπεται το ανέβασμα μόνο αρχείων PDF.';
 $langBioMaxSize = 'Το μέγιστο επιτρεπόμενο όριο του αρχείου είναι %s MB.';
-$lang_eportfolio_enable = 'Ενεργοποίηση e-portfolio χρηστών';
-$langePortfolioDisabled = 'Τo e-portfolio των χρηστών είναι απενεργοποιημένo από τους διαχειριστές της πλατφόρμας.';
-$langUserePortfolioDisabled = 'Τo e-portfolio του χρήστη είναι απενεργοποιημένo.';
+$lang_eportfolio_enable = 'Ενεργοποίηση e-Portfolio χρηστών';
+$langePortfolioDisabled = 'Τo e-Portfolio των χρηστών είναι απενεργοποιημένo από τους διαχειριστές της πλατφόρμας.';
+$langUserePortfolioDisabled = 'Τo e-Portfolio του χρήστη είναι απενεργοποιημένo.';
 $langResume = 'Resume';
-$langePortfolioDisableWarning = 'Το e-portfolio σας είναι απενεργοποιημένο και επομένως δεν είναι ορατό σε άλλους χρήστες και επισκέπτες της πλατφόρμας.';
+$langePortfolioDisableWarning = 'Το e-Portfolio σας είναι απενεργοποιημένο και επομένως δεν είναι ορατό σε άλλους χρήστες και επισκέπτες της πλατφόρμας.';
 $langePortfolioEnableInfo = 'Μπορείτε να το ενεργοποιήσετε από την <a href="%s">κεντρική σελίδα</a> του υποσυστήματος.';
 $langAddResePortfolio = 'Προσθήκη σε e-Portfolio';
 $langAddGroupWorkSubePortfolio = 'Προσθήκη υποβολής ομάδας "%s" σε e-Portfolio';

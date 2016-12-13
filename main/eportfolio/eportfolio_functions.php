@@ -50,11 +50,11 @@ function render_eportfolio_fields_content($uid) {
         if (count($res) > 0) {
     
             $return_string['panels'] .= '<div class="panel panel-default" id="'.$c->id.'">
-                                       <div class="panel-heading">
-                                           <h2 class="panel-title">'.$c->name.'</h2>
-                                       </div>
                                        <div class="panel-body">
-                                           <fieldset>';
+                                           <div class="inner-heading">
+                                               <span>'.$c->name.'</span>
+                                           </div>
+                                            <fieldset>';
             if ($j == 0) {
                 $active = " class='active'";
             } else {
