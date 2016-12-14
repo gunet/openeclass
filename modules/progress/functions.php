@@ -717,10 +717,59 @@ function display_available_blogs($certificate_id) {
     }        
 }
 
+/**
+ * @brief blog comment display form
+ * @global type $tool_content
+ * @global type $langAddModulesButton
+ * @global type $langBlogEmpty
+ * @global type $urlServer
+ * @global type $course_code
+ * @global type $langTitle
+ * @global type $langValue
+ * @global type $langChoice
+ * @global type $langDate
+ * @global type $course_id
+ * @global type $langAutoJudgeOperator
+ * @param type $certificate_id
+ */
 function display_available_blogcomments($certificate_id) {
-    global $tool_content;
     
-    $tool_content .= "still working on this";
+    global $tool_content, $langAddModulesButton, $langBlogEmpty, 
+           $urlServer, $course_code, $langTitle, $langValue,
+           $langChoice, $langDate, $course_id, $langAutoJudgeOperator;
+    
+    $result = Database::get()->queryArray("SELECT * FROM blog_post WHERE course_id = ?d AND id NOT IN 
+                                (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                    AND resource != ''
+                                    AND activity_type = 'blogcomment' 
+                                    AND module = " . MODULE_ID_BLOG . ") 
+                                ORDER BY title", $course_id, $certificate_id);    
+    if (count($result) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langBlogEmpty</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<table class='table-default'>" .
+                "<tr class='list-header'>" .
+                "<th class='text-left' style='width:50%;'>&nbsp;$langTitle</th>" .
+                "<th class='text-left'>&nbsp;$langDate</th>" .
+                "<th style='width:5px;'>&nbsp;$langAutoJudgeOperator</th>" .
+                "<th style='width:50px;'>$langValue</th>" . 
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "</tr>";        
+        foreach ($result as $row) {                        
+            $blog_id = $row->id;            
+            $tool_content .= "<tr>" .
+                    "<td><a href='${urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id#comments-title'>" . q($row->title) . "</a></td>" .
+                    "<td class='text-center'>" . nice_format($row->time, true) . "</td>
+                    <td>". selection(get_operators(), "operator[$blog_id]") . "</td>".
+                    "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$blog_id]' value=''></td>" .
+                    "<td class='text-center'><input name='blogcomment[]' value='$blog_id' type='checkbox'></td>" .
+                    "</tr>";            
+        }
+        $tool_content .= "</table>" .
+                "<div align='right'><input class='btn btn-primary' type='submit' name='add_blogcomment' value='$langAddModulesButton'></div></th></form>";
+    }
 }
 
 
@@ -1510,5 +1559,6 @@ function criteria_with_operators() {
                  'forum',
                  'forumtopic',
                  'blog',
+                 'blogcomments',  
                  'forum-post');
 }

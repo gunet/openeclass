@@ -27,6 +27,9 @@ define('TOPICS_PER_PAGE', 10);
 define('HOT_THRESHOLD', 20);
 define('PAGINATION_CONTEXT', 3);
 
+require_once 'modules/progress/ForumEvent.php';
+require_once 'modules/progress/CommentEvent.php';
+
 function get_total_topics($forum_id) {
     return Database::get()->querySingle("SELECT COUNT(*) AS total FROM forum_topic WHERE forum_id = ?d", $forum_id)->total;
 }

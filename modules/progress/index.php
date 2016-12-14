@@ -297,6 +297,10 @@ if ($is_editor) {
         add_blog_to_certificate($certificate_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;certificate_id=$certificate_id");
+    } elseif (isset($_POST['add_blogcomment'])) {
+        add_blogcomment_to_certificate($certificate_id);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;certificate_id=$certificate_id");
     }
     
     elseif (isset($_GET['del_cert_res'])) { // delete certificate activity

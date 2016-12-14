@@ -276,6 +276,28 @@ function add_blog_to_certificate($certificate_id) {
     }
 }
 
+/**
+ * @brief add blogcomment db entries in certificate criterion
+ * @param type $certificate_id
+ */
+function add_blogcomment_to_certificate($certificate_id) {
+    
+    if (isset($_POST['blogcomment'])) {
+        foreach ($_POST['blogcomment'] as $datakey => $data) {
+            Database::get()->query("INSERT INTO certificate_criterion
+                                SET certificate = ?d, 
+                                module = " . MODULE_ID_BLOG . ", 
+                                resource = ?d, 
+                                activity_type = 'blogcomment',
+                                operator = ?s,
+                                threshold = ?f",
+                            $certificate_id, 
+                            $_POST['blogcomment'][$datakey],
+                            $_POST['operator'][$data],
+                            $_POST['threshold'][$data]);
+        }
+    }
+}
 
 
 /**
@@ -556,9 +578,9 @@ function get_resource_details($resource_id) {
                 $title = Database::get()->querySingle("SELECT title FROM blog_post WHERE blog_post.course_id = ?d AND blog_post.id = ?d", $course_id, $resource)->title;
                 $type = "$langBlog";                
             break;
-        case CommentEvent::BLOG_ACTIVITY:
-                $type = "$langComments";
-                $title = "$langCommentsBlog";
+        case CommentEvent::BLOG_ACTIVITY:                
+                $title = Database::get()->querySingle("SELECT title FROM blog_post WHERE blog_post.course_id = ?d AND blog_post.id = ?d", $course_id, $resource)->title;
+                $type = "$langCommentsBlog";
             break;
         case CommentEvent::COURSE_ACTIVITY:
                 $type = "$langComments";

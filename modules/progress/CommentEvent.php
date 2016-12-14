@@ -24,7 +24,7 @@ require_once 'BasicEvent.php';
 
 class CommentEvent extends BasicEvent {
     
-    const BLOG_ACTIVITY = 'blogpost';
+    const BLOG_ACTIVITY = 'blogcomment';
     const COURSE_ACTIVITY = 'course';
     const NEWCOMMENT = 'comment-submitted';
     const DELCOMMENT = 'comment-deleted';
