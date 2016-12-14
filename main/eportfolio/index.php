@@ -65,7 +65,8 @@ $pageName = q("$userdata->givenname $userdata->surname");
 if ($userdata) {
     
     if ($uid == $id) {
-        
+
+        /*
         if (isset($_POST['toggle_val'])) {
             if ($_POST['toggle_val'] == 'on') {
                 Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 1, $id);
@@ -76,6 +77,7 @@ if ($userdata) {
             }
             redirect_to_home_page("main/eportfolio/index.php?id=$id&token=$token");
         }
+        */
         
         $head_content .= "<script type='text/javascript'>//<![CDATA[
                               $(function(){
@@ -105,7 +107,8 @@ if ($userdata) {
             $off_class = "btn btn-default locked_inactive";
             $on_class = "btn btn-info unlocked_active";
         }
-        
+
+        /*
         $tool_content .= '<div style="margin-top:10px" class="btn-group" id="toggle_event_editing">
                               <form method="post" action="" id="enable-eportfolio-form">
                                   <input type="hidden" name="toggle_val">
@@ -114,6 +117,8 @@ if ($userdata) {
 	                          <button type="button" class="'.$off_class.'">OFF</button>
 	                          <button type="button" class="'.$on_class.'">ON</button>
                           </div>';
+        */
+
         
         $tool_content .= action_bar(array(
                                         array('title' => $langBio,
@@ -125,9 +130,12 @@ if ($userdata) {
                                             'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
                                             'level' => 'primary-label',
                                             'button-class' => 'btn-info'),
+                                        array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
+                                              'url' => "#",
+                                              'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye'),
                                         array('title' => $langResourcesCollection,
-                                              'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
-                                              'level' => 'primary-label'),
+                                            'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
+                                            'level' => 'primary-label'),
                                         array('title' => $langEditResume,
                                             'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                                             'icon' => 'fa-edit'),
