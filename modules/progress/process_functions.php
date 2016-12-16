@@ -153,20 +153,18 @@ function add_lp_to_certificate($certificate_id) {
  */
 function add_wiki_to_certificate($certificate_id) {
               
-    if (isset($_POST['wiki'])) {
-        foreach ($_POST['wiki'] as $datakey => $data) {
-            Database::get()->query("INSERT INTO certificate_criterion
-                                SET certificate = ?d, 
-                                module = " . MODULE_ID_WIKI . ", 
-                                resource = ?d, 
-                                activity_type = 'wiki',
-                                operator = ?s,
-                                threshold = ?f",
-                            $certificate_id, 
-                            $_POST['wiki'][$datakey],
-                            $_POST['operator'][$data],
-                            $_POST['threshold'][$data]);
-        }
+    if (isset($_POST['wiki'])) {        
+        Database::get()->query("INSERT INTO certificate_criterion
+                            SET certificate = ?d, 
+                            module = " . MODULE_ID_WIKI . ", 
+                            resource = null, 
+                            activity_type = 'wiki',
+                            operator = ?s,
+                            threshold = ?f",
+                        $certificate_id,                         
+                        $_POST['operator'],
+                        $_POST['threshold']);
+        
     }
     return;
 }
@@ -259,20 +257,17 @@ function add_forum_to_certificate($certificate_id) {
  */
 function add_blog_to_certificate($certificate_id) {
     
-    if (isset($_POST['blog'])) {
-        foreach ($_POST['blog'] as $datakey => $data) {
-            Database::get()->query("INSERT INTO certificate_criterion
-                                SET certificate = ?d, 
-                                module = " . MODULE_ID_BLOG . ", 
-                                resource = ?d, 
-                                activity_type = 'blog',
-                                operator = ?s,
-                                threshold = ?f",
-                            $certificate_id, 
-                            $_POST['blog'][$datakey],
-                            $_POST['operator'][$data],
-                            $_POST['threshold'][$data]);
-        }
+    if (isset($_POST['blog'])) {        
+        Database::get()->query("INSERT INTO certificate_criterion
+                            SET certificate = ?d, 
+                            module = " . MODULE_ID_BLOG . ", 
+                            resource = null, 
+                            activity_type = 'blog',
+                            operator = ?s,
+                            threshold = ?f",
+                        $certificate_id,                         
+                        $_POST['operator'],
+                        $_POST['threshold']);        
     }
 }
 
@@ -510,9 +505,10 @@ function certificate_resource_usage($certificate_resource_id) {
  * @global type $langMetaQuestionnaire
  * @global type $langBlogPosts
  * @global type $langBlog
+ * @global type $langNumOfBlogs
  * @global type $langForums
  * @global type $langWikiPages
- * @global type $langWikis
+ * @global type $langWiki
  * @global type $langComments
  * @global type $langCommentsBlog
  * @global type $langCommentsCourse
@@ -527,8 +523,8 @@ function get_resource_details($resource_id) {
     
     global $course_id, $langCategoryExcercise, $langCategoryEssay, $langLearningPath,
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire, 
-            $langBlogPosts, $langBlog, $langForums, $langWikiPages,
-            $langWikis, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
+            $langBlogPosts, $langBlog, $langForums, $langWikiPages, $langNumOfBlogs,
+            $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating;
     
     $data = array('type' => '', 'title' => '');
@@ -575,7 +571,7 @@ function get_resource_details($resource_id) {
                 $type = "$langMetaQuestionnaire";
             break;
         case BlogEvent::ACTIVITY: 
-                $title = Database::get()->querySingle("SELECT title FROM blog_post WHERE blog_post.course_id = ?d AND blog_post.id = ?d", $course_id, $resource)->title;
+                $title = "$langNumOfBlogs";
                 $type = "$langBlog";                
             break;
         case CommentEvent::BLOG_ACTIVITY:                
@@ -602,9 +598,9 @@ function get_resource_details($resource_id) {
                 $type = "$langForumRating";
                 $title = "$langPersoValue";
             break;
-        case WikiEvent::ACTIVITY:
-                $type = "$langWikiPages";
-                $title = "$langWikis";
+        case WikiEvent::ACTIVITY:                
+                $type = "$langWiki";
+                $title = "$langWikiPages";
             break;
         default: 
                 $title = "$langAllActivities";
