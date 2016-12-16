@@ -1858,7 +1858,12 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
     if (!$init_done) {
         $init_done = true;
         $filebrowser = $url = '';
+
+        // params for tinymce embed
         $activemodule = 'document/index.php';
+        $append_module = (!empty(current_module_id())) ? "&originating_module=" . q(current_module_id()) : '';
+        $append_forum = (isset($_REQUEST['forum'])) ? "&originating_forum=" . q($_REQUEST['forum']) : '';
+
         if (isset($course_code) && !empty($course_code)) {
             $filebrowser = "file_browser_callback : openDocsPicker,";
             if (!$is_editor) {
@@ -1886,10 +1891,10 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                     }
                 }
             }
-            $url = $urlAppend . "modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=";
+            $url = $urlAppend . "modules/" . $activemodule . "?course=" . $course_code . "&embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
         } elseif ($is_admin) { /* special case for admin announcements */
             $filebrowser = "file_browser_callback : openDocsPicker,";
-            $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
+            $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
         }
         $focus_init = ",
                 init_instance_callback: function(editor) {
