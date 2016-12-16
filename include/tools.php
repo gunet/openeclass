@@ -815,10 +815,15 @@ function lessonToolsMenu($rich=true) {
  */
 function pickerMenu() {
 
-    global $urlServer, $course_code, $course_id, $is_editor, $modules, $session;
+    global $urlServer, $course_code, $course_id, $is_editor, $is_course_admin, $modules, $session, $uid;
 
+    // params
+    $originating_module = (isset($_REQUEST['originating_module'])) ? intval($_REQUEST['originating_module']) : null;
+    $originating_forum = (isset($_REQUEST['originating_forum'])) ? intval($_REQUEST['originating_forum']) : null;
+    $append_module = (!empty($originating_module)) ? "&originating_module=" . q($originating_module) : '';
+    $append_forum = (!empty($originating_forum)) ? "&originating_forum=" . q($originating_forum) : '';
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&docsfilter=' . q($_REQUEST['docsfilter']) : '';
-    $params = "?course=$course_code&embedtype=tinymce" . $docsfilter;
+    $params = "?course=" . $course_code . "&embedtype=tinymce" . $append_module . $append_forum . $docsfilter;
 
     $sideMenuGroup = array();
 
@@ -864,6 +869,33 @@ function pickerMenu() {
         array_push($sideMenuText, q($GLOBALS['langMyDocs']));
         array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php' . $params));
         array_push($sideMenuImg, 'docs.png');
+    }
+
+    // link for group documents
+    if ($originating_module === MODULE_ID_FORUM && !empty($originating_forum)) {
+        $result = Database::get()->querySingle("select * from `group` where forum_id = ?d limit 1", $originating_forum);
+        if ($result) {
+            // check user access: editors and admins PASS, group_members also
+            $usercheck = false;
+            if ($is_editor || $is_course_admin) {
+                $usercheck = true;
+            } else {
+                $group_members = Database::get()->queryArray("select user_id from group_members where group_id = ?d", $result->id);
+                foreach ($group_members as $member) {
+                    if (intval($member->user_id) === intval($uid)) {
+                        $usercheck = true;
+                        break;
+                    }
+                }
+            }
+
+            if ($usercheck) {
+                // display extra menu entry for group documents
+                array_push($sideMenuText, q($GLOBALS['langGroupDocumentsLink'] . "'" . $result->name . "'"));
+                array_push($sideMenuLink, q($urlServer . 'modules/group/document.php' . $params . "&group_id=" . q($result->id)));
+                array_push($sideMenuImg, 'fa-folder-open-o');
+            }
+        }
     }
 
     array_push($sideMenuSubGroup, $sideMenuText);
