@@ -3532,7 +3532,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("CREATE TABLE `certificate` (
           `id` int(11) not null auto_increment primary key,
           `course_id` int(11) not null,
-          `issuer` int(11) not null,
+          `issuer` varchart(255) not null default '',
           `template` mediumint(8),
           `title` varchar(255) not null,
           `description` text,
@@ -3548,18 +3548,21 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         )");
 
         Database::get()->query("CREATE TABLE `badge` (
-          `id` int(11) not null auto_increment primary key,
-          `course_id` int(11) not null,
-          `issuer` int(11) not null,
-          `title` varchar(255) not null,
-          `description` text,
-          `autoassign` tinyint(1) not null default 1,
-          `active` tinyint(1) not null default 1,
-          `created` datetime,
-          `expires` datetime,
-          index `badge_course` (`course`),
-          foreign key (`course_id`) references `course` (`id`),
-          foreign key (`issuer`) references `user`(`id`)
+            `id` int(11) not null auto_increment primary key,
+            `course_id` int(11) not null,
+            `issuer` varchar(255) not null default '',
+            `icon` mediumint(8),
+            `title` varchar(255) not null,
+            `description` text,
+            `message` text,
+            `autoassign` tinyint(1) not null default 1,
+            `active` tinyint(1) not null default 1,
+            `created` datetime,
+            `expires` datetime,
+            `bundle` int(11) not null default 0,
+            index `badge_course` (`course`),
+            foreign key (`course_id`) references `course` (`id`),
+            foreign key (`issuer`) references `user`(`id`)
         )");
 
         Database::get()->query("CREATE TABLE `user_certificate` (

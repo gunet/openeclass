@@ -334,6 +334,14 @@ function get_certificate_templates() {
     return $templates;    
 }
 
+
+function get_badge_icons() {
+    
+    $badges = array ('1','2','3');
+    
+    return $badges;
+}
+
 /**
  * @brief check if we are trying to access other user details
  * @param type $uid
@@ -371,28 +379,38 @@ function check_cert_details($uid, $certificate_id) {
 /**
  * @brief add certificate in DB
  * @global type $course_id
+ * @param type $table
  * @param type $title
  * @param type $description
  * @param type $message
- * @param type $template
+ * @param type $icon
  * @param type $issuer
  * @param type $active
  * @return type
  */
-function add_certificate($title, $description, $message, $template, $issuer, $active) {
+function add_certificate($table, $title, $description, $message, $icon, $issuer, $active) {
     
     global $course_id;
-    
-    $new_cert_id = Database::get()->query("INSERT INTO certificate 
+    if ($table == 'certificate') {
+        $new_id = Database::get()->query("INSERT INTO certificate 
                                 SET course_id = ?d,
                                 title = ?s,
                                 description = ?s,
                                 message = ?s,
                                 template = ?d,
                                 issuer = ?s,
-                                active = ?d", $course_id, $title, $description, $message, $template, $issuer, $active)->lastInsertID;
-    return $new_cert_id;
-    
+                                active = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active)->lastInsertID;    
+    } else {
+        $new_id = Database::get()->query("INSERT INTO badge 
+                                SET course_id = ?d,
+                                title = ?s,
+                                description = ?s,
+                                message = ?s,
+                                icon = ?d,
+                                issuer = ?s,
+                                active = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active)->lastInsertID;    
+    }
+    return $new_id;
 }
 
 /**

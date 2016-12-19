@@ -102,6 +102,83 @@ function display_certificates() {
 
 
 /**
+ * * @brief display all badges -- initial screen
+ * @global type $course_id
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $is_editor
+ * @global type $langDelete
+ * @global type $langConfirmDelete
+ * @global type $langCreateDuplicate
+ * @global type $langNoBadges
+ * @global type $langEditChange
+ * @global type $langAvailBadge
+ * @global type $langViewHide
+ * @global type $langViewShow
+ * @global type $langEditChange
+ * @global type $langSee
+ */
+function display_badges() {
+
+    global $course_id, $tool_content, $course_code, $is_editor,
+           $langDelete, $langConfirmDelete, $langCreateDuplicate,
+           $langNoBadges, $langEditChange, $langAvailBadge,
+           $langViewHide, $langViewShow, $langEditChange, $langSee;
+
+    if ($is_editor) {
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM badge WHERE course_id = ?d", $course_id);
+    } else {
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM badge WHERE course_id = ?d AND active = 1", $course_id);
+    }
+    
+    if (count($sql_cer) == 0) { // no badges
+        $tool_content .= "<div class='alert alert-info'>$langNoBadges</div>";
+    } else {
+        $tool_content .= "<div class='row'>";
+        $tool_content .= "<div class='col-sm-12'>";
+        $tool_content .= "<div class='table-responsive'>";
+        $tool_content .= "<table class='table-default'>";
+        $tool_content .= "<tr class='list-header'>
+                            <th>$langAvailBadge</th>";
+        if( $is_editor) {
+            $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
+        }
+        $tool_content .= "</tr>";
+        foreach ($sql_cer as $data) {            
+            $row_class = !$data->active ? "class='not_visible'" : "";
+            $tool_content .= "
+                    <tr $row_class>
+                        <td>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
+                        </td>";
+            if($is_editor) {
+                $tool_content .= "<td class='option-btn-cell'>";
+                $tool_content .= action_button(array(
+                                    array('title' => $langEditChange,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1",
+                                          'icon' => 'fa-cogs'),
+                                    array('title' => $data->active ? $langViewHide : $langViewShow,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
+                                                  ($data->active ? '0' : '1'),
+                                          'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
+                                    array('title' => $langDelete,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
+                                          'icon' => 'fa-times',
+                                          'class' => 'delete',
+                                          'confirm' => $langConfirmDelete),
+                                    array('title' => $langSee,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;preview=1",
+                                          'icon' => 'fa-search')
+                                        ));
+                $tool_content .= "</td>";
+            }
+            $tool_content .= "</tr>";
+        }
+        $tool_content .= "</table></div></div></div>";
+    }
+}
+
+/**
  * @brief display all certificate activities
  * @global type $tool_content
  * @global type $course_code
@@ -1255,13 +1332,14 @@ function display_available_wiki($certificate_id) {
  * @global type $langpublisher
  * @global type $langMessage
  * @global type $langTemplate
+ * @param type $table
  * @param type $certificate_id
  */
-function certificate_settings($certificate_id = 0) {
+function certificate_settings($table, $certificate_id = 0) {
 
     global $tool_content, $course_code, $langTemplate, $course_id, 
            $langTitle, $langSave, $langInsert, $langMessage,
-           $langActivate, $langDescription, $langpublisher;
+           $langActivate, $langDescription, $langpublisher, $langIcon;
        
         
     if ($certificate_id > 0) {      // edit
@@ -1279,13 +1357,14 @@ function certificate_settings($certificate_id = 0) {
     } else {        // add
         $issuer = q(get_config('institution'));
         $template = '';
+        $icon = '';
         $title = '';
         $description = '';
         $message = '';
         $active = 1;
         $checked = 'checked';
         $cert_id = '';
-        $name = 'newCertificate';
+        $name = ($table == 'certificate')? 'newCertificate' : 'newBadge';
     }
     
     $tool_content .= "<div class='form-wrapper'>
@@ -1303,10 +1382,12 @@ function certificate_settings($certificate_id = 0) {
                         </div>
                 </div>
                 <div class='form-group'>
-                    <label for='title' class='col-sm-2 control-label'>$langTemplate</label>
-                    <div class='col-sm-10'>
-                    " . selection(get_certificate_templates(), 'template', $template) . "
-                    </div>
+                    <label for='title' class='col-sm-2 control-label'>";
+                    $tool_content .= ($table == 'certificate') ? $langTemplate : $langIcon;
+                    $tool_content .= "</label>
+                        <div class='col-sm-10'>";
+                            $tool_content .= ($table == 'certificate') ? selection(get_certificate_templates(), 'template', $template) : selection(get_badge_icons(), 'badge', $icon);
+                        $tool_content .= "</div>
                 </div>
                 <div class='form-group'>
                     <label for='message' class='col-sm-2 control-label'>$langMessage</label>

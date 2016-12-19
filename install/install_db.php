@@ -1728,7 +1728,7 @@ $db->query("CREATE TABLE `certificate_template` (
 $db->query("CREATE TABLE `certificate` (
   `id` int(11) not null auto_increment primary key,
   `course_id` int(11) not null,
-  `issuer` int(11) not null,
+  `issuer` varchar(255) not null default '',
   `template` mediumint(8),
   `title` varchar(255) not null,
   `description` text,
@@ -1747,16 +1747,18 @@ $db->query("CREATE TABLE `certificate` (
 $db->query("CREATE TABLE `badge` (
   `id` int(11) not null auto_increment primary key,
   `course_id` int(11) not null,
-  `author` int(11) not null,
+  `issuer` varchar(255) not null default '',
+  `icon` mediumint(8),
   `title` varchar(255) not null,
   `description` text,
+  `message` text,
   `autoassign` tinyint(1) not null default 1,
   `active` tinyint(1) not null default 1,
   `created` datetime,
   `expires` datetime,
+  `bundle` int(11) not null default 0,
   index `badge_course` (`course`),
-  foreign key (`course_id`) references `course` (`id`),
-  foreign key (`author`) references `user`(`id`)
+  foreign key (`course_id`) references `course` (`id`)  
 )");
 
 $db->query("CREATE TABLE `user_certificate` (
