@@ -297,12 +297,13 @@ function add_blogcomment_to_certificate($certificate_id) {
 
 /**
  * @brief get certificate title
- * @param type $certificate_id
+ * @param type $table
+ * @param type $id
  * @return type
  */
-function get_certificate_title($certificate_id) {
+function get_title($table, $id) {
 
-    $cert_title = Database::get()->querySingle("SELECT title FROM certificate WHERE id = ?d", $certificate_id)->title;
+    $cert_title = Database::get()->querySingle("SELECT title FROM $table WHERE id = ?d", $id)->title;
 
     return $cert_title;
 }
@@ -645,7 +646,7 @@ function cert_output_to_pdf($certificate_id, $user_id) {
     
     $html_certificate = file_get_contents(CERT_TEMPLATE_PATH . $cert_file . ".html");
 
-    $certificate_title = get_certificate_title($certificate_id);
+    $certificate_title = get_title('certificate', $certificate_id);
     $certificate_issuer = get_certificate_issuer($certificate_id);
     $sql = Database::get()->querySingle("SELECT message FROM certificate WHERE id = ?d", $certificate_id);
     if ($sql) {

@@ -212,9 +212,10 @@ function display_badges() {
  * @global type $langUsers
  * @global type $langValue
  * @global type $langPersoValue
+ * @param type $table
  * @param type $certificate_id
  */
-function display_certificate_activities($certificate_id) {
+function display_activities($table, $id) {
 
     global $tool_content, $course_code,
            $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
@@ -226,70 +227,76 @@ function display_certificate_activities($certificate_id) {
            $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
            $langValue, $langPersoValue, $langOfLikesSocial;
 
+    if ($table == 'certificate') {
+        $link_id = "course=$course_code&amp;certificate_id=$id";
+    } else {
+        $link_id = "course=$course_code&amp;badge_id=$id";
+    }
+    
     $tool_content .= action_bar(
             array(
                 array('title' => $langAdd,
                       'level' => 'primary-label',
                       'options' => array(
                           array('title' => "$langOfAssignment",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=assignment",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=assignment",
                                 'icon' => 'fa fa-flask space-after-icon',
                                 'class' => ''),
                           array('title' => "$langExerciseAsModuleLabel",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=exercise",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=exercise",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langOfBlog",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=blog",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=blog",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langOfBlogComments",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=blogcomments",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=blogcomments",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langOfCourseComments",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=coursecomments",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecomments",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langOfForums",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=forum",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=forum",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langOfLearningPath",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=lp",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lp",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langOfLikesSocial",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=likesocial",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=likesocial",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langOfLikesForum",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=likeforum",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=likeforum",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langDocumentAsModuleLabel",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=document",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langMediaAsModuleLabel",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=multimedia",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=multimedia",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),                          
                           array('title' => "$langOfEBook",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=ebook",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=ebook",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langOfPoll",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=poll",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langWiki",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=wiki",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=wiki",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => '')),
                      'icon' => 'fa-plus'),
                 array('title' => $langUsers,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;progressall=true",
+                      'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
                       'icon' => 'fa-users',
                       'level' => 'primary-label'),
                 array('title' => $langBack,
@@ -297,17 +304,17 @@ function display_certificate_activities($certificate_id) {
                       'icon' => 'fa-reply',
                       'level' => 'primary-label'),
                 array('title' => $langConfig,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;edit=1",
+                      'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;edit=1",
                       'icon' => 'fa-cog'),
                 array('title' => "$langExport",
-                      'url' => "dumpcertificatebook.php?course=$course_code&amp;certificate_id=$certificate_id&amp;enc=1253",
+                      'url' => "dumpcertificatebook.php?$link_id&amp;enc=1253",
                       'icon' => 'fa-file-excel-o'),                
             ),
             true
         );
 
     //get available activities
-    $result = Database::get()->queryArray("SELECT * FROM certificate_criterion WHERE certificate = ?d ORDER BY `id` DESC", $certificate_id);    
+    $result = Database::get()->queryArray("SELECT * FROM certificate_criterion WHERE certificate = ?d ORDER BY `id` DESC", $id);    
 
     if (count($result) > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
@@ -339,12 +346,12 @@ function display_certificate_activities($certificate_id) {
                     action_button(array(
                         array('title' => $langEditChange,
                             'icon' => 'fa-edit',
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$certificate_id&amp;act_mod=$details->id",
+                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
                             'show' => in_array($details->activity_type, criteria_with_operators())
                             ),
                         array('title' => $langDelete,
                             'icon' => 'fa-times',
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;certificate_id=$certificate_id&amp;del_cert_res=$details->id",
+                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
                             'confirm' => $langConfirmDelete,
                             'class' => 'delete'))).
                     "</td></tr>";

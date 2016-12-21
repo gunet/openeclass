@@ -143,7 +143,13 @@ $('input[id=button_groups]').click(changeAssignLabel);
 $display = TRUE;
 if (isset($_REQUEST['certificate_id'])) {
     $certificate_id = $_REQUEST['certificate_id'];
-    $certificate_title = get_certificate_title($certificate_id);
+    $certificate_title = get_title('certificate', $certificate_id);
+    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);    
+}
+
+if (isset($_REQUEST['badge_id'])) {
+    $badge_id = $_REQUEST['badge_id'];
+    $badge_title = get_title('badge', $badge_id);
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);    
 }
 
@@ -213,7 +219,7 @@ if ($is_editor) {
                   'level' => 'primary-label')));        
     } elseif (isset($_GET['preview'])) { // certificate preview
         cert_output_to_pdf($certificate_id, $uid);
-    } elseif (!isset($_REQUEST['certificate_id']) or ($isset($_REQUEST['badge_id']))) {
+    } elseif (!isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id']))) {
         $tool_content .= action_bar(
             array(
                 array('title' => "$langNewCertificate",
@@ -367,7 +373,11 @@ if (isset($display) and $display == TRUE) {
         if (isset($certificate_id)) {
             $pageName = $certificate_title;            
             // display certificate resources
-            display_certificate_activities($certificate_id);
+            display_activities('certificate', $certificate_id);
+        }  elseif (isset($badge_id)) {
+            $pageName = $badge_title;
+            // display certificate resources
+            display_activities('badge', $badge_id);
         } else { // display all certificates
             display_certificates();
             display_badges();
