@@ -78,7 +78,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $langPortfolio, $langSearch, $langUser,
         $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
-        $require_current_course, $require_course_admin, $require_help, $siteName, $siteName,
+        $require_current_course, $require_course_admin, $require_help, $siteName,
         $switchLangURL, $theme, $themeimg,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
         $theme_settings, $language, $saved_is_editor, $langProfileImage,
@@ -92,7 +92,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     // get blocks content from $toolContent array
     if ($perso_tool_content) {
-        $lesson_content = $perso_tool_content ['lessons_content'];        
+        $lesson_content = $perso_tool_content ['lessons_content'];
         $personal_calendar_content = $perso_tool_content ['personal_calendar_content'];
     }
 
@@ -150,8 +150,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
 
-    //	BEGIN constructing of left navigation
-    //	----------------------------------------------------------------------
+    //  BEGIN constructing of left navigation
+    //  ----------------------------------------------------------------------
     $t->set_block('mainBlock', 'leftNavBlock', 'leftNav');
     $t->set_block('leftNavBlock', 'leftNavCategoryBlock', 'leftNavCategory');
     $t->set_block('leftNavCategoryBlock', 'leftNavCategoryTitleBlock', 'leftNavCategoryTitle');
@@ -255,7 +255,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LANG_MESSAGES', q($GLOBALS['langMyDropBox']));
         $t->set_var('MESSAGES_LINK', $urlAppend . 'modules/message/index.php');
         $t->set_var('LANG_COURSES', q($GLOBALS['langMyCourses']));
-        $t->set_var('COURSES_LINK', $urlAppend . 'main/my_courses.php');        
+        $t->set_var('COURSES_LINK', $urlAppend . 'main/my_courses.php');
         $t->set_var('LANG_AGENDA', q($langMyAgenda));
         $t->set_var('AGENDA_LINK', $urlAppend . 'main/personal_calendar/index.php');
         $t->set_var('LANG_NOTES', q($GLOBALS['langNotes']));
@@ -325,8 +325,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('SECTION_TITLE', $langUserPortfolio);
         $sectionName = $langUserPortfolio;
     } else {
-        $t->set_var('SECTION_TITLE', $langEclass);
-        $sectionName = $langEclass;
+        $t->set_var('SECTION_TITLE', $siteName);
+        $sectionName = $siteName;
     }
 
     //set the appropriate search action for the searchBox form
@@ -386,7 +386,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_block('mainBlock', 'breadCrumbEntryBlock', 'breadCrumbEntry');
 
         // Breadcrumb landing page link
-        $showStart = true; 
+        $showStart = true;
         if ($landingUrl = get_config('landing_url')) {
             $landingPageName = get_config('landing_name');
             if (!$landingPageName) {
@@ -606,10 +606,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     if ($perso_tool_content) {
-        $t->set_var('LANG_MY_PERSO_LESSONS', $langMyCourses);        
+        $t->set_var('LANG_MY_PERSO_LESSONS', $langMyCourses);
         $t->set_var('LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements);
         $t->set_var('LANG_MY_PERSONAL_CALENDAR', $langMyAgenda);
-        $t->set_var('LESSON_CONTENT', $lesson_content);        
+        $t->set_var('LESSON_CONTENT', $lesson_content);
         $t->set_var('URL_PATH', $urlAppend);
         $t->set_var('TOOL_PATH', $urlAppend);
         $t->set_var('PERSONAL_CALENDAR_CONTENT', $personal_calendar_content);
@@ -636,8 +636,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('HTML_FOOTER', $html_footer);
     }
 
-    //	At this point all variables are set and we are ready to send the final output
-    //	back to the browser
+    //  At this point all variables are set and we are ready to send the final output
+    //  back to the browser
     $t->parse('main', 'mainBlock', false);
 
     $t->pparse('Output', 'fh');
@@ -681,7 +681,7 @@ function dumpArray($arr) {
  * @param array $arr
  */
 function print_a($TheArray) {
-    
+
     echo "<table border=1>";
     if (is_object($TheArray)) {
         $TheArray = (array)($TheArray);
