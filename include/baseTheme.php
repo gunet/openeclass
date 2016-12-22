@@ -102,7 +102,7 @@ function view($view_file, $view_data = array()) {
     } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
         $section_title = trans('langUserPortfolio');
     } else {
-        $section_title = trans('langEclass');
+        $section_title = $siteName;
     }
 
     //set the appropriate search action for the searchBox form
@@ -125,7 +125,7 @@ function view($view_file, $view_data = array()) {
             array_push($breadcrumbs, $item);
             unset($item);
         }
-        
+
 
         // Breadcrumb first entry (home / portfolio)
         if ($session->status != USER_GUEST) {
@@ -323,14 +323,14 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
         $is_editor, $langActivate, $langNote,
         $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
         $langChooseLang, $langDeactivate, $langProfileMenu,
-        $langEclass, $langHelp, $langUsageTerms,
+        $langHelp, $langUsageTerms,
         $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, $langMyAgenda,
         $langMyPersoAnnouncements, $langMyPersoDeadlines,
         $langMyPersoDocs, $langMyPersoForum, $langMyCourses,
         $langPortfolio, $langSearch, $langUser,
         $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
-        $require_current_course, $require_course_admin, $require_help, $siteName, $siteName,
+        $require_current_course, $require_course_admin, $require_help, $siteName,
         $switchLangURL, $theme, $themeimg, $is_course_admin,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
         $theme_settings, $language, $saved_is_editor, $langProfileImage,
