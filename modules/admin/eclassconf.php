@@ -567,6 +567,12 @@ else {
                                <input class='form-control' type='text' name='formLandingUrl' id='formLandingUrl' value='" . q(get_config('landing_url')) . "'>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -660,6 +666,12 @@ else {
                                     "class='form-control'") . "
                             </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>";
@@ -722,6 +734,12 @@ else {
                                 </div>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>";
@@ -778,6 +796,12 @@ else {
                                 </div>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -807,6 +831,12 @@ else {
                                         $lang_opencourses_enable
                                     </label>
                                 </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
@@ -964,6 +994,12 @@ else {
                                 <input type='text' class='form-control' name='actions_expire_interval' value='" . get_config('actions_expire_interval') . "'>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -1010,6 +1046,12 @@ else {
                                 $langEnableCommonDocs
                             </label>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -1044,6 +1086,12 @@ else {
                                 <input class='form-control' type='text' name='dropbox_quota' id='dropbox_quota' value='" . get_config('dropbox_quota') . "'>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -1064,6 +1112,12 @@ else {
                            <div class='col-sm-8'>
                                 <textarea class='form-control' rows='6' name='teacher_upload_whitelist' id='teacher_upload_whitelist'>" . get_config('teacher_upload_whitelist') . "</textarea>
                            </div>
+                        </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                            </div>
                         </div>
                     </fieldset>
                 </div>
@@ -1115,6 +1169,12 @@ $tool_content .= "
                                 <input class='form-control' type='text' name='log_purge_interval' id='log_purge_interval' value='" . get_config('log_purge_interval') . "'>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -1152,13 +1212,13 @@ $tool_content .= "
                                 <input class='form-control' type='text' name='login_fail_forgive_interval' id='login_fail_forgive_interval' value='" . get_config('login_fail_forgive_interval') . "'>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
-                </div>
-            </div>
-            <div class='form-group'>
-                <div class='col-sm-12'>
-                    <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
-                    <a class='btn btn-default' href='index.php'>$langCancel</a>
                 </div>
             </div>
             ". generate_csrf_token_form_field() ."
