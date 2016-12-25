@@ -63,8 +63,17 @@ $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_
 if ($userdata) {
     if ($uid == $id) {
         
+        if (isset($_GET['toggle_val'])) {
+            if ($_GET['toggle_val'] == 'on') {
+                Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 1, $id);
+            } elseif ($_GET['toggle_val'] == 'off') {
+                Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 0, $id);
+            }
+            redirect_to_home_page("main/eportfolio/resources.php?id=$id&token=$token");
+        }
+        
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning ".sprintf($langePortfolioEnableInfo, $urlAppend."main/eportfolio/index.php?id=$uid&amp;token=$token")."</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
         }
         
         $tool_content .= "<div class='alert alert-info fade in'>
@@ -112,6 +121,9 @@ if ($userdata) {
                       'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
                       'level' => 'primary-label',
                       'button-class' => 'btn-primary'),
+                array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
+                      'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token&amp;toggle_val=on",
+                      'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye'),
                 array('title' => $langEditResume,
                       'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                       'icon' => 'fa-edit'),

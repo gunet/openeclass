@@ -66,42 +66,17 @@ if ($userdata) {
     
     if ($uid == $id) {
 
-        /*
-        if (isset($_POST['toggle_val'])) {
-            if ($_POST['toggle_val'] == 'on') {
+        
+        if (isset($_GET['toggle_val'])) {
+            if ($_GET['toggle_val'] == 'on') {
                 Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 1, $id);
-                $userdata->eportfolio_enable = 1;
-            } elseif ($_POST['toggle_val'] == 'off') {
+            } elseif ($_GET['toggle_val'] == 'off') {
                 Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 0, $id);
-                $userdata->eportfolio_enable = 0;
             }
             redirect_to_home_page("main/eportfolio/index.php?id=$id&token=$token");
         }
-        */
-        
-        $head_content .= "<script type='text/javascript'>//<![CDATA[
-                              $(function(){
-                                  $('#toggle_event_editing button').click(function(){
-	                                  if($(this).hasClass('locked_active') || $(this).hasClass('unlocked_inactive')){
-		                                  /* code to do when unlocking */
-                                          $('#enable-eportfolio-form input').val('on');
-                                          $('#enable-eportfolio-form').submit();
-	                                  }else{
-		                                  /* code to do when locking */
-                                          $('#enable-eportfolio-form input').val('off');
-                                          $('#enable-eportfolio-form').submit();
-	                                  }
-	
-	                                  /* reverse locking status */
-	                                  $('#toggle_event_editing button').eq(0).toggleClass('locked_inactive locked_active btn-default btn-info');
-	                                  $('#toggle_event_editing button').eq(1).toggleClass('unlocked_inactive unlocked_active btn-info btn-default');
-                                  });
-                              });//]]> 
-                          </script>";
         
         if ($userdata->eportfolio_enable == 0) {
-            $off_class = "btn btn-info locked_active";
-            $on_class = "btn btn-default unlocked_inactive";
             $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
@@ -128,22 +103,8 @@ if ($userdata) {
                     
                                 });
                               </script>";
-            $off_class = "btn btn-default locked_inactive";
-            $on_class = "btn btn-info unlocked_active";
         }
 
-        /*
-        $tool_content .= '<div style="margin-top:10px" class="btn-group" id="toggle_event_editing">
-                              <form method="post" action="" id="enable-eportfolio-form">
-                                  <input type="hidden" name="toggle_val">
-                              </form>
-                              <b>'.$langEnabledePortfolioButtonsLabel.'</b><br/>
-	                          <button type="button" class="'.$off_class.'">OFF</button>
-	                          <button type="button" class="'.$on_class.'">ON</button>
-                          </div>';
-        */
-
-        
         $tool_content .= action_bar(array(
                                         array('title' => $langBio,
                                             'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
@@ -155,7 +116,7 @@ if ($userdata) {
                                             'level' => 'primary-label',
                                             'button-class' => 'btn-primary'),
                                         array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
-                                              'url' => "#",
+                                              'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=on",
                                               'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye'),
                                         array('title' => $langResourcesCollection,
                                             'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",

@@ -4321,7 +4321,6 @@ $langePortfolioDisabled = 'e-portfolio feature is disabled by the platform\'s ad
 $langUserePortfolioDisabled = 'This user has disabled the e-portfolio feature.';
 $langResume = 'Resume';
 $langePortfolioDisableWarning = 'Your e-portfolio is disabled, therefore it is not accessible to platform\s users and guests';
-$langePortfolioEnableInfo = 'You can enable it from the <a href="%s">home page</a> of the module.';
 $langAddResePortfolio = 'Add to e-Portfolio';
 $langAddGroupWorkSubePortfolio = 'Add submission of group "%s" to e-Portfolio';
 $langResourcesCollection = 'Resources collection';

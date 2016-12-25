@@ -41,7 +41,7 @@ if (!get_config('eportfolio_enable')) {
 $userdata = Database::get()->querySingle("SELECT eportfolio_enable FROM user WHERE id = ?d", $uid);
 
 if ($userdata->eportfolio_enable == 0) {
-    $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning ".sprintf($langePortfolioEnableInfo, $urlAppend."main/eportfolio/index.php?id=$uid&amp;token=$token")."</div>";
+    $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
 }
 
 if (isset($_GET['delete_bio'])) {

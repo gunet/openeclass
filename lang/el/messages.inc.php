@@ -5025,7 +5025,6 @@ $langePortfolioDisabled = 'Τo e-Portfolio των χρηστών είναι απ
 $langUserePortfolioDisabled = 'Τo e-Portfolio του χρήστη είναι απενεργοποιημένo.';
 $langResume = 'Resume';
 $langePortfolioDisableWarning = 'Το e-Portfolio σας είναι απενεργοποιημένο και επομένως δεν είναι ορατό σε άλλους χρήστες και επισκέπτες της πλατφόρμας.';
-$langePortfolioEnableInfo = 'Μπορείτε να το ενεργοποιήσετε από την <a href="%s">κεντρική σελίδα</a> του υποσυστήματος.';
 $langAddResePortfolio = 'Προσθήκη σε e-Portfolio';
 $langAddGroupWorkSubePortfolio = 'Προσθήκη υποβολής ομάδας "%s" σε e-Portfolio';
 $langResourcesCollection = 'Συλλογή πόρων';
