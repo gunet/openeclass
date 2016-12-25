@@ -84,7 +84,7 @@ if ($userdata) {
                 array('title' => $langResourcesCollection,
                       'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
                       'level' => 'primary-label',
-                      'button-class' => 'btn-info'),
+                      'button-class' => 'btn-primary'),
                 array('title' => $langEditResume,
                       'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
                       'icon' => 'fa-edit'),
@@ -270,7 +270,7 @@ if ($userdata) {
                 array('title' => $langResourcesCollection,
                       'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
                       'level' => 'primary-label',
-                      'button-class' => 'btn-info'),
+                      'button-class' => 'btn-primary'),
             ));
     }
     

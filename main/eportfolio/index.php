@@ -129,7 +129,7 @@ if ($userdata) {
                                         array('title' => $langResume,
                                             'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
                                             'level' => 'primary-label',
-                                            'button-class' => 'btn-info'),
+                                            'button-class' => 'btn-primary'),
                                         array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
                                               'url' => "#",
                                               'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye'),
@@ -163,7 +163,7 @@ if ($userdata) {
                                         array('title' => $langResume,
                                             'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
                                             'level' => 'primary-label',
-                                            'button-class' => 'btn-info'),
+                                            'button-class' => 'btn-primary'),
                                         array('title' => $langResourcesCollection,
                                               'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
                                               'level' => 'primary-label'),
@@ -235,16 +235,16 @@ if ($userdata) {
     $tool_content .= "<div class='row'>
                         <div class='col-sm-9'>";
     $tool_content .= $ret_str['panels'];
-    $tool_content .= "</div>";
-    $tool_content .= $ret_str['right_menu'];
-    $tool_content .= "</div>";
     if ($userdata->eportfolio_enable == 1) {
         $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
     } else {
         $social_share = '';
     }
-    $tool_content .= "$social_share</div>
-            </div>";
+    $tool_content .= "$social_share</div>";
+    $tool_content .= $ret_str['right_menu'];
+    $tool_content .= "</div>
+                    </div>
+                  </div>";
 }
 if ($uid == $id) {
     draw($tool_content, 1);
