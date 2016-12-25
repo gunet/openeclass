@@ -360,6 +360,8 @@ function load_js($file, $init='') {
 });
 </script>";
             $file = 'trunk8.js';
+        } elseif ($file == 'clipboard.js') {
+            $file = 'clipboard.js/clipboard.min.js';
         }
 
         $head_content .= js_link($file);

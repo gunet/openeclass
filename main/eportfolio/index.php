@@ -104,6 +104,30 @@ if ($userdata) {
             $on_class = "btn btn-default unlocked_inactive";
             $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
         } elseif ($userdata->eportfolio_enable == 1) {
+            load_js('clipboard.js');
+            $tool_content .= "<div class='form-group'>
+                                  <label for='page-link'>$langPageLink</label>
+                                  <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
+                                  <button class='btn btn-primary' id='copy-btn' data-toggle='tooltip' data-placement='bottom' data-clipboard-target='#page-link'>$langCopy</button>
+                              </div>";
+            $tool_content .= "<script type='text/javascript'>
+                                $('#copy-btn').tooltip({
+                                });
+                    
+                                $(function() {
+                                  var clipboard = new Clipboard('#copy-btn');
+                    
+                                  clipboard.on('success', function(e) {
+                                    e.clearSelection();
+                                    $(e.trigger).attr('title', '$langCopiedSucc').tooltip('fixTitle').tooltip('show');
+                                  });
+                    
+                                  clipboard.on('error', function(e) {
+                                    $(e.trigger).attr('title', '$langCopiedErr').tooltip('fixTitle').tooltip('show');
+                                  });
+                    
+                                });
+                              </script>";
             $off_class = "btn btn-default locked_inactive";
             $on_class = "btn btn-info unlocked_active";
         }

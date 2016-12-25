@@ -4333,6 +4333,9 @@ $langePortfolioCollectionUserInfo = 'In the resource collection of e-Portfolio y
 The respective tabs appear only if resources have been added from the relevant module to the collection.';
 $langePortfolioNoResInCollection = 'There are no resources in this collection';
 $langEnabledePortfolioButtonsLabel = 'Enabled e-Portfolio';
+$langPageLink = 'Page link:';
+$langCopiedSucc = 'Copied';
+$langCopiedErr = 'Press Ctrl+c to copy';
 $langCommentsUser = "User comments";
 $langUserRequests = "User requests";
 $langsUserRequests = "user requests";

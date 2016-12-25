@@ -5037,6 +5037,9 @@ $langePortfolioCollectionUserInfo = 'Στη συλλογή πόρων του e-P
 Οι αντίστοιχες καρτέλες εμφανίζονται μόνο αν έχουν προστεθεί πόροι από τα σχετικά υποσυστήματα στη συλλογή.';
 $langePortfolioNoResInCollection = 'Δεν έχουν προστεθεί πόροι στη συλλογή';
 $langEnabledePortfolioButtonsLabel = 'Ενεργοποιημένο e-Portfolio';
+$langPageLink = 'Σύνδεσμος σελίδας';
+$langCopiedSucc = 'Αντιγράφηκε';
+$langCopiedErr = 'Πατήστε Ctrl+c για αντιγραφή';
 
 /* * ******************************************
   Widgets
