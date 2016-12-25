@@ -31,6 +31,15 @@
                                     </div>
                                 </div>
                             @endif
+                            @if (get_config('eportfolio_enable'))
+                                <div class='row'>
+                                    <div class='col-xs-12'>
+                                        <div>
+                                            <a href='{{ $urlServer }}/main/eportfolio/index.php?id={{ $id }}&token={{ token_generate("eportfolio" . $id) }}'>{{ trans('langUserePortfolio') }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                                 <div class='row'>
                                     <div class='col-xs-6'>
                                         <h4>{{ trans('langProfilePersInfo') }}</h4>
