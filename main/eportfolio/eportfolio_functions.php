@@ -32,7 +32,6 @@ define('EPF_LINK', 5);
  * @return string
  */
 function render_eportfolio_fields_content($uid) {
-    global $langProfileNotAvailable;
     
     $return_string = array();
     $return_string['panels'] = "";
@@ -44,17 +43,22 @@ function render_eportfolio_fields_content($uid) {
     $j = 0;
     
     foreach ($result as $c) {
+        
+        $showCat = false;
+        $cat_return_string = array();
+        $cat_return_string['panels'] = "";
+        $cat_return_string['right_menu'] = "";
     
         $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $c->id);
     
         if (count($res) > 0) {
     
-            $return_string['panels'] .= '<div class="panel panel-default" id="'.$c->id.'">
-                                       <div class="panel-body">
-                                           <div class="inner-heading">
-                                               <span>'.$c->name.'</span>
-                                           </div>
-                                            <fieldset>';
+            $cat_return_string['panels'] .= '<div class="panel panel-default" id="'.$c->id.'">
+                                                 <div class="panel-body">
+                                                     <div class="inner-heading">
+                                                         <span>'.$c->name.'</span>
+                                                     </div>
+                                                     <fieldset>';
             if ($j == 0) {
                 $active = " class='active'";
             } else {
@@ -63,54 +67,63 @@ function render_eportfolio_fields_content($uid) {
     
             $j++;
     
-            $return_string['right_menu'] .= "<li$active><a href='#$c->id'>$c->name</a></li>";
+            $cat_return_string['right_menu'] .= "<li$active><a href='#$c->id'>$c->name</a></li>";
             
             foreach ($res as $f) {
     
                 if (isset($fdata)) {
                     unset($fdata);
                 }
-                
-                $return_string['panels'] .= '<div class="profile-pers-info form-group">';
-                $return_string['panels'] .= '<span class="tag"><strong>'.q($f->name).': </strong></span>';
-                $return_string['panels'] .= '<span>';
     
                 //get data to prefill fields
                 $fdata_res = Database::get()->querySingle("SELECT data FROM eportfolio_fields_data
                                  WHERE user_id = ?d AND field_id = ?d", $uid, $f->id);
                 if (!$fdata_res || $fdata_res->data == '') {
-                    $return_string['panels'] .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+                    
                 } else {
+                    $showCat = true;
+                    $cat_return_string['panels'] .= '<div class="profile-pers-info form-group">';
+                    $cat_return_string['panels'] .= '<span class="tag"><strong>'.q($f->name).': </strong></span>';
+                    $cat_return_string['panels'] .= '<span>';
+                    
                     switch ($f->datatype) {
                         case EPF_TEXTBOX:
-                            $return_string['panels'] .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
+                            $cat_return_string['panels'] .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
                             break;
                         case EPF_TEXTAREA:
-                            $return_string['panels'] .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
+                            $cat_return_string['panels'] .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
                             break;
                         case EPF_DATE:
-                            $return_string['panels'] .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
+                            $cat_return_string['panels'] .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
                             break;
                         case EPF_MENU:
                             $options = unserialize($f->data);
                             $options = array_combine(range(1, count($options)), array_values($options));
                             $options[0] = "";
                             ksort($options);
-                            $return_string['panels'] .= "<span class='tag-value'>".q($options[$fdata_res->data])."</span>";
+                            $cat_return_string['panels'] .= "<span class='tag-value'>".q($options[$fdata_res->data])."</span>";
                             break;
                         case EPF_LINK:
-                            $return_string['panels'] .= "<span class='tag-value'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></span>";
+                            $cat_return_string['panels'] .= "<span class='tag-value'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></span>";
                             break;
                     }
+                    $cat_return_string['panels'] .= "</div>";
                 }
-                $return_string['panels'] .= "</div>";
             }
     
-            $return_string['panels'] .= '</fieldset>
+            $cat_return_string['panels'] .= '</fieldset>
                        </div>
                    </div>';
     
         }
+        
+        if ($showCat) {
+            $return_string['panels'] .= $cat_return_string['panels'];
+            $return_string['right_menu'] .= $cat_return_string['right_menu'];    
+        } else {
+            $j--;
+        }
+        
     }
     
     $return_string['right_menu'] .= '</ul>
