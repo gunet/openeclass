@@ -212,10 +212,10 @@ function display_badges() {
  * @global type $langUsers
  * @global type $langValue
  * @global type $langPersoValue
- * @param type $table
+ * @param type $element
  * @param type $certificate_id
  */
-function display_activities($table, $id) {
+function display_activities($element, $id) {
 
     global $tool_content, $course_code,
            $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
@@ -227,7 +227,7 @@ function display_activities($table, $id) {
            $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
            $langValue, $langPersoValue, $langOfLikesSocial;
 
-    if ($table == 'certificate') {
+    if ($element == 'certificate') {
         $link_id = "course=$course_code&amp;certificate_id=$id";
     } else {
         $link_id = "course=$course_code&amp;badge_id=$id";
@@ -314,7 +314,7 @@ function display_activities($table, $id) {
         );
 
     //get available activities
-    $result = Database::get()->queryArray("SELECT * FROM certificate_criterion WHERE certificate = ?d ORDER BY `id` DESC", $id);    
+    $result = Database::get()->queryArray("SELECT * FROM ${element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);    
 
     if (count($result) > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
@@ -327,7 +327,7 @@ function display_activities($table, $id) {
                             <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>";
         foreach ($result as $details) {
-            $resource_data = get_resource_details($details->id);            
+            $resource_data = get_resource_details($element, $details->id);            
             $tool_content .= "<tr><td>";            
             $tool_content .= $resource_data['title'];
             $tool_content .= "</td><td>" . $resource_data['type'] ."</td>";
@@ -364,52 +364,53 @@ function display_activities($table, $id) {
 
 
 /**
- * @brief choose activity for inserting in certificate
- * @param type $certificate_id
+ * @brief choose activity for inserting in certificate / badge
+ * @param type $element_id
+ * @param type $element
  * @param type $activity
  */
-function insert_activity($certificate_id, $activity) {
+function insert_activity($element, $element_id, $activity) {
                                 
     switch ($activity) {
         case 'assignment':            
-            display_available_assignments($certificate_id);
+            display_available_assignments($element, $element_id);
             break;
         case 'exercise':
-            display_available_exercises($certificate_id);
+            display_available_exercises($element, $element_id);
             break;
         case 'blog';
-            display_available_blogs($certificate_id);
+            display_available_blogs($element, $element_id);
             break;
         case 'blogcomments':
-            display_available_blogcomments($certificate_id);
+            display_available_blogcomments($element, $element_id);
             break;
         case 'coursecomments':
-            display_available_coursecomments($certificate_id);
+            display_available_coursecomments($element, $element_id);
             break;
         case 'forum':
-            display_available_forums($certificate_id);
+            display_available_forums($element, $element_id);
             break;
         case 'lp':
-            display_available_lps($certificate_id);
+            display_available_lps($element, $element_id);
             break;
         case 'likesocial';
             break;
         case 'likeforum';
             break;
         case 'document':
-            display_available_documents($certificate_id);
+            display_available_documents($element, $element_id);
             break;
         case 'multimedia':
-            display_available_multimedia($certificate_id);
+            display_available_multimedia($element, $element_id);
             break;
         case 'ebook':
-            display_available_ebooks($certificate_id);
+            display_available_ebooks($element, $element_id);
             break;
         case 'poll':
-            display_available_polls($certificate_id);
+            display_available_polls($element, $element_id);
             break;
         case 'wiki':
-            display_available_wiki($certificate_id);
+            display_available_wiki($element, $element_id);
             break;
         default: break;
         }        
@@ -417,29 +418,31 @@ function insert_activity($certificate_id, $activity) {
 
 
 /**
- * @brief display editing form about certificate resource
+ * @brief display editing form about resource
  * @global type $tool_content
  * @global type $course_code
  * @global type $langModify
  * @global type $langAutoJudgeOperator
  * @global type $langUsedCertRes
- * @param type $certificate_id
+ * @param type $element_id
+ * @param type $element
  * @param type $activity_id
  */
-function display_modification_activity($certificate_id, $activity_id) {
+function display_modification_activity($element, $element_id, $activity_id) {
     
     global $tool_content, $course_code, $langModify, $langAutoJudgeOperator, $langUsedCertRes;
     
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     if (certificate_resource_usage($activity_id)) { // check if resource has been used by user
         Session::Messages("$langUsedCertRes", "alert-warning");
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;certificate_id=$certificate_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;${element}_id=$element_id");
     } else { // otherwise editing is not allowed
-        $data = Database::get()->querySingle("SELECT threshold, operator FROM certificate_criterion 
-                                            WHERE id = ?d AND certificate = ?d", $activity_id, $certificate_id);
+        $data = Database::get()->querySingle("SELECT threshold, operator FROM ${element}_criterion 
+                                            WHERE id = ?d AND $element = ?d", $activity_id, $element_id);
         $operators = get_operators();
 
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>";
-        $tool_content .= "<input type='hidden' name='certificate_id' value='$certificate_id'>";
+        $tool_content .= "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='name' class='col-sm-1 control-label'>$langAutoJudgeOperator:</label>";    
@@ -467,26 +470,28 @@ function display_modification_activity($certificate_id, $activity_id) {
  * @global type $langAddModulesButton
  * @global type $langAutoJudgeOperator
  * @global type $langValue
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_available_assignments($certificate_id) {
+function display_available_assignments($element, $element_id) {
 
     global $course_id, $tool_content, $langNoAssign, $course_code,
            $langTitle, $langGroupWorkDeadline_of_Submission, $langChoice, 
            $langActive, $langInactive, $langAddModulesButton,
            $langAutoJudgeOperator, $langValue;
-            
+     
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d AND active = 1 AND id NOT IN 
-                                (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                     AND resource != ''
                                     AND activity_type = 'assignment' 
                                     AND module = " . MODULE_ID_ASSIGN . ") 
-                                ORDER BY title", $course_id, $certificate_id);    
+                                ORDER BY title", $course_id, $element_id);    
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     } else {
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<input type='hidden' name = '$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langTitle</th>" .
@@ -531,20 +536,22 @@ function display_available_assignments($certificate_id) {
  * @global type $langAutoJudgeOperator
  * @global type $langValue
  * @global type $langAddModulesButton
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_available_exercises($certificate_id) {
+function display_available_exercises($element, $element_id) {
 
     global $course_id, $course_code, $tool_content, $urlServer, $langExercices,
             $langNoExercises, $langDescription, $langChoice, $langAddModulesButton,
             $langAutoJudgeOperator, $langValue;
     
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
                                     AND exercise.active = 1 AND exercise.id NOT IN 
-                                    (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                    (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                             AND resource != '' 
                                             AND activity_type = 'exercise' 
-                                            AND module = " . MODULE_ID_EXERCISE . ") ORDER BY title", $course_id, $certificate_id);
+                                            AND module = " . MODULE_ID_EXERCISE . ") ORDER BY title", $course_id, $element_id);
     $quizinfo = array();
     foreach ($result as $row) {
         $quizinfo[] = array(
@@ -557,7 +564,7 @@ function display_available_exercises($certificate_id) {
         $tool_content .= "<div class='alert alert-warning'>$langNoExercises</div>";
     } else {
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" . 
-                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th width='50%' class='text-left'>$langExercices</th>" .
@@ -602,9 +609,10 @@ function display_available_exercises($certificate_id) {
  * @global type $langNoDocuments
  * @global type $course_code
  * @global type $group_sql
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_available_documents($certificate_id) {
+function display_available_documents($element, $element_id) {
     
     global $webDir, $course_code, $tool_content, 
             $langDirectory, $langUp, $langName, $langSize,
@@ -628,16 +636,18 @@ function display_available_documents($certificate_id) {
     $dir_setter = $dir_param ? ('&amp;dir=' . $dir_param) : '';
     $dir_html = $dir_param ? "<input type='hidden' name='dir' value='$dir_param'>" : '';
     
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT id, course_id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
                                      WHERE $group_sql AND visible = 1 AND
                                           path LIKE ?s AND
                                           path NOT LIKE ?s AND id NOT IN 
-                                        (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'document' AND module = " . MODULE_ID_DOCS . ")
+                                        (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
+                                            AND resource!='' AND activity_type = 'document' AND module = " . MODULE_ID_DOCS . ")
                                 ORDER BY sort_key COLLATE utf8_unicode_ci",
-                                "$path/%", "$path/%/%", $certificate_id);
+                                "$path/%", "$path/%/%", $element_id);
 
     $fileinfo = array();
-    $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;certificate_id=$certificate_id&amp;add=true&amp;act=document$dir_setter&amp;type=doc&amp;path=";
+    $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;$element_name=$element_id&amp;add=true&amp;act=document$dir_setter&amp;type=doc&amp;path=";
 
     foreach ($result as $row) {
         $fullpath = $basedir . $row->path;
@@ -673,7 +683,7 @@ function display_available_documents($certificate_id) {
             $colspan = 4;
         }
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .                
-                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>";
         if( !empty($path)) {
         $tool_content .=
@@ -757,24 +767,25 @@ function display_available_documents($certificate_id) {
  * @global type $langAutoJudgeOperator
  * @global type $langNumOfBlogs
  * @global type $langResourceAlreadyAdded
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_available_blogs($certificate_id) {
+function display_available_blogs($element, $element_id) {
     
     global $tool_content, $langAddModulesButton, $langNumOfBlogs,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
            $langChoice, $langAutoJudgeOperator;
             
-    $res = Database::get()->queryArray("SELECT * FROM certificate_criterion
-                                    WHERE certificate = ?d 
-                                AND resource IS NULL 
-                                AND activity_type = 'blog' 
-                                AND module = " . MODULE_ID_BLOG . "", $certificate_id);
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $res = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d                                     
+                                            AND resource IS NULL 
+                                            AND activity_type = 'blog' 
+                                            AND module = " . MODULE_ID_BLOG . "", $element_id);
     if (count($res) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
     } else {
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
@@ -808,25 +819,27 @@ function display_available_blogs($certificate_id) {
  * @global type $langDate
  * @global type $course_id
  * @global type $langAutoJudgeOperator
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_available_blogcomments($certificate_id) {
+function display_available_blogcomments($element, $element_id) {
     
     global $tool_content, $langAddModulesButton, $langBlogEmpty, 
            $urlServer, $course_code, $langTitle, $langValue,
            $langChoice, $langDate, $course_id, $langAutoJudgeOperator;
     
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM blog_post WHERE course_id = ?d AND id NOT IN 
-                                (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                     AND resource != ''
                                     AND activity_type = 'blogcomment' 
                                     AND module = " . MODULE_ID_BLOG . ") 
-                                ORDER BY title", $course_id, $certificate_id);    
+                                ORDER BY title", $course_id, $element_id);    
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langBlogEmpty</div>";
     } else {
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left' style='width:50%;'>&nbsp;$langTitle</th>" .
@@ -864,20 +877,22 @@ function display_available_blogcomments($certificate_id) {
  * @global type $course_code
  * @global type $langAutoJudgeOperator
  * @global type $langValue
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_available_forums($certificate_id) {
+function display_available_forums($element, $element_id) {
       
     global $tool_content, $urlServer, $course_id,
            $langComments, $langAddModulesButton, $langChoice, $langNoForums, 
            $langForums, $course_code, $langAutoJudgeOperator, $langValue;
 
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM forum WHERE course_id = ?d 
                                         AND forum.id NOT IN 
-                                        (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                        (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                             AND resource != '' 
                                             AND activity_type = 'forum' 
-                                            AND module = " . MODULE_ID_FORUM . ")", $course_id, $certificate_id);
+                                            AND module = " . MODULE_ID_FORUM . ")", $course_id, $element_id);
     $foruminfo = array();
     foreach ($result as $row) {
         $foruminfo[] = array(
@@ -890,7 +905,7 @@ function display_available_forums($certificate_id) {
         $tool_content .= "<div class='alert alert-warning'>$langNoForums</div>";
     } else {
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th>$langForums</th>" .
@@ -911,10 +926,10 @@ function display_available_forums($certificate_id) {
             $tool_content .= "</tr>";
             $r = Database::get()->queryArray("SELECT * FROM forum_topic WHERE forum_id = ?d 
                                                 AND forum_topic.id NOT IN 
-                                            (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                            (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                                 AND resource != '' 
                                                 AND activity_type = 'forumtopic' 
-                                                AND module = " . MODULE_ID_FORUM . ")", $forum_id, $certificate_id);
+                                                AND module = " . MODULE_ID_FORUM . ")", $forum_id, $element_id);
             if (count($r) > 0) { // if forum topics found
                 $topicinfo = array();
                 foreach ($r as $topicrow) {
@@ -954,21 +969,23 @@ function display_available_forums($certificate_id) {
  * @global type $langAddModulesButton
  * @global type $langValue
  * @global type $langAutoJudgeOperator
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_available_lps($certificate_id) {
+function display_available_lps($element, $element_id) {
 
     global $course_id, $course_code, $urlServer, $tool_content, 
            $langNoLearningPath, $langLearningPaths, $langComments, $langChoice, 
            $langAddModulesButton, $langAutoJudgeOperator, $langValue;
     
-  $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d
                                             AND lp_learnPath.visible = 1
                                             AND lp_learnPath.learnPath_id NOT IN 
-                                        (SELECT resource FROM certificate_criterion WHERE certificate = ?d 
+                                        (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                                     AND resource!='' 
                                                     AND activity_type = 'learning path' 
-                                                    AND module = " . MODULE_ID_LP . ")", $course_id, $certificate_id);
+                                                    AND module = " . MODULE_ID_LP . ")", $course_id, $element_id);
     $lpinfo = array(); 
     foreach ($result as $row) {
         $lpinfo[] = array(
@@ -982,7 +999,7 @@ function display_available_lps($certificate_id) {
         $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
     } else {
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th width='50%'>$langLearningPaths</th>" .
@@ -1020,8 +1037,10 @@ function display_available_lps($certificate_id) {
     }      
 }
 
-function display_available_ratings($certificate_id){
+function display_available_ratings($element, $element_id) {
+    $tool_content .= '..Still working on this...';
 
+    return $tool_content;
 }
   
 
@@ -1037,9 +1056,10 @@ function display_available_ratings($certificate_id){
  * @global type $langAddModulesButton
  * @global type $langNoVideo
  * @global type $course_code
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_available_multimedia($certificate_id) {
+function display_available_multimedia($element, $element_id) {
           
     require_once 'include/lib/mediaresource.factory.php';
     require_once 'include/lib/multimediahelper.class.php';
@@ -1048,6 +1068,7 @@ function display_available_multimedia($certificate_id) {
                 $langTitle, $langDescription, $langDate, $langChoice,
                 $langAddModulesButton, $langNoVideo, $course_code;
                
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $count = 0;
     $video_found = FALSE;
     $cnt1 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM video WHERE course_id = ?d", $course_id)->cnt;
@@ -1056,7 +1077,7 @@ function display_available_multimedia($certificate_id) {
     if ($count > 0) {
         $video_found = TRUE;
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" . 
-                         "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                         "<input type='hidden' name='$element_name' value='$element_id'>" .
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'>" .
                          "<th width='200' class='text-left'>&nbsp;$langTitle</th>" .
@@ -1069,10 +1090,9 @@ function display_available_multimedia($certificate_id) {
                                                         AND course_id = ?d
                                                         AND visible = 1
                                                         AND id NOT IN 
-                                                (SELECT resource FROM certificate_criterion 
-                                                    WHERE certificate = ?d 
+                                                (SELECT resource FROM ${element}_criterion WHERE $element = ?d                                                     
                                                     AND resource!=''
-                                                    AND activity_type IN ('video','videolink') AND module = ". MODULE_ID_VIDEO . ")", $course_id, $certificate_id);
+                                                    AND activity_type IN ('video','videolink') AND module = ". MODULE_ID_VIDEO . ")", $course_id, $element_id);
             foreach ($result as $row) {
                 $row->course_id = $course_id;
                 if ($table == 'video') {
@@ -1102,10 +1122,9 @@ function display_available_multimedia($certificate_id) {
                     $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d
                                                         AND visible = 1
                                                         AND id NOT IN 
-                                                    (SELECT resource FROM certificate_criterion 
-                                                        WHERE certificate = ?d 
+                                                    (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                                         AND resource!=''
-                                                        AND activity_type IN ('video','videolink') AND module = " . MODULE_ID_VIDEO . ")", $videocat->id, $certificate_id);
+                                                        AND activity_type IN ('video','videolink') AND module = " . MODULE_ID_VIDEO . ")", $videocat->id, $element_id);
                     foreach ($sql2 as $linkvideocat) {
                             $tool_content .= "<tr>";
                             $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
@@ -1137,23 +1156,26 @@ function display_available_multimedia($certificate_id) {
  * @global type $langNoEBook
  * @global type $langEBook
  * @global type $course_code
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_available_ebooks($certificate_id) {
+function display_available_ebooks($element, $element_id) {
   
   global $course_id, $course_code, $tool_content, $urlServer,
     $langAddModulesButton, $langChoice, $langNoEBook,
     $langEBook, $course_code;
     
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM ebook WHERE ebook.course_id = ?d
                                                 AND ebook.visible = 1
                                                 AND ebook.id NOT IN 
-                                        (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource!='' AND activity_type = 'ebook' AND module = " . MODULE_ID_EBOOK . ")", $course_id, $certificate_id);
+                                        (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
+                                        AND resource!='' AND activity_type = 'ebook' AND module = " . MODULE_ID_EBOOK . ")", $course_id, $element_id);
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
     } else {
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langEBook</th>" .                
@@ -1231,18 +1253,21 @@ function display_available_ebooks($certificate_id) {
  * @global type $langQuestionnaire
  * @global type $langChoice
  * @global type $langAddModulesButton 
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_available_polls($certificate_id) {
+function display_available_polls($element, $element_id) {
     
     global $course_id, $course_code, $urlServer, $tool_content,
             $langPollNone, $langQuestionnaire, $langChoice, $langAddModulesButton;            
       
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
                                     AND poll.active = 1
                                     AND poll.pid NOT IN 
-                                (SELECT resource FROM certificate_criterion WHERE certificate = ?d AND resource != '' AND activity_type = 'questionnaire' AND module = " . MODULE_ID_QUESTIONNAIRE . ")", 
-                        $course_id, $certificate_id);
+                                (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
+                                    AND resource != '' AND activity_type = 'questionnaire' AND module = " . MODULE_ID_QUESTIONNAIRE . ")", 
+                        $course_id, $element_id);
     
     $pollinfo = array();
     foreach ($result as $row) {
@@ -1255,7 +1280,7 @@ function display_available_polls($certificate_id) {
         $tool_content .= "<div class='alert alert-warning'>$langPollNone</div>";
     } else {
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langQuestionnaire</th>" .                
@@ -1284,24 +1309,25 @@ function display_available_polls($certificate_id) {
  * @global type $langWikiPages
  * @global type $langAutoJudgeOperator
  * @global type $langResourceAlreadyAdded
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_available_wiki($certificate_id) {
+function display_available_wiki($element, $element_id) {
     
     global $tool_content, $langResourceAlreadyAdded,
     $langAddModulesButton, $langChoice, $langTitle, $langWikiPages,
     $course_code, $langAutoJudgeOperator, $langValue;
 
-    $result = Database::get()->queryArray("SELECT resource FROM certificate_criterion 
-                                        WHERE certificate = ?d 
-                                        AND resource IS NULL
-                                        AND activity_type = 'wiki' 
-                                        AND module = " . MODULE_ID_WIKI . "", $certificate_id);    
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $result = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d 
+                                            AND resource IS NULL
+                                            AND activity_type = 'wiki' 
+                                            AND module = " . MODULE_ID_WIKI . "", $element_id);    
     if (count($result) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
     } else {
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='certificate_id' value='$certificate_id'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
@@ -1339,39 +1365,38 @@ function display_available_wiki($certificate_id) {
  * @global type $langpublisher
  * @global type $langMessage
  * @global type $langTemplate
- * @param type $table
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function certificate_settings($table, $certificate_id = 0) {
+function certificate_settings($element, $element_id = 0) {
 
     global $tool_content, $course_code, $langTemplate, $course_id, 
            $langTitle, $langSave, $langInsert, $langMessage,
            $langActivate, $langDescription, $langpublisher, $langIcon;
-       
-        
-    if ($certificate_id > 0) {      // edit
-        $data = Database::get()->querySingle("SELECT issuer, template, title, description, message, active, bundle 
-                                FROM certificate WHERE id = ?d AND course_id = ?d", $certificate_id, $course_id);
+               
+    if ($element_id > 0) {      // edit
+        $field = ($element == 'certificate')? 'template' : 'icon';
+        $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle 
+                                FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
         $issuer = $data->issuer;
-        $template = $data->template;
+        $template = $data->$field;
         $title = $data->title;
         $description = $data->description;
         $message = $data->message;
         $active = $data->active;
         $checked = ($active) ? ' checked': '';
-        $cert_id = "<input type='hidden' name='certificate_id' value='$certificate_id'>";
-        $name = 'editCertificate';
+        $cert_id = ($element == 'certificate')? "<input type='hidden' name='certificate_id' value='$element_id'>" : "<input type='hidden' name='badge_id' value='$element_id'>";
+        $name = 'edit_element';
     } else {        // add
         $issuer = q(get_config('institution'));
-        $template = '';
-        $icon = '';
+        $template = '';        
         $title = '';
         $description = '';
         $message = '';
         $active = 1;
         $checked = 'checked';
         $cert_id = '';
-        $name = ($table == 'certificate')? 'newCertificate' : 'newBadge';
+        $name = ($element == 'certificate')? 'newCertificate' : 'newBadge';
     }
     
     $tool_content .= "<div class='form-wrapper'>
@@ -1390,10 +1415,10 @@ function certificate_settings($table, $certificate_id = 0) {
                 </div>
                 <div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>";
-                    $tool_content .= ($table == 'certificate') ? $langTemplate : $langIcon;
+                    $tool_content .= ($element == 'certificate') ? $langTemplate : $langIcon;
                     $tool_content .= "</label>
                         <div class='col-sm-10'>";
-                            $tool_content .= ($table == 'certificate') ? selection(get_certificate_templates(), 'template', $template) : selection(get_badge_icons(), 'badge', $icon);
+                            $tool_content .= ($element == 'certificate') ? selection(get_certificate_templates(), 'template', $template) : selection(get_badge_icons(), 'template', $template);
                         $tool_content .= "</div>
                 </div>
                 <div class='form-group'>
@@ -1573,7 +1598,7 @@ function display_user_progress_details($certificate_id, $user_id) {
                 </thead>
                 <tbody>";            
             foreach ($sql as $user_criterion) {
-                $resource_data = get_resource_details($user_criterion);                
+                $resource_data = get_resource_details('certificate', $user_criterion);                
                 $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
                 $tool_content .= "<tr>
                         <td>" . $activity . "</td>
@@ -1581,7 +1606,7 @@ function display_user_progress_details($certificate_id, $user_id) {
                         </tr>";
             }
             foreach ($sql2 as $user_criterion) {
-                $resource_data = get_resource_details($user_criterion);                
+                $resource_data = get_resource_details('certificate', $user_criterion);                
                 $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
                 $tool_content .= "<tr class='not_visible'>
                         <td>" . $activity . "</td>
