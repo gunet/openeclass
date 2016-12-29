@@ -743,17 +743,17 @@ else {
                     <h2 class='panel-title'>$langHomePageSettings</h2>
                 </div>
                 <div class='panel-body'>
-                    <span class='text-muted'>Επιλέξτε ποια θέλετε να είναι η αρχική σελίδα</span>
+                    <span class='text-muted'>$langSelectHomePage</span>
                     <fieldset>
                         <div class='landing-default'>
                             <div class='radio'>
                                 <label>
-                                    <input $defaultHomepage class='homepageSet' name='homepageSet' value='default' data-collapse='collapse-defaultHomepage' type='radio'> Προεπιλογή
+                                    <input $defaultHomepage class='homepageSet' name='homepageSet' value='default' data-collapse='collapse-defaultHomepage' type='radio'> $langHomePageDefault
                                 </label>
                             </div>
                             <div id='collapse-defaultHomepage' class='collapse homepage-inputs'>
                                 <div class='form-group'>
-                                    <label for='defaultHomepageIntro' class='col-sm-2 control-label'>Κείμενο Εισαγωγής:</label>
+                                    <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langHomePageIntroText:</label>
                                     <div class='col-sm-10'>
                                         <textarea rows='5' class='form-control' name='defaultHomepageIntro' id='defaultHomepageIntro'>".get_config('defaultHomepageIntro')."</textarea>
                                     </div>
@@ -763,18 +763,18 @@ else {
                         <div class='landing-toolbox'>
                             <div class='radio'>
                                 <label>
-                                    <input $toolboxHomepage class='homepageSet' name='homepageSet' value='toolbox' data-collapse='collapse-toolboxHomepage' type='radio'> Toolbox
+                                    <input $toolboxHomepage class='homepageSet' name='homepageSet' value='toolbox' data-collapse='collapse-toolboxHomepage' type='radio'> $langHomePageToolbox
                                 </label>
                             </div>
                             <div id='collapse-toolboxHomepage' class='collapse homepage-inputs'>
                                 <div class='form-group'>
-                                    <label for='toolboxHomepageTitle' class='col-sm-2 control-label'>Τίτλος</label>
+                                    <label for='toolboxHomepageTitle' class='col-sm-2 control-label'>$langHomePageIntroTitle</label>
                                     <div class='col-sm-10'>
                                         <input class='form-control' type='text' name='toolboxHomepageTitle' id='toolboxHomepageTitle' value='Old Value'>
                                     </div>
                                 </div>
                                 <div class='form-group'>
-                                    <label for='toolboxHomepageIntro' class='col-sm-2 control-label'>Εισαγωγικό κείμενο</label>
+                                    <label for='toolboxHomepageIntro' class='col-sm-2 control-label'>$langHomePageIntroText:</label>
                                     <div class='col-sm-10'>
                                         <textarea rows='5' class='form-control' name='toolboxHomepageIntro' id='toolboxHomepageIntro' value='Old Value'></textarea>
                                     </div>
@@ -784,20 +784,20 @@ else {
                         <div class='landing-external'>
                             <div class='radio'>
                                 <label>
-                                    <input $externalHomepage class='homepageSet' type='radio' name='homepageSet' value='external' data-collapse='collapse-externalHomepage'> External Link
+                                    <input $externalHomepage class='homepageSet' type='radio' name='homepageSet' value='external' data-collapse='collapse-externalHomepage'> $langHomePageExternal
                                 </label>
                             </div>
                             <div id='collapse-externalHomepage' class='collapse homepage-inputs'>
                                 <div class='form-group'>
-                                    <label for='externalHomepageTitle' class='col-sm-2 control-label'>Τίτλος</label>
+                                    <label for='externalHomepageTitle' class='col-sm-2 control-label'>$langHomePageIntroTitle:</label>
                                     <div class='col-sm-10'>
-                                        <input class='form-control' type='textarea' name='externalHomepageTitle' id='externalHomepageTitle' value='Old Value'>
+                                        <input class='form-control' type='text' name='externalHomepageTitle' id='externalHomepageTitle' value='Old Value'>
                                     </div>
                                 </div>
                                 <div class='form-group'>
-                                    <label for='externalHomepageIntro' class='col-sm-2 control-label'>Εισαγωγικό κείμενο</label>
+                                    <label for='externalHomepageUrl' class='col-sm-2 control-label'>$langHomePageIntroUrl:</label>
                                     <div class='col-sm-10'>
-                                        <textarea rows='5' class='form-control' name='externalHomepageIntro'></textarea>
+                                        <input class='form-control' type='text' name='externalHomepageUrl' id='externalHomepageUrl' value='Old Value'>
                                     </div>
                                 </div>
                             </div>
