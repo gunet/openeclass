@@ -328,7 +328,7 @@ if ($is_editor) {
     }
     
     elseif (isset($_GET['del_cert_res'])) { // delete certificate / badge activity
-        if (certificate_resource_usage($element, $_GET['del_cert_res'])) { // check if resource has been used by user
+        if (resource_usage($element, $_GET['del_cert_res'])) { // check if resource has been used by user
             Session::Messages("$langUsedCertRes", "alert-warning");
             redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
         } else { // delete it otherwise
@@ -360,10 +360,10 @@ if ($is_editor) {
         display_modification_activity($element, $element_id, $_GET['act_mod']);
         $display = FALSE;
     } elseif (isset($_GET['progressall'])) { // display users progress (teacher view)
-        display_users_progress($element_id);
+        display_users_progress($element, $element_id);
         $display = FALSE;
     } elseif (isset($_GET['u'])) { // display detailed user progress
-        display_user_progress_details($element_id, $_GET['u']);
+        display_user_progress_details($element, $element_id, $_GET['u']);
         $display = FALSE;
     }
 } elseif (isset($_GET['u'])) { // student view
@@ -394,11 +394,11 @@ if (isset($display) and $display == TRUE) {
             } else {
                 $pageName = $element_title;
                 // display detailed user progress
-                display_user_progress_details($element_id, $uid);
+                display_user_progress_details($element, $element_id, $uid);
             }
         } else {
             // display certificate (student view)
-            student_view_certificate();
+            student_view_progress();
             exit;
         }
     }

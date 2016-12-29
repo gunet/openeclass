@@ -20,6 +20,12 @@
  * ======================================================================== 
  */
 
+/**
+ * @file process_functions.php
+ * @param $element can be 'certificate' or 'badge'
+ * @param $element_id can be 'certificate_id or 'badge_id'
+ */
+
 
 /**
  * @brief add assignment db entries in certificate criterion 
@@ -347,6 +353,10 @@ function get_certificate_templates() {
 }
 
 
+/**
+ * @brief get available badge icons
+ * @return string
+ */
 function get_badge_icons() {
     
     $badges = array (1 => 'icon 1', 2 => 'icon 2', 3 => 'icon 3');
@@ -483,7 +493,7 @@ function visibility($element, $element_id, $visibility) {
 }
 
 /**
- * @brief delete certificate db entries
+ * @brief delete certificate / badge db entries
  * @global type $course_id
  * @param type $certificate_id
  * @param type $element
@@ -528,7 +538,7 @@ function delete_activity($element, $element_id, $activity_id) {
  * @param type $element
  * @return boolean
  */
-function certificate_resource_usage($element, $element_resource_id) {
+function resource_usage($element, $element_resource_id) {
     
     $query = ($element == 'certificate')? 
             "SELECT user FROM user_certificate_criterion WHERE certificate_criterion = ?d" : 
@@ -551,8 +561,7 @@ function certificate_resource_usage($element, $element_resource_id) {
  * @global type $langVideo
  * @global type $langsetvideo
  * @global type $langEBook
- * @global type $langMetaQuestionnaire
- * @global type $langBlogPosts
+ * @global type $langMetaQuestionnaire 
  * @global type $langBlog
  * @global type $langNumOfBlogs
  * @global type $langForums
@@ -572,7 +581,7 @@ function get_resource_details($element, $resource_id) {
     
     global $course_id, $langCategoryExcercise, $langCategoryEssay, $langLearningPath,
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire, 
-            $langBlogPosts, $langBlog, $langForums, $langWikiPages, $langNumOfBlogs,
+            $langBlog, $langForums, $langWikiPages, $langNumOfBlogs,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating;
     

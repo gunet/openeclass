@@ -433,7 +433,7 @@ function display_modification_activity($element, $element_id, $activity_id) {
     global $tool_content, $course_code, $langModify, $langAutoJudgeOperator, $langUsedCertRes;
     
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-    if (certificate_resource_usage($activity_id)) { // check if resource has been used by user
+    if (resource_usage($activity_id)) { // check if resource has been used by user
         Session::Messages("$langUsedCertRes", "alert-warning");
         redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;${element}_id=$element_id");
     } else { // otherwise editing is not allowed
@@ -1458,13 +1458,13 @@ function certificate_settings($element, $element_id = 0) {
 
 
 /**
- * @brief student view certificates
+ * @brief student view certificates / badges
  * @global type $uid
  * @global type $course_id
  */
-function student_view_certificate() {
+function student_view_progress() {
     
-    global $uid, $course_id, $course_code;
+    global $uid, $course_id;
     
     require_once 'Game.php';
 
@@ -1508,21 +1508,31 @@ function student_view_certificate() {
  * @global type $langProgress
  * @global type $langUsersCertResults
  * @global type $langUsersS
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  */
-function display_users_progress($certificate_id) {
+function display_users_progress($element, $element_id) {
     
     global $tool_content, $course_code, $course_id, $langNoCertificateUsers, $langName, $langUsersS,
            $langSurname, $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults;
         
-    $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate 
-                                            WHERE certificate = ?d", $certificate_id);
-    
+    if ($element == 'certificate') {
+        $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate 
+                                            WHERE certificate = ?d", $element_id);
+        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_certificate WHERE 
+                                                    completed = 1 AND certificate = ?d", $element_id)->t;
+        $param_name = 'certificate_id';
+    } else {
+        $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_badge 
+                                            WHERE badge = ?d", $element_id);
+        $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge WHERE 
+                                                    completed = 1 AND badge = ?d", $element_id)->t;
+        $param_name = 'badge_id';
+    }
     $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user, user 
-                                                WHERE `user`.`id` = `course_user`.`user_id`
-                                                AND `course_user`.`course_id` = ?d", $course_id)->total;
-    $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_certificate WHERE 
-                                                    completed = 1 AND certificate = ?d", $certificate_id)->t;
+                                        WHERE `user`.`id` = `course_user`.`user_id`
+                                        AND `course_user`.`course_id` = ?d", $course_id)->total;
+    
     if (count($sql) > 0) {
         $tool_content .= "<div class='alert alert-info'>$langUsersCertResults $certified_users / $all_users $langUsersS.</div>";
         /*              <th class='text-center'>".icon('fa-cogs')."</th> */
@@ -1548,7 +1558,7 @@ function display_users_progress($certificate_id) {
                     <td>" . display_user($user_data->user). "<br>" .
                     "($langAmShort: ". uid_to_am($user_data->user) . ")</td>
                     <td>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%&nbsp;&nbsp;$icon"
-                          . "<small><a href='index.php?course=$course_code&amp;certificate_id=$certificate_id&amp;u=$user_data->user'>$langDetails</a></small>
+                          . "<small><a href='index.php?course=$course_code&amp;$param_name=$element_id&amp;u=$user_data->user'>$langDetails</a></small>
                     </td>
                     </tr>";            
         }
@@ -1566,10 +1576,11 @@ function display_users_progress($certificate_id) {
  * @global type $langAttendanceActivity
  * @global type $langInstallEnd
  * @global type $langTotalPercentCompleteness
- * @param type $certificate_id
+ * @param type $element
+ * @param type $element_id
  * @param type $user_id
  */
-function display_user_progress_details($certificate_id, $user_id) {
+function display_user_progress_details($element, $element_id, $user_id) {
     
     global $tool_content, $langNoUserActivity, $langAttendanceActivity, 
            $langInstallEnd, $langTotalPercentCompleteness;
@@ -1577,17 +1588,32 @@ function display_user_progress_details($certificate_id, $user_id) {
     $resource_data = array();
     
     $tool_content .= "<h5>" .  uid_to_name($user_id) . "</h5>";
-    // completed user resources
-    $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
-                                                        ON user_certificate_criterion.certificate_criterion = certificate_criterion.id 
-                                                            AND certificate_criterion.certificate = ?d 
-                                                            AND user = ?d", $certificate_id, $user_id);
-    // incomplete user resources
-    $sql2 = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d 
-                                                AND id NOT IN 
-                                        (SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
-                                            ON user_certificate_criterion.certificate_criterion = certificate_criterion.id 
-                                            AND certificate_criterion.certificate = ?d AND user = ?d)", $certificate_id, $certificate_id, $user_id);
+    // certificate
+    if ($element == 'certificate') { // completed user resources
+        $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
+                                                            ON user_certificate_criterion.certificate_criterion = certificate_criterion.id 
+                                                                AND certificate_criterion.certificate = ?d 
+                                                                AND user = ?d", $element_id, $user_id);
+        // incomplete user resources
+        $sql2 = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d 
+                                                    AND id NOT IN 
+                                            (SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
+                                                ON user_certificate_criterion.certificate_criterion = certificate_criterion.id 
+                                                AND certificate_criterion.certificate = ?d AND user = ?d)", $element_id, $element_id, $user_id);
+        $sql3 = "SELECT completed, completed_criteria, total_criteria FROM user_certificate WHERE certificate = ?d AND user = ?d";
+    } else { // badge
+        $sql = Database::get()->queryArray("SELECT badge_criterion FROM user_badge_criterion JOIN badge_criterion 
+                                                            ON user_badge_criterion.badge_criterion = badge_criterion.id 
+                                                                AND badge_criterion.badge = ?d 
+                                                                AND user = ?d", $element_id, $user_id);
+        // incomplete user resources
+        $sql2 = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d 
+                                                    AND id NOT IN 
+                                            (SELECT badge_criterion FROM user_badge_criterion JOIN badge_criterion 
+                                                ON user_badge_criterion.badge_criterion = badge_criterion.id 
+                                                AND badge_criterion.badge = ?d AND user = ?d)", $element_id, $element_id, $user_id);
+        $sql3 = "SELECT completed, completed_criteria, total_criteria FROM user_badge WHERE badge = ?d AND user = ?d";
+    }
     if (count($sql) > 0) {
         $tool_content .= "<table class='table-default custom_list_order'>";
         $tool_content .= "<thead>
@@ -1598,7 +1624,7 @@ function display_user_progress_details($certificate_id, $user_id) {
                 </thead>
                 <tbody>";            
             foreach ($sql as $user_criterion) {
-                $resource_data = get_resource_details('certificate', $user_criterion);                
+                $resource_data = get_resource_details($element, $user_criterion);                
                 $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
                 $tool_content .= "<tr>
                         <td>" . $activity . "</td>
@@ -1606,15 +1632,14 @@ function display_user_progress_details($certificate_id, $user_id) {
                         </tr>";
             }
             foreach ($sql2 as $user_criterion) {
-                $resource_data = get_resource_details('certificate', $user_criterion);                
+                $resource_data = get_resource_details($element, $user_criterion);                
                 $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
                 $tool_content .= "<tr class='not_visible'>
                         <td>" . $activity . "</td>
                         <td class='text-center'>" . icon('fa-hourglass-2') . "</td>
                         </tr>";
             }
-            $user_data = Database::get()->querySingle("SELECT completed, completed_criteria, total_criteria FROM user_certificate 
-                                            WHERE certificate = ?d AND user = ?d", $certificate_id, $user_id);            
+            $user_data = Database::get()->querySingle($sql3, $element_id, $user_id);            
             $tool_content .= "<tr>
                     <td><strong>$langTotalPercentCompleteness</strong></td>
                     <td class='text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></td>

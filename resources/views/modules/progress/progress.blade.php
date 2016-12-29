@@ -14,7 +14,7 @@
                 box-shadow: 0px 0px 5px 1px #BBBBBB;
                 border: 4px solid #FFFFFF;
                 position: relative;
-                top: 100px;
+                top: 30px;
                 font-family: Calibri;
                 float: left;
                 margin: 20px;
@@ -111,9 +111,7 @@
     </style>
 
     @if (count($game_certificate) > 0)
-        <div>
-            <strong>Certificates</strong><hr/>
-
+        <div>            
             @foreach ($game_certificate as $key => $certificate)
                 <?php                
                     $dateAssigned = ($certificate->completed == 1) ? $certificate->assigned : '-';
@@ -159,9 +157,7 @@
     @endif
 
     @if (count($game_badge) > 0)
-        <div>
-            <strong>Badges</strong><hr/>
-            
+        <div>                        
             @foreach ($game_badge as $key => $badge)
                 <?php
                     $dateAssigned = ($badge->completed == 1) ? $badge->assigned : '-';
@@ -169,7 +165,12 @@
                 <div class="certificate_panel">
                     <div class="certificate_panel_title">{{ $badge->title }}</div>
                     <div class="certificate_panel_date">{{ $dateAssigned }}</div>
-                    <div class="certificate_panel_viewdetails">View details</div>
+                    <div class="certificate_panel_viewdetails">
+                        <a href="index.php?course={{$course_code}}&amp;badge_id={{$badge->badge}}&amp;u={{$badge->user}}">{{  trans('langDetails') }}</a>
+                        @if ($badge->completed == 1)
+                            &nbsp;&nbsp;<a href="index.php?course={{$course_code}}&amp;badge_id={{$badge->badge}}&amp;u={{$badge->user}}&amp;p=1">{{  trans('langPrintVers') }}</a>
+                        @endif
+                    </div>
 
                     @if ($badge->completed == 1)
                         <div class="certificate_panel_state">
