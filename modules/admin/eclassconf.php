@@ -319,16 +319,16 @@ if (isset($_POST['submit'])) {
     set_config('site_name', $_POST['formsiteName']);
     set_config('phone', $_POST['formtelephone']);
     set_config('email_helpdesk', $_POST['formemailhelpdesk']);
+    set_config('homepage', $_POST['']);
     set_config('institution', $_POST['formInstitution']);
     set_config('institution_url', $_POST['formInstitutionUrl']);
-    set_config('landing_url', $_POST['formLandingUrl']);
-    set_config('landing_name', $_POST['formLandingName']);
     set_config('postaddress', $_POST['formpostaddress']);
     set_config('fax', $_POST['formfax']);
     set_config('account_duration', MONTHS * $_POST['formdurationAccount']);
     set_config('min_password_len', intval($_POST['min_password_len']));
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
+    set_config('homepageSet', $_POST['homepageSet']);
 
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
@@ -379,7 +379,8 @@ if (isset($_POST['submit'])) {
         'course_metadata' => true,
         'opencourses_enable' => true,
         'mydocs_student_enable' => true,
-        'mydocs_teacher_enable' => true);
+        'mydocs_teacher_enable' => true
+        );
 
     register_posted_variables($config_vars, 'all', 'intval');
 
@@ -508,7 +509,7 @@ else {
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formemailAdministrator' class='col-sm-2 control-label'>$langDefaultAdminName:</label>
+                           <label for='formadministratorName' class='col-sm-2 control-label'>$langDefaultAdminName:</label>
                            <div class='col-sm-10'>
                                <input class='form-control' type='text' name='formadministratorName' id='formadministratorName' value='" . q(get_config('admin_name')) . "'>
                            </div>
@@ -553,18 +554,6 @@ else {
                            <label for='formInstitutionUrl' class='col-sm-2 control-label'>$langInstituteName:</label>
                            <div class='col-sm-10'>
                                <input class='form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='" . $InstitutionUrl . "'>
-                           </div>
-                        </div>
-                        <div class='form-group'>
-                           <label for='formLandingName' class='col-sm-2 control-label'>$langLandingPageName:</label>
-                           <div class='col-sm-10'>
-                               <input class='form-control' type='text' name='formLandingName' id='formLandingName' value='" . q(get_config('landing_name')) . "'>
-                           </div>
-                        </div>
-                        <div class='form-group'>
-                           <label for='formLandingUrl' class='col-sm-2 control-label'>$langLandingPageUrl:</label>
-                           <div class='col-sm-10'>
-                               <input class='form-control' type='text' name='formLandingUrl' id='formLandingUrl' value='" . q(get_config('landing_url')) . "'>
                            </div>
                         </div>
                         <hr>
@@ -733,6 +722,85 @@ else {
                                     </label>
                                 </div>
                            </div>
+                        </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>";
+
+    $defaultHomepage = get_config('homepageSet') == '' ? 'checked' : '';
+    $toolboxHomepage = get_config('homepageSet') == 'toolbox' ? 'checked' : '';
+    $externalHomepage = get_config('homepageSet') == 'external' ? 'checked' : '';
+
+    $tool_content .= "
+            <div class='panel panel-default' id='four'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langHomePageSettings</h2>
+                </div>
+                <div class='panel-body'>
+                    <span class='text-muted'>Επιλέξτε ποια θέλετε να είναι η αρχική σελίδα</span>
+                    <fieldset>
+                        <div class='landing-default'>
+                            <div class='radio'>
+                                <label>
+                                    <input $defaultHomepage class='homepageSet' name='homepageSet' value='default' data-collapse='collapse-defaultHomepage' type='radio'> Προεπιλογή
+                                </label>
+                            </div>
+                            <div id='collapse-defaultHomepage' class='collapse homepage-inputs'>
+                                <div class='form-group'>
+                                    <label for='defaultHomepageIntro' class='col-sm-2 control-label'>Κείμενο Εισαγωγής:</label>
+                                    <div class='col-sm-10'>
+                                        <textarea rows='5' class='form-control' name='defaultHomepageIntro' id='defaultHomepageIntro'>".get_config('defaultHomepageIntro')."</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='landing-toolbox'>
+                            <div class='radio'>
+                                <label>
+                                    <input $toolboxHomepage class='homepageSet' name='homepageSet' value='toolbox' data-collapse='collapse-toolboxHomepage' type='radio'> Toolbox
+                                </label>
+                            </div>
+                            <div id='collapse-toolboxHomepage' class='collapse homepage-inputs'>
+                                <div class='form-group'>
+                                    <label for='toolboxHomepageTitle' class='col-sm-2 control-label'>Τίτλος</label>
+                                    <div class='col-sm-10'>
+                                        <input class='form-control' type='text' name='toolboxHomepageTitle' id='toolboxHomepageTitle' value='Old Value'>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <label for='toolboxHomepageIntro' class='col-sm-2 control-label'>Εισαγωγικό κείμενο</label>
+                                    <div class='col-sm-10'>
+                                        <textarea rows='5' class='form-control' name='toolboxHomepageIntro' id='toolboxHomepageIntro' value='Old Value'></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='landing-external'>
+                            <div class='radio'>
+                                <label>
+                                    <input $externalHomepage class='homepageSet' type='radio' name='homepageSet' value='external' data-collapse='collapse-externalHomepage'> External Link
+                                </label>
+                            </div>
+                            <div id='collapse-externalHomepage' class='collapse homepage-inputs'>
+                                <div class='form-group'>
+                                    <label for='externalHomepageTitle' class='col-sm-2 control-label'>Τίτλος</label>
+                                    <div class='col-sm-10'>
+                                        <input class='form-control' type='textarea' name='externalHomepageTitle' id='externalHomepageTitle' value='Old Value'>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <label for='externalHomepageIntro' class='col-sm-2 control-label'>Εισαγωγικό κείμενο</label>
+                                    <div class='col-sm-10'>
+                                        <textarea rows='5' class='form-control' name='externalHomepageIntro'></textarea>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <hr>
                         <div class='form-group'>
@@ -1226,7 +1294,19 @@ $tool_content .= "
     </div>";
     $head_content .= "
         <script>
-        $(function() {
+        $(document).ready(function(){
+            
+            var toCollapse = '#' + $(\"input[name='homepageSet']:checked\").data('collapse');
+            
+            $(toCollapse).collapse('show');
+            $('.homepageSet').change(function() {
+                $('.collapse.in').collapse('hide');
+                var newCollapse = '#' + $(this).data('collapse');
+                $(newCollapse).collapse('show');
+            });
+            
+            
+            $(function() {
             $('#floatMenu').affix({
               offset: {
                 top: 230,
@@ -1236,6 +1316,7 @@ $tool_content .= "
               }
             })
         });
+        });
         </script>";
     $tool_content .= "
         <div class='col-sm-3 hidden-xs' id='affixedSideNav'>
@@ -1243,15 +1324,16 @@ $tool_content .= "
                 <li class='active'><a href='#one'>$langBasicCfgSetting</a></li>
                 <li><a href='#two'>$langUpgReg</a></li>
                 <li><a href='#three'>$langEclassThemes</a></li>
-                <li><a href='#four'>$langEmailSettings</a></li>
-                <li><a href='#five'>$langCourseSettings</a></li>
-                <li><a href='#six'>$langMetaCommentary</a></li>
-                <li><a href='#seven'>$langOtherOptions</a></li>
-                <li><a href='#eight'>$langDocumentSettings</a></li>
-                <li><a href='#nine'>$langDefaultQuota</a></li>
-                <li><a href='#ten'>$langUploadWhitelist</a></li>
-                <li><a href='#eleven'>$langLogActions</a></li>
-                <li><a href='#twelve'>$langLoginFailCheck</a></li>
+                <li><a href='#four'>$langEclassThemes</a></li>
+                <li><a href='#five'>$langEmailSettings</a></li>
+                <li><a href='#six'>$langCourseSettings</a></li>
+                <li><a href='#seven'>$langMetaCommentary</a></li>
+                <li><a href='#eight'>$langOtherOptions</a></li>
+                <li><a href='#nine'>$langDocumentSettings</a></li>
+                <li><a href='#ten'>$langDefaultQuota</a></li>
+                <li><a href='#eleven'>$langUploadWhitelist</a></li>
+                <li><a href='#twelve'>$langLogActions</a></li>
+                <li><a href='#thirteen'>$langLoginFailCheck</a></li>
             </ul>
         </div>
     </div>";
