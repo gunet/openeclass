@@ -422,7 +422,7 @@ function insert_activity($element, $element_id, $activity) {
  * @global type $tool_content
  * @global type $course_code
  * @global type $langModify
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @global type $langUsedCertRes
  * @param type $element_id
  * @param type $element
@@ -430,7 +430,7 @@ function insert_activity($element, $element_id, $activity) {
  */
 function display_modification_activity($element, $element_id, $activity_id) {
     
-    global $tool_content, $course_code, $langModify, $langAutoJudgeOperator, $langUsedCertRes;
+    global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes;
     
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     if (resource_usage($activity_id)) { // check if resource has been used by user
@@ -445,7 +445,7 @@ function display_modification_activity($element, $element_id, $activity_id) {
         $tool_content .= "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='name' class='col-sm-1 control-label'>$langAutoJudgeOperator:</label>";    
+        $tool_content .= "<label for='name' class='col-sm-1 control-label'>$langOperator:</label>";    
         $tool_content .= "<span class='col-sm-1'>" . selection($operators, 'cert_operator', $operators[$data->operator]) . "</span>";
         $tool_content .= "<span class='col-sm-2'><input class='form-control' type='text' name='cert_threshold' value='$data->threshold'></span>";    
         $tool_content .= "</div>";
@@ -468,7 +468,7 @@ function display_modification_activity($element, $element_id, $activity_id) {
  * @global type $langActive
  * @global type $langInactive
  * @global type $langAddModulesButton
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @global type $langValue
  * @param type $element
  * @param type $element_id
@@ -478,7 +478,7 @@ function display_available_assignments($element, $element_id) {
     global $course_id, $tool_content, $langNoAssign, $course_code,
            $langTitle, $langGroupWorkDeadline_of_Submission, $langChoice, 
            $langActive, $langInactive, $langAddModulesButton,
-           $langAutoJudgeOperator, $langValue;
+           $langOperator, $langValue;
      
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d AND active = 1 AND id NOT IN 
@@ -496,7 +496,7 @@ function display_available_assignments($element, $element_id) {
                 "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langTitle</th>" .
                 "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>" .
-                "<th style='width:5px;'>$langAutoJudgeOperator</th>" .
+                "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" . 
                 "<th style='width:10px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
@@ -533,7 +533,7 @@ function display_available_assignments($element, $element_id) {
  * @global type $langNoExercises
  * @global type $langDescription
  * @global type $langChoice
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @global type $langValue
  * @global type $langAddModulesButton
  * @param type $element
@@ -543,7 +543,7 @@ function display_available_exercises($element, $element_id) {
 
     global $course_id, $course_code, $tool_content, $urlServer, $langExercices,
             $langNoExercises, $langDescription, $langChoice, $langAddModulesButton,
-            $langAutoJudgeOperator, $langValue;
+            $langOperator, $langValue;
     
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
@@ -569,7 +569,7 @@ function display_available_exercises($element, $element_id) {
                 "<tr class='list-header'>" .
                 "<th width='50%' class='text-left'>$langExercices</th>" .
                 "<th class='text-left'>$langDescription</th>" .
-                "<th style='width:5px;'>$langAutoJudgeOperator</th>" .
+                "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" . 
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
@@ -764,7 +764,7 @@ function display_available_documents($element, $element_id) {
  * @global type $langTitle
  * @global type $langValue
  * @global type $langChoice
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @global type $langNumOfBlogs
  * @global type $langResourceAlreadyAdded
  * @param type $element
@@ -774,7 +774,7 @@ function display_available_blogs($element, $element_id) {
     
     global $tool_content, $langAddModulesButton, $langNumOfBlogs,
            $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
-           $langChoice, $langAutoJudgeOperator;
+           $langChoice, $langOperator;
             
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $res = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d                                     
@@ -789,7 +789,7 @@ function display_available_blogs($element, $element_id) {
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
-                "<th style='width:5px;'>&nbsp;$langAutoJudgeOperator</th>" .
+                "<th style='width:5px;'>&nbsp;$langOperator</th>" .
                 "<th style='width:30px;'>$langValue</th>" . 
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
@@ -818,7 +818,7 @@ function display_available_blogs($element, $element_id) {
  * @global type $langChoice
  * @global type $langDate
  * @global type $course_id
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @param type $element
  * @param type $element_id
  */
@@ -826,7 +826,7 @@ function display_available_blogcomments($element, $element_id) {
     
     global $tool_content, $langAddModulesButton, $langBlogEmpty, 
            $urlServer, $course_code, $langTitle, $langValue,
-           $langChoice, $langDate, $course_id, $langAutoJudgeOperator;
+           $langChoice, $langDate, $course_id, $langOperator;
     
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM blog_post WHERE course_id = ?d AND id NOT IN 
@@ -844,7 +844,7 @@ function display_available_blogcomments($element, $element_id) {
                 "<tr class='list-header'>" .
                 "<th class='text-left' style='width:50%;'>&nbsp;$langTitle</th>" .
                 "<th class='text-left'>&nbsp;$langDate</th>" .
-                "<th style='width:5px;'>&nbsp;$langAutoJudgeOperator</th>" .
+                "<th style='width:5px;'>&nbsp;$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" . 
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
@@ -875,7 +875,7 @@ function display_available_blogcomments($element, $element_id) {
  * @global type $langNoForums
  * @global type $langForums
  * @global type $course_code
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @global type $langValue
  * @param type $element
  * @param type $element_id
@@ -884,7 +884,7 @@ function display_available_forums($element, $element_id) {
       
     global $tool_content, $urlServer, $course_id,
            $langComments, $langAddModulesButton, $langChoice, $langNoForums, 
-           $langForums, $course_code, $langAutoJudgeOperator, $langValue;
+           $langForums, $course_code, $langOperator, $langValue;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM forum WHERE course_id = ?d 
@@ -910,7 +910,7 @@ function display_available_forums($element, $element_id) {
                 "<tr class='list-header'>" .
                 "<th>$langForums</th>" .
                 "<th>$langComments</th>" .
-                "<th style='width:5px;'>$langAutoJudgeOperator</th>" .
+                "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" . 
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
@@ -968,7 +968,7 @@ function display_available_forums($element, $element_id) {
  * @global type $langChoice
  * @global type $langAddModulesButton
  * @global type $langValue
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @param type $element
  * @param type $element_id
  */
@@ -976,7 +976,7 @@ function display_available_lps($element, $element_id) {
 
     global $course_id, $course_code, $urlServer, $tool_content, 
            $langNoLearningPath, $langLearningPaths, $langComments, $langChoice, 
-           $langAddModulesButton, $langAutoJudgeOperator, $langValue;
+           $langAddModulesButton, $langOperator, $langValue;
     
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d
@@ -1004,7 +1004,7 @@ function display_available_lps($element, $element_id) {
                 "<tr class='list-header'>" .
                 "<th width='50%'>$langLearningPaths</th>" .
                 "<th class='text-left'>$langComments</th>" .
-                "<th style='width:5px;'>$langAutoJudgeOperator</th>" .
+                "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" . 
                 "<th style='width:10px;' class='text-center'>$langChoice</th>" .                                
                 "</tr>";        
@@ -1307,7 +1307,7 @@ function display_available_polls($element, $element_id) {
  * @global type $langValue
  * @global type $langTitle
  * @global type $langWikiPages
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @global type $langResourceAlreadyAdded
  * @param type $element
  * @param type $element_id
@@ -1316,7 +1316,7 @@ function display_available_wiki($element, $element_id) {
     
     global $tool_content, $langResourceAlreadyAdded,
     $langAddModulesButton, $langChoice, $langTitle, $langWikiPages,
-    $course_code, $langAutoJudgeOperator, $langValue;
+    $course_code, $langOperator, $langValue;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d 
@@ -1331,7 +1331,7 @@ function display_available_wiki($element, $element_id) {
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
-                "<th style='width:5px;'>&nbsp;$langAutoJudgeOperator</th>" .
+                "<th style='width:5px;'>&nbsp;$langOperator</th>" .
                 "<th style='width:30px;'>$langValue</th>" . 
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";

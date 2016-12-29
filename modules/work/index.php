@@ -1163,7 +1163,7 @@ function submit_work($id, $on_behalf_of = null) {
  * @global type $langAutoJudgeEnable
  * @global type $langAutoJudgeInput
  * @global type $langAutoJudgeExpectedOutput
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @global type $langAutoJudgeWeight
  * @global type $langAutoJudgeProgrammingLanguage
  * @global type $langAutoJudgeAssertions
@@ -1179,7 +1179,7 @@ function new_assignment() {
            $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales,
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
-           $langAutoJudgeOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
+           $langOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
            $langAutoJudgeAssertions, $langDescription, $langTitle, $langGroups;
 
     $connector = AutojudgeApp::getAutojudge();
@@ -1446,7 +1446,7 @@ function new_assignment() {
                             <thead>
                                 <tr>
                                   <th>$langAutoJudgeInput</th>
-                                  <th>$langAutoJudgeOperator</th>
+                                  <th>$langOperator</th>
                                   <th>$langAutoJudgeExpectedOutput</th>
                                   <th>$langAutoJudgeWeight</th>
                                   <th>".$m['delete']."</th>
@@ -1563,7 +1563,7 @@ function new_assignment() {
  * @global type $langTitle
  * @global type $langAutoJudgeInput
  * @global type $langAutoJudgeExpectedOutput
- * @global type $langAutoJudgeOperator
+ * @global type $langOperator
  * @global type $langAutoJudgeWeight
  * @global type $langAutoJudgeProgrammingLanguage
  * @global type $langAutoJudgeAssertions
@@ -1578,7 +1578,7 @@ function show_edit_assignment($id) {
         $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales,
         $langLessOptions, $langMoreOptions, $langAutoJudgeInputNotSupported, $langGroups,
         $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable, $langDescription,
-        $langTitle, $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langAutoJudgeOperator,
+        $langTitle, $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langOperator,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions;
 
     load_js('bootstrap-datetimepicker');
@@ -1915,7 +1915,7 @@ function show_edit_assignment($id) {
                             <thead>
                                 <tr>
                                     <th>$langAutoJudgeInput</th>
-                                    <th>$langAutoJudgeOperator</th>
+                                    <th>$langOperator</th>
                                     <th>$langAutoJudgeExpectedOutput</th>
                                     <th>$langAutoJudgeWeight</th>
                                     <th>".$m['delete']."</th>

@@ -90,7 +90,7 @@ function get_submission_rank($assign_id,$grade, $submission_date) {
 
 function show_report($id, $sid, $assign,$sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
     global $m, $course_code,$tool_content, $langAutoJudgeInput, $langAutoJudgeOutput,
-        $langAutoJudgeExpectedOutput, $langAutoJudgeOperator, $langAutoJudgeWeight,
+        $langAutoJudgeExpectedOutput, $langOperator, $langAutoJudgeWeight,
         $langAutoJudgeResult, $langAutoJudgeResultsFor, $langAutoJudgeRank,
         $langAutoJudgeDownloadPdf, $langBack;
     $tool_content = "
@@ -101,7 +101,7 @@ function show_report($id, $sid, $assign,$sub, $auto_judge_scenarios, $auto_judge
         </tr>
           <tr> <td> <b>$langAutoJudgeInput</b> </td>
                <td> <b>$langAutoJudgeOutput</b> </td>
-               <td> <b>$langAutoJudgeOperator</b> </td>
+               <td> <b>$langOperator</b> </td>
                <td> <b>$langAutoJudgeExpectedOutput</b> </td>
                <td> <b>$langAutoJudgeWeight</b> </td>
                <td> <b>$langAutoJudgeResult</b> </td>
@@ -138,7 +138,7 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
 
 function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
     global $langAutoJudgeInput, $langAutoJudgeOutput,
-        $langAutoJudgeExpectedOutput, $langAutoJudgeOperator,
+        $langAutoJudgeExpectedOutput, $langOperator,
         $langAutoJudgeWeight, $langAutoJudgeResult,
         $langCourse, $langAssignment, $langStudent, $langAutoJudgeRank, $m;
 
@@ -207,7 +207,7 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
         <tr>
             <th>' . $langAutoJudgeInput . '</th>
             <th>' . $langAutoJudgeOutput . '</th>
-            <th>' . $langAutoJudgeOperator . '</th>
+            <th>' . $langOperator . '</th>
             <th>' . $langAutoJudgeExpectedOutput . '</th>
             <th>' . $langAutoJudgeWeight . '</th>
             <th>' . $langAutoJudgeResult . '</th>
