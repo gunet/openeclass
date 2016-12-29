@@ -331,6 +331,7 @@ if (isset($_POST['submit'])) {
     set_config('homepageSet', $_POST['homepageSet']);
     set_config('defaultHomepageIntro', $_POST['defaultHomepageIntro']);
     set_config('defaultHomepageTitle', $_POST['defaultHomepageTitle']);
+    set_config('defaultHomepageBcrmp', $_POST['defaultHomepageBcrmp']);
 
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
@@ -691,7 +692,7 @@ else {
         $tool_content .= "
             <div class='panel panel-primary' id='three'>
                 <div class='panel-heading'>
-                    <h2 class='panel-title'>$langEclassThemes</h2>
+                    <h2 class='panel-title'>$langChooseLang</h2>
                 </div>
                 <div class='panel-body'>
                     <fieldset>
@@ -708,23 +709,7 @@ else {
                             " . implode(' ', $sel) . "
                             </div>
                         </div>
-                        <div class='form-group'>
-                           <label for='theme' class='col-sm-3 control-label'>$lang_login_form: </label>
-                           <div class='col-sm-9'>
-                                <div class='checkbox'>
-                                    <label>
-                                        <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form>
-                                        $lang_dont_display_login_form
-                                    </label>
-                                </div>
-                                <div class='checkbox'>
-                                    <label>
-                                        <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' $cbox_hide_login_link>
-                                        $lang_hide_login_link
-                                    </label>
-                                </div>
-                           </div>
-                        </div>
+                        
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
@@ -753,19 +738,42 @@ else {
                                     <input $defaultHomepage class='homepageSet' name='homepageSet' value='default' data-collapse='collapse-defaultHomepage' type='radio'> $langHomePageDefault
                                 </label>
                             </div>
+                            <div id='collapse-defaultHomepage' class='collapse homepage-inputs'>
                             <div class='form-group'>
                                 <label for='defaultHomepageTitle' class='col-sm-2 control-label'>$langHomePageIntroTitle</label>
                                 <div class='col-sm-10'>
                                     <input class='form-control' type='text' name='defaultHomepageTitle' id='defaultHomepageTitle' value='".get_config('defaultHomepageTitle', $langEclass)."'>
                                 </div>
                             </div>
-                            <div id='collapse-defaultHomepage' class='collapse homepage-inputs'>
-                                <div class='form-group'>
-                                    <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langHomePageIntroText:</label>
-                                    <div class='col-sm-10'>
-                                        <textarea rows='5' class='form-control' name='defaultHomepageIntro' id='defaultHomepageIntro'>".get_config('defaultHomepageIntro', $langInfoAbout)."</textarea>
-                                    </div>
+                            <div class='form-group'>
+                                <label for='defaultHomepageBcrmp' class='col-sm-2 control-label'>$langHomePageIntroBcrmp</label>
+                                <div class='col-sm-10'>
+                                    <input class='form-control' type='text' name='defaultHomepageBcrmp' id='defaultHomepageBcrmp' value='".get_config('defaultHomepageBcrmp', $langHomePage)."'>
                                 </div>
+                            </div>
+                            <div class='form-group'>
+                                <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langHomePageIntroText:</label>
+                                <div class='col-sm-10'>
+                                    <textarea rows='5' class='form-control' name='defaultHomepageIntro' id='defaultHomepageIntro'>".get_config('defaultHomepageIntro', $langInfoAbout)."</textarea>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                           <label for='theme' class='col-sm-2 control-label'>$lang_login_form: </label>
+                           <div class='col-sm-10'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form>
+                                        $lang_dont_display_login_form
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' $cbox_hide_login_link>
+                                        $lang_hide_login_link
+                                    </label>
+                                </div>
+                           </div>
+                        </div>
                             </div>
                         </div>
                         <div class='landing-toolbox'>
@@ -778,8 +786,14 @@ else {
                                 <div class='form-group'>
                                     <label for='toolboxHomepageTitle' class='col-sm-2 control-label'>$langHomePageIntroTitle</label>
                                     <div class='col-sm-10'>
-                                        <input class='form-control' type='text' name='toolboxHomepageTitle' id='toolboxHomepageTitle' value='Old Value'>
+                                        <input class='form-control' type='text' name='toolboxHomepageTitle' id='toolboxHomepageTitle' value='".get_config('defaultHomepageTitle', $langEclass)."'>
                                     </div>
+                                </div>
+                                <div class='form-group'>
+                                <label for='toolboxHomepageBcrmp' class='col-sm-2 control-label'>$langHomePageIntroBcrmp</label>
+                                <div class='col-sm-10'>
+                                    <input class='form-control' type='text' name='toolboxHomepageBcrmp' id='toolboxHomepageBcrmp' value='".get_config('toolboxHomepageBcrmp', $langHomePage)."'>
+                                </div>
                                 </div>
                                 <div class='form-group'>
                                     <label for='toolboxHomepageIntro' class='col-sm-2 control-label'>$langHomePageIntroText:</label>
@@ -797,9 +811,9 @@ else {
                             </div>
                             <div id='collapse-externalHomepage' class='collapse homepage-inputs'>
                                 <div class='form-group'>
-                                    <label for='externalHomepageTitle' class='col-sm-2 control-label'>$langHomePageIntroTitle:</label>
+                                    <label for='externalHomepageBcrmp' class='col-sm-2 control-label'>$langHomePageIntroBcrmp:</label>
                                     <div class='col-sm-10'>
-                                        <input class='form-control' type='text' name='externalHomepageTitle' id='externalHomepageTitle' value='Old Value'>
+                                        <input class='form-control' type='text' name='externalHomepageBcrmp' id='externalHomepageBcrmp' value='Old Value'>
                                     </div>
                                 </div>
                                 <div class='form-group'>
@@ -1331,7 +1345,7 @@ $tool_content .= "
             <ul id='floatMenu' class='nav nav-pills nav-stacked well well-sm' role='tablist'>
                 <li class='active'><a href='#one'>$langBasicCfgSetting</a></li>
                 <li><a href='#two'>$langUpgReg</a></li>
-                <li><a href='#three'>$langEclassThemes</a></li>
+                <li><a href='#three'>$langChooseLang</a></li>
                 <li><a href='#four'>$langHomePageSettings</a></li>
                 <li><a href='#five'>$langEmailSettings</a></li>
                 <li><a href='#six'>$langCourseSettings</a></li>

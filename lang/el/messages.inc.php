@@ -559,6 +559,7 @@ $langHomePageExternal = "External";
 $langHomePageIntroText = "Εισαγωγικό Κείμενο";
 $langHomePageIntroTitle = "Τίτλος";
 $langHomePageIntroUrl = "URL";
+$langHomePageIntroBcrmp = "Τίτλος πλοήγησης";
 $langThemes = "Επιλογή θέματος";
 $langOtherOptions = "Άλλες ρυθμίσεις";
 $langDefaultQuota = "Αποθηκευτικός χώρος νέων $langsOfCourses";
