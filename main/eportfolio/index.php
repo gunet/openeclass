@@ -220,7 +220,7 @@ if ($userdata) {
     $tool_content .= "<div class='row'>
                         <div class='col-sm-9'>";
     $tool_content .= $ret_str['panels'];
-    if ($userdata->eportfolio_enable == 1) {
+    if ($userdata->eportfolio_enable == 1 AND $ret_str['panels'] != "") {
         $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
     } else {
         $social_share = '';

@@ -33,6 +33,8 @@ define('EPF_LINK', 5);
  */
 function render_eportfolio_fields_content($uid) {
     
+    $showAll = false;
+    
     $return_string = array();
     $return_string['panels'] = "";
     $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav'>
@@ -78,10 +80,9 @@ function render_eportfolio_fields_content($uid) {
                 //get data to prefill fields
                 $fdata_res = Database::get()->querySingle("SELECT data FROM eportfolio_fields_data
                                  WHERE user_id = ?d AND field_id = ?d", $uid, $f->id);
-                if (!$fdata_res || $fdata_res->data == '') {
-                    
-                } else {
+                if ($fdata_res AND (($f->datatype != EPF_MENU AND $fdata_res->data != '') OR ($f->datatype == EPF_MENU AND $fdata_res->data != 0))) {
                     $showCat = true;
+                    $showAll = true;
                     $cat_return_string['panels'] .= '<div class="profile-pers-info form-group">';
                     $cat_return_string['panels'] .= '<span class="tag"><strong>'.q($f->name).': </strong></span>';
                     $cat_return_string['panels'] .= '<span>';
@@ -128,6 +129,11 @@ function render_eportfolio_fields_content($uid) {
     
     $return_string['right_menu'] .= '</ul>
                                  </div>';
+    
+    if (!$showAll) {
+        $return_string['panels'] = "";
+        $return_string['right_menu'] = "";
+    }
     
     return $return_string;
 }
