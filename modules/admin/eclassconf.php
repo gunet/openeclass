@@ -329,6 +329,7 @@ if (isset($_POST['submit'])) {
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
     set_config('homepageSet', $_POST['homepageSet']);
+    set_config('defaultHomepageIntro', $_POST['defaultHomepageIntro']);
 
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
@@ -733,7 +734,7 @@ else {
                 </div>
             </div>";
 
-    $defaultHomepage = get_config('homepageSet') == '' ? 'checked' : '';
+    $defaultHomepage = get_config('homepageSet') == 'default' ? 'checked' : '';
     $toolboxHomepage = get_config('homepageSet') == 'toolbox' ? 'checked' : '';
     $externalHomepage = get_config('homepageSet') == 'external' ? 'checked' : '';
 
@@ -755,7 +756,7 @@ else {
                                 <div class='form-group'>
                                     <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langHomePageIntroText:</label>
                                     <div class='col-sm-10'>
-                                        <textarea rows='5' class='form-control' name='defaultHomepageIntro' id='defaultHomepageIntro'>".get_config('defaultHomepageIntro')."</textarea>
+                                        <textarea rows='5' class='form-control' name='defaultHomepageIntro' id='defaultHomepageIntro'>".get_config('defaultHomepageIntro', $langInfoAbout)."</textarea>
                                     </div>
                                 </div>
                             </div>

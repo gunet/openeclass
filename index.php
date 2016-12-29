@@ -335,13 +335,15 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         }
     }
 
-    $tool_content .= "<div class='row'>
-        <div class='col-md-8'>";
+        $tool_content .= "<div class='row'>
+                            <div class='col-md-8'>";
+    if(get_config('defaultHomepageIntro', $langInfoAbout)) {
         $tool_content .= "<div class='panel'>
-            <div class='panel-body'>
-                $langInfoAbout
-            </div>
+            <div class='panel-body'>" .
+            get_config('defaultHomepageIntro', $langInfoAbout)
+            . "</div>
         </div>";
+    }
 
         // display admin announcements
         if(!empty($ann_content)) {
