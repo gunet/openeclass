@@ -325,8 +325,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('SECTION_TITLE', $langUserPortfolio);
         $sectionName = $langUserPortfolio;
     } else {
-        $t->set_var('SECTION_TITLE', $siteName);
-        $sectionName = $siteName;
+        $t->set_var('SECTION_TITLE', get_config('defaultHomepageTitle', $langEclass));
+        $sectionName = get_config('defaultHomepageTitle', $langEclass);
     }
 
     //set the appropriate search action for the searchBox form

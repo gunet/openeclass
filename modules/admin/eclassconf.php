@@ -330,6 +330,7 @@ if (isset($_POST['submit'])) {
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
     set_config('homepageSet', $_POST['homepageSet']);
     set_config('defaultHomepageIntro', $_POST['defaultHomepageIntro']);
+    set_config('defaultHomepageTitle', $_POST['defaultHomepageTitle']);
 
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
@@ -479,7 +480,7 @@ else {
 <div class='row'>
     <div class='col-sm-9'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-            <div class='panel panel-default' id='one'>
+            <div class='panel panel-primary' id='one'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langBasicCfgSetting</h2>
                 </div>
@@ -560,13 +561,13 @@ else {
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='two'>
+            <div class='panel panel-primary' id='two'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langUpgReg</h2>
                 </div>
@@ -659,7 +660,7 @@ else {
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
@@ -688,7 +689,7 @@ else {
             }
         }
         $tool_content .= "
-            <div class='panel panel-default' id='three'>
+            <div class='panel panel-primary' id='three'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langEclassThemes</h2>
                 </div>
@@ -727,7 +728,7 @@ else {
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
@@ -739,7 +740,7 @@ else {
     $externalHomepage = get_config('homepageSet') == 'external' ? 'checked' : '';
 
     $tool_content .= "
-            <div class='panel panel-default' id='four'>
+            <div class='panel panel-primary' id='four'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langHomePageSettings</h2>
                 </div>
@@ -751,6 +752,12 @@ else {
                                 <label>
                                     <input $defaultHomepage class='homepageSet' name='homepageSet' value='default' data-collapse='collapse-defaultHomepage' type='radio'> $langHomePageDefault
                                 </label>
+                            </div>
+                            <div class='form-group'>
+                                <label for='defaultHomepageTitle' class='col-sm-2 control-label'>$langHomePageIntroTitle</label>
+                                <div class='col-sm-10'>
+                                    <input class='form-control' type='text' name='defaultHomepageTitle' id='defaultHomepageTitle' value='".get_config('defaultHomepageTitle', $langEclass)."'>
+                                </div>
                             </div>
                             <div id='collapse-defaultHomepage' class='collapse homepage-inputs'>
                                 <div class='form-group'>
@@ -806,7 +813,7 @@ else {
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
@@ -825,7 +832,7 @@ else {
     $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
     $cbox_opencourses_enable = get_config('opencourses_enable') ? 'checked' : '';
     $tool_content .= "
-            <div class='panel panel-default' id='five'>
+            <div class='panel panel-primary' id='six'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langCourseSettings</h2>
                 </div>
@@ -868,13 +875,13 @@ else {
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='six'>
+            <div class='panel panel-primary' id='seven'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langMetaCommentary</h2>
                 </div>
@@ -905,7 +912,7 @@ else {
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
@@ -938,7 +945,7 @@ else {
     $id_enable_mobileapi = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
 
         $tool_content .= "
-            <div class='panel panel-default' id='seven'>
+            <div class='panel panel-primary' id='eight'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langOtherOptions</h2>
                 </div>
@@ -1066,14 +1073,14 @@ else {
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
                 </div>
             </div>
 
-            <div class='panel panel-default' id='eight'>
+            <div class='panel panel-primary' id='nine'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langDocumentSettings</h2>
                 </div>
@@ -1118,14 +1125,14 @@ else {
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
                 </div>
             </div>
 
-            <div class='panel panel-default' id='nine'>
+            <div class='panel panel-primary' id='ten'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langDefaultQuota</h2>
                 </div>
@@ -1158,13 +1165,13 @@ else {
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='ten'>
+            <div class='panel panel-primary' id='eleven'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langUploadWhitelist</h2>
                 </div>
@@ -1185,7 +1192,7 @@ else {
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
@@ -1197,7 +1204,7 @@ else {
     $cbox_disable_log_system_actions = get_config('disable_log_system_actions') ? 'checked' : '';
 
 $tool_content .= "
-            <div class='panel panel-default' id='eleven'>
+            <div class='panel panel-primary' id='twelve'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langLogActions</h2>
                 </div>
@@ -1241,13 +1248,13 @@ $tool_content .= "
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='twelve'>
+            <div class='panel panel-primary' id='thirteen'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langLoginFailCheck</h2>
                 </div>
@@ -1284,7 +1291,7 @@ $tool_content .= "
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <input class='btn btn-primary' type='submit' name='submit' value='$langSave'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                             </div>
                         </div>
                     </fieldset>
@@ -1325,7 +1332,7 @@ $tool_content .= "
                 <li class='active'><a href='#one'>$langBasicCfgSetting</a></li>
                 <li><a href='#two'>$langUpgReg</a></li>
                 <li><a href='#three'>$langEclassThemes</a></li>
-                <li><a href='#four'>$langEclassThemes</a></li>
+                <li><a href='#four'>$langHomePageSettings</a></li>
                 <li><a href='#five'>$langEmailSettings</a></li>
                 <li><a href='#six'>$langCourseSettings</a></li>
                 <li><a href='#seven'>$langMetaCommentary</a></li>
