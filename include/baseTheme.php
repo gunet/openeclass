@@ -403,9 +403,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $t->set_var('BREAD_TEXT', '<span class="fa fa-home"></span> ' . $langPortfolio);
                 $t->set_var('BREAD_HREF', $urlAppend . 'main/portfolio.php');
             } else {
-                $t->set_var('BREAD_TEXT', $langHomePage);
+                $t->set_var('BREAD_TEXT', get_config('defaultHomepageBcrmp', $langHomePage));
                 $t->set_var('BREAD_HREF', $urlAppend);
-                $showStart = false;
+                $showStart = true;
             }
 
             if ($showStart) {
