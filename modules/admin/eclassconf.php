@@ -329,9 +329,14 @@ if (isset($_POST['submit'])) {
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
     set_config('homepageSet', $_POST['homepageSet']);
-    set_config('defaultHomepageIntro', $_POST['defaultHomepageIntro']);
+    set_config('defaultHomepageIntro', purify($_POST['defaultHomepageIntro']));
     set_config('defaultHomepageTitle', $_POST['defaultHomepageTitle']);
     set_config('defaultHomepageBcrmp', $_POST['defaultHomepageBcrmp']);
+    set_config('defaultHomepageTitle', $_POST['defaultHomepageTitle']);
+    set_config('toolboxHomepageBcrmp', $_POST['toolboxHomepageBcrmp']);
+    set_config('toolboxHomepageIntro', purify($_POST['toolboxHomepageIntro']));
+    set_config('externalHomepageBcrmp', $_POST['externalHomepageBcrmp']);
+    set_config('externalHomepageUrl', $_POST['externalHomepageUrl']);
 
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
@@ -754,7 +759,7 @@ else {
                             <div class='form-group'>
                                 <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langHomePageIntroText:</label>
                                 <div class='col-sm-10'>
-                                    <textarea rows='5' class='form-control' name='defaultHomepageIntro' id='defaultHomepageIntro'>".get_config('defaultHomepageIntro', $langInfoAbout)."</textarea>
+                                    ".rich_text_editor('defaultHomepageIntro', 5, 20, get_config('defaultHomepageIntro', $langInfoAbout))."
                                 </div>
                             </div>
                             <div class='form-group'>
@@ -798,7 +803,7 @@ else {
                                 <div class='form-group'>
                                     <label for='toolboxHomepageIntro' class='col-sm-2 control-label'>$langHomePageIntroText:</label>
                                     <div class='col-sm-10'>
-                                        <textarea rows='5' class='form-control' name='toolboxHomepageIntro' id='toolboxHomepageIntro' value='Old Value'></textarea>
+                                        ".rich_text_editor('toolboxHomepageIntro', 5, 20, get_config('toolboxHomepageIntro', $langInfoAbout))."
                                     </div>
                                 </div>
                             </div>
@@ -813,13 +818,13 @@ else {
                                 <div class='form-group'>
                                     <label for='externalHomepageBcrmp' class='col-sm-2 control-label'>$langHomePageIntroBcrmp:</label>
                                     <div class='col-sm-10'>
-                                        <input class='form-control' type='text' name='externalHomepageBcrmp' id='externalHomepageBcrmp' value='Old Value'>
+                                        <input class='form-control' type='text' name='externalHomepageBcrmp' id='externalHomepageBcrmp' value='".get_config('externalHomepageBcrmp')."'>
                                     </div>
                                 </div>
                                 <div class='form-group'>
                                     <label for='externalHomepageUrl' class='col-sm-2 control-label'>$langHomePageIntroUrl:</label>
                                     <div class='col-sm-10'>
-                                        <input class='form-control' type='text' name='externalHomepageUrl' id='externalHomepageUrl' value='Old Value'>
+                                        <input class='form-control' type='text' name='externalHomepageUrl' id='externalHomepageUrl' value='".get_config('externalHomepageUrl')."'>
                                     </div>
                                 </div>
                             </div>
