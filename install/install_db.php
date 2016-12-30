@@ -1739,8 +1739,7 @@ $db->query("CREATE TABLE `certificate` (
   `expires` datetime,
   `bundle` int(11) not null default 0,
   index `certificate_course` (`course_id`),
-  foreign key (`course_id`) references `course` (`id`),
-  foreign key (`issuer`) references `user`(`id`),
+  foreign key (`course_id`) references `course` (`id`),  
   foreign key (`template`) references `certificate_template`(`id`)
 )");
 
@@ -1757,7 +1756,7 @@ $db->query("CREATE TABLE `badge` (
   `created` datetime,
   `expires` datetime,
   `bundle` int(11) not null default 0,
-  index `badge_course` (`course`),
+  index `badge_course` (`course_id`),
   foreign key (`course_id`) references `course` (`id`)  
 )");
 

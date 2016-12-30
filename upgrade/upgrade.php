@@ -2769,6 +2769,22 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
             FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE)");
 
+        $db->query("CREATE TABLE IF NOT EXISTS `widget` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `class` varchar(400) NOT NULL) $charset_spec");
+        $db->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
+                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `widget_id` int(11) unsigned NOT NULL,
+                `widget_area_id` int(11) NOT NULL,
+                `options` text NOT NULL,
+                `position` int(3) NOT NULL,
+                `user_id` int(11) NULL,
+                `course_id` int(11) NULL,
+                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+                 FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+                 FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $charset_spec");
+        
+        
         // Abuse report table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `abuse_report` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -3486,50 +3502,53 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
 
         // hierarchy extra fields
-        Database::get()->query("ALTER TABLE hierarchy ADD `description` TEXT AFTER name");
-        Database::get()->query("ALTER TABLE hierarchy ADD `visible` tinyint(4) not null default 2 AFTER order_priority");
+        
+        if (!DBHelper::fieldExists('hierarchy', 'description') or (!DBHelper::fieldExists('hierarchy', 'visible'))) {
+            Database::get()->query("ALTER TABLE hierarchy ADD `description` TEXT AFTER name");
+            Database::get()->query("ALTER TABLE hierarchy ADD `visible` tinyint(4) not null default 2 AFTER order_priority");
 
-        Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
-        Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
-                    IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
-                    IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4))
-                LANGUAGE SQL
-                BEGIN
-                    DECLARE lft, rgt INT(11);
+            Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
+            Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
+                        IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
+                        IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4))
+                    LANGUAGE SQL
+                    BEGIN
+                        DECLARE lft, rgt INT(11);
 
-                    SET lft = parentlft + 1;
-                    SET rgt = parentlft + 2;
+                        SET lft = parentlft + 1;
+                        SET rgt = parentlft + 2;
 
-                    CALL shift_right(parentlft, 2, 0);
+                        CALL shift_right(parentlft, 2, 0);
 
-                    INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible);
-                END");
-        Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-        Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
-        Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8, IN p_description TEXT CHARSET utf8,
-                    IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-                    IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
-                    IN p_order_priority INT(11), IN p_visible TINYINT(4))
-                LANGUAGE SQL
-                BEGIN
-                    UPDATE `hierarchy` SET name = p_name, description = p_description, lft = p_lft, rgt = p_rgt,
-                        code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
-                        order_priority = p_order_priority, visible = p_visible WHERE id = p_id;
+                        INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible);
+                    END");
+            Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
+            Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
+            Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8, IN p_description TEXT CHARSET utf8,
+                        IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
+                        IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
+                        IN p_order_priority INT(11), IN p_visible TINYINT(4))
+                    LANGUAGE SQL
+                    BEGIN
+                        UPDATE `hierarchy` SET name = p_name, description = p_description, lft = p_lft, rgt = p_rgt,
+                            code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
+                            order_priority = p_order_priority, visible = p_visible WHERE id = p_id;
 
-                    IF nodelft <> parentlft THEN
-                        CALL move_nodes(nodelft, p_lft, p_rgt);
-                    END IF;
-                END");
-
+                        IF nodelft <> parentlft THEN
+                            CALL move_nodes(nodelft, p_lft, p_rgt);
+                        END IF;
+                    END");
+        }
         // Gamification Tables
-        Database::get()->query("CREATE TABLE `certificate_template` (
-            `id` mediumint(8) not null auto_increment primary key,
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate_template` (
+            `id` mediumint(8) not null auto_increment,
             `name` varchar(255) not null,
             `description` text,
-            `filename` varchar(255)
+            `filename` varchar(255),
+            PRIMARY KEY(`id`)
         )");
 
-        Database::get()->query("CREATE TABLE `certificate` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate` (
           `id` int(11) not null auto_increment primary key,
           `course_id` int(11) not null,
           `issuer` varchar(255) not null default '',
@@ -3541,13 +3560,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           `created` datetime,
           `expires` datetime,
           `bundle` int(11) not null default 0,
-          index `certificate_course` (`course`),
-          foreign key (`course_id`) references `course` (`id`),
-          foreign key (`issuer`) references `user`(`id`),
+          index `certificate_course` (`course_id`),
+          foreign key (`course_id`) references `course` (`id`),          
           foreign key (`template`) references `certificate_template`(`id`)
         )");
 
-        Database::get()->query("CREATE TABLE `badge` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `badge` (
             `id` int(11) not null auto_increment primary key,
             `course_id` int(11) not null,
             `issuer` varchar(255) not null default '',
@@ -3560,12 +3578,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `created` datetime,
             `expires` datetime,
             `bundle` int(11) not null default 0,
-            index `badge_course` (`course`),
-            foreign key (`course_id`) references `course` (`id`),
-            foreign key (`issuer`) references `user`(`id`)
+            index `badge_course` (`course_id`),
+            foreign key (`course_id`) references `course` (`id`)            
         )");
 
-        Database::get()->query("CREATE TABLE `user_certificate` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_certificate` (
           `id` int(11) not null auto_increment primary key,
           `user` int(11) not null,
           `certificate` int(11) not null,
@@ -3579,7 +3596,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           foreign key (`certificate`) references `certificate` (`id`)
         )");
 
-        Database::get()->query("CREATE TABLE `user_badge` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_badge` (
           `id` int(11) not null auto_increment primary key,
           `user` int(11) not null,
           `badge` int(11) not null,
@@ -3593,7 +3610,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           foreign key (`badge`) references `badge` (`id`)
         )");
 
-        Database::get()->query("CREATE TABLE `certificate_criterion` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate_criterion` (
           `id` int(11) not null auto_increment primary key,
           `certificate` int(11) not null,
           `activity_type` varchar(255),
@@ -3604,7 +3621,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           foreign key (`certificate`) references `certificate`(`id`)
         )");
 
-        Database::get()->query("CREATE TABLE `badge_criterion` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `badge_criterion` (
           `id` int(11) not null auto_increment primary key,
           `badge` int(11) not null,
           `activity_type` varchar(255),
@@ -3615,7 +3632,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           foreign key (`badge`) references `badge`(`id`)
         )");
 
-        Database::get()->query("CREATE TABLE `user_certificate_criterion` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_certificate_criterion` (
           `id` int(11) not null auto_increment primary key,
           `user` int(11) not null,
           `certificate_criterion` int(11) not null,
@@ -3625,7 +3642,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           foreign key (`certificate_criterion`) references `certificate_criterion`(`id`)
         )");
 
-        Database::get()->query("CREATE TABLE `user_badge_criterion` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_badge_criterion` (
           `id` int(11) not null auto_increment primary key,
           `user` int(11) not null,
           `badge_criterion` int(11) not null,
