@@ -168,8 +168,7 @@ require 'modules/admin/custom_profile_fields_functions.php';
         $fields_counter--;
     }
     
-    Session::Messages($langCPFSortOrderSuccess, 'alert-success');
-    redirect_to_home_page("modules/admin/custom_profile_fields.php");       
+    exit;   
 }
 
 $toolName = $langCPFAdmin;

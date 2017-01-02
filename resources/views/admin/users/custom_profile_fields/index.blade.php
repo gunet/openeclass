@@ -92,7 +92,6 @@
         @endforeach
         </div>
         <form name='sortOrderForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
-            <input type='button' class='btn btn-success' onclick='submitSortOrderForm();' name='submitOrderForm' value='{{ trans('langCPFChangeOrder') }}'>
             {!! generate_csrf_token_form_field() !!}
         </form>
         <script src='custom_profile_fields.js'></script>

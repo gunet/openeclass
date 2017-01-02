@@ -49,7 +49,10 @@
     Sortable.create(byId('multi'), {
         animation: 150,
         draggable: '.tile',
-        handle: '.tile__name'
+        handle: '.tile__name',
+        onUpdate: function(evt) {
+        	submitSortOrderForm();
+        }
     });
 
     [].forEach.call(byId('multi').getElementsByClassName('tile__list'), function (el){
@@ -72,9 +75,17 @@
                         }
                     }
                 }
+            },
+            onAdd: function(evt) {
+            	submitSortOrderForm();
+            },
+            onUpdate: function(evt) {
+            	submitSortOrderForm();
             }
         });
     });
+    
+    
 	
 })();
 
@@ -113,5 +124,5 @@ function submitSortOrderForm() {
 		}
 	}
 	
-	form.submit();
+	$.post(window.location.href, $('form[name="sortOrderForm"]').serialize())
 }

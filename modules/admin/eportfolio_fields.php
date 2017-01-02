@@ -377,8 +377,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $fields_counter--;
     }
     
-    Session::Messages($langCPFSortOrderSuccess, 'alert-success');
-    redirect_to_home_page("modules/admin/eportfolio_fields.php");
+    exit;
 } else { //show categories and fields list
     load_js('sortable');
     
@@ -487,7 +486,6 @@ if (isset($_GET['add_cat'])) { //add a new category form
         }
         $tool_content .= "</div>";
         $tool_content .= "<form name='sortOrderForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
-        $tool_content .= "<input type='button' class='btn btn-success' onclick='submitSortOrderForm();' name='submitOrderForm' value='$langCPFChangeOrder'>";
         $tool_content .= generate_csrf_token_form_field() ."</form>";
         $tool_content .= "<script src='custom_profile_fields.js'></script>";
     }
