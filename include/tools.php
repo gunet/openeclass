@@ -304,6 +304,12 @@ function loggedInMenu($rich=true) {
         array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
         array_push($sideMenuImg, "blog");
     }
+    
+    if (get_config('eportfolio_enable')) {
+        array_push($sideMenuText, $GLOBALS['langMyePortfolio']);
+        array_push($sideMenuLink, $urlServer . "main/eportfolio/index.php?id=$uid&amp;token=".token_generate('eportfolio' . $uid));
+        array_push($sideMenuImg, "fa-star");
+    }
 
     // link for my documents
     if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
@@ -463,6 +469,9 @@ function adminMenu() {
         array_push($sideMenuImg, "fa-caret-right");
         array_push($sideMenuText, $GLOBALS['langCPFAdminSideMenuLink']);
         array_push($sideMenuLink, "../admin/custom_profile_fields.php");
+        array_push($sideMenuImg, "fa-caret-right");
+        array_push($sideMenuText, $GLOBALS['langEPFAdminSideMenuLink']);
+        array_push($sideMenuLink, "../admin/eportfolio_fields.php");
         array_push($sideMenuImg, "fa-caret-right");
     }
 

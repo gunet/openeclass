@@ -339,6 +339,8 @@ console.log('aaa');
 });
 </script>";
             $file = 'trunk8.js';
+        } elseif ($file == 'clipboard.js') {
+            $file = 'clipboard.js/clipboard.min.js';
         }
 
         $head_content .= js_link($file);
@@ -1753,10 +1755,25 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN `link` ON abuse_report.rid = `link`.id
                                     WHERE abuse_report.rtype = ?s AND `link`.user_id = ?d", 'link', $u);
             Database::get()->query("DELETE FROM `link` WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM eportfolio_resource WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM eportfolio_fields_data WHERE user_id = ?d", $u);
 
             // delete user images (if any)
             array_map('unlink', glob("$webDir/courses/userimg/{$u}_256.*"));
             array_map('unlink', glob("$webDir/courses/userimg/{$u}_32.*"));
+            
+            //delete user e-portfolio files (if any)
+            array_map('unlink', glob("$webDir/courses/eportfolio/userbios/{$u}/bio.pdf"));
+            array_map('unlink', glob("$webDir/courses/eportfolio/work_submissions/{$u}/*"));
+            if (is_dir("$webDir/courses/eportfolio/userbios/{$u}")) {
+                rmdir("$webDir/courses/eportfolio/userbios/{$u}");
+            }
+            if (is_dir("$webDir/courses/eportfolio/work_submissions/{$u}")) {
+                rmdir("$webDir/courses/eportfolio/work_submissions/{$u}");
+            }
+            if (is_dir("$webDir/courses/eportfolio/mydocs/{$u}")) {
+                rmdir("$webDir/courses/eportfolio/mydocs/{$u}");
+            }
 
             return true;
         } else {

@@ -4926,6 +4926,86 @@ $langCPFAdminSideMenuLink = 'Πεδία προφίλ χρήστη';
 $langCPFLinkValidFail = 'Το πεδίο %s δεν είναι έγκυρη διαδικτυακή διεύθυνση. ';
 $langCPFDateValidFail = 'Το πεδίο %s δεν είναι έγκυρη ημερομηνία. ';
 
+/**************************************************************
+ * e-Portfolio
+ * ************************************************************ */
+$langEPFAdmin = 'Διαχείριση πεδίων e-Portfolio χρήστη';
+$langEPFAdminSideMenuLink = 'Πεδία e-Portfolio χρήστη';
+$langEPFCatDelSuccess = 'Η κατηγορία των πεδίων e-Portfolio διαγράφηκε επιτυχώς';
+$langEPFCatModSuccess = 'Η κατηγορία των πεδίων e-Portfolio τροποποιήθηκε επιτυχώς';
+$langEPFUniqueShortname = 'Το σύντομο όνομα του πεδίου e-Portfolio πρέπει να είναι μοναδικό στην πλατφόρμα';
+$langEPFFieldNameAlert = 'Το όνομα του πεδίου e-Portfolio πρέπει να συμπληρωθεί υποχρεωτικά';
+$langEPFFieldShortNameAlert = 'Το σύντομο όνομα του πεδίου e-Portfolio πρέπει να συμπληρωθεί υποχρεωτικά';
+$langEPFFieldEditSuccess = 'Η επεξεργασία του πεδίου e-Portfolio έγινε επιτυχώς';
+$langEPFEditUniqueShortnameError = 'Το σύντομο όνομα του πεδίου e-Portfolio που συμπληρώσατε έχει ξαναχρησιμοποιηθεί στην πλατφόρμα. Η διαδικασία επεξεργασίας του πεδίου e-Portfolio ακυρώθηκε.';
+$langEPFFieldAddSuccess = 'Το πεδίο e-Portfolio προστέθηκε επιτυχώς';
+$langEPFCreateUniqueShortnameError = 'Το σύντομο όνομα του πεδίου e-Portfolio που συμπληρώσατε έχει ξαναχρησιμοποιηθεί στην πλατφόρμα. Η διαδικασία δημιουργίας του πεδίου e-Portfolio ακυρώθηκε.';
+$langEPFFieldDelSuccess = 'Το πεδίο e-Portfolio διαγράφηκε επιτυχώς';
+$langEPFCatAddedSuccess = 'Η κατηγορία πεδίων e-Portfolio προστέθηκε επιτυχώς';
+$langEPFNoCats = 'Δεν υπάρχουν κατηγορίες πεδίων e-Portfolio';
+$langEPFNewField = 'Προσθήκη πεδίου e-Portfolio';
+$langEPFConfirmCatDelete = 'Διαγράφοντας αυτή την κατηγορία θα διαγραφούν και τα πεδία του e-Portfolio που ανήκουν σε αυτή, καθώς και τα αντίστοιχα δεδομένα από το e-Portfolio των χρηστών. Είστε σίγουροι ότι θέλετε να προχωρήσετε στη διαγραφή;';
+$langEPFConfirmFieldDelete = 'Διαγράφοντας αυτό το πεδίο θα διαγραφούν και τα αντίστοιχα δεδομένα από το e-Portfolio των χρηστών. Είστε σίγουροι ότι θέλετε να προχωρήσετε στη διαγραφή;';
+$langMyePortfolio = 'Το e-Portfolio μου';
+$langEditResume = 'Επεξεργασία του resume';
+$langUserePortfolio = 'e-Portfolio χρήστη';
+$langePortfolioChangeSucc = 'Οι αλλαγές στο e-Portfolio αποθηκεύθηκαν επιτυχώς';
+$langPersInfo = 'Προσωπικά στοιχεία';
+$langEduEmpl = 'Εκπαίδευση και εργασία';
+$langAchievements = 'Διακρίσεις - επιτεύγματα';
+$langGoalsSkills = 'Στόχοι και δεξιότητες';
+$langContactInfo = 'Στοιχεία επικοινωνίας';
+$langBirthDate = 'Ημερομηνία γέννησης';
+$langBirthPlace = 'Τόπος γέννησης';
+$langGender = 'Φύλο';
+$langMale = 'Άνδρας';
+$langFemale = 'Γυναίκα';
+$langAboutMe = 'Σχετικά με μένα';
+$langAboutMeDescr = '<p>Λίγα λόγια για τον εαυτό σας</p>';
+$langPersWebsite = 'Προσωπική σελίδα';
+$langEducation = 'Εκπαίδευση';
+$langEducationDescr = '<p>Σπουδές, ακαδημαϊκά προσόντα κ.λπ.</p>';
+$langEmployment = 'Επαγγελματική εμπειρία';
+$langCertAwards = 'Πιστοποιήσεις και βραβεία';
+$langPublications = 'Δημοσιεύσεις';
+$langPersGoals = 'Προσωπικοί στόχοι';
+$langAcademicGoals = 'Ακαδημαϊκοί στόχοι';
+$langCareerGoals = 'Επαγγελματικοί στόχοι';
+$langPersSkills = 'Προσωπικές δεξιότητες';
+$langAcademicSkills = 'Ακαδημαϊκές δεξιότητες';
+$langCareerSkills = 'Επαγγελματικές δεξιότητες';
+$langFBProfile = 'Facebook προφίλ';
+$langTwitterAccount = 'Twitter λογαριασμός';
+$langLinkedInProfile = 'LinkedIn προφίλ';
+$langBio = 'Βιογραφικό';
+$langBioQuota = 'Όριο αποθηκευτικού χώρου για το βιογραφικό';
+$langUploadBioFailSize = 'Το μέγεθος του αρχείου ξεπερνάει το μέγιστο επιτρεπτό όριο (%d MB)';
+$langBioDeletedSuccess = 'Το αρχείο του βιογραφικού διαγράφηκε επιτυχώς';
+$langUploadBio = 'Ανέβασμα Βιογραφικού';
+$langUploadBioSuccess = 'Το αρχείο του βιογραφικού ανέβηκε επιτυχώς';
+$langUploadBioFailType = 'Το αρχείου που προσπαθήσατε να ανεβάσετε δεν είναι PDF';
+$langBioPermFileType = 'Επιτρέπεται το ανέβασμα μόνο αρχείων PDF.';
+$langBioMaxSize = 'Το μέγιστο επιτρεπόμενο όριο του αρχείου είναι %s MB.';
+$lang_eportfolio_enable = 'Ενεργοποίηση e-Portfolio χρηστών';
+$langePortfolioDisabled = 'Τo e-Portfolio των χρηστών είναι απενεργοποιημένo από τους διαχειριστές της πλατφόρμας.';
+$langUserePortfolioDisabled = 'Τo e-Portfolio του χρήστη είναι απενεργοποιημένo.';
+$langResume = 'Resume';
+$langePortfolioDisableWarning = 'Το e-Portfolio σας είναι απενεργοποιημένο και επομένως δεν είναι ορατό σε άλλους χρήστες και επισκέπτες της πλατφόρμας.';
+$langAddResePortfolio = 'Προσθήκη σε e-Portfolio';
+$langAddGroupWorkSubePortfolio = 'Προσθήκη υποβολής ομάδας "%s" σε e-Portfolio';
+$langResourcesCollection = 'Συλλογή πόρων';
+$langePortfolioResourceAdded = 'Ο πόρος προστέθηκε επιτυχώς στη συλλογή σας';
+$langePortfolioResourceRemoved = 'Ο πόρος αφαιρέθηκε επιτυχώς από τη συλλογή σας';
+$langePortfolioRemoveResource = 'Αφαίρεση';
+$langePortfolioSureToRemoveResource = 'Είστε σίγουροι ότι θέλετε να αφαιρέσετε αυτόν τον πόρο από τη συλλογή σας;';
+$langePortfolioCollectionUserInfo = 'Στη συλλογή πόρων του e-Portfolio μπορείτε να προσθέσετε πόρους από τα υποσυστήματα: ιστολόγιο (προσωπικό και μαθημάτων), εργασίες μαθημάτων και προσωπικά έγγραφα, εφόσον αυτά είναι ενεργοποιημένα.
+Οι αντίστοιχες καρτέλες εμφανίζονται μόνο αν έχουν προστεθεί πόροι από τα σχετικά υποσυστήματα στη συλλογή.';
+$langePortfolioNoResInCollection = 'Δεν έχουν προστεθεί πόροι στη συλλογή';
+$langEnabledePortfolioButtonsLabel = 'Ενεργοποιημένο e-Portfolio';
+$langPageLink = 'Σύνδεσμος σελίδας';
+$langCopiedSucc = 'Αντιγράφηκε';
+$langCopiedErr = 'Πατήστε Ctrl+c για αντιγραφή';
+
 /* * ******************************************
   Widgets
  * ***************************************** */
