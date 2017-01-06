@@ -345,6 +345,7 @@ if (isset($_POST['submit'])) {
         'hide_login_link' => true,
         'dropbox_allow_student_to_student' => true,
         'dropbox_allow_personal_messages' => true,
+        'eportfolio_enable' => true,
         'personal_blog' => true,
         'personal_blog_commenting' => true,
         'personal_blog_rating' => true,
@@ -354,6 +355,7 @@ if (isset($_POST['submit'])) {
         'insert_xml_metadata' => true,
         'enable_mobileapi' => true,
         'doc_quota' => true,
+        'bio_quota' => true,
         'group_quota' => true,
         'video_quota' => true,
         'dropbox_quota' => true,
@@ -944,6 +946,7 @@ else {
     $cbox_am_required = get_config('am_required') ? 'checked' : '';
     $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
     $cbox_dropbox_allow_personal_messages = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
+    $cbox_eportfolio_enable = get_config('eportfolio_enable') ? 'checked' : '';
     $cbox_personal_blog = get_config('personal_blog') ? 'checked' : '';
     $cbox_personal_blog_commenting = get_config('personal_blog_commenting') ? 'checked' : '';
     $cbox_personal_blog_rating = get_config('personal_blog_rating') ? 'checked' : '';
@@ -1046,6 +1049,12 @@ else {
                                 </div>
                                 <div class='checkbox'>
                                     <label>
+                                        <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' $cbox_eportfolio_enable>
+                                        $lang_eportfolio_enable
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
                                         <input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change>
                                         $lang_block_username_change
                                     </label>
@@ -1135,6 +1144,12 @@ else {
                                 </label>
                            </div>
                         </div>
+                        <div class='form-group'>
+                               <label for='bio_quota' class='col-sm-4 control-label'>$langBioQuota (MB):</label>
+                               <div class='col-sm-4'>
+                                    <input class='form-control' type='text' name='bio_quota' id='bio_quota' value='".get_config('bio_quota')."'>
+                               </div>
+                            </div>
                         <div class='checkbox'>
                             <label>
                                 <input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs>

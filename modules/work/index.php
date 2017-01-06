@@ -2937,9 +2937,11 @@ function show_non_submitted($id) {
  * @global type $langTitle
  */
 function show_student_assignments() {
-    global $tool_content, $m, $uid, $course_id, $course_code,
-    $langDaysLeft, $langNoAssign, $course_code, $langTitle;
+    global $tool_content, $m, $uid, $course_id, $course_code, $urlServer,
+    $langDaysLeft, $langNoAssign, $course_code, $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio;
 
+    $add_eportfolio_res_td = "";
+    
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
         $gids_sql_ready = implode(',',array_keys($gids));
@@ -2954,6 +2956,12 @@ function show_student_assignments() {
                                  ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
 
     if (count($result)>0) {
+        if(get_config('eportfolio_enable')) {
+            $add_eportfolio_res_th = "<th class='text-center'>".icon('fa-gears')."</th>";
+        } else {
+            $add_eportfolio_res_th = "";
+        }
+        
         $tool_content .= "
             <div class='row'><div class='col-sm-12'>
             <div class='table-responsive'><table class='table-default'>
@@ -2962,6 +2970,7 @@ function show_student_assignments() {
                                       <th class='text-center' style='width:25%'>$m[deadline]</th>
                                       <th class='text-center'>$m[submitted]</th>
                                       <th class='text-center'>$m[grade]</th>
+                                      $add_eportfolio_res_th
                                   </tr>";
         $k = 0;
         foreach ($result as $row) {
@@ -2983,11 +2992,20 @@ function show_student_assignments() {
             $tool_content .= "</td><td class='text-center'>";
 
             if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids)) {
+                $eportfolio_action_array = array();
                 foreach ($submission as $sub) {
                     if (isset($sub->group_id)) { // if is a group assignment
                         $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;font-size:9px;'>($m[groupsubmit] " .
                                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
+                        
+                        $eportfolio_action_array[] = array('title' => sprintf($langAddGroupWorkSubePortfolio, gid_to_name($sub->group_id)),
+                                'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=work_submission&amp;rid=".$sub->id,
+                                'icon' => 'fa-star');
+                    } else {
+                        $eportfolio_action_array[] = array('title' => $langAddResePortfolio,
+                                'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=work_submission&amp;rid=".$sub->id,
+                                'icon' => 'fa-star');
                     }
                     $tool_content .= "<i class='fa fa-check-square-o'></i><br>";
                 }
@@ -3003,7 +3021,14 @@ function show_student_assignments() {
                 }
                 $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;'>$grade</div>";
             }
+            
+            if(get_config('eportfolio_enable') && !empty($submission)) {
+                $add_eportfolio_res_td = "<td class='option-btn-cell'>".
+                        action_button($eportfolio_action_array)."</td>";
+            }
+            
             $tool_content .= "</td>
+                                $add_eportfolio_res_td
                                   </tr>";
             $k++;
         }

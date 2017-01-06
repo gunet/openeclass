@@ -275,6 +275,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             } elseif ($menuTypeID > 0) {
                 $t->set_block('mainBlock', 'PersoBlogBlock', 'delete');
             }
+            if (get_config('eportfolio_enable')) {
+                $t->set_var('LANG_MYEPORTFOLIO', q($GLOBALS['langMyePortfolio']));
+                $t->set_var('MYEPORTFOLIO_LINK', $urlAppend . 'main/eportfolio/index.php?id='.$GLOBALS['uid'].'&token='.token_generate('eportfolio' . $GLOBALS['uid']));
+            } elseif ($menuTypeID > 0) {
+                $t->set_block('mainBlock', 'ePortfolioBlock', 'delete');
+            }
             if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
                 ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
                 $t->set_var('LANG_MYDOCS', q($GLOBALS['langMyDocs']));

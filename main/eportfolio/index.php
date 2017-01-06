@@ -232,7 +232,7 @@ if ($userdata) {
                   </div>";
 }
 if ($uid == $id) {
-    draw($tool_content, 1);
+    draw($tool_content, 1, null, $head_content);
 } else {
-    draw($tool_content, 0);
+    draw($tool_content, 0, null, $head_content);
 }
