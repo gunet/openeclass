@@ -82,12 +82,6 @@ if ($userdata) {
                           </div>";
         
         if ($userdata->eportfolio_enable == 1) {
-            load_js('clipboard.js');
-            $tool_content .= "<div class='form-group'>
-                                  <label for='page-link'>$langPageLink</label>
-                                  <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/resources.php?id=$id&token=$token'>
-                                  <button class='btn btn-primary' id='copy-btn' data-toggle='tooltip' data-placement='bottom' data-clipboard-target='#page-link'>$langCopy</button>
-                              </div>";
             $tool_content .= "<script type='text/javascript'>
                                 $('#copy-btn').tooltip({
                                 });
