@@ -80,11 +80,18 @@ if ($userdata) {
             $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
-            $tool_content .= "<div class='form-group'>
-                                  <label for='page-link'>$langPageLink</label>
-                                  <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
-                                  <button class='btn btn-primary' id='copy-btn' data-toggle='tooltip' data-placement='bottom' data-clipboard-target='#page-link'>$langCopy</button>
-                              </div>";
+            $clipboard_link = "
+                            <div class='margin-bottom-fat'>
+                                <div class='margin-bottom-thin'><strong>$langPageLink</strong></div>
+                                <div class='input-group'>
+                                    <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
+                                    <span class='input-group-btn'>
+                                        <button class='btn btn-primary' id='copy-btn' data-toggle='tooltip' data-placement='bottom' data-clipboard-target='#page-link'>
+                                            <span class='fa fa-clipboard'></span>&nbsp;&nbsp;&nbsp;$langCopy
+                                        </button>
+                                    </span>
+                                </div>                              
+                            </div>";
             $tool_content .= "<script type='text/javascript'>
                                 $('#copy-btn').tooltip({
                                 });
@@ -234,6 +241,8 @@ if ($userdata) {
     } else {
         $social_share = '';
     }
+
+    $tool_content .= $clipboard_link;
     $tool_content .= "$social_share</div>";
     $tool_content .= $ret_str['right_menu'];
     $tool_content .= "</div>
