@@ -216,10 +216,19 @@ if ($userdata) {
         </script>";
     
     $ret_str = render_eportfolio_fields_content($id);
-    
-    $tool_content .= "<div class='row'>
-                        <div class='col-sm-9'>";
-    $tool_content .= $ret_str['panels'];
+
+    if ($ret_str['panels'] == ""){
+        $tool_content .= "
+                        <div class='row'>
+                            <div class='col-sm-12'>
+                                <div class='panel panel-default'>
+                                    <div class='text-center text-muted panel-body'>".$langNoInfoAvailable."</div>
+                                </div>";
+    } else {
+        $tool_content .= "
+                        <div class='row'>
+                            <div class='col-sm-9'>".$ret_str['panels'];
+    }
     if ($userdata->eportfolio_enable == 1 AND $ret_str['panels'] != "") {
         $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
     } else {
