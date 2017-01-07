@@ -61,6 +61,7 @@ $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_
                                           FROM user WHERE id = ?d", $id);
 
 $pageName = q("$userdata->givenname $userdata->surname");
+$clipboard_link = "";
 
 if ($userdata) {
     
