@@ -61,6 +61,7 @@ $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_
                                           FROM user WHERE id = ?d", $id);
 
 $pageName = q("$userdata->givenname $userdata->surname");
+$clipboard_link = "";
 
 if ($userdata) {
     
@@ -80,11 +81,18 @@ if ($userdata) {
             $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
-            $tool_content .= "<div class='form-group'>
-                                  <label for='page-link'>$langPageLink</label>
-                                  <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
-                                  <button class='btn btn-primary' id='copy-btn' data-toggle='tooltip' data-placement='bottom' data-clipboard-target='#page-link'>$langCopy</button>
-                              </div>";
+            $clipboard_link = "
+                                <div class='margin-bottom-fat'>
+                                    <div class='margin-bottom-thin'><strong>$langPageLink</strong></div>
+                                    <div class='input-group'>
+                                        <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
+                                        <span class='input-group-btn'>
+                                            <button class='btn btn-primary' id='copy-btn' data-toggle='tooltip' data-placement='bottom' data-clipboard-target='#page-link'>
+                                                <span class='fa fa-clipboard'></span>&nbsp;&nbsp;&nbsp;$langCopy
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>";
             $tool_content .= "<script type='text/javascript'>
                                 $('#copy-btn').tooltip({
                                 });
@@ -217,14 +225,25 @@ if ($userdata) {
     
     $ret_str = render_eportfolio_fields_content($id);
     
-    $tool_content .= "<div class='row'>
-                        <div class='col-sm-9'>";
-    $tool_content .= $ret_str['panels'];
+    if ($ret_str['panels'] == ""){
+        $tool_content .= "
+                        <div class='row'>
+                            <div class='col-sm-12'>
+                                <div class='panel panel-default'>
+                                    <div class='text-center text-muted panel-body'>".$langNoInfoAvailable."</div>
+                                </div>";
+    } else {
+        $tool_content .= "
+                        <div class='row'>
+                            <div class='col-sm-9'>".$ret_str['panels'];
+    }
     if ($userdata->eportfolio_enable == 1 AND $ret_str['panels'] != "") {
         $social_share = "<div class='pull-right'>".print_sharing_links($urlServer."main/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
     } else {
         $social_share = '';
     }
+    
+    $tool_content .= $clipboard_link;
     $tool_content .= "$social_share</div>";
     $tool_content .= $ret_str['right_menu'];
     $tool_content .= "</div>
