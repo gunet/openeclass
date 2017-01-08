@@ -495,74 +495,74 @@ else {
                 <div class='panel-body'>
                     <fieldset>
                         <div class='form-group'>
-                           <label for='formurlServer' class='col-sm-2 control-label'>$langSiteUrl:</label>
-                           <div class='col-sm-10'>
+                           <label for='formurlServer' class='col-sm-2 col-sm-offset-1 control-label'>$langSiteUrl:</label>
+                           <div class='col-sm-9'>
                                 <input class='form-control' type='text' name='formurlServer' id='formurlServer' value='" . q($urlServer) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formphpMyAdminURL' class='col-sm-2 control-label'>$langphpMyAdminURL:</label>
-                           <div class='col-sm-10'>
+                           <label for='formphpMyAdminURL' class='col-sm-2 col-sm-offset-1 control-label'>$langphpMyAdminURL:</label>
+                           <div class='col-sm-9'>
                                 <input class='form-control' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='" . q(get_config('phpMyAdminURL')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formphpSysInfoURL' class='col-sm-2 control-label'>$langSystemInfoURL:</label>
-                           <div class='col-sm-10'>
+                           <label for='formphpSysInfoURL' class='col-sm-2 col-sm-offset-1 control-label'>$langSystemInfoURL:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formphpSysInfoURL' id='formphpSysInfoURL' value='" . q(get_config('phpSysInfoURL')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formemailAdministrator' class='col-sm-2 control-label'>$langAdminEmail:</label>
-                           <div class='col-sm-10'>
+                           <label for='formemailAdministrator' class='col-sm-2 col-sm-offset-1 control-label'>$langAdminEmail:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formemailAdministrator' id='formemailAdministrator' value='" . q(get_config('email_sender')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formadministratorName' class='col-sm-2 control-label'>$langDefaultAdminName:</label>
-                           <div class='col-sm-10'>
+                           <label for='formadministratorName' class='col-sm-2 col-sm-offset-1 control-label'>$langDefaultAdminName:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formadministratorName' id='formadministratorName' value='" . q(get_config('admin_name')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formsiteName' class='col-sm-2 control-label'>$langCampusName:</label>
-                           <div class='col-sm-10'>
+                           <label for='formsiteName' class='col-sm-2 col-sm-offset-1 control-label'>$langCampusName:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formsiteName' id='formsiteName' value='" . q(get_config('site_name')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formpostaddress' class='col-sm-2 control-label'>$langPostMail</label>
-                           <div class='col-sm-10'>
+                           <label for='formpostaddress' class='col-sm-2 col-sm-offset-1 control-label'>$langPostMail</label>
+                           <div class='col-sm-9'>
                                <textarea class='form-control' name='formpostaddress' id='formpostaddress'>" . q(get_config('postaddress')) . "</textarea>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formtelephone' class='col-sm-2 control-label'>$langPhone:</label>
-                           <div class='col-sm-10'>
+                           <label for='formtelephone' class='col-sm-2 col-sm-offset-1 control-label'>$langPhone:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formtelephone' id='formtelephone' value='" . q(get_config('phone')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formfax' class='col-sm-2 control-label'>$langFax</label>
-                           <div class='col-sm-10'>
+                           <label for='formfax' class='col-sm-2 col-sm-offset-1 control-label'>$langFax</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formfax' id='formfax' value='" . q(get_config('fax')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formemailhelpdesk' class='col-sm-2 control-label'>$langHelpDeskEmail:</label>
-                           <div class='col-sm-10'>
+                           <label for='formemailhelpdesk' class='col-sm-2 col-sm-offset-1 control-label'>$langHelpDeskEmail:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formemailhelpdesk' id='formemailhelpdesk' value='" . q(get_config('email_helpdesk')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formInstitution' class='col-sm-2 control-label'>$langInstituteShortName:</label>
-                           <div class='col-sm-10'>
+                           <label for='formInstitution' class='col-sm-2 col-sm-offset-1 control-label'>$langInstituteShortName:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formInstitution' id='formInstitution' value='" . $Institution . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formInstitutionUrl' class='col-sm-2 control-label'>$langInstituteName:</label>
-                           <div class='col-sm-10'>
+                           <label for='formInstitutionUrl' class='col-sm-2 col-sm-offset-1 control-label'>$langInstituteName:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='" . $InstitutionUrl . "'>
                            </div>
                         </div>
@@ -737,36 +737,40 @@ else {
                     <h2 class='panel-title'>$langHomePageSettings</h2>
                 </div>
                 <div class='panel-body'>
-                    <span class='text-muted'>$langSelectHomePage</span>
+                    <div class='margin-bottom-fat margin-top-fat'><strong>$langSelectHomePage :</strong></div>
                     <fieldset>
                         <div class='landing-default'>
-                            <div class='radio'>
+                            <div class='radio margin-bottom-fat'>
                                 <label>
                                     <input $defaultHomepage class='homepageSet' name='homepageSet' value='default' data-collapse='collapse-defaultHomepage' type='radio'> $langHomePageDefault
                                 </label>
                             </div>
-                            <div id='collapse-defaultHomepage' class='collapse homepage-inputs'>
+                            <div id='collapse-defaultHomepage' class='collapse homepage-inputs margin-bottom-fat'>
+                            <hr class='margin-bottom-fat'>
                             <div class='form-group'>
-                                <label for='defaultHomepageTitle' class='col-sm-2 control-label'>$langHomePageIntroTitle</label>
-                                <div class='col-sm-10'>
+                                <label for='defaultHomepageTitle' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroTitle</label>
+                                <div class='col-sm-9'>
                                     <input class='form-control' type='text' name='defaultHomepageTitle' id='defaultHomepageTitle' value='".get_config('defaultHomepageTitle', $langEclass)."'>
+                                    <p class='help-block'>$langHomePageTitleHelpText</p>
                                 </div>
                             </div>
                             <div class='form-group'>
-                                <label for='defaultHomepageBcrmp' class='col-sm-2 control-label'>$langHomePageIntroBcrmp</label>
-                                <div class='col-sm-10'>
+                                <label for='defaultHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroBcrmp</label>
+                                <div class='col-sm-9'>
                                     <input class='form-control' type='text' name='defaultHomepageBcrmp' id='defaultHomepageBcrmp' value='".get_config('defaultHomepageBcrmp', $langHomePage)."'>
+                                    <p class='help-block'>$langHomePageNavTitleHelp</p>
                                 </div>
                             </div>
                             <div class='form-group'>
-                                <label for='defaultHomepageIntro' class='col-sm-2 control-label'>$langHomePageIntroText:</label>
-                                <div class='col-sm-10'>
+                                <label for='defaultHomepageIntro' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroText:</label>
+                                <div class='col-sm-9'>
                                     ".rich_text_editor('defaultHomepageIntro', 5, 20, get_config('defaultHomepageIntro', $langInfoAbout))."
+                                    <p class='help-block'>$langHomePageIntroTextHelp</p>
                                 </div>
                             </div>
                             <div class='form-group'>
-                           <label for='theme' class='col-sm-2 control-label'>$lang_login_form: </label>
-                           <div class='col-sm-10'>
+                           <label for='theme' class='col-sm-2 col-sm-offset-1 control-label'>$lang_login_form: </label>
+                           <div class='col-sm-9'>
                                 <div class='checkbox'>
                                     <label>
                                         <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form>
@@ -784,49 +788,56 @@ else {
                             </div>
                         </div>
                         <div class='landing-toolbox'>
-                            <div class='radio'>
+                            <div class='radio margin-bottom-fat'>
                                 <label>
                                     <input $toolboxHomepage class='homepageSet' name='homepageSet' value='toolbox' data-collapse='collapse-toolboxHomepage' type='radio'> $langHomePageToolbox
                                 </label>
                             </div>
-                            <div id='collapse-toolboxHomepage' class='collapse homepage-inputs'>
+                            <div id='collapse-toolboxHomepage' class='collapse homepage-inputs margin-bottom-fat'>
+                            <hr class='margin-bottom-fat'>
                                 <div class='form-group'>
-                                    <label for='toolboxHomepageTitle' class='col-sm-2 control-label'>$langHomePageIntroTitle</label>
-                                    <div class='col-sm-10'>
+                                    <label for='toolboxHomepageTitle' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroTitle</label>
+                                    <div class='col-sm-9'>
                                         <input class='form-control' type='text' name='toolboxHomepageTitle' id='toolboxHomepageTitle' value='".get_config('defaultHomepageTitle', $langEclass)."'>
+                                        <p class='help-block'>$langHomePageTitleHelpText</p>
                                     </div>
                                 </div>
                                 <div class='form-group'>
-                                <label for='toolboxHomepageBcrmp' class='col-sm-2 control-label'>$langHomePageIntroBcrmp</label>
-                                <div class='col-sm-10'>
+                                <label for='toolboxHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroBcrmp</label>
+                                <div class='col-sm-9'>
                                     <input class='form-control' type='text' name='toolboxHomepageBcrmp' id='toolboxHomepageBcrmp' value='".get_config('toolboxHomepageBcrmp', $langHomePage)."'>
+                                    <p class='help-block'>$langHomePageNavTitleHelp</p>
                                 </div>
                                 </div>
                                 <div class='form-group'>
-                                    <label for='toolboxHomepageIntro' class='col-sm-2 control-label'>$langHomePageIntroText:</label>
-                                    <div class='col-sm-10'>
+                                    <label for='toolboxHomepageIntro' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroText:</label>
+                                    <div class='col-sm-9'>
                                         ".rich_text_editor('toolboxHomepageIntro', 5, 20, get_config('toolboxHomepageIntro', $langInfoAbout))."
+                                        <p class='help-block'>$langHomePageIntroTextHelp</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class='landing-external'>
-                            <div class='radio'>
+                            <div class='radio margin-bottom-fat'>
                                 <label>
                                     <input $externalHomepage class='homepageSet' type='radio' name='homepageSet' value='external' data-collapse='collapse-externalHomepage'> $langHomePageExternal
                                 </label>
                             </div>
-                            <div id='collapse-externalHomepage' class='collapse homepage-inputs'>
+                            <div id='collapse-externalHomepage' class='collapse homepage-inputs margin-bottom-fat'>
+                            <hr class='margin-bottom-fat'>
                                 <div class='form-group'>
-                                    <label for='externalHomepageBcrmp' class='col-sm-2 control-label'>$langHomePageIntroBcrmp:</label>
-                                    <div class='col-sm-10'>
+                                    <label for='externalHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroBcrmp:</label>
+                                    <div class='col-sm-9'>
                                         <input class='form-control' type='text' name='externalHomepageBcrmp' id='externalHomepageBcrmp' value='".get_config('externalHomepageBcrmp')."'>
+                                        <p class='help-block'>$langHomePageNavTitleHelp</p>
                                     </div>
                                 </div>
                                 <div class='form-group'>
-                                    <label for='externalHomepageUrl' class='col-sm-2 control-label'>$langHomePageIntroUrl:</label>
-                                    <div class='col-sm-10'>
+                                    <label for='externalHomepageUrl' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroUrl:</label>
+                                    <div class='col-sm-9'>
                                         <input class='form-control' type='text' name='externalHomepageUrl' id='externalHomepageUrl' value='".get_config('externalHomepageUrl')."'>
+                                        <p class='help-block'>$langHomePageExtUrlHelp</p>
                                     </div>
                                 </div>
                             </div>
