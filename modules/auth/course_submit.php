@@ -25,6 +25,9 @@ require_once '../../include/init.php';
 require_once 'include/log.class.php';
 header('Content-Type: text/plain; charset=UTF-8');
 
+if (!$uid) {
+    die('invalid');
+}
 if (isset($_POST['cid']) and isset($_POST['state'])) {
     $cid = intval($_POST['cid']);
     $state = $_POST['state'];
