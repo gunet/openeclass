@@ -985,6 +985,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `comments` TEXT NOT NULL,
     `grade` FLOAT DEFAULT NULL,
     `grade_comments` TEXT NOT NULL,
+    `grade_comments_filepath` VARCHAR(200) NOT NULL DEFAULT '',
+    `grade_comments_filename` VARCHAR(200) NOT NULL DEFAULT '',
     `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
     `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
     `group_id` INT( 11 ) DEFAULT NULL,

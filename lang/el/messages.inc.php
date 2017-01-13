@@ -4091,6 +4091,7 @@ $langDelWarnUserAssignment = 'Επιβεβαίωση διαγραφής εργα
 $langMyPersoDeadlines = "Οι διορίες μου";
 $langAssignmentWillBeActive = 'Η εργασία θα είναι ενεργή στις';
 $langExportGrades = "Εξαγωγή βαθμολογιών";
+$langCommentsFile = "Αρχείο σχολίων";
 
 $langGradeRubric = "Ρουμπρίκα";
 $langGradeRubrics = "Ρουμπρίκες";
