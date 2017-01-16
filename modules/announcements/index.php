@@ -225,8 +225,16 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
 
 // SHOW
 if (isset($_GET['an_id'])) {
-    (!$is_editor)? $student_sql = "AND visible = 1 AND (start_display <= CURDATE() OR start_display IS NULL) AND (stop_display >= CURDATE() OR stop_display IS NULL)" : $student_sql = "";
-    $row = Database::get()->querySingle("SELECT * FROM announcement WHERE course_id = ?d AND id = ". intval($_GET['an_id']) ." ".$student_sql, $course_id);
+    $sql = 'SELECT * FROM announcement WHERE course_id = ?d AND id = ?d';
+    if (!$is_editor) {
+        $sql .= ' AND visible = 1 AND
+            (start_display <= NOW() OR start_display IS NULL) AND
+            (stop_display >= NOW() OR stop_display IS NULL)';
+    }
+    $row = Database::get()->querySingle($sql, $course_id, $_GET['an_id']);
+    if (!$row) {
+        redirect_to_home_page('modules/announcements/');
+    }
 
     $data['action_bar'] = action_bar(
         [
@@ -236,10 +244,6 @@ if (isset($_GET['an_id'])) {
                 'level' => 'primary-label'
             ]
         ],false);
-
-    if(empty($row)){
-        redirect_to_home_page("modules/announcements/");
-    }
 
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
 
