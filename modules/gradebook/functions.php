@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -17,9 +16,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ========================================================================
- */
-
+ * ======================================================================== */
 
 /**
  * @brief display user grades (teacher view)
@@ -842,10 +839,10 @@ function display_gradebook($gradebook) {
                   'url' => "dumpgradebook.php?course=$course_code&amp;t=1&amp;gradebook_id=" . getIndirectReference($gradebook->id),
                   'icon' => 'fa-file-excel-o'),
             array('title' => $langExportGradebookWithUsers,
-                  'url' => "dumpgradebook.php?course=$course_code&amp;&amp;t=2&amp;gradebook_id=" . getIndirectReference($gradebook->id),
+                  'url' => "dumpgradebook.php?course=$course_code&amp;t=2&amp;gradebook_id=" . getIndirectReference($gradebook->id),
                   'icon' => 'fa-file-excel-o'),
             array('title' => "$langExport ($langcsvenc2)",
-                  'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;enc=UTF-8",
+                  'url' => "dumpgradebook.php?course=$course_code&amp;t=2&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;enc=UTF-8",
                   'icon' => 'fa-file-excel-o'),
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
