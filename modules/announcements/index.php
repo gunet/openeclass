@@ -345,22 +345,27 @@ $public_code = course_id_to_public_code($course_id);
 $toolName = $langAnnouncements;
 
 if (isset($_GET['an_id'])) {
-    (!$is_editor)? $student_sql = "AND visible = 1 AND (start_display <= CURDATE() OR start_display IS NULL) AND (stop_display >= CURDATE() OR stop_display IS NULL)" : $student_sql = "";
-    $row = Database::get()->querySingle("SELECT * FROM announcement WHERE course_id = ?d AND id = ". intval($_GET['an_id']) ." ".$student_sql, $course_id);
-    if(empty($row)){
-        redirect_to_home_page("modules/announcements/");
+    $sql = 'SELECT * FROM announcement WHERE course_id = ?d AND id = ?d';
+    if (!$is_editor) {
+        $sql .= ' AND visible = 1 AND
+            (start_display <= NOW() OR start_display IS NULL) AND
+            (stop_display >= NOW() OR stop_display IS NULL)';
+    }
+    $row = Database::get()->querySingle($sql, $course_id, $_GET['an_id']);
+    if (!$row) {
+        redirect_to_home_page('modules/announcements/');
     }
 }
 if ($is_editor) {
-    $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' . $langEmptyAnTitle . '";</script>';
+    $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' . js_escape($langEmptyAnTitle) . '";</script>';
     /* up and down commands */
     if (isset($_GET['down'])) {
         $thisAnnouncementId = $_GET['down'];
-        $sortDirection = "DESC";
+        $sortDirection = 'DESC';
     }
     if (isset($_GET['up'])) {
         $thisAnnouncementId = $_GET['up'];
-        $sortDirection = "ASC";
+        $sortDirection = 'ASC';
     }
 
     $thisAnnouncementOrderFound = false;
