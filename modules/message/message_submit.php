@@ -84,41 +84,39 @@ if (isset($_POST['submit'])) {
     } elseif (!empty($_FILES['file']['name'])) {
         $file_attached = TRUE;
     }
+    
     /*
-     * --------------------------------------
-     *     FORM SUBMIT : UPLOAD NEW FILE
-     * --------------------------------------
+     * submit message
      */
     if (!$error) {
-        if (!$file_attached) {
+        if (!is_array($_POST['recipients'])) { //in personal msg form select2 returns a comma delimited string instead of array
+            $_POST['recipients'] = explode(',', $_POST['recipients']);
+        }
+        foreach ($_POST['recipients'] as $r) { // group ids have been prefixed with '_'
+            if (preg_match('/^_/', $r)) {
+                $sql_res = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = SUBSTRING_INDEX(?s, '_', -1)", $r);
+                foreach ($sql_res as $ar) {
+                    if ($ar->user_id != $uid) {
+                        $recipients[] = $ar->user_id;
+                    }
+                }
+            } else {
+                $recipients[] = $r;
+            }
+        }
+        $recipients = array_unique($recipients);
+        // set title
+        if (isset($_POST['message_title']) and $_POST['message_title'] != '') {
+            $subject = $_POST['message_title'];
+        } else {
+            $subject = $langMessage;
+        }
+        if (!$file_attached) { // no file attached
             $filename = '';
             $real_filename = '';
             $filesize = 0;
-            $recipients = array();
-            if (!is_array($_POST['recipients'])) { //in personal msg form select2 returns a comma delimited string instead of array
-                $_POST['recipients'] = explode(',', $_POST['recipients']);
-            }
-            foreach ($_POST['recipients'] as $r) { // group ids have been prefixed with '_'
-                if (preg_match('/^_/', $r)) {
-                    $sql_res = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = SUBSTRING_INDEX(?s, '_', -1)", $r);
-                    foreach ($sql_res as $ar) {
-                        if ($ar->user_id != $uid) {
-                            $recipients[] = $ar->user_id;
-                        }
-                    }
-                } else {
-                    $recipients[] = $r;
-                }
-            }
-            $recipients = array_unique($recipients);
-            if (isset($_POST['message_title']) and $_POST['message_title'] != '') {
-                $subject = $_POST['message_title'];
-            } else {
-                $subject = $langMessage;
-            }
-
             $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
-        } else {            
+        } else { // file attached
             $cwd = getcwd();
             if (is_dir($message_dir)) {
                 $dropbox_space = dir_total_space($message_dir);
@@ -136,19 +134,11 @@ if (isset($_POST['submit'])) {
             } elseif (!is_uploaded_file($filetmpname)) { // check user found : no clean error msg
                 $errormsg = $langBadFormData;
                 $error = TRUE;
-            }
-            // set title
-            if (isset($_POST['message_title']) and $_POST['message_title'] != '') {
-                $subject = $_POST['message_title'];
-            } else {
-                $subject = $langMessage;
-            }
+            }            
             $format = get_file_extension($filename);
             $real_filename = $filename;
             $filename = safe_filename($format);
-            $filename = php2phps($filename);
-            $recipients = $_POST["recipients"];            
-            //After uploading the file, create the db entries
+            $filename = php2phps($filename);                       
             if (!$error) {
                 $filename_final = $message_dir . '/' . $filename;
                 move_uploaded_file($filetmpname, $filename_final) or die($langUploadError);
