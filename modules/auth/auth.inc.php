@@ -1228,6 +1228,7 @@ function shib_cas_login($type) {
             // user might prefer a different one
             if (!empty($info->email)) {
                 $email = $info->email;
+                $verified_mail = $info->verified_mail;
             }
 
             $userObj = new User();
