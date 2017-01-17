@@ -4092,6 +4092,7 @@ $langMyPersoDeadlines = "Οι διορίες μου";
 $langAssignmentWillBeActive = 'Η εργασία θα είναι ενεργή στις';
 $langExportGrades = "Εξαγωγή βαθμολογιών";
 $langCommentsFile = "Αρχείο σχολίων";
+$langPlagiarismCheck = "Αποστολή για έλεγχο λογοκλοπής";
 
 $langGradeRubric = "Ρουμπρίκα";
 $langGradeRubrics = "Ρουμπρίκες";

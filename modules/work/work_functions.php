@@ -352,3 +352,9 @@ function export_grades_to_csv($id) {
     }
     exit;
 }
+
+
+
+function send_file_for_plagiarism($file_id, $true_file_name, $true_file_path) {            
+    echo '.. work in progress.....';
+}

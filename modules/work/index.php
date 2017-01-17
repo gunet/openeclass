@@ -103,6 +103,20 @@ if (isset($_GET['get']) or isset($_GET['getcomment'])) {
     }
 }
 
+if (isset($_GET['chk'])) { // plagiarism check
+    $file_id = $_GET['chk'];    
+    $file_details = Database::get()->querySingle("SELECT assignment_id, file_path, file_name FROM assignment_submit WHERE id = ?d", $file_id);
+    if ($file_details) {
+        $true_file_name = $file_details->file_name;
+        $secret = work_secret($file_details->assignment_id);
+        $true_file_path = $workPath . "/" . $file_details->file_path;
+    } else {
+        Session::Messages($langFileNotFound, 'alert-danger');
+    }
+    send_file_for_plagiarism($file_id, $true_file_name, $true_file_path);        
+}
+
+
 // Only course admins can download all assignments in a zip file
 if ($is_editor) {
     if (isset($_GET['download'])) {
@@ -2580,6 +2594,7 @@ function sort_link($title, $opt, $attrib = '') {
  * @global type $langEditChange
  * @global type $langAutoJudgeShowWorkResultRpt
  * @global type $langGroupName
+ * @global type $langPlagiarismCheck
  * @param type $id
  * @param type $display_graph_results
  */
@@ -2588,12 +2603,11 @@ function show_assignment($id, $display_graph_results = false) {
     $langWorkOnlineText, $langGradeOk, $course_code, 
     $langGraphResults, $m, $course_code, $works_url, $course_id,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
-    $langAutoJudgeShowWorkResultRpt, $langGroupName;
+    $langAutoJudgeShowWorkResultRpt, $langGroupName, $langPlagiarismCheck;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
                                 WHERE course_id = ?d AND id = ?d", $course_id, $id);
-
     $nav[] = $works_url;
     assignment_details($id, $assign);
 
@@ -2657,6 +2671,7 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "<th width='5%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
 
             $i = 1;
+            $plagiarismlink = '';
             foreach ($result as $row) {
                 //is it a group assignment?
                 if (!empty($row->group_id)) {
@@ -2720,10 +2735,11 @@ function show_assignment($id, $display_graph_results = false) {
                     $tool_content .= "<div style='margin-top: .5em;'><small>" .
                             q($row->comments) . '</small></div>';
                 }
+                $plagiarismlink = "<span class='small'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
                 $tool_content .= "</td>
                                 <td width='85'>" . q($stud_am) . "</td>
                                 <td class='text-center' width='180'>
-                                        $filelink
+                                        $filelink <br> $plagiarismlink
                                 </td>
                                 <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
                                 <td width='5'>
@@ -3074,7 +3090,6 @@ function show_assignments() {
     global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign, $langNewAssign,
            $course_code, $course_id, $langWorksDelConfirm, $langDaysLeft, $m, $langHasExpiredS,
            $langWarnForSubmissions, $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics;
-
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
               FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
