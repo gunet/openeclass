@@ -10,7 +10,9 @@
         "swiftmailer/swiftmailer": "@stable",
         "dropbox/dropbox-sdk": "1.1.*",
         "sabre/dav": "~3.2.0",
-        "google/apiclient": "1.0.*@beta"
+        "google/apiclient": "1.0.*@beta",
+        "guzzlehttp/guzzle": "^6.2",
+        "guzzlehttp/oauth-subscriber": "^0.3.0"
     },
     "autoload": {
         "psr-0": {
