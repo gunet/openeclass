@@ -656,3 +656,97 @@ $langBBB_studentContent = "<p>Here you can find all scheduled course teleconfere
         <li>The link becomes active in a predetermined period before the scheduled start time. This period is set by the course administrator.</li>
         </ul>
         </p>";
+
+
+//Mindmap		
+$langHMindmap = "Mindmap";
+$langHMindmap_student = $langHMindmap ;
+$langMindmapContent = "<p>Create or load a mindmap. You can: </p>
+<h4>Open example</h4>
+<ul>
+  <li>Click on the 'Open example' button you load a default mindmap example</li>
+</ul>
+<h4>Reset</h4>
+<ul>
+	<li>Clicking the 'Reset' button you reset the mindmap at its original state</li>
+</ul>
+<h4>Disable editable</h4>
+<ul>
+	<li>Click on the 'Disable editable' button the rest of actions under the 'Edit' title seize to exist. The actions can be enabled again by clicking the 'Enable editable' button</li>
+</ul>
+<h4>Add a node</h4>
+<ul>
+	<li>Click on the 'Add a node' button you create a node-child of the selected node</li>
+</ul>
+<h4>Remove a node</h4>
+<ul>
+	<li>Click on the 'Remove a node' button you delete the selected node and all of its node-children</li>
+</ul>
+<h4>Theme selection</h4>
+<ul>
+	<li>You can change the colour of the nodes</li>
+</ul>
+<h4>Screenshot</h4>
+<ul>
+	<li>Click on the 'Screenshot' button you can download an image of the current mindmap on your computer</li>
+</ul>
+<h4>Save file</h4>
+<ul>
+	<li>Click on the 'Save file' button you can download a file with the source code (.jm format) of the current mindmap on your computer</li>
+</ul>
+<h4>Save in documents</h4>
+<ul>
+	<li>Click on the 'Save in documents' button you can save a file with the source code  (.jm format) and an image of the current mindmap in the documents module</li>
+</ul>
+<h4>Load from documents</h4>
+<ul>
+	<li>Click on on a source code file '.jm' from Documents loads the specific mindmap</li>
+</ul>
+<h4>Open file</h4>
+<ul>
+	<li>Click on the 'Choose File' button and selecting a source code file '.jm' loads the specific mindmap</li>
+</ul>
+</p>";
+$langMindmap_studentContent ="<p>Create or load a mindmap. You can: </p>
+<h4>Open example</h4>
+<ul>
+  <li>Click on the 'Open example' button you load a mindmap example</li>
+</ul>
+<h4>Reset</h4>
+<ul>
+	<li>Click on the 'Reset' button you reset the mindmap at its original state</li>
+</ul>
+
+<h4>Disable editable</h4>
+<ul>
+	<li>Click on the 'Disable editable' button the rest of actions under the 'edit' title seize to exist. The actions can be enabled again by clicking the 'Enable editable' button</li>
+</ul>
+<h4>Add a node</h4>
+<ul>
+	<li>Click on the 'Add a node' button you create a node-child of the selected node</li>
+</ul>
+<h4>Remove a node</h4>
+<ul>
+	<li>Click on the 'Remove a node' button you delete the selected node and all of its node-children</li>
+</ul>
+<h4>Theme selection</h4>
+<ul>
+	<li>You can change the colour of the nodes</li>
+</ul>
+<h4>Screenshot</h4>
+<ul>
+	<li>Click on the 'Screenshot' button you can download an image of the current mindmap on your computer</li>
+</ul>
+<h4>Save file</h4>
+<ul>
+	<li>Click on the 'Save file' button you can download a file with the source code of the current mindmap on your computer</li>
+</ul>
+<h4>Load from documents</h4>
+<ul>
+	<li>Click on a source code file '.jm' from Documents loads the specific mindmap</li>
+</ul>
+<h4>Open file</h4>
+<ul>
+	<li>Click on the 'Choose File' button and selecting a source code file '.jm' loads the specific mindmap</li>
+</ul>
+</p>";

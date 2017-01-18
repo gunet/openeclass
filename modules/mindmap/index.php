@@ -63,41 +63,42 @@ $action->record(MODULE_ID_MINDMAP);
 
 
 ////////////////////////////
-$json = file_get_contents('php://input');
-if($json != ""){
+	$json = file_get_contents('php://input');
+		if($json != ""){
 
-function outputJSON($msg, $status = 'error'){
-    header('Content-Type: application/json');
-    die(json_encode(array(
-        'data' => $msg,
-        'status' => $status
-    )));
-}
+		function outputJSON($msg, $status = 'error'){
+		header('Content-Type: application/json');
+		die(json_encode(array(
+			'data' => $msg,
+			'status' => $status
+		)));
+		}
 
+		$json_decode = json_decode($json, true); 
+		$mind_s1r=$_POST["mind_str"];
 
+		$file_path=$mind_s1r+".jm";
+		$fileName="jsmind.jm";
+		$file_format = get_file_extension($fileName);
 
+		echo '<script language="javascript">';
+		echo 'alert("message successfully sent")';
+		echo '</script>';
 
-$json_decode = json_decode($json, true); 
-$mind_s1r=$_POST["mind_str"];
+	}
+	
+	if(isset($_GET["jmpath"])){
 
-$file_path=$mind_s1r+".jm";
-$fileName="jsmind.jm";
-$file_format = get_file_extension($fileName);
+		$path = json_decode( base64_decode( $_GET['jmpath'] ) );
+		$myfile = fopen($path, "r") or die("Unable to open file!");
+		$arr = fread($myfile,filesize($path));
 
+		fclose($myfile);
 
-echo '<script language="javascript">';
-echo 'alert("message successfully sent")';
-echo '</script>';
-
-
-
-
-}
-
-
-
-
-
+	}
+	else
+		$arr = "{}";
+		
 $toolName = $langMindmap;
 // guest user not allowed
 if (check_guest()) {
@@ -150,18 +151,19 @@ $tool_content .= "
             <li><button class='jsmind' onclick='toggle_editable(this);'>$langEditDis</button></li>
             <li><button class='jsmind' onclick='add_node();'>$langAddNode</button></li>
             <li><button class='jsmind' onclick='remove_node();'>$langRemoveNode</button></li>
+			<li><button class='jsmind' onclick='reset();'>$langResetMap</button></li>
         </ol>
         <div>3. $langThemes</div>
         <ol type='A'>
         <li>
         <select onchange='set_theme(this.value);'>
             <option value=''>default</option>
-            <option value='primary' selected='selected'>primary</option>
+            <option value='primary'>primary</option>
             <option value='warning'>warning</option>
             <option value='danger'>danger</option>
             <option value='success'>success</option>
             <option value='info'>info</option>
-            <option value='greensea'>greensea</option>
+            <option value='greensea' selected='selected'>greensea</option>
             <option value='nephrite'>nephrite</option>
             <option value='belizehole'>belizehole</option>
             <option value='wisteria'>wisteria</option>
@@ -200,22 +202,29 @@ $tool_content .= '
 	<script type="text/javascript" src="jsmind.screenshot.js"></script>
 	<script type="text/javascript">
     var _jm = null;
+	new_node=1;
     function open_empty(){
         var options = {
             container:"jsmind_container",
-            theme:"primary",
+            theme:"greensea",
             editable:true
         }
         _jm = jsMind.show(options);
         // _jm = jsMind.show(options,mind);
+		
+		var x = '.$arr.';
+		console.log(jQuery.isEmptyObject(x));
+		if ( !jQuery.isEmptyObject(x)) {
+			_jm.show(x);
+		} 		
     }
 
     function open_json(){
         var mind = {
             "meta":{
-                "name":"jsMind remote",
-                "author":"hizzgdev@163.com",
-                "version":"0.2"
+              //  "name":"jsMind remote",
+              //  "author":"hizzgdev@163.com",
+              //  "version":"0.2"
             },
             "format":"node_tree",
             "data":{"id":"root","topic":"Κεντρική ιδέα","children":[
@@ -237,14 +246,34 @@ $tool_content .= '
         }
         _jm.show(mind);
     }
-
-
-
-    function screen_shot(){
-		var x = prompt("'.$langPlzEnterName.'", "Name");
-        _jm.shoot(x);
-		
+	
+	function toggle_editable(btn){
+        var editable = _jm.get_editable();
+        if(editable){
+            _jm.disable_edit();
+            btn.innerHTML = "'.$langEditEn.'";
+        }else{
+            _jm.enable_edit();
+            btn.innerHTML = "'.$langEditDis.'";
+        }
     }
+
+	function reset(){
+		var mind = {
+			"meta":{
+				"name":"jsMind",
+				"version":"0.2e"
+				},
+				"format":"node_tree",
+				"data":{"id":"root","topic":"jsMind Example"}
+				};
+		
+		_jm.show(mind);
+	}
+		
+    function screen_shot(){
+        _jm.screenshot.shootDownload();
+	}
 
     function show_data(){
         var mind_data = _jm.get_data();
@@ -254,29 +283,45 @@ $tool_content .= '
 
     function save_file(){
         var mind_data = _jm.get_data();
-        var mind_name = prompt("'.$langPlzEnterName.'", "Name");
+        var mind_name = prompt("'.$langPleaseEnterName.'", "Name");
+	if (mind_name!=null){
         var mind_str = jsMind.util.json.json2string(mind_data);
         jsMind.util.file.save(mind_str,"text/jsmind",mind_name+".jm");
+	}
     }
     
 	function save_file_in_doc(){
-		
-        var mind_data = _jm.get_data();
-        var data = jsMind.util.json.json2string(mind_data);		
-		
-				
- var x = prompt("'.$langPlzEnterName.'", "Name");
-			
+	
+		var x = prompt("'.$langPleaseEnterName.'", "Name");	
 		if (x!=null){
-		_jm.shootAsDataURL(x);
-		window.location.href = "../document/index.php?mindmap=" + data +"& mindtitle=" + x; 
-		
+			_jm.screenshot.shootAsDataURL(save_file_as_image);
+			_jm.mind.name=x;
 		}
 		
 	}
 	
+	function save_file_as_image(){
+		var urldat = _jm.screenshot.canvas_elem.toDataURL();
+		var imagename = _jm.mind.name;
+        //var mind_data = _jm.get_data();   
+		//console.log(_jm);
+		 
+		//image post in document in base64 format//
+			$.ajax({
+			  type: "POST",
+			  url: "../document/index.php",
+			  data: { 
+				 imgBase64: urldat,
+				 imgname: imagename
+			  }
+			})
+			.done(function(data, textStatus, jqXHR) {
+			    var mind_data = _jm.get_data();
+				var data = jsMind.util.json.json2string(mind_data);	
+				window.location.href = "../document/index.php?mindmap=" + data +"& mindtitle=" + imagename; 
+			});
+	}
 		
-	
     function open_file(){
         var file_input = document.getElementById("file_input");
         var files = file_input.files;
@@ -291,7 +336,7 @@ $tool_content .= '
                 }
             });
         }else{
-            prompt_info("'.$langPlzChooseFile.'")
+            prompt_info("'.$langPleaseChooseFile.'")
         }
     }
 
@@ -324,14 +369,14 @@ $tool_content .= '
             return null;
         }
     }
-
+	
     function add_node(){
         var selected_node = _jm.get_selected_node(); // as parent of new node
         if(!selected_node){prompt_info("'.$langPleaseSelectNode.'");}
-
         var nodeid = jsMind.util.uuid.newid();
-        var topic = "* Node_"+nodeid.substr(0,3)+" *";
+		var topic = "Node "+new_node+"";
         var node = _jm.add_node(selected_node, nodeid, topic);
+		new_node=new_node+1;
     }
 
 
@@ -345,32 +390,7 @@ $tool_content .= '
     function set_theme(theme_name){
         _jm.set_theme(theme_name);
     }
-
-    function toggle_editable(btn){
-        var editable = _jm.get_editable();
-        if(editable){
-            _jm.disable_edit();
-            btn.innerHTML = "'.$langEditEn.'";
-        }else{
-            _jm.enable_edit();
-            btn.innerHTML = "'.$langEditDis.'";
-        }
-    }
-
 	
-	function one_click(){
-		prompt_info("'.$langPlzClickNode.'");
-	}
-	
-	
-	function dbl_click(){
-		prompt_info("'.$langPlzDblClickNode.'");
-	}
-
-
-    function prompt_info(msg){
-        alert(msg);
-    }
 
     open_empty();
 </script>';  

@@ -18,8 +18,6 @@ $action = new action();
 global $course_id;
 
 
-
-
 load_js('tools.js');
 ModalBoxHelper::loadModalBox(true);
 
@@ -53,18 +51,12 @@ echo '</script>';
                                         path = ?s,
                                         filename = ?s,
                                         visible = ?d,
-                                       
                                         date = ?t,
-                                       
                                         format = ?s,
                                        "
                             , $course_id, $msg, $fileName, $vis
                             , $file_date
                             , $file_format)->lastInsertID;
-
-
-
-
 
 
 draw($tool_content, 2, null, $head_content);
