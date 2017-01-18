@@ -319,6 +319,7 @@ if (isset($_POST['submit'])) {
     set_config('site_name', $_POST['formsiteName']);
     set_config('phone', $_POST['formtelephone']);
     set_config('email_helpdesk', $_POST['formemailhelpdesk']);
+    set_config('homepage', $_POST['']);
     set_config('institution', $_POST['formInstitution']);
     set_config('institution_url', $_POST['formInstitutionUrl']);
     set_config('postaddress', $_POST['formpostaddress']);
@@ -327,6 +328,15 @@ if (isset($_POST['submit'])) {
     set_config('min_password_len', intval($_POST['min_password_len']));
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
+    set_config('homepageSet', $_POST['homepageSet']);
+    set_config('defaultHomepageIntro', purify($_POST['defaultHomepageIntro']));
+    set_config('defaultHomepageTitle', $_POST['defaultHomepageTitle']);
+    set_config('defaultHomepageBcrmp', $_POST['defaultHomepageBcrmp']);
+    set_config('defaultHomepageTitle', $_POST['defaultHomepageTitle']);
+    set_config('toolboxHomepageBcrmp', $_POST['toolboxHomepageBcrmp']);
+    set_config('toolboxHomepageIntro', purify($_POST['toolboxHomepageIntro']));
+    set_config('externalHomepageBcrmp', $_POST['externalHomepageBcrmp']);
+    set_config('externalHomepageUrl', $_POST['externalHomepageUrl']);
 
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
@@ -335,6 +345,7 @@ if (isset($_POST['submit'])) {
         'hide_login_link' => true,
         'dropbox_allow_student_to_student' => true,
         'dropbox_allow_personal_messages' => true,
+        'eportfolio_enable' => true,
         'personal_blog' => true,
         'personal_blog_commenting' => true,
         'personal_blog_rating' => true,
@@ -344,6 +355,7 @@ if (isset($_POST['submit'])) {
         'insert_xml_metadata' => true,
         'enable_mobileapi' => true,
         'doc_quota' => true,
+        'bio_quota' => true,
         'group_quota' => true,
         'video_quota' => true,
         'dropbox_quota' => true,
@@ -377,7 +389,8 @@ if (isset($_POST['submit'])) {
         'course_metadata' => true,
         'opencourses_enable' => true,
         'mydocs_student_enable' => true,
-        'mydocs_teacher_enable' => true);
+        'mydocs_teacher_enable' => true
+        );
 
     register_posted_variables($config_vars, 'all', 'intval');
 
@@ -475,88 +488,94 @@ else {
 <div class='row'>
     <div class='col-sm-9'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-            <div class='panel panel-default' id='one'>
+            <div class='panel panel-primary' id='one'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langBasicCfgSetting</h2>
                 </div>
                 <div class='panel-body'>
                     <fieldset>
                         <div class='form-group'>
-                           <label for='formurlServer' class='col-sm-2 control-label'>$langSiteUrl:</label>
-                           <div class='col-sm-10'>
+                           <label for='formurlServer' class='col-sm-2 col-sm-offset-1 control-label'>$langSiteUrl:</label>
+                           <div class='col-sm-9'>
                                 <input class='form-control' type='text' name='formurlServer' id='formurlServer' value='" . q($urlServer) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formphpMyAdminURL' class='col-sm-2 control-label'>$langphpMyAdminURL:</label>
-                           <div class='col-sm-10'>
+                           <label for='formphpMyAdminURL' class='col-sm-2 col-sm-offset-1 control-label'>$langphpMyAdminURL:</label>
+                           <div class='col-sm-9'>
                                 <input class='form-control' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='" . q(get_config('phpMyAdminURL')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formphpSysInfoURL' class='col-sm-2 control-label'>$langSystemInfoURL:</label>
-                           <div class='col-sm-10'>
+                           <label for='formphpSysInfoURL' class='col-sm-2 col-sm-offset-1 control-label'>$langSystemInfoURL:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formphpSysInfoURL' id='formphpSysInfoURL' value='" . q(get_config('phpSysInfoURL')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formemailAdministrator' class='col-sm-2 control-label'>$langAdminEmail:</label>
-                           <div class='col-sm-10'>
+                           <label for='formemailAdministrator' class='col-sm-2 col-sm-offset-1 control-label'>$langAdminEmail:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formemailAdministrator' id='formemailAdministrator' value='" . q(get_config('email_sender')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formemailAdministrator' class='col-sm-2 control-label'>$langDefaultAdminName:</label>
-                           <div class='col-sm-10'>
+                           <label for='formadministratorName' class='col-sm-2 col-sm-offset-1 control-label'>$langDefaultAdminName:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formadministratorName' id='formadministratorName' value='" . q(get_config('admin_name')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formsiteName' class='col-sm-2 control-label'>$langCampusName:</label>
-                           <div class='col-sm-10'>
+                           <label for='formsiteName' class='col-sm-2 col-sm-offset-1 control-label'>$langCampusName:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formsiteName' id='formsiteName' value='" . q(get_config('site_name')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formpostaddress' class='col-sm-2 control-label'>$langPostMail</label>
-                           <div class='col-sm-10'>
+                           <label for='formpostaddress' class='col-sm-2 col-sm-offset-1 control-label'>$langPostMail</label>
+                           <div class='col-sm-9'>
                                <textarea class='form-control' name='formpostaddress' id='formpostaddress'>" . q(get_config('postaddress')) . "</textarea>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formtelephone' class='col-sm-2 control-label'>$langPhone:</label>
-                           <div class='col-sm-10'>
+                           <label for='formtelephone' class='col-sm-2 col-sm-offset-1 control-label'>$langPhone:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formtelephone' id='formtelephone' value='" . q(get_config('phone')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formfax' class='col-sm-2 control-label'>$langFax</label>
-                           <div class='col-sm-10'>
+                           <label for='formfax' class='col-sm-2 col-sm-offset-1 control-label'>$langFax</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formfax' id='formfax' value='" . q(get_config('fax')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formemailhelpdesk' class='col-sm-2 control-label'>$langHelpDeskEmail:</label>
-                           <div class='col-sm-10'>
+                           <label for='formemailhelpdesk' class='col-sm-2 col-sm-offset-1 control-label'>$langHelpDeskEmail:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formemailhelpdesk' id='formemailhelpdesk' value='" . q(get_config('email_helpdesk')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formInstitution' class='col-sm-2 control-label'>$langInstituteShortName:</label>
-                           <div class='col-sm-10'>
+                           <label for='formInstitution' class='col-sm-2 col-sm-offset-1 control-label'>$langInstituteShortName:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formInstitution' id='formInstitution' value='" . $Institution . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formInstitutionUrl' class='col-sm-2 control-label'>$langInstituteName:</label>
-                           <div class='col-sm-10'>
+                           <label for='formInstitutionUrl' class='col-sm-2 col-sm-offset-1 control-label'>$langInstituteName:</label>
+                           <div class='col-sm-9'>
                                <input class='form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='" . $InstitutionUrl . "'>
                            </div>
+                        </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
                         </div>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='two'>
+            <div class='panel panel-primary' id='two'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langUpgReg</h2>
                 </div>
@@ -646,6 +665,12 @@ else {
                                     "class='form-control'") . "
                             </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>";
@@ -672,9 +697,9 @@ else {
             }
         }
         $tool_content .= "
-            <div class='panel panel-default' id='three'>
+            <div class='panel panel-primary' id='three'>
                 <div class='panel-heading'>
-                    <h2 class='panel-title'>$langEclassThemes</h2>
+                    <h2 class='panel-title'>$langChooseLang</h2>
                 </div>
                 <div class='panel-body'>
                     <fieldset>
@@ -691,8 +716,60 @@ else {
                             " . implode(' ', $sel) . "
                             </div>
                         </div>
+                        
+                        <hr>
                         <div class='form-group'>
-                           <label for='theme' class='col-sm-3 control-label'>$lang_login_form: </label>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>";
+
+    $defaultHomepage = get_config('homepageSet') == 'default' ? 'checked' : '';
+    $toolboxHomepage = get_config('homepageSet') == 'toolbox' ? 'checked' : '';
+    $externalHomepage = get_config('homepageSet') == 'external' ? 'checked' : '';
+
+    $tool_content .= "
+            <div class='panel panel-primary' id='four'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langHomePageSettings</h2>
+                </div>
+                <div class='panel-body'>
+                    <div class='margin-bottom-fat margin-top-fat'><strong>$langSelectHomePage :</strong></div>
+                    <fieldset>
+                        <div class='landing-default'>
+                            <div class='radio margin-bottom-fat'>
+                                <label>
+                                    <input $defaultHomepage class='homepageSet' name='homepageSet' value='default' data-collapse='collapse-defaultHomepage' type='radio'> $langHomePageDefault
+                                </label>
+                            </div>
+                            <div id='collapse-defaultHomepage' class='collapse homepage-inputs margin-bottom-fat'>
+                            <hr class='margin-bottom-fat'>
+                            <div class='form-group'>
+                                <label for='defaultHomepageTitle' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroTitle</label>
+                                <div class='col-sm-9'>
+                                    <input class='form-control' type='text' name='defaultHomepageTitle' id='defaultHomepageTitle' value='".get_config('defaultHomepageTitle', $langEclass)."'>
+                                    <p class='help-block'>$langHomePageTitleHelpText</p>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                                <label for='defaultHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroBcrmp</label>
+                                <div class='col-sm-9'>
+                                    <input class='form-control' type='text' name='defaultHomepageBcrmp' id='defaultHomepageBcrmp' value='".get_config('defaultHomepageBcrmp', $langHomePage)."'>
+                                    <p class='help-block'>$langHomePageNavTitleHelp</p>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                                <label for='defaultHomepageIntro' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroText:</label>
+                                <div class='col-sm-9'>
+                                    ".rich_text_editor('defaultHomepageIntro', 5, 20, get_config('defaultHomepageIntro', $langInfoAbout))."
+                                    <p class='help-block'>$langHomePageIntroTextHelp</p>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                           <label for='theme' class='col-sm-2 col-sm-offset-1 control-label'>$lang_login_form: </label>
                            <div class='col-sm-9'>
                                 <div class='checkbox'>
                                     <label>
@@ -707,6 +784,69 @@ else {
                                     </label>
                                 </div>
                            </div>
+                        </div>
+                            </div>
+                        </div>
+                        <div class='landing-toolbox'>
+                            <div class='radio margin-bottom-fat'>
+                                <label>
+                                    <input $toolboxHomepage class='homepageSet' name='homepageSet' value='toolbox' data-collapse='collapse-toolboxHomepage' type='radio'> $langHomePageToolbox
+                                </label>
+                            </div>
+                            <div id='collapse-toolboxHomepage' class='collapse homepage-inputs margin-bottom-fat'>
+                            <hr class='margin-bottom-fat'>
+                                <div class='form-group'>
+                                    <label for='toolboxHomepageTitle' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroTitle</label>
+                                    <div class='col-sm-9'>
+                                        <input class='form-control' type='text' name='toolboxHomepageTitle' id='toolboxHomepageTitle' value='".get_config('defaultHomepageTitle', $langEclass)."'>
+                                        <p class='help-block'>$langHomePageTitleHelpText</p>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                <label for='toolboxHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroBcrmp</label>
+                                <div class='col-sm-9'>
+                                    <input class='form-control' type='text' name='toolboxHomepageBcrmp' id='toolboxHomepageBcrmp' value='".get_config('toolboxHomepageBcrmp', $langHomePage)."'>
+                                    <p class='help-block'>$langHomePageNavTitleHelp</p>
+                                </div>
+                                </div>
+                                <div class='form-group'>
+                                    <label for='toolboxHomepageIntro' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroText:</label>
+                                    <div class='col-sm-9'>
+                                        ".rich_text_editor('toolboxHomepageIntro', 5, 20, get_config('toolboxHomepageIntro', $langInfoAbout))."
+                                        <p class='help-block'>$langHomePageIntroTextHelp</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='landing-external'>
+                            <div class='radio margin-bottom-fat'>
+                                <label>
+                                    <input $externalHomepage class='homepageSet' type='radio' name='homepageSet' value='external' data-collapse='collapse-externalHomepage'> $langHomePageExternal
+                                </label>
+                            </div>
+                            <div id='collapse-externalHomepage' class='collapse homepage-inputs margin-bottom-fat'>
+                            <hr class='margin-bottom-fat'>
+                                <div class='form-group'>
+                                    <label for='externalHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroBcrmp:</label>
+                                    <div class='col-sm-9'>
+                                        <input class='form-control' type='text' name='externalHomepageBcrmp' id='externalHomepageBcrmp' value='".get_config('externalHomepageBcrmp')."'>
+                                        <p class='help-block'>$langHomePageNavTitleHelp</p>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <label for='externalHomepageUrl' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroUrl:</label>
+                                    <div class='col-sm-9'>
+                                        <input class='form-control' type='text' name='externalHomepageUrl' id='externalHomepageUrl' value='".get_config('externalHomepageUrl')."'>
+                                        <p class='help-block'>$langHomePageExtUrlHelp</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
                         </div>
                     </fieldset>
                 </div>
@@ -724,7 +864,7 @@ else {
     $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
     $cbox_opencourses_enable = get_config('opencourses_enable') ? 'checked' : '';
     $tool_content .= "
-            <div class='panel panel-default' id='five'>
+            <div class='panel panel-primary' id='six'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langCourseSettings</h2>
                 </div>
@@ -764,10 +904,16 @@ else {
                                 </div>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='six'>
+            <div class='panel panel-primary' id='seven'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langMetaCommentary</h2>
                 </div>
@@ -795,6 +941,12 @@ else {
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>";
@@ -805,6 +957,7 @@ else {
     $cbox_am_required = get_config('am_required') ? 'checked' : '';
     $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
     $cbox_dropbox_allow_personal_messages = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
+    $cbox_eportfolio_enable = get_config('eportfolio_enable') ? 'checked' : '';
     $cbox_personal_blog = get_config('personal_blog') ? 'checked' : '';
     $cbox_personal_blog_commenting = get_config('personal_blog_commenting') ? 'checked' : '';
     $cbox_personal_blog_rating = get_config('personal_blog_rating') ? 'checked' : '';
@@ -825,7 +978,7 @@ else {
     $id_enable_mobileapi = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
 
         $tool_content .= "
-            <div class='panel panel-default' id='seven'>
+            <div class='panel panel-primary' id='eight'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langOtherOptions</h2>
                 </div>
@@ -907,6 +1060,12 @@ else {
                                 </div>
                                 <div class='checkbox'>
                                     <label>
+                                        <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' $cbox_eportfolio_enable>
+                                        $lang_eportfolio_enable
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
                                         <input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change>
                                         $lang_block_username_change
                                     </label>
@@ -950,11 +1109,17 @@ else {
                                 <input type='text' class='form-control' name='actions_expire_interval' value='" . get_config('actions_expire_interval') . "'>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
 
-            <div class='panel panel-default' id='eight'>
+            <div class='panel panel-primary' id='nine'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langDocumentSettings</h2>
                 </div>
@@ -990,17 +1155,29 @@ else {
                                 </label>
                            </div>
                         </div>
+                        <div class='form-group'>
+                               <label for='bio_quota' class='col-sm-4 control-label'>$langBioQuota (MB):</label>
+                               <div class='col-sm-4'>
+                                    <input class='form-control' type='text' name='bio_quota' id='bio_quota' value='".get_config('bio_quota')."'>
+                               </div>
+                            </div>
                         <div class='checkbox'>
                             <label>
                                 <input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs>
                                 $langEnableCommonDocs
                             </label>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
 
-            <div class='panel panel-default' id='nine'>
+            <div class='panel panel-primary' id='ten'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langDefaultQuota</h2>
                 </div>
@@ -1030,10 +1207,16 @@ else {
                                 <input class='form-control' type='text' name='dropbox_quota' id='dropbox_quota' value='" . get_config('dropbox_quota') . "'>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='ten'>
+            <div class='panel panel-primary' id='eleven'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langUploadWhitelist</h2>
                 </div>
@@ -1051,6 +1234,12 @@ else {
                                 <textarea class='form-control' rows='6' name='teacher_upload_whitelist' id='teacher_upload_whitelist'>" . get_config('teacher_upload_whitelist') . "</textarea>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>";
@@ -1060,7 +1249,7 @@ else {
     $cbox_disable_log_system_actions = get_config('disable_log_system_actions') ? 'checked' : '';
 
 $tool_content .= "
-            <div class='panel panel-default' id='eleven'>
+            <div class='panel panel-primary' id='twelve'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langLogActions</h2>
                 </div>
@@ -1101,10 +1290,16 @@ $tool_content .= "
                                 <input class='form-control' type='text' name='log_purge_interval' id='log_purge_interval' value='" . get_config('log_purge_interval') . "'>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='twelve'>
+            <div class='panel panel-primary' id='thirteen'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langLoginFailCheck</h2>
                 </div>
@@ -1138,13 +1333,13 @@ $tool_content .= "
                                 <input class='form-control' type='text' name='login_fail_forgive_interval' id='login_fail_forgive_interval' value='" . get_config('login_fail_forgive_interval') . "'>
                            </div>
                         </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
+                        </div>
                     </fieldset>
-                </div>
-            </div>
-            <div class='form-group'>
-                <div class='col-sm-12'>
-                    <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
-                    <a class='btn btn-default' href='index.php'>$langCancel</a>
                 </div>
             </div>
             ". generate_csrf_token_form_field() ."
@@ -1152,7 +1347,19 @@ $tool_content .= "
     </div>";
     $head_content .= "
         <script>
-        $(function() {
+        $(document).ready(function(){
+            
+            var toCollapse = '#' + $(\"input[name='homepageSet']:checked\").data('collapse');
+            
+            $(toCollapse).collapse('show');
+            $('.homepageSet').change(function() {
+                $('.collapse.in').collapse('hide');
+                var newCollapse = '#' + $(this).data('collapse');
+                $(newCollapse).collapse('show');
+            });
+            
+            
+            $(function() {
             $('#floatMenu').affix({
               offset: {
                 top: 230,
@@ -1162,22 +1369,24 @@ $tool_content .= "
               }
             })
         });
+        });
         </script>";
     $tool_content .= "
         <div class='col-sm-3 hidden-xs' id='affixedSideNav'>
             <ul id='floatMenu' class='nav nav-pills nav-stacked well well-sm' role='tablist'>
                 <li class='active'><a href='#one'>$langBasicCfgSetting</a></li>
                 <li><a href='#two'>$langUpgReg</a></li>
-                <li><a href='#three'>$langEclassThemes</a></li>
-                <li><a href='#four'>$langEmailSettings</a></li>
-                <li><a href='#five'>$langCourseSettings</a></li>
-                <li><a href='#six'>$langMetaCommentary</a></li>
-                <li><a href='#seven'>$langOtherOptions</a></li>
-                <li><a href='#eight'>$langDocumentSettings</a></li>
-                <li><a href='#nine'>$langDefaultQuota</a></li>
-                <li><a href='#ten'>$langUploadWhitelist</a></li>
-                <li><a href='#eleven'>$langLogActions</a></li>
-                <li><a href='#twelve'>$langLoginFailCheck</a></li>
+                <li><a href='#three'>$langChooseLang</a></li>
+                <li><a href='#four'>$langHomePageSettings</a></li>
+                <li><a href='#five'>$langEmailSettings</a></li>
+                <li><a href='#six'>$langCourseSettings</a></li>
+                <li><a href='#seven'>$langMetaCommentary</a></li>
+                <li><a href='#eight'>$langOtherOptions</a></li>
+                <li><a href='#nine'>$langDocumentSettings</a></li>
+                <li><a href='#ten'>$langDefaultQuota</a></li>
+                <li><a href='#eleven'>$langUploadWhitelist</a></li>
+                <li><a href='#twelve'>$langLogActions</a></li>
+                <li><a href='#thirteen'>$langLoginFailCheck</a></li>
             </ul>
         </div>
     </div>";

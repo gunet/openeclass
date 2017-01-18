@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -114,7 +113,7 @@ $head_content .= <<<hContent
             if (dt2 <= dt1) {
                 var minDate = $('input[name=finish_date]').datepicker('startDate');
                 $('input[name=finish_date]').datepicker('setDate', minDate);
-            }            
+            }
         });
         if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
             $('input[name=start_date]').datepicker('setDate', new Date());
@@ -126,21 +125,21 @@ $head_content .= <<<hContent
             var date2 = $('input[name=finish_date]').datepicker('getDate');
             $('input[name=finish_date]').datepicker('setStartDate', date2);
         }
-        
+
         if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
             $('input[name=finish_date]').datepicker("setDate", 7);
         }
-        
+
         $('#weeklyDates').hide();
-        
+
         $('input[name=view_type]').change(function () {
             if ($('#weekly').is(":checked")) {
                 $('#weeklyDates').show();
             } else {
                 $('#weeklyDates').hide();
             }
-        }).change();    
-        
+        }).change();
+
         $('#coursepassword').keyup(function() {
             $('#result').html(checkStrength($('#coursepassword').val()))
         });
@@ -206,7 +205,7 @@ foreach ($departments as $dep) {
 }
 
 // Check if the teacher is allowed to create in the departments he chose
-if (!$deps_valid) {    
+if (!$deps_valid) {
     $tool_content .= "<div class='alert alert-danger'>$langCreateCourseNotAllowedNode</div>
                     <p class='pull-right'><a class='btn btn-default' href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
     draw($tool_content, 1, null, $head_content);
@@ -216,22 +215,27 @@ if (!$deps_valid) {
 
 // display form
 if (!isset($_POST['create_course'])) {
-        // set skip_preloaded_defaults in order to not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
-        $head_content .= $js;
-        $public_code = $title = '';
-        foreach ($license as $id => $l_info) {
-            if ($id and $id < 10) {
-                $cc_license[$id] = $l_info['title'];
-            }
+    // set skip_preloaded_defaults in order to not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
+    list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
+    $head_content .= $js;
+    $public_code = $title = '';
+    foreach ($license as $id => $l_info) {
+        if ($id and $id < 10) {
+            $cc_license[$id] = $l_info['title'];
         }
-        $tool_content .= action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-default')
-                            ),false);
+    }
+    if (Database::get()->querySingle('SELECT id FROM activity_heading LIMIT 1')) {
+        $activities = true;
+    } else {
+        $activities = false;
+    }
+
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => $urlServer,
+              'icon' => 'fa-reply',
+              'level' => 'primary-label',
+              'button-class' => 'btn-default')), false);
     $tool_content .= "
     <div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
@@ -292,7 +296,7 @@ if (!isset($_POST['create_course'])) {
                         <input type='radio' name='view_type' value='weekly' id='weekly'>
                         $langCourseWeeklyFormat
                       </label>
-                    </div>                         
+                    </div>
                 </div>
             </div>
             <div class='form-group' id='weeklyDates'>
@@ -301,7 +305,7 @@ if (!isset($_POST['create_course'])) {
                 </div>
                 <div class='col-sm-10 col-sm-offset-2'>
                       $langEndDate <input class='dateInForm form-control' type='text' name='finish_date' value='' readonly>
-                </div>                
+                </div>
             </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langOpenCoursesLicense:</label>
@@ -323,13 +327,13 @@ if (!isset($_POST['create_course'])) {
                         <input id='cc_license' type='radio' name='l_radio' value='cc'>
                         $langCMeta[course_license]
                       </label>
-                    </div>                         
+                    </div>
                 </div>
             </div>
             <div class='form-group' id='cc'>
                 <div class='col-sm-10 col-sm-offset-2'>
                       " . selection($cc_license, 'cc_use', "",'class="form-control"') . "
-                </div>              
+                </div>
             </div>
             <div class='form-group'>
                 <label for='localize' class='col-sm-2 control-label'>$langAvailableTypes:</label>
@@ -361,7 +365,7 @@ if (!isset($_POST['create_course'])) {
                         $course_access_icons[COURSE_INACTIVE]." $langInactiveCourse
                         <span class='help-block'><small>$langCourseInactive</small></span>
                       </label>
-                    </div>                   
+                    </div>
                 </div>
                 <div class='form-group'>
                     <label for='coursepassword' class='col-sm-2 control-label'>$langOptPassword:</label>
@@ -377,11 +381,11 @@ if (!isset($_POST['create_course'])) {
                           <input class='btn btn-primary' type='submit' name='create_course' value='".q($langCourseCreate)."'>
                           <a href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
                     </div>
-                </div>                 
+                </div>
             </div>
             <div class='text-right'><small>$langFieldsOptionalNote</small></div>
         </fieldset>
-    ". generate_csrf_token_form_field() ."  
+    ". generate_csrf_token_form_field() ."
     </form>
 </div>";
 
@@ -402,7 +406,7 @@ if (!isset($_POST['create_course'])) {
     if ($validationFailed) {
         redirect_to_home_page('modules/create_course/create_course.php');
     }
-    
+
     // create new course code: uppercase, no spaces allowed
     $code = strtoupper(new_code($departments[0]));
     $code = str_replace(' ', '', $code);
@@ -451,7 +455,7 @@ if (!isset($_POST['create_course'])) {
     }
 
     if (ctype_alnum($_POST['view_type'])) {
-        $view_type = $_POST['view_type'];        
+        $view_type = $_POST['view_type'];
     }
     if (empty($_POST['start_date'])) {
         $_POST['start_date'] = NULL;
@@ -515,7 +519,7 @@ if (!isset($_POST['create_course'])) {
 
         $daterange = new DatePeriod($begin, new DateInterval('P1W'), $end);
 
-        foreach ($daterange as $date) {            
+        foreach ($daterange as $date) {
             //new weeks
             //get the end week day
             $endWeek = new DateTime($date->format("Y-m-d"));
@@ -529,12 +533,12 @@ if (!isset($_POST['create_course'])) {
             }
             $q = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view");
             if ($q) {
-                $order =  max(0, $q->maxorder) + 1;                
+                $order =  max(0, $q->maxorder) + 1;
                 Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week, `order`) VALUES (?d, ?t, ?t, ?d)", $course_id, $startWeekForDB, $endWeekForDB, $order);
             }
         }
     }
-    
+
     // create course modules
     create_modules($new_course_id);
 
@@ -546,7 +550,7 @@ if (!isset($_POST['create_course'])) {
                                         reg_date = " . DBHelper::timeAfter() . ",
                                         document_timestamp = " . DBHelper::timeAfter() . "",
                            $new_course_id, $uid);
-    
+
     $course->refresh($new_course_id, $departments);
 
     // create courses/<CODE>/index.php
@@ -567,7 +571,7 @@ if (!isset($_POST['create_course'])) {
               'icon' => 'fa-arrow-right',
               'level' => 'primary-label',
               'button-class' => 'btn-success')));
-    
+
     // logging
     Log::record(0, 0, LOG_CREATE_COURSE, array('id' => $new_course_id,
                                                'code' => $code,

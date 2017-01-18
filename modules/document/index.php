@@ -25,6 +25,10 @@ if (!isset($require_current_course)) {
     $require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
 }
 
+if (!isset($require_login)) {
+    $require_login = defined('MY_DOCUMENTS') or defined('COMMON_DOCUMENTS');
+}
+
 $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 /* * ** The following is added for statistics purposes ** */
@@ -55,14 +59,20 @@ if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
     $toolName = $langCommonDocs;
     $diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
-} elseif (defined('MY_DOCUMENTS')) {
+} elseif (defined('MY_DOCUMENTS')) {    
+    if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {
+        redirect_to_home_page();        
+    }
+    if ($session->status == USER_STUDENT and !get_config('mydocs_student_enable')) {
+        redirect_to_home_page();
+    }
     $menuTypeID = 1;
     $toolName = $langMyDocs;
     if ($session->status == USER_TEACHER) {
         $diskQuotaDocument = get_config('mydocs_teacher_quota') * 1024 * 1024;
     } else {
         $diskQuotaDocument = get_config('mydocs_student_quota') * 1024 * 1024;
-    } 
+    }
 } else {
     $menuTypeID = 2;
     $toolName = $langDoc;
@@ -93,6 +103,123 @@ if (isset($_GET['showQuota'])) {
     draw($tool_content, $menuTypeID);
     exit;
 }
+
+// ---------------------------
+//mindmap save button
+// ---------------------------
+
+if(isset($_GET["mindmap"])){
+	
+	
+	$mindmap = $_GET['mindmap'];
+	$title = $_GET['mindtitle'];
+	
+	//$uploadPath = " ";
+	$filename = $title . ".jm";
+	$safe_fileName = safe_filename(get_file_extension($filename));
+    $file_path = '/' . $safe_fileName;
+    $file_date = date("Y\-m\-d G\:i\:s");
+    $file_format = get_file_extension($filename);
+
+	echo $basedir . $file_path;
+	//echo $file_path;
+	
+	$myfile = fopen($basedir . $file_path, "w") or die("Unable to open file!");
+	$txt = $mindmap;
+	
+	fwrite($myfile, $txt);
+	fclose($myfile);
+
+	move_uploaded_file($myfile , $basedir . $file_path);
+
+    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+    Database::get()->query("INSERT INTO document SET
+            course_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            extra_path = '',
+            filename = ?s,
+            visible = 1,
+            comment = '',
+            category = 0,
+            title = ?s,
+            creator = ?s,
+            date = ?s,
+            date_modified = ?s,
+            subject = '',
+            description = '',
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = 0,
+            editable = 1",
+            $course_id, $subsystem, $subsystem_id, $file_path,
+            $filename, $title, $file_creator,
+            $file_date, $file_date, $file_creator, $file_format,
+            $language);
+
+
+	//redirect_to_current_dir();
+		
+}
+
+//*** mindmap screenshot save ***//
+
+
+
+if(isset($_POST["imgBase64"])){
+
+
+	$shootname = $_POST['imgname'];
+	$img = $_POST['imgBase64'];
+	$img = str_replace('data:image/png;base64,', '', $img);
+	$img = str_replace(' ', '+', $img);
+	$fileData = base64_decode($img);
+
+	$filename = $shootname . ".png";
+	$safe_fileName = safe_filename(get_file_extension($filename));
+    $file_path = '/' . $safe_fileName;
+    $file_date = date("Y\-m\-d G\:i\:s");
+    $file_format = get_file_extension($filename);
+
+
+//**save**//
+
+file_put_contents($basedir . $file_path, $fileData);
+
+
+
+    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+    Database::get()->query("INSERT INTO document SET
+            course_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            extra_path = '',
+            filename = ?s,
+            visible = 1,
+            comment = '',
+            category = 0,
+            title = ?s,
+            creator = ?s,
+            date = ?s,
+            date_modified = ?s,
+            subject = '',
+            description = '',
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = 0,
+            editable = 0",
+            $course_id, $subsystem, $subsystem_id, $file_path,
+            $filename, $shootname, $file_creator,
+            $file_date, $file_date, $file_creator, $file_format,
+            $language);
+        
+
+}
+
 
 // ---------------------------
 // download directory or file
@@ -182,7 +309,7 @@ if ($can_upload) {
             $uploaded = true;
             $fileName = $cloudfile->name();
         } else if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) { // upload local file
-            $fileName = $_FILES['userFile']['name'];     
+            $fileName = $_FILES['userFile']['name'];
             $userFile = $_FILES['userFile']['tmp_name'];
         }
         validateUploadedFile($fileName, $menuTypeID); // check file type
@@ -191,7 +318,7 @@ if ($can_upload) {
             Session::Messages($langNoSpace, 'alert-danger');
             redirect_to_current_dir();
         } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1 and preg_match('/\.zip$/i', $fileName)) {
-            /* ** Unzipping stage ** */            
+            /* ** Unzipping stage ** */
             $zipFile = new PclZip($userFile);
             validateUploadedZipFile($zipFile->listContent(), $menuTypeID);
             $realFileSize = 0;
@@ -206,7 +333,7 @@ if ($can_upload) {
         } else {
             $fileName = canonicalize_whitespace($fileName);
             $uploaded = true;
-        }        
+        }
     } elseif (isset($_POST['fileURL']) and ($fileURL = trim($_POST['fileURL']))) {
         $extra_path = canonicalize_url($fileURL);
         if (preg_match('/^javascript/', $extra_path)) {
@@ -527,7 +654,7 @@ if ($can_upload) {
      ******************************************/
     // Step 2: Rename file by updating record in database
     if (isset($_POST['renameTo'])) {
-        
+
 
         $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s", $_POST['sourceFile']);
 
@@ -555,9 +682,9 @@ if ($can_upload) {
 
     // Step 1: Show rename dialog box
     if (isset($_GET['rename'])) {
-        
+
         $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s", $_GET['rename']);
-        
+
         $fileName = Database::get()->querySingle("SELECT filename FROM document
                                              WHERE $group_sql AND
                                                    path = ?s", $_GET['rename'])->filename;
@@ -641,7 +768,7 @@ if ($can_upload) {
                                 ))."</div>
                         </div>
                     </form>
-                    
+
                 </div>
             </div>
         </div>";
@@ -824,14 +951,14 @@ if ($can_upload) {
 
     // Add comment form
     if (isset($_GET['comment'])) {
-        
+
         $comment = $_GET['comment'];
         // Retrieve the old comment and metadata
         $row = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $comment);
         if ($row) {
             $curDirPath = my_dirname($comment);
             $backUrl = documentBackLink($curDirPath);
-            $navigation[] = array('url' => $backUrl, 'name' => $pageName);            
+            $navigation[] = array('url' => $backUrl, 'name' => $pageName);
             $oldFilename = q($row->filename);
             $oldComment = q($row->comment);
             $oldCategory = $row->category;
@@ -844,9 +971,9 @@ if ($can_upload) {
             $oldLanguage = q($row->language);
             $oldCopyrighted = $row->copyrighted;
             $oldFormat = $row->format;
-            
+
             $is_file = $row->format != '.dir'? 1 : 0 ;
-            
+
             $dialogBox .= "<div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <fieldset>
@@ -1095,7 +1222,7 @@ foreach ($result as $row) {
             WHERE $group_sql AND
                   path LIKE ?s AND
                   date_modified > ?t" .
-                  ($can_upload? '': ' AND visible=1'), 
+                  ($can_upload? '': ' AND visible=1'),
             $row->path . '/%', $document_timestamp)->c;
         $updated = intval($updated);
     } else {
@@ -1176,10 +1303,10 @@ if ($can_upload) {
             array('title' => $langBack,
                   'url' => "group_space.php?course=$course_code&group_id=$group_id",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label',        
-                  'show' => $subsystem == GROUP)                          
+                  'level' => 'primary-label',
+                  'show' => $subsystem == GROUP)
             ),false);
-                  
+
     }
     // Dialog Box
     if (!empty($dialogBox)) {
@@ -1400,6 +1527,10 @@ if ($doc_count == 0) {
                                     array('title' => $langDownload,
                                           'url' => $download_url,
                                           'icon' => 'fa-download'),
+                                    array('title' => $langAddResePortfolio,
+                                          'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=mydocs&amp;rid=".$row->id,
+                                          'icon' => 'fa-star',
+                                          'show' => !$is_dir && $subsystem == MYDOCS && $subsystem_id == $uid && get_config('eportfolio_enable')),
                                     array('title' => $langDelete,
                                           'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
                                           'icon' => 'fa-times',
@@ -1578,8 +1709,12 @@ function make_clickable_path($path) {
  * @global type $curDirPath
  */
 function redirect_to_current_dir() {
-    global $base_url, $curDirPath;
+    global $base_url, $curDirPath, $course_code, $ebook_id;
 
+    if (defined('EBOOK_DOCUMENTS') and isset($_POST['back']) and $_POST['back'] == 'edit') {
+        redirect_to_home_page('modules/ebook/edit.php?course=' .
+            $course_code . '&id=' . $ebook_id);
+    }
     $redirect_base_url = str_replace('&amp;', '&', $base_url);
     if (isset($curDirPath) and $curDirPath) {
         $redirect_base_url .= 'openDir=' . $curDirPath;

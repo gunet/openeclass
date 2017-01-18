@@ -1,22 +1,29 @@
 <?php
-session_start();
+
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Course';
 $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
-require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'include/lib/modalboxhelper.class.php';
+require_once 'include/lib/multimediahelper.class.php';
+require_once 'modules/course_metadata/CourseXML.php';
+require_once 'include/log.php';
 
-$diskUsed = dir_total_space($basedir);
-$diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
-
+// track stats
 require_once 'include/action.php';
 $action = new action();
 
 global $course_id;
 
 
+
+
+load_js('tools.js');
+ModalBoxHelper::loadModalBox(true);
+
+$tool_content = '<div><h1>hi</h1></div>';
 function outputJSON($msg, $status = 'error'){
     header('Content-Type: application/json');
     die(json_encode(array(
@@ -25,43 +32,59 @@ function outputJSON($msg, $status = 'error'){
     )));
 }
 
-header('Content-type: application/json');
+
+
 $json = file_get_contents('php://input');
 $json_decode = json_decode($json, true); 
 $mind_s1r=$_POST["mind_str"];
 
 $file_path=$mind_s1r+".jm";
-$fileName="$langMindMap";
+$fileName="jsmind.jm";
 $file_format = get_file_extension($fileName);
+$vis=1;
 $file_date = date("Y\-m\-d G\:i\:s");
 
+echo '<script language="javascript">';
+echo 'alert("message successfully sent")';
+echo '</script>';
 
-$fileName = php2phps(add_ext_on_mime($fileName));
-        // File name used in file system and path field
-        $safe_fileName = safe_filename(get_file_extension($fileName));
-         $file_path = '/' . $safe_fileName;
-
-
-$q = Database::get()->query("INSERT INTO document SET
+ Database::get()->query("INSERT INTO document SET
                                         course_id = ?d,
-										subsystem = ?d,
-										subsystem_id = ?d,
                                         path = ?s,
                                         filename = ?s,
                                         visible = ?d,
-                                        creator = ?s,
+                                       
                                         date = ?t,
-                                        date_modified = ?t ,
+                                       
                                         format = ?s,
-										language = ?s
                                        "
-                            , $course_id, 0, 0, $file_path, $fileName, 1, ($_SESSION['givenname'] . " " . $_SESSION['surname']), $file_date, $file_date, $file_format, "el");
+                            , $course_id, $msg, $fileName, $vis
+                            , $file_date
+                            , $file_format)->lastInsertID;
 
-if ($q) {
-     if (!isset($id)) {
-                        $id = $q->lastInsertID;
-                        $log_action = LOG_INSERT;
-					}
-				}
+
+
+
+
+
+draw($tool_content, 2, null, $head_content);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

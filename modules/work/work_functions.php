@@ -176,10 +176,22 @@ function was_graded($uid, $id, $ret_val = FALSE) {
     }
 }
 
-// Show details of a submission
+/**
+ * @brief Show details of a submission
+ * @global type $uid
+ * @global type $m
+ * @global type $langSubmittedAndGraded
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $langAutoJudgeEnable
+ * @global type $langAutoJudgeShowWorkResultRpt
+ * @param type $id
+ */
 function show_submission_details($id) {
+    
     global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code,
            $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt;
+    
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
     if (!$sub) {
         die("Error: submission $id doesn't exist.");
@@ -226,7 +238,7 @@ function show_submission_details($id) {
                     <div class='col-sm-3'>
                         <strong>" . $m['gradecomments'] . ":</strong>
                     </div>
-                    <div class='col-sm-9'>" . $sub->grade_comments . "
+                    <div class='col-sm-9'>" . $sub->grade_comments . "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$sub->id'>" . $sub->grade_comments_filename . "</a>
                     </div>
                 </div>
                 <div class='row margin-bottom-fat'>
@@ -339,4 +351,10 @@ function export_grades_to_csv($id) {
         }
     }
     exit;
+}
+
+
+
+function send_file_for_plagiarism($file_id, $true_file_name, $true_file_path) {            
+    echo '.. work in progress.....';
 }

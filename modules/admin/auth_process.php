@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -54,8 +54,8 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'cas_cachain' => true, 'casusermailattr' => true,
     'casuserfirstattr' => true, 'casuserlastattr' => true, 'cas_altauth' => true,
     'cas_logout' => true, 'cas_ssout' => true, 'casuserstudentid' => true,
-    'auth_instructions' => true, 'auth_title' => true,
-	'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
+    'cas_altauth_use' => true, 'auth_instructions' => true, 'auth_title' => true,
+    'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
     'test_username' => true), 'all');
 
 if (empty($ldap_login_attr)) {
@@ -125,6 +125,7 @@ if (isset($_POST['submit'])) {
                 'casuserfirstattr' => $casuserfirstattr,
                 'casuserlastattr' => $casuserlastattr,
                 'cas_altauth' => $cas_altauth,
+                'cas_altauth_use' => $cas_altauth_use,
                 'cas_logout' => $cas_logout,
                 'cas_ssout' => $cas_ssout,
                 'casuserstudentid' => $casuserstudentid);
@@ -198,7 +199,7 @@ if (isset($_POST['submit'])) {
     // display form
     $tool_content .= "<div class='form-wrapper'>
     <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
-	<fieldset>	
+    <fieldset>
         <input type='hidden' name='auth' value='" . intval($auth) . "'>";
 
     switch ($auth) {

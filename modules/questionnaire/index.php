@@ -178,10 +178,10 @@ draw($tool_content, 2, null, $head_content);
 
 function printPolls() {
     global $tool_content, $course_id, $course_code,
-    $langTitle, $langCancel, $langOpenParticipation,
+    $langTitle, $langCancel, $langOpenParticipation, $langHasExpired,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
     $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
-    $langDeactivate, $langPollHasEnded, $langActivate, $langResourceAccessUnlock,
+    $langDeactivate, $langHasExpired, $langActivate, $langResourceAccessUnlock,
     $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
@@ -542,12 +542,12 @@ function printPolls() {
                         }
                 } else {                    
                     $tool_content .= "<td class='text-center'>";
-                    if ($poll_ended == 1) {
-                        $tool_content .= $langPollHasEnded;
-                    } else if ($poll_not_started == 1) {
+                    if ($poll_not_started == 1) {
                         $tool_content .= $langSurveyNotStarted;
                     } elseif ($has_participated > 0) {
                         $tool_content .= $uid ? $langHasParticipated : $langOpenParticipation;
+                    } else if ($poll_ended == 1) {
+                        $tool_content .= $langHasExpired;
                     } else {
                         $tool_content .= $uid ? $langHasNotParticipated : $langOpenParticipation;
                     }                                        

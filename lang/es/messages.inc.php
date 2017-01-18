@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2016-11-01 13:01:29
+// Generated 2016-11-11 11:57:37
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -305,7 +305,6 @@ $langAdminAn = "Administración de Anuncios";
 $langAdminAddAnn = "Añade un Admin de Anuncios";
 $langAdminModifAnn = "Modificar el Admin de Anuncios";
 $langAdminAnnModify = "Admin de anuncios modificado";
-$langAdminAnVis = "Visible";
 $langAdminAnnAdd = "Admin de Anuncios añadido";
 $langAdminAnnDel = "Admin de anuncios borrado";
 $langAdminAnnMes = "anunciado en";
@@ -1485,7 +1484,6 @@ $langPollSubmitted = "¡Gracias por tu participación!<br><br><a href=\"question
 $langPollTotalAnswers = "Número total de respuestas";
 $langPollNone = "No hay Cuestionarios en el curso actual.";
 $langPollInactive = "El Cuestionario ha expirado o no está activo aún.";
-$langPollHasEnded = "Ha finalizado";
 $langPollCharts = "Resultados del cuestionario";
 $langPollUnknown = "No lo se / Sin respuesta";
 $langIndividuals = "Resultados por usuario";
@@ -2120,7 +2118,6 @@ $m['no'] = "No";
 $m['in'] = "En";
 $m['today'] = "hoy";
 $m['tomorrow'] = "mañana";
-$m['expired'] = "ha&nbsp;expirado";
 $m['submitted'] = "Sometido";
 $m['select'] = "Selección";
 $m['groupsubmit'] = "Sometido de parte de";
@@ -4382,7 +4379,6 @@ $langAnnouncementWillBeVis = "Will be activated on: ";
 $langAnnouncementWillNotBeVis = "Has been deactivated since: ";
 $langGeneralTutorials = "Guides";
 $langAdminAnNotVis = "Not visible";
-$langAdminExpired = "Expired";
 $langAdminWaiting = "Pending";
 $langEmailSendWarn = 'Warning: For the platform to be able to successfully send announcements via e-mail,
 you should either select the SMTP or sendmail sending method or enter an announcement
@@ -4638,3 +4634,12 @@ $langThemeOrange = "Orange";
 $langThemePumpkin = "Pumkin";
 $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
+$langHasExpiredS = "ha expirado";
+$langHasExpired = "Ha expirado";
+$langExportGradebookWithUsers = "Extract user results";
+$langExportGradebook = "Extract gradebook results";
+$langRestrictions = "Restrictions";
+$langTimeConstraint = "Time";
+$langHitConstraint = "Attempts";
+$langBlogRatingLog = "of blog rating";
+$langBlogSharingLog = "of blog sharing";

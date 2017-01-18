@@ -36,6 +36,12 @@ if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
     $toolName = $langCommonDocs;
 } elseif (defined('MY_DOCUMENTS')) {
+    if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {
+        redirect_to_home_page();        
+    }
+    if ($session->status == USER_STUDENT and !get_config('mydocs_student_enable')) {
+        redirect_to_home_page();
+    }
     $menuTypeID = 1;
     $toolName = $langMyDocs;
 } else {

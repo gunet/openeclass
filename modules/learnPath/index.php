@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2016  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,25 +20,25 @@
  * ======================================================================== */
 
 /**
- *      @file index.php
- * 	@authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
- * 	based on Claroline version 1.7 licensed under GPL
- * 	      copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
+ *  @file index.php
+ *  @author Thanos Kyritsis <atkyritsis@upnet.gr>
+ *  based on Claroline version 1.7 licensed under GPL
+ *        copyright (c) 2001, 2006 Universite catholique de Louvain (UCL)
  *
- * 	      original file: learningPathList Revision: 1.56
+ *        original file: learningPathList Revision: 1.56
  *
- * 	Claroline authors: Piraux Sebastien <pir@cerdecam.be>
+ *  Claroline authors: Piraux Sebastien <pir@cerdecam.be>
  *                     Lederer Guillaume <led@cerdecam.be>
- *      @description: This file displays the list of all learning paths available
- *                 for the course.
+ *  @description: This file displays the list of all learning paths available
+ *                for the course.
  *
- *                 Display :
+ *                Display :
  *                  - Name of tool
  *                  - Introduction text for learning paths
  *                  - (admin of course) link to create new empty learning path
  *                  - (admin of course) link to import (upload) a learning path
  *                  - list of available learning paths
- *                 - (student) only visible learning paths
+ *                  - (student) only visible learning paths
  *                  - (student) the % of progression into each learning path
  *                  - (admin of course) all learning paths with
  *                  - modify, delete, statistics, visibility and order, options
@@ -59,28 +59,16 @@ $action->record(MODULE_ID_LP);
 /* * *********************************** */
 require_once 'include/log.class.php';
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-
-    if (isset($_POST['toReorder'])){
-        $toReorder = $_POST['toReorder'];
-
-        if (isset($_POST['prevReorder'])) {
-            $prevRank = Database::get()->querySingle("SELECT `rank` FROM lp_learnPath WHERE learnPath_id = ?d", $_POST['prevReorder'])->rank;
-        } else {
-            $prevRank = 0;
-        }
-
-        Database::get()->query("UPDATE `lp_learnPath` SET `rank`=`rank` + 1 WHERE `course_id` = ?d AND `rank` > ?d", $course_id, $prevRank);
-        Database::get()->query("UPDATE `lp_learnPath` SET `rank` = ?d WHERE `course_id` = ?d AND learnPath_id = ?d", $prevRank + 1, $course_id, $toReorder);
-        $delta = Database::get()->querySingle("SELECT MIN(`rank`) AS minOrder FROM lp_learnPath WHERE course_id =?d", $course_id)->minOrder;
-        Database::get()->query("UPDATE `lp_learnPath` SET `rank` = `rank` - ?d  + 1 WHERE `course_id` = ?d", $delta, $course_id);
-
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['toReorder'])) {
+        reorder_table('lp_learnPath', 'course_id', $course_id, $_POST['toReorder'],
+            isset($_POST['prevReorder'])? $_POST['prevReorder']: null,
+            'learnPath_id', 'rank');
     }
-
     exit();
 }
 
-$style = "";
+$style = '';
 
 if (!add_units_navigation(TRUE)) {
     $toolName = $langLearningPaths;
@@ -156,18 +144,18 @@ if ($is_editor) {
             case "delete" :
                 if (is_dir($webDir . "/courses/" . $course_code . "/scormPackages/path_" . intval($_GET['del_path_id']))) {
                     $findsql = "SELECT M.`module_id`
-						FROM  `lp_rel_learnPath_module` AS LPM, `lp_module` AS M
-						WHERE LPM.`learnPath_id` = ?d
-						AND ( M.`contentType` = ?s OR M.`contentType` = ?s OR M.`contentType` = ?s)
-						AND LPM.`module_id` = M.`module_id`
-						AND M.`course_id` = ?d";
+                        FROM  `lp_rel_learnPath_module` AS LPM, `lp_module` AS M
+                        WHERE LPM.`learnPath_id` = ?d
+                        AND ( M.`contentType` = ?s OR M.`contentType` = ?s OR M.`contentType` = ?s)
+                        AND LPM.`module_id` = M.`module_id`
+                        AND M.`course_id` = ?d";
                     $findResult = Database::get()->queryArray($findsql, $_GET['del_path_id'], CTSCORM_, CTSCORMASSET_, CTLABEL_, $course_id);
 
                     // Delete the startAssets
                     $delAssetSql = "DELETE FROM `lp_asset` WHERE 1=0";
                     // DELETE the SCORM modules
                     $delModuleSql = "DELETE FROM `lp_module`
-					WHERE (`contentType` = ?s OR `contentType` = ?s OR `contentType` = ?s) AND (1=0";
+                    WHERE (`contentType` = ?s OR `contentType` = ?s OR `contentType` = ?s) AND (1=0";
 
                     foreach ($findResult as $delList) {
                         $delAssetSql .= " OR `module_id`= " . intval($delList->module_id);
@@ -183,12 +171,12 @@ if ($is_editor) {
                     claro_delete_file($real);
                 } else { // end of dealing with the case of a scorm learning path.
                     $findsql = "SELECT M.`module_id`
-						FROM  `lp_rel_learnPath_module` AS LPM,
-						`lp_module` AS M
-						WHERE LPM.`learnPath_id` = ?d
-						AND M.`contentType` = ?s
-						AND LPM.`module_id` = M.`module_id`
-						AND M.`course_id` = ?d";
+                        FROM  `lp_rel_learnPath_module` AS LPM,
+                        `lp_module` AS M
+                        WHERE LPM.`learnPath_id` = ?d
+                        AND M.`contentType` = ?s
+                        AND LPM.`module_id` = M.`module_id`
+                        AND M.`course_id` = ?d";
                     $findResult = Database::get()->queryArray($findsql, $_GET['del_path_id'], CTLABEL_, $course_id);
                     // delete labels of non scorm learning path
                     $delLabelModuleSql = "DELETE FROM `lp_module` WHERE 1=0";
@@ -206,10 +194,10 @@ if ($is_editor) {
                 Database::get()->query("DELETE FROM `lp_rel_learnPath_module` WHERE `learnPath_id` = ?d", $_GET['del_path_id']);
 
                 // delete the learning path
-                $lp_name = Database::get()->querySingle("SELECT name FROM `lp_learnPath` 
+                $lp_name = Database::get()->querySingle("SELECT name FROM `lp_learnPath`
                                                                 WHERE `learnPath_id` = ?d
                                                                 AND `course_id` = ?d", $_GET['del_path_id'], $course_id)->name;
-                Database::get()->query("DELETE FROM `lp_learnPath` 
+                Database::get()->query("DELETE FROM `lp_learnPath`
                                                 WHERE `learnPath_id` = ?d
                                                 AND `course_id` = ?d", $_GET['del_path_id'], $course_id);
                 Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
@@ -222,19 +210,19 @@ if ($is_editor) {
             case "mkUnblock" :
                 $blocking = ($_REQUEST['cmd'] == "mkBlock") ? 'CLOSE' : 'OPEN';
                 Database::get()->query("UPDATE `lp_learnPath` SET `lock` = ?s
-					WHERE `learnPath_id` = ?d
-					AND `lock` != ?s
-					AND `course_id` = ?d", $blocking, $_GET['cmdid'], $blocking, $course_id);
+                    WHERE `learnPath_id` = ?d
+                    AND `lock` != ?s
+                    AND `course_id` = ?d", $blocking, $_GET['cmdid'], $blocking, $course_id);
                 break;
             // VISIBILITY COMMAND
             case "mkVisibl" :
             case "mkInvisibl" :
                 $visibility = ($_REQUEST['cmd'] == "mkVisibl") ? 1 : 0;
                 Database::get()->query("UPDATE `lp_learnPath`
-					SET `visible` = ?d
-					WHERE `learnPath_id` = ?d
-					AND `visible` != ?d
-					AND `course_id` = ?d", $visibility, $_GET['visibility_path_id'], $visibility, $course_id);
+                    SET `visible` = ?d
+                    WHERE `learnPath_id` = ?d
+                    AND `visible` != ?d
+                    AND `course_id` = ?d", $visibility, $_GET['visibility_path_id'], $visibility, $course_id);
                 break;
             // CREATE COMMAND
             case "create" :
@@ -242,14 +230,14 @@ if ($is_editor) {
                 if (isset($_POST["newPathName"]) && $_POST["newPathName"] != "") {
                     // check if name already exists
                     $num = Database::get()->querySingle("SELECT COUNT(`name`) AS count FROM `lp_learnPath`
-						WHERE `name` = ?s
-						AND `course_id` = ?d", $_POST['newPathName'], $course_id)->count;
+                        WHERE `name` = ?s
+                        AND `course_id` = ?d", $_POST['newPathName'], $course_id)->count;
                     if ($num == 0) { // "name" doesn't already exist
                         // determine the default order of this Learning path
                         $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->max);
                         // create new learning path
                         $lp_id = Database::get()->query("INSERT INTO `lp_learnPath` (`course_id`, `name`, `comment`, `visible`, `rank`)
-							VALUES (?d, ?s, ?s, 1, ?d)", $course_id, $_POST['newPathName'], $_POST['newComment'], $order)->lastInsertID;
+                            VALUES (?d, ?s, ?s, 1, ?d)", $course_id, $_POST['newPathName'], $_POST['newComment'], $order)->lastInsertID;
                         Log::record($course_id, MODULE_ID_LP, LOG_INSERT, array('id' => $lp_id,
                             'name' => $_POST['newPathName'],
                             'comment' => $_POST['newComment']));
@@ -292,12 +280,12 @@ if ($is_editor) {
                                         )
                                     ))
                                     ."</div>
-                            </div>                        
+                            </div>
                         </form></div>";
                     }
                 } else { // create form requested
                     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-                    $pageName = $langCreateNewLearningPath;                  
+                    $pageName = $langCreateNewLearningPath;
                     $dialogBox = action_bar(array(
                         array('title' => $langBack,
                             'url' => "index.php?course=$course_code",
@@ -331,7 +319,7 @@ if ($is_editor) {
                                         )
                                     ))
                                     ."</div>
-                        </div>                        
+                        </div>
                         </form></div>";
                 }
                 break;
@@ -350,16 +338,16 @@ $head_content .= "
                 handle: '.fa-arrows',
                 animation: 150,
                 onEnd: function (evt) {
-                
+
                 var itemEl = $(evt.item);
-                
+
                 var idReorder = itemEl.attr('data-id');
                 var prevIdReorder = itemEl.prev().attr('data-id');
 
                 $.ajax({
                   type: 'post',
                   dataType: 'text',
-                  data: { 
+                  data: {
                           toReorder: idReorder,
                           prevReorder: prevIdReorder,
                         }
@@ -415,7 +403,7 @@ if ($l == 0) {
 }
 
 $tool_content .= "
-<div class='table-responsive'>    
+<div class='table-responsive'>
     <table class='table-default'>
     <thead>
     <tr class='list-header'>
@@ -470,19 +458,19 @@ $iterator = 1;
 $is_blocked = false;
 $allow = false;
 $ind = 0;
-foreach ($result as $list) { // while ... learning path list    
+foreach ($result as $list) { // while ... learning path list
     if ($list->visible == 0) {
         if ($is_editor) {
             $style = " class='not_visible'";
         } else {
             continue; // skip the display of this file
         }
-    } else {     
+    } else {
         $style = '';
     }
 
     //$is_blocked = $list->lock == 'CLOSE'? true : false;
-    
+
     $tool_content .= "<tr " . $style . " data-id='$list->learnPath_id'>";
     //Display current learning path name
     if (!$is_blocked) {
@@ -496,9 +484,9 @@ foreach ($result as $list) { // while ... learning path list
                   AND M.`course_id` = ?d
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
-        
+
         $play_img = "<span class='fa fa-line-chart' style='font-size:15px;'></span>";
-        
+
         if(!$is_editor){ // If is student
 //            if ($list->lock == 'CLOSE'){ // If is student and LP is closed
 //                $play_url = "<a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>".intval($is_blocked);
@@ -523,7 +511,7 @@ foreach ($result as $list) { // while ... learning path list
 //                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'><i class='fa fa-minus-circle text-danger' style='font-size:20px';></i>&nbsp;&nbsp;$play_img</a>";
 //                } else {
 //                    $play_button = $play_img;
-//                }  
+//                }
 //            } else { // If is admin and LP is open
             $play_button = "";
                 if (count($resultmodules) > 0) { // If there are modules
@@ -567,7 +555,7 @@ foreach ($result as $list) { // while ... learning path list
         } else {
             $moduleNumber = 0;
         }
-        
+
         //2.1 no progression found in DB
             if (($moduleNumber == 0) && ( isset($result[$ind]) && ($result[$ind]->lock == 'CLOSE'))) {
                 //must block next path because last module of this path never tried!
@@ -591,7 +579,7 @@ foreach ($result as $list) { // while ... learning path list
                     }
                 }
             }
-        
+
     } else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
         if(!$is_editor){
             $tool_content .= "<td><a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>"/* .$list['minRaw'] */ . "<span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i></span></td>\n";
@@ -637,7 +625,7 @@ foreach ($result as $list) { // while ... learning path list
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id,
                         'icon' => 'fa-times',
                         'class' => 'delete',
-                        'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name)."\"" : $langDelete)               
+                        'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name)."\"" : $langDelete)
                 )) .
                 "</div></td>\n";
     } elseif ($uid) {
@@ -648,7 +636,7 @@ foreach ($result as $list) { // while ... learning path list
         }
         if ($prog >= 0) {
             $globalprog += $prog;
-        }        
+        }
         $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($prog, 1) . "</td>";
     }
     $tool_content .= "</tr>\n";

@@ -27,25 +27,12 @@ $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileManageLib.inc.php';
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-
-    if (isset($_POST['toReorder'])){
-        $toReorder = $_POST['toReorder'];
-
-        if (isset($_POST['prevReorder'])) {
-            $prevRank = Database::get()->querySingle("SELECT `order` FROM ebook WHERE id = ?d", $_POST['prevReorder'])->order;
-        } else {
-            $prevRank = 0;
-        }
-
-        Database::get()->query("UPDATE `ebook` SET `order` = `order` + 1 WHERE `course_id` = ?d AND `order` > ?d", $course_id, $prevRank);
-        Database::get()->query("UPDATE `ebook` SET `order` = ?d WHERE `course_id` = ?d AND id = ?d", $prevRank + 1, $course_id, $toReorder);
-        $delta = Database::get()->querySingle("SELECT MIN(`order`) AS minOrder FROM ebook WHERE course_id =?d", $course_id)->minOrder;
-        Database::get()->query("UPDATE `ebook` SET `order` = `order` - ?d  + 1 WHERE `course_id` = ?d", $delta, $course_id);
-
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['toReorder'])) {
+        reorder_table('ebook', 'course_id', $course_id, $_POST['toReorder'],
+            isset($_POST['prevReorder'])? $_POST['prevReorder']: null);
     }
-
-    exit();
+    exit;
 }
 
 /* * ** The following is added for statistics purposes ** */
@@ -201,7 +188,9 @@ if (!$q && !isset($_GET['create'])) {
         } else {
             $title_link = "<a href='show.php/$course_code/$r->id/'>" . q($r->title) . "</a>";
         }
-        $warning = is_null($r->sid) ? " <i>($langInactive)</i>" : '';
+        if ($is_editor) {
+            $title_link .= '&nbsp;' . icon('fa-edit', $langEditChange, "edit.php?course=$course_code&amp;id=" . $r->id);
+        }
         $tool_content .= "<tr class = '$vis_class' data-id='$r->id'>
                 <td>$title_link</td>".
                    tools($r->id, $k, $num, $r->visible) .

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -12,7 +12,7 @@
  * be useful (without any warranty), under the terms of the GNU (General
  * Public License) as published by the Free Software Foundation.
  * The full license can be read in "/info/license/license_gpl.txt".
- *ε
+ *
  * Contact address: GUnet Asynchronous eLearning Group,
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
@@ -179,6 +179,10 @@ $langNoRules = 'Δεν υπάρχουν κανόνες';
 $langApplyRule = 'Εφαρμογή του κανόνα στους υπάρχοντες χρήστες κατά την αποθήκευση';
 $langRuleApplied = 'Ο κανόνας εφαρμόστηκε σε όλους τους υπάρχοντες χρήστες';
 $langSureToDelRule = "Θέλετε σίγουρα να διαγραφεί ο κανόνας;";
+$langActivityCourse = 'Μαθήματα-Δραστηριότητες';
+$langNoActivityHeadings = 'Δεν υπάρχουν τίτλοι κατηγοριών δραστηριοτήτων';
+$langActivityCourseAdd = 'Προσθήκη τίτλου κατηγορίας δραστηριότητας';
+$langOptional = 'Προαιρετικό';
 
 // FAQ
 $langAdminCreateFaq = "Δημιουργία FAQ";
@@ -343,8 +347,8 @@ $langAddWeek = 'Προσθήκη εβδομάδας';
 $langEditWeek = 'Επεξεργασία εβδομάδας';
 $langWeekTitle = "Τίτλος εβδομάδας";
 $langBlogComment = "σχολιασμού ιστολογίου";
-$langBlogRating = "αξιολόγησης ιστολογίου";
-$langBlogSharing = "διαμοιρασμού ιστολογίου";
+$langBlogRatingLog = "αξιολόγησης ιστολογίου";
+$langBlogSharingLog = "διαμοιρασμού ιστολογίου";
 $langsCourseSharing = "διαμοιρασμού $langsOfCourse σε κοινωνικά δίκτυα";
 $langsCourseRating = "αξιολόγησης $langsOfCourse";
 $langCourseComment = "σχολιασμού $langsOfCourse";
@@ -547,6 +551,19 @@ $langVideoQuota = "Όριο αποθηκευτικού χώρου $langsOfCourse
 $langDropboxQuota = "Όριο αποθηκευτικού χώρου $langsOfCourse για την «Ανταλλαγή μηνυμάτων»";
 $langGroupQuota = "Όριο αποθηκευτικού χώρου $langsOfCourse για τις «Ομάδες Χρηστών»";
 $langEclassThemes = "Εμφάνιση πλατφόρμας";
+$langHomePageSettings = "Ορισμός αρχικής σελίδας";
+$langHomePageTitleHelpText = "Ο τίτλος που θα εμφανίζεται στην Αρχική Σελίδα";
+$langHomePageNavTitleHelp = "Ο τίτλος πλοήσηςη που θα εμφανίζεται για στο breadcrump";
+$langHomePageIntroTextHelp = "Το εισαγωγικό κείμενο της αρχικής σελίδας";
+$langHomePageExtUrlHelp = "Το url του εξωτερικού συνδέσμου που θα λειτουργεί σαν αρχική σελίδα της πλατφόρμας";
+$langSelectHomePage = "Επιλέξτε ποια θέλετε να είναι η αρχική σελίδα";
+$langHomePageDefault = "Προεπιλογή";
+$langHomePageToolbox = "Toolbox";
+$langHomePageExternal = "External";
+$langHomePageIntroText = "Εισαγωγικό Κείμενο";
+$langHomePageIntroTitle = "Τίτλος";
+$langHomePageIntroUrl = "URL";
+$langHomePageIntroBcrmp = "Τίτλος πλοήγησης";
 $langThemes = "Επιλογή θέματος";
 $langOtherOptions = "Άλλες ρυθμίσεις";
 $langDefaultQuota = "Αποθηκευτικός χώρος νέων $langsOfCourses";
@@ -1024,7 +1041,7 @@ $langExerciseCompleted = "Η Άσκηση ολοκληρώθηκε με επιτ
 $langConfirmPurgeExercise = "Επιβεβαίωση διαγραφής άσκησης";
 $langPurgeExerciseResults = "Εκκαθάριση αποτελεσμάτων";
 $langPurgeExercisesResults = "Διαγραφή αποτελεσμάτων ασκήσεων";
-$langPurgeExerciseResultsSuccess = "Τα αποτελέσματα της άσκησης διαγράφηκαν";
+$langPurgeExerciseResultsSuccess = "Τα αποτελέσματα της ερώτησης της άσκησης διαγράφηκαν";
 $langPurgeExercisesResultsSuccess = "Τα αποτελέσματα των ασκήσεων διαγράφηκαν";
 $langConfirmPurgeExerciseResults = "Επιβεβαίωση διαγραφής αποτελεσμάτων άσκησης";
 $langNotAvailable = "Μη διαθέσιμα";
@@ -1799,6 +1816,8 @@ $langResultsFailed = "Αποτυχία";
 $langStudentTotalScore = "Βαθμολογία $langsOfStudent";
 $langTotalScore = "Συνολική βαθμολογία";
 $langNotRecorded = "μη καταγεγραμμένη";
+$langHasExpiredS = "έχει λήξει";
+$langHasExpired = "Έχει λήξει";
 
 // import exercise.php
 $langImportExercise = "Εισαγωγή Άσκησης";
@@ -2136,9 +2155,12 @@ $langHelpDeskPhone = "Τηλέφωνο Helpdesk";
 $langHelpDeskFax = "Αριθμός Fax Helpdesk";
 $langHelpDeskEmail = "Email Helpdesk";
 $langCampusName = "Όνομα Πλατφόρμας";
+$langSiteIntroText = "Εισαγωγικό Κείμενο";
 $langInstituteShortName = "Όνομα Ιδρύματος - Οργανισμού";
 $langInstituteName = "Website Ιδρύματος - Οργανισμού";
 $langInstitutePostAddress = "Ταχ. Διεύθυνση Ιδρύματος - Οργανισμού";
+$langLandingPageUrl = 'URL αρχικής σελίδας πλατφόρμας';
+$langLandingPageName = 'Τίτλος αρχικής σελίδας πλατφόρμας';
 $langWarnHelpDesk = "Προσοχή: στο \"Email Helpdesk\" στέλνονται οι αιτήσεις καθηγητών για λογαριασμό στην πλατφόρμα";
 $langDBSettingIntro = "Το πρόγραμμα εγκατάστασης θα δημιουργήσει την βάση δεδομένων της πλατφόρμας αν δεν υπάρχει.";
 $langStep1 = "Βήμα %d από %d";
@@ -2905,7 +2927,6 @@ $langPollSubmitted = "Ευχαριστούμε για την συμμετοχή 
 $langPollTotalAnswers = "Συνολικός αριθμός συμμετοχών";
 $langPollNone = "Δεν υπάρχουν διαθέσιμα Ερωτηματολόγια.";
 $langPollInactive = "Το Ερωτηματολόγιο έχει λήξει ή δεν έχει ενεργοποιηθεί ακόμα.";
-$langPollHasEnded = "Έχει λήξει";
 $langPollCharts = "Αποτελέσματα Ερωτηματολογίου";
 $langPollUnknown = "Δεν ξέρω / Δεν απαντώ";
 $langPollAnonymize = "Ανωνυμοποίηση αποτελεσμάτων";
@@ -3926,7 +3947,6 @@ $m['in'] = "σε";
 $m['from'] = "από";
 $m['today'] = "σήμερα";
 $m['tomorrow'] = "αύριο";
-$m['expired'] = "έχει&nbsp;λήξει";
 $m['submitted'] = "Έχει&nbsp;αποσταλεί";
 $m['pending'] = "Προς επιβεβαίωση";
 $m['select'] = "Επιλογή";
@@ -4072,6 +4092,23 @@ $langDelWarnUserAssignment = 'Επιβεβαίωση διαγραφής εργα
 $langMyPersoDeadlines = "Οι διορίες μου";
 $langAssignmentWillBeActive = 'Η εργασία θα είναι ενεργή στις';
 $langExportGrades = "Εξαγωγή βαθμολογιών";
+$langCommentsFile = "Αρχείο σχολίων";
+$langPlagiarismCheck = "Αποστολή για έλεγχο λογοκλοπής";
+
+$langGradeRubric = "Ρουμπρίκα";
+$langGradeRubrics = "Ρουμπρίκες";
+$langNewGradeRubric = "Δημιουργία ρουμπρίκας";
+$langNoGradeRubrics = 'Δεν έχουν καταχωρηθεί ρουμπρίκες.';
+$langTitleRubric = "Όνομα ρουμπρίκας";
+$langRubricDesc = "Περιγραφή ρουμπρίκας";
+$langRubricCrit = "Κριτήριο";
+$langAddRubricCriteria ="Νέο κριτήριο";
+$langRubricOptions = "Επιλογές ρουμπρίκας";
+$langRubricOption1 = "Να επιτρέπεται η προεπισκόπηση της ρουμπρίκας από τον εκπαιδευόμενο πριν τη βαθμολόγηση";
+$langRubricOption2 = "Προβολή της περιγραφής της ρουμπρίκας κατά τη διάρκεια της βαθμολόγησης";
+$langRubricOption3 = "Προβολή της περιγραφής της ρουμπρίκας σε αυτούς που θα βαθμολογηθούν";
+$langRubricOption4 = "Προβολή των βαθμών κάθε κριτηρίου κατά τη διάρκεια της βαθμολόγησης";
+$langRubricOption5 = "Προβολή των βαθμών κάθε κριτηρίου στα άτομα προς βαθμολόγηση";
 
 /* * ***********************************************************
  * listerqusers.php
@@ -4896,6 +4933,86 @@ $langCPFAdminSideMenuLink = 'Πεδία προφίλ χρήστη';
 $langCPFLinkValidFail = 'Το πεδίο %s δεν είναι έγκυρη διαδικτυακή διεύθυνση. ';
 $langCPFDateValidFail = 'Το πεδίο %s δεν είναι έγκυρη ημερομηνία. ';
 
+/**************************************************************
+ * e-Portfolio
+ * ************************************************************ */
+$langEPFAdmin = 'Διαχείριση πεδίων e-Portfolio χρήστη';
+$langEPFAdminSideMenuLink = 'Πεδία e-Portfolio χρήστη';
+$langEPFCatDelSuccess = 'Η κατηγορία των πεδίων e-Portfolio διαγράφηκε επιτυχώς';
+$langEPFCatModSuccess = 'Η κατηγορία των πεδίων e-Portfolio τροποποιήθηκε επιτυχώς';
+$langEPFUniqueShortname = 'Το σύντομο όνομα του πεδίου e-Portfolio πρέπει να είναι μοναδικό στην πλατφόρμα';
+$langEPFFieldNameAlert = 'Το όνομα του πεδίου e-Portfolio πρέπει να συμπληρωθεί υποχρεωτικά';
+$langEPFFieldShortNameAlert = 'Το σύντομο όνομα του πεδίου e-Portfolio πρέπει να συμπληρωθεί υποχρεωτικά';
+$langEPFFieldEditSuccess = 'Η επεξεργασία του πεδίου e-Portfolio έγινε επιτυχώς';
+$langEPFEditUniqueShortnameError = 'Το σύντομο όνομα του πεδίου e-Portfolio που συμπληρώσατε έχει ξαναχρησιμοποιηθεί στην πλατφόρμα. Η διαδικασία επεξεργασίας του πεδίου e-Portfolio ακυρώθηκε.';
+$langEPFFieldAddSuccess = 'Το πεδίο e-Portfolio προστέθηκε επιτυχώς';
+$langEPFCreateUniqueShortnameError = 'Το σύντομο όνομα του πεδίου e-Portfolio που συμπληρώσατε έχει ξαναχρησιμοποιηθεί στην πλατφόρμα. Η διαδικασία δημιουργίας του πεδίου e-Portfolio ακυρώθηκε.';
+$langEPFFieldDelSuccess = 'Το πεδίο e-Portfolio διαγράφηκε επιτυχώς';
+$langEPFCatAddedSuccess = 'Η κατηγορία πεδίων e-Portfolio προστέθηκε επιτυχώς';
+$langEPFNoCats = 'Δεν υπάρχουν κατηγορίες πεδίων e-Portfolio';
+$langEPFNewField = 'Προσθήκη πεδίου e-Portfolio';
+$langEPFConfirmCatDelete = 'Διαγράφοντας αυτή την κατηγορία θα διαγραφούν και τα πεδία του e-Portfolio που ανήκουν σε αυτή, καθώς και τα αντίστοιχα δεδομένα από το e-Portfolio των χρηστών. Είστε σίγουροι ότι θέλετε να προχωρήσετε στη διαγραφή;';
+$langEPFConfirmFieldDelete = 'Διαγράφοντας αυτό το πεδίο θα διαγραφούν και τα αντίστοιχα δεδομένα από το e-Portfolio των χρηστών. Είστε σίγουροι ότι θέλετε να προχωρήσετε στη διαγραφή;';
+$langMyePortfolio = 'Το e-Portfolio μου';
+$langEditResume = 'Επεξεργασία του resume';
+$langUserePortfolio = 'e-Portfolio χρήστη';
+$langePortfolioChangeSucc = 'Οι αλλαγές στο e-Portfolio αποθηκεύθηκαν επιτυχώς';
+$langPersInfo = 'Προσωπικά στοιχεία';
+$langEduEmpl = 'Εκπαίδευση και εργασία';
+$langAchievements = 'Διακρίσεις - επιτεύγματα';
+$langGoalsSkills = 'Στόχοι και δεξιότητες';
+$langContactInfo = 'Στοιχεία επικοινωνίας';
+$langBirthDate = 'Ημερομηνία γέννησης';
+$langBirthPlace = 'Τόπος γέννησης';
+$langGender = 'Φύλο';
+$langMale = 'Άνδρας';
+$langFemale = 'Γυναίκα';
+$langAboutMe = 'Σχετικά με μένα';
+$langAboutMeDescr = '<p>Λίγα λόγια για τον εαυτό σας</p>';
+$langPersWebsite = 'Προσωπική σελίδα';
+$langEducation = 'Εκπαίδευση';
+$langEducationDescr = '<p>Σπουδές, ακαδημαϊκά προσόντα κ.λπ.</p>';
+$langEmployment = 'Επαγγελματική εμπειρία';
+$langCertAwards = 'Πιστοποιήσεις και βραβεία';
+$langPublications = 'Δημοσιεύσεις';
+$langPersGoals = 'Προσωπικοί στόχοι';
+$langAcademicGoals = 'Ακαδημαϊκοί στόχοι';
+$langCareerGoals = 'Επαγγελματικοί στόχοι';
+$langPersSkills = 'Προσωπικές δεξιότητες';
+$langAcademicSkills = 'Ακαδημαϊκές δεξιότητες';
+$langCareerSkills = 'Επαγγελματικές δεξιότητες';
+$langFBProfile = 'Facebook προφίλ';
+$langTwitterAccount = 'Twitter λογαριασμός';
+$langLinkedInProfile = 'LinkedIn προφίλ';
+$langBio = 'Βιογραφικό';
+$langBioQuota = 'Όριο αποθηκευτικού χώρου για το βιογραφικό';
+$langUploadBioFailSize = 'Το μέγεθος του αρχείου ξεπερνάει το μέγιστο επιτρεπτό όριο (%d MB)';
+$langBioDeletedSuccess = 'Το αρχείο του βιογραφικού διαγράφηκε επιτυχώς';
+$langUploadBio = 'Ανέβασμα Βιογραφικού';
+$langUploadBioSuccess = 'Το αρχείο του βιογραφικού ανέβηκε επιτυχώς';
+$langUploadBioFailType = 'Το αρχείου που προσπαθήσατε να ανεβάσετε δεν είναι PDF';
+$langBioPermFileType = 'Επιτρέπεται το ανέβασμα μόνο αρχείων PDF.';
+$langBioMaxSize = 'Το μέγιστο επιτρεπόμενο όριο του αρχείου είναι %s MB.';
+$lang_eportfolio_enable = 'Ενεργοποίηση e-Portfolio χρηστών';
+$langePortfolioDisabled = 'Τo e-Portfolio των χρηστών είναι απενεργοποιημένo από τους διαχειριστές της πλατφόρμας.';
+$langUserePortfolioDisabled = 'Τo e-Portfolio του χρήστη είναι απενεργοποιημένo.';
+$langResume = 'Resume';
+$langePortfolioDisableWarning = 'Το e-Portfolio σας είναι απενεργοποιημένο και επομένως δεν είναι ορατό σε άλλους χρήστες και επισκέπτες της πλατφόρμας.';
+$langAddResePortfolio = 'Προσθήκη σε e-Portfolio';
+$langAddGroupWorkSubePortfolio = 'Προσθήκη υποβολής ομάδας "%s" σε e-Portfolio';
+$langResourcesCollection = 'Συλλογή πόρων';
+$langePortfolioResourceAdded = 'Ο πόρος προστέθηκε επιτυχώς στη συλλογή σας';
+$langePortfolioResourceRemoved = 'Ο πόρος αφαιρέθηκε επιτυχώς από τη συλλογή σας';
+$langePortfolioRemoveResource = 'Αφαίρεση';
+$langePortfolioSureToRemoveResource = 'Είστε σίγουροι ότι θέλετε να αφαιρέσετε αυτόν τον πόρο από τη συλλογή σας;';
+$langePortfolioCollectionUserInfo = 'Στη συλλογή πόρων του e-Portfolio μπορείτε να προσθέσετε πόρους από τα υποσυστήματα: ιστολόγιο (προσωπικό και μαθημάτων), εργασίες μαθημάτων και προσωπικά έγγραφα, εφόσον αυτά είναι ενεργοποιημένα.
+Οι αντίστοιχες καρτέλες εμφανίζονται μόνο αν έχουν προστεθεί πόροι από τα σχετικά υποσυστήματα στη συλλογή.';
+$langePortfolioNoResInCollection = 'Δεν έχουν προστεθεί πόροι στη συλλογή';
+$langEnabledePortfolioButtonsLabel = 'Ενεργοποιημένο e-Portfolio';
+$langPageLink = 'Σύνδεσμος σελίδας';
+$langCopiedSucc = 'Αντιγράφηκε';
+$langCopiedErr = 'Πατήστε Ctrl+c για αντιγραφή';
+
 /* * ******************************************
   Widgets
  * ***************************************** */
@@ -5150,8 +5267,8 @@ $langEditDis = "Απενενεργοποίηση τροποποίησης";
 $langAddNode = "Προσθήκη κόμβου";
 $langRemoveNode = "Αφαίρεση κόμβου";
 $langSaveFile = "Αποθήκευση αρχείου";
-$langSaveInDoc = "Αποθήκευση στα έγγραφα";
-$langOpenFile = "άνοιγμα αρχείου";
+$langSaveInDoc = "Αποθήκευση στα Έγγραφα";
+$langOpenFile = "Άνοιγμα αρχείου (.jm)";
 $langEditMind = "Τροποποίηση";
 $langToggle = "Εναλλαγή";
 $langOpenMind = "Άνοιγμα";
@@ -5171,6 +5288,7 @@ $langThemeOrange = "Πορτοκαλί";
 $langThemePumpkin = "Κολοκύθα";
 $langThemePomegranate = "Ρόδι";
 $langThemeClouds = "Σύννεφα";
+$langPlzEnterName = "Παρακαλώ εισάγετε όνομα"; 
 
 /* * *********************************************
  * coursecategory.php

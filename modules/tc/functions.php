@@ -496,7 +496,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
  * @global type $langDelete
  * @global type $langNoBBBSesssions
  * @global type $langDaysLeft
- * @global type $m
+ * @global type $langHasExpiredS
  * @global type $langBBBNotServerAvailableStudent
  * @global type $langBBBNotServerAvailableTeacher
  * @global type $langBBBImportRecordings
@@ -507,10 +507,10 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
 function bbb_session_details() {
 
     global $course_id, $tool_content, $is_editor, $course_code, $uid, $tc_type,
-        $langNewBBBSessionStart, $langParticipants,$langConfirmDelete,
+        $langNewBBBSessionStart, $langParticipants,$langConfirmDelete, $langHasExpiredS,
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
-        $langActivate, $langDeactivate, $langEditChange, $langDelete, $langUnitDescr,
-        $langNoBBBSesssions, $langDaysLeft, $m, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
+        $langActivate, $langDeactivate, $langEditChange, $langDelete,
+        $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
         $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langdate, $langBBBNoServerForRecording;
 
 
@@ -580,7 +580,7 @@ function bbb_session_details() {
                     format_time_duration($timeLeft * 60) .
                     "</small></span>";
             } elseif (isset($end_date) and ($timeLeft < 0)) {
-                $timeLabel .= "<br><span class='label label-danger'><small>$m[expired]</small></span>";
+                $timeLabel .= "<br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
             }
             $meeting_id = $row->meeting_id;
             $att_pw = $row->att_pw;

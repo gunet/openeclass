@@ -1001,6 +1001,12 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
                 Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d',
                     $options['status'], $user_info_object->id);
             }
+            if ($options['am'] != $user_info_object->am) {
+                // update student ID
+                $user_info_object->am = $options['am'];
+                Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
+                    $options['am'], $user_info_object->id);
+            }
             $userObj->refresh($user_info_object->id, $options['departments']);
             if (!array_search($user_info_object->password, $auth_ids)) {
                 $_SESSION['canChangePassword'] = true;
@@ -1032,7 +1038,7 @@ function login($user_info_object, $posted_uname, $pass, $provider=null, $user_da
   Authenticate user via alternate defined methods
  * ************************************************************** */
 
-function alt_login($user_info_object, $uname, $pass) {
+function alt_login($user_info_object, $uname, $pass, $mobile = false) {
     global $warning, $auth_ids;
 
     $_SESSION['canChangePassword'] = false;
@@ -1043,10 +1049,13 @@ function alt_login($user_info_object, $uname, $pass) {
     // a CAS user might enter a username/password in the form, instead of doing CAS login
     // check auth according to the defined alternative authentication method of CAS
     if ($auth == 7) {
-        $cas = explode('|', $auth_method_settings['auth_settings']);
-        $cas_altauth = intval(str_replace('cas_altauth=', '', $cas[7]));
-        // check if alt auth is valid and configured
-        if (($cas_altauth > 0) && check_auth_configured($cas_altauth)) {
+        $cas_settings = get_auth_settings($auth);
+        $cas_altauth = intval($cas_settings['cas_altauth']);
+        $use_altauth = $mobile ||
+            (isset($cas_settings['cas_altauth_use']) &&
+             $cas_settings['cas_altauth_use'] == 'all');
+        if ($use_altauth and $cas_altauth > 0 and
+                check_auth_configured($cas_altauth)) {
             $auth = $cas_altauth;
             // fetch settings of alt auth
             $auth_method_settings = get_auth_settings($auth);
@@ -1096,7 +1105,7 @@ function alt_login($user_info_object, $uname, $pass) {
                 'attributes' => array(),
                 'status' => $user_info_object->status,
                 'departments' => $userObj->getDepartmentIds($user_info_object->id),
-                'am' => $user_info_object));
+                'am' => $user_info_object->am));
 
             if (!$options['accept']) {
                 deny_access();
@@ -1107,6 +1116,12 @@ function alt_login($user_info_object, $uname, $pass) {
                 $user_info_object->status = $options['status'];
                 Database::get()->query('UPDATE user SET status = ?d WHERE id = ?d',
                     $options['status'], $user_info_object->id);
+            }
+            if ($options['am'] != $user_info_object->am) {
+                // update student ID
+                $user_info_object->am = $options['am'];
+                Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
+                    $options['am'], $user_info_object->id);
             }
 
             $userObj->refresh($user_info_object->id, $options['departments']);
@@ -1158,6 +1173,7 @@ function shib_cas_login($type) {
 
     $_SESSION['canChangePassword'] = false;
     $autoregister = get_config('alt_auth_stud_reg') == 2;
+    $verified_mail = EMAIL_UNVERIFIED;
 
     if ($type == 'shibboleth') {
         $uname = $_SESSION['shib_uname'];
@@ -1177,6 +1193,10 @@ function shib_cas_login($type) {
         $givenname = $_SESSION['cas_givenname'];
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
         $am = isset($_SESSION['cas_userstudentid']) ? $_SESSION['cas_userstudentid'] : '';
+    }
+    if ($email) {
+        // Email is considered verified if it came from CAS or Shibboleth
+        $verified_mail = EMAIL_VERIFIED;
     }
 
     // Attributes passed to login_hook()
@@ -1219,6 +1239,7 @@ function shib_cas_login($type) {
             // user might prefer a different one
             if (!empty($info->email)) {
                 $email = $info->email;
+                $verified_mail = $info->verified_mail;
             }
 
             $userObj = new User();
@@ -1235,11 +1256,12 @@ function shib_cas_login($type) {
             }
 
             $status = $options['status'];
+            $am = $options['am'];
 
             // update user information
             Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s,
-                                           status = ?d WHERE id = ?d",
-                                        $surname, $givenname, $email, $status, $info->id);
+                                           status = ?d, verified_mail = ?d WHERE id = ?d",
+                    $surname, $givenname, $email, $status, $verified_mail, $info->id);
             if (!empty($am) and $info->am != $am) {
                 Database::get()->query('UPDATE user SET am = ?s WHERE id = ?d',
                     $am, $info->id);
@@ -1269,10 +1291,8 @@ function shib_cas_login($type) {
         }
     } elseif ($autoregister and !(get_config('am_required') and empty($am))) {
         // if user not found and autoregister enabled, create user
-        $verified_mail = EMAIL_UNVERIFIED;
-        if (isset($_SESSION['cas_email'])) {
-            $verified_mail = EMAIL_VERIFIED;
-        } else { // redirect user to mail_verify_change.php
+        if (!$verified_mail) {
+            // redirect user to mail_verify_change.php
             $_SESSION['mail_verification_required'] = 1;
         }
 
@@ -1329,6 +1349,12 @@ function shib_cas_login($type) {
         $_SESSION['mail_verification_required'] = 1;
         // init.php is already loaded so redirect from here
         redirect_to_home_page('modules/auth/mail_verify_change.php');
+    } else {
+        if (isset($_GET['next'])) {
+            redirect_to_home_page($_GET['next']);
+        } else {
+            redirect_to_home_page('main/portfolio.php');
+        }
     }
 }
 

@@ -24,7 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'work_functions.php';
 require_once 'modules/group/group_functions.php';
 
-$pageName = $m['grades'];
+$toolName = $langScore;
 
 if ($is_editor && isset($_GET['assignment']) && isset($_GET['submission'])) {
     $as_id = intval($_GET['assignment']);
@@ -45,11 +45,27 @@ function get_assignment_details($id) {
     return Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
 }
 
-// Show to professor details of a student's submission and allow editing of fields
-// $assign contains an array with the assignment's details
+/**
+ * @brief Show to professor details of a student's submission and allow editing of fields            
+ * @global type $m
+ * @global type $langGradeOk
+ * @global string $tool_content
+ * @global type $course_code
+ * @global type $langCancel
+ * @global type $langBack
+ * @global type $assign
+ * @global type $langWorkOnlineText
+ * @global type $course_id
+ * @global type $langCommentsFile
+ * @param type $id
+ * @param type $sid
+ * @param type $assign (contains an array with the assignment's details)
+ */
 function show_edit_form($id, $sid, $assign) {
+    
     global $m, $langGradeOk, $tool_content, $course_code, $langCancel,
-           $langBack, $assign, $langWorkOnlineText, $course_id;
+           $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile;
+    
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
     if (count($sub)>0) {
         $uid_2_name = display_user($sub->uid);
@@ -110,7 +126,7 @@ function show_edit_form($id, $sid, $assign) {
                 )
             ))."
             <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
+                <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
                 <input type='hidden' name='assignment' value='$id'>
                 <input type='hidden' name='submission' value='$sid'>
                 <fieldset>
@@ -138,6 +154,13 @@ function show_edit_form($id, $sid, $assign) {
                         <label for='comments' class='col-sm-3 control-label'>$m[gradecomments]:</label>
                         <div class='col-sm-9'>
                             <textarea class='form-control' rows='3' name='comments'  id='comments'>$comments</textarea>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='comments_file' class='col-sm-3 control-label'>$langCommentsFile:</label>
+                        <div class='col-sm-9'>
+                            <input type='file' name='comments_file' id='comments_file' size='35'>
+                            " . fileSizeHidenInput() . "
                         </div>
                     </div>
                     <div class='form-group'>

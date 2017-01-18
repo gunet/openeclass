@@ -86,16 +86,36 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
 //Gets the student's assignment file ($file_type=NULL)
 //or the teacher's assignment ($file_type=1)
-if (isset($_GET['get'])) {
-    if (isset($_GET['file_type']) && $_GET['file_type']==1) {
-        $file_type = intval($_GET['file_type']);
+if (isset($_GET['get']) or isset($_GET['getcomment'])) {
+    if (isset($_GET['getcomment'])) {
+        $file_type = 2;
+        $get = $_GET['getcomment'];
     } else {
-        $file_type = NULL;
+        if (isset($_GET['file_type']) && $_GET['file_type']==1) {
+            $file_type = intval($_GET['file_type']);
+        } else {
+            $file_type = NULL;
+        }
+        $get = $_GET['get'];
     }
-    if (!send_file(intval($_GET['get']), $file_type)) {
+    if (!send_file(intval($get), $file_type)) {
         Session::Messages($langFileNotFound, 'alert-danger');
     }
 }
+
+if (isset($_GET['chk'])) { // plagiarism check
+    $file_id = $_GET['chk'];    
+    $file_details = Database::get()->querySingle("SELECT assignment_id, file_path, file_name FROM assignment_submit WHERE id = ?d", $file_id);
+    if ($file_details) {
+        $true_file_name = $file_details->file_name;
+        $secret = work_secret($file_details->assignment_id);
+        $true_file_path = $workPath . "/" . $file_details->file_path;
+    } else {
+        Session::Messages($langFileNotFound, 'alert-danger');
+    }
+    send_file_for_plagiarism($file_id, $true_file_name, $true_file_path);        
+}
+
 
 // Only course admins can download all assignments in a zip file
 if ($is_editor) {
@@ -1125,7 +1145,7 @@ function new_assignment() {
            $desc, $language, $head_content, $langMoreOptions, $langLessOptions,
            $langBack, $langSave, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
            $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
-           $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales,
+           $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales, $langGradeRubric,
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
            $langAutoJudgeOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
@@ -1262,6 +1282,12 @@ function new_assignment() {
                             $langGradeScales
                           </label>
                         </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='grading_type' value='2'". ($grading_type ? " checked" : "") .">
+                            $langGradeRubric
+                          </label>
+                        </div>
                     </div>
                 </div>
                 <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
@@ -1271,6 +1297,15 @@ function new_assignment() {
                             $scale_options
                       </select>
                       <span class='help-block'>$scale_error</span>
+                    </div>
+                </div>
+                <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
+                    <label for='title' class='col-sm-2 control-label'>$langGradeRubric:</label>
+                    <div class='col-sm-10'>
+                      <select name='scale' class='form-control' id='rubric' disabled>
+                            $rubric_options
+                      </select>
+                      <span class='help-block'>$rubric_error</span>
                     </div>
                 </div>
                 <div class='form-group".($max_grade_error ? " has-error" : "").($grading_type ? " hidden" : "")."'>
@@ -2559,6 +2594,7 @@ function sort_link($title, $opt, $attrib = '') {
  * @global type $langEditChange
  * @global type $langAutoJudgeShowWorkResultRpt
  * @global type $langGroupName
+ * @global type $langPlagiarismCheck
  * @param type $id
  * @param type $display_graph_results
  */
@@ -2567,12 +2603,11 @@ function show_assignment($id, $display_graph_results = false) {
     $langWorkOnlineText, $langGradeOk, $course_code, 
     $langGraphResults, $m, $course_code, $works_url, $course_id,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
-    $langAutoJudgeShowWorkResultRpt, $langGroupName;
+    $langAutoJudgeShowWorkResultRpt, $langGroupName, $langPlagiarismCheck;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
                                 WHERE course_id = ?d AND id = ?d", $course_id, $id);
-
     $nav[] = $works_url;
     assignment_details($id, $assign);
 
@@ -2609,6 +2644,8 @@ function show_assignment($id, $display_graph_results = false) {
                                                    assign.grade_submission_date grade_submission_date,
                                                    assign.grade grade, assign.comments comments,
                                                    assign.grade_comments grade_comments,
+                                                   assign.grade_comments_filename grade_comments_filename,
+                                                   assign.grade_comments_filepath grade_comments_filepath,
                                                    assignment.grading_scale_id grading_scale_id,
                                                    assignment.deadline deadline
                                                    FROM assignment_submit AS assign, user, assignment
@@ -2634,6 +2671,7 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "<th width='5%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
 
             $i = 1;
+            $plagiarismlink = '';
             foreach ($result as $row) {
                 //is it a group assignment?
                 if (!empty($row->group_id)) {
@@ -2697,10 +2735,11 @@ function show_assignment($id, $display_graph_results = false) {
                     $tool_content .= "<div style='margin-top: .5em;'><small>" .
                             q($row->comments) . '</small></div>';
                 }
+                $plagiarismlink = "<span class='small'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
                 $tool_content .= "</td>
                                 <td width='85'>" . q($stud_am) . "</td>
                                 <td class='text-center' width='180'>
-                                        $filelink
+                                        $filelink <br> $plagiarismlink
                                 </td>
                                 <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
                                 <td width='5'>
@@ -2735,9 +2774,12 @@ function show_assignment($id, $display_graph_results = false) {
                     $comments = "<br><div class='label label-primary'>" .
                             nice_format($row->grade_submission_date) . "</div>";
                 }
-                if (trim($row->grade_comments)) {
+                if (trim($row->grade_comments) or ($row->grade_comments_filename)) {
                     $label = '<b>'.$m['gradecomments'] . '</b>:';
-                    $comments .= "&nbsp;<span>" . q_math($row->grade_comments) . "</span>";
+                    $comments .= "&nbsp;<span>" . q_math($row->grade_comments) . "</span>";                    
+                    $comments .= "&nbsp;&nbsp;<span class='small'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;getcomment=$row->id'>" . q($row->grade_comments_filename) . "</a>
+                            </span>";
                 } else {
                     $label = '';
                     $comments = '';
@@ -2920,11 +2962,14 @@ function show_non_submitted($id) {
  * @global type $langNoAssign
  * @global type $course_code
  * @global type $langTitle
+ * @global type $langHasExpiredS
  */
 function show_student_assignments() {
-    global $tool_content, $m, $uid, $course_id, $course_code,
-    $langDaysLeft, $langNoAssign, $course_code, $langTitle;
+    global $tool_content, $m, $uid, $course_id, $course_code, $urlServer, $langHasExpiredS,
+    $langDaysLeft, $langNoAssign, $course_code, $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio;
 
+    $add_eportfolio_res_td = "";
+    
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
         $gids_sql_ready = implode(',',array_keys($gids));
@@ -2939,6 +2984,12 @@ function show_student_assignments() {
                                  ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
 
     if (count($result)>0) {
+        if(get_config('eportfolio_enable')) {
+            $add_eportfolio_res_th = "<th class='text-center'>".icon('fa-gears')."</th>";
+        } else {
+            $add_eportfolio_res_th = "";
+        }
+        
         $tool_content .= "
             <div class='row'><div class='col-sm-12'>
             <div class='table-responsive'><table class='table-default'>
@@ -2947,6 +2998,7 @@ function show_student_assignments() {
                                       <th class='text-center' style='width:25%'>$m[deadline]</th>
                                       <th class='text-center'>$m[submitted]</th>
                                       <th class='text-center'>$m[grade]</th>
+                                      $add_eportfolio_res_th
                                   </tr>";
         $k = 0;
         foreach ($result as $row) {
@@ -2963,16 +3015,25 @@ function show_student_assignments() {
             if ($row->time > 0) {
                 $tool_content .= "<br>(<small>$langDaysLeft" . format_time_duration($row->time) . "</small>)";
             } else if($row->deadline){
-                $tool_content .= "<br> (<small><span class='expired'>$m[expired]</span></small>)";
+                $tool_content .= "<br> (<small><span class='expired'>$langHasExpiredS</span></small>)";
             }
             $tool_content .= "</td><td class='text-center'>";
 
             if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids)) {
+                $eportfolio_action_array = array();
                 foreach ($submission as $sub) {
                     if (isset($sub->group_id)) { // if is a group assignment
                         $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;font-size:9px;'>($m[groupsubmit] " .
                                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
+                        
+                        $eportfolio_action_array[] = array('title' => sprintf($langAddGroupWorkSubePortfolio, gid_to_name($sub->group_id)),
+                                'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=work_submission&amp;rid=".$sub->id,
+                                'icon' => 'fa-star');
+                    } else {
+                        $eportfolio_action_array[] = array('title' => $langAddResePortfolio,
+                                'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=work_submission&amp;rid=".$sub->id,
+                                'icon' => 'fa-star');
                     }
                     $tool_content .= "<i class='fa fa-check-square-o'></i><br>";
                 }
@@ -2988,7 +3049,14 @@ function show_student_assignments() {
                 }
                 $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;'>$grade</div>";
             }
+            
+            if(get_config('eportfolio_enable') && !empty($submission)) {
+                $add_eportfolio_res_td = "<td class='option-btn-cell'>".
+                        action_button($eportfolio_action_array)."</td>";
+            }
+            
             $tool_content .= "</td>
+                                $add_eportfolio_res_td
                                   </tr>";
             $k++;
         }
@@ -3012,6 +3080,7 @@ function show_student_assignments() {
  * @global type $langWorksDelConfirm
  * @global type $langDaysLeft
  * @global type $m
+ * @global type $langHasExpiredS
  * @global type $langWarnForSubmissions
  * @global type $langDelSure
  * @global type $langGradeScales
@@ -3019,9 +3088,8 @@ function show_student_assignments() {
  */
 function show_assignments() {
     global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign, $langNewAssign,
-           $course_code, $course_id, $langWorksDelConfirm, $langDaysLeft, $m,
-           $langWarnForSubmissions, $langDelSure, $langGradeScales, $langTitle;
-
+           $course_code, $course_id, $langWorksDelConfirm, $langDaysLeft, $m, $langHasExpiredS,
+           $langWarnForSubmissions, $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics;
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
               FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
@@ -3034,6 +3102,9 @@ function show_assignments() {
             array('title' => $langGradeScales,
                   'url' => "grading_scales.php?course=$course_code",
                   'icon' => 'fa-sort-alpha-asc',
+                  'level' => 'primary-label'),
+			array('title' => $langGradeRubrics,
+                  'url' => "rubrics.php?course=$course_code",
                   'level' => 'primary-label'),
             ),false);
 
@@ -3074,7 +3145,7 @@ function show_assignments() {
             if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
             } else if((int)$row->deadline){
-                $tool_content .= " <br><span class='label label-danger'><small>$m[expired]</small></span>";
+                $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
             }
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .
@@ -3113,10 +3184,11 @@ function show_assignments() {
  * @global type $m
  * @global type $course_code
  * @global type $langFormErrors
+ * @global type $workPath
  * @param type $args
  */
 function submit_grade_comments($args) {
-    global $langGrades, $course_id, $langTheField, $m, $course_code, $langFormErrors;
+    global $langGrades, $course_id, $langTheField, $m, $course_code, $langFormErrors, $workPath;
 
     $id = $args['assignment'];
     $sid = $args['submission'];
@@ -3136,15 +3208,33 @@ function submit_grade_comments($args) {
     if($v->validate()) {
         $grade = $args['grade'];
         $comment = $args['comments'];
+        if (isset($_FILES['comments_file']) and is_uploaded_file($_FILES['comments_file']['tmp_name'])) { // upload comments file            
+            $comments_filename = $_FILES['comments_file']['name'];
+            validateUploadedFile($comments_filename); // check file type
+            $comments_filename = php2phps(add_ext_on_mime($comments_filename));
+            // File name used in file system and path field
+            $safe_comments_filename = safe_filename(get_file_extension($comments_filename));
+            if (move_uploaded_file($_FILES['comments_file']['tmp_name'], "$workPath/admin_files/$safe_comments_filename")) {
+                @chmod("$workPath/admin_files/$safe_comments_filename", 0644);                
+                $comments_real_filename = $_FILES['comments_file']['name'];
+                $comments_filepath = $safe_comments_filename;
+            }
+        } else {
+            $comments_filepath = $comments_real_filename = '';
+        }
+                
         $grade = is_numeric($grade) ? $grade : null;
         if(isset($args['auto_judge_scenarios_output'])){
             Database::get()->query("UPDATE assignment_submit SET auto_judge_scenarios_output = ?s
                                     WHERE id = ?d",serialize($args['auto_judge_scenarios_output']), $sid);
         }
         if (Database::get()->query("UPDATE assignment_submit
-                                    SET grade = ?f, grade_comments = ?s,
+                                    SET grade = ?f, grade_comments = ?s, 
+                                    grade_comments_filepath = ?s,
+                                    grade_comments_filename = ?s,
                                     grade_submission_date = NOW(), grade_submission_ip = ?s
-                                    WHERE id = ?d", $grade, $comment, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows>0) {
+                                    WHERE id = ?d", $grade, $comment, $comments_filepath,
+                                            $comments_real_filename, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows>0) {
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                     'title' => $assignment->title,
                     'grade' => $grade,
@@ -3263,14 +3353,22 @@ function send_file($id, $file_type) {
     global $uid, $is_editor;
     
     if (isset($file_type)) {
-        $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
-        // don't show file if: assignment nonexistent, not editor, not active assignment, module not visible
-        if (count($info) == 0 or
-            !($is_editor or
-              ($info->active and visible_module(MODULE_ID_ASSIGN)))) {
-            return false;
+        if ($file_type == 1) {
+            $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+            // don't show file if: assignment nonexistent, not editor, not active assignment, module not visible
+            if (count($info) == 0 or
+                !($is_editor or
+                  ($info->active and visible_module(MODULE_ID_ASSIGN)))) {
+                return false;
+            }
+            send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, null, true);
+        } elseif ($file_type == 2) { // download comments file
+            $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
+            if (count($info)==0) {
+                return false;
+            }
+            send_file_to_client("$GLOBALS[workPath]/admin_files/$info->grade_comments_filepath", $info->grade_comments_filename, null, true);
         }
-        send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, null, true);
     } else {
         $info = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
         if (count($info)==0) {

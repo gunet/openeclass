@@ -146,7 +146,7 @@ class Indexer {
      * @return string
      */
     public static function filterQuery($inputStr) {
-        $terms = explode(' ', str_replace(self::$specials, '', self::phonetics($inputStr)));
+        $terms = explode(' ', str_replace(self::$specials, '', self::phonetics(canonicalize_whitespace($inputStr))));
         $clearTerms = array();
         foreach ($terms as $term) {
             if (!in_array($term, self::$specialkeywords)) {
@@ -248,6 +248,44 @@ class Indexer {
             $query = Zend_Search_Lucene_Search_QueryParser::parse($inputStr, 'utf-8');
             return $this->__index->find($query);
         } catch (Zend_Search_Exception $e) {
+            return array();
+        }
+        return array();
+    }
+
+    /**
+     * Raw Searches in the index.
+     *
+     * @param  array $inputQueries - One or more Lucene Queries, they are NOT filtered for Lucene operators
+     * @return array               - array of Zend_Search_Lucene_Search_QueryHit objects
+     */
+    public function multiSearchRaw($inputQueries) {
+        if (!get_config('enable_indexing')) {
+            return;
+        }
+
+        try {
+            $allhits = array();
+            $prevHitIds = array();
+
+            foreach($inputQueries as $inputStr) {
+                $query = Zend_Search_Lucene_Search_QueryParser::parse($inputStr, 'utf-8');
+                $hits = $this->__index->find($query);
+                $hitIds = array();
+
+                foreach($hits as $hit) {
+                    $hitIds[] = intval($hit->pkid);
+
+                    if(!in_array(intval($hit->pkid), $prevHitIds)) {
+                        $allhits[] = $hit;
+                    }
+
+                    $prevHitIds = $hitIds;
+                }
+            }
+
+            return $allhits;
+        }  catch (Zend_Search_Exception $e) {
             return array();
         }
         return array();

@@ -934,8 +934,7 @@ if (!class_exists('Exercise')) {
         /**
          * Purge exercise user attempt
          */
-        function purgeAttempt($eurid) {
-            $id = $this->id;
+        function purgeAttempt($id, $eurid) {            
 
             Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d AND eurid = ?d", $id, $eurid);

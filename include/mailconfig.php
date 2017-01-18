@@ -105,7 +105,7 @@ function mail_settings_form() {
         $lang_email_from, $langEmailAnnounce, $langUsername, $langPassword,
         $langEmailSendmail, $langEmailTransport, $langEmailSMTPServer,
         $langEmailSMTPPort, $langEmailEncryption, $langEmailSendWarn,
-        $langPreviousStep, $langNextStep, $tool_content, $langEmailBounces;
+        $langPreviousStep, $langNextStep, $tool_content, $langEmailBounces, $langSave;
 
     // True if running initial install
     $install = isset($GLOBALS['input_fields']);
@@ -134,7 +134,7 @@ function mail_settings_form() {
     $cbox_email_from = get_var('email_from') ? 'checked' : '';
     if (!$install) {
         $tool_content .= "
-            <div class='panel panel-default' id='four'>
+            <div class='panel panel-primary' id='five'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langEmailSettings</h2>
                 </div>
@@ -216,6 +216,12 @@ function mail_settings_form() {
                            <div class='col-sm-10'>
                                 <input type='text' class='form-control' name='sendmail_command' id='formSendmailCommand' value='".q(get_var('sendmail_command', ini_get('sendmail_path')))."'>
                            </div>
+                        </div>
+                        <hr>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                            </div>
                         </div>";
     if (!$install) {
         $tool_content .= "

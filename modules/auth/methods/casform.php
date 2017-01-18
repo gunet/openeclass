@@ -39,6 +39,7 @@ if (!empty($auth_data['auth_settings'])) {
     $auth_data['casuserfirstattr'] = 'givenName';
     $auth_data['casuserlastattr'] = 'sn';
     $auth_data['cas_altauth'] = 0;
+    $auth_data['cas_altauth_use'] = 'mobile';
 }
 
 $cas_ssout_data = array(0 => $m['no'], 1 => $m['yes']);
@@ -50,6 +51,11 @@ $cas_altauth_data = array(
     3 => 'IMAP',
     4 => 'LDAP',
     5 => 'External DB');
+
+$cas_altauth_use_data = array('mobile' => $langcas_altauth_use_mobile, 'all' => $langcas_altauth_use_all);
+if (!isset($auth_data['cas_altauth_use'])) {
+    $auth_data['cas_altauth_use'] = 'mobile';
+}
 
 $tool_content .= "
     <div class='form-group'>
@@ -63,13 +69,13 @@ $tool_content .= "
         <div class='col-sm-10'>
             <input class='form-control' name='cas_port' id='cas_port' type='text' value='" . q($cas_port) . "'>
         </div>
-    </div>    
+    </div>
     <div class='form-group'>
         <label for='cas_context' class='col-sm-2 control-label'>$langcas_context:</label>
         <div class='col-sm-10'>
             <input class='form-control' name='cas_context' id='cas_context' type='text' value='" . q($auth_data['cas_context']) . "'>
         </div>
-    </div> 
+    </div>
     <div class='form-group'>
         <label for='cas_logout' class='col-sm-2 control-label'>$langcas_logout:</label>
         <div class='col-sm-10'>
@@ -87,19 +93,19 @@ $tool_content .= "
         <div class='col-sm-10'>
             <input class='form-control' name='cas_cachain' id='cas_cachain' type='text' value='" . q($auth_data['cas_cachain']) . "'>
         </div>
-    </div>  
+    </div>
     <div class='form-group'>
         <label for='casusermailattr' class='col-sm-2 control-label'>$langcasusermailattr:</label>
         <div class='col-sm-10'>
             <input class='form-control' name='casusermailattr' id='casusermailattr' type='text' value='" . q($auth_data['casusermailattr']) . "'>
         </div>
-    </div>       
+    </div>
     <div class='form-group'>
         <label for='casuserfirstattr' class='col-sm-2 control-label'>$langcasuserfirstattr:</label>
         <div class='col-sm-10'>
             <input class='form-control' name='casuserfirstattr' id='casuserfirstattr' type='text' value='" . q($auth_data['casuserfirstattr']) . "'>
         </div>
-    </div> 
+    </div>
     <div class='form-group'>
         <label for='casuserlastattr' class='col-sm-2 control-label'>$langcasuserlastattr:</label>
         <div class='col-sm-10'>
@@ -116,6 +122,12 @@ $tool_content .= "
         <label for='cas_altauth' class='col-sm-2 control-label'>$langcas_altauth:</label>
         <div class='col-sm-10'>
             ". selection($cas_altauth_data, 'cas_altauth', $auth_data['cas_altauth'], 'class="form-control"') ."
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='cas_altauth_use' class='col-sm-2 control-label'>$langcas_altauth_use:</label>
+        <div class='col-sm-10'>
+            ". selection($cas_altauth_use_data, 'cas_altauth_use', $auth_data['cas_altauth_use'], 'class="form-control"') ."
         </div>
     </div>" .
     eclass_auth_form($auth_data['auth_title'], $auth_data['auth_instructions']);

@@ -64,14 +64,14 @@ if (isset($_GET['delete'])) {
                               'url' => "edit.php?course=$course_code&amp;id=$info->id",
                               'icon' => 'fa-reply',
                              'level' => 'primary-label')
-                        ));         
+                        ));
         // Form #1 - edit title
         $tool_content .= "
         <div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
                 <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langTitle:</label>         
+                    <label class='col-sm-2 control-label'>$langTitle:</label>
                     <div class='col-sm-9 input-group'>
                         <input class='form-control' type='text' name='ebook_title' value='" . q($info->title) . "' />
                         <span class='input-group-btn'>
@@ -105,18 +105,18 @@ if (isset($_GET['delete'])) {
         $section_editing = false;
         foreach ($q as $section) {
             $sid = $section->id;
-            $qsid = Session::has('new_section_id') ? Session::get('new_section_id') : q($section->public_id);                     
+            $qsid = Session::has('new_section_id') ? Session::get('new_section_id') : q($section->public_id);
             $qstitle = Session::has('new_section_title') ? Session::get('new_section_title') : q($section->title);
             $sections[$sid] = $qsid . '. ' . ellipsize($section->title, 25);
             if ($sid === $edit_section) {
                 $section_id = "
                                 <input type='hidden' name='csid' value='$sid'>
-                                <div class='form-group'>                                    
+                                <div class='form-group'>
                                     <input type='text' class='form-control' name='new_section_id' value='$qsid'>
                                 </div>";
                 $section_title = "<div class='form-group".(Session::getError('new_section_title') ? " has-error" : "")."'>
                                     <input type='text size='3' class='form-control' name='new_section_title' value='$qstitle'>
-                                    <span class='help-block'>".Session::getError('new_section_title')."</span>    
+                                    <span class='help-block'>".Session::getError('new_section_title')."</span>
                                 </div>
                                 ";
                 $section_editing = true;
@@ -133,14 +133,14 @@ if (isset($_GET['delete'])) {
                                           'icon' => 'fa-times',
                                           'class' => 'delete',
                                           'confirm' => $langEBookSectionDelConfirm)
-                ));            
-            }       
+                ));
+            }
             $tool_content .= "
             <tr>
               <td style='width:70px;'>$section_id</td>
               <td>$section_title</td>
               <td class='text-center'>$section_tools</td>
-            </tr>";          
+            </tr>";
         }
         $new_section_id = Session::has('new_section_id') ? Session::get('new_section_id') : '';
         if (!$section_editing) {
@@ -152,7 +152,7 @@ if (isset($_GET['delete'])) {
                 <td>
                     <div class='form-group".(Session::getError('new_section_title') ? " has-error" : "")."'>
                         <input class='form-control' type='text' size='35' name='new_section_title'>
-                        <span class='help-block'>".Session::getError('new_section_title')."</span>    
+                        <span class='help-block'>".Session::getError('new_section_title')."</span>
                     </div>
                 </td>
                 <td class='center'>
@@ -162,7 +162,7 @@ if (isset($_GET['delete'])) {
         }
         $tool_content .= "
           </table>
-          </fieldset></form>";        
+          </fieldset></form>";
 } elseif (isset($_POST['new_section_submit'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('new_section_title'));
@@ -182,7 +182,7 @@ if (isset($_GET['delete'])) {
                     , $ebook_id, $_POST['new_section_id'], $_POST['new_section_title']);
         }
     } else {
-        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());      
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
     }
     $redirect_link = isset($_POST['csid']) ? "modules/ebook/edit.php?course=$course_code&id=$ebook_id&editEbook=1" : "modules/ebook/edit.php?course=$course_code&id=$ebook_id&editEbook=1";
     redirect_to_home_page($redirect_link);
@@ -243,26 +243,26 @@ if (isset($_GET['delete'])) {
         $pageName = $langEBookEdit;
         $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
         $k = 0;
-        list($paths, $files, $file_ids, $id_map) = find_html_files();
+        list($paths, $files, $file_ids, $id_map, $editable) = find_html_files();
 
         $sections = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                            WHERE ebook_id = ?d
                            ORDER BY CONVERT(public_id, UNSIGNED), public_id", $info->id);
         if ($sections){
-            
+
             $sections_table = "<ul class='list-group'>";
             foreach ($sections as $section){
                 $sections_table .=
                         "
                         <li class='list-group-item'>
                             ".q($section->public_id).".&nbsp;
-                            ".q($section->title)."    
+                            ".q($section->title)."
                         </li>
                         ";
             }
             $sections_table .= "</ul>";
-            
-            
+
+
         } else {
             $sections_table = "<span class='not_visible'> - $langNoEBookSections - </span>";
         }
@@ -272,7 +272,7 @@ if (isset($_GET['delete'])) {
                               'url' => "index.php?course=$course_code",
                               'icon' => 'fa-reply',
                              'level' => 'primary-label')
-                        ));    
+                        ));
         $tool_content .= "
             <div class='panel panel-default'>
                 <div class='panel-heading'>
@@ -289,7 +289,7 @@ if (isset($_GET['delete'])) {
                         </div>
                         <div class='col-sm-10'>
                             " . q($info->title) . "
-                        </div>                
+                        </div>
                     </div>
                     <div class='row  margin-bottom-fat'>
                         <div class='col-sm-2'>
@@ -297,8 +297,8 @@ if (isset($_GET['delete'])) {
                         </div>
                         <div class='col-sm-10'>
                             $sections_table
-                        </div>                
-                    </div>                
+                        </div>
+                    </div>
                 </div>
             </div>";
 
@@ -318,12 +318,12 @@ if (isset($_GET['delete'])) {
                               'url' => "new.php?course=$course_code&ebook_id=$ebook_id&amp;from=ebookEdit",
                               'icon' => 'fa-plus-circle',
                               'button-class' => 'btn-success',
-                              'level' => 'primary-label'),            
+                              'level' => 'primary-label'),
                             array('title' => $langFileAdmin,
                                   'url' => "document.php?course=$course_code&amp;ebook_id=$ebook_id",
-                                  'icon' => 'fa-hdd-o',                          
-                                  'level' => 'primary-label')            
-                        ));      
+                                  'icon' => 'fa-hdd-o',
+                                  'level' => 'primary-label')
+                        ));
         // Form #3 - edit subsection file assignment
         $q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
                                   ebook_section.id AS psid,
@@ -336,25 +336,32 @@ if (isset($_GET['delete'])) {
                            WHERE ebook_section.ebook_id = $info->id AND
                                  ebook_section.id = ebook_subsection.section_id
                                  ORDER BY CONVERT(psid, UNSIGNED), psid,
-                                          CONVERT(pssid, UNSIGNED), pssid");  
+                                          CONVERT(pssid, UNSIGNED), pssid");
         if (count($files) > 0 || count($q) > 0) {
             $tool_content .= "
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
                 <fieldset>
                     <table class='table-default'>
-                    <tr class='list-header'>       
+                    <tr class='list-header'>
                       <th>$langFileName</th>
                       <th>$langTitle</th>
                       <th>$langSection</th>
                       <th>$langSubsection</th>
                     </tr>";
-                   foreach ($q as $r) {        
+                   foreach ($q as $r) {
                        $file_id = $r->file_id;
                        $display_id = $r->sid . ',' . $r->ssid;
+                       if ($editable[$id_map[$file_id]]) {
+                           $edit = '&nbsp;' . icon('fa-edit', $langEditChange,
+                               "new.php?course=$course_code&amp;editPath=" .
+                               $paths[$id_map[$file_id]] . "&amp;ebook_id=$ebook_id&amp;back=edit");
+                       } else {
+                           $edit = '';
+                       }
                        $tool_content .= "
-                            <tr>              
-                                <td class='smaller'><a href='show.php/$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
+                            <tr>
+                                <td class='smaller'><a href='show.php/$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a>$edit</td>
                                 <td><input type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
                                 <td>" . selection($sections, "sid[$file_id]", $r->sid, 'class="form-control"') . "</td>
                                 <td class='center' style='width: 50px;'>
@@ -362,21 +369,21 @@ if (isset($_GET['delete'])) {
                                     <input type='text' class='form-control' name='ssid[$file_id]' value='" . q($r->pssid) . "'>
                                 </td>
                             </tr>";
-                       unset($files[$id_map[$file_id]]);        
+                       unset($files[$id_map[$file_id]]);
                    }
-                   foreach ($files as $key => $file) {        
+                   foreach ($files as $key => $file) {
                        $path = $paths[$key];
                        $file_id = $file_ids[$key];
                        $title = get_html_title($basedir . $path);
                        $tool_content .= "
-                        <tr class='not_visible'>          
+                        <tr class='not_visible'>
                             <td class='smaller'><a href='show.php/$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
                             <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
                             <td>" . selection($sections, "sid[$file_id]", ' ', 'class="form-control"') . "</td>
                             <td class='center' style='width: 50px;'>
                                <input class='form-control' type='text' name='ssid[$file_id]'>
                            </td>
-                        </tr>";        
+                        </tr>";
                    }
                    $tool_content .= "
                     <tr>
@@ -388,7 +395,7 @@ if (isset($_GET['delete'])) {
         } else {
             $tool_content .= "<div class='alert alert-warning'>$langEBookNoPages</div>";
         }
-    }    
+    }
 }
 $pageName = $langEBookEdit;
 
@@ -400,16 +407,17 @@ function find_html_files() {
     $disk_paths = array();
     $public_paths = array();
     $file_ids = array();
-    $q = Database::get()->queryArray("SELECT id, path, filename FROM document
+    $q = Database::get()->queryArray("SELECT id, path, filename, editable FROM document
                               WHERE $group_sql AND (format = 'html' OR format = 'htm')");
     foreach ($q as $row) {
         $disk_paths[] = $row->path;
         $public_paths[] = public_file_path($row->path, $row->filename);
         $file_ids[] = $row->id;
+        $editable[] = $row->editable;
     }
     array_multisort($public_paths, $disk_paths, $file_ids);
     $id_map = array_flip($file_ids);
-    return array(&$disk_paths, &$public_paths, &$file_ids, &$id_map);
+    return array(&$disk_paths, &$public_paths, &$file_ids, &$id_map, &$editable);
 }
 
 function get_html_title($file) {

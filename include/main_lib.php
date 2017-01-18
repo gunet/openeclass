@@ -2,9 +2,9 @@
 
 /*
  * ========================================================================
- * Open eClass 3.5 - E-learning and Course Management System
+ * Open eClass 3.6 - E-learning and Course Management System
  * ========================================================================
-  Copyright(c) 2003-2016  Greek Universities Network - GUnet
+  Copyright(c) 2003-2017  Greek Universities Network - GUnet
   A full copyright notice can be read in "/info/copyright.txt".
 
   Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -210,7 +210,7 @@ function css_link($file) {
  * @return type
  */
 function load_js($file, $init='') {
-    global $head_content, $theme_settings, $language,
+    global $head_content, $theme_settings, $language, 
             $langReadMore, $langReadLess, $langViewHide, $langViewShow;
     static $loaded;
 
@@ -314,7 +314,7 @@ function load_js($file, $init='') {
             $file = "sortable/Sortable.min.js";
         } elseif ($file == 'filetree') {
             $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
-            $file = 'jquery_filetree/jqueryFileTree.js';
+            $file = 'jquery_filetree/jqueryFileTree.js';            
         } elseif ($file == 'trunk8') {
             $head_content .= "
 <script>
@@ -339,6 +339,8 @@ console.log('aaa');
 });
 </script>";
             $file = 'trunk8.js';
+        } elseif ($file == 'clipboard.js') {
+            $file = 'clipboard.js/clipboard.min.js';
         }
 
         $head_content .= js_link($file);
@@ -681,11 +683,14 @@ function check_guest($id = FALSE) {
 function check_editor($user_id = null, $cid = null) {
     global $uid, $course_id, $is_admin;
 
+    if (is_null($user_id) and isset($uid)) {
+        $user_id = $uid;
+    }
+    if (!$user_id) {
+        return false;
+    }
     if ($is_admin) {
         return true;
-    }
-    if (!isset($user_id) and isset($uid)) {
-        $user_id = $uid;
     }
     if (!isset($cid) and isset($course_id)) {
         $cid = $course_id;
@@ -980,7 +985,7 @@ function randomkeys($length) {
 // it returns a formated number string, with unit identifier.
 function format_bytesize($kbytes, $dec_places = 2) {
     global $text;
-
+    
     if ($kbytes > 1048576) {
         $result = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
         $result .= '&nbsp;Gb';
@@ -1049,7 +1054,7 @@ function visible_module($module_id) {
  * @return boolean
  */
 function is_module_disable($module_id) {
-
+    
     $q = Database::get()->querySingle("SELECT * FROM module_disable WHERE module_id = ?d", $module_id);
     if ($q) {
         return true;
@@ -1375,32 +1380,42 @@ function move_order($table, $id_field, $id, $order_field, $direction, $condition
 }
 
 // Handle reordering of a table (from AJAX drag-and-drop) by
-// updating the `order` field in table $table
+// updating the `order` field (or $orderField if set) in table $table
 // Limit update to records with value $limitValue in `$limitField`
-function reorder_table($table, $limitField, $limitValue, $toReorder, $prevReorder = null) {
-    Database::get()->transaction(function () use ($table, $limitField, $limitValue, $toReorder, $prevReorder) {
-        $max = Database::get()->querySingle("SELECT MAX(`order`) AS max_order
-            FROM `$table` WHERE `$limitField` = ?d", $limitValue)->max_order;
+function reorder_table($table, $limitField, $limitValue, $toReorder, $prevReorder = null, $idField = 'id', $orderField = 'order') {
+    Database::get()->transaction(function ()
+            use ($table, $limitField, $limitValue, $toReorder, $prevReorder, $idField, $orderField) {
+        if ($limitField) {
+            $where = "WHERE `$limitField` = ?d";
+        } else {
+            $where = '';
+            $limitValue = array();
+        }
+        $max = Database::get()->querySingle("SELECT MAX(`$orderField`) AS max_order
+            FROM `$table` $where", $limitValue)->max_order;
+
+        if ($where) {
+            $where .= ' AND';
+        } else {
+            $where = 'WHERE';
+        }
 
         if (!is_null($prevReorder)) {
-            $prevRank = Database::get()->querySingle("SELECT `order` AS rank
-                FROM `$table` WHERE id = ?d", $prevReorder)->rank;
+            $prevRank = Database::get()->querySingle("SELECT `$orderField` AS rank
+                FROM `$table` WHERE `$idField` = ?d", $prevReorder)->rank;
         } else {
             $prevRank = 0;
         }
 
         Database::get()->query("UPDATE `$table`
-            SET `order` = `order` + ?d + 1
-            WHERE `$limitField` = ?d
-                AND `order` > ?d", $max, $limitValue, $prevRank);
+            SET `$orderField` = `$orderField` + ?d + 1
+            $where `$orderField` > ?d", $max, $limitValue, $prevRank);
         Database::get()->query("UPDATE `$table`
-            SET `order` = ?d
-            WHERE `$limitField` = ?d
-                AND id = ?d", $prevRank + 1, $limitValue, $toReorder);
+            SET `$orderField` = ?d
+            $where `$idField` = ?d", $prevRank + 1, $limitValue, $toReorder);
         Database::get()->query("UPDATE `$table`
-            SET `order` = `order` - ?d
-            WHERE `$limitField` = ?d
-                AND `order` > ?d", $max, $limitValue, $prevRank + 1);
+            SET `$orderField` = `$orderField` - ?d
+            $where `$orderField` > ?d", $max, $limitValue, $prevRank + 1);
     });
 }
 
@@ -1603,7 +1618,7 @@ function delete_course($cid) {
                             WHERE `comments`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $cid);
     Database::get()->query("DELETE `wall_post_resources` FROM `wall_post_resources` INNER JOIN `wall_post` ON `wall_post_resources`.`post_id` = `wall_post`.`id`
                             WHERE `wall_post`.`course_id` = ?d", $cid);
-    Database::get()->query("DELETE FROM `wall_post` WHERE `course_id` = ?d", $cid);
+    Database::get()->query("DELETE FROM `wall_post` WHERE `course_id` = ?d", $cid);    
     // check if we have guest account. If yes delete it.
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
     if ($guest_user) {
@@ -1644,14 +1659,14 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM exercise WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_module WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_settings WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM tag WHERE id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module WHERE course_id != ?d)", $cid);
+    Database::get()->query("DELETE FROM tag WHERE id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module WHERE course_id != ?d)", $cid);    
     Database::get()->query("DELETE FROM tag_element_module WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id IN
+    Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id IN 
                                     (SELECT id FROM gradebook_activities WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d))", $cid);
     Database::get()->query("DELETE FROM gradebook_activities WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM gradebook_users WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM gradebook WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id IN
+    Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id IN 
                                     (SELECT id FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d))", $cid);
     Database::get()->query("DELETE FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM attendance_users WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
@@ -1660,7 +1675,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM course_external_server WHERE course_id = ?d", $cid);
 
     removeDir("$webDir/courses/$course_code");
-    removeDir("$webDir/video/$course_code");
+    removeDir("$webDir/video/$course_code");    
     // refresh index
     require_once 'modules/search/indexer.class.php';
     Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $cid);
@@ -1682,21 +1697,21 @@ function deleteUser($id, $log) {
 
     if ($u == 1) {
         return false;
-    } else {
+    } else {        
         // validate if this is an existing user
-        if (Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $u)) {
+        if (Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $u)) {            
             Database::get()->query("DELETE FROM actions_daily WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $u);
             // delete user assignments (if any)
-            $assignment_data = Database::get()->queryArray("SELECT assignment_id, file_path FROM assignment_submit WHERE uid = ?d", $u);
+            $assignment_data = Database::get()->queryArray("SELECT assignment_id, file_path FROM assignment_submit WHERE uid = ?d", $u);            
             if (count($assignment_data) > 0) { // if assignments found
                 foreach ($assignment_data as $data) {
                     $courseid = Database::get()->querySingle("SELECT course_id FROM assignment WHERE id = $data->assignment_id")->course_id;
-                    unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);
+                    unlink($webDir . "/courses/". course_id_to_code($courseid) . "/work/" . $data->file_path);                
                 }
             }
             Database::get()->query("DELETE FROM assignment_submit WHERE uid = ?d", $u);
-
+            
             Database::get()->query("DELETE FROM course_user WHERE user_id = ?d", $u);
             Database::get()->query("DELETE dropbox_attachment FROM dropbox_attachment INNER JOIN dropbox_msg ON dropbox_attachment.msg_id = dropbox_msg.id
                                     WHERE dropbox_msg.author_id = ?d", $u);
@@ -1740,10 +1755,25 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN `link` ON abuse_report.rid = `link`.id
                                     WHERE abuse_report.rtype = ?s AND `link`.user_id = ?d", 'link', $u);
             Database::get()->query("DELETE FROM `link` WHERE user_id = ?d", $u);
-
+            Database::get()->query("DELETE FROM eportfolio_resource WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM eportfolio_fields_data WHERE user_id = ?d", $u);
+            
             // delete user images (if any)
             array_map('unlink', glob("$webDir/courses/userimg/{$u}_256.*"));
             array_map('unlink', glob("$webDir/courses/userimg/{$u}_32.*"));
+            
+            //delete user e-portfolio files (if any)
+            array_map('unlink', glob("$webDir/courses/eportfolio/userbios/{$u}/bio.pdf"));
+            array_map('unlink', glob("$webDir/courses/eportfolio/work_submissions/{$u}/*"));
+            if (is_dir("$webDir/courses/eportfolio/userbios/{$u}")) {
+                rmdir("$webDir/courses/eportfolio/userbios/{$u}");
+            }
+            if (is_dir("$webDir/courses/eportfolio/work_submissions/{$u}")) {
+                rmdir("$webDir/courses/eportfolio/work_submissions/{$u}");
+            }
+            if (is_dir("$webDir/courses/eportfolio/mydocs/{$u}")) {
+                rmdir("$webDir/courses/eportfolio/mydocs/{$u}");
+            }
 
             return true;
         } else {
@@ -1845,7 +1875,12 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
     if (!$init_done) {
         $init_done = true;
         $filebrowser = $url = '';
+
+        // params for tinymce embed
         $activemodule = 'document/index.php';
+        $append_module = (!empty(current_module_id())) ? "&originating_module=" . q(current_module_id()) : '';
+        $append_forum = (isset($_REQUEST['forum'])) ? "&originating_forum=" . q($_REQUEST['forum']) : '';
+
         if (isset($course_code) && !empty($course_code)) {
             $filebrowser = "file_browser_callback : openDocsPicker,";
             if (!$is_editor) {
@@ -1873,10 +1908,10 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                     }
                 }
             }
-            $url = $urlAppend . "modules/$activemodule?course=$course_code&embedtype=tinymce&docsfilter=";
+            $url = $urlAppend . "modules/" . $activemodule . "?course=" . $course_code . "&embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
         } elseif ($is_admin) { /* special case for admin announcements */
             $filebrowser = "file_browser_callback : openDocsPicker,";
-            $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
+            $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
         }
         $focus_init = ",
                 init_instance_callback: function(editor) {
@@ -2130,7 +2165,7 @@ function handle_unit_info_edit() {
     global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code, $webDir;
     require_once 'modules/tags/moduleElement.class.php';
     $title = $_REQUEST['unittitle'];
-    $descr = $_REQUEST['unitdescr'];
+    $descr = purify($_REQUEST['unitdescr']);
     if (isset($_REQUEST['unit_id'])) { // update course unit
         $unit_id = $_REQUEST['unit_id'];
         Database::get()->query("UPDATE course_units SET
@@ -2142,7 +2177,7 @@ function handle_unit_info_edit() {
             $tagsArray = explode(',', $_POST['tags']);
             $moduleTag = new ModuleElement($unit_id);
             $moduleTag->syncTags($tagsArray);
-        }
+        }        
         $successmsg = $langCourseUnitModified;
     } else { // add new course unit
         $order = $maxorder + 1;
@@ -2156,7 +2191,7 @@ function handle_unit_info_edit() {
             $tagsArray = explode(',', $_POST['tags']);
             $moduleTag = new ModuleElement($unit_id);
             $moduleTag->attachTags($tagsArray);
-        }
+        }              
     }
     // update index
     require_once 'modules/search/indexer.class.php';
@@ -2278,7 +2313,7 @@ function get_glossary_terms($course_id) {
         }
         if (!empty($row->notes)) {
             $_SESSION['glossary_notes'][$term] = $row->notes;
-        }
+        }        
     }
     $_SESSION['glossary_course_id'] = $course_id;
     return true;
@@ -2568,7 +2603,7 @@ function course_status($course_id) {
 }
 
 /**
- * @brief return message concerning course visibility
+ * @brief return message concerning course visibility 
  * @global type $langTypeOpen
  * @global type $langTypeClosed
  * @global type $langTypeInactive
@@ -2577,9 +2612,9 @@ function course_status($course_id) {
  * @return type
  */
 function course_status_message($course_id) {
-
+   
     global $langTypeOpen, $langTypeClosed, $langTypeInactive, $langTypeRegistration;
-
+    
     $status = Database::get()->querySingle("SELECT visible FROM course WHERE id = ?d", $course_id)->visible;
     switch ($status) {
         case COURSE_REGISTRATION: $message = $langTypeRegistration; break;
@@ -2892,7 +2927,7 @@ function faq_exist() {
         return true;
     } else {
         return false;
-    }
+    }    
 }
 
 /**
@@ -2986,9 +3021,9 @@ function add_framebusting_headers() {
 }
 
 /**
- * This header enables the Cross-site scripting (XSS) filter built into most
- * recent web browsers. It's usually enabled by default anyway, so the role of
- * this header is to re-enable the filter for this particular website if it
+ * This header enables the Cross-site scripting (XSS) filter built into most 
+ * recent web browsers. It's usually enabled by default anyway, so the role of 
+ * this header is to re-enable the filter for this particular website if it 
  * was disabled by the user.
  */
 
@@ -2998,7 +3033,7 @@ function add_xxsfilter_headers() {
 
 
 /**
- * The nosniff header, prevents Internet Explorer and Google Chrome from
+ * The nosniff header, prevents Internet Explorer and Google Chrome from 
  * MIME-sniffing a response away from the declared content-type.
  */
 
@@ -3007,7 +3042,7 @@ function add_nosniff_headers() {
 }
 
 /**
- * HTTP Strict-Transport-Security (HSTS) enforces secure (HTTP over SSL/TLS)
+ * HTTP Strict-Transport-Security (HSTS) enforces secure (HTTP over SSL/TLS) 
  * connections to the server.
  */
 
@@ -3016,7 +3051,7 @@ function add_hsts_headers() {
 }
 
 /**
- *
+ * 
  * @param int $num_bytes [optional]
  * @return string
 */
@@ -3029,7 +3064,7 @@ function generate_csrf_token($num_bytes = 16) {
 /**
  * Check the validity of the csrf token for the current session.
  *
- * @param string $token
+ * @param string $token 
  * @return Boolean
  */
 function validate_csrf_token($token) {
@@ -3066,29 +3101,29 @@ function csrf_token_error() {
 
 /**
  * Indirect Reference to Direct Reference Map
- *
+ * 
  * @return ArrayObject
  */
 function getIndirectReferencesMap(){
-    if(!isset($_SESSION['IRMAP']) || !isset($_SESSION['DRMAP'])){
-        $_SESSION['IRMAP'] = new ArrayObject();
-        $_SESSION['DRMAP'] = new ArrayObject();
+    if(!isset($_SESSION['IRMAP']) || !isset($_SESSION['DRMAP'])){  
+        $_SESSION['IRMAP'] = new ArrayObject(); 
+        $_SESSION['DRMAP'] = new ArrayObject(); 
     }
     return $_SESSION['IRMAP'];
-}
+}  
 
 /**
  * Direct Reference to Indirect Reference Map
- *
+ * 
  * @return ArrayObject
  */
 function getDirectReferencesMap(){
-    if(!isset($_SESSION['IRMAP']) || !isset($_SESSION['DRMAP'])){
-        $_SESSION['IRMAP'] = new ArrayObject();
-        $_SESSION['DRMAP'] = new ArrayObject();
+    if(!isset($_SESSION['IRMAP']) || !isset($_SESSION['DRMAP'])){  
+        $_SESSION['IRMAP'] = new ArrayObject(); 
+        $_SESSION['DRMAP'] = new ArrayObject(); 
     }
     return $_SESSION['DRMAP'];
-}
+}    
 
 /**
  * Simple Random Number Generation for indirect References
@@ -3188,24 +3223,24 @@ function forbidden($path = '') {
  * @param array $options options for each entry
  *
  * Each item in array is another array of the attributes for button:
- *
+ * 
  */
 function form_buttons($btnArray) {
-
+    
     global $langCancel;
-
+    
     $buttons = "";
-
+    
     foreach ($btnArray as $btn){
-
+        
         if(!isset($btn['show']) || (isset($btn['show']) && $btn['show'] == true)){
-
+        
         $id = isset($btn['id'])?"id='$btn[id]'": '';
         $custom_field = isset($btn['custom_field'])?"onclick='$btn[custom_field]'": '';
         if (isset($btn['icon'])) {
             $text = "<span class='fa $btn[icon] space-after-icon'></span>" . $text;
         }
-
+        
         if (isset($btn['href'])) {
             $class = isset($btn['class']) ? $btn['class'] : 'btn-default';
             $title = isset($btn['title'])?"title='$btn[title]'": '';
@@ -3231,7 +3266,7 @@ function form_buttons($btnArray) {
         }
     }
     }
-
+    
     return $buttons;
 }
 
@@ -3306,7 +3341,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                $subMenu .= '<li><a class="'.$subOption['class'].'" href="' . $subOption['url'] . '">';
                $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].'"></span>' : '';
                $subMenu .= q($subOption['title']) . '</a></li>';
-
+               
             }
             $subMenu .= '</ul>';
         }
@@ -3735,7 +3770,7 @@ function my_dirname($path) {
 function warnIfExtNotLoaded($extensionName) {
 
     global $tool_content, $langModuleNotInstalled, $langReadHelp, $langHere;
-
+    
     if (extension_loaded($extensionName)) {
         $tool_content .= '<li>' . icon('fa-check') . ' ' . $extensionName . '</li>';
     } else {
@@ -3818,7 +3853,7 @@ function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array) {
             } elseif (isIPv6($ip_or_cidr)) {
                 if ($ip == $ip_or_cidr) return true;
             }
-        }
+        }        
     }
     return false;
 }
@@ -3833,7 +3868,7 @@ function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array) {
 function closest($search, $arr) {
    $closest = null;
    $position = null;
-
+   
    foreach($arr as $key => $item) {
        if ($closest == null || abs($search - $closest) > abs($item - $search)) {
            $closest = $item;
@@ -3984,7 +4019,7 @@ function showSecondFactorUserProfile(){
 function saveSecondFactorUserProfile(){
     $connector = secondfaApp::getsecondfa();
     if($connector->isEnabled() == true ){
-        return secondfaApp::saveUserProfile($_SESSION['uid']);
+        return secondfaApp::saveUserProfile($_SESSION['uid']); 
     } else {
         return "";
     }
@@ -4026,7 +4061,7 @@ function showSecondFactorChallenge(){
 function checkSecondFactorChallenge(){
     $connector = secondfaApp::getsecondfa();
     if($connector->isEnabled() == true ){
-        return secondfaApp::checkChallenge($_SESSION['uid']);
+        return secondfaApp::checkChallenge($_SESSION['uid']); 
     } else {
         return "";
     }

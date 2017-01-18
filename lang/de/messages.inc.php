@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2016-11-01 13:01:30
+// Generated 2016-11-11 11:57:38
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -289,7 +289,6 @@ $langAdminAn = "Administrator Ankündigungen";
 $langAdminAddAnn = "Hinzufügen von Administrator Ankündigung";
 $langAdminModifAnn = "Ändern von Administrator Ankündigung";
 $langAdminAnnModify = "Administrator Ankündigung geändert";
-$langAdminAnVis = "Sichtbar";
 $langAdminAnnAdd = "Die Administrator Ankündigung wurde hinzugefügt";
 $langAdminAnnDel = "Administrator Ankündigung wurde gelöscht";
 $langAdminAnnMes = "Wurde aufgestellt am";
@@ -1443,7 +1442,6 @@ $langPollSubmitted = "Danke für Ihre Teilnahme";
 $langPollTotalAnswers = "Gesamte Anzahl von Antworten";
 $langPollNone = "Es gibt zu diesem Zeitpunkt keinen Fragebogen.";
 $langPollInactive = "<p class='caution'>Der Fragebogen ist abgelaufen oder wurde noch nicht aktiviert.</p>";
-$langPollHasEnded = "Ist abgelaufen";
 $langPollCharts = "Ergebnisse des Fragebogens";
 $langPollUnknown = "Ich weiss nicht / Ich antworte nicht";
 $langIndividuals = "Ergebnisse pro Benutzer";
@@ -2058,7 +2056,6 @@ $m['no'] = "Nein";
 $m['in'] = "in";
 $m['today'] = "heute";
 $m['tomorrow'] = "morgen";
-$m['expired'] = "ist&nbsp;abgelaufen";
 $m['submitted'] = "wurde abgeschickt";
 $m['select'] = "Auswahl";
 $m['groupsubmit'] = "wurde abgeschickt in Auftrag des";
@@ -4296,7 +4293,6 @@ $langAnnouncementWillBeVis = "Will be activated on: ";
 $langAnnouncementWillNotBeVis = "Has been deactivated since: ";
 $langGeneralTutorials = "Guides";
 $langAdminAnNotVis = "Not visible";
-$langAdminExpired = "Expired";
 $langAdminWaiting = "Pending";
 $langEmailSendWarn = 'Warning: For the platform to be able to successfully send announcements via e-mail,
 you should either select the SMTP or sendmail sending method or enter an announcement
@@ -4552,3 +4548,12 @@ $langThemeOrange = "Orange";
 $langThemePumpkin = "Pumkin";
 $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
+$langHasExpiredS = "ist abgelaufen";
+$langHasExpired = "Abgelaufen";
+$langExportGradebookWithUsers = "Extract user results";
+$langExportGradebook = "Extract gradebook results";
+$langRestrictions = "Restrictions";
+$langTimeConstraint = "Time";
+$langHitConstraint = "Attempts";
+$langBlogRatingLog = "of blog rating";
+$langBlogSharingLog = "of blog sharing";

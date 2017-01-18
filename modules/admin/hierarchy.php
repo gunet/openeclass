@@ -78,7 +78,7 @@ if (!isset($_REQUEST['action'])) {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 } else {
-    $tool_content .= action_bar(array(            
+    $tool_content .= action_bar(array(
             array('title' => $langBack,
                 'url' => "$_SERVER[SCRIPT_NAME]",
                 'icon' => 'fa-reply',
@@ -114,7 +114,7 @@ if (!isset($_GET['action'])) {
 /* <![CDATA[ */
 
 $(function() {
-            
+
     $( "#js-tree" ).jstree({
         "plugins" : ["sort", "contextmenu"],
         "core" : {
@@ -147,8 +147,8 @@ $(function() {
             "items" : customMenu
         }
     })
-    .delegate("a", "click.jstree", function (e) { 
-        $("#js-tree").jstree("show_contextmenu", e.currentTarget); 
+    .delegate("a", "click.jstree", function (e) {
+        $("#js-tree").jstree("show_contextmenu", e.currentTarget);
     });
 
 });
@@ -184,11 +184,11 @@ hContent;
 elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
     if (isset($_POST['add'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) { csrf_token_error(); }
-        $code = $_POST['code'];
+        $code = canonicalize_whitespace($_POST['code']);
 
         $names = array();
         foreach ($session->active_ui_languages as $key => $langcode) {
-            $n = (isset($_POST['name-' . $langcode])) ? $_POST['name-' . $langcode] : null;
+            $n = (isset($_POST['name-' . $langcode])) ? canonicalize_whitespace($_POST['name-' . $langcode]) : null;
             if (!empty($n)) {
                 $names[$langcode] = $n;
             }
@@ -212,7 +212,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
             $visible = 2;
         }
         // Check for empty fields
-        if (empty($names)) {
+        if (!count($names)) {
             $tool_content .= "<div class='alert alert-danger'>" . $langEmptyNodeName . "</div><br>";
             $tool_content .= action_bar(array(
                 array('title' => $langReturnToAddNode,
@@ -295,7 +295,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
                 <input class='form-control' type='text' name='order_priority'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
             </div>
         </div>";
-        
+
         $visibleChecked = array(NODE_CLOSED => '', NODE_SUBSCRIBED => '', NODE_OPEN => '');
         $visibleChecked[2] = " checked='checked'";
         $tool_content .= formVisible($visibleChecked);
@@ -318,7 +318,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         ". generate_csrf_token_form_field() ."
         </form>
         </div>";
-    }    
+    }
 }
 // Delete node
 elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
@@ -349,7 +349,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
             Session::Messages($langNodeErase, 'alert alert-success');
         }
         redirect_to_home_page('modules/admin/hierarchy.php');
-    }    
+    }
 }
 // Edit a node
 elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
@@ -362,7 +362,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
 
         $names = array();
         foreach ($session->active_ui_languages as $key => $langcode) {
-            $n = (isset($_POST['name-' . $langcode])) ? $_POST['name-' . $langcode] : null;
+            $n = (isset($_POST['name-' . $langcode])) ? canonicalize_whitespace($_POST['name-' . $langcode]) : null;
             if (!empty($n)) {
                 $names[$langcode] = $n;
             }
@@ -378,7 +378,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         }
         $description = serialize($descriptions);
 
-        $code = $_POST['code'];
+        $code = canonicalize_whitespace($_POST['code']);
         $allow_course = (isset($_POST['allow_course'])) ? 1 : 0;
         $allow_user = (isset($_POST['allow_user'])) ? 1 : 0;
         $order_priority = (isset($_POST['order_priority']) && !empty($_POST['order_priority'])) ? intval($_POST['order_priority']) : 'null';
@@ -386,8 +386,16 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         if ($visible < 0 || $visible > 2) {
             $visible = 2;
         }
-        if (empty($name)) {
-            $tool_content .= "<div class='alert alert-danger'>" . $langEmptyNodeName . "<br>";
+        if (!count($names)) {
+            $tool_content .= "<div class='alert alert-danger'>" . $langEmptyNodeName . "</div><br>";
+            $tool_content .= action_bar(array(
+                array('title' => $langReturnToEditNode,
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?action=edit&amp;id=$id",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')));
+        } elseif (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
+            // Check for greek letters
+            $tool_content .= "<div class='alert alert-danger'>" . $langGreekCode . "</div><br>";
             $tool_content .= action_bar(array(
                 array('title' => $langReturnToEditNode,
                     'url' => $_SERVER['SCRIPT_NAME'] . "?action=edit&amp;id=$id",
@@ -477,18 +485,18 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         } else {
             $formOPid = 0;
         }
-        
+
         if ($is_admin) {
             list($js, $html) = $tree->buildNodePicker($treeopts);
         } else {
             $treeopts['allowables'] = $user->getDepartmentIds($uid);
             list($js, $html) = $tree->buildNodePicker($treeopts);
         }
-        
+
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "<span class='help-block'><small>$langNodeParent2</small></span>
-        </div></div>        
+        </div></div>
         <div class='form-group'>
           <label class='col-sm-3 control-label'>$langNodeAllowCourse:</label>
             <div class='col-sm-9'>
@@ -530,11 +538,11 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
                 )
             ))."
           </div>
-        </div>        
+        </div>
         </fieldset>
         ". generate_csrf_token_form_field() ."
         </form>
-        </div>";           
+        </div>";
     }
 }
 
