@@ -244,7 +244,7 @@ if (isset($_POST['submit'])) {
                             <div id='mail-body'>
                                 <br>
                                 <div><b>$langSubject:</b> <span>$subject</span></div><br>
-                                <div><b>$langMailBody:</b></div>
+                                <div><b>$langMailBody</b></div>
                                 <div id='mail-body-inner'>
                                     " . $_POST['body']. "
                                 </div><br/>
