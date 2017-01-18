@@ -4,29 +4,22 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-    <title>!!! TOOLBOX !!!</title>
+    <title>{%PAGE_TITLE%}</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="select2/css/select2.min.css">
-    <link rel="stylesheet" href="select2/css/select2-bootstrap.min.css">
-    <link rel="stylesheet" href="../CSS/font-awesome-4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{%TOOLBOX_PATH%}css/bootstrap.min.css">
+    <link rel="stylesheet" href="{%TOOLBOX_PATH%}css/toolbox_styles.css">
+    <link href="{%template_base%}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/toolbox_styles.css">
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js">
-    </script>
+    <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="{%template_base%}/js/bootstrap.min.js"></script>
 
     <!-- Our javascript -->
-
-    <script src="select2/js/select2.full.min.js"></script>
-
+    {%HEAD_EXTRAS%}
 
     <script>
         $(document).ready(function () {
@@ -71,10 +64,10 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="logo-area hidden-xs hidden-sm">
-                    <img class="img-responsive" src="Logo.png">
+                    <img class="img-responsive" src="{%logo_img%}">
                 </div>
                 <div class="logo-area visible-xs visible-sm">
-                    <img class="img-responsive center-block" src="Logo.png">
+                    <img class="img-responsive center-block" src="{%logo_img_small%}">
                 </div>
             </div>
             <div class="col-md-6 menu-nav">
@@ -92,17 +85,19 @@
         </div>
     </div>
 </div>
+<!-- BEGIN welcomeBlock -->
 <div class="description-sct">
     <div class="container">
         <div class="row">
             <div class="jumbotron">
                 <h2>Welcome to Toolbox</h2>
-                <p>The Toolbox for Social Literacy in the Public Sector is an on-line database that contains a range of training materials for trainers as well as other professionals for training social literacy. Social literacy means the presence of social skills, knowledge and positive human values that support the ability in people to act positively and responsibly in social settings, and also their ability to successfully and deliberately mediate their world as family members, workers, citizens and lifelong learners.</p>
-                <img src="googleplus.png" class="img-responsive" style="width: 200px;">
+                <p>{%infoAbout%}</p>
+                {%socialSharingLinks%}
             </div>
         </div>
     </div>
 </div>
+<!-- END welcomeBlock -->
 <div class="search-sct">
     <div class="container">
         <div class="row">
@@ -111,99 +106,46 @@
                     <div class="panel-body">
                         <div class="inner-heading text-center">Search form</div>
                         <div class="row">
-                            <form>
+                            <form method='get' action='{%formAction%}'>
+                                <!-- BEGIN selectFieldBlock -->
                                 <div class="col-xs-6 col-sm-3">
                                     <div class="form-group">
-                                        <label for="modules">Modules</label>
-                                        <select id="modules" class="form-control" multiple="multiple">
-                                            <option>OneOneOneOne</option>
-                                            <option>TwoTwoTwoTwo</option>
-                                            <option>ThreeThreeThreeThree</option>
-                                            <option>FourFourFourFour</option>
-                                            <option>OneOneOneOne</option>
-                                            <option>TwoTwoTwoTwo</option>
-                                            <option>ThreeThreeThreeThree</option>
-                                            <option>FourFourFourFour</option>
-                                            <option>OneOneOneOne</option>
-                                            <option>TwoTwoTwoTwo</option>
-                                            <option>ThreeThreeThreeThree</option>
-                                            <option>FourFourFourFour</option>
+                                        <label for="modules">{%selectFieldLabel%}</label>
+                                        <select id="modules" name='{%selectFieldName%}' class="form-control" multiple>
+                                            <!-- BEGIN selectOptionBlock -->
+                                            <option value="{%selectOptionValue%}" {%selectOptionSelected%}>{%selectOptionTitle%}</option>
+                                            <!-- END selectOptionBlock -->
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-xs-6 col-sm-3">
-                                    <div class="form-group">
-                                        <label for="duration">Duration</label>
-                                        <select id="duration" class="form-control" multiple="multiple">
-                                            <option>One</option>
-                                            <option>Two</option>
-                                            <option>Three</option>
-                                            <option>Four</option>
-                                            <option>OneOneOneOne</option>
-                                            <option>TwoTwoTwoTwo</option>
-                                            <option>ThreeThreeThreeThree</option>
-                                            <option>FourFourFourFour</option>
-                                            <option>OneOneOneOne</option>
-                                            <option>TwoTwoTwoTwo</option>
-                                            <option>ThreeThreeThreeThree</option>
-                                            <option>FourFourFourFour</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 col-sm-3">
-                                    <div class="form-group">
-                                        <label for="group-size">Group Size</label>
-                                        <select id="group-size" class="form-control" multiple="multiple">
-                                            <option>One</option>
-                                            <option>Two</option>
-                                            <option>Three</option>
-                                            <option>Four</option>
-                                            <option>OneOneOneOne</option>
-                                            <option>TwoTwoTwoTwo</option>
-                                            <option>ThreeThreeThreeThree</option>
-                                            <option>FourFourFourFour</option>
-                                            <option>OneOneOneOne</option>
-                                            <option>TwoTwoTwoTwo</option>
-                                            <option>ThreeThreeThreeThree</option>
-                                            <option>FourFourFourFour</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 col-sm-3">
-                                    <div class="form-group">
-                                        <label for="language">Language</label>
-                                        <select id="language" class="form-control" multiple="multiple">
-                                            <option>One</option>
-                                            <option>Two</option>
-                                            <option>Three</option>
-                                            <option>Four</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                <!-- END selectFieldBlock -->
                                 <div class="col-xs-12" style="padding-top: 50px; padding-bottom: 20px;">
-                                <button class="btn btn-success center-block">Search</button>
+                                    <button class="btn btn-success center-block">{%langSearch%}</button>
                             </div>
                             </form>
                         </div>
+                        <!-- BEGIN statsBlock -->
                         <div class="col-xs-12 panel-inner-footer">
                             <div class="row text-center">
                                 <div class="col-sm-4">
-                                    <b>Total Exercises : </b> 43
+                                    <b>{%langTotalCourses%} : </b> {%totalCourses%}
                                 </div>
                                 <div class="col-sm-4">
-                                    <b>Total Users : </b> 543
+                                    <b>{%langTotalUsers%} : </b> {%totalUsers%}
                                 </div>
                                 <div class="col-sm-4">
-                                    <b>Total Visits : </b> 552
+                                    <b>{%langTotalVisits%} : </b> {%totalVisits%}
                                 </div>
                             </div>
                         </div>
+                        <!-- END statsBlock -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- BEGIN resultListBlock -->
 <div class="result-sct">
     <div class="container">
         <div class="row">
@@ -211,164 +153,31 @@
                 <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="inner-heading text-center">Search Results</div>
-                    <div class="search-count text-center"><span class="text-muted"><b>32 entries</b> found matching your search</span></div>
+                    <div class="search-count text-center"><span class="text-muted"><b>{%resultNumEntries%}</b> {%resultNumEntriesFound%}</span></div>
                     <div class="row">
+                        <!-- BEGIN resultBlock -->
                         <div class="col-xs-6">
                             <div class="panel panel-success result-wrapper">
                                 <div class="panel-heading">
-                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
+                                    <div class="panel-title"><a href="{%resultLink%}">{%resultTitle%} <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
                                 </div>
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-xs-8 result-content">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
-                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
-                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
+                                            {%resultContent%}
                                         </div>
                                         <div class="col-xs-4 result-meta">
                                             <ul class="list-unstyled">
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
+                                                <!-- BEGIN resultMetaBlock -->
+                                                <li><span class="fa {%resultMetaIcon%}"></span>&nbsp;&nbsp;{%resultMetaLabel%}</li>
+                                                <!-- END resultMetaBlock -->
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-6">
-                            <div class="panel panel-success result-wrapper">
-                                <div class="panel-heading">
-                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-xs-8 result-content">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
-                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
-                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
-                                        </div>
-                                        <div class="col-xs-4 result-meta">
-                                            <ul class="list-unstyled">
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="panel panel-success result-wrapper">
-                                <div class="panel-heading">
-                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-xs-8 result-content">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
-                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
-                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
-                                        </div>
-                                        <div class="col-xs-4 result-meta">
-                                            <ul class="list-unstyled">
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="panel panel-success result-wrapper">
-                                <div class="panel-heading">
-                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-xs-8 result-content">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
-                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
-                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
-                                        </div>
-                                        <div class="col-xs-4 result-meta">
-                                            <ul class="list-unstyled">
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="panel panel-success result-wrapper">
-                                <div class="panel-heading">
-                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-xs-8 result-content">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
-                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
-                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
-                                        </div>
-                                        <div class="col-xs-4 result-meta">
-                                            <ul class="list-unstyled">
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="panel panel-success result-wrapper">
-                                <div class="panel-heading">
-                                    <div class="panel-title"><a href="#">Lorem Ipsum <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class="row">
-                                        <div class="col-xs-8 result-content">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce egestas tellus id gravida faucibus. Curabitur in commodo metus, et euismod tortor. Sed aliquet lacus vel risus sagittis finibus. Maecenas a neque consequat, egestas urna vitae, egestas orci. Vivamus aliquet risus nulla, vel tincidunt odio venenatis et. Proin ornare sapien id neque gravida, a euismod metus scelerisque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec at venenatis ligula. Aliquam sed faucibus eros, non blandit turpis.</p>
-                                            <p>Phasellus non eleifend ex, sit amet bibendum libero. Donec luctus hendrerit purus, sed facilisis erat feugiat eu. Donec nulla lacus, porttitor at magna eget, ultrices congue nunc. Vivamus ut fringilla lacus. Mauris ante mi, fringilla vel semper a, pellentesque a mi. Aenean congue sodales odio, in tristique felis tempor vitae. Nunc malesuada, tortor vel laoreet scelerisque, leo augue posuere magna, sit amet vehicula sem leo in dui.</p>
-                                            <p>Etiam dictum mauris a vehicula dapibus. Curabitur nunc ligula, posuere non purus ac, varius porttitor sem. Maecenas vulputate velit enim, aliquam tristique turpis fringilla at. Maecenas porta sollicitudin porttitor. Fusce fermentum fringilla dignissim. Mauris ac nulla scelerisque, posuere metus in, pellentesque enim. Morbi porta hendrerit leo quis elementum. Quisque at tellus lorem. Duis vel odio tempus, semper mauris nec, commodo mauris. Mauris risus libero, laoreet sit amet auctor in, egestas eu justo. Mauris lectus sem, consectetur ut nisi nec, placerat aliquet ante.</p>
-                                        </div>
-                                        <div class="col-xs-4 result-meta">
-                                            <ul class="list-unstyled">
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                                <li><i class="fa fa-folder-open"></i>&nbsp;&nbsp;asdfasdf</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- END resultBlock -->
                     </div>
                 </div>
             </div>
@@ -376,26 +185,23 @@
         </div>
     </div>
 </div>
+<!-- END resultListBlock -->
 <div class="footer-sct">
+    <!-- BEGIN footerBlock -->
     <footer class="footer">
         <div class="container">
             <div class="row footer-main">
-                <div class="col-sm-6">
-                    <img src="Logo.png" class="img-responsive center-block">
-                </div>
-                <div class="col-sm-6">
-                    <p> This project has been funded with support from the European Commission. This publication [communication] reflects the views only of the author, and the Commission cannot be held responsible for any use which may be made of the information contained therein.
-                    </p>
-                </div>
+                {%FOOTER%}
             </div>
         </div>
     </footer>
+    <!-- END footerBlock -->
     <div class="copyright-note">
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="text-center">
-                        Copyright &copy; 2016 | YCARE all rights reserved
+                        <span>{%COPYRIGHT%} &mdash; <a href="{%TERMS_URL%}">{%LANG_TERMS%}</a></span>
                     </div>
                 </div>
             </div>
@@ -482,7 +288,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                Already have an accont? <a class="loginModal" href="#">Login</a>
+                Already have an account? <a class="loginModal" href="#">Login</a>
             </div>
         </div>
     </div>
