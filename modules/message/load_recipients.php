@@ -45,21 +45,15 @@ if (isset($_POST['course'])) {
                     AND cu.user_id = u.id
                     AND cu.status != ?d
                     AND u.id != ?d
-                    ORDER BY UPPER(u.surname), UPPER(u.givenname)";
+                    ORDER BY name";
             $res = Database::get()->queryArray($sql, $cid, USER_GUEST, $uid);
-            
-            if ($is_editor) {
-                $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d ORDER BY id DESC";
-                $result_g = Database::get()->queryArray($sql_g, $cid);
-            } else {//allow students to send messages only to groups they are members of
-                $sql_g = "SELECT `g`.id, `g`.name FROM `group` as `g`, `group_members` as `gm`
-                              WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d";
-                $result_g = Database::get()->queryArray($sql_g, $cid, $uid);
-            }
+            // find course groups (if any)
+            $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d ORDER BY name";
+            $result_g = Database::get()->queryArray($sql_g, $cid);
             
             foreach ($result_g as $res_g)
             {
-                $jsonarr['_'.$res_g->id] = q($res_g->name);
+            $jsonarr['_'.$res_g->id] = q($res_g->name);
             }
         } else {
             //if user is student an student-student messages not allowed for course messages show teachers
@@ -138,7 +132,7 @@ if (isset($_POST['course'])) {
                 AND cu.status != ?d
                 AND u.id != ?d
                 AND (u.surname LIKE ?s OR u.username LIKE ?s)
-                ORDER BY UPPER(u.surname), UPPER(u.givenname)
+                ORDER BY name
                 LIMIT 10";
         $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
     }
