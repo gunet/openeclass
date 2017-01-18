@@ -284,15 +284,9 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 
                 $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);
                 
-                if ($is_editor) {
-                    $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d";
-                    $result_g = Database::get()->queryArray($sql_g, $course_id);
-                } else {//allow students to send messages only to groups they are members of
-                    $sql_g = "SELECT `g`.id, `g`.name FROM `group` as `g`, `group_members` as `gm` 
-                              WHERE `g`.id = `gm`.group_id AND `g`.course_id = ?d AND `gm`.user_id = ?d";
-                    $result_g = Database::get()->queryArray($sql_g, $course_id, $uid);            
-                }
-                                    
+                // find course groups (if any)
+                $sql_g = "SELECT id, name FROM `group` WHERE course_id = ?d ORDER BY name";
+                $result_g = Database::get()->queryArray($sql_g, $course_id);                                                    
                 foreach ($result_g as $res_g)
                 {
                     if (isset($_GET['group_id']) and $_GET['group_id'] == $res_g->id) {
