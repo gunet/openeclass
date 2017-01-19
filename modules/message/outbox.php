@@ -60,10 +60,10 @@ if (isset($_GET['mid'])) {
         $recipients = '';
         foreach ($msg->recipients as $r) {
             if ($r != $msg->author_id) {
-                //$recipients .= display_user($r, false, false, "outtabs").'<br/>';
-                $recipients .= display_user($r, false, false, "outtabs").' , &nbsp;';
-            }
+                $recipients .= display_user($r, false, false, "outtabs").' ,&nbsp';
+            }            
         }        
+        $recipients = rtrim($recipients, ',&nbsp;'); // remove the last comma
         $out .= "<div id='out_del_msg'></div>
                 <div id='out_msg_area'>
                     <div class='panel panel-primary'>
