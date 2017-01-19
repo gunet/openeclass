@@ -42,7 +42,7 @@ require_once 'include/log.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'include/lib/csv.class.php';
-require_once 'modules/plaguarism/plaguarism.php';
+require_once 'modules/plagiarism/plagiarism.php';
 
 // For colorbox, fancybox, shadowbox use
 require_once 'include/lib/modalboxhelper.class.php';
@@ -85,12 +85,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     exit;
 }
 
-/* Plaguarism demo
+/* Plagiarism demo
 
-if (!Plaguarism::get()->isFileSubmitted($fileID))
-    Plaguarism::get()->submitFile($fileID, "/full/path/to/hased_filename", "original_filename.doc");
+if (!Plagiarism::get()->isFileSubmitted($fileID))
+    Plagiarism::get()->submitFile($fileID, "/full/path/to/hased_filename", "original_filename.doc");
 else {
-    $results = Plaguarism::get()->getResults($fileID);
+    $results = Plagiarism::get()->getResults($fileID);
     if ($results->ready) {
 //        $results-> ...;
     }

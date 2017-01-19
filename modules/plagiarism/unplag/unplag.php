@@ -22,7 +22,7 @@
 
 require_once 'vendor/autoload.php';
 
-class UnPlag extends Plaguarism {
+class UnPlag extends Plagiarism {
 
     const DEBUGLEVEL = Debug::ERROR;
 
@@ -44,7 +44,7 @@ class UnPlag extends Plaguarism {
     /**
      * 
      * @param type $fileID
-     * @param PlaguarismResult $result 
+     * @param PlagiarismResult $result 
      */
     private function getPDF($fileID, $result) {
         $submitID = $this->getSubmissionID($fileID);
@@ -70,7 +70,7 @@ class UnPlag extends Plaguarism {
     /**
      * 
      * @param type $fileID
-     * @return PlaguarismResult
+     * @return PlagiarismResult
      */
     private function getFileResults($fileID) {
         $submitID = $this->getSubmissionID($fileID);
@@ -85,7 +85,7 @@ class UnPlag extends Plaguarism {
                     ]
                 ]);
                 $result = json_decode($response->getBody(), true);
-                return new PlaguarismResult($result['check']['progress'], $result['check']['report']['view_url']);
+                return new PlagiarismResult($result['check']['progress'], $result['check']['report']['view_url']);
             } catch (Exception $ex) {
                 Debug::message($ex->getMessage(), UnPlag::DEBUGLEVEL);
             }

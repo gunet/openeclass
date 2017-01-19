@@ -21,16 +21,16 @@
 
 require_once 'unplag/unplag.php';
 
-abstract class Plaguarism {
+abstract class Plagiarism {
 
     private static $current;
 
     /**
-     * Get default plaguarism check tool
-     * @return Plaguarism
+     * Get default plagiarism check tool
+     * @return Plagiarism
      */
     public static function get() {
-        if (!Plaguarism::$current)
+        if (!Plagiarism::$current)
             self::$current = new UnPlag ();
         return self::$current;
     }
@@ -53,7 +53,7 @@ abstract class Plaguarism {
     /**
      * Get results of a previously submitted file.
      * @param string $fileID The file to check upon
-     * @return PlaguarismResult Check result. Might be null
+     * @return PlagiarismResult Check result. Might be null
      */
     public abstract function getResults($fileID);
 
@@ -78,7 +78,7 @@ abstract class Plaguarism {
     protected abstract function getType();
 }
 
-class PlaguarismResult {
+class PlagiarismResult {
 
     /**
      * @var float Value could be between 0 and 1
@@ -90,7 +90,7 @@ class PlaguarismResult {
     public $ready;
 
     /**
-     * @var string The URL of the plaguarism detection
+     * @var string The URL of the plagiarism detection
      */
     public $resultURL;
 
