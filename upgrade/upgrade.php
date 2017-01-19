@@ -3532,6 +3532,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 AFTER grade_comments");
         }
         
+        // plagiarism tool table
+        if (!DBHelper::tableExists('ext_plag_connection')) {
+            Database::get()->query("CREATE TABLE `ext_plag_connection` (
+              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `type` int(1) unsigned NOT NULL DEFAULT '1',
+              `file_id` int(11) NOT NULL,
+              `remote_file_id` int(11) DEFAULT NULL,
+              `submission_id` int(11) DEFAULT NULL,
+              PRIMARY KEY (`id`)) $tbl_options");
+        }
+            
+        
     }
 
     // update eclass version
