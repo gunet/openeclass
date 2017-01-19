@@ -42,6 +42,7 @@ require_once 'include/log.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'include/lib/csv.class.php';
+require_once 'modules/plaguarism/plaguarism.php';
 
 // For colorbox, fancybox, shadowbox use
 require_once 'include/lib/modalboxhelper.class.php';
@@ -83,6 +84,19 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     echo json_encode($data);
     exit;
 }
+
+/* Plaguarism demo
+
+if (!Plaguarism::get()->isFileSubmitted($fileID))
+    Plaguarism::get()->submitFile($fileID, "/full/path/to/hased_filename", "original_filename.doc");
+else {
+    $results = Plaguarism::get()->getResults($fileID);
+    if ($results->ready) {
+//        $results-> ...;
+    }
+}
+
+*/
 
 //Gets the student's assignment file ($file_type=NULL)
 //or the teacher's assignment ($file_type=1)
