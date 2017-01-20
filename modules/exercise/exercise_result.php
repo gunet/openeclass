@@ -28,6 +28,7 @@ $require_current_course = TRUE;
 $guest_allowed = true;
 include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'modules/gradebook/functions.php';
 
 $pageName = $langExercicesResult;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
@@ -46,7 +47,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL",
         $eurid)->count;
     if ($ungraded == 0) {
-        // if no more ungraded quastions, set attempt as complete and
+        // if no more ungraded questions, set attempt as complete and
         // recalculate sum of grades
         Database::get()->query("UPDATE exercise_user_record
             SET attempt_status = ?d,
@@ -54,6 +55,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                                     WHERE eurid = ?d)
             WHERE eurid = ?d",
             ATTEMPT_COMPLETED, $eurid, $eurid);
+        $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting FROM exercise_user_record WHERE eurid = ?d", $eurid);
+        // update gradebook            
+        update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
     } else {
         // else increment total by just this grade
         Database::get()->query("UPDATE exercise_user_record
@@ -419,7 +423,7 @@ if (count($exercise_question_ids)>0){
                                 $choice[$answerId] = $matching[$choice[$answerId]];
                             } elseif (!$choice[$answerId]) {
                                 $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
-                            } else {
+                            } else {                                
                                 $choice[$answerId] = "<span class='text-danger'>
                                                                 <del>" . q($matching[$choice[$answerId]]) . "</del>
                                                                 </span>";
@@ -477,7 +481,7 @@ if (count($exercise_question_ids)>0){
                             $tool_content .= "
                                                 <tr class='even'>
                                                   <td>" . standard_text_escape($answer) . "</td>
-                                                  <td>" . q($choice[$answerId]) ." / <span class='text-success'><b>" . q($matching[$answerCorrect]) . "</b></span></td>
+                                                  <td>" . $choice[$answerId] ." / <span class='text-success'><b>" . q($matching[$answerCorrect]) . "</b></span></td>
                                                 </tr>";
                         }
                     }
