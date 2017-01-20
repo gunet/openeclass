@@ -96,15 +96,17 @@ load_js('sortable/Sortable.min.js');
 ModalBoxHelper::loadModalBox();
 $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
 <script type='text/javascript'>
-    $(document).ready(function() {  "
-.($is_editor && $course_info->view_type != 'simple' ? 'Sortable.create(boxlistSort,{
-        animation: 350,
-        handle: \'.fa-arrows\',
-                animation: 150,
-                onUpdate: function (evt) {
+    $(document).ready(function() {";
 
+// Units sorting
+if ($is_editor and in_array($course_info->view_type, ['weekly', 'units'])) {
+    $head_content .= '
+        Sortable.create(boxlistSort, {
+            animation: 350,
+            handle: \'.fa-arrows\',
+            animation: 150,
+            onUpdate: function (evt) {
                 var itemEl = $(evt.item);
-
                 var idReorder = itemEl.attr(\'data-id\');
                 var prevIdReorder = itemEl.prev().attr(\'data-id\');
 
@@ -112,14 +114,16 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
                   type: \'post\',
                   dataType: \'text\',
                   data: {
-                          toReorder: idReorder,
-                          prevReorder: prevIdReorder,
-                        }
-                    });
-                }
-});' : '')
-//Calendar stuff
-.'var calendar = $("#bootstrapcalendar").calendar({
+                      toReorder: idReorder,
+                      prevReorder: prevIdReorder,
+                  }
+                });
+            }
+        });';
+}
+
+// Calendar stuff
+$head_content .= 'var calendar = $("#bootstrapcalendar").calendar({
                     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
                     events_source: "'.$urlAppend.'main/calendar_data.php?course='.$course_code.'",
                     language: "'.$langLanguageCode.'",
@@ -261,7 +265,7 @@ $head_content .= "
             };
         </script>";
 
-if(count($res)>0){
+if (count($res) > 0) {
     foreach ($res as $key => $row) {
         $desctype = intval($row->type) - 1;
         $hidden_id = "hidden_" . $key;
@@ -457,7 +461,7 @@ if ($is_editor) {
 
 
 }
-//style='color:#999999; font-size:13px;'
+
 $bar_content .= "<strong>" . $langCode . ":</strong> " . q($public_code) . "" .
                 "<br><strong>" . $langFaculty . ":</strong> ";
 
@@ -589,15 +593,14 @@ if (!empty($rec_mail)) {
 // Contentbox: Course main contentbox
 //Temp commit (waiting for Alex to fix course description issue)
 
-if(!empty($license_info_box)){
-
+if (!empty($license_info_box)) {
     $license_holder = "
                         <div class ='text-center'>
                            $license_info_box
                         </div>
                         ";
 } else {
-    $license_holder = "";
+    $license_holder = '';
 }
 
 if ($course_info->home_layout == 3) {
@@ -613,8 +616,7 @@ if ($course_info->home_layout == 3) {
         </div>";
    $main_content_cols = 'col-sm-7';
 }
-$edit_link = "";
-$action_bar = "";
+$edit_link = $action_bar = '';
 if ($is_editor) {
     warnCourseInvalidDepartment(true);
     $edit_link = "
@@ -640,7 +642,7 @@ if ($is_editor) {
 
     $edit_link = " ";
 }
-$course_info_popover = "<div  class='list-group'>$course_info_extra</div>";
+$course_info_popover = "<div class='list-group'>$course_info_extra</div>";
 
 $tool_content .= "
 $action_bar
@@ -699,38 +701,38 @@ if ($is_editor) {
     }
 }
 
-    $sql = Database::get()->queryArray($query, $course_id);
-    $total_cunits = count($sql);
-    if ($total_cunits > 0) {
-        $cunits_content .= "";
-        $count_index = 0;
-        foreach ($sql as $cu) {
-            if ($cu->visible == 1) {
-               $count_index++;
-            }
-            // access status
-            $access = $cu->public;
-            // Visibility icon
-            $vis = $cu->visible;
-            $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
-            $class_vis = ($vis == 0) ? 'not_visible' : '';
-            if ($course_info->view_type == 'weekly') {
-                if (!empty($cu->title)) {
-                    $cwtitle = "" . q($cu->title) . " ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";
-                } else {
-                    $cwtitle = "$count_index$langor $langsWeek ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";
-                }
-                $href = "<a class = '$class_vis' href='${urlServer}modules/weeks/?course=$course_code&amp;id=$cu->id&amp;cnt=$count_index'>$cwtitle</a>";
+$sql = Database::get()->queryArray($query, $course_id);
+$total_cunits = count($sql);
+if ($total_cunits > 0) {
+    $cunits_content .= "";
+    $count_index = 0;
+    foreach ($sql as $cu) {
+        if ($cu->visible == 1) {
+            $count_index++;
+        }
+        // access status
+        $access = $cu->public;
+        // Visibility icon
+        $vis = $cu->visible;
+        $icon_vis = ($vis == 1) ? 'visible.png' : 'invisible.png';
+        $class_vis = ($vis == 0) ? 'not_visible' : '';
+        if ($course_info->view_type == 'weekly') {
+            if (!empty($cu->title)) {
+                $cwtitle = "" . q($cu->title) . " ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";
             } else {
-                $href = "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+                $cwtitle = "$count_index$langor $langsWeek ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";
             }
-            $cunits_content .= "<div class='col-xs-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-xs-12'>
-                                    <div class='item-content'>
-                                        <div class='item-header clearfix'>
-                                            <div class='item-title h4'>$href</div>";
-                                if ($is_editor) {
-                if ($course_info->view_type == 'weekly') { // actions for course weekly format
-                    $cunits_content .= "<div class='item-side'>" .
+            $href = "<a class = '$class_vis' href='${urlServer}modules/weeks/?course=$course_code&amp;id=$cu->id&amp;cnt=$count_index'>$cwtitle</a>";
+        } else {
+            $href = "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+        }
+        $cunits_content .= "<div class='col-xs-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-xs-12'>
+                              <div class='item-content'>
+                                <div class='item-header clearfix'>
+                                  <div class='item-title h4'>$href</div>";
+        if ($is_editor) {
+            if ($course_info->view_type == 'weekly') { // actions for course weekly format
+                $cunits_content .= "<div class='item-side'>" .
                     action_button(array(
                         array('title' => $langEditChange,
                               'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$cu->id&amp;cnt=$count_index",
@@ -743,11 +745,11 @@ if ($is_editor) {
                               'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
                               'show' => $visible == COURSE_OPEN),)) .
                     '</div>';
-                } else {
-                    $cunits_content .= "<div class='item-side'>
-                                            <div class='reorder-btn'>
-                                                <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
-                                            </div>" .
+            } else {
+                $cunits_content .= "<div class='item-side'>
+                                      <div class='reorder-btn'>
+                                        <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
+                                          </div>" .
                     action_button(array(
                         array('title' => $langEditChange,
                               'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
@@ -765,22 +767,31 @@ if ($is_editor) {
                               'class' => 'delete',
                               'confirm' => $langCourseUnitDeleteConfirm))) .
                     '</div>';
-                }
             }
-                        $cunits_content .= "</div>
-                                        <div class='item-body'>";
-                        $cunits_content .= ($cu->comments == ' ')?'':$cu->comments;
-                        $cunits_content .= "</div></div>";
-            $cunits_content .= "</div></div></div>";
         }
-    } else {
-        $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";
+        $cunits_content .= "</div>
+            <div class='item-body'>";
+        $cunits_content .= ($cu->comments == ' ')?'':$cu->comments;
+        $cunits_content .= "</div></div>";
+        $cunits_content .= "</div></div></div>";
     }
+} else {
+    $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";
+}
 
 // Contentbox: Thematikes enotites
 // Contentbox: Calendar
 // Contentbox: Announcements
-if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple')) {
+
+$displayCalendar = Database::get()->querySingle('SELECT MAX(visible) AS vis FROM course_module
+                            WHERE course_id = ?d AND module_id IN (?d, ?d, ?d, ?d)',
+                            $course_id, MODULE_ID_AGENDA, MODULE_ID_EXERCISE,
+                            MODULE_ID_TC, MODULE_ID_ASSIGN)->vis;
+$displayAnnouncements = Database::get()->querySingle('SELECT visible FROM course_module
+                            WHERE course_id = ?d AND module_id = ' . MODULE_ID_ANNOUNCE,
+                            $course_id)->visible;
+
+if (($total_cunits > 0 or $is_editor) and in_array($course_info->view_type, ['weekly', 'units'])) {
     $alter_layout = FALSE;
     $cunits_sidebar_columns = 4;
     $cunits_sidebar_subcolumns = 12;
@@ -790,68 +801,116 @@ if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple'))
     $cunits_sidebar_subcolumns = 6;
 }
 $tool_content .= "<div class='row'>";
-if (!$alter_layout) {
-    $unititle = ($course_info->view_type == 'weekly')? $langCourseWeeklyFormat : $langCourseUnits ;
+if ($course_info->view_type == 'activity') {
+    $tool_content .= "
+    <div class='col-xs-2 pull-right'>
+        <a href='{$urlAppend}modules/course_info/activity_edit.php?course=$course_code' class='btn btn-default'>
+            <span class='fa fa-edit fa-fw'></span>" . q($langActivityEdit) . "</a></div>
+    <div class='col-md-8'>
+        <div class='row'>
+            <div class='col-md-12'>";
+    $qVisible = ($is_editor? '': 'AND visible = 1');
+    $items = Database::get()->queryArray("SELECT activity_content.id, heading, content
+        FROM activity_heading
+            LEFT JOIN activity_content
+                ON activity_heading.id = activity_content.heading_id
+        WHERE course_id = ?d ORDER BY `order`", $course_id);
+    foreach ($items as $item) {
+        $tool_content .= "
+                <div class='panel clearfix'>
+                    <div class='col-xs-12'>
+                        <div class='item-title h4'>" . q(getSerializedMessage($item->heading)) ."</div>
+                        <div class='item-body'>" . standard_text_escape($item->content) . "</div>";
+        $resources = Database::get()->queryArray("SELECT * FROM unit_resources
+            WHERE unit_id = ?d AND `order` >= 0 $qVisible ORDER BY `order`", $item->id);
+        if (count($resources > 0)) {
+            $tool_content .= "
+                        <div class='table-responsive'>
+                            <table class='table table-striped table-hover'>
+                                <tbody>";
+            foreach ($resources as $info) {
+                $info->comments = standard_text_escape($info->comments);
+                show_resourceWeek($info);
+            }
+            $tool_content .= "
+                                </tbody>
+                            </table>
+                        </div>";
+        }
+        $tool_content .= "
+                    </div>
+                </div>";
+    }
+    $tool_content .= "
+            </div>
+        </div>
+    </div>
+";
+
+} elseif (!$alter_layout) {
+    $unititle = ($course_info->view_type == 'weekly')? $langCourseWeeklyFormat : $langCourseUnits;
     $tool_content .= "
     <div class='col-md-8 course-units'>
         <div class='row'>
             <div class='col-md-12'>
-                <h3 class='content-title  pull-left'>$unititle</h3>
-            ";
+                <h3 class='content-title pull-left'>$unititle</h3>";
 
-        if ($is_editor and $course_info->view_type == 'units') {
-            $link = "{$urlServer}modules/units/info.php?course=$course_code";
-            $tool_content .= "<a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
-                                <span class='fa fa-plus-circle'></span><span class='hidden'>.</span>
-                            </a>";
-        }
+    if ($is_editor and $course_info->view_type == 'units') {
+        $link = "{$urlServer}modules/units/info.php?course=$course_code";
+        $tool_content .= "<a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
+              <span class='fa fa-plus-circle'></span><span class='hidden'>.</span></a>";
+    }
 
-        $tool_content .= "</div></div>";
-        $tool_content .= "<div class='row boxlist no-list' id='boxlistSort'>
+    $tool_content .= "
+            </div>
+        </div>
+        <div class='row boxlist no-list' id='boxlistSort'>
             $cunits_content
-        </div>";
-    $tool_content .= "</div>";
+        </div>
+    </div>";
 }
 
-$tool_content .= "<div class='col-md-$cunits_sidebar_columns'>";
+$tool_content .= "
+    <div class='col-md-$cunits_sidebar_columns'>
+        <div class='row'>";
 
-//BEGIN - Get user personal calendar
-$today = getdate();
-$day = $today['mday'];
-$month = $today['mon'];
-$year = $today['year'];
-if (isset($uid)) {
-    Calendar_Events::get_calendar_settings();
-}
-$user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
-//END - Get personal calendar
-
-$tool_content .="<div class='row'>";
-        // display open course level if exist
-            if (isset($level) && !empty($level)) {
-                $tool_content .= "
-                    <div class='col-md-$cunits_sidebar_subcolumns'>
-                        <h3 class='content-title'>$langOpenCourseShort</h3>
-                        <div class='panel'>
-                            <div class='panel-body'>
-                                $opencourses_level
-                            </div>
-                            <div class='panel-footer'>
-                                $opencourses_level_footer
-                            </div>
-                        </div>
+// display open course level if exist
+if (isset($level) && !empty($level)) {
+    $tool_content .= "
+            <div class='col-md-$cunits_sidebar_subcolumns'>
+                <h3 class='content-title'>$langOpenCourseShort</h3>
+                <div class='panel'>
+                    <div class='panel-body'>
+                        $opencourses_level
                     </div>
-                ";
-            }
-                $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h3 class='content-title'>$langCalendar</h3>
-                    <div class='panel'>
-                        <div class='panel-body'>
-                            $user_personal_calendar
-                        </div>
-                        <div class='panel-footer'>
-                            <div class='row'>
-                                <div class='col-sm-6 event-legend'>
+                    <div class='panel-footer'>
+                        $opencourses_level_footer
+                    </div>
+                </div>
+            </div>";
+}
+
+if ($displayCalendar) {
+    //BEGIN - Get user personal calendar
+    $today = getdate();
+    $day = $today['mday'];
+    $month = $today['mon'];
+    $year = $today['year'];
+    if (isset($uid)) {
+        Calendar_Events::get_calendar_settings();
+    }
+    $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
+    //END - Get personal calendar
+    $tool_content .= "
+            <div class='col-md-$cunits_sidebar_subcolumns'>
+                <h3 class='content-title'>$langCalendar</h3>
+                <div class='panel'>
+                    <div class='panel-body'>
+                        $user_personal_calendar
+                    </div>
+                    <div class='panel-footer'>
+                        <div class='row'>
+                            <div class='col-sm-6 event-legend'>
                                 <div>
                                     <span class='event event-important'></span><span>$langAgendaDueDay</span>
                                 </div>
@@ -867,25 +926,32 @@ $tool_content .="<div class='row'>";
                                     <span class='event event-special'></span><span>$langAgendaPersonalEvent</span>
                                 </div>
                             </div>
-                            </div>
                         </div>
                     </div>
                 </div>
-                <div class='col-md-$cunits_sidebar_subcolumns'>
-                                <h3 class='content-title'>$langAnnouncements</h3>
-                                <div class='panel'>
-                                    <div class='panel-body'>
-                                        <ul class='tablelist'>" . course_announcements() . "
-                                        </ul>
-                                    </div>
-                                    <div class='panel-footer clearfix'>
-                                        <div class='pull-right'><a href='{$urlAppend}modules/announcements/?course=$course_code'><small>$langMore&hellip;</small></a></div>
-                                    </div>
-                                </div>
-                            </div>
-                       </div>
-                       </div>
-                </div>";
+            </div>";
+}
+
+if ($displayAnnouncements) {
+    $tool_content .= "
+            <div class='col-md-$cunits_sidebar_subcolumns'>
+                <h3 class='content-title'>$langAnnouncements</h3>
+                <div class='panel'>
+                    <div class='panel-body'>
+                        <ul class='tablelist'>" . course_announcements() . "</ul>
+                    </div>
+                    <div class='panel-footer clearfix'>
+                        <div class='pull-right'>
+                            <a href='{$urlAppend}modules/announcements/?course=$course_code'><small>$langMore&hellip;</small></a>
+                        </div>
+                    </div>
+                </div>
+            </div>";
+}
+$tool_content .= "
+        </div>
+    </div>
+</div>";
 
 draw($tool_content, 2, null, $head_content);
 

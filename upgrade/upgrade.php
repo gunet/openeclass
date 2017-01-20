@@ -3452,7 +3452,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `order` INT(11) NOT NULL DEFAULT 0,
             `heading` TEXT NOT NULL,
             `required` BOOL NOT NULL DEFAULT 0) $tbl_options");
-        
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_content` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `course_id` INT(11) NOT NULL,
+            `heading_id` INT(11) NOT NULL DEFAULT 0,
+            `content` TEXT NOT NULL,
+            FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+            FOREIGN KEY (heading_id) REFERENCES activity_heading(id) ON DELETE CASCADE,
+            UNIQUE KEY `heading_course` (`course_id`,`heading_id`)) $tbl_options");
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `shortname` VARCHAR(255) NOT NULL,
@@ -3463,25 +3472,25 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `sortorder`  INT(11) NOT NULL DEFAULT 0,
             `required` TINYINT NOT NULL DEFAULT 0,
             `data` TEXT NULL DEFAULT NULL) $tbl_options");
-        
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_data` (
             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
             `field_id` INT(11) NOT NULL,
             `data` TEXT NOT NULL,
             PRIMARY KEY (`user_id`, `field_id`)) $tbl_options");
-        
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_category` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `name` MEDIUMTEXT NOT NULL,
             `sortorder`  INT(11) NOT NULL DEFAULT 0) $tbl_options");
-        
+
         Database::get()->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`) VALUES
             (1, '$langPersInfo', 0),
             (2, '$langEduEmpl', -1),
             (3, '$langAchievements', -2),
             (4, '$langGoalsSkills', -3),
             (5, '$langContactInfo', -4)");
-        
+
         Database::get()->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
             (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
             (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
@@ -3504,7 +3513,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
             (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
             (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
-        
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
@@ -3515,13 +3524,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `time_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `data` TEXT NOT NULL,
             INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $tbl_options");
-        
+
         Database::get()->query("INSERT INTO `config` (`key`, `value`) VALUES ('bio_quota', '4')");
-        
+
         if (!DBHelper::fieldExists('user', 'eportfolio_enable')) {
             Database::get()->query("ALTER TABLE `user` ADD eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0");
         }
-        
+
         // upgrade table `assignment_submit`
         if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filename')) {
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filename VARCHAR(200) NOT NULL DEFAULT ''
@@ -3531,7 +3540,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
                                 AFTER grade_comments");
         }
-        
+
     }
 
     if (version_compare($oldversion, '3.6', '<')) {

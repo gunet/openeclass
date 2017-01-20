@@ -392,7 +392,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `document` (
 
 $db->query("CREATE TABLE IF NOT EXISTS `group_properties` (
     `course_id` INT(11) NOT NULL,
-    `group_id` INT(11) NOT NULL PRIMARY KEY,	
+    `group_id` INT(11) NOT NULL PRIMARY KEY,
     `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
     `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
     `allow_unregister` TINYINT(4) NOT NULL DEFAULT 0,
@@ -483,7 +483,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `link` (
     `title` TEXT NOT NULL,
     `description` TEXT NOT NULL,
     `category` INT(6) DEFAULT 0 NOT NULL,
-    `order` INT(6) DEFAULT 0 NOT NULL,    
+    `order` INT(6) DEFAULT 0 NOT NULL,
     `user_id` INT(11) DEFAULT 0 NOT NULL,
     PRIMARY KEY (`id`, `course_id`)) $tbl_options");
 
@@ -600,7 +600,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `videolink` (
 $db->query("CREATE TABLE `video_category` (
     `id` INT(11) NOT NULL auto_increment,
     `course_id` INT(11) NOT NULL,
-    `name` VARCHAR(255) NOT NULL, 
+    `name` VARCHAR(255) NOT NULL,
     `description` TEXT DEFAULT NULL,
     PRIMARY KEY (id)) $tbl_options");
 
@@ -777,7 +777,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `abuse_report` (
     INDEX `abuse_report_index_2` (`course_id`, `status`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,                
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `shortname` VARCHAR(255) NOT NULL,
                 `name` MEDIUMTEXT NOT NULL,
                 `description` MEDIUMTEXT NULL DEFAULT NULL,
@@ -917,7 +917,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_id` int(11) NULL,
     `group_id` int(11) NULL,
-    `poll_id` int(11) NOT NULL ) $tbl_options"); 
+    `poll_id` int(11) NOT NULL ) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_user_record` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -934,8 +934,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
     `aid` INT(11) NOT NULL DEFAULT 0,
     `answer_text` TEXT NOT NULL,
     `submit_date` DATETIME NOT NULL,
-    FOREIGN KEY (`poll_user_record_id`) 
-    REFERENCES `poll_user_record` (`id`) 
+    FOREIGN KEY (`poll_user_record_id`)
+    REFERENCES `poll_user_record` (`id`)
     ON DELETE CASCADE) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
@@ -943,7 +943,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
     `pid` INT(11) NOT NULL DEFAULT 0,
     `question_text` VARCHAR(250) NOT NULL DEFAULT '',
     `qtype` tinyint(3) UNSIGNED NOT NULL,
-    `q_position` INT(11) DEFAULT 1, 
+    `q_position` INT(11) DEFAULT 1,
     `q_scale` INT(11) NULL DEFAULT NULL) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
@@ -959,7 +959,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `comments` TEXT NOT NULL,
     `submission_type` TINYINT NOT NULL DEFAULT '0',
     `deadline` DATETIME NULL DEFAULT NULL,
-    `late_submission` TINYINT NOT NULL DEFAULT '0', 
+    `late_submission` TINYINT NOT NULL DEFAULT '0',
     `submission_date` DATETIME NOT NULL,
     `active` CHAR(1) NOT NULL DEFAULT '1',
     `secret_directory` VARCHAR(30) NOT NULL,
@@ -1003,28 +1003,28 @@ $db->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
 // rubric table based on grading scales
 $db->query("CREATE TABLE IF NOT EXISTS `rubric` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-	`name` VARCHAR(200) NOT NULL,
+    `name` VARCHAR(200) NOT NULL,
     `title` varchar(255) NOT NULL,
     `scales` text NOT NULL,
-	`description` text NOT NULL,
-	`preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
+    `description` text NOT NULL,
+    `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
     `rubric_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
     `rubric_to_graded` tinyint(1) NOT NULL DEFAULT '0',
     `points_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
     `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
     `course_id` int(11) NOT NULL,
     KEY `course_id` (`course_id`)) $tbl_options");
-	
-	$db->query("CREATE TABLE IF NOT EXISTS `rubric` (
+
+    $db->query("CREATE TABLE IF NOT EXISTS `rubric` (
      `id` INT(11) NOT NULL AUTO_INCREMENT,
      `title` VARCHAR(200) NOT NULL,
      `description` text NOT NULL,
-	 `preview_rubric` TINYINT(1) NOT NULL DEFAULT '0',
+     `preview_rubric` TINYINT(1) NOT NULL DEFAULT '0',
      `rubric_during_evaluation` TINYINT(1) NOT NULL DEFAULT '0',
      `rubric_to_graded` TINYINT(1) NOT NULL DEFAULT '0',
      `points_during_evaluation` TINYINT(1) NOT NULL DEFAULT '0',
      `points_to_graded` TINYINT(1) NOT NULL DEFAULT '0',
-	 `uid` INT(11) NOT NULL,
+     `uid` INT(11) NOT NULL,
      PRIMARY KEY (`id`))
      $charset_spec");
 
@@ -1058,7 +1058,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_id` int(11) NULL,
     `group_id` int(11) NULL,
-    `exercise_id` int(11) NOT NULL ) $tbl_options"); 
+    `exercise_id` int(11) NOT NULL ) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
     `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1156,7 +1156,7 @@ $db->query("CREATE TABLE `user_department` (
     `department` INT(11) NOT NULL,
     UNIQUE KEY `udep_unique` (`user`,`department`),
     FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`department`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE) $tbl_options"); 
+    FOREIGN KEY (`department`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE) $tbl_options");
 
 // hierarchy stored procedures
 $db->query("DROP PROCEDURE IF EXISTS `add_node`");
@@ -1370,7 +1370,7 @@ $db->query("CREATE TABLE `user_ext_uid` (
     UNIQUE KEY (user_id, auth_id),
     KEY (uid),
     FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE)
-    $tbl_options"); 
+    $tbl_options");
 
 $db->query("CREATE TABLE `user_request_ext_uid` (
     id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1379,7 +1379,7 @@ $db->query("CREATE TABLE `user_request_ext_uid` (
     uid VARCHAR(64) NOT NULL,
     UNIQUE KEY (user_request_id, auth_id),
     FOREIGN KEY (`user_request_id`) REFERENCES `user_request` (`id`) ON DELETE CASCADE)
-    $tbl_options"); 
+    $tbl_options");
 
 $eclass_stud_reg = intval($eclass_stud_reg);
 $eclass_prof_reg = intval($eclass_prof_reg);
@@ -1558,7 +1558,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     `enabled` enum('true','false') DEFAULT NULL,
     `server_key` varchar(255) DEFAULT NULL,
     `username` varchar(255) DEFAULT NULL,
-    `password` varchar(255) DEFAULT NULL,    
+    `password` varchar(255) DEFAULT NULL,
     `api_url` varchar(255) DEFAULT NULL,
     `webapp` varchar(255) DEFAULT NULL,
     `max_rooms` int(11) DEFAULT NULL,
@@ -1722,6 +1722,15 @@ $db->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
     `order` INT(11) NOT NULL DEFAULT 0,
     `heading` TEXT NOT NULL,
     `required` BOOL NOT NULL DEFAULT 0) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `activity_content` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `heading_id` INT(11) NOT NULL DEFAULT 0,
+    `content` TEXT NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+    FOREIGN KEY (heading_id) REFERENCES activity_heading(id) ON DELETE CASCADE,
+    UNIQUE KEY `heading_course` (`course_id`,`heading_id`)) $tbl_options");
 
 // Conference table
 $db->query("CREATE TABLE IF NOT EXISTS `conference` (
