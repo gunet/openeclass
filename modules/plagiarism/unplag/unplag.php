@@ -41,6 +41,10 @@ class UnPlag extends Plagiarism {
         return $result;
     }
 
+    protected function getType() {
+        return 1;
+    }
+    
     /**
      * 
      * @param type $fileID
@@ -191,9 +195,5 @@ class UnPlag extends Plagiarism {
         ]);
         return $client;
     }
-
-    private static function getType() {
-        return 1;
-    }
-
+    
 }

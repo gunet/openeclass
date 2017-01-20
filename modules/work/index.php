@@ -127,7 +127,7 @@ if (isset($_GET['chk'])) { // plagiarism check
     } else {
         Session::Messages($langFileNotFound, 'alert-danger');
     }
-    send_file_for_plagiarism($file_id, $true_file_name, $true_file_path);        
+    send_file_for_plagiarism($file_id, $true_file_path, $true_file_name);
 }
 
 
@@ -2749,7 +2749,12 @@ function show_assignment($id, $display_graph_results = false) {
                     $tool_content .= "<div style='margin-top: .5em;'><small>" .
                             q($row->comments) . '</small></div>';
                 }
-                $plagiarismlink = "<span class='small'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
+                $results = Plagiarism::get()->getResults($row->id);
+                if ($results->ready) {
+            //        $results-> ...;
+                } else {
+                    $plagiarismlink = "<span class='small'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
+                }
                 $tool_content .= "</td>
                                 <td width='85'>" . q($stud_am) . "</td>
                                 <td class='text-center' width='180'>

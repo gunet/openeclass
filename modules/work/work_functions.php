@@ -355,6 +355,10 @@ function export_grades_to_csv($id) {
 
 
 
-function send_file_for_plagiarism($file_id, $true_file_name, $true_file_path) {            
-    echo '.. work in progress.....';
+function send_file_for_plagiarism($file_id, $true_file_path, $true_file_name) {
+    
+    if (!Plagiarism::get()->isFileSubmitted($file_id)) {
+        Plagiarism::get()->submitFile($file_id, $true_file_path, $true_file_name);
+        //Plagiarism::get()->submitFile($file_id, "/full/path/to/hased_filename", "original_filename.doc");
+    }    
 }
