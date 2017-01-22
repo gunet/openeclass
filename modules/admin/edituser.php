@@ -211,6 +211,11 @@ if ($u) {
         $newstatus = isset($_POST['newstatus']) ? $_POST['newstatus'] : 'NULL';
         $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';
         if (isset($_POST['user_date_expires_at'])) {
+            if ( empty($_POST['user_date_expires_at']) || "" == trim($_POST['user_date_expires_at']) )
+	        {
+		        Session::Messages($langUserExpiresFieldEmpty, 'alert-warning');
+                redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
+            }
             $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
             $user_expires_at = $expires_at->format("Y-m-d H:i");
             $user_date_expires_at = $expires_at->format("d-m-Y H:i");

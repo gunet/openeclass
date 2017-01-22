@@ -3824,6 +3824,7 @@ $langHierarchyTestCategory = 'Example Category';
 $langHierarchyTestSubCategory = 'Subcategory';
 $langNotificationsExist = 'Notifications Available';
 $langAllNotes = "All notes";
+$langUserExpiresFieldEmpty = "User expires date is not set or empty! ";
 $langCourseCommenting = "Comments in $langsCourse home page";
 $langBlogCommenting = "Comments in blog posts";
 $langCourseRating = "$langCourse rating";
