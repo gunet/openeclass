@@ -392,14 +392,19 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_block('mainBlock', 'breadCrumbEntryBlock', 'breadCrumbEntry');
 
         // Breadcrumb landing page link
+        $homepageSet = get_config('homepage');
         $showStart = true;
-        if ($landingUrl = get_config('landing_url')) {
+        if ($homepageSet == 'external' and ($landingUrl = get_config('landing_url'))) {
             $landingPageName = get_config('landing_name');
             if (!$landingPageName) {
                 $landingPageName = $langHomePage;
             }
             $t->set_var('BREAD_TEXT', $landingPageName);
             $t->set_var('BREAD_HREF', $landingUrl);
+            $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
+        } elseif ($homepageSet == 'toolbox') {
+            $t->set_var('BREAD_TEXT', get_config('toolbox_name', $langHomePage));
+            $t->set_var('BREAD_HREF', $urlAppend . 'main/toolbox.php');
             $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
         }
 

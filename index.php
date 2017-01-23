@@ -151,10 +151,14 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     header("Location: {$urlServer}main/portfolio.php");
 } else {
     // redirect to landing page if defined
-    if ($landingUrl = get_config('landing_url')) {
+    $homepageSet = get_config('homepage');
+    if ($homepageSet == 'external' and ($landingUrl = get_config('landing_url'))) {
         header('Location: ' . $landingUrl);
         exit;
+    } elseif ($homepageSet == 'toolbox') {
+        redirect_to_home_page('main/toolbox.php');
     }
+
     // check authentication methods
     $aid = null;
     $hybridLinkId = null;

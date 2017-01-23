@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.3
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -310,6 +309,23 @@ if (isset($_POST['submit'])) {
         set_config('default_language', $_POST['default_language']);
     }
 
+    $homepageSet = $_POST['homepageSet'];
+    if ($homepageSet == 'external') {
+        set_config('homepage', 'external');
+        set_config('landing_name', $_POST['landing_name']);
+        set_config('landing_url', $_POST['landing_url']);
+    } elseif ($homepageSet == 'toolbox') {
+        set_config('homepage', 'toolbox');
+        set_config('toolbox_name', $_POST['toolbox_name']);
+        set_config('toolbox_title', $_POST['toolbox_title']);
+        set_config('toolbox_intro', $_POST['toolbox_intro']);
+    } else {
+        set_config('homepage', 'default');
+        set_config('homepage_title', $_POST['homepage_title']);
+        set_config('homepage_name', $_POST['homepage_name']);
+        set_config('homepage_intro', purify($_POST['homepage_intro']));
+    }
+
     set_config('active_ui_languages', implode(' ', $active_lang_codes));
     set_config('base_url', $_POST['formurlServer']);
     set_config('phpMyAdminURL', $_POST['formphpMyAdminURL']);
@@ -328,15 +344,6 @@ if (isset($_POST['submit'])) {
     set_config('min_password_len', intval($_POST['min_password_len']));
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
-    set_config('homepageSet', $_POST['homepageSet']);
-    set_config('defaultHomepageIntro', purify($_POST['defaultHomepageIntro']));
-    set_config('defaultHomepageTitle', $_POST['defaultHomepageTitle']);
-    set_config('defaultHomepageBcrmp', $_POST['defaultHomepageBcrmp']);
-    set_config('defaultHomepageTitle', $_POST['defaultHomepageTitle']);
-    set_config('toolboxHomepageBcrmp', $_POST['toolboxHomepageBcrmp']);
-    set_config('toolboxHomepageIntro', purify($_POST['toolboxHomepageIntro']));
-    set_config('externalHomepageBcrmp', $_POST['externalHomepageBcrmp']);
-    set_config('externalHomepageUrl', $_POST['externalHomepageUrl']);
 
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
@@ -716,7 +723,7 @@ else {
                             " . implode(' ', $sel) . "
                             </div>
                         </div>
-                        
+
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
@@ -727,9 +734,15 @@ else {
                 </div>
             </div>";
 
-    $defaultHomepage = get_config('homepageSet') == 'default' ? 'checked' : '';
-    $toolboxHomepage = get_config('homepageSet') == 'toolbox' ? 'checked' : '';
-    $externalHomepage = get_config('homepageSet') == 'external' ? 'checked' : '';
+    $defaultHomepage = $toolboxHomepage = $externalHomepage = '';
+    $homepageSet = get_config('homepage');
+    if ($homepageSet == 'toolbox') {
+        $toolboxHomepage = 'checked';
+    } elseif ($homepageSet == 'external') {
+        $externalHomepage = 'checked';
+    } else {
+        $defaultHomepage = 'checked';
+    }
 
     $tool_content .= "
             <div class='panel panel-primary' id='four'>
@@ -750,21 +763,21 @@ else {
                             <div class='form-group'>
                                 <label for='defaultHomepageTitle' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroTitle</label>
                                 <div class='col-sm-9'>
-                                    <input class='form-control' type='text' name='defaultHomepageTitle' id='defaultHomepageTitle' value='".get_config('defaultHomepageTitle', $langEclass)."'>
+                                    <input class='form-control' type='text' name='homepage_title' id='defaultHomepageTitle' value='".q(get_config('homepage_title', $langEclass))."'>
                                     <p class='help-block'>$langHomePageTitleHelpText</p>
                                 </div>
                             </div>
                             <div class='form-group'>
                                 <label for='defaultHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroBcrmp</label>
                                 <div class='col-sm-9'>
-                                    <input class='form-control' type='text' name='defaultHomepageBcrmp' id='defaultHomepageBcrmp' value='".get_config('defaultHomepageBcrmp', $langHomePage)."'>
+                                    <input class='form-control' type='text' name='homepage_name' id='defaultHomepageBcrmp' value='".q(get_config('homepage_name', $langHomePage))."'>
                                     <p class='help-block'>$langHomePageNavTitleHelp</p>
                                 </div>
                             </div>
                             <div class='form-group'>
                                 <label for='defaultHomepageIntro' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroText:</label>
                                 <div class='col-sm-9'>
-                                    ".rich_text_editor('defaultHomepageIntro', 5, 20, get_config('defaultHomepageIntro', $langInfoAbout))."
+                                    ".rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro', $langInfoAbout))."
                                     <p class='help-block'>$langHomePageIntroTextHelp</p>
                                 </div>
                             </div>
@@ -798,21 +811,21 @@ else {
                                 <div class='form-group'>
                                     <label for='toolboxHomepageTitle' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroTitle</label>
                                     <div class='col-sm-9'>
-                                        <input class='form-control' type='text' name='toolboxHomepageTitle' id='toolboxHomepageTitle' value='".get_config('defaultHomepageTitle', $langEclass)."'>
+                                        <input class='form-control' type='text' name='toolbox_title' id='toolboxHomepageTitle' value='".q(get_config('toolbox_title', $langEclass))."'>
                                         <p class='help-block'>$langHomePageTitleHelpText</p>
                                     </div>
                                 </div>
                                 <div class='form-group'>
                                 <label for='toolboxHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroBcrmp</label>
                                 <div class='col-sm-9'>
-                                    <input class='form-control' type='text' name='toolboxHomepageBcrmp' id='toolboxHomepageBcrmp' value='".get_config('toolboxHomepageBcrmp', $langHomePage)."'>
+                                    <input class='form-control' type='text' name='toolbox_name' id='toolboxHomepageBcrmp' value='".q(get_config('toolbox_name', $langHomePage))."'>
                                     <p class='help-block'>$langHomePageNavTitleHelp</p>
                                 </div>
                                 </div>
                                 <div class='form-group'>
                                     <label for='toolboxHomepageIntro' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroText:</label>
                                     <div class='col-sm-9'>
-                                        ".rich_text_editor('toolboxHomepageIntro', 5, 20, get_config('toolboxHomepageIntro', $langInfoAbout))."
+                                        ".rich_text_editor('toolbox_intro', 5, 20, get_config('toolbox_intro', $langInfoAbout))."
                                         <p class='help-block'>$langHomePageIntroTextHelp</p>
                                     </div>
                                 </div>
@@ -829,14 +842,14 @@ else {
                                 <div class='form-group'>
                                     <label for='externalHomepageBcrmp' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroBcrmp:</label>
                                     <div class='col-sm-9'>
-                                        <input class='form-control' type='text' name='externalHomepageBcrmp' id='externalHomepageBcrmp' value='".get_config('externalHomepageBcrmp')."'>
+                                        <input class='form-control' type='text' name='landing_name' id='externalHomepageBcrmp' value='".q(get_config('landing_name'))."'>
                                         <p class='help-block'>$langHomePageNavTitleHelp</p>
                                     </div>
                                 </div>
                                 <div class='form-group'>
                                     <label for='externalHomepageUrl' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageIntroUrl:</label>
                                     <div class='col-sm-9'>
-                                        <input class='form-control' type='text' name='externalHomepageUrl' id='externalHomepageUrl' value='".get_config('externalHomepageUrl')."'>
+                                        <input class='form-control' type='text' name='landing_url' id='externalHomepageUrl' value='".q(get_config('landing_url'))."'>
                                         <p class='help-block'>$langHomePageExtUrlHelp</p>
                                     </div>
                                 </div>
@@ -1348,17 +1361,16 @@ $tool_content .= "
     $head_content .= "
         <script>
         $(document).ready(function(){
-            
+
             var toCollapse = '#' + $(\"input[name='homepageSet']:checked\").data('collapse');
-            
+
             $(toCollapse).collapse('show');
             $('.homepageSet').change(function() {
                 $('.collapse.in').collapse('hide');
                 var newCollapse = '#' + $(this).data('collapse');
                 $(newCollapse).collapse('show');
             });
-            
-            
+
             $(function() {
             $('#floatMenu').affix({
               offset: {
