@@ -45,6 +45,7 @@ $t->set_var('COPYRIGHT', 'Open eClass © 2003-' . date('Y'));
 $t->set_var('TERMS_URL', $urlAppend .'info/terms.php');
 $t->set_var('LANG_TERMS', $langUsageTerms);
 $t->set_var('langSearch', $langSearch);
+$t->set_var('toolboxTitle', q(get_config('toolbox_title', $langEclass)));
 
 if ($footer = get_config('toolbox_footer_' . $session->language)) {
     $t->set_var('FOOTER', $footer);
