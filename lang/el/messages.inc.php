@@ -4295,6 +4295,7 @@ $langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σ�
 $langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
 $langNoteSaved = "Αποθηκεύτηκε με επιτυχία";
 $langAllNotes = "Όλες οι σημειώσεις";
+$langUserExpiresFieldEmpty = "Η ημερομηνία λήξης χρήστη είναι κενή ή δεν έχει οριστεί";
 
 /* * ******************************************
   Personal calendar
