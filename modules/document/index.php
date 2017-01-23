@@ -109,8 +109,7 @@ if (isset($_GET['showQuota'])) {
 // ---------------------------
 
 if(isset($_GET["mindmap"])){
-	
-	
+		
 	$mindmap = $_GET['mindmap'];
 	$title = $_GET['mindtitle'];
 	
@@ -121,9 +120,6 @@ if(isset($_GET["mindmap"])){
     $file_date = date("Y\-m\-d G\:i\:s");
     $file_format = get_file_extension($filename);
 
-	echo $basedir . $file_path;
-	//echo $file_path;
-	
 	$myfile = fopen($basedir . $file_path, "w") or die("Unable to open file!");
 	$txt = $mindmap;
 	
@@ -153,7 +149,7 @@ if(isset($_GET["mindmap"])){
             format = ?s,
             language = ?s,
             copyrighted = 0,
-            editable = 1",
+            editable = 0",
             $course_id, $subsystem, $subsystem_id, $file_path,
             $filename, $title, $file_creator,
             $file_date, $file_date, $file_creator, $file_format,
@@ -164,9 +160,10 @@ if(isset($_GET["mindmap"])){
 		
 }
 
-//*** mindmap screenshot save ***//
 
-
+// ---------------------------
+// mindmap screenshot save 
+// ---------------------------
 
 if(isset($_POST["imgBase64"])){
 
@@ -184,11 +181,11 @@ if(isset($_POST["imgBase64"])){
     $file_format = get_file_extension($filename);
 
 
-//**save**//
+// ---------------------------
+// mindmap  save in database
+// ---------------------------
 
 file_put_contents($basedir . $file_path, $fileData);
-
-
 
     $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
     Database::get()->query("INSERT INTO document SET
@@ -216,7 +213,6 @@ file_put_contents($basedir . $file_path, $fileData);
             $filename, $shootname, $file_creator,
             $file_date, $file_date, $file_creator, $file_format,
             $language);
-        
 
 }
 
@@ -1424,6 +1420,7 @@ if ($doc_count == 0) {
                         }
                     }
                 }
+				
 
                 if ($can_upload and $entry['editable']) {
                     $edit_url = "new.php?course=$course_code&amp;editPath=$entry[path]" .
@@ -1467,9 +1464,25 @@ if ($doc_count == 0) {
             if ($can_upload and !$entry['public']) {
                 $link_title_extra .= '&nbsp;' . icon('fa-lock', $langNonPublicFile);
             }
-
-            $tool_content .= "<tr $style><td class='text-center'>$img_href</td>
+			
+			// open jm in mindmap module
+			if ($entry['format'] == "jm"){
+			
+				$jmname = $entry['title'];
+				$jmpath = base64_encode( json_encode($basedir . $entry['path']) ); 
+			
+				$edit_url = "../mindmap/index.php?course=$course_code&amp;jmpath=$jmpath";
+			
+			
+				$tool_content .= "<tr $style><td class='text-center'>.jm</td>
+                              <td><a href='$edit_url'>$jmname $link_title_extra</a>";
+			
+			}else{
+			
+				$tool_content .= "<tr $style><td class='text-center'>$img_href</td>
                               <td><input type='hidden' value='$download_url'>$link_href $link_title_extra";
+							  
+			}
             // comments
             if (!empty($entry['comment'])) {
                 $tool_content .= "<br><span class='comment text-muted'><small>" .

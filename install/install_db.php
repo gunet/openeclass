@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -1733,6 +1733,15 @@ $db->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
     `heading` TEXT NOT NULL,
     `required` BOOL NOT NULL DEFAULT 0) $tbl_options");
 
+$db->query("CREATE TABLE IF NOT EXISTS `activity_content` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `heading_id` INT(11) NOT NULL DEFAULT 0,
+    `content` TEXT NOT NULL,
+    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+    FOREIGN KEY (heading_id) REFERENCES activity_heading(id) ON DELETE CASCADE,
+    UNIQUE KEY `heading_course` (`course_id`,`heading_id`)) $tbl_options");
+
 // Conference table
 $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `conf_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1744,6 +1753,30 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
     `user_id` varchar(255) default '0',
     `group_id` varchar(255) default '0',
     PRIMARY KEY (`conf_id`,`course_id`)) $tbl_options");
+
+// Course Category tables
+$db->query("CREATE TABLE IF NOT EXISTS `category` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` TEXT NOT NULL,
+    `ordering` INT(11),
+    `multiple` BOOLEAN NOT NULL DEFAULT TRUE,
+    `searchable` BOOLEAN NOT NULL DEFAULT TRUE,
+    `active` BOOLEAN NOT NULL DEFAULT TRUE
+    ) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `category_value` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `category_id` INT(11) NOT NULL REFERENCES category(id),
+    `name` TEXT NOT NULL,
+    `ordering` INT(11),
+    `active` BOOLEAN NOT NULL DEFAULT TRUE
+    ) $tbl_options");
+
+$db->query("CREATE TABLE IF NOT EXISTS `course_category` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL REFERENCES course(id),
+    `category_value_id` INT(11) NOT NULL REFERENCES category_value(id)
+    ) $tbl_options");
 
 $_SESSION['theme'] = 'default';
 $webDir = '..';

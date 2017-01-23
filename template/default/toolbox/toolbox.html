@@ -1,0 +1,298 @@
+<!DOCTYPE HTML>
+<html style="height: 100%;">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <title>{%PAGE_TITLE%}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="{%TOOLBOX_PATH%}css/bootstrap.min.css">
+    <link rel="stylesheet" href="{%TOOLBOX_PATH%}css/toolbox_styles.css">
+    <link href="{%template_base%}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
+
+    <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="{%template_base%}/js/bootstrap.min.js"></script>
+
+    <!-- Our javascript -->
+    {%HEAD_EXTRAS%}
+
+    <script>
+        $(document).ready(function () {
+            $(".loginModal").click(function () {
+                if( $("#registerModalContent").hasClass('in') ){
+                    $('#registerModalContent').modal('toggle');
+                }
+                $("#loginModalContent").modal();
+            });
+            $(".registerModal").click(function () {
+                if( $("#loginModalContent").hasClass('in') ) {
+                    $('#loginModalContent').modal('toggle');
+                }
+                $("#registerModalContent").modal();
+            });
+
+            $("select").select2({
+                theme: "bootstrap",
+                placeholder: "Select an option"
+            });
+        });
+    </script>
+
+</head>
+
+<body style="height: 100%;">
+<div class="top-bar-sct">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="loginModal reg-btns pull-right">
+                    <span>
+                        Register / Login
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="banner-sct">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="logo-area hidden-xs hidden-sm">
+                    <img class="img-responsive" src="{%logo_img%}">
+                </div>
+                <div class="logo-area visible-xs visible-sm">
+                    <img class="img-responsive center-block" src="{%logo_img_small%}">
+                </div>
+            </div>
+            <div class="col-md-6 menu-nav">
+                <ul class="hidden-xs hidden-sm list-inline pull-right">
+                    <li>Platform</li>
+                    <li>Project</li>
+                    <li>FAQ</li>
+                </ul>
+                <ul class="visible-xs visible-sm list-inline text-center">
+                    <li>Platform</li>
+                    <li>Project</li>
+                    <li>FAQ</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- BEGIN welcomeBlock -->
+<div class="description-sct">
+    <div class="container">
+        <div class="row">
+            <div class="jumbotron">
+                <h2>Welcome to Toolbox</h2>
+                <p>{%infoAbout%}</p>
+                {%socialSharingLinks%}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END welcomeBlock -->
+<div class="search-sct">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default criterias">
+                    <div class="panel-body">
+                        <div class="inner-heading text-center">Search form</div>
+                        <div class="row">
+                            <form method='get' action='{%formAction%}'>
+                                <!-- BEGIN selectFieldBlock -->
+                                <div class="col-xs-6 col-sm-3">
+                                    <div class="form-group">
+                                        <label for="modules">{%selectFieldLabel%}</label>
+                                        <select id="modules" name='{%selectFieldName%}' class="form-control" multiple>
+                                            <!-- BEGIN selectOptionBlock -->
+                                            <option value="{%selectOptionValue%}" {%selectOptionSelected%}>{%selectOptionTitle%}</option>
+                                            <!-- END selectOptionBlock -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- END selectFieldBlock -->
+                                <div class="col-xs-12" style="padding-top: 50px; padding-bottom: 20px;">
+                                    <button class="btn btn-success center-block">{%langSearch%}</button>
+                            </div>
+                            </form>
+                        </div>
+                        <!-- BEGIN statsBlock -->
+                        <div class="col-xs-12 panel-inner-footer">
+                            <div class="row text-center">
+                                <div class="col-sm-4">
+                                    <b>{%langTotalCourses%} : </b> {%totalCourses%}
+                                </div>
+                                <div class="col-sm-4">
+                                    <b>{%langTotalUsers%} : </b> {%totalUsers%}
+                                </div>
+                                <div class="col-sm-4">
+                                    <b>{%langTotalVisits%} : </b> {%totalVisits%}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END statsBlock -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- BEGIN resultListBlock -->
+<div class="result-sct">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="inner-heading text-center">Search Results</div>
+                    <div class="search-count text-center"><span class="text-muted"><b>{%resultNumEntries%}</b> {%resultNumEntriesFound%}</span></div>
+                    <div class="row">
+                        <!-- BEGIN resultBlock -->
+                        <div class="col-xs-6">
+                            <div class="panel panel-success result-wrapper">
+                                <div class="panel-heading">
+                                    <div class="panel-title"><a href="{%resultLink%}">{%resultTitle%} <i class="fa fa-arrow-circle-o-right pull-right"></i></a></div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-xs-8 result-content">
+                                            {%resultContent%}
+                                        </div>
+                                        <div class="col-xs-4 result-meta">
+                                            <ul class="list-unstyled">
+                                                <!-- BEGIN resultMetaBlock -->
+                                                <li><span class="fa {%resultMetaIcon%}"></span>&nbsp;&nbsp;{%resultMetaLabel%}</li>
+                                                <!-- END resultMetaBlock -->
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END resultBlock -->
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END resultListBlock -->
+<div class="footer-sct">
+    <!-- BEGIN footerBlock -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row footer-main">
+                {%FOOTER%}
+            </div>
+        </div>
+    </footer>
+    <!-- END footerBlock -->
+    <div class="copyright-note">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="text-center">
+                        <span>{%COPYRIGHT%} &mdash; <a href="{%TERMS_URL%}">{%LANG_TERMS%}</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="loginModalContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Login</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <form>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputEmail1">Enter username</label>
+                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter username">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputPassword1">Enter password</label>
+                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter password">
+                            </div>
+                            <button type="button" class="btn btn-primary btn-block">Log in</button>
+                        </form>
+                    </div>
+                    <div class="col-sm-1 login-seperator"></div>
+                    <div class="col-sm-5 alt-login">
+                        <h5 class="text-center">Or log in with:</h5>
+                        <img class="img-responsive" src="googleplus.png" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                Not having an account? Please <a class="registerModal">Register</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="registerModalContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabelRegister">Login</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputEmail1">Name</label>
+                                <input type="email" class="form-control" id="exampleInputEmailRegister" placeholder="Name">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputPassword1">Last name</label>
+                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Last name">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputEmail1">Enter username</label>
+                                <input type="email" class="form-control" id="exampleInputEmailRegister" placeholder="Enter username">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputPassword1">Enter password</label>
+                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Enter password">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputPassword1">Retype Password</label>
+                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Retype password">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="exampleInputPassword1">Email</label>
+                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Email">
+                            </div>
+                            <button type="button" class="btn btn-primary btn-block">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                Already have an account? <a class="loginModal" href="#">Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<!-- END mainBlock -->

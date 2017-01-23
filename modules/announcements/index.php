@@ -684,7 +684,7 @@ if ($is_editor) {
         <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langEmailOption:</label></div>
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
-                <select class='form-control' name='recipients[]' multiple class='form-control' id='select-recipients'>";
+                <select class='form-control' name='recipients[]' multiple id='select-recipients'>";
         $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email
                                                     FROM course_user cu
                                                         JOIN user u ON cu.user_id=u.id

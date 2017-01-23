@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,29 +17,29 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 class Tag {
-    
+
     private $id;
     private $name;
-        
+
     public function __construct($name = '') {
         $this->name = $name;
     }
     public function getID() {
         return $this->id;
-    }    
+    }
     public function setName($name) {
         $this->name = $name;
-    }   
+    }
     public function getName() {
         return $this->name;
     }
     public static function tagInput($id = null) {
         global $langTags, $head_content, $course_code;
-        
+
         // initialize the tags
         $answer = '';
         if (isset($id)) {
@@ -51,7 +51,7 @@ class Tag {
                 $arrayTemp = "{id:\"" . js_escape($tag) . "\" , text:\"" . js_escape($tag) . "\"},";
                 $answer = $answer . $arrayTemp;
             }
-        }        
+        }
         $head_content .= "
             <script>
                 $(function () {
@@ -84,18 +84,19 @@ class Tag {
                             }
                     });
                     $('#tags').select2('data', [".$answer."]);
-                });                
+                });
             </script>";
         $input_field = "
                 <div class='form-group'>
                     <label for='tags' class='col-sm-2 control-label'>$langTags:</label>
                     <div class='col-sm-10'>
-                        <input type='hidden' id='tags' class='form-control' name='tags' value=''>
+                        <select id='tags' class='form-control' name='tags' multiple>
+                        </select>
                     </div>
-                </div>             
+                </div>
         ";
         return $input_field;
-    }  
+    }
     public function findOrCreate(){
        if($this->name){
             if($tag = $this->exists()) {
@@ -112,5 +113,5 @@ class Tag {
     private function exists() {
         $tag = Database::get()->querySingle('SELECT * FROM tag WHERE name = ?s', $this->name);
         return $tag;
-    }    
+    }
 }

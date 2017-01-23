@@ -296,7 +296,14 @@ if (!isset($_POST['create_course'])) {
                         <input type='radio' name='view_type' value='weekly' id='weekly'>
                         $langCourseWeeklyFormat
                       </label>
-                    </div>
+                    </div>" .
+                    ($activities? "
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='view_type' value='activity' id='activity'>
+                        $langCourseActivityFormat
+                      </label>
+                    </div>": '') . "
                 </div>
             </div>
             <div class='form-group' id='weeklyDates'>

@@ -27,15 +27,15 @@ $helpTopic = '';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
-$q = $_GET['q'];
+$q = $_GET['q']['term'];
 
 $taglist = Database::get()->queryArray("SELECT id, name FROM tag WHERE name LIKE ?s ORDER BY name", "%$q%");
 if ($taglist) {
     foreach ($taglist as $tag) {
-        $tags[] = array('id' => $tag->name, 'text' => $tag->name);
+        $tags[] = array('id' => $tag->name, 'name' => $tag->name);
     }
 } else {
-    $tags[] = array('text' => '');
+    $tags = array();
 }
 
 echo json_encode($tags);

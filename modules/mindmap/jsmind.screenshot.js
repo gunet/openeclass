@@ -80,6 +80,26 @@
         }
     };
 
+    jcanvas.image = function(ctx,backgroundUrl,x,y,w,h,r,rotation,callback){
+        var img = new Image();
+        img.onload = function () {
+            ctx.save();
+            ctx.translate(x,y);
+            ctx.save();
+            ctx.beginPath();
+            jcanvas.rect(ctx,0,0,w,h,r);
+            ctx.closePath();
+            ctx.clip();
+            ctx.translate(w/2,h/2);
+            ctx.rotate(rotation*Math.PI/180);
+            ctx.drawImage(img,-w/2,-h/2);
+            ctx.restore();
+            ctx.restore();
+            callback();
+        }
+        img.src = backgroundUrl;
+    };
+
     jsMind.screenshot = function(jm){
         this.jm = jm;
         this.canvas_elem = null;
@@ -101,33 +121,28 @@
             this.resize();
         },
 
-        shoot:function(mind_name){
+        shoot:function(callback){
             this.init();
-            this._draw();
             this._watermark();
-            this._download(mind_name);
-            this.clean();
+            var jms = this;
+            this._draw(function(){
+                if(!!callback){
+                    callback(jms);
+                }
+                jms.clean();
+            });
         },
 
-        shootAsDataURL:function(name){
-            this.init();
-            this._draw();
-            this._watermark();
-            var url = this.canvas_elem.toDataURL();
-		
-		//image post in document in base64 format//
-			$.ajax({
-			  type: "POST",
-			  url: "../document/index.php",
-			  data: { 
-				 imgBase64: url,
-				 imgname: name
-			  }
-			}).done(function(o) {
-			 // console.log('saved'); 
-			});
-            this.clean();
-            return url;
+        shootDownload: function(){
+            this.shoot(function(jms){
+                jms._download();
+            });
+        },
+
+        shootAsDataURL: function(callback){
+            this.shoot(function(jms){
+                callback(jms.canvas_elem.toDataURL());
+            });
         },
 
         resize:function(){
@@ -142,12 +157,12 @@
             this.canvas_ctx.clearRect(0,0,c.width,c.height);
         },
 
-        _draw:function(){
+        _draw:function(callback){
             var ctx = this.canvas_ctx;
             ctx.textAlign = 'left';
             ctx.textBaseline = 'top';
             this._draw_lines();
-            this._draw_nodes();
+            this._draw_nodes(callback);
         },
 
         _watermark:function(){
@@ -166,13 +181,29 @@
             this.jm.view.show_lines(this.canvas_ctx);
         },
 
-        _draw_nodes:function(){
+        _draw_nodes:function(callback){
             var nodes = this.jm.mind.nodes;
             var node;
             for(var nodeid in nodes){
                 node = nodes[nodeid];
                 this._draw_node(node);
             }
+
+            function check_nodes_ready() {
+                console.log('check_node_ready'+new Date());
+                var allOk = true;
+                for(var nodeid in nodes){
+                    node = nodes[nodeid];
+                    allOk = allOk & node.ready;
+                }
+
+                if(!allOk) {
+                    $w.setTimeout(check_nodes_ready, 200);
+                } else {
+                    $w.setTimeout(callback, 200);
+                }
+            }
+            check_nodes_ready();
         },
 
         _draw_node:function(node){
@@ -180,21 +211,24 @@
             var view_data = node._data.view;
             var node_element = view_data.element;
             var ncs = getComputedStyle(node_element);
-			
-			
-			
-            if(!is_visible(ncs)){ return; }
+            if(!is_visible(ncs)){
+                node.ready = true;
+                return;
+            }
 
             var bgcolor = css(ncs,'background-color');
-			//console.log(bgcolor);
-            var round_radius = parseInt(css(ncs,'border-radius'));
+            var round_radius = parseInt(css(ncs,'border-top-left-radius'));
             var color = css(ncs,'color');
-            var font = css(ncs,'font');
             var padding_left = parseInt(css(ncs,'padding-left'));
             var padding_right = parseInt(css(ncs,'padding-right'));
             var padding_top = parseInt(css(ncs,'padding-top'));
             var padding_bottom = parseInt(css(ncs,'padding-bottom'));
             var text_overflow = css(ncs,'text-overflow');
+            var font = css(ncs,'font-style')+' '+
+                        css(ncs,'font-variant')+' '+
+                        css(ncs,'font-weight')+' '+
+                        css(ncs,'font-size')+'/'+css(ncs,'line-height')+' '+
+                        css(ncs,'font-family');
 
             var rb = {x:view_data.abs_x,
                       y:view_data.abs_y,
@@ -213,15 +247,31 @@
             ctx.fill();
 
             ctx.fillStyle = color;
-            if(text_overflow === 'ellipsis'){
-                jcanvas.text_ellipsis(ctx, node.topic, tb.x, tb.y, tb.w, tb.h);
-            }else{
-                var line_height = parseInt(css(ncs,'line-height'));
-                jcanvas.text_multiline(ctx, node.topic, tb.x, tb.y, tb.w, tb.h,line_height);
+            if ('background-image' in node.data) {
+                var backgroundUrl = css(ncs,'background-image').slice(5, -2);
+                node.ready = false;
+                var rotation = 0;
+                if ('background-rotation' in node.data) {
+                    rotation = node.data['background-rotation'];
+                }
+                jcanvas.image(ctx, backgroundUrl, rb.x, rb.y, rb.w, rb.h, round_radius, rotation,
+                    function() {
+                        node.ready = true;
+                    });
             }
-
+            if (!!node.topic) {
+                if(text_overflow === 'ellipsis'){
+                    jcanvas.text_ellipsis(ctx, node.topic, tb.x, tb.y, tb.w, tb.h);
+                }else{
+                    var line_height = parseInt(css(ncs,'line-height'));
+                    jcanvas.text_multiline(ctx, node.topic, tb.x, tb.y, tb.w, tb.h,line_height);
+                }
+            }
             if(!!view_data.expander){
                 this._draw_expander(view_data.expander);
+            }
+            if (!('background-image' in node.data)) {
+                node.ready = true;
             }
         },
 
@@ -251,10 +301,9 @@
             ctx.stroke();
         },
 
-        _download:function(mind_name){
+        _download:function(){
             var c = this.canvas_elem;
-            var name = this.jm.mind.name;
-
+            var name = this.jm.mind.name+'.png';
 			
             if (navigator.msSaveBlob && (!!c.msToBlob)) {
                 var blob = c.msToBlob();
@@ -265,8 +314,7 @@
                 if ('download' in anchor) {
                     anchor.style.visibility = 'hidden';
                     anchor.href = bloburl;
-                    //anchor.download = this.jm.mind.name;
-					anchor.download = mind_name ;
+                    anchor.download = name;
                     $d.body.appendChild(anchor);
                     var evt = $d.createEvent('MouseEvents');
                     evt.initEvent('click', true, true);
@@ -288,11 +336,8 @@
     var screenshot_plugin = new jsMind.plugin('screenshot',function(jm){
         var jss = new jsMind.screenshot(jm);
         jm.screenshot = jss;
-        jm.shoot = function(mind_name){
-            jss.shoot(mind_name);
-		};
-		jm.shootAsDataURL = function(test){
-			jss.shootAsDataURL(test);
+        jm.shoot = function(){
+            jss.shoot();
         };
         jm.add_event_listener(function(type,data){
             jss.jm_event_handle.call(jss,type,data);

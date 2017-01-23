@@ -3,7 +3,7 @@
  * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -3453,6 +3453,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `heading` TEXT NOT NULL,
             `required` BOOL NOT NULL DEFAULT 0) $tbl_options");
         
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_content` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `course_id` INT(11) NOT NULL,
+            `heading_id` INT(11) NOT NULL DEFAULT 0,
+            `content` TEXT NOT NULL,
+            FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+            FOREIGN KEY (heading_id) REFERENCES activity_heading(id) ON DELETE CASCADE,
+            UNIQUE KEY `heading_course` (`course_id`,`heading_id`)) $tbl_options");
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `shortname` VARCHAR(255) NOT NULL,
@@ -3531,7 +3540,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
                                 AFTER grade_comments");
         }
-        
+
         // plagiarism tool table
         if (!DBHelper::tableExists('ext_plag_connection')) {
             Database::get()->query("CREATE TABLE `ext_plag_connection` (
@@ -3542,8 +3551,30 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
               `submission_id` int(11) DEFAULT NULL,
               PRIMARY KEY (`id`)) $tbl_options");
         }
-            
-        
+
+        // Course Category tables
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `category` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` TEXT NOT NULL,
+            `ordering` INT(11),
+            `multiple` BOOLEAN NOT NULL DEFAULT TRUE,
+            `searchable` BOOLEAN NOT NULL DEFAULT TRUE,
+            `active` BOOLEAN NOT NULL DEFAULT TRUE
+            ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `category_value` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `category_id` INT(11) NOT NULL REFERENCES category(id),
+            `name` TEXT NOT NULL,
+            `ordering` INT(11),
+            `active` BOOLEAN NOT NULL DEFAULT TRUE
+            ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `course_category` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `course_id` INT(11) NOT NULL REFERENCES course(id),
+            `category_value_id` INT(11) NOT NULL REFERENCES category_value(id)
+            ) $tbl_options");
     }
 
     // update eclass version

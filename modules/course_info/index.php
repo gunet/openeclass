@@ -102,10 +102,10 @@ $head_content .= <<<hContent
     function hideCCFields() {
         $('#cc').hide();
     }
-        
-    $(document).ready(function() {        
+
+    $(document).ready(function() {
         $('input[name=start_date]').datepicker({
-            format: 'yyyy-mm-dd',            
+            format: 'yyyy-mm-dd',
             language: '$language',
             autoclose: true
         }).on('changeDate', function(e){
@@ -118,7 +118,7 @@ $head_content .= <<<hContent
                 $('input[name=finish_date]').datepicker('setStartDate', date2);
             }
         });
-        
+
         $('input[name=finish_date]').datepicker({
             format: 'yyyy-mm-dd',
             language: '$language',
@@ -129,9 +129,9 @@ $head_content .= <<<hContent
             if (dt2 <= dt1) {
                 var minDate = $('input[name=finish_date]').datepicker('startDate');
                 $('input[name=finish_date]').datepicker('setDate', minDate);
-            }            
+            }
         });
-        
+
         if($('input[name=start_date]').datepicker("getDate") == 'Invalid Date'){
             $('input[name=start_date]').datepicker('setDate', new Date());
             var date2 = $('input[name=start_date]').datepicker('getDate');
@@ -142,13 +142,13 @@ $head_content .= <<<hContent
             var date2 = $('input[name=finish_date]').datepicker('getDate');
             $('input[name=finish_date]').datepicker('setStartDate', date2);
         }
-        
+
         if($('input[name=finish_date]').datepicker("getDate") == 'Invalid Date'){
             $('input[name=finish_date]').datepicker("setDate", 7);
         }
-        
+
         $('#weeklyDates').hide();
-        
+
         $('input[name=view_type]').change(function () {
             if ($('#weekly').is(":checked")) {
                 $('#weeklyDates').show();
@@ -156,13 +156,13 @@ $head_content .= <<<hContent
                 $('#weeklyDates').hide();
             }
         }).change();
-        
+
         $('#coursepassword').keyup(function() {
             $('#result').html(checkStrength($('#coursepassword').val()))
         });
-        
+
         displayCoursePassword();
-        
+
         $('#courseopen').click(function(event) {
                 activate_input_password();
         });
@@ -175,7 +175,7 @@ $head_content .= <<<hContent
         $('#courseinactive').click(function(event) {
                 deactivate_input_password();
         });
-        
+
         $('input[name=l_radio]').change(function () {
             if ($('#cc_license').is(":checked")) {
                 showCCFields();
@@ -197,7 +197,7 @@ $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
 
 if (isset($_POST['submit'])) {
-    $view_type = $_POST['view_type'];    
+    $view_type = $_POST['view_type'];
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (!isset($_POST['start_date']) or !$_POST['start_date']) {
         $_POST['start_date'] = null;
@@ -252,8 +252,8 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        //===================course format and start and finish date===============        
-        if ($view_type == 'weekly') {            
+        //===================course format and start and finish date===============
+        if ($view_type == 'weekly') {
             if (is_null($_POST['start_date'])) {
                 Session::Messages($langCourseWeeklyFormatNotice);
                 redirect_to_home_page("modules/course_info/index.php?course=$course_code");
@@ -274,12 +274,12 @@ if (isset($_POST['submit'])) {
                 $cnt = 1;
                 // counter for the old records
                 $cntOld = 0;
-                                
+
                 $begin = new DateTime($_POST['start_date']);
 
                 // check if there is no end date
                 if (is_null($_POST['finish_date'])) {
-                    $end = new DateTime($begin->format("Y-m-d"));                    
+                    $end = new DateTime($begin->format("Y-m-d"));
                     $end->add(new DateInterval('P26W'));
                 } else {
                     $end = new DateTime($_POST['finish_date']);
@@ -311,9 +311,9 @@ if (isset($_POST['submit'])) {
                     } else {
                         $q = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view");
                         if ($q) {
-                            $order =  max(0, $q->maxorder) + 1;                
+                            $order =  max(0, $q->maxorder) + 1;
                             Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week, `order`) VALUES (?d, ?t, ?t, ?d)", $course_id, $startWeekForDB, $endWeekForDB, $order);
-                        }                        
+                        }
                     }
                     // update the counter
                     $cnt++;
@@ -339,7 +339,7 @@ if (isset($_POST['submit'])) {
         if ($deps_changed and !$deps_valid) {
             Session::Messages($langCreateCourseNotAllowedNode, 'alert-danger');
             redirect_to_home_page("modules/course_info/?course=$course_code");
-        } else {            
+        } else {
             Database::get()->query("UPDATE course
                             SET title = ?s,
                                 public_code = ?s,
@@ -355,7 +355,7 @@ if (isset($_POST['submit'])) {
                             WHERE id = ?d", $_POST['title'], $_POST['fcode'], $_POST['course_keywords'], $_POST['formvisible'], $course_license, $_POST['titulary'], $session->language, $password, $view_type, $_POST['start_date'], $_POST['finish_date'], $course_id);
             $course->refresh($course_id, $departments);
 
-            Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY, 
+            Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
                 array('title' => $_POST['title'],
                       'public_code' => $_POST['fcode'],
                       'visible' => $_POST['formvisible'],
@@ -379,8 +379,8 @@ if (isset($_POST['submit'])) {
             }
             if (isset($_POST['disable_log_course_user_requests'])) {
                 setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, $_POST['disable_log_course_user_requests'], $course_id);
-            }                                    
-            Session::Messages($langModifDone,'alert-success');            
+            }
+            Session::Messages($langModifDone,'alert-success');
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         }
     }
@@ -397,7 +397,7 @@ if (isset($_POST['submit'])) {
             'icon' => 'fa-reply',
             'level' => 'primary-label')
     );
-    
+
     // access control for when to display the link to clone course
     if (get_config('allow_teacher_clone_course') || $is_admin) {
         $action_bar_array0 = array_merge($action_bar_array0, array(
@@ -406,7 +406,7 @@ if (isset($_POST['submit'])) {
                   'icon' => 'fa-archive')
         ));
     }
-    
+
     $action_bar_array = array_merge($action_bar_array0, array(
         array('title' => $langRefreshCourse,
             'url' => "refresh_course.php?course=$course_code",
@@ -414,22 +414,25 @@ if (isset($_POST['submit'])) {
         array('title' => $langCourseMetadata,
             'url' => "../course_metadata/index.php?course=$course_code",
             'icon' => 'fa-file-text',
-            'show' => get_config('course_metadata')),                
+            'show' => get_config('course_metadata')),
         array('title' => $langCourseMetadataControlPanel,
             'url' => "../course_metadata/control.php?course=$course_code",
             'icon' => 'fa-list',
             'show' => get_config('opencourses_enable') && $is_opencourses_reviewer),
+        array('title' => $langCourseCategoryActions,
+            'url' => "../course_category/index.php?course=$course_code",
+            'icon' => 'fa-file-text'),
         array('title' => $langDelCourse,
             'url' => "delete_course.php?course=$course_code",
             'icon' => 'fa-times',
             'button-class' => 'btn-danger')
     ));
-    
+
     $tool_content .= "
-	<div id='operations_container'>" . action_bar($action_bar_array) . "</div>";
+    <div id='operations_container'>" . action_bar($action_bar_array) . "</div>";
 
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
-                	       course_license, password, id, view_type, start_date, finish_date
+                           course_license, password, id, view_type, start_date, finish_date
                       FROM course WHERE code = ?s", $course_code);
     $title = $c->title;
     $visible = $c->visible;
@@ -460,7 +463,7 @@ if (isset($_POST['submit'])) {
         $log_course_user_requests_inactive = '';
         $log_course_user_requests_dis = '';
     }
-    //Sharing options    
+    //Sharing options
     if (!is_sharing_allowed($course_id)) {
         $sharing_radio_dis = ' disabled';
         if (!get_config('enable_social_sharing_links')) {
@@ -468,7 +471,7 @@ if (isset($_POST['submit'])) {
         }
         if (course_status($course_id) != COURSE_OPEN) {
             $sharing_dis_label = $langSharingDisCourse;
-        }        
+        }
     } else {
         $sharing_radio_dis = '';
         $sharing_dis_label = '';
@@ -530,28 +533,28 @@ if (isset($_POST['submit'])) {
         $log_course_user_requests_enable = "checked";
     }
     $tool_content .= "<div class='form-wrapper'>
-	<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
-	<fieldset>
-	<div class='form-group'>
+    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
+    <fieldset>
+    <div class='form-group'>
             <label for='fcode' class='col-sm-2 control-label'>$langCode</label>
             <div class='col-sm-10'>
                 <input type='text' class='form-control' name='fcode' id='fcode' value='$public_code'>
             </div>
         </div>
-        <div class='form-group'>	    
+        <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langCourseTitle:</label>
             <div class='col-sm-10'>
-		<input type='text' class='form-control' name='title' id='title' value='" . q($title) . "'>
-	    </div>
+        <input type='text' class='form-control' name='title' id='title' value='" . q($title) . "'>
+        </div>
         </div>
         <div class='form-group'>
             <label for='titulary' class='col-sm-2 control-label'>$langTeachers:</label>
             <div class='col-sm-10'>
-		<input type='text' class='form-control' name='titulary' id='titulary' value='$titulary'>
-	    </div>
+        <input type='text' class='form-control' name='titulary' id='titulary' value='$titulary'>
+        </div>
         </div>
         <div class='form-group'>
-	    <label for='Faculty' class='col-sm-2 control-label'>$langFaculty:</label>
+        <label for='Faculty' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";
         if ($depadmin_mode) {
             list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
@@ -560,14 +563,21 @@ if (isset($_POST['submit'])) {
         }
         $head_content .= $js;
         $tool_content .= $html;
+
+        if ($c->view_type == 'activity' or Database::get()->querySingle('SELECT id FROM activity_heading LIMIT 1')) {
+            $activities = true;
+        } else {
+            $activities = false;
+        }
+
         @$tool_content .= "</div></div>
-	    <div class='form-group'>
-		<label for='course_keywords' class='col-sm-2 control-label'>$langCourseKeywords</label>
-		<div class='col-sm-10'>
+        <div class='form-group'>
+        <label for='course_keywords' class='col-sm-2 control-label'>$langCourseKeywords</label>
+        <div class='col-sm-10'>
                     <input type='text' class='form-control' name='course_keywords' id='course_keywords' value='$course_keywords'>
                 </div>
-	    </div>        
-	    <div class='form-group'>
+        </div>
+        <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseFormat:</label>
                 <div class='col-sm-10'>
                     <div class='radio'>
@@ -587,14 +597,20 @@ if (isset($_POST['submit'])) {
                         <input type='radio' name='view_type' value='weekly' id='weekly'".($c->view_type == "weekly" ? " checked" : "").">
                         $langCourseWeeklyFormat
                       </label>
-                    </div>                         
-                </div>                    
+                    </div>" . ($activities? ("
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='view_type' value='activity' id='activity'".($c->view_type == "activity" ? " checked" : "").">
+                        $langCourseActivityFormat
+                      </label>
+                    </div>"): '') . "
+                </div>
             </div>
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2' id='weeklyDates'>
-                        $langStartDate 
+                        $langStartDate
                         <input class='dateInForm form-control' type='text' name='start_date' value='" .
-                            ($c->start_date ? $c->start_date : '')."' readonly>                       
+                            ($c->start_date ? $c->start_date : '')."' readonly>
                         $langEndDate
                         <input class='dateInForm form-control' type='text' name='finish_date' value='" .
                             ($c->finish_date ? $c->finish_date : '')."' readonly>
@@ -605,7 +621,7 @@ if (isset($_POST['submit'])) {
         $tool_content .= "<input type='hidden' name='course_license' value='" . getIndirectReference($course_license) . "'>";
     }
     $language = $c->lang;
-    $tool_content .= "        
+    $tool_content .= "
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langOpenCoursesLicense:</label>
                 <div class='col-sm-10'>
@@ -626,11 +642,11 @@ if (isset($_POST['submit'])) {
                         <input id='cc_license' type='radio' name='l_radio' value='cc'$cc_checked$disabledVisibility>
                         $langCMeta[course_license]
                       </label>
-                    </div>                         
-                </div>                    
+                    </div>
+                </div>
             </div>
             <div class='form-group'>
-                <div class='col-sm-10 col-sm-offset-2' id='cc'>            
+                <div class='col-sm-10 col-sm-offset-2' id='cc'>
                     " . selection($cc_license, 'cc_use', $course_license, 'class="form-control"'.$disabledVisibility) . "
                 </div>
             </div>
@@ -668,8 +684,8 @@ if (isset($_POST['submit'])) {
                             </span>&nbsp;$langInactiveCourse
                         <span class='help-block'><small>$langCourseInactiveShort</small></span>
                       </label>
-                    </div>                   
-                </div>            
+                    </div>
+                </div>
             </div>
             <div class='form-group'>
                 <label for='coursepassword' class='col-sm-2 control-label'>$langOptPassword:</label>
@@ -679,11 +695,11 @@ if (isset($_POST['submit'])) {
                 <div class='col-sm-2 text-center padding-thin'>
                     <span id='result'></span>
                 </div>
-            </div>                        
-	    <div class='form-group'>
+            </div>
+        <div class='form-group'>
                 <label for='Options' class='col-sm-2 control-label'>$langLanguage:</label>
-                <div class='col-sm-10'>" . lang_select_options('localize', 'class="form-control"', $language) . "</div>	        
-	    </div>
+                <div class='col-sm-10'>" . lang_select_options('localize', 'class="form-control"', $language) . "</div>
+        </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseUserRequests:</label>
                 <div class='col-sm-10'>
@@ -697,7 +713,7 @@ if (isset($_POST['submit'])) {
                       <label>
                             <input type='radio' value='1' name='disable_log_course_user_requests' $log_course_user_requests_disable $log_course_user_requests_inactive> $langDeactivate
                       </label>
-                    </div>                    
+                    </div>
                 </div>
             </div>
             <div class='form-group'>
@@ -713,8 +729,8 @@ if (isset($_POST['submit'])) {
                             <input type='radio' value='0' name='s_radio' $checkSharingDis $sharing_radio_dis> $langSharingDis
                             <span class='help-block'><small>$sharing_dis_label</small></span>
                       </label>
-                    </div>                  
-                </div>                    
+                    </div>
+                </div>
             </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseRating:</label>
@@ -726,9 +742,9 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='0' name='r_radio' $checkRatingDis> $langRatingDis                    
+                            <input type='radio' value='0' name='r_radio' $checkRatingDis> $langRatingDis
                       </label>
-                    </div>                   
+                    </div>
                 </div>
             </div>
             <div class='form-group'>
@@ -742,10 +758,10 @@ if (isset($_POST['submit'])) {
                     <div class='radio'>
                       <label>
                             <input type='radio' value='0' name='ran_radio' $checkAnonRatingDis $anon_rating_radio_dis> $langRatingAnonDis
-                            <span class='help-block'><small>$anon_rating_dis_label</small></span>     
+                            <span class='help-block'><small>$anon_rating_dis_label</small></span>
                       </label>
-                    </div>                   
-                </div>                    
+                    </div>
+                </div>
             </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseCommenting:</label>
@@ -757,10 +773,10 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='0' name='c_radio' $checkCommentDis> $langCommentsDis                    
+                            <input type='radio' value='0' name='c_radio' $checkCommentDis> $langCommentsDis
                       </label>
-                    </div>                   
-                </div>                    
+                    </div>
+                </div>
             </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langAbuseReport:</label>
@@ -772,10 +788,10 @@ if (isset($_POST['submit'])) {
                     </div>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='0' name='ar_radio' $checkAbuseReportDis> $langAbuseReportDis                    
+                            <input type='radio' value='0' name='ar_radio' $checkAbuseReportDis> $langAbuseReportDis
                       </label>
-                    </div>                   
-                </div>                    
+                    </div>
+                </div>
             </div>
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
@@ -783,7 +799,7 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
         </fieldset>
-        ". generate_csrf_token_form_field() ."  
+        ". generate_csrf_token_form_field() ."
     </form>
 </div>";
 }

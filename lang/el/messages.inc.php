@@ -4,7 +4,7 @@
  * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -12,7 +12,7 @@
  * be useful (without any warranty), under the terms of the GNU (General
  * Public License) as published by the Free Software Foundation.
  * The full license can be read in "/info/license/license_gpl.txt".
- *ε
+ *
  * Contact address: GUnet Asynchronous eLearning Group,
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
@@ -334,6 +334,7 @@ $langCurrentStatus = "Τρέχουσα κατάσταση";
 $langListUsers = "Λίστα Χρηστών";
 $langTakeBackup = "Λήψη Αντιγράφου Ασφαλείας";
 $langStatsCourse = "Στατιστικά $langOfCourse";
+$langActivityEdit = 'Επεξεργασία δραστηριότητας';
 
 // course_info.php
 $langCourseEditSuccess = "Τα στοιχεία του $langsOfCourse άλλαξαν με επιτυχία!";
@@ -341,6 +342,7 @@ $langCourseInfoEdit = "Αλλαγή στοιχείων $langsOfCourse";
 $langBackCourse = "Επιστροφή στην αρχική σελίδα του $langsOfCourse";
 $langCourseFormat = "Mορφή $langsOfCourse";
 $langCourseWeeklyFormat = 'Εβδομαδιαία μορφή';
+$langCourseActivityFormat = 'Μορφή δραστηριότητας';
 $langWithCourseUnits = "$langCourse με θεματικές ενότητες";
 $langCourseSimpleFormat = 'Απλή μορφή';
 $langAddWeek = 'Προσθήκη εβδομάδας';
@@ -553,7 +555,7 @@ $langGroupQuota = "Όριο αποθηκευτικού χώρου $langsOfCourse
 $langEclassThemes = "Εμφάνιση πλατφόρμας";
 $langHomePageSettings = "Ορισμός αρχικής σελίδας";
 $langHomePageTitleHelpText = "Ο τίτλος που θα εμφανίζεται στην Αρχική Σελίδα";
-$langHomePageNavTitleHelp = "Ο τίτλος πλοήσηςη που θα εμφανίζεται για στο breadcrump";
+$langHomePageNavTitleHelp = "Ο τίτλος πλοήγησης που θα εμφανίζεται στο breadcrump";
 $langHomePageIntroTextHelp = "Το εισαγωγικό κείμενο της αρχικής σελίδας";
 $langHomePageExtUrlHelp = "Το url του εξωτερικού συνδέσμου που θα λειτουργεί σαν αρχική σελίδα της πλατφόρμας";
 $langSelectHomePage = "Επιλέξτε ποια θέλετε να είναι η αρχική σελίδα";
@@ -5267,9 +5269,10 @@ $langEditEn = "Ενεργοποίηση τροποποίησης";
 $langEditDis = "Απενενεργοποίηση τροποποίησης";
 $langAddNode = "Προσθήκη κόμβου";
 $langRemoveNode = "Αφαίρεση κόμβου";
+$langResetMap = "Καθαρισμός χάρτη";
 $langSaveFile = "Αποθήκευση αρχείου";
-$langSaveInDoc = "Αποθήκευση στα Έγγραφα";
-$langOpenFile = "Άνοιγμα αρχείου (.jm)";
+$langSaveInDoc = "Αποθήκευση στα έγγραφα";
+$langOpenFile = "άνοιγμα αρχείου";
 $langEditMind = "Τροποποίηση";
 $langToggle = "Εναλλαγή";
 $langOpenMind = "Άνοιγμα";
@@ -5292,5 +5295,41 @@ $langThemeClouds = "Σύννεφα";
 $langPlzEnterName = "Παρακαλώ εισάγετε όνομα"; 
 
 
-
- 
+/* * *********************************************
+ * coursecategory.php
+ * ********************************************* */
+$langCourseCategoryActions = "Κατηγορίες Μεταδεδομένων";
+$langCourseCategoryAdd = "Προσθήκη κατηγορίας";
+$langCourseCategoryDel = "Διαγραφή κατηγορίας";
+$langCourseCategoryEdit = "Επεξεργασία κατηγορίας";
+$langAllCourseCategories = "Κατηγορίες Μεταδεδομένων";
+$langEmptyCourseCategoryName = "Αφήσατε το όνομα κενό! Δοκιμάστε ξανά";
+$langCourseCategoryProErase = "Υπάρχουν τιμές που ανήκουν σε αυτή την κατηγορία μεταδεδομένων";
+$langCourseCategoryNoErase = "Η διαγραφή της κατηγορίας μεταδεδομένων δεν είναι δυνατή.";
+$langCourseCategoryErase = "Η κατηγορία μεταδεδομένων διαγράφηκε";
+$langEditCourseCategorySuccess = "Η επεξεργασία πραγματοποιήθηκε επιτυχώς";
+$langCourseCategory2 = "(π.χ. Μέγεθος Ομάδας)";
+$langCourseCategoryMultiple = "Πολλαπλότητα";
+$langCourseCategoryMultiple2 = "Η κατηγορία μεταδεδομένων θα έχει πολλαπλές τιμές";
+$langCourseCategorySearchable = "Αναζητήσιμη";
+$langCourseCategorySearchable2 = "Η κατηγορία μεταδεδομένων θα συμμετέχει στην ειδική εργαλειοθήκη αναζήτησης";
+$langCourseCategoryActive = "Ενεργή";
+$langCourseCategoryActive2 = "Η κατηγορία μεταδεδομένων θα εμφανίζεται στους χρήστες";
+$langCourseCategoryOrdering = "Ταξινόμηση";
+$langCourseCategoryOrdering2 = "(π.χ. 1, 2, κ.ο.κ.)";
+$langEditCourseCategoryValues = "Επεξεργασία τιμών";
+$langCourseCategoryValues = "Τιμές Κατηγοριών Μεταδεδομένων";
+$langCourseCategoryValueAdd = "Προσθήκη τιμής κατηγορίας";
+$langCourseCategoryValueDel = "Διαγραφή τιμής κατηγορίας";
+$langCourseCategoryValueEdit = "Επεξεργασία τιμής κατηγορίας";
+$langAllCourseCategoryValues = "Τιμές Κατηγοριών Μεταδεδομένων";
+$langEmptyCourseCategoryValueName= "Αφήσατε το όνομα κενό! Δοκιμάστε ξανά";
+$langCourseCategoryValueErase = "Η τιμή της κατηγορίας μεταδεδομένων διαγράφηκε";
+$langEditCourseCategoryValueSuccess = "Η επεξεργασία πραγματοποιήθηκε επιτυχώς";
+$langCourseCategoryValue2 = "(π.χ. 1 - 30)";
+$langCourseCategoryValueOrdering = "Ταξινόμηση";
+$langCourseCategoryValueOrdering2 = "(π.χ. 1, 2, κ.ο.κ.)";
+$langCourseCategoryValueActive = "Ενεργή";
+$langCourseCategoryValueActive2 = "Η τιμή κατηγορίας μεταδεδομένων θα εμφανίζεται στους χρήστες";
+$langInactiveCourseCategories = "Ανενεργές κατηγορίες";
+$langActiveCourseCategories = "Ενεργές κατηγορίες";
