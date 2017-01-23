@@ -1,26 +1,18 @@
 <!DOCTYPE HTML>
 <html style="height: 100%;">
 <head>
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
     <title>{%PAGE_TITLE%}</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="{%TOOLBOX_PATH%}css/bootstrap.min.css">
     <link rel="stylesheet" href="{%TOOLBOX_PATH%}css/toolbox_styles.css">
     <link href="{%template_base%}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
 
     <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
-
-    <!-- Latest compiled and minified JavaScript -->
     <script src="{%template_base%}/js/bootstrap.min.js"></script>
-
-    <!-- Our javascript -->
+    {%EXTRA_CSS%}
     {%HEAD_EXTRAS%}
-
     <script>
         $(document).ready(function () {
             $(".loginModal").click(function () {
