@@ -51,8 +51,9 @@ $courseHome = "{$urlAppend}courses/$course_code/";
 $items = Database::get()->queryArray("SELECT activity_content.id, activity_heading.id AS heading_id, heading, content, required
     FROM activity_heading
         LEFT JOIN activity_content
-            ON activity_heading.id = activity_content.heading_id
-    WHERE course_id = ?d OR course_id IS NULL ORDER BY `order`", $course_id);
+            ON activity_heading.id = activity_content.heading_id AND
+               (course_id = ?d OR course_id IS NULL)
+    ORDER BY `order`", $course_id);
 
 $tool_content .= action_bar(array(
     array('title' => $langBack,

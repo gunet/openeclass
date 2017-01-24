@@ -813,33 +813,36 @@ if ($course_info->view_type == 'activity') {
     $items = Database::get()->queryArray("SELECT activity_content.id, heading, content
         FROM activity_heading
             LEFT JOIN activity_content
-                ON activity_heading.id = activity_content.heading_id
-        WHERE course_id = ?d ORDER BY `order`", $course_id);
+                ON activity_heading.id = activity_content.heading_id AND
+                   course_id = ?d
+        ORDER BY `order`", $course_id);
     foreach ($items as $item) {
-        $tool_content .= "
-                <div class='panel clearfix'>
-                    <div class='col-xs-12'>
-                        <div class='item-title h4'>" . q(getSerializedMessage($item->heading)) ."</div>
-                        <div class='item-body'>" . standard_text_escape($item->content) . "</div>";
-        $resources = Database::get()->queryArray("SELECT * FROM unit_resources
-            WHERE unit_id = ?d AND `order` >= 0 $qVisible ORDER BY `order`", $item->id);
-        if (count($resources > 0)) {
+        if (trim($item->comments)) {
             $tool_content .= "
-                        <div class='table-responsive'>
-                            <table class='table table-striped table-hover'>
-                                <tbody>";
-            foreach ($resources as $info) {
-                $info->comments = standard_text_escape($info->comments);
-                show_resourceWeek($info);
+                    <div class='panel clearfix'>
+                        <div class='col-xs-12'>
+                            <div class='item-title h4'>" . q(getSerializedMessage($item->heading)) ."</div>
+                            <div class='item-body'>" . standard_text_escape($item->content) . "</div>";
+            $resources = Database::get()->queryArray("SELECT * FROM unit_resources
+                WHERE unit_id = ?d AND `order` >= 0 $qVisible ORDER BY `order`", $item->id);
+            if (count($resources > 0)) {
+                $tool_content .= "
+                            <div class='table-responsive'>
+                                <table class='table table-striped table-hover'>
+                                    <tbody>";
+                foreach ($resources as $info) {
+                    $info->comments = standard_text_escape($info->comments);
+                    show_resourceWeek($info);
+                }
+                $tool_content .= "
+                                    </tbody>
+                                </table>
+                            </div>";
             }
             $tool_content .= "
-                                </tbody>
-                            </table>
-                        </div>";
+                        </div>
+                    </div>";
         }
-        $tool_content .= "
-                    </div>
-                </div>";
     }
     $tool_content .= "
             </div>
