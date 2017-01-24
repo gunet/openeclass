@@ -819,28 +819,26 @@ if ($course_info->view_type == 'activity') {
     foreach ($items as $item) {
         if (trim($item->content)) {
             $tool_content .= "
-                    <div class='panel clearfix'>
-                        <div class='col-xs-12'>
-                            <div class='item-title h4'>" . q(getSerializedMessage($item->heading)) ."</div>
-                            <div class='item-body'>" . standard_text_escape($item->content) . "</div>";
+                    <div class='panel panel-default clearfix'>
+                        <div class='panel-heading'><h4>" . q(getSerializedMessage($item->heading)) ."</h4></div>
+                        <div class='panel-body'>" . standard_text_escape($item->content) . "</div>";
             $resources = Database::get()->queryArray("SELECT * FROM unit_resources
                 WHERE unit_id = ?d AND `order` >= 0 $qVisible ORDER BY `order`", $item->id);
             if (count($resources > 0)) {
                 $tool_content .= "
-                            <div class='table-responsive'>
-                                <table class='table table-striped table-hover'>
-                                    <tbody>";
+                        <div class='table-responsive'>
+                            <table class='table table-striped table-hover'>
+                                <tbody>";
                 foreach ($resources as $info) {
                     $info->comments = standard_text_escape($info->comments);
                     show_resourceWeek($info);
                 }
                 $tool_content .= "
-                                    </tbody>
-                                </table>
-                            </div>";
+                                </tbody>
+                            </table>
+                        </div>";
             }
             $tool_content .= "
-                        </div>
                     </div>";
         }
     }
