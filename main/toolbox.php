@@ -45,7 +45,7 @@ $t->set_var('COPYRIGHT', 'Open eClass © 2003-' . date('Y'));
 $t->set_var('TERMS_URL', $urlAppend .'info/terms.php');
 $t->set_var('LANG_TERMS', $langUsageTerms);
 $t->set_var('langSearch', $langSearch);
-$t->set_var('toolboxTitle', q(get_config('toolbox_title', $langEclass)));
+$t->set_var('toolboxTitle', q(getSerializedMessage(get_config('toolbox_title', $langEclass))));
 
 if ($footer = get_config('toolbox_footer_' . $session->language)) {
     $t->set_var('FOOTER', $footer);
@@ -125,12 +125,6 @@ if ($theme_id) {
     }
     if (!empty($theme_options_styles['leftMenuSelectedFontColor'])) {
         $styles_str .= "#leftnav .panel a.parent-menu:not(.collapsed){color: $theme_options_styles[leftMenuSelectedFontColor];}";
-    }
-    if (isset($theme_options_styles['imageUpload'])) {
-        $t->set_var('logo_img', "$urlThemeData/$theme_options_styles[imageUpload]");
-    }
-    if (isset($theme_options_styles['imageUploadSmall'])) {
-        $t->set_var('logo_img_small', "$urlThemeData/$theme_options_styles[imageUploadSmall]");
     }
 
     $t->set_var('EXTRA_CSS', "<style>$styles_str</style>");
@@ -240,7 +234,7 @@ if ($searching) {
     $t->set_var('resultNumEntriesFound', 'found matching your search');
     $t->parse('resultList', 'resultListBlock', false);
 } else {
-    $t->set_var('infoAbout', standard_text_escape($langInfoAbout));
+    $t->set_var('infoAbout', standard_text_escape(getSerializedMessage(get_config('toolbox_intro', $langInfoAbout))));
     $t->parse('welcome', 'welcomeBlock', false);
 
     $totalCourses = Database::get()->querySingle('SELECT COUNT(*) AS totalCourses
