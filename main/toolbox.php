@@ -46,16 +46,7 @@ $t->set_var('TERMS_URL', $urlAppend .'info/terms.php');
 $t->set_var('LANG_TERMS', $langUsageTerms);
 $t->set_var('langSearch', $langSearch);
 $t->set_var('toolboxTitle', q(getSerializedMessage(get_config('toolbox_title', $langEclass))));
-
-if ($footer = get_config('toolbox_footer_' . $session->language)) {
-    $t->set_var('FOOTER', $footer);
-    $t->parse('footer', 'footerBlock', false);
-}
-
-if (get_config('enable_social_sharing_links')) {
-    $t->set_var('socialSharingLinks',
-        print_sharing_links($urlServer . 'main/toolbox.php', $siteName));
-}
+$t->set_var('container', 'container');
 
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
 if ($theme_id) {
@@ -139,6 +130,16 @@ if (isset($theme_options_styles['imageUploadSmall'])) {
     $t->set_var('logo_img_small', "$urlThemeData/$theme_options_styles[imageUploadSmall]");
 } else {
     $t->set_var('logo_img_small', $themeimg.'/logo_eclass_small.png');
+}
+
+if ($footer = get_config('toolbox_footer_' . $session->language)) {
+    $t->set_var('FOOTER', $footer);
+    $t->parse('footer', 'footerBlock', false);
+}
+
+if (get_config('enable_social_sharing_links')) {
+    $t->set_var('socialSharingLinks',
+        print_sharing_links($urlServer . 'main/toolbox.php', $siteName));
 }
 
 $searching = false;

@@ -298,7 +298,7 @@ body{
     position: relative;
 }
 
-.top-bar-sct .container{
+.top-bar-sct .container, .top-bar-sct .container-fluid{
     margin-top: 0px;
     background-color: rgb(238, 238, 238);
     height: 52px;
@@ -310,7 +310,7 @@ body{
     color: white;
 }
 
-.banner-sct .container{
+.banner-sct .container, .banner-sct .container-fluid{
     height: 120px;
     font-family: Roboto, sans-serif;
     background-color: rgb(250, 250, 250);
@@ -325,7 +325,7 @@ body{
     margin: 20px 0px;
 }
 
-.top-bar-sct .container{
+.top-bar-sct .container, .top-bar-sct .container-fluid{
     margin-top: 0px;
 }
 
@@ -352,12 +352,12 @@ body{
     border-right: 1px solid #999;
 }
 
-.description-sct .container{
+.description-sct .container, .description-sct .container-fluid{
     padding-bottom: 80px;
     background-color: rgb(250, 250, 250);
 }
 
-.search-sct .container, .result-sct .container{
+.search-sct .container, .search-sct .container-fluid, .result-sct .container, .result-sct .container-fluid{
     background-color: rgb(250, 250, 250);
     padding-bottom: 50px;
 }
@@ -385,7 +385,7 @@ body{
     border-bottom: 1px solid #ccc;
 }
 
-.footer-sct .container{
+.footer-sct .container, .footer-sct .container-fluid{
     font-family: "Roboto", sans-serif;
     background-color: #232C3A;
     color: #eee;
@@ -397,7 +397,7 @@ body{
     padding-bottom: 70px;
 }
 
-.copyright-note .container{
+.copyright-note .container, .copyright-note .container-fluid{
     padding-top: 20px;
     padding-bottom: 20px;
     border-top:1px solid #999;
