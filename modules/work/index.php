@@ -2599,6 +2599,7 @@ function sort_link($title, $opt, $attrib = '') {
  * @global type $langAutoJudgeShowWorkResultRpt
  * @global type $langGroupName
  * @global type $langPlagiarismCheck
+ * @global type $langProgress
  * @param type $id
  * @param type $display_graph_results
  */
@@ -2607,7 +2608,7 @@ function show_assignment($id, $display_graph_results = false) {
     $langWorkOnlineText, $langGradeOk, $course_code, $langAutoJudgeResult,
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langAutoJudgeDownloadPdf,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
-    $langAutoJudgeShowWorkResultRpt, $langGroupName, $langPlagiarismCheck;
+    $langAutoJudgeShowWorkResultRpt, $langGroupName, $langPlagiarismCheck, $langProgress;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
@@ -2742,9 +2743,13 @@ function show_assignment($id, $display_graph_results = false) {
                 
                 // check for plagiarism via 'unplag' tool (http://www.unplag.com)
                 if (get_config('ext_unplag_enabled')) {
-                    $results = Plagiarism::get()->getResults($row->id);                
-                    if ($results and $results->ready) {
-                        $plagiarismlink = "<small><a href='$results->resultURL'>$langAutoJudgeResult</a> (<a href='$results->pdfURL'>$langAutoJudgeDownloadPdf</a>)</small>";
+                    $results = Plagiarism::get()->getResults($row->id);                                    
+                    if ($results) {
+                        if ($results->ready) {
+                            $plagiarismlink = "<small><a href='$results->resultURL' target=_blank>$langAutoJudgeResult</a> (<a href='$results->pdfURL' target=_blank>$langAutoJudgeDownloadPdf</a>)</small>";
+                        } else {
+                            $plagiarismlink = "<small>$langProgress: ". $results->progress*100 . "%</small>";
+                        }
                     } else {
                         $plagiarismlink = "<span class='small'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
                     }
