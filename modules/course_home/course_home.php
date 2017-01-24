@@ -817,7 +817,7 @@ if ($course_info->view_type == 'activity') {
                    course_id = ?d
         ORDER BY `order`", $course_id);
     foreach ($items as $item) {
-        if (trim($item->comments)) {
+        if (trim($item->content)) {
             $tool_content .= "
                     <div class='panel clearfix'>
                         <div class='col-xs-12'>
