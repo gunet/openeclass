@@ -78,16 +78,6 @@ if ($theme_id) {
         $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "";
         $styles_str .= "body{background: $bg_color$bg_image;$background_type}";
     }
-    $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
-    if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) {
-        $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
-    }
-    if (isset($theme_options_styles['loginImg'])) {
-        $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str }";
-    }
-    if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='full-width') {
-        $styles_str .= ".jumbotron.jumbotron-login {  background-size: cover, cover; background-position: 0% 0%;}";
-    }
     if (isset($theme_options_styles['fluidContainerWidth'])) {
         $t->set_var('container', 'container-fluid');
         $styles_str .= ".container-fluid {max-width:$theme_options_styles[fluidContainerWidth]px}";
