@@ -24,6 +24,7 @@
 
 require_once '../include/baseTheme.php';
 require_once 'modules/sharing/sharing.php';
+require_once 'modules/auth/login_form.inc.php';
 
 load_js('select2');
 
@@ -44,9 +45,20 @@ $t->set_var('PAGE_TITLE', q($siteName));
 $t->set_var('COPYRIGHT', 'Open eClass © 2003-' . date('Y'));
 $t->set_var('TERMS_URL', $urlAppend .'info/terms.php');
 $t->set_var('LANG_TERMS', $langUsageTerms);
-$t->set_var('langSearch', $langSearch);
+$t->set_var('noAccountPleaseRegister',
+    sprintf($langNoAccountPleaseRegister, '<a class="registerModal">', '</a>'));
+$t->set_var('alreadyHaveAccount',
+    sprintf($langAlreadyHaveAccount, '<a class="loginModal">', '</a>'));
+$t->set_var('loginForm', login_form());
 $t->set_var('toolboxTitle', q(getSerializedMessage(get_config('toolbox_title', $langEclass))));
 $t->set_var('container', 'container');
+
+$msgs = array('langSearch', 'langRegister', 'langLogin', 'langName',
+    'langSurname', 'langUsername', 'langEmail', 'langPass',
+    'langConfirmation', 'langSubmit');
+foreach ($msgs as $msg) {
+    $t->set_var($msg, $GLOBALS[$msg]);
+}
 
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
 if ($theme_id) {

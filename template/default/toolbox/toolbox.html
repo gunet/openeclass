@@ -44,7 +44,7 @@
             <div class="col-xs-12">
                 <div class="loginModal reg-btns pull-right">
                     <span>
-                        Register / Login
+                        {%langRegister%} / {%langLogin%}
                     </span>
                 </div>
             </div>
@@ -209,32 +209,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Login</h4>
+                <h4 class="modal-title" id="myModalLabel">{%langLogin%}</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <form>
-                            <div class="form-group">
-                                <label class="hidden" for="exampleInputEmail1">Enter username</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter username">
-                            </div>
-                            <div class="form-group">
-                                <label class="hidden" for="exampleInputPassword1">Enter password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter password">
-                            </div>
-                            <button type="button" class="btn btn-primary btn-block">Log in</button>
-                        </form>
-                    </div>
-                    <div class="col-sm-1 login-seperator"></div>
-                    <div class="col-sm-5 alt-login">
-                        <h5 class="text-center">Or log in with:</h5>
-                        <img class="img-responsive" src="googleplus.png" />
-                    </div>
-                </div>
+                {%loginForm%}
             </div>
             <div class="modal-footer">
-                Not having an account? Please <a class="registerModal">Register</a>
+                {%noAccountPleaseRegister%}
             </div>
         </div>
     </div>
@@ -244,43 +225,43 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabelRegister">Login</h4>
+                <h4 class="modal-title" id="myModalLabelRegister">{%langRegister%}</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12">
                         <form>
                             <div class="form-group">
-                                <label class="hidden" for="exampleInputEmail1">Name</label>
-                                <input type="email" class="form-control" id="exampleInputEmailRegister" placeholder="Name">
+                                <label class="hidden" for="inputName">{%langName%}</label>
+                                <input type="text" class="form-control" name="givenname_form" id="inputName" placeholder="{%langName%}">
                             </div>
                             <div class="form-group">
-                                <label class="hidden" for="exampleInputPassword1">Last name</label>
-                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Last name">
+                                <label class="hidden" for="inputSurname">{%langSurname%}</label>
+                                <input type="text" class="form-control" name="surname_form" id="inputSurname" placeholder="{%langSurname%}">
                             </div>
                             <div class="form-group">
-                                <label class="hidden" for="exampleInputEmail1">Enter username</label>
-                                <input type="email" class="form-control" id="exampleInputEmailRegister" placeholder="Enter username">
+                                <label class="hidden" for="inputUsername">{%langUsername%}</label>
+                                <input type="text" class="form-control" name="uname" id="inputUsername" placeholder="{%langUsername%}">
                             </div>
                             <div class="form-group">
-                                <label class="hidden" for="exampleInputPassword1">Enter password</label>
-                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Enter password">
+                                <label class="hidden" for="inputEmail">{%langEmail%}</label>
+                                <input type="email" class="form-control" name="email" id="inputEmail" placeholder="{%langEmail%}">
                             </div>
                             <div class="form-group">
-                                <label class="hidden" for="exampleInputPassword1">Retype Password</label>
-                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Retype password">
+                                <label class="hidden" for="inputPassword">{%langPass%}</label>
+                                <input type="password" class="form-control" name="password1" id="inputPassword" placeholder="{%langPass%}">
                             </div>
                             <div class="form-group">
-                                <label class="hidden" for="exampleInputPassword1">Email</label>
-                                <input type="password" class="form-control" id="exampleInputEmailRegister" placeholder="Email">
+                                <label class="hidden" for="inputPassword1">{%langConfirmation%}</label>
+                                <input type="password" class="form-control" name="password" id="inputPassword1" placeholder="{%langConfirmation%}">
                             </div>
-                            <button type="button" class="btn btn-primary btn-block">Submit</button>
+                            <button type="button" class="btn btn-primary btn-block">{%langSubmit%}</button>
                         </form>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                Already have an account? <a class="loginModal" href="#">Login</a>
+                {%alreadyHaveAccount%}
             </div>
         </div>
     </div>

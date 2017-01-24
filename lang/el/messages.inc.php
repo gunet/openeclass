@@ -62,6 +62,8 @@ $langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
 $langVisible = "Ορατή";
 $langInvisible = "Μη ορατή";
+$langNoAccountPleaseRegister = 'Δεν έχετε λογαριασμό; Παρακαλούμε %sεγγραφείτε%s.';
+$langAlreadyHaveAccount = "Έχετε ήδη λογαριασμό; %sΣυνδεθείτε%s";
 
 /* * ******************************************
  * addadmin.php
