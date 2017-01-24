@@ -127,32 +127,31 @@ class UnPlag extends Plagiarism {
     }
 
     private function submitFileToServer($fileID, $fileLocation, $filename = null) {
+                
         if ($this->isFileSubmitted($fileID))
             return TRUE;
-
-        if ($filename)
-            $filename = basename($fileLocation);
+        
         try {
             $response = $this->getClient()->post('file/upload', [//send HTTP POST request
                 'multipart' => [
                     [
                         'name' => 'file',
-                        'contents' => fopen($fileLocation, 'r') //resource will be automatically encoded by guzzle
+                        'contents' => fopen("$fileLocation", 'r') //resource will be automatically encoded by guzzle
                     ],
                     [
                         'name' => 'format',
-                        'contents' => strtolower(pathinfo($filename, PATHINFO_EXTENSION)) //specify format of file
+                        'contents' => strtolower(pathinfo(basename($fileLocation), PATHINFO_EXTENSION)) //specify format of file
                     ],
                     [
                         'name' => 'name',
-                        'contents' => basename($filename) //optional parameter name
+                        'contents' => $filename //optional parameter name
                     ]
                 ],
                 'headers' => [
                     'Accept' => 'application/json' // Force unplag to give response in JSON
                 ]
             ]);
-            $result = json_decode($response->getBody(), true);
+            $result = json_decode($response->getBody(), true);            
             if ($result['file']['id']) {
                 $this->createRemoteFileID($fileID, $result['file']['id']);
                 return TRUE;
@@ -165,8 +164,9 @@ class UnPlag extends Plagiarism {
 
     private function getClient() {
         $app = ExtAppManager::getApp("unplag");
-        if (!$app->isEnabled())
+        if (!$app->isEnabled()) {            
             return null;
+        }
 
         $key = $app->getParam(UnplagApp::APIKEY)->value();
         $secret = $app->getParam(UnplagApp::APISECRET)->value();

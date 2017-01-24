@@ -85,19 +85,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     exit;
 }
 
-/* Plagiarism demo
-
-if (!Plagiarism::get()->isFileSubmitted($fileID))
-    Plagiarism::get()->submitFile($fileID, "/full/path/to/hased_filename", "original_filename.doc");
-else {
-    $results = Plagiarism::get()->getResults($fileID);
-    if ($results->ready) {
-//        $results-> ...;
-    }
-}
-
-*/
-
 //Gets the student's assignment file ($file_type=NULL)
 //or the teacher's assignment ($file_type=1)
 if (isset($_GET['get']) or isset($_GET['getcomment'])) {
@@ -128,6 +115,7 @@ if (isset($_GET['chk'])) { // plagiarism check
         Session::Messages($langFileNotFound, 'alert-danger');
     }
     send_file_for_plagiarism($file_id, $true_file_path, $true_file_name);
+    
 }
 
 
@@ -2600,6 +2588,8 @@ function sort_link($title, $opt, $attrib = '') {
  * @global type $langGraphResults
  * @global type $m
  * @global type $course_code
+ * @global type $langAutoJudgeResult
+ * @global type $langAutoJudgeDownloadPdf
  * @global array $works_url
  * @global type $course_id
  * @global type $langDelWarnUserAssignment
@@ -2614,8 +2604,8 @@ function sort_link($title, $opt, $attrib = '') {
  */
 function show_assignment($id, $display_graph_results = false) {
     global $tool_content, $m, $langNoSubmissions, $langSubmissions,
-    $langWorkOnlineText, $langGradeOk, $course_code, 
-    $langGraphResults, $m, $course_code, $works_url, $course_id,
+    $langWorkOnlineText, $langGradeOk, $course_code, $langAutoJudgeResult,
+    $langGraphResults, $m, $course_code, $works_url, $course_id, $langAutoJudgeDownloadPdf,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
     $langAutoJudgeShowWorkResultRpt, $langGroupName, $langPlagiarismCheck;
 
@@ -2749,12 +2739,17 @@ function show_assignment($id, $display_graph_results = false) {
                     $tool_content .= "<div style='margin-top: .5em;'><small>" .
                             q($row->comments) . '</small></div>';
                 }
-                $results = Plagiarism::get()->getResults($row->id);
-                if ($results->ready) {
-            //        $results-> ...;
-                } else {
-                    $plagiarismlink = "<span class='small'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
+                
+                // check for plagiarism via 'unplag' tool (http://www.unplag.com)
+                if (get_config('ext_unplag_enabled')) {
+                    $results = Plagiarism::get()->getResults($row->id);                
+                    if ($results and $results->ready) {
+                        $plagiarismlink = "<small><a href='$results->resultURL'>$langAutoJudgeResult</a> (<a href='$results->pdfURL'>$langAutoJudgeDownloadPdf</a>)</small>";
+                    } else {
+                        $plagiarismlink = "<span class='small'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
+                    }
                 }
+                // ---------------------------------
                 $tool_content .= "</td>
                                 <td width='85'>" . q($stud_am) . "</td>
                                 <td class='text-center' width='180'>

@@ -355,10 +355,20 @@ function export_grades_to_csv($id) {
 
 
 
+/**
+ * @brief send file for plagiarism check
+ * @param type $file_id
+ * @param type $true_file_path
+ * @param type $true_file_name
+ */
 function send_file_for_plagiarism($file_id, $true_file_path, $true_file_name) {
+    
+    global $langPlagiarismAlreadyCheck, $langPlagiarismFileSent;
     
     if (!Plagiarism::get()->isFileSubmitted($file_id)) {
         Plagiarism::get()->submitFile($file_id, $true_file_path, $true_file_name);
-        //Plagiarism::get()->submitFile($file_id, "/full/path/to/hased_filename", "original_filename.doc");
-    }    
+        Session::Messages($langPlagiarismFileSent, 'alert-success');        
+    } else {
+        Session::Messages($langPlagiarismAlreadyCheck, 'alert-warning');
+    }
 }

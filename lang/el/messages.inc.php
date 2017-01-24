@@ -4095,6 +4095,8 @@ $langAssignmentWillBeActive = 'Η εργασία θα είναι ενεργή σ
 $langExportGrades = "Εξαγωγή βαθμολογιών";
 $langCommentsFile = "Αρχείο σχολίων";
 $langPlagiarismCheck = "Αποστολή για έλεγχο λογοκλοπής";
+$langPlagiarismAlreadyCheck = "To αρχείο έχει ήδη σταλεί για έλεγχο λογοκλοπής";
+$langPlagiarismFileSent = "To αρχείο στάλθηκε για έλεγχο λογοκλοπής";
 
 $langGradeRubric = "Ρουμπρίκα";
 $langGradeRubrics = "Ρουμπρίκες";
