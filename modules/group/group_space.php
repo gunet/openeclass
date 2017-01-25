@@ -133,7 +133,8 @@ if (isset($_GET['group_as'])) {
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }	     
-} else {        
+} else {
+    $student_to_student_allow = get_config('dropbox_allow_student_to_student');    
     $tool_content .= action_bar(array(
                 array('title' => $langModify,
                       'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
@@ -167,7 +168,7 @@ if (isset($_GET['group_as'])) {
                 array('title' => $langEmailGroup,                    
                       'url' => "../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
                       'icon' => 'fa-envelope',                  
-                      'show' => $is_editor or $is_tutor),
+                      'show' => $is_editor or $is_tutor or $student_to_student_allow),
                 array('title' => "$langDumpUser",
                       'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1",
                       'icon' => 'fa-file-archive-o',
