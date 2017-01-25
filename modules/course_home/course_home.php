@@ -802,12 +802,14 @@ if (($total_cunits > 0 or $is_editor) and in_array($course_info->view_type, ['we
 }
 $tool_content .= "<div class='row'>";
 if ($course_info->view_type == 'activity') {
+    if ($is_editor) {
+        $tool_content .= "
+            <div class='col-xs-12 margin-bottom-thin'>
+                <a href='{$urlAppend}modules/course_info/activity_edit.php?course=$course_code' class='btn btn-default'>
+                    <span class='fa fa-edit fa-fw'></span>" . q($langActivityEdit) . "</a>
+            </div>";
+    }
     $tool_content .= "
-    <div class='col-xs-2 pull-right'>
-        <a href='{$urlAppend}modules/course_info/activity_edit.php?course=$course_code' class='btn btn-default'>
-            <span class='fa fa-edit fa-fw'></span>" . q($langActivityEdit) . "</a></div>
-    <div class='col-md-8'>
-        <div class='row'>
             <div class='col-md-12'>";
     $qVisible = ($is_editor? '': 'AND visible = 1');
     $items = Database::get()->queryArray("SELECT activity_content.id, heading, content
@@ -844,8 +846,6 @@ if ($course_info->view_type == 'activity') {
     }
     $tool_content .= "
             </div>
-        </div>
-    </div>
 ";
 
 } elseif (!$alter_layout) {
