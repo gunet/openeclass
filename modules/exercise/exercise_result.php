@@ -27,6 +27,7 @@ $require_current_course = TRUE;
 $guest_allowed = true;
 include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
 
 $pageName = $langExercicesResult;
@@ -54,6 +55,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                                     WHERE eurid = ?d)
             WHERE eurid = ?d",
             ATTEMPT_COMPLETED, $eurid, $eurid);
+        $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting FROM exercise_user_record WHERE eurid = ?d", $eurid);
+        // update gradebook            
+        update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
     } else {
         // else increment total by just this grade
         Database::get()->query("UPDATE exercise_user_record
