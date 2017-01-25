@@ -3424,16 +3424,41 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 ADD UNIQUE KEY `unit_resources_order` (`unit_id`,`order`)');
         }
         //eportfolio tables and data
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields` (
-                        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                        `shortname` VARCHAR(255) NOT NULL,
-                        `name` MEDIUMTEXT NOT NULL,
-                        `description` MEDIUMTEXT NULL DEFAULT NULL,
-                        `datatype` VARCHAR(255) NOT NULL,
-                        `categoryid` INT(11) NOT NULL DEFAULT 0,
-                        `sortorder`  INT(11) NOT NULL DEFAULT 0,
-                        `required` TINYINT NOT NULL DEFAULT 0,
-                        `data` TEXT NULL DEFAULT NULL) $charset_spec");
+        if (!DBHelper::tableExists('eportfolio_fields')) {
+            Database::get()->query("CREATE TABLE `eportfolio_fields` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `shortname` VARCHAR(255) NOT NULL,
+                            `name` MEDIUMTEXT NOT NULL,
+                            `description` MEDIUMTEXT NULL DEFAULT NULL,
+                            `datatype` VARCHAR(255) NOT NULL,
+                            `categoryid` INT(11) NOT NULL DEFAULT 0,
+                            `sortorder`  INT(11) NOT NULL DEFAULT 0,
+                            `required` TINYINT NOT NULL DEFAULT 0,
+                            `data` TEXT NULL DEFAULT NULL) $charset_spec");
+
+            Database::get()->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
+                            (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
+                            (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
+                            (3, 'gender', '$langGender', '', '4', 1, -2, 0, 'a:2:{i:0;s:".strlen($langMale).":\"$langMale\";i:1;s:".strlen($langFemale).":\"$langFemale\";}'),
+                            (4, 'about_me', '$langAboutMe', '$langAboutMeDescr', '2', 1, -3, 0, ''),
+                            (5, 'personal_website', '$langPersWebsite', '', '5', 1, -4, 0, ''),
+                            (6, 'education', '$langEducation', '$langEducationDescr', '2', 2, 0, 0, ''),
+                            (7, 'employment', '$langEmployment', '', '2', 2, -1, 0, ''),
+                            (8, 'certificates_awards', '$langCertAwards', '', '2', 3, 0, 0, ''),
+                            (9, 'publications', '$langPublications', '', '2', 3, -1, 0, ''),
+                            (10, 'personal_goals', '$langPersGoals', '', '2', 4, 0, 0, ''),
+                            (11, 'academic_goals', '$langAcademicGoals', '', '2', 4, -1, 0, ''),
+                            (12, 'career_goals', '$langCareerGoals', '', '2', 4, -2, 0, ''),
+                            (13, 'personal_skills', '$langPersSkills', '', '2', 4, -3, 0, ''),
+                            (14, 'academic_skills', '$langAcademicSkills', '', '2', 4, -4, 0, ''),
+                            (15, 'career_skills', '$langCareerSkills', '', '2', 4, -5, 0, ''),
+                            (16, 'email', '$langEmail', '', '1', 5, 0, 0, ''),
+                            (17, 'phone_number', '$langPhone', '', '1', 5, -1, 0, ''),
+                            (18, 'Address', '$langAddress', '', '1', 5, -2, 0, ''),
+                            (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
+                            (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
+                            (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
+        }
         
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_data` (
                         `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
@@ -3441,40 +3466,20 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `data` TEXT NOT NULL,
                         PRIMARY KEY (`user_id`, `field_id`)) $charset_spec");
         
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_category` (
-                        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                        `name` MEDIUMTEXT NOT NULL,
-                        `sortorder`  INT(11) NOT NULL DEFAULT 0) $charset_spec");
-        
-        Database::get()->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`) VALUES
-                        (1, '$langPersInfo', 0),
-                        (2, '$langEduEmpl', -1),
-                        (3, '$langAchievements', -2),
-                        (4, '$langGoalsSkills', -3),
-                        (5, '$langContactInfo', -4)");
-        
-        Database::get()->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
-                        (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
-                        (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
-                        (3, 'gender', '$langGender', '', '4', 1, -2, 0, 'a:2:{i:0;s:".strlen($langMale).":\"$langMale\";i:1;s:".strlen($langFemale).":\"$langFemale\";}'),
-                        (4, 'about_me', '$langAboutMe', '$langAboutMeDescr', '2', 1, -3, 0, ''),
-                        (5, 'personal_website', '$langPersWebsite', '', '5', 1, -4, 0, ''),
-                        (6, 'education', '$langEducation', '$langEducationDescr', '2', 2, 0, 0, ''),
-                        (7, 'employment', '$langEmployment', '', '2', 2, -1, 0, ''),
-                        (8, 'certificates_awards', '$langCertAwards', '', '2', 3, 0, 0, ''),
-                        (9, 'publications', '$langPublications', '', '2', 3, -1, 0, ''),
-                        (10, 'personal_goals', '$langPersGoals', '', '2', 4, 0, 0, ''),
-                        (11, 'academic_goals', '$langAcademicGoals', '', '2', 4, -1, 0, ''),
-                        (12, 'career_goals', '$langCareerGoals', '', '2', 4, -2, 0, ''),
-                        (13, 'personal_skills', '$langPersSkills', '', '2', 4, -3, 0, ''),
-                        (14, 'academic_skills', '$langAcademicSkills', '', '2', 4, -4, 0, ''),
-                        (15, 'career_skills', '$langCareerSkills', '', '2', 4, -5, 0, ''),
-                        (16, 'email', '$langEmail', '', '1', 5, 0, 0, ''),
-                        (17, 'phone_number', '$langPhone', '', '1', 5, -1, 0, ''),
-                        (18, 'Address', '$langAddress', '', '1', 5, -2, 0, ''),
-                        (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
-                        (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
-                        (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
+        if (!DBHelper::tableExists('eportfolio_fields_category')) {
+            Database::get()->query("CREATE TABLE `eportfolio_fields_category` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `name` MEDIUMTEXT NOT NULL,
+                            `sortorder`  INT(11) NOT NULL DEFAULT 0) $charset_spec");
+
+            Database::get()->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`) VALUES
+                            (1, '$langPersInfo', 0),
+                            (2, '$langEduEmpl', -1),
+                            (3, '$langAchievements', -2),
+                            (4, '$langGoalsSkills', -3),
+                            (5, '$langContactInfo', -4)");
+
+        }
         
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
