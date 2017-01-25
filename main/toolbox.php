@@ -157,6 +157,7 @@ foreach ($categories as $category) {
     }
     $t->set_var('selectFieldLabel', $catTitle);
     $t->set_var('selectFieldName', $catName . '[]');
+    $t->set_var('selectFieldId', 'modules' . $catName);
     $values = Database::get()->queryArray("SELECT * FROM category_value
           WHERE category_id = ?d AND active = 1
           ORDER BY ordering, id", $category->id);
