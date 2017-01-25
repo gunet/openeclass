@@ -54,9 +54,9 @@ $t->set_var('toolboxTitle', q(getSerializedMessage(get_config('toolbox_title', $
 $t->set_var('container', 'container');
 
 $lang_select = "<div class='dropdown'>
-  <a href='#' class='dropdown-toggle' role='button' id='dropdownMenuLang' data-toggle='dropdown'>
+  <span class='dropdown-toggle' role='button' id='dropdownMenuLang' data-toggle='dropdown'>
       <span class='fa fa-globe'></span><span class='sr-only'>$langChooseLang</span>
-  </a>
+  </span>
   <ul class='dropdown-menu dropdown-menu-right' role='menu' aria-labelledby='dropdownMenuLang'>";
 foreach ($session->active_ui_languages as $code) {
     $class = ($code == $session->language)? ' class="active"': '';
