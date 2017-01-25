@@ -231,7 +231,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <form>
+                        <form method='post' action='{%registrationUrl%}'>
                             <div class="form-group">
                                 <label class="hidden" for="inputName">{%langName%}</label>
                                 <input type="text" class="form-control" name="givenname_form" id="inputName" placeholder="{%langName%}">
@@ -256,7 +256,7 @@
                                 <label class="hidden" for="inputPassword1">{%langConfirmation%}</label>
                                 <input type="password" class="form-control" name="password" id="inputPassword1" placeholder="{%langConfirmation%}">
                             </div>
-                            <button type="button" class="btn btn-primary btn-block">{%langSubmit%}</button>
+                            <button type="submit" name="submit" class="btn btn-primary btn-block">{%langSubmit%}</button>
                         </form>
                     </div>
                 </div>

@@ -39,6 +39,7 @@ $t->set_block('resultBlock', 'resultMetaBlock', 'resultMeta');
 $t->set_block('main', 'selectFieldBlock', 'selectField');
 $t->set_block('selectFieldBlock', 'selectOptionBlock', 'selectOption');
 $t->set_var('URL_PATH', $urlAppend);
+$t->set_var('registrationUrl', $urlAppend . 'modules/auth/newuser.php');
 $t->set_var('TOOLBOX_PATH', $urlAppend . "template/$theme/toolbox/");
 $t->set_var('template_base', $urlAppend . 'template/' . $theme);
 $t->set_var('PAGE_TITLE', q($siteName));
