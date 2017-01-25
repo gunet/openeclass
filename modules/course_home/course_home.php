@@ -659,7 +659,7 @@ Database::get()->queryFunc('SELECT category_id, category.name AS category_name,
         $cid = $item->category_id;
         if (!isset($categoryItems[$cid])) {
             $categoryItems[$cid] = "
-                <div class='col-xs-2'>
+                <div class='col-xs-12 col-sm-6 col-md-3'>
                     <ul class='list-unstyled'>
                         <li><strong>" . q(getSerializedMessage($item->category_name)) . "</strong></li>";
         }
@@ -702,13 +702,13 @@ $action_bar
 
                     <div class=''>$main_content</div>
                 </div>
+                $categoryDisplay
                 <div class='col-xs-12 course-below-wrapper'>
                     <div class='row text-muted course-below-info'>
                     <div class='col-xs-6'>
                          $bar_content
                     </div>
                     <div class='col-xs-6'>$license_holder</div>
-                    $categoryDisplay
                 </div>
             </div>
         </div>
