@@ -53,11 +53,33 @@ $t->set_var('loginForm', login_form());
 $t->set_var('toolboxTitle', q(getSerializedMessage(get_config('toolbox_title', $langEclass))));
 $t->set_var('container', 'container');
 
+$lang_select = "<div class='dropdown'>
+  <a href='#' class='dropdown-toggle' role='button' id='dropdownMenuLang' data-toggle='dropdown'>
+      <span class='fa fa-globe'></span><span class='sr-only'>$langChooseLang</span>
+  </a>
+  <ul class='dropdown-menu dropdown-menu-right' role='menu' aria-labelledby='dropdownMenuLang'>";
+foreach ($session->active_ui_languages as $code) {
+    $class = ($code == $session->language)? ' class="active"': '';
+    $lang_select .=
+        "<li role='presentation'$class>
+            <a role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>" .
+                q($native_language_names_init[$code]) . "</a></li>";
+}
+$lang_select .= "</ul></div>";
+$t->set_var('LANG_SELECT', $lang_select);
+
 $msgs = array('langSearch', 'langRegister', 'langLogin', 'langName',
     'langSurname', 'langUsername', 'langEmail', 'langPass',
     'langConfirmation', 'langSubmit');
 foreach ($msgs as $msg) {
     $t->set_var($msg, $GLOBALS[$msg]);
+}
+
+if ($uid) {
+    $t->set_var('loginLogout', "<a href='$urlAppend?logout=true'>$langLogout</a>");
+} else {
+    $t->set_var('loginModal', 'loginModal');
+    $t->set_var('loginLogout', "$langLogIn / $langRegister");
 }
 
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
