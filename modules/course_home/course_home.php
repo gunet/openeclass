@@ -647,6 +647,38 @@ $courseDescriptionVisible = count($res);
 
 $course_info_popover = "<div class='list-group'>$course_info_extra</div>";
 
+$categoryItems = array();
+Database::get()->queryFunc('SELECT category_id, category.name AS category_name,
+        category_value_id AS value_id, category_value.name AS value_name
+    FROM course_category
+        INNER JOIN category_value ON course_category.category_value_id = category_value.id
+        INNER JOIN category ON category_value.category_id = category.id
+    WHERE course_id = ?d
+    ORDER BY category.ordering, category_value.ordering',
+    function ($item) use (&$categoryItems) {
+        $cid = $item->category_id;
+        if (!isset($categoryItems[$cid])) {
+            $categoryItems[$cid] = "
+                <div class='col-xs-2'>
+                    <ul class='list-unstyled'>
+                        <li><strong>" . q(getSerializedMessage($item->category_name)) . "</strong></li>";
+        }
+        $categoryItems[$cid] .= "<li><span class='fa fa-plus-circle fa-fw'></span>" .
+            q(getSerializedMessage($item->value_name)) . "</li>";
+    }, $course_id);
+
+if (count($categoryItems)) {
+    foreach ($categoryItems as &$item) {
+        $item .= '</ul></div>';
+    }
+    $categoryDisplay = "
+        <div class='col-xs-12'>
+            <div class='row margin-top-thin'>" . implode('', $categoryItems) . "</div>
+        </div>";
+} else {
+    $categoryDisplay = '';
+}
+
 $tool_content .= "
 $action_bar
 <div class='row margin-top-thin margin-bottom-fat'>
@@ -674,8 +706,9 @@ $action_bar
                     <div class='row text-muted course-below-info'>
                     <div class='col-xs-6'>
                          $bar_content
-                     </div>
-                     <div class='col-xs-6'>$license_holder</div>
+                    </div>
+                    <div class='col-xs-6'>$license_holder</div>
+                    $categoryDisplay
                 </div>
             </div>
         </div>
