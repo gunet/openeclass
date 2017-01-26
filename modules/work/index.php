@@ -2702,25 +2702,13 @@ function show_assignment($id, $display_graph_results = false) {
             foreach ($groups as $group) {
                 $group_options .= "<option value='$group->id'>$group->name</option>";
             }
-            $tool_content .= "
-                        <br>
-                        <div class='row margin-bottom-thin'>                   
-                            <div class='col-sm-8'>
-                                <b>$langSubmissions:</b>&nbsp; $num_results
-                            </div>
-                            <div class='col-sm-4'>
-                                <form name='gfilter' action='$_SERVER[REQUEST_URI]' method='post'>
-                                    <select class='form-control pull-right' name='group_id' onchange='document.gfilter.submit();'>
-                                        <option value='0'>-- $langGroups --</option>
-                                        $group_options                               
-                                    </select>
-                                </form>
-                            </div>
+            $tool_content .= "                        
+                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
+                        <input type='hidden' name='grades_id' value='$id' />
+                         <br>
                         <div class='margin-bottom-thin'>
                             <b>$langSubmissions:</b>&nbsp; $count_of_assignments
                         </div>
-                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
-                        <input type='hidden' name='grades_id' value='$id' />                        
                         <div class='table-responsive'>
                         <table class='table-default'>
                         <tbody>
