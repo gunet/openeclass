@@ -36,7 +36,6 @@ if ($course_info->view_type != 'activity') {
 
 if (isset($_POST['submit']) and isset($_POST['content'])) {
     foreach ($_POST['content'] as $id => $content) {
-        echo "$id<br>";
         $content = purify($content);
         Database::get()->query('INSERT INTO activity_content
             (heading_id, course_id, content) VALUES (?d, ?d, ?s)
