@@ -21,7 +21,7 @@
  */
 
 define('CERT_TEMPLATE_PATH', $webDir . "/courses/user_progress_data/cert_templates/");
-define('BADGE_TEMPLATE_PATH', $webDir . "/courses/user_progress_data/badge_templates/");
+define('BADGE_TEMPLATE_PATH', $urlServer . "/courses/user_progress_data/badge_templates/");
         
 /**
  * @brief display all certificates -- initial screen
@@ -1481,16 +1481,20 @@ function student_view_progress() {
 
     // populate with data
     foreach ($iter as $key) {
-        $gameQ = "select a.*, b.title, "
-                . " b.description, b.active, b.created "
+        $gameQ = "select a.*, b.title,"
+                . " b.description, b.active, b.created, b.id"
                 . " from user_{$key} a "
                 . " join {$key} b on (a.{$key} = b.id) "
                 . " where a.user = ?d and b.course_id = ?d";
-        Database::get()->queryFunc($gameQ, function($game) use ($key, &$data) {
-            $data['game_' . $key][] = $game;            
+        Database::get()->queryFunc($gameQ, function($game) use ($key, &$data) {            
+            if ($key == 'badge') { // get badge icon                
+                $game->filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = 
+                                                                    (SELECT icon FROM badge WHERE id = ?d)", $game->id)->filename;           
+            }
+            $data['game_' . $key][] = $game;
         }, $uid, $course_id);
-    }
-    
+    }    
+    $data['badge_template_path'] = BADGE_TEMPLATE_PATH;
     view('modules.progress.progress', $data);        
 }
 

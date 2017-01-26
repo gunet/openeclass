@@ -349,7 +349,7 @@ function get_certificate_templates() {
     foreach ($t as $data) {
         $templates[$data->id] = $data->name;
     }
-    return $templates;    
+    return $templates;
 }
 
 
@@ -359,8 +359,12 @@ function get_certificate_templates() {
  */
 function get_badge_icons() {
     
-    $badges = array (1 => 'icon 1', 2 => 'icon 2', 3 => 'icon 3');
+    $badges = array();
     
+    $b = Database::get()->queryArray("SELECT id, name FROM badge_icon");
+    foreach ($b as $data) {
+        $badges[$data->id] = $data->name;
+    }
     return $badges;
 }
 

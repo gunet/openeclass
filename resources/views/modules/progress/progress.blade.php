@@ -1,7 +1,6 @@
 @extends('layouts.default')
 
-@section('content')
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+@section('content')    
     <style>
             .certificate_panel
             {
@@ -168,7 +167,7 @@
                     <div class="certificate_panel_viewdetails">
                         <a href="index.php?course={{$course_code}}&amp;badge_id={{$badge->badge}}&amp;u={{$badge->user}}">{{  trans('langDetails') }}</a>
                         @if ($badge->completed == 1)
-                            &nbsp;&nbsp;<a href="index.php?course={{$course_code}}&amp;badge_id={{$badge->badge}}&amp;u={{$badge->user}}&amp;p=1">{{  trans('langPrintVers') }}</a>
+                            <img src="{{ $badge_template_path }}{{ $badge->filename }}">
                         @endif
                     </div>
 
@@ -178,8 +177,7 @@
                             {{-- <i class="fa fa-hourglass-2 state_waiting"></i> --}}
                         </div>
                         <div class="certificate_panel_badge">
-                            <img src="{{ $template_base }}/img/game/badge.png">
-                            {{-- <img class="badge_waiting" src="{{ $template_base }}/img/game/badge.png"> --}}
+                            <img src="{{ $template_base }}/img/game/badge.png">                            
                         </div>
                     @else
                         <div class="certificate_panel_percentage">{{ round($badge->completed_criteria / $badge->total_criteria * 100, 0) }}%</div>

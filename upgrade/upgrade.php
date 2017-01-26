@@ -3552,6 +3552,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `filename` varchar(255),
             PRIMARY KEY(`id`)
         )");
+                
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `badge_icon` (
+                `id` mediumint(8) not null auto_increment primary key,
+                `name` varchar(255) not null,
+                `description` text,
+                `filename` varchar(255)
+        )");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate` (
           `id` int(11) not null auto_increment primary key,
