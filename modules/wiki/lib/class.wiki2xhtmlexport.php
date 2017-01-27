@@ -52,7 +52,7 @@ class WikiToSingleHTMLExporter extends Wiki2xhtmlRenderer
      */
     public function __construct($wiki)
     {
-        Wiki2xhtmlRenderer::Wiki2xhtmlRenderer($wiki);
+        parent::__construct($wiki);
         $this->setOpt('first_title_level', 3);
         $this->setOpt('note_str','<div class="footnotes"><h5>Notes</h5>%s</div>');
         $this->wiki =&$wiki;
@@ -64,7 +64,7 @@ class WikiToSingleHTMLExporter extends Wiki2xhtmlRenderer
      */
     public function export()
     {
-		global $langWikiMainPage, $langWikiPageNotLoaded;
+        global $langWikiMainPage, $langWikiPageNotLoaded;
 		
         $pageList = $this->wiki->allPagesByCreationDate();
 
@@ -247,7 +247,7 @@ td {
     /**
      * @see Wiki2xhtmlRenderer
      */
-    function _getWikiPageLink( $pageName, &$tag, &$attr, &$type )
+    function _getWikiPageLink( $pageName, &$tag, &$attr)
     {
         // allow links to use wikiwords for wiki page locations
         if ($this->getOpt('active_wikiwords') && $this->getOpt('words_pattern'))
