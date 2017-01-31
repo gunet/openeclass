@@ -92,7 +92,8 @@ while ($iterator <= $_POST['maxMediaForm']) {
             $num = Database::get()->querySingle($sql, $video->path, $_SESSION['path_id'], $course_id)->count;
 
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                reuse_module($thisLinkModule->module_id);
+                create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
+                //reuse_module($thisLinkModule->module_id);
                 Session::Messages($langInsertedAsModule, 'alert-info');
 
             } else {
@@ -118,8 +119,8 @@ while ($iterator <= $_POST['maxMediaForm']) {
         $thisLinkModule = Database::get()->querySingle($sql, $videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
 
         if ($thisLinkModule) {
-            // check if this is this LP that used this medialink as a module
-            $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
+            // check if this is this LP that used this medialink as a module in course
+            $sql = "SELECT COUNT(*) AS c    ount FROM `lp_rel_learnPath_module` AS LPM,
                                   `lp_module` AS M,
                                   `lp_asset` AS A
                              WHERE M.`module_id` =  LPM.`module_id`
@@ -130,7 +131,9 @@ while ($iterator <= $_POST['maxMediaForm']) {
             $num = Database::get()->querySingle($sql, $videolink->url, $_SESSION['path_id'], $course_id)->count;
 
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                reuse_module($thisLinkModule->module_id);
+                //reuse_module($thisLinkModule->module_id);                 
+                // TODO ---- needs improvement //
+                create_new_module($videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
                 Session::Messages($langInsertedAsModule, 'alert-info');
                 redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             } else {
@@ -262,7 +265,8 @@ function create_new_module($title, $description, $path, $contentType) {
  */
 function reuse_module($module_id) {
     // determine the default order of this Learning path
-    $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max FROM `lp_rel_learnPath_module`")->max);
+    $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max FROM `lp_rel_learnPath_module`
+                    WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
 
     // finally : insert in learning path
     Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
