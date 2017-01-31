@@ -37,7 +37,7 @@ $dialogBox = '';
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], 'name' => $langAdm);
 $toolName = $langInsertMyMediaToolName;
-$tool_content .= 
+$tool_content .=
          action_bar(array(
             array('title' => $langBack,
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
@@ -87,18 +87,19 @@ while ($iterator <= $_POST['maxMediaForm']) {
                              WHERE M.`module_id` =  LPM.`module_id`
                                AND M.`startAsset_id` = A.`asset_id`
                                AND A.`path` = ?s
-                               AND LPM.`learnPath_id` = ?d";
-            $num = Database::get()->querySingle($sql, $video->path, $_SESSION['path_id'])->count;
+                               AND LPM.`learnPath_id` = ?d
+                               AND M.course_id = ?d";
+            $num = Database::get()->querySingle($sql, $video->path, $_SESSION['path_id'], $course_id)->count;
 
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                reuse_module($thisLinkModule->module_id);               
+                reuse_module($thisLinkModule->module_id);
                 Session::Messages($langInsertedAsModule, 'alert-info');
 
-            } else {                
+            } else {
                 Session::Messages($langAlreadyUsed, 'alert-warning');
             }
         } else {
-            create_new_module($video->title, $video->description, $video->path, CTMEDIA_);           
+            create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
             Session::Messages($langInsertedAsModule, 'alert-info');
         }
     }
@@ -124,14 +125,15 @@ while ($iterator <= $_POST['maxMediaForm']) {
                              WHERE M.`module_id` =  LPM.`module_id`
                                AND M.`startAsset_id` = A.`asset_id`
                                AND A.`path` = ?s
-                               AND LPM.`learnPath_id` = ?d";
-            $num = Database::get()->querySingle($sql, $videolink->url, $_SESSION['path_id'])->count;
+                               AND LPM.`learnPath_id` = ?d
+                               AND M.course_id = ?d";
+            $num = Database::get()->querySingle($sql, $videolink->url, $_SESSION['path_id'], $course_id)->count;
 
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                reuse_module($thisLinkModule->module_id);               
+                reuse_module($thisLinkModule->module_id);
                 Session::Messages($langInsertedAsModule, 'alert-info');
                 redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
-            } else {                
+            } else {
                 Session::Messages($langAlreadyUsed);
                 redirect_to_home_page('modules/learnPath/learningPathAdmin.php?course=' . $course_code);
             }
@@ -157,7 +159,7 @@ draw($tool_content, 2, null, $head_content);
  */
 function showmedia() {
     global $langName, $langSelection, $langAddModulesButton, $course_code, $course_id, $langNoVideo;
-        
+
     $output = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                <div class='table-responsive'>
                <table class='table-default'>
@@ -173,7 +175,7 @@ function showmedia() {
     $j = 1;
     $resultMedia = Database::get()->queryArray("SELECT * FROM video WHERE visible = 1 AND course_id = ?d ORDER BY title", $course_id);
     $resultMediaLinks = Database::get()->queryArray("SELECT * FROM videolink WHERE visible = 1 AND course_id = ?d ORDER BY title", $course_id);
-    
+
     if (empty($resultMedia) && empty($resultMediaLinks)){
         $output .= "
             <tr>
@@ -182,11 +184,11 @@ function showmedia() {
             </tr>
         ";
     }
-    
+
     foreach ($resultMedia as $myrow) {
         $vObj = MediaResourceFactory::initFromVideo($myrow);
 
-        $output .= "<tr>                    
+        $output .= "<tr>
                     <td align='text-left'>" . MultimediaHelper::chooseMediaAhref($vObj) . "
                     <br />
                     <small class='comments'>" . q($myrow->description) . "</small></td>";
@@ -195,7 +197,7 @@ function showmedia() {
     }
     foreach ($resultMediaLinks as $myrow) {
         $vObj = MediaResourceFactory::initFromVideoLink($myrow);
-        $output .= "<tr>                    
+        $output .= "<tr>
                     <td align='left' valign='top'>" . MultimediaHelper::chooseMedialinkAhref($vObj) . "
                     <br />
                     <small class='comments'>" . q($myrow->description) . "</small></td>";
