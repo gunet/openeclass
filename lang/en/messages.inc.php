@@ -3885,8 +3885,11 @@ $langEBookPages = $langEBook. ' ' .$langPages;
 $langNewEBookPage = "New Page";
 $langEBookInfoEdit = "Edit e-Books' Info/Sections";
 $langDisableModules = 'Modules';
-$langDisableModulesHelp = 'You can select which modules will be disabled
-    for all $langsCourses platform-wide.';
+$langDisableModulesHelp = "You can select which modules will be disabled
+    for all $langsCourses platform-wide.";
+$langDefaultModules = 'Default Modules';
+$langDefaultModulesHelp = "The following modules are enabled by default in all
+    new $langsCourses created on the platform.";
 $langldap_id_attr = "Attribute for student ID";
 $langcasuserstudentid = "CAS SAML attribute for student ID";
 $langPrint = "Print";

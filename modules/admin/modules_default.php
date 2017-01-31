@@ -20,48 +20,47 @@
  * ======================================================================== */
 
 
-// Disable modules admin page
+// New course default modules admin page
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
+require_once 'modules/create_course/functions.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$pageName = $langDisableModules;
+$navigation[] = array('url' => 'modules.php', 'name' => $langModules);
+$pageName = $langDefaultModules;
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    Database::get()->query('DELETE FROM module_disable');
-    if (isset($_POST['moduleDisable'])) {
-        $optArray = implode(', ', array_fill(0, count($_POST['moduleDisable']), '(?d)'));
-        Database::get()->query('INSERT INTO module_disable (module_id) VALUES ' . $optArray,
-            array_keys($_POST['moduleDisable']));
+    if (isset($_POST['module'])) {
+        set_config('default_modules', serialize(array_keys($_POST['module'])));
     }
     Session::Messages($langWikiEditionSucceed, 'alert-success');
-    redirect_to_home_page('modules/admin/modules.php');
+    redirect_to_home_page('modules/admin/modules_default.php');
 } else {
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => $urlAppend . 'modules/admin/modules.php',
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')), false) .
+        "<div class='alert alert-warning'>$langDefaultModulesHelp</div>
+         <div class='form-wrapper'>
+           <form class='form-horizontal' role='form' action='modules_default.php' method='post'>";
+
     $disabled = array();
     foreach (Database::get()->queryArray('SELECT module_id FROM module_disable') as $item) {
         $disabled[] = $item->module_id;
     }
-    $tool_content .= action_bar(array(
-        array('title' => $langDefaultModules,
-              'url' => $urlAppend . 'modules/admin/modules_default.php',
-              'icon' => 'fa-check-square-o',
-              'level' => 'primary-label'),
-        array('title' => $langBack,
-              'url' => $urlAppend . 'modules/admin/index.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')), false) .
-        "<div class='alert alert-warning'>$langDisableModulesHelp</div>
-         <div class='form-wrapper'>
-           <form class='form-horizontal' role='form' action='modules.php' method='post'>";
+    $default = default_modules();
 
-    $alwaysEnabled = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE, MODULE_ID_DESCRIPTION);
     foreach ($modules as $mid => $minfo) {
-        if (in_array($mid, $alwaysEnabled)) {
-            continue;
+        $checked = in_array($mid, $default)? ' checked': '';
+        if (in_array($mid, $disabled)) {
+            $entry_disabled = ' disabled';
+            $not_visible = ' class="not_visible"';
+        } else {
+            $not_visible = $entry_disabled = '';
         }
-        $checked = in_array($mid, $disabled)? ' checked': '';
         $icon = $minfo['image'];
         if (isset($theme_settings['icon_map'][$icon])) {
             $icon = $theme_settings['icon_map'][$icon];
@@ -70,8 +69,8 @@ if (isset($_POST['submit'])) {
         $tool_content .= "
            <div class='form-group'>
              <div class='col-xs-12 checkbox'>
-               <label>
-                 <input type='checkbox' name='moduleDisable[$mid]' value='1'$checked> " .
+               <label$not_visible>
+                 <input type='checkbox' name='module[$mid]' value='1'$checked$entry_disabled> " .
                     $icon . '&nbsp;' . q($minfo['title']) . "
                </label>
              </div>

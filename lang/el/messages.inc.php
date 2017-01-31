@@ -167,6 +167,9 @@ $langDisableModules = 'Υποσυστήματα';
 $langDisableModulesHelp = "Μπορείτε να επιλέξετε ποια από τα παρακάτω
     υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλα τα $langsCourses της
     πλατφόρμας.";
+$langDefaultModules = 'Προκαθορισμένα υποσυστήματα';
+$langDefaultModulesHelp = "Τα παρακάτω υποσυστήματα είναι ενεργοποιημένα εξ
+    ορισμού στα νέα $langsCourses της πλατφόρμας κατά τη δημιουργία τους.";
 $langAutoEnroll = 'Αυτόματη εγγραφή';
 $langAutoEnrollNew = 'Προσθήκη κανόνα';
 $langAutoEnrollAdded = 'Ο κανόνας προστέθηκε';

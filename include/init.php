@@ -439,7 +439,6 @@ $admin_modules = array(
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'abuse'),
 );
 
-
 // -------------------------------------------
 // modules which can't be enabled or disabled
 // -------------------------------------------
