@@ -159,7 +159,7 @@ if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
     if ($info) {
         $pageName = $info->title;
-        $comments = trim($info->comments);
+        $comments = standard_text_escape(trim($info->comments));
     } else {
       $tool_content .= "<br>";
         Session::Messages($langUnknownResType);

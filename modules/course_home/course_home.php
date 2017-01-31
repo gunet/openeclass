@@ -457,7 +457,7 @@ if ($is_editor) {
 
 
 }
-//style='color:#999999; font-size:13px;'
+
 $bar_content .= "<strong>" . $langCode . ":</strong> " . q($public_code) . "" .
                 "<br><strong>" . $langFaculty . ":</strong> ";
 
@@ -769,7 +769,7 @@ if ($is_editor) {
             }
                         $cunits_content .= "</div>
                                         <div class='item-body'>";
-                        $cunits_content .= ($cu->comments == ' ')?'':$cu->comments;
+        $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
                         $cunits_content .= "</div></div>";
             $cunits_content .= "</div></div></div>";
         }

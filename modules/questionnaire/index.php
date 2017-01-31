@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -117,8 +117,8 @@ if ($is_editor) {
                     $poll->creation_date, 
                     $poll->start_date, 
                     $poll->end_date, 
-                    $poll->description, 
-                    $poll->end_message, 
+                    purify($poll->description),
+                    purify($poll->end_message),
                     $poll->anonymized,
                     $poll->assign_to_specific
                 );
@@ -328,7 +328,7 @@ function printPolls() {
                 }
 
                 $tool_content .= "</div>
-                                    <div class='table_td_body'>$thepoll->description</div>
+                                    <div class='table_td_body'>" . standard_text_escape($thepoll->description) . "</div>
                                     </div></td>";
                 $tool_content .= "
                         <td class='text-left'><div class='table_td text-center'><div class='table_td_header'>
