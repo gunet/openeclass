@@ -809,7 +809,7 @@ if ($total_cunits > 0) {
         }
         $cunits_content .= "</div>
             <div class='item-body'>";
-        $cunits_content .= ($cu->comments == ' ')?'':$cu->comments;
+        $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
         $cunits_content .= "</div></div>";
         $cunits_content .= "</div></div></div>";
     }
