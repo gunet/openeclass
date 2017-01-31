@@ -27,6 +27,7 @@
 
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/forcedownload.php';
 
 if (isset($_GET['course']) and isset($_GET['id'])) {
     $video = Database::get()->querySingle('SELECT * FROM video
