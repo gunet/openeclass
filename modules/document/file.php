@@ -110,6 +110,10 @@ if (defined('GROUP_DOCUMENTS')) {
 }
 
 $file_info = public_path_to_disk_path($path_components);
+
+if (!isset($file_info->visible) or (!isset($file_info->public))) {
+    forbidden();
+}
 if (!$is_editor and !resource_access($file_info->visible, $file_info->public)) {
     forbidden();
 }
