@@ -21,10 +21,12 @@
 
 require_once 'question.class.php';
 require_once 'answer.class.php';
-if (file_exists('../../include/log.class.php')) {
+
+if (file_exists('include/log.class.php')) {
+    require_once 'include/log.class.php';
+} elseif (file_exists('../../include/log.class.php')) {
     require_once '../../include/log.class.php';
-}
-if (file_exists('../../../include/log.class.php')) {
+} elseif (file_exists('../../../include/log.class.php')) {
     require_once '../../../include/log.class.php';
 }
 
