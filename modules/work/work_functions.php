@@ -357,18 +357,41 @@ function export_grades_to_csv($id) {
 
 /**
  * @brief send file for plagiarism check
+ * @param type $assign_id
  * @param type $file_id
  * @param type $true_file_path
  * @param type $true_file_name
+ * @global type $course_code
  */
-function send_file_for_plagiarism($file_id, $true_file_path, $true_file_name) {
+function send_file_for_plagiarism($assign_id, $file_id, $true_file_path, $true_file_name) {
     
-    global $langPlagiarismAlreadyCheck, $langPlagiarismFileSent;
+    global $course_code, $langPlagiarismAlreadyCheck, $langPlagiarismFileSent;
     
     if (!Plagiarism::get()->isFileSubmitted($file_id)) {
-        Plagiarism::get()->submitFile($file_id, $true_file_path, $true_file_name);
-        Session::Messages($langPlagiarismFileSent, 'alert-success');        
+        Plagiarism::get()->submitFile($file_id, $true_file_path, $true_file_name);        
+        Session::Messages($langPlagiarismFileSent, 'alert-success');
     } else {
-        Session::Messages($langPlagiarismAlreadyCheck, 'alert-warning');
+        Session::Messages($langPlagiarismAlreadyCheck, 'alert-warning');        
     }
+    redirect_to_home_page("modules/work/index.php?course=$course_code&id=$assign_id");
+}
+
+
+/**
+ * @brief check for valid plagiarism file type
+ * @param type $file_id
+ * @return boolean
+ */
+function valid_plagiarism_file_type($file_id) {
+            
+    $unplag_allowable_file_extensions = array('doc', 'docx', 'rtf', 'txt', 'odt', 'html', 'pdf');
+    
+    $file_details = Database::get()->querySingle("SELECT file_name FROM assignment_submit WHERE id = ?d", $file_id);
+    if ($file_details) {
+        $file_type = get_file_extension($file_details->file_name);        
+        if (in_array($file_type, $unplag_allowable_file_extensions)) {
+            return TRUE;
+        }
+    }
+    return FALSE;    
 }

@@ -108,14 +108,14 @@ if (isset($_GET['chk'])) { // plagiarism check
     $file_id = $_GET['chk'];    
     $file_details = Database::get()->querySingle("SELECT assignment_id, file_path, file_name FROM assignment_submit WHERE id = ?d", $file_id);
     if ($file_details) {
+        $assign_id = $file_details->assignment_id;
         $true_file_name = $file_details->file_name;
         $secret = work_secret($file_details->assignment_id);
         $true_file_path = $workPath . "/" . $file_details->file_path;
     } else {
         Session::Messages($langFileNotFound, 'alert-danger');
     }
-    send_file_for_plagiarism($file_id, $true_file_path, $true_file_name);
-    
+    send_file_for_plagiarism($assign_id, $file_id, $true_file_path, $true_file_name);    
 }
 
 
@@ -2588,8 +2588,8 @@ function sort_link($title, $opt, $attrib = '') {
  * @global type $langGraphResults
  * @global type $m
  * @global type $course_code
- * @global type $langAutoJudgeResult
- * @global type $langAutoJudgeDownloadPdf
+ * @global type $langPlagiarismResult
+ * @global type $langDownloadToPDF
  * @global array $works_url
  * @global type $course_id
  * @global type $langDelWarnUserAssignment
@@ -2605,8 +2605,8 @@ function sort_link($title, $opt, $attrib = '') {
  */
 function show_assignment($id, $display_graph_results = false) {
     global $tool_content, $m, $langNoSubmissions, $langSubmissions,
-    $langWorkOnlineText, $langGradeOk, $course_code, $langAutoJudgeResult,
-    $langGraphResults, $m, $course_code, $works_url, $course_id, $langAutoJudgeDownloadPdf,
+    $langWorkOnlineText, $langGradeOk, $course_code, $langPlagiarismResult,
+    $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
     $langAutoJudgeShowWorkResultRpt, $langGroupName, $langPlagiarismCheck, $langProgress;
 
@@ -2742,11 +2742,11 @@ function show_assignment($id, $display_graph_results = false) {
                 }
                 
                 // check for plagiarism via 'unplag' tool (http://www.unplag.com)
-                if (get_config('ext_unplag_enabled')) {
+                if (get_config('ext_unplag_enabled') and valid_plagiarism_file_type($row->id)) {
                     $results = Plagiarism::get()->getResults($row->id);                                    
                     if ($results) {
                         if ($results->ready) {
-                            $plagiarismlink = "<small><a href='$results->resultURL' target=_blank>$langAutoJudgeResult</a> (<a href='$results->pdfURL' target=_blank>$langAutoJudgeDownloadPdf</a>)</small>";
+                            $plagiarismlink = "<small><a href='$results->resultURL' target=_blank>$langPlagiarismResult</a><br>(<a href='$results->pdfURL' target=_blank>$langDownloadToPDF</a>)</small>";
                         } else {
                             $plagiarismlink = "<small>$langProgress: ". $results->progress*100 . "%</small>";
                         }
