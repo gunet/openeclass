@@ -1494,51 +1494,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `assignment_id` int(11) NOT NULL,
                             PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $tbl_options");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `title` varchar(200) NOT NULL,
-                            `description` text NOT NULL,
-                            `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
-                            `rubric_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
-                            `rubric_to_graded` tinyint(1) NOT NULL DEFAULT '0',
-                            `points_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
-                            `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
-                            `uid` INT(11) NOT NULL,
-                            PRIMARY KEY (`id`)
-                          ) $tbl_options");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_rel` (
-                            `id` INT(11) NOT NULL AUTO_INCREMENT,
-                            `rubric_id` INT(11) NOT NULL,
-                            `course_id` INT(11) NOT NULL,
-                            `module_id` INT(11) NOT NULL,
-                            `resource_id` INT(11) NOT NULL,
-                            PRIMARY KEY (`id`)
-                          ) $tbl_options");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_criteria` (
-                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                            `rubric_id` int(11) NOT NULL,
-                            `sortorder` varchar(30) NOT NULL,
-                            `description` text,
-                            PRIMARY KEY (`id`)
-                         ) $tbl_options");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_levels` (
-                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                            `rubric_id` int(11) NOT NULL,
-                            `criterionid` int(10) unsigned NOT NULL,
-                            `score` decimal(5,0) NOT NULL,
-                            `definition` text NOT NULL,
-                            PRIMARY KEY (`id`)
-                          ) $tbl_options");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_assesment` (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `as_sub_id` int(11) NOT NULL,
-                            `uid` int(11) NOT NULL,
-                            `level_chosen_id` int(11) NOT NULL,
-                            `level_feedback` varchar(60) NOT NULL,
-                            PRIMARY KEY (`id`)
-                          ) $tbl_options ");
-
-
+        
         Database::get()->query("DROP TABLE IF EXISTS agenda");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `agenda` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -3579,6 +3535,51 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `course_id` INT(11) NOT NULL REFERENCES course(id),
             `category_value_id` INT(11) NOT NULL REFERENCES category_value(id)
             ) $tbl_options");
+        
+        // Rubric tables
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `title` varchar(200) NOT NULL,
+                            `description` text NOT NULL,
+                            `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
+                            `rubric_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
+                            `rubric_to_graded` tinyint(1) NOT NULL DEFAULT '0',
+                            `points_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
+                            `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
+                            `uid` INT(11) NOT NULL,
+                            PRIMARY KEY (`id`)
+                          ) $tbl_options");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_rel` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT,
+                            `rubric_id` INT(11) NOT NULL,
+                            `course_id` INT(11) NOT NULL,
+                            `module_id` INT(11) NOT NULL,
+                            `resource_id` INT(11) NOT NULL,
+                            PRIMARY KEY (`id`)
+                          ) $tbl_options");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_criteria` (
+                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                            `rubric_id` int(11) NOT NULL,
+                            `sortorder` varchar(30) NOT NULL,
+                            `description` text,
+                            PRIMARY KEY (`id`)
+                         ) $tbl_options");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_levels` (
+                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                            `rubric_id` int(11) NOT NULL,
+                            `criterionid` int(10) unsigned NOT NULL,
+                            `score` decimal(5,0) NOT NULL,
+                            `definition` text NOT NULL,
+                            PRIMARY KEY (`id`)
+                          ) $tbl_options");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_assesment` (
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `as_sub_id` int(11) NOT NULL,
+                            `uid` int(11) NOT NULL,
+                            `level_chosen_id` int(11) NOT NULL,
+                            `level_feedback` varchar(60) NOT NULL,
+                            PRIMARY KEY (`id`)
+                          ) $tbl_options ");
     }
 
     // update eclass version
