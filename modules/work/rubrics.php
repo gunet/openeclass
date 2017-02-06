@@ -38,7 +38,7 @@ if (isset($_POST['submitScale'])) {
     $scale_id = isset($_POST['rubric_id']) ? $_POST['rubric_id'] : 0;
     if($v->validate()) {
         $name = $_POST['name'];
-		$title = $_POST['title'];
+        $title = $_POST['title'];
         $scales = array();
         foreach ($_POST['scale_item_name'] as $key => $item_name) {
             $scales[$key]['scale_item_name'] = $item_name;

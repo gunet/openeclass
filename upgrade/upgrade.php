@@ -3538,17 +3538,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         
         // Rubric tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `title` varchar(200) NOT NULL,
-                            `description` text NOT NULL,
-                            `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
-                            `rubric_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
-                            `rubric_to_graded` tinyint(1) NOT NULL DEFAULT '0',
-                            `points_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
-                            `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
-                            `uid` INT(11) NOT NULL,
-                            PRIMARY KEY (`id`)
-                          ) $tbl_options");
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(200) NOT NULL,
+            `title` varchar(255) NOT NULL,
+            `scales` text NOT NULL,
+            `description` text,
+            `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
+            `rubric_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
+            `rubric_to_graded` tinyint(1) NOT NULL DEFAULT '0',
+            `points_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
+            `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
+            `course_id` int(11) NOT NULL,
+            KEY `course_id` (`course_id`)) $tbl_options");
+                    
         Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_rel` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT,
                             `rubric_id` INT(11) NOT NULL,
