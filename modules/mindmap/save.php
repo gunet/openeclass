@@ -9,14 +9,12 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
-require_once 'include/log.php';
 
 // track stats
 require_once 'include/action.php';
 $action = new action();
 
 global $course_id;
-
 
 load_js('tools.js');
 ModalBoxHelper::loadModalBox(true);
@@ -29,8 +27,6 @@ function outputJSON($msg, $status = 'error'){
         'status' => $status
     )));
 }
-
-
 
 $json = file_get_contents('php://input');
 $json_decode = json_decode($json, true); 
@@ -57,7 +53,6 @@ echo '</script>';
                             , $course_id, $msg, $fileName, $vis
                             , $file_date
                             , $file_format)->lastInsertID;
-
 
 draw($tool_content, 2, null, $head_content);
 

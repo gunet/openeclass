@@ -5292,7 +5292,7 @@ $langOpenMind = "Άνοιγμα";
 $langPleaseSelectNode = "Παρακαλώ επιλέξτε ένα κόμβο.";
 $langPlzClickNode = "Προσπαθήστε να κάνετε κλικ σε ένα κόμβο";
 $langPlzDblClickNode = "Προσπαθήστε να κάνετε διπλό κλικ σε ένα κόμβο";
-$langPlzChooseFile = "Παρακαλώ επιλέξτε αρχείο";
+$langPleaseChooseFile = "Παρακαλώ επιλέξτε αρχείο";
 $langThemeDefault = "Προεπιλογή";
 $langThemePrimary = "Βασικό";
 $langThemeWarning = "Προειδοποίηση";
@@ -5305,7 +5305,7 @@ $langThemeOrange = "Πορτοκαλί";
 $langThemePumpkin = "Κολοκύθα";
 $langThemePomegranate = "Ρόδι";
 $langThemeClouds = "Σύννεφα";
-$langPlzEnterName = "Παρακαλώ εισάγετε όνομα"; 
+$langPleaseEnterName = "Παρακαλώ εισάγετε όνομα"; 
 
 
 /* * *********************************************

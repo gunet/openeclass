@@ -20,8 +20,8 @@
  * ======================================================================== */
 
 /**
- * @file chat.php
- * @brief Main script for chat module
+ * @file index.php
+ * @brief Main script for mindmap module
  */
 $require_current_course = TRUE;
 $require_login = TRUE;
@@ -30,85 +30,48 @@ $helpTopic = 'Mindmap';
 
 require_once '../../include/baseTheme.php';
 
-
-$coursePath = $webDir . '/courses/';
-    $fileChatName = $coursePath . $course_code . '/chat.txt';
-    $tmpArchiveFile = $coursePath . $course_code . '/tmpChatArchive.txt';
-
-    $nick = uid_to_name($uid);
-
-// How many lines to show on screen
-    define('MESSAGE_LINE_NB', 40);
-// How many lines to keep in temporary archive
-// (the rest are in the current chat file)
-    define('MAX_LINE_IN_FILE', 80);
-
-    if ($GLOBALS['language'] == 'el') {
-        $timeNow = date("d-m-Y / H:i", time());
-    } else {
-        $timeNow = date("Y-m-d / H:i", time());
-    }
-
-    if (!file_exists($fileChatName)) {
-        $fp = fopen($fileChatName, 'w') or die('<center>$langChatError</center>');
-        fclose($fp);
-    }
-
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_MINDMAP);
 /* * *********************************** */
 
-
-
 ////////////////////////////
-	$json = file_get_contents('php://input');
-		if($json != ""){
+    $json = file_get_contents('php://input');
+    if($json != "") {
+        function outputJSON($msg, $status = 'error'){
+        header('Content-Type: application/json');
+        die(json_encode(array(
+                'data' => $msg,
+                'status' => $status
+        )));
+        }
 
-		function outputJSON($msg, $status = 'error'){
-		header('Content-Type: application/json');
-		die(json_encode(array(
-			'data' => $msg,
-			'status' => $status
-		)));
-		}
+        $json_decode = json_decode($json, true); 
+        $mind_s1r=$_POST["mind_str"];
 
-		$json_decode = json_decode($json, true); 
-		$mind_s1r=$_POST["mind_str"];
+        $file_path=$mind_s1r+".jm";
+        $fileName="jsmind.jm";
+        $file_format = get_file_extension($fileName);
 
-		$file_path=$mind_s1r+".jm";
-		$fileName="jsmind.jm";
-		$file_format = get_file_extension($fileName);
-
-		echo '<script language="javascript">';
-		echo 'alert("message successfully sent")';
-		echo '</script>';
-
-	}
+        echo '<script language="javascript">';
+        echo 'alert("message successfully sent")';
+        echo '</script>';
+    }
 	
-	if(isset($_GET["jmpath"])){
-
-		$path = json_decode( base64_decode( $_GET['jmpath'] ) );
-		$myfile = fopen($path, "r") or die("Unable to open file!");
-		$arr = fread($myfile,filesize($path));
-
-		fclose($myfile);
-
-	}
-	else
-		$arr = "{}";
+    if(isset($_GET["jmpath"])) {
+        $path = json_decode( base64_decode( $_GET['jmpath'] ) );
+        $myfile = fopen($path, "r") or die("Unable to open file!");
+        $arr = fread($myfile,filesize($path));
+        fclose($myfile);
+    } else $arr = "{}";
 		
 $toolName = $langMindmap;
 // guest user not allowed
 if (check_guest()) {
-
     $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
     draw($tool_content, 2, 'mindmap');
 }
-
-
-
 
 $head_content .= '
 
@@ -132,29 +95,23 @@ $head_content .= '
         }
     </style>';
 
-
-
-
 $tool_content .= "
-
-
 <div id='layout'>
     <div id='jsmind_nav'>
         <div>1. $langOpenMind</div>
-        <ol type='A'>
-            <li><button class='jsmind' onclick='open_json();'>$langOpenEx</button></li>
-            
+        <ol type='Α'>
+            <li><button class='jsmind' onclick='open_json();'>$langOpenEx</button></li>            
         </ol>
         </ol>
         <div>2. $langEditMind</div>
-        <ol type='A'>
+        <ol type='Α'>
             <li><button class='jsmind' onclick='toggle_editable(this);'>$langEditDis</button></li>
             <li><button class='jsmind' onclick='add_node();'>$langAddNode</button></li>
             <li><button class='jsmind' onclick='remove_node();'>$langRemoveNode</button></li>
-			<li><button class='jsmind' onclick='reset();'>$langResetMap</button></li>
+            <li><button class='jsmind' onclick='reset();'>$langResetMap</button></li>
         </ol>
         <div>3. $langThemes</div>
-        <ol type='A'>
+        <ol type='Α'>
         <li>
         <select onchange='set_theme(this.value);'>
             <option value=''>default</option>
@@ -177,17 +134,15 @@ $tool_content .= "
         </li>
         </ol>
         <div>4. $langSave</div>
-        <ol type='A'>
-		        <li><button class='sub' onclick='screen_shot();'>$langScreenshot</button></li>
-                <li><button class='sub' onclick='save_file();'>$langSaveFile</button></li>";
-				//<li><button class='sub' onclick='show_data();'>show data</button></li>
+        <ol type='Α'>
+            <li><button class='sub' onclick='screen_shot();'>$langScreenshot</button></li>
+            <li><button class='sub' onclick='save_file();'>$langSaveFile</button></li>";
+            //<li><button class='sub' onclick='show_data();'>show data</button></li>
 				
-if($is_editor)	{			
-$tool_content .="<li><button class='sub' onclick='save_file_in_doc();'>$langSaveInDoc</button></li>";				
-				
-}				
-				
-				
+if($is_editor)	{
+    $tool_content .="<li><button class='sub' onclick='save_file_in_doc();'>$langSaveInDoc</button></li>";							
+}
+								
 $tool_content .="<li><input id='file_input' class='sub' type='file' onchange='open_file();'/></li>                
         </ol>
     </div>
@@ -195,8 +150,7 @@ $tool_content .="<li><input id='file_input' class='sub' type='file' onchange='op
 </div>";
    
 
-$tool_content .= '   
-   
+$tool_content .= '      
 	<script type="text/javascript" src="jsmind.js"></script>
 	<script type="text/javascript" src="jsmind.draggable.js"></script>
 	<script type="text/javascript" src="jsmind.screenshot.js"></script>
