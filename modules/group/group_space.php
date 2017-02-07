@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 /**
- * 
+ *
  * @file group_space.php
  * @brief Display user group info
  */
@@ -33,20 +33,24 @@ require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 require_once 'group_functions.php';
 
-initialize_group_id();
+if (isset($_GET['selfReg']) and isset($_GET['group_id'])) {
+    $group_id = getDirectReference($_GET['group_id']);
+} else {
+    initialize_group_id();
+}
 initialize_group_info($group_id);
 
 $toolName = $langGroups;
 $pageName = $group_name;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 
-if (!$is_editor) {    
-    if ((!$is_member) and (!$self_reg)) { // check if we are group member
+if (!$is_editor) {
+    if (!$is_member and !$self_reg) { // check if we are group member
         Session::Messages($langForbidden, 'alert-danger');
-        redirect_to_home_page("modules/group/index.php?course=$course_code");       
-    }   
+        redirect_to_home_page("modules/group/index.php?course=$course_code");
+    }
     if (isset($_GET['selfReg']) and $_GET['selfReg'] == 1) {
-        if (!$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) { // if registration is possible
+        if (user_can_add_group($uid, $course_id) and !$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) { // if registration is possible
             $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
             $group = gid_to_name($group_id);
             Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array('id' => $id,
@@ -62,7 +66,7 @@ if (!$is_editor) {
     }
     if (isset($_GET['selfUnReg']) and $_GET['selfUnReg'] == 1) {
         if ($is_member and $allow_unreg and $status != USER_GUEST) { // if registration is possible
-            
+
             Database::get()->query("DELETE FROM group_members WHERE user_id = ?d AND group_id = ?d", $uid, $group_id);
             $group = gid_to_name($group_id);
             Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('uid' => $uid,
@@ -74,7 +78,7 @@ if (!$is_editor) {
             Session::Messages($langForbidden, 'alert-danger');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
-    }     
+    }
 }
 
 if (isset($_GET['group_as'])) {
@@ -82,13 +86,13 @@ if (isset($_GET['group_as'])) {
     $navigation[] = array('url' => "group_space.php?course=$course_code&amp;group_id=$group_id", 'name' => $group_name);
     $group_id = $_GET['group_id'];
 
-    $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time FROM assignment AS a LEFT JOIN assignment_to_specific AS b ON a.id=b.assignment_id 
+    $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time FROM assignment AS a LEFT JOIN assignment_to_specific AS b ON a.id=b.assignment_id
                                                         WHERE a.course_id = ?d AND a.group_submissions= ?d AND (b.group_id= ?d OR b.group_id is null) AND a.active = 1 ORDER BY a.id", $course_id, 1, $group_id);
-    $tool_content .= action_bar(array(               
+    $tool_content .= action_bar(array(
                 array('title' => "$langBack",
                       'level' => "primary-label",
                       'url' => "group_space.php?course=$course_code&amp;group_id=$group_id",
-                      'icon' => 'fa-reply')));					
+                      'icon' => 'fa-reply')));
     if (count($result)>0) {
             $tool_content .= "
         <div class='row'>
@@ -100,7 +104,7 @@ if (isset($_GET['group_as'])) {
                   <th class='text-center'>$m[subm]</th>
                   <th class='text-center'>$m[nogr]</th>
                   <th class='text-center'>$m[deadline]</th>
-                </tr>";        
+                </tr>";
         foreach ($result as $row) {
             // Check if assignment contains submissions
             $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;
@@ -129,19 +133,19 @@ if (isset($_GET['group_as'])) {
             }
            $tool_content .= "</td></tr>";
         }
-        $tool_content .= '</table></div></div></div>';	
+        $tool_content .= '</table></div></div></div>';
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
-    }	     
+    }
 } else {
-    $student_to_student_allow = get_config('dropbox_allow_student_to_student');    
+    $student_to_student_allow = get_config('dropbox_allow_student_to_student');
     $tool_content .= action_bar(array(
                 array('title' => $langModify,
                       'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
                       'level' => 'primary-label',
                       'icon' => 'fa-edit',
                       'button-class' => 'btn-success',
-                      'show' => $is_editor),            
+                      'show' => $is_editor),
                 array('title' => $langForums,
                       'url' => "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id",
                       'icon' => 'fa-comments',
@@ -165,9 +169,9 @@ if (isset($_GET['group_as'])) {
                       'url' => "index.php?course=$course_code",
                       'icon' => 'fa-reply',
                       'level' => 'primary'),
-                array('title' => $langEmailGroup,                    
+                array('title' => $langEmailGroup,
                       'url' => "../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
-                      'icon' => 'fa-envelope',                  
+                      'icon' => 'fa-envelope',
                       'show' => $is_editor or $is_tutor or $student_to_student_allow),
                 array('title' => "$langDumpUser",
                       'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1",
@@ -180,7 +184,7 @@ if (isset($_GET['group_as'])) {
 
     $tutors = array();
     $members = array();
-    $q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.has_icon, group_members.is_tutor, 
+    $q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.has_icon, group_members.is_tutor,
                           group_members.description
                           FROM group_members, user
                           WHERE group_members.group_id = ?d AND
@@ -235,7 +239,7 @@ if (isset($_GET['group_as'])) {
         $tool_content .= "<div class='row'>
                         <div class='col-xs-12'>
                           <ul class='list-group'>
-                              <li class='list-group-item list-header'>                           
+                              <li class='list-group-item list-header'>
                                   <div class='row'>
                                       <div class='col-xs-4'>$langSurnameName</div>
                                       <div class='col-xs-4'>$langAm</div>
@@ -244,7 +248,7 @@ if (isset($_GET['group_as'])) {
                               </li>";
 
         foreach ($members as $member) {
-            $user_group_description = $member->description;        
+            $user_group_description = $member->description;
             $tool_content .= "<li class='list-group-item'><div class='row'><div class='col-xs-4'>" . display_user($member->id, false, true);
             if ($user_group_description) {
                 $tool_content .= "<br />" . q($user_group_description);
@@ -262,7 +266,7 @@ if (isset($_GET['group_as'])) {
             } else {
                 $tool_content .= '-';
             }
-            $tool_content .= "</div></div></li>";     
+            $tool_content .= "</div></div></li>";
         }
         $tool_content .= "</ul>";
         $tool_content .= "</div></div>";
