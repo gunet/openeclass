@@ -451,7 +451,7 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
  * @param type $issuer
  * @param type $active
  */
-function modify($element, $element_id, $title, $description, $message, $value, $issuer, $active) {    
+function modify($element, $element_id, $title, $description, $message, $value, $issuer) {    
     
     global $course_id;
     $field = ($element == 'certificate')? 'template' : 'icon';
@@ -459,10 +459,9 @@ function modify($element, $element_id, $title, $description, $message, $value, $
                                                    description = ?s,
                                                    message = ?s,
                                                    $field = ?d,
-                                                   issuer = ?s,
-                                                   active = ?d
+                                                   issuer = ?s                                                   
                                                 WHERE id = ?d AND course_id = ?d",
-                                    $title, $description, $message, $value, $issuer, $active, $element_id, $course_id);
+                                    $title, $description, $message, $value, $issuer, $element_id, $course_id);
     
 }
 
@@ -481,6 +480,21 @@ function modify_certificate_activity($element, $element_id, $activity_id) {
                             $_POST['cert_threshold'], $_POST['cert_operator'], $activity_id, $element_id);
 }
 
+
+/**
+ * @brief check if certificate / badge has activities
+ * @param type $element
+ * @param type $element_id
+ * @return type
+ */
+function has_activity($element, $element_id) {
+    
+    $num_of_activities = Database::get()->querySingle("SELECT COUNT(*) AS act FROM ${element}_criterion WHERE $element = ?d", $element_id)->act;
+    
+    return $num_of_activities;    
+}
+
+
 /**
  * @brief modify certificate / badge visibility in DB
  * @global type $course_id
@@ -488,7 +502,7 @@ function modify_certificate_activity($element, $element_id, $activity_id) {
  * @param type $element
  * @param type $visibility 
  */
-function visibility($element, $element_id, $visibility) {
+function update_visibility($element, $element_id, $visibility) {
     
     global $course_id;
     

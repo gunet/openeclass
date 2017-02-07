@@ -240,8 +240,12 @@ if ($is_editor) {
     //end of the top menu
         
     if (isset($_GET['vis'])) { // activate or deactivate certificate
-        visibility($element, $element_id, $_GET['vis']);        
-        Session::Messages($langGlossaryUpdated, 'alert-success');
+        if (has_activity($element, $element_id) > 0) {
+            update_visibility($element, $element_id, $_GET['vis']);        
+            Session::Messages($langGlossaryUpdated, 'alert-success');
+        } else {
+            Session::Messages($langNotActivated, 'alert-warning');
+        }
         redirect_to_home_page("modules/progress/index.php?course=$course_code");
     }        
     if (isset($_POST['newCertificate']) or isset($_POST['newBadge'])) {  //add a new certificate / badge
@@ -253,7 +257,7 @@ if ($is_editor) {
         if($v->validate()) {
             $table = (isset($_POST['newCertificate'])) ? 'certificate' : 'badge';
             $icon  = $_POST['template'];
-            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], $_POST['active']);
+            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0);
             Session::Messages("$langNewCertificateSuc", 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
@@ -267,8 +271,9 @@ if ($is_editor) {
             'title' => "$langTheField $langTitle",
         ));
         if($v->validate()) {
-            $active = isset($_POST['active']) ? 1 : 0;            
-            modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $active);
+            //$active = isset($_POST['active']) ? 1 : 0;           
+            //modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer'], $active);
+            modify($element, $element_id, $_POST['title'], $_POST['description'], $_POST['message'], $_POST['template'], $_POST['issuer']);
             Session::Messages("$langQuotaSuccess", 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {

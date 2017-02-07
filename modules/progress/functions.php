@@ -1383,8 +1383,8 @@ function certificate_settings($element, $element_id = 0) {
         $title = $data->title;
         $description = $data->description;
         $message = $data->message;
-        $active = $data->active;
-        $checked = ($active) ? ' checked': '';
+        //$active = $data->active;
+        //$checked = ($active) ? ' checked': '';
         $cert_id = ($element == 'certificate')? "<input type='hidden' name='certificate_id' value='$element_id'>" : "<input type='hidden' name='badge_id' value='$element_id'>";
         $name = 'edit_element';
     } else {        // add
@@ -1393,8 +1393,8 @@ function certificate_settings($element, $element_id = 0) {
         $title = '';
         $description = '';
         $message = '';
-        $active = 1;
-        $checked = 'checked';
+        //$active = 0;
+        //$checked = 'checked';
         $cert_id = '';
         $name = ($element == 'certificate')? 'newCertificate' : 'newBadge';
     }
@@ -1432,15 +1432,16 @@ function certificate_settings($element, $element_id = 0) {
                     <div class='col-sm-10'>
                         <input class='form-control' type='text' name='issuer' value='$issuer'>
                     </div>
-                </div>
-                 <div class='form-group'>
+                </div>                
+                $cert_id";
+                 /*<div class='form-group'>
                     <label for='activate' class='col-sm-2 control-label'>$langActivate</label>
                     <div class='col-sm-10'>
                         <input class='form-control' type='checkbox' name='active' value='$active' $checked></label>
                     </div>
-                </div>
-                $cert_id
-                <div class='form-group'>
+                </div> */
+                
+                $tool_content .= "<div class='form-group'>
                     <div class='col-xs-12'>".form_buttons(array(
                         array(
                                 'text' => $langSave,
@@ -1485,7 +1486,7 @@ function student_view_progress() {
                 . " b.description, b.active, b.created, b.id"
                 . " from user_{$key} a "
                 . " join {$key} b on (a.{$key} = b.id) "
-                . " where a.user = ?d and b.course_id = ?d";
+                . " where a.user = ?d and b.course_id = ?d and b.active = 1";
         Database::get()->queryFunc($gameQ, function($game) use ($key, &$data) {            
             if ($key == 'badge') { // get badge icon                
                 $game->filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = 
@@ -1618,40 +1619,39 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                                 AND badge_criterion.badge = ?d AND user = ?d)", $element_id, $element_id, $user_id);
         $sql3 = "SELECT completed, completed_criteria, total_criteria FROM user_badge WHERE badge = ?d AND user = ?d";
     }
-    if (count($sql) > 0) {
-        $tool_content .= "<table class='table-default custom_list_order'>";
-        $tool_content .= "<thead>
-                    <tr>
-                      <th>$langAttendanceActivity</th>
-                      <th style='width:10px;'>$langInstallEnd</th>
-                    </tr>
-                </thead>
-                <tbody>";            
-            foreach ($sql as $user_criterion) {
-                $resource_data = get_resource_details($element, $user_criterion);                
-                $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
-                $tool_content .= "<tr>
-                        <td>" . $activity . "</td>
-                        <td class='text-center'>" . icon('fa-check-circle') . "</td>
-                        </tr>";
-            }
-            foreach ($sql2 as $user_criterion) {
-                $resource_data = get_resource_details($element, $user_criterion);                
-                $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
-                $tool_content .= "<tr class='not_visible'>
-                        <td>" . $activity . "</td>
-                        <td class='text-center'>" . icon('fa-hourglass-2') . "</td>
-                        </tr>";
-            }
-            $user_data = Database::get()->querySingle($sql3, $element_id, $user_id);            
-            $tool_content .= "<tr>
-                    <td><strong>$langTotalPercentCompleteness</strong></td>
-                    <td class='text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></td>
-                    </tr>";
-        $tool_content .= "</tbody></table>";
-    } else {
-        $tool_content .= "<div class='alert alert-info'>$langNoUserActivity</div>";
+    if (count($sql) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoUserActivity</div>";
     }
+    $tool_content .= "<table class='table-default custom_list_order'>";
+    $tool_content .= "<thead>
+                <tr>
+                  <th>$langAttendanceActivity</th>
+                  <th style='width:10px;'>$langInstallEnd</th>
+                </tr>
+            </thead>
+            <tbody>";            
+        foreach ($sql as $user_criterion) {
+            $resource_data = get_resource_details($element, $user_criterion);                
+            $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+            $tool_content .= "<tr>
+                    <td>" . $activity . "</td>
+                    <td class='text-center'>" . icon('fa-check-circle') . "</td>
+                    </tr>";
+        }
+        foreach ($sql2 as $user_criterion) {
+            $resource_data = get_resource_details($element, $user_criterion);                
+            $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+            $tool_content .= "<tr class='not_visible'>
+                    <td>" . $activity . "</td>
+                    <td class='text-center'>" . icon('fa-hourglass-2') . "</td>
+                    </tr>";
+        }
+        $user_data = Database::get()->querySingle($sql3, $element_id, $user_id);            
+        $tool_content .= "<tr>
+                <td><strong>$langTotalPercentCompleteness</strong></td>
+                <td class='text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></td>
+                </tr>";
+    $tool_content .= "</tbody></table>";    
 }
 
 
