@@ -622,10 +622,8 @@ function display_available_documents($element, $element_id) {
     require_once 'modules/document/doc_init.php';
     require_once 'include/lib/mediaresource.factory.php';
     require_once 'include/lib/fileManageLib.inc.php';
-    require_once 'include/lib/fileDisplayLib.inc.php';
-    //require_once 'include/lib/modalboxhelper.class.php';
+    require_once 'include/lib/fileDisplayLib.inc.php';    
     require_once 'include/lib/multimediahelper.class.php';
-    //require_once 'include/lib/mediaresource.factory.php';
 
     doc_init();
     

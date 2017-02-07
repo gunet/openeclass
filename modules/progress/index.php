@@ -283,63 +283,63 @@ if ($is_editor) {
     } elseif (isset($_POST['mod_cert_activity'])) { // modify certificate activity
         modify_certificate_activity($element, $element_id, $_POST['activity_id']);
         Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     }
         // add resources to certificate
     elseif(isset($_POST['add_assignment'])) { // add assignment activity in certificate
         add_assignment_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_exercise'])) { // add exercise activity in certificate
         add_exercise_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_lp'])) { // add learning path activity in certificate
         add_lp_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_document'])) { // add document activity in certificate
         add_document_to_certificate($element, $element_id);
-        Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        Session::Messages("$langQuotaSuccess", 'alert-success');        
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_multimedia'])) { // add multimedia activity in certificate
         add_multimedia_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_poll'])) { // add poll activity in certificate
         add_poll_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_wiki'])) { // add wiki activity in certificate
         add_wiki_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_ebook'])) { // add ebook activity in certificate
         add_ebook_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_forum'])) { // add forum activity in certificate
         add_forum_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_blog'])) {
         add_blog_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_blogcomment'])) {
         add_blogcomment_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     }
     
     elseif (isset($_GET['del_cert_res'])) { // delete certificate / badge activity
         if (resource_usage($element, $_GET['del_cert_res'])) { // check if resource has been used by user
             Session::Messages("$langUsedCertRes", "alert-warning");
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
         } else { // delete it otherwise
             delete_activity($element, $element_id, $_GET['del_cert_res']);
             Session::Messages("$langAttendanceDel", "alert-success");
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;$param_name=$element_id");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
         }
     } elseif (isset($_GET['del_cert'])) {  //  delete certificate / badge
         delete_certificate('certificate', $_GET['del_cert']);
