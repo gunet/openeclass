@@ -341,7 +341,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                             if ($userinfo['count'] == 1) {
                                 $surname = get_ldap_attribute($userinfo, 'sn');
                                 $givenname = get_ldap_attribute($userinfo, 'givenname');
-                                if (empty($givennname)) {
+                                if (empty($givenname)) {
                                     $cn = get_ldap_attribute($userinfo, 'cn');
                                     $givenname = trim(str_replace($surname, '', $cn));
                                 }
