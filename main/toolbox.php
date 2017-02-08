@@ -170,20 +170,34 @@ if (get_config('enable_social_sharing_links')) {
 $searching = false;
 $valTitles = $catTitles = $catNames = array();
 $t->set_var('formAction', $urlAppend . 'main/toolbox.php');
-$categories = Database::get()->queryArray("SELECT * FROM category WHERE active = 1 ORDER BY ordering, id");
+$categories = Database::get()->queryArray("SELECT * FROM category WHERE active = 1 AND searchable = 1 ORDER BY ordering, id");
+
 foreach ($categories as $category) {
     $catName = 'cat' . $category->id;
     $catNames[$category->id] = $catName;
     $catTitles[$category->id] = $catTitle = q(getSerializedMessage($category->name));
+    $catMultiple = ($category->multiple >= 1) ? "multiple='multiple'" : '';
+
     if (isset($_GET[$catName])) {
         $searching = true;
     }
+
     $t->set_var('selectFieldLabel', $catTitle);
     $t->set_var('selectFieldName', $catName . '[]');
     $t->set_var('selectFieldId', 'modules' . $catName);
+    $t->set_var('selectFieldMultiple', $catMultiple);
+
     $values = Database::get()->queryArray("SELECT * FROM category_value
           WHERE category_id = ?d AND active = 1
           ORDER BY ordering, id", $category->id);
+
+    // empty option for non-multiple categories
+    if ($category->multiple <= 0) {
+        $t->set_var('selectOptionTitle', '');
+        $t->set_var('selectOptionValue', null);
+        $t->parse('selectOption', 'selectOptionBlock', true);
+    }
+
     foreach ($values as $value) {
         $valTitles[$value->id] = $valTitle = q(getSerializedMessage($value->name));
         $t->set_var('selectOptionTitle', $valTitle);
@@ -200,8 +214,10 @@ foreach ($categories as $category) {
     $t->set_var('selectOption', '');
 }
 
+// platform languages as searchable category
 $t->set_var('selectFieldLabel', $langLanguage);
 $t->set_var('selectFieldName', 'catlang[]');
+$t->set_var('selectFieldMultiple', "multiple='multiple'");
 foreach ($session->active_ui_languages as $langCode) {
     $t->set_var('selectOptionTitle', q($langNameOfLang[langcode_to_name($langCode)]));
     $t->set_var('selectOptionValue', $langCode);
