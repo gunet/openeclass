@@ -170,7 +170,7 @@ if (get_config('enable_social_sharing_links')) {
 $searching = false;
 $valTitles = $catTitles = $catNames = array();
 $t->set_var('formAction', $urlAppend . 'main/toolbox.php');
-$categories = Database::get()->queryArray("SELECT * FROM category WHERE active = 1 ORDER BY ordering, id");
+$categories = Database::get()->queryArray("SELECT * FROM category WHERE active = 1 AND searchable = 1 ORDER BY ordering, id");
 foreach ($categories as $category) {
     $catName = 'cat' . $category->id;
     $catNames[$category->id] = $catName;
