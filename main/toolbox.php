@@ -218,23 +218,36 @@ if (isset($_GET['catlang'])) {
 $t->parse('selectField', 'selectFieldBlock', true);
 
 if ($searching) {
-    $query = 'SELECT c.id AS course_id, title, code, description FROM course c';
+    $query = 'SELECT DISTINCT(a.course_id), a.title, a.code, a.description, a.lang FROM ('
+             . '  SELECT'
+             . '   c.id AS course_id, c.title, c.code, c.description, c.lang';
     $where = array();
     $args = array();
-    if (isset($_GET['catlang'])) {
-        $where[] = "c.lang IN " . placeholders($_GET['catlang']);
-        $args[] = $_GET['catlang'];
-    }
+
     foreach ($catNames as $catId => $catName) {
         if (isset($_GET[$catName])) {
-            $query .= " LEFT JOIN course_category $catName
-                ON (c.id = $catName.course_id AND
-                    $catName.id IN (SELECT id FROM category_value WHERE category_id = $catId))";
-            $where[] = "$catName.id IN " . placeholders($_GET[$catName]);
+            $query .= ', ' . $catName . '.category_value_id AS ' . $catName;
+        }
+    }
+
+    $query .= ' FROM course c ';
+
+    foreach ($catNames as $catId => $catName) {
+        if (isset($_GET[$catName])) {
+            $query .= ' LEFT JOIN course_category ' . $catName . ' ON (c.id = ' . $catName . '.course_id AND ' . $catName . '.category_value_id IN (SELECT id FROM category_value WHERE category_id = ' . $catId . '))';
+            $where[] = 'a.' . $catName . ' IN ' . placeholders($_GET[$catName]);
             $args[] = $_GET[$catName];
         }
     }
-    $query .= ' WHERE ' . implode(' AND ', $where);
+
+    // lang searching
+    if (isset($_GET['catlang'])) {
+        $where[] = "a.lang IN " . placeholders($_GET['catlang'], 's');
+        $args[] = $_GET['catlang'];
+    }
+
+    $query .= ' ) AS a WHERE ' . implode(' AND ', $where);
+
     $courses = Database::get()->queryArray($query, $args);
     foreach ($courses as $course) {
         $t->set_var('resultLink', $urlAppend . 'courses/' . $course->code . '/');
@@ -282,7 +295,7 @@ if ($searching) {
 $t->set_var('HEAD_EXTRAS', $head_content);
 $t->pparse('Output', 'main');
 
-function placeholders($array) {
+function placeholders($array, $type = 'd') {
     $c = count($array);
-    return '(' . implode(', ', array_fill(0, $c, '?d')) . ')';
+    return '(' . implode(', ', array_fill(0, $c, '?' . $type)) . ')';
 }
