@@ -142,64 +142,7 @@ if ($is_editor) {
         switch ($_REQUEST['cmd']) {
             // DELETE COMMAND
             case "delete" :
-                if (is_dir($webDir . "/courses/" . $course_code . "/scormPackages/path_" . intval($_GET['del_path_id']))) {
-                    $findsql = "SELECT M.`module_id`
-                        FROM  `lp_rel_learnPath_module` AS LPM, `lp_module` AS M
-                        WHERE LPM.`learnPath_id` = ?d
-                        AND ( M.`contentType` = ?s OR M.`contentType` = ?s OR M.`contentType` = ?s)
-                        AND LPM.`module_id` = M.`module_id`
-                        AND M.`course_id` = ?d";
-                    $findResult = Database::get()->queryArray($findsql, $_GET['del_path_id'], CTSCORM_, CTSCORMASSET_, CTLABEL_, $course_id);
-
-                    // Delete the startAssets
-                    $delAssetSql = "DELETE FROM `lp_asset` WHERE 1=0";
-                    // DELETE the SCORM modules
-                    $delModuleSql = "DELETE FROM `lp_module`
-                    WHERE (`contentType` = ?s OR `contentType` = ?s OR `contentType` = ?s) AND (1=0";
-
-                    foreach ($findResult as $delList) {
-                        $delAssetSql .= " OR `module_id`= " . intval($delList->module_id);
-                        $delModuleSql .= " OR (`module_id`= " . intval($delList->module_id) . " AND `course_id` = " . intval($course_id) . " )";
-                    }
-                    Database::get()->query($delAssetSql);
-
-                    $delModuleSql .= ")";
-                    Database::get()->query($delModuleSql, CTSCORM_, CTSCORMASSET_, CTLABEL_);
-
-                    // DELETE the directory containing the package and all its content
-                    $real = realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . intval($_GET['del_path_id']));
-                    claro_delete_file($real);
-                } else { // end of dealing with the case of a scorm learning path.
-                    $findsql = "SELECT M.`module_id`
-                        FROM  `lp_rel_learnPath_module` AS LPM,
-                        `lp_module` AS M
-                        WHERE LPM.`learnPath_id` = ?d
-                        AND M.`contentType` = ?s
-                        AND LPM.`module_id` = M.`module_id`
-                        AND M.`course_id` = ?d";
-                    $findResult = Database::get()->queryArray($findsql, $_GET['del_path_id'], CTLABEL_, $course_id);
-                    // delete labels of non scorm learning path
-                    $delLabelModuleSql = "DELETE FROM `lp_module` WHERE 1=0";
-
-                    foreach ($findResult as $delList) {
-                        $delLabelModuleSql .= " OR (`module_id`=" . intval($delList->module_id) . " AND `course_id` = " . intval($course_id) . " )";
-                    }
-                    Database::get()->query($delLabelModuleSql);
-                }
-
-                // delete everything for this path (common to normal and scorm paths) concerning modules, progress and path
-                // delete all user progression
-                Database::get()->query("DELETE FROM `lp_user_module_progress` WHERE `learnPath_id` = ?d", $_GET['del_path_id']);
-                // delete all relation between modules and the deleted learning path
-                Database::get()->query("DELETE FROM `lp_rel_learnPath_module` WHERE `learnPath_id` = ?d", $_GET['del_path_id']);
-
-                // delete the learning path
-                $lp_name = Database::get()->querySingle("SELECT name FROM `lp_learnPath`
-                                                                WHERE `learnPath_id` = ?d
-                                                                AND `course_id` = ?d", $_GET['del_path_id'], $course_id)->name;
-                Database::get()->query("DELETE FROM `lp_learnPath`
-                                                WHERE `learnPath_id` = ?d
-                                                AND `course_id` = ?d", $_GET['del_path_id'], $course_id);
+                $lp_name = deleteLearningPath($_GET['del_path_id']);
                 Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
                 Session::Messages($langLearnPathDeleted, 'alert-success');
                 redirect_to_home_page('modules/learnPath/?course=' . $course_code);
@@ -595,38 +538,53 @@ foreach ($result as $list) { // while ... learning path list
 
         $is_real_dir = is_dir(realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $list->learnPath_id));
 
+        $lp_menu = array(
+            array('title' => $langEditChange,
+                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
+                'icon' => 'fa-edit'),
+            // VISIBILITY link
+            array('title' => !$list->visible == 0 ? $langViewHide : $langViewShow,
+                'url' => !$list->visible == 0 ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;visibility_path_id=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;visibility_path_id=" . $list->learnPath_id,
+                'icon' => !$list->visible == 0 ? 'fa-eye-slash' : 'fa-eye'),
+            array('title' => $list->lock == 'OPEN' ? $langBlock : $langNoBlock,
+                'url' => $list->lock == 'OPEN' ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $list->learnPath_id,
+                'icon' => $list->lock == 'OPEN' ? 'fa-minus-circle' : 'fa-play-circle',
+                'show' => !($ind == 1)),
+            array('title' => $langTracking,
+                'url' => "details.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
+                'icon' => 'fa-line-chart'),
+            array('title' => $langExport2004,
+                'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export&amp;path_id=' . $list->learnPath_id,
+                'icon' => 'fa-download'),
+            array('title' => $langExport12,
+                'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export12&amp;path_id=' . $list->learnPath_id,
+                'icon' => 'fa-download'),
+            array('title' => $langExportIMSCP,
+                'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=exportIMSCP&amp;path_id=' . $list->learnPath_id,
+                'icon' => 'fa-download')
+        );
+
+        if ($is_real_dir) {
+            $lp_menu[] =
+                array('title' => $langReplace,
+                    'url' => "importLearningPath.php?course=" . $course_code . "&amp;replace_id=" . $list->learnPath_id,
+                    'icon' => 'fa-times',
+                    'confirm' => ($langAreYouSureToReplaceScorm . " \"" . $list->name) . "\"",
+                    'confirm_title' => $langConfirmReplace,
+                    'confirm_button' => $langReplace
+                );
+        }
+
+        $lp_menu[] =
+            array('title' => $langDelete,
+                'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id,
+                'icon' => 'fa-times',
+                'class' => 'delete',
+                'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name) . "\"" : $langDelete);
+
         $tool_content .= "<td class='option-btn-cell' style='width: 90px;'><div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer;
                 vertical-align: bottom;'><span class='fa fa-arrows' style='cursor: pointer;'></span></div><div class='pull-left'>" .
-                action_button(array(
-                    array('title' => $langEditChange,
-                        'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
-                        'icon' => 'fa-edit'),
-                    // VISIBILITY link
-                    array('title' => !$list->visible == 0? $langViewHide : $langViewShow,
-                        'url' => !$list->visible == 0? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;visibility_path_id=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;visibility_path_id=" . $list->learnPath_id,
-                        'icon' => !$list->visible == 0? 'fa-eye-slash': 'fa-eye'),
-                    array('title' => $list->lock == 'OPEN'? $langBlock : $langNoBlock,
-                        'url' => $list->lock == 'OPEN'? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $list->learnPath_id,
-                        'icon' => $list->lock == 'OPEN'? 'fa-minus-circle' : 'fa-play-circle',
-                        'show' => !($ind == 1)),
-                    array('title' => $langTracking,
-                        'url' => "details.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
-                        'icon' => 'fa-line-chart'),
-                    array('title' => $langExport2004,
-                        'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export&amp;path_id=' . $list->learnPath_id,
-                        'icon' => 'fa-download'),
-                    array('title' => $langExport12,
-                        'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export12&amp;path_id=' . $list->learnPath_id,
-                        'icon' => 'fa-download'),
-                    array('title' => $langExportIMSCP,
-                        'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=exportIMSCP&amp;path_id=' . $list->learnPath_id,
-                        'icon' => 'fa-download'),
-                    array('title' => $langDelete,
-                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id,
-                        'icon' => 'fa-times',
-                        'class' => 'delete',
-                        'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name)."\"" : $langDelete)
-                )) .
+                action_button($lp_menu) .
                 "</div></td>\n";
     } elseif ($uid) {
         // % progress

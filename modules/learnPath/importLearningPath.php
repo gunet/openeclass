@@ -52,6 +52,7 @@ require_once "include/lib/learnPathLib.inc.php";
 require_once "include/lib/fileManageLib.inc.php";
 require_once "include/lib/fileUploadLib.inc.php";
 require_once "include/lib/fileDisplayLib.inc.php";
+require_once 'include/log.class.php';
 
 $pwd = getcwd();
 
@@ -484,6 +485,16 @@ function utf8_decode_if_is_utf8($str) {
     return seems_utf8($str) ? utf8_decode($str) : $str;
 }
 
+function replaceIdHiddenInput() {
+    global $webDir, $course_code;
+    $replaceId = (isset($_GET['replace_id']) && intval($_GET['replace_id']) > 0) ? intval($_GET['replace_id']) : 0;
+    if (is_dir($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $replaceId)) {
+        return "<input type='hidden' name='replace_id' value='" . $replaceId . "'>";
+    } else {
+        return '';
+    }
+}
+
 /* ======================================
   CLAROLINE MAIN
   ====================================== */
@@ -510,15 +521,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     $insertedAsset_id = array();
 
     $lpName = $langUnamedPath;
+    $replace_id = null;
 
-    // we need a new path_id for this learning path so we prepare a line in DB
-    // this line will be removed if an error occurs
-    $rankMax = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+    // handle learnpath id replacing mode
+    if (isset($_POST['replace_id']) && intval($_POST['replace_id']) > 0) {
+        // validate replace_id
+        $valid = intval(Database::get()->querySingle("SELECT 1 as exist FROM lp_learnPath where learnPath_id = ?d and course_id = ?d", $_POST['replace_id'], $course_id)->exist);
+        if ($valid == 1) {
+            // init vars
+            $replace_id = intval($_POST['replace_id']);
+            $tempPathId = $replace_id;
+            $rankMax = intval(Database::get()->querySingle("SELECT rank AS max FROM lp_learnPath WHERE learnPath_id = ?d", $replace_id)->max);
+
+            // delete old lp
+            $lp_name = deleteLearningPath($replace_id);
+            Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
+
+            // create new lp
+            Database::get()->query("INSERT INTO `lp_learnPath`
+            (`learnPath_id`, `course_id`, `name`,`visible`,`rank`,`comment`)
+            VALUES (?d, ?d, ?s, 0, ?d,'')", $tempPathId, $course_id, $lpName, $rankMax);
+        }
+    }
+
+    if ($replace_id == null) {
+        // we need a new path_id for this learning path so we prepare a line in DB
+        // this line will be removed if an error occurs
+        $rankMax = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
             FROM `lp_learnPath` WHERE `course_id` = ?d", $course_id)->max);
 
-    $tempPathId = Database::get()->query("INSERT INTO `lp_learnPath`
+        $tempPathId = Database::get()->query("INSERT INTO `lp_learnPath`
             (`course_id`, `name`,`visible`,`rank`,`comment`)
             VALUES (?d, ?s, 0, ?d,'')", $course_id, $lpName, $rankMax)->lastInsertID;
+    }
     $baseWorkDir .= "path_" . $tempPathId;
 
     if (!is_dir($baseWorkDir)) {
@@ -1027,9 +1062,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         claro_delete_file($baseWorkDir);
     } else {
         // finalize insertion : update the empty learning path insert that was made to find its id
-        $rankMax = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+        if ($replace_id != null) {
+            $rankMax = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
                 FROM `lp_learnPath`
                 WHERE `course_id` = ?d", $course_id)->max);
+        }
 
         if (isset($manifestData['packageTitle'])) {
             $lpName = $manifestData['packageTitle'];
@@ -1109,7 +1146,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                             <label for='uploadedPackage' class='col-sm-2 control-label'>$langPathUploadFile</label>
                             <div class='col-sm-10'>
                                 <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >" .
-                                fileSizeHidenInput() . "
+                                fileSizeHidenInput() . replaceIdHiddenInput() . "
                                 <input id='uploadedPackage' type='file' name='uploadedPackage'>
                                 <span class='smaller'>$langLearningPathUploadFile</span>
                                 <span class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></span>
