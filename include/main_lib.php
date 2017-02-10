@@ -166,6 +166,10 @@ define('EBOOK', 2);
 define('COMMON', 3);
 define('MYDOCS', 4);
 
+// path for certificates / badges templates
+define('CERT_TEMPLATE_PATH', "/courses/user_progress_data/cert_templates/");
+define('BADGE_TEMPLATE_PATH', "/courses/user_progress_data/badge_templates/");
+
 // interval in minutes for counting online users
 define('MAX_IDLE_TIME', 10);
 

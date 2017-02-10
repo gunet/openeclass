@@ -691,9 +691,12 @@ function get_resource_details($element, $resource_id) {
 
 /**
  * @brief certificate pdf output 
+ * @global type $webDir;
  * @param type $user_id
  */
 function cert_output_to_pdf($certificate_id, $user_id) {
+    
+    global $webDir;
            
     $cert_file = Database::get()->querySingle("SELECT filename FROM certificate_template 
                                                     JOIN certificate ON certificate_template.id = certificate.template
@@ -701,7 +704,7 @@ function cert_output_to_pdf($certificate_id, $user_id) {
     
     $mpdf = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);
     
-    $html_certificate = file_get_contents(CERT_TEMPLATE_PATH . $cert_file . ".html");
+    $html_certificate = file_get_contents($webDir . CERT_TEMPLATE_PATH . $cert_file);
 
     $certificate_title = get_title('certificate', $certificate_id);
     $certificate_issuer = get_certificate_issuer($certificate_id);

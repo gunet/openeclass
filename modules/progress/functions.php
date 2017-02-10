@@ -20,8 +20,6 @@
  * ========================================================================
  */
 
-define('CERT_TEMPLATE_PATH', $webDir . "/courses/user_progress_data/cert_templates/");
-define('BADGE_TEMPLATE_PATH', $urlServer . "/courses/user_progress_data/badge_templates/");
         
 /**
  * @brief display all certificates -- initial screen
@@ -1380,9 +1378,7 @@ function certificate_settings($element, $element_id = 0) {
         $template = $data->$field;
         $title = $data->title;
         $description = $data->description;
-        $message = $data->message;
-        //$active = $data->active;
-        //$checked = ($active) ? ' checked': '';
+        $message = $data->message;        
         $cert_id = ($element == 'certificate')? "<input type='hidden' name='certificate_id' value='$element_id'>" : "<input type='hidden' name='badge_id' value='$element_id'>";
         $name = 'edit_element';
     } else {        // add
@@ -1390,9 +1386,7 @@ function certificate_settings($element, $element_id = 0) {
         $template = '';        
         $title = '';
         $description = '';
-        $message = '';
-        //$active = 0;
-        //$checked = 'checked';
+        $message = '';        
         $cert_id = '';
         $name = ($element == 'certificate')? 'newCertificate' : 'newBadge';
     }
@@ -1431,14 +1425,7 @@ function certificate_settings($element, $element_id = 0) {
                         <input class='form-control' type='text' name='issuer' value='$issuer'>
                     </div>
                 </div>                
-                $cert_id";
-                 /*<div class='form-group'>
-                    <label for='activate' class='col-sm-2 control-label'>$langActivate</label>
-                    <div class='col-sm-10'>
-                        <input class='form-control' type='checkbox' name='active' value='$active' $checked></label>
-                    </div>
-                </div> */
-                
+                $cert_id";                                 
                 $tool_content .= "<div class='form-group'>
                     <div class='col-xs-12'>".form_buttons(array(
                         array(
@@ -1460,10 +1447,11 @@ function certificate_settings($element, $element_id = 0) {
  * @brief student view certificates / badges
  * @global type $uid
  * @global type $course_id
+ * @global type $urlServer
  */
 function student_view_progress() {
     
-    global $uid, $course_id;
+    global $uid, $course_id, $urlServer;
     
     require_once 'Game.php';
 
@@ -1493,7 +1481,7 @@ function student_view_progress() {
             $data['game_' . $key][] = $game;
         }, $uid, $course_id);
     }    
-    $data['badge_template_path'] = BADGE_TEMPLATE_PATH;
+    $data['badge_template_path'] = $urlServer . BADGE_TEMPLATE_PATH;
     view('modules.progress.progress', $data);        
 }
 

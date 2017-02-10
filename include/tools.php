@@ -560,6 +560,10 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langAutoEnroll']);
         array_push($sideMenuLink, '../admin/autoenroll.php');
         array_push($sideMenuImg, 'fa-caret-right');
+        
+        array_push($sideMenuText, $GLOBALS['langCertBadge']);
+        array_push($sideMenuLink, '../admin/certbadge.php');
+        array_push($sideMenuImg, 'fa-caret-right');
 
         foreach ($sideMenuLink as $module_link) {
             if ($current_module_dir == module_path($module_link)) {
