@@ -8,14 +8,14 @@
 
                 <div class='panel-body'>
                     <div id='course-title-wrapper' class='course-info-title clearfix'>
-                        <div class='pull-left h4'>{{ trans('langDescription') }}</div> 
+                        <div class='pull-left h4'>{{ trans('langDescription') }}</div>
                         @if ($is_editor)
                             <div class='access access-edit pull-left'>
                                 <a href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
                                     <span class='fa fa-pencil' style='line-height: 30px;' data-toggle='tooltip' data-placement='top' title='Επεξεργασία πληροφοριών'></span>
                                     <span class='hidden'>.</span>
                                 </a>
-                            </div>                        
+                            </div>
                         @endif
                         <ul class='course-title-actions clearfix pull-right list-inline'>
                             <li class='access pull-right'>
@@ -46,7 +46,7 @@
                             <div>
                                 <img class='banner-image img-responsive' src='{{ isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . rawurlencode($course_info->course_image) : "$themeimg/ph1.jpg" }}' alt='Course Banner'/>
                             </div>
-                        </div>                    
+                        </div>
                     @endif
                     <div class='col-xs-12{{ $course_info->home_layout == 1 ? ' col-sm-7' : ''}}'>
                         <div class=''>
@@ -66,7 +66,7 @@
                                 @else
                                     <p class='not_visible'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
                                 @endif
-                            </div>                         
+                            </div>
                         </div>
                     </div>
                     <div class='col-xs-12 course-below-wrapper'>
@@ -79,13 +79,13 @@
                                     @if ($key+1 < count($departments))
                                         <br>
                                     @endif
-                                @endforeach                                
+                                @endforeach
                              </div>
                             <div class='col-xs-6'>
                                 @if ($course_info->course_license)
                                     <div class ='text-center'>
-                                        <span>{!! copyright_info($course_id) !!}</span> 
-                                    </div>                                
+                                        <span>{!! copyright_info($course_id) !!}</span>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -97,7 +97,7 @@
                         @if(isset($rating_content))
                             <div class='col-sm-6'>
                                 {!! $rating_content !!}
-                            </div>       
+                            </div>
                         @endif
                         @if(isset($social_content) || isset($comment_content))
                            <div class='text-right{{ isset($rating_content) ? " col-xs-6" : " col-xs-12" }}'>
@@ -105,16 +105,16 @@
                                     {!! $comment_content !!}
                                 @endif
                                 @if(isset($social_content) && isset($comment_content))
-                                    &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp; 
+                                    &nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;
                                 @endif
                                 @if(isset($social_content))
                                     {!! $social_content !!}
                                 @endif
                             </div>
-                        @endif         
+                        @endif
                     </div>
-                </div>        
-            @endif                    
+                </div>
+            @endif
             </div>
         </div>
     </div>
@@ -126,11 +126,11 @@
                         <div class='content-title pull-left h3'>
                             {{ $course_info->view_type == 'weekly' ? trans('langCourseWeeklyFormat') : trans('langCourseUnits') }}
                         </div>
-                        @if ($is_editor and $course_info->view_type == 'units')            
+                        @if ($is_editor and $course_info->view_type == 'units')
                             <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='{{ trans('langAddUnit') }}'>
                                 <span class='fa fa-plus-circle'></span>
                                 <span class='hidden'>.</span>
-                            </a>           
+                            </a>
                         @endif
                     </div>
                 </div>
@@ -140,27 +140,27 @@
                         @foreach ($course_units as $key => $course_unit)
                             @if ($course_unit->visible == 1)
                                <?php $count_index++; ?>
-                            @endif                    
+                            @endif
                             <div class='col-xs-12'>
                                 <div class='panel clearfix'>
                                     <div class='col-xs-12'>
                                         <div class='item-content'>
                                             <div class='item-header clearfix'>
                                                 <div class='item-title h4'>
-                                                    @if ($course_info->view_type == 'weekly')             
+                                                    @if ($course_info->view_type == 'weekly')
                                                         <a {!! !$course_unit->visible ? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/weeks/?course={{ $course_code }}&amp;id={{ $course_unit->id }}&amp;cnt={{ $count_index }}'>
                                                             @if(!empty($course_unit->title))
-                                                                {{ $course_unit->title }}                    
+                                                                {{ $course_unit->title }}
                                                             @else
                                                                 {{ $count_index.trans('langor') }} {{ trans('langsWeek') }}
                                                             @endif
-                                                            ({{ trans('langFrom2') }} {{ nice_format($course_unit->start_week) }} {{ trans('langTill') }} {{ nice_format($course_unit->finish_week) }}) 
+                                                            ({{ trans('langFrom2') }} {{ nice_format($course_unit->start_week) }} {{ trans('langTill') }} {{ nice_format($course_unit->finish_week) }})
                                                         </a>
                                                     @else
                                                         <a{!! !$course_unit->visible ? " class='not_visible'" : "" !!} href='{{ $urlServer }}modules/units/?course={{ $course_code }}&amp;id={{ $course_unit->id }}'>
                                                             {{ $course_unit->title }}
                                                         </a>
-                                                    @endif                                                  
+                                                    @endif
                                                 </div>
                                                 @if ($is_editor)
                                                     <div class='item-side'>
@@ -172,7 +172,7 @@
                                                                     'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$course_unit->id&amp;cnt=$count_index",
                                                                     'icon' => 'fa-edit'
                                                                 ],
-                                                                [   
+                                                                [
                                                                     'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
                                                                     'url' => "$_SERVER[SCRIPT_NAME]?visW=". getIndirectReference($course_unit->id),
                                                                     'icon' => $course_unit->visible == 1? 'fa-eye-slash' : 'fa-eye'
@@ -226,30 +226,30 @@
                                                                 ]
                                                             ]) !!}
                                                     @endif
-                                                    </div> 
+                                                    </div>
                                                 @endif
-                                            </div>	
+                                            </div>
                                             <div class='item-body'>
-                                                {!! $course_unit->comments == ' ' ? '' : $course_unit->comments !!}
+                                                {!! $course_unit->comments == ' ' ? '' : standard_text_escape($course_unit->comments) !!}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>                                              
+                            </div>
                         @endforeach
                     @else
                     <div class='col-sm-12'>
                         <div class='panel'>
                             <div class='panel-body not_visible'> - {{ trans('langNoUnits') }} - </div>
                         </div>
-                    </div>                    
-                    @endif            
+                    </div>
+                    @endif
                 </div>
                 {!! $course_home_main_area_widgets !!}
             </div>
         @endif
 
-        <div class='col-md-{{ $cunits_sidebar_columns }}'> 
+        <div class='col-md-{{ $cunits_sidebar_columns }}'>
             <div class='row'>
                 @if (isset($level) && !empty($level)) {
                     <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
@@ -333,7 +333,7 @@
                     <span>{{ $currentCourseName }}</span>&nbsp;
                     {{ trans('langAccessed') }} {{ claro_format_locale_date(trans('dateFormatLong'), strtotime('now')) }}&nbsp;
                     {{ trans('langFrom2') }} {{ $urlServer }}courses/{{$course_code}}/
-                </div>                                
+                </div>
             </div>
         </div>
     </div>

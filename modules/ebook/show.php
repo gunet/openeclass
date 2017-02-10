@@ -245,6 +245,8 @@ $body_node = $dom->getElementsByTagName('body')->item(0);
 foreach ($body_node->childNodes as $element) {
     $ebook_body .= str_replace('&#13;', '', dom_save_html($dom, $element));
 }
+$ebook_body = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', $ebook_body);
+$ebook_body = mathfilter($ebook_body, 12, $urlAppend . 'courses/mathimg/');
 unset($dom);
 $t->set_var('ebook_head', $ebook_head);
 $t->set_var('ebook_body', $ebook_body);

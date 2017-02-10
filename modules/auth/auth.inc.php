@@ -157,6 +157,10 @@ function get_auth_info($auth)
     global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, $langViaShibboleth, $langViaCAS, $langViaFacebook, $langViaTwitter, $langViaGoogle, $langViaLive, $langViaYahoo, $langViaLinkedIn, $langNbUsers, $langAuthChangeUser;
 
     if(!empty($auth)) {
+        $title = Database::get()->querySingle('SELECT auth_title FROM auth WHERE auth_id = ?d', $auth);
+        if ($title and $title->auth_title) {
+            return $title->auth_title;
+        }
         switch($auth)
         {
             case '1': $m = $langViaeClass;
