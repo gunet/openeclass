@@ -1620,6 +1620,70 @@ function check_LPM_validity($is_editor, $course_code, $extraQuery = false, $extr
     }
 }
 
+function deleteLearningPath($pathId) {
+    global $course_code, $course_id, $webDir;
+
+    if (is_dir($webDir . "/courses/" . $course_code . "/scormPackages/path_" . intval($pathId))) {
+        $findsql = "SELECT M.`module_id`
+						FROM  `lp_rel_learnPath_module` AS LPM, `lp_module` AS M
+						WHERE LPM.`learnPath_id` = ?d
+						AND ( M.`contentType` = ?s OR M.`contentType` = ?s OR M.`contentType` = ?s)
+						AND LPM.`module_id` = M.`module_id`
+						AND M.`course_id` = ?d";
+        $findResult = Database::get()->queryArray($findsql, $pathId, CTSCORM_, CTSCORMASSET_, CTLABEL_, $course_id);
+
+        // Delete the startAssets
+        $delAssetSql = "DELETE FROM `lp_asset` WHERE 1=0";
+        // DELETE the SCORM modules
+        $delModuleSql = "DELETE FROM `lp_module` WHERE (`contentType` = ?s OR `contentType` = ?s OR `contentType` = ?s) AND (1=0";
+
+        foreach ($findResult as $delList) {
+            $delAssetSql .= " OR `module_id`= " . intval($delList->module_id);
+            $delModuleSql .= " OR (`module_id`= " . intval($delList->module_id) . " AND `course_id` = " . intval($course_id) . " )";
+        }
+        Database::get()->query($delAssetSql);
+
+        $delModuleSql .= ")";
+        Database::get()->query($delModuleSql, CTSCORM_, CTSCORMASSET_, CTLABEL_);
+
+        // DELETE the directory containing the package and all its content
+        $real = realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . intval($pathId));
+        claro_delete_file($real);
+    } else { // end of dealing with the case of a scorm learning path.
+        $findsql = "SELECT M.`module_id`
+						FROM  `lp_rel_learnPath_module` AS LPM,
+						`lp_module` AS M
+						WHERE LPM.`learnPath_id` = ?d
+						AND M.`contentType` = ?s
+						AND LPM.`module_id` = M.`module_id`
+						AND M.`course_id` = ?d";
+        $findResult = Database::get()->queryArray($findsql, $pathId, CTLABEL_, $course_id);
+        // delete labels of non scorm learning path
+        $delLabelModuleSql = "DELETE FROM `lp_module` WHERE 1=0";
+
+        foreach ($findResult as $delList) {
+            $delLabelModuleSql .= " OR (`module_id`=" . intval($delList->module_id) . " AND `course_id` = " . intval($course_id) . " )";
+        }
+        Database::get()->query($delLabelModuleSql);
+    }
+
+    // delete everything for this path (common to normal and scorm paths) concerning modules, progress and path
+    // delete all user progression
+    Database::get()->query("DELETE FROM `lp_user_module_progress` WHERE `learnPath_id` = ?d", $pathId);
+    // delete all relation between modules and the deleted learning path
+    Database::get()->query("DELETE FROM `lp_rel_learnPath_module` WHERE `learnPath_id` = ?d", $pathId);
+
+    // delete the learning path
+    $lp_name = Database::get()->querySingle("SELECT name FROM `lp_learnPath` 
+                                                                WHERE `learnPath_id` = ?d
+                                                                AND `course_id` = ?d", $pathId, $course_id)->name;
+    Database::get()->query("DELETE FROM `lp_learnPath` 
+                                                WHERE `learnPath_id` = ?d
+                                                AND `course_id` = ?d", $pathId, $course_id);
+
+    return $lp_name;
+}
+
 function triggerLPGame($courseId, $uid, $lpId, $eventName) {
     $eventData = new stdClass();
     $eventData->courseId = $courseId;
