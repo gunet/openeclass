@@ -155,9 +155,10 @@ function login_form() {
             $loginForm .= "
                             </span>
                         </div>
-                    </div>
+                    </div>";
+        }
+        $loginForm .= "
                 </div>";
-            }
     }
     $loginForm .= "
             </div>
