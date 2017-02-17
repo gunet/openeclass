@@ -2029,7 +2029,7 @@ $langAdministrator = "Administrator";
 $langContinue = "Continue";
 $langDelImage = "Remove picture";
 $langGroups = "Groups";
-$langGroup = "group";
+$langGroup = "Group";
 $langIs = "is";
 $langLastname = "Last name";
 $langLegendRequiredFields = "<span class=\"required\">*</span> denotes required field";
