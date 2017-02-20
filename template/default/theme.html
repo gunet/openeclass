@@ -16,17 +16,17 @@
 
      <!-- BootBox -->
     <script src="{%URL_PATH%}js/bootbox/bootbox.min.js?v={%ECLASS_VERSION%}"></script>
-    
+
     <!-- SlimScroll -->
     <script src="{%URL_PATH%}js/jquery.slimscroll.min.js"></script>
     <!-- BlockUI -->
     <script src="{%URL_PATH%}js/blockui-master/jquery.blockUI.js"></script>
     <script>
         $(function() {
-            $('.blockUI').click(function() { 
-                $.blockUI({ message: "<h4><span class='fa fa-refresh fa-spin'></span> {%LANG_PLEASE_WAIT%}</h4>" }); 
-            }); 
-        });     
+            $('.blockUI').click(function() {
+                $.blockUI({ message: "<h4><span class='fa fa-refresh fa-spin'></span> {%LANG_PLEASE_WAIT%}</h4>" });
+            });
+        });
     </script>
     <script>
     bootbox.setDefaults({
@@ -41,13 +41,13 @@
     <link rel="shortcut icon" href="{%FAVICON_PATH%}" />
     <link rel="apple-touch-icon-precomposed" href="{%ICON_PATH%}" />
     <link rel="icon" type="image/png" href="{%ICON_PATH%}" />
-    
+
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="{%template_base%}/CSS/bootstrap-custom.css?v={%ECLASS_VERSION%}">
 
     <!-- Font Awesome - A font of icons -->
     <link href="{%template_base%}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
-    
+
     <!--[if lt IE 9]>
       <script type="text/javascript" src="{%template_base%}/js/html5shiv.min.js"></script>
       <script type="text/javascript" src="{%template_base%}/js/respond.min.js"></script>
@@ -68,13 +68,13 @@
 
             </div>
         </noscript>
-	
+
         <!-- BEGIN headerBlock -->
         <div class="{%container%} header_container">
             <div class="row" id="header_section">
                 <!-- BEGIN normalViewOpenDiv -->
                 <div id="bgr-cheat-header" class="hidden-xs hidden-sm col-md-2">
-<!--                     BEGIN logoBlock 
+<!--                     BEGIN logoBlock
                     <div class="logo">
                         <a href='{%URL_PATH%}'>
                         <img class="img-responsive hidden-xs hidden-sm" src="{%template_base%}/img/{%logo_img%}" alt=''>
@@ -84,7 +84,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-10 nav-container">
                 <!-- END normalViewOpenDiv -->
-                
+
                     <nav id="header" class="navbar navbar-default" role="navigation">
                         <!-- BEGIN normalViewOpenDiv -->
                         <button class="navbar-toggle pull-left">
@@ -108,7 +108,7 @@
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                                     <li role="presentation">
                                         <a role="menuitem" tabindex="-1" href="{%COURSES_LINK%}"><span class="fa fa-graduation-cap fa-fw"></span>{%LANG_COURSES%}</a>
-                                    </li>                                    
+                                    </li>
                                     <li role="presentation">
                                         <a role="menuitem" tabindex="-1" href="{%MESSAGES_LINK%}"><span class="fa fa-envelope-o fa-fw"></span>{%LANG_MESSAGES%}</a>
                                     </li>
@@ -181,7 +181,7 @@
                     <div class="col-md-12 add-gutter">
                         <!-- BEGIN breadCrumbs -->
                         <div class="row">
-                            <nav role="navigation" class="col-xs-12"> 
+                            <nav role="navigation" class="col-xs-12">
                                 <ol class="breadcrumb">
                                     <!-- BEGIN breadCrumbLinkBlock -->
                                     <li><a href='{%BREAD_HREF%}'>{%BREAD_TEXT%}</a></li>
@@ -250,7 +250,7 @@
             </div>
             <!-- BEGIN leftNavBlock -->
             <div id="leftnav" class="col-md-2 col-xs-pull-10 col-sm-pull-10 col-md-pull-10 sidebar {%leftNavClass%} embeded float-menu">
-                
+
                 <!-- BEGIN logoBlock -->
                     <div class="logo">
                         <a href='{%URL_PATH%}'>
@@ -258,7 +258,7 @@
                         </a>
                     </div>
                     <!-- END logoBlock -->
-                
+
                 <!-- BEGIN searchBlock -->
                 <div id="quick-search-wrapper">
                     <form action='{%URL_PATH%}modules/search/{%SEARCH_ACTION%}' method='post' >
@@ -272,8 +272,8 @@
                     </form>
                 </div>
                 <!-- END searchBlock -->
-                
-                <div class="panel-group" id="sidebar-accordion">                   
+
+                <div class="panel-group" id="sidebar-accordion">
                     <!-- BEGIN leftNavCategoryBlock -->
                     <div class="panel">
 

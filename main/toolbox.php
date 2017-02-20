@@ -46,6 +46,8 @@ $t->set_var('PAGE_TITLE', q($siteName));
 $t->set_var('COPYRIGHT', 'Open eClass © 2003-' . date('Y'));
 $t->set_var('TERMS_URL', $urlAppend .'info/terms.php');
 $t->set_var('LANG_TERMS', $langUsageTerms);
+$t->set_var('FAVICON_PATH', $urlAppend . 'template/favicon/favicon.ico');
+$t->set_var('ICON_PATH', $urlAppend . 'template/favicon/openeclass_128x128.png');
 $t->set_var('noAccountPleaseRegister',
     sprintf($langNoAccountPleaseRegister, '<a class="registerModal">', '</a>'));
 $t->set_var('alreadyHaveAccount',
