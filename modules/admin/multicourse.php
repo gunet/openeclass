@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -111,7 +111,8 @@ $user = new user();
 load_js('jstree3');
 
 
-list($js, $html) = $tree->buildCourseNodePickerIndirect(array('allowables' => $user->getDepartmentIds($uid)));
+$options = $is_admin ? array() : array('allowables' => $user->getDepartmentIds($uid));
+list($js, $html) = $tree->buildCourseNodePicker($options);
 $head_content .= $js;
 $data['html'] = $html;
 
