@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -112,13 +112,14 @@ if (isset($_POST['submit'])) {
             <label for='title' class='col-sm-3 control-label'>$langMultiCourseTitles:</label>
             <div class='col-sm-9'>" . text_area('courses', 20, 80, '') . "</div>
         </div>
-	<div class='form-group'>
-            <label for='title' class='col-sm-3 control-label'>$langFaculty:</label>	  
+    <div class='form-group'>
+            <label for='title' class='col-sm-3 control-label'>$langFaculty:</label>
             <div class='col-sm-9'>";
-        list($js, $html) = $tree->buildCourseNodePicker(array('allowables' => $user->getDepartmentIds($uid)));
-        $head_content .= $js;
-        $tool_content .= $html;
-    $tool_content .= "</div></div>";
+
+    $options = $is_admin ? array() : array('allowables' => $user->getDepartmentIds($uid));
+    list($js, $html) = $tree->buildCourseNodePicker($options);
+    $head_content .= $js;
+    $tool_content .= $html . "</div></div>";
 
     $tool_content .= "<div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langConfidentiality</label></div>
         <div class='form-group'>
@@ -132,7 +133,7 @@ if (isset($_POST['submit'])) {
             <div class='col-sm-9 radio'><label><input id='courseopen' type='radio' name='formvisible' value='2' checked> $langPublic</label></div>
             </div>
         <div class='form-group'>
-            <label for='PrivateOpen' class='col-sm-3 control-label'>$langRegCourse</label>	
+            <label for='PrivateOpen' class='col-sm-3 control-label'>$langRegCourse</label>
             <div class='col-sm-9 radio'><label><input id='coursewithregistration' type='radio' name='formvisible' value='1'> $langPrivOpen</label></div>
         </div>
         <div class='form-group'>
@@ -144,13 +145,13 @@ if (isset($_POST['submit'])) {
              <div class='col-sm-9 radio'><label><input id='courseinactive' type='radio' name='formvisible' value='3'> $langCourseInactiveShort</label></div>
          </div>
          <div class='form-group'>
-          <label for='language' class='col-sm-3 control-label'>$langLanguage:</label>	  
+          <label for='language' class='col-sm-3 control-label'>$langLanguage:</label>
            <div class='col-sm-9'>" . lang_select_options('lang') . "</div>
          </div>
          <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                <a href='index.php' class='btn btn-default'>$langCancel</a>    
+                <a href='index.php' class='btn btn-default'>$langCancel</a>
             </div>
         </div>
         </fieldset>
