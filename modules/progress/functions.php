@@ -860,6 +860,15 @@ function display_available_blogcomments($element, $element_id) {
 }
 
 
+function display_available_coursecomments($element, $element_id) {
+    
+    global $tool_content;
+    
+    $tool_content .= "<div class='alert alert-warning'>....Προς υλοποίηση....</div>";
+    
+    return $tool_content;    
+}
+
 /**
  * @brief forum display form
  * @global type $tool_content

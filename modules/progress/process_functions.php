@@ -190,8 +190,8 @@ function add_wiki_to_certificate($element, $element_id) {
 function add_poll_to_certificate($element, $element_id) {
     
     if (isset($_POST['poll'])) {
-        foreach ($_POST['poll'] as $data) {      
-          Database::get()->query("INSERT_INTO ${element}_criterion
+        foreach ($_POST['poll'] as $data) {            
+          Database::get()->query("INSERT INTO ${element}_criterion
                                     SET $element = ?d, 
                                     module= " . MODULE_ID_QUESTIONNAIRE . ", 
                                     resource = ?d, 
@@ -212,7 +212,7 @@ function add_poll_to_certificate($element, $element_id) {
  */
 function add_ebook_to_certificate($element, $element_id) {
      if (isset($_POST['ebook'])) {
-        foreach ($_POST['ebook'] as $data) {      
+        foreach ($_POST['ebook'] as $data) {     
           Database::get()->query("INSERT INTO ${element}_criterion
                                     SET $element = ?d, 
                                     module= " . MODULE_ID_EBOOK . ", 
@@ -222,6 +222,29 @@ function add_ebook_to_certificate($element, $element_id) {
                             $data);
         }
     }
+    if (isset($_POST['section'])) {
+        foreach ($_POST['section'] as $data) {     
+          Database::get()->query("INSERT INTO ${element}_criterion
+                                    SET $element = ?d, 
+                                    module= " . MODULE_ID_EBOOK . ", 
+                                    resource = ?d, 
+                                    activity_type = 'ebook'",
+                            $element_id,
+                            $data);
+        }
+    }
+    if (isset($_POST['subsection'])) {
+        foreach ($_POST['subsection'] as $data) {     
+          Database::get()->query("INSERT INTO ${element}_criterion
+                                    SET $element = ?d, 
+                                    module= " . MODULE_ID_EBOOK . ", 
+                                    resource = ?d, 
+                                    activity_type = 'ebook'",
+                            $element_id,
+                            $data);
+        }
+    }
+    
     return;
 }
 
@@ -522,16 +545,26 @@ function delete_certificate($element, $element_id) {
     if ($element == 'certificate') {
         $r = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d", $element_id);
         foreach ($r as $act) { // delete certificate activities
-            delete_activity('certificate', $element_id, $act->id);
-        }    
-        Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
+            if (!resource_usage($element, $act->id)) { // check if activity has been used by user
+                delete_activity('certificate', $element_id, $act->id);
+            } else {
+                return false;
+            }
+        }
+        Database::get()->query("DELETE FROM certificate WHERE id = ?d AND course_id = ?d", $element_id, $course_id);        
     } else {
         $r = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d", $element_id);
         foreach ($r as $act) { // delete badge activities
-            delete_activity('badge', $element_id, $act->id);
+            if (!resource_usage($element, $act->id)) { // check if activity has been used by user
+                delete_activity('badge', $element_id, $act->id);
+            } else {
+                return false;
+            }            
         }
         Database::get()->query("DELETE FROM badge WHERE id = ?d AND course_id = ?d", $element_id, $course_id);        
     }
+    
+    return true;
 }
 
 
@@ -552,8 +585,8 @@ function delete_activity($element, $element_id, $activity_id) {
 
 /**
  * @brief checks if user has used a specified certificate / badge resource
- * @param type $element_resource_id
  * @param type $element
+ * @param type $element_resource_id
  * @return boolean
  */
 function resource_usage($element, $element_resource_id) {
@@ -635,11 +668,27 @@ function get_resource_details($element, $resource_id) {
                 $type = "$langVideo";                
             break;
         case ViewingEvent::VIDEOLINK_ACTIVITY:
-                $title = Database::get()->querySingle("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $resource)->title;                
+                $title = Database::get()->querySingle("SELECT title FROM videolink WHERE videolink.course_id = ?d AND videolink.id = ?d", $course_id, $resource)->title;
                 $type = "$langsetvideo";                
             break;
         case ViewingEvent::EBOOK_ACTIVITY:
-                $title = Database::get()->querySingle("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $resource)->title;
+                $q = Database::get()->querySingle("SELECT title FROM ebook WHERE ebook.course_id = ?d AND ebook.id = ?d", $course_id, $resource);
+                if ($q) {
+                    $title = $q->title;
+                } else {
+                    $q1 = Database::get()->querySingle("SELECT ebook_section.title FROM ebook_section, ebook WHERE ebook_section.ebook_id = ebook.id AND ebook.course_id = ?d AND ebook_section.id = ?d", $course_id, $resource);
+                    if ($q1) {
+                        $title = $q1->title;
+                    } else {
+                        $q2 = Database::get()->querySingle("SELECT ebook_subsection.title FROM ebook_subsection, ebook_section, ebook "
+                                . "WHERE ebook_subsection.id = ebook_subsection.section_id "
+                                . "AND ebook_section.id = ebook_section.ebook_id "
+                                . "AND ebook.course_id = ?d AND ebook_subsection.id = ?d", $course_id, $resource);
+                        if ($q2) {
+                            $title = $q2->title;
+                        }                    
+                    }
+                }                
                 $type = "$langEBook";
             break;
         case ViewingEvent::QUESTIONNAIRE_ACTIVITY: 

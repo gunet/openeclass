@@ -341,14 +341,20 @@ if ($is_editor) {
             Session::Messages("$langAttendanceDel", "alert-success");
             redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
         }
-    } elseif (isset($_GET['del_cert'])) {  //  delete certificate / badge
-        delete_certificate('certificate', $_GET['del_cert']);
-        Session::Messages("$langGlossaryDeleted", "alert-success");
-        redirect_to_home_page("modules/progress/index.php?course=$course_code");
-    } elseif (isset($_GET['del_badge'])) {  //  delete certificate / badge
-        delete_certificate('badge', $_GET['del_badge']);
-        Session::Messages("$langGlossaryDeleted", "alert-success");
-        redirect_to_home_page("modules/progress/index.php?course=$course_code");    
+    } elseif (isset($_GET['del_cert'])) {  //  delete certificate 
+        if (delete_certificate('certificate', $_GET['del_cert'])) {
+            Session::Messages("$langGlossaryDeleted", "alert-success");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+        } else {
+            Session::Messages("$langUsedCertRes", "alert-warning");
+        }
+    } elseif (isset($_GET['del_badge'])) {  //  badge
+        if (delete_certificate('badge', $_GET['del_badge'])) {
+            Session::Messages("$langGlossaryDeleted", "alert-success");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code");
+        } else {
+            Session::Messages("$langUsedCertRes", "alert-warning");
+        }        
     } elseif (isset($_GET['newcert'])) {
         certificate_settings('certificate'); // create new certificate
         $display = FALSE;
