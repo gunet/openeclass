@@ -50,6 +50,14 @@ if (isset($_GET['forum'])) {
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
+// security check
+if ($group_id) {
+    if (!$is_member or !$has_forum) {            
+        header("Location: index.php?course=$course_code");
+        exit();
+    }
+}
+
 $myrow = Database::get()->querySingle("SELECT id, name FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);
 
 $forum_name = $myrow->name;

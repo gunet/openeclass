@@ -25,6 +25,7 @@ $require_login = true;
 $require_help = true;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
+require_once 'modules/group/group_functions.php';
 require_once 'modules/forum/functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
@@ -54,6 +55,18 @@ if (isset($_GET['forum'])) {
     header("Location: index.php?course=$course_code");
     exit();
 }
+
+$is_member = false;
+$group_id = init_forum_group_info($forum);
+
+// security check
+if ($group_id) {
+    if (!$is_member or !$has_forum) {                    
+        header("Location: index.php?course=$course_code");
+        exit();
+    }
+}
+
 if (isset($_GET['topic'])) {
     $topic = intval($_GET['topic']);
 }
