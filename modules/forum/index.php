@@ -211,8 +211,10 @@ if ($total_categories > 0) {
                             $forum_action_notify = FALSE;
                         }                    
                         $tool_content .= "<tr><td>";
-                        if ($is_editor or ! $group_id or ( $has_forum and $is_member)) {
-                            if ($forum_action_notify) $tool_content .= "<span class='pull-right label label-primary' data-toggle='tooltip' data-placement='bottom' title='".q($langNotify)."'><i class='fa fa-envelope'></i></span>";
+                        if ($is_editor or ! $group_id or ($has_forum and $is_member)) {
+                            if ($forum_action_notify) {
+                                $tool_content .= "<span class='pull-right label label-primary' data-toggle='tooltip' data-placement='bottom' title='" . q($langNotify) . "'><i class='fa fa-envelope'></i></span>";
+                            }
                             $tool_content .= "<a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>
                                                                 <b>$forum_name</b>
                                                                 </a><div class='smaller'>" . $member . "</div>";
@@ -225,9 +227,11 @@ if ($total_categories > 0) {
                             "<td class='text-center'>$total_posts</td>" .
                             "<td class='text-center'>";
                         if ($total_topics > 0 && $total_posts > 0) {
-                            $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;" .
-                                "<a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>" .
-                                icon('fa-comment-o', $langLastPost) . "</a><br>$human_last_post_time</span></td>";
+                            $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;";                        
+                            if ($is_editor or ! $group_id or ($has_forum and $is_member)) {
+                                $tool_content .= "<a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>".icon('fa-comment-o', $langLastPost) ."</a>";
+                            }
+                            $tool_content .= "<br>$human_last_post_time</span></td>";
                         } else {
                             $tool_content .= "<div class='inactive'>$langNoPosts</div></td>";
                         }
