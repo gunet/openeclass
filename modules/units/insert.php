@@ -419,13 +419,13 @@ function insert_forum($id) {
  * @global type $course_code
  * @param type $id
  */
-function insert_poll($id) {
+function insert_poll($id) {    
     global $course_id, $course_code;
     if(isset($_POST['poll'])){
         $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
         foreach ($_POST['poll'] as $poll_id) {
             $order++;
-            $poll = Database::get()->querySingle("SELECT * from poll where course_id = ?d", $course_id);
+            $poll = Database::get()->querySingle("SELECT * FROM poll where course_id = ?d AND pid = ?d", $course_id, $poll_id);
             $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'poll', 
                                             title = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
                                         $id, $poll->name, $order, $poll->pid);
