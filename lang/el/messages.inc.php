@@ -1340,6 +1340,8 @@ $langAvailableBadges = "Διαθέσιμα εικονίδια διάκρισης
 $langAvailableCertTemplates = "Διαθέσιμα πρότυπα πιστοποιητικών";
 $langDelWithSuccess = "Η διαγραφή πραγματοποιήθηκε με επιτυχία";
 $langCertBadge = "Πιστοποιητικά / Διακρίσεις";
+$langCertificateDetails = "Στοιχεία Πιστοποιητικού";
+$langBadgeDetails = "Στοιχεία Διάκρισης";
 //------------------------------------
 
 

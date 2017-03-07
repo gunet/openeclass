@@ -222,7 +222,7 @@ if ($is_editor) {
                   'level' => 'primary-label')));        
     } elseif (isset($_GET['preview'])) { // certificate preview
         cert_output_to_pdf($element_id, $uid);
-    } elseif (!isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id']))) {
+    } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])))) {
         $tool_content .= action_bar(
             array(
                 array('title' => "$langNewCertificate",
@@ -390,7 +390,7 @@ if (isset($display) and $display == TRUE) {
     if ($is_editor) {
         if (isset($element_id)) {
             $pageName = $element_title;
-            // display certificate / badge resources
+            // display certificate settings and resources            
             display_activities($element, $element_id);                
         } else { // display all certificates         
             display_certificates();

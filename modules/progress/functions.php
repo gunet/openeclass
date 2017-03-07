@@ -200,8 +200,7 @@ function display_badges() {
  * @global type $langOfLearningPath
  * @global type $langDelete
  * @global type $langEditChange
- * @global type $langConfirmDelete
- * @global type $langConfig
+ * @global type $langConfirmDelete 
  * @global type $langInsertWorkCap
  * @global type $langAdd
  * @global type $langExport
@@ -221,7 +220,7 @@ function display_activities($element, $id) {
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langOfForums, $langOfBlogComments, $langOfCourseComments, $langOfLikesForum,
            $langOfLearningPath, $langDelete, $langEditChange, $langConfirmDelete,           
-           $langConfig, $langInsertWorkCap, $langDocumentAsModuleLabel,
+           $langInsertWorkCap, $langDocumentAsModuleLabel,
            $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
            $langValue, $langPersoValue, $langOfLikesSocial;
 
@@ -252,10 +251,10 @@ function display_activities($element, $id) {
                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=blogcomments",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langOfCourseComments",
+                          /*array('title' => "$langOfCourseComments",
                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecomments",
                                 'icon' => 'fa fa-edit space-after-icon',
-                                'class' => ''),
+                                'class' => ''),*/
                           array('title' => "$langOfForums",
                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=forum",
                                 'icon' => 'fa fa-edit space-after-icon',
@@ -264,14 +263,14 @@ function display_activities($element, $id) {
                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lp",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
-                          array('title' => "$langOfLikesSocial",
+                          /*array('title' => "$langOfLikesSocial",
                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=likesocial",
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => ''),
                           array('title' => "$langOfLikesForum",
                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=likeforum",
                                 'icon' => 'fa fa-edit space-after-icon',
-                                'class' => ''),
+                                'class' => ''),*/
                           array('title' => "$langDocumentAsModuleLabel",
                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
                                 'icon' => 'fa fa-edit space-after-icon',
@@ -300,17 +299,17 @@ function display_activities($element, $id) {
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label'),
-                array('title' => $langConfig,
-                      'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;edit=1",
-                      'icon' => 'fa-cog'),
+                      'level' => 'primary-label'),                
                 array('title' => "$langExport",
                       'url' => "dumpcertificatebook.php?$link_id&amp;enc=1253",
                       'icon' => 'fa-file-excel-o'),                
             ),
             true
         );
-
+     
+    // certificate details
+    $tool_content .= display_certificate_settings($element, $id);
+        
     //get available activities
     $result = Database::get()->queryArray("SELECT * FROM ${element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);    
 
@@ -1358,7 +1357,85 @@ function display_available_wiki($element, $element_id) {
 
 
 /**
- * @brief add / edit certificate settings
+ * @brief display badge / certificate settings
+ * @global type $tool_content
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $langDescription
+ * @global type $langConfig
+ * @global type $langMessage
+ * @global type $langpublisher
+ * @global type $langCertificateDetails
+ * @global type $langBadgeDetails
+ * @param type $element
+ * @param type $element_id
+ */
+function display_certificate_settings($element, $element_id) {
+    
+    global $tool_content, $course_id, $course_code, $urlServer,
+           $langDescription, $langConfig, $langMessage, 
+           $langpublisher, $langCertificateDetails, $langBadgeDetails;
+
+    $field = ($element == 'certificate')? 'template' : 'icon';
+    $header = ($element == 'certificate')? "$langCertificateDetails" : "$langBadgeDetails";
+    $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle 
+                            FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
+    $issuer = $data->issuer;
+    $template = $data->$field;
+    $title = $data->title;
+    $description = $data->description;
+    $message = $data->message;
+    $icon = '';
+    if ($element == 'badge') {
+        $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = ?d", $element_id)->filename;        
+        $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_filename";
+        $icon = "<div><img src='$icon_link' width='60' height='60'></div>";
+    }
+           
+    $tool_content .= "<div class='panel panel-action-btn-primary'>";
+    $tool_content .= "<div class='panel-heading'>
+            <h3 class='panel-title'>
+                $header &nbsp;
+                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1'>
+                    <span class='fa fa-edit' title='' data-toggle='tooltip' data-original-title='$langConfig'></span>
+                </a>
+            </h3>
+        </div>";            
+        
+    $tool_content .= "<div class='panel-body'>";
+    $tool_content .= $icon;
+    $tool_content .= "<div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langDescription:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    " . $description . "
+                </div>
+            </div>";
+    $tool_content .= "<div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langMessage:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    " . $message . "
+                </div>
+            </div>";
+    $tool_content .= "<div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langpublisher:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    " . $issuer . "
+                </div>
+            </div>";
+    $tool_content .= "</div></div>";        
+    
+}
+
+
+
+/**
+ * @brief add / edit certificate / badge settings
  * @global string $tool_content
  * @global type $course_code
  * @global type $course_id
