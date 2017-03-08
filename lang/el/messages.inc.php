@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -12,7 +12,7 @@
  * be useful (without any warranty), under the terms of the GNU (General
  * Public License) as published by the Free Software Foundation.
  * The full license can be read in "/info/license/license_gpl.txt".
- *ε
+ *
  * Contact address: GUnet Asynchronous eLearning Group,
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
@@ -258,6 +258,7 @@ $langDisableEclassStudRegNo = "Οι $langsStudents μπορούν να εγγρ�
 $langDisableEclassStudRegViaReq = "Οι $langsStudents μπορούν να εγγραφούν μέσω αίτησης";
 $langDisableEclassProfRegNo = "Οι $langsTeachers μπορούν να εγγραφούν μέσω αίτησης";
 $langUserNotLogin = "Χρήστες που δεν έχουν εισέλθει";
+$langParams = 'Παράμετροι';
 
 // listusers
 $langBegin = "αρχή";
@@ -2631,7 +2632,7 @@ $langPages = "Σελίδες";
 $langNoForums = "Δεν υπάρχουν διαθέσιμες περιοχές συζητήσεων";
 $langNoForumsCat = "Δεν υπάρχουν περιοχές συζητήσεων σε αυτή την κατηγορία.";
 $langNewTopic = "Νέο θέμα";
-$langTopicStored = "Το νέο θέμα αποθυκεύτηκε";
+$langTopicStored = "Το θέμα δημιουργήθηκε";
 $langTopicData = "Στοιχεία θέματος";
 $langTopicAnswer = "Απάντηση στο θέμα συζήτησης";
 $langGroupDocumentsLink = "Έγγραφα ομάδας ";

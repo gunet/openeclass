@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -187,7 +187,7 @@ class Log {
                 if ($course_id == 0 or $module_id == 0) { // system logging
                     $tool_content .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
                 } else { // course logging
-                    $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
+                    $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details, $r->action_type) . "</td>";
                 }
                 $tool_content .= "</tr>";
             }
@@ -269,7 +269,7 @@ class Log {
                 break;
             case MODULE_ID_WIKI: $content = $this->wiki_action_details($details);
                 break;
-            case MODULE_ID_USERS: $content = $this->course_user_action_details($details);
+            case MODULE_ID_USERS: $content = $this->course_user_action_details($details, $type);
                 break;
             case MODULE_ID_TOOLADMIN: $content = $this->external_link_action_details($details);
                 break;
@@ -829,14 +829,24 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function course_user_action_details($details) {
+    private function course_user_action_details($details, $type) {
 
         global $langUnCourse, $langOfUser, $langToUser,
         $langsOfTeacher, $langsOfEditor, $langNewUser, $langAddGUser,
         $langRemoveRightAdmin, $langRemoveRightAdmin, $langUnCourse,
-        $langTheU, $langGiveRight, $langRemovedRight, $langsOfGroupTutor;
+        $langTheU, $langGiveRight, $langRemovedRight, $langsOfGroupTutor,
+        $langDelUsers, $langParams;
 
         $details = unserialize($details);
+
+        if (isset($details['multiple'])) {
+            if ($type == LOG_DELETE) {
+                $content = "$langDelUsers &mdash; $langParams: " . 
+                    implode(', ', $details['params']) . '<br>' .
+                    display_user($details['uid']);
+            }
+            return $content;
+        }
         
         switch ($details['right']) {
             case '+5': $content = $langNewUser;
