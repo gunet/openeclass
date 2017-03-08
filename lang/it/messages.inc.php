@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2017-03-08 16:49:06
+// Generated 2017-03-08 17:19:32
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -4801,3 +4801,10 @@ $langDownloadToPDF = "Report in PDF format";
 $langPleaseChooseFile = "Please choose a file";
 $langPleaseEnterName = "Please enter a name";
 $langParams = 'Parameters';
+$langWithRegistrationDate = 'With registration date';
+$langWho = 'Who';
+$langWithDepartment = 'belong to';
+$langWithoutDepartment = "don't belong to";
+$langWithId = 'With';
+$langWithStudentId = 'student IDs';
+$langWithUsernames = 'usernames';

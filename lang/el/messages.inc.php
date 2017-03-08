@@ -1047,7 +1047,7 @@ $langWithDepartment = 'ανήκουν στα';
 $langWithoutDepartment = 'δεν ανήκουν στα';
 $langWithId = 'Με';
 $langWithStudentId = 'αριθμούς μητρώου';
-$langWithUsernames = 'ονόματα χρήστών';
+$langWithUsernames = 'ονόματα χρηστών';
 
 /* * ***************************************************
  * contact.php

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2017-03-08 16:49:04
+// Generated 2017-03-08 17:19:30
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -4824,3 +4824,10 @@ $langDownloadToPDF = "Report in PDF format";
 $langPleaseChooseFile = "Please choose a file";
 $langPleaseEnterName = "Please enter a name";
 $langParams = 'Parameters';
+$langWithRegistrationDate = 'With registration date';
+$langWho = 'Who';
+$langWithDepartment = 'belong to';
+$langWithoutDepartment = "don't belong to";
+$langWithId = 'With';
+$langWithStudentId = 'student IDs';
+$langWithUsernames = 'usernames';

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2017-03-08 16:49:05
+// Generated 2017-03-08 17:19:30
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -4814,3 +4814,10 @@ $langDownloadToPDF = "Report in PDF format";
 $langPleaseChooseFile = "Please choose a file";
 $langPleaseEnterName = "Please enter a name";
 $langParams = 'Parameters';
+$langWithRegistrationDate = 'With registration date';
+$langWho = 'Who';
+$langWithDepartment = 'belong to';
+$langWithoutDepartment = "don't belong to";
+$langWithId = 'With';
+$langWithStudentId = 'student IDs';
+$langWithUsernames = 'usernames';
