@@ -168,7 +168,7 @@ if (isset($_POST['submit'])) {
             </div>
             <div class='form-group'>
                 <div class='col-sm-1 col-sm-offset-2 checkbox'>
-                    <label><input type='checkbox' name='delusersid'>$langWith</label>
+                    <label><input type='checkbox' name='delusersid'>$langWithId</label>
                 </div>
                 <div class='col-sm-2'>
                     " . selection(array('am' => $langWithStudentId, 'uname' => $langWithUsernames), 'id_flag', 'am') . "

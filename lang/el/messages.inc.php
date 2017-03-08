@@ -1041,6 +1041,14 @@ $langAttemptWasCanceled = "Η προσπάθεια ακυρώθηκε.";
 $langExerciseAttemptLeft = 'Προσοχή! Σας απομένει μία προσπάθεια.';
 $langExerciseAttemptsLeft = 'Προσοχή! Σας απομένουν %d προσπάθειες.';
 $langExerciseAttemptContinue = 'Πατώντας στο κουμπί «Συνέχεια» η προσπάθειά σας θα καταγραφεί.';
+$langWithRegistrationDate = 'Με ημερομηνία εγγραφής';
+$langWho = 'Που';
+$langWithDepartment = 'ανήκουν στα';
+$langWithoutDepartment = 'δεν ανήκουν στα';
+$langWithId = 'Με';
+$langWithStudentId = 'αριθμούς μητρώου';
+$langWithUsernames = 'ονόματα χρήστών';
+
 /* * ***************************************************
  * contact.php
  * **************************************************** */
