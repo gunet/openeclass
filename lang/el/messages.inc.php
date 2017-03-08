@@ -267,6 +267,7 @@ $langDisableEclassStudRegNo = "Οι $langsStudents μπορούν να εγγρ�
 $langDisableEclassStudRegViaReq = "Οι $langsStudents μπορούν να εγγραφούν μέσω αίτησης";
 $langDisableEclassProfRegNo = "Οι $langsTeachers μπορούν να εγγραφούν μέσω αίτησης";
 $langUserNotLogin = "Χρήστες που δεν έχουν εισέλθει";
+$langParams = 'Παράμετροι';
 
 // listusers
 $langBegin = "αρχή";
@@ -1061,6 +1062,14 @@ $langAttemptWasCanceled = "Η προσπάθεια ακυρώθηκε.";
 $langExerciseAttemptLeft = 'Προσοχή! Σας απομένει μία προσπάθεια.';
 $langExerciseAttemptsLeft = 'Προσοχή! Σας απομένουν %d προσπάθειες.';
 $langExerciseAttemptContinue = 'Πατώντας στο κουμπί «Συνέχεια» η προσπάθειά σας θα καταγραφεί.';
+$langWithRegistrationDate = 'Με ημερομηνία εγγραφής';
+$langWho = 'Που';
+$langWithDepartment = 'ανήκουν στα';
+$langWithoutDepartment = 'δεν ανήκουν στα';
+$langWith = 'Με';
+$langWithStudentId = 'αριθμούς μητρώου';
+$langWithUsernames = 'ονόματα χρήστών';
+
 /* * ***************************************************
  * contact.php
  * **************************************************** */

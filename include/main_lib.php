@@ -363,13 +363,15 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
         $begin = true;
         $html = '';
         foreach ($user as $user_data) {
-            if (!isset($user->user_id)) {
-                if ($begin) {
-                    $begin = false;
-                } else {
-                    $html .= '<br>';
-                }
+            if ($begin) {
+                $begin = false;
+            } else {
+                $html .= '<br>';
+            }
+            if (isset($user->user_id)) {
                 $html .= display_user($user_data->user_id, $print_email);
+            } else {
+                $html .= display_user($user_data, $print_email);
             }
         }
         return $html;

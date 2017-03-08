@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -187,7 +187,7 @@ class Log {
                 if ($course_id == 0 or $module_id == 0) { // system logging
                     $tool_content .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
                 } else { // course logging
-                    $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
+                    $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details, $r->action_type) . "</td>";
                 }
                 $tool_content .= "</tr>";
             }
@@ -238,7 +238,7 @@ class Log {
      * @return type
      * drive to appropriate subsystem for displaying details
      */
-    public function course_action_details($module_id, $details) {
+    public function course_action_details($module_id, $details, $type=null) {
 
         global $langUnknownModule;
 
@@ -269,7 +269,7 @@ class Log {
                 break;
             case MODULE_ID_WIKI: $content = $this->wiki_action_details($details);
                 break;
-            case MODULE_ID_USERS: $content = $this->course_user_action_details($details);
+            case MODULE_ID_USERS: $content = $this->course_user_action_details($details, $type);
                 break;
             case MODULE_ID_TOOLADMIN: $content = $this->external_link_action_details($details);
                 break;
@@ -288,7 +288,7 @@ class Log {
             case MODULE_ID_TC: $content = $this->tc_action_details($details);
                 break;
 			case MODULE_ID_MINDMAP: $content = $this->mindmap_action_details($details);
-                break;	
+                break;
             default: $content = $langUnknownModule;
                 break;
         }
@@ -824,22 +824,32 @@ class Log {
      * @global type $langsOfGroupTutor
      * @global type $langGiveRight
      * @global type $langRemovedRight
-     * @global type $langRemoveRightAdmin    
+     * @global type $langRemoveRightAdmin
      * @global type $langRemoveRightAdmin
      * @global type $langUnCourse
      * @global type $langTheU
      * @param type $details
      * @return string
      */
-    private function course_user_action_details($details) {
+    private function course_user_action_details($details, $type) {
 
         global $langUnCourse, $langOfUser, $langToUser,
         $langsOfTeacher, $langsOfEditor, $langNewUser, $langAddGUser,
         $langRemoveRightAdmin, $langRemoveRightAdmin, $langUnCourse,
-        $langTheU, $langGiveRight, $langRemovedRight, $langsOfGroupTutor;
+        $langTheU, $langGiveRight, $langRemovedRight, $langsOfGroupTutor,
+        $langDelUsers, $langParams;
 
         $details = unserialize($details);
-        
+
+        if (isset($details['multiple'])) {
+            if ($type == LOG_DELETE) {
+                $content = "$langDelUsers &mdash; $langParams: " . 
+                    implode(', ', $details['params']) . '<br>' .
+                    display_user($details['uid']);
+            }
+            return $content;
+        }
+
         switch ($details['right']) {
             case '+5': $content = $langNewUser;
                        $content .= "&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo";
@@ -876,7 +886,7 @@ class Log {
                 break;
             case '+10': $content = "$langAddGUser&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
                 break;
-        }        
+        }
         return $content;
     }
 
@@ -960,18 +970,18 @@ class Log {
      */
     private function wall_action_details($details) {
         global $langContent, $langWallExtVideoLink;
-    
+
         $details = unserialize($details);
-    
+
         $content = '';
-    
+
         if (!empty($details['content'])) {
             $content .= "$langContent: &laquo".q($details['content'])."&raquo<br/>";
         }
         if (!empty($details['extvideo'])) {
             $content .= "$langWallExtVideoLink: &laquo".q($details['extvideo'])."&raquo<br/>";
         }
-    
+
         return $content;
     }
 
@@ -1236,9 +1246,9 @@ class Log {
      * @return string
      */
     private function tc_action_details($details) {
-        
+
         global $langTitle, $langDescription, $langType;
-        
+
         $d = unserialize($details);
         $content = '';
         if (isset($d['tc_type'])) {
@@ -1248,9 +1258,9 @@ class Log {
         if (isset($d['desc'])) {
             $content .= "&nbsp;&mdash;&nbsp; $langDescription " . "&laquo" . $d['desc']. "&raquo";
         }
-        
+
         return $content;
-                
+
     }
     /**
      * @global type $langInsert
@@ -1294,7 +1304,7 @@ class Log {
             if (array_key_exists($key, $_SERVER)) {
                 foreach (explode(',', $_SERVER[$key]) as $ip) {
                     $ip = trim($ip);
-                        
+
                     if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6 | FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
                         return $ip;
                     }
