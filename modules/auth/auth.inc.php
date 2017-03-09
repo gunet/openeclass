@@ -159,7 +159,7 @@ function get_auth_info($auth)
     if(!empty($auth)) {
         $title = Database::get()->querySingle('SELECT auth_title FROM auth WHERE auth_id = ?d', $auth);
         if ($title and $title->auth_title) {
-            return $title->auth_title;
+            return getSerializedMessage($title->auth_title);
         }
         switch($auth)
         {
