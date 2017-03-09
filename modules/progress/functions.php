@@ -220,7 +220,7 @@ function display_activities($element, $id) {
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langOfForums, $langOfBlogComments, $langOfCourseComments, $langOfLikesForum,
            $langOfLearningPath, $langDelete, $langEditChange, $langConfirmDelete,           
-           $langInsertWorkCap, $langDocumentAsModuleLabel,
+           $langInsertWorkCap, $langDocumentAsModuleLabel, $langCourseParticipation,
            $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
            $langValue, $langPersoValue, $langOfLikesSocial;
 
@@ -290,8 +290,12 @@ function display_activities($element, $id) {
                           array('title' => "$langWiki",
                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=wiki",
                                 'icon' => 'fa fa-edit space-after-icon',
+                                'class' => ''),
+                          array('title' => "$langCourseParticipation",
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=participation",
+                                'icon' => 'fa fa-edit space-after-icon',
                                 'class' => '')),
-                     'icon' => 'fa-plus'),
+                        'icon' => 'fa-plus'),
                 array('title' => $langUsers,
                       'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
                       'icon' => 'fa-users',
@@ -408,6 +412,9 @@ function insert_activity($element, $element_id, $activity) {
             break;
         case 'wiki':
             display_available_wiki($element, $element_id);
+            break;
+        case 'participation':
+            display_available_participation($element, $element_id);
             break;
         default: break;
         }        
@@ -1353,6 +1360,57 @@ function display_available_wiki($element, $element_id) {
                     <input class='btn btn-primary' type='submit' name='add_wiki' value='$langAddModulesButton'>
                 </div></form>";
     }
+}
+
+/**
+ * @brief display course participation form
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $langTitle
+ * @global type $langChoice
+ * @global type $langAddModulesButton
+ * @global type $langOperator
+ * @global type $langValue
+ * @global type $langCourseParticipation
+ * @param type $element
+ * @param type $element_id
+ */
+function display_available_participation($element, $element_id) {
+
+    global $tool_content, $course_code, $langInHour,
+           $langTitle, $langChoice, $langAddModulesButton,
+           $langOperator, $langValue, $langCourseParticipation;
+     
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $result = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d 
+                                            AND resource IS NULL
+                                            AND activity_type = 'participation'", $element_id);    
+    if (count($result) > 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
+                "<table class='table-default'>" .
+                "<tr class='list-header'>" .
+                "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
+                "<th style='width:5px;'>&nbsp;$langOperator</th>" .
+                "<th style='width:30px;'>$langValue</th>" . 
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "</tr>";
+                
+        $tool_content .= "<tr>
+                            <td>$langCourseParticipation $langInHour</td>
+                            <td>". selection(get_operators(), "operator") . "</td>
+                            <td class='text-center'><input style='width:50px;' type='text' name='threshold' value=''></td>
+                            <td align='center'><input type='checkbox' name='participation' value='1'></td>
+                        </tr>";
+        
+        $tool_content .= "
+                    </table>
+                <div class='text-right'>
+                    <input class='btn btn-primary' type='submit' name='add_participation' value='$langAddModulesButton'>
+                </div></form>";
+    }      
 }
 
 

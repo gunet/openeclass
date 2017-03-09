@@ -330,6 +330,10 @@ if ($is_editor) {
         add_blogcomment_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_participation'])) {
+        add_courseparticipation_to_certificate($element, $element_id);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     }
     
     elseif (isset($_GET['del_cert_res'])) { // delete certificate / badge activity

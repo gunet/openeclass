@@ -1342,6 +1342,9 @@ $langDelWithSuccess = "Η διαγραφή πραγματοποιήθηκε με
 $langCertBadge = "Πιστοποιητικά / Διακρίσεις";
 $langCertificateDetails = "Στοιχεία Πιστοποιητικού";
 $langBadgeDetails = "Στοιχεία Διάκρισης";
+$langCourseParticipation = "Διάρκεια συμμετοχής";
+$langCourseHoursParticipation = "Ώρες συμμετοχής";
+
 //------------------------------------
 
 

@@ -158,6 +158,30 @@ function add_lp_to_certificate($element, $element_id) {
 }
 
 /**
+ * @brief add course participation db entries in criterion
+ * @param type $element_id
+ * @param type $element
+ * @return type
+ */
+function add_courseparticipation_to_certificate($element, $element_id) {
+              
+    if (isset($_POST['participation'])) {        
+        Database::get()->query("INSERT INTO ${element}_criterion
+                            SET $element = ?d, 
+                            module = " . MODULE_ID_USAGE . ", 
+                            resource = null, 
+                            activity_type = 'courseparticipation',
+                            operator = ?s,
+                            threshold = ?f",
+                        $element_id,                         
+                        $_POST['operator'],
+                        $_POST['threshold']);
+        
+    }
+    return;
+}
+
+/**
  * @brief add wiki db entries in criterion
  * @param type $element_id
  * @param type $element
@@ -625,6 +649,8 @@ function resource_usage($element, $element_resource_id) {
  * @global type $langCourseSocialBookmarks
  * @global type $langForumRating
  * @global type $langAllActivities
+ * @global type $langCourseParticipation
+ * @global type $langCourseHoursParticipation
  * @param type $resource_id
  * @return type
  */
@@ -632,9 +658,9 @@ function get_resource_details($element, $resource_id) {
     
     global $course_id, $langCategoryExcercise, $langCategoryEssay, $langLearningPath,
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire, 
-            $langBlog, $langForums, $langWikiPages, $langNumOfBlogs,
+            $langBlog, $langForums, $langWikiPages, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
-            $langPersoValue, $langCourseSocialBookmarks, $langForumRating;
+            $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation;
     
     $data = array('type' => '', 'title' => '');
     
@@ -726,6 +752,10 @@ function get_resource_details($element, $resource_id) {
         case WikiEvent::ACTIVITY:                
                 $type = "$langWiki";
                 $title = "$langWikiPages";
+            break;
+        case 'courseparticipation':
+                $type = "$langCourseParticipation";
+                $title = "$langCourseHoursParticipation";
             break;
         default: 
                 $title = "$langAllActivities";
