@@ -31,9 +31,9 @@ if (!empty($auth_data['auth_settings'])) {
     }
 } else {
     $auth_data['cas_host'] = $auth_data['cas_context'] =
-        $auth_data['cas_logout'] = $auth_data['cas_ssout'] =
-        $auth_data['cas_cachain'] = $auth_data['casusermailattr'] =
-        $auth_data['casusermailattr'] = '';
+    $auth_data['cas_logout'] = $auth_data['cas_ssout'] =
+    $auth_data['cas_cachain'] = $auth_data['casusermailattr'] =
+    $auth_data['casusermailattr'] = '';
     $cas_port = 443;
     $auth_data['casusermailattr'] = 'mail';
     $auth_data['casuserfirstattr'] = 'givenName';

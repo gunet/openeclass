@@ -343,11 +343,23 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                             $testauth = true;
                             $userinfo = ldap_get_entries($ldap, $userinforequest);
                             if ($userinfo['count'] == 1) {
-                                $surname = get_ldap_attribute($userinfo, 'sn');
-                                $givenname = get_ldap_attribute($userinfo, 'givenname');
-                                if (empty($givenname)) {
-                                    $cn = get_ldap_attribute($userinfo, 'cn');
-                                    $givenname = trim(str_replace($surname, '', $cn));
+                                // find ldap surname attribute 
+                                $attr_surname = explode(' ', $settings['ldap_surname_attr']);
+                                foreach ($attr_surname as $asurname) {
+                                    $l_surname = get_ldap_attribute($userinfo, $asurname);
+                                    if (!empty($l_surname)) {
+                                        $surname = $l_surname;
+                                        break;
+                                    }
+                                }
+                                // find ldap name attribute
+                                $attr_givenname = explode(' ', $settings['ldap_firstname_attr']);
+                                foreach ($attr_givenname as $agivenname) {
+                                    $l_givenname = get_ldap_attribute($userinfo, $agivenname);
+                                    if (!empty($l_givenname)) {
+                                        $givenname = $l_givenname;
+                                        break;
+                                    }
                                 }
                                 $_SESSION['auth_user_info'] = array(
                                     'attributes' => get_ldap_attributes($userinfo),
