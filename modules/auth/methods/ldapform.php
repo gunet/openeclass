@@ -33,6 +33,8 @@ if (empty($auth_data['auth_settings'])) {
     $auth_data['ldap_login_attr'] = 'uid';
     $auth_data['ldap_login_attr2'] = '';
     $auth_data['ldap_studentid'] = '';
+    $auth_data['ldap_firstname_attr'] = '';
+    $auth_data['ldap_surname_attr'] = '';
     $auth_data['ldap_mail_attr'] = 'mail';
 }
 
@@ -86,7 +88,19 @@ $tool_content .= "
         <div class='col-sm-10'>
             <input class='form-control' name='ldap_mail_attr' id='ldap_mail_attr' type='text' value='" . q($auth_data['ldap_mail_attr']) . "'>
         </div>
-    </div>  
+    </div>
+    <div class='form-group'>
+        <label for='ldap_firstname_attr' class='col-sm-2 control-label'>$langldapfirstnameattr:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='ldap_firstname_attr' id='ldap_firstname_attr' type='text' value='" . q($auth_data['ldap_firstname_attr']) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='ldap_surname_attr' class='col-sm-2 control-label'>$langldapsurnameattr:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='ldap_surname_attr' id='ldap_surname_attr' type='text' value='" . q($auth_data['ldap_surname_attr']) . "'>
+        </div>
+    </div>
     <div class='form-group'>
         <label for='ldap_studentid' class='col-sm-2 control-label'>$langldap_id_attr:</label>
         <div class='col-sm-10'>
