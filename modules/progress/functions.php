@@ -1384,7 +1384,7 @@ function display_available_participation($element, $element_id) {
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                             AND resource IS NULL
-                                            AND activity_type = 'participation'", $element_id);    
+                                            AND activity_type = 'courseparticipation'", $element_id);
     if (count($result) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
     } else {
