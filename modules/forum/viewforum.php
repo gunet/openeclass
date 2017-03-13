@@ -51,8 +51,8 @@ $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
 // security check
-if ($group_id) {
-    if (!$is_member or !$has_forum) {            
+if (($group_id) and !$is_editor) {
+    if (!$is_member or !$has_forum) {
         header("Location: index.php?course=$course_code");
         exit();
     }
@@ -69,7 +69,7 @@ if (isset($_GET['empty'])) { // if we come from newtopic.php
 
 $pageName = q($forum_name);
 if ($can_post) {
-    $tool_content .= 
+    $tool_content .=
             action_bar(array(
                 array('title' => $langNewTopic,
                     'url' => "newtopic.php?course=$course_code&amp;forum=$forum_id",
@@ -79,7 +79,7 @@ if ($can_post) {
                 array('title' => $langBack,
                     'url' => "javascript:history.go(-1)",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')                
+                    'level' => 'primary-label')
                 ));
 }
 
@@ -217,7 +217,7 @@ if (($is_editor) and isset($_GET['topicdel'])) {
                                 AND course_id = ?d", $num_topics, $forum_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE topic_id = ?d AND course_id = ?d", $topic_id, $course_id);
     Session::Messages($langDeletedMessage, 'alert-success');
-    redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");   
+    redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");
 }
 
 // modify topic notification
@@ -248,7 +248,7 @@ if ($is_editor and isset($_GET['topiclock'])) {
     } else {
         $tool_content .= "<div class='alert alert-success'>$langLockedTopic</div>";
     }
-    
+
 }
 
 $result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS poster_id
@@ -258,7 +258,7 @@ $result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS p
         ORDER BY topic_time DESC LIMIT $first_topic, " . TOPICS_PER_PAGE . "", $forum_id);
 
 
-if (count($result) > 0) { // topics found    
+if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
 	<table class='table-default'>
 	<tr class='list-header'>
@@ -268,8 +268,8 @@ if (count($result) > 0) { // topics found
 	  <th class='text-center forum_td'>$langSeen</th>
 	  <th class='text-center forum_td'>$langLastMsg</th>
 	  <th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
-	</tr>";    
-    foreach ($result as $myrow) {        
+	</tr>";
+    foreach ($result as $myrow) {
         $replies = $myrow->num_replies;
         $topic_id = $myrow->id;
         $last_post_datetime = $myrow->post_time;
@@ -279,7 +279,7 @@ if (count($result) > 0) { // topics found
         $last_post_time = mktime($hour, $min, $sec, $month, $day, $year);
         if (!isset($last_visit)) {
             $last_visit = 0;
-        }        
+        }
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
         $pagination = '';
@@ -292,7 +292,7 @@ if (count($result) > 0) { // topics found
             } else {
                 $image = icon('fa-comments');
             }
-        }        
+        }
         if ($replies > POSTS_PER_PAGE) {
             $total_reply_pages = ceil($replies / POSTS_PER_PAGE);
             $pagination .= "<strong class='pagination'><span>&nbsp;".icon('fa-arrow-circle-right')." ";
@@ -335,7 +335,7 @@ if (count($result) > 0) { // topics found
                 'class' => 'delete',
                 'confirm' => $langConfirmDelete)
         );
-        
+
         if ($is_editor) {
             if ($topic_locked == 0) {
                 $dyntools[] = array('title' => $langLockTopic,
@@ -349,12 +349,12 @@ if (count($result) > 0) { // topics found
                     );
             }
         }
-        
+
         $dyntools[] = array('title' => $langNotify,
                             'url' => (isset($_GET['start']) and $_GET['start'] > 0) ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id",
                             'icon' => 'fa-envelope');
         $tool_content .= action_button($dyntools);
-        $tool_content .= "</td></tr>";        
+        $tool_content .= "</td></tr>";
     } // end of while
     $tool_content .= "</table></div>";
 } else {

@@ -863,15 +863,31 @@ function edit_assignment($id) {
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id&choice=edit");
     }
 }
+
+/**
+ * 
+ * @global type $course_id
+ * @global type $uid
+ * @global type $langOnBehalfOfGroupComment
+ * @global array $works_url
+ * @global type $langOnBehalfOfUserComment
+ * @global string $workPath
+ * @global type $langUploadSuccess
+ * @global type $langUploadError
+ * @global type $course_code
+ * @global type $langAutoJudgeInvalidFileType
+ * @global type $langAutoJudgeScenariosPassed
+ * @global type $is_editor
+ * @param type $id
+ * @param type $on_behalf_of
+ */
 function submit_work($id, $on_behalf_of = null) {
     global $course_id, $uid, $langOnBehalfOfGroupComment,
            $works_url, $langOnBehalfOfUserComment, $workPath,
            $langUploadSuccess, $langUploadError, $course_code,
-           $langAutoJudgeEmptyFile, $langAutoJudgeInvalidFileType,
+           $langAutoJudgeInvalidFileType,
            $langAutoJudgeScenariosPassed, $is_editor;
-    $connector = AutojudgeApp::getAutojudge();
-    $langExt = $connector->getSupportedLanguages();
-
+    
     $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type,
                             deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                             auto_judge, auto_judge_scenarios, lang, max_grade
@@ -882,6 +898,11 @@ function submit_work($id, $on_behalf_of = null) {
     $auto_judge_scenarios = ($auto_judge == true) ? unserialize($row->auto_judge_scenarios) : null;
     $lang = $row->lang;
     $max_grade = $row->max_grade;
+            
+    if (AutojudgeApp::getAutojudge()->isEnabled() && $auto_judge) {
+        $connector = AutojudgeApp::getAutojudge();
+        $langExt = $connector->getSupportedLanguages();
+    }
 
     $nav[] = $works_url;
     $nav[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => q($row->title));
@@ -1140,9 +1161,7 @@ function submit_work($id, $on_behalf_of = null) {
  * @global type $answer
  * @global type $desc
  * @global type $language
- * @global string $head_content
- * @global type $langMoreOptions
- * @global type $langLessOptions
+ * @global string $head_content 
  * @global type $langBack
  * @global type $langSave
  * @global type $langStudents
@@ -1173,7 +1192,7 @@ function submit_work($id, $on_behalf_of = null) {
  */
 function new_assignment() {
     global $tool_content, $m, $course_code, $course_id,
-           $desc, $language, $head_content, $langMoreOptions, $langLessOptions,
+           $desc, $language, $head_content,
            $langBack, $langSave, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
            $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
            $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales,
@@ -1181,8 +1200,7 @@ function new_assignment() {
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
            $langOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
            $langAutoJudgeAssertions, $langDescription, $langTitle, $langGroups;
-
-    $connector = AutojudgeApp::getAutojudge();
+    
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -1437,8 +1455,9 @@ function new_assignment() {
                     </div>
                 </div>";
                 if(AutojudgeApp::getAutojudge()->isEnabled()) {
-                $tool_content .= "
-                <div class='form-group'>
+                    $connector = AutojudgeApp::getAutojudge();
+                    $tool_content .= "
+                    <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
                     <div class='col-sm-10'>
                         <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1' /></div>
