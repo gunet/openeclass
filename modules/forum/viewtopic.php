@@ -60,8 +60,8 @@ $is_member = false;
 $group_id = init_forum_group_info($forum);
 
 // security check
-if ($group_id) {
-    if (!$is_member or !$has_forum) {                    
+if (($group_id) and !$is_editor) {
+    if (!$is_member or !$has_forum) {
         header("Location: index.php?course=$course_code");
         exit();
     }
@@ -121,7 +121,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
                   'status' => $r->status
         ));
     }
-    Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $post_id, 'forum_post');   
+    Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $post_id, 'forum_post');
     Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
@@ -194,7 +194,7 @@ if (isset($_SESSION['message'])) {
 if ($topic_locked == 1) {
     $tool_content .= "<div class='alert alert-warning'>$langErrorTopicLocked</div>";
 } else {
-    $tool_content .= 
+    $tool_content .=
             action_bar(array(
                 array('title' => $langReply,
                     'url' => "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum",
@@ -204,7 +204,7 @@ if ($topic_locked == 1) {
                 array('title' => $langBack,
                     'url' => "viewforum.php?course=$course_code&forum=$forum",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')                
+                    'level' => 'primary-label')
                 ));
 }
 
@@ -227,7 +227,7 @@ if ($paging and $total > POSTS_PER_PAGE) {
         $pagination_btns = "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'><span aria-hidden='true'>&laquo;</span></a></li>";
     } else {
         $pagination_btns = "<li class='disabled'><a href='#'><span aria-hidden='true'>&laquo;</span></a></li>";
-    }    
+    }
     for ($x = 0; $x < $total; $x += POSTS_PER_PAGE) {
         if ($start && ($start == $x)) {
             $pagination_btns .= "<li class='active'><a href='#'>$times</a></li>";
@@ -243,7 +243,7 @@ if ($paging and $total > POSTS_PER_PAGE) {
         $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'><span aria-hidden='true'>&raquo;</span></a></li>";
     } else {
         $pagination_btns .= "<li class='disabled'><a href='#'><span aria-hidden='true'>&raquo;</span></a></li>";
-    }      
+    }
     $tool_content .= "
         <nav>
             <ul class='pagination'>
@@ -258,7 +258,7 @@ if ($paging and $total > POSTS_PER_PAGE) {
     if ($total > POSTS_PER_PAGE) {
         $tool_content .= "
         <div class='clearfix margin-bottom-fat'>
-          <nav>  
+          <nav>
             <div class='pull-right'>
                 <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
             </div>
@@ -306,7 +306,7 @@ foreach ($result as $myrow) {
             $user_stats[$myrow->poster_id] = '';
         }
     }
-    
+
     $tool_content .= "<td>
                         <div>".profile_image($myrow->poster_id, '50px', 'img-responsive img-circle margin-bottom-thin'). "</div>
                         <div><small>" .display_user($myrow->poster_id, false, false)."</small</div>
@@ -315,7 +315,7 @@ foreach ($result as $myrow) {
     $message = $myrow->post_text;
     // support for math symbols
     $message = mathfilter($message, 12, "../../courses/mathimg/");
-    
+
 
     $rate_str = "";
     if (setting_get(SETTING_FORUM_RATING_ENABLE, $course_id)) {
@@ -360,7 +360,7 @@ foreach ($result as $myrow) {
     if (abuse_report_show_flag('forum_post', $myrow->id, $course_id, $is_editor)) {
         $head_content .= abuse_report_add_js();
         $flag_arr = abuse_report_action_button_flag('forum_post', $myrow->id, $course_id);
-        
+
         $dyntools[] = $flag_arr[0]; //action button option
         $report_modal = $flag_arr[1]; //modal html code
     }
@@ -391,12 +391,12 @@ if ($paging and $total > POSTS_PER_PAGE) {
                 <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>
             </div>
           </nav>
-        ";    
+        ";
 } else {
     if ($total > POSTS_PER_PAGE) {
         $tool_content .= "
         <div class='clearfix margin-bottom-fat'>
-          <nav>  
+          <nav>
             <div class='pull-right'>
                 <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
             </div>
