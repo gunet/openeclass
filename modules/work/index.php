@@ -869,8 +869,6 @@ function submit_work($id, $on_behalf_of = null) {
            $langUploadSuccess, $langUploadError, $course_code,
            $langAutoJudgeEmptyFile, $langAutoJudgeInvalidFileType,
            $langAutoJudgeScenariosPassed, $is_editor;
-    $connector = AutojudgeApp::getAutojudge();
-    $langExt = $connector->getSupportedLanguages();
 
     $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type,
                             deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
@@ -882,6 +880,11 @@ function submit_work($id, $on_behalf_of = null) {
     $auto_judge_scenarios = ($auto_judge == true) ? unserialize($row->auto_judge_scenarios) : null;
     $lang = $row->lang;
     $max_grade = $row->max_grade;
+
+    if (AutojudgeApp::getAutojudge()->isEnabled() && $auto_judge) {
+       $connector = AutojudgeApp::getAutojudge();
+       $langExt = $connector->getSupportedLanguages();
+    }
 
     $nav[] = $works_url;
     $nav[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => q($row->title));
