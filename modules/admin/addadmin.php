@@ -60,7 +60,7 @@ if (isset($_POST['submit']) and ! empty($username)) {
             }
             if ($affected > 0) {
                 $tool_content .= "<div class='alert alert-success'>
-                    $langTheUser " . q($username) . " $langWith id=" . q($user_id) . " $langDone</div>";
+                    $langTheUser <b>" . q($username) . "</b> $langDone</div>";
             }
         } else {
             $tool_content .= "<div class='alert alert-danger'>$langError</div>";
