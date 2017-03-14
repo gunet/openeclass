@@ -2263,14 +2263,14 @@ function purify($text) {
 
 // Expand glossary terms to HTML for tooltips with the definition
 function glossary_expand($text) {
-    return preg_replace_callback($_SESSION['glossary_terms_regexp'], 'glossary_expand_callback', $text);
+    return preg_replace_callback($_SESSION['glossary_terms_regexp'], 'glossary_expand_callback', q($text));
 }
 
 function glossary_expand_callback($matches) {
     static $glossary_seen_terms;
     global $langGlossaryUrl, $langComments;
 
-    $term = mb_strtolower($matches[0], 'UTF-8');
+    $term = mb_strtolower(html_entity_decode($matches[0]), 'UTF-8');
     if (isset($glossary_seen_terms[$term])) {
         return $matches[0];
     }
@@ -2340,7 +2340,7 @@ function set_glossary_cache() {
             $begin = true;
             foreach (array_keys($_SESSION['glossary']) as $term) {
                 $_SESSION['glossary_terms_regexp'] .= ($begin ? '' : '|') .
-                        preg_quote($term);
+                        preg_quote(q($term));
                 if ($begin) {
                     $begin = false;
                 }
