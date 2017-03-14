@@ -840,11 +840,9 @@ function submit_work($id, $on_behalf_of = null) {
     global $course_id, $uid, $langOnBehalfOfGroupComment,
            $works_url, $langOnBehalfOfUserComment, $workPath,
            $langUploadSuccess, $langUploadError, $course_code,
-           $langAutoJudgeEmptyFile, $langAutoJudgeInvalidFileType,
+           $langAutoJudgeInvalidFileType,
            $langAutoJudgeScenariosPassed, $is_editor;
-    $connector = AutojudgeApp::getAutojudge();
-    $langExt = $connector->getSupportedLanguages();
-
+        
     $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type,
                             deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                             auto_judge, auto_judge_scenarios, lang, max_grade
@@ -855,6 +853,11 @@ function submit_work($id, $on_behalf_of = null) {
     $auto_judge_scenarios = ($auto_judge == true) ? unserialize($row->auto_judge_scenarios) : null;
     $lang = $row->lang;
     $max_grade = $row->max_grade;
+    
+    if (AutojudgeApp::getAutojudge()->isEnabled() && $auto_judge) {
+        $connector = AutojudgeApp::getAutojudge();
+        $langExt = $connector->getSupportedLanguages();
+    }
 
     $nav[] = $works_url;
     $nav[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => q($row->title));
@@ -1151,9 +1154,7 @@ function new_assignment() {
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
            $langAutoJudgeOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
-           $langAutoJudgeAssertions, $langDescription, $langTitle;
-
-    $connector = AutojudgeApp::getAutojudge();
+           $langAutoJudgeAssertions, $langDescription, $langTitle;      
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -1427,8 +1428,9 @@ function new_assignment() {
                     </div>
                 </div>";
                 if(AutojudgeApp::getAutojudge()->isEnabled()) {
-                $tool_content .= "
-                <div class='form-group'>
+                    $connector = AutojudgeApp::getAutojudge();
+                    $tool_content .= "
+                    <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langAutoJudgeEnable:</label>
                     <div class='col-sm-10'>
                         <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1' /></div>
