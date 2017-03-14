@@ -338,28 +338,36 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
 
                     $userinforequest = ldap_search($ldap, $settings['ldap_base'], $search_filter);
                     if ($entry_id = ldap_first_entry($ldap, $userinforequest)) {
-                        $user_dn = ldap_get_dn($ldap, $entry_id);
+                        $user_dn = ldap_get_dn($ldap, $entry_id);                        
                         if (@ldap_bind($ldap, $user_dn, $test_password)) {
                             $testauth = true;
                             $userinfo = ldap_get_entries($ldap, $userinforequest);
                             if ($userinfo['count'] == 1) {
-                                // find ldap surname attribute 
-                                $attr_surname = explode(' ', $settings['ldap_surname_attr']);
-                                foreach ($attr_surname as $asurname) {
-                                    $l_surname = get_ldap_attribute($userinfo, $asurname);
-                                    if (!empty($l_surname)) {
-                                        $surname = $l_surname;
-                                        break;
+                                if (isset($settings['ldap_surname_attr']) and !empty($settings['ldap_surname_attr'])) {
+                                    // find ldap surname attribute 
+                                    $attr_surname = explode(' ', $settings['ldap_surname_attr']);
+                                    foreach ($attr_surname as $asurname) {
+                                        $l_surname = get_ldap_attribute($userinfo, $asurname);
+                                        if (!empty($l_surname)) {
+                                                $surname = $l_surname;
+                                            break;
+                                        }
                                     }
+                                } else {
+                                    $surname = get_ldap_attribute($userinfo, 'sn');
                                 }
-                                // find ldap name attribute
-                                $attr_givenname = explode(' ', $settings['ldap_firstname_attr']);
-                                foreach ($attr_givenname as $agivenname) {
-                                    $l_givenname = get_ldap_attribute($userinfo, $agivenname);
-                                    if (!empty($l_givenname)) {
-                                        $givenname = $l_givenname;
-                                        break;
+                                if (isset($settings['ldap_firstname_attr']) and !empty($settings['ldap_firstname_attr'])) {
+                                    // find ldap name attribute
+                                    $attr_givenname = explode(' ', $settings['ldap_firstname_attr']);
+                                    foreach ($attr_givenname as $agivenname) {
+                                        $l_givenname = get_ldap_attribute($userinfo, $agivenname);
+                                        if (!empty($l_givenname)) {
+                                                $givenname = $l_givenname;
+                                            break;
+                                        }
                                     }
+                                } else {
+                                    $givenname = get_ldap_attribute($userinfo, 'givenname');
                                 }
                                 $_SESSION['auth_user_info'] = array(
                                     'attributes' => get_ldap_attributes($userinfo),
