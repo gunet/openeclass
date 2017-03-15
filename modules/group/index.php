@@ -90,7 +90,7 @@ if ($is_editor) {
         $v->rule('min', array('group_quantity'), 1);
         $v->rule('required', array('group_max'));
         $v->rule('numeric', array('group_max'));
-        $v->rule('min', array('group_max'), 1);
+        $v->rule('min', array('group_max'), 0);
         $v->labels(array(
             'group_quantity' => "$langTheField $langNewGroups",
             'group_max' => "$langTheField $langNewGroupMembers"
@@ -560,7 +560,7 @@ if ($is_editor) {
             }
             $tool_content .= "</td><td class='text-center'>$member_count</td>";
             if ($max_members == 0) {
-                $tool_content .= "<td>-</td>";
+                $tool_content .= "<td class='text-center'>&mdash;</td>";
             } else {
                 $tool_content .= "<td class='text-center'>$max_members</td>";
             }
@@ -649,17 +649,17 @@ if ($is_editor) {
             }
             $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>$member_count</td><td class='text-center'>" .
-                    ($max_members ? $max_members : '-') . "</td>";
+                    ($max_members ? $max_members : '&mdash;') . "</td>";
             // If self-registration and multi registration allowed by admin and group is not full
             $tool_content .= "<td class='text-center'>";
             if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
                 $group_id_indirect = getIndirectReference($group_id);
                 $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id_indirect");
             } elseif (!$self_reg) {
-                $tool_content .= ' - ';
+                $tool_content .= '&mdash;';
             } else {
                 if (!$allow_unreg) {
-                    $tool_content .= ' - ';
+                    $tool_content .= '&mdash;';
                 } else {
                    $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
                 }

@@ -1951,6 +1951,7 @@ $langGroupPrefs = "Λειτουργικά Χαρακτηριστικά Ομάδ�
 $langGroupPropertiesSum = "Σύνοψη Ρυθμίσεων";
 $langGroup = "Ομάδα Χρηστών";
 $langInGroup = "στην ομάδα χρηστών";
+$langGroupInfiniteUsers = "0 = απεριόριστος αριθμός χρηστών";
 
 // Group Properties
 $langGroupProperties = "Ρυθμίσεις Ομάδων Χρηστών";
@@ -3822,7 +3823,6 @@ $langAdministrator = "Διαχειριστής";
 $langContinue = " Συνέχεια ";
 $langDelImage = "Διαγραφή εικόνας";
 $langGroups = "Ομάδες Χρηστών";
-$langGroup = "Ομάδα Χρηστών";
 $langIs = "είναι";
 $langLastname = "Επώνυμο";
 $langLegendRequiredFields = "<span class=\"required\">*</span> δείχνει απαραίτητο πεδίο ";
