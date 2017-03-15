@@ -59,7 +59,7 @@ $head_content .= "<script type='text/javascript'>
 //check if social bookmarking is enabled for this course
 $social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
 
-$group_max_value = Session::has('group_max') ? Session::get('group_max') : 8;
+$group_max_value = Session::has('group_max') ? Session::get('group_max') : 0;
 $group_quantity_value = Session::has('group_quantity') ? Session::get('group_quantity') : 1;
 
 if (isset($_GET['all'])) {
@@ -78,7 +78,7 @@ if (isset($_GET['all'])) {
             <label for='group_max' class='col-sm-2 control-label'>$langNewGroupMembers:</label>
             <div class='col-sm-10'>
                 <input name='group_max' type='text' class='form-control' id='group_max' value='$group_max_value' placeholder='$langNewGroupMembers'>
-                <span class='help-block'>".(Session::getError('group_max') ?: "$langMax $langPlaces")."</span>
+                <span class='help-block'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
             </div>
         </div>
 		<div class='form-group'>
@@ -116,7 +116,7 @@ if (isset($_GET['all'])) {
         </form>
     </div>";
 } else {
-	if ($is_editor) {            
+	if ($is_editor) {
             $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>";
             $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname                         
                                                 FROM course_user, user 
@@ -147,10 +147,10 @@ if (isset($_GET['all'])) {
           <div class='col-sm-10'><textarea class='form-control' name='description' rows='2' cols='60'></textarea></div>
         </div>
         <div class='form-group".(Session::getError('group_max') ? " has-error" : "")."'>
-            <label class='col-sm-2 control-label'>$langMax $langGroupPlacesThis:</label>
+            <label class='col-sm-2 control-label'>$langNewGroupMembers:</label>
             <div class='col-sm-10'>
-                <input class='form-control' type=text name='group_max' size=2>
-                <span class='help-block'>".Session::getError('group_max')."</span>
+                <input class='form-control' type=text name='group_max' value='$group_max_value' size=2>
+                <span class='help-block'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>                
             </div>              
         </div>
 		<div class='form-group'>
