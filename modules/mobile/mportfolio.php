@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2015  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_mlogin = true;
@@ -42,7 +42,7 @@ exit();
 function appendToolsDom($dom, $domRoot, $toolsArr, $profileToolsArr) {
     appendToolArray($toolsArr, 'tools', $dom, $domRoot);
     appendToolArray($profileToolsArr, 'profiletools', $dom, $domRoot);
-    
+
     $dom->formatOutput = true;
     $ret = $dom->saveXML();
     return $ret;
@@ -59,7 +59,7 @@ function appendToolArray($toolsArr, $elementName, $dom, $domRoot) {
 
 function appendToolElement($root, $dom, $tool) {
     $t = $root->appendChild($dom->createElement('tool'));
-    
+
     $t->appendChild(new DOMAttr('name', $tool->name));
     $t->appendChild(new DOMAttr('link', $tool->link));
     $t->appendChild(new DOMAttr('redirect', $tool->redirect));
@@ -68,16 +68,13 @@ function appendToolElement($root, $dom, $tool) {
 }
 
 function populateTools($baseurl) {
-//    global $langMyAnnouncements, $langMyPersoDeadlines, $langMyProfile, $langRegCourses, $langMyAgenda;
-    global $langRegCourses;
+    global $langRegCourses, $session;
 
     $toolsArr = array();
-//    $toolsArr[] = createNewTool($baseurl, $langMyAnnouncements, 'modules/announcements/myannouncements.php', 'myannouncements');
-//    $toolsArr[] = createNewTool($baseurl, $langMyPersoDeadlines, 'modules/work/mydeadlines.php', 'mydeadlines');
-//    $toolsArr[] = createNewTool($baseurl, $langMyAgenda, 'main/personal_calendar/index.php', 'myagenda');
-//    $toolsArr[] = createNewTool($baseurl, $langMyProfile, 'main/profile/display_profile.php', 'myprofile');
     $toolsArr[] = createNewTool($baseurl, $langRegCourses, 'modules/auth/courses.php', 'coursesubscribe');
-
+    if ($session->status == USER_TEACHER) {
+        $toolsArr[] = createNewTool($baseurl, $GLOBALS['langCourseCreate'], 'modules/create_course/create_course.php', 'createcourse');
+    }
     return $toolsArr;
 }
 
@@ -90,19 +87,19 @@ function populateProfileTools($baseurl) {
     $toolsArr[] = createNewTool($baseurl, $GLOBALS['langNotes'], 'main/notes/index.php', 'mynotes');
     $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyProfile'], 'main/profile/display_profile.php', 'myprofile');
     $toolsArr[] = createNewTool($baseurl, $GLOBALS['langMyStats'], 'modules/usage/?t=u', 'mystats');
-    
+
     return $toolsArr;
 }
 
 function createNewTool($baseurl, $name, $redirect, $type) {
     global $urlServer;
-    
+
     $tool = new stdClass();
     $tool->name = $name;
     $tool->redirect = $urlServer . $redirect;
     $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = $type;
     $tool->active = "true";
-    
+
     return $tool;
 }
