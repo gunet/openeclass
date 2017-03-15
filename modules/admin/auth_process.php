@@ -40,9 +40,8 @@ if (isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) {
 }
 
 register_posted_variables(array('imaphost' => true, 'pop3host' => true,
-    'ldaphost' => true, 'ldap_base' => true,
-    'ldapbind_dn' => true, 'ldapbind_pw' => true,
-    'ldap_login_attr' => true, 'ldap_login_attr2' => true,
+    'ldaphost' => true, 'ldap_base' => true, 'ldapbind_dn' => true,
+    'ldapbind_pw' => true, 'ldap_login_attr' => true,
     'ldap_firstname_attr' => true, 'ldap_surname_attr' => true,
     'ldap_studentid' => true, 'ldap_mail_attr' => true,
     'dbhost' => true, 'dbtype' => true, 'dbname' => true,
@@ -81,7 +80,6 @@ if (isset($_POST['submit'])) {
                 'ldapbind_dn' => $ldapbind_dn,
                 'ldapbind_pw' => $ldapbind_pw,
                 'ldap_login_attr' => $ldap_login_attr,
-                'ldap_login_attr2' => $ldap_login_attr2,
                 'ldap_firstname_attr' => $ldap_firstname_attr,
                 'ldap_surname_attr' => $ldap_surname_attr,
                 'ldap_mail_attr' => $ldap_mail_attr,
@@ -156,7 +154,7 @@ if (isset($_POST['submit'])) {
         $auth_settings = pack_settings($settings);
     } elseif ($auth >= 8) {
         $auth_settings = serialize($settings);
-    }    
+    }
     $result = Database::get()->query("UPDATE auth
         SET auth_settings = ?s,
             auth_instructions = ?s,
