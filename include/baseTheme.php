@@ -44,11 +44,10 @@ if (isset($toolContent_ErrorExists)) {
     Session::Messages($toolContent_ErrorExists);
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-        header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
+        redirect_to_home_page("main/login_form.php?next=" . urlencode($next));
     } else {
-        header("Location:" . $urlServer . "index.php");
+        redirect_to_home_page('main/portfolio.php');
     }
-    exit();
 }
 
 require_once 'template/template.inc.php';
