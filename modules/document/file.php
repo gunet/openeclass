@@ -159,7 +159,7 @@ if (file_exists($disk_path)) {
             echo $langMailVerificationClick . " " . "<a href='" . $dl_url . "'>". $langDownload . "</a>";
             unset($_SESSION['FILE_PHP__LP_MODE']);
             exit();
-        }
+        }                
         triggerGame($file_info->id);
         send_file_to_client($disk_path, $file_info->filename);
     } else {
