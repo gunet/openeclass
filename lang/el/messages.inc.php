@@ -3134,6 +3134,7 @@ $langRegDone = "Οι αλλαγές σας κατοχυρώθηκαν.";
 $langPassTooEasy = "Το συνθηματικό σας είναι πολύ απλό. Χρησιμοποιήστε ένα συνθηματικό σαν και αυτό";
 $langChoiceLesson = "Επιλογή $langsOfCourses";
 $langRegCourses = "Εγγραφή σε $langsCourse";
+$langRegEnterCourse = "Εγγραφή και είσοδος στο $langsCourse";
 $langChoiceDepartment = "Επιλογή $langOfFaculty";
 $langCoursesRegistered = "Η εγγραφή σας στα $langsCourses που επιλέξατε έγινε με επιτυχία!";
 $langNoCoursesRegistered = "<p>Δεν επιλέξατε $langsCourse για εγγραφή.</p><p> Μπορείτε να εγγραφείτε σε $langsCourse, την

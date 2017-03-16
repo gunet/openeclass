@@ -319,8 +319,6 @@ if (isset($require_current_course) and $require_current_course) {
             $toolContent_ErrorExists = $langLessonDoesNotExist;
         }
 
-        $fac_lower = strtolower($fac);
-
         // Check for course visibility by current user
         $status = 0;
         // The admin and power users can see all courses as adminOfCourse
@@ -332,32 +330,30 @@ if (isset($require_current_course) and $require_current_course) {
                                                            course_id = ?d", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
-            } else {
+            } elseif ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($course_code)) {
                 // the department manager has rights to the courses of his department(s)
-                if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($course_code)) {
-                    require_once 'include/lib/hierarchy.class.php';
-                    require_once 'include/lib/course.class.php';
-                    require_once 'include/lib/user.class.php';
+                require_once 'include/lib/hierarchy.class.php';
+                require_once 'include/lib/course.class.php';
+                require_once 'include/lib/user.class.php';
 
-                    $treeObj = new Hierarchy();
-                    $courseObj = new Course();
-                    $userObj = new User();
+                $treeObj = new Hierarchy();
+                $courseObj = new Course();
+                $userObj = new User();
 
-                    $atleastone = false;
-                    $subtrees = $treeObj->buildSubtrees($userObj->getDepartmentIds($uid));
-                    $depIds = $courseObj->getDepartmentIds($course_id);
-                    foreach ($depIds as $depId) {
-                        if (in_array($depId, $subtrees)) {
-                            $atleastone = true;
-                            break;
-                        }
+                $atleastone = false;
+                $subtrees = $treeObj->buildSubtrees($userObj->getDepartmentIds($uid));
+                $depIds = $courseObj->getDepartmentIds($course_id);
+                foreach ($depIds as $depId) {
+                    if (in_array($depId, $subtrees)) {
+                        $atleastone = true;
+                        break;
                     }
+                }
 
-                    if ($atleastone) {
-                        $status = 1;
-                        $is_course_admin = true;
-                        $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
-                    }
+                if ($atleastone) {
+                    $status = 1;
+                    $is_course_admin = true;
+                    $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
                 }
             }
         }
@@ -365,9 +361,10 @@ if (isset($require_current_course) and $require_current_course) {
         if ($visible != COURSE_OPEN) {
             if (!$uid) {
                 $toolContent_ErrorExists = $langNoAdminAccess;
-            } elseif ($status == 0 and ( $visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED)) {
-                $toolContent_ErrorExists = $langLoginRequired;
-            } elseif ($status == 5 and $visible == COURSE_INACTIVE) {
+            } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED) and !$course_guest_allowed) {
+                Session::Messages($langLoginRequired, 'alert-info');
+                redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
+            } elseif ($status != USER_TEACHER and $visible == COURSE_INACTIVE) {
                 $toolContent_ErrorExists = $langCheckProf;
             }
         }
@@ -437,7 +434,6 @@ $admin_modules = array(
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'tooladmin'),
     MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'abuse'),
 );
-
 
 // -------------------------------------------
 // modules which can't be enabled or disabled

@@ -70,22 +70,6 @@ if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SER
     }
 }
 
-if (isset($_REQUEST['register'])) {
-    if ($course_info) {
-        $allow_reg = $course_info->visible == COURSE_REGISTRATION
-                     || $course_info->visible == COURSE_OPEN;
-        if ($allow_reg) {
-            if (empty($course_info->password) || $course_info->password == $_POST['password']) {
-                Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
-                                    VALUES (?d, ?d, ?d, NOW())", $course_id, $uid, USER_STUDENT);
-                Session::Messages($langNotifyRegUser1, 'alert-success');
-            } else {
-                Session::Messages($langInvalidCode, 'alert-warning');
-            }
-        }
-        redirect_to_home_page("courses/$course_code");
-    }
-}
 if(!empty($langLanguageCode)){
     load_js('bootstrap-calendar-master/js/language/'.$langLanguageCode.'.js');
 }
@@ -150,7 +134,8 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
 
     ."})
     </script>";
-if (!empty($course_info->password)) {
+$registerUrl = js_escape($urlAppend . 'modules/course_home/register.php?course=' . $course_code);
+if ($course_info->password !== '') {
     $head_content .= "
         <script type='text/javascript'>
             $(function() {
@@ -158,11 +143,11 @@ if (!empty($course_info->password)) {
                     e.preventDefault();
                     bootbox.dialog({
                         title: '$langLessonCode',
-                        message: '<form class=\"form-horizontal\" role=\"form\" action=\"\" method=\"POST\" id=\"password_form\">'+
+                        message: '<form class=\"form-horizontal\" action=\"$registerUrl\" method=\"POST\" id=\"password_form\">'+
                                     '<div class=\"form-group\">'+
                                         '<div class=\"col-sm-12\">'+
-                                            '<input type=\"text\" class=\"form-control\" id=\"password\" name=\"password\">'+
-                                            '<input type=\"hidden\" class=\"form-control\" id=\"register\" name=\"register\">'+
+                                            '<input type=\"password\" class=\"form-control\" id=\"password\" name=\"pass\">'+
+                                            '<input type=\"hidden\" class=\"form-control\" name=\"register\" value=\"from-home\">'+
                                         '</div>'+
                                     '</div>'+
                                   '</form>',
@@ -176,7 +161,7 @@ if (!empty($course_info->password)) {
                                 className: 'btn-success',
                                 callback: function (d) {
                                     var password = $('#password').val();
-                                    if(password != '') {
+                                    if (password != '') {
                                         $('#password_form').submit();
                                     } else {
                                         $('#password').closest('.form-group').addClass('has-error');
@@ -190,7 +175,20 @@ if (!empty($course_info->password)) {
                 })
             });
         </script>";
+} else {
+    $head_content .= "
+        <script type='text/javascript'>
+            $(function() {
+              $('#passwordModal').on('click', function(e){
+                e.preventDefault();
+                $('<form method=\"POST\" action=\"$registerUrl\">' +
+                  '<input type=\"hidden\" name=\"register\" value=\"true\">' +
+                  '</form>').appendTo('body').submit();
+              });
+            });
+        </script>";
 }
+
 // For statistics: record login
 Database::get()->query("INSERT INTO logins
     SET user_id = ?d, course_id = ?d, ip = ?s, date_time = " . DBHelper::timeAfter(),
@@ -631,9 +629,9 @@ if ($is_editor) {
     if (!in_array($course_id, array_keys($myCourses))) {
         $action_bar = action_bar(array(
             array('title' => $langRegister,
-                  'url' => "/courses/$course_code?register",
+                  'url' => $urlAppend . "modules/course_home/register.php?course=$course_code",
                   'icon' => 'fa-check',
-                  'link-attrs' => !empty($course_info->password) ? "id='passwordModal'" : "",
+                  'link-attrs' => "id='passwordModal'",
                   'level' => 'primary-label',
                   'button-class' => 'btn-success')));
     }
