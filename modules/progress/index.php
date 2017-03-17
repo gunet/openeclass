@@ -37,6 +37,7 @@ require_once 'ForumEvent.php';
 require_once 'LearningPathEvent.php';
 require_once 'RatingEvent.php';
 require_once 'ViewingEvent.php';
+require_once 'CourseParticipationEvent.php';
 
 $toolName = $langCertificates;
 

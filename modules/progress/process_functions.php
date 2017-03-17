@@ -41,7 +41,7 @@ function add_assignment_to_certificate($element, $element_id) {
                                     SET $element = ?d, 
                                         module= " . MODULE_ID_ASSIGN . ", 
                                         resource = ?d, 
-                                        activity_type = 'assignment', 
+                                        activity_type = '" . AssignmentEvent::ACTIVITY . "', 
                                         operator = ?s, 
                                         threshold = ?f",
                                     $element_id, 
@@ -68,7 +68,7 @@ function add_exercise_to_certificate($element, $element_id) {
                                     SET $element = ?d, 
                                         module = " . MODULE_ID_EXERCISE . ", 
                                         resource = ?d, 
-                                        activity_type = 'exercise', 
+                                        activity_type = '" . ExerciseEvent::ACTIVITY . "', 
                                         operator = ?s, 
                                         threshold = ?f",
                                     $element_id, 
@@ -95,7 +95,7 @@ function add_document_to_certificate($element, $element_id) {
                             SET $element = ?d, 
                                 module= " . MODULE_ID_DOCS . ",
                                 resource = ?d, 
-                                activity_type = 'document'",
+                                activity_type = '" . ViewingEvent::DOCUMENT_ACTIVITY . "'",
                         $element_id, $data);              
             }
         }
@@ -111,7 +111,6 @@ function add_document_to_certificate($element, $element_id) {
 function add_multimedia_to_certificate($element, $element_id) {
                 
     if (isset($_POST['video'])) {
-        $d = array();
         foreach ($_POST['video'] as $data) {
             $d = explode(":", $data);
             Database::get()->query("INSERT INTO ${element}_criterion
@@ -120,7 +119,6 @@ function add_multimedia_to_certificate($element, $element_id) {
         }
     }
     if (isset($_POST['videocatlink'])) {
-        $d = array();
         foreach ($_POST['videocatlink'] as $data) {
             $d = explode(":", $data);
             Database::get()->query("INSERT_INTO ${element}_criterion
@@ -145,7 +143,7 @@ function add_lp_to_certificate($element, $element_id) {
                                 SET $element = ?d, 
                                 module = " . MODULE_ID_LP . ", 
                                 resource = ?d,
-                                activity_type = 'learning path',
+                                activity_type = '" . LearningPathEvent::ACTIVITY . "',
                                 operator = ?s, 
                                 threshold = ?f",
                             $element_id, 
@@ -170,7 +168,7 @@ function add_courseparticipation_to_certificate($element, $element_id) {
                             SET $element = ?d, 
                             module = " . MODULE_ID_USAGE . ", 
                             resource = null, 
-                            activity_type = 'courseparticipation',
+                            activity_type = '" . CourseParticipationEvent::ACTIVITY . "',
                             operator = ?s,
                             threshold = ?f",
                         $element_id,                         
@@ -194,7 +192,7 @@ function add_wiki_to_certificate($element, $element_id) {
                             SET $element = ?d, 
                             module = " . MODULE_ID_WIKI . ", 
                             resource = null, 
-                            activity_type = 'wiki',
+                            activity_type = '" . WikiEvent::ACTIVITY . "',
                             operator = ?s,
                             threshold = ?f",
                         $element_id,                         
@@ -219,7 +217,7 @@ function add_poll_to_certificate($element, $element_id) {
                                     SET $element = ?d, 
                                     module= " . MODULE_ID_QUESTIONNAIRE . ", 
                                     resource = ?d, 
-                                    activity_type = 'questionnaire'",
+                                    activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "'",
                             $element_id,
                             $data);
         }
@@ -241,7 +239,7 @@ function add_ebook_to_certificate($element, $element_id) {
                                     SET $element = ?d, 
                                     module= " . MODULE_ID_EBOOK . ", 
                                     resource = ?d, 
-                                    activity_type = 'ebook'",
+                                    activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
                             $element_id,
                             $data);
         }
@@ -252,7 +250,7 @@ function add_ebook_to_certificate($element, $element_id) {
                                     SET $element = ?d, 
                                     module= " . MODULE_ID_EBOOK . ", 
                                     resource = ?d, 
-                                    activity_type = 'ebook'",
+                                    activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
                             $element_id,
                             $data);
         }
@@ -263,7 +261,7 @@ function add_ebook_to_certificate($element, $element_id) {
                                     SET $element = ?d, 
                                     module= " . MODULE_ID_EBOOK . ", 
                                     resource = ?d, 
-                                    activity_type = 'ebook'",
+                                    activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "'",
                             $element_id,
                             $data);
         }
@@ -286,7 +284,7 @@ function add_forum_to_certificate($element, $element_id) {
                                 SET $element = ?d, 
                                 module = " . MODULE_ID_FORUM . ", 
                                 resource = ?d, 
-                                activity_type = 'forum',
+                                activity_type = '" . ForumEvent::ACTIVITY . "',
                                 operator = ?s,
                                 threshold = ?f",
                             $element_id, 
@@ -325,7 +323,7 @@ function add_blog_to_certificate($element, $element_id) {
                             SET $element = ?d, 
                             module = " . MODULE_ID_BLOG . ", 
                             resource = null, 
-                            activity_type = 'blog',
+                            activity_type = '" . BlogEvent::ACTIVITY . "',
                             operator = ?s,
                             threshold = ?f",
                         $element_id,                         
@@ -345,9 +343,9 @@ function add_blogcomment_to_certificate($element, $element_id) {
         foreach ($_POST['blogcomment'] as $datakey => $data) {
             Database::get()->query("INSERT INTO ${element}_criterion
                                 SET $element = ?d, 
-                                module = " . MODULE_ID_BLOG . ", 
+                                module = " . MODULE_ID_COMMENTS . ", 
                                 resource = ?d, 
-                                activity_type = 'blogcomment',
+                                activity_type = '" . CommentEvent::BLOG_ACTIVITY . "',
                                 operator = ?s,
                                 threshold = ?f",
                             $element_id, 
@@ -753,7 +751,7 @@ function get_resource_details($element, $resource_id) {
                 $type = "$langWiki";
                 $title = "$langWikiPages";
             break;
-        case 'courseparticipation':
+        case CourseParticipationEvent::ACTIVITY:
                 $type = "$langCourseParticipation";
                 $title = "$langCourseHoursParticipation";
             break;

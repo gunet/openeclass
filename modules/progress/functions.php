@@ -488,7 +488,7 @@ function display_available_assignments($element, $element_id) {
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d AND active = 1 AND id NOT IN 
                                 (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                     AND resource != ''
-                                    AND activity_type = 'assignment' 
+                                    AND activity_type = '" . AssignmentEvent::ACTIVITY . "' 
                                     AND module = " . MODULE_ID_ASSIGN . ") 
                                 ORDER BY title", $course_id, $element_id);    
     if (count($result) == 0) {
@@ -554,7 +554,7 @@ function display_available_exercises($element, $element_id) {
                                     AND exercise.active = 1 AND exercise.id NOT IN 
                                     (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                             AND resource != '' 
-                                            AND activity_type = 'exercise' 
+                                            AND activity_type = '" . ExerciseEvent::ACTIVITY . "' 
                                             AND module = " . MODULE_ID_EXERCISE . ") ORDER BY title", $course_id, $element_id);
     $quizinfo = array();
     foreach ($result as $row) {
@@ -644,7 +644,7 @@ function display_available_documents($element, $element_id) {
                                           path LIKE ?s AND
                                           path NOT LIKE ?s AND id NOT IN 
                                         (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
-                                            AND resource!='' AND activity_type = 'document' AND module = " . MODULE_ID_DOCS . ")
+                                            AND resource!='' AND activity_type = '" . ViewingEvent::DOCUMENT_ACTIVITY . "' AND module = " . MODULE_ID_DOCS . ")
                                 ORDER BY sort_key COLLATE utf8_unicode_ci",
                                 "$path/%", "$path/%/%", $element_id);
 
@@ -781,7 +781,7 @@ function display_available_blogs($element, $element_id) {
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $res = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d                                     
                                             AND resource IS NULL 
-                                            AND activity_type = 'blog' 
+                                            AND activity_type = '" . BlogEvent::ACTIVITY . "' 
                                             AND module = " . MODULE_ID_BLOG . "", $element_id);
     if (count($res) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
@@ -834,8 +834,8 @@ function display_available_blogcomments($element, $element_id) {
     $result = Database::get()->queryArray("SELECT * FROM blog_post WHERE course_id = ?d AND id NOT IN 
                                 (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                     AND resource != ''
-                                    AND activity_type = 'blogcomment' 
-                                    AND module = " . MODULE_ID_BLOG . ") 
+                                    AND activity_type = '" . CommentEvent::BLOG_ACTIVITY . "' 
+                                    AND module = " . MODULE_ID_COMMENTS . ") 
                                 ORDER BY title", $course_id, $element_id);    
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langBlogEmpty</div>";
@@ -902,7 +902,7 @@ function display_available_forums($element, $element_id) {
                                         AND forum.id NOT IN 
                                         (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                             AND resource != '' 
-                                            AND activity_type = 'forum' 
+                                            AND activity_type = '" . ForumEvent::ACTIVITY . "' 
                                             AND module = " . MODULE_ID_FORUM . ")", $course_id, $element_id);
     $foruminfo = array();
     foreach ($result as $row) {
@@ -995,7 +995,7 @@ function display_available_lps($element, $element_id) {
                                             AND lp_learnPath.learnPath_id NOT IN 
                                         (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                                     AND resource!='' 
-                                                    AND activity_type = 'learning path' 
+                                                    AND activity_type = '" . LearningPathEvent::ACTIVITY . "' 
                                                     AND module = " . MODULE_ID_LP . ")", $course_id, $element_id);
     $lpinfo = array(); 
     foreach ($result as $row) {
@@ -1103,7 +1103,7 @@ function display_available_multimedia($element, $element_id) {
                                                         AND id NOT IN 
                                                 (SELECT resource FROM ${element}_criterion WHERE $element = ?d                                                     
                                                     AND resource!=''
-                                                    AND activity_type IN ('video','videolink') AND module = ". MODULE_ID_VIDEO . ")", $course_id, $element_id);
+                                                    AND activity_type IN ('" . ViewingEvent::VIDEO_ACTIVITY . "', '" . ViewingEvent::VIDEOLINK_ACTIVITY . "') AND module = ". MODULE_ID_VIDEO . ")", $course_id, $element_id);
             foreach ($result as $row) {
                 $row->course_id = $course_id;
                 if ($table == 'video') {
@@ -1135,7 +1135,7 @@ function display_available_multimedia($element, $element_id) {
                                                         AND id NOT IN 
                                                     (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                                         AND resource!=''
-                                                        AND activity_type IN ('video','videolink') AND module = " . MODULE_ID_VIDEO . ")", $videocat->id, $element_id);
+                                                        AND activity_type IN ('" . ViewingEvent::VIDEO_ACTIVITY . "', '" . ViewingEvent::VIDEOLINK_ACTIVITY . "') AND module = " . MODULE_ID_VIDEO . ")", $videocat->id, $element_id);
                     foreach ($sql2 as $linkvideocat) {
                             $tool_content .= "<tr>";
                             $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
@@ -1181,7 +1181,7 @@ function display_available_ebooks($element, $element_id) {
                                                 AND ebook.visible = 1
                                                 AND ebook.id NOT IN 
                                         (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
-                                        AND resource!='' AND activity_type = 'ebook' AND module = " . MODULE_ID_EBOOK . ")", $course_id, $element_id);
+                                        AND resource!='' AND activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "' AND module = " . MODULE_ID_EBOOK . ")", $course_id, $element_id);
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
     } else {
@@ -1277,7 +1277,7 @@ function display_available_polls($element, $element_id) {
                                     AND poll.active = 1
                                     AND poll.pid NOT IN 
                                 (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
-                                    AND resource != '' AND activity_type = 'questionnaire' AND module = " . MODULE_ID_QUESTIONNAIRE . ")", 
+                                    AND resource != '' AND activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "' AND module = " . MODULE_ID_QUESTIONNAIRE . ")",
                         $course_id, $element_id);
     
     $pollinfo = array();
@@ -1332,7 +1332,7 @@ function display_available_wiki($element, $element_id) {
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                             AND resource IS NULL
-                                            AND activity_type = 'wiki' 
+                                            AND activity_type = '" . WikiEvent::ACTIVITY . "' 
                                             AND module = " . MODULE_ID_WIKI . "", $element_id);    
     if (count($result) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
@@ -1379,12 +1379,12 @@ function display_available_participation($element, $element_id) {
 
     global $tool_content, $course_code, $langInHour,
            $langTitle, $langChoice, $langAddModulesButton,
-           $langOperator, $langValue, $langCourseParticipation;
+           $langOperator, $langValue, $langCourseParticipation, $langResourceAlreadyAdded;
      
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                             AND resource IS NULL
-                                            AND activity_type = 'courseparticipation'", $element_id);
+                                            AND activity_type = '" . CourseParticipationEvent::ACTIVITY . "'", $element_id);
     if (count($result) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
     } else {

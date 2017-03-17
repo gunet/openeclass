@@ -74,7 +74,7 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                     </div>
                 </div>                    
                 ";
-                triggerGame($course_id, $uid, CommentEvent::NEWCOMMENT, $commentEventActivity);
+                triggerGame($course_id, $uid, CommentEvent::NEWCOMMENT, $commentEventActivity, $comment->getRid());
             } else {
                 $response[0] = 'ERROR';
                 $response[1] = "<div class='alert alert-warning'>".$langCommentsSaveFail."</div>";
@@ -91,7 +91,7 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                 if ($comment->delete()) {
                     $response[0] = 'OK';
                     $response[1] = "<div class='alert alert-success'>".$langCommentsDelSuccess."</div>";
-                    triggerGame($course_id, $uid, CommentEvent::DELCOMMENT, $commentEventActivity);
+                    triggerGame($course_id, $uid, CommentEvent::DELCOMMENT, $commentEventActivity, $comment->getRid());
                 } else {
                     $response[0] = 'ERROR';
                     $response[1] = "<div class='alert alert-warning'>".$langCommentsDelFail."</div>";
@@ -146,14 +146,14 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
     }
 }
 
-function triggerGame($courseId, $uid, $eventName, $commentEventActivity) {
+function triggerGame($courseId, $uid, $eventName, $commentEventActivity, $resourceId) {
     if ($commentEventActivity !== null) {
         $eventData = new stdClass();
         $eventData->courseId = $courseId;
         $eventData->uid = $uid;
         $eventData->activityType = $commentEventActivity;
         $eventData->module = MODULE_ID_COMMENTS;
-
+        $eventData->resource = $resourceId;
         CommentEvent::trigger($eventName, $eventData);
     }
 }

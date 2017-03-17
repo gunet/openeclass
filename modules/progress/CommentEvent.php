@@ -24,7 +24,7 @@ require_once 'BasicEvent.php';
 
 class CommentEvent extends BasicEvent {
     
-    const BLOG_ACTIVITY = 'blogcomment';
+    const BLOG_ACTIVITY = 'blogpost';
     const COURSE_ACTIVITY = 'course';
     const NEWCOMMENT = 'comment-submitted';
     const DELCOMMENT = 'comment-deleted';
@@ -40,7 +40,7 @@ class CommentEvent extends BasicEvent {
                     . " FROM comments "
                     . " WHERE user_id = ?d "
                     . " AND rid = ?d "
-                    . " AND rtype = ?s", $data->uid, $data->courseId, $data->activityType);
+                    . " AND rtype = ?s", $data->uid, $data->resource, $data->activityType);
             if ($subm && floatval($subm->count) > 0) {
                 $threshold = floatval($subm->count);
             }
