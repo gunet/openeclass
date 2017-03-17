@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2017-03-08 17:19:30
+// Generated 2017-03-17 13:51:06
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -1902,7 +1902,7 @@ $timeNoSecFormat = '%I:%M %p';
 $langNoAdminAccess = '<strong>The page you tried to access requires a valid username and password.</strong><br/>
 The system has automatically redirected you to the start page to login. This could have been caused
 by a mistyped URL or due to session timeout.';
-$langLoginRequired = '<strong>You are not enrolled to $langsCourse you are trying to access.</strong><br/> The system has automatically redirect you to the start page to enroll to the $langsCourse (if the $langsCourse is open for registration).
+$langLoginRequired = '<strong>You are not registered to the $langsCourse you are trying to access.</strong><br/> The system has automatically redirect you to the start page to register (if the $langsCourse is open for registration).
 ';
 $langSessionIsLost = "<strong>Your session has timed-out.</strong><br/>The system has automatically redirected you to the start page to login again.";
 $langCheckProf = "<strong>Your action requires $langsTeacher privileges. </strong><br/> The system has
@@ -2133,8 +2133,8 @@ $m['submitted'] = "Submitted";
 $m['select'] = "Selection";
 $m['groupsubmit'] = "Submitted on behalf of";
 $m['ofgroup'] = "group";
-$m['deleted_work_by_user'] = "Previous submited assignment was deleted";
-$m['deleted_work_by_group'] = "Previous submitted assignment (by other member of the work) was deleted";
+$m['deleted_work_by_user'] = "Your previously submitted assignment was deleted:";
+$m['deleted_work_by_group'] = "Previously submitted assignment (by other member of your group) was deleted:";
 $m['by_groupmate'] = 'By another member of your group';
 $m['the_file'] = 'The file';
 $m['was_submitted'] = 'was submitted.';
@@ -4298,7 +4298,7 @@ $langSFATypeWYS = 'Type the code that you see in the App:';
 $langSFAScan = 'Scan Image:';
 $langsecondfaUpdated = '2FA settings successfully updated';
 $langAnalyticsDescription = '<p>You can connect the platform to an external web analytics service (e.g. Google
-    Analytics, Piwiki) in order to record detailed statistics and information on visitors.</p>';
+    Analytics, Piwik) in order to record detailed statistics and information on visitors.</p>';
 $langAntivirusDescription = "<p>Connection with existing Antivirus software</p>";
 $langWafDescription = "<p>Enable Web Application Firewall</p>";
 $langExerciseAttemptLeft = 'Beware! Only one attempt remaining.';
@@ -4804,7 +4804,7 @@ $langCourseCategoryValueActive = "Active";
 $langCourseCategoryValueActive2 = "The category value will be visible to the users";
 $langInactiveCourseCategories = "Inactive categories";
 $langActiveCourseCategories = "Active categories";
-$langUnplagShortDescription = "Connection with UnPlag service";
+$langUnplagShortDescription = "Connection with UnPlag service. The UnPlag plagiarism detection is a commercial service. Please visit <a href=\"https://unplag.com\">https://unplag.com</a> for more information.";
 $langUnplagLongDescription = "Connection with UnPlag plagiarism detection service";
 $langNameOfLang['slovene'] = 'Slovene';
 $langNameOfLang['slovak'] = 'Slovak';
@@ -4831,3 +4831,7 @@ $langWithoutDepartment = "don't belong to";
 $langWithId = 'With';
 $langWithStudentId = 'student IDs';
 $langWithUsernames = 'usernames';
+$langldapfirstnameattr = "User given name attribute";
+$langldapsurnameattr = "User surname attribute";
+$langGroupInfiniteUsers = "0: unlimited members";
+$langRegEnterCourse = "Register and enter $langsCourse";

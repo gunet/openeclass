@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2017-03-08 17:19:32
+// Generated 2017-03-17 13:51:08
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -1342,8 +1342,7 @@ $langTracking = "Suivi";
 $langTypeOfModule = "Type de module";
 $langUnamedModule = "Module sans nom";
 $langUnamedPath = "Parcours sans nom";
-$langUseOfPool = "This page allows you to view all the modules available in this course. <br /> Any exercise or document that has been added in a learning path will also appear in this list."
-;
+$langUseOfPool = "This page allows you to view all the modules available in this $langsCourse. <br> Any educational resource that has been added in a learning path will also appear in this list.";
 $langUsedInLearningPaths = "Nombre de parcours d'apprentissage utilisant ce module : ";
 $langView = "Afficher";
 $langViewMode = "Visualiser le mode";
@@ -2034,7 +2033,7 @@ $timeNoSecFormat = '%I:%M %p';
 $langNoAdminAccess = '<strong>The page you tried to access requires a valid username and password.</strong><br/>
 The system has automatically redirected you to the start page to login. This could have been caused
 by a mistyped URL or due to session timeout.';
-$langLoginRequired = '<strong>You are not enrolled to $langsCourse you are trying to access.</strong><br/> The system has automatically redirect you to the start page to enroll to the $langsCourse (if the $langsCourse is open for registration).
+$langLoginRequired = '<strong>You are not registered to the $langsCourse you are trying to access.</strong><br/> The system has automatically redirect you to the start page to register (if the $langsCourse is open for registration).
 ';
 $langSessionIsLost = "<strong>Your session has timed-out.</strong><br/>The system has automatically redirected you to the start page to login again.";
 $langCheckProf = "<strong>Your action requires $langsTeacher privileges. </strong><br/> The system has
@@ -4496,7 +4495,7 @@ $langSFATypeWYS = 'Type the code that you see in the App:';
 $langSFAScan = 'Scan Image:';
 $langsecondfaUpdated = '2FA settings successfully updated';
 $langAnalyticsDescription = '<p>You can connect the platform to an external web analytics service (e.g. Google
-    Analytics, Piwiki) in order to record detailed statistics and information on visitors.</p>';
+    Analytics, Piwik) in order to record detailed statistics and information on visitors.</p>';
 $langAntivirusDescription = "<p>Connection with existing Antivirus software</p>";
 $langWafDescription = "<p>Enable Web Application Firewall</p>";
 $langExerciseAttemptLeft = 'Beware! Only one attempt remaining.';
@@ -5002,7 +5001,7 @@ $langCourseCategoryValueActive = "Active";
 $langCourseCategoryValueActive2 = "The category value will be visible to the users";
 $langInactiveCourseCategories = "Inactive categories";
 $langActiveCourseCategories = "Active categories";
-$langUnplagShortDescription = "Connection with UnPlag service";
+$langUnplagShortDescription = "Connection with UnPlag service. The UnPlag plagiarism detection is a commercial service. Please visit <a href=\"https://unplag.com\">https://unplag.com</a> for more information.";
 $langUnplagLongDescription = "Connection with UnPlag plagiarism detection service";
 $langNameOfLang['slovene'] = 'Slovene';
 $langNameOfLang['slovak'] = 'Slovak';
@@ -5029,3 +5028,7 @@ $langWithoutDepartment = "don't belong to";
 $langWithId = 'With';
 $langWithStudentId = 'student IDs';
 $langWithUsernames = 'usernames';
+$langldapfirstnameattr = "User given name attribute";
+$langldapsurnameattr = "User surname attribute";
+$langGroupInfiniteUsers = "0: unlimited members";
+$langRegEnterCourse = "Register and enter $langsCourse";
