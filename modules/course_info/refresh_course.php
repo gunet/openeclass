@@ -72,7 +72,7 @@ if (isset($_POST['submit'])) {
 
     $output = array();
     if (isset($_POST['delusersdate']) or isset($_POST['delusersdept']) or
-        isset($_POST['delusersid'])) {
+        isset($_POST['delusersid']) or isset($_POST['delusersinactive'])) {
             $output[] = delete_users();
     }
     if (isset($_POST['delannounces'])) {
@@ -142,6 +142,11 @@ if (isset($_POST['submit'])) {
                 <label class='col-sm-2 control-label'>$langUsers</label>
                 <div class='col-sm-10'>
                     <p class='form-control-static'>$langUserDelCourse:</p>
+                </div>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2 checkbox'>
+                    <label><input type='checkbox' name='delusersinactive'>$langInactiveUsers</label>
                 </div>
             </div>
             <div class='form-group'>
@@ -245,6 +250,11 @@ function delete_users() {
           AND course_user.reviewer = 0
           AND course_id = ?d';
     $args = array($course_id);
+
+    if (isset($_POST['delusersinactive'])) {
+        $sql .= ' AND user.expires_at < ' . DBHelper::timeAfter();
+        $details['params'][] = "inactive\n";
+    }
 
     if (isset($_POST['delusersdate']) and isset($_POST['reg_date']) and isset($_POST['reg_flag'])) {
         $date_obj = DateTime::createFromFormat('d-m-Y', $_POST['reg_date']);
