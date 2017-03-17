@@ -1624,9 +1624,13 @@ function student_view_progress() {
             }
             $data['game_' . $key][] = $game;
         }, $uid, $course_id);
-    }    
+    }   
     $data['badge_template_path'] = $urlServer . BADGE_TEMPLATE_PATH;
-    view('modules.progress.progress', $data);        
+    if (count($data['game_badge']) > 0 or count($data['game_certificate']) > 0) {
+        view('modules.progress.progress', $data);       
+    } else {
+        view('modules.progress.noprogress');
+    }
 }
 
 

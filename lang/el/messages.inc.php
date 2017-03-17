@@ -1344,6 +1344,7 @@ $langCertificateDetails = "Στοιχεία Πιστοποιητικού";
 $langBadgeDetails = "Στοιχεία Διάκρισης";
 $langCourseParticipation = "Διάρκεια συμμετοχής";
 $langCourseHoursParticipation = "Ώρες συμμετοχής";
+$langNoCertBadge = "Δεν έχει οριστεί κάποιο πιστοποιητικό ή διάκριση.";
 
 //------------------------------------
 
