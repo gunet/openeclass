@@ -84,9 +84,9 @@ function delete_submissions_by_uid($uid, $gid, $id, $new_filename = '') {
 
     $return = '';
     $res = Database::get()->queryArray("SELECT id, file_path, file_name, uid, group_id
-				FROM assignment_submit
+                FROM assignment_submit
                                 WHERE assignment_id = ?d AND
-				      (uid = ?d OR group_id = ?d)", $id, $uid, $gid);
+                      (uid = ?d OR group_id = ?d)", $id, $uid, $gid);
     foreach ($res as $row) {
         if ($row->file_path != $new_filename) {
             @unlink("$GLOBALS[workPath]/$row->file_path");
@@ -108,9 +108,9 @@ function find_submissions($is_group_assignment, $uid, $id, $gids) {
     if ($is_group_assignment AND count($gids)) {
         $groups_sql = join(', ', array_keys($gids));
         $res = Database::get()->queryArray("SELECT id, uid, group_id, submission_date,
-					file_path, file_name, comments, grade,
-					grade_comments, grade_submission_date
-					FROM assignment_submit
+                    file_path, file_name, comments, grade,
+                    grade_comments, grade_submission_date
+                    FROM assignment_submit
                                         WHERE assignment_id = ?d AND
                                         group_id IN ($groups_sql)", $id);
     } else {
@@ -266,9 +266,9 @@ $tool_content .= "
 function was_submitted($uid, $gid, $id) {
 
     $q = Database::get()->querySingle("SELECT uid, group_id
-			      FROM assignment_submit
-			      WHERE assignment_id = ?d AND
-				    (uid = ?d or group_id = ?d)", $id, $uid, $gid);
+                  FROM assignment_submit
+                  WHERE assignment_id = ?d AND
+                    (uid = ?d or group_id = ?d)", $id, $uid, $gid);
     if ($q) {
         if ($q->uid == $uid) {
             return 'user';
@@ -309,16 +309,16 @@ function cleanup_filename($f) {
  * @param type $id
  */
 function export_grades_to_csv($id) {
-    
+
     global $course_code, $course_id,
-           $langSurname, $langName, $langAm, 
+           $langSurname, $langName, $langAm,
            $langUsername, $langEmail, $langGradebookGrade;
-    
-    $csv = new CSV();    
+
+    $csv = new CSV();
     $csv->filename = $course_code . "_" . $id . "_grades_list.csv";
     $csv->outputHeaders();
     // additional security
-    $q = Database::get()->querySingle("SELECT id, title FROM assignment 
+    $q = Database::get()->querySingle("SELECT id, title FROM assignment
                             WHERE id = ?d AND course_id = ?d", $id, $course_id);
     if ($q) {
         $assignment_id = $q->id;
@@ -329,7 +329,7 @@ function export_grades_to_csv($id) {
         $sql = Database::get()->queryArray("SELECT uid, grade FROM assignment_submit
                         WHERE assignment_id = ?d", $assignment_id);
         foreach ($sql as $data) {
-            $entries = Database::get()->querySingle('SELECT surname, givenname, username, am, email 
+            $entries = Database::get()->querySingle('SELECT surname, givenname, username, am, email
                         FROM user
                         WHERE id = ?d',
                         $data->uid);
