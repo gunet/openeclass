@@ -238,7 +238,7 @@ class Log {
      * @return type
      * drive to appropriate subsystem for displaying details
      */
-    public function course_action_details($module_id, $details) {
+    public function course_action_details($module_id, $details, $type=null) {
 
         global $langUnknownModule;
 
