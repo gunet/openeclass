@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2017-01-23 12:05:52
+// Generated 2017-03-17 13:51:08
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -3389,7 +3389,7 @@ $langQuestionDifficult = "Difficult";
 $langQuestionVeryDifficult = "Very difficult";
 $langWithCriteria = 'with Criteria';
 $langSelectionRule = 'Selection Rule';
-$langOptional = 'Optional';
+$langOptional = "(optional)";
 $langCreationDate = "Creation Date";
 $langLicense = "License";
 $lang_dropbox_allow_personal_messages = "Allow personal messages exchange in 'Dropbox'";
@@ -3785,8 +3785,7 @@ $langEBookPages = $langEBook. ' ' .$langPages;
 $langNewEBookPage = "New Page";
 $langEBookInfoEdit = "Edit e-Books' Info/Sections";
 $langDisableModules = 'Modules';
-$langDisableModulesHelp = 'You can select which modules will be disabled
-    for all $langsCourses platform-wide.';
+$langDisableModulesHelp = "You can select which modules will be disabled for all $langsCourses platform-wide.";
 $langldap_id_attr = "Attribute for student ID";
 $langcasuserstudentid = "CAS SAML attribute for student ID";
 $langPrint = "Print";
@@ -4203,7 +4202,7 @@ $langSFATypeWYS = 'Type the code that you see in the App:';
 $langSFAScan = 'Scan Image:';
 $langsecondfaUpdated = '2FA settings successfully updated';
 $langAnalyticsDescription = '<p>You can connect the platform to an external web analytics service (e.g. Google
-    Analytics, Piwiki) in order to record detailed statistics and information on visitors.</p>';
+    Analytics, Piwik) in order to record detailed statistics and information on visitors.</p>';
 $langAntivirusDescription = "<p>Connection with existing Antivirus software</p>";
 $langWafDescription = "<p>Enable Web Application Firewall</p>";
 $langExerciseAttemptLeft = 'Beware! Only one attempt remaining.';
@@ -4709,5 +4708,34 @@ $langCourseCategoryValueActive = "Active";
 $langCourseCategoryValueActive2 = "The category value will be visible to the users";
 $langInactiveCourseCategories = "Inactive categories";
 $langActiveCourseCategories = "Active categories";
-$langUnplagShortDescription = "Connection with UnPlag service";
+$langUnplagShortDescription = "Connection with UnPlag service. The UnPlag plagiarism detection is a commercial service. Please visit <a href=\"https://unplag.com\">https://unplag.com</a> for more information.";
 $langUnplagLongDescription = "Connection with UnPlag plagiarism detection service";
+$langNameOfLang['slovene'] = 'Slovene';
+$langNameOfLang['slovak'] = 'Slovak';
+$langNameOfLang['dutch'] = 'Dutch';
+$langUserExpiresFieldEmpty = "User expires date is not set or empty! ";
+$langNoAccountPleaseRegister = "Don't have an account? Please %sregister%s.";
+$langAlreadyHaveAccount = "Already have an account? %sLogin%s";
+$langPlagiarismAlreadyCheck = "The file has already been submitted for plagiarism check";
+$langPlagiarismFileSent = "File submitted for plagiarism check";
+$langDefaultModules = 'Default Modules';
+$langDefaultModulesHelp = "The following modules are enabled by default in all
+    new $langsCourses created on the platform.";
+$langConfirmReplace = "Confirm replace of";
+$langAreYouSureToReplaceScorm = "This learning path is part of a SCORM importation package. If you delete this path, all its SCORM conformant modules, the statistics of $langsOfStudents and related files will be deleted from the platform. Are you sure you want to replace the learning path named ";
+$langPlagiarismResult = "Plagiarism check result";
+$langDownloadToPDF = "Report in PDF format";
+$langPleaseChooseFile = "Please choose a file";
+$langPleaseEnterName = "Please enter a name";
+$langParams = 'Parameters';
+$langWithRegistrationDate = 'With registration date';
+$langWho = 'Who';
+$langWithDepartment = 'belong to';
+$langWithoutDepartment = "don't belong to";
+$langWithId = 'With';
+$langWithStudentId = 'student IDs';
+$langWithUsernames = 'usernames';
+$langldapfirstnameattr = "User given name attribute";
+$langldapsurnameattr = "User surname attribute";
+$langGroupInfiniteUsers = "0: unlimited members";
+$langRegEnterCourse = "Register and enter $langsCourse";
