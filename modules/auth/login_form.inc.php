@@ -27,11 +27,11 @@
 
 require_once 'modules/auth/auth.inc.php';
 
-function login_form() {
+function login_form($format='main') {
     global $head_content, $urlServer, $urlAppend, $langLogInWith, $langEnter,
         $langViaSocialNetwork, $langUsername, $langPass, $langUserLogin,
         $langOr, $lang_forgot_pass, $langAlternateLogin, $extAuthMethods,
-        $hybridAuthMethods;
+        $hybridAuthMethods, $langOrLoginWith;
 
     // check authentication methods
     $aid = null;
@@ -45,29 +45,45 @@ function login_form() {
                 ORDER BY auth_default DESC, auth_id");
     foreach ($q as $l) {
         if (in_array($l->auth_name, $extAuthMethods)) {
-            $authLink[] = array(
-                'showTitle' => true,
-                'class' => 'login-option login-option-sso',
-                'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title)),
-                'html' => "<a class='btn btn-default btn-login' href='" . $urlServer .
-                          ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$langEnter</a><br>");
-        } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
-            $hybridProviders[] = $l->auth_name;
-            if (is_null($hybridLinkId)) {
+            $loginUrl = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');
+            $loginTitle = empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title));
+            if ($format == 'main') {
                 $authLink[] = array(
                     'showTitle' => true,
-                    'class' => 'login-option',
-                    'title' => $langViaSocialNetwork);
-                $hybridLinkId = count($authLink) - 1;
+                    'class' => 'login-option login-option-sso',
+                    'title' => $loginTitle,
+                    'html' => "<a class='btn btn-default btn-login' href='$loginUrl'>$langEnter</a><br>");
+            } else {
+                $authLink[] = "<a class='btn btn-block btn-primary' href='$loginUrl'>$loginTitle</a>";
+            }
+        } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
+            $hybridProviders[] = $l->auth_name;
+            $font = $class = $l->auth_name;
+            if ($class === 'live') {
+                $class = 'microsoft';
+                $font = 'windows';
+            }
+            if ($format == 'main') {
+                $providerIcon[$l->auth_name] = array($class, $font);
+                if (is_null($hybridLinkId)) {
+                    $authLink[] = array(
+                        'showTitle' => true,
+                        'class' => 'login-option',
+                        'title' => $langViaSocialNetwork);
+                    $hybridLinkId = count($authLink) - 1;
+                }
+            } else {
+                $authLink[] = "<a class='btn btn-block btn-social btn-$class' href='{$urlServer}index.php?provider={$l->auth_name}'><span class='fa fa-$font'></span>" . ucfirst($l->auth_name) . "</a>";
             }
         } elseif (!$loginFormEnabled) {
             $autofocus = count($authLink)? '' : 'autofocus' ;
             $loginFormEnabled = true;
-            $authLink[] = array(
-                'showTitle' => false,
-                'class' => 'login-option',
-                'title' => empty($l->auth_title)? "$langLogInWith<br>Credentials": q(getSerializedMessage($l->auth_title)),
-                'html' => "<form action='$urlServer' method='post'>
+            if ($format == 'main') {
+                $authLink[] = array(
+                    'showTitle' => false,
+                    'class' => 'login-option',
+                    'title' => empty($l->auth_title)? "$langLogInWith<br>Credentials": q(getSerializedMessage($l->auth_title)),
+                    'html' => "<form action='$urlServer' method='post'>
                              <div class='form-group'>
                                 <label for='uname' class='sr-only'>$langUsername</label>
                                 <input type='text' id='uname' name='uname' placeholder='$langUsername' $autofocus><span class='col-xs-2 col-sm-2 col-md-2 fa fa-user'></span>
@@ -81,10 +97,13 @@ function login_form() {
                            <div class='text-right'>
                              <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                            </div>");
+            }
         }
 
-        if (count($hybridProviders)) {
+        if (count($hybridProviders) or ($format != 'main' and count($authLink))) {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/default/CSS/bootstrap-social.css'>";
+        }
+        if ($format == 'main' and count($hybridProviders)) {
             $authLink[$hybridLinkId]['html'] = '<div style="padding-top: 10px;">';
             $beginHybridHTML = true;
             foreach ($hybridProviders as $provider) {
@@ -93,12 +112,7 @@ function login_form() {
                 } else {
                     $authLink[$hybridLinkId]['html'] .= '<br>';
                 }
-                $providerClass = $provider;
-                $providerFont = $provider;
-                if ($provider === 'live') {
-                    $providerClass = 'microsoft';
-                    $providerFont = 'windows';
-                }
+                list($providerClass, $providerFont) = $providerIcon[$provider];
                 $authLink[$hybridLinkId]['html'] .=
                     "<a class='btn btn-block btn-social btn-$providerClass' href='{$urlServer}index.php?provider=$provider'><span class='fa fa-$providerFont'></span>" . ucfirst($provider) . "</a>";
             }
@@ -115,6 +129,41 @@ function login_form() {
             })
         });
       </script>";
+    }
+
+    if ($format != 'main') {
+        $altLoginTitle = '';
+        if ($loginFormEnabled) {
+            $loginForm .= "
+                <div class='col-sm-6'>
+                    <form action='$urlServer' method='post' id='loginForm'>
+                        <input class='nextUrl' name='next' type='hidden' value='/'>
+                        <div class='form-group'>
+                            <label class='hidden' for='uname'>$langUsername</label>
+                            <input name='uname' type='text' class='form-control' id='uname' placeholder='$langUsername'>
+                        </div>
+                        <div class='form-group'>
+                            <label class='hidden' for='pass'>$langPass</label>
+                            <input name='pass' type='password' class='form-control' id='pass' placeholder='$langPass'>
+                        </div>
+                        <button type='submit' name='submit' class='btn btn-primary btn-block'>$langEnter</button>
+                    </form>
+                </div>";
+            if (count($authLink)) {
+                $altLoginTitle = "<h5 class='text-center'>$langOrLoginWith:</h5>";
+            }
+        }
+        if (count($authLink)) {
+            $loginForm .= "
+            <div class='col-sm-6 alt-login'>
+                $altLoginTitle";
+            foreach ($authLink as $html) {
+                $loginForm .= $html;
+            }
+            $loginForm .= "
+            </div>";
+        }
+        return $loginForm;
     }
 
     $loginForm .= "

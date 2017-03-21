@@ -3214,6 +3214,7 @@ $langLdapRequest = 'Υπάρχει ήδη μια αίτηση για τον χρ
 $langLDAPUser = 'Χρήστης LDAP';
 $langLogIn = 'Σύνδεση';
 $langLogInWith = "Σύνδεση με";
+$langOrLoginWith = 'Ή συνδεθείτε με';
 $langAction = 'Ενέργεια';
 $langRequiredFields = 'Τα πεδία με (*) είναι υποχρεωτικά';
 $langCourseVisits = "Επισκέψεις ανά $langsCourse";
@@ -3222,7 +3223,6 @@ $langSearchFor = 'Αναζήτηση στα ονόματα';
 $langSearchExact = 'Για ακριβείς τιμές';
 $langSearchStartsWith = 'Στην αρχή των ονομάτων';
 $langSearchSubstring = 'Οπουδήποτε';
-
 
 // user registration
 $langAuthUserName = "Δώστε το όνομα χρήστη:";

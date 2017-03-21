@@ -1670,6 +1670,7 @@ $langLdapRequest = "There is already a request for the user";
 $langLDAPUser = 'LDAP user';
 $langLogIn = "Login";
 $langAction = "Action";
+$langOrLoginWith = 'Or log in with';
 $langRequiredFields = '(fields marked by (*) are required)';
 $langCourseVisits = "$langCourse Visits";
 $langDurationVisitsPerCourse = "Participation time per $langsCourse";
