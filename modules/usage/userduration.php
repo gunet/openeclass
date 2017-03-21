@@ -47,8 +47,8 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
     $format = 'html';
     $toolName = $langUserDuration;
 
-    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);  
-    
+    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
+
     $tool_content .= action_bar(array(
         array('title' => $langUsage,
             'url' => "index.php?course=$course_code",
@@ -75,10 +75,10 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
 }
 
 $result = user_duration_query($course_id);
-if (count($result) > 0) {    
-    foreach ($result as $row) {        
+if (count($result) > 0) {
+    foreach ($result as $row) {
         $grp_name = user_groups($course_id, $row->id, $format);
-        if ($format == 'html') {            
+        if ($format == 'html') {
             $tool_content .= "<td class='bullet'>" . display_user($row->id) . "</td>
                                 <td class='center'>$row->am</td>
                                 <td class='center'>$grp_name</td>
@@ -126,13 +126,13 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
     if ($group !== false) {
         $from = "`group_members` AS groups
                                 LEFT JOIN user ON groups.user_id = user.id";
-        $and = "AND groups.group_id = ?d";        
+        $and = "AND groups.group_id = ?d";
         $terms[] = $group;
     } else {
-        $from = " (SELECT 
-                            id, surname, givenname, username, password, email, parent_email, status, phone, am, 
-                            registered_at, expires_at, lang, description, has_icon, verified_mail, receive_mail, email_public, 
-                            phone_public, am_public, whitelist, last_passreminder 
+        $from = " (SELECT
+                            id, surname, givenname, username, password, email, parent_email, status, phone, am,
+                            registered_at, expires_at, lang, description, has_icon, verified_mail, receive_mail, email_public,
+                            phone_public, am_public, whitelist, last_passreminder
                           FROM user UNION (SELECT 0 as id,
                             '' as surname,
                             'Anonymous' as givenname,
@@ -145,7 +145,7 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             null as am,
                             null as registered_at,
                             null as expires_at,
-                            null as lang,                            
+                            null as lang,
                             null as description,
                             null as has_icon,
                             null as verified_mail,
@@ -155,9 +155,9 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             null as am_public,
                             null as whitelist,
                             null as last_passreminder)) as user ";
-        $and = '';               
+        $and = '';
     }
-        
+
     return Database::get()->queryArray("SELECT SUM(actions_daily.duration) AS duration,
                                    user.surname AS surname,
                                    user.givenname AS givenname,
@@ -168,7 +168,6 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                             WHERE (actions_daily.course_id = ?d)
                             $and
                             $date_where
-                            GROUP BY user.id
+                            GROUP BY user.id, surname, givenname, am                          
                             ORDER BY surname, givenname",  $course_id, $terms);
 }
-
