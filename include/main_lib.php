@@ -354,8 +354,10 @@ console.log('aaa');
 // Return HTML for a user - first parameter is either a user id (so that the
 // user's info is fetched from the DB) or a hash with user_id, surname, givenname,
 // email, or an array of user ids or user info arrays
-function display_user($user, $print_email = false, $icon = true, $class = "") {
+function display_user($user, $print_email = false, $icon = true, $class = "", $code = "") {
     global $langAnonymous, $urlAppend;
+
+    $course_code_link = "";
 
     if (count($user) == 0) {
         return '-';
@@ -404,7 +406,10 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
 
     $token = token_generate($user->id, true);
     $student_name = $user->surname || $user->givenname ? q($user->surname) . " " .  q($user->givenname) : $user->username;
-    return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id&amp;token=$token'>" .
+    if (!empty($code)) {
+      $course_code_link = "&amp;course=$GLOBALS[course_code]";
+    }
+    return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id$course_code_link&amp;token=$token'>" .
             $student_name . "</a>" .
             ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
 }
