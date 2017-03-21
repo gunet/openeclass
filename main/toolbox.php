@@ -79,7 +79,8 @@ foreach ($msgs as $msg) {
 }
 
 if ($uid) {
-    $t->set_var('loginLogout', "<a href='$urlAppend?logout=true'>$langLogout</a>");
+    $t->set_var('loginLogout', q($_SESSION['givenname'] . ' ' . $_SESSION['surname']) .
+        " &nbsp; <a href='$urlAppend?logout=true'>$langLogout</a>");
 } else {
     $t->set_var('loginModal', 'loginModal');
     $t->set_var('loginLogout', "$langLogIn / $langRegister");
