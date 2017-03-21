@@ -73,9 +73,9 @@ $t->set_var('LANG_SELECT', $lang_select);
 
 $msgs = array('langSearch', 'langRegister', 'langLogin', 'langName',
     'langSurname', 'langUsername', 'langEmail', 'langPass',
-    'langConfirmation', 'langSubmit');
+    'langConfirmation', 'langSubmit', 'langUsername', 'langPassword');
 foreach ($msgs as $msg) {
-    $t->set_var($msg, $GLOBALS[$msg]);
+    $t->set_var($msg, q($GLOBALS[$msg]));
 }
 
 if ($uid) {
