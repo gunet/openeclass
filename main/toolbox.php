@@ -56,6 +56,10 @@ $t->set_var('loginForm', login_form('toolbox'));
 $t->set_var('toolboxTitle', q(getSerializedMessage(get_config('toolbox_title', $langEclass))));
 $t->set_var('container', 'container');
 
+if ($messages = Session::getMessages()) {
+    $t->set_var('EXTRA_MSG', "<div class='row'><div class='col-xs-12'>".$messages."</div></div>");
+}
+
 $lang_select = "<div class='dropdown'>
   <span class='dropdown-toggle' role='button' id='dropdownMenuLang' data-toggle='dropdown'>
       <span class='fa fa-globe'></span><span class='sr-only'>$langChooseLang</span>
