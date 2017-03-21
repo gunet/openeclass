@@ -330,7 +330,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                 @ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0); // for search in Active Directory
                 if (@ldap_bind($ldap, $settings['ldapbind_dn'], $settings['ldapbind_pw'])) {
                     if (isset($settings['ldap_login_attr2']) and !empty($settings['ldap_login_attr2'])) {
-                        $settings['ldap_login_attr'] .= $settings['ldap_login_attr2'];
+                        $settings['ldap_login_attr'] .= ' ' . $settings['ldap_login_attr2'];
                     }
                     $search_filter = '';
                     $ldap_login_attrs = explode(' ', $settings['ldap_login_attr']);
