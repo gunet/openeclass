@@ -935,7 +935,7 @@ function submit_work($id, $on_behalf_of = null) {
             }
         }
 
-        $submit_ip = $_SERVER['REMOTE_ADDR'];
+        $submit_ip = Log::get_client_ip();
         $submission_text = isset($_POST['submission_text']) ? purify($_POST['submission_text']) : NULL;
         if (isset($on_behalf_of)) {
             if ($row->group_submissions) {
@@ -984,7 +984,7 @@ function submit_work($id, $on_behalf_of = null) {
                                     (uid, assignment_id, submission_date, submission_ip, file_path,
                                      file_name, submission_text, comments, grade, grade_comments, grade_submission_ip,
                                      grade_submission_date, group_id)
-                                     VALUES (?d, ?d, NOW(), ?s, ?s, ?s, ?s, ?s, ?f, ?s, ?s, NOW(), ?d)", $data)->lastInsertID;
+                                     VALUES (?d, ?d, ". DBHelper::timeAfter() . ", ?s, ?s, ?s, ?s, ?s, ?f, ?s, ?s, " . DBHelper::timeAfter() . ", ?d)", $data)->lastInsertID;
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $sid,
                 'title' => $row->title,
                 'assignment_id' => $row->id,
