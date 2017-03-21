@@ -118,10 +118,15 @@ view('main.profile.index', $data);
 
 function allow_access($level) {
         
-    if ($level == ACCESS_USERS) {        
+    if ($level == ACCESS_USERS) { // if we have allowed it
         return true;
-    } elseif ($_SESSION['status'] == USER_TEACHER) {        
+    } elseif ($_SESSION['status'] == USER_TEACHER) { // if we are teacher
         return true;
+    }  elseif (isset($_GET['course'])) {
+        $c = $_GET['course'];
+        if ($_SESSION['courses'][$c] == USER_TEACHER) { // if we are course teacher
+          return true;
+        }
     } else {
         return false;
     }

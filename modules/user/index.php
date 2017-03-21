@@ -208,7 +208,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                             <div style='padding-left:8px; padding-top: 5px;'>$stats_icon</div>
                         </div>
                         <div class='pull-left'>
-                            <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false)."</div>
+                            <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false, '', $course_code)."</div>                            
                             <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a></small></div>
                             <div class='text-muted'><small>$am_message</small></div>
                         </div>";
