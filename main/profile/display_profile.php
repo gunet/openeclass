@@ -55,15 +55,15 @@ if ($userdata) {
     $auth = array_search($userdata->password, $auth_ids);
     if (!$auth) {
         $auth = 1;
-    }    
+    }
     if ($auth != 1) {
         $allow_password_change = false;
     } else {
         $allow_password_change = true;
-    }    
+    }
     if ($uid == $id) {
         $passurl = $urlServer . 'main/profile/password.php';
-        $tool_content .= 
+        $tool_content .=
             action_bar(array(
                 array('title' => $langEditProfile,
                     'url' => "profile.php",
@@ -83,10 +83,10 @@ if ($userdata) {
                     'url' => "../unreguser.php",
                     'icon' => 'fa-times',
                     'level' => 'primary')
-                ));    
+                ));
     } else {
         if (get_config('dropbox_allow_personal_messages')) {
-            $tool_content .= 
+            $tool_content .=
                 action_bar(array(
                     array('title' => $langProfileSendMail,
                         'url' => $urlAppend . "modules/message/index.php?upload=1&amp;id=$id",
@@ -110,7 +110,7 @@ if ($userdata) {
             $providers .= "<div><span class='tag'>$langProviderConnectWith&nbsp;:&nbsp;</span>" . $providers_text . "</div>";
         }
     }
-    
+
     if (get_config('personal_blog')) {
         $perso_blog_html = "<div class='row'>
                                 <div class='col-xs-12'>
@@ -144,7 +144,7 @@ if ($userdata) {
                                     <h4>$langProfilePersInfo</h4>
                                     <div class='profile-pers-info'>
                                         <span class='tag'>$langEmail :</span>";
-                if (!empty($userdata->email) and allow_access($userdata->email_public)) { 
+                if (!empty($userdata->email) and allow_access($userdata->email_public)) {
                     $tool_content .= " <span class='tag-value'>" . mailto($userdata->email) . "</span>";
                 } else {
                     $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
@@ -192,7 +192,7 @@ if ($userdata) {
     }
         $tool_content .= "
     <div id='profile-departments' class='row'>
-        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>            
+        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
             <div><span class='tag'>$langFaculty : </span>";
             $departments = $user->getDepartmentIds($id);
                 $i = 1;
@@ -223,11 +223,16 @@ draw($tool_content, 1);
  * @return boolean
  */
 function allow_access($level) {
-        
-    if ($level == ACCESS_USERS) {        
+
+    if ($level == ACCESS_USERS) { // if we have allowed it
         return true;
-    } elseif ($_SESSION['status'] == USER_TEACHER) {
+    } elseif ($_SESSION['status'] == USER_TEACHER) { // if we are teacher
         return true;
+    } elseif (isset($_GET['course'])) {
+        $c = $_GET['course'];
+        if ($_SESSION['courses'][$c] == USER_TEACHER) { // if we are course teacher
+          return true;
+        }
     } else {
         return false;
     }
