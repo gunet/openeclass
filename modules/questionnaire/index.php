@@ -60,8 +60,12 @@ if ($is_editor) {
                     Session::Messages($langPollActivated, 'alert-success');
                     break;
                 case 'deactivate':
-                    Database::get()->query("UPDATE poll SET active = 0 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-                    Session::Messages($langPollDeactivated, 'alert-success');
+                    if (!resource_belongs_to_progress_data(MODULE_ID_QUESTIONNAIRE, $pid)) {
+                        Database::get()->query("UPDATE poll SET active = 0 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+                        Session::Messages($langPollDeactivated, 'alert-success');
+                    } else {
+                        Session::Messages($langResourceBelongsToCert, 'alert-warning');
+                    }
                     break;
             }
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
@@ -81,13 +85,17 @@ if ($is_editor) {
         }
         // delete polls
         if (isset($_GET['delete']) and $_GET['delete'] == 'yes') {
-            Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
-                        (SELECT pqid FROM poll_question WHERE pid = ?d)", $pid);
-            Database::get()->query("DELETE FROM `poll_to_specific` WHERE poll_id = ?d", $pid);
-            Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-            Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
-            Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
-            Session::Messages($langPollDeleted, 'alert-success');
+            if (!resource_belongs_to_progress_data(MODULE_ID_QUESTIONNAIRE, $pid)) {
+                Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
+                            (SELECT pqid FROM poll_question WHERE pid = ?d)", $pid);
+                Database::get()->query("DELETE FROM `poll_to_specific` WHERE poll_id = ?d", $pid);
+                Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
+                Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
+                Database::get()->query("DELETE FROM poll_user_record WHERE pid = ?d", $pid);
+                Session::Messages($langPollDeleted, 'alert-success');
+            } else {
+                Session::Messages($langResourceBelongsToCert, "alert-warning");
+            }
             redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);       
         // delete poll results
         } elseif (isset($_GET['delete_results']) && $_GET['delete_results'] == 'yes') {

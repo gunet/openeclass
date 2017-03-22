@@ -624,6 +624,7 @@ function resource_usage($element, $element_resource_id) {
     }    
 }
 
+
 /**
  * @brief get resource details given a certificate resource
  * @global type $course_id

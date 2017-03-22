@@ -74,13 +74,21 @@ if ($is_editor) {
         if ($objExerciseTmp->read($exerciseId)) {
             switch ($_GET['choice']) {
                 case 'delete': // deletes an exercise
-                    $objExerciseTmp->delete();
-                    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                    Session::Messages($langPurgeExerciseSuccess, 'alert-success');
+                    if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
+                        $objExerciseTmp->delete();
+                        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                        Session::Messages($langPurgeExerciseSuccess, 'alert-success');
+                    } else {
+                        Session::Messages($langResourceBelongsToCert, "alert-warning");
+                    }
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'purge': // purge exercise results
-                    $objExerciseTmp->purge();
-                    Session::Messages($langPurgeExerciseResultsSuccess);
+                    if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
+                        $objExerciseTmp->purge();
+                        Session::Messages($langPurgeExerciseResultsSuccess);
+                    } else {
+                        Session::Messages($langResourceBelongsToCert, "alert-warning");
+                    }
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'enable':  // enables an exercise
                     $objExerciseTmp->enable();
@@ -88,9 +96,13 @@ if ($is_editor) {
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'disable': // disables an exercise
-                    $objExerciseTmp->disable();
-                    $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                    if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
+                        $objExerciseTmp->disable();
+                        $objExerciseTmp->save();
+                        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                    } else {
+                        Session::Messages($langResourceBelongsToCert, "alert-warning");
+                    }
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'public':  // make exercise public
                     $objExerciseTmp->makepublic();

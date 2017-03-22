@@ -73,8 +73,12 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
     // visibility commands
     if (isset($_GET['vis'])) {
         $table = select_table($_GET['table']);
-        Database::get()->query("UPDATE $table SET visible = ?d WHERE id = ?d", $_GET['vis'], $_GET['vid']);
-        Session::Messages($langViMod, "alert-success");
+        if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $_GET['vid'])) {
+            Database::get()->query("UPDATE $table SET visible = ?d WHERE id = ?d", $_GET['vis'], $_GET['vid']);
+            Session::Messages($langViMod, "alert-success");
+        } else {
+            Session::Messages($langResourceBelongsToCert, "alert-warning");
+        }
     }
 
     // Public accessibility commands
@@ -88,11 +92,16 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
     if (isset($_GET['delete'])) {
         if ($_GET['delete'] == 'delcat') { // delete video category
             // delete category videos
+            $error = FALSE;
             $q1 = Database::get()->queryArray("SELECT id FROM video WHERE category = ?d AND course_id = ?d", $_GET['id'], $course_id);
             foreach ($q1 as $a) {
-                delete_video($a->id, 'video', $course_id, $course_code, $webDir);
+                if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $a->id)) {
+                    delete_video($a->id, 'video', $course_id, $course_code, $webDir);
+                }   else {
+                    Session::Messages($langResourceBelongsToCert, "alert-warning");
+                    $error = TRUE;
+                }
             }
-            
             // delete category videolinks
             $q2 = Database::get()->queryArray("SELECT id FROM videolink WHERE category = ?d AND course_id = ?d", $_GET['id'], $course_id);
             foreach ($q2 as $a) {
@@ -100,14 +109,19 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
             }
             
             // delete category
-            delete_video_category($_GET['id']);
+            if (!$error) {                
+                delete_video_category($_GET['id']);
+            }
             
         } else { // delete video / videolink
             $table = select_table($_GET['table']);
-            delete_video($_GET['id'], $table, $course_id, $course_code, $webDir);
+            if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $_GET['id'])) {
+                delete_video($_GET['id'], $table, $course_id, $course_code, $webDir);
+                Session::Messages($langGlossaryDeleted, "alert-success");
+            } else {
+                Session::Messages($langResourceBelongsToCert, "alert-warning");
+            }
         }
-        
-        Session::Messages($langGlossaryDeleted, "alert-success");
     }
 } // end of admin actions
 

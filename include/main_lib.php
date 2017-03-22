@@ -1223,6 +1223,39 @@ function resource_access($visible, $public) {
     }
 }
 
+
+/**
+ * @brief check if a specific resource belongs to certificate / badge
+ * @global type $course_id
+ * @param type $module
+ * @param type $resource_id
+ * @return boolean
+ */
+function resource_belongs_to_progress_data($module, $resource_id) {
+         
+    global $course_id;
+    
+    // check if module belongs to certificate
+    $sql = Database::get()->querySingle("SELECT * FROM certificate_criterion JOIN certificate "
+                                            . "ON certificate.id = certificate_criterion.certificate "
+                                            . "WHERE course_id = ?d AND module = ?d AND resource = ?d",
+                                        $course_id, $module, $resource_id);
+    if ($sql) {
+        return true;
+    }
+    // check if module belongs to badge
+    $sql2 = Database::get()->querySingle("SELECT * FROM badge_criterion JOIN badge "
+                                            . "ON badge.id = badge_criterion.badge "
+                                            . "WHERE course_id = ?d AND module = ?d AND resource = ?d", 
+                                        $course_id, $module, $resource_id);
+    if ($sql2) {
+        return true;
+    }
+    
+    return false;
+}
+
+
 # Only languages defined below are available for selection in the UI
 # If you add any new languages, make sure they are defined in the
 # next array as well

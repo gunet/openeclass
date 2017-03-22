@@ -52,6 +52,14 @@ if (isset($_GET['id'])) {
 $backPath = $data['backPath'] = $urlAppend . "modules/video/index.php?course=" . $course_code;
 $navigation[] = array('url' => $backPath, 'name' => $langVideo);
 
+
+if (isset($_GET['form_input'])) {
+    $form_input = $_GET['form_input'];    
+} else {
+    $form_input = '';
+}
+$data['form_input'] = $form_input;
+
 // handle submitted data
 if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
     $id = $_POST['id'];
@@ -209,10 +217,6 @@ if (isset($_GET['id']) && isset($_GET['table_edit'])) {
 // handle common data for create/edit
 $data['nick'] = $_SESSION['givenname'] . ' ' . $_SESSION['surname'];
 $data['resultcategories'] = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY `name`", $course_id);
-if ($_GET['form_input'] === 'opendelos') {
-    $data['jsonObj'] = requestDelosJSON();
-    $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
-}
 
 // js and view
 load_js('tools.js');
@@ -240,11 +244,15 @@ function checkrequired(which, entry) {
 }
 </script>
 hContent;
-    
-if ($_GET['form_input'] === 'opendelos') {
+
+
+if ($form_input === 'opendelos') {
+    $data['jsonObj'] = requestDelosJSON();
+    $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
     $head_content .= getDelosJavaScript();
     view('modules.video.editdelos', $data);
-} else {
+}
+ else {    
     view('modules.video.edit', $data);
 }
 

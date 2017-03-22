@@ -133,9 +133,12 @@ if ($is_editor) {
         switch ($_REQUEST['cmd']) {
             // DELETE COMMAND
             case "delete" :
-                $lp_name = deleteLearningPath($_GET['del_path_id']);
-                Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
-
+                if (!resource_belongs_to_progress_data(MODULE_ID_LP, $_GET['del_path_id'])) {
+                    $lp_name = deleteLearningPath($_GET['del_path_id']);
+                    Log::record($course_id, MODULE_ID_LP, LOG_DELETE, array('name' => $lp_name));
+                } else {
+                    $tool_content .= "<div class='alert alert-warning'>$langResourceBelongsToCert</div>";
+                }
                 break;
             // ACCESSIBILITY COMMAND
             case "mkBlock" :
@@ -150,11 +153,15 @@ if ($is_editor) {
             case "mkVisibl" :
             case "mkInvisibl" :
                 $visibility = ($_REQUEST['cmd'] == "mkVisibl") ? 1 : 0;
-                Database::get()->query("UPDATE `lp_learnPath`
+                if (($_REQUEST['cmd'] == "mkInvisibl") and resource_belongs_to_progress_data(MODULE_ID_LP, $_GET['visibility_path_id'])) {
+                    $tool_content .= "<div class='alert alert-warning'>$langResourceBelongsToCert</div>";
+                } else {
+                    Database::get()->query("UPDATE `lp_learnPath`
 					SET `visible` = ?d
 					WHERE `learnPath_id` = ?d
 					AND `visible` != ?d
 					AND `course_id` = ?d", $visibility, $_GET['visibility_path_id'], $visibility, $course_id);
+                }
                 break;
             // ORDER COMMAND
             case "moveUp" :
@@ -362,17 +369,17 @@ $tool_content .= "
 <div class='table-responsive'>    
     <table class='table-default'>
     <tr class='list-header'>
-      <th><div align='left'>$langLearningPaths</div></th>\n";
+      <th><div align='left'>$langLearningPaths</div></th>";
 
 if ($is_editor) {
     // Titles for teachers
-    $tool_content .= "      <th><div align='center'>" . icon('fa-gears') . "</div></th>\n";
+    $tool_content .= "<th><div align='center'>" . icon('fa-gears') . "</div></th>";
 } elseif ($uid) {
     // display progression only if user is not teacher && not anonymous
-    $tool_content .= "      <th colspan='2' width='50'><div align='center'>$langProgress</div></th>\n";
+    $tool_content .= "<th colspan='2' width='50'><div align='center'>$langProgress</div></th>";
 }
 // close title line
-$tool_content .= "    </tr>\n";
+$tool_content .= "</tr>";
 
 // display invisible learning paths only if user is courseAdmin
 if ($is_editor) {
@@ -597,7 +604,7 @@ foreach ($result as $list) { // while ... learning path list
                 'class' => 'delete',
                 'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name)."\"" : $langDelete);
 
-        $tool_content .= "<td class='option-btn-cell'>" . action_button($lp_menu) . "</td>\n";
+        $tool_content .= "<td class='option-btn-cell'>" . action_button($lp_menu) . "</td>";
     } elseif ($uid) {
         // % progress
         $prog = get_learnPath_progress($list->learnPath_id, $uid);
@@ -609,7 +616,7 @@ foreach ($result as $list) { // while ... learning path list
         }        
         $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($prog, 1) . "</td>";
     }
-    $tool_content .= "</tr>\n";
+    $tool_content .= "</tr>";
     $iterator++;
     $ind++;
 } // end while
@@ -621,9 +628,9 @@ if (!$is_editor && $iterator != 1 && $uid) {
     <tr>
       <th><div align='right'><b>$langPathsInCourseProg</b>:</div></th>
       <th><div align='right'>" . disp_progress_bar($total, 1) . "</div></th>
-    </tr>\n";
+    </tr>";
 }
-$tool_content .= "\n     </table></div>\n";
+$tool_content .= "</table></div>";
 $tool_content .= "<div class='modal fade' id='restrictlp' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
   <div class='modal-dialog'>
     <div class='modal-content'>
@@ -631,7 +638,7 @@ $tool_content .= "<div class='modal fade' id='restrictlp' tabindex='-1' role='di
         $langRestrictedLPath
       ."</div>
       <div class='modal-footer'>
-        <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+        <button type='button' class='btn btn-default' data-dismiss='modal'>$langClose</button>
       </div>
     </div>
   </div>
