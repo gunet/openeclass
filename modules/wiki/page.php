@@ -82,7 +82,6 @@ require_once "modules/wiki/lib/class.wikisearchengine.php";
 require_once 'modules/wiki/lib/class.lockmanager.php';
 require_once 'modules/wiki/lib/lib.requestfilter.php';
 require_once 'modules/wiki/lib/lib.wikidisplay.php';
-require_once 'modules/wiki/lib/lib.javascript.php';
 
 // set request variables
 $wikiId = (isset($_REQUEST['wikiId'])) ? intval($_REQUEST['wikiId']) : 0;
@@ -434,7 +433,7 @@ if (!isset($content)) {
 // --------- Start of wiki display --------------------
 // set xtra head
 
-$jspath = document_web_path() . '/lib/javascript';
+$jspath = $urlAppend . 'modules/wiki/lib/javascript';
 
 // set image repository
 $head_content .= "<script type=\"text/javascript\">"

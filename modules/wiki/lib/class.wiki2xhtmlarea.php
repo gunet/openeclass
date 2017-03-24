@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -39,8 +39,6 @@
   ==============================================================================
  */
 
-
-require_once dirname(__FILE__) . "/lib.javascript.php";
 
 /**
  * Wiki2xhtml editor textarea
@@ -98,42 +96,42 @@ class Wiki2xhtmlArea {
      */
     function getToolbar() {
 
-        global $wiki_toolbar, $langWikiUrl, $langWikiUrlImage;
+        global $wiki_toolbar, $langWikiUrl, $langWikiUrlImage, $urlAppend;
         $toolbar = '';
 
         $toolbar .= '<script type="text/javascript" src="'
-                . document_web_path() . '/lib/javascript/toolbar.js"></script>'
+                . $urlAppend . 'modules/wiki/lib/javascript/toolbar.js"></script>'
                 . "\n"
         ;
         $toolbar .= "<script type=\"text/javascript\">if (document.getElementById) {
-		var tb = new dcToolBar(document.getElementById('" . $this->attributeList['id'] . "'),
-		'wiki','" . document_web_path() . "/toolbar/');
+        var tb = new dcToolBar(document.getElementById('" . $this->attributeList['id'] . "'),
+        'wiki','" . $urlAppend . "modules/wiki/toolbar/');
 
-        	tb.btStrong('" . $wiki_toolbar['Strongemphasis'] . "');
-		tb.btEm('" . $wiki_toolbar['Emphasis'] . "');
-		tb.btIns('" . $wiki_toolbar['Inserted'] . "');
-		tb.btDel('" . $wiki_toolbar['Deleted'] . "');
-		tb.btQ('" . $wiki_toolbar['Inlinequote'] . "');
-		tb.btCode('" . $wiki_toolbar['Code'] . "');
-		tb.btHr('" . $wiki_toolbar['Hr'] . "');
-		tb.addSpace(10);
-		tb.btH1('" . $wiki_toolbar['H1'] . "');
-		tb.btH2('" . $wiki_toolbar['H2'] . "');
-		tb.btH3('" . $wiki_toolbar['H3'] . "');
-		tb.btH4('" . $wiki_toolbar['H4'] . "');
-		tb.addSpace(10);
-		tb.btBr('" . $wiki_toolbar['Linebreak'] . "');
-		tb.addSpace(10);
-		tb.btBquote('" . $wiki_toolbar['Blockquote'] . "');
-		tb.btPre('" . $wiki_toolbar['Preformatedtext'] . "');
-		tb.btList('" . $wiki_toolbar['Unorderedlist'] . "','ul');
-		tb.btList('" . $wiki_toolbar['Orderedlist'] . "','ol');
-		tb.addSpace(10);
-        	tb.btLink('" . $wiki_toolbar['Link'] . "','" . $langWikiUrl . "');
-        	tb.btImgLink('" . $wiki_toolbar['Externalimage'] . "','" . $langWikiUrlImage . "');
-		tb.draw('');
-	}
-	</script>\n";
+        tb.btStrong('" . $wiki_toolbar['Strongemphasis'] . "');
+        tb.btEm('" . $wiki_toolbar['Emphasis'] . "');
+        tb.btIns('" . $wiki_toolbar['Inserted'] . "');
+        tb.btDel('" . $wiki_toolbar['Deleted'] . "');
+        tb.btQ('" . $wiki_toolbar['Inlinequote'] . "');
+        tb.btCode('" . $wiki_toolbar['Code'] . "');
+        tb.btHr('" . $wiki_toolbar['Hr'] . "');
+        tb.addSpace(10);
+        tb.btH1('" . $wiki_toolbar['H1'] . "');
+        tb.btH2('" . $wiki_toolbar['H2'] . "');
+        tb.btH3('" . $wiki_toolbar['H3'] . "');
+        tb.btH4('" . $wiki_toolbar['H4'] . "');
+        tb.addSpace(10);
+        tb.btBr('" . $wiki_toolbar['Linebreak'] . "');
+        tb.addSpace(10);
+        tb.btBquote('" . $wiki_toolbar['Blockquote'] . "');
+        tb.btPre('" . $wiki_toolbar['Preformatedtext'] . "');
+        tb.btList('" . $wiki_toolbar['Unorderedlist'] . "','ul');
+        tb.btList('" . $wiki_toolbar['Orderedlist'] . "','ol');
+        tb.addSpace(10);
+        tb.btLink('" . $wiki_toolbar['Link'] . "','" . $langWikiUrl . "');
+        tb.btImgLink('" . $wiki_toolbar['Externalimage'] . "','" . $langWikiUrlImage . "');
+        tb.draw('');
+    }
+    </script>\n";
 
         return $toolbar;
     }

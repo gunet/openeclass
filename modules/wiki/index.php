@@ -72,7 +72,7 @@ $toolName = $langWiki;
 if ($_gid && $_gid != 0 && $is_groupAllowed) {
     // group context
     $groupId = intval($_gid);
-    
+
     $sql = "SELECT `name` FROM `group` WHERE `id` = ?d";
     $result = Database::get()->querySingle($sql, $groupId);
     if (is_object($result)) {
@@ -81,7 +81,7 @@ if ($_gid && $_gid != 0 && $is_groupAllowed) {
         $navigation[] = array('url' => '../group/group_space.php?course=' . $course_code, 'name' => $group_name);
     } else {
         $groupId = 0;
-    }    
+    }
 } else {
     // course context
     $groupId = 0;
@@ -92,7 +92,6 @@ require_once 'lib/class.wiki.php';
 require_once 'lib/class.wikistore.php';
 require_once 'lib/class.wikipage.php';
 require_once 'lib/lib.requestfilter.php';
-require_once 'lib/lib.javascript.php';
 require_once 'lib/lib.wikidisplay.php';
 
 // filter request variables
@@ -119,7 +118,7 @@ $wikiList = array();
 // --------- Start of command processing ----------------
 
 switch ($action) {
-	case 'exExport':
+    case 'exExport':
     {
         require_once "lib/class.wiki2xhtmlexport.php";
 
@@ -163,7 +162,7 @@ switch ($action) {
                 redirect_to_home_page("modules/wiki/index.php?course=$course_code");
             } else {
                 redirect_to_home_page("modules/wiki/index.php?course=$course_code&gid=$groupId");
-            }			
+            }
     // request edit
     case "rqEdit": {
             if ($wikiId == 0) {
@@ -190,7 +189,7 @@ switch ($action) {
         $v->labels(array(
             'title' => "$langTheField $langTitle"
         ));
-        if($v->validate()) {        
+        if($v->validate()) {
             $wikiTitle = (isset($_POST['title'])) ? strip_tags($_POST['title']) : '';
             $wikiDesc = (isset($_POST['desc'])) ? strip_tags($_POST['desc']) : '';
 
@@ -229,7 +228,7 @@ switch ($action) {
             }
             if ($wikiACL['other_edit'] == false and $wikiACL['other_create'] == true) {
                 $wikiACL['other_create'] = false;
-            }        
+            }
             if ($wikiId == 0) {
                 $wiki = new Wiki();
                 $wiki->setTitle($wikiTitle);
@@ -284,8 +283,8 @@ switch ($action) {
 // javascript
 
 if ($action == 'rqEdit') {
-    $jspath = document_web_path() . '/lib/javascript';
-    $htmlHeadXtra[] = '<script type="text/javascript" src="' . $jspath . '/wiki_acl.js"></script>';
+    $jspath = $urlAppend . 'modules/wiki/lib/javascript';
+    $htmlHeadXtra[] = "<script type='text/javascript' src='$jspath/wiki_acl.js'></script>";
     $claroBodyOnload[] = 'initBoxes();';
 }
 
@@ -340,7 +339,7 @@ switch ($action) {
             break;
     }
     // edit form
-    case "rqEdit": {            
+    case "rqEdit": {
             $tool_content .= claro_disp_wiki_properties_form($wikiId, $wikiTitle, $wikiDesc, $groupId, $wikiACL);
             break;
         }
