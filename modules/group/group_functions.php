@@ -204,12 +204,32 @@ function showgroupcategoryadmintools($categoryid) {
  * @global type $is_editor
  * @global type $course_id
  * @global type $tool_content
+ * @global type $langConfig
+ * @global type $langUnRegister
  * @global type $course_code
  * @global type $langGroupDelconfirm
  * @global type $langDelete
+ * @global type $langRegister
+ * @global type $member_count
+ * @global type $langModify
+ * @global type $is_member
+ * @global type $multi_reg
+ * @global type $langMyGroup
+ * @global type $langAddDescription
  * @global type $langEditChange
  * @global type $groups_num
  * @global type $uid
+ * @global type $totalRegistered
+ * @global type $student_desc
+ * @global type $allow_unreg
+ * @global type $tutors
+ * @global type $group_name
+ * @global type $self_reg
+ * @global type $user_group_description
+ * @global type $user_groups
+ * @global type $max_members
+ * @global type $group_description
+ * @global type $langCommentsUser
  * @param type $catid
  */
 function showgroupsofcategory($catid) {
@@ -217,7 +237,7 @@ function showgroupsofcategory($catid) {
     global $is_editor, $course_id, $tool_content, $langConfig, $langUnRegister,
     $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
     $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
-    $langEditChange, $groups_num, $uid, $totalRegistered, $student_desc,
+    $langEditChange, $groups_num, $uid, $totalRegistered, $student_desc, $allow_unreg,
     $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members, $group_description, $langCommentsUser;
 
     $q = Database::get()->queryArray("SELECT id FROM `group`
@@ -226,7 +246,7 @@ function showgroupsofcategory($catid) {
 
     foreach ($q as $row) {
         $tool_content .= "<tr><td style='padding-left: 25px;'>";
-        $group_id = $row->id;
+        $group_id = $row->id;        
         initialize_group_info($group_id);
         if ($is_editor) {
             $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) . "</a>";
@@ -293,11 +313,15 @@ function showgroupsofcategory($catid) {
             $tool_content .= "<td class='text-center'>";
             // If self-registration and multi registration allowed by admin and group is not full
             if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
-                $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
+                $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=".getIndirectReference($group_id)."");
             } elseif (!$self_reg) {
                 $tool_content .= ' - ';
             } else {
-                $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
+                if (!$allow_unreg) {
+                    $tool_content .= '&mdash;';
+                } else {
+                    $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
+                }
             }
             $tool_content .= "</td>";
         }

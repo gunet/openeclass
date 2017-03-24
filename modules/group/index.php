@@ -547,7 +547,7 @@ if ($is_editor) {
                 </tr>";
 
         foreach ($groupSelect as $group) {
-            initialize_group_info($group->id);
+            initialize_group_info($group->id);            
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                     <br><p>$group_description</p>";
