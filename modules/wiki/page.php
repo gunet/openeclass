@@ -82,7 +82,6 @@ require_once "modules/wiki/lib/class.wikisearchengine.php";
 require_once 'modules/wiki/lib/class.lockmanager.php';
 require_once 'modules/wiki/lib/lib.requestfilter.php';
 require_once 'modules/wiki/lib/lib.wikidisplay.php';
-require_once 'modules/wiki/lib/lib.javascript.php';
 
 // set request variables
 $wikiId = (isset($_REQUEST['wikiId'])) ? intval($_REQUEST['wikiId']) : 0;
@@ -100,24 +99,24 @@ $result = Database::get()->querySingle($sql, $wikiId, $course_id);
 if (is_object($result)) {
     $groupId = $result->group_id;
     if ($groupId != 0) {
-        
+
         if ($is_groupAllowed) {
             //check if user is group member
             $sql = "SELECT `user_id` FROM `group_members`  WHERE user_id = ?d and group_id = ?d";
             $result = Database::get()->querySingle($sql, $uid, $groupId);
             if (is_object($result)) {
-            	$is_groupMember = true;
+                $is_groupMember = true;
             } else {
-            	$is_groupMember = false;
+                $is_groupMember = false;
             }
-            
+
             $sql = "SELECT `name` FROM `group` WHERE `id` = ?d";
             $result = Database::get()->querySingle($sql, $groupId);
             if (is_object($result)) {
-            	$group_name = $result->name;
-            	$navigation[] = array('url' => '../group/index.php?course=' . $course_code, 'name' => $langGroups);
-            	$navigation[] = array('url' => '../group/group_space.php?course=' . $course_code, 'name' => $group_name);
-            }    
+                $group_name = $result->name;
+                $navigation[] = array('url' => '../group/index.php?course=' . $course_code, 'name' => $langGroups);
+                $navigation[] = array('url' => '../group/group_space.php?course=' . $course_code, 'name' => $group_name);
+            }
         } else {//redirect user to course wiki
             header("Location: index.php?course=$course_code");
             exit();
@@ -253,7 +252,7 @@ switch ($action) {
     }
     case 'exSearch': {
         $pattern = isset($_REQUEST['searchPattern']) ? trim($_REQUEST['searchPattern']) : null;
-        
+
         if (!empty($pattern)) {
             $searchEngine = new WikiSearchEngine();
             $searchResult = $searchEngine->searchInWiki($pattern, $wikiId, CLWIKI_SEARCH_ANY);
@@ -261,7 +260,7 @@ switch ($action) {
             if (is_null( $searchResult )) {
                 $searchResult = array();
             }
-        
+
             $wikiList = $searchResult;
         }
         else {
@@ -307,38 +306,38 @@ switch ($action) {
     }
     // edit page content
     case 'edit': {
-        
+
         $lock_manager = new LockManager();
-        
+
         //require a lock for this page
         $gotLock = $lock_manager->getLock($wiki_title, $wikiId, $uid);
-        
+
         if ($gotLock) {//succesfully locked page
-            
+
             if ($wikiStore->pageExists($wikiId, $wiki_title)) {
-            	if ($versionId == 0) {
-            		$wikiPage->loadPage($wiki_title);
-            	} else {
-            		$wikiPage->loadPageVersion($versionId);
-            	}
-            	if ($content == '') {
-            		$content = $wikiPage->getContent();
-            	}
-            	if ($content == "__CONTENT__EMPTY__") {
-            		$content = '';
-            	}
-            
-            	$wiki_title = $wikiPage->getTitle();
+                if ($versionId == 0) {
+                    $wikiPage->loadPage($wiki_title);
+                } else {
+                    $wikiPage->loadPageVersion($versionId);
+                }
+                if ($content == '') {
+                    $content = $wikiPage->getContent();
+                }
+                if ($content == "__CONTENT__EMPTY__") {
+                    $content = '';
+                }
+
+                $wiki_title = $wikiPage->getTitle();
             } else {
-            	if ($content == '') {
-            		$message = $langWikiNoContent;
-            		$style = 'alert-warning';
-            	}
+                if ($content == '') {
+                    $message = $langWikiNoContent;
+                    $style = 'alert-warning';
+                }
             }
         } else {//already locked by another user
             $action = 'conflict';
         }
-        
+
         break;
     }
     // view page
@@ -362,57 +361,57 @@ switch ($action) {
     // save page
     case 'save': {
         $lock_manager = new LockManager();
-        
+
         //require a lock for this page
         $gotLock = $lock_manager->getLock($wiki_title, $wikiId, $uid);
-        
+
         if ($gotLock) {//a lock was acquired, so we can proceed in saving
             if(isset($_REQUEST['current']) AND $_REQUEST['current']=='yes') {
-            	$wikiPage->loadPageVersion($versionId);
-            	$content = $wikiPage->getContent();
-            	$changelog = $langWikiPageRevertedVersion;
-            	$versionId = 0;
+                $wikiPage->loadPageVersion($versionId);
+                $content = $wikiPage->getContent();
+                $changelog = $langWikiPageRevertedVersion;
+                $versionId = 0;
             }
-            
+
             if (isset($content)) {
-            	$time = date('Y-m-d H:i:s');
-            
-            	if ($wikiPage->pageExists($wiki_title)) {
-            		$wikiPage->loadPage($wiki_title);
-            		if ($content == $wikiPage->getContent()) {
-            
-            			$message = $langWikiIdenticalContent;
-            			$style = 'caution';
-            			$action = 'show';
-            		} else {
-            			$wikiPage->edit($creatorId, $content, $changelog, $time, true);
-            			if ($wikiPage->hasError()) {
-            				$message = "Database error : " . $wikiPage->getError();
-            				$style = "caution";
-            			} else {
-            				$message = $langWikiPageSaved;
-            				$style = "success";
-            			}
-            			$action = 'show';
-            		}
-            	} else {
-            		$wikiPage->create($creatorId, $wiki_title, $content, $changelog, $time, true);
-            		if ($wikiPage->hasError()) {
-            			$message = 'Database error : ' . $wikiPage->getError();
-            			$style = 'caution';
-            		} else {
-            			$message = $langWikiPageSaved;
-            			$style = 'success';
-            		}
-            		$action = 'show';
-            	}
+                $time = date('Y-m-d H:i:s');
+
+                if ($wikiPage->pageExists($wiki_title)) {
+                    $wikiPage->loadPage($wiki_title);
+                    if ($content == $wikiPage->getContent()) {
+
+                        $message = $langWikiIdenticalContent;
+                        $style = 'caution';
+                        $action = 'show';
+                    } else {
+                        $wikiPage->edit($creatorId, $content, $changelog, $time, true);
+                        if ($wikiPage->hasError()) {
+                            $message = "Database error : " . $wikiPage->getError();
+                            $style = "caution";
+                        } else {
+                            $message = $langWikiPageSaved;
+                            $style = "success";
+                        }
+                        $action = 'show';
+                    }
+                } else {
+                    $wikiPage->create($creatorId, $wiki_title, $content, $changelog, $time, true);
+                    if ($wikiPage->hasError()) {
+                        $message = 'Database error : ' . $wikiPage->getError();
+                        $style = 'caution';
+                    } else {
+                        $message = $langWikiPageSaved;
+                        $style = 'success';
+                    }
+                    $action = 'show';
+                }
             }
             //release the lock after finishing saving
             $lock_manager->releaseLock($wiki_title, $wikiId);
         } else {//failed to lock, unable to save
             $action = 'conflict';
         }
-        
+
         break;
     }
     // page history
@@ -434,7 +433,7 @@ if (!isset($content)) {
 // --------- Start of wiki display --------------------
 // set xtra head
 
-$jspath = document_web_path() . '/lib/javascript';
+$jspath = $urlAppend . 'modules/wiki/lib/javascript';
 
 // set image repository
 $head_content .= "<script type=\"text/javascript\">"
@@ -469,13 +468,13 @@ switch ($action) {
             break;
         }
     case "rqSearch": {
-        	$pageName = $langSearch;
-        	break;
+            $pageName = $langSearch;
+            break;
         }
     case "exSearch": {
-        	$pageName = $langSearch;
-        	break;
-        }   
+            $pageName = $langSearch;
+            break;
+        }
     case "history": {
             $dispTitle = ( $wiki_title == "__MainPage__" ) ? $langWikiMainPage : $wiki_title;
             $navigation[] = array('url' => 'page.php?course=' . $course_code . '&amp;action=show&amp;wikiId='
@@ -542,7 +541,7 @@ $tool_content .= action_bar(array(
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId() ."&amp;action=show&amp;title=__MainPage__",
         'icon' => 'fa-wikipedia',
         'level' => 'primary-label'
-    ),        
+    ),
     array(
         'title' => $langWikiRecentChanges,
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId() ."&amp;action=recent",
@@ -554,7 +553,7 @@ $tool_content .= action_bar(array(
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId() ."&amp;action=all",
         'icon' => 'fa-files-o',
         'level' => 'primary'
-    ),   
+    ),
     array(
         'title' => $langSearch,
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=" . $wiki->getWikiId() . "&amp;action=rqSearch",
@@ -566,8 +565,8 @@ $tool_content .= action_bar(array(
         'url' => "index.php?course=$course_code&amp;gid=$groupId",
         'icon' => 'fa-list',
         'level' => 'primary'
-    )    
-));    
+    )
+));
 }
 
 
@@ -680,26 +679,26 @@ switch ($action) {
             break;
         }
     case "conflict": {
-   
-    	$tool_content .= '<div class="wikiTitle">' . "\n";
-    	$tool_content .= '<h2>' . $langWikiEditLock
-    	. '</h2>'
+
+        $tool_content .= '<div class="wikiTitle">' . "\n";
+        $tool_content .= '<h2>' . $langWikiEditLock
+        . '</h2>'
         . "\n"
-    	;
-    	
-		$tool_content .= '</div>' . "\n";
-		$message = $langWikiLockInfo;
-		$tool_content .= "<div class='alert alert-danger'>$message</div></br />";
+        ;
+
+        $tool_content .= '</div>' . "\n";
+        $message = $langWikiLockInfo;
+        $tool_content .= "<div class='alert alert-danger'>$message</div></br />";
 
 
-		if (isset($content) && $content != '') {
-		    //proceed to edit for, in order to save the content later
-			$action = 'edit';
-			$pre_action = 'conflict';
-		} else {
-		    break;
-		}
-    }    
+        if (isset($content) && $content != '') {
+            //proceed to edit for, in order to save the content later
+            $action = 'edit';
+            $pre_action = 'conflict';
+        } else {
+            break;
+        }
+    }
     // edit page
     case "edit": {
             if (!$wiki->pageExists($wiki_title) && !$is_allowedToCreate) {
@@ -708,11 +707,11 @@ switch ($action) {
                 $tool_content .= $langWikiNotAllowedToEdit;
             } else {
                 $script = $_SERVER['SCRIPT_NAME'] . "?course=$course_code";
-                
+
                 //Do not show progress bar if a lock conflict was detected
                 if (!isset($pre_action) || $pre_action != 'conflict') {
                     //add lock time progress bar
-                    
+
                     $head_content .= "<script type='text/javascript'>
                         function secondsToHms(d) {
                         d = Number(d);
@@ -721,37 +720,37 @@ switch ($action) {
                         var s = Math.floor(d % 3600 % 60);
                         return ((h > 0 ? h + \":\" : \"\") + (m > 0 ? (h > 0 && m < 10 ? \"0\" : \"\") + m + \":\" : \"0:\") + (s < 10 ? \"0\" : \"\") + s); }
                     </script>\n\n";
-                    
+
                     $head_content .= "<script type='text/javascript'>
-                                        	function countdown(callback) {
-                                        	    var bar = document.getElementById('progress'),
-                                        	    timer = document.getElementById('progresstime'),
-                                        	    time = max = ".($lock_manager->lock_duration-5).",
-                                        	            
-                                        	    url = 'lib/confirmlock.php'
-                                        	    data = { uid : ".$uid.", page_title : \"".rawurlencode($wiki_title)."\", wiki_id : ".$wikiId." }
-                                        	            
-                                        	    int = setInterval(function() {    
-                                        	    	timer.innerHTML = secondsToHms(time);
-                                        	        bar.style.width = Math.floor(100 * time-- / max) + '%';
-                                        	        if (time + 1 == 0) {
-                                        	            clearInterval(int);
-                                        	            // 600ms - width animation time
-                                        	            callback && setTimeout(callback, 600);
-                                        	        }
-                                        	        if ((max - time) % 25 == 0) {//ajax polling to keep lock alive   
-                                        	            $.post(url, data);    
-                                        	        }
-                                        	    }, 1000);
-                                        	}
-                                        	            
-                                        	$(document).ready(function(){
-                                        	    countdown(function() {
-                                        	        bootbox.alert('".$langWikiLockTimeEnd."');
-                                        	    });
+                                            function countdown(callback) {
+                                                var bar = document.getElementById('progress'),
+                                                timer = document.getElementById('progresstime'),
+                                                time = max = ".($lock_manager->lock_duration-5).",
+
+                                                url = 'lib/confirmlock.php'
+                                                data = { uid : ".$uid.", page_title : \"".rawurlencode($wiki_title)."\", wiki_id : ".$wikiId." }
+
+                                                int = setInterval(function() {
+                                                    timer.innerHTML = secondsToHms(time);
+                                                    bar.style.width = Math.floor(100 * time-- / max) + '%';
+                                                    if (time + 1 == 0) {
+                                                        clearInterval(int);
+                                                        // 600ms - width animation time
+                                                        callback && setTimeout(callback, 600);
+                                                    }
+                                                    if ((max - time) % 25 == 0) {//ajax polling to keep lock alive
+                                                        $.post(url, data);
+                                                    }
+                                                }, 1000);
+                                            }
+
+                                            $(document).ready(function(){
+                                                countdown(function() {
+                                                    bootbox.alert('".$langWikiLockTimeEnd."');
+                                                });
                                             })
                                     </script>\n";
-                    
+
                     $tool_content .= "  <div>
                                             $langWikiLockTimeRemaining
                                             <span id='progresstime'>".intval(gmdate('i', $lock_manager->lock_duration-5)).":".gmdate('s', $lock_manager->lock_duration-5)."</span>
@@ -765,7 +764,7 @@ switch ($action) {
                                             </div>
                                        </noscript>";
                 }
-                
+
                 $tool_content .= claro_disp_wiki_editor($wikiId, $wiki_title, $versionId, $content, $changelog, $script
                         , true, false)
                 ;
@@ -783,11 +782,11 @@ switch ($action) {
                          redirect_to_home_page("modules/wiki/page.php?course=$course_code&wikiId=$wikiId&action=show");
                      } else {
                          Session::Messages($langWikiDeletePageError, 'alert-danger');
-                         redirect_to_home_page("modules/wiki/page.php?course=$course_code&action=show&title=".rawurlencode($wiki_title)."&wikiId=$wikiId");                         
+                         redirect_to_home_page("modules/wiki/page.php?course=$course_code&action=show&title=".rawurlencode($wiki_title)."&wikiId=$wikiId");
                      }
                  } else {
                     Session::Messages($langWikiPageNotFound);
-                    redirect_to_home_page("modules/wiki/page.php?course=$course_code&wikiId=$wikiId&action=show");                     
+                    redirect_to_home_page("modules/wiki/page.php?course=$course_code&wikiId=$wikiId&action=show");
                  }
              }
              break;
@@ -807,13 +806,13 @@ switch ($action) {
             if ($wikiPage->hasError()) {
                 $tool_content .= $wikiPage->getError();
             } else {
-                
+
                 //unlock after edit cancellation
                 //only if current user is the lock owner (to avoid unlocking with GET)
                 $lock_manager = new LockManager();
                 if ($lock_manager->getLockOwner($wiki_title, $wikiId) == $uid) {
                     $lock_manager->releaseLock($wiki_title, $wikiId);
-                } 
+                }
 
                 // get localized value for wiki main page title
                 if ($wiki_title === '__MainPage__') {
@@ -843,17 +842,17 @@ switch ($action) {
                 } else {
                     $versionInfo = '';
                 }
-                
+
                 if(isset($_GET['printable']) and $_GET['printable']=="yes") {
                     if ($versionId == 0) {
-                	    $wikiPage->loadPage($wiki_title);
-                	}
+                        $wikiPage->loadPage($wiki_title);
+                    }
                     else {
                         $wikiPage->loadPageVersion($versionId);
                     }
-                    
+
                     $htmltitle = ($wiki_title=='__MainPage__') ? $langWikiMainPage : $wiki_title;
-                    
+
                     $style = '<style type="text/css">
                             table { border: black solid 1px; }
                             td { border: black solid 1px; }
@@ -861,28 +860,28 @@ switch ($action) {
                     $printable_content = '<html><head><meta charset="utf-8"><title>'.
                                           $htmltitle.'</title>'.
                                           $style.'</head><body>';
-                    
+
                     $printable_content .= '<h2>'.$htmltitle. '</h2>'."\n";
-                    
+
                     $printable_content .= '<h3>'.$toolTitle['mainTitle'].'</h3><hr/>'."\n";
                     //remove the toc script (if it exists) with preg_replace
                     $printable_content .= preg_replace('#<script(.*?)>(.*?)</script>#is', '', $wikiRenderer->render($wikiPage->getContent()))."\n";
                     $printable_content .= '<hr>';
-                		
+
                     $editorInfo = user_get_data($wikiPage->getEditorId());
                     $editorStr = $editorInfo->givenname . "&nbsp;" . $editorInfo->surname;
                     $editorUrl = '&nbsp;-&nbsp;' . $editorStr;
-                
+
                     $cur_ver_time = $wikiPage->getCurrentVersionMtime();
                     $time = explode(" ", $cur_ver_time);
-                    
+
                     $mtime = nice_format($wikiPage->getCurrentVersionMtime(), TRUE);
-                
-                	$versionInfo = sprintf($langWikiVersionInfoPattern, $mtime, $editorUrl);
-                	$printable_content .= $versionInfo;
-                	$printable_content .= '</body></html>';
+
+                    $versionInfo = sprintf($langWikiVersionInfoPattern, $mtime, $editorUrl);
+                    $printable_content .= $versionInfo;
+                    $printable_content .= '</body></html>';
                 }
-                else {           
+                else {
                     $wiki_content = "<div id='mainContent' class='wiki2xhtml'>
                                     ". $wikiRenderer->render($content) ."
                                     </div>";
@@ -951,7 +950,7 @@ switch ($action) {
                         . "\n"
                 ;
 
-                $userInfo = user_get_data($version->editor_id);                
+                $userInfo = user_get_data($version->editor_id);
 
                 $userStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
 
@@ -970,13 +969,13 @@ switch ($action) {
                         . '</td><td>'.$makecurrent.'</td><td colspan="3"></td>'
                         . "\n"
                 ;
-                
+
                 if ($version->changelog != '') {
-                	$tool_content .='<td colspan="4">(<i>'.$version->changelog
-                	. '</i>)</td>'
-                	. "\n";
+                    $tool_content .='<td colspan="4">(<i>'.$version->changelog
+                    . '</i>)</td>'
+                    . "\n";
                 }
-                
+
                 $tool_content .= '</tr>' . "\n";
             }
         }
@@ -991,7 +990,7 @@ switch ($action) {
 
         if (!empty($searchResult)) {
             $tool_content .= '<ul>' . "\n";
-    
+
             foreach ($searchResult as $page) {
                 if ('__MainPage__' == $page->title) {
                     $title = $langWikiMainPage;
@@ -999,21 +998,21 @@ switch ($action) {
                 else {
                     $title = $page->title;
                 }
-    
+
                 $urltitle = rawurlencode($page->title);
-    
+
                 $link = '<a href="'
                         . htmlspecialchars($_SERVER['SCRIPT_NAME'] . '?wikiId='
                         . $wikiId . '&title=' . $urltitle
                         . '&action=show') . '">' . $title . '</a>';
-    
+
                 $tool_content .= '<li>' . $link. '</li>' . "\n";
             }
             $tool_content .= '</ul>' . "\n";
         } else {
             $tool_content .= $langNoResult;
         }
-        
+
         break;
     }
     case 'rqSearch':
@@ -1069,10 +1068,10 @@ if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes
                                           'icon' => 'fa-times',
                                           'confirm' => $langWikiDeletePageWarning,
                                           'show' => ($is_allowedToEdit || $is_allowedToCreate) && $wiki_title != "__MainPage__" && $is_editor
-                                      )                                    
+                                      )
                                     ))."</div>
                                     <h3 class='panel-title'>
-                                        ". ( $wiki_title != "__MainPage__" ? $wiki_title : $langWikiMainPage) ." 
+                                        ". ( $wiki_title != "__MainPage__" ? $wiki_title : $langWikiMainPage) ."
                                      </h3>
                                 </div>
                                 <div class='panel-body'>
