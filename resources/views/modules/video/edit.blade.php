@@ -35,7 +35,7 @@
                                     <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='{{ $pendingCloudUpload }}'>
                                     <input type='text' class='form-control' name='fileCloudName' value='{{ CloudFile::fromJSON($pendingCloudUpload)->name() }}' readonly>
                                 </div>
-                            @elseif ($form_input === 'file'))
+                            @elseif ($form_input === 'file')
                                 <label for='FileName' class='col-sm-2 control-label'>{{ trans('langWorkFile') }}:</label>
                                 <div class='col-sm-10'>
                                     <input type='hidden' name='MAX_FILE_SIZE' value='{{ fileUploadMaxSize() }}'>
