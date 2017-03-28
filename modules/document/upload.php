@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -31,13 +31,20 @@ $require_login = true;
 require_once "../../include/baseTheme.php";
 require_once "modules/document/doc_init.php";
 require_once 'modules/drives/clouddrive.php';
+require_once 'include/course_settings.php';
+
+$can_upload_replacement = $can_upload;
+if ($subsystem == MAIN and get_config('enable_docs_public_write') and
+    setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE)) {
+        $can_upload = true;
+}
 
 if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
     $toolName = $langCommonDocs;
 } elseif (defined('MY_DOCUMENTS')) {
     if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {
-        redirect_to_home_page();        
+        redirect_to_home_page();
     }
     if ($session->status == USER_STUDENT and !get_config('mydocs_student_enable')) {
         redirect_to_home_page();
@@ -109,7 +116,7 @@ if ($can_upload) {
             <div class='col-md-12'>
                 <div class='form-wrapper'>
 
-        <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>      
+        <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>
           <input type='hidden' name='uploadPath' value='$uploadPath' />
           $group_hidden_input
           $fileinput
@@ -208,12 +215,13 @@ if ($can_upload) {
                         <input type='checkbox' name='uncompress' value='1'>
                         <strong>$langUncompress</strong>
                     </label>
-                </div>          
+                </div>
               </div>
         </div>";
     }
 
-    $tool_content .= "
+    if ($can_upload_replacement) {
+        $tool_content .= "
       <div class='form-group'>
         <div class='col-sm-offset-2 col-sm-10'>
             <div class='checkbox'>
@@ -221,10 +229,12 @@ if ($can_upload) {
                     <input type='checkbox' name='replace' value='1'>
                     <strong>$langReplaceSameName</strong>
                 </label>
-            </div>         
+            </div>
         </div>
-      </div>      
+      </div>";
+    }
 
+    $tool_content .= "
     <div class='row'>
         <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
     </div>";

@@ -384,6 +384,7 @@ if (isset($_POST['submit'])) {
         'enable_indexing' => true,
         'enable_search' => true,
         'enable_common_docs' => true,
+        'enable_docs_public_write' => true,
         'enable_social_sharing_links' => true,
         'enable_strong_passwords' => true,
         'login_fail_check' => true,
@@ -981,6 +982,7 @@ else {
     $cbox_enable_indexing = get_config('enable_indexing') ? 'checked' : '';
     $cbox_enable_search = get_config('enable_search') ? 'checked' : '';
     $cbox_enable_common_docs = get_config('enable_common_docs') ? 'checked' : '';
+    $cbox_enable_docs_public_write = get_config('enable_docs_public_write') ? 'checked' : '';
     $cbox_mydocs_student_enable = get_config('mydocs_student_enable') ? 'checked' : '';
     $cbox_mydocs_teacher_enable = get_config('mydocs_teacher_enable') ? 'checked' : '';
     $mydocs_student_quota = floatval(get_config('mydocs_student_quota'));
@@ -1178,6 +1180,12 @@ else {
                             <label>
                                 <input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs>
                                 $langEnableCommonDocs
+                            </label>
+                        </div>
+                        <div class='checkbox'>
+                            <label>
+                                <input type='checkbox' name='enable_docs_public_write' value='1' $cbox_enable_docs_public_write>
+                                $langEnableDocsPublicWrite
                             </label>
                         </div>
                         <hr>

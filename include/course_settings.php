@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -26,13 +26,13 @@
 require_once 'include/log.class.php';
 
 /** Get the default value of a course setting.
- * 
+ *
  * @param int $setting_id   One of the SETTING_... constants
  * @return int Setting value
  */
 function setting_default($setting_id) {
     global $langUnknownSetting;
-    
+
     $defaults = array(
         SETTING_BLOG_COMMENT_ENABLE => 1,
         SETTING_BLOG_STUDENT_POST => 1,
@@ -42,13 +42,14 @@ function setting_default($setting_id) {
         SETTING_COURSE_RATING_ENABLE => 0,
         SETTING_COURSE_COMMENT_ENABLE => 0,
         SETTING_COURSE_ANONYMOUS_RATING_ENABLE => 0,
-        SETTING_FORUM_RATING_ENABLE => 0,        
+        SETTING_FORUM_RATING_ENABLE => 0,
         SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE => 0,
         SETTING_COURSE_ABUSE_REPORT_ENABLE => 0,
-        SETTING_COURSE_USER_REQUESTS_DISABLE => 0,        
+        SETTING_COURSE_USER_REQUESTS_DISABLE => 0,
         SETTING_GROUP_MULTIPLE_REGISTRATION => 0,
         SETTING_GROUP_STUDENT_DESCRIPTION => 0,
-        SETTING_COURSE_FORUM_NOTIFICATIONS => 0);
+        SETTING_COURSE_FORUM_NOTIFICATIONS => 0,
+        SETTING_DOCUMENTS_PUBLIC_WRITE => 0);
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];
     } else {
@@ -57,7 +58,7 @@ function setting_default($setting_id) {
 }
 
 /** Get the value of a course setting.
- * 
+ *
  * @param int $setting_id   One of the SETTING_... constants
  * @param int $course_id    The course id (default: the current course id)
  * @return int Setting value
@@ -77,14 +78,14 @@ function setting_get($setting_id, $course_id=null) {
 }
 
 /** Set the value of a course setting.
- * 
+ *
  * @param int $setting_id   One of the SETTING_... constants
  * @param int $value        New value of the setting
  * @param int $course_id    The course id (default: the current course id)
  */
 function setting_set($setting_id, $value, $course_id=null) {
     global $course_code;
-    
+
     if (!$course_id) {
         $course_id = $GLOBALS['course_id'];
     }

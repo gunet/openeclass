@@ -383,7 +383,10 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['f_radio'])) {
                 setting_set(SETTING_COURSE_FORUM_NOTIFICATIONS, $_POST['f_radio'], $course_id);
             }
-            
+            if (isset($_POST['f_radio'])) {
+                setting_set(SETTING_DOCUMENTS_PUBLIC_WRITE, $_POST['enable_docs_public_write'], $course_id);
+            }
+
             Session::Messages($langModifDone,'alert-success');
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         }
@@ -480,8 +483,8 @@ if (isset($_POST['submit'])) {
         $sharing_radio_dis = '';
         $sharing_dis_label = '';
     }
-    
-    
+
+
     if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS, $course_id) == 1) {
         $checkForumDis = '';
         $checkForumEn = 'checked';
@@ -514,7 +517,7 @@ if (isset($_POST['submit'])) {
         $anon_rating_dis_label = '';
     }
 
-    if (setting_get(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $course_id) == 1) {
+    if (setting_get(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $course_id)) {
         $checkAnonRatingDis = '';
         $checkAnonRatingEn = 'checked ';
     } else {
@@ -522,28 +525,35 @@ if (isset($_POST['submit'])) {
         $checkAnonRatingEn = '';
     }
     // USER COMMENTS
-    if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
-        $checkCommentDis = "";
-        $checkCommentEn = "checked ";
+    if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id)) {
+        $checkCommentDis = '';
+        $checkCommentEn = 'checked ';
     } else {
-        $checkCommentDis = "checked ";
-        $checkCommentEn = "";
+        $checkCommentDis = 'checked ';
+        $checkCommentEn = '';
     }
     // ABUSE REPORT
-    if (setting_get(SETTING_COURSE_ABUSE_REPORT_ENABLE, $course_id) == 1) {
-        $checkAbuseReportDis = "";
-        $checkAbuseReportEn = "checked ";
+    if (setting_get(SETTING_COURSE_ABUSE_REPORT_ENABLE, $course_id)) {
+        $checkAbuseReportDis = '';
+        $checkAbuseReportEn = 'checked ';
     } else {
-        $checkAbuseReportDis = "checked ";
-        $checkAbuseReportEn = "";
+        $checkAbuseReportDis = 'checked ';
+        $checkAbuseReportEn = '';
     }
     // LOG COURSE USER REQUESTS
-    if (setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id) == 1) {
-        $log_course_user_requests_disable = "checked";
-        $log_course_user_requests_enable = "";
+    if (setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course_id)) {
+        $log_course_user_requests_disable = 'checked';
+        $log_course_user_requests_enable = '';
     } else {
-        $log_course_user_requests_disable = "";
-        $log_course_user_requests_enable = "checked";
+        $log_course_user_requests_disable = '';
+        $log_course_user_requests_enable = 'checked';
+    }
+    if (setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE, $course_id)) {
+        $enable_docs_public_write = ' checked';
+        $disable_docs_public_write = '';
+    } else {
+        $enable_docs_public_write = '';
+        $disable_docs_public_write = ' checked';
     }
     $tool_content .= "<div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
@@ -585,10 +595,10 @@ if (isset($_POST['submit'])) {
 
         @$tool_content .= "</div></div>
         <div class='form-group'>
-        <label for='course_keywords' class='col-sm-2 control-label'>$langCourseKeywords</label>
-        <div class='col-sm-10'>
-                    <input type='text' class='form-control' name='course_keywords' id='course_keywords' value='$course_keywords'>
-                </div>
+            <label for='course_keywords' class='col-sm-2 control-label'>$langCourseKeywords</label>
+            <div class='col-sm-10'>
+                <input type='text' class='form-control' name='course_keywords' id='course_keywords' value='$course_keywords'>
+            </div>
         </div>
         <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseFormat:</label>
@@ -717,12 +727,12 @@ if (isset($_POST['submit'])) {
                 <label class='col-sm-2 control-label'>$langCourseUserRequests:</label>
                 <div class='col-sm-10'>
                     <div class='radio'>
-                    <div class='radio'>
                       <label>
                             <input type='radio' value='0' name='disable_log_course_user_requests' $log_course_user_requests_enable $log_course_user_requests_inactive> $langActivate
                             <span class='help-block'><small>$log_course_user_requests_dis</small></span>
                       </label>
                     </div>
+                    <div class='radio'>
                       <label>
                             <input type='radio' value='1' name='disable_log_course_user_requests' $log_course_user_requests_disable $log_course_user_requests_inactive> $langDeactivate
                       </label>
@@ -820,7 +830,23 @@ if (isset($_POST['submit'])) {
                       </label>
                     </div>
                 </div>
-            </div>
+            </div>" . (get_config('enable_docs_public_write')? "
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langPublicDocumentManagement:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='1' name='enable_docs_public_write'$enable_docs_public_write> $langActivate
+                            <span class='help-block'><small>$langPublicDocumentManagementExplanation</small></span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='0' name='enable_docs_public_write'$disable_docs_public_write> $langDeactivate
+                      </label>
+                    </div>
+                </div>
+            </div>": '') . "
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>

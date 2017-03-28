@@ -368,9 +368,9 @@ function enough_size($fileSize, $dir, $maxDirSpace) {
  *
  * @author Hugues Peeters <hugues.peeters@claroline.net>
  * @param int local max allowed file size e.g. remaining place in
- * 	an allocated course directory
+ *  an allocated course directory
  * @return int lower value between php.ini values of upload_max_filesize and
- * 	post_max_size and the claroline value of size left in directory
+ *  post_max_size and the claroline value of size left in directory
  * @see    - get_max_upload_size() uses  dir_total_space() function
  */
 
@@ -411,7 +411,7 @@ function showquota($quota, $used, $backPath=null) {
     $course_code, $subsystem, $group_id, $ebook_id, $pageName;
 
     $retstring = '';
-    
+
     // pososto xrhsimopoioumenou xorou se %
     if ($quota == 0) {
         $diskUsedPercentage = ($used > 0)? '100%': '0%';
@@ -463,7 +463,7 @@ function showquota($quota, $used, $backPath=null) {
         <div class='col-sm-9'>
               <p class='form-control-static'>$quota</p>
         </div>
-      </div>  
+      </div>
     </form>
     </div></div></div>";
     $tmp_cwd = getcwd();
@@ -483,9 +483,10 @@ function unwanted_file($filename) {
 // a new safe filename
 function process_extracted_file($p_event, &$p_header) {
     global $uploadPath, $realFileSize, $basedir, $course_id,
-    $subsystem, $subsystem_id, $uploadPath, $group_sql;
+        $subsystem, $subsystem_id, $uploadPath, $group_sql,
+        $uploading_as_user;
 
-    $replace = isset($_POST['replace']);
+    $replace = !$uploading_as_user && isset($_POST['replace']);
 
     if (!isset($uploadPath)) {
         $uploadPath = '';
@@ -517,7 +518,7 @@ function process_extracted_file($p_event, &$p_header) {
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
         return 0;
     } else {
-        // Check if file already exists        
+        // Check if file already exists
         $result = Database::get()->querySingle("SELECT id, path, visible FROM document
                                            WHERE $group_sql AND
                                                  path REGEXP ?s AND
@@ -540,7 +541,7 @@ function process_extracted_file($p_event, &$p_header) {
                 $backup_n = 1;
                 do {
                     $backup = preg_replace('/\.[a-zA-Z0-9_-]+$/', '', $filename) .
-                            '_backup_' . $backup_n . '.' . $format;                    
+                            '_backup_' . $backup_n . '.' . $format;
                     $n = Database::get()->querySingle("SELECT COUNT(*) as count FROM document
                                                               WHERE $group_sql AND
                                                                     path REGEXP ?s AND
@@ -554,7 +555,7 @@ function process_extracted_file($p_event, &$p_header) {
             }
         }
 
-        $path .= '/' . safe_filename($format);        
+        $path .= '/' . safe_filename($format);
         $id = Database::get()->query("INSERT INTO document SET
                                  course_id = ?d,
                                  subsystem = ?d,
@@ -598,7 +599,7 @@ function make_path($path, $path_components) {
 
     $path_already_exists = true;
     $depth = 1 + substr_count($path, '/');
-    foreach ($path_components as $component) {        
+    foreach ($path_components as $component) {
         $q = Database::get()->querySingle("SELECT path, visible, format,
                                       (LENGTH(path) - LENGTH(REPLACE(path, '/', ''))) AS depth
                                       FROM document
@@ -615,7 +616,7 @@ function make_path($path, $path_components) {
             make_dir($basedir . $path);
             $id = Database::get()->query("INSERT INTO document SET
                                           course_id = ?d,
-					  subsystem = ?d,
+                      subsystem = ?d,
                                           subsystem_id = ?d,
                                           path = ?s,
                                           filename = ?s,
@@ -636,7 +637,7 @@ function make_path($path, $path_components) {
 
 /**
  * Validate a given uploaded filename against the whitelist and error if necessary.
- * 
+ *
  * @param string  $filename   - The given filename.
  * @param integer $menuTypeID - The menu type to display in case of error.
  */
@@ -668,7 +669,7 @@ function validateRenamedFile($filename, $menuTypeID = 2) {
 
 /**
  * Validate a given uploaded zip archive contents against the whitelist and error if necessary.
- * 
+ *
  * @param array   $listContent - The list contents of the zip arhive, preferably by directly wiring PclZip::listContent().
  * @param integer $menuTypeID  - The menu type to display in case of error.
  */
@@ -695,7 +696,7 @@ function validateUploadedZipFile($listContent, $menuTypeID = 2) {
 
 /**
  * Check whether a filename is allowed by the whitelist or not.
- * 
+ *
  * @param  string  $filename - The filename to check against the whitelist.
  * @return boolean           - Whether the whitelist allows the specific filename extension or not.
  */
@@ -721,7 +722,7 @@ function isWhitelistAllowed($filename) {
 
 /**
  * Fetch a user's whitelist.
- * 
+ *
  * @param  integer $uid - The userId whose whitelist we want.
  * @return string       - The given user's whitelist.
  */
@@ -732,9 +733,9 @@ function fetchUserWhitelist($uid) {
 
 /**
  * Mimic get_file_extension from main lib.
- * 
- * @param  string $filename - The filename whose extension we want. 
- * @return string           - The given filename's extension. 
+ *
+ * @param  string $filename - The filename whose extension we want.
+ * @return string           - The given filename's extension.
  */
 function getPureFileExtension($filename) {
     $matches = array();

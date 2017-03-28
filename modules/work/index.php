@@ -2224,6 +2224,10 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
     $langGradeScalesSelect;
 
+    if (!$_SESSION['courses'][$course_code]) {
+        return;
+    }
+
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
 
     $group_select_hidden_input = $group_select_form = '';
@@ -2260,7 +2264,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                               " . selection($groups_with_no_submissions, 'group_id') . "
                             </div>
                         </div>";
-            }else{
+            } else {
                 Session::Messages($m['NoneWorkGroupNoSubmission'], 'alert-danger');
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
             }
@@ -2465,7 +2469,7 @@ function assignment_details($id, $row) {
             </h3>
         </div>
         <div class='panel-body'>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langTitle:</strong>
                 </div>
@@ -2504,7 +2508,7 @@ function assignment_details($id, $row) {
             </div>";
         }
         $tool_content .= "
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$m[max_grade]:</strong>
                 </div>
@@ -2512,7 +2516,7 @@ function assignment_details($id, $row) {
                     $row->max_grade
                 </div>
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$m[start_date]:</strong>
                 </div>
@@ -2520,7 +2524,7 @@ function assignment_details($id, $row) {
                     " . nice_format($row->submission_date, true) . "
                 </div>
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$m[deadline]:</strong>
                 </div>
@@ -2528,7 +2532,7 @@ function assignment_details($id, $row) {
                     $deadline ".(isset($deadline_notice) ? $deadline_notice : "")."
                 </div>
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$m[group_or_user]:</strong>
                 </div>

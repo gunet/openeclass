@@ -367,6 +367,8 @@ $langCourseAbuseReport = "αναφορά κατάχρησης";
 $langForumNotifications = "Ενημέρωση $langsOfStudents";
 $langActivateForumNotifications = "Ενεργοποίηση ενημέρωσης $langsOfStudents";
 $langDisableForumNotifications = "Aπενεργοποίηση ενημέρωσης $langsOfStudents";
+$langPublicDocumentManagement = 'Δημόσια διαχείριση εγγράφων';
+$langPublicDocumentManagementExplanation = 'Επιτρέπεται απόστολή και διαχείριση αρχείων στα «Έγγραφα» από όλους τους εγγεγραμμένους χρήστες';
 
 // listreq.php
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις " . $langOfTeachers;
@@ -621,6 +623,7 @@ $langActionsExpireInterval = "Διάστημα διατήρησης στατισ
 $langLogActions = "Καταγραφή ενεργειών";
 $langDocumentSettings = 'Ρυθμίσεις αρχείων';
 $langEnableCommonDocs = "Ενεργοποίηση λειτουργίας «Κοινόχρηστων Αρχείων»";
+$langEnableDocsPublicWrite = "Ενεργοποίηση επιλογής διαχείρισης εγγράφων από χρήστες";
 $langEnableMyDocs = 'Ενεργοποίηση προσωπικών αρχείων';
 $langMyDocsQuota = 'Όριο αποθηκευτικού χώρου προσωπικών αρχείων';
 $langEmailAnnounce = "Διεύθυνση κοινοποίησης ανακοινώσεων";
