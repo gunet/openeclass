@@ -24,20 +24,21 @@
  * @brief Main script for the usage statistics module
  */
 
-$require_help = true;
-if(!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c'){
+if (!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c') {
     $require_current_course = true;
     $require_course_admin = true;
-    $stats_type = 'course';
+    $stats_type = 'course';        
+} elseif(isset($_REQUEST['t'])) {
+    if ($_REQUEST['t'] == 'a') {
+        $require_admin = true;
+        $stats_type = 'admin';
+    } else if ($_REQUEST['t'] == 'u') {
+        $require_valid_uid = TRUE;
+        $stats_type = 'user';
+    }
 }
-elseif(isset($_REQUEST['t']) && ($_REQUEST['t'] == 'a' || ($_REQUEST['t'] == 'u' && isset($_REQUEST['u'])))){
-    $require_admin = true;
-    $stats_type = ($_REQUEST['t'] == 'u')? 'user':'admin';
-}
-else{ // expecting $_REQUEST['t'] == 'u'
-    $require_valid_uid = TRUE;
-    $stats_type = 'user';
-}
+        
+$require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
 require_once '../../include/baseTheme.php';
@@ -118,7 +119,6 @@ $head_content .= "<style>
 </style>";
 
 $pageName = $langUsage;
-
 if (isset($_GET['per_course_dur'])) {
     $tool_content .= action_bar(array(
         array('title' => $langPersonalStats,
@@ -128,13 +128,16 @@ if (isset($_GET['per_course_dur'])) {
             'url' => "../../main/portfolio.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
-        ),false);
-    $tool_content .= user_duration_per_course();
-} else {
-    if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)){
-        require_once 'modules/usage/course.php';
+        ),false);    
+    if (($_REQUEST['u'] != $uid) and !$is_admin) { // security check
+        redirect_to_home_page();
+    } else {
+        $tool_content .= user_duration_per_course($_REQUEST['u']);
     }
-    elseif($stats_type == 'admin' && $is_admin){
+} else {    
+    if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)) {        
+        require_once 'modules/usage/course.php';
+    } elseif($stats_type == 'admin' && $is_admin){
         require_once 'modules/usage/admin.php';
     } else {
         require_once 'modules/usage/user.php';
