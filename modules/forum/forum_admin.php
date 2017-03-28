@@ -257,12 +257,21 @@ elseif (isset($_GET['forumgoadd'])) {
     // --------------------------------
     $subject_notify = "$logo - $langCatNotify";
     $body_topic_notify = "$langBodyCatNotify $langInCat '$ctg' \n\n$gunet";
-    $sql = Database::get()->queryArray("SELECT DISTINCT user_id FROM forum_notify
+    
+    if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)) { // first lookup for course setting
+           $sql = Database::get()->queryArray("SELECT cu.user_id FROM course_user cu
+                                                    JOIN user u ON cu.user_id=u.id
+                                                WHERE cu.course_id = ?d
+                                                AND u.email <> ''
+                                                AND u.email IS NOT NULL", $course_id);
+       } else { // if it's not set lookup user setting    
+            $sql = Database::get()->queryArray("SELECT DISTINCT user_id FROM forum_notify
                                 WHERE cat_id = ?d AND
                                         notify_sent = 1 AND
                                         course_id = ?d AND
                                         user_id <> ?d"
             , $cat_id, $course_id, $uid);
+       }
     foreach ($sql as $r) {
         $emailaddr = uid_to_email($r->user_id);
         if (Swift_Validate::email($emailaddr) and get_user_email_notification($r->user_id, $course_id)) {

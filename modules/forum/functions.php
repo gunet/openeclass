@@ -179,8 +179,7 @@ function add_topic_link($pagenr, $total_reply_pages) {
  * @brief Send an e-mail notification for new messages to subscribed users
  * @global type $logo
  * @global type $langNewForumNotify
- * @global type $course_code
- * @global type $course_code
+ * @global type $course_code 
  * @global type $course_id
  * @global type $langForumFrom
  * @global type $uid
@@ -207,15 +206,14 @@ function add_topic_link($pagenr, $total_reply_pages) {
  * @param type $topic_date
  */
 function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $topic_date) {
-    global $logo, $langNewForumNotify, $course_code, $course_code, $course_id, $langForumFrom,
+    global $logo, $langNewForumNotify, $course_code, $course_id, $langForumFrom,
         $uid, $langBodyForumNotify, $langInForums, $urlServer, $langdate, $langSender,
         $langCourse, $langCategory, $langForum, $langSubject, $langNote,
         $langLinkUnsubscribe, $langHere, $charset, $langMailBody, $langMailSubject;
 
     $subject_notify = "$logo - $langNewForumNotify";
     $category_id = forum_category($forum_id);
-    $cat_name = category_name($category_id);
-    $c = course_code_to_title($course_code);
+    $cat_name = category_name($category_id);    
     $name = uid_to_name($uid);
     $title = course_id_to_title($course_id);
 
@@ -265,9 +263,17 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
        "$langNote: " . canonicalize_whitespace(str_replace('<br />', "\n", sprintf($langLinkUnsubscribe, q($title)))) .
        " $langHere:\n${urlServer}main/profile/emailunsubscribe.php?cid=$course_id\n";
 
-    $users = Database::get()->queryArray("SELECT DISTINCT user_id FROM forum_notify
+       if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)) { // first lookup for course setting
+           $users = Database::get()->queryArray("SELECT cu.user_id FROM course_user cu
+                                                    JOIN user u ON cu.user_id=u.id
+                                                WHERE cu.course_id = ?d
+                                                AND u.email <> ''
+                                                AND u.email IS NOT NULL", $course_id);
+       } else { // if it's not set lookup user setting           
+            $users = Database::get()->queryArray("SELECT DISTINCT user_id FROM forum_notify
 			WHERE (forum_id = ?d OR cat_id = ?d)
 			AND notify_sent = 1 AND course_id = ?d AND user_id != ?d", $forum_id, $category_id, $course_id, $uid);
+       }       
     $email = array();
     foreach ($users as $user) {
         if (get_user_email_notification($user->user_id, $course_id)) {
@@ -276,7 +282,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
                 $email[] = $useremail;
             }
         }
-    }
+    }    
     send_mail_multipart('', '', '', $email, $subject_notify, $plain_topic_notify, $html_topic_notify, $charset);
 }
 

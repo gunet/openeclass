@@ -354,6 +354,10 @@ $langsCourseAnonymousRating = "σχολιασμού $langsOfCourse από ανώ
 $langForumRating = "αξιολόγησης συζητήσεων";
 $langCourseSocialBookmarks = "συλλογικών συνδέσμων";
 $langCourseAbuseReport = "αναφορά κατάχρησης";
+$langForumNotifications = "Ενημέρωση $langsOfStudents";
+$langActivateForumNotifications = "Ενεργοποίηση ενημέρωσης $langsOfStudents";
+$langDisableForumNotifications = "Aπενεργοποίηση ενημέρωσης $langsOfStudents";
+
 
 // listreq.php
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις " . $langOfTeachers;

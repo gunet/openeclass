@@ -248,7 +248,10 @@ if (isset($_POST['submit'])) {
             }
             if (isset($_POST['disable_log_course_user_requests'])) {
                 setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, $_POST['disable_log_course_user_requests'], $course_id);
-            }                                    
+            }
+            if (isset($_POST['f_radio'])) {
+                setting_set(SETTING_COURSE_FORUM_NOTIFICATIONS, $_POST['f_radio'], $course_id);
+            }            
             Session::Messages($langModifDone,'alert-success');            
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         }
@@ -377,6 +380,18 @@ if (isset($_POST['submit'])) {
     }
     $data['sharing_radio_dis'] = $sharing_radio_dis;
     $data['sharing_dis_label'] = $sharing_dis_label;
+            
+    
+    if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS, $course_id) == 1) {
+        $checkForumDis = '';
+        $checkForumEn = 'checked';
+    } else {
+        $checkForumDis = 'checked';
+        $checkForumEn = '';
+    }
+    $data['checkForumDis'] = $checkForumDis;
+    $data['checkForumEn'] = $checkForumEn;
+
 
     if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
         $checkSharingDis = '';

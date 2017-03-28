@@ -319,6 +319,22 @@
             </div>                    
         </div>
         <div class='form-group'>
+            <label class='col-sm-2 control-label'>{{ trans('langForum') }}:</label>
+            <div class='col-sm-10'>
+                <div class='radio'>
+                  <label>
+                        <input type='radio' value='1' name='f_radio' {{ $checkForumEn }}> {{ trans('langActivateForumNotifications') }}
+                  </label>
+                </div>
+                <div class='radio'>
+                  <label>
+                        <input type='radio' value='0' name='f_radio' {{ $checkForumDis }}> {{ trans('langDisableForumNotifications') }}                        
+                  </label>
+                </div>                  
+            </div>                    
+        </div>
+    
+        <div class='form-group'>
         <label class='col-sm-2 control-label'>
             {{ trans('langCourseRating') }}:
         </label>
