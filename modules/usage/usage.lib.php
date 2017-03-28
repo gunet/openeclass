@@ -22,6 +22,7 @@
 
 require_once 'include/log.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/textLib.inc.php';
 
 /**
  * Get statistics of visits and visit duration to a course. The results are
@@ -880,6 +881,46 @@ function user_duration_per_course($u) {
     }
 
 }
+
+/**
+ * @brief get user 5 last logins
+ * @global type $langLastVisits
+ * @global type $dateFormatLong
+ * @global type $tool_content
+ * @param type $u
+ */
+function user_last_logins($u) {
+    
+    global $langLastVisits, $dateFormatLong, $tool_content;
+    
+    $result = Database::get()->queryArray("SELECT * FROM loginout
+                                        WHERE id_user = ?d ORDER by idLog DESC LIMIT 5", $u);
+    if (count($result) > 0) {
+        $tool_content .= "<div class='row margin-bottom-fat margin-top-fat'>
+                  <div class='col-xs-12'>
+                    <ul class='list-group'>
+                      <li class='list-group-item disabled'>
+                        <div class='row'>
+                          <div class='col-sm-12'><b>$langLastVisits</b></div>
+                        </div>";
+                
+        foreach ($result as $lastVisit) {
+            $tool_content .= "<li class='list-group-item'>
+                        <div class='row'>
+                          <div class='col-sm-8'><b>" . claro_format_locale_date($dateFormatLong, strtotime($lastVisit->when)) . 
+                        "</b>&nbsp;&nbsp;(" . date_format(date_create($lastVisit->when),'H:i') . ")</div>
+                        </div>
+                      </li>";
+        }
+        $tool_content .= "
+                    </ul>
+                  </div>
+                </div>";
+    } else {
+        $tool_content .= '';
+    }
+}
+
 
 /**
  * Get old statistics of visits and visit duration to a course. 
