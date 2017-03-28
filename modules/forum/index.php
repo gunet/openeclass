@@ -125,14 +125,14 @@ if ($total_categories > 0) {
                 'title' => $langEditChange,
                 'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
                 'icon' => 'fa-edit',
-                'level' => "primary",
+                'level' => 'primary',
                 'show' => $is_editor
             ),
             array(
                 'title' => $langNewForum,
                 'url' => "forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum",
                 'icon' => 'fa-plus-circle',
-                'level' => "primary",
+                'level' => 'primary',
                 'show' => $is_editor
             ),
             array(
@@ -140,7 +140,8 @@ if ($total_categories > 0) {
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
                 'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope',
                 'level' => 'primary',
-                'btn_class' => $action_notify ? 'btn-primary' : 'btn-default'
+                'btn_class' => $action_notify ? 'btn-primary' : 'btn-default',
+                'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS))
             ),
             array('title' => $langDelete,
                 'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
@@ -201,16 +202,20 @@ if ($total_categories > 0) {
                         //  - forum doesn't belong to group
                         //  - forum belongs to group and group forums are enabled and
                         //     - user is member of group
-                        $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
-                            WHERE user_id = ?d
-                                  AND forum_id = ?d
-                                  AND course_id = ?d", $uid, $forum_id, $course_id);
-                        if ($forum_action_notify) {
-                            $forum_action_notify = $forum_action_notify->notify_sent;
-                        } else {
+                        if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)) { // first lookup for course setting
                             $forum_action_notify = FALSE;
-                        }                    
-                        $tool_content .= "<tr><td>";
+                        } else { // if it's not set lookup user setting
+                            $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
+                                WHERE user_id = ?d
+                                      AND forum_id = ?d
+                                      AND course_id = ?d", $uid, $forum_id, $course_id);
+                            if ($forum_action_notify) {
+                                $forum_action_notify = $forum_action_notify->notify_sent;
+                            } else {
+                                $forum_action_notify = FALSE;
+                            }
+                        }
+                        $tool_content .= "<tr><td>";                        
                         if ($is_editor or ! $group_id or ($has_forum and $is_member)) {
                             if ($forum_action_notify) {
                                 $tool_content .= "<span class='pull-right label label-primary' data-toggle='tooltip' data-placement='bottom' title='" . q($langNotify) . "'><i class='fa fa-envelope'></i></span>";
