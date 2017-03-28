@@ -42,12 +42,13 @@ function setting_default($setting_id) {
         SETTING_COURSE_RATING_ENABLE => 0,
         SETTING_COURSE_COMMENT_ENABLE => 0,
         SETTING_COURSE_ANONYMOUS_RATING_ENABLE => 0,
-        SETTING_FORUM_RATING_ENABLE => 0,
+        SETTING_FORUM_RATING_ENABLE => 0,        
         SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE => 0,
         SETTING_COURSE_ABUSE_REPORT_ENABLE => 0,
         SETTING_COURSE_USER_REQUESTS_DISABLE => 0,        
         SETTING_GROUP_MULTIPLE_REGISTRATION => 0,
-        SETTING_GROUP_STUDENT_DESCRIPTION => 0);
+        SETTING_GROUP_STUDENT_DESCRIPTION => 0,
+        SETTING_COURSE_FORUM_NOTIFICATIONS => 0);
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];
     } else {

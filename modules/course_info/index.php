@@ -380,6 +380,10 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['disable_log_course_user_requests'])) {
                 setting_set(SETTING_COURSE_USER_REQUESTS_DISABLE, $_POST['disable_log_course_user_requests'], $course_id);
             }
+            if (isset($_POST['f_radio'])) {
+                setting_set(SETTING_COURSE_FORUM_NOTIFICATIONS, $_POST['f_radio'], $course_id);
+            }
+            
             Session::Messages($langModifDone,'alert-success');
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         }
@@ -475,6 +479,15 @@ if (isset($_POST['submit'])) {
     } else {
         $sharing_radio_dis = '';
         $sharing_dis_label = '';
+    }
+    
+    
+    if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS, $course_id) == 1) {
+        $checkForumDis = '';
+        $checkForumEn = 'checked';
+    } else {
+        $checkForumDis = 'checked';
+        $checkForumEn = '';
     }
 
     if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
@@ -728,6 +741,21 @@ if (isset($_POST['submit'])) {
                       <label>
                             <input type='radio' value='0' name='s_radio' $checkSharingDis $sharing_radio_dis> $langSharingDis
                             <span class='help-block'><small>$sharing_dis_label</small></span>
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langForum:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='1' name='f_radio' $checkForumEn> $langActivateForumNotifications
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='0' name='f_radio' $checkForumDis> $langDisableForumNotifications
                       </label>
                     </div>
                 </div>
