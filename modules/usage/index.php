@@ -133,6 +133,7 @@ if (isset($_GET['per_course_dur'])) {
         redirect_to_home_page();
     } else {
         $tool_content .= user_duration_per_course($_REQUEST['u']);
+        $tool_content .= user_last_logins($_REQUEST['u']);
     }
 } else {    
     if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)) {        
