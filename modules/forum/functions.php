@@ -274,7 +274,10 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
     $email = array();
     foreach ($users as $user) {
         if (get_user_email_notification($user->user_id, $course_id)) {
-            $email[] = uid_to_email($user->user_id);
+            $useremail = uid_to_email($user->user_id);
+            if (Swift_Validate::email($useremail)) { // if email is valid
+                $email[] = $useremail;
+            }
         }
     }    
     send_mail_multipart('', '', '', $email, $subject_notify, $plain_topic_notify, $html_topic_notify, $charset);
