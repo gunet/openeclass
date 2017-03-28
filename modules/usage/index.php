@@ -24,20 +24,21 @@
  * @brief Main script for the usage statistics module
  */
 
-$require_help = true;
-if(!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c'){
+if (!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c') {
     $require_current_course = true;
     $require_course_admin = true;
-    $stats_type = 'course';
+    $stats_type = 'course';        
+} elseif(isset($_REQUEST['t'])) {
+    if ($_REQUEST['t'] == 'a') {
+        $require_admin = true;
+        $stats_type = 'admin';
+    } else if ($_REQUEST['t'] == 'u') {
+        $require_valid_uid = TRUE;
+        $stats_type = 'user';
+    }
 }
-elseif(isset($_REQUEST['t']) && ($_REQUEST['t'] == 'a' || ($_REQUEST['t'] == 'u' && isset($_REQUEST['u'])))){
-    $require_admin = true;
-    $stats_type = ($_REQUEST['t'] == 'u')? 'user':'admin';
-}
-else{ // expecting $_REQUEST['t'] == 'u'
-    $require_valid_uid = TRUE;
-    $stats_type = 'user';
-}
+        
+$require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
 require_once '../../include/baseTheme.php';
@@ -53,37 +54,37 @@ load_js('bootstrap-datepicker');
 
 $head_content .= "
 <script type='text/javascript'>
-    var lang = '$language';
-    var langHits = '$langHits';
-    var langDuration = '$langDuration';
-    var langDay = '$langDay';
-    var langWeek = '$langWeek';
-    var langMonth = '$langMonth';
-    var langYear = '$langYear';
-    var langDepartment = '$langFaculty';
-    var langCourses = '$langCourses';
-    var langUsers = '$langUsers';
+    var lang = '" . js_escape($language) . "';
+    var langHits = '" . js_escape($langHits) . "';
+    var langDuration = '" . js_escape($langDuration) . "';
+    var langDay = '" . js_escape($langDay) . "';
+    var langWeek = '" . js_escape($langWeek) . "';
+    var langMonth = '" . js_escape($langMonth) . "';
+    var langYear = '" . js_escape($langYear) . "';
+    var langDepartment = '" . js_escape($langFaculty) . "';
+    var langCourses = '" . js_escape($langCourses) . "';
+    var langUsers = '" . js_escape($langUsers) . "';
     var maxintervals = 20;
-    var views = {plots:{class: 'fa fa-bar-chart', title: '$langPlots'}, list:{class: 'fa fa-list', title: '$langDetails'}};
-    var langNoResult = '$langNoResult';
-    var langDisplay ='$langDisplay';
-    var langResults = '$langResults2';
-    var langNoResult = '$langNoResult';
-    var langTotalResults = '$langTotalResults';
-    var langDisplayed= '$langDisplayed';
-    var langTill = '$langTill';
-    var langFrom = '$langFrom2';
-    var langSearch = '$langSearch';
-    var langActions = '$langActions';
-    var langRegs = '$langRegisterActions';
-    var langUnregs = '$langUnregisterActions';
-    var langCopy = '$langCopy';
-    var langPrint = '$langPrint';
-    var langExport = '$langSaveAs';
-    var langFavouriteModule = '$langFavourite';
-    var langFavouriteCourse = '$langFavouriteCourse';
-    var langLoginUser = '$langLoginUser';
-    var langHours = '$langHours';
+    var views = {plots:{class: 'fa fa-bar-chart', title: '" . js_escape($langPlots) . "'}, list:{class: 'fa fa-list', title: '" . js_escape($langDetails) . "'}};
+    var langNoResult = '" . js_escape($langNoResult) . "';
+    var langDisplay ='" . js_escape($langDisplay) . "';
+    var langResults = '" . js_escape($langResults2) . "';
+    var langNoResult = '" . js_escape($langNoResult) . "';
+    var langTotalResults = '" . js_escape($langTotalResults) . "';
+    var langDisplayed= '" . js_escape($langDisplayed) . "';
+    var langTill = '" . js_escape($langTill) . "';
+    var langFrom = '" . js_escape($langFrom2) . "';
+    var langSearch = '" . js_escape($langSearch) . "';
+    var langActions = '" . js_escape($langActions) . "';
+    var langRegs = '" . js_escape($langRegisterActions) . "';
+    var langUnregs = '" . js_escape($langUnregisterActions) . "';
+    var langCopy = '" . js_escape($langCopy) . "';
+    var langPrint = '" . js_escape($langPrint) . "';
+    var langExport = '" . js_escape($langSaveAs) . "';
+    var langFavouriteModule = '" . js_escape($langFavourite) . "';
+    var langFavouriteCourse = '" . js_escape($langFavouriteCourse) . "';
+    var langLoginUser = '" . js_escape($langLoginUser) . "';
+    var langHours = '" . js_escape($langHours) . "';
 </script>";
 load_js('datatables');
 load_js('datatables_bootstrap');
@@ -118,7 +119,6 @@ $head_content .= "<style>
 </style>";
 
 $pageName = $langUsage;
-
 if (isset($_GET['per_course_dur'])) {
     $tool_content .= action_bar(array(
         array('title' => $langPersonalStats,
@@ -128,13 +128,16 @@ if (isset($_GET['per_course_dur'])) {
             'url' => "../../main/portfolio.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
-        ),false);
-    $tool_content .= user_duration_per_course();
-} else {
-    if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)){
-        require_once 'modules/usage/course.php';
+        ),false);    
+    if (($_REQUEST['u'] != $uid) and !$is_admin) { // security check
+        redirect_to_home_page();
+    } else {
+        $tool_content .= user_duration_per_course($_REQUEST['u']);
     }
-    elseif($stats_type == 'admin' && $is_admin){
+} else {    
+    if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)) {        
+        require_once 'modules/usage/course.php';
+    } elseif($stats_type == 'admin' && $is_admin){
         require_once 'modules/usage/admin.php';
     } else {
         require_once 'modules/usage/user.php';

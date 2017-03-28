@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass
+ * Open eClass 
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,12 +17,14 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ========================================================================
+ * ======================================================================== 
  */
+
+$statsuser = (isset($_REQUEST['u']) && intval($_REQUEST['u'])>0)? intval($_REQUEST['u']) : $uid;
 
 $tool_content .= action_bar(array(
     array('title' => $langDurationVisitsPerCourse,
-        'url' => "$_SERVER[SCRIPT_NAME]?t=u&amp;per_course_dur=TRUE",
+        'url' => "$_SERVER[SCRIPT_NAME]?t=u&amp;u=$statsuser&amp;per_course_dur=TRUE",
         'level' => 'primary-label'),
     array('title' => $langBack,
         'url' => "/main/portfolio.php",
@@ -30,14 +32,14 @@ $tool_content .= action_bar(array(
         'level' => 'primary-label')
 ),false);
 
-$statsuser = (isset($_REQUEST['u']) && intval($_REQUEST['u'])>0)? intval($_REQUEST['u']):$uid;
-if ($statsuser != $uid) {
+
+if ($statsuser != $uid) { 
     $toolName .= "$langUserStats: " . uid_to_name($statsuser)." (".uid_to_name($statsuser, 'username').")";
     $pageName = "$langUserStats: " . uid_to_name($statsuser)." (".uid_to_name($statsuser, 'username').")";
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
     $navigation[] = array('url' => '../admin/listusers.php', 'name' => $langListUsers);
 }
-$head_content .=
+$head_content .= 
     "<script type='text/javascript'>
         startdate = null;
         interval = 1;
@@ -47,6 +49,7 @@ $head_content .=
         course = null;
         stats = 'u';
     </script>";
+
 require_once 'modules/usage/form.php';
 
 
