@@ -827,13 +827,13 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
 
 /**
  * @brief calculate user duration per course
- * @global $uid
+ * @param integer $uid
  * @global $tool_content
  * @global $langDurationVisitsPerCourse
 */
-function user_duration_per_course() {
-
-    global $uid, $tool_content, $langDurationVisitsPerCourse, $langNotEnrolledToLessons;
+function user_duration_per_course($u) {
+   
+    global $tool_content, $langDurationVisitsPerCourse, $langNotEnrolledToLessons;
 
     $totalDuration = 0;
     $result = Database::get()->queryArray("SELECT SUM(hits) AS cnt, SUM(duration) AS duration, course.code
@@ -845,7 +845,7 @@ function user_duration_per_course() {
                                         WHERE course_user.user_id = ?d
                                         AND course.visible != " . COURSE_INACTIVE . "
                                         GROUP BY course.id
-                                        ORDER BY duration DESC", $uid);
+                                        ORDER BY duration DESC", $u);
     if (count($result) > 0) {  // found courses ?
         foreach ($result as $item) {
             $totalDuration += $item->duration;
