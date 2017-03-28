@@ -352,7 +352,8 @@ if (count($result) > 0) { // topics found
 
         $dyntools[] = array('title' => $langNotify,
                             'url' => (isset($_GET['start']) and $_GET['start'] > 0) ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id",
-                            'icon' => 'fa-envelope');
+                            'icon' => 'fa-envelope',
+                            'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)));
         $tool_content .= action_button($dyntools);
         $tool_content .= "</td></tr>";
     } // end of while

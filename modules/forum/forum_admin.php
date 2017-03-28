@@ -264,11 +264,12 @@ elseif (isset($_GET['forumgoadd'])) {
                                         user_id <> ?d"
             , $cat_id, $course_id, $uid);
     foreach ($sql as $r) {
-        if (get_user_email_notification($r->user_id, $course_id)) {
+        $emailaddr = uid_to_email($r->user_id);
+        if (Swift_Validate::email($emailaddr) and get_user_email_notification($r->user_id, $course_id)) {
             $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
             $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
             $body_topic_notify .= $unsubscribe . $linkhere;
-            $emailaddr = uid_to_email($r->user_id);
+            
 
             $header_html_topic_notify = "<!-- Header Section -->
             <div id='mail-header'>
@@ -298,10 +299,10 @@ elseif (isset($_GET['forumgoadd'])) {
             $html_topic_notify = $header_html_topic_notify.$body_html_topic_notify.$footer_html_topic_notify;
 
             $plain_message = html2text($html_topic_notify);
-
+            
             send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_message, $html_topic_notify, $charset);
         }
-    }
+    }        
     // end of notification
     Session::Messages($langForumCategoryAdded, 'alert-success');
     redirect_to_home_page("modules/forum/index.php?course=$course_code");

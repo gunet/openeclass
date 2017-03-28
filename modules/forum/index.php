@@ -115,43 +115,42 @@ if ($total_categories > 0) {
             $link_notify = toggle_link($action_notify);
         }
         $tool_content .= "<div class='table-responsive' style='margin-bottom:30px;'><table class='table-default'>";
-        $tool_content .= "
-		<caption><strong>$langCategory :</strong> $cat_title<div class='pull-right'>";
-
+        $tool_content .= "<caption><strong>$langCategory :</strong> $cat_title<div class='pull-right'>";
        
         $tool_content .= action_button(
                 array(
-            array(
-                'title' => $langEditChange,
-                'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
-                'icon' => 'fa-edit',
-                'level' => "primary",
-                'show' => $is_editor
-            ),
-            array(
-                'title' => $langNewForum,
-                'url' => "forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum",
-                'icon' => 'fa-plus-circle',
-                'level' => "primary",
-                'show' => $is_editor
-            ),
-            array(
-                'title' => $action_notify ? $langStopNotify : $langNotify,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
-                'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope',
-                'level' => 'primary',
-                'btn_class' => $action_notify ? 'btn-primary' : 'btn-default'
-            ),
-            array('title' => $langDelete,
-                'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
-                'icon' => 'fa-times text-danger',
-                'class' => 'delete',
-                'confirm' => $langConfirmDelete,
-                'level' => 'primary',
-                'show' => $is_editor
-            )
-        )
-                );
+                    array(
+                        'title' => $langEditChange,
+                        'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
+                        'icon' => 'fa-edit',
+                        'level' => 'primary',
+                        'show' => $is_editor
+                    ),
+                    array(
+                        'title' => $langNewForum,
+                        'url' => "forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum",
+                        'icon' => 'fa-plus-circle',
+                        'level' => 'primary',
+                        'show' => $is_editor
+                    ),
+                    array(
+                        'title' => $action_notify ? $langStopNotify : $langNotify,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
+                        'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope',
+                        'level' => 'primary',
+                        'btn_class' => $action_notify ? 'btn-primary' : 'btn-default',
+                        'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS))
+                    ),
+                    array('title' => $langDelete,
+                        'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
+                        'icon' => 'fa-times text-danger',
+                        'class' => 'delete',
+                        'confirm' => $langConfirmDelete,
+                        'level' => 'primary',
+                        'show' => $is_editor
+                    )
+                )
+            );
         $tool_content .= "</div></caption>";
         $tool_content .= "<tr class='list-header'>
             <td class='forum_td'>$langForums</td>
@@ -201,16 +200,20 @@ if ($total_categories > 0) {
                         //  - forum doesn't belong to group
                         //  - forum belongs to group and group forums are enabled and
                         //     - user is member of group
-                        $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
-                            WHERE user_id = ?d
-                                  AND forum_id = ?d
-                                  AND course_id = ?d", $uid, $forum_id, $course_id);
-                        if ($forum_action_notify) {
-                            $forum_action_notify = $forum_action_notify->notify_sent;
-                        } else {
+                        if (setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)) { // first lookup for course setting
                             $forum_action_notify = FALSE;
-                        }                    
-                        $tool_content .= "<tr><td>";
+                        } else { // if it's not set lookup user setting
+                            $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
+                                WHERE user_id = ?d
+                                      AND forum_id = ?d
+                                      AND course_id = ?d", $uid, $forum_id, $course_id);
+                            if ($forum_action_notify) {
+                                $forum_action_notify = $forum_action_notify->notify_sent;
+                            } else {
+                                $forum_action_notify = FALSE;
+                            }
+                        }
+                        $tool_content .= "<tr><td>";                        
                         if ($is_editor or ! $group_id or ($has_forum and $is_member)) {
                             if ($forum_action_notify) {
                                 $tool_content .= "<span class='pull-right label label-primary' data-toggle='tooltip' data-placement='bottom' title='" . q($langNotify) . "'><i class='fa fa-envelope'></i></span>";
@@ -245,24 +248,25 @@ if ($total_categories > 0) {
 
                         $tool_content .= action_button(
                             array(
-                            array(
-                                'title' => $langEditChange,
-                                'url' => "forum_admin.php?course=$course_code&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
-                                'icon' => 'fa-edit',
-                                'show' => $is_editor),
-                            array(
-                                'title' => $forum_action_notify ? $langStopNotify : $langNotify,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
-                                'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope'),
-                            array(
-                                'title' => $langDelete,
-                                'url' => "forum_admin.php?course=$course_code&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
-                                'icon' => 'fa-times',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmDelete,
-                                'show' => $is_editor))    
-                            );
-                    }
+                                array(
+                                    'title' => $langEditChange,
+                                    'url' => "forum_admin.php?course=$course_code&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
+                                    'icon' => 'fa-edit',
+                                    'show' => $is_editor),
+                                array(
+                                    'title' => $forum_action_notify ? $langStopNotify : $langNotify,
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
+                                    'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope',
+                                    'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS))),
+                                array(
+                                    'title' => $langDelete,
+                                    'url' => "forum_admin.php?course=$course_code&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
+                                    'icon' => 'fa-times',
+                                    'class' => 'delete',
+                                    'confirm' => $langConfirmDelete,
+                                    'show' => $is_editor))    
+                                );
+                            }
                 } else {
                     $tool_content .= "<tr>" .
                         "<td colspan='6' class='alert2'><span class='not_visible'> - $langNoForumsCat - </span></td>" .
