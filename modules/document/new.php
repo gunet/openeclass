@@ -29,15 +29,20 @@ $require_login = true;
 
 require_once "../../include/baseTheme.php";
 require_once "modules/document/doc_init.php";
-
+require_once 'include/course_settings.php';
 doc_init();
+
+if ($subsystem == MAIN and get_config('enable_docs_public_write') and
+    setting_get(SETTING_DOCUMENTS_PUBLIC_WRITE)) {
+        $can_upload = true;
+}
 
 if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
     $toolName = $langCommonDocs;
-} elseif (defined('MY_DOCUMENTS')) {    
+} elseif (defined('MY_DOCUMENTS')) {
     if ($session->status == USER_TEACHER and !get_config('mydocs_teacher_enable')) {
-        redirect_to_home_page();        
+        redirect_to_home_page();
     }
     if ($session->status == USER_STUDENT and !get_config('mydocs_student_enable')) {
         redirect_to_home_page();

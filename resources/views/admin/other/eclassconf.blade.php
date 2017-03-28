@@ -565,6 +565,12 @@
                                     {{ trans('langEnableCommonDocs') }}
                                 </label>
                             </div>
+                            <div class='checkbox'>
+                            <label>
+                                <input type='checkbox' name='enable_docs_public_write' value='1' {{ $cbox_enable_docs_public_write }}>
+                                {{ trans('langEnableDocsPublicWrite') }}
+                            </label>
+                        </div>
                         </fieldset>
                     </div>
                 </div>

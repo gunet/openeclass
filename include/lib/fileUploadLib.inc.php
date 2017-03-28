@@ -293,9 +293,10 @@ function showquota($quota, $used, $backPath=null, $menuTypeID=null) {
 // a new safe filename
 function process_extracted_file($p_event, &$p_header) {
     global $uploadPath, $realFileSize, $basedir, $course_id,
-    $subsystem, $subsystem_id, $uploadPath, $group_sql;
+            $subsystem, $subsystem_id, $uploadPath, $group_sql,
+            $uploading_as_user;
 
-    $replace = isset($_POST['replace']);
+    $replace = !$uploading_as_user && isset($_POST['replace']);
 
     if (!isset($uploadPath)) {
         $uploadPath = '';
@@ -314,7 +315,7 @@ function process_extracted_file($p_event, &$p_header) {
         $stored_filename = cp737_to_utf8($stored_filename);
     }
     $path_components = explode('/', $stored_filename);
-    $filename = array_pop($path_components);    
+    $filename = array_pop($path_components);
     $file_date = date("Y\-m\-d G\:i\:s", $p_header['mtime']);
     $path = make_path($uploadPath, $path_components);
     if ($p_header['folder']) {
@@ -493,10 +494,10 @@ function validateUploadedZipFile($listContent, $menuTypeID = 2) {
         $filename = basename($entry['filename']);
 
         if (!isWhitelistAllowed($filename)) {
-            $tool_content .= "<div class='alert alert-danger'>$langUploadedZipFileNotAllowed <b>". q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";            
+            $tool_content .= "<div class='alert alert-danger'>$langUploadedZipFileNotAllowed <b>". q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
             draw($tool_content, $menuTypeID, null, $head_content);
             exit;
-        }        
+        }
     }
 }
 
@@ -510,7 +511,7 @@ function isWhitelistAllowed($filename) {
     global $is_editor, $uid;
 
     $wh = get_config('student_upload_whitelist');
-    $wh2 = ($is_editor) ? get_config('teacher_upload_whitelist') : '';    
+    $wh2 = ($is_editor) ? get_config('teacher_upload_whitelist') : '';
     $wh3 = fetchUserWhitelist($uid);
 
     $wh .= (strlen($wh2) > 0) ? ', ' . $wh2 : '';

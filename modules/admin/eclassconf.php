@@ -374,6 +374,7 @@ if (isset($_POST['submit'])) {
         'enable_indexing' => true,
         'enable_search' => true,
         'enable_common_docs' => true,
+        'enable_docs_public_write' => true,
         'enable_social_sharing_links' => true,
         'enable_strong_passwords' => true,
         'login_fail_check' => true,
@@ -496,7 +497,7 @@ else {
         $data['cbox_display_captcha'] = '';
         $data['disable_display_captcha'] = 'disabled';
         $data['message_display_captcha'] = '<div>' . $lang_display_captcha_unsupported . '</div>';
-    }    
+    }
     $active_ui_languages = explode(' ', get_config('active_ui_languages'));
     $langdirs = active_subdirs($webDir . '/lang', 'messages.inc.php');
     $data['sel'] = [];
@@ -548,6 +549,7 @@ else {
     $data['cbox_enable_indexing'] = get_config('enable_indexing') ? 'checked' : '';
     $data['cbox_enable_search'] = get_config('enable_search') ? 'checked' : '';
     $data['cbox_enable_common_docs'] = get_config('enable_common_docs') ? 'checked' : '';
+    $data['cbox_enable_docs_public_write'] = get_config('enable_docs_public_write') ? 'checked' : '';
     $data['cbox_mydocs_student_enable'] = get_config('mydocs_student_enable') ? 'checked' : '';
     $data['cbox_mydocs_teacher_enable'] = get_config('mydocs_teacher_enable') ? 'checked' : '';
     $data['mydocs_student_quota'] = floatval(get_config('mydocs_student_quota'));
