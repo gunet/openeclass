@@ -1,4 +1,10 @@
 <?php
+require_once "../../../include/baseTheme.php";
+require_once "modules/tc/functions.php";
+
+if (is_configured_tc_server() != 'webconf') { // security check
+    redirect_to_home_page('index.php');
+}
 echo '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
@@ -37,12 +43,12 @@ echo '
             // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
             var xiSwfUrlStr = "playerProductInstall.swf";
             var flashvars = {};
-			flashvars.videoconf_url = "rtmp://'.base64_decode($_GET['webconf_server']).'/avchat/'.$_GET['meeting_id'].'"
-			flashvars.chat_url = "rtmp://'.base64_decode($_GET['webconf_server']).'/textchat/'.$_GET['meeting_id'].'"                        
-			flashvars.jnlp_url = "'. base64_decode($_GET['base_url']) . 'courses/'.$_GET['course'].'/rooms/'.$_GET['meeting_id'].'.jnlp"
-			flashvars.base_screen_url = "rtmp://'.base64_decode($_GET['screenshare_server']).'/screenshare"
-			flashvars.screen_streamname = "'.$_GET['meeting_id'].'"
-			flashvars.username = "'. $_GET['user'] . '"
+			flashvars.videoconf_url = "rtmp://'.base64_decode($_GET['webconf_server']).'/avchat/'.js_escape($_GET['meeting_id']).'";
+			flashvars.chat_url = "rtmp://'.base64_decode($_GET['webconf_server']).'/textchat/'.js_escape($_GET['meeting_id']).'";
+			flashvars.jnlp_url = "'. base64_decode($_GET['base_url']) . 'courses/'.$_GET['course'].'/rooms/'.js_escape($_GET['meeting_id']).'.jnlp";
+			flashvars.base_screen_url = "rtmp://'.base64_decode($_GET['screenshare_server']).'/screenshare";
+			flashvars.screen_streamname = "'.js_escape($_GET['meeting_id']).'";
+			flashvars.username = "'. js_escape($_GET['user']) . '";
             var params = {};
             params.quality = "high";
             params.bgcolor = "#ffffff";
