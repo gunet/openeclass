@@ -53,9 +53,7 @@ if (!$is_editor) {
         if (user_can_add_group($uid, $course_id) and !$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) { // if registration is possible
             $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
             $group = gid_to_name($group_id);
-            Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array('id' => $id,
-                                                                        'uid' => $uid,
-                                                                        'name' => $group));
+            Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array( 'uid' => $uid, 'name' => $group));
 
             Session::Messages($langGroupNowMember, 'alert-success');
             redirect_to_home_page("modules/group/group_space.php?course=$course_code&group_id=$group_id");
@@ -69,8 +67,7 @@ if (!$is_editor) {
 
             Database::get()->query("DELETE FROM group_members WHERE user_id = ?d AND group_id = ?d", $uid, $group_id);
             $group = gid_to_name($group_id);
-            Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('uid' => $uid,
-                                                                        'name' => $group));
+            Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('uid' => $uid, 'name' => $group));
 
             Session::Messages($langGroupNowNotMember, 'alert-success');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
