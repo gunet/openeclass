@@ -199,11 +199,11 @@ if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise
         triggerGame($course_id, $uid, $exerciseId);
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseExpiredTime);
-        //redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
+        redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     } else {
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseExpired);
-        //redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
 }
 
