@@ -465,7 +465,7 @@ final class Database {
      */
     private static function dbg($message, $statement, $init_time, $backtrace_info, $level = Debug::ERROR) {
         $statement_pure = str_replace(array("\n", "\r", "\t"), array("", "", ""), $statement);
-        Debug::message($message . ", \tstatement:\"$statement_pure\", \telapsed:" . (microtime() - $init_time), $level, $backtrace_info['file'], $backtrace_info['line']);
+        Debug::message($message . ", \tstatement:\"$statement_pure\", \telapsed:" . (microtime(true) - floatval($init_time)), $level, $backtrace_info['file'], $backtrace_info['line']);
     }
 
 }
