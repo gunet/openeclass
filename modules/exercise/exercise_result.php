@@ -41,7 +41,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     $question_id = $_POST['question_id'];
     $eurid = $_GET['eurId'];
     Database::get()->query("UPDATE exercise_answer_record
-        SET weight = ?d WHERE eurid = ?d AND question_id = ?d",
+                SET weight = ?f WHERE eurid = ?d AND question_id = ?d",
         $grade, $eurid, $question_id);
     $ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count
         FROM exercise_answer_record WHERE eurid = ?d AND weight IS NULL",
@@ -61,7 +61,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     } else {
         // else increment total by just this grade
         Database::get()->query("UPDATE exercise_user_record
-            SET total_score = total_score + ?d WHERE eurid = ?d",
+            SET total_score = total_score + ?f WHERE eurid = ?d",
             $grade, $eurid);
     }
     exit();
@@ -79,7 +79,7 @@ if (isset($_GET['eurId'])) {
     $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d ORDER BY question_id", $eurid);
     $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
     if (!$exercise_user_record) {
-        //No record matches with thiw exercise user record id
+        //No record matches with this exercise user record id
         Session::Messages($langExerciseNotFound);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
@@ -98,10 +98,10 @@ if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
 $head_content .= "<script type='text/javascript'>
     		$(document).ready(function(){
                     function save_grade(elem){
-                        var grade = parseInt($(elem).val());
+                        var grade = parseFloat($(elem).val());
                         var element_name = $(elem).attr('name');
                         var questionId = parseInt(element_name.substring(14,element_name.length - 1));
-                        var questionMaxGrade = parseInt($(elem).next().val());
+                        var questionMaxGrade = parseFloat($(elem).next().val());
                         if (grade > questionMaxGrade) {
                             bootbox.alert('$langGradeTooBig');
                             return false;

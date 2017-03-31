@@ -190,18 +190,19 @@ if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise
         }      
         $objExercise->save_unanswered();
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
-        $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;        
+        $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, total_score = ?f, attempt_status = ?d,
                         total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseExpiredTime);
-        redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
+        //redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     } else {
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseExpired);
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        //redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
 }
+
 
 //If question list exists in the Session get it for there
 //else get it using the apropriate object method and save it to the session
@@ -329,6 +330,10 @@ if (isset($_POST['formSent'])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $record_end_date = date('Y-m-d H:i:s', time());
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
+        if (empty($totalScore)) {
+            $totalScore = 0.00;
+        }
+
         if ($objExercise->isRandom()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
                                           SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
