@@ -772,9 +772,9 @@ if (!class_exists('Exercise')) {
                    Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, is_answered)
                            VALUES (?d, ?d, ?s, ?d, ?d)", $eurid, $key, $value, 1, $as_answered);
                } else {
-                   $weight = ($as_answered == 1) ? 0 : NULL; // if the question is unswered give 0 weight else give NULL
+                   $weight = ($as_answered == 1) ? 0 : NULL; // if the question is unanswered give 0 weight else give NULL
                    Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
-                           VALUES (?d, ?d, ?s, ?d, ?d, ?d)", $eurid, $key, $value, 0, $weight, $as_answered);
+                           VALUES (?d, ?d, ?s, ?d, ?f, ?d)", $eurid, $key, $value, 0, $weight, $as_answered);
                }
            } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS || $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT) {
                $objAnswersTmp = new Answer($key);
