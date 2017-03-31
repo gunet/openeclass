@@ -631,4 +631,13 @@ class MultimediaHelper {
         return array('/9slides\.com\/talks\/([^&^\?]+)/i');
     }
 
+    public static function getPurifierSafeIframeRegexp() {
+        return '%^(https?:)?//(' .
+            'www\.youtube(?:-nocookie)?\.com/embed/|' .
+            'player\.vimeo\.com/video/|'.
+            'www\.dailymotion\.com/embed/video/' .
+            'www\.9slides\.com/embed/' .
+            ')%';
+    }
+
 }

@@ -141,14 +141,18 @@ $uid = $session->user_id;
 // construct $urlAppend from $urlServer
 $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
 // HTML Purifier
-require_once 'include/HTMLPurifier_Filter_MyIframe.php';
+require_once 'include/lib/multimediahelper.class.php';
 $purifier = new HTMLPurifier();
 $purifier->config->set('Cache.SerializerPath', $webDir . '/courses/temp');
 $purifier->config->set('Attr.AllowedFrameTargets', array('_blank'));
 $purifier->config->set('HTML.SafeObject', true);
 $purifier->config->set('Output.FlashCompat', true);
 $purifier->config->set('HTML.FlashAllowFullScreen', true);
-$purifier->config->set('Filter.Custom', array(new HTMLPurifier_Filter_MyIframe()));
+// iframes config: http://stackoverflow.com/questions/4739284/htmlpurifier-iframe-vimeo-and-youtube-video
+$purifier->config->set('HTML.SafeIframe', true);
+$purifier->config->set('URI.SafeIframeRegexp', MultimediaHelper::getPurifierSafeIframeRegexp());
+$purifier->config->set('HTML.AllowedElements', array('iframe'));
+$purifier->config->set('HTML.AllowedAttributes','iframe@src,iframe@allowfullscreen,iframe@width,iframe@height');
 $purifier->config->set('HTML.DefinitionID', 'html5-definitions');
 if (($def = $purifier->config->maybeGetRawHTMLDefinition())) {
     // http://htmlpurifier.org/phorum/read.php?2,7417,7417
@@ -165,6 +169,10 @@ if (($def = $purifier->config->maybeGetRawHTMLDefinition())) {
       'src' => 'URI',
       'type' => 'Text',
     ));
+    // iframes config: http://stackoverflow.com/questions/4739284/htmlpurifier-iframe-vimeo-and-youtube-video
+    $def->addAttribute('iframe', 'allowfullscreen', 'Bool');
+    $def->addAttribute('iframe', 'width', 'Length');
+    $def->addAttribute('iframe', 'height', 'Length');
 }
 // PHP Math Publisher
 require_once 'include/phpmathpublisher/mathpublisher.php';
