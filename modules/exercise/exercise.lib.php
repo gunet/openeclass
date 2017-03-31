@@ -159,20 +159,11 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                 if ($answerId == $nbrAnswers) {
                     // if it remains answers to shown at the right side
                     while (isset($Select[$cpt2])) {
-                        $tool_content .= "
-                                              <tr class='even'>
-                                                <td colspan='2'>
-                                                  <table width='100%'>
-                                                  <tr>
-                                                  <td width='200'>&nbsp;</td>
-                                                  <td width='100'>&nbsp;</td>
-                                                  <td width='200' valign='top'>" .
-                                "<b>" . q($Select[$cpt2]['Lettre']) . ".</b> " . q($Select[$cpt2]['Reponse']) . "
-                                                  </td>
-                                                  </tr>
-                                                  </table>
-                                                </td>
-                                              </tr>";
+                            $tool_content .= "<tr class='even'>                                                
+                                              <td>&nbsp;</td>
+                                              <td>&nbsp;</td>
+                                              <td>" . "<b>" . q($Select[$cpt2]['Lettre']) . ".</b> " . q($Select[$cpt2]['Reponse']) . "</td>                                                
+                                          </tr>";
                         $cpt2++;
                     } // end while()
                 }  // end if()
