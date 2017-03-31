@@ -2256,7 +2256,7 @@ function set_glossary_cache() {
 
     if (!isset($course_id)) {
         unset($_SESSION['glossary_terms_regexp']);
-    } elseif (!isset($_SESSION['glossary']) or
+    } elseif (!isset($_SESSION['glossary_terms_regexp']) or
             $_SESSION['glossary_course_id'] != $course_id) {
         if (get_glossary_terms($course_id) and count($_SESSION['glossary']) > 0) {
             // Test whether \b works correctly, workaround if not
