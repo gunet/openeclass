@@ -39,7 +39,6 @@ if (isset($_GET['exerciseId'])) {
     $exerciseId = getDirectReference($_GET['exerciseId']);    
     $exerciseIdIndirect = $_GET['exerciseId'];    
 }
-
 // if the object is not in the session
 if (!isset($_SESSION['objExercise'][$exerciseId])) {
     // construction of Exercise
@@ -55,9 +54,8 @@ if (!isset($_SESSION['objExercise'][$exerciseId])) {
     }
 }
 
-if (isset($_SESSION['objExercise'][$exerciseId])) {
-    
-    $objExercise = $_SESSION['objExercise'][$exerciseId];
+if (isset($_SESSION['objExercise'][$exerciseIdIndirect])) {
+    $objExercise = $_SESSION['objExercise'][$exerciseIdIndirect];
 }
 
 if ($is_editor && isset($_GET['purgeAttempID'])) {    
@@ -78,7 +76,7 @@ $end_date = new DateTime($objExercise->selectEndDate());
 $showScore = $displayScore == 1 
             || $is_editor
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
-            || $displayScore == 4 && $end_date < $cur_date; 
+            || $displayScore == 4 && $end_date < $cur_date;
 $tool_content .= "
 <div class='table-responsive'>
     <table class='table-default'>
