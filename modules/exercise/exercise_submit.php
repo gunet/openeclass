@@ -195,11 +195,11 @@ if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise
                         total_weighting = ?f WHERE eurid = ?d", $record_end_date, $totalScore, $attempt_status, $totalWeighting, $eurid);
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseExpiredTime);
-        //redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
+        redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     } else {
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseExpired);
-        //redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
 }
 
