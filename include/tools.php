@@ -647,7 +647,7 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langAdminManual']);
         $manual_language = ($language == 'el')? $language: 'en';
-        array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=$manual_language:admin_doc");
+        array_push($sideMenuLink, "http://docs.openeclass.org/doku.php?id=$manual_language:admin_doc");
         array_push($sideMenuImg, "fa-caret-right");
 
         array_push($sideMenuSubGroup, $sideMenuText);
