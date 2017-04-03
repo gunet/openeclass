@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 /**
- *  
+ *
  * @file group_edit.php
  * @brief group editing
  *
@@ -47,10 +47,10 @@ $navigation[] = array('url' => "group_space.php?course=$course_code&amp;group_id
 load_js('select2');
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
-        $('#select-tutor').select2();              
+        $('#select-tutor').select2();
     });
     </script>
-    <script type='text/javascript' src='{$urlAppend}js/tools.js'></script>\n    
+    <script type='text/javascript' src='{$urlAppend}js/tools.js'></script>\n
 ";
 
 //check if social bookmarking is enabled for this course
@@ -58,7 +58,7 @@ $social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, 
 
 $message = '';
 // Once modifications have been done, the user validates and arrives here
-if (isset($_POST['modify'])) { 
+if (isset($_POST['modify'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('name'));
     $v->rule('required', array('maxStudent'));
@@ -67,8 +67,37 @@ if (isset($_POST['modify'])) {
     $v->labels(array(
         'name' => "$langTheField $langNewGroups",
         'maxStudent' => "$langTheField $langMax $langGroupPlacesThis"
-    ));    
+    ));
     if($v->validate()) {
+        $self_reg = $allow_unreg = $has_forum = $documents = $wiki = 0;
+
+        if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on') {
+            $self_reg = 1;
+        }
+        if (isset($_POST['allow_unreg']) and $_POST['allow_unreg'] == 'on') {
+            $allow_unreg = 1;
+        }
+        if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
+            $has_forum = 1;
+        }
+        if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
+            $documents = 1;
+        }
+        if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
+            $wiki = 1;
+        }
+        $private_forum = $_POST['private_forum'];
+        $group_id = $_POST['group_id'];
+
+        Database::get()->query("UPDATE group_properties SET
+                                self_registration = ?d,
+                                allow_unregister = ?d,
+                                forum = ?d,
+                                private_forum = ?d,
+                                documents = ?d,
+                                wiki = ?d WHERE course_id = ?d AND group_id = ?d",
+            $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki, $course_id, $group_id);
+
         // Update main group settings
         register_posted_variables(array('name' => true, 'description' => true), 'all');
         register_posted_variables(array('maxStudent' => true), 'all');
@@ -76,8 +105,8 @@ if (isset($_POST['modify'])) {
         if ($maxStudent != 0 and $student_members > $maxStudent) {
             $maxStudent = $student_members;
             $message .= "<div class='alert alert-warning'>$langGroupMembersUnchanged</div>";
-        }                
-		$category_id = intval($_POST['selectcategory']);
+        }
+        $category_id = intval($_POST['selectcategory']);
         Database::get()->query("UPDATE `group`
                                         SET name = ?s,
                                             description = ?s,
@@ -113,11 +142,11 @@ if (isset($_POST['modify'])) {
             // Delete all members of this group
             $cur_member_ids = [];
             Database::get()->queryFunc("SELECT user_id FROM group_members "
-                    . "WHERE group_id = ?d AND is_tutor = 0", 
+                    . "WHERE group_id = ?d AND is_tutor = 0",
                     function ($group_member) use (&$cur_member_ids) {
                         array_push($cur_member_ids, $group_member->user_id);
                     },$group_id);
-            if (isset($_POST['ingroup'])) {        
+            if (isset($_POST['ingroup'])) {
                 $ids_to_be_inserted = array_diff($_POST['ingroup'], $cur_member_ids);
                 $ids_to_be_deleted = implode(', ', array_diff($cur_member_ids, $_POST['ingroup']));
                 if ($ids_to_be_deleted) {
@@ -127,14 +156,14 @@ if (isset($_POST['modify'])) {
                 foreach ($ids_to_be_inserted as $user_id) {
                     Database::get()->query("INSERT INTO group_members (user_id, group_id)
                                               VALUES (?d, ?d)", $user_id, $group_id);
-                }                
+                }
             } else {
                 Database::get()->query("DELETE FROM group_members
                                             WHERE group_id = ?d AND is_tutor = 0",$group_id);
             }
-            $message .= "<div class='alert alert-success'>$langGroupSettingsModified</div>";
-			redirect_to_home_page("modules/group/index.php?course=$course_code");
-        }    
+            Session::Messages($langGroupSettingsModified,'alert-success');
+            redirect_to_home_page("modules/group/index.php?course=$course_code");
+        }
         initialize_group_info($group_id);
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
@@ -145,6 +174,17 @@ if (isset($_POST['modify'])) {
 $tool_content_group_name = q($group_name);
 
 if ($is_editor) {
+
+    $group = Database::get()->querySingle("SELECT * FROM group_properties WHERE group_id = ?d AND course_id = ?d", $group_id, $course_id);
+
+    $checked['self_reg'] = ($group->self_registration?'checked':'');
+    $checked['allow_unreg'] = ($group->allow_unregister?'checked':'');
+    $checked['private_forum_yes'] =($group->private_forum?' checked="1"' : '');
+    $checked['private_forum_no'] = ($group->private_forum? '' : ' checked="1"');
+    $checked['has_forum'] = ($group->forum?'checked':'');
+    $checked['documents'] = ($group->documents?'checked':'');
+    $checked['wiki'] = ($group->wiki?'checked':'');
+
     $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>\n";
     $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
                                    user.id IN (SELECT user_id FROM group_members
@@ -190,7 +230,7 @@ if ($multi_reg) {
                               u.id NOT IN (SELECT user_id FROM group_members, `group`
                                                                WHERE `group`.id = group_members.group_id AND
                                                                `group`.course_id = ?d)
-                        GROUP BY u.id
+                        GROUP BY u.id, u.surname, u.givenname, u.am
                         ORDER BY u.surname, u.givenname", $course_id);
 }
 
@@ -229,11 +269,11 @@ $tool_content .=  action_bar(array(
           'url' => $back_url,
            )
   ));
-  
+
 
 $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
-        <fieldset>    
+        <fieldset>
         <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
             <label class='col-sm-2 control-label'>$langGroupName:</label>
             <div class='col-sm-10'>
@@ -251,7 +291,7 @@ $tool_content .= "<div class='form-wrapper'>
                 <input class='form-control' type=text name='maxStudent' size=2 value='$tool_content_max_student'>
                 <span class='help-block'>".Session::getError('maxStudent')."</span>
             </div>
-              
+
         </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langGroupTutor:</label>
@@ -284,7 +324,7 @@ $tool_content .= "<div class='form-wrapper'>
                               </div>
                               <div class='form-group'>
                                   <input class='btn btn-default' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
-                              </div>    
+                              </div>
                           </td>
                           <td class='text-right'>
                             <select class='form-control' id='members_box' name='ingroup[]' size='15' multiple>
@@ -297,7 +337,7 @@ $tool_content .= "<div class='form-wrapper'>
             </div>
       </div>
     </div>
-	<div class='form-group'>
+    <div class='form-group'>
             <label for='selectcategory' class='col-sm-2 control-label'>$langCategory:</label>
             <div class='col-sm-3'>
                 <select class='form-control' name='selectcategory' id='selectcategory'>
@@ -305,7 +345,7 @@ $tool_content .= "<div class='form-wrapper'>
         $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
         foreach ($resultcategories as $myrow) {
             $tool_content .= "<option value='$myrow->id'";
-            $category_id = $myrow->id;            
+            $category_id = $myrow->id;
             if ($group_category == $myrow->id) {
                 $tool_content .= " selected='selected'";
             }
@@ -314,25 +354,96 @@ $tool_content .= "<div class='form-wrapper'>
         $tool_content .= "
             </select>
             </div>
-    </div>
-				
-    <div class='form-group'>
-    <div class='col-sm-10 col-sm-offset-2'>".
-        form_buttons(array(
-            array(
-                'text'  =>  $langSave,
-                'name'  =>  'modify',
-                'value' =>  $langModify,
-                'javascript' => "selectAll('members_box',true)"
-            ),
-            array(
-                'href'  =>  "index.php?course=$course_code"
-            )
-        ))
-        ."</div>  
-    </div>
-    </fieldset>
-    </form>
+    </div>";
+
+    $tool_content .= "
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langGroupStudentRegistrationType:</label>
+                <div class='col-sm-10'>             
+                    <div class='checkbox'>
+                    <label>
+                     <input type='checkbox' name='self_reg' $checked[self_reg]>
+                        $langGroupAllowStudentRegistration
+                        </label>
+                        </div>                    
+                </div>
+            </div>
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langGroupAllowUnregister:</label>
+                <div class='col-sm-10'>             
+                    <div class='checkbox'>
+                    <label>
+                     <input type='checkbox' name='allow_unreg' $checked[allow_unreg]>
+                        $langGroupAllowStudentUnregister
+                        </label>
+                        </div>                    
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langPrivate_1:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='private_forum' value='1' checked=''  $checked[private_forum_yes]>
+                        $langPrivate_2
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='private_forum' value='0' $checked[private_forum_no]>
+                        $langPrivate_3
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langGroupForum:</label>
+                <div class='col-sm-10'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='forum' $checked[has_forum]>
+                      </label>
+                    </div>                    
+                </div>
+            </div>   
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langDoc:</label>
+                <div class='col-sm-10'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='documents' $checked[documents]>
+                      </label>
+                    </div>                    
+                </div>
+            </div>  
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langWiki:</label>
+                <div class='col-sm-10'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='wiki' $checked[wiki]>
+                      </label>
+                    </div>                    
+                </div>
+            </div>			
+            <input type='hidden' name='group_id' value=$group_id></input>          
+        <div class='form-group'>
+        <div class='col-sm-10 col-sm-offset-2'>".
+            form_buttons(array(
+                array(
+                    'text'  =>  $langSave,
+                    'name'  =>  'modify',
+                    'value' =>  $langModify,
+                    'javascript' => "selectAll('members_box',true)"
+                ),
+                array(
+                    'href'  =>  "index.php?course=$course_code"
+                )
+            ))
+            ."</div>
+        </div>
+        </fieldset>
+        </form>
 </div>";
 
 draw($tool_content, 2, null, $head_content);

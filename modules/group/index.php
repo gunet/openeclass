@@ -84,27 +84,27 @@ if ($is_editor) {
         redirect_to_home_page("modules/group/index.php");
     }
     if (isset($_POST['creation'])) { // groups creation
-        $v = new Valitron\Validator($_POST);        
+        $v = new Valitron\Validator($_POST);
         $v->rule('required', array('group_quantity'));
         $v->rule('numeric', array('group_quantity'));
         $v->rule('min', array('group_quantity'), 1);
         $v->rule('required', array('group_max'));
         $v->rule('numeric', array('group_max'));
-        $v->rule('min', array('group_max'), 1);
+        $v->rule('min', array('group_max'), 0);
         $v->labels(array(
             'group_quantity' => "$langTheField $langNewGroups",
             'group_max' => "$langTheField $langNewGroupMembers"
         ));
-        
+
         if($v->validate()) {
-            $group_max = $_POST['group_max'];            
+            $group_max = $_POST['group_max'];
             $group_quantity = $_POST['group_quantity'];
-            $group_description = isset($_POST['description']) ? $_POST['description'] : '';  
-            $private_forum = isset($_POST['private_forum']) ? $_POST['private_forum'] : 0;   
+            $group_description = isset($_POST['description']) ? $_POST['description'] : '';
+            $private_forum = isset($_POST['private_forum']) ? $_POST['private_forum'] : 0;
             if (isset($_POST['group_name'])) {
                 $group_name = $_POST['group_name'];
             }
-                        
+
             if (isset($_POST['all'])) { // default values if we create multiple groups
                 $self_reg = 1;
                 $allow_unreg = 0;
@@ -158,25 +158,25 @@ if ($is_editor) {
                     if ($res) {
                         $group_num++;
                     }
-                    $forumname = "$langForumGroup $group_num";                    
+                    $forumname = "$langForumGroup $group_num";
                 } else {
                     $g_name = $_POST['group_name'];
                     $forumname = "$langForumGroup $g_name";
-                }                                
+                }
                 // Create a unique path to group documents to try (!)
                 // avoiding groups entering other groups area
                 $secretDirectory = uniqid('');
                 make_dir("courses/$course_code/group/$secretDirectory");
                 touch("courses/$course_code/group/index.php");
                 touch("courses/$course_code/group/$secretDirectory/index.php");
-                
+
                 // group forum creation
                 $q = Database::get()->query("INSERT INTO forum SET name = '$forumname',
-                                                    `desc` = ' ', num_topics = 0, 
-                                                    num_posts = 0, last_post_id = 1, 
+                                                    `desc` = ' ', num_topics = 0,
+                                                    num_posts = 0, last_post_id = 1,
                                                     cat_id = ?d, course_id = ?d", $cat_id, $course_id);
                 $forum_id = $q->lastInsertID;
-                
+
                 $id = Database::get()->query("INSERT INTO `group` SET
                                              course_id = ?d,
                                              name = ?s,
@@ -186,8 +186,8 @@ if ($is_editor) {
                                              secret_directory = ?s,
                                              category_id = ?d",
                                     $course_id, $g_name, $group_description, $forum_id, $group_max, $secretDirectory, $_POST['selectcategory'])->lastInsertID;
-					
-                
+
+
                 if (isset($_POST['tutor'])) {
                     $user_tutor_id = 0;
                     foreach ($_POST['tutor'] as $user_tutor_id) {
@@ -195,31 +195,31 @@ if ($is_editor) {
                     }
                 }
                 if (isset($_POST['ingroup'])) {
-                    $new_group_members = count($_POST['ingroup']);                               
+                    $new_group_members = count($_POST['ingroup']);
                     for ($i = 0; $i < $new_group_members; $i++) {
                        Database::get()->query("INSERT INTO group_members (user_id, group_id)
                                               VALUES (?d, ?d)", $_POST['ingroup'][$i], $id);
-                    }               
+                    }
                 }
-                
+
                 $query_vars = [
-                    $course_id, 
+                    $course_id,
                     $id,
                     $self_reg,
                     $allow_unreg,
                     $has_forum,
                     $private_forum,
-                    $documents, 
+                    $documents,
                     $wiki
                 ];
-                
+
                 $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,
-                                                                    group_id = ?d, self_registration = ?d, 
-                                                                    allow_unregister = ?d, 
-                                                                    forum = ?d, private_forum = ?d, 
-                                                                    documents = ?d, wiki = ?d, 
-                                                                    agenda = 0", $query_vars);                
-                
+                                                                    group_id = ?d, self_registration = ?d,
+                                                                    allow_unregister = ?d,
+                                                                    forum = ?d, private_forum = ?d,
+                                                                    documents = ?d, wiki = ?d,
+                                                                    agenda = 0", $query_vars);
+
                 /** ********Create Group Wiki*********** */
                 //Set ACL
                 $wikiACL = array();
@@ -251,7 +251,7 @@ if ($is_editor) {
                                                                             'max_members' => $group_max,
                                                                             'secret_directory' => $secretDirectory));
             }
-            
+
             Session::Messages($langGroupsAdded2, "alert-success");
             redirect_to_home_page("modules/group/index.php?course=$course_code");
 
@@ -259,47 +259,7 @@ if ($is_editor) {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/group/group_creation.php?course=$course_code");
         }
-    } elseif (isset($_POST['properties'])) {
-	
-	if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on') {
-		$self_reg = 1;
-	}
-	else $self_reg = 0;
-        
-        if (isset($_POST['allow_unreg']) and $_POST['allow_unreg'] == 'on') {
-		$allow_unreg = 1;
-	}
-	else $allow_unreg = 0;
-			
-	if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
-		$has_forum = 1;
-	}
-	else $has_forum = 0;
-	
-	if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
-		$documents = 1;
-	}
-	else $documents = 0;
-	
-	if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
-		$wiki = 1;
-	}
-	else $wiki = 0;
-
-	$private_forum = $_POST['private_forum'];
-	$group_id = $_POST['group_id'];
-	    
-	Database::get()->query("UPDATE group_properties SET
-                                self_registration = ?d,
-                                allow_unregister = ?d,
-                                forum = ?d,
-                                private_forum = ?d,
-                                documents = ?d,
-                                wiki = ?d WHERE course_id = ?d AND group_id = ?d",
-                     $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki, $course_id, $group_id);
-        $message = $langGroupPropertiesModified;
-
-    } elseif (isset($_POST['submitCategory'])) {
+    }  elseif (isset($_POST['submitCategory'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_group_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
@@ -390,7 +350,7 @@ if ($is_editor) {
 
         Database::get()->query("DELETE FROM document WHERE course_id = ?d AND subsystem = 1 AND subsystem_id = ?d", $course_id, $id);
         Database::get()->query("DELETE FROM group_members WHERE group_id = ?d", $id);
-		Database::get()->query("DELETE FROM group_properties WHERE group_id = ?d", $id);
+        Database::get()->query("DELETE FROM group_properties WHERE group_id = ?d", $id);
         Database::get()->query("DELETE FROM `group` WHERE id = ?d", $id);
 
         /*         * ********Delete Group Wiki*********** */
@@ -434,14 +394,14 @@ if ($is_editor) {
                                                                   WHERE `group`.id = group_members.group_id AND
                                                                         `group`.course_id = ?d)
                                 GROUP BY u.id
-                                ORDER BY u.surname, u.givenname", $course_id, $course_id);        
-        
+                                ORDER BY u.surname, u.givenname", $course_id, $course_id);
+
         // gets first group with highest value and adds user id
         foreach ($resUserSansGroupe as $idUser) {
-            
+
             $idGroupChoisi = array_keys($placeAvailableInGroups, max($placeAvailableInGroups));
             $idGroupChoisi = $idGroupChoisi[0];
-            if ($placeAvailableInGroups[$idGroupChoisi] > 0){            
+            if ($placeAvailableInGroups[$idGroupChoisi] > 0){
                 $userOfGroups[$idGroupChoisi][] = $idUser->id;
                 $placeAvailableInGroups[$idGroupChoisi] --;
             } else {
@@ -484,13 +444,13 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle'),
                 array('title' => $langFillGroupsAll,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;fill=yes",
-                      'icon' => 'fa-pencil',    
+                      'icon' => 'fa-pencil',
                       'show' => $num_of_groups > 0),
                 array('title' => $langDeleteGroups,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes",
                       'icon' => 'fa-times',
                       'confirm' => $langDeleteGroupAllWarn,
-                      'show' => $num_of_groups > 0),                
+                      'show' => $num_of_groups > 0),
                 array('title' => $langEmptyGroups,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;empty=yes",
                       'icon' => 'fa-trash',
@@ -504,9 +464,9 @@ if ($is_editor) {
 
         $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
         $num_of_groups = count($groupSelect);
-	$cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
-	$num_of_cat = count($cat);
-	$q = count(Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id));
+    $cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
+    $num_of_cat = count($cat);
+    $q = count(Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id));
         // groups list
     if ($num_of_groups>0 || $num_of_cat>0) {
         $head_content .= "
@@ -521,16 +481,16 @@ if ($is_editor) {
                             });
                             </script>";
     }
-	if ($num_of_groups==0 && $num_of_cat==0) {
+    if ($num_of_groups==0 && $num_of_cat==0) {
             $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
         }
-	elseif ($num_of_groups==0 && $num_of_cat>0) {
+    elseif ($num_of_groups==0 && $num_of_cat>0) {
             $tool_content .= "
             <div class='row'>
                 <div class='col-sm-12'>
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>
-				<tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>
+                <tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>
                 <th class=' option-btn-cell text-center'>" . icon('fa-gears') . "</th>
                 </tr>
                 <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
@@ -560,25 +520,22 @@ if ($is_editor) {
             }
             $tool_content .= "</td><td class='text-center'>$member_count</td>";
             if ($max_members == 0) {
-                $tool_content .= "<td>-</td>";
+                $tool_content .= "<td class='text-center'>&mdash;</td>";
             } else {
                 $tool_content .= "<td class='text-center'>$max_members</td>";
             }
             $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
-                        array('title' => $langConfig,
-                            'url' => "group_properties.php?course=$course_code&amp;group_id=$group->id",
-                            'icon' => 'fa-gear'),
                         array('title' => $langEditChange,
                             'url' => "group_edit.php?course=$course_code&amp;category=$group->category_id&amp;group_id=$group->id",
-                            'icon' => 'fa-edit'),                        
+                            'icon' => 'fa-edit'),
                         array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group->id",
                             'icon' => 'fa-times',
                             'class' => 'delete',
                             'confirm' => $langConfirmDelete))) .
                         "</td></tr>";
-            $totalRegistered += $member_count;            
+            $totalRegistered += $member_count;
         }
         $tool_content .= "</table></div><br>";
         $tool_content .= "
@@ -605,11 +562,11 @@ if ($is_editor) {
                 <div class='col-sm-12'>
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>
-				<tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>
+                <tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>
                 </tr>
                 <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
                 </tr></table></div></div></div>";
-    } else {        
+    } else {
         $tool_content .= "<div class='table-responsive'>
             <table class='table-default'>
                 <tr class='list-header'>
@@ -618,12 +575,12 @@ if ($is_editor) {
                   <th width='50'>$langGroupMembersNum</th>
                   <th width='50'>$langMax</th>
                   <th class='text-center' style='width:45px;'>".icon('fa-gears', $langActions)."</th>
-                </tr>";        
+                </tr>";
         foreach ($q as $row) {
             $group_id = $row->id;
-            
+
             initialize_group_info($group_id);
-            
+
             $tool_content .= "<td class='text-left'>";
             // Allow student to enter group only if he's a member
             if ($is_member or $is_tutor) {
@@ -647,18 +604,19 @@ if ($is_editor) {
             foreach ($tutors as $t) {
                 $tool_content .= display_user($t->user_id) . "<br>";
             }
-            $tool_content .= "</td>";           
+            $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>$member_count</td><td class='text-center'>" .
-                    ($max_members ? $max_members : '-') . "</td>";
+                    ($max_members ? $max_members : '&mdash;') . "</td>";
             // If self-registration and multi registration allowed by admin and group is not full
-            $tool_content .= "<td class='text-center'>";            
+            $tool_content .= "<td class='text-center'>";
             if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
-                $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
+                $group_id_indirect = getIndirectReference($group_id);
+                $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id_indirect");
             } elseif (!$self_reg) {
-                $tool_content .= ' - ';
+                $tool_content .= '&mdash;';
             } else {
                 if (!$allow_unreg) {
-                    $tool_content .= ' - ';
+                    $tool_content .= '&mdash;';
                 } else {
                    $tool_content .= icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id", " style='color:#d9534f;'");
                 }
@@ -669,12 +627,12 @@ if ($is_editor) {
         $tool_content .= "</table></div>";
     }
 }
-            
+
     if (!in_array($action, array('addcategory', 'editcategory'))) {
-	$numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
-	$cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
-	$aantalcategories = count($cat);
-	$tool_content .= "<br><br><div class='row'>
+    $numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
+    $cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
+    $aantalcategories = count($cat);
+    $tool_content .= "<br><br><div class='row'>
             <div class='col-sm-12'>
             <div class='margin-bottom-thin' style='font-weight: bold;'>";
         if ($aantalcategories > 0) {
@@ -689,10 +647,10 @@ if ($is_editor) {
             <div class='table-responsive'>
             <table class='table-default category-links'>";
 
-	if ($urlview === '') {
+    if ($urlview === '') {
             $urlview = str_repeat('0', $aantalcategories);
         }
-        $i = 0;        
+        $i = 0;
         foreach ($cat as $myrow) {
             if (empty($urlview)) {
                 // No $view set in the url, thus for each category link it should be all zeros except it's own
@@ -727,7 +685,7 @@ if ($is_editor) {
                 $tool_content .= "</tr>";
                 // display category groups
                 showgroupsofcategory($myrow->id);
-                
+
                 if ($groups_num == 1) {
                     $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupInCategory - </td>" .
                         ($is_editor? '<td></td>': '') . "<tr>";

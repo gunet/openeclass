@@ -1,11 +1,13 @@
 <?php
 
 /* ========================================================================
- *   Open eClass 3.0
+ *   Open eClass 3.6
  *   E-learning and Course Management System
  * ========================================================================
- *  Copyright(c) 2003-2014  Greek Universities Network - GUnet
+ *  Copyright(c) 2003-2017  Greek Universities Network - GUnet
  */
+
+require_once 'include/course_settings.php';
 
 function initialize_group_id($param = 'group_id') {
     global $group_id, $urlServer, $course_code;
@@ -48,11 +50,11 @@ function initialize_group_id($param = 'group_id') {
  * @param type $group_id
  */
 function initialize_group_info($group_id) {
-    
+
     global $course_id, $is_editor, $status, $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki,
     $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors, $group_category,
     $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code;
- 
+
     $grp_property_item = Database::get()->querySingle("SELECT self_registration, allow_unregister, forum, private_forum, documents, wiki
                      FROM group_properties WHERE course_id = ?d AND group_id = ?d", $course_id, $group_id);
     $self_reg = $grp_property_item->self_registration;
@@ -60,13 +62,13 @@ function initialize_group_info($group_id) {
     $has_forum = $grp_property_item->forum;
     $private_forum = $grp_property_item->private_forum;
     $documents = $grp_property_item->documents;
-    $wiki = $grp_property_item->wiki;    
-   
+    $wiki = $grp_property_item->wiki;
+
     // Guest users aren't allowed to register / unregister
     if ($status == USER_GUEST) {
         $self_reg = $allow_unreg = 0;
     }
-    
+
     $res = Database::get()->querySingle("SELECT name, description, forum_id, max_members, secret_directory, category_id
                              FROM `group` WHERE course_id = ?d AND id = ?d", $course_id, $group_id);
     if (!$res) {
@@ -79,16 +81,16 @@ function initialize_group_info($group_id) {
     $max_members = Session::has('maxStudent') ? Session::get('maxStudent') : $res->max_members;
     $secret_directory = $res->secret_directory;
     $group_category = $res->category_id;
-    
+
     $member_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM group_members
                                                                     WHERE group_id = ?d
                                                                     AND is_tutor = 0", $group_id)->count;
-    
+
     $tutors = group_tutors($group_id);
-    
+
     $is_tutor = $is_member = FALSE;
     $user_group_description = NULL;
-    
+
     if (isset($uid)) { // check if we are group_member
         $res = Database::get()->querySingle("SELECT user_id FROM group_members
                                      WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
@@ -102,7 +104,7 @@ function initialize_group_info($group_id) {
             $is_tutor = $res->is_tutor;
         }
     }
-    
+
     // check description
     if ($is_tutor || $is_editor) {
         $res = Database::get()->queryArray("SELECT description,user_id FROM group_members
@@ -116,10 +118,10 @@ function initialize_group_info($group_id) {
         if (isset($uid)) {
             $res = Database::get()->querySingle("SELECT description FROM group_members
                                          WHERE group_id = ?d AND user_id = ?d AND is_tutor != 1", $group_id, $uid);
-            if ($res) {                
+            if ($res) {
                 $user_group_description .= $res->description;
             }
-        }        
+        }
     }
 }
 
@@ -129,13 +131,13 @@ function initialize_group_info($group_id) {
  * @return type
  */
 function group_tutors($group_id) {
-    
+
     $tutors = array();
     $res = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname, has_icon FROM group_members, user
-			 WHERE group_id = ?d AND
-			       is_tutor = 1 AND
-			       group_members.user_id = user.id
-			 ORDER BY surname, givenname", $group_id);    
+             WHERE group_id = ?d AND
+                   is_tutor = 1 AND
+                   group_members.user_id = user.id
+             ORDER BY surname, givenname", $group_id);
     foreach ($res as $tutor) {
         $tutors[] = $tutor;
     }
@@ -155,8 +157,8 @@ function user_group_info($uid, $course_id, $as_id = NULL) {
 
     if ($uid != null) {
         $q = Database::get()->queryArray("SELECT group_members.group_id AS grp_id, `group`.name AS grp_name FROM group_members,`group`
-			WHERE group_members.group_id = `group`.id
-			AND `group`.course_id = ?d AND group_members.user_id = ?d", $course_id, $uid);
+            WHERE group_members.group_id = `group`.id
+            AND `group`.course_id = ?d AND group_members.user_id = ?d", $course_id, $uid);
     } else {
         if (!is_null($as_id) && Database::get()->querySingle("SELECT assign_to_specific FROM assignment WHERE id = ?d", $as_id)->assign_to_specific) {
             $q = Database::get()->queryArray("SELECT `group`.name AS grp_name,`group`.id AS grp_id FROM `group`, assignment_to_specific WHERE `group`.id = assignment_to_specific.group_id AND `group`.course_id = ?d AND assignment_to_specific.assignment_id = ?d", $course_id, $as_id);
@@ -172,7 +174,7 @@ function user_group_info($uid, $course_id, $as_id = NULL) {
 }
 
 /**
- * 
+ *
  * @global type $langDelete
  * @global type $langEditChange
  * @global type $langGroupCatDel
@@ -189,11 +191,11 @@ function showgroupcategoryadmintools($categoryid) {
                       'icon' => 'fa-edit',
                       'url' => "group_category.php?course=$course_code&amp;editcategory=1&amp;id=$categoryid"),
                 array('title' => $langDelete,
-                        'icon' => 'fa-times',                        
+                        'icon' => 'fa-times',
                         'url' => "index.php?course=$course_code&amp;deletecategory=1&amp;id=$categoryid",
                         'class' => 'delete',
                         'confirm' => $langGroupCatDel)
-                ));           
+                ));
 }
 
 
@@ -231,7 +233,7 @@ function showgroupcategoryadmintools($categoryid) {
  * @param type $catid
  */
 function showgroupsofcategory($catid) {
-    
+
     global $is_editor, $course_id, $tool_content, $langConfig, $langUnRegister,
     $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
     $langModify, $is_member, $multi_reg, $langMyGroup, $langAddDescription,
@@ -241,7 +243,7 @@ function showgroupsofcategory($catid) {
     $q = Database::get()->queryArray("SELECT id FROM `group`
                                    WHERE course_id = ?d AND category_id = ?d
                                    ORDER BY `id`", $course_id, $catid);
-          
+
     foreach ($q as $row) {
         $tool_content .= "<tr><td style='padding-left: 25px;'>";
         $group_id = $row->id;        
@@ -282,7 +284,7 @@ function showgroupsofcategory($catid) {
             $tool_content .= display_user($t->user_id) . "<br>";
         }
         $tool_content .= "</td>";
-               
+
         if ($catid == -2) {
             $rating = new Rating('thumbs_up', 'group', $group_id);
             $tool_content .= $rating->put($is_editor, $uid, $course_id);
@@ -294,9 +296,6 @@ function showgroupsofcategory($catid) {
         if ($is_editor) {
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
-                array('title' => $langConfig,
-                      'icon' => 'fa-gear',
-                      'url' => "group_properties.php?course=$course_code&amp;group_id=$group_id"),                        
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
                       'url' => "group_edit.php?course=$course_code&amp;category=$catid&amp;group_id=$group_id"),
@@ -307,9 +306,9 @@ function showgroupsofcategory($catid) {
                       'confirm' => $langGroupDelconfirm)
             ));
             $tool_content .= "</td>";
-        } else {            
+        } else {
             $tool_content .= "<td class='text-center'>";
-            // If self-registration and multi registration allowed by admin and group is not full        
+            // If self-registration and multi registration allowed by admin and group is not full
             if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
                 $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=".getIndirectReference($group_id)."");
             } elseif (!$self_reg) {
@@ -339,9 +338,9 @@ function showgroupsofcategory($catid) {
  */
 function submit_group_category() {
     global $course_id, $langTheFieldIsRequired,
-           $categoryname, $description, $langFormErrors, 
+           $categoryname, $description, $langFormErrors,
            $course_code;
-				
+
     register_posted_variables(array('categoryname' => true,
                                     'description' => true), 'all', 'trim');
     $set_sql = "SET name = ?s, description = ?s";
@@ -402,7 +401,7 @@ function delete_group($id) {
 
     Database::get()->query("DELETE FROM `group` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('id' => $id,
-																'name' => $name));
+                                                                'name' => $name));
 }
 
 /**
@@ -419,4 +418,28 @@ function delete_group_category($id) {
     Database::get()->query("DELETE FROM `group_category` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('cat_id' => $id,
                                                                'category' => $category));
+}
+
+/**
+ * @brief check whether a user can register to another group in a course
+ * @param type $uid
+ * @param type $course_id
+ * @return type
+ */
+function user_can_add_group($uid, $course_id) {
+    $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);
+    if ($multi_reg) {
+        return true; // user can register to unlimited groups
+    }
+    $q = Database::get()->querySingle('SELECT group_id
+        FROM `group`, group_members
+        WHERE `group`.id = group_members.group_id
+            AND `group`.course_id = ?d
+            AND group_members.is_tutor = 0
+            AND group_members.user_id = ?d
+        LIMIT 1', $course_id, $uid);
+    if ($q and $q->group_id) {
+        return false; // user can register to single group and already registered
+    }
+    return true;
 }
