@@ -296,9 +296,6 @@ function showgroupsofcategory($catid) {
         if ($is_editor) {
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
-                array('title' => $langConfig,
-                      'icon' => 'fa-gear',
-                      'url' => "group_properties.php?course=$course_code&amp;group_id=$group_id"),
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
                       'url' => "group_edit.php?course=$course_code&amp;category=$catid&amp;group_id=$group_id"),

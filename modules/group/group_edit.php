@@ -69,6 +69,35 @@ if (isset($_POST['modify'])) {
         'maxStudent' => "$langTheField $langMax $langGroupPlacesThis"
     ));
     if($v->validate()) {
+        $self_reg = $allow_unreg = $has_forum = $documents = $wiki = 0;
+
+        if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on') {
+            $self_reg = 1;
+        }
+        if (isset($_POST['allow_unreg']) and $_POST['allow_unreg'] == 'on') {
+            $allow_unreg = 1;
+        }
+        if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
+            $has_forum = 1;
+        }
+        if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
+            $documents = 1;
+        }
+        if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
+            $wiki = 1;
+        }
+        $private_forum = $_POST['private_forum'];
+        $group_id = $_POST['group_id'];
+
+        Database::get()->query("UPDATE group_properties SET
+                                self_registration = ?d,
+                                allow_unregister = ?d,
+                                forum = ?d,
+                                private_forum = ?d,
+                                documents = ?d,
+                                wiki = ?d WHERE course_id = ?d AND group_id = ?d",
+            $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki, $course_id, $group_id);
+
         // Update main group settings
         register_posted_variables(array('name' => true, 'description' => true), 'all');
         register_posted_variables(array('maxStudent' => true), 'all');
@@ -132,7 +161,7 @@ if (isset($_POST['modify'])) {
                 Database::get()->query("DELETE FROM group_members
                                             WHERE group_id = ?d AND is_tutor = 0",$group_id);
             }
-            $message .= "<div class='alert alert-success'>$langGroupSettingsModified</div>";
+            Session::Messages($langGroupSettingsModified,'alert-success');
             redirect_to_home_page("modules/group/index.php?course=$course_code");
         }
         initialize_group_info($group_id);
@@ -145,6 +174,17 @@ if (isset($_POST['modify'])) {
 $tool_content_group_name = q($group_name);
 
 if ($is_editor) {
+
+    $group = Database::get()->querySingle("SELECT * FROM group_properties WHERE group_id = ?d AND course_id = ?d", $group_id, $course_id);
+
+    $checked['self_reg'] = ($group->self_registration?'checked':'');
+    $checked['allow_unreg'] = ($group->allow_unregister?'checked':'');
+    $checked['private_forum_yes'] =($group->private_forum?' checked="1"' : '');
+    $checked['private_forum_no'] = ($group->private_forum? '' : ' checked="1"');
+    $checked['has_forum'] = ($group->forum?'checked':'');
+    $checked['documents'] = ($group->documents?'checked':'');
+    $checked['wiki'] = ($group->wiki?'checked':'');
+
     $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>\n";
     $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
                                    user.id IN (SELECT user_id FROM group_members
@@ -314,25 +354,96 @@ $tool_content .= "<div class='form-wrapper'>
         $tool_content .= "
             </select>
             </div>
-    </div>
+    </div>";
 
-    <div class='form-group'>
-    <div class='col-sm-10 col-sm-offset-2'>".
-        form_buttons(array(
-            array(
-                'text'  =>  $langSave,
-                'name'  =>  'modify',
-                'value' =>  $langModify,
-                'javascript' => "selectAll('members_box',true)"
-            ),
-            array(
-                'href'  =>  "index.php?course=$course_code"
-            )
-        ))
-        ."</div>
-    </div>
-    </fieldset>
-    </form>
+    $tool_content .= "
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langGroupStudentRegistrationType:</label>
+                <div class='col-sm-10'>             
+                    <div class='checkbox'>
+                    <label>
+                     <input type='checkbox' name='self_reg' $checked[self_reg]>
+                        $langGroupAllowStudentRegistration
+                        </label>
+                        </div>                    
+                </div>
+            </div>
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langGroupAllowUnregister:</label>
+                <div class='col-sm-10'>             
+                    <div class='checkbox'>
+                    <label>
+                     <input type='checkbox' name='allow_unreg' $checked[allow_unreg]>
+                        $langGroupAllowStudentUnregister
+                        </label>
+                        </div>                    
+                </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langPrivate_1:</label>
+                <div class='col-sm-10'>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='private_forum' value='1' checked=''  $checked[private_forum_yes]>
+                        $langPrivate_2
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='private_forum' value='0' $checked[private_forum_no]>
+                        $langPrivate_3
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langGroupForum:</label>
+                <div class='col-sm-10'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='forum' $checked[has_forum]>
+                      </label>
+                    </div>                    
+                </div>
+            </div>   
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langDoc:</label>
+                <div class='col-sm-10'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='documents' $checked[documents]>
+                      </label>
+                    </div>                    
+                </div>
+            </div>  
+            <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langWiki:</label>
+                <div class='col-sm-10'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='wiki' $checked[wiki]>
+                      </label>
+                    </div>                    
+                </div>
+            </div>			
+            <input type='hidden' name='group_id' value=$group_id></input>          
+        <div class='form-group'>
+        <div class='col-sm-10 col-sm-offset-2'>".
+            form_buttons(array(
+                array(
+                    'text'  =>  $langSave,
+                    'name'  =>  'modify',
+                    'value' =>  $langModify,
+                    'javascript' => "selectAll('members_box',true)"
+                ),
+                array(
+                    'href'  =>  "index.php?course=$course_code"
+                )
+            ))
+            ."</div>
+        </div>
+        </fieldset>
+        </form>
 </div>";
 
 draw($tool_content, 2, null, $head_content);
