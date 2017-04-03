@@ -76,6 +76,7 @@ if (isset($uid) and $uid) {
  * @return type
  */
 function manlink($desc, $link, $language) {
-    $url = 'http://docs.openeclass.org/'.ECLASS_VERSION.'';
+    $shortVer = preg_replace('/^(\d\.\d+).*$/', '\1', ECLASS_VERSION);
+    $url = 'https://docs.openeclass.org/' . $shortVer;
     return "<a href='$url/$language:$link' target='_blank' class='mainpage list-group-item'>" .icon('fa-globe'). "&nbsp;&nbsp;-&nbsp;&nbsp;$desc</a>";
 }
