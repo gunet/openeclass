@@ -304,7 +304,6 @@ function loggedInMenu($rich=true) {
         array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
         array_push($sideMenuImg, "blog");
     }
-
     // link for my documents
     if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
@@ -630,8 +629,10 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langAdminManual']);
         $manual_language = ($language == 'el')? $language: 'en';
-        array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=$manual_language:admin_doc");
-        array_push($sideMenuImg, "arrow.png");
+
+        array_push($sideMenuLink, "http://docs.openeclass.org/doku.php?id=$manual_language:admin_doc");
+        array_push($sideMenuImg, "fa-caret-right");
+
 
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
