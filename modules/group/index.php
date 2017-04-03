@@ -259,47 +259,7 @@ if ($is_editor) {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/group/group_creation.php?course=$course_code");
         }
-    } elseif (isset($_POST['properties'])) {
-
-    if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on') {
-        $self_reg = 1;
-    }
-    else $self_reg = 0;
-
-        if (isset($_POST['allow_unreg']) and $_POST['allow_unreg'] == 'on') {
-        $allow_unreg = 1;
-    }
-    else $allow_unreg = 0;
-
-    if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
-        $has_forum = 1;
-    }
-    else $has_forum = 0;
-
-    if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
-        $documents = 1;
-    }
-    else $documents = 0;
-
-    if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
-        $wiki = 1;
-    }
-    else $wiki = 0;
-
-    $private_forum = $_POST['private_forum'];
-    $group_id = $_POST['group_id'];
-
-    Database::get()->query("UPDATE group_properties SET
-                                self_registration = ?d,
-                                allow_unregister = ?d,
-                                forum = ?d,
-                                private_forum = ?d,
-                                documents = ?d,
-                                wiki = ?d WHERE course_id = ?d AND group_id = ?d",
-                     $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki, $course_id, $group_id);
-        $message = $langGroupPropertiesModified;
-
-    } elseif (isset($_POST['submitCategory'])) {
+    }  elseif (isset($_POST['submitCategory'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_group_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
@@ -566,9 +526,6 @@ if ($is_editor) {
             }
             $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
-                        array('title' => $langConfig,
-                            'url' => "group_properties.php?course=$course_code&amp;group_id=$group->id",
-                            'icon' => 'fa-gear'),
                         array('title' => $langEditChange,
                             'url' => "group_edit.php?course=$course_code&amp;category=$group->category_id&amp;group_id=$group->id",
                             'icon' => 'fa-edit'),
