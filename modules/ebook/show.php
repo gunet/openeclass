@@ -222,7 +222,7 @@ $dom = new DOMDocument();
 
 if (isset($_SESSION['glossary_terms_regexp']) and !empty($_SESSION['glossary_terms_regexp'])) {
     $xpath = new DOMXpath($dom);
-    $textNodes = $xpath->query('//text()');
+    $textNodes = $xpath->query('body//text()');
     foreach ($textNodes as $textNode) {
         if (!empty($textNode->data)) {
             $new_contents = glossary_expand($textNode->data);
