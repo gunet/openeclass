@@ -226,16 +226,10 @@ if ($is_editor) {
     } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])))) {
         $tool_content .= action_bar(
             array(
-                array('title' => "$langNewCertificate",
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1",
-                      'icon' => 'fa-plus',
-                      'level' => 'primary-label',
-                      'button-class' => 'btn-success'),
-                array('title' => "$langNewBadge",
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1",
-                      'icon' => 'fa-plus',
-                      'level' => 'primary-label',
-                      'button-class' => 'btn-success')));
+                array('title' => "$langBack",
+                      'url' => "{$urlServer}courses/$course_code/index.php",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')));
     }
     $tool_content .= "</div></div>";
     //end of the top menu
@@ -396,7 +390,7 @@ if (isset($display) and $display == TRUE) {
         if (isset($element_id)) {
             $pageName = $element_title;
             // display certificate settings and resources            
-            display_activities($element, $element_id);                
+            display_activities($element, $element_id);
         } else { // display all certificates         
             display_certificates();
             display_badges();
