@@ -1,9 +1,9 @@
 <?php
 /* ========================================================================
- * Open eClass 3.2
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -605,8 +605,8 @@ hContent;
 if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['table_edit'])) {
     ModalBoxHelper::loadModalBox(true);
 
-    $count_video = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video $filterv AND course_id = ?d ORDER BY title", $course_id)->count;
-    $count_video_links = Database::get()->querySingle("SELECT count(*) AS count FROM videolink $filterl AND course_id = ?d ORDER BY title", $course_id)->count;
+    $count_video = Database::get()->querySingle("SELECT COUNT(*) AS count FROM video $filterv AND course_id = ?d", $course_id)->count;
+    $count_video_links = Database::get()->querySingle("SELECT count(*) AS count FROM videolink $filterl AND course_id = ?d", $course_id)->count;
     $num_of_categories = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `video_category` WHERE course_id = ?d", $course_id)->count;
 
     $expand_all = isset($_GET['d']) && $_GET['d'] == '1';
