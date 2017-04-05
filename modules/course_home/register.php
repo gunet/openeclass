@@ -51,7 +51,7 @@ if (isset($_POST['register'])) {
         }
         Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
             VALUES (?d, ?d, " . USER_STUDENT . ", NOW())", $course_id, $uid);
-        Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid, 'right' => USER_STUDENT));
+        Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid, 'right' => USER_STUDENT));
         Session::Messages($langNotifyRegUser1, 'alert-success');
         redirect_to_home_page("courses/$course_code/");
     }
