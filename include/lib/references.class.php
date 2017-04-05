@@ -108,7 +108,6 @@ class References {
          */
         $display = (is_null($course_selected))? "none":"block";
         $course = (is_null($course_selected))? null:"course:$course_selected";
-        error_log("course_selected = $course_selected");
         $object_select_fields .= "</select></span>"
              ."<span id='refcoursecont' style=\"display:$display;float:left;\"><select class='form-control' id='refcourse' name='refcourse'>";
         $refcourses = array(0 => $langSelectFromMenu) + self::get_user_courselist();
@@ -133,7 +132,6 @@ class References {
          * values of the form: course_videolink:3 or user:8
          */
         $display = (is_null($object_selected) || $module_selected == -1)? "none":"block";
-        error_log("object_selected = $object_selected");
         $object_select_fields .= "</select></span>"
             ."<span id='refobjidcont' style=\"display:$display;float:left;\"><select class='form-control' id='refobjid' name='refobjid'>";
         $objids = array(0 => $langSelectFromMenu);
@@ -285,7 +283,6 @@ class References {
      * @return array of modules items as object id and object description 
      */
     public static function get_general_module_items($module){
-        error_log("*************************************** get_general_module_items(".serialize($module).")");
         $items = array();
         if (isset($_SESSION['uid']) && $_SESSION['uid']) {
             if(in_array($module, array_keys(self::$ref_object_types['general']))){
@@ -324,7 +321,6 @@ class References {
      * @return array of modules items as object id and object description 
      */
     public static function get_course_module_items($course, $module){
-        error_log("*************************************** get_course_module_items($course, $module)");
         if (isset($_SESSION['uid']) && $_SESSION['uid']) {
             $user_associated_to_course = Database::get()->querySingle("SELECT count(*) c FROM course_user WHERE course_id = ?d AND user_id = ?d", intval($course), intval($_SESSION['uid']))->c;
             if($user_associated_to_course == 1){
