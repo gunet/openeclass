@@ -3042,6 +3042,7 @@ function show_non_submitted($id) {
  */
 function show_student_assignments() {
 
+
     global $tool_content, $m, $uid, $course_id, $course_code, $urlServer,
     $langDaysLeft, $langNoAssign, $langTitle, $langHasExpiredS, $langAddResePortfolio, $langAddGroupWorkSubePortfolio;
     
@@ -3184,18 +3185,38 @@ function show_assignments() {
             ),false);
 
     if (count($result)>0) {
+
         $tool_content .= "
-            <div class='row'><div class='col-sm-12'>
-                    <div class='table-responsive'>
-                    <table class='table-default'>
-                    <tr class='list-header'>
-                      <th style='width:45%;'>$langTitle</th>
-                      <th class='text-center'>$m[subm]</th>
-                      <th class='text-center'>$m[nogr]</th>
-                      <th class='text-center'>$m[deadline]</th>
-                      <th class='text-center'>".icon('fa-gears')."</th>
-                    </tr>";
-        $index = 0;
+            <div class='row'>
+            <div class='col-xs-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        <div class='inner-heading'>
+                            <div class='row'>
+                                <div class='col-sm-12'>
+                                    <strong>Διαθέσιμες Ασκήσεις</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='res-table-wrapper'>
+                            <div class='row res-table-header'>
+                                <div class='col-sm-5'>
+                                    $langTitle
+                                </div>
+                                <div class='col-sm-2'>
+                                    $m[subm]
+                                </div>
+                                <div class='col-sm-2'>
+                                    $m[nogr]
+                                </div>
+                                <div class='col-sm-2'>
+                                    $m[deadline]
+                                </div>
+                                <div class='col-sm-1 text-center'>
+                                    <i class='fa fa-cogs'></i>
+                                </div>
+                            </div>
+        ";
         foreach ($result as $row) {
             // Check if assignement contains submissions
             $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;
@@ -3208,44 +3229,53 @@ function show_assignments() {
                 }
             }
 
-            $tool_content .= "<tr class='".(!$row->active ? "not_visible":"")."'>";
             $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
-            $tool_content .= "<td>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
-                                <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
-                            </td>
-                            <td class='text-center'>$num_submitted</td>
-                            <td class='text-center'>$num_ungraded</td>
-                            <td class='text-center'>$deadline";
+
+            $tool_content .= "
+                <div class='row res-table-row ".(!$row->active ? "not_visible":"")."'>
+                    <div class='col-xs-5'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
+                        <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
+                    </div>
+                    <div class='col-xs-2'>$num_submitted</div>
+                    <div class='col-xs-2'>$num_ungraded</div>
+                    <div class='col-xs-2'>$deadline";
             if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
             } else if((int)$row->deadline){
                 $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
             }
-           $tool_content .= "</td>
-              <td class='option-btn-cell'>" .
-              action_button(array(
-                    array('title' => $langEditChange,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
-                          'icon' => 'fa-edit'),
+                $tool_content .="</div>  
+                    <div class='col-xs-1'>" .
+                    action_button(array(
+                        array('title' => $langEditChange,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
+                            'icon' => 'fa-edit'),
 
-                    array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
-                          'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
-                          'icon' => $row->active == 1 ? 'fa-eye-slash': 'fa-eye'),
-                    array('title' => $m['WorkSubsDelete'],
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
-                          'icon' => 'fa-eraser',
-                          'confirm' => "$langWarnForSubmissions $langDelSure",
-                          'show' => $num_submitted > 0),
-                    array('title' => $langDelete,
+                        array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
+                            'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
+                            'icon' => $row->active == 1 ? 'fa-eye-slash': 'fa-eye'),
+                        array('title' => $m['WorkSubsDelete'],
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
+                            'icon' => 'fa-eraser',
+                            'confirm' => "$langWarnForSubmissions $langDelSure",
+                            'show' => $num_submitted > 0),
+                        array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
                             'icon' => 'fa-times',
                             'class' => 'delete',
                             'confirm' => $langWorksDelConfirm))).
-                   "</td></tr>";
-            $index++;
+                    "
+                    </div>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+                </div>
+            ";
         }
-        $tool_content .= '</table></div></div></div>';
+
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }

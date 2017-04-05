@@ -54,31 +54,6 @@ function display_certificates() {
     } else { // If there are certificates
 
         $tool_content .= "
-            <style>
-                .row.header {
-                    font-family: Roboto;
-                    font-weight: bold;
-                    border-radius: 4px;
-                    background-color: #f6f6f6;
-                    line-height: 40px;
-                }
-                .table-wrapper {
-                    padding-left: 15px;
-                    padding-right:15px;
-                }
-                .row.tablelike {
-                    padding-top: 15px;
-                    padding-bottom: 15px;
-                }
-                .row.tablelike:nth-child(odd) {
-                    background-color: #fafafa;
-                }
-                .row.tablelike:hover {
-                    background-color: #f6f6f6;
-                }
-            </style>";
-
-        $tool_content .= "
             <div class='row'>
                 <div class='col-xs-12'>
                     <div class='panel panel-default'>
@@ -93,7 +68,7 @@ function display_certificates() {
                                     </div>
                                 </div>
                             </div>
-                            <div class='table-wrapper'>";
+                            <div class='res-table-wrapper'>";
 
                             foreach ($sql_cer as $data) {
 
@@ -102,7 +77,7 @@ function display_certificates() {
                                 $status_msg = $data->active ? $langActive : $langInactive;
 
                                 $tool_content .= "
-                                <div class='row tablelike'>
+                                <div class='row res-table-row'>
                                     <div class='col-sm-2'>
                                         <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='/modules/progress/templates/thumbs/certificate.png'>
                                     </div>
@@ -179,31 +154,6 @@ function display_badges() {
     } else {
 
         $tool_content .= "
-            <style>
-                .row.header {
-                    font-family: Roboto;
-                    font-weight: bold;
-                    border-radius: 4px;
-                    background-color: #f6f6f6;
-                    line-height: 40px;
-                }
-                .table-wrapper {
-                    padding-left: 15px;
-                    padding-right:15px;
-                }
-                .row.tablelike {
-                    padding-top: 15px;
-                    padding-bottom: 15px;
-                }
-                .row.tablelike:nth-child(odd) {
-                    background-color: #fafafa;
-                }
-                .row.tablelike:hover {
-                    background-color: #f6f6f6;
-                }
-            </style>";
-
-        $tool_content .= "
             <div class='row'>
                 <div class='col-xs-12'>
                     <div class='panel panel-default'>
@@ -218,7 +168,7 @@ function display_badges() {
                                     </div>
                                 </div>
                             </div>
-                            <div class='table-wrapper'>";
+                            <div class='res-table-wrapper'>";
 
         foreach ($sql_cer as $data) {
 
@@ -227,7 +177,7 @@ function display_badges() {
             $status_msg = $data->active ? $langActive : $langInactive;
 
             $tool_content .= "
-                                <div class='row tablelike'>
+                                <div class='row res-table-row'>
                                     <div class='col-sm-2'>
                                         <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='/modules/progress/templates/thumbs/badge.png'>
                                     </div>
@@ -416,29 +366,6 @@ function display_activities($element, $id) {
     if (count($result) > 0) {
 
         $tool_content .= "
-            <style>
-                .row.header {
-                    font-family: Roboto;
-                    font-weight: bold;
-                    border-radius: 4px;
-                    background-color: #f6f6f6;
-                    line-height: 40px;
-                }
-                .table-wrapper {
-                    padding-left: 15px;
-                    padding-right:15px;
-                }
-                .row.tablelike {
-                    padding-top: 15px;
-                    padding-bottom: 15px;
-                }
-                .row.tablelike:nth-child(odd) {
-                    background-color: #fafafa;
-                }
-                .row.tablelike:hover {
-                    background-color: #f6f6f6;
-                }
-            </style>
             <div class='row'>
             <div class='col-xs-12'>
                 <div class='panel panel-default'>
@@ -453,26 +380,26 @@ function display_activities($element, $id) {
                                 </div>
                             </div>
                         </div>
-                        <div class='table-wrapper'>
-                        <div class='row header'>
-                            <div class='col-sm-7'>
-                                $langTitle
-                            </div>
-                            <div class='col-sm-2'>
-                                $langType
-                            </div>
-                            <div class='col-sm-2'>
-                                $langValue
-                            </div>
-                            <div class='col-sm-1 text-center'>
-                                <i class='fa fa-cogs'></i>
-                            </div>
-                        </div>";
+                        <div class='res-table-wrapper'>
+                            <div class='row res-table-header'>
+                                <div class='col-sm-7'>
+                                    $langTitle
+                                </div>
+                                <div class='col-sm-2'>
+                                    $langType
+                                </div>
+                                <div class='col-sm-2'>
+                                    $langValue
+                                </div>
+                                <div class='col-sm-1 text-center'>
+                                    <i class='fa fa-cogs'></i>
+                                </div>
+                            </div>";
 
                         foreach ($result as $details) {
                                 $resource_data = get_resource_details($element, $details->id);
                                 $tool_content .= "
-                                <div class='row tablelike'>
+                                <div class='row res-table-row'>
                                     <div class='col-sm-7'>".$resource_data['title']."</div>
                                     <div class='col-sm-2'>". $resource_data['type']."</div>
                                     <div class='col-sm-2'>";

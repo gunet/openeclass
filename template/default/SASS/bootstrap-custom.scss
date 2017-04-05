@@ -3279,3 +3279,28 @@ a.btn, button{
         }
     }
 }
+
+// Responsive Tables
+.res-table-wrapper {
+    padding-left: 15px;
+    padding-right:15px;
+
+    .row.res-table-header {
+        font-family: Roboto;
+        font-weight: bold;
+        border-radius: 4px;
+        background-color: #f6f6f6;
+        padding-bottom: 20px;
+        padding-top: 20px;
+    }
+    .row.res-table-row {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    .row.res-table-row:nth-child(odd) {
+        background-color: #fafafa;
+    }
+    .row.res-table-row:hover {
+        background-color: #f6f6f6;
+    }
+}
