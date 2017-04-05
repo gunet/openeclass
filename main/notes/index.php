@@ -144,7 +144,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $titleToModify = Session::has('newTitle') ? Session::get('newTitle') : (isset($note) ? q($note->title) : '');
     $contentToModify = Session::has('newContent') ? Session::get('newContent') : (isset($note) ? $note->content : '');
     $gen_type_selected = isset($note) ? $note->reference_obj_module : null;
-    $course_selected = isset($note) ? $note->reference_obj_course :  null;
+    $course_selected = isset($note) ? $note->reference_obj_course : null;
     $type_selected = isset($note) ? $note->reference_obj_type : null;
     $object_selected = isset($note) ? $note->reference_obj_id : null;
 
