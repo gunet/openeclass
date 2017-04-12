@@ -1505,8 +1505,8 @@ function display_available_participation($element, $element_id) {
 function display_certificate_settings($element, $element_id) {
     
     global $tool_content, $course_id, $course_code, $urlServer,
-           $langDescription, $langConfig, $langMessage, 
-           $langpublisher, $langCertificateDetails, $langBadgeDetails, $langEditForum;
+           $langDescription, $langConfig, $langMessage, $langProgressBasicInfo,
+           $langpublisher, $langCertificateDetails, $langBadgeDetails, $langEditChange;
 
     $field = ($element == 'certificate')? 'template' : 'icon';
     $header = ($element == 'certificate')? "$langCertificateDetails" : "$langBadgeDetails";
@@ -1525,19 +1525,6 @@ function display_certificate_settings($element, $element_id) {
     }
 
     $tool_content .= "
-        <style>
-            .cert-info-title {
-                font-weight: bold;
-                font-family: Roboto;
-                padding: 10px 0px;
-            }
-            .cert-info-text {
-                padding: 10px;
-                background-color: #f6f6f6;
-                border-radius: 4px;
-                margin-bottom: 10px;
-            }
-        </style>
         <div class='row'>
             <div class='col-xs-12'>
                 <div class='panel panel-default'>
@@ -1545,10 +1532,10 @@ function display_certificate_settings($element, $element_id) {
                         <div class='inner-heading'>
                             <div class='row'>
                                 <div class='col-sm-7'>
-                                    <strong>Βασικά Στοιχεία</strong>
+                                    <strong>$langProgressBasicInfo</strong>
                                 </div>
                                 <div class='col-sm-5 text-right'>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'><span class='fa fa-pencil'></span> &nbsp;&nbsp;$langEditForum</a>
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'><span class='fa fa-pencil'></span> &nbsp;&nbsp;$langEditChange</a>
                                 </div>
                             </div>
                         </div>
@@ -1557,14 +1544,14 @@ function display_certificate_settings($element, $element_id) {
                                 <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block' src='/modules/progress/templates/thumbs/certificate.png'>
                             </div>
                             <div class='col-sm-7'>
-                                <div class='cert-info-title'>Title</div>
-                                <div class='cert-info-text'>$title</div>
-                                <div class='cert-info-title'>Description</div>
-                                <div class='cert-info-text'>$description</div>
-                                <div class='cert-info-title'>Message</div>
-                                <div class='cert-info-text'>$message</div>
-                                <div class='cert-info-title'>Issuer</div>
-                                <div class='cert-info-text'>$issuer</div>
+                                <div class='pn-info-title-sct'>Title</div>
+                                <div class='pn-info-text-sct'>$title</div>
+                                <div class='pn-info-title-sct'>Description</div>
+                                <div class='pn-info-text-sct'>$description</div>
+                                <div class='pn-info-title-sct'>Message</div>
+                                <div class='pn-info-text-sct'>$message</div>
+                                <div class='pn-info-title-sct'>Issuer</div>
+                                <div class='pn-info-text-sct'>$issuer</div>
                             </div>
                         </div>
                     </div>

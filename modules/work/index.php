@@ -2456,7 +2456,7 @@ function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $m, $langDaysLeft,
            $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
            $langGraphResults, $langWorksDelConfirm, $langWorkFile, 
-           $langEditChange, $langExportGrades, $langDescription, $langTitle;
+           $langEditChange, $langExportGrades, $langDescription, $langTitle, $langAvailableWorks;
 
     if ($is_editor) {
         $tool_content .= action_bar(array(
@@ -2495,7 +2495,7 @@ function assignment_details($id, $row) {
                 'button-class' => "btn-danger",
                 'confirm' => "$langWorksDelConfirm"
             )
-        ));
+        ), false);
     }
     $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
     if ($row->time > 0) {
@@ -2505,103 +2505,152 @@ function assignment_details($id, $row) {
     }
 
     $moduleTag = new ModuleElement($id);
+
     $tool_content .= "
-    <div class='panel panel-action-btn-primary'>
-        <div class='panel-heading'>
-            <h3 class='panel-title'>
-                $m[WorkInfo] &nbsp;
-                ". (($is_editor) ?    
-                "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit'>
-                    <span class='fa fa-edit' title='' data-toggle='tooltip' data-original-title='$langEditChange'></span>
-                </a>" : "")."                    
-            </h3>
-        </div>
-        <div class='panel-body'>
-            <div class='row  margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langTitle:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    " . q($row->title) . "
-                </div>
-            </div>";
+        <div class='row'>
+            <div class='col-xs-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        <div class='inner-heading'>
+                            <div class='row'>
+                                <div class='col-sm-7'>
+                                    $m[WorkInfo] &nbsp;
+                                </div>
+                                <div class='col-sm-5 text-right'>
+                                ". (($is_editor) ?
+                                    "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit' class='btn btn-primary btn-sm'>
+                                        <span class='fa fa-edit' title='' data-toggle='tooltip' data-original-title='$langEditChange'></span> &nbsp;&nbsp;$langEditChange
+                                    </a>" : "")."
+                                </div>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-sm-2'>
+                                <div class='pn-info-title-sct'>
+                                    $langTitle
+                                </div>
+                            </div>
+                            <div class='col-sm-10'>
+                                <div class='pn-info-text-sct'>
+                                    " . q($row->title) . "
+                                </div>
+                            </div>
+                        </div>";
         if (!empty($row->description)) {
-            $tool_content .= "<div class='row  margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langDescription:</strong>
+            $tool_content .= "<div class='row'>
+                <div class='col-sm-2'>
+                    <div class='pn-info-title-sct'>
+                        $langDescription
+                    </div>
                 </div>
-                <div class='col-sm-9'>
-                    $row->description
-                </div>
-            </div>";
-        }
-        if (!empty($row->comments)) {
-            $tool_content .= "<div class='row  margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$m[comments]:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $row->comments
+                <div class='col-sm-10'>
+                    <div class='pn-info-text-sct'>
+                        $row->description
+                    </div>
                 </div>
             </div>";
         }
-        if (!empty($row->file_name)) {
-            $tool_content .= "<div class='row  margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langWorkFile:</strong>
+    if (!empty($row->comments)) {
+        $tool_content .= "<div class='row'>
+                <div class='col-sm-2'>
+                    <div class='pn-info-title-sct'>
+                        $m[comments]:
+                    </div>
                 </div>
-                <div class='col-sm-9'>
-                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>$row->file_name</a>
+                <div class='col-sm-10'>
+                    <div class='pn-info-text-sct'>$row->comments</div>
                 </div>
             </div>";
-        }
+    }
+    if (!empty($row->file_name)) {
         $tool_content .= "
-            <div class='row  margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$m[max_grade]:</strong>
+            <div class='row'>
+                <div class='col-sm-2'>
+                    <div class='pn-info-title-sct'>
+                        $langWorkFile:
+                    </div>
                 </div>
-                <div class='col-sm-9'>
-                    $row->max_grade
-                </div>
-            </div>
-            <div class='row  margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$m[start_date]:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    " . nice_format($row->submission_date, true) . "
-                </div>
-            </div>
-            <div class='row  margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$m[deadline]:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $deadline ".(isset($deadline_notice) ? $deadline_notice : "")."
-                </div>
-            </div>
-            <div class='row  margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$m[group_or_user]:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."
+                <div class='col-sm-10'>
+                    <div class='pn-info-text-sct'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>$row->file_name</a></div>
                 </div>
             </div>";
-        $tags_list = $moduleTag->showTags();
-        if ($tags_list)
+    }
+    $tool_content .= "
+            <div class='row'>
+                <div class='col-sm-2'>
+                    <div class='pn-info-title-sct'>
+                        $m[max_grade]:
+                    </div>
+                </div>
+                <div class='col-sm-10'>
+                    <div class='pn-info-text-sct'>
+                        $row->max_grade
+                    </div>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-sm-2'>
+                    <div class='pn-info-title-sct'>
+                        $m[start_date]:
+                    </div>
+                </div>
+                <div class='col-sm-10'>
+                    <div class='pn-info-text-sct'>
+                        " . nice_format($row->submission_date, true) . "
+                    </div>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-sm-2'>
+                    <div class='pn-info-title-sct'>
+                        $m[deadline]:
+                    </div>
+                </div>
+                <div class='col-sm-10'>
+                    <div class='pn-info-text-sct'>
+                        $deadline ".(isset($deadline_notice) ? $deadline_notice : "")."
+                    </div>
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-sm-2'>
+                    <div class='pn-info-title-sct'>
+                        $m[group_or_user]:
+                    </div>
+                </div>
+                <div class='col-sm-10'>
+                    <div class='pn-info-text-sct'>
+                        ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."
+                    </div>
+                </div>
+            </div>";
+
+    $tags_list = $moduleTag->showTags();
+    if ($tags_list)
         $tool_content .= "
-            <div class='row  margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langTags:</strong>
+            <div class='row'>
+                <div class='col-sm-2'>
+                    <div class='pn-info-title-sct'>
+                        $langTags:
+                    </div>
                 </div>
-                <div class='col-sm-9'>
-                    $tags_list
+                <div class='col-sm-10'>
+                    <div class='pn-info-text-sct'>
+                        $tags_list
+                    </div>
                 </div>
-            </div> ";
-$tool_content .= "
+            </div>
+            ";
+
+                    $tool_content .= "</div>
+                </div>
+            </div>
         </div>
-    </div>";
+    ";
+
+
+
+
 
 }
 
@@ -2621,10 +2670,10 @@ function sort_link($title, $opt, $attrib = '') {
             $r = 1;
         }
         $tool_content .= "
-                  <th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt&rev=$r$i'>" . "$title</a></th>";
+                  <div $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt&rev=$r$i'>" . "$title</a></div>";
     } else {
         $tool_content .= "
-                  <th $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt$i'>$title</a></th>";
+                  <div $attrib><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;sort=$opt$i'>$title</a></div>";
     }
 }
 
@@ -2697,7 +2746,7 @@ function show_assignment($id, $display_graph_results = false) {
             $group_id = 0;
             $extra_sql = '';
             $sql_vars[] = $id;
-            if(isset($_POST['group_id']) && $_POST['group_id']) {
+            if (isset($_POST['group_id']) && $_POST['group_id']) {
                 $group_id = $_POST['group_id'];
                 if ($assign->group_submissions) {
                     $extra_sql .= " AND assign.group_id = ?d";
@@ -2705,15 +2754,15 @@ function show_assignment($id, $display_graph_results = false) {
                 } else {
                     $users = Database::get()->queryArray("SELECT `user_id` FROM `group_members` WHERE `group_id` = ?d", $group_id);
                     $users_sql_ready = '';
-                    if($users) {                                          
-                         foreach ($users as $user) {
-                             $user_ids[] = $user->user_id;
-                         }
-                         $users_sql_ready .= implode(', ',$user_ids);
+                    if ($users) {
+                        foreach ($users as $user) {
+                            $user_ids[] = $user->user_id;
+                        }
+                        $users_sql_ready .= implode(', ', $user_ids);
                     }
                     $extra_sql .= " AND user.id IN ($users_sql_ready)";
                 }
-            }           
+            }
 
             $result = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
                                                    assign.uid uid, assign.group_id group_id,
@@ -2733,32 +2782,56 @@ function show_assignment($id, $display_graph_results = false) {
             foreach ($groups as $group) {
                 $group_options .= "<option value='$group->id'>$group->name</option>";
             }
-            $tool_content .= "                        
-                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
-                        <input type='hidden' name='grades_id' value='$id' />
-                         <br>
-                        <div class='margin-bottom-thin'>
-                            <b>$langSubmissions:</b>&nbsp; $count_of_assignments
-                        </div>
-                        <div class='table-responsive'>
-                        <table class='table-default'>
-                        <tbody>
-                        <tr class='list-header'>
-                      <th width='3'>&nbsp;</th>";
-            sort_link($m['username'].' / '.$langGroupName, 'username');
-            sort_link($m['am'], 'am');
-            $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename');
-            sort_link($m['sub_date'], 'date');
-            sort_link($m['grade'], 'grade');
-            $tool_content .= "<th width='5%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
 
-            $i = 1;
+
+            $tool_content .= "
+            <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
+                <input type='hidden' name='grades_id' value='$id' />
+                    <div class='row'>
+                        <div class='col-xs-12'>
+                            <div class='panel panel-default'>
+                                <div class='panel-body'>
+                                    <div class='inner-heading'>
+                                        <div class='row'>
+                                            <div class='col-sm-8'>
+                                                $langSubmissions:&nbsp; $count_of_assignments
+                                            </div>
+                                            <div class='col-sm-4'>
+                                                <button class='pull-right btn btn-primary btn-sm' type='submit' name='submit_grades'>$langGradeOk</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='res-table-wrapper'>
+                                        <div class='row res-table-header'>
+                                            <div class='col-sm-4'>";
+            sort_link($m['username'] . ' / ' . $langGroupName, 'username');
+
+
+            $tool_content .= "
+                                            </div>
+                                            <div class='col-sm-2'>";
+            sort_link($m['am'], 'am');
+            $tool_content .= "</div>
+                                            <div class='col-sm-2'>";
+            $assign->submission_type ? $tool_content .= "$langWorkOnlineText" : sort_link($m['filename'], 'filename');
+            $tool_content .= "</div>
+                                            <div class='col-sm-2'>";
+            sort_link($m['sub_date'], 'date');
+            $tool_content .= "</div>
+                                            <div class='col-sm-1'>";
+            sort_link($m['grade'], 'grade');
+            $tool_content .= "</div>
+                                            <div class='col-sm-1 text-center'>
+                                                <i class='fa fa-cogs'></i>
+                                            </div>
+                                        </div>";
+
             foreach ($result as $row) {
                 //is it a group assignment?
                 if (!empty($row->group_id)) {
                     $subContentGroup = "$m[groupsubmit] " .
-                            "<a href='../group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
-                            "$m[ofgroup] " . gid_to_name($row->group_id) . "</a>";
+                        "<a href='../group/group_space.php?course=$course_code&amp;group_id=$row->group_id'>" .
+                        "$m[ofgroup] " . gid_to_name($row->group_id) . "</a>";
                 } else {
                     $subContentGroup = '';
                 }
@@ -2798,7 +2871,7 @@ function show_assignment($id, $display_graph_results = false) {
                         $grade = closest($grade, $scale_values)['value'];
                     }
                     foreach ($scales as $scale) {
-                        $scale_options .= "<option value='$scale[scale_item_value]'".($scale['scale_item_value'] == $grade ? " selected" : "").">$scale[scale_item_name]</option>";
+                        $scale_options .= "<option value='$scale[scale_item_value]'" . ($scale['scale_item_value'] == $grade ? " selected" : "") . ">$scale[scale_item_name]</option>";
                     }
                     $grade_field = "
                             <select name='grades[$row->id][grade]' class='form-control' id='scales'>
@@ -2807,90 +2880,94 @@ function show_assignment($id, $display_graph_results = false) {
                 } else {
                     $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3'>";
                 }
-                $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
-                $tool_content .= "
-                                <tr>
-                                <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
-                                <td>$name";
-                if (trim($row->comments != '')) {
-                    $tool_content .= "<div style='margin-top: .5em;'><small>" .
-                            q($row->comments) . '</small></div>';
-                }
-                $tool_content .= "</td>
-                                <td width='85'>" . q($stud_am) . "</td>
-                                <td class='text-center' width='180'>
-                                        $filelink
-                                </td>
-                                <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
-                                <td width='5'>
-                                    <div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
-                                        $grade_field
-                                        <span class='help-block'>".Session::getError("grade.$row->id")."</span>
-                                    </div>
-                                </td>
-                                <td class='option-btn-cell'>".
-                                    action_button(array(
-                                        array(
-                                            'title' => $langEditChange,
-                                            'url' => "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id",
-                                            'level' => 'primary',
-                                            'icon' => 'fa-edit'
-                                        ),
-                                        array(
-                                            'title' => $langDelete,
-                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id",
-                                            'class' => 'delete',
-                                            'icon' => 'fa-times',
-                                            'confirm' => $langDelWarnUserAssignment
-                                        )
-                                    ))."
-                                </td>
-                                </tr>
-                                <tr>
-                                <td colspan='6'>";
-
-                //professor comments
-                if ($row->grade_comments || $row->grade != '') {
-                    $comments = "<br><div class='label label-primary'>" .
-                            nice_format($row->grade_submission_date) . "</div>";
-                }
-                if (trim($row->grade_comments)) {
-                    $label = '<b>'.$m['gradecomments'] . '</b>:';
-                    $comments .= "&nbsp;<span>" . q_math($row->grade_comments) . "</span>";
-                } else {
-                    $label = '';
-                    $comments = '';
-                }
-                $tool_content .= "<div style='padding-top: .5em;'>$label
-				  $comments
-                                ";
-                if(AutojudgeApp::getAutojudge()->isEnabled()) {
-                    $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
-                    $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
-                }
-                $tool_content .= "
-                                </td>
-                                </tr>";
-                $i++;
-            } //END of Foreach
+                $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ? "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
 
             $tool_content .= "
-                    </tbody>
-                </table>
-            </div>
-            <div class='form-group'>
-                <div class='col-xs-12'>
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' value='1' name='email'> $m[email_users]
-                      </label>
+                                <div class='row res-table-row'>
+                                    <div class='col-sm-4'>$name";
+                                if (trim($row->comments != '')) {
+                                    $tool_content .= "<div style='margin-top: .5em;'><small>" .
+                                        q($row->comments) . '</small></div>';
+                                }
+                                $tool_content .=
+                                    "</div>
+                                    <div class='col-sm-2'>" . q($stud_am) . "</div>
+                                    <div class='col-sm-2'>
+                                            $filelink
+                                    </div>
+                                    <div class='col-sm-2'>" . nice_format($row->submission_date, TRUE) . $late_sub_text . "</div>
+                                    <div class='col-sm-1'>
+                                        <div class='form-group " . (Session::getError("grade.$row->id") ? "has-error" : "") . "'>
+                                            $grade_field
+                                            <span class='help-block'>" . Session::getError("grade.$row->id") . "</span>
+                                        </div>
+                                    </div>
+                                    <div class='col-sm-1'>
+                                    " .
+                action_button(array(
+                    array(
+                        'title' => $langEditChange,
+                        'url' => "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id",
+                        'icon' => 'fa-edit'
+                    ),
+                    array(
+                        'title' => $langDelete,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id",
+                        'class' => 'delete',
+                        'icon' => 'fa-times',
+                        'confirm' => $langDelWarnUserAssignment
+                    )
+                ))
+                . "
+                                    </div>
+                                <div class='col-xs-12'>
+                                ";
+
+            //professor comments
+            if ($row->grade_comments || $row->grade != '') {
+                $comments = "<br><div class='label label-primary'>" .
+                    nice_format($row->grade_submission_date) . "</div>";
+            }
+            if (trim($row->grade_comments)) {
+                $label = '<b>' . $m['gradecomments'] . '</b>:';
+                $comments .= "&nbsp;<span>" . q_math($row->grade_comments) . "</span>";
+            } else {
+                $label = '';
+                $comments = '';
+            }
+            $tool_content .= "<div style='padding-top: .5em;'>$label
+                                          $comments
+                                                        ";
+            if (AutojudgeApp::getAutojudge()->isEnabled()) {
+                $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
+                $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
+            }
+
+            $tool_content .= "
+                                        </div>";
+        }
+            $tool_content .= "</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class='pull-right'>
-                <button class='btn btn-primary' type='submit' name='submit_grades'>$langGradeOk</button>
-            </div>
-            </form>";
+                    <div class='form-group'>
+                        <div class='col-xs-12'>
+                            <div class='checkbox'>
+                              <label>
+                                <input type='checkbox' value='1' name='email'> $m[email_users]
+                              </label>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </form>
+            ";
+
+
+
+
         } else {            
             $result1 = Database::get()->queryArray("SELECT grade FROM assignment_submit WHERE assignment_id = ?d ORDER BY grade ASC", $id);
             $gradeOccurances = array(); // Named array to hold grade occurances/stats
@@ -3167,7 +3244,7 @@ function show_student_assignments() {
 function show_assignments() {
     global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign, $langNewAssign,
            $course_code, $course_id, $langWorksDelConfirm, $langDaysLeft, $m, $langHasExpiredS,
-           $langWarnForSubmissions, $langDelSure, $langGradeScales, $langTitle;
+           $langWarnForSubmissions, $langDelSure, $langGradeScales, $langTitle, $langAvailableWorks;
 
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
@@ -3194,22 +3271,22 @@ function show_assignments() {
                         <div class='inner-heading'>
                             <div class='row'>
                                 <div class='col-sm-12'>
-                                    <strong>Διαθέσιμες Ασκήσεις</strong>
+                                    <strong>$langAvailableWorks</strong>
                                 </div>
                             </div>
                         </div>
                         <div class='res-table-wrapper'>
                             <div class='row res-table-header'>
-                                <div class='col-sm-5'>
+                                <div class='col-sm-4'>
                                     $langTitle
-                                </div>
-                                <div class='col-sm-2'>
-                                    $m[subm]
                                 </div>
                                 <div class='col-sm-2'>
                                     $m[nogr]
                                 </div>
                                 <div class='col-sm-2'>
+                                    $m[subm]
+                                </div>
+                                <div class='col-sm-3'>
                                     $m[deadline]
                                 </div>
                                 <div class='col-sm-1 text-center'>
@@ -3233,13 +3310,13 @@ function show_assignments() {
 
             $tool_content .= "
                 <div class='row res-table-row ".(!$row->active ? "not_visible":"")."'>
-                    <div class='col-xs-5'>
+                    <div class='col-xs-4'>
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
                         <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                     </div>
-                    <div class='col-xs-2'>$num_submitted</div>
                     <div class='col-xs-2'>$num_ungraded</div>
-                    <div class='col-xs-2'>$deadline";
+                    <div class='col-xs-2'>$num_submitted</div>
+                    <div class='col-xs-3'>$deadline";
             if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
             } else if((int)$row->deadline){
@@ -3275,6 +3352,8 @@ function show_assignments() {
                 </div>
             ";
         }
+
+
 
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";

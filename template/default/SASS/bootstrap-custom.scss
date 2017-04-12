@@ -3296,6 +3296,11 @@ a.btn, button{
     .row.res-table-row {
         padding-top: 15px;
         padding-bottom: 15px;
+        border-radius: 4px;
+
+        [class^=col-] {
+            text-overflow: ellipsis;
+        }
     }
     .row.res-table-row:nth-child(odd) {
         background-color: #fafafa;
@@ -3303,4 +3308,16 @@ a.btn, button{
     .row.res-table-row:hover {
         background-color: #f6f6f6;
     }
+}
+
+.pn-info-title-sct{
+    font-weight: bold;
+    font-family: Roboto;
+    padding: 10px 0px;
+}
+.pn-info-text-sct{
+    padding: 10px;
+    background-color: #f6f6f6;
+    border-radius: 4px;
+    margin-bottom: 20px;
 }
