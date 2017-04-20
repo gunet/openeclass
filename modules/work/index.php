@@ -3241,7 +3241,7 @@ function show_assignments() {
                     <div class='col-xs-2'>$num_ungraded</div>
                     <div class='col-xs-2'>$deadline";
             if ($row->time > 0) {
-                $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
+                $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft " . format_time_duration($row->time) . "</small></span>";
             } else if((int)$row->deadline){
                 $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
             }
