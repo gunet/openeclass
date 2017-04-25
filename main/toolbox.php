@@ -207,20 +207,21 @@ foreach ($categories as $category) {
     $t->set_var('selectOption', '');
 }
 
+if (isset($_GET['catlang'])) {
+    $searching = true;
+}
 $t->set_var('selectFieldLabel', $langLanguage);
 $t->set_var('selectFieldName', 'catlang[]');
 foreach ($session->active_ui_languages as $langCode) {
     $t->set_var('selectOptionTitle', q($langNameOfLang[langcode_to_name($langCode)]));
     $t->set_var('selectOptionValue', $langCode);
-    if (isset($_GET['catlang']) and in_array($langCode, $_GET['catlang'])) {
+    if (isset($_GET['catlang']) and in_array($langCode, $_GET['catlang']) or
+        (!$searching and $langCode == $session->language)) {
         $t->set_var('selectOptionSelected', 'selected');
     } else {
         $t->set_var('selectOptionSelected', '');
     }
     $t->parse('selectOption', 'selectOptionBlock', true);
-}
-if (isset($_GET['catlang'])) {
-    $searching = true;
 }
 $t->parse('selectField', 'selectFieldBlock', true);
 
