@@ -174,6 +174,10 @@ if (get_config('enable_social_sharing_links')) {
         print_sharing_links($urlServer . 'main/toolbox.php', $siteName));
 }
 
+if (get_config('ext_analytics_enabled') and $html_footer = get_config('ext_analytics_code')) {
+    $t->set_var('HTML_FOOTER', $html_footer);
+}
+
 $searching = false;
 $valTitles = $catTitles = $catNames = array();
 $t->set_var('formAction', $urlAppend . 'main/toolbox.php');
