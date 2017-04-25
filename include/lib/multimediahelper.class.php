@@ -520,7 +520,15 @@ class MultimediaHelper {
         foreach (self::getYoutubePatterns() as $pattern) {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
-                $medialink = 'https://www.youtube.com/embed/' . $sanitized . '?hl=en&fs=1&rel=0&autoplay=1&wmode=transparent';
+                $start = '';
+                $end = '';
+                if (preg_match(self::getStartPattern(), $medialink, $stmatches)) {
+                    $start = '&start=' . intval($stmatches[1]);
+                }
+                if (preg_match(self::getEndPattern(), $medialink, $endmatches)) {
+                    $end = '&end=' . intval($endmatches[1]);
+                }
+                $medialink = 'https://www.youtube.com/embed/' . $sanitized . '?hl=en&fs=1&rel=0&autoplay=1&wmode=transparent' . $start . $end;
             }
         }
 
@@ -629,6 +637,14 @@ class MultimediaHelper {
     
     public static function getNineSlidesPatterns() {
         return array('/9slides\.com\/talks\/([^&^\?]+)/i');
+    }
+
+    public static function getStartPattern() {
+        return '/start=([0-9]*)/i';
+    }
+
+    public static function getEndPattern() {
+        return '/end=([0-9]*)/i';
     }
 
 }
