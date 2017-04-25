@@ -699,7 +699,7 @@ $langWikiContent = "<p>Attraverso il modulo <b>Wiki</b> gli studenti e gli inseg
 <p>Una serie di operazioni sono alla tua disposizione per quanto riguarda il Wiki. In particolare:</p>
 
 <ul>
-<li><b>Ultime modifiche.</b> Con questa opzione puoi osservare le ultime modifiche effettuate al wiki. Operazioni come <img src='$themeimg/wiki.png' align='absmiddle'> la visualizzazione della Home Page di Wiki, <img src='$themeimg/book.png' align='absmiddle'> la visualizzazione di tutte le pagine , <img src='$themeimg/list.png' align='absmiddle'>la visualizzare dell'elenco delle pagine di Wiki sono disponibili tramite questo modulo. </li>
+<li><b>Ultime modifiche.</b> Con questa opzione puoi osservare le ultime modifiche effettuate al wiki. Operazioni come <img src='$themeimg/wiki.png' align='absmiddle'> la visualizzazione della Home Page di Wiki, <span class='fa files-o'></span>> la visualizzazione di tutte le pagine , <span class='fa list'></span> la visualizzare dell'elenco delle pagine di Wiki sono disponibili tramite questo modulo. </li>
 <li><b>Cambiare impostazioni.</b> <img align='absmiddle' src='$themeimg/edit.png'> Puoi modificare il titolo e la descrizione di un certo Wiki con questa opzione.</li>
 <li><b> Eliminare.</ b> Per eliminare un Wiki basta premere il pulsante (<img src='$themeimg/delete.png' width=16 height=16>), che sta a destra </li >
 </ul>
@@ -710,7 +710,7 @@ $langWiki_studentContent = "
 <p>Una serie di operazioni sono alla tua disposizione per quanto riguarda il Wiki. In particolare:</p>
 
 <ul>
-<li><b>Ultime modifiche.</b> Con questa opzione puoi osservare le ultime modifiche effettuate al wiki. Operazioni come <img src='$themeimg/wiki.png' align='absmiddle'> la visualizzazione della Home Page di Wiki, <img src='$themeimg/book.png' align='absmiddle'> la visualizzazione di tutte le pagine , <img src='$themeimg/list.png' align='absmiddle'>la visualizzare dell'elenco delle pagine di Wiki sono disponibili tramite questo modulo. </li>
+<li><b>Ultime modifiche.</b> Con questa opzione puoi osservare le ultime modifiche effettuate al wiki. Operazioni come <img src='$themeimg/wiki.png' align='absmiddle'> la visualizzazione della Home Page di Wiki, <span class='fa files-o'></span> la visualizzazione di tutte le pagine , <span class='fa list'></span> la visualizzare dell'elenco delle pagine di Wiki sono disponibili tramite questo modulo. </li>
 
 $langWikiSyntaxHelp";
 $langHGlossary = "Glossario";
