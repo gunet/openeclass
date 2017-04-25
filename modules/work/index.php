@@ -3439,11 +3439,18 @@ function download_assignments($id) {
     }
 }
 
-// Create an index.html file for assignment $id listing user submissions
-// Set $online to TRUE to get an online view (on the web) - else the
-// index.html works for the zip file
+
+/**
+ * @brief Create an index.html file for assignment $id listing user submissions
+         Set $online to TRUE to get an online view (on the web) - else the index.html works for the zip file
+ * @param $path
+ * @param $id
+ * @param bool $online
+ *
+ */
 function create_zip_index($path, $id, $online = FALSE) {
-    global $charset, $m, $course_id;
+    global $charset, $m, $course_id,
+           $langAssignment, $langAm, $langSurnameName;
 
     $fp = fopen($path, "w");
     if (!$fp) {
@@ -3464,9 +3471,9 @@ function create_zip_index($path, $id, $online = FALSE) {
 	<body>
 		<table class="table-default">
 			<tr>
-				<th>' . $m['username'] . '</th>
-				<th>' . $m['am'] . '</th>
-				<th>' . $m['filename'] . '</th>
+				<th>' . $langSurnameName . '</th>
+				<th>' . $langAm .  '</th>
+				<th>' . $langAssignment . '</th>
 				<th>' . $m['sub_date'] . '</th>
 				<th>' . $m['grade'] . '</th>
 			</tr>');
@@ -3477,11 +3484,20 @@ function create_zip_index($path, $id, $online = FALSE) {
         $scales = unserialize($serialized_scale_data);
         $scale_values = array_value_recursive('scale_item_value', $scales);
     }
-    $result = Database::get()->queryArray("SELECT a.uid, a.file_path, a.submission_date, a.grade, a.comments, a.grade_comments, a.group_id, b.deadline FROM assignment_submit a, assignment b WHERE a.assignment_id = ?d AND a.assignment_id = b.id ORDER BY a.id", $id);
+    $assign_type = 0; // = assignment with submitted files
+    if ($assign->submission_type == 1) {
+        $assign_type = 1; // = free text assignment
+    }
+    $result = Database::get()->queryArray("SELECT a.uid, a.file_path, a.submission_text, a.submission_date, a.grade, a.comments, a.grade_comments, a.group_id, b.deadline FROM assignment_submit a, assignment b WHERE a.assignment_id = ?d AND a.assignment_id = b.id ORDER BY a.id", $id);
     foreach ($result as $row) {
-        $filename = basename($row->file_path);
-        $filelink = empty($filename) ? '&nbsp;' :
+        if ($assign_type == 1) {
+            $filelink = $row->submission_text;
+        } else {
+            $filename = basename($row->file_path);
+            $filelink = empty($filename) ? '&nbsp;' :
                 ("<a href='$filename'>" . htmlspecialchars($filename) . '</a>');
+        }
+
         $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  "<div style='color:red;'>$m[late_submission]</div>" : '';
         if ($assign->grading_scale_id) {
             $key = closest($row->grade, $scale_values, true)['key'];
