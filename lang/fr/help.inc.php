@@ -497,7 +497,7 @@ $langWikiContent = "
 <p>A series of actions is provided to you. More specifically: </p>
 <ul>
 <li><b>Recent changes.</b> Through this option you can view all recent modifications made in the Wiki. You can click on 'Main page' (<img src='$themeimg/wiki.png' align='absmiddle'>) to view the Wiki main page, 
-you can click on 'All pages' (<img src='$themeimg/book.png' align='absmiddle'>) to view a list of all Wiki pages, or click on 'List of Wiki' (<img src='$themeimg/list.png' align='absmiddle'>) to view a list with all Wikis for the current course.</li>
+you can click on 'All pages' (<span class='fa files-o'></span>) to view a list of all Wiki pages, or click on 'List of Wiki' (<span class='fa list'></span>) to view a list with all Wikis for the current course.</li>
 <li><b>Edit properties</b> (<img src='$themeimg/edit.png' align='absmiddle'>). Allows you to change the title and description details of a Wiki.</li>
 <li><b>Delete.</b> To delete a Wiki, click on icon (<img src='$themeimg/delete.png' width=16 height=16>) next to its name.</li>
 </ul>
@@ -506,7 +506,7 @@ For each Wiki page you can select to edit the page content or see a list of the 
 $langWikiSyntaxHelp";
 $langWiki_studentContent = "The Wiki module is a new collaboration tool that allows registered users (teachers and students) to create and edit Web page content.
 <p>A series of actions is provided to you. More specifically: </p>
-<p><b>Recent changes.</b> Through this option you can view all recent modifications made in the Wiki. You can click on 'Main page' (<img src='$themeimg/wiki.png' align='absmiddle'>) to view the Wiki main page, you can click on 'All pages' (<img src='$themeimg/book.png' align='absmiddle'>) to view a list of all Wiki pages, or click on 'List of Wiki' (<img src='$themeimg/list.png' align='absmiddle'>) to view a list with all Wikis.</p>
+<p><b>Recent changes.</b> Through this option you can view all recent modifications made in the Wiki. You can click on 'Main page' (<img src='$themeimg/wiki.png' align='absmiddle'>) to view the Wiki main page, you can click on 'All pages' (<span class='fa files-o'></span>) to view a list of all Wiki pages, or click on 'List of Wiki' (<span class='fa list'></span>) to view a list with all Wikis.</p>
 
 $langWikiSyntaxHelp";
 $langHGlossary = "Glossaire";
