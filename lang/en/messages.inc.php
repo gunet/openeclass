@@ -1508,7 +1508,7 @@ $langNoCoursesAvailable = "There are no available $langsCourses for registration
 $langRegistration = "Registration";
 $langSurname = "Last Name";
 $langUsername = "Username";
-$langConfirmation = "Confirmation";
+$langConfirmation = "Confirm password";
 $langUserNotice = "(max 30 characters)";
 $langEmailNotice = "An email address is not required, but keep in mind that without it, you won't be able to receive
 announcements and notifications by email";
