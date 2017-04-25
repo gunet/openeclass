@@ -3168,7 +3168,7 @@ function show_student_assignments() {
                                     <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'>$title_temp</a></td>
                                     <td class='text-center'>" . $deadline ;
             if ($row->time > 0) {
-                $tool_content .= "<br>(<small>$langDaysLeft" . format_time_duration($row->time) . "</small>)";
+                $tool_content .= "<br>(<small>$langDaysLeft " . format_time_duration($row->time) . "</small>)";
             } else if($row->deadline){
                 $tool_content .= "<br> (<small><span class='expired'>$langHasExpiredS</span></small>)";
             }
@@ -3318,7 +3318,7 @@ function show_assignments() {
                     <div class='col-xs-2'>$num_submitted</div>
                     <div class='col-xs-3'>$deadline";
             if ($row->time > 0) {
-                $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
+                $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft " . format_time_duration($row->time) . "</small></span>";
             } else if((int)$row->deadline){
                 $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
             }
