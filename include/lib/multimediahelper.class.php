@@ -312,7 +312,7 @@ class MultimediaHelper {
     public static function serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv) {
         global $urlAppend;
         $ret = '';
-        $ret .= "<link rel='stylesheet' href='{$urlAppend}js/flowplayer/html5/skin/minimalist.css'>";
+        $ret .= "<link rel='stylesheet' href='{$urlAppend}js/flowplayer/html5/skin/skin.css'>";
         $ret .= "<script type='text/javascript' src='{$urlAppend}js/jquery-" . JQUERY_VERSION . ".min.js'></script>";
         $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/html5/flowplayer.min.js'></script>";
         $ret .= $startdiv;
@@ -320,6 +320,7 @@ class MultimediaHelper {
                       data-swf="' . $urlAppend . 'js/flowplayer/html5/flowplayer.swf" 
                       data-fullscreen="true"
                       data-embed="false"
+                      data-share="false"
                       style="max-width: ' . (self::getObjectWidth() - 4) . 'px;">
                     <video autoplay><source type="' . $mime . '" src="' . $mediaPlay . '"></video></div>';
         $ret .= $enddiv;
