@@ -33,6 +33,7 @@
   ==============================================================================
  */
 use Hautelook\Phpass\PasswordHash;
+use Hybrid\Auth;
 
 require_once 'include/log.class.php';
 require_once 'include/lib/user.class.php';
@@ -717,9 +718,8 @@ function hybridauth_login() {
         $langNoCookies, $langEnterPlatform, $urlServer, $langHere, $auth_ids,
         $inactive_uid, $langTooManyFails, $warning, $langGeneralError;
 
-    // include HubridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
-    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+
     $config = get_hybridauth_config();
 
     $_SESSION['canChangePassword'] = false;
