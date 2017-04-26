@@ -28,6 +28,8 @@ session_start();
  *
  */
 
+use Hybrid\Auth;
+
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
 if (preg_match('|/courses/([a-zA-Z_-]*\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
     $dbname = $matches[1];
@@ -83,9 +85,9 @@ if (isset($_GET['logout']) and $uid) {
         unset($_SESSION[$key]);
     }
 
-    // include HubridAuth libraries
+    // include HybridAuth libraries
     require_once 'modules/auth/methods/hybridauth/config.php';
-    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+
     $config = get_hybridauth_config();
     $hybridauth = new Hybrid_Auth( $config );
     $hybridauth->logoutAllProviders();
