@@ -89,7 +89,7 @@ $sql = "SELECT MIN(LPM.`learnPath_module_id`) AS learnPath_module_id,
          AND LPM.`module_id` = M.`module_id`
          AND M.`course_id` = ?d
     GROUP BY LPM.`module_id`
-    ORDER BY LPM.`rank`";
+    ORDER BY MIN(LPM.`rank`)";
 $moduleList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
 $extendedList = array();
@@ -169,17 +169,22 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-left fa-lg"></span> </a></li>';
+        $prevNextString .= '<li class="prevnext" style="padding-top: 15px;"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-left fa-lg"></span> </a></li>';
     } else {
-        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><i class='fa fa-arrow-circle-left'></i></a></li>";
+        $prevNextString .= "<li class='prevnext' style='padding-top: 15px;'><a href='#' class='inactive'><span class='fa fa-arrow-circle-left'></span></a></li>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-right fa-lg"></span></a></li>';
+        $prevNextString .= '<li class="prevnext" style="padding-top: 15px;"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-right fa-lg"></span></a></li>';
     } else {
-        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><span class='fa fa-arrow-circle-right'></span></a></li>";
+        $prevNextString .= "<li class='prevnext' style='padding-top: 15px;'><a href='#' class='inactive'><span class='fa fa-arrow-circle-right'></span></a></li>";
     }
 }
 
+$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+$theme_options_styles = unserialize($theme_options->styles);
+$urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+$logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData."/".$theme_options_styles['imageUploadSmall'] : $themeimg."/eclass-new-logo-small.png" ;
 
 echo "<!DOCTYPE HTML>
 <html>
@@ -201,10 +206,10 @@ echo "<!DOCTYPE HTML>
     <script src='{$urlAppend}js/jquery.slimscroll.min.js'></script>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>
+    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css?v=".ECLASS_VERSION."'>
 
     <!-- Font Awesome - A font of icons -->
-    <link href='{$urlAppend}template/default/CSS/font-awesome/css/font-awesome.css' rel='stylesheet'>
+    <link href='{$urlAppend}template/default/CSS/font-awesome-4.2.0/css/font-awesome.css' rel='stylesheet'>
 
     <style>
         .navbar-inverse .navbar-nav > li > a {color: whitesmoke;}
@@ -260,7 +265,6 @@ echo "<!DOCTYPE HTML>
         }
         #navigation-btns #close-btn span{
             font-size:16px;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
         #leftTOCtoggler{
             margin-top: 7px;
@@ -281,7 +285,7 @@ echo "<!DOCTYPE HTML>
         }
         var fs = window.parent.document.getElementById('colFrameset');
         var fsJQe = $('#colFrameset', window.parent.document);
-        if (leftTOChiddenStatus != fsJQe.hasClass('hidden')) {
+        if (Boolean(leftTOChiddenStatus) == fsJQe.hasClass('hidden')) {
             fsJQe.toggleClass('hidden');
             if (fsJQe.hasClass('hidden')) {
                 fs.cols = '0, *';
@@ -312,13 +316,13 @@ echo "<!DOCTYPE HTML>
     <nav class='navbar navbar-inverse navbar-static-top' role='navigation'>
             <div class='container-fluid'>
                 <div class='navbar-header col-xs-2'>
-                  <a id='leftTOCtoggler' class='btn pull-left'><i class='fa fa-bars fa-lg'></i></a>
-                  <a id='toc_logo' class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='{$themeimg}/eclass-new-logo-small.png' alt='Logo'></a>
+                  <a id='leftTOCtoggler' class='btn pull-left'><span class='fa fa-bars fa-lg'></span></a>
+                  <a id='toc_logo' class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='$logoUrl' alt='Logo'></a>
                 </div>
                 <div class='navbar-header col-xs-10 pull-right'>
                     <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
                         $prevNextString
-                        <li id='close-btn'><a href='$returl' target='_top'><i class='fa fa-times fa-lg'>&nbsp;<span class='hidden-xs'>$langLogout</span></i></a></li>
+                        <li id='close-btn' style='padding-top: 15px;'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLeave</span></span></a></li>
                     </ul>
                     <div class='pull-right progressbar-plr'>";
 
