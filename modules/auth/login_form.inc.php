@@ -134,10 +134,12 @@ function login_form($format='main') {
     if ($format != 'main') {
         $altLoginTitle = '';
         if ($loginFormEnabled) {
+            $nextUrl = str_replace($urlAppend, '', $_SERVER['REQUEST_URI']);
+            $loginPage = (strpos($nextUrl, 'main/toolbox') === 0)? '?login_page=toolbox': '';
             $loginForm .= "
                 <div class='col-sm-6'>
-                    <form action='$urlServer' method='post' id='loginForm'>
-                        <input class='nextUrl' name='next' type='hidden' value='/'>
+                    <form action='$urlServer$loginPage' method='post' id='loginForm'>
+                        <input class='nextUrl' name='next' type='hidden' value='$nextUrl'>
                         <div class='form-group'>
                             <label class='hidden' for='uname'>$langUsername</label>
                             <input name='uname' type='text' class='form-control' id='uname' placeholder='$langUsername'>
@@ -147,6 +149,9 @@ function login_form($format='main') {
                             <input name='pass' type='password' class='form-control' id='pass' placeholder='$langPass'>
                         </div>
                         <button type='submit' name='submit' class='btn btn-primary btn-block'>$langEnter</button>
+                        <div class='text-right small lost-pass-link'>
+                            <a href='$urlAppend/modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                        </div>
                     </form>
                 </div>";
             if (count($authLink)) {

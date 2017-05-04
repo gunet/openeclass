@@ -225,8 +225,14 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                 <p>$langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>.</p></div>
                                 $homelink";
             } elseif (!isset($auth)) {
-                $tool_content .= "<div class='alert alert-success'>$lang_pass_email_ok <strong>" .
+                $alert = "$lang_pass_email_ok <strong>" . q($email) . "</strong>";
+                if ($_POST['send_link'] == 'toolbox') {
+                    Session::Messages($alert, 'alert-success');
+                    redirect_to_home_page('main/toolbox.php');
+                } else {
+                    $tool_content .= "<div class='alert alert-success'>$lang_pass_email_ok <strong>" .
                         q($email) . "</strong></div>$homelink";
+                }
             }
         }
     } else {
@@ -241,10 +247,14 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                         <p>$langLostPassPending</p></div>
                         $homelink";
         } else {
-            $tool_content .= "<div class='alert alert-danger'>
-                        <p><strong>$langAccountNotFound1 (" . q("$userName / $email") . ")</strong></p>
-                        <p>$langAccountNotFound2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p></div>
-                        $homelink";
+            $alert = "<p><strong>$langAccountNotFound1 (" . q("$userName / $email") . ")</strong></p>
+                      <p>$langAccountNotFound2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>";
+            if ($_POST['send_link'] == 'toolbox') {
+                Session::Messages($alert, 'alert-danger');
+                redirect_to_home_page('main/toolbox.php');
+            } else {
+                $tool_content .= "<div class='alert alert-danger'>$alert</div>$homelink";
+            }
         }
     }
 } else {

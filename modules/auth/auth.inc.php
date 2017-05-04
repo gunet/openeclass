@@ -671,7 +671,11 @@ function process_login() {
                 case 4:
                     if (isset($_GET['login_page'])) {
                         Session::flash('login_error', $invalidIdMessage);
-                        redirect_to_home_page('main/login_form.php');
+                        if ($_GET['login_page'] == 'toolbox') {
+                            redirect_to_home_page('main/toolbox.php');
+                        } else {
+                            redirect_to_home_page('main/login_form.php');
+                        }
                     } else {
                         $warning .= "<div class='alert alert-warning'>$invalidIdMessage</div>";
                         increaseLoginFailure();
@@ -687,6 +691,10 @@ function process_login() {
                     break;
                 default:
                     break;
+            }
+            if ($warning) {
+                Session::flash('login_warning', $warning);
+                redirect_to_home_page('main/toolbox.php');
             }
         } else {
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)

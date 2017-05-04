@@ -57,7 +57,9 @@ $t->set_var('toolboxTitle', q(getSerializedMessage(get_config('toolbox_title', $
 $t->set_var('container', 'container');
 
 if ($messages = Session::getMessages()) {
-    $t->set_var('EXTRA_MSG', "<div class='row'><div class='col-xs-12'>".$messages."</div></div>");
+    $t->set_var('EXTRA_MSG', "<div class='row'><div class='col-xs-12'>$messages</div></div>");
+} elseif (Session::has('login_warning')) {
+    $t->set_var('EXTRA_MSG', "<div class='row'><div class='col-xs-12'>" . Session::get('login_warning') . '</div></div>');
 }
 
 $lang_select = "<div class='dropdown'>
@@ -85,9 +87,16 @@ foreach ($msgs as $msg) {
 if ($uid) {
     $t->set_var('loginLogout', q($_SESSION['givenname'] . ' ' . $_SESSION['surname']) .
         " &nbsp; <a href='$urlAppend?logout=true'>$langLogout</a>");
+    $t->set_block('main', 'loginModalsBlock', 'delete');
 } else {
     $t->set_var('loginModal', 'loginModal');
     $t->set_var('loginLogout', "$langLogIn / $langRegister");
+    $t->set_var('langRemindPass', $lang_remind_pass);
+    $t->set_var('lostPassUrl', $urlAppend . 'modules/auth/lostpass.php');
+    if (Session::has('login_error')) {
+        $t->set_var('loginError', '<div class="alert alert-danger">' . Session::get('login_error') . '</div>');
+        $head_content .= '<script>$(function () { $("#loginModalContent").modal("toggle"); })</script>';
+    }
 }
 
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');

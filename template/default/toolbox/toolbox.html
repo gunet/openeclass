@@ -16,18 +16,21 @@
     <script>
         $(document).ready(function () {
             $(".loginModal").click(function () {
-                if( $("#registerModalContent").hasClass('in') ){
-                    $('#registerModalContent').modal('toggle');
-                }
+                $('#registerModalContent').modal('hide');
+                $("#lostPassModalContent").modal('hide');
                 $("#loginModalContent").modal();
             });
             $(".registerModal").click(function () {
-                if( $("#loginModalContent").hasClass('in') ) {
-                    $('#loginModalContent').modal('toggle');
-                }
+                $('#loginModalContent').modal('hide');
+                $("#lostPassModalContent").modal('hide');
                 $("#registerModalContent").modal();
             });
-
+            $(".lost-pass-link").click(function (e) {
+                e.preventDefault();
+                $('#registerModalContent').modal('hide');
+                $('#loginModalContent').modal('hide');
+                $("#lostPassModalContent").modal();
+            });
             $("select").select2({
                 theme: "bootstrap",
                 placeholder: "Select an option"
@@ -208,17 +211,16 @@
     </div>
 </div>
 
-
-
-
-<div class="modal fade" id="loginModalContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<!-- BEGIN loginModalsBlock -->
+<div class="modal fade" id="loginModalContent" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">{%langLogin%}</h4>
+                <h4 class="modal-title" id="loginModalLabel">{%langLogin%}</h4>
             </div>
             <div class="modal-body">
+                {%loginError%}
                 <div class="row">
                     {%loginForm%}
                 </div>
@@ -229,17 +231,17 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="registerModalContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="registerModalContent" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabelRegister">{%langRegister%}</h4>
+                <h4 class="modal-title" id="registerModalLabel">{%langRegister%}</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <form method='post' action='{%registrationUrl%}'>
+                        <form method="post" action="{%registrationUrl%}">
                             <div class="form-group">
                                 <label class="hidden" for="inputName">{%langName%}</label>
                                 <input type="text" class="form-control" name="givenname_form" id="inputName" placeholder="{%langName%}">
@@ -275,6 +277,37 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="lostPassModalContent" tabindex="-1" role="dialog" aria-labelledby="lostPassModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="lostPassModalLabel">{%langRemindPass%}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form method="post" action="{%lostPassUrl%}">
+                            <div class="form-group">
+                                <label class="hidden" for="inputLostPassUsername">{%langUsername%}</label>
+                                <input type="text" class="form-control" name="userName" id="inputLostPassUsername" placeholder="{%langUsername%}">
+                            </div>
+                            <div class="form-group">
+                                <label class="hidden" for="inputLostPassEmail">{%langEmail%}</label>
+                                <input type="email" class="form-control" name="email" id="inputLostPassEmail" placeholder="{%langEmail%}">
+                            </div>
+                            <button type="submit" name="send_link" class="btn btn-primary btn-block" value="toolbox">{%langSubmit%}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                {%noAccountPleaseRegister%}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END loginModalsBlock -->
 {%HTML_FOOTER%}
 </body>
 </html>

@@ -13,7 +13,7 @@
         "google/apiclient": "1.0.*@beta",
         "guzzlehttp/guzzle": "^6.2",
         "guzzlehttp/oauth-subscriber": "^0.3.0",
-        "hybridauth/hybridauth": "2.*"
+        "hybridauth/hybridauth": "^2.9"
     },
     "autoload": {
         "psr-0": {
