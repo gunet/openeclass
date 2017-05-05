@@ -165,7 +165,7 @@ if (isset($_POST['submit'])) {
 
         $emailbodyplain = html2text($emailbody);
 
-        send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody, $charset);
+        send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody);
 
         Session::Messages(array($message,
             "$langTheU \"$givenname_form $surname_form\" $langAddedU" .

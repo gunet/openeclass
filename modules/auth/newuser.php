@@ -487,7 +487,7 @@ if (!isset($_POST['submit'])) {
 
         // send email to user
         if (!empty($email)) {
-            send_mail_multipart('', '', '', $email, $emailsubject, $emailPlainBody, $html_topic_notify, $charset);
+            send_mail_multipart('', '', '', $email, $emailsubject, $emailPlainBody, $html_topic_notify);
             $user_msg = $langPersonalSettings;
         } else {
             $user_msg = $langPersonalSettingsLess;

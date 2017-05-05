@@ -309,7 +309,7 @@ elseif (isset($_GET['forumgoadd'])) {
 
             $plain_message = html2text($html_topic_notify);
             
-            send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_message, $html_topic_notify, $charset);
+            send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_message, $html_topic_notify);
         }
     }        
     // end of notification

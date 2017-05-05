@@ -280,5 +280,5 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
             }
         }
     }    
-    send_mail_multipart('', '', '', $email, $subject_notify, $plain_topic_notify, $html_topic_notify, $charset);
+    send_mail_multipart('', '', '', $email, $subject_notify, $plain_topic_notify, $html_topic_notify);
 }

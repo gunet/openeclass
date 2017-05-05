@@ -320,7 +320,7 @@ if ($is_valid) {
         $plainemailbody = html2text($emailbody);
 
         if (!empty($email)) {
-            send_mail_multipart($siteName, $emailAdministrator, '', $email, $emailsubject, $plainemailbody, $emailbody, $charset, "Reply-To: $emailhelpdesk");
+            send_mail_multipart($siteName, $emailAdministrator, '', $email, $emailsubject, $plainemailbody, $emailbody);
         }
 
         $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
@@ -414,7 +414,7 @@ if ($is_valid) {
             $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
             $plainemailbody = html2text($MailMessage);
 
-            if (!send_mail_multipart($siteName, $emailAdministrator, $gunet, $emailhelpdesk, $mailsubject, $plainemailbody, $MailMessage, $charset, "Reply-To: $email")) {
+            if (!send_mail_multipart($siteName, $emailAdministrator, $gunet, $emailhelpdesk, $mailsubject, $plainemailbody, $MailMessage)) {
                 $tool_content .= "<div class='alert alert-warning'>$langMailErrorMessage &nbsp; <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a></div>";
                 draw($tool_content, 0);
                 exit();
@@ -448,7 +448,7 @@ if ($is_valid) {
             $MailMessage = $header_html_topic_notify.$body_html_topic_notify;
             $plainemailbody = html2text($MailMessage);
 
-            if (!send_mail_multipart($siteName, $emailAdministrator, '', $email, $subject, $plainemailbody, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
+            if (!send_mail_multipart($siteName, $emailAdministrator, '', $email, $subject, $plainemailbody, $MailMessage)) {
                 $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>");
                 $tool_content .= $mail_ver_error;
                 draw($tool_content, 0);

@@ -317,7 +317,7 @@ function submitPoll() {
                 </div>
             </div>";
             $body_plain = html2text($body_html);
-            send_mail_multipart('', '', '', $participantEmail, $subject, $body_plain, $body_html, $charset);
+            send_mail_multipart('', '', '', $participantEmail, $subject, $body_plain, $body_html);
         }
 
         $question = isset($_POST['question'])? $_POST['question']: array();

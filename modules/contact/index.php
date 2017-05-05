@@ -192,7 +192,7 @@ function email_profs($course_id, $content, $from_name, $from_username, $from_add
         } else {
             $to_name = $prof->givenname . ' ' . $prof->surname;
             $ret .= "<div class='alert alert-success'>" . icon('fa-university') . "&nbsp;" . q($to_name) . "</div>";            
-            if (!send_mail_multipart($from_name, $from_address, $to_name, $prof->email, $subject, $plainMessage, $message, $GLOBALS['charset'])) {
+            if (!send_mail_multipart($from_name, $from_address, $to_name, $prof->email, $subject, $plainMessage, $message)) {
                 $ret .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>";
             }
         }

@@ -218,7 +218,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
         /*         * *** Account details found, now send e-mail **** */
         if ($found_editable_password) {
             $emailsubject = $lang_remind_pass;
-            if (!send_mail_multipart('', '', '', $email, $emailsubject, $plainText, $text, $charset)) {
+            if (!send_mail_multipart('', '', '', $email, $emailsubject, $plainText, $text)) {
                 $tool_content = "<div class='alert alert-danger'>
                                 <p><strong>$langAccountEmailError1</strong></p>
                                 <p>$langAccountEmailError2 $email.</p>

@@ -559,7 +559,7 @@ if ($is_editor) {
                                                        FROM course_user, user
                                                        WHERE course_id = ?d AND user.id IN ($recipients_emaillist) AND
                                                              course_user.user_id = user.id", function ($person)
-                use (&$countEmail, &$recipients, &$invalid, $course_id, $general_to, $emailSubject, $emailBody, $emailContent, $charset) {
+                use (&$countEmail, &$recipients, &$invalid, $course_id, $general_to, $emailSubject, $emailBody, $emailContent) {
                     $countEmail++;
                     $emailTo = $person->email;
                     $user_id = $person->id;
@@ -572,12 +572,12 @@ if ($is_editor) {
                     }
                     // send mail message per 50 recipients
                     if (count($recipients) >= 50) {
-                        send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
+                        send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
                         $recipients = array();
                     }
                 }, $course_id);
                 if (count($recipients) > 0) {
-                    send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
+                    send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent);
                 }
                 Session::Messages("$langAnnAddWithEmail $countEmail $langRegUser", 'alert-success');
                 if ($invalid > 0) { // info about invalid emails (if exist)
