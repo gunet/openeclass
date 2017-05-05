@@ -161,7 +161,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
         /*         * *** Account details found, now send e-mail **** */
         if ($data['found_editable_password']) {
             $emailsubject = $lang_remind_pass;
-            $data['mail_sent'] = send_mail_multipart('', '', '', $data['email'], $emailsubject, $plainText, $text, $charset);
+            $data['mail_sent'] = send_mail_multipart('', '', '', $data['email'], $emailsubject, $plainText, $text);
         }
     } else {
         $data['res_second_attempt'] = Database::get()->querySingle("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u

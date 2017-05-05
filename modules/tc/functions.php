@@ -432,7 +432,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
                 // Notify course users for new bbb session
-                send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
+                send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent);
             }
         }
 
@@ -461,7 +461,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
                 ";
                 $emailcontent = $emailheader . $emailmain;
                 $emailbody = html2text($emailcontent);
-                send_mail_multipart('', '', '', $row, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
+                send_mail_multipart('', '', '', $row, $emailsubject, $emailbody, $emailcontent);
             }
         }
     }
@@ -1314,4 +1314,32 @@ function has_enable_recordings($server_id) {
     $result = Database::get()->querySingle("SELECT enable_recordings FROM tc_servers WHERE id = ?d", $server_id)->enable_recordings;
 
     return $result;
+}
+
+/**
+ * @brief get tc title given its meeting id
+ * @param type $meeting_id
+ * @return type
+ */
+function get_tc_title($meeting_id) {
+    
+    $result = Database::get()->querySingle("SELECT title FROM tc_session 
+                    WHERE meeting_id = ?d", $meeting_id)->title;
+    
+    return $result;
+    
+}
+
+/**
+ * @brief check if there are log entries
+ * @return boolean
+ */
+function has_tc_participation() {
+    
+    $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM bbb_attendance")->cnt;
+    if ($cnt > 0) {
+        return true;
+    } else {
+        return false;
+    }    
 }

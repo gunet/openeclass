@@ -78,7 +78,7 @@ if (isset($_GET['add'])) {
 
             $plainemailbody = html2text($emailbody);
 
-            send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody, $charset);
+            send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody);
         }
     } else {
         Session::Messages($langAddError, "alert alert-warning");

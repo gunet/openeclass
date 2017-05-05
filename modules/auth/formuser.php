@@ -280,7 +280,7 @@ if ($all_set) {
         $plainMailMessage = html2text($MailMessage);
 
         $emailAdministrator = get_config('email_sender');
-        if (!send_mail_multipart($siteName, $emailAdministrator, '', $emailhelpdesk, $subject, $plainMailMessage, $MailMessage, $charset, "Reply-To: $usermail")) {
+        if (!send_mail_multipart($siteName, $emailAdministrator, '', $emailhelpdesk, $subject, $plainMailMessage, $MailMessage)) {
             $tool_content .= "<div class='alert alert-warning'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>";
         }
 
@@ -319,7 +319,7 @@ if ($all_set) {
 
         $plainMailMessage = html2text($MailMessage);
 
-        if (!send_mail_multipart($siteName, $emailAdministrator, '', $usermail, $subject, $plainMailMessage, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
+        if (!send_mail_multipart($siteName, $emailAdministrator, '', $usermail, $subject, $plainMailMessage, $MailMessage)) {
             $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $usermail, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>");
             $tool_content .= $mail_ver_error;
             draw($tool_content, 0);

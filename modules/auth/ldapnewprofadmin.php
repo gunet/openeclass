@@ -148,7 +148,7 @@ if ($submit) {
     $emailbody = $header_html_topic_notify.$body_html_topic_notify;
     $plainemailbody = html2text($emailbody);
 
-    if (!send_mail_multipart('', '', '', $pe, $mailsubject, $plainemailbody, $emailbody, $charset)) {
+    if (!send_mail_multipart('', '', '', $pe, $mailsubject, $plainemailbody, $emailbody)) {
         $tool_content .= "
 	    <div class='alert alert-danger'>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></div>
 	    ";

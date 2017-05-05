@@ -110,12 +110,12 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
 
         $emailbody = html2text($emailcontent);
         if (count($recipients) >= 50) {
-            send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset);
+            send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent);
             $recipients = array();
         }
     }
     if (count($recipients) > 0) {
-        send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset);
+        send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent);
     }
     Session::Messages($emailsuccess, 'alert-success');
     redirect_to_home_page('modules/admin/mailtoprof.php');

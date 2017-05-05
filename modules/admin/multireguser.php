@@ -254,7 +254,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
 
     $emailPlainBody = html2text($emailbody);
     if ($send_mail) {
-        send_mail_multipart('', '', '', $email, $emailsubject, $emailPlainBody, $emailbody, $charset);
+        send_mail_multipart('', '', '', $email, $emailsubject, $emailPlainBody, $emailbody);
     }
 
     return array($id, $surname, $givenname, $email, $phone, $am, $uname, $password);

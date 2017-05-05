@@ -53,7 +53,7 @@ if (isset($_POST['rejected_req_id'])) { // do reject course user request
         
     $message = $mailHeader.$mailMain;    
     $plainMessage = html2text($message);    
-    if (!send_mail_multipart('', '', '', $to_address, $subject, $plainMessage, $message, $GLOBALS['charset'])) {
+    if (!send_mail_multipart('', '', '', $to_address, $subject, $plainMessage, $message)) {
         $tool_content .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>";
     }
     Database::get()->query("UPDATE course_user_request SET status = 0 WHERE id = ?d", $_POST['rejected_req_id']);        
@@ -89,7 +89,7 @@ if (isset($_GET['rid'])) {
 
                     $emailbody = $header_html_topic_notify . $body_html_topic_notify;
                     $plainemailbody = html2text($emailbody);
-                    send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody, $charset);
+                    send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody);
                 }
             }
             // close user request

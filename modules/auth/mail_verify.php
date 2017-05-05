@@ -111,7 +111,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
 
                     $plainMailMessage = html2text($MailMessage);
 
-                    if (!send_mail_multipart($siteName, $emailAdministrator, '', get_config('email_helpdesk'), $subject, $plainMailMessage, $MailMessage, $charset, "Reply-To: $usermail")) {
+                    if (!send_mail_multipart($siteName, $emailAdministrator, '', get_config('email_helpdesk'), $subject, $plainMailMessage, $MailMessage)) {
                         $user_msg = $langMailErrorMessage;
                     } else {
                         $user_msg = $infoprof;

@@ -3741,14 +3741,14 @@ function send_mail_to_group_id($gid, $subject, $plainBody, $body) {
                                  WHERE members.group_id = ?d
                                  AND user.id = members.user_id", $gid);
     foreach ($res as $info) {
-        send_mail_multipart('', '', "$info->givenname $info->surname", $info->email, $subject, $plainBody, $body, $charset);
+        send_mail_multipart('', '', "$info->givenname $info->surname", $info->email, $subject, $plainBody, $body);
     }
 }
 
 function send_mail_to_user_id($uid, $subject, $plainBody, $body) {
     global $charset;
     $user = Database::get()->querySingle("SELECT surname, givenname, email FROM user WHERE id = ?d", $uid);
-    send_mail_multipart('', '', "$user->givenname $user->surname", $user->email, $subject, $plainBody, $body, $charset);
+    send_mail_multipart('', '', "$user->givenname $user->surname", $user->email, $subject, $plainBody, $body);
 }
 
 // Return a list of users with no submissions for assignment $id

@@ -172,7 +172,12 @@ if ($is_editor) {
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
-                      'show' => is_active_tc_server($tc_type, $course_id))));
+                      'show' => is_active_tc_server($tc_type, $course_id)),
+            array('title' => $langParticipate,
+                      'url' => "tcuserduration.php?course=$course_code",
+                      'icon' => 'fa-clock-o',                     
+                      'level' => 'primary-label',
+                      'show' => has_tc_participation())));
         }
     }
 }

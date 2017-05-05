@@ -98,7 +98,7 @@ if (!empty($_POST['submit'])) {
 
         $emailhelpdesk = get_config('email_helpdesk');
         $emailAdministrator = get_config('email_sender');
-        if (!send_mail_multipart($siteName, $emailAdministrator, '', $email, $subject, $plainMailMessage, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
+        if (!send_mail_multipart($siteName, $emailAdministrator, '', $email, $subject, $plainMailMessage, $MailMessage)) {
             $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</div>");
             $tool_content .= $mail_ver_error;
         } else {

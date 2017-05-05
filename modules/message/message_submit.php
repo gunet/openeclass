@@ -215,7 +215,7 @@ if (isset($_POST['submit'])) {
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
                         if (Swift_Validate::email($emailaddr)) { // if email address is valid
-                            send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
+                            send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
                         } else {
                             $errormail = TRUE;
                         }
@@ -261,7 +261,7 @@ if (isset($_POST['submit'])) {
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
                         if (Swift_Validate::email($emailaddr)) { // if email address is valid
-                            send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message, $charset);
+                            send_mail_multipart('', '', '', $emailaddr, $subject_dropbox, $plain_body_dropbox_message, $body_dropbox_message);
                         } else {
                             $errormail = TRUE;
                         }

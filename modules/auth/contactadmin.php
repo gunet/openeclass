@@ -83,7 +83,7 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
         $emailbody = $header_html_topic_notify.$body_html_topic_notify;
 
         $plainEmailBody = html2text($emailbody);
-        if (!send_mail_multipart('', '', '', $to, $emailsubject, $plainEmailBody, $emailbody, $charset)) {
+        if (!send_mail_multipart('', '', '', $to, $emailsubject, $plainEmailBody, $emailbody)) {
             $tool_content .= "<div class='alert alert-danger'>$langEmailNotSend " . q($to) . "!</div><br />";
         } else {
             $tool_content .= "<div class='alert alert-success'>$emailsuccess</div><br />";
