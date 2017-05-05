@@ -174,12 +174,12 @@
                                                                 ],
                                                                 [
                                                                     'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
-                                                                    'url' => "$_SERVER[SCRIPT_NAME]?visW=". getIndirectReference($course_unit->id),
+                                                                    'url' => "$_SERVER[REQUEST_URI]?visW=". getIndirectReference($course_unit->id),
                                                                     'icon' => $course_unit->visible == 1? 'fa-eye-slash' : 'fa-eye'
                                                                 ],
                                                                 [
                                                                   'title' => $course_unit->public == 1? trans('langResourceAccessLock') : trans('langResourceAccessUnlock'),
-                                                                  'url' => "$_SERVER[SCRIPT_NAME]?access=". getIndirectReference($course_unit->id),
+                                                                  'url' => "$_SERVER[REQUEST_URI]?access=". getIndirectReference($course_unit->id),
                                                                   'icon' => $course_unit->public == 1? 'fa-lock' : 'fa-unlock',
                                                                   'show' => $course_info->visible == COURSE_OPEN
                                                                 ]
@@ -195,31 +195,31 @@
                                                                 [
                                                                     'title' => trans('langDown'),
                                                                     'level' => 'primary',
-                                                                    'url' => "$_SERVER[SCRIPT_NAME]?down=". getIndirectReference($course_unit->id),
+                                                                    'url' => "$_SERVER[REQUEST_URI]?down=". getIndirectReference($course_unit->id),
                                                                     'icon' => 'fa-arrow-down',
                                                                     'disabled' => $key + 1 == count($course_units)
                                                                 ],
                                                                 [
                                                                     'title' => trans('langUp'),
                                                                     'level' => 'primary',
-                                                                    'url' => "$_SERVER[SCRIPT_NAME]?up=". getIndirectReference($course_unit->id),
+                                                                    'url' => "$_SERVER[REQUEST_URI]?up=". getIndirectReference($course_unit->id),
                                                                     'icon' => 'fa-arrow-up',
                                                                     'disabled' => $key == 0
                                                                 ],
                                                                 [
                                                                     'title' => $course_unit->visible == 1? trans('langViewHide') : trans('langViewShow'),
-                                                                    'url' => "$_SERVER[SCRIPT_NAME]?vis=". getIndirectReference($course_unit->id),
+                                                                    'url' => "$_SERVER[REQUEST_URI]?vis=". getIndirectReference($course_unit->id),
                                                                     'icon' => $course_unit->visible == 1? 'fa-eye-slash' : 'fa-eye'
                                                                 ],
                                                                 [
                                                                     'title' => $course_unit->public == 1? trans('langResourceAccessLock') : trans('langResourceAccessUnlock'),
-                                                                    'url' => "$_SERVER[SCRIPT_NAME]?access=". getIndirectReference($course_unit->id),
+                                                                    'url' => "$_SERVER[REQUEST_URI]?access=". getIndirectReference($course_unit->id),
                                                                     'icon' => $course_unit->public == 1? 'fa-lock' : 'fa-unlock',
                                                                     'show' => $course_info->visible == COURSE_OPEN
                                                                 ],
                                                                 [
                                                                     'title' => trans('langDelete'),
-                                                                    'url' => "$_SERVER[SCRIPT_NAME]?del=". getIndirectReference($course_unit->id),
+                                                                    'url' => "$_SERVER[REQUEST_URI]?del=". getIndirectReference($course_unit->id),
                                                                     'icon' => 'fa-times',
                                                                     'class' => 'delete',
                                                                     'confirm' => trans('langCourseUnitDeleteConfirm')
