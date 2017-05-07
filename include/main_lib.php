@@ -1881,10 +1881,10 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
 
         // params for tinymce embed
         $activemodule = 'document/index.php';
-        $append_module = (!empty(current_module_id())) ? "&originating_module=" . q(current_module_id()) : '';
+        $append_module = (current_module_id()) ? "&originating_module=" . q(current_module_id()) : '';
         $append_forum = (isset($_REQUEST['forum'])) ? "&originating_forum=" . q($_REQUEST['forum']) : '';
 
-        if (isset($course_code) && !empty($course_code)) {
+        if (isset($course_code) && $course_code) {
             $filebrowser = "file_browser_callback : openDocsPicker,";
             if (!$is_editor) {
                 $cid = course_code_to_id($course_code);
