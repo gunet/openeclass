@@ -692,7 +692,7 @@ function process_login() {
                 default:
                     break;
             }
-            if ($warning) {
+            if ($warning and isset($_GET['login_page']) and $_GET['login_page'] == 'toolbox') {
                 Session::flash('login_warning', $warning);
                 redirect_to_home_page('main/toolbox.php');
             }
