@@ -19,6 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use Hybrid\Auth;
+
 $require_help = true;
 $require_login = true;
 $require_valid_uid = true;
@@ -35,7 +37,6 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/log.class.php';
 
 require_once 'modules/auth/methods/hybridauth/config.php';
-require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
 
 check_uid();
 check_guest();
