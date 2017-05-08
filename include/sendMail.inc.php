@@ -69,7 +69,7 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
     $message->setBody($body_plain, 'text/plain')
         ->addPart("<html>
 <head>
-  <meta http-equiv='Content-Type' content='text/html; charset='UTF-8'>
+  <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
   <title>message</title>
   <style type='text/css'>
     /* General Styles */
