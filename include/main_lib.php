@@ -2758,8 +2758,8 @@ class HtmlCutString {
 
     function __construct($string, $limit, $postfix) {
         // create dom element using the html string
-        $this->tempDiv = new DomDocument;
-        $this->tempDiv->loadHTML('<?xml encoding="UTF-8"><div>' . $string . '</div>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
+        $this->tempDiv = new DOMDocument('1.0', 'UTF-8');
+        $this->tempDiv->loadHTML('<?xml version="1.0" encoding="UTF-8" ?><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div>' . $string . '</div>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
         // keep the characters count till now
         $this->charCount = 0;
         // put the postfix at the end
