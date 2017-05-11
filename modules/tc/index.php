@@ -175,7 +175,7 @@ if ($is_editor) {
                       'show' => is_active_tc_server($tc_type, $course_id)),
             array('title' => $langParticipate,
                       'url' => "tcuserduration.php?course=$course_code",
-                      'icon' => 'fa-clock-o',                     
+                      'icon' => 'fa-clock-o',
                       'level' => 'primary-label',
                       'show' => has_tc_participation())));
         }
