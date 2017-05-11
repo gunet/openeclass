@@ -494,6 +494,7 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
  * @global type $langDeactivate
  * @global type $langEditChange
  * @global type $langDelete
+ * @global type $langParticipate
  * @global type $langNoBBBSesssions
  * @global type $langDaysLeft
  * @global type $langHasExpiredS
@@ -509,7 +510,7 @@ function bbb_session_details() {
     global $course_id, $tool_content, $is_editor, $course_code, $uid, $tc_type,
         $langNewBBBSessionStart, $langParticipants,$langConfirmDelete, $langHasExpiredS,
         $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
-        $langActivate, $langDeactivate, $langEditChange, $langDelete,
+        $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
         $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
         $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langdate, $langBBBNoServerForRecording;
 
@@ -645,6 +646,10 @@ function bbb_session_details() {
                             array(  'title' => $langBBBImportRecordings,
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=import_video",
                                     'icon' => "fa-edit",
+                                    'show' => $tc_type == 'bbb'),
+                            array(  'title' => $langParticipate,
+                                    'url' => "tcuserduration.php?course=$course_code&amp;id=$row->id",
+                                    'icon' => "fa-clock-o",
                                     'show' => $tc_type == 'bbb'),
                             array(  'title' => $row->active? $langDeactivate : $langActivate,
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=do_".
@@ -1328,6 +1333,19 @@ function get_tc_title($meeting_id) {
     
     return $result;
     
+}
+
+/**
+ * @brief get encoded tc meeting id given its db id
+ * @param type $id
+ * @return type
+ */
+function get_tc_meeting_id($id) {
+    
+    $result = Database::get()->querySingle("SELECT meeting_id FROM tc_session 
+                    WHERE id = ?d", $id)->meeting_id;
+    
+    return $result;
 }
 
 /**

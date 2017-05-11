@@ -3582,6 +3582,29 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `level_feedback` varchar(60) NOT NULL,
                             PRIMARY KEY (`id`)
                           ) $tbl_options ");
+                
+        Database::get()->query("CREATE TABLE `bbb_attendance` (
+                            `id` int(11) NOT NULL DEFAULT '0',
+                            `meetingid` varchar(20) NOT NULL,
+                            `bbbuserid` varchar(20) DEFAULT NULL,
+                            `totaltime` int(11) NOT NULL DEFAULT '0',
+                            `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            PRIMARY KEY (`id`,`meetingid`),
+                            KEY `id` (`id`),
+                            KEY `meetingid` (`meetingid`)
+                        ) $tbl_options");
+        
+        Database::get()->query("CREATE TABLE `bbb_log` (
+                            `id` int(11) NOT NULL,
+                            `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                            `meetingid` varchar(20) NOT NULL,
+                            `bbbuserid` varchar(20) DEFAULT NULL,
+                            `fullName` varchar(200) DEFAULT NULL,
+                            PRIMARY KEY (`id`),
+                            KEY `userid` (`bbbuserid`),
+                            KEY `fullName` (`fullName`),
+                            KEY `id` (`id`)
+                        ) $tbl_options");                
     }
 
     // update eclass version
