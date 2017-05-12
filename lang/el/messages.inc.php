@@ -3366,6 +3366,7 @@ $langUsersWithNoMail = "Χρήστες που δεν έχουν δηλώσει e
 $langMailVerificationNoU = "Δεν έχει επιβεβαιωθεί";
 $langMailVerificationYesU = "Έχει επιβεβαιωθεί";
 $langMailVerificationPendingU = "Εκκρεμεί επιβεβαίωση";
+$langRegisteredUserAlreadyExists = 'Υπάρχει ήδη λογαριασμός με τα στοιχεία με τα οποία δοκιμάσατε να εγγραφείτε. Αν έχετε χάσει το συνθηματικό σας, μπορείτε να ορίσετε νέο.';
 
 // mail_ver_settings.php
 $langMailVerificationSettings = 'Ρυθμίσεις επιβεβαίωσης e-mail διεύθυνσης χρηστών';

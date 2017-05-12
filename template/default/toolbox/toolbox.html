@@ -239,24 +239,26 @@
                 <h4 class="modal-title" id="registerModalLabel">{%langRegister%}</h4>
             </div>
             <div class="modal-body">
+                {%registerError%}
                 <div class="row">
                     <div class="col-sm-12">
                         <form method="post" action="{%registrationUrl%}">
+                            <input type="hidden" name="toolbox" value="true">
                             <div class="form-group">
                                 <label class="hidden" for="inputName">{%langName%}</label>
-                                <input type="text" class="form-control" name="givenname_form" id="inputName" placeholder="{%langName%}">
+                                <input type="text" class="form-control" name="givenname_form" id="inputName" placeholder="{%langName%}" value="{%givennameValue%}">
                             </div>
                             <div class="form-group">
                                 <label class="hidden" for="inputSurname">{%langSurname%}</label>
-                                <input type="text" class="form-control" name="surname_form" id="inputSurname" placeholder="{%langSurname%}">
+                                <input type="text" class="form-control" name="surname_form" id="inputSurname" placeholder="{%langSurname%}" value="{%surnameValue%}">
                             </div>
                             <div class="form-group">
                                 <label class="hidden" for="inputUsername">{%langUsername%}</label>
-                                <input type="text" class="form-control" name="uname" id="inputUsername" placeholder="{%langUsername%}">
+                                <input type="text" class="form-control" name="uname" id="inputUsername" placeholder="{%langUsername%}" value="{%usernameValue%}">
                             </div>
                             <div class="form-group">
                                 <label class="hidden" for="inputEmail">{%langEmail%}</label>
-                                <input type="email" class="form-control" name="email" id="inputEmail" placeholder="{%langEmail%}">
+                                <input type="email" class="form-control" name="email" id="inputEmail" placeholder="{%langEmail%}" value="{%emailValue%}">
                             </div>
                             <div class="form-group">
                                 <label class="hidden" for="inputPassword">{%langPass%}</label>
@@ -285,16 +287,17 @@
                 <h4 class="modal-title" id="lostPassModalLabel">{%langRemindPass%}</h4>
             </div>
             <div class="modal-body">
+                {%recoveryWarning%}
                 <div class="row">
                     <div class="col-sm-12">
                         <form method="post" action="{%lostPassUrl%}">
                             <div class="form-group">
                                 <label class="hidden" for="inputLostPassUsername">{%langUsername%}</label>
-                                <input type="text" class="form-control" name="userName" id="inputLostPassUsername" placeholder="{%langUsername%}">
+                                <input type="text" class="form-control" name="userName" id="inputLostPassUsername" placeholder="{%langUsername%}" value="{%usernameValue%}">
                             </div>
                             <div class="form-group">
                                 <label class="hidden" for="inputLostPassEmail">{%langEmail%}</label>
-                                <input type="email" class="form-control" name="email" id="inputLostPassEmail" placeholder="{%langEmail%}">
+                                <input type="email" class="form-control" name="email" id="inputLostPassEmail" placeholder="{%langEmail%}" value="{%emailValue%}">
                             </div>
                             <button type="submit" name="send_link" class="btn btn-primary btn-block" value="toolbox">{%langSubmit%}</button>
                         </form>

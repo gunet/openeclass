@@ -2581,6 +2581,7 @@ $langChangeTo = "Change to";
 $langMailVerificationChanged = "Has changed";
 $langMailVerificationChangedNo = "You haven't choose some change";
 $langMailVerificationChangedNoAdmin = "No users or admin email address is not allowed";
++$langRegisteredUserAlreadyExists = "An account with the provided registration details already exists. If you've lost your password, you can try resetting it.";
 $langCheckCourseAdmin = "
         <strong>Action requires $langsCourse administrator rights.</strong>
         <br>You have been redirected to home page for logging in again.";
