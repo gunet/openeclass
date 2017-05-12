@@ -34,8 +34,7 @@ $tool_content .= action_bar(array(
 
 // get the incoming values and initialize them
 if (isset($_GET['u'])) {
-    $user = getDirectReference($_GET['u']);
-    $iuid = $_GET['u'];
+    $user = $_GET['u'];    
 } else {
     forbidden();
 }
@@ -57,7 +56,7 @@ if (!isset($_POST['doit'])) {
             $tool_content .= "<div class='alert alert-warning'>$langConfirmDeleteQuestion1 $u_desc<br>
                 $langConfirmDeleteQuestion3
               </div>
-              <form method='post' action='$_SERVER[SCRIPT_NAME]?u=$iuid'>
+              <form method='post' action='$_SERVER[SCRIPT_NAME]?u=$user'>
                 <input class='btn btn-danger' type='submit' name='doit' value='$langDelete'>
                 ". generate_csrf_token_form_field() ."
               </form>";
@@ -69,7 +68,7 @@ if (!isset($_POST['doit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (get_admin_rights($user) > 0) {
         Session::Messages($langTryDeleteAdmin, 'alert-danger');
-        redirect_to_home_page("modules/admin/deluser.php?u=$iuid");
+        redirect_to_home_page("modules/admin/deluser.php?u=$user");
     } else {
         if (deleteUser($user, true)) {
             Session::Messages("$langWithUsername \"$u_account\" ($u_realname) $langWasDeleted.", 'alert-info');

@@ -1559,6 +1559,9 @@ function course_id_to_public_code($cid) {
 function delete_course($cid) {
     global $webDir;
 
+    if (!isset($webDir) or empty($webDir)) { // security
+        return;
+    }
     $course_code = course_id_to_code($cid);
 
     Database::get()->query("DELETE FROM announcement WHERE course_id = ?d", $cid);
@@ -1700,8 +1703,11 @@ function deleteUser($id, $log) {
     global $webDir;
 
     $u = intval($id);
-
-    if ($u == 1) {
+       
+    if (!isset($webDir) or empty($webDir)) { // security
+        return false;
+    }
+    if ($u == 1) { // don't delete admin user
         return false;
     } else {
         // validate if this is an existing user
