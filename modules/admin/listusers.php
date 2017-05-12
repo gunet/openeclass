@@ -348,7 +348,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 array(
                     'title' => $langDelete,
                     'icon' => 'fa-times',
-                    'url' => "deluser.php?u=$iuid"
+                    'url' => "deluser.php?u=$logs->id"
                 )
             ));
         }

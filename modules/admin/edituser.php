@@ -138,7 +138,7 @@ if ($u) {
                 'icon' => 'fa-key',
                 'level' => 'primary'),
             array('title' => $langDelUser,
-                'url' => "deluser.php?u=$ind_u",
+                'url' => "deluser.php?u=$u",
                 'icon' => 'fa-times',
                 'level' => 'primary',
                 'show' => $u > 1),

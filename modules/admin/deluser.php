@@ -25,8 +25,7 @@ include '../../include/baseTheme.php';
 
 // get the incoming values and initialize them
 if (isset($_GET['u'])) {
-    $data['user'] = $user = getDirectReference($_GET['u']);
-    $data['iuid'] = $iuid = $_GET['u'];
+    $data['user'] = $user = $_GET['u'];
 } else {
     forbidden();
 }
@@ -44,7 +43,7 @@ if (isset($_POST['doit'])) {
     checkSecondFactorChallenge();
     if (get_admin_rights($user) > 0) {
         Session::Messages($langTryDeleteAdmin, 'alert-danger');
-        redirect_to_home_page("modules/admin/deluser.php?u=$iuid");
+        redirect_to_home_page("modules/admin/deluser.php?u=$user");
     } else {
         if (deleteUser($user, true)) {
             Session::Messages("$langWithUsername \"$u_account\" ($u_realname) $langWasDeleted.", 'alert-info');
