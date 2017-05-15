@@ -278,9 +278,9 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
    }
 }
 $exerciseTimeLeft = $exercise_EndDate->getTimestamp() - $temp_CurrentDate;
-if ($exerciseTimeLeft < $timeleft or $exerciseTimeLeft < 3 * 3600) {
-    // Display countdown of exercise remaining time if less than user's
-    // remaining time or less than 3 hours away
+if ((isset($timeleft) and $exerciseTimeLeft < $timeleft) or $exerciseTimeLeft < 3 * 3600) {
+    // Display countdown of exercise remaining time if less than
+    // user's remaining time or less than 3 hours away
     $timeleft = $exerciseTimeLeft;
 }
 //if there are answers in the session get them
