@@ -178,7 +178,7 @@ $exercise_EndDate = isset($exercise_EndDate) ? new DateTime($objExercise->select
 //exercise has ended or hasn't been enabled yet due to declared dates
 if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp())) {
     //if that happens during an active attempt
-    if(isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])) {
+    if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
         $record_end_date = date('Y-m-d H:i:s', time());
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
@@ -277,7 +277,12 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
         $timeleft = $exerciseTimeConstraint*60;
    }
 }
-
+$exerciseTimeLeft = $exercise_EndDate->getTimestamp() - $temp_CurrentDate;
+if ($exerciseTimeLeft < $timeleft or $exerciseTimeLeft < 3 * 3600) {
+    // Display countdown of exercise remaining time if less than user's
+    // remaining time or less than 3 hours away
+    $timeleft = $exerciseTimeLeft;
+}
 //if there are answers in the session get them
     if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
             $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
@@ -399,7 +404,7 @@ $exerciseDescription_temp = standard_text_escape($exerciseDescription);
 $tool_content .= "<div class='panel panel-primary'>
   <div class='panel-heading'>
     <h3 class='panel-title'>" .
-      (isset($timeleft) && $timeleft>0 ?
+      (isset($timeleft) && $timeleft > 0 ?
         "<div class='pull-right'>$langRemainingTime: <span id='progresstime'>" . $timeleft . "</span></div>" : '') .
       q_math($exerciseTitle) . "</h3>
   </div>";
