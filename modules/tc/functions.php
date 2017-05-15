@@ -1328,8 +1328,10 @@ function has_enable_recordings($server_id) {
  */
 function get_tc_title($meeting_id) {
     
+    global $course_id;
+    
     $result = Database::get()->querySingle("SELECT title FROM tc_session 
-                    WHERE meeting_id = ?d", $meeting_id)->title;
+                    WHERE meeting_id = ?s AND course_id = ?d", $meeting_id, $course_id)->title;
     
     return $result;
     
