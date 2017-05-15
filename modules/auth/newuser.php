@@ -248,7 +248,7 @@ if (!isset($_POST['submit'])) {
                       <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
                     </div>";
             }
-        //add custom profile fields 
+        //add custom profile fields
         $tool_content .= render_profile_fields_form(array('origin' => 'student_register'));
 
         //check if provider_id from an authenticated user and a valid provider name are set so as to show the relevant form
@@ -284,7 +284,7 @@ if (!isset($_POST['submit'])) {
     } else {
         $am_arr_value = false;
     }
-    
+
     $var_arr = array('uname' => true,
                     'surname_form' => true,
                     'givenname_form' => true,
@@ -293,15 +293,17 @@ if (!isset($_POST['submit'])) {
                     'email' => $email_arr_value,
                     'phone' => false,
                     'am' => $am_arr_value);
-    
+
     //add custom profile fields required variables
     augment_registered_posted_variables_arr($var_arr);
-    
+
     $missing = register_posted_variables($var_arr);
 
     if (!isset($_POST['department'])) {
         $departments = array();
-        $missing = false;
+        if (!isset($_POST['toolbox'])) {
+            $missing = false;
+        }
     } else {
         $departments = $_POST['department'];
     }
@@ -313,8 +315,20 @@ if (!isset($_POST['submit'])) {
     } else {
         $uname = canonicalize_whitespace($uname);
         // check if the username is already in use
-        $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $uname);
+        $username_check = Database::get()->querySingle("SELECT username, email FROM user WHERE username = ?s", $uname);
         if ($username_check) {
+            if (isset($_POST['toolbox'])) {
+                $login_details = array();
+                foreach ($var_arr as $var => $req) {
+                    $login_details[$var] = $GLOBALS[$var];
+                }
+                Session::flash('login-details', $login_details);
+                Session::flash('username-exists', true);
+                if ($username_check->email === $email) {
+                    Session::flash('email-correct', true);
+                }
+                redirect_to_home_page('main/toolbox.php');
+            }
             $registration_errors[] = $langUserFree;
         }
         if ($display_captcha) {
@@ -441,10 +455,10 @@ if (!isset($_POST['submit'])) {
         Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $last_id);
         $userObj->refresh($last_id, $departments);
         user_hook($last_id);
-        
+
         //fill custom profile fields
         process_profile_fields_data(array('uid' => $last_id, 'origin' => 'student_register'));
-        
+
         if ($vmail) {
             $hmac = token_generate($uname . $email . $last_id);
         }
@@ -493,10 +507,10 @@ if (!isset($_POST['submit'])) {
             $user_msg = $langPersonalSettingsLess;
         }
         // verification needed
-        if ($vmail) {            
+        if ($vmail) {
                 $tool_content .= "<div class='alert alert-info'>$langMailVerificationSuccess
                                 $langMailVerificationSuccess2 <br><br><small>$langMailVerificationNote</small>
-                                 <br><br>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";        
+                                 <br><br>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div>";
         } else { // login user
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
             $uid = $myrow->id;
@@ -511,17 +525,26 @@ if (!isset($_POST['submit'])) {
             $_SESSION['surname'] = $surname_form;
             $_SESSION['uname'] = $uname;
             $session->setLoginTimestamp();
-        
+
             $tool_content .= "<div class='alert alert-success'>$user_msg <br><br>";
-            $tool_content .= "$langClick 
+            $tool_content .= "$langClick
                                 <a href='$urlServer' class='mainpage'>$langHere</a> $langPersonalSettingsMore
                               <ul>
                                 <li>$langPersonalSettingsMore1</li>
                                 <li>$langPersonalSettingsMore2</li>
                               </ul>
-                            </div>";            
+                            </div>";
         }
     } else {
+        if (isset($_POST['toolbox'])) {
+            $login_details = array();
+            foreach ($var_arr as $var => $req) {
+                $login_details[$var] = $GLOBALS[$var];
+            }
+            Session::flash('login-details', $login_details);
+            Session::flash('registration-errors', $registration_errors);
+            redirect_to_home_page('main/toolbox.php');
+        }
         // errors exist - registration failed
         $tool_content .= "<div class='alert alert-danger'>";
         foreach ($registration_errors as $error) {
@@ -534,7 +557,7 @@ if (!isset($_POST['submit'])) {
                 '&amp;email=' . urlencode($email) .
                 '&amp;am=' . urlencode($am) .
                 '&amp;phone=' . urlencode($phone) .
-                augment_url_refill_custom_profile_fields_registr() . 
+                augment_url_refill_custom_profile_fields_registr() .
                 "'>$langAgain</a></p>";
     }
 } // end of registration

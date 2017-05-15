@@ -96,6 +96,24 @@ if ($uid) {
     if (Session::has('login_error')) {
         $t->set_var('loginError', '<div class="alert alert-danger">' . Session::get('login_error') . '</div>');
         $head_content .= '<script>$(function () { $("#loginModalContent").modal("toggle"); })</script>';
+    } elseif (Session::has('login-details')) {
+        $loginDetails = Session::get('login-details');
+        $t->set_var('givennameValue', $loginDetails['givenname_form']);
+        $t->set_var('surnameValue', $loginDetails['surname_form']);
+        $t->set_var('emailValue', $loginDetails['email']);
+        $t->set_var('usernameValue', $loginDetails['uname']);
+        if (Session::has('email-correct')) {
+            $t->set_var('recoveryWarning', "<div class='alert alert-info'>$langRegisteredUserAlreadyExists</div>");
+            $head_content .= '<script>$(function () { $("#lostPassModalContent").modal("toggle"); })</script>';
+        } else {
+            if (Session::has('username-exists')) {
+                $t->set_var('registerError', "<div class='alert alert-danger'>$langMultiRegUsernameError</div>");
+            } elseif (Session::has('registration-errors')) {
+                $t->set_var('registerError', "<div class='alert alert-danger'>" .
+                    implode('<br>', Session::get('registration-errors')) . "</div>");
+            }
+            $head_content .= '<script>$(function () { $("#registerModalContent").modal("toggle"); })</script>';
+        }
     }
 }
 
