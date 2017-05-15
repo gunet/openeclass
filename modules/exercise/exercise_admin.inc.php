@@ -46,10 +46,8 @@ load_js('tools.js');
 if (isset($_POST['submitExercise'])) {
     $v = new Valitron\Validator($_POST);
     $v->addRule('ipORcidr', function($field, $value, array $params) {
-        //explode here and run a loop
-        $IPs = explode(',', $value);
         //matches IPv4/6 and IPv4/6 CIDR ranges
-        foreach ($IPs as $ip){
+        foreach ($value as $ip){
             $valid = isIPv4($ip) || isIPv4cidr($ip) || isIPv6($ip) || isIPv6cidr($ip);
             if (!$valid) return false;
         }
@@ -74,7 +72,7 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($exerciseDescription);
         $objExercise->updateType($exerciseType);
-        $objExercise->updateIPLock($_POST['exerciseIPLock']);
+        $objExercise->updateIPLock(implode(',', $_POST['exerciseIPLock']));
         $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
         if (isset($exerciseStartDate) and !empty($exerciseStartDate)) {
             $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $exerciseStartDate);
@@ -132,7 +130,9 @@ if (isset($_POST['submitExercise'])) {
     $randomQuestions = Session::has('questionDrawn') ? Session::get('questionDrawn') : $objExercise->isRandom();
     $displayResults = Session::has('dispresults') ? Session::get('dispresults') : $objExercise->selectResults();
     $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
-    $exerciseIPLock = Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : $objExercise->selectIPLock();
+    $exerciseIPLock = trim(Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : $objExercise->selectIPLock());
+    $exerciseIPLockOptions = implode('',
+        array_map(function ($item) { return $item? ('<option selected>' . q($item) . '</option>'): ''; }, explode(',', $exerciseIPLock)));
     $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
     $exerciseAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : $objExercise->selectAssignToSpecific();
         if ($objExercise->selectAssignToSpecific()) {
@@ -254,10 +254,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 }
             });
             $('#exerciseIPLock').select2({
-                dropdownCssClass : 'hidden',
-                minimumResultsForSearch: 1,
-                tags: false,
-                tokenSeparators: [' ']
+                minimumResultsForSearch: Infinity,
+                tags: true,
+                tokenSeparators: [',', ' ']
             });
             $('#assign_button_all').click(hideAssignees);
             $('#assign_button_user, #assign_button_group').click(ajaxAssignees);
@@ -487,7 +486,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")."'>
                    <label for='exerciseIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
                    <div class='col-sm-10'>
-                     <input name='exerciseIPLock' type='hidden' class='form-control' id='exerciseIPLock' value='$exerciseIPLock' placeholder=''>
+                     <select name='exerciseIPLock[]' class='form-control' id='exerciseIPLock' multiple>
+                        $exerciseIPLockOptions
+                     </select>
                      <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
                    </div>
                  </div>

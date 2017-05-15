@@ -3872,8 +3872,8 @@ function ip_v6_cidr_match($ip, $range) {
     return $ip_net_bits == $net_bits;
 }
 
-function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array) {
-    if(isIPv4($ip)){
+function match_ip_to_ip_or_cidr($ip, $ips_or_cidr_array) {
+    if (isIPv4($ip)) {
         foreach ($ips_or_cidr_array as $ip_or_cidr) {
             if (isIPv4cidr($ip_or_cidr)) {
                 if (ip_v4_cidr_match($ip, $ip_or_cidr)) return true;
