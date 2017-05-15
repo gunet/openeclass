@@ -21,7 +21,6 @@
  */
 
 if (php_sapi_name() == 'cli' and !isset($_SERVER['REMOTE_ADDR'])) { // command line execution
-
     $guest_allow = true;
 
     require_once 'functions.php';

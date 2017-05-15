@@ -56,19 +56,24 @@ $tool_content .= "
       <th>$langTotalDuration</th>
     </tr>";
 
-if (isset($meetingid)) {
+if (isset($meetingid)) { // specific course meeting
     $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM bbb_attendance
                                                 WHERE bbb_attendance.meetingid = ?s 
                                             ORDER BY date DESC", $meetingid);
-} else {
-    $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM bbb_attendance 
-                                                ORDER BY date DESC");
+} else { // all course meetings    
+        $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM bbb_attendance, tc_session 
+                                                    WHERE bbb_attendance.meetingid = tc_session.meeting_id
+                                                    AND tc_session.course_id = ?d
+                                                ORDER BY date DESC", $course_id);          
 }
+
 if (count($result) > 0) {
     $temp_date = null;
     foreach ($result as $row) {
         if ($row->date != $temp_date) {
-            $tool_content .= "<tr><td colspan='4' class='monthLabel list-header'><div align='center'><b>" . claro_format_locale_date($dateFormatLong, strtotime($row->date)) . "</b></div></td></tr>";
+            $tool_content .= "<tr><td colspan='4' class='monthLabel list-header'>"
+                    . "<div align='center'><b>" . claro_format_locale_date($dateFormatLong, strtotime($row->date)) . "</b></div>"
+                    . "</td></tr>";
             $temp_date = $row->date;
         }
         
