@@ -281,11 +281,13 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
         $timeleft = $exerciseTimeConstraint*60;            
    }
 }
-$exerciseTimeLeft = $exercise_EndDate->getTimestamp() - $temp_CurrentDate;
-if ((isset($timeleft) and $exerciseTimeLeft < $timeleft) or $exerciseTimeLeft < 3 * 3600) {
-    // Display countdown of exercise remaining time if less than
-    // user's remaining time or less than 3 hours away
-    $timeleft = $exerciseTimeLeft;
+if ($exercise_EndDate) {
+    $exerciseTimeLeft = $exercise_EndDate->getTimestamp() - $temp_CurrentDate;
+    if ((isset($timeleft) and $exerciseTimeLeft < $timeleft) or $exerciseTimeLeft < 3 * 3600) {
+        // Display countdown of exercise remaining time if less than
+        // user's remaining time or less than 3 hours away
+        $timeleft = $exerciseTimeLeft;
+    }
 }
 if (isset($timeleft)) {
     // Automatically submit 10 sec before expiration to account for delays etc.
