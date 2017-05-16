@@ -2312,7 +2312,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
                                   <label>
-                                    <input type='checkbox' name='email' id='email_button' value='1'>
+                                    <input type='checkbox' name='email' id='email_button' value='1' checked>
                                     $m[email_users]
                                   </label>
                                 </div>
@@ -2830,7 +2830,7 @@ function show_assignment($id, $display_graph_results = false) {
                 <div class='col-xs-12'>
                     <div class='checkbox'>
                       <label>
-                        <input type='checkbox' value='1' name='email'> $m[email_users]
+                        <input type='checkbox' value='1' name='email' checked> $m[email_users]
                       </label>
                     </div>
                 </div>
@@ -3349,7 +3349,7 @@ function submit_grades($grades_id, $grades, $email = false) {
                         update_gradebook_book($quserid, $assignment->id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                     }
 
-                    if ($email) {
+                    if ($email) {                        
                         grade_email_notify($grades_id, $sid, $grade, '');
                     }
                     Session::Messages($langGrades, 'alert-success');
