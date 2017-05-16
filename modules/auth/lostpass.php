@@ -243,9 +243,14 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                     a.user_id IS NULL AND
                     (u.last_passreminder IS NOT NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) < u.last_passreminder)", $email, $userName);
         if ($res) {
-            $tool_content .= "<div class='alert alert-danger'>
+            if ($_POST['send_link'] == 'toolbox') {
+                Session::Messages($langLostPassPending, 'alert-danger');
+                redirect_to_home_page('main/toolbox.php');
+            } else {
+                $tool_content .= "<div class='alert alert-danger'>
                         <p>$langLostPassPending</p></div>
                         $homelink";
+            }
         } else {
             $alert = "<p><strong>$langAccountNotFound1 (" . q("$userName / $email") . ")</strong></p>
                       <p>$langAccountNotFound2 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>, $langAccountNotFound3</p>";
