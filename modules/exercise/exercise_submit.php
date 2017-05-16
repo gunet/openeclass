@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.5
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -140,7 +140,7 @@ if ($password && !$is_editor) {
 //If the exercise is IP protected
 $ips = $objExercise->selectIPLock();
 if ($ips && !$is_editor){
-    $user_ip = $_SERVER["REMOTE_ADDR"];
+    $user_ip = Log::get_client_ip();
     if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
         Session::Messages($langIPHasNoAccess);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
@@ -277,11 +277,13 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
         $timeleft = $exerciseTimeConstraint * 60;
    }
 }
-$exerciseTimeLeft = $exercise_EndDate->getTimestamp() - $temp_CurrentDate;
-if ((isset($timeleft) and $exerciseTimeLeft < $timeleft) or $exerciseTimeLeft < 3 * 3600) {
-    // Display countdown of exercise remaining time if less than
-    // user's remaining time or less than 3 hours away
-    $timeleft = $exerciseTimeLeft;
+if ($exercise_EndDate) {
+    $exerciseTimeLeft = $exercise_EndDate->getTimestamp() - $temp_CurrentDate;
+    if ((isset($timeleft) and $exerciseTimeLeft < $timeleft) or $exerciseTimeLeft < 3 * 3600) {
+        // Display countdown of exercise remaining time if less than
+        // user's remaining time or less than 3 hours away
+        $timeleft = $exerciseTimeLeft;
+    }
 }
 if (isset($timeleft)) {
     // Automatically submit 10 sec before expiration to account for delays etc.
