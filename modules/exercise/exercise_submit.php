@@ -142,7 +142,7 @@ if ($password && !$is_editor) {
 //If the exercise is IP protected
 $ips = $objExercise->selectIPLock();
 if ($ips && !$is_editor){
-    $user_ip = $_SERVER["REMOTE_ADDR"];
+    $user_ip = Log::get_client_ip();
     if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
         Session::Messages($langIPHasNoAccess);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);                
@@ -286,6 +286,10 @@ if ((isset($timeleft) and $exerciseTimeLeft < $timeleft) or $exerciseTimeLeft < 
     // Display countdown of exercise remaining time if less than
     // user's remaining time or less than 3 hours away
     $timeleft = $exerciseTimeLeft;
+}
+if (isset($timeleft)) {
+    // Automatically submit 10 sec before expiration to account for delays etc.
+    $timeleft -= 10;
 }
 //if there are answers in the session get them
     if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
@@ -482,7 +486,7 @@ if (!$questionList) {
 }
 $tool_content .= "</form>";
 if ($questionList) {
-$refresh_time = 10 * 60 * 1000; // 10 min
+$refresh_time = (ini_get("session.gc_maxlifetime") - 10 ) * 1000;
 $head_content .= "<script type='text/javascript'>            
                 $(window).bind('beforeunload', function(){
                     var date = new Date();
