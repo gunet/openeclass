@@ -200,8 +200,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                             <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a></small></div>
                             <div class='text-muted'><small>$am_message</small></div>
                         </div>";
-        $roleColumn = "<div class='text-muted'>".str_replace(', ', ',<br>', $user_role_string)."</div>";
-
+        $roleColumn = "<div class='text-muted'>".str_replace(', ', ',<br>', $user_role_string)."</div>";        
+        // search for inactive users
+        $inactive_user = is_inactive_user($myrow->id);
         //setting datables column data
         $data['aaData'][] = array(
             'DT_RowId' => getIndirectReference($myrow->id),
@@ -210,7 +211,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             '1' => $roleColumn,
             '2' => user_groups($course_id, $myrow->id),
             '3' => "<div class='text-center text-muted'>$date_field</div>",
-            '4' => $user_role_controls
+            '4' => $user_role_controls,
+            '5' => $inactive_user
         );
     }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -239,11 +241,16 @@ $head_content .= "
                                     '</select>')
                                     .appendTo( $(column.footer()).empty() );
                 },
+                'createdRow': function(row, data, dataIndex) {
+                    if (data[5] == 1) {
+                        $(row). addClass('not_visible');
+                    }
+                },
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
                 'sScrollX': true,
-                'fnDrawCallback': function( oSettings ) {
+                'drawCallback': function( oSettings ) {
                     tooltip_init();
                     popover_init();
                 },

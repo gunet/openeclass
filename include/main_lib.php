@@ -789,6 +789,22 @@ function user_exists($login) {
     }
 }
 
+/**
+ * @brief checks if a user is inactive
+ * @param type $uid
+ * @return boolean
+ */
+function is_inactive_user($uid) {
+    
+    $qry = Database::get()->querySingle("SELECT * FROM user 
+                            WHERE id = ?d 
+                        AND expires_at < " . DBHelper::timeAfter() . "", $uid);
+    if ($qry) {
+        return true;        
+    } else {
+        return false;
+    }
+}
 
 /**
  * @brief Check if a user with username $login already applied for account
