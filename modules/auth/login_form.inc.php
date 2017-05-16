@@ -134,7 +134,7 @@ function login_form($format='main') {
     if ($format != 'main') {
         $altLoginTitle = '';
         if ($loginFormEnabled) {
-            $nextUrl = str_replace($urlAppend, '', $_SERVER['REQUEST_URI']);
+            $nextUrl = substr($_SERVER['REQUEST_URI'], strlen($urlAppend));
             $loginPage = (strpos($nextUrl, 'main/toolbox') === 0)? '?login_page=toolbox': '';
             $loginForm .= "
                 <div class='col-sm-6'>
