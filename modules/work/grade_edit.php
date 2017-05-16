@@ -62,8 +62,7 @@ function show_edit_form($id, $sid, $assign) {
         }
 
         $grade = Session::has('grade') ? Session::get('grade') : $sub->grade;
-        $comments = Session::has('comments') ? Session::get('comments') : q($sub->grade_comments);
-        $email_status = !Session::has('email') ?: " checked";
+        $comments = Session::has('comments') ? Session::get('comments') : q($sub->grade_comments);        
 
         $pageName = $m['addgradecomments'];
         if($assign->submission_type){
@@ -144,7 +143,7 @@ function show_edit_form($id, $sid, $assign) {
                         <div class='col-sm-9 col-sm-offset-3'>
                             <div class='checkbox'>
                                 <label>
-                                    <input type='checkbox' value='1' id='email_button' name='email'$email_status>
+                                    <input type='checkbox' value='1' id='email_button' name='email' checked>
                                     $m[email_users]
                                 </label>
                             </div>
