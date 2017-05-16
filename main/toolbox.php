@@ -83,7 +83,7 @@ $msgs = array('langSearch', 'langRegister', 'langLogin', 'langName',
 foreach ($msgs as $msg) {
     $t->set_var($msg, q($GLOBALS[$msg]));
 }
-
+$t->set_var('langSelectFromMenu', js_escape($langSelectFromMenu));
 if ($uid) {
     $t->set_var('loginLogout', q($_SESSION['givenname'] . ' ' . $_SESSION['surname']) .
         " &nbsp; <a href='$urlAppend?logout=true'>$langLogout</a>");
