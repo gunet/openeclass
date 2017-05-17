@@ -1,5 +1,4 @@
 <?php
-
 /* ========================================================================
  * Open eClass
  * E-learning and Course Management System
@@ -20,67 +19,73 @@
  * ========================================================================
  */
 
-if (php_sapi_name() == 'cli' and !isset($_SERVER['REMOTE_ADDR'])) { // command line execution
-    $guest_allow = true;
+//error_log("cron bbb_attendance START");
 
-    require_once 'functions.php';
-    // βάλε το δικό σου    
-    //require_once '/var/www/html/openeclass/include/init.php';    
-    require_once '../../include/init.php';
+$require_current_course = TRUE;
+$require_login = TRUE;
 
-    
-    // *** TO DO **** //
-    $q = Database::get()->querySingle("SELECT server_key, api_url FROM tc_servers WHERE type='bbb' AND enabled = 'true'");
-    if ($q) {
-        $salt = $q->server_key;
-        $bbb_url = $q->api_url;            
-    } else {
-        exit();
-    }
-    
-    // ή βάλε ρητά το δικό σου
-    //$bbb_url = "http://xxxxxxx";
-    //$salt = "xxxxxxxx";
-       
-    /****************************************************/
-    /*									 				*/
-    /*									 				*/
-    /*			MAIN CODE				 				*/
-    /*									 				*/
-    /*									 				*/
-    /****************************************************/
-        // scan active bbb rooms
-    $xml_url = $bbb_url."api/getMeetings?checksum=".sha1("getMeetings".$salt);
-    // read the XML format of bbb answer and ...
-    $xml = simplexml_load_file($xml_url);    
-    // ... for each meeting room scan connected users
-    foreach ($xml -> meetings -> meeting as $row) {
-        $meet_id = $row -> meetingID;
-        $moder_pw = $row -> moderatorPW;        
-        /****************************************************/
-        /*									 				*/
-        /*		write attendes in SQL database				*/
-        /*									 				*/
-        /****************************************************/
-        // Instatiate the BBB class:
-        $bbb = new BigBlueButton($salt,$bbb_url);
+require_once '../../include/baseTheme.php';
+require_once 'functions.php';
 
-        $joinParams = array(
-            'meetingId' => $meet_id, // REQUIRED - We have to know which meeting to join.
-            'password' => $moder_pw //,	// REQUIRED - Must match either attendee or moderator pass for meeting.
-        );
-        // Get the URL to meeting info:
-        $room_xml = $bbb-> getMeetingInfoUrl($bbb_url, $salt, $joinParams);
-        /****************************************************/
-        /*                                                  */
-        /*		XML read from URL and write to SQL	*/
-        /*                                                  */
-        /****************************************************/
-        xml2sql($room_xml);
-    }  
+$pageName = $langBBBRecordUserParticipation;
+load_js('tools.js');
+
+/*$head_content .= "<script type='text/javascript'>
+    setInterval(function() {
+        $.ajax({
+            url: 'bbb_attendance.php'
+        })
+    }, 60000)
+</script>";*/
+        
+// *** TO DO **** //
+$q = Database::get()->querySingle("SELECT server_key, api_url FROM tc_servers WHERE type='bbb' AND enabled = 'true'");
+if ($q) {
+    $salt = $q->server_key;
+    $bbb_url = $q->api_url;            
+} else {
+    exit();
 }
-        
-        
+$tool_content .= $langWangBBBAttendance;
+
+// ή βάλε ρητά το δικό σου
+//$bbb_url = "http://xxxxxxx";
+//$salt = "xxxxxxxx";
+
+    // scan active bbb rooms
+$xml_url = $bbb_url."api/getMeetings?checksum=".sha1("getMeetings".$salt);
+// read the XML format of bbb answer and ...
+$xml = simplexml_load_file($xml_url);    
+// ... for each meeting room scan connected users
+foreach ($xml -> meetings -> meeting as $row) {
+    $meet_id = $row -> meetingID;
+    $moder_pw = $row -> moderatorPW;        
+    /****************************************************/
+    /*		write attendes in SQL database		*/
+    /****************************************************/
+    // Instatiate the BBB class:
+    $bbb = new BigBlueButton($salt,$bbb_url);
+
+    $joinParams = array(
+        'meetingId' => $meet_id, // REQUIRED - We have to know which meeting to join.
+        'password' => $moder_pw //,	// REQUIRED - Must match either attendee or moderator pass for meeting.
+    );
+    // Get the URL to meeting info:
+    $room_xml = $bbb-> getMeetingInfoUrl($bbb_url, $salt, $joinParams);
+    /****************************************************/    
+    /*		XML read from URL and write to SQL	*/    
+    /****************************************************/
+    xml2sql($room_xml);
+    
+}
+//error_log("cron bbb_attendance STOP");
+// draws pop window
+draw_popup();
+
+/**
+ * @brief record users attendance in db
+ * @param type $room_xml
+ */
 function xml2sql($room_xml) {
 
     $xml = simplexml_load_file($room_xml);
@@ -105,10 +110,10 @@ function xml2sql($room_xml) {
         $last_time_stamp = Database::get()->querySingle("SELECT date FROM bbb_log WHERE meetingid = ?s AND bbbuserid = ?s", $meetingid, $bbbuserid)->date;
 
         /****************************************************/
-        /*	Write users' presence in summary 				*/
-        /*	totaltime 	 									*/
-        /*	per room										*/
-        /*	SQL table: bbb_attendance						*/
+        /*	Write users' presence in summary            */
+        /*	totaltime                                   */
+        /*	per room                                    */
+        /*	SQL table: bbb_attendance                   */
         /****************************************************/
         $currentDate = strtotime(date("Y-m-d H:i:s"));        
         $q2 = Database::get()->querySingle("SELECT start_date, end_date FROM tc_session WHERE meeting_id = ?s", strval($xml_meet_id));
@@ -129,9 +134,7 @@ function xml2sql($room_xml) {
                 $nextid++;                                
                 Database::get()->query("INSERT INTO bbb_attendance (`id`, `meetingid`, `bbbuserid`, `totaltime`) 
                         VALUES  (?d, ?s, ?s, 1)", $nextid, $meetingid, $bbbuserid);
-            }            
-            $time1 = Database::get()->querySingle("SELECT totaltime FROM bbb_attendance WHERE meetingid = ?s", $meetingid)->totaltime;
-            //echo date('H:i', mktime(0, $time1));
+            }
         }
     }
 }
