@@ -113,6 +113,11 @@ load_js('select2');
 
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
+        $('#popupattendance1').click(function() {
+	     window.open($(this).prop('href'), '', 'height=400,width=500,scrollbars=no,status=no');
+	     return false;
+	});    
+
         $('#select-groups').select2();
         $('#selectAll').click(function(e) {
             e.preventDefault();
@@ -173,6 +178,11 @@ if ($is_editor) {
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
                       'show' => is_active_tc_server($tc_type, $course_id)),
+            array('title' => $langBBBRecordUserParticipation,
+                      'url' => "bbb_attendance.php?course=$course_code",
+                      'icon' => 'fa-group',
+                      'level' => 'primary-label',
+                      'link-attrs' => "id=popupattendance1"),
             array('title' => $langParticipate,
                       'url' => "tcuserduration.php?course=$course_code",
                       'icon' => 'fa-clock-o',
@@ -235,8 +245,8 @@ elseif(isset($_GET['choice']))
                 $record = $sess->record;
                 if (bbb_session_running($_GET['meeting_id']) == false) { // create meeting
                     create_meeting($_GET['title'],$_GET['meeting_id'], $mod_pw, $_GET['att_pw'], $record);
-                }
-                if (isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
+                }               
+                if (isset($_GET['mod_pw'])) { // join moderator (== $is_editor)                                        
                     header('Location: ' . bbb_join_moderator($_GET['meeting_id'], $_GET['mod_pw'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
                 } else {
                     $ssUsers = get_meeting_users($serv->server_key, $serv->api_url, $_GET['meeting_id'], $mod_pw);
