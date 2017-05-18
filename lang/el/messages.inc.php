@@ -65,6 +65,13 @@ $langInvisible = "Μη ορατή";
 $langNoAccountPleaseRegister = 'Δεν έχετε λογαριασμό; Παρακαλούμε %sεγγραφείτε%s.';
 $langAlreadyHaveAccount = "Έχετε ήδη λογαριασμό; %sΣυνδεθείτε%s";
 
+// Toolbox
+$langNumEntryFound = 'Βρέθηκε %s αποτέλεσμα για την αναζήτησή σας';
+$langNumEntriesFound = 'Βρέθηκαν %s αποτελέσματα για την αναζήτησή σας';
+$langSearchForm = 'Φόρμα αναζήτησης';
+$langSearchResults = 'Αποτελέσματα αναζήτησης';
+
+
 /* * ******************************************
  * addadmin.php
  * ******************************************* */

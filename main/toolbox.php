@@ -78,8 +78,8 @@ $lang_select .= "</ul></div>";
 $t->set_var('LANG_SELECT', $lang_select);
 
 $msgs = array('langSearch', 'langRegister', 'langLogin', 'langName',
-    'langSurname', 'langUsername', 'langEmail', 'langPass',
-    'langConfirmation', 'langSubmit');
+    'langSurname', 'langUsername', 'langEmail', 'langPass', 'langSubmit',
+    'langConfirmation', 'langSearchForm', 'langSearchResults');
 foreach ($msgs as $msg) {
     $t->set_var($msg, q($GLOBALS[$msg]));
 }
@@ -309,8 +309,8 @@ if ($searching) {
         $t->parse('result', 'resultBlock', true);
     }
     $c = count($courses);
-    $t->set_var('resultNumEntries', $c . ' ' . ($c == 1 ? 'entry' : 'entries'));
-    $t->set_var('resultNumEntriesFound', 'found matching your search');
+    $entriesFound = sprintf($c == 1? $langNumEntryFound : $langNumEntriesFound, "<b>$c</b>");
+    $t->set_var('resultNumEntriesFound', $entriesFound);
     $t->parse('resultList', 'resultListBlock', false);
 } else {
     $t->set_var('infoAbout', standard_text_escape(getSerializedMessage(get_config('toolbox_intro', $langInfoAbout))));

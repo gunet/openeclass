@@ -4840,3 +4840,7 @@ $langldapfirstnameattr = "User given name attribute";
 $langldapsurnameattr = "User surname attribute";
 $langGroupInfiniteUsers = "0: unlimited members";
 $langRegEnterCourse = "Register and enter $langsCourse";
+$langNumEntryFound = '%s entry found matching your search';
+$langNumEntriesFound = '%s entries found matching your search';
+$langSearchForm = 'Search Form';
+$langSearchResults = 'Search Results';
