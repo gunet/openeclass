@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2017-03-17 13:51:06
+// Generated 2017-05-18 16:08:37
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -1670,7 +1670,6 @@ $langLdapRequest = "There is already a request for the user";
 $langLDAPUser = 'LDAP user';
 $langLogIn = "Login";
 $langAction = "Action";
-$langOrLoginWith = 'Or log in with';
 $langRequiredFields = '(fields marked by (*) are required)';
 $langCourseVisits = "$langCourse Visits";
 $langDurationVisitsPerCourse = "Participation time per $langsCourse";
@@ -2581,7 +2580,6 @@ $langChangeTo = "Change to";
 $langMailVerificationChanged = "Has changed";
 $langMailVerificationChangedNo = "You haven't choose some change";
 $langMailVerificationChangedNoAdmin = "No users or admin email address is not allowed";
-+$langRegisteredUserAlreadyExists = "An account with the provided registration details already exists. If you've lost your password, you can try resetting it.";
 $langCheckCourseAdmin = "
         <strong>Action requires $langsCourse administrator rights.</strong>
         <br>You have been redirected to home page for logging in again.";
@@ -2784,9 +2782,6 @@ $langLoginFailForgiveInterval = "Quarantine Interval";
 $langActionsExpireInterval = "Statistics retention period";
 $langLogActions = "Action logging";
 $langEnableCommonDocs = "Enable 'Common Docs'";
-$langEnableDocsPublicWrite = "Enable public document management option";
-$langPublicDocumentManagement = 'Public documents editing';
-$langPublicDocumentManagementExplanation = 'Allow upload and editing of files in the Documents module for all registered users';
 $langCommonDocs = "Common Documents";
 $langExplainCommonDocs = "File will be accessible to all $langsCourses via 'Documents'";
 $langExternalFile = 'External File Link';
@@ -4840,7 +4835,17 @@ $langldapfirstnameattr = "User given name attribute";
 $langldapsurnameattr = "User surname attribute";
 $langGroupInfiniteUsers = "0: unlimited members";
 $langRegEnterCourse = "Register and enter $langsCourse";
+$langForumNotifications = "$langStudents notifications";
+$langActivateForumNotifications = "Enable $langsStudents notification";
+$langDisableForumNotifications = "Disable $langsStudents notification";
+$langPublicDocumentManagement = 'Public documents editing';
+$langPublicDocumentManagementExplanation = 'Allow upload and editing of files in the Documents module for all registered users';
+$langEnableDocsPublicWrite = "Enable public document management option";
+$langOrLoginWith = 'Or log in with';
 $langNumEntryFound = '%s entry found matching your search';
 $langNumEntriesFound = '%s entries found matching your search';
 $langSearchForm = 'Search Form';
 $langSearchResults = 'Search Results';
+$langRegisteredUserAlreadyExists = "An account with the provided registration details already exists. If you've lost your password, you can try resetting it.";
+$langBBBRecordUserParticipation = "Teleconference Attendance";
+$langWangBBBAttendance = "Warning: Don't close this window because it is needed to record the attendance of participants in the teleconference!";

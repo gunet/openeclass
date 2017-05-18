@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2017-03-17 13:51:08
+// Generated 2017-05-18 16:08:38
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -3107,7 +3107,7 @@ $langWikiPageDeleted = "The Wiki Page was deleted succesfully";
 $langWikiPageNotLoaded = "Wiki Page %s could not be loaded";
 $langWikiPagePrintable = "Printable friendly version";
 $langWikiSearchInPages = "Search in Wiki Pages";
-$langWikiSearchResults = "Search results";
+$langWikiSearchResults = "Suchergebnisse";
 $langWikiSearchMissingKeywords = "No search keywords given";
 $wiki_toolbar['Hr'] = "Horizontal Line";
 $wiki_toolbar['H1'] = "Header 1";
@@ -3655,7 +3655,7 @@ $langNoteSaved = "Submitted successfully";
 $langLoginBgGradient = "Login screen background gradient";
 $langLoginImg = "Login screen image";
 $langThemeOptionsName = "Theme Options Name";
-$langMyCoursesSide = 'My $langCourses';
+$langMyCoursesSide = "My $langCourses";
 $langMyMessagesSide = 'My Messages';
 $langQuickNotesSide = 'Quick Notes';
 $langUsageTerms = 'Terms of Use';
@@ -3848,9 +3848,9 @@ $langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP v
 $langPHPVersion = 'PHP version';
 $langGuestLoginLabel = "$langCourse guest accounts";
 $langGuestLogin = 'Login with guest account';
-$langGuestLoginLinks = 'Activate and add guest links in $langsCourse list';
-$langGuestWarnEmptyPassword = 'Caution! You have entered an empty password for the guest user. This means that it is possible to access your $langsCourse without entering a password.';
-$langInvalidArchive = 'Invalid $langsCourse archive';
+$langGuestLoginLinks = "Activate and add guest links in $langsCourse list";
+$langGuestWarnEmptyPassword = "Caution! You have entered an empty password for the guest user. This means that it is possible to access your $langsCourse without entering a password.";
+$langInvalidArchive = "Invalid $langsCourse archive";
 $langPreviousMonth = "Previous $langMonth";
 $langNextMonth = "Next $langMonth";
 $langNew = 'New';
@@ -4052,7 +4052,7 @@ $langProviderError3 = 'Provider not properly configured';
 $langProviderError4 = 'Unknown or disabled provider';
 $langProviderError5 = 'Missing provider application credentials';
 $langProviderError6 = 'Authentication failed. The user has canceled the authentication or the provider refused the connection';
-$langProviderError7 = 'User profile request failed. Most likely the user is not connected to the provider and he should to authenticate again';
+$langProviderError7 = 'User profile request failed. Most likely the user is not connected to the provider and should authenticate again';
 $langProviderError8 = 'User not connected to the provider';
 $langProviderError9 = 'There is already another user authenticated with this provider.';
 $langGradeScaleNotEditable = "Grading scale is not editable anymore as it has been used for the grading of 1 or more assignments.";
@@ -4220,7 +4220,7 @@ $langEmailSendmail = 'Sendmail Command';
 $langShibGivenname = "Shibboleth Given Name";
 $langShibSurname = "Shibboleth Surname";
 $langShibStudentId = "Shibboleth Student ID";
-$langAnnHasPublished = "An announcement has published in $langsCourse";
+$langAnnHasPublished = "Announcement published in $langsCourse";
 $langor = "or";
 $langFavouriteCourse = "Favourite $langOfCourses";
 $langFavouriteCourses = "Popular $langCourses";
@@ -4739,3 +4739,17 @@ $langldapfirstnameattr = "User given name attribute";
 $langldapsurnameattr = "User surname attribute";
 $langGroupInfiniteUsers = "0: unlimited members";
 $langRegEnterCourse = "Register and enter $langsCourse";
+$langForumNotifications = "$langStudents notifications";
+$langActivateForumNotifications = "Enable $langsStudents notification";
+$langDisableForumNotifications = "Disable $langsStudents notification";
+$langPublicDocumentManagement = 'Public documents editing';
+$langPublicDocumentManagementExplanation = 'Allow upload and editing of files in the Documents module for all registered users';
+$langEnableDocsPublicWrite = "Enable public document management option";
+$langOrLoginWith = 'Or log in with';
+$langNumEntryFound = '%s Ergebnis stimmt mit der Suche überein';
+$langNumEntriesFound = '%s Ergebnisse stimmen mit der Suche überein';
+$langSearchForm = 'Search Form';
+$langSearchResults = 'Suchresultate';
+$langRegisteredUserAlreadyExists = "An account with the provided registration details already exists. If you've lost your password, you can try resetting it.";
+$langBBBRecordUserParticipation = "Teleconference Attendance";
+$langWangBBBAttendance = "Warning: Don't close this window because it is needed to record the attendance of participants in the teleconference!";
