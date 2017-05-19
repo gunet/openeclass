@@ -114,7 +114,7 @@ load_js('select2');
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
         $('#popupattendance1').click(function() {
-	     window.open($(this).prop('href'), '', 'height=400,width=500,scrollbars=no,status=no');
+	     window.open($(this).prop('href'), '', 'height=200,width=500,scrollbars=no,status=no');
 	     return false;
 	});    
 
@@ -178,16 +178,16 @@ if ($is_editor) {
                       'button-class' => 'btn-success',
                       'level' => 'primary-label',
                       'show' => is_active_tc_server($tc_type, $course_id)),
-            array('title' => $langBBBRecordUserParticipation,
-                      'url' => "bbb_attendance.php?course=$course_code",
-                      'icon' => 'fa-group',
-                      'level' => 'primary-label',
-                      'link-attrs' => "id=popupattendance1"),
-            array('title' => $langParticipate,
-                      'url' => "tcuserduration.php?course=$course_code",
-                      'icon' => 'fa-clock-o',
-                      'level' => 'primary-label',
-                      'show' => has_tc_participation())));
+                array('title' => $langBBBRecordUserParticipation,
+                          'url' => "bbb_attendance.php?course=$course_code",
+                          'icon' => 'fa-group',
+                          'level' => 'primary-label',
+                          'link-attrs' => "id=popupattendance1"),
+                array('title' => $langParticipate,
+                          'url' => "tcuserduration.php?course=$course_code",
+                          'icon' => 'fa-clock-o',
+                          'level' => 'primary-label')
+                ));
         }
     }
 }
