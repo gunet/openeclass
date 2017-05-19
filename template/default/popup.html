@@ -9,17 +9,19 @@
   <body>
     <div class='container'>
       <div class='row'>
-        <div class='col col-xs-12 text-center'>            
-          <p><img src='{%template_base%}/img/logo_eclass.png' alt=''></p>
-          <div class='panel'>
+        <div class='col-xs-12 text-center'>            
+          <div style='padding-top: 10px; padding-bottom: 10px;'>
+              <img style = 'filter: invert(100%);' src='{%template_base%}/img/logo_eclass.png' alt=''>
+          </div>
+          <div class='panel panel-default'>
             <div class='panel-body'>
-                <div class='alert alert-info'>
-                    {%TOOL_CONTENT%}
-                </div>
+            <div class='alert alert-info'>
+                {%TOOL_CONTENT%}
+            </div>
             </div>
           </div>          
         </div>
       </div>
     </div>
-  </body>
+  </body> 
 </html>

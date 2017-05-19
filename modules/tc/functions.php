@@ -502,7 +502,6 @@ function add_update_bbb_session($title, $desc, $start_session, $BBBEndDate, $sta
  * @global type $langBBBNotServerAvailableTeacher
  * @global type $langBBBImportRecordings
  * @global type $langAllUsers
- * @global type $langBBBRecordUserParticipation
  * @global type $langBBBNoServerForRecording
  * @global type $tc_type
  */
@@ -510,7 +509,7 @@ function bbb_session_details() {
 
     global $course_id, $tool_content, $is_editor, $course_code, $uid, $tc_type,
         $langNewBBBSessionStart, $langParticipants,$langConfirmDelete, $langHasExpiredS,
-        $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle, $langBBBRecordUserParticipation,
+        $langBBBSessionJoin, $langNote, $langBBBNoteEnableJoin, $langTitle,
         $langActivate, $langDeactivate, $langEditChange, $langDelete, $langParticipate,
         $langNoBBBSesssions, $langDaysLeft, $langBBBNotServerAvailableStudent, $langNewBBBSessionEnd,
         $langBBBNotServerAvailableTeacher, $langBBBImportRecordings, $langAllUsers, $langdate, $langBBBNoServerForRecording;
@@ -604,8 +603,7 @@ function bbb_session_details() {
             if ($canJoin) {
                 if($is_editor) {
                     $i++;                    
-                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($title) . "</a>";
-                    $attendanceLink = "<a href='bbb_attendance.php?course=$course_code' id='popupattendance$i'><i class='fa fa-group' title='$langBBBRecordUserParticipation'></i></a>";
+                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($title) . "</a>";                    
                 } else {
                     $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
                 }
@@ -627,7 +625,7 @@ function bbb_session_details() {
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
                     <td>
                         <div class='table_td'>
-                            <div class='table_td_header clearfix'>$joinLink $attendanceLink</div> $warning_message_record
+                            <div class='table_td_header clearfix'>$joinLink</div> $warning_message_record
                             <div class='table_td_body'>
                                 $desc
                             </div>
@@ -1353,40 +1351,4 @@ function get_tc_meeting_id($id) {
                     WHERE id = ?d", $id)->meeting_id;
     
     return $result;
-}
-
-/**
- * @brief check if there are log entries
- * @return boolean
- */
-function has_tc_participation() {
-    
-    $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM bbb_attendance")->cnt;
-    if ($cnt > 0) {
-        return true;
-    } else {
-        return false;
-    }    
-}
-
-
-function AttendanceModalBox($id, $labelId, $title, $body, $okId) {
-    
-    global $langOk;
-    
-    return <<<htmlEOF
-<div class='modal fade' id='$id' tabindex='-1' role='dialog' aria-labelledby='$labelId' aria-hidden='true'>
-    <div class='modal-dialog'>
-        <div class='modal-content'>
-            <div class='modal-header'>
-                <h4 class='modal-title' id='$labelId'>$title</h4>
-            </div>
-            <div class='modal-body'><p>$body</p></div>
-            <div class='modal-footer'>                
-                <button id='$okId' type='button' class='btn btn-primary'>$langOk</button>
-            </div>
-        </div>
-    </div>
-</div>
-htmlEOF;
 }

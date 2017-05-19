@@ -19,25 +19,25 @@
  * ========================================================================
  */
 
-//error_log("cron bbb_attendance START");
-
 $require_current_course = TRUE;
 $require_login = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
-
-$pageName = $langBBBRecordUserParticipation;
+load_js('jquery-' . JQUERY_VERSION . '.min.js');
 load_js('tools.js');
 
-/*$head_content .= "<script type='text/javascript'>
+$head_content .= "
+<script type='text/javascript'>
     setInterval(function() {
         $.ajax({
             url: 'bbb_attendance.php'
         })
     }, 60000)
-</script>";*/
-        
+</script>";
+
+$pageName = $langBBBRecordUserParticipation;
+
 // *** TO DO **** //
 $q = Database::get()->querySingle("SELECT server_key, api_url FROM tc_servers WHERE type='bbb' AND enabled = 'true'");
 if ($q) {
@@ -51,7 +51,7 @@ $tool_content .= $langWangBBBAttendance;
 // ή βάλε ρητά το δικό σου
 //$bbb_url = "http://xxxxxxx";
 //$salt = "xxxxxxxx";
-
+error_log("cron bbb_attendance START");
     // scan active bbb rooms
 $xml_url = $bbb_url."api/getMeetings?checksum=".sha1("getMeetings".$salt);
 // read the XML format of bbb answer and ...
@@ -78,7 +78,7 @@ foreach ($xml -> meetings -> meeting as $row) {
     xml2sql($room_xml);
     
 }
-//error_log("cron bbb_attendance STOP");
+error_log("cron bbb_attendance STOP");
 // draws pop window
 draw_popup();
 
