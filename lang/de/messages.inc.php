@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2017-05-18 16:08:38
+// Generated 2017-05-22 17:29:55
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -3301,7 +3301,7 @@ $langConfirmDeleteRecursive = "Delete group of repeated events";
 $langConfirmDeleteEvent = "Are you sure to delete the event?";
 $langDeleteError = "Delete error";
 $langUpdateError = "Update error";
-$langTitleDateNotEmpty = "The title and teh date of the event must be non empty.";
+$langTitleDateNotEmpty = "The title and date of the event must be non empty.";
 $langAgendaDueDay = "Due day";
 $langAgendaCourseEvent = "$langCourse event";
 $langAgendaPersonalEvent = "Personal event";

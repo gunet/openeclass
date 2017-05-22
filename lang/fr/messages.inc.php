@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2017-05-18 16:08:39
+// Generated 2017-05-22 17:29:56
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -3594,7 +3594,7 @@ $langConfirmDeleteRecursive = "Delete group of repeated events";
 $langConfirmDeleteEvent = "Are you sure to delete the event?";
 $langDeleteError = "Delete error";
 $langUpdateError = "Update error";
-$langTitleDateNotEmpty = "The title and teh date of the event must be non empty.";
+$langTitleDateNotEmpty = "The title and date of the event must be non empty.";
 $langAgendaDueDay = "Due day";
 $langAgendaCourseEvent = "$langCourse event";
 $langAgendaPersonalEvent = "Personal event";
