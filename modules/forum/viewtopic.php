@@ -140,10 +140,11 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     if ($total == 1) { // if exists one post in topic
         Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ?d", $topic, $forum);
         Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMTOPIC, $topic);
-        Database::get()->query("UPDATE forum SET num_topics = 0,
-                            num_posts = 0
-                            WHERE id = ?d
-                            AND course_id = ?d", $forum, $course_id);
+        Database::get()->query("UPDATE forum SET 
+                                    num_topics = num_topics-1,
+                                    num_posts = num_posts-1
+                                WHERE id = ?d
+                                    AND course_id = ?d", $forum, $course_id);
         header("Location: viewforum.php?course=$course_code&forum=$forum");
     } else {
         $last_post = Database::get()->querySingle("SELECT MAX(id) AS last_post FROM forum_post WHERE topic_id = ?d", $topic)->last_post;
