@@ -24,7 +24,7 @@
  * @brief display user duration in teleconference
  */
 $require_current_course = true;
-$require_course_admin = true;
+$require_login = TRUE;
 $require_help = true;
 $helpTopic = 'Usage';
 $require_login = true;
@@ -47,8 +47,38 @@ if (isset($_GET['id'])) {
     $meetingid = get_tc_meeting_id($_GET['id']);
 }
 
-//<th>$langAm</th>
-$tool_content .= "
+$result = [];
+if (isset($_GET['u']) and $_GET['u']) { // if we want specific user
+    $name = uid_to_name($uid);
+    $bbb_name = Database::get()->queryArray("SELECT DISTINCT(bbbuserid) FROM bbb_log WHERE fullName = ?s", $name);
+    foreach ($bbb_name as $data) {
+        $r = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM bbb_attendance, tc_session 
+                                                WHERE bbb_attendance.meetingid = tc_session.meeting_id
+                                            AND tc_session.course_id = ?d 
+                                            AND bbb_attendance.bbbuserid = ?s
+                                                ORDER BY date DESC", $course_id, $data->bbbuserid);
+        foreach ($r as $data2) {
+            array_push($result, (object) array('meetingid' => $data2->meetingid, 
+                                               'bbbuserid' => $data2->bbbuserid,
+                                               'totaltime' => $data2->totaltime,
+                                               'date' => $data2->date));
+        }
+    }
+} else {
+    if (isset($meetingid)) { // specific course meeting
+        $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM bbb_attendance
+                                                    WHERE bbb_attendance.meetingid = ?s
+                                                ORDER BY date DESC", $meetingid);
+    } else { // all course meetings        
+            $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM bbb_attendance, tc_session 
+                                                        WHERE bbb_attendance.meetingid = tc_session.meeting_id
+                                                        AND tc_session.course_id = ?d
+                                                    ORDER BY date DESC", $course_id);                  
+    }
+}
+// display results
+if (count($result) > 0) {
+    $tool_content .= "
     <table class='table-default'>
     <tr>
       <th>$langSurnameName</th>      
@@ -56,18 +86,6 @@ $tool_content .= "
       <th>$langTotalDuration</th>
     </tr>";
 
-if (isset($meetingid)) { // specific course meeting
-    $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM bbb_attendance
-                                                WHERE bbb_attendance.meetingid = ?s 
-                                            ORDER BY date DESC", $meetingid);
-} else { // all course meetings    
-        $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM bbb_attendance, tc_session 
-                                                    WHERE bbb_attendance.meetingid = tc_session.meeting_id
-                                                    AND tc_session.course_id = ?d
-                                                ORDER BY date DESC", $course_id);          
-}
-
-if (count($result) > 0) {
     $temp_date = null;
     foreach ($result as $row) {
         if ($row->date != $temp_date) {
@@ -75,19 +93,19 @@ if (count($result) > 0) {
                     . "<div align='center'><b>" . claro_format_locale_date($dateFormatLong, strtotime($row->date)) . "</b></div>"
                     . "</td></tr>";
             $temp_date = $row->date;
-        }
-        
+        }        
         $user_full_name = Database::get()->querySingle("SELECT fullName FROM bbb_log
                                 WHERE bbb_log.bbbuserid = ?s", $row->bbbuserid)->fullName;
-        $tc_title = get_tc_title($row->meetingid);
-        //<td class='center'>" . uid_to_am($row->userid) . "</td>
+        $tc_title = get_tc_title($row->meetingid);        
         $tool_content .= "<tr><td class='bullet'>$user_full_name</td>                            
                             <td class='center'>$tc_title</td>
                             <td class='center'>" . format_time_duration(0 + 60 * $row->totaltime) . "</td>
                             </tr>";
         
-    }    
+    }
+    $tool_content .= "</table>";
+} else {
+    $tool_content .= "<div class='alert alert-warning'>$langBBBNoParticipation</div>";
 }
-$tool_content .= "</table>";    
 
 draw($tool_content, 2);

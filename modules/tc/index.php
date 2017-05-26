@@ -190,6 +190,13 @@ if ($is_editor) {
                 ));
         }
     }
+} else {
+    $tool_content .= action_bar(array(                
+                array('title' => $langParticipate,
+                          'url' => "tcuserduration.php?course=$course_code&amp;u=true",
+                          'icon' => 'fa-clock-o',
+                          'level' => 'primary-label')
+                ));
 }
 
 if (isset($_GET['add'])) {
