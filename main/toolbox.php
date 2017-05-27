@@ -309,7 +309,8 @@ if ($searching) {
         $t->parse('result', 'resultBlock', true);
     }
     $c = count($courses);
-    $entriesFound = sprintf($c == 1? $langNumEntryFound : $langNumEntriesFound, "<b>$c</b>");
+    $entriesFound = ($c == 0)? $langNoEntriesFound:
+        sprintf($c == 1? $langNumEntryFound : $langNumEntriesFound, "<b>$c</b>");
     $t->set_var('resultNumEntriesFound', $entriesFound);
     $t->parse('resultList', 'resultListBlock', false);
 } else {
