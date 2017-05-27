@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2017-05-22 17:29:54
+// Generated 2017-05-27 17:59:56
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Versión del $siteName";
@@ -4832,10 +4832,12 @@ $langPublicDocumentManagement = 'Public documents editing';
 $langPublicDocumentManagementExplanation = 'Allow upload and editing of files in the Documents module for all registered users';
 $langEnableDocsPublicWrite = "Enable public document management option";
 $langOrLoginWith = "o accede con";
-$langNumEntryFound = '%s entry found matching your search';
-$langNumEntriesFound = '%s entries found matching your search';
+$langNumEntryFound = "Se ha encontrado %n resultado";
+$langNumEntriesFound = "Se han encontrado %n resultados";
 $langSearchForm = 'Search Form';
 $langSearchResults = 'Resultados de búsqueda';
 $langRegisteredUserAlreadyExists = "An account with the provided registration details already exists. If you've lost your password, you can try resetting it.";
 $langBBBRecordUserParticipation = "Teleconference Attendance";
 $langWangBBBAttendance = "Warning: Don't close this window because it is needed to record the attendance of participants in the teleconference!";
+$langNoEntriesFound = 'No se ha encontrado ningún resultado para su búsqueda';
+$langBBBNoParticipation = "$langStudent has not participated in any teleconference.";

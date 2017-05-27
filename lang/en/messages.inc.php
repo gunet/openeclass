@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2017-05-18 16:08:37
+// Generated 2017-05-27 17:59:56
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -4844,9 +4844,10 @@ $langEnableDocsPublicWrite = "Enable public document management option";
 $langOrLoginWith = 'Or log in with';
 $langNumEntryFound = '%s result found matching your search';
 $langNumEntriesFound = '%s results found matching your search';
-$langNoEntriesFound = 'No results found matching your search';
 $langSearchForm = 'Search Form';
 $langSearchResults = 'Search Results';
 $langRegisteredUserAlreadyExists = "An account with the provided registration details already exists. If you've lost your password, you can try resetting it.";
 $langBBBRecordUserParticipation = "Teleconference Attendance";
 $langWangBBBAttendance = "Warning: Don't close this window because it is needed to record the attendance of participants in the teleconference!";
+$langNoEntriesFound = 'No results found matching your search';
+$langBBBNoParticipation = "$langStudent has not participated in any teleconference.";

@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2017-05-22 17:29:55
+// Generated 2017-05-27 17:59:58
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -4331,7 +4331,7 @@ $langFaqCloseAll = "Close all";
 $langFaqEditSuccess = "The changes have been submitted";
 $langFaqAddSuccess = "Question added successfully";
 $langFaqDeleteSuccess = "Question deleted sucessfully";
-$langFaqNoEntries = "No questions.";
+$langFaqNoEntries = "Keine Fragen.";
 $langFaqAddNew = "Add a new one by clicking \"Add question\".";
 $langFaqReorderSuccess = "Reordering completed";
 $langTcCourseEnabled = "Teleconference enabled.";
@@ -4753,3 +4753,5 @@ $langSearchResults = 'Suchresultate';
 $langRegisteredUserAlreadyExists = "An account with the provided registration details already exists. If you've lost your password, you can try resetting it.";
 $langBBBRecordUserParticipation = "Teleconference Attendance";
 $langWangBBBAttendance = "Warning: Don't close this window because it is needed to record the attendance of participants in the teleconference!";
+$langNoEntriesFound = 'Keine Ergebnisse stimmen mit der Suche überein';
+$langBBBNoParticipation = "$langStudent has not participated in any teleconference.";
