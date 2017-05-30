@@ -558,5 +558,10 @@ public function deleteRecordingsWithXmlResponseArray($recordingParams) {
 }
 
 
+public function getMeetingInfo($url) {    
+    return $this->_processXmlResponse($url);
+}
+
+
 } // END OF BIGBLUEBUTTON CLASS
 
