@@ -3,7 +3,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -48,24 +48,18 @@ if ($q) {
 }
 $tool_content .= $langWangBBBAttendance;
 
-// ή βάλε ρητά το δικό σου
-//$bbb_url = "http://xxxxxxx";
-//$salt = "xxxxxxxx";
-error_log("cron bbb_attendance START");
-    // scan active bbb rooms
+// scan active bbb rooms
 $xml_url = $bbb_url."api/getMeetings?checksum=".sha1("getMeetings".$salt);
 // read the XML format of bbb answer and ...
-$xml = simplexml_load_file($xml_url);    
+$bbb = new BigBlueButton($salt, $bbb_url);
+$xml = $bbb->getMeetingInfo($xml_url);
 // ... for each meeting room scan connected users
 foreach ($xml -> meetings -> meeting as $row) {
     $meet_id = $row -> meetingID;
     $moder_pw = $row -> moderatorPW;        
     /****************************************************/
     /*		write attendes in SQL database		*/
-    /****************************************************/
-    // Instatiate the BBB class:
-    $bbb = new BigBlueButton($salt,$bbb_url);
-
+    /****************************************************/    
     $joinParams = array(
         'meetingId' => $meet_id, // REQUIRED - We have to know which meeting to join.
         'password' => $moder_pw //,	// REQUIRED - Must match either attendee or moderator pass for meeting.
@@ -75,10 +69,8 @@ foreach ($xml -> meetings -> meeting as $row) {
     /****************************************************/    
     /*		XML read from URL and write to SQL	*/    
     /****************************************************/
-    xml2sql($room_xml);
-    
+    xml2sql($room_xml, $bbb);    
 }
-error_log("cron bbb_attendance STOP");
 // draws pop window
 draw_popup();
 
@@ -86,9 +78,9 @@ draw_popup();
  * @brief record users attendance in db
  * @param type $room_xml
  */
-function xml2sql($room_xml) {
+function xml2sql($room_xml, $bbb) {
 
-    $xml = simplexml_load_file($room_xml);
+    $xml = $bbb->getMeetingInfo($room_xml);    
     $xml_meet_id = $xml->meetingID;   //meetingID of specific bbb request meeting room
 
     foreach ($xml -> attendees -> attendee as $row) {
@@ -104,10 +96,8 @@ function xml2sql($room_xml) {
         $nextid = Database::get()->querySingle("SELECT MAX(id) as id FROM bbb_log")->id;
         $nextid++;
 
-        $result = Database::get()->query("INSERT INTO bbb_log (id, meetingid, bbbuserid, fullName) 
+        Database::get()->query("INSERT INTO bbb_log (id, meetingid, bbbuserid, fullName) 
                     VALUES (?d, ?s, ?s, ?s)", $nextid, $meetingid, $bbbuserid, $fullName);
-        $userid = Database::get()->querySingle("SELECT id FROM user WHERE CONCAT(surname, ' ', givenname) = ?s", $fullName)->id;
-        $last_time_stamp = Database::get()->querySingle("SELECT date FROM bbb_log WHERE meetingid = ?s AND bbbuserid = ?s", $meetingid, $bbbuserid)->date;
 
         /****************************************************/
         /*	Write users' presence in summary            */
