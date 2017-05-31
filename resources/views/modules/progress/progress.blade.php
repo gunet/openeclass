@@ -112,8 +112,9 @@
     @if (count($game_certificate) > 0)
         <div>            
             @foreach ($game_certificate as $key => $certificate)
-                <?php                
-                    $dateAssigned = ($certificate->completed == 1) ? $certificate->assigned : '-';
+                <?php
+                    $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned));
+                    $dateAssigned = ($certificate->completed == 1) ? $formatted_date : '';
                 ?>
                 <div class="certificate_panel">
                     <div class="certificate_panel_title">{{ $certificate->title }}</div>
@@ -159,7 +160,8 @@
         <div>                        
             @foreach ($game_badge as $key => $badge)
                 <?php
-                    $dateAssigned = ($badge->completed == 1) ? $badge->assigned : '-';
+                    $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($badge->assigned));
+                    $dateAssigned = ($badge->completed == 1) ? $formatted_date : '';
                 ?>
                 <div class="certificate_panel">
                     <div class="certificate_panel_title">{{ $badge->title }}</div>

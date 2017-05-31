@@ -383,6 +383,17 @@ function get_certificate_issuer($certificate_id) {
 }
 
 /**
+ * @brief get certificate template filename
+ * @param type $certificate_id
+ */
+function get_certificate_template($certificate_id) {
+    
+    $r = Database::get()->querySingle("SELECT name, filename FROM certificate_template WHERE id = ?d", $certificate_id);   
+    
+    return [$r->name => $r->filename];
+}
+
+/**
  * @brief get available certificate templates
  * @return type
  */
@@ -397,6 +408,18 @@ function get_certificate_templates() {
     return $templates;
 }
 
+/**
+ * @brief get available badge icon
+ * @param type $badge_id
+ * @return type
+ */
+function get_badge_icon($badge_id) {
+    
+    $r = Database::get()->querySingle("SELECT name, filename FROM badge_icon WHERE id = ?d", $badge_id);
+   
+    return [$r->name => $r->filename];    
+    
+}
 
 /**
  * @brief get available badge icons
@@ -433,9 +456,9 @@ function check_user_details($uid) {
  * @param type $certificate_id
  * @return type
  */
-function check_cert_details($uid, $certificate_id) {
+function check_cert_details($uid, $element, $element_id) {
         
-    $sql = Database::get()->querySingle("SELECT completed FROM user_certificate WHERE certificate = ?d AND user = ?d", $certificate_id, $uid);
+    $sql = Database::get()->querySingle("SELECT completed FROM user_${element} WHERE $element = ?d AND user = ?d", $element_id, $uid);
     if ($sql) {
         if (!$sql->completed) {
             redirect_to_home_page();

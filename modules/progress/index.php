@@ -395,11 +395,11 @@ if (isset($display) and $display == TRUE) {
             display_certificates();
             display_badges();
         }
-    } else {
+    } else {        
         check_user_details($uid); // security check
-        if (isset($element_id)) {
+        if (isset($element_id)) {            
             if (isset($_GET['p']) and $_GET['p']) {
-                check_cert_details($uid, $element_id); // security check
+                check_cert_details($uid, $element, $element_id); // security check
                 cert_output_to_pdf($element_id, $uid);
             } else {
                 $pageName = $element_title;

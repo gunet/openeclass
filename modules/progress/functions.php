@@ -26,7 +26,7 @@
  * @global type $course_id
  * @global type $tool_content
  * @global type $course_code
- * @global type $is_editor
+ * @global type $urlServer
  * @global type $langDelete
  * @global type $langConfirmDelete
  * @global type $langCreateDuplicate
@@ -40,12 +40,13 @@
  */
 function display_certificates() {
 
-    global $course_id, $tool_content, $course_code, $is_editor,
+    global $course_id, $tool_content, $course_code, $urlServer,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
-           $langNoCertificates, $langActive, $langInactive, $langNewCertificate, $langEditChange, $langNewCertificate, $langAvailCert, $langActivate, $langDeactivate, $langEditChange, $langSee;
+           $langNoCertificates, $langActive, $langInactive, $langNewCertificate, $langEditChange, 
+           $langNewCertificate, $langAvailCert, $langActivate, $langDeactivate, $langSee;
 
     // Fetch the certificate list
-    $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM certificate WHERE course_id = ?d", $course_id);
+    $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d", $course_id);
     
     if (count($sql_cer) == 0) { // If no certificates
 
@@ -75,11 +76,15 @@ function display_certificates() {
                                 $vis_status = $data->active ? "text-success" : "text-danger";
                                 $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
                                 $status_msg = $data->active ? $langActive : $langInactive;
-
+                                $template_details = get_certificate_template($data->template);
+                                $template_name = key($template_details);
+                                $template_filename = $template_details[$template_name];
+                                $template_link = $urlServer . CERT_TEMPLATE_PATH . "$template_filename";
+                                //<img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='".$urlServer . CERT_TEMPLATE_PATH . $template."';'>
                                 $tool_content .= "
                                 <div class='row res-table-row'>
                                     <div class='col-sm-2'>
-                                        <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='/modules/progress/templates/thumbs/certificate.png'>
+                                        <a href='$template_link' target=_blank>$template_name</a>
                                     </div>
                                     <div class='col-sm-9'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a>
@@ -125,6 +130,7 @@ function display_certificates() {
  * @global type $tool_content
  * @global type $course_code
  * @global type $is_editor
+ * @global type $urlServer
  * @global type $langDelete
  * @global type $langConfirmDelete
  * @global type $langCreateDuplicate
@@ -141,12 +147,13 @@ function display_badges() {
     global $course_id, $tool_content, $course_code, $is_editor,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
            $langNoBadges, $langEditChange, $langAvailBadge,
-           $langViewHide, $langViewShow, $langEditChange, $langNewBadge, $langSee, $langActive, $langInactive;
+           $langViewHide, $langViewShow, $langEditChange, $langNewBadge, 
+           $langSee, $langActive, $langInactive, $urlServer;
 
     if ($is_editor) {
-        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM badge WHERE course_id = ?d", $course_id);
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d", $course_id);
     } else {
-        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active FROM badge WHERE course_id = ?d AND active = 1", $course_id);
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1", $course_id);
     }
     
     if (count($sql_cer) == 0) { // no badges
@@ -171,18 +178,20 @@ function display_badges() {
                             <div class='res-table-wrapper'>";
 
         foreach ($sql_cer as $data) {
-
             $vis_status = $data->active ? "text-success" : "text-danger";
             $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
             $status_msg = $data->active ? $langActive : $langInactive;
-
+            $badge_details = get_badge_icon($data->icon);
+            $badge_name = key($badge_details);
+            $badge_icon = $badge_details[$badge_name];
+            $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";
             $tool_content .= "
                                 <div class='row res-table-row'>
                                     <div class='col-sm-2'>
-                                        <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='/modules/progress/templates/thumbs/badge.png'>
+                                        <img style='box-shadow: 0 0 4px 1px #bbb; max-height: 50px;' class='img-responsive block-center' src='$icon_link'>
                                     </div>
                                     <div class='col-sm-9'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id'>".q($data->title)."</a>
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
                                         <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
                                     </div>
                                     <div class='col-sm-1 text-left'>".
@@ -291,7 +300,7 @@ function display_activities($element, $id) {
         );
      
     // certificate details
-    $tool_content .= display_certificate_settings($element, $id);
+    $tool_content .= display_settings($element, $id);
         
     //get available activities
     $result = Database::get()->queryArray("SELECT * FROM ${element}_criterion WHERE $element = ?d ORDER BY `id` DESC", $id);    
@@ -1502,9 +1511,9 @@ function display_available_participation($element, $element_id) {
  * @param type $element
  * @param type $element_id
  */
-function display_certificate_settings($element, $element_id) {
+function display_settings($element, $element_id) {
     
-    global $tool_content, $course_id, $course_code, $urlServer,
+    global $tool_content, $course_id, $course_code, $urlServer, $langTitle, 
            $langDescription, $langConfig, $langMessage, $langProgressBasicInfo,
            $langpublisher, $langCertificateDetails, $langBadgeDetails, $langEditChange;
 
@@ -1512,16 +1521,16 @@ function display_certificate_settings($element, $element_id) {
     $header = ($element == 'certificate')? "$langCertificateDetails" : "$langBadgeDetails";
     $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle 
                             FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
-    $issuer = $data->issuer;
-    $template = $data->$field;
+    $issuer = $data->issuer;    
     $title = $data->title;
     $description = $data->description;
     $message = $data->message;
-    $icon = '';
+    $icon_link = '';
     if ($element == 'badge') {
-        $badge_filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = ?d", $element_id)->filename;        
-        $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_filename";
-        $icon = "<div><img src='$icon_link' width='60' height='60'></div>";
+        $badge_details = get_badge_icon($data->icon);
+        $badge_name = key($badge_details);
+        $badge_icon = $badge_details[$badge_name];
+        $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";        
     }
 
     $tool_content .= "
@@ -1541,16 +1550,16 @@ function display_certificate_settings($element, $element_id) {
                         </div>
                         <div class='row'>
                             <div class='col-sm-5'>
-                                <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block' src='/modules/progress/templates/thumbs/certificate.png'>
+                                <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block' src='$icon_link'>
                             </div>
                             <div class='col-sm-7'>
-                                <div class='pn-info-title-sct'>Title</div>
+                                <div class='pn-info-title-sct'>$langTitle</div>
                                 <div class='pn-info-text-sct'>$title</div>
-                                <div class='pn-info-title-sct'>Description</div>
+                                <div class='pn-info-title-sct'>$langDescription</div>
                                 <div class='pn-info-text-sct'>$description</div>
-                                <div class='pn-info-title-sct'>Message</div>
+                                <div class='pn-info-title-sct'>$langMessage</div>
                                 <div class='pn-info-text-sct'>$message</div>
-                                <div class='pn-info-title-sct'>Issuer</div>
+                                <div class='pn-info-title-sct'>$langpublisher</div>
                                 <div class='pn-info-text-sct'>$issuer</div>
                             </div>
                         </div>
@@ -1695,7 +1704,7 @@ function student_view_progress() {
             }
             $data['game_' . $key][] = $game;
         }, $uid, $course_id);
-    }   
+    }
     $data['badge_template_path'] = $urlServer . BADGE_TEMPLATE_PATH;
     if (count($data['game_badge']) > 0 or count($data['game_certificate']) > 0) {
         view('modules.progress.progress', $data);       
