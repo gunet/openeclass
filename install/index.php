@@ -533,7 +533,7 @@ elseif (isset($_POST['install1'])) {
 	<h3>$langCheckReq</h3>
 	<ul class='list-unstyled'>
         <li>" . icon('fa-check') . " <b>Webserver</b> $langFoundIt <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em></li>";
-    if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+    if (version_compare(PHP_VERSION, '5.5.0') >= 0) {
         $info_icon = icon('fa-check');
         $info_text = '';
     } else {
