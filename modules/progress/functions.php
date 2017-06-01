@@ -288,7 +288,7 @@ function display_activities($element, $id) {
                       'icon' => 'fa-users',
                       'level' => 'primary-label'),
                 array('title' => "$langExport",
-                      'url' => "dumpcertificatebook.php?$link_id&amp;enc=1253",
+                      'url' => "dumpcertificateresults.php?$link_id&amp;enc=UTF-8",
                       'icon' => 'fa-file-excel-o',
                       'level' => 'primary-label'),
                 array('title' => $langBack,
@@ -1502,8 +1502,7 @@ function display_available_participation($element, $element_id) {
  * @global type $tool_content
  * @global type $course_id
  * @global type $course_code
- * @global type $langDescription
- * @global type $langConfig
+ * @global type $langDescription 
  * @global type $langMessage
  * @global type $langpublisher
  * @global type $langCertificateDetails
@@ -1514,7 +1513,7 @@ function display_available_participation($element, $element_id) {
 function display_settings($element, $element_id) {
     
     global $tool_content, $course_id, $course_code, $urlServer, $langTitle, 
-           $langDescription, $langConfig, $langMessage, $langProgressBasicInfo,
+           $langDescription, $langMessage, $langProgressBasicInfo,
            $langpublisher, $langCertificateDetails, $langBadgeDetails, $langEditChange;
 
     $field = ($element == 'certificate')? 'template' : 'icon';
@@ -1525,7 +1524,7 @@ function display_settings($element, $element_id) {
     $title = $data->title;
     $description = $data->description;
     $message = $data->message;
-    $icon_link = '';
+    $icon_link = '';    
     if ($element == 'badge') {
         $badge_details = get_badge_icon($data->icon);
         $badge_name = key($badge_details);
@@ -1533,6 +1532,8 @@ function display_settings($element, $element_id) {
         $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";        
     }
 
+    $icon_link = $urlServer . "/modules/tc/test.pdf";
+    //$tool_content .= "<h:graphicImage value='$icon_link' width='100' height='100'>";
     $tool_content .= "
         <div class='row'>
             <div class='col-xs-12'>
