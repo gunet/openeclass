@@ -181,7 +181,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     if (ini_get('short_open_tag')) { // check if short_open_tag is Off
         $tool_content .= "<div class='alert alert-danger'>$langWarningInstall2</div>";
     }
-    if (version_compare(PHP_VERSION, '5.4.0') < 0) {
+    if (version_compare(PHP_VERSION, '5.5.0') < 0) {
         $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
     }
     if (!in_array(get_config('email_transport'), array('smtp', 'sendmail')) and
