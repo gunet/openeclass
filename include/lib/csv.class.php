@@ -27,8 +27,7 @@ class CSV {
 
 	public $filename = null;
 	public $sendBOM = false;
-	public $sendSep = false;
-    public $debug = false;
+	public $sendSep = false;        
 
 	private $outputStarted = false;
 	private $encoding;
@@ -36,15 +35,16 @@ class CSV {
 	private $recordSeparator = "\r\n";
 	private $encodedRecordSeparator;
 	private $encodedFieldSeparator;
+        private $debug;
 
-	public function __construct($encoding=null) {
+	public function __construct($encoding=null) {                
 		if ($encoding) {
 			$this->setEncoding($encoding);
 		} else {
 			$this->setEncoding('UTF-16LE');
 		}
 	}
-
+               
 	public function setEncoding($encoding) {
 		$this->encoding = $encoding;
 		$this->encodedRecordSeparator = $this->recordSeparator;
@@ -149,6 +149,10 @@ class CSV {
             }
         }
         return $string;
+    }
+    
+    public function setDebug($debug) {
+        $this->debug = $debug;
     }
 }
 
