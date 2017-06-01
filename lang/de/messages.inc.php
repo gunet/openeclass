@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2017-05-27 17:59:58
+// Generated 2017-06-01 17:57:47
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -2172,8 +2172,8 @@ $langInsertWork = 'Studienarbeit';
 $langUnknownResType = "Fehler! Unbekannte Ressource der Kurseinheit";
 $langNoExercises = "Es gibt keine Übungen";
 $langVia = 'durch';
-$langStudentViewEnable = "<b>$langsStudent</b> Umgebung";
-$langStudentViewDisable = "<b>$langsTeacher</b> Umgebung";
+$langStudentViewEnable = "$langStudent Umgebung";
+$langStudentViewDisable = "$langTeacher Umgebung";
 $langNoRead = "Sie haben keine Leseberechtigung für dieses Forum";
 $langNoForumsCat = "Es gibt keine Foren in dieser Kategorie";
 $langNoCookies = 'Warnung! Die Cookies sind in ihrem Web-Browser deaktiviert. Das Einwählen (Login) ist nicht möglich.';

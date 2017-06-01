@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2017-05-27 17:59:56
+// Generated 2017-06-01 17:57:46
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Versión del $siteName";
@@ -1314,10 +1314,10 @@ $lang_username = "Nombre de usuario";
 $langPassCannotChange1 = "La contraseña para esta cuenta no puede ser cambiado.";
 $langPassCannotChange2 = "Esta cuenta utiliza un método de autentificación externo. Por favor contacta con el administrador en";
 $langPassCannotChange3 = "para más información.";
-$langFinalDesc = "$descripción de la página web";
-$langShortDesc = "$breve descripción de la página web";
-$langManS = "$lang Manual del usuario";
-$langManT = "$lang Manual del formador";
+$langFinalDesc = "Descripción de la página web";
+$langShortDesc = "Breve descripción de la página web";
+$langManS = "Manual del $langStudent";
+$langManT = "Manual del $langTeacher";
 $langOr = "Como mínimo uno de los términos";
 $langNote = "Nota";
 $langAcrobat = "Para poder leer archivos PDF, puedes utilizar Acrobat Reader";

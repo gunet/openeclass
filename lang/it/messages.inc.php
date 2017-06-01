@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2017-05-27 17:59:59
+// Generated 2017-06-01 17:57:48
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
