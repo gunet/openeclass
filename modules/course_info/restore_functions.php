@@ -256,8 +256,9 @@ function get_option($options, $name) {
  * @param type $course_desc
  * @param type $course_vis
  * @param type $course_prof
+ * @parma type $clone_course
  */
-function create_restored_course($restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof) {
+function create_restored_course($restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $clone_course = FALSE) {
     global $webDir, $urlServer, $urlAppend;
     
     require_once 'modules/create_course/functions.php';
@@ -266,7 +267,7 @@ function create_restored_course($restoreThis, $course_code, $course_lang, $cours
     $new_course_code = null;
     $new_course_id = null;
 
-    Database::get()->transaction(function() use (&$new_course_code, &$new_course_id, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $webDir, $urlServer, $urlAppend) {
+    Database::get()->transaction(function() use (&$new_course_code, &$new_course_id, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $webDir, &$tool_content, $urlServer, $urlAppend, $clone_course) {
         $departments = array();
         if (isset($_POST['department'])) {
             $_POST['department'] = arrayValuesDirect($_POST['department']);
@@ -363,12 +364,17 @@ function create_restored_course($restoreThis, $course_code, $course_lang, $cours
 
         $coursedir = "${webDir}/courses/$new_course_code";
         $videodir = "${webDir}/video/$new_course_code";
-        move_dir($r, $coursedir);
-        if (is_dir($restoreThis . '/video_files')) {
-            move_dir($restoreThis . '/video_files', $videodir);
+        move_dir($r, $coursedir);        
+        
+        if ($clone_course) {        
+            recurse_copy($webDir . '/video/' . $GLOBALS['currentCourseCode'], $webDir . '/video/' . $new_course_code);
+        } else {
+            if (is_dir($restoreThis . '/video_files')) {
+                move_dir($restoreThis . '/video_files', $videodir);
+            }
         }
-        course_index($new_course_code);        
 
+        course_index($new_course_code);        
         require_once 'upgrade/functions.php';
         load_global_messages();
 

@@ -23,6 +23,7 @@
 $require_current_course = true;
 $require_course_admin = true;
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 // access control
 if (!get_config('allow_teacher_clone_course') && !$is_admin) {
@@ -41,7 +42,7 @@ $_POST['restoreThis'] = null; // satisfy course_details_form()
 if (isset($_POST['create_restored_course'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $currentCourseCode = $course_code;
-    $message_restore_users = '';
+
     $restoreThis = $webDir . '/courses/tmpUnzipping/' .
         $uid . '/' . safe_filename();
     make_dir($restoreThis);
@@ -57,62 +58,20 @@ if (isset($_POST['create_restored_course'])) {
         'course_vis' => true,
         'course_prof' => true), 'all');
 
-    $new_course_code = create_restored_course($restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);    
+    create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, true);
     $course_code = $currentCourseCode; // revert course code to the correct value
-    $data['coursedir'] = "${webDir}/courses/$new_course_code";
-    $data['restore_users'] = $message_restore_users;
-    
-    $backUrl = $urlAppend . (isset($currentCourseCode)? "courses/$currentCourseCode/": 'modules/admin/');
-    $data['new_action_bar'] = action_bar(array(
-        array('title' => $langEnter,
-              'url' => $urlAppend . "courses/$new_course_code/",
-              'icon' => 'fa-arrow-right',
-              'level' => 'primary-label',
-              'button-class' => 'btn-success'),
-        array('title' => $langBack,
-              'url' => $backUrl,
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')), false);    
 } else {
     $desc = Database::get()->querySingle("SELECT description FROM course WHERE id = ?d", $course_id)->description;
-    $old_faculty = array();
+    $old_deps = array();
     Database::get()->queryFunc("SELECT department FROM course_department WHERE course = ?d",
-        function ($dep) use ($treeObj, &$old_faculty) {
-            $old_faculty[] = array('name' => $treeObj->getFullPath($dep->department));
+        function ($dep) use ($treeObj, &$old_deps) {
+            $old_deps[] = array('name' => $treeObj->getFullPath($dep->department));
         }, $course_id);
 
-    $data['action_bar'] = action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => "index.php?course=$course_code",
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary-label')));
-    
-    list($tree_js, $tree_html) = $treeObj->buildCourseNodePickerIndirect();    
-    $head_content = $tree_js;
-    $data['course_node_picker'] = $tree_html;
-        
-    if (is_array($old_faculty)) {
-        foreach ($old_faculty as $entry) {
-            $old_faculty_names[] = q(Hierarchy::unserializeLangField($entry['name']));
-        }
-        $old_faculty = implode('<br>', $old_faculty_names);
-    } else {
-        $old_faculty = q(Hierarchy::unserializeLangField($faculty));
-    }
-    
-    $data['formAction'] = $_SERVER['SCRIPT_NAME'];
-    if (isset($GLOBALS['course_code'])) {
-        $data['formAction'] .= '?course=' . $GLOBALS['course_code'];
-    }
-    $data['old_faculty'] = $old_faculty;
-    $data['code'] = q($public_code);
-    $data['title'] = q($currentCourseName);
-    $data['prof'] = q($titulaires);
-    
-    $data['lang_selection'] = lang_select_options('course_lang');
-    $data['rich_text_editor'] = rich_text_editor('course_desc', 10, 40, purify($desc));    
-    $data['visibility_select'] = visibility_select($visible);        
+    $tool_content = course_details_form($public_code, $currentCourseName, $titulaires, $currentCourseLanguage, null, $visible, $desc, $old_deps);
 }
 
-$data['menuTypeID'] = 2;
-view('modules.course_info.clone_course', $data);
+load_js('jstree3');
+list($js, $html) = $treeObj->buildCourseNodePicker();
+$head_content .= $js;
+draw($tool_content, 2, null, $head_content);
