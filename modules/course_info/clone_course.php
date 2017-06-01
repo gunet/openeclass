@@ -23,6 +23,7 @@
 $require_current_course = true;
 $require_course_admin = true;
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/fileUploadLib.inc.php';
 
 // access control
 if (!get_config('allow_teacher_clone_course') && !$is_admin) {
@@ -57,7 +58,7 @@ if (isset($_POST['create_restored_course'])) {
         'course_vis' => true,
         'course_prof' => true), 'all');
 
-    create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);
+    create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, true);
     $course_code = $currentCourseCode; // revert course code to the correct value
 } else {
     $desc = Database::get()->querySingle("SELECT description FROM course WHERE id = ?d", $course_id)->description;
