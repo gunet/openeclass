@@ -393,8 +393,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `document` (
 $db->query("CREATE TABLE IF NOT EXISTS `group_properties` (
     `course_id` INT(11) NOT NULL,
     `group_id` INT(11) NOT NULL PRIMARY KEY,	
-    `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
-    `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
+    `self_registration` TINYINT(4) NOT NULL DEFAULT 1,   
     `allow_unregister` TINYINT(4) NOT NULL DEFAULT 0,
     `forum` TINYINT(4) NOT NULL DEFAULT 1,
     `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
