@@ -28,33 +28,35 @@ include '../../include/init.php';
 require_once 'include/lib/csv.class.php';
 require_once 'process_functions.php';
 
-$element = 'certificate';
-$element_id = "$_GET[certificate_id]";
+if (isset($_GET['certificate_id'])) {
+    $element = 'certificate';
+    $element_id = "$_GET[certificate_id]";
+} else {
+    $element = 'badge';
+    $element_id = "$_GET[badge_id]";
+}
 
 $csv = new CSV();
-//$csv->setDebug(false);
 
 if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
     $csv->setEncoding('UTF-8');
 }
-$csv->filename = $course_code . "_users_certificate_results.csv";
+$csv->filename = $course_code . "_users_progress_results.csv";
 
-$cert_title = get_title($element, $_GET['certificate_id']);
+$cert_title = get_title($element, $element_id);
 
-if ($element == 'certificate') {
-    $csv->outputRecord($cert_title)
-            ->outputRecord($langSurname, $langName, $langAm, $langUsername, $langEmail, $langProgress);
+$csv->outputRecord($cert_title)
+        ->outputRecord($langSurname, $langName, $langAm, $langUsername, $langEmail, $langProgress);
 
-    $sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_certificate 
-                                            WHERE certificate = ?d", $element_id);
-    
-    foreach ($sql as $user_data) {
-        $csv->outputRecord(uid_to_name($user_data->user, 'surname'), 
-                           uid_to_name($user_data->user, 'givenname'), 
-                           uid_to_am($user_data->user),
-                           uid_to_name($user_data->user, 'username'),                
-                           uid_to_email($user_data->user),
-                           round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . '%');
-    $csv->outputRecord();
-    }    
+$sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_{$element}
+                                        WHERE $element = ?d", $element_id);
+
+foreach ($sql as $user_data) {
+    $csv->outputRecord(uid_to_name($user_data->user, 'surname'), 
+                       uid_to_name($user_data->user, 'givenname'), 
+                       uid_to_am($user_data->user),
+                       uid_to_name($user_data->user, 'username'),                
+                       uid_to_email($user_data->user),
+                       round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . '%');
+$csv->outputRecord();
 }

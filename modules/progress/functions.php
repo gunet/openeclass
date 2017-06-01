@@ -1754,9 +1754,7 @@ function display_users_progress($element, $element_id) {
                                         AND `course_user`.`course_id` = ?d", $course_id)->total;
     
     if (count($sql) > 0) {
-        $tool_content .= "<div class='alert alert-info'>$langUsersCertResults $certified_users / $all_users $langUsersS.</div>";
-        /*              <th class='text-center'>".icon('fa-cogs')."</th> */
-            //$tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>";            
+        $tool_content .= "<div class='alert alert-info'>$langUsersCertResults $certified_users / $all_users $langUsersS.</div>";        
         $tool_content .= "<table class='table-default custom_list_order'>";
             $tool_content .= "<thead>
                         <tr>
