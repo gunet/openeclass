@@ -1548,8 +1548,7 @@ $db->query("CREATE TABLE `tc_attendance` (
     `meetingid` varchar(20) NOT NULL,
     `bbbuserid` varchar(20) DEFAULT NULL,
     `totaltime` int(11) NOT NULL DEFAULT '0',
-    `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `type` varchar(255) default 'bbb',
+    `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,    
     PRIMARY KEY (`id`,`meetingid`),
     KEY `id` (`id`),
     KEY `meetingid` (`meetingid`)) $tbl_options");
@@ -1560,6 +1559,7 @@ $db->query("CREATE TABLE `tc_log` (
     `meetingid` varchar(20) NOT NULL,
     `bbbuserid` varchar(20) DEFAULT NULL,
     `fullName` varchar(200) DEFAULT NULL,
+    `type` varchar(255) default 'bbb',
     PRIMARY KEY (`id`),
     KEY `userid` (`bbbuserid`),
     KEY `fullName` (`fullName`)) $tbl_options");
