@@ -31,7 +31,7 @@ $head_content .= "
 <script type='text/javascript'>
     setInterval(function() {
         $.ajax({
-            url: 'bbb_attendance.php'
+            url: 'tc_attendance.php'
         })
     }, 60000)
 </script>";
@@ -91,19 +91,19 @@ function xml2sql($room_xml, $bbb) {
         /*	Write users' presence in detail 	    */
         /*	per minute and 				    */
         /*	per room				    */
-        /*	SQL table: bbb_log			    */
+        /*	SQL table: tc_log			    */
         /****************************************************/        
-        $nextid = Database::get()->querySingle("SELECT MAX(id) as id FROM bbb_log")->id;
+        $nextid = Database::get()->querySingle("SELECT MAX(id) as id FROM tc_log")->id;
         $nextid++;
 
-        Database::get()->query("INSERT INTO bbb_log (id, meetingid, bbbuserid, fullName) 
+        Database::get()->query("INSERT INTO tc_log (id, meetingid, bbbuserid, fullName) 
                     VALUES (?d, ?s, ?s, ?s)", $nextid, $meetingid, $bbbuserid, $fullName);
 
         /****************************************************/
         /*	Write users' presence in summary            */
         /*	totaltime                                   */
         /*	per room                                    */
-        /*	SQL table: bbb_attendance                   */
+        /*	SQL table: tc_attendance                   */
         /****************************************************/
         $currentDate = strtotime(date("Y-m-d H:i:s"));        
         $q2 = Database::get()->querySingle("SELECT start_date, end_date FROM tc_session WHERE meeting_id = ?s", strval($xml_meet_id));
@@ -111,18 +111,18 @@ function xml2sql($room_xml, $bbb) {
         $tcDateEnd = strtotime($q2->end_date);
 
         if($currentDate > $tcDateBegin && ($currentDate < $tcDateEnd || empty($tcDateEnd))) {           
-            $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM bbb_attendance 
+            $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM tc_attendance 
                                             WHERE bbbuserid = ?s AND meetingid = ?s", $bbbuserid, $meetingid)->cnt;            
             if ($cnt > 0) {            
-                Database::get()->querySingle("UPDATE bbb_attendance 
+                Database::get()->querySingle("UPDATE tc_attendance 
                                                 SET totaltime = totaltime + 1 
                                             WHERE bbbuserid = ?s AND meetingid = ?s", $bbbuserid, $meetingid);
-                $nextid = Database::get()->querySingle("SELECT MAX(id) AS id FROM bbb_attendance")->id;
+                $nextid = Database::get()->querySingle("SELECT MAX(id) AS id FROM tc_attendance")->id;
                 $nextid++;
             } else {                                
-                $nextid = Database::get()->querySingle("SELECT MAX(id) AS id FROM bbb_attendance")->id;
+                $nextid = Database::get()->querySingle("SELECT MAX(id) AS id FROM tc_attendance")->id;
                 $nextid++;                                
-                Database::get()->query("INSERT INTO bbb_attendance (`id`, `meetingid`, `bbbuserid`, `totaltime`) 
+                Database::get()->query("INSERT INTO tc_attendance (`id`, `meetingid`, `bbbuserid`, `totaltime`) 
                         VALUES  (?d, ?s, ?s, 1)", $nextid, $meetingid, $bbbuserid);
             }
         }

@@ -179,7 +179,7 @@ if ($is_editor) {
                       'level' => 'primary-label',
                       'show' => is_active_tc_server($tc_type, $course_id)),
                 array('title' => $langBBBRecordUserParticipation,
-                          'url' => "bbb_attendance.php?course=$course_code",
+                          'url' => "tc_attendance.php?course=$course_code",
                           'icon' => 'fa-group',
                           'level' => 'primary-label',
                           'link-attrs' => "id=popupattendance1"),

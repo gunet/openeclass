@@ -3583,7 +3583,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             PRIMARY KEY (`id`)
                           ) $tbl_options ");
                 
-        Database::get()->query("CREATE TABLE `bbb_attendance` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
                             `id` int(11) NOT NULL DEFAULT '0',
                             `meetingid` varchar(20) NOT NULL,
                             `bbbuserid` varchar(20) DEFAULT NULL,
@@ -3594,17 +3594,17 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             KEY `meetingid` (`meetingid`)
                         ) $tbl_options");
         
-        Database::get()->query("CREATE TABLE `bbb_log` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_log` (
                             `id` int(11) NOT NULL,
                             `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                             `meetingid` varchar(20) NOT NULL,
                             `bbbuserid` varchar(20) DEFAULT NULL,
                             `fullName` varchar(200) DEFAULT NULL,
+                            `type` varchar(255) default 'bbb',
                             PRIMARY KEY (`id`),
                             KEY `userid` (`bbbuserid`),
-                            KEY `fullName` (`fullName`),
-                            KEY `id` (`id`)
-                        ) $tbl_options");                
+                            KEY `fullName` (`fullName`)
+                        ) $tbl_options");
     }
 
     // update eclass version

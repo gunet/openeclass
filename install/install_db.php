@@ -1594,26 +1594,26 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
     KEY `idx_tc_servers` (`hostname`)) $tbl_options");
 
 
-$db->query("CREATE TABLE `bbb_attendance` (
+$db->query("CREATE TABLE `tc_attendance` (
     `id` int(11) NOT NULL DEFAULT '0',
     `meetingid` varchar(20) NOT NULL,
     `bbbuserid` varchar(20) DEFAULT NULL,
     `totaltime` int(11) NOT NULL DEFAULT '0',
     `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `type` varchar(255) default 'bbb',
     PRIMARY KEY (`id`,`meetingid`),
     KEY `id` (`id`),
     KEY `meetingid` (`meetingid`)) $tbl_options");
 
-$db->query("CREATE TABLE `bbb_log` (
-  `id` int(11) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `meetingid` varchar(20) NOT NULL,
-  `bbbuserid` varchar(20) DEFAULT NULL,
-  `fullName` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `userid` (`bbbuserid`),
-  KEY `fullName` (`fullName`),
-  KEY `id` (`id`)) $tbl_options");
+$db->query("CREATE TABLE `tc_log` (
+    `id` int(11) NOT NULL,
+    `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `meetingid` varchar(20) NOT NULL,
+    `bbbuserid` varchar(20) DEFAULT NULL,
+    `fullName` varchar(200) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `userid` (`bbbuserid`),
+    KEY `fullName` (`fullName`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_external_server` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
