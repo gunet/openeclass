@@ -50,12 +50,12 @@ if (isset($_GET['id'])) {
 $result = [];
 if (isset($_GET['u']) and $_GET['u']) { // if we want specific user
     $name = uid_to_name($uid);
-    $bbb_name = Database::get()->queryArray("SELECT DISTINCT(bbbuserid) FROM bbb_log WHERE fullName = ?s", $name);
+    $bbb_name = Database::get()->queryArray("SELECT DISTINCT(bbbuserid) FROM tc_log WHERE fullName = ?s", $name);
     foreach ($bbb_name as $data) {
-        $r = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM bbb_attendance, tc_session 
-                                                WHERE bbb_attendance.meetingid = tc_session.meeting_id
+        $r = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM tc_attendance, tc_session 
+                                                WHERE tc_attendance.meetingid = tc_session.meeting_id
                                             AND tc_session.course_id = ?d 
-                                            AND bbb_attendance.bbbuserid = ?s
+                                            AND tc_attendance.bbbuserid = ?s
                                                 ORDER BY date DESC", $course_id, $data->bbbuserid);
         foreach ($r as $data2) {
             array_push($result, (object) array('meetingid' => $data2->meetingid, 
@@ -66,12 +66,12 @@ if (isset($_GET['u']) and $_GET['u']) { // if we want specific user
     }
 } else {
     if (isset($meetingid)) { // specific course meeting
-        $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM bbb_attendance
-                                                    WHERE bbb_attendance.meetingid = ?s
+        $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM tc_attendance
+                                                    WHERE tc_attendance.meetingid = ?s
                                                 ORDER BY date DESC", $meetingid);
     } else { // all course meetings        
-            $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM bbb_attendance, tc_session 
-                                                        WHERE bbb_attendance.meetingid = tc_session.meeting_id
+            $result = Database::get()->queryArray("SELECT meetingid, bbbuserid, totaltime, date FROM tc_attendance, tc_session 
+                                                        WHERE tc_attendance.meetingid = tc_session.meeting_id
                                                         AND tc_session.course_id = ?d
                                                     ORDER BY date DESC", $course_id);                  
     }
@@ -94,8 +94,8 @@ if (count($result) > 0) {
                     . "</td></tr>";
             $temp_date = $row->date;
         }        
-        $user_full_name = Database::get()->querySingle("SELECT fullName FROM bbb_log
-                                WHERE bbb_log.bbbuserid = ?s", $row->bbbuserid)->fullName;
+        $user_full_name = Database::get()->querySingle("SELECT fullName FROM tc_log
+                                WHERE tc_log.bbbuserid = ?s", $row->bbbuserid)->fullName;
         $tc_title = get_tc_title($row->meetingid);        
         $tool_content .= "<tr><td class='bullet'>$user_full_name</td>                            
                             <td class='center'>$tc_title</td>
