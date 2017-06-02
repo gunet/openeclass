@@ -1974,7 +1974,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                 },
                 ";
         }
-        load_js('tinymce/tinymce.gzip.js');
+        load_js('tinymce/tinymce.min.js');
         $head_content .= "
 <script type='text/javascript'>
 
@@ -2033,7 +2033,7 @@ tinymce.init({
         {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
         {title: 'None', value: ' '}
     ],
-    plugins: 'fullscreen,pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
+    plugins: 'fullscreen,pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code,textcolor,colorpicker',
     entity_encoding: 'raw',
     relative_urls: false,
     link_class_list: [
@@ -2046,7 +2046,7 @@ tinymce.init({
     // Menubar options
     menu : 'false',
     // Toolbar options
-    toolbar1: 'toggle | bold | italic | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | bullist | numlist | outdent | indent',
+    toolbar1: 'toggle | bold | italic | forecolor | emoticons | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | bullist | numlist | outdent | indent',
     toolbar2: 'underline | strikethrough | superscript | subscript | table | undo | redo | pastetext | cut | copy | paste | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
     // Replace values for the template plugin
      // Toolbar options
