@@ -568,12 +568,15 @@ function display_available_assignments($element, $element_id) {
            $langOperator, $langValue;
      
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-    $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d AND active = 1 AND id NOT IN 
-                                (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
-                                    AND resource != ''
-                                    AND activity_type = '" . AssignmentEvent::ACTIVITY . "' 
-                                    AND module = " . MODULE_ID_ASSIGN . ") 
-                                ORDER BY title", $course_id, $element_id);    
+    $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d 
+                                    AND active = 1 
+                                    AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")
+                                    AND id NOT IN 
+                                    (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
+                                        AND resource != ''
+                                        AND activity_type = '" . AssignmentEvent::ACTIVITY . "' 
+                                        AND module = " . MODULE_ID_ASSIGN . ") 
+                                    ORDER BY title", $course_id, $element_id);    
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     } else {
@@ -634,7 +637,9 @@ function display_available_exercises($element, $element_id) {
     
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
-                                    AND exercise.active = 1 AND exercise.id NOT IN 
+                                    AND exercise.active = 1 
+                                    AND (exercise.end_date IS NULL OR exercise.end_date >= ". DBHelper::timeAfter() . ")
+                                    AND exercise.id NOT IN 
                                     (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                             AND resource != '' 
                                             AND activity_type = '" . ExerciseEvent::ACTIVITY . "' 
@@ -1358,6 +1363,7 @@ function display_available_polls($element, $element_id) {
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     $result = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
                                     AND poll.active = 1
+                                    AND poll.end_date >= ". DBHelper::timeAfter() . "
                                     AND poll.pid NOT IN 
                                 (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                     AND resource != '' AND activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "' AND module = " . MODULE_ID_QUESTIONNAIRE . ")",
