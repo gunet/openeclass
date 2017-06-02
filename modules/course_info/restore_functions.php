@@ -1324,23 +1324,25 @@ function unit_map_function(&$data, $maps) {
 function ratings_map_function(&$data, $maps) {
     list($blog_post_map, $forum_post_map, $link_map, $wall_map, $course_id) = $maps;
     $rtype = $data['rtype'];
+    $data['rid'] = null;
     if ($rtype == 'blogpost') {
-        $data['rid'] = $blog_post_map[$data['rid']];
+        $data['rid'] = @$blog_post_map[$data['rid']];
     } elseif ($rtype == 'course') {
         $data['rid'] = $course_id;
     } elseif ($rtype == 'forum_post') {
-        $data['rid'] = $forum_post_map[$data['rid']];
+        $data['rid'] = @$forum_post_map[$data['rid']];
     } elseif ($rtype == 'link') {
-        $data['rid'] = $link_map[$data['rid']];
+        $data['rid'] = @$link_map[$data['rid']];
     } elseif ($rtype == 'wallpost') {
-        $data['rid'] = $wall_map[$data['rid']];
+        $data['rid'] = @$wall_map[$data['rid']];
     }
-    return true;
+    return !is_null($data['rid']);
 }
 
 function comments_map_function(&$data, $maps) {
     list($blog_post_map, $wall_map, $course_id) = $maps;
     $rtype = $data['rtype'];
+    $data['rid'] = null;
     if ($rtype == 'blogpost') {
         $data['rid'] = $blog_post_map[$data['rid']];
     } elseif ($rtype == 'course') {
@@ -1348,7 +1350,7 @@ function comments_map_function(&$data, $maps) {
     } elseif ($rtype == 'wallpost') {
         $data['rid'] = $wall_map[$data['rid']];
     }
-    return true;
+    return !is_null($data['rid']);
 }
 
 function abuse_report_map_function(&$data, $maps) {
