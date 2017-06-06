@@ -350,3 +350,78 @@ function export_grades_to_csv($id) {
     }
     exit;
 }
+
+/**
+ * Auto Judge functions
+ * @param type $scenarionAssertion
+ * @param type $scenarioInputResult
+ * @param type $scenarioOutputExpectation
+ * @return type
+ */
+function doScenarioAssertion($scenarionAssertion, $scenarioInputResult, $scenarioOutputExpectation) {
+    switch($scenarionAssertion) {
+        case 'eq':
+            $assertionResult = ($scenarioInputResult == $scenarioOutputExpectation);
+            break;
+        case 'same':
+            $assertionResult = ($scenarioInputResult === $scenarioOutputExpectation);
+            break;
+        case 'notEq':
+            $assertionResult = ($scenarioInputResult != $scenarioOutputExpectation);
+            break;
+        case 'notSame':
+            $assertionResult = ($scenarioInputResult !== $scenarioOutputExpectation);
+            break;
+        case 'integer':
+            $assertionResult = (is_int($scenarioInputResult));
+            break;
+        case 'float':
+            $assertionResult = (is_float($scenarioInputResult));
+            break;
+        case 'digit':
+            $assertionResult = (ctype_digit($scenarioInputResult));
+            break;
+        case 'boolean':
+            $assertionResult = (is_bool($scenarioInputResult));
+            break;
+        case 'notEmpty':
+            $assertionResult = (empty($scenarioInputResult) === false);
+            break;
+        case 'notNull':
+            $assertionResult = ($scenarioInputResult !== null);
+            break;
+        case 'string':
+            $assertionResult = (is_string($scenarioInputResult));
+            break;
+        case 'startsWith':
+            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === 0);
+            break;
+        case 'endsWith':
+            $stringPosition  = mb_strlen($scenarioInputResult, 'utf8') - mb_strlen($scenarioOutputExpectation, 'utf8');
+            $assertionResult = (mb_strripos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === $stringPosition);
+            break;
+        case 'contains':
+            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8'));
+            break;
+        case 'numeric':
+            $assertionResult = (is_numeric($scenarioInputResult));
+            break;
+        case 'isArray':
+            $assertionResult = (is_array($scenarioInputResult));
+            break;
+        case 'true':
+            $assertionResult = ($scenarioInputResult === true);
+            break;
+        case 'false':
+            $assertionResult = ($scenarioInputResult === false);
+            break;
+        case 'isJsonString':
+            $assertionResult = (json_decode($value) !== null && JSON_ERROR_NONE === json_last_error());
+            break;
+        case 'isObject':
+            $assertionResult = (is_object($scenarioInputResult));
+            break;
+    }
+
+    return $assertionResult;
+}

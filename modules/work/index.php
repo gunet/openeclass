@@ -31,7 +31,7 @@ $helpTopic = 'Work';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
-require_once 'work_functions.php';
+require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'modules/attendance/functions.php';
@@ -2699,15 +2699,17 @@ function sort_link($title, $opt, $attrib = '') {
  * @global type $langEditChange
  * @global type $langAutoJudgeShowWorkResultRpt
  * @global type $langGroupName
+ * @global type $langAmShort
+ * @global type $langGradebookGrade
  * @param type $id
  * @param type $display_graph_results
  */
 function show_assignment($id, $display_graph_results = false) {
-    global $tool_content, $m, $langNoSubmissions, $langSubmissions,
-    $langWorkOnlineText, $langGradeOk, $course_code, 
+    global $tool_content, $langNoSubmissions, $langSubmissions,
+    $langWorkOnlineText, $langGradeOk, $course_code, $langGradebookGrade,
     $langGraphResults, $m, $course_code, $works_url, $course_id,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
-    $langAutoJudgeShowWorkResultRpt, $langGroupName, $langGroups;
+    $langAutoJudgeShowWorkResultRpt, $langGroupName, $langAmShort;    
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
@@ -2765,17 +2767,17 @@ function show_assignment($id, $display_graph_results = false) {
             }
 
             $result = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
-                                                   assign.uid uid, assign.group_id group_id,
-                                                   assign.submission_date submission_date,
-                                                   assign.grade_submission_date grade_submission_date,
-                                                   assign.grade grade, assign.comments comments,
-                                                   assign.grade_comments grade_comments,
-                                                   assignment.grading_scale_id grading_scale_id,
-                                                   assignment.deadline deadline
-                                                   FROM assignment_submit AS assign, user, assignment
-                                                   WHERE assign.assignment_id = ?d 
-                                                   AND assign.assignment_id = assignment.id 
-                                                   AND user.id = assign.uid$extra_sql
+                                                        assign.uid uid, assign.group_id group_id,
+                                                        assign.submission_date submission_date,
+                                                        assign.grade_submission_date grade_submission_date,
+                                                        assign.grade grade, assign.comments comments,
+                                                        assign.grade_comments grade_comments,
+                                                        assignment.grading_scale_id grading_scale_id,
+                                                        assignment.deadline deadline
+                                                FROM assignment_submit AS assign, user, assignment
+                                                    WHERE assign.assignment_id = ?d 
+                                                    AND assign.assignment_id = assignment.id 
+                                                    AND user.id = assign.uid$extra_sql
                                                    ORDER BY $order $rev", $sql_vars);
             $groups = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d", $course_id);
             $group_options = "";
@@ -2806,25 +2808,19 @@ function show_assignment($id, $display_graph_results = false) {
                                             <div class='col-sm-4'>";
             sort_link($m['username'] . ' / ' . $langGroupName, 'username');
 
-
-            $tool_content .= "
-                                            </div>
-                                            <div class='col-sm-2'>";
-            sort_link($m['am'], 'am');
-            $tool_content .= "</div>
-                                            <div class='col-sm-2'>";
+            $tool_content .= "</div><div class='col-sm-2'>";
+            sort_link($langAmShort, 'am');
+            $tool_content .= "</div><div class='col-sm-2'>";
             $assign->submission_type ? $tool_content .= "$langWorkOnlineText" : sort_link($m['filename'], 'filename');
-            $tool_content .= "</div>
-                                            <div class='col-sm-2'>";
+            $tool_content .= "</div><div class='col-sm-2'>";
             sort_link($m['sub_date'], 'date');
+            $tool_content .= "</div><div class='col-sm-1'>";
+            sort_link($langGradebookGrade, 'grade');
             $tool_content .= "</div>
-                                            <div class='col-sm-1'>";
-            sort_link($m['grade'], 'grade');
-            $tool_content .= "</div>
-                                            <div class='col-sm-1 text-center'>
-                                                <i class='fa fa-cogs'></i>
-                                            </div>
-                                        </div>";
+                                <div class='col-sm-1 text-center'>
+                                    <i class='fa fa-cogs'></i>
+                                </div>
+                            </div>";
 
             foreach ($result as $row) {
                 //is it a group assignment?
@@ -2882,8 +2878,7 @@ function show_assignment($id, $display_graph_results = false) {
                 }
                 $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ? "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
 
-            $tool_content .= "
-                                <div class='row res-table-row'>
+            $tool_content .= "<div class='row res-table-row'>
                                     <div class='col-sm-4'>$name";
                                 if (trim($row->comments != '')) {
                                     $tool_content .= "<div style='margin-top: .5em;'><small>" .
@@ -2919,9 +2914,8 @@ function show_assignment($id, $display_graph_results = false) {
                     )
                 ))
                 . "
-                                    </div>
-                                <div class='col-xs-12'>
-                                ";
+                    </div>
+                <div class='col-xs-12'>";
 
             //professor comments
             if ($row->grade_comments || $row->grade != '') {
@@ -2936,23 +2930,16 @@ function show_assignment($id, $display_graph_results = false) {
                 $comments = '';
             }
             $tool_content .= "<div style='padding-top: .5em;'>$label
-                                          $comments
-                                                        ";
+                                          $comments                                                        ";
             if (AutojudgeApp::getAutojudge()->isEnabled()) {
                 $reportlink = "work_result_rpt.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                 $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
             }
-
-            $tool_content .= "
-                                        </div>";
+            $tool_content .= "</div>"
+                    . "</div></div>";
         }
-            $tool_content .= "</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='form-group'>
+        
+        $tool_content .= "<div class='form-group'>
                         <div class='col-xs-12'>
                             <div class='checkbox'>
                               <label>
@@ -2960,14 +2947,14 @@ function show_assignment($id, $display_graph_results = false) {
                               </label>
                             </div>
                         </div>
-                    </div>
-                    </div>
-                </form>
-            ";
-
-
-
-
+                    </div>";
+         
+            $tool_content .= "</div>
+                            </div>                                                              
+                        </div>
+                    </div>                    
+                </div>
+            </form>";
         } else {            
             $result1 = Database::get()->queryArray("SELECT grade FROM assignment_submit WHERE assignment_id = ?d ORDER BY grade ASC", $id);
             $gradeOccurances = array(); // Named array to hold grade occurances/stats
@@ -3795,72 +3782,4 @@ function max_grade_from_scale($scale_id) {
         }
     }
     return $max_scale_item_value;
-}
-
-function doScenarioAssertion($scenarionAssertion, $scenarioInputResult, $scenarioOutputExpectation) {
-    switch($scenarionAssertion) {
-        case 'eq':
-            $assertionResult = ($scenarioInputResult == $scenarioOutputExpectation);
-            break;
-        case 'same':
-            $assertionResult = ($scenarioInputResult === $scenarioOutputExpectation);
-            break;
-        case 'notEq':
-            $assertionResult = ($scenarioInputResult != $scenarioOutputExpectation);
-            break;
-        case 'notSame':
-            $assertionResult = ($scenarioInputResult !== $scenarioOutputExpectation);
-            break;
-        case 'integer':
-            $assertionResult = (is_int($scenarioInputResult));
-            break;
-        case 'float':
-            $assertionResult = (is_float($scenarioInputResult));
-            break;
-        case 'digit':
-            $assertionResult = (ctype_digit($scenarioInputResult));
-            break;
-        case 'boolean':
-            $assertionResult = (is_bool($scenarioInputResult));
-            break;
-        case 'notEmpty':
-            $assertionResult = (empty($scenarioInputResult) === false);
-            break;
-        case 'notNull':
-            $assertionResult = ($scenarioInputResult !== null);
-            break;
-        case 'string':
-            $assertionResult = (is_string($scenarioInputResult));
-            break;
-        case 'startsWith':
-            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === 0);
-            break;
-        case 'endsWith':
-            $stringPosition  = mb_strlen($scenarioInputResult, 'utf8') - mb_strlen($scenarioOutputExpectation, 'utf8');
-            $assertionResult = (mb_strripos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === $stringPosition);
-            break;
-        case 'contains':
-            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8'));
-            break;
-        case 'numeric':
-            $assertionResult = (is_numeric($scenarioInputResult));
-            break;
-        case 'isArray':
-            $assertionResult = (is_array($scenarioInputResult));
-            break;
-        case 'true':
-            $assertionResult = ($scenarioInputResult === true);
-            break;
-        case 'false':
-            $assertionResult = ($scenarioInputResult === false);
-            break;
-        case 'isJsonString':
-            $assertionResult = (json_decode($value) !== null && JSON_ERROR_NONE === json_last_error());
-            break;
-        case 'isObject':
-            $assertionResult = (is_object($scenarioInputResult));
-            break;
-    }
-
-    return $assertionResult;
 }

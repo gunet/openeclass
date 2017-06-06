@@ -21,7 +21,7 @@
 
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
-require_once 'work_functions.php';
+require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 
 $pageName = $m['grades'];
