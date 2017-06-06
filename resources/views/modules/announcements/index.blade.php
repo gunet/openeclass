@@ -1,8 +1,8 @@
 @extends('layouts.default')
 
 @push('head_scripts')
-<script src="/js/datatables/media/js/jquery.dataTables.min.js"></script>
-<script src="/js/trunk8.js"></script>
+<script src="{{ $urlServer }}/js/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="{{ $urlServer }}/js/trunk8.js"></script>
 <script type='text/javascript'>
     $(document).ready(function() {
 
@@ -163,7 +163,7 @@
 @endpush
 
 @push('head_styles')
-<link rel='stylesheet' type='text/css' href="/js/datatables/media/css/jquery.dataTables.css" />
+<link rel='stylesheet' type='text/css' href="{{ $urlServer }}/js/datatables/media/css/jquery.dataTables.css" />
 @endpush
 
 @section('content')
