@@ -3154,9 +3154,8 @@ function show_student_assignments() {
                                       <th class='text-center'>$m[submitted]</th>
                                       <th class='text-center'>$m[grade]</th>
                                       $add_eportfolio_res_th
-                                  </tr>";
-        $k = 0;
-        foreach ($result as $row) {
+                                  </tr>";       
+        foreach ($result as $row) {            
             $title_temp = q($row->title);
             if($row->deadline){
                 $deadline = nice_format($row->deadline, true);
@@ -3213,11 +3212,9 @@ function show_student_assignments() {
             
             $tool_content .= "</td>
                                 $add_eportfolio_res_td
-                                  </tr>";
-            $k++;
-        }
-        $tool_content .= '
-                                  </table></div></div></div>';
+                                  </tr>";            
+        }        
+        $tool_content .= '</table></div></div></div>';
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }
@@ -3262,7 +3259,6 @@ function show_assignments() {
             ),false);
 
     if (count($result)>0) {
-
         $tool_content .= "
             <div class='row'>
             <div class='col-xs-12'>
@@ -3344,17 +3340,13 @@ function show_assignments() {
                             'confirm' => $langWorksDelConfirm))).
                     "
                     </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-                </div>
-            ";
+                </div>";
         }
-
-
-
+        $tool_content .= "</div>
+                    </div>
+                </div>
+            </div>
+        </div>";
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     }
