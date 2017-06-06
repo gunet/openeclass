@@ -123,102 +123,12 @@ if ($is_editor) {
 }
 
 if ($is_editor) {
-    load_js('tools.js');
-    global $themeimg, $m;
-    $head_content .= "
-    <script type='text/javascript'>
-    ";
-    if(AutojudgeApp::getAutojudge()->isEnabled()) {
-    $head_content .= "
-    function check_weights() {
-        /* function to check weight validity */
-        if($('#hidden-opt').is(':visible') && $('#auto_judge').is(':checked')) {
-            var weights = document.getElementsByClassName('auto_judge_weight');
-            var weight_sum = 0;
-            var max_grade = parseFloat(document.getElementById('max_grade').value);
-            max_grade = Math.round(max_grade * 1000) / 1000;
-
-            for (i = 0; i < weights.length; i++) {
-                // match ints or floats
-                w = weights[i].value.match(/^\d+\.\d+$|^\d+$/);
-                if(w != null) {
-                    w = parseFloat(w);
-                    if(w >= 0  && w <= max_grade)  // 0->max_grade allowed
-                    {
-                        /* allow 3 decimal digits */
-                        weight_sum += w;
-                        continue;
-                    }
-                    else{
-                        alert('Weights must be between 1 and max_grade!');
-                        return false;
-                    }
-                }
-                else {
-                    alert('Only numbers as weights!');
-                    return false;
-                }
-            }
-            diff = Math.round((max_grade - weight_sum) * 1000) / 1000;
-            if (diff >= 0 && diff <= 0.001) {
-                return true;
-            }
-            else {
-                alert('Weights do not sum up to ' + max_grade +
-                    '!\\n(Remember, 3 decimal digits precision)');
-                return false;
-            }
-        }
-        else
-            return true;
-    }
-    function updateWeightsSum() {
-        var weights = document.getElementsByClassName('auto_judge_weight');
-        var weight_sum = 0;
-        var max_grade = parseFloat(document.getElementById('max_grade').value);
-        max_grade = Math.round(max_grade * 1000) / 1000;
-
-        for (i = 0; i < weights.length; i++) {
-            // match ints or floats
-            w = weights[i].value.match(/^\d+\.\d+$|^\d+$/);
-            if(w != null) {
-                w = parseFloat(w);
-                if(w >= 0  && w <= max_grade)  // 0->max_grade allowed
-                {
-                    /* allow 3 decimal digits */
-                    weight_sum += w;
-                    continue;
-                }
-                else{
-                    $('#weights-sum').html('-');
-                    $('#weights-sum').css('color', 'red');
-                    return;
-                }
-            }
-            else {
-                $('#weights-sum').html('-');
-                $('#weights-sum').css('color', 'red');
-                return;
-            }
-        }
-        $('#weights-sum').html(weight_sum);
-        diff = Math.round((max_grade - weight_sum) * 1000) / 1000;
-        if (diff >= 0 && diff <= 0.001) {
-            $('#weights-sum').css('color', 'green');
-        } else {
-            $('#weights-sum').css('color', 'red');
-        }
-    }
-    $(document).ready(function() {
-        updateWeightsSum();
-        $('.auto_judge_weight').change(updateWeightsSum);
-        $('#max_grade').change(updateWeightsSum);
-    });
-    ";
-    }
+    load_js('tools.js');            
+    $head_content .= "<script type='text/javascript'>";
+                
     $head_content .= "
     $(function() {
-        $('.onlineText').click( function(e){
+        $('.onlineText').click( function(e){        
             e.preventDefault();
             var sid = $(this).data('id');
             $.ajax({
@@ -246,12 +156,7 @@ if ($is_editor) {
         $('input[id=assign_button_some]').click(ajaxAssignees);
         $('input[id=assign_button_all]').click(hideAssignees);
         ";
-        if(AutojudgeApp::getAutojudge()->isEnabled()) {
-        $head_content .= "
-        $('input[name=auto_judge]').click(changeAutojudgeScenariosVisibility);
-        $(document).ready(function() { changeAutojudgeScenariosVisibility.apply($('input[name=auto_judge]')); });
-        ";
-        }
+            
         $head_content .= "
         function hideAssignees()
         {
@@ -336,74 +241,163 @@ if ($is_editor) {
                 $('#assign_box').find('option').remove().end().append(select_content);
             });
         }";
+        
         if(AutojudgeApp::getAutojudge()->isEnabled()) {
-        $head_content .= "
-        function changeAutojudgeScenariosVisibility() {
-            if($(this).is(':checked')) {
-                $(this).parent().parent().find('table').show();
-                $('#lang').parent().parent().show();
-            } else {
-                $(this).parent().parent().find('table').hide();
-                $('#lang').parent().parent().hide();
-            }
-        }
-        $('#autojudge_new_scenario').click(function(e) {
-            var rows = $(this).parent().parent().parent().find('tr').size()-1;
-            // Clone the first line
-            var newLine = $(this).parent().parent().parent().find('tr:first').clone();
-            // Replace 0 wth the line number
-            newLine.html(newLine.html().replace(/auto_judge_scenarios\[0\]/g, 'auto_judge_scenarios['+rows+']'));
-            // Initialize the remove event and show the button
-            newLine.find('.autojudge_remove_scenario').show();
-            newLine.find('.autojudge_remove_scenario').click(removeRow);
-            // Clear out any potential content
-            newLine.find('input').val('');
-            // Insert it just before the final line
-            newLine.insertBefore($(this).parent().parent().parent().find('tr:last'));
-            // Add the event handler
-            newLine.find('.auto_judge_weight').change(updateWeightsSum);
-            e.preventDefault();
-            return false;
-        });
-        // Remove row
-        function removeRow(e) {
-            $(this).parent().parent().remove();
-            e.preventDefault();
-            return false;
-        }
-        $('.autojudge_remove_scenario').click(removeRow);
-        $(document).on('change', 'select.auto_judge_assertion', function(e) {
-            e.preventDefault();
-            var value = $(this).val();
+            $head_content .= "
+                $('input[name=auto_judge]').click(changeAutojudgeScenariosVisibility);
+                $(document).ready(function() { changeAutojudgeScenariosVisibility.apply($('input[name=auto_judge]')); });            
+        
+            function check_weights() {
+            /* function to check weight validity */
+            if($('#hidden-opt').is(':visible') && $('#auto_judge').is(':checked')) {
+                var weights = document.getElementsByClassName('auto_judge_weight');
+                var weight_sum = 0;
+                var max_grade = parseFloat(document.getElementById('max_grade').value);
+                max_grade = Math.round(max_grade * 1000) / 1000;
 
-            // Change selected attr.
-            $(this).find('option').each(function() {
-                if ($(this).attr('selected') == 'selected') {
-                    $(this).removeAttr('selected');
-                } else if ($(this).attr('value') == value) {
-                    $(this).attr('selected', true);
+                for (i = 0; i < weights.length; i++) {
+                    // match ints or floats
+                    w = weights[i].value.match(/^\d+\.\d+$|^\d+$/);
+                    if(w != null) {
+                        w = parseFloat(w);
+                        if(w >= 0  && w <= max_grade)  // 0->max_grade allowed
+                        {
+                            /* allow 3 decimal digits */
+                            weight_sum += w;
+                            continue;
+                        }
+                        else{
+                            alert('Weights must be between 1 and max_grade!');
+                            return false;
+                        }
+                    }
+                    else {
+                        alert('Only numbers as weights!');
+                        return false;
+                    }
                 }
-            });
-            var row       = $(this).parent().parent();
-            var tableBody = $(this).parent().parent().parent();
-            var indexNum  = row.index() + 1;
-
-            if (value === 'eq' ||
-                value === 'same' ||
-                value === 'notEq' ||
-                value === 'notSame' ||
-                value === 'startsWith' ||
-                value === 'endsWith' ||
-                value === 'contains'
-            ) {
-                tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').removeAttr('disabled');
-            } else {
-                tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').val('');
-                tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').attr('disabled', 'disabled');
+                diff = Math.round((max_grade - weight_sum) * 1000) / 1000;
+                if (diff >= 0 && diff <= 0.001) {
+                    return true;
+                }
+                else {
+                    alert('Weights do not sum up to ' + max_grade +
+                        '!\\n(Remember, 3 decimal digits precision)');
+                    return false;
+                }
             }
-            return false;
+            else
+                return true;
+        }
+        function updateWeightsSum() {
+            var weights = document.getElementsByClassName('auto_judge_weight');
+            var weight_sum = 0;
+            var max_grade = parseFloat(document.getElementById('max_grade').value);
+            max_grade = Math.round(max_grade * 1000) / 1000;
+
+            for (i = 0; i < weights.length; i++) {
+                // match ints or floats
+                w = weights[i].value.match(/^\d+\.\d+$|^\d+$/);
+                if(w != null) {
+                    w = parseFloat(w);
+                    if(w >= 0  && w <= max_grade)  // 0->max_grade allowed
+                    {
+                        /* allow 3 decimal digits */
+                        weight_sum += w;
+                        continue;
+                    }
+                    else{
+                        $('#weights-sum').html('-');
+                        $('#weights-sum').css('color', 'red');
+                        return;
+                    }
+                }
+                else {
+                    $('#weights-sum').html('-');
+                    $('#weights-sum').css('color', 'red');
+                    return;
+                }
+            }
+            $('#weights-sum').html(weight_sum);
+            diff = Math.round((max_grade - weight_sum) * 1000) / 1000;
+            if (diff >= 0 && diff <= 0.001) {
+                $('#weights-sum').css('color', 'green');
+            } else {
+                $('#weights-sum').css('color', 'red');
+            }
+        }
+        $(document).ready(function() {
+            updateWeightsSum();
+            $('.auto_judge_weight').change(updateWeightsSum);
+            $('#max_grade').change(updateWeightsSum);
         });
-        ";
+                   
+            function changeAutojudgeScenariosVisibility() {
+                if($(this).is(':checked')) {
+                    $(this).parent().parent().find('table').show();
+                    $('#lang').parent().parent().show();
+                } else {
+                    $(this).parent().parent().find('table').hide();
+                    $('#lang').parent().parent().hide();
+                }
+            }
+            $('#autojudge_new_scenario').click(function(e) {
+                var rows = $(this).parent().parent().parent().find('tr').size()-1;
+                // Clone the first line
+                var newLine = $(this).parent().parent().parent().find('tr:first').clone();
+                // Replace 0 wth the line number
+                newLine.html(newLine.html().replace(/auto_judge_scenarios\[0\]/g, 'auto_judge_scenarios['+rows+']'));
+                // Initialize the remove event and show the button
+                newLine.find('.autojudge_remove_scenario').show();
+                newLine.find('.autojudge_remove_scenario').click(removeRow);
+                // Clear out any potential content
+                newLine.find('input').val('');
+                // Insert it just before the final line
+                newLine.insertBefore($(this).parent().parent().parent().find('tr:last'));
+                // Add the event handler
+                newLine.find('.auto_judge_weight').change(updateWeightsSum);
+                e.preventDefault();
+                return false;
+            });
+            // Remove row
+            function removeRow(e) {
+                $(this).parent().parent().remove();
+                e.preventDefault();
+                return false;
+            }
+            $('.autojudge_remove_scenario').click(removeRow);
+            $(document).on('change', 'select.auto_judge_assertion', function(e) {
+                e.preventDefault();
+                var value = $(this).val();
+
+                // Change selected attr.
+                $(this).find('option').each(function() {
+                    if ($(this).attr('selected') == 'selected') {
+                        $(this).removeAttr('selected');
+                    } else if ($(this).attr('value') == value) {
+                        $(this).attr('selected', true);
+                    }
+                });
+                var row       = $(this).parent().parent();
+                var tableBody = $(this).parent().parent().parent();
+                var indexNum  = row.index() + 1;
+
+                if (value === 'eq' ||
+                    value === 'same' ||
+                    value === 'notEq' ||
+                    value === 'notSame' ||
+                    value === 'startsWith' ||
+                    value === 'endsWith' ||
+                    value === 'contains'
+                ) {
+                    tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').removeAttr('disabled');
+                } else {
+                    tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').val('');
+                    tableBody.find('tr:nth-child('+indexNum+')').find('input.auto_judge_output').attr('disabled', 'disabled');
+                }
+                return false;
+            });
+            ";
         }
         $head_content .= "
     });
