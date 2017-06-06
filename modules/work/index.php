@@ -3549,21 +3549,19 @@ function download_assignments($id) {
 }
 
 /**
- * @brief Create an index.html file for assignment $id listing user submissions
-        Set $online to TRUE to get an online view (on the web) - else the
-        index.html works for the zip file
+ * @brief Create an index.html file for assignment $id listing user submissions        
  * @global type $charset
  * @global type $m
  * @global type $course_id
  * @global type $langAssignment
  * @global type $langAm
  * @global type $langSurnameName
+ * @global $langGradebookGrade
  * @param type $path
  * @param type $id
- * @param type $online
  */
-function create_zip_index($path, $id, $online = FALSE) {
-        global $charset, $m, $course_id, $langAssignment, $langAm, $langSurnameName;
+function create_zip_index($path, $id) {
+        global $charset, $m, $course_id, $langAssignment, $langAm, $langSurnameName, $langGradebookGrade;
 
 
     $fp = fopen($path, "w");
@@ -3589,7 +3587,7 @@ function create_zip_index($path, $id, $online = FALSE) {
                             <th>' . $langAm .  '</th>
                             <th>' . $langAssignment . '</th>
                             <th>' . $m['sub_date'] . '</th>
-                            <th>' . $m['grade'] . '</th>
+                            <th>' . $$langGradebookGrade . '</th>
 			</tr>');
 
     $assign = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
@@ -3648,7 +3646,7 @@ function show_plain_view($id) {
     global $workPath, $charset;
 
     $secret = work_secret($id);
-    create_zip_index("$secret/index.html", $id, TRUE);
+    create_zip_index("$secret/index.html", $i);
     header("Content-Type: text/html; charset=$charset");
     readfile("$workPath/$secret/index.html");
     exit;

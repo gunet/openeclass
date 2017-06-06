@@ -299,7 +299,7 @@ $tool_content .= "<div class='form-group'>
             <div class='form-group ".(($answerType != 6) ? "hide": "")."'>
                 <label for='questionGrade' class='col-sm-2 col-sm-offset-1 control-label'>$m[grade]:</label>
                 <div class='col-sm-9'>
-                  <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$m[grade]' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
+                  <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$langGradebookGrade' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
                 </div>
             </div>
             <div class='row'>

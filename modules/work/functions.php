@@ -177,10 +177,15 @@ function was_graded($uid, $id, $ret_val = FALSE) {
     }
 }
 
-// Show details of a submission
+
+/*
+ * @brief Show details of a submission
+ */
 function show_submission_details($id) {
+    
     global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code,
-           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt;
+           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langGradebookGrade;
+    
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
     if (!$sub) {
         die("Error: submission $id doesn't exist.");
@@ -218,7 +223,7 @@ function show_submission_details($id) {
                 </div>
                 <div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
-                        <strong>" . $m['grade'] . ":</strong>
+                        <strong>" . $langGradebookGrade . ":</strong>
                     </div>
                     <div class='col-sm-9'>" . $sub->grade . "
                     </div>
@@ -255,11 +260,10 @@ function show_submission_details($id) {
                     </div>
                 </div>";
                 }
-            table_row($m['comments'], $sub->comments, true);
-$tool_content .= "
-            </div>
-        </div>
-            ";
+        table_row($m['comments'], $sub->comments, true);
+        $tool_content .= "
+                </div>
+            </div>";
 }
 
 // Check if a file has been submitted by user uid or group gid

@@ -1652,13 +1652,18 @@ function add_gradebook_other_activity($gradebook_id) {
  * @brief insert grades for activity
  * @global string $tool_content
  * @global type $langGradebookEdit
+ * @global type $gradebook
+ * @global type $langTheField
+ * @global type $course_code
+ * @global type $langFormErrors
+ * @global type $langGradebookGrade
  * @param type $gradebook_id
  * @param type $actID
  */
 function insert_grades($gradebook_id, $actID) {
 
     global $tool_content, $langGradebookEdit, $gradebook, $langTheField, 
-           $course_code, $langFormErrors, $m;
+           $course_code, $langFormErrors, $langGradebookGrade;
 
     $errors = [];  
     $v = new Valitron\Validator($_POST['usersgrade']);
@@ -1670,7 +1675,7 @@ function insert_grades($gradebook_id, $actID) {
         $v->rule('min', array("$userID"), 0);
         $v->rule('max', array("$userID"), $gradebook->range);
         $v->labels(array(
-            "$userID" => "$langTheField $m[grade]"
+            "$userID" => "$langTheField $langGradebookGrade"
         ));
     }
     if($v->validate()) {

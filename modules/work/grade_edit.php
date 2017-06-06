@@ -48,8 +48,10 @@ function get_assignment_details($id) {
 // Show to professor details of a student's submission and allow editing of fields
 // $assign contains an array with the assignment's details
 function show_edit_form($id, $sid, $assign) {
+    
     global $m, $langGradeOk, $tool_content, $course_code, $langCancel,
-           $langBack, $assign, $langWorkOnlineText, $course_id;
+           $langBack, $assign, $langWorkOnlineText, $course_id, $langGradebookGrade;
+    
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
     if (count($sub)>0) {
         $uid_2_name = display_user($sub->uid);
@@ -127,7 +129,7 @@ function show_edit_form($id, $sid, $assign) {
                     </div>
                     $submission
                     <div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
-                        <label for='grade' class='col-sm-3 control-label'>$m[grade]:</label>
+                        <label for='grade' class='col-sm-3 control-label'>$langGradebookGrade:</label>
                         <div class='col-sm-4'>
                             $grade_field
                             <span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>

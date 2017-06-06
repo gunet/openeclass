@@ -136,11 +136,29 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
     return $table_content;
 }
 
+/**
+ * 
+ * @global type $langAutoJudgeInput
+ * @global type $langAutoJudgeOutput
+ * @global type $langAutoJudgeExpectedOutput
+ * @global type $langOperator
+ * @global type $langAutoJudgeWeight
+ * @global type $langAutoJudgeResult
+ * @global type $langGradebookGrade
+ * @global type $langCourse
+ * @global type $langAssignment
+ * @global type $langStudent
+ * @global type $langAutoJudgeRank
+ * @param type $assign
+ * @param type $sub
+ * @param type $auto_judge_scenarios
+ * @param type $auto_judge_scenarios_output
+ */
 function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
     global $langAutoJudgeInput, $langAutoJudgeOutput,
         $langAutoJudgeExpectedOutput, $langOperator,
-        $langAutoJudgeWeight, $langAutoJudgeResult,
-        $langCourse, $langAssignment, $langStudent, $langAutoJudgeRank, $m;
+        $langAutoJudgeWeight, $langAutoJudgeResult, $langGradebookGrade,
+        $langCourse, $langAssignment, $langStudent, $langAutoJudgeRank;
 
     // create new PDF document
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -253,7 +271,7 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
         <th>' . $langStudent . '</th><td> '.q(uid_to_name($sub->uid)).'</td>
       </tr>
       <tr>
-        <th>' . $m['grade'] . '</th><td>' . $sub->grade . '/' . $assign->max_grade . '</td>
+        <th>' . $langGradebookGrade . '</th><td>' . $sub->grade . '/' . $assign->max_grade . '</td>
       </tr>
       <tr>
         <th>' . $langAutoJudgeRank . '</th><td>' . get_submission_rank($assign->id, $sub->grade, $sub->submission_date) . '</td>

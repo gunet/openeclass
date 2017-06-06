@@ -534,13 +534,14 @@ class Log {
      * display action details in assignments
      * @global type $langTitle
      * @global type $langDescription
+     * @global type $langGradebookGrade
      * @global type $m
      * @param type $details
      * @return string
      */
     private function assignment_action_details($details) {
 
-        global $langTitle, $langDescription, $m;
+        global $langTitle, $langDescription, $m, $langGradebookGrade;
 
         $details = unserialize($details);
         $content = "$langTitle  &laquo" . q($details['title']) . "&raquo";
@@ -554,7 +555,7 @@ class Log {
             $content .= "&nbsp;&mdash;&nbsp; " . q($m['comments']) . " &laquo" . q($details['comments']) . "&raquo";
         }
         if (!empty($details['grade'])) {
-            $content .= "&nbsp;&mdash;&nbsp; " . q($m['grade']) . " &laquo" . q($details['grade']) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; " . q($langGradebookGrade) . " &laquo" . q($details['grade']) . "&raquo";
         }
         return $content;
     }
