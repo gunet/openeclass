@@ -35,6 +35,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'include/action.php';
 require_once 'include/course_settings.php';
+require_once 'include/log.class.php';
 require_once 'modules/sharing/sharing.php';
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/comments/class.comment.php';
@@ -192,7 +193,7 @@ if ($course_info->password !== '') {
 // For statistics: record login
 Database::get()->query("INSERT INTO logins
     SET user_id = ?d, course_id = ?d, ip = ?s, date_time = " . DBHelper::timeAfter(),
-    $uid, $course_id, $_SERVER['REMOTE_ADDR']);
+    $uid, $course_id, Log::get_client_ip());
 
 // opencourses hits sumation
 $visitsopencourses = 0;

@@ -21,6 +21,8 @@
 /**
  * This class represents the rating system
 */
+require_once 'include/log.class.php';
+
 Class Rating {
     
     private $widget = ''; //rating widget type
@@ -117,7 +119,7 @@ Class Rating {
         if ($this->widget == 'up_down') {
             if ($user_id == 0) {//anonymous user
                 $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
-                $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, $_SERVER['REMOTE_ADDR']);
+                $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, Log::get_client_ip());
             } else {
                 $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d";
                 $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value);
@@ -126,7 +128,7 @@ Class Rating {
             if ($res->c > 0) {//clicking again the same icon deletes the rating
                 if ($user_id == 0) {//anonymous user
                     $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
-                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, $_SERVER['REMOTE_ADDR']);
+                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, Log::get_client_ip());
                 } else {
                     $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d";
                     Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value);
@@ -137,7 +139,7 @@ Class Rating {
                 if ($user_id == 0) {//anonymous user
                     //delete old rating of the same user on this resource if it exists
                     $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
-                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $_SERVER['REMOTE_ADDR']);
+                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, Log::get_client_ip());
                 } else {
                     //delete old rating of the same user on this resource if it exists
                     $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d";
@@ -146,14 +148,14 @@ Class Rating {
                 
                 //cast new rating
                 $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`,`rating_source`,`time`) VALUES(?d,?s,?s,?d,?d,?s,NOW())";
-                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, $_SERVER['REMOTE_ADDR']);
+                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, Log::get_client_ip());
                 
                 $action = "ins";
             } 
         } elseif ($this->widget == 'thumbs_up') {
             if ($user_id == 0) {//anonymous user
                 $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
-                $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, $_SERVER['REMOTE_ADDR']);
+                $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, Log::get_client_ip());
             } else {
                 $sql = "SELECT COUNT(`rate_id`) as `c` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d";
                 $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value);
@@ -162,7 +164,7 @@ Class Rating {
             if ($res->c > 0) {//clicking again the same icon deletes the rating
                 if ($user_id == 0) {//anonymous user
                     $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
-                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, $_SERVER['REMOTE_ADDR']);
+                    Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value, Log::get_client_ip());
                 } else {
                     $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `value`=?d";
                     Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $value);
@@ -172,7 +174,7 @@ Class Rating {
             } else {//either casting a new rating or changing the rating
                 //cast new rating
                 $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`,`rating_source`, `time`) VALUES(?d,?s,?s,?d,?d,?s,NOW())";
-                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, $_SERVER['REMOTE_ADDR']);
+                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, Log::get_client_ip());
             
                 $action = "ins";
             }
@@ -180,7 +182,7 @@ Class Rating {
             //Delete old ratings
             if ($user_id == 0) {//anonymous user
                 $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
-                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, $_SERVER['REMOTE_ADDR']);
+                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id, Log::get_client_ip());
             } else {
                 $sql = "DELETE FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget`=?s AND `user_id`=?d";
                 Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $user_id);
@@ -191,7 +193,7 @@ Class Rating {
             } else {
                 //cast new rating
                 $sql = "INSERT INTO `rating` (`rid`,`rtype`,`widget`,`value`,`user_id`, `rating_source`, `time`) VALUES(?d,?s,?s,?d,?d,?s,NOW())";
-                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, $_SERVER['REMOTE_ADDR']);
+                Database::get()->query($sql, $this->rid, $this->rtype, $this->widget, $value, $user_id, Log::get_client_ip());
                 
                 $action = "ins";
             }
@@ -339,7 +341,7 @@ Class Rating {
     public function userHasRated($user_id) {
         if ($user_id == 0) {//anonymous users
             $sql = "SELECT `value` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
-            $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, $_SERVER['REMOTE_ADDR']);
+            $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id, Log::get_client_ip());
         } else {
             $sql = "SELECT `value` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d";
             $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, $this->widget, $user_id);
@@ -360,7 +362,7 @@ Class Rating {
     public function getFivestarUserRating($user_id) {
         if ($user_id == 0) {//anonymous user
             $sql = "SELECT `value` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d AND `rating_source`=?s AND `time` >= DATE_SUB(NOW(), INTERVAL 1 DAY)";
-            $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, 'fivestar', $user_id, $_SERVER['REMOTE_ADDR']);
+            $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, 'fivestar', $user_id, Log::get_client_ip());
         } else {
             $sql = "SELECT `value` FROM `rating` WHERE `rid`=?d AND `rtype`=?s AND `widget` = ?s AND `user_id`=?d";
             $res = Database::get()->querySingle($sql, $this->rid, $this->rtype, 'fivestar', $user_id);

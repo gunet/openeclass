@@ -21,6 +21,7 @@
 
 header('Content-Type: application/xml; charset=utf-8');
 use Hautelook\Phpass\PasswordHash;
+require_once ('include/log.class.php');
 if (isset($_POST['token'])) {
     $require_mlogin = true;
     $require_noerrors = true;
@@ -29,11 +30,10 @@ if (isset($_POST['token'])) {
     if (isset($_REQUEST['logout'])) {
         require_once ('modules/auth/auth.inc.php');
 
-        if (isset($_SESSION['uid'])) {
+        if (isset($_SESSION['uid'])) {        
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                                                  VALUES (?d, ?s, NOW(), 'LOGOUT')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
+                                                  VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGOUT')", intval($_SESSION['uid']), Log::get_client_ip());
         }
-
         if (isset($_SESSION['cas_uname'])) { // if we are CAS user
             define('CAS', true);
         }
@@ -82,7 +82,7 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     $myrow = Database::get()->querySingle("SELECT * FROM user WHERE username $sqlLogin", $uname);
 
     if (get_config('login_fail_check')) {
-        $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'
+        $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . Log::get_client_ip() . "'
                                     AND COUNT > " . intval(get_config('login_fail_threshold')) . "
                                     AND DATE_SUB(CURRENT_TIMESTAMP, interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail");
     }
@@ -98,7 +98,7 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
 
     if (isset($_SESSION['uid']) && $ok === 1) {
         Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                                              VALUES (?d, ?s, NOW(), 'LOGIN')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
+                                              VALUES (?d, ?s, NOW(), 'LOGIN')", intval($_SESSION['uid']), Log::get_client_ip());
         resetLoginFailure();
         session_regenerate_id();
         set_session_mvars();
