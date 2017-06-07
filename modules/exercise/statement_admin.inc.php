@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.7
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -81,9 +81,10 @@ if (isset($_POST['submitQuestion'])) {
     $v->labels(array(
         'questionName' => "$langTheField $langQuestion"
     ));
-    if($v->validate()) {
-        $questionName = trim($questionName);
-        $questionDescription = purify($questionDescription);
+    if ($v->validate()) {
+        $questionName = trim($_POST['questionName']);
+        $questionDescription = purify($_POST['questionDescription']);
+        $answerType = intval($_POST['answerType']);
         // no name given
         if (empty($questionName)) {
             $msgErr = $langGiveQuestion;
@@ -94,14 +95,19 @@ if (isset($_POST['submitQuestion'])) {
         $objQuestion->updateTitle($questionName);
         $objQuestion->updateDescription($questionDescription);
         $objQuestion->updateType($answerType);
-        $objQuestion->updateDifficulty($difficulty);
-        $objQuestion->updateCategory($category);
+        $objQuestion->updateDifficulty($_POST['difficulty']);
+        $objQuestion->updateCategory($_POST['category']);
 
-        //If grade field set (only in Free text questions)
-        if (isset($questionGrade)) {
-            $objQuestion->updateWeighting($questionGrade);
+        // If grade field set (only in Free text questions)
+        if (isset($_POST['questionGrade'])) {
+            $objQuestion->updateWeighting($_POST['questionGrade']);
         }
-        (isset($exerciseId)) ? $objQuestion->save($exerciseId) : $objQuestion->save();
+        if (isset($_POST['exerciseId'])) {
+            $objQuestion->save($_POST['exerciseId']);
+            $exerciseId = intval($_POST['exerciseId']);
+        } else {
+            $objQuestion->save();
+        }
         $questionId = $objQuestion->selectId();
         // upload or delete picture
         if (isset($_POST['deletePicture'])) {
@@ -123,9 +129,9 @@ if (isset($_POST['submitQuestion'])) {
                 $nbrQuestions++;
             }
         }
-        //if the answer type is free text (which means doesn't have predefined answers)
-        //redirects to either pool or edit exercise page
-        //else it redirect to modifyanswers page in order to add answers to question
+        // if the answer type is free text (which means it doesn't have predefined answers)
+        // redirect to either pool or edit exercise page
+        // else redirect to modify answers page in order to add answers to question
         if ($answerType == FREE_TEXT) {
             $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId" : "modules/exercise/question_pool.php?course=$course_code";
         } else {
@@ -139,7 +145,7 @@ if (isset($_POST['submitQuestion'])) {
         redirect_to_home_page("modules/exercise/admin.php?course={$course_code}{$exercise_or_pool}{$new_or_modif}");
     }
 } else {
-// if we don't come here after having cancelled the warning message "used in several exercises"
+    // if we don't come here after having cancelled the warning message "used in several exercises"
     if (!isset($buttonBack)) {
         $questionName = $objQuestion->selectTitle();
         $questionDescription = $objQuestion->selectDescription();
@@ -157,7 +163,6 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     if (!empty($msgErr)) {
         $tool_content .= "<div class='alert alert-danger'>$msgErr</div>\n";
     }
-
 
     if (isset($_GET['newQuestion'])){
         $form_submit_action = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".((isset($exerciseId))? "exerciseId=$exerciseId" : "")."&amp;newQuestion=" . urlencode($_GET['newQuestion']);

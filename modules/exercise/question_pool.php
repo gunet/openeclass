@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -39,7 +39,7 @@ $(function() {
                 var modifyAllLink = $(this).attr('href');
                 var modifyOneLink = modifyAllLink.concat('&clone=true');
                 $('a#modifyAll').attr('href', modifyAllLink);
-                $('a#modifyOne').attr('href', modifyOneLink); 
+                $('a#modifyOne').attr('href', modifyOneLink);
           });
     });
 });
@@ -88,7 +88,7 @@ if ($is_editor) {
         // destruction of the Question object
         unset($objQuestionTmp);
         //Session::set_flashdata($message, $class);
-        redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&amp;fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");
+        redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");
     }
     // gets an existing question and copies it into a new exercise
     elseif (isset($_GET['recup']) && isset($fromExercise)) {
@@ -105,15 +105,15 @@ if ($is_editor) {
         // adds the question ID into the list of questions for the current exercise
         $objExercise->addToList($recup);
         Session::Messages($langQuestionReused, 'alert-success');
-        redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");        
+        redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code".(isset($fromExercise) ? "&fromExercise=$fromExercise" : "")."&exerciseId=$exerciseId");
     }
-    
+
     if (isset($fromExercise)) {
         $action_bar_options[] = array('title' => $langGoBackToEx,
                 'url' => "admin.php?course=$course_code&amp;exerciseId=$fromExercise",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'
-         );        
+         );
     } else {
         $action_bar_options = array(
             array('title' => $langNewQu,
@@ -121,21 +121,21 @@ if ($is_editor) {
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'),
-			array('title' => $langImportQTI,
+            array('title' => $langImportQTI,
                 'url' => "admin.php?course=$course_code&amp;importIMSQTI=yes",
                 'icon' => 'fa-download',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'),
-			array('title' => $langExportQTI,
+            array('title' => $langExportQTI,
                 'url' => "question_pool.php?". $_SERVER['QUERY_STRING'] . "&amp;exportIMSQTI=yes",
                 'icon' => 'fa-upload',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success')
-         );          
+         );
     }
-	
+
     $tool_content .= action_bar($action_bar_options);
-    
+
     if (isset($fromExercise)) {
         $result = Database::get()->queryArray("SELECT id, title FROM `exercise` WHERE course_id = ?d AND id <> ?d ORDER BY id", $course_id, $fromExercise);
     } else {
@@ -158,7 +158,7 @@ if ($is_editor) {
     $tool_content .= "<div class='form-wrapper'><form class='form-inline' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'><input type='hidden' name='course' value='$course_code'>
                         ".(isset($fromExercise)? "<input type='hidden' name='fromExercise' value='$fromExercise'>" : "")."
                         <div class='form-group'>
-                            <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-control'>                               
+                            <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-control'>
                                 $exercise_options
                             </select>
                     </div>
@@ -177,11 +177,11 @@ if ($is_editor) {
                         <select onChange = 'document.qfilter.submit();' name='categoryId' class='form-control'>
                             $q_cat_options
                         </select>
-                    </div>                    
+                    </div>
                 </form>
-            </div>";      
+            </div>";
     //End of filtering Component
-    
+
     if (isset($fromExercise)) {
         $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
     }
@@ -202,10 +202,10 @@ if ($is_editor) {
         if(isset($categoryId) && $categoryId!=-1) {
             $total_query_vars[] = $categoryId;
             $extraSql .= " AND category = ?d";
-        }          
-        $total_query_vars = isset($fromExercise) ? array_merge($total_query_vars, array($fromExercise, $fromExercise)) : $total_query_vars; 
+        }
+        $total_query_vars = isset($fromExercise) ? array_merge($total_query_vars, array($fromExercise, $fromExercise)) : $total_query_vars;
         $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));
-        if (isset($fromExercise)) {            
+        if (isset($fromExercise)) {
             $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d  AND exercise_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
@@ -230,43 +230,43 @@ if ($is_editor) {
         if(isset($categoryId) && $categoryId!=-1) {
             $total_query_vars[] = $categoryId;
             $extraSql .= " AND category = ?d";
-        }          
+        }
         // If user selected All question and comes to question pool from an exercise
         if ((!isset($exerciseId) || $exerciseId == 0) && isset($fromExercise)) {
-            $total_query_vars = array_merge($total_query_vars, array($fromExercise, $fromExercise));    
+            $total_query_vars = array_merge($total_query_vars, array($fromExercise, $fromExercise));
         }
         $result_query_vars = array_merge($total_query_vars, array($from, QUESTIONS_PER_PAGE));
-        //When user selected orphan questions
+        // When user selected orphan questions
         if (isset($exerciseId) && $exerciseId == -1) {
             $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$extraSql ORDER BY question
                             LIMIT ?d, ?d";
             $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                            ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$extraSql";   
+                            ON question_id = id WHERE course_id = ?d AND exercise_id IS NULL$extraSql";
         } else { // if user selected all questions
-            if (isset($fromExercise)) { // if is coming to question pool from an exercise
+            if (isset($fromExercise)) { // if coming to question pool from an exercise
                 $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                                ON question_id = id WHERE course_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+                                ON question_id = id WHERE course_id = ?d $extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                                 question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
-                                GROUP BY id ORDER BY question LIMIT ?d, ?d";
+                                GROUP BY id, question, type ORDER BY question LIMIT ?d, ?d";
                 $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                                ON question_id = id WHERE course_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
-                                question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))";           
+                                ON question_id = id WHERE course_id = ?d $extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
+                                question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))";
             } else {
                 $result_query = "SELECT id, question, type FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                                ON question_id = id WHERE course_id = ?d$extraSql
-                                GROUP BY id ORDER BY question LIMIT ?d, ?d";
+                                ON question_id = id WHERE course_id = ?d $extraSql
+                                GROUP BY id, question, type ORDER BY question LIMIT ?d, ?d";
                 $total_query = "SELECT COUNT(id) AS total FROM `exercise_question` LEFT JOIN `exercise_with_questions`
-                                ON question_id = id WHERE course_id = ?d$extraSql";           
-            }                             
+                                ON question_id = id WHERE course_id = ?d $extraSql";
+            }
             // forces the value to 0
-            $exerciseId = 0;            
+            $exerciseId = 0;
         }
     }
 
     if (isset($_GET['exportIMSQTI'])) {
 
-        $result = Database::get()->queryArray($result_query, $result_query_vars);    
+        $result = Database::get()->queryArray($result_query, $result_query_vars);
         header('Content-type: text/xml');
         header('Content-Disposition: attachment; filename="exportQTI.xml"');
         exportIMSQTI($result);
@@ -276,13 +276,13 @@ if ($is_editor) {
     } else {
 
         //END OF BUILDING QUERIES AND QUERY VARS
-        $result = Database::get()->queryArray($result_query, $result_query_vars);     
+        $result = Database::get()->queryArray($result_query, $result_query_vars);
         $total_questions = Database::get()->querySingle($total_query, $total_query_vars)->total;
 
         $nbrQuestions = count($result);
         $tool_content .= "
-	<tr>
-	  <th>$langQuesList</th>
+    <tr>
+      <th>$langQuesList</th>
           <th class='text-center'>".icon('fa-gears')."</th>
         </tr>";
         foreach ($result as $row) {
@@ -333,7 +333,7 @@ if ($is_editor) {
                               'confirm' => $langConfirmYourChoice,
                               'show' => !isset($fromExercise))
                      )) .
-                     "</td></tr>";       
+                     "</td></tr>";
             }
         }
         if (!$nbrQuestions) {
@@ -357,7 +357,7 @@ if ($is_editor) {
             if ($page > 0) {
                 $prevpage = $page - 1;
                 $query_string_url = removeGetVar($_SERVER['REQUEST_URI'], 'page');
-                $tool_content .= "<small>&lt;&lt; <a href='$query_string_url&amp;page=$prevpage'>$langPreviousPage</a></small>";            
+                $tool_content .= "<small>&lt;&lt; <a href='$query_string_url&amp;page=$prevpage'>$langPreviousPage</a></small>";
             }
             if ($page < $numpages) {
                 $nextpage = $page + 1;
@@ -388,7 +388,7 @@ $tool_content .= "
       </div>
     </div>
   </div>
-</div>    
+</div>
 ";
 
 draw($tool_content, 2, null, $head_content);

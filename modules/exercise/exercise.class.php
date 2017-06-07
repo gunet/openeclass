@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -96,8 +96,8 @@ if (!class_exists('Exercise')) {
             global $course_id;
 
             $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, temp_save, time_constraint,
-			attempts_allowed, random, active, public, results, score, ip_lock, password_lock, assign_to_specific
-			FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
+            attempts_allowed, random, active, public, results, score, ip_lock, password_lock, assign_to_specific
+            FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
             if ($object) {
@@ -120,7 +120,7 @@ if (!class_exists('Exercise')) {
                 $this->assign_to_specific = $object->assign_to_specific;
 
                 $result = Database::get()->queryArray("SELECT question_id, q_position FROM `exercise_with_questions`, `exercise_question`
-				WHERE course_id = ?d AND question_id = id AND exercise_id = ?d ORDER BY q_position", $course_id, $id);
+                WHERE course_id = ?d AND question_id = id AND exercise_id = ?d ORDER BY q_position", $course_id, $id);
 
                 // fills the array with the question ID for this exercise
                 // the key of the array is the question position
@@ -292,7 +292,7 @@ if (!class_exists('Exercise')) {
          *
          * @author - Olivier Brouckaert
          * @return - array - if the exercise is not set to take questions randomly, returns the question list
-         * 					 without randomizing, otherwise, returns the list with questions selected randomly
+         *                   without randomizing, otherwise, returns the list with questions selected randomly
          */
         function selectRandomList() {
             // if the exercise is not a random exercise, or if there are not at least 2 questions
@@ -478,7 +478,7 @@ if (!class_exists('Exercise')) {
 
             $id = $this->id;
             $exercise = $this->exercise;
-            $description = standard_text_escape($this->description);
+            $description = purify($this->description);
             $type = $this->type;
             $startDate = $this->startDate;
             $endDate = $this->endDate;
@@ -496,7 +496,7 @@ if (!class_exists('Exercise')) {
             // exercise already exists
             if ($id) {
                 $affected_rows = Database::get()->query("UPDATE `exercise`
-				SET title = ?s, description = ?s, type = ?d," .
+                SET title = ?s, description = ?s, type = ?d," .
                         "start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d," .
                         "attempts_allowed = ?d, random = ?d, active = ?d, public = ?d, results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s, assign_to_specific = ?d
                         WHERE course_id = ?d AND id = ?d",
@@ -511,7 +511,7 @@ if (!class_exists('Exercise')) {
             else {
                 $this->id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, type, start_date,
                         end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock, password_lock, assign_to_specific)
-			VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d)",
+            VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d)",
                         $course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave,
                         $timeConstraint, $attemptsAllowed, $random, $active, $results, $score, $ip_lock, $password_lock, $assign_to_specific)->lastInsertID;
 
@@ -536,7 +536,7 @@ if (!class_exists('Exercise')) {
             global $course_id;
 
             $pos = Database::get()->querySingle("SELECT q_position FROM `exercise_question`
-				  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
+                  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
             if ($pos > 1) {
                 $temp = $this->questionList[$pos - 1];
                 $this->questionList[$pos - 1] = $this->questionList[$pos];
@@ -555,7 +555,7 @@ if (!class_exists('Exercise')) {
             global $course_id;
 
             $pos = Database::get()->querySingle("SELECT q_position FROM `exercise_question`
-				  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
+                  WHERE course_id = ?d AND id = ?d", $course_id, $id)->q_position;
             if ($pos < count($this->questionList)) {
                 $temp = $this->questionList[$pos + 1];
                 $this->questionList[$pos + 1] = $this->questionList[$pos];
@@ -936,7 +936,7 @@ if (!class_exists('Exercise')) {
         /**
          * Purge exercise user attempt
          */
-        function purgeAttempt($id, $eurid) {            
+        function purgeAttempt($id, $eurid) {
 
             Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d AND eurid = ?d", $id, $eurid);
@@ -953,7 +953,7 @@ if (!class_exists('Exercise')) {
             }
             $id = $this->id;
             $exercise = $this->exercise.(($clone_course_id == $course_id)? " ($langCopy2)" : '');
-            $description = standard_text_escape($this->description);
+            $description = $this->description;
             $type = $this->type;
             $startDate = $this->startDate;
             $endDate = $this->endDate;

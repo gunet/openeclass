@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -26,7 +26,7 @@
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 
-if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['assign_type'])) {
         if ($_POST['assign_type'] == 2) {
             $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
@@ -66,33 +66,38 @@ if (isset($_POST['submitExercise'])) {
         'exerciseIPLock' => "$langTheField IPs"
     ));
     if($v->validate()) {
-        $exerciseTitle = trim($exerciseTitle);
-        $exerciseDescription = purify($exerciseDescription);
+        $exerciseTitle = trim($_POST['exerciseTitle']);
         $randomQuestions = (isset($_POST['questionDrawn'])) ? intval($_POST['questionDrawn']) : 0;
         $objExercise->updateTitle($exerciseTitle);
-        $objExercise->updateDescription($exerciseDescription);
-        $objExercise->updateType($exerciseType);
-        $objExercise->updateIPLock(implode(',', $_POST['exerciseIPLock']));
+        $objExercise->updateDescription($_POST['exerciseDescription']);
+        $objExercise->updateType($_POST['exerciseType']);
+        if (isset($_POST['exerciseIPLock'])) {
+            $objExercise->updateIPLock(implode(',', $_POST['exerciseIPLock']));
+        }
         $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
-        if (isset($exerciseStartDate) and !empty($exerciseStartDate)) {
-            $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $exerciseStartDate);
+        if (isset($_POST['exerciseStartDate']) and !empty($_POST['exerciseStartDate'])) {
+            $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseStartDate']);
         } else {
             $startDateTime_obj = new DateTime('NOW');
         }
         $startDateTime_obj = $startDateTime_obj->format('Y-m-d H:i:s');
         $objExercise->updateStartDate($startDateTime_obj);
-        $endDateTime_obj = isset($exerciseEndDate) && !empty($exerciseEndDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate)->format('Y-m-d H:i:s') : NULL;
+        $endDateTime_obj = isset($_POST['exerciseEndDate']) && !empty($_POST['exerciseEndDate']) ?
+            DateTime::createFromFormat('d-m-Y H:i', $_POST['exerciseEndDate'])->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateEndDate($endDateTime_obj);
-        $objExercise->updateTempSave($exerciseTempSave);
-        $objExercise->updateTimeConstraint($exerciseTimeConstraint);
-        $objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
-        $objExercise->setRandom($randomQuestions);
-        $objExercise->updateResults($dispresults);
-        $objExercise->updateScore($dispscore);
-        $objExercise->updateAssignToSpecific($assign_to_specific);
+        $objExercise->updateTempSave($_POST['exerciseTempSave']);
+        $objExercise->updateTimeConstraint($_POST['exerciseTimeConstraint']);
+        $objExercise->updateAttemptsAllowed($_POST['exerciseAttemptsAllowed']);
+        if (isset($_POST['randomQuestions'])) {
+            $objExercise->setRandom($_POST['randomQuestions']);
+        }
+        $objExercise->updateResults($_POST['dispresults']);
+        $objExercise->updateScore($_POST['dispscore']);
+        $objExercise->updateAssignToSpecific($_POST['assign_to_specific']);
         $objExercise->save();
         // reads the exercise ID (only useful for a new exercise)
         $exerciseId = $objExercise->selectId();
+
         $objExercise->assignTo(filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY));
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
 
@@ -594,7 +599,6 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             $disp_score_message = $langScoreDispEndDate;
             break;
     }
-    $exerciseDescription = standard_text_escape($exerciseDescription);
     $exerciseStartDate = $exerciseStartDate;
     $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
