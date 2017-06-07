@@ -31,6 +31,7 @@ $session_id = $_GET['session'];
 session_id($session_id);
 session_start();
 require_once '../../include/init.php';
+require_once 'include/log.class.php';
 require_once 'modules/auth/auth.inc.php';
 
 // validate token timestamp
@@ -69,7 +70,7 @@ if ($exists && intval($exists->exists) === 1) {
         $_SESSION['langswitch'] = $user->lang;
         
         Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
-                                              VALUES (?d, ?s, NOW(), 'LOGIN')", intval($_SESSION['uid']), $_SERVER['REMOTE_ADDR']);
+                                              VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGIN')", intval($_SESSION['uid']), Log::get_client_ip());
         session_regenerate_id();
         set_session_mvars();
         $session->setLoginTimestamp();

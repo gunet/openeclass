@@ -27,6 +27,7 @@ $require_help = true;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
+require_once 'include/log.class.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/forum/functions.php';
 require_once 'modules/search/indexer.class.php';
@@ -86,7 +87,7 @@ if ($topic_locked == 1) {
 
 if (isset($_POST['submit'])) {
     $message = $_POST['message'];
-    $poster_ip = $_SERVER['REMOTE_ADDR'];
+    $poster_ip = Log::get_client_ip();
     $parent_post = $_POST['parent_post'];
     if (trim($message) == '') {
         $tool_content .= "

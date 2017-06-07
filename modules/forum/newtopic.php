@@ -29,6 +29,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
+require_once 'include/log.class.php';
 require_once 'functions.php';
 
 $toolName = $langForums;
@@ -82,7 +83,7 @@ if (isset($_POST['submit'])) {
         exit;
     }
     $message = purify($message);
-    $poster_ip = $_SERVER['REMOTE_ADDR'];
+    $poster_ip = Log::get_client_ip();
     $time = date("Y-m-d H:i:s");
 
     $topic_id = Database::get()->query("INSERT INTO forum_topic (title, poster_id, forum_id, topic_time) VALUES (?s, ?d, ?d, ?t)"

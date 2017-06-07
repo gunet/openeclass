@@ -3259,7 +3259,7 @@ function submit_grade_comments($args) {
                                     grade_comments_filename = ?s,
                                     grade_submission_date = NOW(), grade_submission_ip = ?s
                                     WHERE id = ?d", $grade, $comment, $comments_filepath,
-                                            $comments_real_filename, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows>0) {
+                                            $comments_real_filename, Log::get_client_ip(), $sid)->affectedRows>0) {
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                     'title' => $assignment->title,
                     'grade' => $grade,
@@ -3332,7 +3332,7 @@ function submit_grades($grades_id, $grades, $email = false) {
             if ($val !== $grade) {
                 if (Database::get()->query("UPDATE assignment_submit
                                             SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
-                                            WHERE id = ?d", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {
+                                            WHERE id = ?d", $grade, Log::get_client_ip(), $sid)->affectedRows > 0) {
                     Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
                             'title' => $assignment->title,
                             'grade' => $grade));

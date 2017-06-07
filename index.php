@@ -77,7 +77,7 @@ if (isset($_SESSION['uid'])) {
 if (isset($_GET['logout']) and $uid) {
     Database::get()->query("INSERT INTO loginout (loginout.id_user,
                 loginout.ip, loginout.when, loginout.action)
-                VALUES (?d, ?s, NOW(), 'LOGOUT')", $uid, $_SERVER['REMOTE_ADDR']);
+                VALUES (?d, ?s, " .DBHelper::timeAfter() . ", 'LOGOUT')", $uid, Log::get_client_ip());
     if (isset($_SESSION['cas_uname'])) { // if we are CAS user
         define('CAS', true);
     }
