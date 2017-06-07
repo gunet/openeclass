@@ -21,7 +21,7 @@
 
 header('Content-Type: application/xml; charset=utf-8');
 use Hautelook\Phpass\PasswordHash;
-require_once ('include/log.class.php');
+require_once '../../include/log.class.php';
 if (isset($_POST['token'])) {
     $require_mlogin = true;
     $require_noerrors = true;
