@@ -409,7 +409,7 @@ if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
                                                     AND u.email<>''
                                                     AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
 
-        $data['tags'] = Tag::tagInput($AnnouncementToModify);
+        $data['tags'] = eClassTag::tagInput($AnnouncementToModify);
         $data['startdate_error'] = $data['startdate_error'] ? " has-error" : "";
         $data['enddate_error'] = $data['enddate_error'] ? " has-error" : "";
 

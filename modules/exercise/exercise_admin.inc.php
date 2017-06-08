@@ -548,7 +548,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         </div>
                     </div>
                 </div>
-                 " . Tag::tagInput($exerciseId) . "
+                 " . eClassTag::tagInput($exerciseId) . "
 
                  <div class='form-group'>
                    <div class='col-sm-offset-2 col-sm-10'>

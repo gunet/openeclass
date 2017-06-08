@@ -1531,7 +1531,7 @@ function new_assignment() {
                 </div>
                 ";
                 }
-                $tool_content .= Tag::tagInput()."
+                $tool_content .= eClassTag::tagInput()."
 
             <div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>".
@@ -2053,7 +2053,7 @@ function show_edit_assignment($id) {
                   </div>
                 </div>";
                 }
-                $tool_content .= Tag::tagInput($id)."
+                $tool_content .= eClassTag::tagInput($id)."
             <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>".
                     form_buttons(array(
@@ -3527,16 +3527,31 @@ function send_file($id, $file_type) {
  * @return boolean
  */
 function download_assignments($id) {
-    global $workPath, $course_code;
     
-    $counter = Database::get()->querySingle('SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d', $id)->count;
+    global $workPath, $course_code;    
+    
+    $sub_type = Database::get()->querySingle("SELECT submission_type FROM assignment WHERE id = ?d", $id)->submission_type;
+    $counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $id)->count;
     if ($counter>0) {
         $secret = work_secret($id);
         $filename = "{$course_code}_work_$id.zip";
         chdir($workPath);
         create_zip_index("$secret/index.html", $id);
         $zip = new PclZip($filename);
-        $flag = $zip->create($secret, "work_$id", $secret);
+        if ($sub_type == 1) { // free text assignment
+            $sql = Database::get()->queryArray("SELECT uid, submission_text FROM assignment_submit WHERE assignment_id = ?d", $id);                        
+            foreach ($sql as $data) {                
+                $onlinetext = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);                
+                $onlinetext->WriteHTML($data->submission_text);
+                $pdfname = greek_to_latin(uid_to_name($data->uid)) . ".pdf";
+                $onlinetext->Output($pdfname, 'F');
+                $zip->add($pdfname);
+                unlink($pdfname);
+            }
+            $zip->add("$secret/index.html", PCLZIP_OPT_REMOVE_PATH, "$secret");
+        } else {
+            $flag = $zip->create($secret, "work_$id", $secret);
+        }
         header("Content-Type: application/x-zip");
         header("Content-Disposition: attachment; filename=$filename");
         stop_output_buffering();
@@ -3567,7 +3582,7 @@ function create_zip_index($path, $id) {
     $fp = fopen($path, "w");
     if (!$fp) {
         die("Unable to create assignment index file - aborting");
-    }
+    }    
     fputs($fp, '
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -3587,7 +3602,7 @@ function create_zip_index($path, $id) {
                             <th>' . $langAm .  '</th>
                             <th>' . $langAssignment . '</th>
                             <th>' . $m['sub_date'] . '</th>
-                            <th>' . $$langGradebookGrade . '</th>
+                            <th>' . $langGradebookGrade . '</th>
 			</tr>');
 
     $assign = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
@@ -3599,16 +3614,21 @@ function create_zip_index($path, $id) {
         $assign_type = 0; // = assignment with submitted files
     if ($assign->submission_type == 1) {
         $assign_type = 1; // = free text assignment
-    }
-    $result = Database::get()->queryArray("SELECT a.uid, a.file_path, a.submission_text, a.submission_date, a.grade, a.comments, a.grade_comments, a.group_id, b.deadline FROM assignment_submit a, assignment b WHERE a.assignment_id = ?d AND a.assignment_id = b.id ORDER BY a.id", $id);        
+    }    
+    $result = Database::get()->queryArray("SELECT a.uid, a.file_path, a.submission_text, a.submission_date, a.grade, a.comments, a.grade_comments, a.group_id, b.deadline "
+                                                . "FROM assignment_submit a, assignment b "
+                                                . "WHERE a.assignment_id = ?d "
+                                                . "AND a.assignment_id = b.id "
+                                                . "ORDER BY a.id", $id);        
     foreach ($result as $row) {
         if ($assign_type == 1) {
-            $filelink = $row->submission_text;
+            $filename = greek_to_latin(uid_to_name($row->uid)) . ".pdf";
         } else {
             $filename = basename($row->file_path);
+        }
             $filelink = empty($filename) ? '&nbsp;' :
                 ("<a href='$filename'>" . htmlspecialchars($filename) . '</a>');
-        }
+        
         $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  "<div style='color:red;'>$m[late_submission]</div>" : '';
         if ($assign->grading_scale_id) {
             $key = closest($row->grade, $scale_values, true)['key'];

@@ -56,7 +56,7 @@ if (isset($_GET['edit'])) {
 $data['postUrl'] = "index.php?course=$course_code" .
     ($data['unitId'] ? "&id=$data[unitId]": '');
 $data['descriptionEditor'] = rich_text_editor('unitdescr', 10, 20, $unitDescr);
-$data['tagInput'] = $data['unitId']? Tag::tagInput($data['unitId']): Tag::tagInput();
+$data['tagInput'] = $data['unitId']? eClassTag::tagInput($data['unitId']): eClassTag::tagInput();
 
 view('modules.units.info', $data);
 
