@@ -81,9 +81,9 @@ $data['action_bar'] = action_bar([
 
 // admin hasn't clicked on edit
 if (empty($submit0) && empty($submit1) && empty($submit2)) {
-    $data['mr'] = get_config('email_required') ? $m['yes'] : $m['no'];
-    $data['mv'] = get_config('email_verification_required') ? $m['yes'] : $m['no'];
-    $data['mm'] = get_config('dont_mail_unverified_mails') ? $m['yes'] : $m['no'];    
+    $data['mr'] = get_config('email_required') ? $langYes : $langNo;
+    $data['mv'] = get_config('email_verification_required') ? $langYes : $langNo;
+    $data['mm'] = get_config('dont_mail_unverified_mails') ? $langYes : $langNo;
     
     $data['verified_email_cnt'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt;
     $data['unverified_email_cnt'] = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";")->cnt;

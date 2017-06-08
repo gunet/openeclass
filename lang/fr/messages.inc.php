@@ -2252,7 +2252,7 @@ $m['deadline'] = "Date limite de soumission";
 $m['username'] = "Identifiant $langsOfStudent"
 ;
 $m['filename'] = "Nom du fichier";
-$m['sub_date'] = "Date de soumission";
+$langSubmissionDate = "Date de soumission";
 $m['comments'] = "Commentaires";
 $m['gradecomments'] = "Commentaires d'évaluation";
 $m['addgradecomments'] = "Ajouter les commentaires de l'évaluateur";

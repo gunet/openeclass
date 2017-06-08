@@ -131,7 +131,7 @@ function find_submissions($is_group_assignment, $uid, $id, $gids) {
 // there is a comment by the professor but no grade, or FALSE if neither
 // grade or professor comment is set
 function submission_grade($subid) {
-    global $m;
+    global $langYes;
 
     $res = Database::get()->querySingle("SELECT grade, grade_comments
                                                 FROM assignment_submit
@@ -141,7 +141,7 @@ function submission_grade($subid) {
         if (!empty($grade)) {
             return $grade;
         } elseif (!empty($res->grade_comments)) {
-            return $m['yes'];
+            return $langYes;
         } else {
             return FALSE;
         }
@@ -183,7 +183,7 @@ function was_graded($uid, $id, $ret_val = FALSE) {
  */
 function show_submission_details($id) {
     
-    global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code,
+    global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code, $langSubmissionDate,
            $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langGradebookGrade;
     
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
@@ -237,7 +237,7 @@ function show_submission_details($id) {
                 </div>
                 <div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
-                        <strong>" . $m['sub_date'] . ":</strong>
+                        <strong>" . $langSubmissionDate . ":</strong>
                     </div>
                     <div class='col-sm-9'>" . $sub->submission_date . "
                     </div>

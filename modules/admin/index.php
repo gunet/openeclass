@@ -63,7 +63,7 @@ if (get_config('enable_indexing')) {
     $idx = new Indexer();
 
     $data['numDocs'] = $idx->getIndex()->numDocs();
-    $data['isOpt'] = (!$idx->getIndex()->hasDeletions()) ? $m['yes'] : $m['no'];
+    $data['isOpt'] = (!$idx->getIndex()->hasDeletions()) ? $langYes : $langNo;
     $data['idxHasDeletions'] = $idx->getIndex()->hasDeletions();
     
 

@@ -172,8 +172,8 @@ if ($u) {
 
         $data['verified_mail_data'] = array();
         $data['verified_mail_data'][0] = $m['pending'];
-        $data['verified_mail_data'][1] = $m['yes'];
-        $data['verified_mail_data'][2] = $m['no'];
+        $data['verified_mail_data'][1] = $langYes;
+        $data['verified_mail_data'][2] = $langNo;
 
 
         if (isDepartmentAdmin()) {

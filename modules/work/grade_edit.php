@@ -49,7 +49,7 @@ function get_assignment_details($id) {
 // $assign contains an array with the assignment's details
 function show_edit_form($id, $sid, $assign) {
     
-    global $m, $langGradeOk, $tool_content, $course_code, $langCancel,
+    global $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langSubmissionDate,
            $langBack, $assign, $langWorkOnlineText, $course_id, $langGradebookGrade;
     
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
@@ -122,7 +122,7 @@ function show_edit_form($id, $sid, $assign) {
                         </div>
                     </div>
                     <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$m[sub_date]:</label>
+                        <label class='col-sm-3 control-label'>$langSubmissionDate:</label>
                         <div class='col-sm-9'>
                             <span>".q($sub->submission_date)."</span>
                         </div>

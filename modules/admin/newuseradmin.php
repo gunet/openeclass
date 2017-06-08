@@ -283,13 +283,13 @@ if (isset($_GET['id'])) { // if we come from prof request
     }
     $data['params'] = $params = '';
 } elseif (@$_GET['type'] == 'user') {
-    $data['pstatus'] =  $pstatus = 5;
+    $data['pstatus'] =  $pstatus = USER_STUDENT;
     $data['cpf_context'] =  array('origin' => 'student_register');
     $pageName = $langUserDetails;
     $title = $langInsertUserInfo;
     $data['params'] =  $params = "?type=user";
 } else {
-    $data['pstatus'] =  $pstatus = 1;
+    $data['pstatus'] =  $pstatus = USER_TEACHER;
     $data['cpf_context'] = array('origin' => 'teacher_register');
     $pageName = $langProfReg;
     $title = $langNewProf;
@@ -300,7 +300,7 @@ if (isset($_GET['id'])) { // if we come from prof request
 $active_auth_methods = get_auth_active_methods();
 $data['eclass_method_unique'] = $eclass_method_unique = count($active_auth_methods) == 1 && $active_auth_methods[0] == 1;
 
-$data['verified_mail_data'] =  array(0 => $m['pending'], 1 => $m['yes'], 2 => $m['no']);
+$data['verified_mail_data'] =  array(0 => $m['pending'], 1 => $langYes, 2 => $langNo);
 
 $nodePickerParams = array(
     'params' => 'name="department"',

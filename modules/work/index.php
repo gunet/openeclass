@@ -2695,15 +2695,16 @@ function sort_link($title, $opt, $attrib = '') {
  * @global type $langGroupName
  * @global type $langAmShort
  * @global type $langGradebookGrade
+ * @global type $langSubmissionDate
  * @param type $id
  * @param type $display_graph_results
  */
 function show_assignment($id, $display_graph_results = false) {
     global $tool_content, $langNoSubmissions, $langSubmissions,
     $langWorkOnlineText, $langGradeOk, $course_code, $langGradebookGrade,
-    $langGraphResults, $m, $course_code, $works_url, $course_id,
+    $langGraphResults, $m, $course_code, $works_url, $course_id, $langSubmissionDate,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
-    $langAutoJudgeShowWorkResultRpt, $langGroupName, $langAmShort;    
+    $langAutoJudgeShowWorkResultRpt, $langGroupName, $langAmShort;
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
@@ -2807,7 +2808,7 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "</div><div class='col-sm-2'>";
             $assign->submission_type ? $tool_content .= "$langWorkOnlineText" : sort_link($m['filename'], 'filename');
             $tool_content .= "</div><div class='col-sm-2'>";
-            sort_link($m['sub_date'], 'date');
+            sort_link($langSubmissionDate, 'date');
             $tool_content .= "</div><div class='col-sm-1'>";
             sort_link($langGradebookGrade, 'grade');
             $tool_content .= "</div>
@@ -3571,12 +3572,15 @@ function download_assignments($id) {
  * @global type $langAssignment
  * @global type $langAm
  * @global type $langSurnameName
- * @global $langGradebookGrade
+ * @global type $langGradebookGrade
+ * @global typ $langSubmissionDate
  * @param type $path
  * @param type $id
  */
 function create_zip_index($path, $id) {
-        global $charset, $m, $course_id, $langAssignment, $langAm, $langSurnameName, $langGradebookGrade;
+    
+        global $charset, $m, $course_id, $langAssignment, $langAm, 
+                $langSurnameName, $langGradebookGrade, $langSubmissionDate;
 
 
     $fp = fopen($path, "w");
@@ -3601,7 +3605,7 @@ function create_zip_index($path, $id) {
                             <th>' . $langSurnameName . '</th>
                             <th>' . $langAm .  '</th>
                             <th>' . $langAssignment . '</th>
-                            <th>' . $m['sub_date'] . '</th>
+                            <th>' . $langSubmissionDate . '</th>
                             <th>' . $langGradebookGrade . '</th>
 			</tr>');
 

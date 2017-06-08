@@ -228,7 +228,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
     
-    $data['yes_no'] = array(0 => $m['no'], 1 => $m['yes']);
+    $data['yes_no'] = array(0 => $langNo, 1 => $langYes);
     $data['visibility'] = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
     $data['user_type'] = array(CPF_USER_TYPE_PROF => $langsTeachers, CPF_USER_TYPE_STUD => $langStudents, CPF_USER_TYPE_ALL => $langAll);
     
@@ -273,7 +273,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
         $data['fielddescr_rich_text'] =  rich_text_editor('fielddescr', 8, 20, standard_text_escape($result->description));
         
         $data['field_types'] = $field_types = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langCPFLink);
-        $data['yes_no'] = array(0 => $m['no'], 1 => $m['yes']);
+        $data['yes_no'] = array(0 => $langNo, 1 => $langYes);
         $data['visibility'] = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
         $data['user_type'] = array(CPF_USER_TYPE_PROF => $langsTeachers, CPF_USER_TYPE_STUD => $langStudents, CPF_USER_TYPE_ALL => $langAll);
         
@@ -303,7 +303,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
               'level' => 'primary-label')));
     
     $data['field_types'] = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langCPFLink);
-    $data['yes_no'] = array(0 => $m['no'], 1 => $m['yes']);
+    $data['yes_no'] = array(0 => $langNo, 1 => $langYes);
     $data['visibility'] = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
     $data['user_type'] = array(CPF_USER_TYPE_PROF => $langsTeachers, CPF_USER_TYPE_STUD => $langStudents, CPF_USER_TYPE_ALL => $langAll);   
     
