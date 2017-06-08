@@ -2255,7 +2255,6 @@ $m['addgradecomments'] = "Ajouter les commentaires de l'évaluateur";
 $m['delete'] = "Supprimer";
 $m['edit'] = "Modifier";
 $m['start_date'] = "Start date";
-$m['grade'] = "Note";
 $m['am'] = "Numéro d'étudiant";
 $m['yes'] = "Oui";
 $m['no'] = "Non";

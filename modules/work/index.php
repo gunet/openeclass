@@ -31,7 +31,7 @@ $helpTopic = 'Work';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
-require_once 'work_functions.php';
+require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/gradebook/functions.php';
 require_once 'modules/attendance/functions.php';
@@ -2222,7 +2222,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     global $tool_content, $m, $langWorkFile, $langSave, $langSubmit, $uid,
     $langNotice3, $gid, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
-    $langGradeScalesSelect;
+    $langGradebookGrade;
 
     if (!$_SESSION['courses'][$course_code]) {
         return;
@@ -2302,7 +2302,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     }
     $extra = $on_behalf_of ? "
                         <div class='form-group'>
-                            <label class='col-sm-2 control-label'>$m[grade]:</label>
+                            <label class='col-sm-2 control-label'>$langGradebookGrade:</label>
                             <div class='col-sm-10'>
                               $grade_field
                               <input type='hidden' name='on_behalf_of' value='1'>
@@ -2606,11 +2606,12 @@ function sort_link($title, $opt, $attrib = '') {
  * @global type $langGroupName
  * @global type $langPlagiarismCheck
  * @global type $langProgress
+ * @global type $langGradebookGrade
  * @param type $id
  * @param type $display_graph_results
  */
 function show_assignment($id, $display_graph_results = false) {
-    global $tool_content, $m, $langNoSubmissions, $langSubmissions,
+    global $tool_content, $m, $langNoSubmissions, $langSubmissions, $langGradebookGrade,
     $langWorkOnlineText, $langGradeOk, $course_code, $langPlagiarismResult,
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
@@ -2678,7 +2679,7 @@ function show_assignment($id, $display_graph_results = false) {
             sort_link($m['am'], 'am');
             $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename');
             sort_link($m['sub_date'], 'date');
-            sort_link($m['grade'], 'grade');
+            sort_link($langGradebookGrade, 'grade');
             $tool_content .= "<th width='5%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
 
             $i = 1;
@@ -2988,10 +2989,13 @@ function show_non_submitted($id) {
  * @global type $course_code
  * @global type $langTitle
  * @global type $langHasExpiredS
+ * @global type $langGradebookGrade
  */
 function show_student_assignments() {
-    global $tool_content, $m, $uid, $course_id, $course_code, $urlServer, $langHasExpiredS,
-    $langDaysLeft, $langNoAssign, $course_code, $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio;
+    global $tool_content, $m, $uid, $course_id, $course_code, 
+            $urlServer, $langHasExpiredS, $langDaysLeft, 
+            $langNoAssign, $course_code, $langTitle, 
+            $langAddResePortfolio, $langAddGroupWorkSubePortfolio, $langGradebookGrade;
 
     $add_eportfolio_res_td = "";
     
@@ -3022,7 +3026,7 @@ function show_student_assignments() {
                                       <th style='width:45%'>$langTitle</th>
                                       <th class='text-center' style='width:25%'>$m[deadline]</th>
                                       <th class='text-center'>$m[submitted]</th>
-                                      <th class='text-center'>$m[grade]</th>
+                                      <th class='text-center'>$langGradebookGrade</th>
                                       $add_eportfolio_res_th
                                   </tr>";
         $k = 0;
@@ -3206,14 +3210,15 @@ function show_assignments() {
  * @global type $langGrades
  * @global type $course_id
  * @global type $langTheField
- * @global type $m
+ * @global type $langGradebookGrade
  * @global type $course_code
  * @global type $langFormErrors
  * @global type $workPath
  * @param type $args
  */
 function submit_grade_comments($args) {
-    global $langGrades, $course_id, $langTheField, $m, $course_code, $langFormErrors, $workPath;
+    global $langGrades, $course_id, $langTheField, $course_code, 
+            $langFormErrors, $workPath, $langGradebookGrade;
 
     $id = $args['assignment'];
     $sid = $args['submission'];
@@ -3228,7 +3233,7 @@ function submit_grade_comments($args) {
     $v->rule('min', array('grade'), 0);
     $v->rule('max', array('grade'), $assignment->max_grade);
     $v->labels(array(
-        'grade' => "$langTheField $m[grade]"
+        'grade' => "$langTheField $langGradebookGrade"
     ));
     if($v->validate()) {
         $grade = $args['grade'];
@@ -3295,13 +3300,14 @@ function submit_grade_comments($args) {
  * @global type $course_code
  * @global type $langFormErrors
  * @global type $langTheField
- * @global type $m
+ * @global type $langGradebookGrade
  * @param type $grades_id
  * @param type $grades
  * @param type $email
  */
 function submit_grades($grades_id, $grades, $email = false) {
-    global $langGrades, $course_id, $course_code, $langFormErrors, $langTheField, $m;
+    global $langGrades, $course_id, $course_code, $langFormErrors, 
+            $langTheField, $langGradebookGrade;
     
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $grades_id);
     $errors = [];
@@ -3315,7 +3321,7 @@ function submit_grades($grades_id, $grades, $email = false) {
         $v->rule('min', array('grade'), 0);
         $v->rule('max', array('grade'), $assignment->max_grade);
         $v->labels(array(
-            'grade' => "$langTheField $m[grade]"
+            'grade' => "$langTheField $langGradebookGrade"
         ));
         if(!$v->validate()) {
             $valitron_errors = $v->errors();
@@ -3449,7 +3455,7 @@ function download_assignments($id) {
  *
  */
 function create_zip_index($path, $id, $online = FALSE) {
-    global $charset, $m, $course_id,
+    global $charset, $m, $course_id, $langGradebookGrade,
            $langAssignment, $langAm, $langSurnameName;
 
     $fp = fopen($path, "w");
@@ -3475,7 +3481,7 @@ function create_zip_index($path, $id, $online = FALSE) {
 				<th>' . $langAm .  '</th>
 				<th>' . $langAssignment . '</th>
 				<th>' . $m['sub_date'] . '</th>
-				<th>' . $m['grade'] . '</th>
+				<th>' . $langGradebookGrade . '</th>
 			</tr>');
 
     $assign = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
@@ -3545,7 +3551,8 @@ function show_plain_view($id) {
 // Send to single user for individual submissions or group members for group
 // submissions
 function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
-    global $m, $currentCourseName, $urlServer, $course_code;
+    
+    global $m, $currentCourseName, $urlServer, $course_code, $langGradebookGrade;
     static $title, $group;
 
     if (!isset($title)) {
@@ -3559,7 +3566,7 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
     $subject = sprintf($m['work_email_subject'], $title);
     $body = sprintf($m['work_email_message'], $title, $currentCourseName) . "\n\n";
     if ($grade != '') {
-        $body .= ": $m[grade]$grade\n";
+        $body .= ": $langGradebookGrade$grade\n";
     }
     if ($comments) {
         $body .= "$m[gradecomments]: $comments\n";
@@ -3576,7 +3583,7 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
     $body_html_topic_notify = "<!-- Body Section -->
     <div id='mail-body'>
         <br>
-        <div><b>$m[grade]: </b> <span class='left-space'>$grade</span></div><br>
+        <div><b>$langGradebookGrade: </b> <span class='left-space'>$grade</span></div><br>
         <div><b>$m[gradecomments]: </b></div>
         <div id='mail-body-inner'>
             $comments<br><br>

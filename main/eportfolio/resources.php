@@ -510,7 +510,7 @@ if ($userdata) {
                 $submission_content .= "</div>";
                 $submission_content .= "</div>";
                 $submission_content .= "<div><b>$langSubmit</b>: " . nice_format($data['subm_date'], true). "</div>
-                                       <div><b>".$m['grade']."</b>: ".$data['grade']." / ".$data['max_grade']."</div>
+                                       <div><b>$langGradebookGrade</b>: ".$data['grade']." / ".$data['max_grade']."</div>
                                        <div><b>".$m['group_or_user']."</b>: ".$assignment_type."</div>";
                 if (!is_null($data['subm_text'])) {
                     $submission_content .= "<div><b>$langWorkOnlineText</b>: <br>".$data['subm_text']."</div>";

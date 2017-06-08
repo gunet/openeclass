@@ -2122,7 +2122,6 @@ $m['addgradecomments'] = "Add grading comments";
 $m['delete'] = "Delete";
 $m['edit'] = "Modify";
 $m['start_date'] = "Start date";
-$m['grade'] = "Grade";
 $m['am'] = "" . $langStudent . "ID";
 $m['yes'] = "Yes";
 $m['no'] = "No";

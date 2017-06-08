@@ -26,7 +26,7 @@ require_once '../../include/baseTheme.php';
 require_once __DIR__.'/../../include/tcpdf/tcpdf_include.php';
 require_once __DIR__.'/../../include/tcpdf/tcpdf.php';
 
-require_once 'work_functions.php';
+require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 
 $nameTools = $langAutoJudgeDetailedReport;
@@ -88,15 +88,38 @@ function get_submission_rank($assign_id,$grade, $submission_date) {
     return Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE (grade > ?f OR (grade = ?f AND submission_date < ?t)) AND assignment_id = ?d",$grade,$grade, $submission_date,$assign_id)->count+1;
 }
 
+/**
+ * 
+ * @global type $course_code
+ * @global string $tool_content
+ * @global type $langAutoJudgeInput
+ * @global type $langAutoJudgeOutput
+ * @global type $langAutoJudgeExpectedOutput
+ * @global type $langAutoJudgeOperator
+ * @global type $langAutoJudgeWeight
+ * @global type $langAutoJudgeResult
+ * @global type $langAutoJudgeResultsFor
+ * @global type $langAutoJudgeRank
+ * @global type $langAutoJudgeDownloadPdf
+ * @global type $langBack
+ * @global type $langGradebookGrade
+ * @param type $id
+ * @param type $sid
+ * @param type $assign
+ * @param type $sub
+ * @param type $auto_judge_scenarios
+ * @param type $auto_judge_scenarios_output
+ */
 function show_report($id, $sid, $assign,$sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
-    global $m, $course_code,$tool_content, $langAutoJudgeInput, $langAutoJudgeOutput,
+    global $course_code,$tool_content, $langAutoJudgeInput, $langAutoJudgeOutput,
         $langAutoJudgeExpectedOutput, $langAutoJudgeOperator, $langAutoJudgeWeight,
         $langAutoJudgeResult, $langAutoJudgeResultsFor, $langAutoJudgeRank,
-        $langAutoJudgeDownloadPdf, $langBack;
+        $langAutoJudgeDownloadPdf, $langBack, $langGradebookGrade;
+    
     $tool_content = "
-        <table  style=\"table-layout: fixed; width: 99%\" class='table-default'>
+        <table  style='table-layout: fixed; width: 99%' class='table-default'>
         <tr> <td> <b>$langAutoJudgeResultsFor</b>: ".  q(uid_to_name($sub->uid))."</td> </tr>
-        <tr> <td> <b>".$m['grade']."</b>: $sub->grade /$assign->max_grade </td>
+        <tr> <td><b>$langGradebookGrade</b>: $sub->grade /$assign->max_grade </td>
              <td><b> $langAutoJudgeRank</b>: ".get_submission_rank($assign->id,$sub->grade, $sub->submission_date)." </td>
         </tr>
           <tr> <td> <b>$langAutoJudgeInput</b> </td>
@@ -139,8 +162,8 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
 function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
     global $langAutoJudgeInput, $langAutoJudgeOutput,
         $langAutoJudgeExpectedOutput, $langAutoJudgeOperator,
-        $langAutoJudgeWeight, $langAutoJudgeResult,
-        $langCourse, $langAssignment, $langStudent, $langAutoJudgeRank, $m;
+        $langAutoJudgeWeight, $langAutoJudgeResult, $langGradebookGrade,
+        $langCourse, $langAssignment, $langStudent, $langAutoJudgeRank;
 
     // create new PDF document
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -253,7 +276,7 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
         <th>' . $langStudent . '</th><td> '.q(uid_to_name($sub->uid)).'</td>
       </tr>
       <tr>
-        <th>' . $m['grade'] . '</th><td>' . $sub->grade . '/' . $assign->max_grade . '</td>
+        <th>' . $langGradebookGrade . '</th><td>' . $sub->grade . '/' . $assign->max_grade . '</td>
       </tr>
       <tr>
         <th>' . $langAutoJudgeRank . '</th><td>' . get_submission_rank($assign->id, $sub->grade, $sub->submission_date) . '</td>

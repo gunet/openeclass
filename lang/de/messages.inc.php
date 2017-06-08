@@ -2049,7 +2049,6 @@ $m['addgradecomments'] = "Kommentare des Korrektors hinzufügen";
 $m['delete'] = "Löschen";
 $m['edit'] = "Ändern";
 $m['start_date'] = "Anfangsdatum";
-$m['grade'] = "Benotung";
 $m['am'] = "".$langStudent."Identifikationsnummer";
 $m['yes'] = "Ja";
 $m['no'] = "Nein";

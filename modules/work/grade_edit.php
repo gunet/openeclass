@@ -21,7 +21,7 @@
 
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
-require_once 'work_functions.php';
+require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 
 $toolName = $langScore;
@@ -57,13 +57,14 @@ function get_assignment_details($id) {
  * @global type $langWorkOnlineText
  * @global type $course_id
  * @global type $langCommentsFile
+ * @global type $langGradebookGrade
  * @param type $id
  * @param type $sid
  * @param type $assign (contains an array with the assignment's details)
  */
 function show_edit_form($id, $sid, $assign) {
     
-    global $m, $langGradeOk, $tool_content, $course_code, $langCancel,
+    global $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langGradebookGrade,
            $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile;
     
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
@@ -143,7 +144,7 @@ function show_edit_form($id, $sid, $assign) {
                     </div>
                     $submission
                     <div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
-                        <label for='grade' class='col-sm-3 control-label'>$m[grade]:</label>
+                        <label for='grade' class='col-sm-3 control-label'>$langGradebookGrade:</label>
                         <div class='col-sm-4'>
                             $grade_field
                             <span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>

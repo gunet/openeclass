@@ -185,12 +185,13 @@ function was_graded($uid, $id, $ret_val = FALSE) {
  * @global type $course_code
  * @global type $langAutoJudgeEnable
  * @global type $langAutoJudgeShowWorkResultRpt
+ * @global type $langGradebookGrade
  * @param type $id
  */
 function show_submission_details($id) {
     
     global $uid, $m, $langSubmittedAndGraded, $tool_content, $course_code,
-           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt;
+           $langAutoJudgeEnable, $langAutoJudgeShowWorkResultRpt, $langGradebookGrade;
     
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $id);
     if (!$sub) {
@@ -229,7 +230,7 @@ function show_submission_details($id) {
                 </div>
                 <div class='row margin-bottom-fat'>
                     <div class='col-sm-3'>
-                        <strong>" . $m['grade'] . ":</strong>
+                        <strong>" . $langGradebookGrade . ":</strong>
                     </div>
                     <div class='col-sm-9'>" . $sub->grade . "
                     </div>

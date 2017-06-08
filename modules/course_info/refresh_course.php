@@ -29,7 +29,7 @@ $require_course_admin = TRUE;
 $require_login = TRUE;
 
 require_once '../../include/baseTheme.php';
-require_once 'modules/work/work_functions.php';
+require_once 'modules/work/functions.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/log.class.php';
