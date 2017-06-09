@@ -22,10 +22,6 @@
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
 
-// Include the main TCPDF library
-require_once __DIR__.'/../../include/tcpdf/tcpdf_include.php';
-require_once __DIR__.'/../../include/tcpdf/tcpdf.php';
-
 require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 
@@ -93,8 +89,9 @@ function show_report($id, $sid, $assign,$sub, $auto_judge_scenarios, $auto_judge
         $langAutoJudgeExpectedOutput, $langOperator, $langAutoJudgeWeight,
         $langAutoJudgeResult, $langAutoJudgeResultsFor, $langAutoJudgeRank,
         $langAutoJudgeDownloadPdf, $langBack;
+    
     $tool_content = "
-        <table  style=\"table-layout: fixed; width: 99%\" class='table-default'>
+        <table  style='table-layout: fixed; width: 99%' class='table-default'>
         <tr> <td> <b>$langAutoJudgeResultsFor</b>: ".  q(uid_to_name($sub->uid))."</td> </tr>
         <tr> <td> <b>".$m['grade']."</b>: $sub->grade /$assign->max_grade </td>
              <td><b> $langAutoJudgeRank</b>: ".get_submission_rank($assign->id,$sub->grade, $sub->submission_date)." </td>
@@ -161,43 +158,16 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
         $langCourse, $langAssignment, $langStudent, $langAutoJudgeRank;
 
     // create new PDF document
-    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-    // set document information
-    $pdf->SetCreator(PDF_CREATOR);
-    $pdf->SetAuthor(PDF_AUTHOR);
+    $pdf = new mPDF('utf-8', 'A4-L', 0, '', 0, 0, 0, 0, 0, 0);
+    // set document information    
     $pdf->SetTitle('Auto Judge Report');
-    $pdf->SetSubject('Auto Judge Report');
-    // set default header data
-    $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
-
-    // set header and footer fonts
-    $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-
-    // set default monospaced font
-    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-    // set margins
-    $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-    // set auto page breaks
-    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-    // set image scale factor
-    $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-
+    $pdf->SetSubject('Auto Judge Report');        
     // set some language-dependent strings (optional)
     if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
         require_once(dirname(__FILE__).'/lang/eng.php');
         $pdf->setLanguageArray($l);
     }
-
-    // add a page
-    $pdf->AddPage();
-
+    
     $report_table = '
     <style>
     table.first{
@@ -278,8 +248,7 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
       </tr>
     </table>';
 
-    $pdf->writeHTML($report_details, true, false, true, false, '');
-    $pdf->Ln();
-    $pdf->writeHTML($report_table, true, false, true, false, '');
-    $pdf->Output('auto_judge_report_'.q(uid_to_name($sub->uid)).'.pdf', 'D');
+    $pdf->WriteHTML($report_details);    
+    $pdf->WriteHTML($report_table);
+    $pdf->Output('auto_judge_report_'.q(uid_to_name($sub->uid)).'.pdf', 'F');
 }
