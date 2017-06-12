@@ -3492,7 +3492,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `data` TEXT NOT NULL,
                         INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $tbl_options");
 
-        Database::get()->query("INSERT INTO `config` (`key`, `value`) VALUES ('bio_quota', '4')");
+        Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES ('bio_quota', '4')");
 
         if (!DBHelper::fieldExists('user', 'eportfolio_enable')) {
             Database::get()->query("ALTER TABLE `user` ADD eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0");
