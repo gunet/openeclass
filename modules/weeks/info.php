@@ -44,12 +44,12 @@ if (isset($_GET['edit'])) { // display form for editing course unit
         redirect_to_home_page("courses/$course_code/");        
     }
     $weektitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
-    $tagsInput = Tag::tagInput($id);
+    $tagsInput = eClassTag::tagInput($id);
     $weekdescr = $cu->comments;
     $week_id = $cu->id;    
 } else {
     $pageName = $langAddWeek;
-    $tagsInput = Tag::tagInput();
+    $tagsInput = eClassTag::tagInput();
     $weekdescr = $weektitle = '';
 }
 

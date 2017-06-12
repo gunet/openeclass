@@ -19,7 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== 
  */
-require_once 'tag.class.php';
+require_once 'eclasstag.class.php';
 class ModuleElement {
     
     private $course_id;
@@ -64,7 +64,7 @@ class ModuleElement {
     }    
     public function attachTags($tagsArray) {
         foreach ($tagsArray as $tag_name){
-            $tag = new Tag($tag_name);
+            $tag = new eClassTag($tag_name);
             $tag_id = $tag->findOrCreate();
             if($tag_id){
                 Database::get()->query("INSERT INTO `tag_element_module` (`course_id`, `module_id`, `element_id`, `user_id`, `date`, `tag_id`) VALUES (?d, ?d, ?d, ?d, NOW(), ?d)", $this->course_id, $this->module_id, $this->element_id, $this->user_id, $tag_id);    
@@ -73,7 +73,7 @@ class ModuleElement {
     }
     public function detachTags($tagsArray) {
         foreach ($tagsArray as $tag_name){
-            $tag = new Tag($tag_name);
+            $tag = new eClassTag($tag_name);
             $tag_id = $tag->findOrCreate();
             if($tag_id){
                 Database::get()->query("DELETE FROM tag WHERE id IN (?d) AND id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module HAVING count(tag_id)>1)", $tag_id);

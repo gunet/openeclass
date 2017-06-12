@@ -20,7 +20,7 @@
  * ========================================================================
  */
 
-class Tag {
+class eClassTag {
 
     private $id;
     private $name;
@@ -99,7 +99,7 @@ class Tag {
     }
     public function findOrCreate(){
        if($this->name){
-            if($tag = $this->exists()) {
+            if($tag === $this->exists()) {
                 $this->id = $tag->id;
                 return $this->id;
             } else {

@@ -43,12 +43,12 @@ if (isset($_GET['edit'])) { // display form for editing course unit
         redirect_to_home_page("courses/$course_code/");
     } 
     $unittitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
-    $tagsInput = Tag::tagInput($id);
+    $tagsInput = eClassTag::tagInput($id);
     $unitdescr = $cu->comments;
     $unit_id = $cu->id;
 } else {
     $pageName = $langAddUnit;
-    $tagsInput = Tag::tagInput();
+    $tagsInput = eClassTag::tagInput();
     $unitdescr = $unittitle = '';
 }
 

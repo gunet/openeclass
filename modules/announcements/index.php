@@ -700,7 +700,7 @@ if ($is_editor) {
                 <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
         </div>
-        " . Tag::tagInput($AnnouncementToModify) . "
+        " . eClassTag::tagInput($AnnouncementToModify) . "
         <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-10 control-panel'>$langAnnouncementActivePeriod:</label></div>
 
 
