@@ -215,8 +215,8 @@ if ($u) {
             <div class='col-sm-10'>";
         $verified_mail_data = array();
         $verified_mail_data[0] = $m['pending'];
-        $verified_mail_data[1] = $m['yes'];
-        $verified_mail_data[2] = $m['no'];
+        $verified_mail_data[1] = $langYes;
+        $verified_mail_data[2] = $langNo;
 
         $tool_content .= selection($verified_mail_data, "verified_mail", intval($info->verified_mail), "class='form-control'");
         $tool_content .= "</div></div>";

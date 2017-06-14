@@ -40,6 +40,8 @@ $langInCourses = "στο $langsCourse";
 $langInCoursesL = "στο $langsCourse";
 $langOfSite = "της πλατφόρμας";
 $langResourceBrowser = 'Αναζήτηση πόρων';
+$langYes = "Ναι";
+$langNo = "Όχι";
 
 #For the logged-out user:
 $langAboutCourses1 = "Αυτή τη στιγμή, η πλατφόρμα διαθέτει συνολικά";
@@ -3978,8 +3980,6 @@ $m['delete'] = "Διαγραφή";
 $m['edit'] = "Αλλαγή";
 $m['start_date'] = "Ημερομηνία έναρξης";
 $m['am'] = "Αρ. Mητρώου";
-$m['yes'] = "Ναι";
-$m['no'] = "Όχι";
 $m['in'] = "σε";
 $m['from'] = "από";
 $m['today'] = "σήμερα";

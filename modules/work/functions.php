@@ -130,7 +130,7 @@ function find_submissions($is_group_assignment, $uid, $id, $gids) {
 // there is a comment by the professor but no grade, or FALSE if neither
 // grade or professor comment is set
 function submission_grade($subid) {
-    global $m;
+    global $langYes;
 
     $res = Database::get()->querySingle("SELECT grade, grade_comments
                                                 FROM assignment_submit
@@ -140,7 +140,7 @@ function submission_grade($subid) {
         if (!empty($grade)) {
             return $grade;
         } elseif (!empty($res->grade_comments)) {
-            return $m['yes'];
+            return $langYes;
         } else {
             return FALSE;
         }

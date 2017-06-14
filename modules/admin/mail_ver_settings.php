@@ -38,9 +38,9 @@ $tool_content .= action_bar(array(
                     'level' => 'primary-label')
                 ));
 
-$mr = get_config('email_required') ? $m['yes'] : $m['no'];
-$mv = get_config('email_verification_required') ? $m['yes'] : $m['no'];
-$mm = get_config('dont_mail_unverified_mails') ? $m['yes'] : $m['no'];
+$mr = get_config('email_required') ? $langYes : $langNo;
+$mv = get_config('email_verification_required') ? $langYes : $langNo;
+$mm = get_config('dont_mail_unverified_mails') ? $langYes : $langNo;
 
 register_posted_variables(array(
     'submit' => true,

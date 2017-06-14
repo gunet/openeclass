@@ -311,7 +311,7 @@ formGroup('uname_form', $langUsername,
 $active_auth_methods = get_auth_active_methods();
 $eclass_method_unique = count($active_auth_methods) == 1 && $active_auth_methods[0] == 1;
 
-$verified_mail_data = array(0 => $m['pending'], 1 => $m['yes'], 2 => $m['no']);
+$verified_mail_data = array(0 => $m['pending'], 1 => $langYes, 2 => $langNo);
 
 $nodePickerParams = array(
     'params' => 'name="department"',

@@ -5,8 +5,6 @@
 
 $langCourse = "Course";
 $langEclass = "E-Learning Platform";
-$langYes = "Yes";
-$langNo = "No";
 $langTeacher = "Teacher";
 $langOfTeacher = "Teacher";
 $langTeachers = "Teachers";

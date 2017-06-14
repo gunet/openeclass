@@ -42,7 +42,7 @@ if (!empty($auth_data['auth_settings'])) {
     $auth_data['cas_altauth_use'] = 'mobile';
 }
 
-$cas_ssout_data = array(0 => $m['no'], 1 => $m['yes']);
+$cas_ssout_data = array(0 => $langNo, 1 => $langYes);
 
 $cas_altauth_data = array(
     0 => '-',

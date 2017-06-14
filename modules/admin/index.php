@@ -196,7 +196,7 @@ if (get_config('enable_indexing')) {
     $idx = new Indexer();
 
     $numDocs = $idx->getIndex()->numDocs();
-    $isOpt = (!$idx->getIndex()->hasDeletions()) ? $m['yes'] : $m['no'];
+    $isOpt = (!$idx->getIndex()->hasDeletions()) ? $langYes : $langNo;
 
     
     $tool_content .= "

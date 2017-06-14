@@ -71,11 +71,14 @@ if (isset($_GET['submit'])) {
  * @global type $langCancel
  * @global type $urlServer
  * @global type $langTitle
+ * @global type $langYes
+ * @global type $langNo
  * @return type
  */
 function show_assignments() {
     global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content,
-           $langWorks, $course_id, $course_code, $themeimg, $langCancel, $urlServer, $langTitle;
+            $langYes, $langNo, $langWorks, $course_id, $course_code, 
+            $themeimg, $langCancel, $urlServer, $langTitle;
     
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -114,11 +117,11 @@ function show_assignments() {
         $table_content .= "</div></td>\n      <td align=\"center\">";
         $subm = was_submitted($uid, $group_id, $row->id);
         if ($subm == 'user') {
-            $table_content .= $m['yes'];
+            $table_content .= $langYes;
         } elseif ($subm == 'group') {
             $table_content .= $m['by_groupmate'];
         } else {
-            $table_content .= $m['no'];
+            $table_content .= $langNo;
         }
         $table_content .= "</td><td align=\"center\">";
         if ($row->time >= 0 and !was_graded($uid, $row->id) and is_group_assignment($row->id)) {

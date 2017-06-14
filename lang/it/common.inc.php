@@ -5,8 +5,6 @@
 
 $langCourse = "Corso";
 $langEclass = 'Open eClass - Piattaforma di eLearning asincrona';
-$langYes = "Sì";
-$langNo = "No";
 $langTeacher = "Insegnante";
 $langOfTeacher = "dell'Insegnante";
 $langTeachers = "Insegnanti";
