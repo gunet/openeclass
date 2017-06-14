@@ -49,7 +49,8 @@ function setting_default($setting_id) {
         SETTING_GROUP_MULTIPLE_REGISTRATION => 0,
         SETTING_GROUP_STUDENT_DESCRIPTION => 0,
         SETTING_COURSE_FORUM_NOTIFICATIONS => 0,
-        SETTING_DOCUMENTS_PUBLIC_WRITE => 0);
+        SETTING_DOCUMENTS_PUBLIC_WRITE => 0,
+        SETTING_COURSE_ASSIGNMENT_NOTIFY => 0);
     if (isset($defaults[$setting_id])) {
         return $defaults[$setting_id];
     } else {

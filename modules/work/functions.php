@@ -354,6 +354,65 @@ function export_grades_to_csv($id) {
     exit;
 }
 
+/**
+ * @brief notify (via email) course admin about assignment submission
+ * @global type $logo
+ * @global type $langAssignmentPublished
+ * @global type $langAssignmentHasPublished
+ * @global type $urlServer
+ * @global type $course_code
+ * @global type $langSender
+ * @global type $langAssignment
+ * @global type $course_id
+ * @global type $langHasAssignmentPublished
+ * @param type $title
+ */
+function notify_for_assignment_submission($title) {
+    
+    global $logo, $langAssignmentPublished, $langTo, $course_id,
+           $langsCourse, $langHasAssignmentPublished,
+           $urlServer, $course_code, $langSender, $langAssignment;
+            
+    $emailSubject = "$logo - $langAssignmentPublished";
+    $emailHeaderContent = "
+        <!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$langHasAssignmentPublished $langTo $langsCourse <a href='{$urlServer}courses/$course_code/'>" . q(course_id_to_title($course_id)) . "</a>.</div>
+                <ul id='forum-category'>
+                    <li><span><b>$langSender:</b></span> <span class='left-space'>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "</span></li>
+                </ul>
+            </div>
+        </div>";
+
+    $emailBodyContent = "
+        <!-- Body Section -->
+        <div id='mail-body'>
+            <br>                
+            <div><b>$langAssignment:</b> <span class='left-space'>".q($title)."</span></div><br>                
+        </div>";
+    
+    $emailContent = $emailHeaderContent . $emailBodyContent;
+    $emailBody = html2text($emailContent);
+        
+    $profs = Database::get()->queryArray("SELECT user.id AS prof_uid, user.email AS email,
+                              user.surname, user.givenname
+                           FROM course_user JOIN user ON user.id = course_user.user_id
+                           WHERE course_id = ?d AND course_user.status = " . USER_TEACHER . "", $course_id);
+    
+    foreach ($profs as $prof) {
+        if (!get_user_email_notification_from_courses($prof->prof_uid) or (!get_user_email_notification($prof->prof_uid, $course_id))) {
+            continue;
+        } else {
+            $to_name = $prof->givenname . " " . $prof->surname;
+            echo "$_SESSION[givenname] $_SESSION[surname], $_SESSION[email], $to_name, $prof->email, $emailSubject, $emailBody, $emailContent";
+            /*if (!send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $to_name, $prof->email, $emailSubject, $emailBody, $emailContent)) {
+                continue;
+            }*/
+        }
+    }
+}
 
 
 /**

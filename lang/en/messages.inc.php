@@ -2151,7 +2151,7 @@ $m['your_group'] = 'your group';
 $m['this_is_group_assignment'] = 'This is a group assignment.';
 $m['noguest'] = 'To submit work to an assignment you must login as a normal
 	user, not as a guest.';
-$m['one_submission'] = 'One file has been submitted';
+$langHasAssignmentPublished = 'One file has been submitted';
 $m['more_submissions'] = '%d files have been submitteD';
 $m['plainview'] = 'Concise list of submissions and grades';
 $m['WorkInfo'] = 'Assignment info';

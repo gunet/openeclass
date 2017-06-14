@@ -633,7 +633,10 @@ function add_assignment() {
                     $moduleTag = new ModuleElement($id);
                     $moduleTag->attachTags($tagsArray);
                 }
-
+                
+                $notify_submission = isset($_POST['notify_submission']) ? 1 : 0;                
+                setting_set(SETTING_COURSE_ASSIGNMENT_NOTIFY, $notify_submission);
+                
                 $secret = work_secret($id);
 
                 $student_name = canonicalize_whitespace(uid_to_name($uid));
@@ -648,12 +651,7 @@ function add_assignment() {
                     $_FILES['userfile']['name'] = '';
                     $_FILES['userfile']['tmp_name'] = '';
                 } else {
-                    validateUploadedFile($_FILES['userfile']['name'], 2);
-                    if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
-                        $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
-                        $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
-                        return;
-                    }
+                    validateUploadedFile($_FILES['userfile']['name'], 2);                    
                     $ext = get_file_extension($_FILES['userfile']['name']);
                     $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
                     if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
@@ -756,44 +754,37 @@ function edit_assignment($id) {
         $lang                 = isset($_POST['lang']) ? filter_input(INPUT_POST, 'lang') : '';
 
         if ($assign_to_specific == 1 && empty($assigned_to)) {
-             $assign_to_specific = 0;
+            $assign_to_specific = 0;
          }
 
          if (!isset($_POST['comments'])) {
-             $comments = '';
+            $comments = '';
          } else {
-             $comments = purify($_POST['comments']);
+            $comments = purify($_POST['comments']);
          }
 
          if (!isset($_FILES) || !$_FILES['userfile']['size']) {
-             $_FILES['userfile']['name'] = '';
-             $_FILES['userfile']['tmp_name'] = '';
-             $filename = $row->file_path;
-             $file_name = $row->file_name;
+            $_FILES['userfile']['name'] = '';
+            $_FILES['userfile']['tmp_name'] = '';
+            $filename = $row->file_path;
+            $file_name = $row->file_name;
          } else {
-             validateUploadedFile($_FILES['userfile']['name'], 2);
-             if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
-                                'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
-                                'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
-                 $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
-                 $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
-                 return;
-             }
+            validateUploadedFile($_FILES['userfile']['name'], 2);             
             $student_name = trim(uid_to_name($user_id));
             $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
-             $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
-             if (!empty($am)) {
-                 $local_name .= $am;
-             }
-             $local_name = greek_to_latin($local_name);
-             $local_name = replace_dangerous_char($local_name);
-             $secret = $row->secret_directory;
-             $ext = get_file_extension($_FILES['userfile']['name']);
-             $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
-             if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
-                 @chmod("$workPath/admin_files/$filename", 0644);
-                 $file_name = $_FILES['userfile']['name'];
-             }
+            $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
+            if (!empty($am)) {
+                $local_name .= $am;
+            }
+            $local_name = greek_to_latin($local_name);
+            $local_name = replace_dangerous_char($local_name);
+            $secret = $row->secret_directory;
+            $ext = get_file_extension($_FILES['userfile']['name']);
+            $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
+            if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
+                @chmod("$workPath/admin_files/$filename", 0644);
+                $file_name = $_FILES['userfile']['name'];
+            }
          }
          Database::get()->query("UPDATE assignment SET title = ?s, description = ?s,
              group_submissions = ?d, comments = ?s, submission_type = ?d, deadline = ?t, late_submission = ?d, submission_date = ?t, max_grade = ?f,
@@ -811,6 +802,9 @@ function edit_assignment($id) {
             $moduleTag->syncTags($tagsArray);
          }
 
+        $notify_submission = isset($_POST['notify_submission']) ? 1 : 0;                
+        setting_set(SETTING_COURSE_ASSIGNMENT_NOTIFY, $notify_submission);
+         
          if ($assign_to_specific && !empty($assigned_to)) {
              if ($group_submissions == 1) {
                  $column = 'group_id';
@@ -836,6 +830,25 @@ function edit_assignment($id) {
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id&choice=edit");
     }
 }
+
+
+/**
+ * @brief submit assignment
+ * @global type $course_id
+ * @global type $uid
+ * @global type $langOnBehalfOfGroupComment
+ * @global array $works_url
+ * @global type $langOnBehalfOfUserComment
+ * @global type $workPath
+ * @global type $langUploadSuccess
+ * @global type $langUploadError
+ * @global type $course_code
+ * @global type $langAutoJudgeInvalidFileType
+ * @global type $langAutoJudgeScenariosPassed
+ * @global type $is_editor
+ * @param type $id
+ * @param type $on_behalf_of
+ */
 function submit_work($id, $on_behalf_of = null) {
     global $course_id, $uid, $langOnBehalfOfGroupComment,
            $works_url, $langOnBehalfOfUserComment, $workPath,
@@ -892,7 +905,7 @@ function submit_work($id, $on_behalf_of = null) {
             $group_id = 0;
         }
         // If submission type is Online Text
-        if($row->submission_type){
+        if($row->submission_type) {
             $filename = '';
             $file_name = '';
             $success_msgs[] = $langUploadSuccess;
@@ -992,6 +1005,12 @@ function submit_work($id, $on_behalf_of = null) {
                 'filename' => $file_name,
                 'comments' => $stud_comments,
                 'group_id' => $group_id));
+            
+            // notify course admin (if requested)
+            if (setting_get(SETTING_COURSE_ASSIGNMENT_NOTIFY)) {
+                notify_for_assignment_submission($row->title);
+            }
+            
             if ($row->group_submissions) {
                 $group_id = Database::get()->querySingle("SELECT group_id FROM assignment_submit WHERE id = ?d", $sid)->group_id;
                 $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
@@ -1144,6 +1163,7 @@ function submit_work($id, $on_behalf_of = null) {
  * @global type $langAutoJudgeAssertions
  * @global type $langDescription
  * @global type $langType
+ * @global type $langNotifyAssignmentSubmission
  */
 function new_assignment() {
     global $tool_content, $m, $course_code, $course_id,
@@ -1154,7 +1174,7 @@ function new_assignment() {
            $langAutoJudgeInputNotSupported, $langAutoJudgeSum, $langAutoJudgeNewScenario,
            $langAutoJudgeEnable, $langAutoJudgeInput, $langAutoJudgeExpectedOutput,
            $langAutoJudgeOperator, $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage,
-           $langAutoJudgeAssertions, $langDescription, $langTitle;      
+           $langAutoJudgeAssertions, $langDescription, $langTitle, $langNotifyAssignmentSubmission;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -1370,6 +1390,16 @@ function new_assignment() {
                     </div>
                 </div>
                 <div class='form-group'>
+                    <div class='col-xs-10 col-xs-offset-2'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='notify_submission' value='1'>
+                            $langNotifyAssignmentSubmission
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class='form-group'>
                     <label class='col-sm-2 control-label'>$m[group_or_user]:</label>
                     <div class='col-sm-10'>
                         <div class='radio'>
@@ -1558,6 +1588,7 @@ function new_assignment() {
  * @global type $langAutoJudgeProgrammingLanguage
  * @global type $langAutoJudgeAssertions
  * @global type $langTitle
+ * @global type $langNotifyAssignmentSubmission
  * @param type $id
  */
 function show_edit_assignment($id) {
@@ -1569,7 +1600,7 @@ function show_edit_assignment($id) {
         $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales,
         $langLessOptions, $langMoreOptions, $langAutoJudgeInputNotSupported, $langTitle,
         $langAutoJudgeSum, $langAutoJudgeNewScenario, $langAutoJudgeEnable, $langDescription,
-        $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langAutoJudgeOperator,
+        $langAutoJudgeInput, $langAutoJudgeExpectedOutput, $langAutoJudgeOperator, $langNotifyAssignmentSubmission,
         $langAutoJudgeWeight, $langAutoJudgeProgrammingLanguage, $langAutoJudgeAssertions;
 
     load_js('bootstrap-datetimepicker');
@@ -1690,6 +1721,7 @@ function show_edit_assignment($id) {
     $grading_type = Session::has('grading_type') ? Session::get('grading_type') : ($row->grading_scale_id ? 1 : 0);
     $enableWorkStart = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : null;
     $enableWorkEnd = Session::has('enableWorkEnd') ? Session::get('enableWorkEnd') : ($WorkEnd ? 1 : 0);
+    $checked = setting_get(SETTING_COURSE_ASSIGNMENT_NOTIFY) ? 'checked' : '';
     $comments = trim($row->comments);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -1722,7 +1754,7 @@ function show_edit_assignment($id) {
                 </div>
             </div>";
     if (!empty($comments)) {
-    $tool_content .= "<div class='form-group'>
+        $tool_content .= "<div class='form-group'>
                 <label for='desc' class='col-sm-2 control-label'>$m[comments]:</label>
                 <div class='col-sm-10'>
                 " . rich_text_editor('comments', 5, 65, $comments) . "
@@ -1825,6 +1857,16 @@ function show_edit_assignment($id) {
                           <label>
                             <input type='checkbox' id='late_submission' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '').">
                             $m[late_submission_enable]
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-xs-10 col-xs-offset-2'>
+                        <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='notify_submission' value='1' $checked>
+                                $langNotifyAssignmentSubmission
                           </label>
                         </div>
                     </div>
@@ -2607,12 +2649,13 @@ function sort_link($title, $opt, $attrib = '') {
  * @global type $langPlagiarismCheck
  * @global type $langProgress
  * @global type $langGradebookGrade
+ * @global type $langHasAssignmentPublished
  * @param type $id
  * @param type $display_graph_results
  */
 function show_assignment($id, $display_graph_results = false) {
     global $tool_content, $m, $langNoSubmissions, $langSubmissions, $langGradebookGrade,
-    $langWorkOnlineText, $langGradeOk, $course_code, $langPlagiarismResult,
+    $langWorkOnlineText, $langGradeOk, $course_code, $langPlagiarismResult, $langHasAssignmentPublished,
     $langGraphResults, $m, $course_code, $works_url, $course_id, $langDownloadToPDF,
     $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange,
     $langAutoJudgeShowWorkResultRpt, $langGroupName, $langPlagiarismCheck, $langProgress;
@@ -2644,7 +2687,7 @@ function show_assignment($id, $display_graph_results = false) {
                                  WHERE assignment_id = ?d ", $id)->count_of_assignments;    
     if ($count_of_assignments > 0) {
         if ($count_of_assignments == 1) {
-            $num_of_submissions = $m['one_submission'];
+            $num_of_submissions = $langHasAssignmentPublished;
         } else {
             $num_of_submissions = sprintf("$m[more_submissions]", $count_of_assignments);
         }
@@ -2893,10 +2936,20 @@ function show_assignment($id, $display_graph_results = false) {
                       <div class='alert alert-warning'>$langNoSubmissions</div>";
     }
 }
-
+/**
+ * @global type $tool_content
+ * @global array $works_url
+ * @global type $course_id
+ * @global type $m
+ * @global type $langGroup
+ * @global type $course_code
+ * @global type $langHasAssignmentPublished
+ * @param type $id
+ */
 function show_non_submitted($id) {
-    global $tool_content, $works_url, $course_id, $m, $langSubmissions,
-            $langGroup, $course_code;
+    global $tool_content, $works_url, $course_id, $m,
+            $langGroup, $course_code, $langHasAssignmentPublished;
+    
     $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
                                 WHERE course_id = ?d AND id = ?d", $course_id, $id);
@@ -2908,7 +2961,7 @@ function show_non_submitted($id) {
         $num_results = count($groups);
         if ($num_results > 0) {
             if ($num_results == 1) {
-                $num_of_submissions = $m['one_submission'];
+                $num_of_submissions = $langHasAssignmentPublished;
             } else {
                 $num_of_submissions = sprintf("$m[more_submissions]", $num_results);
             }
