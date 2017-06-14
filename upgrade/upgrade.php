@@ -3491,15 +3491,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `user` ADD eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0");
         }
         
-        // upgrade table `assignment_submit`
-        if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filename')) {
-            Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filename VARCHAR(200) NOT NULL DEFAULT ''
-                                AFTER grade_comments");
-        }
         if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
                                 AFTER grade_comments");
         }
+        // upgrade table `assignment`
+        if (!DBHelper::fieldExists('assignment', 'notification')) {
+            Database::get()->query("ALTER TABLE assingment ADD notification tinyint(4) DEFAULT 0");
+        }
+        if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
+            Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
+                                AFTER grade_comments");
+        }                
 
         // plagiarism tool table
         if (!DBHelper::tableExists('ext_plag_connection')) {
