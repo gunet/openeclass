@@ -4032,7 +4032,6 @@ $m['group_assignment_publish'] = 'Μπορείτε να στείλετε κάπ�
 $m['group_assignment_no_groups'] = 'Θα πρέπει <a href="%s">να εγγραφείτε σε κάποια
         ομάδα</a> πριν μπορέσετε να υποβάλετε κάποιο αρχείο.';
 $m['noguest'] = 'Για να αποστείλετε εργασία πρέπει να συνδεθείτε ως κανονικός χρήστης.';
-$m['one_submission'] = 'Έχει υποβληθεί μία εργασία';
 $m['one_non_submission'] = 'Δεν έχει υποβληθεί μία εργασία';
 $m['more_submissions'] = 'Έχουν υποβληθεί %d εργασίες';
 $m['more_non_submissions'] = 'Δεν έχουν υποβληθεί %d εργασίες';
@@ -4146,6 +4145,9 @@ $langOnBehalfOfGroupComment = 'Υποβλήθηκε από: %s, εκ μέρου�
 $langDelWarnUserAssignment = 'Επιβεβαίωση διαγραφής εργασίας ' . $langOfUser;
 $langMyPersoDeadlines = "Οι διορίες μου";
 $langAssignmentWillBeActive = 'Η εργασία θα είναι ενεργή στις';
+$langNotifyAssignmentSubmission = "Να ειδοποιηθώ (μέσω email) όταν γίνεται υποβολή εργασίας";
+$langAssignmentPublished = "Υποβολή εργασίας";
+$langHasAssignmentPublished = 'Έχει υποβληθεί μία εργασία';
 $langExportGrades = "Εξαγωγή βαθμολογιών";
 
 /* * ***********************************************************
