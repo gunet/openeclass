@@ -614,7 +614,7 @@ draw($tool_content, 2, null, $head_content);
  * @return type
  */
 function add_assignment() {
-    global $tool_content, $workPath, $course_id, $uid, $langTheField, $m, $langTitle,
+    global $workPath, $course_id, $uid, $langTheField, $m, $langTitle,
         $course_code, $langFormErrors, $langNewAssignSuccess, $langScales;
 
     $v = new Valitron\Validator($_POST);
@@ -638,6 +638,7 @@ function add_assignment() {
         $submission_type = $_POST['submission_type'];
         $late_submission = isset($_POST['late_submission']) ? 1 : 0;
         $group_submissions = $_POST['group_submissions'];
+        $notify_submission = isset($_POST['notify_submission']) ? 1 : 0;
         if (isset($_POST['scale'])) {
             $max_grade = max_grade_from_scale($_POST['scale']);
             $grading_scale_id = $_POST['scale'];
@@ -655,10 +656,9 @@ function add_assignment() {
         if ($assign_to_specific == 1 && empty($assigned_to)) {
             $assign_to_specific = 0;
         }
-        if (make_dir("$workPath/$secret") and make_dir("$workPath/admin_files/$secret")) {
-            $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_type, submission_date, secret_directory, group_submissions, max_grade, grading_scale_id, assign_to_specific, auto_judge, auto_judge_scenarios, lang) "
-                    . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?f, ?d, ?d, ?d, ?s, ?s)", $course_id, $title, $desc, $deadline, $late_submission, '', $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $grading_scale_id, $assign_to_specific, $auto_judge, $auto_judge_scenarios, $lang)->lastInsertID;
-
+        if (make_dir("$workPath/$secret") and make_dir("$workPath/admin_files/$secret")) {           
+            $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_type, submission_date, secret_directory, group_submissions, max_grade, grading_scale_id, assign_to_specific, auto_judge, auto_judge_scenarios, lang, notification) "
+                    . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?f, ?d, ?d, ?d, ?s, ?s, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $grading_scale_id, $assign_to_specific, $auto_judge, $auto_judge_scenarios, $lang, $notify_submission)->lastInsertID;
             if ($id) {
                 // tags
                 if (isset($_POST['tags'])) {
@@ -816,12 +816,16 @@ function edit_assignment($id) {
                 $file_name = $_FILES['userfile']['name'];
             }
          }
+         $notify_submission = isset($_POST['notify_submission']) ? 1 : 0;
          Database::get()->query("UPDATE assignment SET title = ?s, description = ?s,
              group_submissions = ?d, comments = ?s, submission_type = ?d, deadline = ?t, late_submission = ?d, submission_date = ?t, max_grade = ?f,
              grading_scale_id = ?d, assign_to_specific = ?d, file_path = ?s, file_name = ?s,
-             auto_judge = ?d, auto_judge_scenarios = ?s, lang = ?s
+             auto_judge = ?d, auto_judge_scenarios = ?s, lang = ?s, notification = ?d 
              WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions,
-             $comments, $submission_type, $deadline, $late_submission, $submission_date, $max_grade, $grading_scale_id, $assign_to_specific, $filename, $file_name, $auto_judge, $auto_judge_scenarios, $lang, $course_id, $id);
+                $comments, $submission_type, $deadline, $late_submission, 
+                $submission_date, $max_grade, $grading_scale_id, $assign_to_specific, 
+                $filename, $file_name, $auto_judge, $auto_judge_scenarios, 
+                $lang, $notify_submission, $course_id, $id);
 
          Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
 
@@ -884,10 +888,11 @@ function submit_work($id, $on_behalf_of = null) {
     
     $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type,
                             deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
-                            auto_judge, auto_judge_scenarios, lang, max_grade
+                            auto_judge, auto_judge_scenarios, lang, max_grade, notification 
                             FROM assignment
                             WHERE course_id = ?d AND id = ?d",
                             $course_id, $id);
+    $notification = $row->notification;
     $auto_judge = $row->auto_judge;
     $auto_judge_scenarios = ($auto_judge == true) ? unserialize($row->auto_judge_scenarios) : null;
     $lang = $row->lang;
@@ -1032,6 +1037,11 @@ function submit_work($id, $on_behalf_of = null) {
                 'filename' => $file_name,
                 'comments' => $stud_comments,
                 'group_id' => $group_id));
+
+            // notify course admin (if requested)            
+            if ($notification) {
+                notify_for_assignment_submission($row->title);
+            }
             if ($row->group_submissions) {
                 $group_id = Database::get()->querySingle("SELECT group_id FROM assignment_submit WHERE id = ?d", $sid)->group_id;
                 $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
@@ -1710,6 +1720,7 @@ function show_edit_assignment($id) {
     $grading_type = Session::has('grading_type') ? Session::get('grading_type') : ($row->grading_scale_id ? 1 : 0);
     $enableWorkStart = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : null;
     $enableWorkEnd = Session::has('enableWorkEnd') ? Session::get('enableWorkEnd') : ($WorkEnd ? 1 : 0);
+    $checked = $row->notification ? 'checked' : '';
     $comments = trim($row->comments);
     $tool_content .= action_bar(array(
         array('title' => $langBack,

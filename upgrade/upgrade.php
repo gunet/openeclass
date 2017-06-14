@@ -3686,6 +3686,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         KEY `userid` (`bbbuserid`),
                         KEY `fullName` (`fullName`)
                     ) $tbl_options");
+        
+        // upgrade table `assignment`
+        if (!DBHelper::fieldExists('assignment', 'notification')) {
+            Database::get()->query("ALTER TABLE assingment ADD notification tinyint(4) DEFAULT 0");
+        }
     }
 
     // update eclass version
