@@ -77,7 +77,8 @@ if (isset($_GET['submit'])) {
  * @return type
  */
 function show_assignments() {
-    global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content, $langYes,
+
+    global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content, $langYes, $langNo,
            $langWorks, $course_id, $course_code, $themeimg, $langCancel, $urlServer, $langTitle;
     
     $gids = user_group_info($uid, $course_id);
@@ -103,8 +104,7 @@ function show_assignments() {
         if (!$row->active) {
             continue;
         }
-
-        $table_content .= "<tr><td width=\"1%\">
+        $table_content .= "<tr><td width='1%'>
 			<img style='padding-top:2px;' src='$themeimg/arrow.png' alt=''></td>
 			<td><div align='left'><a href='index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a></td>
 			<td align='center'>" . nice_format($row->deadline);
@@ -114,7 +114,7 @@ function show_assignments() {
                             $table_content .= "<br> (<small><span class='expired'>$m[expired]</span></small>)";
                         }
 
-        $table_content .= "</div></td>\n      <td align=\"center\">";
+        $table_content .= "</div></td><td align='center'>";
         $subm = was_submitted($uid, $group_id, $row->id);
         if ($subm == 'user') {
             $table_content .= $langYes;
@@ -123,13 +123,13 @@ function show_assignments() {
         } else {
             $table_content .= $langNo;
         }
-        $table_content .= "</td><td align=\"center\">";
+        $table_content .= "</td><td align='center'>";
         if ($row->time >= 0 and !was_graded($uid, $row->id) and is_group_assignment($row->id)) {
             $table_content .= "<input type='radio' name='assign' value='$row->id'>";
         } else {
             $table_content .= '-';
         }
-        $table_content .= "</td>\n    </tr>";
+        $table_content .= "</td></tr>";
     }
     $tool_content .= "
             <div class='form-wrapper'>

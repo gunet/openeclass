@@ -4,8 +4,6 @@
 // Generated 2015-02-12 11:04:32
 
 $langEclass = "Open eClass - die asynchrone E-Learning Plattform";
-$langYes = "Ja";
-$langNo = "Nein";
 $langTeacher = "Dozent";
 $langOfTeacher = "Dozenten";
 $langTeachers = "Dozenten";

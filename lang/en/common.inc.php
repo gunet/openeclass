@@ -4,8 +4,6 @@
 // Generated 2016-01-25 15:39:15
 
 $langEclass = "E-Learning Platform";
-$langYes = "Yes";
-$langNo = "No";
 $langTeacher = "Teacher";
 $langOfTeacher = "Teacher";
 $langTeachers = "Teachers";

@@ -20,6 +20,8 @@
  * ======================================================================== */
 
 $langLocale = 'el_GR.UTF-8';
+$langYes = "Ναι";
+$langNo = "Όχι";
 $langIntro = "Η πλατφόρμα <strong>$siteName</strong> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών $langOfCourses και υποστηρίζει την Υπηρεσία Ασύγχρονης Τηλεκπαίδευσης στο <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Έκδοση";
 $langAboutText = "Η έκδοση της πλατφόρμας είναι";

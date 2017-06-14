@@ -4,8 +4,6 @@
 // Generated 2015-02-12 11:04:34
 
 $langEclass = 'Open eClass - Piattaforma di eLearning asincrona';
-$langYes = "Sì";
-$langNo = "No";
 $langTeacher = "Insegnante";
 $langOfTeacher = "dell'Insegnante";
 $langTeachers = "Insegnanti";

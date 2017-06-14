@@ -15,8 +15,9 @@ $langLast30daysLogins = "Nombre total de connexions à la plateforme pendant les
 $langTotalCourses = "Nombre de cours";
 $langInfo = "Fiche d'identité de la plateforme";
 $langAboutCourses = "La plateforme supporte au total";
-$langAboutUsers = "Sur la plateforme il y a actuellement"
-;
+$langAboutUsers = "Sur la plateforme il y a actuellement";
+$langYes = "Oui";
+$langNo = "Non";
 $langOperation = "Opération";
 $langAboutCourses1 = "En ce moment, la plateforme comporte au total";
 $langAboutUsers1 = "Les utilisateurs inscrits sont ";
@@ -25,8 +26,7 @@ $langAnd = "et";
 $langCoursesHeader = "Cours";
 $langClosed = "fermés";
 $langOpen = "ouverts";
-$langSemiopen = "sur inscription"
-;
+$langSemiopen = "sur inscription";
 $langUsers = "Utilisateurs";
 $langUsersS = "utilisateurs";
 $langUser = "Utilisateur";
@@ -67,17 +67,13 @@ $langNoReport = "Il n'y a pas de données mensuelles disponibles";
 $langEmailNotSend = "Erreur lors d'un envoi e-mail à l'adresse";
 $langFound = "Ont été trouvés";
 $langFoundIt = "a été trouvé";
-$langListCours = "Liste des cours/Actions"
-;
+$langListCours = "Liste des cours/Actions";
 $langListUsersActions = "Liste d'utilisateurs/Actions";
 $langSearchUser = "Rechercher un utilisateur";
 $langInfoMail = "E-mail d'information";
-$langProfReg = "Inscription $langTeacher"
-;
-$langProfOpen = "Demandes d(e) $langTeachers"
-;
-$langUserOpen = "Demandes d(e) $langStudents"
-;
+$langProfReg = "Inscription $langTeacher";
+$langProfOpen = "Demandes d(e) $langTeachers";
+$langUserOpen = "Demandes d(e) $langStudents";
 $langPHPInfo = "Informations sur PHP";
 $langManuals = "Manuels disponibles";
 $langFormatPDF = "Format PDF";
@@ -2261,8 +2257,6 @@ $m['edit'] = "Modifier";
 $m['start_date'] = "Start date";
 $m['grade'] = "Note";
 $m['am'] = "Numéro d'étudiant";
-$m['yes'] = "Oui";
-$m['no'] = "Non";
 $m['in'] = "in";
 $m['today'] = "aujourd'hui";
 $m['tomorrow'] = "demain";
