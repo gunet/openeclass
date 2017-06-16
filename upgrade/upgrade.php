@@ -3423,6 +3423,104 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query('ALTER TABLE unit_resources
                 ADD UNIQUE KEY `unit_resources_order` (`unit_id`,`order`)');
         }
+
+        // fix wrong entries in statistics
+        Database::get()->query("UPDATE actions_daily SET module_id = " .MODULE_ID_VIDEO . " WHERE module_id = 0");
+        
+        // hierarchy extra fields
+        if (!DBHelper::fieldExists('hierarchy', 'description') or (!DBHelper::fieldExists('hierarchy', 'visible'))) {
+            Database::get()->query("ALTER TABLE hierarchy ADD `description` TEXT AFTER name");
+            Database::get()->query("ALTER TABLE hierarchy ADD `visible` tinyint(4) not null default 2 AFTER order_priority");
+
+            Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
+            Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
+                        IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
+                        IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4))
+                    LANGUAGE SQL
+                    BEGIN
+                        DECLARE lft, rgt INT(11);
+
+                        SET lft = parentlft + 1;
+                        SET rgt = parentlft + 2;
+
+                        CALL shift_right(parentlft, 2, 0);
+
+                        INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible);
+                    END");
+            Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
+            Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
+            Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8, IN p_description TEXT CHARSET utf8,
+                        IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
+                        IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
+                        IN p_order_priority INT(11), IN p_visible TINYINT(4))
+                    LANGUAGE SQL
+                    BEGIN
+                        UPDATE `hierarchy` SET name = p_name, description = p_description, lft = p_lft, rgt = p_rgt,
+                            code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
+                            order_priority = p_order_priority, visible = p_visible WHERE id = p_id;
+
+                        IF nodelft <> parentlft THEN
+                            CALL move_nodes(nodelft, p_lft, p_rgt);
+                        END IF;
+                    END");
+        }
+        
+        // fix invalid agenda durations
+        Database::get()->queryFunc("SELECT DISTINCT duration FROM agenda WHERE duration NOT LIKE '%:%'",
+            function ($item) {
+                $d = $item->duration;
+                if (preg_match('/(\d*)[.,:](\d+)/', $d, $matches)) {
+                    $fixed = sprintf('%02d:%02d', intval($matches[0]), intval($matches[1]));
+                } else {
+                    $val = intval($d);
+                    if ($val <= 10) {
+                        $fixed = sprintf('%02d:00', $val);
+                    } else {
+                        $h = floor($val / 60);
+                        $m = $val % 60;
+                        $fixed = sprintf('%02d:%02d', $h, $m);
+                    }
+                }
+                Database::get()->query('UPDATE agenda
+                    SET duration = ?s WHERE duration = ?s', $fixed, $d);
+            });        
+    }
+    
+    
+    if (version_compare($oldversion, '3.5.1', '<')) {
+        // FAQ, E-book and learning path unique indexes
+        if (!DBHelper::indexExists('faq', 'faq_order')) {
+            Database::get()->query('ALTER TABLE faq
+                ADD UNIQUE KEY `faq_order` (`order`)');
+        }
+        if (!DBHelper::indexExists('ebook', 'ebook_order')) {
+            Database::get()->query('ALTER TABLE ebook
+                ADD UNIQUE KEY `ebook_order` (`course_id`, `order`)');
+        }
+        if (!DBHelper::indexExists('lp_learnPath', 'learnPath_order')) {
+            Database::get()->query('ALTER TABLE lp_learnPath
+                ADD UNIQUE KEY `learnPath_order` (`course_id`, `rank`)');
+        }
+    }
+    
+    if (version_compare($oldversion, '3.6', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.6'));
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `order` INT(11) NOT NULL DEFAULT 0,
+            `heading` TEXT NOT NULL,
+            `required` BOOL NOT NULL DEFAULT 0) $tbl_options");
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_content` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `course_id` INT(11) NOT NULL,
+            `heading_id` INT(11) NOT NULL DEFAULT 0,
+            `content` TEXT NOT NULL,
+            FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+            FOREIGN KEY (heading_id) REFERENCES activity_heading(id) ON DELETE CASCADE,
+            UNIQUE KEY `heading_course` (`course_id`,`heading_id`)) $tbl_options");        
+        
+        
         //eportfolio tables and data
         if (!DBHelper::tableExists('eportfolio_fields')) {
             Database::get()->query("CREATE TABLE `eportfolio_fields` (
@@ -3501,50 +3599,74 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('user', 'public_blog')) {
             Database::get()->query("ALTER TABLE `user` ADD public_blog TINYINT(1) NOT NULL DEFAULT 0");
         }
+                
+        // bbb attendance tables
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
+                        `id` int(11) NOT NULL DEFAULT '0',
+                        `meetingid` varchar(20) NOT NULL,
+                        `bbbuserid` varchar(20) DEFAULT NULL,
+                        `totaltime` int(11) NOT NULL DEFAULT '0',
+                        `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                        PRIMARY KEY (`id`,`meetingid`),
+                        KEY `id` (`id`),
+                        KEY `meetingid` (`meetingid`)
+                    ) $tbl_options");
 
-        // fix wrong entries in statistics
-        Database::get()->query("UPDATE actions_daily SET module_id = " .MODULE_ID_VIDEO . " WHERE module_id = 0");
-
-
-        // hierarchy extra fields
-
-        if (!DBHelper::fieldExists('hierarchy', 'description') or (!DBHelper::fieldExists('hierarchy', 'visible'))) {
-            Database::get()->query("ALTER TABLE hierarchy ADD `description` TEXT AFTER name");
-            Database::get()->query("ALTER TABLE hierarchy ADD `visible` tinyint(4) not null default 2 AFTER order_priority");
-
-            Database::get()->query("DROP PROCEDURE IF EXISTS `add_node`");
-            Database::get()->query("CREATE PROCEDURE `add_node` (IN name TEXT CHARSET utf8, IN description TEXT CHARSET utf8, IN parentlft INT(11),
-                        IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN,
-                        IN p_allow_user BOOLEAN, IN p_order_priority INT(11), IN p_visible TINYINT(4))
-                    LANGUAGE SQL
-                    BEGIN
-                        DECLARE lft, rgt INT(11);
-
-                        SET lft = parentlft + 1;
-                        SET rgt = parentlft + 2;
-
-                        CALL shift_right(parentlft, 2, 0);
-
-                        INSERT INTO `hierarchy` (name, description, lft, rgt, code, allow_course, allow_user, order_priority, visible) VALUES (name, description, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority, p_visible);
-                    END");
-            Database::get()->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-            Database::get()->query("DROP PROCEDURE IF EXISTS `update_node`");
-            Database::get()->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT CHARSET utf8, IN p_description TEXT CHARSET utf8,
-                        IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-                        IN p_code VARCHAR(20) CHARSET utf8, IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN,
-                        IN p_order_priority INT(11), IN p_visible TINYINT(4))
-                    LANGUAGE SQL
-                    BEGIN
-                        UPDATE `hierarchy` SET name = p_name, description = p_description, lft = p_lft, rgt = p_rgt,
-                            code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
-                            order_priority = p_order_priority, visible = p_visible WHERE id = p_id;
-
-                        IF nodelft <> parentlft THEN
-                            CALL move_nodes(nodelft, p_lft, p_rgt);
-                        END IF;
-                    END");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_log` (
+                        `id` int(11) NOT NULL,
+                        `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                        `meetingid` varchar(20) NOT NULL,
+                        `bbbuserid` varchar(20) DEFAULT NULL,
+                        `fullName` varchar(200) DEFAULT NULL,
+                        `type` varchar(255) default 'bbb',
+                        PRIMARY KEY (`id`),
+                        KEY `userid` (`bbbuserid`),
+                        KEY `fullName` (`fullName`)
+                    ) $tbl_options");
+                        
+        // upgrade assignments        
+        if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
+            Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
+                                AFTER grade_comments");
+        }        
+        if (!DBHelper::fieldExists('assignment', 'notification')) {
+            Database::get()->query("ALTER TABLE assingment ADD notification tinyint(4) DEFAULT 0");
         }
-        // Gamification Tables
+        if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
+            Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
+                                AFTER grade_comments");
+        }        
+        
+        // Course Category tables
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `category` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` TEXT NOT NULL,
+            `ordering` INT(11),
+            `multiple` BOOLEAN NOT NULL DEFAULT TRUE,
+            `searchable` BOOLEAN NOT NULL DEFAULT TRUE,
+            `active` BOOLEAN NOT NULL DEFAULT TRUE
+            ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `category_value` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `category_id` INT(11) NOT NULL REFERENCES category(id),
+            `name` TEXT NOT NULL,
+            `ordering` INT(11),
+            `active` BOOLEAN NOT NULL DEFAULT TRUE
+            ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `course_category` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `course_id` INT(11) NOT NULL REFERENCES course(id),
+            `category_value_id` INT(11) NOT NULL REFERENCES category_value(id)
+            ) $tbl_options");
+    }
+    
+    
+    if (version_compare($oldversion, '3.7', '<')) {
+        updateInfo(-1, sprintf($langUpgForVersion, '3.7'));
+    
+        // Gamification Tables (aka certificate + badge)
         Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate_template` (
             `id` mediumint(8) not null auto_increment,
             `name` varchar(255) not null,
@@ -3663,34 +3785,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           foreign key (`user`) references `user`(`id`),
           foreign key (`badge_criterion`) references `badge_criterion`(`id`)
         ) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
-                        `id` int(11) NOT NULL DEFAULT '0',
-                        `meetingid` varchar(20) NOT NULL,
-                        `bbbuserid` varchar(20) DEFAULT NULL,
-                        `totaltime` int(11) NOT NULL DEFAULT '0',
-                        `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        PRIMARY KEY (`id`,`meetingid`),
-                        KEY `id` (`id`),
-                        KEY `meetingid` (`meetingid`)
-                    ) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_log` (
-                        `id` int(11) NOT NULL,
-                        `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                        `meetingid` varchar(20) NOT NULL,
-                        `bbbuserid` varchar(20) DEFAULT NULL,
-                        `fullName` varchar(200) DEFAULT NULL,
-                        `type` varchar(255) default 'bbb',
-                        PRIMARY KEY (`id`),
-                        KEY `userid` (`bbbuserid`),
-                        KEY `fullName` (`fullName`)
-                    ) $tbl_options");
-        
-        // upgrade table `assignment`
-        if (!DBHelper::fieldExists('assignment', 'notification')) {
-            Database::get()->query("ALTER TABLE assingment ADD notification tinyint(4) DEFAULT 0");
-        }
     }
 
     // update eclass version
