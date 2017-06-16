@@ -3497,7 +3497,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         // upgrade table `assignment`
         if (!DBHelper::fieldExists('assignment', 'notification')) {
-            Database::get()->query("ALTER TABLE assingment ADD notification tinyint(4) DEFAULT 0");
+            Database::get()->query("ALTER TABLE assignment ADD notification tinyint(4) DEFAULT 0");
         }
         if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
