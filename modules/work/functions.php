@@ -405,11 +405,10 @@ function notify_for_assignment_submission($title) {
         if (!get_user_email_notification_from_courses($prof->prof_uid) or (!get_user_email_notification($prof->prof_uid, $course_id))) {
             continue;
         } else {
-            $to_name = $prof->givenname . " " . $prof->surname;
-            echo "$_SESSION[givenname] $_SESSION[surname], $_SESSION[email], $to_name, $prof->email, $emailSubject, $emailBody, $emailContent";
-            /*if (!send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $to_name, $prof->email, $emailSubject, $emailBody, $emailContent)) {
+            $to_name = $prof->givenname . " " . $prof->surname;            
+            if (!send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $to_name, $prof->email, $emailSubject, $emailBody, $emailContent)) {
                 continue;
-            }*/
+            }
         }
     }
 }
