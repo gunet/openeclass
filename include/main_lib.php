@@ -257,7 +257,7 @@ function load_js($file, $init='') {
             $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
             $file = 'datatables/media/js/dataTables.bootstrap.js';
         } elseif ($file == 'jszip') {
-            $file = 'jszip/dist/jszip.js';
+            $file = 'jszip/dist/jszip.min.js';
         } elseif ($file == 'pdfmake') {
             $file = 'pdfmake/build/pdfmake.js';
         } elseif ($file == 'vfs_fonts') {
