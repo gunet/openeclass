@@ -115,7 +115,7 @@ $head_content .= "<style>
 </style>";
 
 $pageName = $langUsage;
-if (isset($_GET['per_course_dur'])) {
+if (isset($_GET['per_course_dur'])) {   
     $tool_content .= action_bar(array(
         array('title' => $langPersonalStats,
             'url' => "../usage/?t=u",
@@ -131,12 +131,12 @@ if (isset($_GET['per_course_dur'])) {
         $tool_content .= user_duration_per_course($_REQUEST['u']);
         $tool_content .= user_last_logins($_REQUEST['u']);
     }
-} else {    
+} else {
     if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)) {        
         require_once 'modules/usage/course.php';
-    } elseif($stats_type == 'admin' && $is_admin){
+    } elseif($stats_type == 'admin' && $is_admin){        
         require_once 'modules/usage/admin.php';
-    } else {
+    } else {        
         require_once 'modules/usage/user.php';
         $stats_type = 'user';
     }
