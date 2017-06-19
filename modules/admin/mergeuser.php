@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.6
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,9 +20,9 @@
  * ======================================================================== */
 
 
-/** 
+/**
   @file mergeuser.php
-  @Description: Merge two users  
+  @Description: Merge two users
  */
 
 $require_usermanage_user = true;
@@ -36,8 +36,13 @@ $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions)
 if (isset($_REQUEST['u'])) {
     $u = intval($_REQUEST['u']);
     $navigation[] = array('url' => "edituser.php?u=$u", 'name' => $langEditUser);
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => "edituser.php?u=$u",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
     if ($u == 1 or get_admin_rights($u) >= 0) {
-        $tool_content = "<div class='alert alert-danger'>$langUserMergeAdminForbidden</div>";
+        $tool_content .= "<div class='alert alert-danger'>$langUserMergeAdminForbidden</div>";
         draw($tool_content, 3);
         exit;
     }
@@ -48,32 +53,34 @@ if (isset($_REQUEST['u'])) {
         $legend = q(sprintf($langUserMergeLegend, $info['username']));
         $status_names = array(USER_GUEST => $langGuest, USER_TEACHER => $langTeacher, USER_STUDENT => $langStudent);
         $target = false;
-        
+
         $pageName = $legend;
-        $tool_content .= action_bar(array(            
-            array('title' => $langBack,
-                'url' => "index.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary')));
-        
+
         if (isset($_POST['target'])) {
             $target = Database::get()->querySingle("SELECT * FROM user WHERE username COLLATE utf8_bin = ?s", $_POST['target']);
-            if ($target)
-                $target = (array) $target;
-            else
+            if ($target) {
+                if ($target->id == $u) {
+                    $target = false;
+                    Session::Messages($langMergeUserWithSelf, 'alert-warning');
+                } else {
+                    $target = (array) $target;
+                }
+            } else {
                 $target = false;
+                Session::Messages(q(sprintf($langChangeUserNotFound, $_POST['target'])), 'alert-warning');
+            }
         }
         $target_field = $target_user_input = '';
         $submit_button = $langSearch;
         if ($target) {
             $target_auth_id = isset($auth_ids[$target['password']]) ? $auth_ids[$target['password']] : 1;
             $target_field .= "<div class='form-group'><label class='col-sm-3 control-label'>$langUserMergeTarget:</label>
-                                              <div class='col-sm-9'>" . display_user($target['id']) .
-                    " (" . q($target['username']) . ")</div></div>
+                                              <div class='col-sm-9'><p class='form-control-static'>" . display_user($target['id']) .
+                    " (" . q($target['username']) . ")</p></div></div>
                                     <div class='form-group'><label class='col-sm-3 control-label'>$langEditAuthMethod:</label>
-                                              <div class='col-sm-9'>" . get_auth_info($target_auth_id) . "</div></div>
-                                                  <div class='form-group'><label class='col-sm-3 control-label'>$langProperty:</label>                                          
-                                              <div class='col-sm-9'>" . q($status_names[$target['status']]) . "</div></div>";
+                                              <div class='col-sm-9'><p class='form-control-static'>" . get_auth_info($target_auth_id) . "</p></div></div>
+                                                  <div class='form-group'><label class='col-sm-3 control-label'>$langProperty:</label>
+                                              <div class='col-sm-9'><p class='form-control-static'>" . q($status_names[$target['status']]) . "</p></div></div>";
             if ($info['status'] == USER_TEACHER and $target['status'] != USER_TEACHER) {
                 $target = false;
                 $target_field .= "<div class='alert alert-warning'>$langUserMergeForbidden</div>";
@@ -90,27 +97,27 @@ if (isset($_REQUEST['u'])) {
         if (!$target) {
             $target_field .= "<div class='form-group'><label class='col-sm-3 control-label'>$langUserMergeTarget:</label>
                                               <div class='col-sm-9'><input type='text' name='target' size='50'></div></div>";
-        }                
-        $tool_content = "<div class='form-wrapper'>
+        }
+        $tool_content .= "<div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
-                 <fieldset>                                    
+                 <fieldset>
                    <div class='form-group'>
                      <label class='col-sm-3 control-label'>$langUser:</label>
-                        <div class='col-sm-9'>" . display_user($info['id']) . "</div>
+                        <div class='col-sm-9'><p class='form-control-static'>" . display_user($info['id']) . "</p></div>
                     </div>
                     <div class='form-group'>
                     <label class='col-sm-3 control-label'>$langEditAuthMethod:</label>
-                         <div class='col-sm-9'>" . get_auth_info($auth_id) . "</div>
+                         <div class='col-sm-9'><p class='form-control-static'>" . get_auth_info($auth_id) . "</p></div>
                     </div>
                     <div class='form-group'>
-                    <label class='col-sm-3 control-label'>$langProperty:</label>                     
-                         <div class='col-sm-9'>" . q($status_names[$info['status']]) . "</div>
-                    </div>                    
+                    <label class='col-sm-3 control-label'>$langProperty:</label>
+                         <div class='col-sm-9'><p class='form-control-static'>" . q($status_names[$info['status']]) . "</p></div>
+                    </div>
                      $target_field
                     <input type='hidden' name='u' value='$u'>
-                     <div class='col-sm-offset-3 col-sm-9'>                                                  
+                     <div class='col-sm-offset-3 col-sm-9'>
                            <input class='btn btn-primary' type='submit' name='submit' value='$submit_button'>
-                    </div>                                                  
+                    </div>
                  </fieldset>
                  $target_user_input
                  ". generate_csrf_token_form_field() ."
@@ -156,7 +163,7 @@ function do_user_merge($source, $target) {
         Database::get()->query("DELETE FROM user WHERE id = ?d", $source_id);
         Database::get()->query("DELETE FROM course_user WHERE user_id IN ($source_id, $target_id)");
         Database::get()->query("INSERT INTO course_user SELECT * FROM `$tmp_table`");
-        Database::get()->query("DROP TEMPORARY TABLE `$tmp_table`");        
+        Database::get()->query("DROP TEMPORARY TABLE `$tmp_table`");
         fix_table('loginout', 'id_user', $source_id, $target_id);
         fix_table('log', 'user_id', $source_id, $target_id);
         fix_table('assignment_submit', 'uid', $source_id, $target_id);
