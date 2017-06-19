@@ -4850,3 +4850,4 @@ $langBBBRecordUserParticipation = "Teleconference Attendance";
 $langWangBBBAttendance = "Warning: Don't close this window because it is needed to record the attendance of participants in the teleconference!";
 $langNoEntriesFound = 'No results found matching your search';
 $langBBBNoParticipation = "$langStudent has not participated in any teleconference.";
+$langMergeUserWithSelf = 'Unable to merge an account with itself.';
