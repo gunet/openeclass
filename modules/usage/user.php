@@ -22,12 +22,16 @@
 
 $statsuser = (isset($_REQUEST['u']) && intval($_REQUEST['u'])>0)? intval($_REQUEST['u']) : $uid;
 
+$urlback = "../../main/portfolio.php";
+if ($is_admin) {
+    $urlback = "../admin/listusers.php";
+}
 $tool_content .= action_bar(array(
     array('title' => $langDurationVisitsPerCourse,
         'url' => "$_SERVER[SCRIPT_NAME]?t=u&amp;u=$statsuser&amp;per_course_dur=TRUE",
         'level' => 'primary-label'),
     array('title' => $langBack,
-        'url' => "/main/portfolio.php",
+        'url' => $urlback,
         'icon' => 'fa-reply',
         'level' => 'primary-label')
 ),false);
