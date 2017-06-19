@@ -79,8 +79,7 @@ $(document).ready(function(){
     });
     $('#startdate').change(function(){
         sdate = $(this).datepicker("getDate");
-        startdate = sdate.getFullYear()+"-"+(sdate.getMonth()+1)+"-"+sdate.getDate();
-        $('#enddate').focus();
+        startdate = sdate.getFullYear()+"-"+(sdate.getMonth()+1)+"-"+sdate.getDate();        
     });
     $('#enddate').change(function(){
         edate = $(this).datepicker("getDate");
