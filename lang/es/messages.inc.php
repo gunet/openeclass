@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2017-06-01 17:57:46
+// Generated 2017-06-21 14:15:50
 
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Versión del $siteName";
@@ -21,8 +21,6 @@ $langAboutCourses1 = "En este momento, la plataforma está presente";
 $langAboutUsers1 = "El número registrado de usuarios es ";
 $langLast30daysLogins1 = "y el  número total de accesos a la plataforma durante los últimos 30 días es";
 $langAnd = "y";
-$langYes = "Sì";
-$langNo = "No";
 $langCoursesHeader = "Cursos";
 $langClosed = "cerrado";
 $langOpen = "abierto";
@@ -2113,7 +2111,10 @@ $m['addgradecomments'] = "Añadiendo comentarios graduados";
 $m['delete'] = "Borrado";
 $m['edit'] = "Modificado";
 $m['start_date'] = "Fecha de inicio";
+$m['grade'] = "Grado";
 $m['am'] = "".$langStudent."ID";
+$m['yes'] = "Sí";
+$m['no'] = "No";
 $m['in'] = "En";
 $m['today'] = "hoy";
 $m['tomorrow'] = "mañana";
@@ -3142,7 +3143,7 @@ $langGradebookNewUser = "You should click on 'Submit' to create a gradebook reco
 $langGradebookWeight = "Contribution percentage";
 $langGradebookAutoGrade = "automatic grade submission";
 $langGradebookNoAutoGrade = "non-automatic grade submission";
-$langGradebookGrade = "Grado";
+$langGradebookGrade = "Grade";
 $langGradebookGradeAlert = "Be careful of the remaining weight";
 $langGradebookActivityAct = "Learning path activity";
 $langGradebookActivityLpExe = "Learning path exercise";
@@ -4840,3 +4841,7 @@ $langBBBRecordUserParticipation = "Teleconference Attendance";
 $langWangBBBAttendance = "Warning: Don't close this window because it is needed to record the attendance of participants in the teleconference!";
 $langNoEntriesFound = 'No se ha encontrado ningún resultado para su búsqueda';
 $langBBBNoParticipation = "$langStudent has not participated in any teleconference.";
+$langMergeUserWithSelf = 'Unable to merge an account with itself.';
+$langNotifyAssignmentSubmission = ;
+$langAssignmentPublished = ;
+$langHasAssignmentPublished = 'One file has been submitted';

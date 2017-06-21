@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2017-06-01 17:57:47
+// Generated 2017-06-21 14:15:51
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
@@ -15,9 +15,8 @@ $langLast30daysLogins = "Nombre total de connexions à la plateforme pendant les
 $langTotalCourses = "Nombre de cours";
 $langInfo = "Fiche d'identité de la plateforme";
 $langAboutCourses = "La plateforme supporte au total";
-$langAboutUsers = "Sur la plateforme il y a actuellement";
-$langYes = "Oui";
-$langNo = "Non";
+$langAboutUsers = "Sur la plateforme il y a actuellement"
+;
 $langOperation = "Opération";
 $langAboutCourses1 = "En ce moment, la plateforme comporte au total";
 $langAboutUsers1 = "Les utilisateurs inscrits sont ";
@@ -26,7 +25,8 @@ $langAnd = "et";
 $langCoursesHeader = "Cours";
 $langClosed = "fermés";
 $langOpen = "ouverts";
-$langSemiopen = "sur inscription";
+$langSemiopen = "sur inscription"
+;
 $langUsers = "Utilisateurs";
 $langUsersS = "utilisateurs";
 $langUser = "Utilisateur";
@@ -67,13 +67,17 @@ $langNoReport = "Il n'y a pas de données mensuelles disponibles";
 $langEmailNotSend = "Erreur lors d'un envoi e-mail à l'adresse";
 $langFound = "Ont été trouvés";
 $langFoundIt = "a été trouvé";
-$langListCours = "Liste des cours/Actions";
+$langListCours = "Liste des cours/Actions"
+;
 $langListUsersActions = "Liste d'utilisateurs/Actions";
 $langSearchUser = "Rechercher un utilisateur";
 $langInfoMail = "E-mail d'information";
-$langProfReg = "Inscription $langTeacher";
-$langProfOpen = "Demandes d(e) $langTeachers";
-$langUserOpen = "Demandes d(e) $langStudents";
+$langProfReg = "Inscription $langTeacher"
+;
+$langProfOpen = "Demandes d(e) $langTeachers"
+;
+$langUserOpen = "Demandes d(e) $langStudents"
+;
 $langPHPInfo = "Informations sur PHP";
 $langManuals = "Manuels disponibles";
 $langFormatPDF = "Format PDF";
@@ -2251,7 +2255,10 @@ $m['addgradecomments'] = "Ajouter les commentaires de l'évaluateur";
 $m['delete'] = "Supprimer";
 $m['edit'] = "Modifier";
 $m['start_date'] = "Start date";
+$m['grade'] = "Note";
 $m['am'] = "Numéro d'étudiant";
+$m['yes'] = "Oui";
+$m['no'] = "Non";
 $m['in'] = "in";
 $m['today'] = "aujourd'hui";
 $m['tomorrow'] = "demain";
@@ -2274,7 +2281,7 @@ $m['submitted_by_other_member'] = 'Ce fichier a été soumis par un autre membre
 $m['your_group'] = 'de votre groupe';
 $m['this_is_group_assignment'] = 'Ceci est un devoir collectif.';
 $m['noguest'] = "Afin de soumettre un devoir, vous devez vous connecter en tant qu'utilisateur normal.";
-$langHasAssignmentPublished = 'Un devoir a été soumis';
+$m['one_submission'] = 'Un devoir a été soumis';
 $m['more_submissions'] = '%d devoirs ont été soumis';
 $m['plainview'] = "Liste concise de devoirs et de notes d'evaluation";
 $m['WorkInfo'] = 'Informations sur le devoir'
@@ -3358,7 +3365,7 @@ $langGradebookTotalGradeNoInput = "No grades entered yet or no activities in the
 $langGradebookGrades = "Grades";
 $langGradebookAlertToChange = "Warning: The gradebook is being edited and grades may change.";
 $langGradebookAlertNoInput = "No submissions";
-$langGradeTotal = "Total Gradebook";
+$langGradeTotal = "My Gradebook";
 $langMeanValue = "Mean value";
 $langMinValue = "Min";
 $langMaxValue = "Max";
@@ -5041,3 +5048,7 @@ $langBBBRecordUserParticipation = "Teleconference Attendance";
 $langWangBBBAttendance = "Warning: Don't close this window because it is needed to record the attendance of participants in the teleconference!";
 $langNoEntriesFound = 'No results found matching your search';
 $langBBBNoParticipation = "$langStudent has not participated in any teleconference.";
+$langMergeUserWithSelf = 'Unable to merge an account with itself.';
+$langNotifyAssignmentSubmission = ;
+$langAssignmentPublished = ;
+$langHasAssignmentPublished = 'One file has been submitted';

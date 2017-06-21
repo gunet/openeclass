@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2017-06-01 17:57:48
+// Generated 2017-06-21 14:15:52
 
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";
@@ -21,8 +21,6 @@ $langAboutCourses1 = "Attualmente, la piattaforma dispone in tutto";
 $langAboutUsers1 = "Gli utenti registrati sono ";
 $langLast30daysLogins1 = "e gli accessi totali alla piattaforma negli ultimi 30 giorni sono";
 $langAnd = "e";
-$langYes = "Sì";
-$langNo = "No";
 $langCoursesHeader = "Corsi";
 $langClosed = "chiusi";
 $langOpen = "aperti";
@@ -2104,7 +2102,10 @@ $m['addgradecomments'] = "Aggiungere commenti di valutazione";
 $m['delete'] = "Eliminare";
 $m['edit'] = "Modificare";
 $m['start_date'] = "Data di inizio";
+$m['grade'] = "Voto";
 $m['am'] = "Numero di matricolazione";
+$m['yes'] = "Sì";
+$m['no'] = "No";
 $m['in'] = "in";
 $m['today'] = "oggi";
 $m['tomorrow'] = "domani";
@@ -2127,7 +2128,7 @@ $m['submitted_by_other_member'] = "Questo file è stato inviato da un altro memb
 $m['your_group'] = "tuo gruppo";
 $m['this_is_group_assignment'] = "Questo compito è cooperativo";
 $m['noguest'] = "Per inviare un compito dovresti aver fatto login come un utente normale.";
-$langHasAssignmentPublished = "Un file è inviato";
+$m['one_submission'] = "Un file è inviato";
 $m['more_submissions'] = "Sono inviati %d file";
 $m['plainview'] = "Riepilogo di compiti - punteggi";
 $m['WorkInfo'] = "Informazioni sul compito";
@@ -3129,7 +3130,7 @@ $langGradebookNewUser = "You should click on 'Submit' to create a gradebook reco
 $langGradebookWeight = "Contribution percentage";
 $langGradebookAutoGrade = "automatic grade submission";
 $langGradebookNoAutoGrade = "non-automatic grade submission";
-$langGradebookGrade = "Voto";
+$langGradebookGrade = "Grade";
 $langGradebookGradeAlert = "Be careful of the remaining weight";
 $langGradebookActivityAct = "Learning path activity";
 $langGradebookActivityLpExe = "Learning path exercise";
@@ -3144,7 +3145,7 @@ $langGradebookTotalGradeNoInput = "No grades entered yet or no activities in the
 $langGradebookGrades = "Grades";
 $langGradebookAlertToChange = "Warning: The gradebook is being edited and grades may change.";
 $langGradebookAlertNoInput = "No submissions";
-$langGradeTotal = "Total Gradebook";
+$langGradeTotal = "My Gradebook";
 $langMeanValue = "Mean value";
 $langMinValue = "Min";
 $langMaxValue = "Max";
@@ -4827,3 +4828,7 @@ $langBBBRecordUserParticipation = "Teleconference Attendance";
 $langWangBBBAttendance = "Warning: Don't close this window because it is needed to record the attendance of participants in the teleconference!";
 $langNoEntriesFound = 'No results found matching your search';
 $langBBBNoParticipation = "$langStudent has not participated in any teleconference.";
+$langMergeUserWithSelf = 'Unable to merge an account with itself.';
+$langNotifyAssignmentSubmission = ;
+$langAssignmentPublished = ;
+$langHasAssignmentPublished = 'One file has been submitted';
