@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2017-06-21 14:15:51
+// Generated 2017-06-21 16:48:05
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -4756,6 +4756,6 @@ $langWangBBBAttendance = "Warning: Don't close this window because it is needed 
 $langNoEntriesFound = 'Keine Ergebnisse stimmen mit der Suche überein';
 $langBBBNoParticipation = "$langStudent has not participated in any teleconference.";
 $langMergeUserWithSelf = 'Unable to merge an account with itself.';
-$langNotifyAssignmentSubmission = ;
-$langAssignmentPublished = ;
+$langNotifyAssignmentSubmission = "Notify me via email for new submissions";
+$langAssignmentPublished = "Assignment submission";
 $langHasAssignmentPublished = 'One file has been submitted';
