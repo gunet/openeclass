@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2017-06-21 16:48:05
+// Generated 2017-06-22 15:19:57
 
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
@@ -932,7 +932,7 @@ $langLogout = "Auswählen (Logout)";
 $langSupportForum = "Hilfe (Support) Forum";
 $langInvalidAuth = "Ungültige Authentifizierungsmethode";
 $langContact = 'Kontakt';
-$lang_forgot_pass = 'Haben Sie ihr Passwort vergegssen ?';
+$lang_forgot_pass = 'Haben Sie ihr Passwort vergessen?';
 $langNewAnnounce = "Neu!";
 $langUnregUser = "Löschen des Benutzerkontos";
 $langListCourses = "Liste aller Kurse";
@@ -4714,8 +4714,8 @@ $langNameOfLang['slovene'] = 'Slovenisch';
 $langNameOfLang['slovak'] = 'Slovakisch';
 $langNameOfLang['dutch'] = 'Niederländisch';
 $langUserExpiresFieldEmpty = "User expires date is not set or empty! ";
-$langNoAccountPleaseRegister = 'Sie haben noch keinen Account? Bitte registrieren Sie sich.';
-$langAlreadyHaveAccount = 'Haben Sie bereits einen Account? Anmelden';
+$langNoAccountPleaseRegister = 'Sie haben noch keinen Account? Bitte %sregistrieren Sie sich%s.';
+$langAlreadyHaveAccount = 'Haben Sie bereits einen Account? %sAnmelden%s';
 $langPlagiarismAlreadyCheck = "The file has already been submitted for plagiarism check";
 $langPlagiarismFileSent = "File submitted for plagiarism check";
 $langDefaultModules = 'Default Modules';
@@ -4745,7 +4745,7 @@ $langDisableForumNotifications = "Disable $langsStudents notification";
 $langPublicDocumentManagement = 'Public documents editing';
 $langPublicDocumentManagementExplanation = 'Allow upload and editing of files in the Documents module for all registered users';
 $langEnableDocsPublicWrite = "Enable public document management option";
-$langOrLoginWith = 'oder einloggen mit';
+$langOrLoginWith = 'oder anmelden mit';
 $langNumEntryFound = '%s Ergebnis stimmt mit der Suche überein';
 $langNumEntriesFound = '%s Ergebnisse stimmen mit der Suche überein';
 $langSearchForm = 'Search Form';
