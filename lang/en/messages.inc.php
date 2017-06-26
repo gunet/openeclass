@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2017-06-01 17:57:45
+// Generated 2017-06-22 15:19:55
 
 $langIntro = "The <strong>$siteName</strong> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName version";
@@ -38,8 +38,6 @@ $langPassword = "Password";
 $langAdd = "Add";
 $langNotFound = "not found";
 $langWith = "with";
-$langYes = "Yes";
-$langNo = "No";
 $langDone = "became an admin.";
 $langErrorAddaAdmin = "Error: Unable to add user to admins. The user may already be an admin.";
 $langInsertUserInfo = "Insert user information";
@@ -2124,7 +2122,10 @@ $m['addgradecomments'] = "Add grading comments";
 $m['delete'] = "Delete";
 $m['edit'] = "Modify";
 $m['start_date'] = "Start date";
+$m['grade'] = "Grade";
 $m['am'] = "" . $langStudent . "ID";
+$m['yes'] = "Yes";
+$m['no'] = "No";
 $m['in'] = "in";
 $m['today'] = "today";
 $m['tomorrow'] = "tomorrow";
@@ -2151,7 +2152,7 @@ $m['your_group'] = 'your group';
 $m['this_is_group_assignment'] = 'This is a group assignment.';
 $m['noguest'] = 'To submit work to an assignment you must login as a normal
 	user, not as a guest.';
-$langHasAssignmentPublished = 'One file has been submitted';
+$m['one_submission'] = 'One file has been submitted';
 $m['more_submissions'] = '%d files have been submitteD';
 $m['plainview'] = 'Concise list of submissions and grades';
 $m['WorkInfo'] = 'Assignment info';
@@ -3167,7 +3168,7 @@ $langGradebookTotalGradeNoInput = "No grades entered yet or no activities in the
 $langGradebookGrades = "Grades";
 $langGradebookAlertToChange = "Warning: The gradebook is being edited and grades may change.";
 $langGradebookAlertNoInput = "No submissions";
-$langGradeTotal = "Total Gradebook";
+$langGradeTotal = "My Gradebook";
 $langMeanValue = "Mean value";
 $langMinValue = "Min";
 $langMaxValue = "Max";
@@ -4851,3 +4852,6 @@ $langWangBBBAttendance = "Warning: Don't close this window because it is needed 
 $langNoEntriesFound = 'No results found matching your search';
 $langBBBNoParticipation = "$langStudent has not participated in any teleconference.";
 $langMergeUserWithSelf = 'Unable to merge an account with itself.';
+$langNotifyAssignmentSubmission = "Notify me via email for new submissions";
+$langAssignmentPublished = "Assignment submission";
+$langHasAssignmentPublished = 'One file has been submitted';
