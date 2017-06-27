@@ -258,8 +258,7 @@ function display_badges() {
  * @global type $langBack
  * @global type $langInsertWorkCap
  * @global type $langUsers
- * @global type $langValue
- * @global type $langPersoValue
+ * @global type $langValue 
  * @param type $element
  * @param type $certificate_id
  */
@@ -273,7 +272,7 @@ function display_activities($element, $id) {
            $langOfLearningPath, $langDelete, $langEditChange, $langConfirmDelete,           
            $langInsertWorkCap, $langDocumentAsModuleLabel, $langCourseParticipation,
            $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
-           $langValue, $langPersoValue, $langOfLikesSocial;
+           $langValue, $langOfLikesSocial;
 
     if ($element == 'certificate') {
         $link_id = "course=$course_code&amp;certificate_id=$id";
@@ -372,9 +371,10 @@ function display_activities($element, $id) {
             'secondary_btn_class' => 'btn-success btn-sm'
         ));
 
-    if (count($result) > 0) {
-
-        $tool_content .= "
+    if (count($result) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoActivCert</div>";
+    }
+    $tool_content .= "
             <div class='row'>
             <div class='col-xs-12'>
                 <div class='panel panel-default'>
@@ -404,46 +404,43 @@ function display_activities($element, $id) {
                                     <i class='fa fa-cogs'></i>
                                 </div>
                             </div>";
-
-                        foreach ($result as $details) {
-                                $resource_data = get_resource_details($element, $details->id);
-                                $tool_content .= "
-                                <div class='row res-table-row'>
-                                    <div class='col-sm-7'>".$resource_data['title']."</div>
-                                    <div class='col-sm-2'>". $resource_data['type']."</div>
-                                    <div class='col-sm-2'>";
-                                if (!empty($details->operator)) {
-                                    $op = get_operators();
-                                    $tool_content .= $op[$details->operator];
-                                } else {
-                                    $tool_content .= "&mdash;";
-                                }
-                                $tool_content .= "&nbsp;$details->threshold</div>";
-
-                                $tool_content .= "<div class='col-sm-1 text-center'>".
-                                    action_button(array(
-                                        array('title' => $langEditChange,
-                                            'icon' => 'fa-edit',
-                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
-                                            'show' => in_array($details->activity_type, criteria_with_operators())
-                                        ),
-                                        array('title' => $langDelete,
-                                            'icon' => 'fa-times',
-                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
-                                            'confirm' => $langConfirmDelete,
-                                            'class' => 'delete'))).
-                                    "</div></div>";
-                            }
-                            $tool_content .= "</div>
-                       
+        
+    if (count($result) > 0) {
+        foreach ($result as $details) {
+                $resource_data = get_resource_details($element, $details->id);
+                $tool_content .= "
+                <div class='row res-table-row'>
+                    <div class='col-sm-7'>".$resource_data['title']."</div>
+                    <div class='col-sm-2'>". $resource_data['type']."</div>
+                    <div class='col-sm-2'>";
+                if (!empty($details->operator)) {
+                    $op = get_operators();
+                    $tool_content .= $op[$details->operator];
+                } else {
+                    $tool_content .= "&mdash;";
+                }
+                $tool_content .= "&nbsp;$details->threshold</div>";
+                $tool_content .= "<div class='col-sm-1 text-center'>".
+                    action_button(array(
+                        array('title' => $langEditChange,
+                            'icon' => 'fa-edit',
+                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
+                            'show' => in_array($details->activity_type, criteria_with_operators())
+                        ),
+                        array('title' => $langDelete,
+                            'icon' => 'fa-times',
+                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
+                            'confirm' => $langConfirmDelete,
+                            'class' => 'delete'))).
+                    "</div></div>";
+            }
+    }
+    $tool_content .= "</div>                       
                     </div>
                 </div>
             </div>
         </div>
         ";
-    } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoActivCert</div>";
-    }
 }
 
 

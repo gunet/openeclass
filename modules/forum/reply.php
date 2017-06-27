@@ -102,7 +102,8 @@ if (isset($_POST['submit'])) {
 
     $this_post = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip, parent_post_id) VALUES (?d, ?s , ?d, ?t, ?s, ?d)"
                     , $topic, $message, $uid, $time, $poster_ip, $parent_post)->lastInsertID;
-    triggerGame($course_id, $uid, ForumEvent::NEWPOST);
+    //triggerGame($course_id, $uid, ForumEvent::NEWPOST);
+    triggerGame($course_id, $uid, ForumEvent::ACTIVITY);
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $this_post);
     $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post 
                         INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id

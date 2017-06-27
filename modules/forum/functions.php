@@ -294,5 +294,6 @@ function triggerGame($courseId, $uid, $eventName) {
     $eventData->activityType = ForumEvent::ACTIVITY;
     $eventData->module = MODULE_ID_FORUM;
 
+    ForumEvent::trigger($eventName, $eventData);
     CommentEvent::trigger($eventName, $eventData);
 }

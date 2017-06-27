@@ -299,7 +299,7 @@ function add_forum_to_certificate($element, $element_id) {
                                 SET $element = ?d, 
                                 module = " . MODULE_ID_FORUM . ", 
                                 resource = ?d, 
-                                activity_type = 'forumtopic',
+                                activity_type = '" . ForumEvent::ACTIVITY . "',
                                 operator = ?s,
                                 threshold = ?f",
                             $element_id, 
@@ -760,7 +760,8 @@ function get_resource_details($element, $resource_id) {
                 $title = "$langPersoValue";
             break;
         case ForumEvent::ACTIVITY:
-                $title = Database::get()->querySingle("SELECT name FROM forum WHERE course_id = ?d AND id = ?d", $course_id, $resource)->name;
+                $title = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $resource)->title;
+                //$title = Database::get()->querySingle("SELECT name FROM forum WHERE course_id = ?d AND id = ?d", $course_id, $resource)->name;
                 $type = "$langForums";                
             break;
         case 'forumtopic':
