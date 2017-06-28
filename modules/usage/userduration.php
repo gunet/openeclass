@@ -28,6 +28,7 @@ $require_current_course = true;
 $require_course_admin = true;
 $require_help = true;
 $helpTopic = 'course_stats';
+$helpSubTopic = 'users_participation';
 $require_login = true;
 
 require_once '../../include/baseTheme.php';
