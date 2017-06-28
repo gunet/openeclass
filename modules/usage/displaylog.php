@@ -34,6 +34,9 @@ if (isset($_GET['from_admin'])) {
 }
 
 $require_course_admin = true;
+$require_help = true;
+$helpTopic = 'course_stats';
+$helpSubTopic = 'users_actions';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 

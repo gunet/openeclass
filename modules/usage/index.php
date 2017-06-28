@@ -26,20 +26,23 @@
 
 if (!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c') {
     $require_current_course = true;
-    $require_course_admin = true;
+    $require_course_admin = true;    
+    $helpTopic = 'course_stats';
     $stats_type = 'course';        
 } elseif(isset($_REQUEST['t'])) {
     if ($_REQUEST['t'] == 'a') {
         $require_admin = true;
-        $stats_type = 'admin';
+        $stats_type = 'admin';        
+        $helpTopic = 'course_stats';
     } else if ($_REQUEST['t'] == 'u') {
         $require_valid_uid = TRUE;
-        $stats_type = 'user';
+        $stats_type = 'user';        
+        $helpTopic = 'portfolio';
+        $helpSubTopic = 'personal_stats';
     }
 }
         
 $require_help = true;
-$helpTopic = 'course_stats';
 $require_login = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/usage/usage.lib.php';
