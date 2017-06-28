@@ -26,8 +26,6 @@
 
 $require_current_course = true;
 $require_editor = true;
-$require_help = true;
-$helpTopic = '';
 require_once '../../include/baseTheme.php';
 require_once 'modules/tags/moduleElement.class.php';
 $pageName = $langEditWeek;

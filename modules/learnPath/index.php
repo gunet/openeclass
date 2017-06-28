@@ -45,7 +45,7 @@
  */
 $require_current_course = TRUE;
 $require_help = TRUE;
-$helpTopic = "Path";
+$helpTopic = "learningpath";
 
 include "../../include/baseTheme.php";
 require_once 'include/lib/learnPathLib.inc.php';
@@ -168,8 +168,8 @@ if ($is_editor) {
                     AND `course_id` = ?d", $visibility, $_GET['visibility_path_id'], $visibility, $course_id);
                 break;
             // CREATE COMMAND
-            case "create" :
-                // create form sent
+            case "create" :                
+                // create form sent                
                 if (isset($_POST["newPathName"]) && $_POST["newPathName"] != "") {
                     // check if name already exists
                     $num = Database::get()->querySingle("SELECT COUNT(`name`) AS count FROM `lp_learnPath`

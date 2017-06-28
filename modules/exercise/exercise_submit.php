@@ -26,8 +26,6 @@ include('answer.class.php');
 include('exercise.lib.php');
 
 $require_current_course = TRUE;
-$require_help = TRUE;
-$helpTopic = 'Exercise';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';

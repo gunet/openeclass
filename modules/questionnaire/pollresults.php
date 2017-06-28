@@ -22,7 +22,7 @@
 
 $require_current_course = true;
 $require_help = true;
-$helpTopic = 'Questionnaire';
+$helpTopic = 'questionnaire';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';

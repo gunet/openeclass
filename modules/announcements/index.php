@@ -21,7 +21,7 @@
 
 $require_current_course = true;
 $require_help = true;
-$helpTopic = 'Announce';
+$helpTopic = 'announcements';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';

@@ -84,7 +84,7 @@ if (isset($_POST['submitQuestion'])) {
     if ($v->validate()) {
         $questionName = trim($_POST['questionName']);
         $questionDescription = purify($_POST['questionDescription']);
-        $answerType = intval($_POST['answerType']);
+        $answerType = intval($_POST['answerType']);        
         // no name given
         if (empty($questionName)) {
             $msgErr = $langGiveQuestion;
@@ -133,9 +133,9 @@ if (isset($_POST['submitQuestion'])) {
         // redirect to either pool or edit exercise page
         // else redirect to modify answers page in order to add answers to question
         if ($answerType == FREE_TEXT) {
-            $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId" : "modules/exercise/question_pool.php?course=$course_code";
+            $redirect_url = (isset($exerciseId)) ? "modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&htopic=6" : "modules/exercise/question_pool.php?course=$course_code";
         } else {
-            $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId";
+            $redirect_url = "modules/exercise/admin.php?course=$course_code".((isset($exerciseId))? "&exerciseId=$exerciseId" : "")."&modifyAnswers=$questionId&htopic=$answerType";
         }
         redirect_to_home_page($redirect_url);
     } else {

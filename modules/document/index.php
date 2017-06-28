@@ -51,7 +51,7 @@ require_once 'modules/drives/clouddrive.php';
 require_once 'include/course_settings.php';
 
 $require_help = true;
-$helpTopic = 'Doc';
+$helpTopic = 'documents';
 
 // Used to check for quotas
 $diskUsed = dir_total_space($basedir);

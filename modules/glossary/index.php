@@ -22,7 +22,7 @@
 
 $require_current_course = true;
 $require_help = true;
-$helpTopic = 'Glossary';
+$helpTopic = 'glossary';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';

@@ -25,7 +25,7 @@
 
 $require_current_course = TRUE;
 $require_help = TRUE;
-$helpTopic = 'For';
+$helpTopic = 'forum';
 $require_editor = true;
 
 require_once '../../include/baseTheme.php';

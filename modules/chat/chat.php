@@ -25,8 +25,8 @@
  */
 $require_current_course = TRUE;
 $require_login = TRUE;
-$require_help = TRUE;
-$helpTopic = 'Conference';
+$require_help = true;
+$helpTopic = 'chat';
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
@@ -77,7 +77,7 @@ $toolName = $langChat;
 // guest user not allowed
 if (check_guest()) {
     $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
-    draw($tool_content, 2, 'conference');
+    draw($tool_content, 2);
 }
 
 $head_content .= '<script type="text/javascript">

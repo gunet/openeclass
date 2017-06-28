@@ -28,7 +28,7 @@
 
 $require_current_course = TRUE;
 $require_help = true;
-$helpTopic = 'Link';
+$helpTopic = 'links';
 $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';

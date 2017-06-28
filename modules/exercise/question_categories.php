@@ -21,6 +21,9 @@
 
 $require_current_course = TRUE;
 $require_editor = true;
+$require_help = TRUE;
+$helpTopic = 'exercises';
+$helpSubTopic = 'question_categories';
 
 include '../../include/baseTheme.php';
 
@@ -100,6 +103,7 @@ if (isset($_POST['submitCat'])) {
     }
     redirect_to_home_page("modules/exercise/question_categories.php?course=$course_code");
 } else {
+    $toolName = $langExercices;
     $pageName = $langQuestionCats;
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
     

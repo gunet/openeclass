@@ -26,7 +26,7 @@
 $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
-$helpTopic = 'For';
+$helpTopic = 'forum';
 require_once '../../include/baseTheme.php';
 $toolName = $langForums;
 

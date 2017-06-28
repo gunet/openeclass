@@ -54,3 +54,4 @@ $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
 $langsOfFaculty = "category";
+$langHelp = "Help";

@@ -27,7 +27,7 @@
 $require_current_course = true;
 $require_course_admin = true;
 $require_help = true;
-$helpTopic = 'Usage';
+$helpTopic = 'course_stats';
 $require_login = true;
 
 require_once '../../include/baseTheme.php';

@@ -22,7 +22,7 @@
 $require_current_course = true;
 $require_course_admin = true;
 $require_help = true;
-$helpTopic = 'courseTools';
+$helpTopic = 'course_tools';
 $require_login = true;
 
 include '../../include/baseTheme.php';
@@ -99,8 +99,7 @@ if (isset($_POST['submit'])) {
                   'level' => 'primary-label'
                  )));
         
-    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
-    $helpTopic = 'Module';
+    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);    
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=true'>
             <fieldset>            

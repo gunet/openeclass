@@ -39,7 +39,7 @@ if (!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c') {
 }
         
 $require_help = true;
-$helpTopic = 'Usage';
+$helpTopic = 'course_stats';
 $require_login = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/usage/usage.lib.php';

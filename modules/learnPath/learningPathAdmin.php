@@ -53,7 +53,9 @@
  */
 
 $require_current_course = TRUE;
-
+$require_help = TRUE;
+$helpTopic = "learningpath";
+$helpSubTopic = 'units';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';

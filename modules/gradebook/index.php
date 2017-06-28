@@ -21,7 +21,7 @@
 $require_login = TRUE;
 $require_current_course = TRUE;
 $require_help = TRUE;
-$helpTopic = 'Gradebook';
+$helpTopic = 'gradebook';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';

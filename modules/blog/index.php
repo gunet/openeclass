@@ -28,7 +28,7 @@ if (isset($_GET['course'])) { //course blog
     $blog_type = 'perso_blog';
 }
 $require_help = TRUE;
-$helpTopic = 'Blog';
+$helpTopic = 'blog';
 require_once '../../include/baseTheme.php';
 require_once 'modules/comments/class.commenting.php';
 require_once 'modules/comments/class.comment.php';

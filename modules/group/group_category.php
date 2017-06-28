@@ -26,7 +26,8 @@
 
 $require_current_course = TRUE;
 $require_help = TRUE;
-$helpTopic = 'Group';
+$helpTopic = 'groups';
+$helpSubTopic = 'settings';
 $require_editor = true;
 
 require_once '../../include/baseTheme.php';

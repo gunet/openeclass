@@ -27,7 +27,6 @@ use Hautelook\Phpass\PasswordHash;
 
 $require_login = true;
 $require_admin = TRUE;
-$helpTopic = 'Profile';
 $require_valid_uid = TRUE;
 
 include '../../include/baseTheme.php';

@@ -26,7 +26,7 @@
 
 $require_current_course = true;
 $require_help = true;
-$helpTopic = 'EBook';
+$helpTopic = 'ebook';
 $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';

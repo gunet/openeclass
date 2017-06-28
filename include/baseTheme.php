@@ -66,21 +66,20 @@ require_once 'tools.php';
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-    global $session, $course_code, $course_id, $helpTopic,
+    global $session, $course_code, $course_id, $helpTopic, $helpSubTopic, 
         $is_editor, $langActivate, $langNote,$langPleaseWait,
-        $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
+        $langAdmin, $langAdvancedSearch, 
         $langChooseLang, $langDeactivate, $langProfileMenu,
         $langEclass, $langHelp, $langUsageTerms,
-        $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, $langMyAgenda,
-        $langMyPersoAnnouncements, $langMyPersoDeadlines,
-        $langMyPersoDocs, $langMyPersoForum, $langMyCourses,
-        $langPortfolio, $langSearch, $langUser,
+        $langHomePage, $langLogin, $langLogout, $langMyAgenda,
+        $langMyPersoAnnouncements, $langMyCourses,
+        $langPortfolio, $langSearch,
         $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_course_admin, $require_help, $siteName,
-        $switchLangURL, $theme, $themeimg,
+        $theme, $themeimg,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
-        $theme_settings, $language, $saved_is_editor, $langProfileImage,
+        $theme_settings, $language, $saved_is_editor,
         $langStudentViewEnable, $langStudentViewDisable, $langTitle, $langEnterNote, $langFieldsRequ;
 
     // negative course_id might be set in common documents
@@ -566,10 +565,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     // if $require_help is true (set by each tool) display the help link
-    if ($require_help == true) {
-        if (isset($require_current_course) and !$is_editor) {
-            $helpTopic .= '_student';
-        }
+    if ($require_help == true) {        
         $head_content .= "
         <script>
         $(function() {
@@ -583,7 +579,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
         $help_link_icon = "
 
-        <a id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\">
+        <a id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?language=$language&amp;topic=$helpTopic&amp;subtopic=$helpSubTopic\">
             <i class='fa fa-question-circle tiny-icon' data-toggle='tooltip' data-placement='top' title='$langHelp'></i>
         </a>";
 

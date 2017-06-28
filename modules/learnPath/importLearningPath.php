@@ -46,7 +46,9 @@
 
 $require_current_course = TRUE;
 $require_editor = TRUE;
-
+$require_help = TRUE;
+$helpTopic = "learningpath";
+$helpSubTopic = 'learning_objects';
 require_once("../../include/baseTheme.php");
 require_once "include/lib/learnPathLib.inc.php";
 require_once "include/lib/fileManageLib.inc.php";

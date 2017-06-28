@@ -25,6 +25,7 @@
  */
 $require_current_course = true;
 $guest_allowed = true;
+
 define('HIDE_TOOL_TITLE', 1);
 define('STATIC_MODULE', 1);
 require_once '../../include/baseTheme.php';
@@ -48,10 +49,8 @@ require_once 'modules/course_metadata/CourseXML.php';
 
 $tree = new Hierarchy();
 $course = new Course();
-
 $pageName = ''; // delete $pageName set in doc_init.php
-$require_help = TRUE;
-$helpTopic = 'course_home';
+
 $main_content = $cunits_content = $bar_content = $course_info_extra = "";
 
 add_units_navigation(TRUE);

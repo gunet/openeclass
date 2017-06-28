@@ -26,11 +26,23 @@ require_once 'answer.class.php';
 require_once 'exercise.lib.php';
 
 $require_current_course = true;
-require_once '../../include/baseTheme.php';
+$require_help = TRUE;
+$helpTopic = 'exercises';
+if (isset($_GET['htopic'])) {
+    $htopic = $_GET['htopic'];
+    switch ($htopic) {
+        case '1': $helpSubTopic = 'multiple_choice_one'; break;
+        case '2': $helpSubTopic = 'multiple_choice_many'; break;
+        case '3': $helpSubTopic = 'fill_gaps'; break;
+        case '4': $helpSubTopic = 'matching'; break;
+        case '5': $helpSubTopic = 'true_false'; break;
+        case '6': $helpSubTopic = 'free_text'; break;
+    }
+}
 
+require_once '../../include/baseTheme.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-
 ModalBoxHelper::loadModalBox();
 
 $toolName = $langExercices;

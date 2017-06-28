@@ -35,7 +35,7 @@
 
 $require_login = true;
 $require_help = TRUE;
-$helpTopic = 'Notes';
+$helpTopic = 'portfolio';
 
 include '../../include/baseTheme.php';
 $require_valid_uid = true;

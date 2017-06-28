@@ -20,16 +20,18 @@
  * ======================================================================== */
 
 
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
+include 'exercise.class.php';
+include 'question.class.php';
+include 'answer.class.php';
 
 $require_current_course = TRUE;
+$require_help = TRUE;
+$helpTopic = 'exercises';
+$helpSubTopic = 'question_bank';
 
 include '../../include/baseTheme.php';
 
 require_once 'imsqtilib.php';
-
 
 $head_content .= "
 <script>
@@ -45,7 +47,7 @@ $(function() {
 });
 </script>";
 $tool_content .= "<div id='dialog' style='display:none;'>$langUsedInSeveralExercises</div>";
-
+$toolName = $langExercices;
 $pageName = $langQuestionPool;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 

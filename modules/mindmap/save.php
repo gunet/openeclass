@@ -1,8 +1,6 @@
 <?php
 
 $require_current_course = TRUE;
-$require_help = TRUE;
-$helpTopic = 'Course';
 $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
