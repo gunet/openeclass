@@ -20,11 +20,11 @@
  * ======================================================================== */
 
 use Hybrid\Auth;
-
-$require_help = true;
 $require_login = true;
 $require_valid_uid = true;
-$helpTopic = 'Profile';
+$require_help = true;
+$helpTopic = 'portfolio';
+$helpSubTopic = 'profile_change';
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';

@@ -43,7 +43,7 @@ $tlabelReq = 'CLWIKI__';
 
 $require_current_course = TRUE;
 $require_help = TRUE;
-$helpTopic = 'Wiki';
+$helpTopic = 'wiki';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 

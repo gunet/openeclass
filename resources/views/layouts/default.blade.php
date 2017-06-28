@@ -194,7 +194,7 @@
                                         <h2 class='page-subtitle'>
                                             {{ $toolName }}
                                             @if ($require_help)
-                                                <a id='help-btn' href='{{ $urlAppend }}modules/help/help.php?topic={{ $helpTopic }}&amp;language={{ $language }}'>
+                                                <a id='help-btn' href='{{ $urlAppend }}modules/help/help.php?topic={{ $helpTopic }}&amp;language={{ $language }}&amp;subtopic={{ $helpSubTopic }}'>
                                                     <span class='fa fa-question-circle tiny-icon' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'></span>
                                                 </a>                                            
                                             @endif

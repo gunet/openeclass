@@ -34,10 +34,11 @@
 
 $require_login = true;
 $require_help = TRUE;
-$helpTopic = 'PersonalCalendar';
+$helpTopic = 'portfolio';
+$helpSubTopic = 'my_calendar';
+$require_valid_uid = true;
 
 include '../../include/baseTheme.php';
-$require_valid_uid = true;
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/references.class.php';

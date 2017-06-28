@@ -53,7 +53,7 @@ require_once 'tools.php';
 function view($view_file, $view_data = array()) {
     global $webDir, $is_editor, $course_code, $course_id, $language, $siteName,
     $urlAppend, $urlServer, $theme, $pageName, $currentCourseName, $uid, $session, $toolName,
-    $require_help, $professor, $helpTopic, $head_content, $toolName, $themeimg, $navigation,
+    $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
     $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
     $require_editor;
 
@@ -194,10 +194,7 @@ function view($view_file, $view_data = array()) {
     }
 
     // if $require_help is true (set by each tool) display the help link
-    if ($require_help == true) {
-        if (isset($require_current_course) and !$is_editor) {
-            $helpTopic .= '_student';
-        }
+    if ($require_help == true) {        
         $head_content .= "
         <script>
         $(function() {
@@ -283,7 +280,7 @@ function view($view_file, $view_data = array()) {
     $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
             'pageTitle', 'urlAppend', 'urlServer', 'eclass_version', 'template_base', 'toolName',
             'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam',
-            'require_help', 'helpTopic', 'head_content', 'toolArr', 'module_id',
+            'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
             'module_visibility', 'professor', 'pageName', 'menuTypeID', 'section_title',
             'messages', 'logo_img', 'logo_img_small', 'styles_str', 'breadcrumbs',
             'is_mobile', 'current_module_dir','search_action', 'require_current_course',

@@ -21,7 +21,7 @@
 
 $require_current_course = TRUE;
 $require_help = TRUE;
-$helpTopic = 'Coursedescription';
+$helpTopic = 'course_description';
 $guest_allowed = true;
 
 require_once '../../include/baseTheme.php';

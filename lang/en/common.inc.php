@@ -30,6 +30,7 @@ $langOfFaculties = "Faculties";
 $langFaculties = "Faculties";
 $langsFaculty = "faculty";
 $langsFaculties = "faculties";
+$langsOfFaculty = "faculty";
 $langpres = "Undergraduate";
 $langposts = "Postgraduate";
 $langothers = "Other";
@@ -53,4 +54,4 @@ $langsCourse = "course";
 $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
-
+$langHelp = "Help";

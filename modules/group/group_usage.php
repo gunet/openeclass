@@ -24,8 +24,6 @@
  * @brief Groups usage / statistics
  */
 $require_current_course = TRUE;
-$require_help = TRUE;
-$helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';

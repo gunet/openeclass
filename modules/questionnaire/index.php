@@ -26,7 +26,7 @@
 
 $require_current_course = TRUE;
 $require_help = TRUE;
-$helpTopic = 'Questionnaire';
+$helpTopic = 'questionnaire';
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 /* * ** The following is added for statistics purposes ** */

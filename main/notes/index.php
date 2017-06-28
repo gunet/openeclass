@@ -35,7 +35,7 @@
 
 $require_login = true;
 $require_help = TRUE;
-$helpTopic = 'Notes';
+$helpTopic = 'portfolio';
 
 if(isset($_POST['setsessioncourse']) && $_POST['setsessioncourse'] == 1)
     $require_current_course = TRUE;

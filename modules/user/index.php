@@ -23,7 +23,7 @@ $require_login = true;
 $require_current_course = TRUE;
 $require_course_admin = TRUE;
 $require_help = TRUE;
-$helpTopic = 'User';
+$helpTopic = 'course_users';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';

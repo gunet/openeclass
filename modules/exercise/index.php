@@ -27,10 +27,9 @@ require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
 $require_current_course = TRUE;
-$require_help = TRUE;
 $guest_allowed = TRUE;
-
-$helpTopic = 'Exercise';
+$require_help = TRUE;
+$helpTopic = 'exercises';
 
 include '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';

@@ -27,7 +27,7 @@ if (isset($_GET['course'])) { //course messages
 }
 $guest_allowed = false;
 $require_help = true;
-$helpTopic = 'Dropbox';
+$helpTopic = 'message';
 
 include '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';

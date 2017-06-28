@@ -24,7 +24,7 @@
 $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = TRUE;
-$helpTopic = 'bbb';
+$helpTopic = 'tc';
 $guest_allowed = false;
 
 require_once '../../include/baseTheme.php';

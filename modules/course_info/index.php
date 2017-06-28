@@ -28,7 +28,7 @@ if (isset($_GET['from_home']) and ( $_GET['from_home'] == TRUE) and isset($_GET[
 $require_current_course = true;
 $require_course_admin = true;
 $require_help = true;
-$helpTopic = 'Infocours';
+$helpTopic = 'course_settings';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 require_once 'include/lib/user.class.php';

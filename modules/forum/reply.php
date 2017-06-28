@@ -24,7 +24,7 @@
  */
 $require_current_course = true;
 $require_help = true;
-$helpTopic = 'For';
+$helpTopic = 'forum';
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/group/group_functions.php';

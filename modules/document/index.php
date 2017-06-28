@@ -49,7 +49,7 @@ $action = new action();
 $action->record(MODULE_ID_DOCS);
 
 $require_help = true;
-$helpTopic = 'Doc';
+$helpTopic = 'documents';
 
 doc_init();
 

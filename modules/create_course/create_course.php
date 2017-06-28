@@ -21,7 +21,8 @@
 
 $require_login = TRUE;
 $require_help = TRUE;
-$helpTopic = 'CreateCourse';
+$helpTopic = 'portfolio';
+$helpSubTopic = 'create_course';
 
 require_once '../../include/baseTheme.php';
 

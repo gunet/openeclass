@@ -24,8 +24,6 @@ require_once 'exercise.class.php';
 require_once 'userRecord.class.php';
 
 $require_current_course = true;
-$require_help = true;
-$helpTopic = 'Exercise';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
