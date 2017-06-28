@@ -184,13 +184,13 @@ function is_admin($username, $password) {
         
     if (DBHelper::fieldExists('user', 'user_id')) {
         $user = Database::get()->querySingle("SELECT * FROM user, admin
-				WHERE admin.idUser = user.user_id AND
-				BINARY user.username = ?s", $username);
+                WHERE admin.idUser = user.user_id AND
+                BINARY user.username = ?s", $username);
         $db_schema = 0;
     } else {
         $user = Database::get()->querySingle("SELECT * FROM user, admin
-				WHERE admin.user_id = user.id AND
-				BINARY user.username = ?s", $username);
+                WHERE admin.user_id = user.id AND
+                BINARY user.username = ?s", $username);
         $db_schema = 1;
     }
 
@@ -280,7 +280,7 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
 
     if (rename($path_to_dropbox . $filename, $path_to_dropbox . $new_filename)) {
         Database::get()->query("UPDATE dropbox_file SET filename = '$new_filename'
-	        	WHERE id = '$id'", $code);
+                WHERE id = '$id'", $code);
     } else {
         Debug::message($langEncDropboxError, Debug::ERROR);
     }
@@ -1116,7 +1116,7 @@ function upgrade_course_3_0($code, $course_id) {
                                     VALUES (".MODULE_ID_BLOG.", 0, $course_id)");
     Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
                                     VALUES (".MODULE_ID_TC.", 0, $course_id)");
-	Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
+    Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
                                     VALUES (".MODULE_ID_MINDMAP.", 0, $course_id)"); 
     
     
@@ -1499,9 +1499,9 @@ function upgrade_course_2_2($code, $lang) {
 
     // upgrade exercises
     Database::get()->query("ALTER TABLE `exercise_user_record`
-		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
+        CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
     Database::get()->query("ALTER TABLE `exercise_user_record`
-		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
+        CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
     if (!DBHelper::fieldExists('exercices', 'results', $code))
         echo add_field('exercices', 'results', "TINYINT(1) NOT NULL DEFAULT '1'");
     Database::get()->query("ALTER TABLE `questions` CHANGE `ponderation` `ponderation` FLOAT(11,2) NULL DEFAULT NULL");
@@ -1522,7 +1522,7 @@ function upgrade_course_2_2($code, $lang) {
     }
     // upgrade lp_module me to kainourio content type
     Database::get()->query("ALTER TABLE `lp_module`
-		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')");
+        CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')");
     Database::get()->query("ALTER TABLE `liens` CHANGE `url` `url` VARCHAR(255) DEFAULT NULL");
     Database::get()->query("ALTER TABLE `liens` CHANGE `titre` `titre` VARCHAR(255) DEFAULT NULL");
     // indexes creation
@@ -1555,7 +1555,7 @@ function upgrade_course_2_1_3($code) {
 
     // upgrade lp_module me to kainourio content type
     Database::get()->query("ALTER TABLE `lp_module`
-		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')");
+        CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')");
 }
 
 // Remove the first component from beginning of $path, return the rest starting with '/'
@@ -1655,18 +1655,26 @@ function group_documents_main_db($path, $course_id, $group_id, $type) {
 }
 
 function mkdir_or_error($dirname) {
-    global $langErrorCreatingDirectory;
-    if (!is_dir($dirname)) {
-        if (!make_dir($dirname)) {
+    global $langErrorCreatingDirectory, $command_line;
+
+    if (!(is_dir($dirname) or make_dir($dirname))) {
+        if ($command_line) {
+            echo "$langErrorCreatingDirectory $dirname\n";
+        } else {
             echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $dirname</div>";
         }
     }
 }
 
 function touch_or_error($filename) {
-    global $langErrorCreatingDirectory;
-    if (@!touch($filename)) {
-        echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $filename</div>";
+    global $langErrorCreatingDirectory, $command_line;
+
+    if (!(file_exists($filename) or @touch($filename))) {
+        if ($command_line) {
+            echo "$langErrorCreatingDirectory $filename\n";
+        } else {
+            echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $filename</div>";
+        }
     }
 }
 

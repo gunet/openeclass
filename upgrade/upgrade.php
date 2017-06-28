@@ -42,6 +42,12 @@ if (php_sapi_name() == 'cli' and ! isset($_SERVER['REMOTE_ADDR'])) {
     $command_line = false;
 }
 
+if ($command_line and isset($argv[1])) {
+    $logfile_path = $argv[1];
+} else {
+    $logfile_path = "$webDir/courses";
+}
+
 load_global_messages();
 
 if ($urlAppend[strlen($urlAppend) - 1] != '/') {
@@ -149,8 +155,6 @@ if (!file_exists($videoDir)) {
     }
 } elseif (!is_dir($videoDir)) {
     die($langUpgNoVideoDir2);
-} elseif (!is_writable($videoDir)) {
-    die($langUpgNoVideoDir3);
 }
 
 mkdir_or_error('courses/temp');
@@ -279,12 +283,16 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     }
     $logdate = date("Y-m-d_G.i:s");
     $logfile = "log-$logdate.html";
-    if (!($logfile_handle = @fopen("$webDir/courses/$logfile", 'w'))) {
+    if (!($logfile_handle = @fopen("$logfile_path/$logfile", 'w'))) {
         $error = error_get_last();
-        Session::Messages($langLogFileWriteError .
-            '<br><i>' . q($error['message']) . '</i>');
-        draw($tool_content, 0);
-        exit;
+        if ($command_line) {
+            die("$langLogFileWriteError\n$error[message].\nTry: $argv[0] <logfile path>\n");
+        } else {
+            Session::Messages($langLogFileWriteError .
+                '<br><i>' . q($error['message']) . '</i>');
+            draw($tool_content, 0);
+            exit;
+        }
     }
 
     fwrite($logfile_handle, "<!DOCTYPE html><html><head><meta charset='UTF-8'>
@@ -1494,7 +1502,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `assignment_id` int(11) NOT NULL,
                             PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $tbl_options");
-        
+
         Database::get()->query("DROP TABLE IF EXISTS agenda");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `agenda` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -3408,7 +3416,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `order` INT(11) NOT NULL DEFAULT 0,
             `heading` TEXT NOT NULL,
             `required` BOOL NOT NULL DEFAULT 0) $tbl_options");
-        
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_content` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `course_id` INT(11) NOT NULL,
@@ -3416,20 +3424,20 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `content` TEXT NOT NULL,
             FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
             FOREIGN KEY (heading_id) REFERENCES activity_heading(id) ON DELETE CASCADE,
-            UNIQUE KEY `heading_course` (`course_id`,`heading_id`)) $tbl_options");        
-        
+            UNIQUE KEY `heading_course` (`course_id`,`heading_id`)) $tbl_options");
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_data` (
             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
             `field_id` INT(11) NOT NULL,
             `data` TEXT NOT NULL,
             PRIMARY KEY (`user_id`, `field_id`)) $tbl_options");
-        
+
         if (!DBHelper::tableExists('eportfolio_fields_category')) {
             Database::get()->query("CREATE TABLE `eportfolio_fields_category` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `name` MEDIUMTEXT NOT NULL,
             `sortorder`  INT(11) NOT NULL DEFAULT 0) $tbl_options");
-        
+
             Database::get()->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`) VALUES
                 (1, '$langPersInfo', 0),
                 (2, '$langEduEmpl', -1),
@@ -3437,8 +3445,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 (4, '$langGoalsSkills', -3),
                 (5, '$langContactInfo', -4)");
         }
-        
-        if (!DBHelper::tableExists('eportfolio_fields')) {        
+
+        if (!DBHelper::tableExists('eportfolio_fields')) {
             Database::get()->query("CREATE TABLE `eportfolio_fields` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `shortname` VARCHAR(255) NOT NULL,
@@ -3473,7 +3481,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
                 (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
         }
-        
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
@@ -3484,13 +3492,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `time_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `data` TEXT NOT NULL,
             INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $tbl_options");
-        
-        Database::get()->query("INSERT INTO `config` (`key`, `value`) VALUES ('bio_quota', '4')");
-        
+
+        Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES ('bio_quota', '4')");
+
         if (!DBHelper::fieldExists('user', 'eportfolio_enable')) {
             Database::get()->query("ALTER TABLE `user` ADD eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0");
         }
-        
+
         if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
                                 AFTER grade_comments");
@@ -3502,7 +3510,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
                                 AFTER grade_comments");
-        }                
+        }
 
         // plagiarism tool table
         if (!DBHelper::tableExists('ext_plag_connection')) {
@@ -3538,7 +3546,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `course_id` INT(11) NOT NULL REFERENCES course(id),
             `category_value_id` INT(11) NOT NULL REFERENCES category_value(id)
             ) $tbl_options");
-        
+
         // Rubric tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -3553,7 +3561,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
             `course_id` int(11) NOT NULL,
             KEY `course_id` (`course_id`)) $tbl_options");
-                    
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_rel` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT,
                             `rubric_id` INT(11) NOT NULL,
@@ -3585,7 +3593,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `level_feedback` varchar(60) NOT NULL,
                             PRIMARY KEY (`id`)
                           ) $tbl_options ");
-                
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
                             `id` int(11) NOT NULL DEFAULT '0',
                             `meetingid` varchar(20) NOT NULL,
@@ -3596,7 +3604,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             KEY `id` (`id`),
                             KEY `meetingid` (`meetingid`)
                         ) $tbl_options");
-        
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_log` (
                             `id` int(11) NOT NULL,
                             `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -3634,7 +3642,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if ($debug_error) {
             echo " * $langUpgSucNotice\n";
         }
-        echo $langUpgradeSuccess, "\n", $langLogOutput, ": courses/$logfile\n";
+        echo $langUpgradeSuccess, "\n", $langLogOutput, ": $logfile_path/$logfile\n";
     } else {
         if ($debug_error) {
             $output_result .= "<div class='alert alert-danger'>" . $langUpgSucNotice . "</div>";
