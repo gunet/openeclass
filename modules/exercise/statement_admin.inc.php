@@ -102,9 +102,9 @@ if (isset($_POST['submitQuestion'])) {
         if (isset($_POST['questionGrade'])) {
             $objQuestion->updateWeighting($_POST['questionGrade']);
         }
-        if (isset($_POST['exerciseId'])) {
-            $objQuestion->save($_POST['exerciseId']);
-            $exerciseId = intval($_POST['exerciseId']);
+        if (isset($_GET['exerciseId'])) {
+            $exerciseId = intval($_GET['exerciseId']);
+            $objQuestion->save($exerciseId);
         } else {
             $objQuestion->save();
         }
