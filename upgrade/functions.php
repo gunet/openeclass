@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2017  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -184,13 +183,13 @@ function is_admin($username, $password) {
 
     if (DBHelper::fieldExists('user', 'user_id')) {
         $user = Database::get()->querySingle("SELECT * FROM user, admin
-				WHERE admin.idUser = user.user_id AND
-				BINARY user.username = ?s", $username);
+                WHERE admin.idUser = user.user_id AND
+                BINARY user.username = ?s", $username);
         $db_schema = 0;
     } else {
         $user = Database::get()->querySingle("SELECT * FROM user, admin
-				WHERE admin.user_id = user.id AND
-				BINARY user.username = ?s", $username);
+                WHERE admin.user_id = user.id AND
+                BINARY user.username = ?s", $username);
         $db_schema = 1;
     }
 
@@ -280,7 +279,7 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
 
     if (rename($path_to_dropbox . $filename, $path_to_dropbox . $new_filename)) {
         Database::get()->query("UPDATE dropbox_file SET filename = '$new_filename'
-	        	WHERE id = '$id'", $code);
+                WHERE id = '$id'", $code);
     } else {
         Debug::message($langEncDropboxError, Debug::ERROR);
     }
@@ -794,8 +793,8 @@ function upgrade_course_3_0($code, $course_id) {
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.poll
                          (`pid`, `course_id`, `creator_id`, `name`, `creation_date`, `start_date`, `end_date`, `active`, `anonymized`)
                          SELECT `pid` + $pollid_offset, $course_id, `creator_id`, `name`, `creation_date`, `start_date`,
-                                `end_date`, `active`, `anonymized` 
-                         FROM poll ORDER BY pid") != null);
+                                `end_date`, `active`, `anonymized`
+                           FROM poll ORDER BY pid") != null);
 
         // ----- poll_question DB Table ----- //
         $pollquestionid_offset = Database::get()->querySingle("SELECT MAX(pqid) AS max FROM `$mysqlMainDb`.poll_question")->max;
@@ -1116,6 +1115,8 @@ function upgrade_course_3_0($code, $course_id) {
                                     VALUES (".MODULE_ID_BLOG.", 0, $course_id)");
     Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
                                     VALUES (".MODULE_ID_TC.", 0, $course_id)");
+    Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
+                                    VALUES (".MODULE_ID_MINDMAP.", 0, $course_id)");
     Database::get()->query("INSERT INTO `$mysqlMainDb`.course_module (module_id, visible, course_id)
                                     VALUES (".MODULE_ID_LTI_CONSUMER.", 0, $course_id)");
 
@@ -1498,9 +1499,9 @@ function upgrade_course_2_2($code, $lang) {
 
     // upgrade exercises
     Database::get()->query("ALTER TABLE `exercise_user_record`
-		CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
+        CHANGE `RecordStartDate` `RecordStartDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
     Database::get()->query("ALTER TABLE `exercise_user_record`
-		CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
+        CHANGE `RecordEndDate` `RecordEndDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'");
     if (!DBHelper::fieldExists('exercices', 'results', $code))
         echo add_field('exercices', 'results', "TINYINT(1) NOT NULL DEFAULT '1'");
     Database::get()->query("ALTER TABLE `questions` CHANGE `ponderation` `ponderation` FLOAT(11,2) NULL DEFAULT NULL");
@@ -1521,7 +1522,7 @@ function upgrade_course_2_2($code, $lang) {
     }
     // upgrade lp_module me to kainourio content type
     Database::get()->query("ALTER TABLE `lp_module`
-		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')");
+        CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')");
     Database::get()->query("ALTER TABLE `liens` CHANGE `url` `url` VARCHAR(255) DEFAULT NULL");
     Database::get()->query("ALTER TABLE `liens` CHANGE `titre` `titre` VARCHAR(255) DEFAULT NULL");
     // indexes creation
@@ -1554,7 +1555,7 @@ function upgrade_course_2_1_3($code) {
 
     // upgrade lp_module me to kainourio content type
     Database::get()->query("ALTER TABLE `lp_module`
-		CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')");
+        CHANGE `contentType` `contentType` ENUM('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK')");
 }
 
 // Remove the first component from beginning of $path, return the rest starting with '/'
@@ -1654,18 +1655,26 @@ function group_documents_main_db($path, $course_id, $group_id, $type) {
 }
 
 function mkdir_or_error($dirname) {
-    global $langErrorCreatingDirectory;
-    if (!is_dir($dirname)) {
-        if (!make_dir($dirname)) {
+    global $langErrorCreatingDirectory, $command_line;
+
+    if (!(is_dir($dirname) or make_dir($dirname))) {
+        if ($command_line) {
+            echo "$langErrorCreatingDirectory $dirname\n";
+        } else {
             echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $dirname</div>";
         }
     }
 }
 
 function touch_or_error($filename) {
-    global $langErrorCreatingDirectory;
-    if (@!touch($filename)) {
-        echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $filename</div>";
+    global $langErrorCreatingDirectory, $command_line;
+
+    if (!(file_exists($filename) or @touch($filename))) {
+        if ($command_line) {
+            echo "$langErrorCreatingDirectory $filename\n";
+        } else {
+            echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $filename</div>";
+        }
     }
 }
 
@@ -1802,7 +1811,7 @@ function setGlobalContactInfo() {
     }
 }
 
-function updateAnnouncementSticky( $table ) {
+function updateAnnouncementAdminSticky( $table ) {
     $arr_date = Database::get()->queryArray("SELECT id FROM $table ORDER BY `date` ASC");
     $arr_order_objects = Database::get()->queryArray("SELECT id FROM $table ORDER BY `order` ASC");
     $arr_order = [];
@@ -1832,6 +1841,42 @@ function updateAnnouncementSticky( $table ) {
     foreach ($arr_sticky as $announcement_id) {
         $ordering++;
         Database::get()->query("UPDATE $table SET `order` = ?d where `id`= ?d", $ordering, $announcement_id);
+    }
+}
+
+function updateAnnouncementSticky( $table ) {
+    $courses = Database::get()->queryArray("SELECT course_id FROM $table GROUP BY course_id");
+    foreach ($courses as $course) {
+        $arr_date = Database::get()->queryArray("SELECT id FROM $table WHERE course_id = $course->course_id ORDER BY `date` ASC");
+        $arr_order_objects = Database::get()->queryArray("SELECT id FROM $table WHERE course_id = $course->course_id ORDER BY `order` ASC");
+        $arr_order = [];
+        foreach ($arr_order_objects as $key => $value) {
+            $arr_order[$key] = $value->id;
+        }
+
+        $length = count($arr_order);
+
+        $offset = 0;
+        for ($i = 0; $i < $length; $i++) {
+            if ($arr_date[$i]->id != $arr_order[$i - $offset]) {
+                $offset++;
+            }
+        }
+
+        $zero = $length - $offset;
+        $arr_sticky = array_slice($arr_order, -$offset);
+        $arr_default = array_slice($arr_order, 0, $zero);
+
+        $default_placeholders = implode(',', array_fill(0, count($arr_default), '?d'));
+        if (!empty($default_placeholders)) {
+            Database::get()->query("UPDATE $table SET `order` = 0 WHERE `id` IN ($default_placeholders)", $arr_default);
+        }
+
+        $ordering = 0;
+        foreach ($arr_sticky as $announcement_id) {
+            $ordering++;
+            Database::get()->query("UPDATE $table SET `order` = ?d WHERE `id`= ?d", $ordering, $announcement_id);
+        }
     }
 }
 

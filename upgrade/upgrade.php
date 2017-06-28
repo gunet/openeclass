@@ -1,5 +1,4 @@
 <?php
-
 /* ========================================================================
  * Open eClass 4.0
  * E-learning and Course Management System
@@ -33,9 +32,6 @@ require_once 'upgradeHelper.php';
 
 stop_output_buffering();
 
-// set default storage engine
-Database::get()->query("SET default_storage_engine = InnoDB");
-
 require_once 'upgrade/functions.php';
 
 set_time_limit(0);
@@ -44,6 +40,12 @@ if (php_sapi_name() == 'cli' and ! isset($_SERVER['REMOTE_ADDR'])) {
     $command_line = true;
 } else {
     $command_line = false;
+}
+
+if ($command_line and isset($argv[1])) {
+    $logfile_path = $argv[1];
+} else {
+    $logfile_path = "$webDir/courses";
 }
 
 load_global_messages();
@@ -153,8 +155,6 @@ if (!file_exists($videoDir)) {
     }
 } elseif (!is_dir($videoDir)) {
     die($langUpgNoVideoDir2);
-} elseif (!is_writable($videoDir)) {
-    die($langUpgNoVideoDir3);
 }
 
 mkdir_or_error('courses/temp');
@@ -288,12 +288,16 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and $_SESSION['is
     }
     $logdate = date("Y-m-d_G.i:s");
     $logfile = "log-$logdate.html";
-    if (!($logfile_handle = @fopen("$webDir/courses/$logfile", 'w'))) {
+    if (!($logfile_handle = @fopen("$logfile_path/$logfile", 'w'))) {
         $error = error_get_last();
-        Session::Messages($langLogFileWriteError .
-            '<br><i>' . q($error['message']) . '</i>');
-        draw($tool_content, 0);
-        exit;
+        if ($command_line) {
+            die("$langLogFileWriteError\n$error[message].\nTry: $argv[0] <logfile path>\n");
+        } else {
+            Session::Messages($langLogFileWriteError .
+                 '<br><i>' . q($error['message']) . '</i>');
+            draw($tool_content, 0);
+            exit;
+        }
     }
 
     fwrite($logfile_handle, "<!DOCTYPE html><html><head><meta charset='UTF-8'>
@@ -1503,50 +1507,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `assignment_id` int(11) NOT NULL,
                             PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $tbl_options");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `title` varchar(200) NOT NULL,
-                            `description` text NOT NULL,
-                            `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
-                            `rubric_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
-                            `rubric_to_graded` tinyint(1) NOT NULL DEFAULT '0',
-                            `points_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
-                            `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
-                            `uid` INT(11) NOT NULL,
-                            PRIMARY KEY (`id`)
-                          ) $tbl_options");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_rel` (
-                            `id` INT(11) NOT NULL AUTO_INCREMENT,
-                            `rubric_id` INT(11) NOT NULL,
-                            `course_id` INT(11) NOT NULL,
-                            `module_id` INT(11) NOT NULL,
-                            `resource_id` INT(11) NOT NULL,
-                            PRIMARY KEY (`id`)
-                          ) $tbl_options");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_criteria` (
-                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                            `rubric_id` int(11) NOT NULL,
-                            `sortorder` varchar(30) NOT NULL,
-                            `description` text,
-                            PRIMARY KEY (`id`)
-                         ) $tbl_options");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_levels` (
-                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                            `rubric_id` int(11) NOT NULL,
-                            `criterionid` int(10) unsigned NOT NULL,
-                            `score` decimal(5,0) NOT NULL,
-                            `definition` text NOT NULL,
-                            PRIMARY KEY (`id`)
-                          ) $tbl_options");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_assesment` (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `as_sub_id` int(11) NOT NULL,
-                            `uid` int(11) NOT NULL,
-                            `level_chosen_id` int(11) NOT NULL,
-                            `level_feedback` varchar(60) NOT NULL,
-                            PRIMARY KEY (`id`)
-                          ) $tbl_options ");
-
 
         Database::get()->query("DROP TABLE IF EXISTS agenda");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `agenda` (
@@ -1704,7 +1664,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `reference_obj_course` int(11) DEFAULT NULL,
                         PRIMARY KEY (`id`)) $tbl_options");
 
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `personal_calendar_settings` (
+        Database::get()->query("CREATE TABLE  IF NOT EXISTS `personal_calendar_settings` (
                         `user_id` int(11) NOT NULL,
                         `view_type` enum('day','month','week') DEFAULT 'month',
                         `personal_color` varchar(30) DEFAULT '#5882fa',
@@ -3308,38 +3268,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         // drop trigger
         Database::get()->query("DROP TRIGGER IF EXISTS personal_calendar_settings_init");
-
-        //Create Sticky Announcements
-        $arr_date = Database::get()->queryArray("SELECT id FROM announcement ORDER BY `date` ASC");
-        $arr_order_objects = Database::get()->queryArray("SELECT id FROM announcement ORDER BY `order` ASC");
-        $arr_order = [];
-        foreach ($arr_order_objects as $key=>$value) {
-            $arr_order[$key] = $value->id;
-        }
-
-        $length = count($arr_order);
-
-        $offset = 0;
-        for ($i = 0; $i < $length; $i++) {
-            if ($arr_date[$i]->id != $arr_order[$i-$offset]) {
-                $offset++;
-            }
-        }
-
-        $zero = $length - $offset;
-        $arr_sticky = array_slice($arr_order, -$offset);
-        $arr_default = array_slice($arr_order, 0, $zero);
-
-        $default_placeholders = implode(',', array_fill(0, count($arr_default), '?d'));
-        if ($default_placeholders) {
-            Database::get()->query("UPDATE `announcement` SET `order` = 0 WHERE `id` IN ($default_placeholders)", $arr_default);
-        }
-
-        $ordering = 0;
-        foreach ($arr_sticky as $announcement_id) {
-            $ordering++;
-            Database::get()->query("UPDATE `announcement` SET `order` = ?d where `id`= ?d", $ordering, $announcement_id);
-        }
+        // update announcements
+        Database::get()->query("UPDATE announcement SET `order` = 0");
+        updateAnnouncementAdminSticky("admin_announcement");
 
         //Create FAQ table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `faq` (
@@ -3470,7 +3401,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             });
     }
 
-
     if (version_compare($oldversion, '3.5.1', '<')) {
         // FAQ, E-book and learning path unique indexes
         if (!DBHelper::indexExists('faq', 'faq_order')) {
@@ -3488,7 +3418,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
     if (version_compare($oldversion, '3.6', '<')) {
-
         updateInfo(-1, sprintf($langUpgForVersion, '3.6'));
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
@@ -3506,75 +3435,73 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             FOREIGN KEY (heading_id) REFERENCES activity_heading(id) ON DELETE CASCADE,
             UNIQUE KEY `heading_course` (`course_id`,`heading_id`)) $tbl_options");
 
-
-        //eportfolio tables and data
-        if (!DBHelper::tableExists('eportfolio_fields')) {
-            Database::get()->query("CREATE TABLE `eportfolio_fields` (
-                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `shortname` VARCHAR(255) NOT NULL,
-                            `name` MEDIUMTEXT NOT NULL,
-                            `description` MEDIUMTEXT NULL DEFAULT NULL,
-                            `datatype` VARCHAR(255) NOT NULL,
-                            `categoryid` INT(11) NOT NULL DEFAULT 0,
-                            `sortorder`  INT(11) NOT NULL DEFAULT 0,
-                            `required` TINYINT NOT NULL DEFAULT 0,
-                            `data` TEXT NULL DEFAULT NULL) $tbl_options");
-
-            Database::get()->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
-                            (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
-                            (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
-                            (3, 'gender', '$langGender', '', '4', 1, -2, 0, 'a:2:{i:0;s:".strlen($langMale).":\"$langMale\";i:1;s:".strlen($langFemale).":\"$langFemale\";}'),
-                            (4, 'about_me', '$langAboutMe', '$langAboutMeDescr', '2', 1, -3, 0, ''),
-                            (5, 'personal_website', '$langPersWebsite', '', '5', 1, -4, 0, ''),
-                            (6, 'education', '$langEducation', '$langEducationDescr', '2', 2, 0, 0, ''),
-                            (7, 'employment', '$langEmployment', '', '2', 2, -1, 0, ''),
-                            (8, 'certificates_awards', '$langCertAwards', '', '2', 3, 0, 0, ''),
-                            (9, 'publications', '$langPublications', '', '2', 3, -1, 0, ''),
-                            (10, 'personal_goals', '$langPersGoals', '', '2', 4, 0, 0, ''),
-                            (11, 'academic_goals', '$langAcademicGoals', '', '2', 4, -1, 0, ''),
-                            (12, 'career_goals', '$langCareerGoals', '', '2', 4, -2, 0, ''),
-                            (13, 'personal_skills', '$langPersSkills', '', '2', 4, -3, 0, ''),
-                            (14, 'academic_skills', '$langAcademicSkills', '', '2', 4, -4, 0, ''),
-                            (15, 'career_skills', '$langCareerSkills', '', '2', 4, -5, 0, ''),
-                            (16, 'email', '$langEmail', '', '1', 5, 0, 0, ''),
-                            (17, 'phone_number', '$langPhone', '', '1', 5, -1, 0, ''),
-                            (18, 'Address', '$langAddress', '', '1', 5, -2, 0, ''),
-                            (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
-                            (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
-                            (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
-        }
-
+        // eportfolio tables and data
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields_data` (
-                        `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                        `field_id` INT(11) NOT NULL,
-                        `data` TEXT NOT NULL,
-                        PRIMARY KEY (`user_id`, `field_id`)) $tbl_options");
+            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+            `field_id` INT(11) NOT NULL,
+            `data` TEXT NOT NULL,
+            PRIMARY KEY (`user_id`, `field_id`)) $tbl_options");
 
         if (!DBHelper::tableExists('eportfolio_fields_category')) {
             Database::get()->query("CREATE TABLE `eportfolio_fields_category` (
-                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `name` MEDIUMTEXT NOT NULL,
-                            `sortorder`  INT(11) NOT NULL DEFAULT 0) $tbl_options");
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` MEDIUMTEXT NOT NULL,
+            `sortorder`  INT(11) NOT NULL DEFAULT 0) $tbl_options");
 
             Database::get()->query("INSERT INTO `eportfolio_fields_category` (`id`, `name`, `sortorder`) VALUES
-                            (1, '$langPersInfo', 0),
-                            (2, '$langEduEmpl', -1),
-                            (3, '$langAchievements', -2),
-                            (4, '$langGoalsSkills', -3),
-                            (5, '$langContactInfo', -4)");
+                (1, '$langPersInfo', 0),
+                (2, '$langEduEmpl', -1),
+                (3, '$langAchievements', -2),
+                (4, '$langGoalsSkills', -3),
+                (5, '$langContactInfo', -4)");
+        }
 
+        if (!DBHelper::tableExists('eportfolio_fields')) {
+            Database::get()->query("CREATE TABLE `eportfolio_fields` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `shortname` VARCHAR(255) NOT NULL,
+                `name` MEDIUMTEXT NOT NULL,
+                `description` MEDIUMTEXT NULL DEFAULT NULL,
+                `datatype` VARCHAR(255) NOT NULL,
+                `categoryid` INT(11) NOT NULL DEFAULT 0,
+                `sortorder`  INT(11) NOT NULL DEFAULT 0,
+                `required` TINYINT NOT NULL DEFAULT 0,
+                `data` TEXT NULL DEFAULT NULL) $tbl_options");
+
+            Database::get()->query("INSERT INTO `eportfolio_fields` (`id`, `shortname`, `name`, `description`, `datatype`, `categoryid`, `sortorder`, `required`, `data`) VALUES
+                (1, 'birth_date', '$langBirthDate', '', '3', 1, 0, 0, ''),
+                (2, 'birth_place', '$langBirthPlace', '', '1', 1, -1, 0, ''),
+                (3, 'gender', '$langGender', '', '4', 1, -2, 0, 'a:2:{i:0;s:".strlen($langMale).":\"$langMale\";i:1;s:".strlen($langFemale).":\"$langFemale\";}'),
+                (4, 'about_me', '$langAboutMe', '$langAboutMeDescr', '2', 1, -3, 0, ''),
+                (5, 'personal_website', '$langPersWebsite', '', '5', 1, -4, 0, ''),
+                (6, 'education', '$langEducation', '$langEducationDescr', '2', 2, 0, 0, ''),
+                (7, 'employment', '$langEmployment', '', '2', 2, -1, 0, ''),
+                (8, 'certificates_awards', '$langCertAwards', '', '2', 3, 0, 0, ''),
+                (9, 'publications', '$langPublications', '', '2', 3, -1, 0, ''),
+                (10, 'personal_goals', '$langPersGoals', '', '2', 4, 0, 0, ''),
+                (11, 'academic_goals', '$langAcademicGoals', '', '2', 4, -1, 0, ''),
+                (12, 'career_goals', '$langCareerGoals', '', '2', 4, -2, 0, ''),
+                (13, 'personal_skills', '$langPersSkills', '', '2', 4, -3, 0, ''),
+                (14, 'academic_skills', '$langAcademicSkills', '', '2', 4, -4, 0, ''),
+                (15, 'career_skills', '$langCareerSkills', '', '2', 4, -5, 0, ''),
+                (16, 'email', '$langEmail', '', '1', 5, 0, 0, ''),
+                (17, 'phone_number', '$langPhone', '', '1', 5, -1, 0, ''),
+                (18, 'Address', '$langAddress', '', '1', 5, -2, 0, ''),
+                (19, 'fb', '$langFBProfile', '', '5', 5, -3, 0, ''),
+                (20, 'twitter', '$langTwitterAccount', '', '5', 5, -4, 0, ''),
+                (21, 'linkedin', '$langLinkedInProfile', '', '5', 5, -5, 0, '')");
         }
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `eportfolio_resource` (
-                        `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                        `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                        `resource_id` INT(11) NOT NULL,
-                        `resource_type` VARCHAR(50) NOT NULL,
-                        `course_id` INT(11) NOT NULL,
-                        `course_title` VARCHAR(250) NOT NULL DEFAULT '',
-                        `time_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        `data` TEXT NOT NULL,
-                        INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $tbl_options");
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+            `resource_id` INT(11) NOT NULL,
+            `resource_type` VARCHAR(50) NOT NULL,
+            `course_id` INT(11) NOT NULL,
+            `course_title` VARCHAR(250) NOT NULL DEFAULT '',
+            `time_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `data` TEXT NOT NULL,
+            INDEX `eportfolio_res_index` (`user_id`,`resource_type`)) $tbl_options");
 
         Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES ('bio_quota', '4')");
 
@@ -3586,52 +3513,29 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `user` ADD public_blog TINYINT(1) NOT NULL DEFAULT 0");
         }
 
-        // bbb attendance tables
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
-                        `id` int(11) NOT NULL DEFAULT '0',
-                        `meetingid` varchar(20) NOT NULL,
-                        `bbbuserid` varchar(20) DEFAULT NULL,
-                        `totaltime` int(11) NOT NULL DEFAULT '0',
-                        `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        PRIMARY KEY (`id`,`meetingid`),
-                        KEY `id` (`id`),
-                        KEY `meetingid` (`meetingid`)
-                    ) $tbl_options");
 
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_log` (
-                        `id` int(11) NOT NULL,
-                        `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                        `meetingid` varchar(20) NOT NULL,
-                        `bbbuserid` varchar(20) DEFAULT NULL,
-                        `fullName` varchar(200) DEFAULT NULL,
-                        `type` varchar(255) default 'bbb',
-                        PRIMARY KEY (`id`),
-                        KEY `userid` (`bbbuserid`),
-                        KEY `fullName` (`fullName`)
-                    ) $tbl_options");
-
-        // upgrade assignments
+        if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
+            Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
+                                AFTER grade_comments");
+        }
+        // upgrade table `assignment`
+        if (!DBHelper::fieldExists('assignment', 'notification')) {
+            Database::get()->query("ALTER TABLE assignment ADD notification tinyint(4) DEFAULT 0");
+        }
         if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
                                 AFTER grade_comments");
         }
 
-        if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filename')) {
-            Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filename VARCHAR(200) NOT NULL DEFAULT ''
-                                AFTER grade_comments");
-        }
-
-        if (!DBHelper::fieldExists('assignment', 'notification')) {
-            Database::get()->query("ALTER TABLE assignment ADD notification tinyint(4) DEFAULT 0");
-        }
-        if (!DBHelper::fieldExists('assignment', 'grading_type')) {
-            Database::get()->query("ALTER TABLE assignment ADD `grading_type` TINYINT NOT NULL DEFAULT '0' AFTER group_submissions");
-        }
-        if (!DBHelper::fieldExists('assignment', 'password_lock')) {
-            Database::get()->query("ALTER TABLE `assignment` ADD `password_lock` VARCHAR(255)");
-        }
-        if (!DBHelper::fieldExists('assignment', 'ip_lock')) {
-            Database::get()->query("ALTER TABLE `assignment` ADD `ip_lock` TEXT");
+        // plagiarism tool table
+        if (!DBHelper::tableExists('ext_plag_connection')) {
+            Database::get()->query("CREATE TABLE `ext_plag_connection` (
+              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `type` int(1) unsigned NOT NULL DEFAULT '1',
+              `file_id` int(11) NOT NULL,
+              `remote_file_id` int(11) DEFAULT NULL,
+              `submission_id` int(11) DEFAULT NULL,
+              PRIMARY KEY (`id`)) $tbl_options");
         }
 
         // Course Category tables
@@ -3658,193 +3562,97 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `category_value_id` INT(11) NOT NULL REFERENCES category_value(id)
             ) $tbl_options");
 
-        // Gamification Tables (aka certificate + badge)
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate_template` (
-            `id` mediumint(8) not null auto_increment,
-            `name` varchar(255) not null,
-            `description` text,
-            `filename` varchar(255),
-            PRIMARY KEY(`id`)
-        )");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `badge_icon` (
-                `id` mediumint(8) not null auto_increment primary key,
-                `name` varchar(255) not null,
-                `description` text,
-                `filename` varchar(255)
-        )");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate` (
-          `id` int(11) not null auto_increment primary key,
-          `course_id` int(11) not null,
-          `issuer` varchar(255) not null default '',
-          `template` mediumint(8),
-          `title` varchar(255) not null,
-          `description` text,
-          `autoassign` tinyint(1) not null default 1,
-          `active` tinyint(1) not null default 1,
-          `created` datetime,
-          `expires` datetime,
-          `bundle` int(11) not null default 0,
-          index `certificate_course` (`course_id`),
-          foreign key (`course_id`) references `course` (`id`),
-          foreign key (`template`) references `certificate_template`(`id`)
-        ) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `badge` (
-            `id` int(11) not null auto_increment primary key,
-            `course_id` int(11) not null,
-            `issuer` varchar(255) not null default '',
-            `icon` mediumint(8),
-            `title` varchar(255) not null,
-            `description` text,
-            `message` text,
-            `autoassign` tinyint(1) not null default 1,
-            `active` tinyint(1) not null default 1,
-            `created` datetime,
-            `expires` datetime,
-            `bundle` int(11) not null default 0,
-            index `badge_course` (`course_id`),
-            foreign key (`course_id`) references `course` (`id`)
-          )");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_certificate` (
-          `id` int(11) not null auto_increment primary key,
-          `user` int(11) not null,
-          `certificate` int(11) not null,
-          `completed` boolean default false,
-          `completed_criteria` int(11),
-          `total_criteria` int(11),
-          `updated` datetime,
-          `assigned` datetime,
-          unique key `user_certificate` (`user`, `certificate`),
-          foreign key (`user`) references `user`(`id`),
-          foreign key (`certificate`) references `certificate` (`id`)
-        ) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_badge` (
-          `id` int(11) not null auto_increment primary key,
-          `user` int(11) not null,
-          `badge` int(11) not null,
-          `completed` boolean default false,
-          `completed_criteria` int(11),
-          `total_criteria` int(11),
-          `updated` datetime,
-          `assigned` datetime,
-          unique key `user_badge` (`user`, `badge`),
-          foreign key (`user`) references `user`(`id`),
-          foreign key (`badge`) references `badge` (`id`)
-        ) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `certificate_criterion` (
-          `id` int(11) not null auto_increment primary key,
-          `certificate` int(11) not null,
-          `activity_type` varchar(255),
-          `module` int(11),
-          `resource` int(11),
-          `threshold` decimal(7,2),
-          `operator` varchar(20),
-          foreign key (`certificate`) references `certificate`(`id`)
-        ) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `badge_criterion` (
-          `id` int(11) not null auto_increment primary key,
-          `badge` int(11) not null,
-          `activity_type` varchar(255),
-          `module` int(11),
-          `resource` int(11),
-          `threshold` decimal(7,2),
-          `operator` varchar(20),
-          foreign key (`badge`) references `badge`(`id`)
-        ) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_certificate_criterion` (
-          `id` int(11) not null auto_increment primary key,
-          `user` int(11) not null,
-          `certificate_criterion` int(11) not null,
-          `created` datetime,
-          unique key `user_certificate_criterion` (`user`, `certificate_criterion`),
-          foreign key (`user`) references `user`(`id`),
-          foreign key (`certificate_criterion`) references `certificate_criterion`(`id`)
-        ) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_badge_criterion` (
-          `id` int(11) not null auto_increment primary key,
-          `user` int(11) not null,
-          `badge_criterion` int(11) not null,
-          `created` datetime,
-          unique key `user_badge_criterion` (`user`, `badge_criterion`),
-          foreign key (`user`) references `user`(`id`),
-          foreign key (`badge_criterion`) references `badge_criterion`(`id`)
-        ) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `certified_users` (
-            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-            `course_title` varchar(255) NOT NULL DEFAULT '',
-            `cert_title` varchar(255) NOT NULL DEFAULT '',
-            `cert_id` int(11) NOT NULL,
-            `cert_issuer` varchar(256) DEFAULT NULL,
-            `user_fullname` varchar(255) NOT NULL DEFAULT '',
-            `assigned` datetime NOT NULL,
-            `identifier` varchar(255) NOT NULL DEFAULT '',
-            `expires` datetime DEFAULT NULL,
-            PRIMARY KEY (`id`)
-        ) $tbl_options");
-
-        // tc attendance tables
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
-            `id` int(11) NOT NULL DEFAULT '0',
-            `meetingid` varchar(20) NOT NULL,
-            `bbbuserid` varchar(20) DEFAULT NULL,
-            `totaltime` int(11) NOT NULL DEFAULT '0',
-            `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (`id`,`meetingid`),
-            KEY `id` (`id`),
-            KEY `meetingid` (`meetingid`)
-        ) $tbl_options");
-
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_log` (
-                `id` int(11) NOT NULL,
-                `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                `meetingid` varchar(20) NOT NULL,
-                `bbbuserid` varchar(20) DEFAULT NULL,
-                `fullName` varchar(200) DEFAULT NULL,
-                `type` varchar(255) default 'bbb',
-                PRIMARY KEY (`id`),
-                KEY `userid` (`bbbuserid`),
-                KEY `fullName` (`fullName`)
-            ) $tbl_options");
-
         // Rubric tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `name` VARCHAR(200) NOT NULL,
+            `title` varchar(255) NOT NULL,
             `scales` text NOT NULL,
             `description` text,
             `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
+            `rubric_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
+            `rubric_to_graded` tinyint(1) NOT NULL DEFAULT '0',
+            `points_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
             `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
-            `course_id` int(11) NOT NULL)
-            $tbl_options");
+            `course_id` int(11) NOT NULL,
+            KEY `course_id` (`course_id`)) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_rel` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT,
+                            `rubric_id` INT(11) NOT NULL,
+                            `course_id` INT(11) NOT NULL,
+                            `module_id` INT(11) NOT NULL,
+                            `resource_id` INT(11) NOT NULL,
+                            PRIMARY KEY (`id`)
+                          ) $tbl_options");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_criteria` (
+                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                            `rubric_id` int(11) NOT NULL,
+                            `sortorder` varchar(30) NOT NULL,
+                            `description` text,
+                            PRIMARY KEY (`id`)
+                         ) $tbl_options");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_levels` (
+                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                            `rubric_id` int(11) NOT NULL,
+                            `criterionid` int(10) unsigned NOT NULL,
+                            `score` decimal(5,0) NOT NULL,
+                            `definition` text NOT NULL,
+                            PRIMARY KEY (`id`)
+                          ) $tbl_options");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_assesment` (
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `as_sub_id` int(11) NOT NULL,
+                            `uid` int(11) NOT NULL,
+                            `level_chosen_id` int(11) NOT NULL,
+                            `level_feedback` varchar(60) NOT NULL,
+                            PRIMARY KEY (`id`)
+                          ) $tbl_options ");
+
+        // tc attendance tables
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_attendance` (
+                            `id` int(11) NOT NULL DEFAULT '0',
+                            `meetingid` varchar(20) NOT NULL,
+                            `bbbuserid` varchar(20) DEFAULT NULL,
+                            `totaltime` int(11) NOT NULL DEFAULT '0',
+                            `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            PRIMARY KEY (`id`,`meetingid`),
+                            KEY `id` (`id`),
+                            KEY `meetingid` (`meetingid`)
+                        ) $tbl_options");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `tc_log` (
+                            `id` int(11) NOT NULL,
+                            `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                            `meetingid` varchar(20) NOT NULL,
+                            `bbbuserid` varchar(20) DEFAULT NULL,
+                            `fullName` varchar(200) DEFAULT NULL,
+                            `type` varchar(255) default 'bbb',
+                            PRIMARY KEY (`id`),
+                            KEY `userid` (`bbbuserid`),
+                            KEY `fullName` (`fullName`)
+                        ) $tbl_options");
     }
 
     if (version_compare($oldversion, '4.0', '<')) {
         updateInfo(-1, sprintf($langUpgForVersion, '4.0'));
 
-        $db->query("CREATE TABLE IF NOT EXISTS `widget` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `class` varchar(400) NOT NULL) $tbl_options");
-        $db->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
-                `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `widget_id` int(11) unsigned NOT NULL,
-                `widget_area_id` int(11) NOT NULL,
-                `options` text NOT NULL,
-                `position` int(3) NOT NULL,
-                `user_id` int(11) NULL,
-                `course_id` int(11) NULL,
-                 FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
-                 FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-                 FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $tbl_options");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget` (
+                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `class` varchar(400) NOT NULL) $tbl_options");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `widget_widget_area` (
+                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `widget_id` int(11) unsigned NOT NULL,
+                            `widget_area_id` int(11) NOT NULL,
+                            `options` text NOT NULL,
+                            `position` int(3) NOT NULL,
+                            `user_id` int(11) NULL,
+                            `course_id` int(11) NULL,
+                            FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+                            FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+                            FOREIGN KEY (widget_id) REFERENCES widget(id) ON DELETE CASCADE) $tbl_options");
     }
+
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
@@ -3870,7 +3678,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if ($debug_error) {
             echo " * $langUpgSucNotice\n";
         }
-        echo $langUpgradeSuccess, "\n", $langLogOutput, ": courses/$logfile\n";
+        echo $langUpgradeSuccess, "\n", $langLogOutput, ": $logfile_path/$logfile\n";
     } else {
         if ($debug_error) {
             $output_result .= "<div class='alert alert-danger'>" . $langUpgSucNotice . "</div>";

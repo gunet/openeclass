@@ -10,6 +10,7 @@ function getInfoAreas() {
 
 function updateInfo($percent, $infoText, $debug = true) {
     global $command_line;
+    static $last = null;
 
     if ($debug) {
         Debug::message($infoText, Debug::WARNING);
@@ -21,7 +22,11 @@ function updateInfo($percent, $infoText, $debug = true) {
         } else {
             $percentageText .= '%';
         }
-        echo $percentageText, ' ', $infoText, "\n";
+        $output = $percentageText . ' ' . $infoText;
+        if ($last != $output) {
+            echo $output, "\n";
+            $last = $output;
+        }
     } else {
         echo '<script>';
         if ($percent >= 0) {
