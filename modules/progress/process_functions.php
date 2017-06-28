@@ -276,30 +276,14 @@ function add_ebook_to_certificate($element, $element_id) {
  * @param type $element
  * @return type
  */
-function add_forum_to_certificate($element, $element_id) {
-           
-    if (isset($_POST['forum'])) {
-        foreach ($_POST['forum'] as $datakey => $data) {        
+function add_forumtopic_to_certificate($element, $element_id) {
+    if (isset($_POST[ForumTopicEvent::ACTIVITY])) {
+        foreach ($_POST[ForumTopicEvent::ACTIVITY] as $datakey => $data) {
             Database::get()->query("INSERT INTO ${element}_criterion
                                 SET $element = ?d, 
                                 module = " . MODULE_ID_FORUM . ", 
                                 resource = ?d, 
-                                activity_type = '" . ForumEvent::ACTIVITY . "',
-                                operator = ?s,
-                                threshold = ?f",
-                            $element_id, 
-                            $_POST['forum'][$datakey],
-                            $_POST['operator'][$data],
-                            $_POST['threshold'][$data]);
-        }        
-    }
-    if (isset($_POST['forumtopic'])) {
-        foreach ($_POST['forumtopic'] as $datakey => $data) {        
-            Database::get()->query("INSERT INTO ${element}_criterion
-                                SET $element = ?d, 
-                                module = " . MODULE_ID_FORUM . ", 
-                                resource = ?d, 
-                                activity_type = '" . ForumEvent::ACTIVITY . "',
+                                activity_type = '" . ForumTopicEvent::ACTIVITY . "',
                                 operator = ?s,
                                 threshold = ?f",
                             $element_id, 
@@ -493,7 +477,7 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
                                 message = ?s,
                                 template = ?d,
                                 issuer = ?s,
-                                active = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active)->lastInsertID;    
+                                active = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active)->lastInsertID;
     } else {
         $new_id = Database::get()->query("INSERT INTO badge 
                                 SET course_id = ?d,
@@ -759,14 +743,9 @@ function get_resource_details($element, $resource_id) {
                 $type = "$langPersoValue $langCourseSocialBookmarks";
                 $title = "$langPersoValue";
             break;
-        case ForumEvent::ACTIVITY:
+        case ForumTopicEvent::ACTIVITY:
                 $title = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $resource)->title;
-                //$title = Database::get()->querySingle("SELECT name FROM forum WHERE course_id = ?d AND id = ?d", $course_id, $resource)->name;
-                $type = "$langForums";                
-            break;
-        case 'forumtopic':
-                $title = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $resource)->title;
-                $type = "$langForums";                
+                $type = "$langForums";
             break;
         case RatingEvent::FORUM_ACTIVITY:
                 $type = "$langForumRating";

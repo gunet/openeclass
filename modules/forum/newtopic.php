@@ -91,7 +91,7 @@ if (isset($_POST['submit'])) {
 
     $post_id = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip) VALUES (?d, ?s, ?d, ?t, ?s)"
                     , $topic_id, $message, $uid, $time, $poster_ip)->lastInsertID;
-    triggerGame($course_id, $uid, ForumEvent::NEWPOST);
+    triggerGame($course_id, $uid, ForumTopicEvent::NEWPOST, $topic_id);
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
     $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post 

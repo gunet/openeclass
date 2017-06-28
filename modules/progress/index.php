@@ -33,7 +33,7 @@ require_once 'AssignmentEvent.php';
 require_once 'CommentEvent.php';
 require_once 'BlogEvent.php';
 require_once 'WikiEvent.php';
-require_once 'ForumEvent.php';
+require_once 'ForumTopicEvent.php';
 require_once 'LearningPathEvent.php';
 require_once 'RatingEvent.php';
 require_once 'ViewingEvent.php';
@@ -313,8 +313,8 @@ if ($is_editor) {
         add_ebook_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
-    } elseif (isset($_POST['add_forum'])) { // add forum activity in certificate
-        add_forum_to_certificate($element, $element_id);
+    } elseif (isset($_POST['add_forumtopic'])) { // add forum activity in certificate
+        add_forumtopic_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_blog'])) {

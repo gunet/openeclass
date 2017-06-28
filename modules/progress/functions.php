@@ -251,7 +251,7 @@ function display_badges() {
  * @global type $langOfLearningPath
  * @global type $langDelete
  * @global type $langEditChange
- * @global type $langConfirmDelete 
+ * @global type $langConfirmDelete
  * @global type $langInsertWorkCap
  * @global type $langAdd
  * @global type $langExport
@@ -306,15 +306,15 @@ function display_activities($element, $id) {
 
     $addActivityBtn = action_button(array(
         array('title' => "$langOfAssignment",
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=assignment",
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
             'icon' => 'fa fa-flask space-after-icon',
             'class' => ''),
         array('title' => "$langExerciseAsModuleLabel",
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=exercise",
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ExerciseEvent::ACTIVITY,
             'icon' => 'fa fa-edit space-after-icon',
             'class' => ''),
         array('title' => "$langOfBlog",
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=blog",
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . BlogEvent::ACTIVITY,
             'icon' => 'fa fa-edit space-after-icon',
             'class' => ''),
         array('title' => "$langOfBlogComments",
@@ -326,7 +326,7 @@ function display_activities($element, $id) {
               'icon' => 'fa fa-edit space-after-icon',
               'class' => ''),*/
         array('title' => "$langOfForums",
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=forum",
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumTopicEvent::ACTIVITY,
             'icon' => 'fa fa-edit space-after-icon',
             'class' => ''),
         array('title' => "$langOfLearningPath",
@@ -453,13 +453,13 @@ function display_activities($element, $id) {
 function insert_activity($element, $element_id, $activity) {
                                 
     switch ($activity) {
-        case 'assignment':            
+        case AssignmentEvent::ACTIVITY:
             display_available_assignments($element, $element_id);
             break;
-        case 'exercise':
+        case ExerciseEvent::ACTIVITY:
             display_available_exercises($element, $element_id);
             break;
-        case 'blog';
+        case BlogEvent::ACTIVITY;
             display_available_blogs($element, $element_id);
             break;
         case 'blogcomments':
@@ -468,8 +468,8 @@ function insert_activity($element, $element_id, $activity) {
         case 'coursecomments':
             display_available_coursecomments($element, $element_id);
             break;
-        case 'forum':
-            display_available_forums($element, $element_id);
+        case ForumTopicEvent::ACTIVITY:
+            display_available_forumtopics($element, $element_id);
             break;
         case 'lp':
             display_available_lps($element, $element_id);
@@ -976,79 +976,53 @@ function display_available_coursecomments($element, $element_id) {
  * @param type $element
  * @param type $element_id
  */
-function display_available_forums($element, $element_id) {
-      
+function display_available_forumtopics($element, $element_id) {
     global $tool_content, $urlServer, $course_id,
-           $langComments, $langAddModulesButton, $langChoice, $langNoForums, 
+           $langComments, $langAddModulesButton, $langChoice, $langNoForums, $langNoForumTopic,
            $langForums, $course_code, $langOperator, $langValue;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-    $result = Database::get()->queryArray("SELECT * FROM forum WHERE course_id = ?d 
-                                        AND forum.id NOT IN 
+    $result = Database::get()->queryArray("SELECT ft.* FROM forum_topic ft JOIN forum f ON (f.id = ft.forum_id) WHERE f.course_id = ?d
+                                        AND ft.id NOT IN 
                                         (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
                                             AND resource != '' 
-                                            AND activity_type = '" . ForumEvent::ACTIVITY . "' 
+                                            AND activity_type = '" . ForumTopicEvent::ACTIVITY . "' 
                                             AND module = " . MODULE_ID_FORUM . ")", $course_id, $element_id);
-    $foruminfo = array();
-    foreach ($result as $row) {
-        $foruminfo[] = array(
-            'id' => $row->id,
-            'name' => $row->name,
-            'comment' => $row->desc,
-            'topics' => $row->num_topics);
+    $topicinfo = array();
+    foreach ($result as $topicrow) {
+        $topicinfo[] = array(
+            'topic_id' => $topicrow->id,
+            'topic_title' => $topicrow->title,
+            'topic_time' => $topicrow->topic_time,
+            'forum_id' => $topicrow->forum_id);
     }
-    if (count($foruminfo) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoForums</div>";
+
+    if (count($topicinfo) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoForumTopic</div>";
     } else {
         $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th>$langForums</th>" .
-                "<th>$langComments</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$langValue</th>" . 
+                "<th style='width:50px;'>$langValue</th>" .
                 "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
 
-        foreach ($foruminfo as $entry) {
-            $forum_id = $entry['id'];
+        foreach ($topicinfo as $topicentry) {
+            $topic_id = $topicentry['topic_id'];
+            $forum_id = $topicentry['forum_id'];
             $tool_content .= "<tr>";
-            $tool_content .= "<td><a href='${urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>" . q($entry['name']). "</a></td>";
-            $tool_content .= "<td>" . q($entry['comment']) . "</td>";            
-            $tool_content .= "<td>". selection(get_operators(), "operator[$forum_id]") . "</td>";
-            $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$forum_id]' value=''></td>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='forum[]' value='$forum_id'></td>";
+            $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id'>" . q($topicentry['topic_title']) . "</a></td>";
+            $tool_content .= "<td>". selection(get_operators(), "operator[$topic_id]") . "</td>";
+            $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$topic_id]' value=''></td>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='forumtopic[]' value='$topic_id'></td>";
             $tool_content .= "</tr>";
-            $r = Database::get()->queryArray("SELECT * FROM forum_topic WHERE forum_id = ?d 
-                                                AND forum_topic.id NOT IN 
-                                            (SELECT resource FROM ${element}_criterion WHERE $element = ?d 
-                                                AND resource != '' 
-                                                AND activity_type = 'forumtopic' 
-                                                AND module = " . MODULE_ID_FORUM . ")", $forum_id, $element_id);
-            if (count($r) > 0) { // if forum topics found
-                $topicinfo = array();
-                foreach ($r as $topicrow) {
-                    $topicinfo[] = array(
-                        'topic_id' => $topicrow->id,
-                        'topic_title' => $topicrow->title,
-                        'topic_time' => $topicrow->topic_time);
-                }
-                foreach ($topicinfo as $topicentry) {
-                    $topic_id = $topicentry['topic_id'];
-                    $tool_content .= "<tr>";
-                    $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$entry[id]'>" . q($topicentry['topic_title']) . "</a></td>";
-                    $tool_content .= "<td>&nbsp;</td>";
-                    $tool_content .= "<td>". selection(get_operators(), "operator[$topic_id]") . "</td>";
-                    $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$topic_id]' value=''></td>";
-                    $tool_content .= "<td class='text-center'><input type='checkbox' name='forumtopic[]' value='$topic_id'></td>";
-                    $tool_content .= "</tr>";
-                }
-            }
         }
         $tool_content .= "</table>";
         $tool_content .= "<div class='text-right'>
-                            <input class='btn btn-primary' type='submit' name='add_forum' value='$langAddModulesButton'>
+                            <input class='btn btn-primary' type='submit' name='add_forumtopic' value='$langAddModulesButton'>
                         </div></form>";        
     }
 }

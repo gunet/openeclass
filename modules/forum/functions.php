@@ -27,8 +27,7 @@ define('TOPICS_PER_PAGE', 10);
 define('HOT_THRESHOLD', 20);
 define('PAGINATION_CONTEXT', 3);
 
-require_once 'modules/progress/ForumEvent.php';
-require_once 'modules/progress/CommentEvent.php';
+require_once 'modules/progress/ForumTopicEvent.php';
 
 function get_total_topics($forum_id) {
     return Database::get()->querySingle("SELECT COUNT(*) AS total FROM forum_topic WHERE forum_id = ?d", $forum_id)->total;
@@ -287,13 +286,13 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
 }
 
 
-function triggerGame($courseId, $uid, $eventName) {
+function triggerGame($courseId, $uid, $eventName, $topicId) {
     $eventData = new stdClass();
     $eventData->courseId = $courseId;
     $eventData->uid = $uid;
-    $eventData->activityType = ForumEvent::ACTIVITY;
+    $eventData->activityType = ForumTopicEvent::ACTIVITY;
     $eventData->module = MODULE_ID_FORUM;
+    $eventData->resource = intval($topicId);
 
-    ForumEvent::trigger($eventName, $eventData);
-    CommentEvent::trigger($eventName, $eventData);
+    ForumTopicEvent::trigger($eventName, $eventData);
 }
