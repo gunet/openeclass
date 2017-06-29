@@ -29,8 +29,8 @@
 
 /**
  * @brief add assignment db entries in certificate criterion 
- * @param type $element_id
  * @param type $element
+ * @param type $element_id
  * @return type
  */
 function add_assignment_to_certificate($element, $element_id) {
@@ -56,8 +56,8 @@ function add_assignment_to_certificate($element, $element_id) {
 
 /**
  * @brief add exercise db entries in certificate criterion 
- * @param type $element_id
  * @param type $element
+ * @param type $element_id
  * @return type
  */
 function add_exercise_to_certificate($element, $element_id) {
@@ -83,8 +83,8 @@ function add_exercise_to_certificate($element, $element_id) {
 
 /**
  * @brief add document db entries in certificate criterion
- * @param type $element_id
  * @param type $element
+ * @param type $element_id
  * @return type
  */
 function add_document_to_certificate($element, $element_id) {
@@ -105,8 +105,8 @@ function add_document_to_certificate($element, $element_id) {
 
 /**
  * @brief add multimedia db entries in criterion
- * @param type $element_id
  * @param type $element
+ * @param type $element_id
  */
 function add_multimedia_to_certificate($element, $element_id) {
                 
@@ -131,9 +131,9 @@ function add_multimedia_to_certificate($element, $element_id) {
 
 
 /**
- * @brief add lp db entries in criterion
- * @param type $element_id
+ * @brief add LP db entries in criterion
  * @param type $element
+ * @param type $element_id
  */
 function add_lp_to_certificate($element, $element_id) {
     
@@ -157,8 +157,8 @@ function add_lp_to_certificate($element, $element_id) {
 
 /**
  * @brief add course participation db entries in criterion
- * @param type $element_id
  * @param type $element
+ * @param type $element_id
  * @return type
  */
 function add_courseparticipation_to_certificate($element, $element_id) {
@@ -181,8 +181,8 @@ function add_courseparticipation_to_certificate($element, $element_id) {
 
 /**
  * @brief add wiki db entries in criterion
- * @param type $element_id
  * @param type $element
+ * @param type $element_id
  * @return type
  */
 function add_wiki_to_certificate($element, $element_id) {
@@ -205,8 +205,8 @@ function add_wiki_to_certificate($element, $element_id) {
 
 /**
  * @brief add poll db entries in criterion
- * @param type $element_id
  * @param type $element
+ * @param type $element_id
  * @return type
  */
 function add_poll_to_certificate($element, $element_id) {
@@ -228,8 +228,8 @@ function add_poll_to_certificate($element, $element_id) {
 
 /**
  * @brief add ebook db entries in criterion
- * @param type $element_id
  * @param type $element
+ * @param type $element_id
  * @return type
  */
 function add_ebook_to_certificate($element, $element_id) {
@@ -270,10 +270,36 @@ function add_ebook_to_certificate($element, $element_id) {
     return;
 }
 
+
+
 /**
  * @brief add forum db entries in criterion
- * @param type $element_id
  * @param type $element
+ * @param type $element_id
+ * @return type
+ */
+function add_forum_to_certificate($element, $element_id) {
+    
+    if (isset($_POST[ForumEvent::ACTIVITY])) {        
+        Database::get()->query("INSERT INTO ${element}_criterion
+                            SET $element = ?d, 
+                            module = " . MODULE_ID_FORUM . ", 
+                            resource = null, 
+                            activity_type = '" . ForumEvent::ACTIVITY . "',
+                            operator = ?s,
+                            threshold = ?f",
+                        $element_id,
+                        $_POST['operator'],
+                        $_POST['threshold']);
+    }
+    return;
+}
+
+
+/**
+ * @brief add forum topic db entries in criterion
+ * @param type $element
+ * @param type $element_id
  * @return type
  */
 function add_forumtopic_to_certificate($element, $element_id) {
@@ -297,12 +323,12 @@ function add_forumtopic_to_certificate($element, $element_id) {
 
 /**
  * @brief add blog db entries in criterion
- * @param type $element_id
  * @param type $element
+ * @param type $element_id
  */
 function add_blog_to_certificate($element, $element_id) {
     
-    if (isset($_POST['blog'])) {        
+    if (isset($_POST[BlogEvent::ACTIVITY])) {        
         Database::get()->query("INSERT INTO ${element}_criterion
                             SET $element = ?d, 
                             module = " . MODULE_ID_BLOG . ", 
@@ -317,9 +343,9 @@ function add_blog_to_certificate($element, $element_id) {
 }
 
 /**
- * @brief add blogcomment db entries in criterion
- * @param type $element_id
+ * @brief add blog comment db entries in criterion
  * @param type $element
+ * @param type $element_id
  */
 function add_blogcomment_to_certificate($element, $element_id) {
     
@@ -645,6 +671,7 @@ function resource_usage($element, $element_resource_id) {
  * @global type $langMetaQuestionnaire 
  * @global type $langBlog
  * @global type $langNumOfBlogs
+ * @global type $langNumOfForums
  * @global type $langForums
  * @global type $langWikiPages
  * @global type $langWiki
@@ -662,7 +689,7 @@ function resource_usage($element, $element_resource_id) {
  */
 function get_resource_details($element, $resource_id) {
     
-    global $course_id, $langCategoryExcercise, $langCategoryEssay, $langLearningPath,
+    global $course_id, $langCategoryExcercise, $langCategoryEssay, $langLearningPath, $langNumOfForums,
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire, 
             $langBlog, $langForums, $langWikiPages, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
@@ -742,6 +769,10 @@ function get_resource_details($element, $resource_id) {
         case RatingEvent::SOCIALBOOKMARK_ACTIVITY:
                 $type = "$langPersoValue $langCourseSocialBookmarks";
                 $title = "$langPersoValue";
+            break;
+        case ForumEvent::ACTIVITY:
+                $title = "$langNumOfForums";
+                $type = "$langForums";
             break;
         case ForumTopicEvent::ACTIVITY:
                 $title = Database::get()->querySingle("SELECT title FROM forum_topic WHERE id = ?d", $resource)->title;

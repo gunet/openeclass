@@ -243,6 +243,7 @@ function display_badges() {
  * @global type $langOfEBook
  * @global type $langOfPoll
  * @global type $langWiki
+ * @global type $langOfTopicForums
  * @global type $langOfForums
  * @global type $langOfBlogComments
  * @global type $langOfCourseComments
@@ -268,11 +269,12 @@ function display_activities($element, $id) {
            $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
-           $langOfForums, $langOfBlogComments, $langOfCourseComments, $langOfLikesForum,
-           $langOfLearningPath, $langDelete, $langEditChange, $langConfirmDelete,           
+           $langOfTopicForums, $langOfBlogComments, $langConfirmDelete,
+           $langOfLearningPath, $langDelete, $langEditChange,
            $langInsertWorkCap, $langDocumentAsModuleLabel, $langCourseParticipation,
            $langAdd, $langExport, $langBack, $langInsertWorkCap, $langUsers,
-           $langValue, $langOfLikesSocial;
+           $langValue, $langOfForums;
+    /*$langOfCourseComments, $langOfLikesForum,$langOfLikesSocial */
 
     if ($element == 'certificate') {
         $link_id = "course=$course_code&amp;certificate_id=$id";
@@ -311,27 +313,31 @@ function display_activities($element, $id) {
             'class' => ''),
         array('title' => "$langExerciseAsModuleLabel",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ExerciseEvent::ACTIVITY,
-            'icon' => 'fa fa-edit space-after-icon',
+            'icon' => 'fa fa-pencil-square-o',
             'class' => ''),
         array('title' => "$langOfBlog",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . BlogEvent::ACTIVITY,
-            'icon' => 'fa fa-edit space-after-icon',
+            'icon' => 'fa fa-columns fa-fw',
             'class' => ''),
         array('title' => "$langOfBlogComments",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=blogcomments",
-            'icon' => 'fa fa-edit space-after-icon',
+            'icon' => 'fa fa-columns fa-fw',
             'class' => ''),
         /*array('title' => "$langOfCourseComments",
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecomments",
               'icon' => 'fa fa-edit space-after-icon',
               'class' => ''),*/
         array('title' => "$langOfForums",
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumEvent::ACTIVITY,
+            'icon' => 'fa fa-comments fa-fw',
+            'class' => ''),
+        array('title' => "$langOfTopicForums",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumTopicEvent::ACTIVITY,
-            'icon' => 'fa fa-edit space-after-icon',
+            'icon' => 'fa fa-comments fa-fw',
             'class' => ''),
         array('title' => "$langOfLearningPath",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lp",
-            'icon' => 'fa fa-edit space-after-icon',
+            'icon' => 'fa fa-ellipsis-h fa-fw',
             'class' => ''),
         /*array('title' => "$langOfLikesSocial",
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=likesocial",
@@ -343,7 +349,7 @@ function display_activities($element, $id) {
               'class' => ''),*/
         array('title' => "$langDocumentAsModuleLabel",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
-            'icon' => 'fa fa-edit space-after-icon',
+            'icon' => 'fa fa-folder-open-o fa-fw',
             'class' => ''),
         array('title' => "$langMediaAsModuleLabel",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=multimedia",
@@ -351,19 +357,19 @@ function display_activities($element, $id) {
             'class' => ''),
         array('title' => "$langOfEBook",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=ebook",
-            'icon' => 'fa fa-edit space-after-icon',
+            'icon' => 'fa fa-book fa-fw',
             'class' => ''),
         array('title' => "$langOfPoll",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=poll",
-            'icon' => 'fa fa-edit space-after-icon',
+            'icon' => 'fa fa-question-circle fa-fw',
             'class' => ''),
         array('title' => "$langWiki",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=wiki",
-            'icon' => 'fa fa-edit space-after-icon',
+            'icon' => 'fa fa-wikipedia-w fa-fw',
             'class' => ''),
         array('title' => "$langCourseParticipation",
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=participation",
-            'icon' => 'fa fa-edit space-after-icon',
+            'icon' => 'fa fa-area-chart fa-fw',
             'class' => '')),
         array(
             'secondary_title' => $langAdd,
@@ -467,6 +473,9 @@ function insert_activity($element, $element_id, $activity) {
             break;
         case 'coursecomments':
             display_available_coursecomments($element, $element_id);
+            break;
+        case ForumEvent::ACTIVITY:
+            display_available_forums($element, $element_id);
             break;
         case ForumTopicEvent::ACTIVITY:
             display_available_forumtopics($element, $element_id);
@@ -961,14 +970,62 @@ function display_available_coursecomments($element, $element_id) {
 }
 
 /**
- * @brief forum display form
+ * @brief number of forums display form
+ * @global type $tool_content
+ * @global type $langAddModulesButton
+ * @global type $langNumOfForums
+ * @global type $course_code
+ * @global type $langTitle
+ * @global type $langValue
+ * @global type $langResourceAlreadyAdded
+ * @global type $langChoice
+ * @global type $langOperator
+ * @param type $element
+ * @param type $element_id
+ */
+function display_available_forums($element, $element_id) {
+   
+    global $tool_content, $langAddModulesButton, $langNumOfForums,
+           $course_code, $langTitle, $langValue, $langResourceAlreadyAdded,
+           $langChoice, $langOperator;
+            
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $res = Database::get()->queryArray("SELECT resource FROM ${element}_criterion WHERE $element = ?d                                     
+                                            AND resource IS NULL 
+                                            AND activity_type = '" . ForumEvent::ACTIVITY . "' 
+                                            AND module = " . MODULE_ID_FORUM . "", $element_id);
+    if (count($res) > 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
+    } else {
+        $tool_content .= "<form action='index.php?course=$course_code' method='post'>" .
+                "<input type='hidden' name='$element_name' value='$element_id'>" .
+                "<table class='table-default'>" .
+                "<tr class='list-header'>" .
+                "<th class='text-left' style='width:70%;'>&nbsp;$langTitle</th>" .
+                "<th style='width:5px;'>&nbsp;$langOperator</th>" .
+                "<th style='width:30px;'>$langValue</th>" . 
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "</tr>";
+                
+            $tool_content .= "<tr>" .
+                    "<td>$langNumOfForums</td>" .
+                    "<td>". selection(get_operators(), "operator") . "</td>".
+                    "<td class='text-center'><input style='width:30px;' type='text' name='threshold' value=''></td>" .
+                    "<td class='text-center'><input name='forum' value='1' type='checkbox'></td>" .
+                    "</tr>";            
+        
+        $tool_content .= "</table>" .
+                "<div align='right'><input class='btn btn-primary' type='submit' name='add_forum' value='$langAddModulesButton'></div></th></form>";
+    }
+    
+}
+/**
+ * @brief forum topic display form
  * @global type $tool_content
  * @global type $urlServer
- * @global type $course_id
- * @global type $langComments
+ * @global type $course_id 
  * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $langNoForums
+ * @global type $langChoice 
  * @global type $langForums
  * @global type $course_code
  * @global type $langOperator
@@ -978,7 +1035,7 @@ function display_available_coursecomments($element, $element_id) {
  */
 function display_available_forumtopics($element, $element_id) {
     global $tool_content, $urlServer, $course_id,
-           $langComments, $langAddModulesButton, $langChoice, $langNoForums, $langNoForumTopic,
+           $langAddModulesButton, $langChoice, $langNoForumTopic,
            $langForums, $course_code, $langOperator, $langValue;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
