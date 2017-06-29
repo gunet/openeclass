@@ -34,7 +34,7 @@ class UnplagApp extends ExtApp {
     }
 
     public function getDisplayName() {
-        return "UnPlag";
+        return "Unicheck";
     }
 
     public function getShortDescription() {

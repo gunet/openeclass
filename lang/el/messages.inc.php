@@ -1200,6 +1200,7 @@ $langAttendanceNoActMessage1 = "Δεν υπάρχουν δραστηριότητ
 $langAttendanceNoActMessage4 = "Δεν υπάρχουν δραστηριότητες για αυτόματη καταχώρηση";
 $langAttendanceNoActMessageAss4 = "Δεν υπάρχουν εργασίες για αυτόματη καταχώρηση";
 $langAttendanceNoActMessageExe4 = "Δεν υπάρχουν ασκήσεις για αυτόματη καταχώρηση";
+$langAttendanceNoActMessageTc = "Δεν υπάχουν τηλεσυνεργασίες για αυτόματη καταχώρηση";
 $langAttendanceNoActMessage5 = "Δεν υπάρχουν δραστηριότητες στο παρουσιολόγιο.";
 $langAttendanceActCour = "Δραστηριότητα $langsOfCourse";
 $langAttendanceInsAut = "αυτόματη καταχώρηση παρουσίας";
@@ -5285,8 +5286,8 @@ $langOpenMeetingsDescription = "<p>Το υποσύστημα <strong>Τηλεσ�
 <p>Το OpenMeetings ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα OpenMeetings επιλέξτε <a href=\"openmeetingsconf.php\">Ρυθμίσεις</a>.</p>";
 $langWebConfDescription = "<p>Το υποσύστημα <strong>Τηλεσυνεργασίας</strong> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://webconf.gunet.gr/\" target=\"_blank\">WebConf</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας $langsOfTeachers και $langsOfStudents.</p>
 <p>Το WebConf ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα WebConf επιλέξτε <a href=\"webconf.php\">Ρυθμίσεις</a>.</p>";
-$langUnplagShortDescription = "Σύνδεση με υπηρεσία UnPlag. Η υπηρεσία ελέγχου λογοκλοπής UnPlag είναι εμπορικό προϊόν. Δείτε περισσότερες πληροφορίες στο <a href=\"https://unplag.com\">https://unplag.com</a>";
-$langUnplagLongDescription = "Σύνδεση με υπηρεσία UnPlag.";
+$langUnplagShortDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής (plagiarism). Η υπηρεσία ελέγχου λογοκλοπής είναι εμπορικό προϊόν και προσφέρεται από την εταιρεία Unicheck (πρώην Unplag). Δείτε περισσότερες πληροφορίες στο <a href=\"https://unicheck.com\">https://unicheck.com</a>";
+$langUnplagLongDescription = "Σύνδεση με υπηρεσία ελέγχου λογοκλοπής.";
 
 // Messages for OpenMeetings
 $langOpenMeetingsConf = "Ρυθμίσεις \"OpenMeetings\" του $siteName";
