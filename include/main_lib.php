@@ -165,6 +165,7 @@ define('LISTBOX_FILL', 2); //
 define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
 define('GRADEBOOK_ACTIVITY_EXERCISE', 2);
 define('GRADEBOOK_ACTIVITY_LP', 3);
+define('GRADEBOOK_ACTIVITY_TC', 4);
 
 // Subsystem types (used in documents)
 define('MAIN', 0);

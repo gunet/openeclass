@@ -1352,3 +1352,16 @@ function get_tc_meeting_id($id) {
     
     return $result;
 }
+
+/**
+ * @brief get tc meeting id given its encoded meeting id
+ * @param type $meeting_id
+ * @return type
+ */
+function get_tc_id($meeting_id) {
+    $result = Database::get()->querySingle("SELECT id FROM tc_session 
+                    WHERE meeting_id = ?s", $meeting_id)->id;
+    
+    return $result;
+    
+}
