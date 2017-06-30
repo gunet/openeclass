@@ -88,12 +88,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 //Checks if an exercise ID exists in the URL
 //and if so it gets the exercise object either by the session (if it exists there)
 //or by initializing it using the exercise ID
-if (isset($_REQUEST['exerciseId'])) {
+if (isset($_REQUEST['exerciseId'])) {    
     $exerciseId = intval($_REQUEST['exerciseId']);
     //  Checks if exercise object exists in the Session
     if (isset($_SESSION['objExercise'][$exerciseId])) {
         $objExercise = $_SESSION['objExercise'][$exerciseId];
-    } else {
+    } else {        
         // construction of Exercise
         $objExercise = new Exercise();
         // if the specified exercise is disabled (this only applies to students)
@@ -125,17 +125,21 @@ if(isset($_POST['attempt_value']) && !isset($_GET['eurId'])){
     $objDateTime = new DateTime('NOW');
     $attempt_value = $objDateTime->getTimestamp();
 }
-//If the exercise is password protected
-$password = $objExercise->selectPasswordLock();
-if ($password && !$is_editor) {
-    if(!isset($_SESSION['password'][$exerciseId][$attempt_value])) {
-        if (isset($_POST['password']) && $password === $_POST['password']) {
-            $_SESSION['password'][$exerciseId][$attempt_value] = 1;
-        } else {
-            Session::Messages($langCaptchaWrong);
-            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+
+if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
+    //If the exercise is password protected
+    $password = $objExercise->selectPasswordLock();
+    if ($password && !$is_editor) {
+        if(!isset($_SESSION['password'][$exerciseId][$attempt_value])) {
+            if (isset($_POST['password']) && $password === $_POST['password']) {
+                $_SESSION['password'][$exerciseId][$attempt_value] = 1;
+            } else {
+                Session::Messages($langCaptchaWrong);
+                redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+            }
         }
     }
+
 }
 //If the exercise is IP protected
 $ips = $objExercise->selectIPLock();
