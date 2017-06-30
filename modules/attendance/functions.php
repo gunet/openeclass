@@ -227,7 +227,6 @@ function register_user_presences($attendance_id, $actID) {
  * @global type $langTitle
  * @global type $langType
  * @global type $langAttendanceActivityDate
- * @global type $langAttendanceAbsences
  * @global type $langAttendanceNoTitle
  * @global type $langExercise
  * @global type $langAssignment
@@ -239,9 +238,7 @@ function register_user_presences($attendance_id, $actID) {
  * @global type $langAttendanceNoActMessage1
  * @global type $langAttendanceActivity
  * @global type $langHere
- * @global type $langAttendanceNoActMessage3
- * @global type $langToA
- * @global type $langcsvenc1
+ * @global type $langAttendanceNoActMessage3 
  * @global type $langcsvenc2
  * @global type $langConfig
  * @global type $langUsers
@@ -250,17 +247,18 @@ function register_user_presences($attendance_id, $actID) {
  * @global type $langInsertExerciseCap
  * @global type $langAdd
  * @global type $langExport
+ * @global type $langInsertTcMeeting
  * @param type $attendance_id
  */
 function display_attendance_activities($attendance_id) {
 
-    global $tool_content, $course_code, $attendance,
-           $langAttendanceActList, $langTitle, $langType, $langAttendanceActivityDate, $langAttendanceAbsences,
-           $langGradebookNoTitle, $langExercise, $langAssignment,$langAttendanceInsAut, $langAttendanceInsMan,
-           $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1, $langAttendanceActivity,
-           $langHere, $langAttendanceNoActMessage3, $langToA, $langcsvenc1, $langcsvenc2,
+    global $tool_content, $course_code, $attendance, $langAttendanceInsMan,
+           $langAttendanceActList, $langTitle, $langType, $langAttendanceActivityDate,
+           $langGradebookNoTitle, $langExercise, $langAssignment,$langAttendanceInsAut, 
+           $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1, 
+           $langHere, $langAttendanceNoActMessage3, $langcsvenc2, $langAttendanceActivity,
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap,
-           $langAdd, $langExport, $langBack, $langNoRegStudent;
+           $langAdd, $langExport, $langBack, $langNoRegStudent, $langBBB;
 
     $attendance_id_ind = getIndirectReference($attendance_id);
     $tool_content .= action_bar(
@@ -279,6 +277,10 @@ function display_attendance_activities($attendance_id) {
                           array('title' => "$langInsertExerciseCap",
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityEx=1",
                                 'icon' => 'fa fa-edit space-after-icon',
+                                'class' => ''),
+                          array('title' => "$langBBB",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityTc=1",
+                                'icon' => 'fa fa-exchange space-after-icon',
                                 'class' => '')),
                      'icon' => 'fa-plus'),
                 array('title' => $langStudents,
@@ -420,7 +422,6 @@ function attendance_display_available_exercises($attendance_id) {
  * @global type $course_code
  * @global type $tool_content
  * @global type $dateFormatLong
- * @global type $langWorks
  * @global type $m
  * @global type $langDescription
  * @global type $langAttendanceNoActMessageAss4
@@ -432,7 +433,7 @@ function attendance_display_available_exercises($attendance_id) {
 function attendance_display_available_assignments($attendance_id) {
 
     global $course_id, $course_code, $tool_content, $dateFormatLong,
-           $langWorks, $m, $langDescription, $langAttendanceNoActMessageAss4,
+           $m, $langDescription, $langAttendanceNoActMessageAss4,
            $langAdd, $langTitle, $langHour;
 
     $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d
@@ -484,6 +485,47 @@ function attendance_display_available_assignments($attendance_id) {
     }
 }
 
+/**
+ * @brief display available tc sessions for adding them to attendance
+ * @global type $tool_content 
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $langAttendanceNoActMessageTc
+ * @global type $langGradebookActivityDate
+ * @global type $langTitle
+ * @global type $langAdd
+ * @param type $attendance_id
+ */
+function attendance_display_available_tc($attendance_id) {
+    
+    global $tool_content, $course_code, $course_id, $langGradebookActivityDate,
+            $langTitle, $langAdd, $langAttendanceNoActMessageTc;
+    
+    $checkForTc = Database::get()->queryArray("SELECT * FROM tc_session WHERE course_id = ?d
+                                                AND active = '1'
+                                                AND (end_date IS NULL OR end_date >= " . DBHelper::timeAfter() . ")
+                                                AND id NOT IN
+                                            (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1
+                                                        AND attendance_id = ?d)", $course_id, $attendance_id);
+        
+    $checkForTcNumber = count($checkForTc);
+
+    if ($checkForTcNumber > 0) {
+        $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
+                            <table class='table-default'";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate</th>";
+        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
+        $tool_content .= "</tr>";
+        foreach ($checkForTc as $data) {                                    
+            $tool_content .= "<tr><td><b>" . q($data->title) . "</b></td>";
+            $tool_content .= "<td>".nice_format($data->start_date, true) . "</td>";                    
+            $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $data->id . "&amp;type=4");
+        } // end of while
+        $tool_content .= "</tr></table></div></div></div>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageTc</div>";
+    }
+}
 
 /**
  * @brief add other attendance activity
@@ -591,7 +633,7 @@ function add_attendance_other_activity($attendance_id) {
  */
 function add_attendance_activity($attendance_id, $id, $type) {
 
-    global $course_id;
+    global $course_id;    
     $actTitle = "";
     if ($type == GRADEBOOK_ACTIVITY_ASSIGNMENT) { //  add  assignments
         //checking if it's new or not
@@ -653,8 +695,50 @@ function add_attendance_activity($attendance_id, $id, $type) {
             }
         }
     }
+    
+    if ($type == GRADEBOOK_ACTIVITY_TC) { // add tc
+        $checkForTc = Database::get()->querySingle("SELECT * FROM tc_session WHERE course_id = ?d
+                                                AND active = '1'
+                                                AND (end_date IS NULL OR end_date >= " . DBHelper::timeAfter() . ")
+                                                AND id NOT IN
+                                            (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 4
+                                                        AND attendance_id = ?d) AND id = ?d", $course_id, $attendance_id, $id);
+        
+        if ($checkForTc) {
+            $module_auto_id = $checkForTc->id;
+            $module_auto_type = 4; // 4 for tc
+            $module_auto = 1;
+            $actTitle = $checkForTc->title;
+            $actDate = $checkForTc->start_date;
+            $actDesc = $checkForTc->description;
+            $meetingid = $checkForTc->meeting_id;
+
+            Database::get()->query("INSERT INTO attendance_activities
+                                        SET attendance_id = ?d, title = ?s, `date` = ?t, description = ?s,
+                                        module_auto_id = ?d, auto = ?d, module_auto_type = ?d",
+                                    $attendance_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
+            $sql = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);            
+            foreach ($sql as $u) {
+                $TcUserRecord = Database::get()->querySingle("SELECT * FROM tc_attendance WHERE meetingid = ?s "
+                                                            . "AND bbbuserid = (SELECT bbbuserid "
+                                                                                . "FROM tc_log "
+                                                                                . "WHERE fullName = '" . uid_to_name($u->uid) . "' "
+                                                                                . "AND meetingid = ?s ORDER BY `date` LIMIT 1)", $meetingid, $meetingid);              
+                if ($TcUserRecord) {
+                    update_attendance_book($u->uid, $id, GRADEBOOK_ACTIVITY_TC);
+                }
+            }
+        }
+    }
     return $actTitle;
 }
+
+
+/**
+ * 
+ * @param type $attendance_id
+ * @param type $uid
+ */
 function update_user_attendance_activities($attendance_id, $uid) {
     $attendanceActivities = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d AND auto = 1", $attendance_id);
     foreach ($attendanceActivities as $attendanceActivity) {
@@ -1362,14 +1446,13 @@ function attendForAutoActivities($userID, $exeID, $exeType) {
 
 /**
  * @brief insert user presence
- * @global string $tool_content
  * @global type $langGradebookEdit
  * @param type $attendance_id
  * @param type $actID
  */
 function insert_presence($attendance_id, $actID) {
 
-    global $tool_content, $langGradebookEdit, $course_code;
+    global $langGradebookEdit, $course_code;
 
     if (isset($_POST['userspresence'])) {
 

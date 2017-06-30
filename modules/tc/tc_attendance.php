@@ -24,6 +24,7 @@ $require_login = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
+require_once 'modules/attendance/functions.php';
 load_js('jquery-' . JQUERY_VERSION . '.min.js');
 load_js('tools.js');
 
@@ -125,6 +126,10 @@ function xml2sql($room_xml, $bbb) {
                 Database::get()->query("INSERT INTO tc_attendance (`id`, `meetingid`, `bbbuserid`, `totaltime`) 
                         VALUES  (?d, ?s, ?s, 1)", $nextid, $meetingid, $bbbuserid);
             }
+            $user_full_name = Database::get()->querySingle("SELECT fullName FROM tc_log
+                                WHERE bbbuserid = ?s LIMIT 1", $bbbuserid)->fullName;
+            $u = Database::get()->querySingle("SELECT id FROM user WHERE CONCAT_WS(' ', surname, givenname) = ?s", $user_full_name)->id;
+            update_attendance_book($u, get_tc_id($meetingid),GRADEBOOK_ACTIVITY_TC);
         }
     }
 }

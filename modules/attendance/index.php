@@ -385,7 +385,7 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
-    } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
+    } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp']) or isset($_GET['addActivityTc'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         if (isset($_GET['addActivityAs'])) {
             $pageName = "$langAdd $langInsertWork";
@@ -393,6 +393,8 @@ if ($is_editor) {
             $pageName = "$langAdd $langInsertExercise";
         } elseif (isset($_GET['addActivityLp'])) {
             $pageName = "$langAdd $langLearningPath1";
+        } elseif (isset($_GET['addActivityTc'])) {
+            $pageName = "$langAdd $langInsertTcMeeting";
         } else {
             $pageName = $langGradebookAddActivity;
         }
@@ -473,8 +475,8 @@ if ($is_editor) {
         add_attendance_other_activity($attendance_id);
         $display = FALSE;
     }
-    //UPDATE/INSERT DB: new activity from exersices, assignments, learning paths
-    elseif(isset($_GET['addCourseActivity'])) {
+    //UPDATE/INSERT DB: new activity from exersices, assignments, learning paths, teleconference
+    elseif(isset($_GET['addCourseActivity'])) {        
         $id = $_GET['addCourseActivity'];
         $type = intval($_GET['type']);
         $actt = add_attendance_activity($attendance_id, $id, $type);
@@ -486,7 +488,7 @@ if ($is_editor) {
     }
 
     //UPDATE/INSERT DB: add or edit activity to attendance module (edit concerns and course activities like lps)
-    elseif(isset($_POST['submitAttendanceActivity'])) {
+    elseif(isset($_POST['submitAttendanceActivity'])) {        
         $v = new Valitron\Validator($_POST);
         $v->rule('date', array('date'));
         $v->labels(array(
@@ -591,6 +593,9 @@ if ($is_editor) {
         $display = FALSE;
     } elseif (isset($_GET['addActivityEx'])) { // display available exercises
         attendance_display_available_exercises($attendance_id);
+        $display = FALSE;
+    } elseif (isset($_GET['addActivityTc'])) {
+        attendance_display_available_tc($attendance_id);
         $display = FALSE;
     }
     //DISPLAY - EDIT DB: insert grades for each activity
