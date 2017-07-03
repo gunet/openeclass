@@ -526,7 +526,7 @@ function display_modification_activity($element, $element_id, $activity_id) {
     global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes;
     
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-    if (resource_usage($activity_id)) { // check if resource has been used by user
+    if (resource_usage($element, $activity_id)) { // check if resource has been used by user
         Session::Messages("$langUsedCertRes", "alert-warning");
         redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;${element}_id=$element_id");
     } else { // otherwise editing is not allowed
