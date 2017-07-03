@@ -100,6 +100,12 @@ class BasicEvent implements Sabre\Event\EventEmitterInterface {
                     if (isset($data->resource)) {
                         $andResource = " and c.resource = ?d ";
                         $args[] = $data->resource;
+                    } else {
+                        // safeguard in case criterion as described in its DB-row mistakenly uses a non-null resource when it should use NULL
+                        // the safeguard will not allow Hoa\Ruler\Visitor\Asserter::visitContext() to raise an exception about the missing resource
+                        // so, when the eventData does not include a resource, we are specifically querying for criteria with NULL resource 
+                        // instead of blindly trusting the DB.
+                        $andResource = " and c.resource is null ";
                     }
                     $critsQ = "select c.*, '$key' as type from {$key}_criterion c"
                         . " where c.$key in " . $inIds . " "
