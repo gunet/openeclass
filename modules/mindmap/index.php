@@ -79,16 +79,11 @@ $head_content .= '
 
     <style type="text/css">
         li{margin-top:2px; margin-bottom:2px;}
-        button.jsmind{width:140px;}
-        select{width:140px;}
-        #layout{width:1230px;}
         #jsmind_nav{width:240px;height:600px;border:solid 1px #ccc;overflow:auto;float:left; margin-left:10px;}
         .file_input{width:100px;}
-        button.sub{width:100px;}
 
         #jsmind_container{
-            float:left;
-            width:700px;
+            width:100%;
             height:600px;
             border:solid 1px #ccc;
             background:#f4f4f4;
@@ -97,55 +92,65 @@ $head_content .= '
 
 $tool_content .= "
 <div id='layout'>
-    <div id='jsmind_nav'>
-        <div>1. $langOpenMind</div>
-        <ol type='Α'>
-            <li><button class='jsmind' onclick='open_json();'>$langOpenEx</button></li>            
-        </ol>
-        </ol>
-        <div>2. $langEditMind</div>
-        <ol type='Α'>
-            <li><button class='jsmind' onclick='toggle_editable(this);'>$langEditDis</button></li>
-            <li><button class='jsmind' onclick='add_node();'>$langAddNode</button></li>
-            <li><button class='jsmind' onclick='remove_node();'>$langRemoveNode</button></li>
-            <li><button class='jsmind' onclick='reset();'>$langResetMap</button></li>
-        </ol>
-        <div>3. $langThemes</div>
-        <ol type='Α'>
-        <li>
-        <select onchange='set_theme(this.value);'>
-            <option value=''>default</option>
-            <option value='primary'>primary</option>
-            <option value='warning'>warning</option>
-            <option value='danger'>danger</option>
-            <option value='success'>success</option>
-            <option value='info'>info</option>
-            <option value='greensea' selected='selected'>greensea</option>
-            <option value='nephrite'>nephrite</option>
-            <option value='belizehole'>belizehole</option>
-            <option value='wisteria'>wisteria</option>
-            <option value='asphalt'>asphalt</option>
-            <option value='orange'>orange</option>
-            <option value='pumpkin'>pumpkin</option>
-            <option value='pomegranate'>pomegranate</option>
-            <option value='clouds'>clouds</option>
-            <option value='asbestos'>asbestos</option>
-        </select>
-        </li>
-        </ol>
-        <div>4. $langSave</div>
-        <ol type='Α'>
-            <li><button class='sub' onclick='screen_shot();'>$langScreenshot</button></li>
-            <li><button class='sub' onclick='save_file();'>$langSaveFile</button></li>";
-            //<li><button class='sub' onclick='show_data();'>show data</button></li>
-				
+	<div id='jsmiin-nav-horizontal'>
+		<div class='btn-group btn-group-justified' role='group'>
+			<div class='btn-group' role='group'>
+				<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langOpenMind <span class='caret'></span> </button>
+				<ul class='dropdown-menu'>
+					<li><a href='javascript:void(0)' role='button' onclick='open_json();'>$langOpenEx</a></li>
+				</ul>
+			</div>
+			<div class='btn-group' role='group'>
+				<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langEditMind <span class='caret'></span> </button>
+				<ul class='dropdown-menu'>
+					<li><a href='javascript:void(0)' role='button' onclick='toggle_editable(this);'>$langEditDis</a></li>
+            		<li><a href='javascript:void(0)' role='button' onclick='add_node();'>$langAddNode</a></li>
+            		<li><a href='javascript:void(0)' role='button' onclick='remove_node();'>$langRemoveNode</a></li>
+            		<li><a href='javascript:void(0)' role='button' onclick='reset();'>$langResetMap</a></li>
+				</ul>
+			</div>
+			<div class='btn-group' role='group'>
+				<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langThemes <span class='caret'></span> </button>
+				<ul class='dropdown-menu'>
+					<li>
+						<select onchange='set_theme(this.value);'>
+				            <option value=''>default</option>
+				            <option value='primary'>primary</option>
+				            <option value='warning'>warning</option>
+				            <option value='danger'>danger</option>
+				            <option value='success'>success</option>
+				            <option value='info'>info</option>
+				            <option value='greensea' selected='selected'>greensea</option>
+				            <option value='nephrite'>nephrite</option>
+				            <option value='belizehole'>belizehole</option>
+				            <option value='wisteria'>wisteria</option>
+				            <option value='asphalt'>asphalt</option>
+				            <option value='orange'>orange</option>
+				            <option value='pumpkin'>pumpkin</option>
+				            <option value='pomegranate'>pomegranate</option>
+				            <option value='clouds'>clouds</option>
+				            <option value='asbestos'>asbestos</option>
+				        </select>
+					</li>
+				</ul>
+			</div>
+			<div class='btn-group' role='group'>
+				<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langSave <span class='caret'></span> </button>
+				<ul class='dropdown-menu'>
+					<li><a href='javascript:void(0)' role='button'  onclick='screen_shot();'>$langScreenshot</a></li>
+            		<li><a href='javascript:void(0)' role='button'  onclick='save_file();'>$langSaveFile</a></li>";
+            		//<li><button role='button' onclick='show_data();'>show data</button></li>
+
 if($is_editor)	{
-    $tool_content .="<li><button class='sub' onclick='save_file_in_doc();'>$langSaveInDoc</button></li>";							
+    $tool_content .="<li><a href='javascript:void(0)' role='button' onclick='save_file_in_doc();'>$langSaveInDoc</a></li>";
 }
-								
-$tool_content .="<li><input id='file_input' class='sub' type='file' onchange='open_file();'/></li>                
-        </ol>
-    </div>
+
+$tool_content .="<li><input id='file_input' type='file' onchange='open_file();'/></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+    
     <div id='jsmind_container'></div>
 </div>";
    
