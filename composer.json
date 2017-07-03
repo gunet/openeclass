@@ -15,6 +15,7 @@
         "google/apiclient": "1.0.*@beta",
         "hoa/ruler": "~1.0",
         "sabre/event": "~2.0.0",
+        "hybridauth/hybridauth": "^2.9",
         "mpdf/mpdf": "^6.1"
     },
     "require-dev": {
