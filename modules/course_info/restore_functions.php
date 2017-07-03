@@ -1158,8 +1158,9 @@ function register_users($course_id, $userid_map, $cours_user, $restoreHelper) {
     }
 
     foreach ($userid_map as $old_id => $new_id) {
-        Database::get()->query("INSERT INTO course_user SET course_id = ?d, user_id = ?d, status = ?d, tutor = ?d, editor = ?d, "
-                . "reviewer = ?d, reg_date = ?t, receive_mail = ?d, document_timestamp = ?t",
+        if ($document_timestamp[$old_id] == '0000-00-00 00:00:00') { // invalide date time value for mysql >= 5.7
+            Database::get()->query("INSERT INTO course_user SET course_id = ?d, user_id = ?d, status = ?d, tutor = ?d, editor = ?d, "
+                . "reviewer = ?d, reg_date = ?t, receive_mail = ?d, document_timestamp = " . DBHelper::timeAfter() . "",
                 intval($course_id),
                 intval($new_id),
                 intval($status[$old_id]),
@@ -1167,8 +1168,20 @@ function register_users($course_id, $userid_map, $cours_user, $restoreHelper) {
                 intval($editor[$old_id]),
                 intval($reviewer[$old_id]),
                 $reg_date[$old_id],
-                intval($receive_mail[$old_id]),
-                $document_timestamp[$old_id]);
+                intval($receive_mail[$old_id]));
+        } else {
+            Database::get()->query("INSERT INTO course_user SET course_id = ?d, user_id = ?d, status = ?d, tutor = ?d, editor = ?d, "
+                    . "reviewer = ?d, reg_date = ?t, receive_mail = ?d, document_timestamp = ?t",
+                    intval($course_id),
+                    intval($new_id),
+                    intval($status[$old_id]),
+                    intval($tutor[$old_id]),
+                    intval($editor[$old_id]),
+                    intval($reviewer[$old_id]),
+                    $reg_date[$old_id],
+                    intval($receive_mail[$old_id]),
+                    $document_timestamp[$old_id]);
+        }
     }
 }
 
