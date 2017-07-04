@@ -28,9 +28,7 @@
  * @global type $langEditChange
  * @global type $langDelete
  * @global type $langConfirmDelete
- * @global type $langDeactivate
  * @global type $langCreateDuplicate
- * @global type $langActivate
  * @global type $langAvailableAttendances
  * @global type $langNoAttendances
  * @global type $is_editor
@@ -38,10 +36,10 @@
 function display_attendances() {
 
     global $course_id, $tool_content, $course_code, $langEditChange,
-           $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
-           $langActivate, $langAvailableAttendances, $langNoAttendances, $is_editor,
+           $langDelete, $langConfirmDelete, $langCreateDuplicate,
+           $langAvailableAttendances, $langNoAttendances, $is_editor,
            $langViewHide, $langViewShow, $langEditChange, $langStart, $langEnd, $uid;
-
+    
     if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
     } else {
@@ -122,30 +120,28 @@ function display_attendances() {
  */
 function register_user_presences($attendance_id, $actID) {
 
-    global $tool_content, $course_id, $course_code, $langAttendanceAutoBook,
+    global $tool_content, $course_id, $course_code,
            $langName, $langSurname, $langRegistrationDateShort, $langAttendanceAbsences,
            $langAm, $langAttendanceBooking, $langID, $langAttendanceEdit, $langCancel;
+    
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
     $tool_content .= "<div class='alert alert-info'>" . q($result->title) . "</div>";
-    //record booking
-    if(isset($_POST['bookUsersToAct'])) {
+    
+    if(isset($_POST['bookUsersToAct'])) {        
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
         //get all the active users
-        $activeUsers = Database::get()->queryArray("SELECT uid as userID FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
-
-        if ($activeUsers){
+        $activeUsers = Database::get()->queryArray("SELECT uid as userID FROM attendance_users WHERE attendance_id = ?d", $attendance_id);        
+        if ($activeUsers) {
             foreach ($activeUsers as $result) {
                 $userInp = intval(@$_POST[$result->userID]); //get the record from the teacher (input name is the user id)
                 // //check if there is record for the user for this activity
-                $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count, id FROM attendance_book
+                $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count FROM attendance_book
                                                         WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $result->userID);
-                if($checkForBook->count) {
-                    //update
-                    Database::get()->query("UPDATE attendance_book SET attend = ?d WHERE id = ?d ", $userInp, $checkForBook->id);
-                } else {
-                    //insert
+                if($checkForBook->count) { //update                    
+                    Database::get()->query("UPDATE attendance_book SET attend = ?d WHERE attendance_activity_id = ?d AND uid = ?d", $userInp, $actID, $result->userID);
+                } else {  //insert                    
                     Database::get()->query("INSERT INTO attendance_book SET uid = ?d,
                                                     attendance_activity_id = ?d, attend = ?d, comments = ?s", $result->userID, $actID, $userInp, '');
                 }
@@ -154,6 +150,7 @@ function register_user_presences($attendance_id, $actID) {
             redirect_to_home_page("modules/attendance/index.php");
         }
     }
+    
     //display users
     $resultUsers = Database::get()->queryArray("SELECT attendance_users.id AS recID, attendance_users.uid AS userID,
                                                 user.surname AS surname, user.givenname AS name, user.am AS am, course_user.reg_date AS reg_date
@@ -185,8 +182,8 @@ function register_user_presences($attendance_id, $actID) {
                 <td class='text-center'>$cnt</td>
                 <td> " . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
-                <td class='text-center'>" . nice_format($resultUser->reg_date, true, true) . "</td>
-                <td class='text-center'><input type='checkbox' value='1' name='userspresence[$resultUser->userID]'";
+                <td class='text-center'>" . nice_format($resultUser->reg_date, true, true) . "</td>                
+                <td class='text-center'><input type='checkbox' value='1' name='$resultUser->userID'";
                 //check if the user has attendace for this activity already OR if it should be automatically inserted here
                 $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
                 if(isset($q->attend) && $q->attend == 1) {
@@ -205,14 +202,6 @@ function register_user_presences($attendance_id, $actID) {
                                 'value'=> $langAttendanceBooking
                                 ))).
                 "<a href='index.php?course=$course_code&amp;attendance_id=" . $attendance_id . "' class='btn btn-default'>$langCancel</a>";
-//        if ($act_type == 1) {
-//            $tool_content .= form_buttons(array(
-//                                array(
-//                                    'text' => $langAttendanceAutoBook,
-//                                    'name' => 'updateUsersToAct',
-//                                    'value'=> $langAttendanceAutoBook
-//                                )));
-//            }
         $tool_content .= "</div></div>";
         $tool_content .= generate_csrf_token_form_field() ."</form></div>";
         $tool_content .= "</tbody></table>";
@@ -1439,69 +1428,6 @@ function attendForAutoActivities($userID, $exeID, $exeType) {
             return 1;
         }else{
             return 0;
-        }
-    }
-}
-
-
-/**
- * @brief insert user presence
- * @global type $langGradebookEdit
- * @param type $attendance_id
- * @param type $actID
- */
-function insert_presence($attendance_id, $actID) {
-
-    global $langGradebookEdit, $course_code;
-
-    if (isset($_POST['userspresence'])) {
-
-        $to_be_inserted = array_keys($_POST['userspresence']);
-        $already_inserted = [];
-        Database::get()->queryFunc("SELECT uid FROM attendance_book
-                                        WHERE attendance_activity_id = ?d",
-        function($attendance_book) use (&$already_inserted){
-            array_push($already_inserted, $attendance_book->uid);
-        },$actID);
-
-        $to_be_deleted = array_diff($already_inserted, $to_be_inserted);
-        foreach ($to_be_deleted as $row) {
-            Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $row);
-        }
-        foreach ($to_be_inserted as $row) {
-            // check if there is record for the user for this activity
-            $checkForBook = Database::get()->querySingle("SELECT COUNT(id) AS count, id FROM attendance_book
-                                        WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $row);
-            if (!$checkForBook->count) {
-                Database::get()->query("INSERT INTO attendance_book SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ?s", $row, $actID, 1, '');
-            }
-        }
-    } else {
-        Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $actID);
-    }
-    Session::Messages($langGradebookEdit, 'alert-success');
-    redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=".  getIndirectReference($actID));
-}
-
-
-/**
- * @brief update presence from modules for given activity
- * @param type $attendance_id
- * @param type $actID
- */
-function update_presence($attendance_id, $actID) {
-
-    $sql = Database::get()->querySingle("SELECT module_auto_type, module_auto_id
-                            FROM attendance_activities WHERE id = ?d", $actID);
-    if ($sql) {
-        $activity_type = $sql->module_auto_type;
-        $id = $sql->module_auto_id;
-    }
-    //get all the active users
-    $q = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
-    if ($q) {
-        foreach ($q as $activeUsers) {
-            update_attendance_book($activeUsers->uid, $id, $activity_type);
         }
     }
 }

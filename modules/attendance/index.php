@@ -602,12 +602,6 @@ if ($is_editor) {
     elseif (isset($_GET['ins'])) {
         $actID = intval(getDirectReference($_GET['ins']));
         $error = false;
-        if (isset($_POST['bookUsersToAct'])) {
-            insert_presence($attendance_id, $actID);
-        }
-//        if (isset($_POST['updateUsersToAct'])) {
-//            update_presence($attendance_id, $actID);
-//        }
         register_user_presences($attendance_id, $actID);
         $display = FALSE;
     }
