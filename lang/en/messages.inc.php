@@ -4856,3 +4856,4 @@ $langMergeUserWithSelf = 'Unable to merge an account with itself.';
 $langNotifyAssignmentSubmission = "Notify me via email for new submissions";
 $langAssignmentPublished = "Assignment submission";
 $langHasAssignmentPublished = 'One file has been submitted';
+$langLastLogin = 'Last login';

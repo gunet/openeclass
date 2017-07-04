@@ -3294,6 +3294,7 @@ $langRegistrationDateShort = "Ημερομηνία <br />εγγραφής";
 $langRegistrationDate = "Ημερομηνία εγγραφής";
 $langCreationDate = "Ημερομηνία δημιουργίας";
 $langExpirationDate = "Ημερομηνία λήξης";
+$langLastLogin = 'Τελευταία σύνδεση';
 $langCourseRegistrationDate = "Ημ/νία εγγραφής στο $langsCourse";
 $langUnknownDate = "(άγνωστη)";
 $langUserID = "Αριθμός χρήστη";

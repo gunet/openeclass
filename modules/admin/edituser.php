@@ -252,6 +252,13 @@ if ($u) {
         $tool_content .= "</div></div>";
         $reg_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);
         $exp_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->expires_at);
+        $last_login = Database::get()->querySingle('SELECT `when` FROM loginout
+            WHERE id_user = ?d ORDER BY idLog DESC LIMIT 1', $u);
+        if ($last_login) {
+            $last_login_date = DateTime::createFromFormat("Y-m-d H:i:s", $last_login->when)->format("d-m-Y H:i");
+        } else {
+            $last_login_date = '-';
+        }
         $tool_content .= "
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langRegistrationDate:</label>
@@ -265,6 +272,10 @@ if ($u) {
                         <span class='input-group-addon'><i class='fa fa-calendar'></i></span>
                     </div>
                 </div>
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langLastLogin:</label>
+                <div class='col-sm-10'><p class='form-control-static'>$last_login_date</p></div>
             </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langUserID: </label>
