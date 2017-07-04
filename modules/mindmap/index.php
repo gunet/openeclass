@@ -82,6 +82,10 @@ $head_content .= '
         #jsmind_nav{width:240px;height:600px;border:solid 1px #ccc;overflow:auto;float:left; margin-left:10px;}
         .file_input{width:100px;}
 
+		.active-theme{
+			background-color: red;
+		}
+
         #jsmind_container{
             width:100%;
             height:600px;
@@ -112,26 +116,22 @@ $tool_content .= "
 			<div class='btn-group' role='group'>
 				<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langThemes <span class='caret'></span> </button>
 				<ul class='dropdown-menu'>
-					<li>
-						<select onchange='set_theme(this.value);'>
-				            <option value=''>default</option>
-				            <option value='primary'>primary</option>
-				            <option value='warning'>warning</option>
-				            <option value='danger'>danger</option>
-				            <option value='success'>success</option>
-				            <option value='info'>info</option>
-				            <option value='greensea' selected='selected'>greensea</option>
-				            <option value='nephrite'>nephrite</option>
-				            <option value='belizehole'>belizehole</option>
-				            <option value='wisteria'>wisteria</option>
-				            <option value='asphalt'>asphalt</option>
-				            <option value='orange'>orange</option>
-				            <option value='pumpkin'>pumpkin</option>
-				            <option value='pomegranate'>pomegranate</option>
-				            <option value='clouds'>clouds</option>
-				            <option value='asbestos'>asbestos</option>
-				        </select>
-					</li>
+					<li><a href='javascript:void(0)' data-theme='' role='button' onclick='set_theme(this);'>Default</a></li>
+					<li><a href='javascript:void(0)' data-theme='primary' role='button' onclick='alert(this);'>Primary</a></li>
+					<li><a href='javascript:void(0)' data-theme='warning' role='button' onclick='set_theme(this);'>Warning</a></li>
+					<li><a href='javascript:void(0)' data-theme='danger' role='button' onclick='set_theme(this);'>Danger</a></li>
+					<li><a href='javascript:void(0)' data-theme='success' role='button' onclick='set_theme(this);'>Success</a></li>
+					<li><a href='javascript:void(0)' data-theme='info' role='button' onclick='set_theme(this);'>Info</a></li>
+					<li><a href='javascript:void(0)' data-theme='greensea' role='button' onclick='set_theme(this);'>Greensea</a></li>
+					<li><a href='javascript:void(0)' data-theme='nephrite' role='button' onclick='set_theme(this);'>Nephrite</a></li>
+					<li><a href='javascript:void(0)' data-theme='belizehole' role='button' onclick='set_theme(this);'>Belizehole</a></li>
+					<li><a href='javascript:void(0)' data-theme='wisteria' role='button' onclick='set_theme(this);'>Wisteria</a></li>
+					<li><a href='javascript:void(0)' data-theme='asphalt' role='button' onclick='set_theme(this);'>Asphalt</a></li>
+					<li><a href='javascript:void(0)' data-theme='orange' role='button' onclick='set_theme(this);'>Orange</a></li>
+					<li><a href='javascript:void(0)' data-theme='pumpkin' role='button' onclick='set_theme(this);'>Pumpkin</a></li>
+					<li><a href='javascript:void(0)' data-theme='pomegranate' role='button' onclick='set_theme(this);'>Pomegranate</a></li>
+					<li><a href='javascript:void(0)' data-theme='clouds' role='button' onclick='set_theme(this);'>Clouds</a></li>
+					<li><a href='javascript:void(0)' data-theme='asbestos' role='button' onclick='set_theme(this);'>Asbestos</a></li>
 				</ul>
 			</div>
 			<div class='btn-group' role='group'>
@@ -226,7 +226,6 @@ $tool_content .= '
 				"format":"node_tree",
 				"data":{"id":"root","topic":"jsMind Example"}
 				};
-		
 		_jm.show(mind);
 	}
 		
@@ -346,8 +345,8 @@ $tool_content .= '
         _jm.remove_node(selected_id);
     }
 
-    function set_theme(theme_name){
-        _jm.set_theme(theme_name);
+    function set_theme(node){
+        _jm.set_theme(node.getAttribute("data-theme"));
     }
 	
 
