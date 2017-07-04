@@ -102,6 +102,7 @@ $tool_content .= "
 				<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langOpenMind <span class='caret'></span> </button>
 				<ul class='dropdown-menu'>
 					<li><a href='javascript:void(0)' role='button' onclick='open_json();'>$langOpenEx</a></li>
+					<li><input id='file_input' type='file' onchange='open_file();'/></li>
 				</ul>
 			</div>
 			<div class='btn-group' role='group'>
@@ -117,7 +118,7 @@ $tool_content .= "
 				<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>$langThemes <span class='caret'></span> </button>
 				<ul class='dropdown-menu'>
 					<li><a href='javascript:void(0)' data-theme='' role='button' onclick='set_theme(this);'>Default</a></li>
-					<li><a href='javascript:void(0)' data-theme='primary' role='button' onclick='alert(this);'>Primary</a></li>
+					<li><a href='javascript:void(0)' data-theme='primary' role='button' onclick='set_theme(this);'>Primary</a></li>
 					<li><a href='javascript:void(0)' data-theme='warning' role='button' onclick='set_theme(this);'>Warning</a></li>
 					<li><a href='javascript:void(0)' data-theme='danger' role='button' onclick='set_theme(this);'>Danger</a></li>
 					<li><a href='javascript:void(0)' data-theme='success' role='button' onclick='set_theme(this);'>Success</a></li>
@@ -145,7 +146,7 @@ if($is_editor)	{
     $tool_content .="<li><a href='javascript:void(0)' role='button' onclick='save_file_in_doc();'>$langSaveInDoc</a></li>";
 }
 
-$tool_content .="<li><input id='file_input' type='file' onchange='open_file();'/></li>
+$tool_content .="
 				</ul>
 			</div>
 		</div>
