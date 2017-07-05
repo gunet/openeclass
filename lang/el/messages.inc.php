@@ -5332,17 +5332,15 @@ $langPlzDblClickNode = "Προσπαθήστε να κάνετε διπλό κλ
 $langPleaseChooseFile = "Παρακαλώ επιλέξτε αρχείο";
 $langThemeDefault = "Προεπιλογή";
 $langThemePrimary = "Βασικό";
-$langThemeWarning = "Προειδοποίηση";
 $langThemeDanger = "Κίνδυνος";
-$langThemeWarning = "Προειδοποίηση";
 $langThemeSuccess = "Επιτυχία";
-$langThemeInfo = "Πληροφορίες";
 $langThemeGreenSea = "Βεραμάν";
 $langThemeOrange = "Πορτοκαλί";
 $langThemePumpkin = "Κολοκύθα";
 $langThemePomegranate = "Ρόδι";
 $langThemeClouds = "Σύννεφα";
 $langPleaseEnterName = "Παρακαλώ εισάγετε όνομα"; 
+$langMindMapSaved = "Η εννοιολογική χαρτογράφηση αποθηκεύθηκε";
 
 
 /* * *********************************************

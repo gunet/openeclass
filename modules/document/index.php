@@ -157,7 +157,8 @@ if (isset($_GET['mindmap'])) {
             $filename, $title, $file_creator,
             $file_date, $file_date, $file_creator, $file_format,
             $language, $uid);
-    exit;
+    Session::Messages($langMindMapSaved,"alert-success");
+    redirect_to_home_page("modules/mindmap/index.php");
 }
 
 

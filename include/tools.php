@@ -107,6 +107,7 @@ function getToolsArray($cat) {
                                           " . MODULE_ID_GROUPS . ",
                                           " . MODULE_ID_ATTENDANCE . ",
                                           " . MODULE_ID_GRADEBOOK . ",
+                                          " . MODULE_ID_MINDMAP . ",
                                           " . MODULE_ID_LP . ") AND
                         module_id NOT IN (SELECT module_id FROM module_disable)";
             if (!check_guest()) {

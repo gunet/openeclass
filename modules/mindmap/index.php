@@ -277,7 +277,7 @@ $tool_content .= '
 			.done(function(data, textStatus, jqXHR) {
 			    var mind_data = _jm.get_data();
 				var data = jsMind.util.json.json2string(mind_data);	
-				window.location.href = "../document/index.php?mindmap=" + data +"& mindtitle=" + imagename; 
+				window.location.href = "../document/index.php?mindmap=" + data +"&mindtitle=" + imagename; 
 			});
 	}
 		

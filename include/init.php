@@ -524,6 +524,7 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                                                 " . MODULE_ID_GROUPS . ",
                                                 " . MODULE_ID_GRADEBOOK . ",
                                                 " . MODULE_ID_ATTENDANCE . ",
+                                                " . MODULE_ID_MINDMAP . ",
                                                 " . MODULE_ID_LP . ")", $course_id);
     } elseif ($is_editor) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
