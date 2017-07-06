@@ -891,6 +891,21 @@ if ($course_info->view_type == 'activity') {
         <div class='row'>
             <div class='col-md-12'>
                 <h3 class='content-title pull-left'>$unititle</h3>";
+    
+    //help icon 
+    $head_content .= "
+        <script>
+        $(function() {
+            $('#help-btn').click(function(e) {
+                e.preventDefault();
+                $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
+            });
+        });
+        </script>
+        ";
+    $tool_content .= "<a class='pull-left add-unit-btn' id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?language=$language&amp;topic=course_units\" data-toggle='tooltip' data-placement='top' title='$langHelp'>
+            <span class='fa fa-question-circle'></span>
+        </a>";
 
     if ($is_editor and $course_info->view_type == 'units') {
         $link = "{$urlServer}modules/units/info.php?course=$course_code";
