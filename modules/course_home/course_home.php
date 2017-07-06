@@ -199,6 +199,18 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
 
     ."})
     </script>";
+ 
+$head_content .= "
+        <script>
+        $(function() {
+            $('#help-btn').click(function(e) {
+                e.preventDefault();
+                $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
+            });
+        });
+        </script>
+        ";
+
 $head_content .= "
         <script>
             $(function() {
@@ -538,7 +550,6 @@ foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key
     $data['course_home_sidebar_widgets'] .= $widget->run($key);
 }
 view('modules.course.home.index', $data);
-//draw($tool_content, 2, null, $head_content);
 
 /**
  * @brief fetch course announcements

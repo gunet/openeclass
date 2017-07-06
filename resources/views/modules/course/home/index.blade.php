@@ -125,7 +125,10 @@
                     <div class='col-md-12'>
                         <div class='content-title pull-left h3'>
                             {{ $course_info->view_type == 'weekly' ? trans('langCourseWeeklyFormat') : trans('langCourseUnits') }}
-                        </div>
+                        </div>                         
+                <a class='pull-left add-unit-btn' id='help-btn' href='{{ $urlAppend }}modules/help/help.php?language={{ $language}}&topic=course_units' data-toggle='tooltip' data-placement='top' title='{{ trans('langHelp') }}'>
+                    <span class='fa fa-question-circle'></span>
+                </a>
                         @if ($is_editor and $course_info->view_type == 'units')
                             <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='{{ trans('langAddUnit') }}'>
                                 <span class='fa fa-plus-circle'></span>

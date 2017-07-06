@@ -695,6 +695,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
  * @global type $is_editor
  * @global type $course_id
  * @global type $course_code
+ * @global type $langWasDeleted
  * @param type $type
  * @param type $title
  * @param type $comments
@@ -704,7 +705,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
  * @return string
  */
 function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility) {
-    global $id, $urlServer, $is_editor, $course_code;
+    global $id, $urlServer, $is_editor, $course_code, $langWasDeleted;
 
     $module_visible = visible_module(MODULE_ID_FORUM); // checks module visibility
     if (!$module_visible and ! $is_editor) {
@@ -718,15 +719,21 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
         $forumlink = $link . "$title</a>";
     } else {
         $r = Database::get()->querySingle("SELECT forum_id FROM forum_topic WHERE id = ?d", $ft_id);
-        $forum_id = $r->forum_id;
-        $link = "<a href='${urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
-        $forumlink = $link . "$title</a>";
-        if (!$module_visible) {
-            $forumlink .= "<i>($langInactiveModule)</i>";
+        if (!$r) { // check if it was deleted
+            if (!$is_editor) {
+                return '';
+            } else {                
+                $imagelink = icon('fa-times');
+                $forumlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
+            }
+        } else {
+            $forum_id = $r->forum_id;
+            $link = "<a href='${urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
+            $forumlink = $link . "$title</a>";
         }
     }
 
-    $imagelink = $link . "</a>" . icon('fa-comments'). "";
+    $imagelink = icon('fa-comments'). "";
 
     if (!empty($comments)) {
         $comment_box = "<br />$comments";

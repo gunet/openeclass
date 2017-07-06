@@ -24,12 +24,11 @@
  * @file index.php
  * @brief Units display module
  */
-
-define('HIDE_TOOL_TITLE', 1);
 $require_current_course = true;
 $guest_allowed = true;
 $require_help = TRUE;
-$helpTopic = 'AddCourseUnitscontent';
+$helpTopic = 'course_units';
+$helpSubTopic = 'units_actions';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
@@ -53,6 +52,7 @@ if (isset($_GET['cnt'])) {
 }
 
 $pageName = '';
+$toolName = $langCourseUnits;
 $lang_editor = $language;
 load_js('tools.js');
 ModalBoxHelper::loadModalBox(true);
