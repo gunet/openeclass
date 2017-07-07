@@ -12,9 +12,13 @@
             {
                 font-family: Roboto;
             }
+            a{
+                color: inherit;
+            }
             a:hover
             {
                 text-decoration: none;
+                color: inherit;
             }
 
             .certificate_panel
@@ -23,14 +27,19 @@
                 height: 198px; /* original was height: 150px; */
                 margin: 0 auto;
                 padding: 20px;
-                border-radius: 4px;
+                border-radius: 1px;
                 background-color: #fafafa;
-                box-shadow: 0px 0px 5px 1px #BBBBBB;
+                transition: box-shadow 0.1s;
+                box-shadow: 0px 0px 5px 2px #BBBBBB;
                 border: 4px solid #FFFFFF;
                 position: relative;
                 font-family: Calibri;
                 float: left;
                 margin: 20px;
+            }
+            .certificate_panel:hover
+            {
+                box-shadow: 0px 0px 10px 6px #d9d9d9;
             }
 
             .certificate_panel_title
@@ -133,27 +142,29 @@
                         $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($badge->assigned));
                         $dateAssigned = ($badge->completed == 1) ? $formatted_date : '';
                     ?>
-                    <div class="certificate_panel">
-                        <h4 class="certificate_panel_title"><a href="index.php?course={{$course_code}}&amp;badge_id={{$badge->badge}}&amp;u={{$badge->user}}">{{ $badge->title }}</a></h4>
-                        <div class="certificate_panel_date">{{ $dateAssigned }}</div>
-                        <div class="certificate_panel_viewdetails">
+                    <a href="index.php?course={{$course_code}}&amp;badge_id={{$badge->badge}}&amp;u={{$badge->user}}">
+                        <div class="certificate_panel">
+                            <h4 class="certificate_panel_title">{{ $badge->title }}</h4>
+                            <div class="certificate_panel_date">{{ $dateAssigned }}</div>
+                            <div class="certificate_panel_viewdetails">
+                                @if ($badge->completed == 1)
+                                    <img src="{{ $badge_template_path }}{{ $badge->filename }}">
+                                @endif
+                            </div>
+
                             @if ($badge->completed == 1)
-                                <img src="{{ $badge_template_path }}{{ $badge->filename }}">
+                                <div class="certificate_panel_state">
+                                    <i class="fa fa-check-circle fa-inverse state_success"></i>
+                                    {{-- <i class="fa fa-hourglass-2 state_waiting"></i> --}}
+                                </div>
+                                <div class="certificate_panel_badge">
+                                    <img src="{{ $template_base }}/img/game/badge.png">
+                                </div>
+                            @else
+                                <div class="certificate_panel_percentage">{{ round($badge->completed_criteria / $badge->total_criteria * 100, 0) }}%</div>
                             @endif
                         </div>
-
-                        @if ($badge->completed == 1)
-                            <div class="certificate_panel_state">
-                                <i class="fa fa-check-circle fa-inverse state_success"></i>
-                                {{-- <i class="fa fa-hourglass-2 state_waiting"></i> --}}
-                            </div>
-                            <div class="certificate_panel_badge">
-                                <img src="{{ $template_base }}/img/game/badge.png">
-                            </div>
-                        @else
-                            <div class="certificate_panel_percentage">{{ round($badge->completed_criteria / $badge->total_criteria * 100, 0) }}%</div>
-                        @endif
-                    </div>
+                    </a>
                     {{-- badge id: {{ $badge->badge }} <br/>
                     badge title: {{ $badge->title }} <br/>
                     badge description: {{ $badge->description }} <br/>
@@ -180,28 +191,30 @@
                     $formatted_date = claro_format_locale_date('%A, %d %B %Y', strtotime($certificate->assigned));
                     $dateAssigned = ($certificate->completed == 1) ? $formatted_date : '';
                     ?>
-                    <div class="certificate_panel">
-                        <h4 class="certificate_panel_title"><a href="index.php?course={{$course_code}}&amp;certificate_id={{$certificate->certificate}}&amp;u={{$certificate->user}}">{{ $certificate->title }}</a></h4>
-                        <div class="certificate_panel_date">{{ $dateAssigned }}</div>
-                        <div class="certificate_panel_viewdetails">
+                    <a href="index.php?course={{$course_code}}&amp;certificate_id={{$certificate->certificate}}&amp;u={{$certificate->user}}">
+                        <div class="certificate_panel">
+                            <h4 class="certificate_panel_title">{{ $certificate->title }}</h4>
+                            <div class="certificate_panel_date">{{ $dateAssigned }}</div>
+                            <div class="certificate_panel_viewdetails">
+                                @if ($certificate->completed == 1)
+                                    &nbsp;&nbsp;<a href="index.php?course={{$course_code}}&amp;certificate_id={{$certificate->certificate}}&amp;u={{$certificate->user}}&amp;p=1">{{  trans('langPrintVers') }}</a>
+                                @endif
+                            </div>
+
                             @if ($certificate->completed == 1)
-                                &nbsp;&nbsp;<a href="index.php?course={{$course_code}}&amp;certificate_id={{$certificate->certificate}}&amp;u={{$certificate->user}}&amp;p=1">{{  trans('langPrintVers') }}</a>
+                                <div class="certificate_panel_state">
+                                    <i class="fa fa-check-circle fa-inverse state_success"></i>
+                                    {{-- <i class="fa fa-hourglass-2 state_waiting"></i> --}}
+                                </div>
+                                <div class="certificate_panel_badge">
+                                    <img src="{{ $template_base }}/img/game/badge.png">
+                                    {{-- <img class="badge_waiting" src="{{ $template_base }}/img/game/badge.png"> --}}
+                                </div>
+                            @else
+                                <div class="certificate_panel_percentage">{{ round($certificate->completed_criteria / $certificate->total_criteria * 100, 0) }}%</div>
                             @endif
                         </div>
-
-                        @if ($certificate->completed == 1)
-                            <div class="certificate_panel_state">
-                                <i class="fa fa-check-circle fa-inverse state_success"></i>
-                                {{-- <i class="fa fa-hourglass-2 state_waiting"></i> --}}
-                            </div>
-                            <div class="certificate_panel_badge">
-                                <img src="{{ $template_base }}/img/game/badge.png">
-                                {{-- <img class="badge_waiting" src="{{ $template_base }}/img/game/badge.png"> --}}
-                            </div>
-                        @else
-                            <div class="certificate_panel_percentage">{{ round($certificate->completed_criteria / $certificate->total_criteria * 100, 0) }}%</div>
-                        @endif
-                    </div>
+                    </a>
                     {{-- certificate id: {{ $certificate->certificate }} <br/>
                     certificate title: {{ $certificate->title }} <br/>
                     certificate description: {{ $certificate->description }} <br/>
