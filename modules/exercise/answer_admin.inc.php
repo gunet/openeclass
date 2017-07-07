@@ -194,6 +194,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 break;
             } else {
                 // adds the answer into the object
+                $reponse[$i] = purify(trim($_POST['reponse'][$i]));
                 $objAnswer->createAnswer($reponse[$i], $goodAnswer, purify($comment[$i]), $weighting[$i], $i);
             }
         }

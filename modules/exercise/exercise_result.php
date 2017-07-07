@@ -56,7 +56,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             WHERE eurid = ?d",
             ATTEMPT_COMPLETED, $eurid, $eurid);
         $data = Database::get()->querySingle("SELECT eid, uid, total_score, total_weighting FROM exercise_user_record WHERE eurid = ?d", $eurid);
-        // update gradebook            
+        // update gradebook
         update_gradebook_book($data->uid, $data->eid, $data->total_score/$data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
     } else {
         // else increment total by just this grade
@@ -75,7 +75,7 @@ load_js('tools.js');
 
 if (isset($_GET['eurId'])) {
     $eurid = $_GET['eurId'];
-    $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);        
+    $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
     $exercise_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d ORDER BY question_id", $eurid);
     $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
     if (!$exercise_user_record) {
@@ -96,7 +96,7 @@ if (isset($_GET['eurId'])) {
 }
 if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
 $head_content .= "<script type='text/javascript'>
-    		$(document).ready(function(){
+            $(document).ready(function(){
                     function save_grade(elem){
                         var grade = parseFloat($(elem).val());
                         var element_name = $(elem).attr('name');
@@ -263,8 +263,6 @@ if (count($exercise_question_ids)>0){
         $choice = $objQuestionTmp->get_answers_record($eurid);
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
-        $questionDescription_temp = nl2br(make_clickable($questionDescription));
-        $questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
         $questionWeighting = $objQuestionTmp->selectWeighting();
         $answerType = $objQuestionTmp->selectType();
 
@@ -293,7 +291,7 @@ if (count($exercise_question_ids)>0){
             $tool_content .= "
                 <b>" . q_math($questionName) . "</b>
                 <br>" .
-                standard_text_escape($questionDescription_temp)
+                standard_text_escape($questionDescription)
                 . "<br><br>";
         } else {
             $tool_content .= "<div class='alert alert-warning'>$langQuestionAlreadyDeleted</div>";
@@ -343,9 +341,12 @@ if (count($exercise_question_ids)>0){
                 $answerCorrect = $objAnswerTmp->isCorrect($answerId);
                 $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
 
-                // support for math symbols
-                $answer = mathfilter($answer, 12, '../../courses/mathimg/');
-                $answerComment = mathfilter($answerComment, 12, '../../courses/mathimg/');
+                if ($answerType == FILL_IN_BLANKS or $answerType == FILL_IN_BLANKS_TOLERANT) {
+                    list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);
+                }
+
+                $answer = standard_text_escape($answer);
+                $answerComment = standard_text_escape($answerComment);
 
                 switch ($answerType) {
                     // for unique answer
@@ -363,7 +364,6 @@ if (count($exercise_question_ids)>0){
                     // for fill in the blanks
                     case FILL_IN_BLANKS :
                     case FILL_IN_BLANKS_TOLERANT :
-                        list($answer, $answerWeighting) = Question::blanksSplitAnswer($answer);
                         // splits weightings that are joined with a comma
                         $answerWeighting = explode(',', $answerWeighting);
                         // we save the answer because it will be modified
@@ -423,7 +423,7 @@ if (count($exercise_question_ids)>0){
                                 $choice[$answerId] = $matching[$choice[$answerId]];
                             } elseif (!$choice[$answerId]) {
                                 $choice[$answerId] = '&nbsp;&nbsp;&nbsp;';
-                            } else {                                
+                            } else {
                                 $choice[$answerId] = "<span class='text-danger'>
                                                                 <del>" . q($matching[$choice[$answerId]]) . "</del>
                                                                 </span>";
@@ -536,7 +536,7 @@ if ($showScore) {
     <br/>
     <table class='table-default'>
     <tr>
-	<td class='text-right'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b>
+    <td class='text-right'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b>
       </td>
     </tr>
     </table>";
