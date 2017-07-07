@@ -5,6 +5,10 @@
 
             .badge-container
             {
+                font-family: 'Open Sans', sans-serif;
+            }
+            .badge-container
+            {
                 padding-bottom: 40px;
             }
 
@@ -146,11 +150,6 @@
                         <div class="certificate_panel">
                             <h4 class="certificate_panel_title">{{ $badge->title }}</h4>
                             <div class="certificate_panel_date">{{ $dateAssigned }}</div>
-                            <div class="certificate_panel_viewdetails">
-                                @if ($badge->completed == 1)
-                                    <img src="{{ $badge_template_path }}{{ $badge->filename }}">
-                                @endif
-                            </div>
 
                             @if ($badge->completed == 1)
                                 <div class="certificate_panel_state">
@@ -158,7 +157,7 @@
                                     {{-- <i class="fa fa-hourglass-2 state_waiting"></i> --}}
                                 </div>
                                 <div class="certificate_panel_badge">
-                                    <img src="{{ $template_base }}/img/game/badge.png">
+                                    <img src="{{ $badge_template_path }}{{ $badge->filename }}">
                                 </div>
                             @else
                                 <div class="certificate_panel_percentage">{{ round($badge->completed_criteria / $badge->total_criteria * 100, 0) }}%</div>

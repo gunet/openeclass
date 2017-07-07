@@ -1834,12 +1834,13 @@ function display_users_progress($element, $element_id) {
  */
 function display_user_progress_details($element, $element_id, $user_id) {
     
-    global $tool_content, $langNoUserActivity, $langAttendanceActivity, 
-           $langInstallEnd, $langTotalPercentCompleteness;
-    
+    global $tool_content, $langNoUserActivity, $langAttendanceActivity, $langpublisher,
+           $langInstallEnd, $langTotalPercentCompleteness, $langTitle, $langDescription;
+
+	$element_title = get_title($element, $element_id);
+
     $resource_data = array();
-    
-    $tool_content .= "<h5>" .  uid_to_name($user_id) . "</h5>";
+
     // certificate
     if ($element == 'certificate') { // completed user resources
         $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
@@ -1866,39 +1867,92 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                                 AND badge_criterion.badge = ?d AND user = ?d)", $element_id, $element_id, $user_id);
         $sql3 = "SELECT completed, completed_criteria, total_criteria FROM user_badge WHERE badge = ?d AND user = ?d";
     }
+	$user_data = Database::get()->querySingle($sql3, $element_id, $user_id);
     if (count($sql) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoUserActivity</div>";
     }
-    $tool_content .= "<table class='table-default custom_list_order'>";
-    $tool_content .= "<thead>
-                <tr>
-                  <th>$langAttendanceActivity</th>
-                  <th style='width:10px;'>$langInstallEnd</th>
-                </tr>
-            </thead>
-            <tbody>";            
-        foreach ($sql as $user_criterion) {
-            $resource_data = get_resource_details($element, $user_criterion);                
-            $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
-            $tool_content .= "<tr>
-                    <td>" . $activity . "</td>
-                    <td class='text-center'>" . icon('fa-check-circle') . "</td>
-                    </tr>";
-        }
-        foreach ($sql2 as $user_criterion) {
-            $resource_data = get_resource_details($element, $user_criterion);                
-            $activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
-            $tool_content .= "<tr class='not_visible'>
-                    <td>" . $activity . "</td>
-                    <td class='text-center'>" . icon('fa-hourglass-2') . "</td>
-                    </tr>";
-        }
-        $user_data = Database::get()->querySingle($sql3, $element_id, $user_id);            
-        $tool_content .= "<tr>
-                <td><strong>$langTotalPercentCompleteness</strong></td>
-                <td class='text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></td>
-                </tr>";
-    $tool_content .= "</tbody></table>";    
+
+	$tool_content .= "
+        <div class='row'>
+            <div class='col-xs-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        <div class='inner-heading'>
+                            <div class='row'>
+                                <div class='col-sm-7'>
+                                    <strong>$element_title</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-sm-12'>
+                            	<div class='pn-info-title-sct'>$langTotalPercentCompleteness</div>
+                            	<div class='pn-info-text-sct'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>
+                                <div class='pn-info-title-sct'>$langDescription</div>
+                                <div class='pn-info-text-sct'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque pellentesque leo in velit lobortis aliquam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum faucibus tortor justo. Aenean blandit fringilla tellus, at congue orci molestie id. Aliquam a odio non quam pharetra dapibus. Donec mollis, nisl vitae pellentesque vulputate, libero justo tristique arcu, a condimentum augue nisi vitae turpis. Maecenas consequat, leo id laoreet imperdiet, arcu neque porta nisi, eu scelerisque eros nisl in lorem. Praesent eu odio sit amet magna vulputate ultrices sit amet vitae leo. Nullam ac tempor elit. Sed eleifend nisi vitae erat eleifend, dignissim efficitur dolor ultrices. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi eget hendrerit nunc. Proin at lorem et ipsum interdum vehicula. Curabitur luctus facilisis ante, vitae pellentesque lectus imperdiet et.</div>
+                                <div class='pn-info-title-sct'>$langpublisher</div>
+                                <div class='pn-info-text-sct'>".get_certificate_issuer($element_id)."</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    ";
+
+	$tool_content .= "
+            <div class='row'>
+            <div class='col-xs-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        <div class='inner-heading'>
+                            <div class='row'>
+                                <div class='col-sm-10'>
+                                    <strong>$langAttendanceActivity</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='res-table-wrapper'>
+                            <div class='row res-table-header'>
+                                <div class='col-sm-9'>
+                                    $langTitle
+                                </div>
+                                <div class='col-sm-3 text-center'>
+                                    $langInstallEnd
+                                </div>
+                            </div>";
+
+
+	foreach ($sql as $user_criterion) {
+		$resource_data = get_resource_details($element, $user_criterion);
+		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+		$tool_content .= "
+                <div class='row res-table-row'>
+                    <div class='col-sm-9'>$activity</div>
+                    <div class='col-sm-3 text-center'>" . icon('fa-check-circle') . "</div>
+                </div>";
+	}
+	foreach ($sql2 as $user_criterion) {
+		$resource_data = get_resource_details($element, $user_criterion);
+		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+		$tool_content .= "
+                <div class='row res-table-row'>
+                    <div class='col-sm-9'>$activity</div>
+                    <div class='col-sm-3 text-center'>" . icon('fa-check-circle') . "</div>
+                </div>";
+	}
+	$tool_content .= "
+                <div class='row res-table-header'>
+                    <div class='col-sm-9'>$langTotalPercentCompleteness</div>
+                    <div class='col-sm-3 text-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>
+                </div>";
+
+	$tool_content .= "                     
+                    </div></div>
+                </div>
+            </div>
+        </div>
+        ";
 }
 
 

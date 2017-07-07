@@ -382,17 +382,23 @@ if ($is_editor) {
 } elseif (isset($_GET['u'])) { // student view
         $pageName = $element_title;
         $tool_content .= action_bar(array(
+	        array('title' => $langPrint,
+	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&certificate_id=$element_id&u=".$_GET['u']."&p=1",
+	              'icon' => 'fa-print',
+	              'level' => 'primary-label',
+	              'show' => true),
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary-label')
+	        ));
 }
 
 if (isset($display) and $display == TRUE) {
     if ($is_editor) {
         if (isset($element_id)) {
             $pageName = $element_title;
-            // display certificate settings and resources            
+            // display certificate settings and resources
             display_activities($element, $element_id);
         } else { // display all certificates         
 	        display_badges();
