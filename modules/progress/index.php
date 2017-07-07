@@ -44,10 +44,10 @@ $toolName = $langCertificates;
 
 load_js('tools.js');
 load_js('jquery');
-load_js('datatables');
-load_js('datatables_filtering_delay');
+//load_js('datatables');
+//load_js('datatables_filtering_delay');
 
-@$head_content .= "
+/*@$head_content .= "
 <script type='text/javascript'>
 $(function() {    
     var oTable = $('#users_table{$course_id}').DataTable ({
@@ -139,7 +139,7 @@ $('input[id=button_groups]').click(changeAssignLabel);
         });
     }
 });
-</script>";
+</script>"; */
 
 $display = TRUE;
 if (isset($_REQUEST['certificate_id'])) {

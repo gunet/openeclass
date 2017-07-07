@@ -36,22 +36,21 @@
  * @global type $langViewHide
  * @global type $langViewShow
  * @global type $langEditChange
+ * @global type $langHere
  * @global type $langSee
  */
 function display_certificates() {
 
     global $course_id, $tool_content, $course_code, $urlServer,
-           $langDelete, $langConfirmDelete, $langCreateDuplicate,
+           $langDelete, $langConfirmDelete, /*$langCreateDuplicate,*/
            $langNoCertificates, $langActive, $langInactive, $langNewCertificate, $langEditChange, 
-           $langNewCertificate, $langAvailCert, $langActivate, $langDeactivate, $langSee;
+           $langNewCertificate, $langAvailCert, $langActivate, $langDeactivate, $langSee, $langHere;
 
     // Fetch the certificate list
     $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d", $course_id);
     
     if (count($sql_cer) == 0) { // If no certificates
-
-        $tool_content .= "<div class='alert alert-info'>$langNoCertificates</div>";
-
+        $tool_content .= "<div class='alert alert-warning'>$langNoCertificates <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1'>$langHere</a>.</div>";
     } else { // If there are certificates
 
         $tool_content .= "
@@ -140,14 +139,15 @@ function display_certificates() {
  * @global type $langViewHide
  * @global type $langViewShow
  * @global type $langEditChange
+ * @global type $langHere
  * @global type $langSee
  */
 function display_badges() {
 
     global $course_id, $tool_content, $course_code, $is_editor,
-           $langDelete, $langConfirmDelete, $langCreateDuplicate,
-           $langNoBadges, $langEditChange, $langAvailBadge,
-           $langViewHide, $langViewShow, $langEditChange, $langNewBadge, 
+           $langDelete, $langConfirmDelete, /*$langCreateDuplicate,*/
+           $langNoBadges, $langEditChange, $langAvailBadge, $langHere,
+           $langActivate, $langDeactivate, $langNewBadge, 
            $langSee, $langActive, $langInactive, $urlServer;
 
     if ($is_editor) {
@@ -157,7 +157,7 @@ function display_badges() {
     }
     
     if (count($sql_cer) == 0) { // no badges
-        $tool_content .= "<div class='alert alert-info'>$langNoBadges</div>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoBadges <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1'>$langHere</a>.</div>";
     } else {
 
         $tool_content .= "
@@ -199,7 +199,7 @@ function display_badges() {
                     array('title' => $langEditChange,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1",
                         'icon' => 'fa-cogs'),
-                    array('title' => $data->active ? $langViewHide : $langViewShow,
+                    array('title' => $data->active ? $langDeactivate : $langActivate,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
                             ($data->active ? '0' : '1'),
                         'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
