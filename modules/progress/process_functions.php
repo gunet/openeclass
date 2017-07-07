@@ -381,7 +381,21 @@ function get_title($table, $id) {
 }
 
 /**
- * @brief get certiticate issuer
+ * 
+ * @param type $table
+ * @param type $id
+ * @return type
+ */
+function get_cert_desc($element, $id) {
+    
+    $cert_desc = Database::get()->querySingle("SELECT description FROM $element WHERE id = ?d", $id)->description;
+
+    return $cert_desc;
+}
+
+
+/**
+ * @brief get certificate issuer
  * @param type $certificate_id
  * @return type
  */

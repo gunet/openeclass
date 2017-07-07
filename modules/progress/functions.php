@@ -1889,9 +1889,9 @@ function display_user_progress_details($element, $element_id, $user_id) {
                             	<div class='pn-info-title-sct'>$langTotalPercentCompleteness</div>
                             	<div class='pn-info-text-sct'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>
                                 <div class='pn-info-title-sct'>$langDescription</div>
-                                <div class='pn-info-text-sct'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque pellentesque leo in velit lobortis aliquam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum faucibus tortor justo. Aenean blandit fringilla tellus, at congue orci molestie id. Aliquam a odio non quam pharetra dapibus. Donec mollis, nisl vitae pellentesque vulputate, libero justo tristique arcu, a condimentum augue nisi vitae turpis. Maecenas consequat, leo id laoreet imperdiet, arcu neque porta nisi, eu scelerisque eros nisl in lorem. Praesent eu odio sit amet magna vulputate ultrices sit amet vitae leo. Nullam ac tempor elit. Sed eleifend nisi vitae erat eleifend, dignissim efficitur dolor ultrices. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Morbi eget hendrerit nunc. Proin at lorem et ipsum interdum vehicula. Curabitur luctus facilisis ante, vitae pellentesque lectus imperdiet et.</div>
+                                <div class='pn-info-text-sct'>" . get_cert_desc($element, $element_id) . "</div>
                                 <div class='pn-info-title-sct'>$langpublisher</div>
-                                <div class='pn-info-text-sct'>".get_certificate_issuer($element_id)."</div>
+                                <div class='pn-info-text-sct'>" . get_certificate_issuer($element_id) . "</div>
                             </div>
                         </div>
                     </div>

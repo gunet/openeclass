@@ -383,7 +383,7 @@ if ($is_editor) {
         $pageName = $element_title;
         $tool_content .= action_bar(array(
 	        array('title' => $langPrint,
-	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&certificate_id=$element_id&u=".$_GET['u']."&p=1",
+	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
 	              'icon' => 'fa-print',
 	              'level' => 'primary-label',
 	              'show' => true),
