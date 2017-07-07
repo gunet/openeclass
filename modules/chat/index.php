@@ -22,6 +22,8 @@
 
 $require_current_course = TRUE;
 $require_login = TRUE;
+$require_help = true;
+$helpTopic = 'chat';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'functions.php';
