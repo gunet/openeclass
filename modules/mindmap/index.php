@@ -26,7 +26,7 @@
 $require_current_course = TRUE;
 $require_login = TRUE;
 $require_help = TRUE;
-$helpTopic = 'Mindmap';
+$helpTopic = 'mind_map';
 
 require_once '../../include/baseTheme.php';
 
