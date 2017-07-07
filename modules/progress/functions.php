@@ -1936,9 +1936,9 @@ function display_user_progress_details($element, $element_id, $user_id) {
 		$resource_data = get_resource_details($element, $user_criterion);
 		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
 		$tool_content .= "
-                <div class='row res-table-row'>
+                <div class='row res-table-row not_visible'>
                     <div class='col-sm-9'>$activity</div>
-                    <div class='col-sm-3 text-center'>" . icon('fa-check-circle') . "</div>
+                    <div class='col-sm-3 text-center'>" . icon('fa-hourglass-2') . "</div>
                 </div>";
 	}
 	$tool_content .= "

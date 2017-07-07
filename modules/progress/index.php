@@ -379,8 +379,7 @@ if ($is_editor) {
         display_user_progress_details($element, $element_id, $_GET['u']);
         $display = FALSE;
     }
-} elseif (isset($_GET['u'])) { // student view
-        $pageName = $element_title;
+} elseif (isset($_GET['u'])) { // student view        
         $tool_content .= action_bar(array(
 	        array('title' => $langPrint,
 	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
@@ -404,7 +403,7 @@ if (isset($display) and $display == TRUE) {
 	        display_badges();
 	        display_certificates();
         }
-    } else {        
+    } else {
         check_user_details($uid); // security check
         if (isset($element_id)) {            
             if (isset($_GET['p']) and $_GET['p']) {
