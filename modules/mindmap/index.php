@@ -92,6 +92,10 @@ $head_content .= '
             border:solid 1px #ccc;
             background:#f4f4f4;
         }
+        
+        jmnodes.theme-greensea jmnode.selected{
+        	color: black ;
+        }
     </style>';
 
 $tool_content .= "
