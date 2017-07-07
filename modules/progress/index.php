@@ -395,8 +395,8 @@ if (isset($display) and $display == TRUE) {
             // display certificate settings and resources            
             display_activities($element, $element_id);
         } else { // display all certificates         
-            display_certificates();
-            display_badges();
+	        display_badges();
+	        display_certificates();
         }
     } else {        
         check_user_details($uid); // security check
