@@ -3905,6 +3905,8 @@ $langUpgradeInProgress = 'Use is temporary restricted, because the platform is
     to login.';
 $langAddOpenDelosVideoLink = "Add OpenDelos video link";
 $langOpenDelosReplaceInfo = "<p>Already existing links will be refreshed with current metadata.</p><p><span style='color:red'>*</span> The link already exists in $langsCourse videolinks.</p><p><span style='color:red'>**</span> The link already exists, but OpenDelos platform holds a newer version.</p>";
+$langOpenDelosPublicVideos = "Public multimedia files";
+$langOpenDelosPrivateVideos = "Private multimedia files";
 $langWorkSubType = "Submission Type";
 $langWorkOnlineText = "Online Text";
 $lang_personal_blog = "Activate personal blog";

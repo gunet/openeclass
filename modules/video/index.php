@@ -370,8 +370,8 @@ hContent;
     } // end of add_submit
     if (isset($_POST['add_submit_delos'])) {
         if (isset($_POST['delosResources'])) {
-            $jsonObj = requestDelosJSON();
-            storeDelosResources($jsonObj);
+            list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
+            storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth);
         }
         $tool_content .= "<div class='alert alert-success'>$langLinksAdded</div>";
     }
@@ -507,13 +507,8 @@ hContent;
             $tool_content .= "</form>
                 </div></div></div>";
         } else if ($_GET['form_input'] === 'opendelos') {
-            $jsonObj = requestDelosJSON();
-            // construct the form/table from the JSON received
-            if ($jsonObj !== null && property_exists($jsonObj, "resources")) {
-                $tool_content .= displayDelosForm($jsonObj, getCurrentVideoLinks());
-            } else {
-                $tool_content .= "<div class='alert alert-warning' role='alert'>$langNoVideo</div>";
-            }
+            list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
+            $tool_content .= displayDelosForm($jsonPublicObj, $jsonPrivateObj, $checkAuth, getCurrentVideoLinks());
         }
     }
 
