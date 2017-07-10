@@ -5302,7 +5302,35 @@ $langOpenMeetingsModuleKey = "Module key";
 $langOpenMeetingsWebApp = "Όνομα WebApp";
 
 // Messages for Mindmaps
-$langMindmap = 'Εννοιολογικός χάρτης';
+$langMindmap = "Εννοιολογική χαρτογράφηση";
+$langScreenshot = "Στιγμιότυπο οθόνης";
+$langOpenEx = "Άνοιγμα παραδείγματος";
+$langEditEn = "Ενεργοποίηση τροποποίησης";
+$langEditDis = "Απενενεργοποίηση τροποποίησης";
+$langAddNode = "Προσθήκη κόμβου";
+$langRemoveNode = "Αφαίρεση κόμβου";
+$langResetMap = "Καθαρισμός χάρτη";
+$langSaveFile = "Αποθήκευση αρχείου";
+$langSaveInDoc = "Αποθήκευση στα έγγραφα";
+$langOpenFile = "άνοιγμα αρχείου";
+$langEditMind = "Τροποποίηση";
+$langToggle = "Εναλλαγή";
+$langOpenMind = "Άνοιγμα";
+$langPleaseSelectNode = "Παρακαλώ επιλέξτε ένα κόμβο.";
+$langPlzClickNode = "Προσπαθήστε να κάνετε κλικ σε ένα κόμβο";
+$langPlzDblClickNode = "Προσπαθήστε να κάνετε διπλό κλικ σε ένα κόμβο";
+$langPleaseChooseFile = "Παρακαλώ επιλέξτε αρχείο";
+$langThemeDefault = "Προεπιλογή";
+$langThemePrimary = "Βασικό";
+$langThemeDanger = "Κίνδυνος";
+$langThemeSuccess = "Επιτυχία";
+$langThemeGreenSea = "Βεραμάν";
+$langThemeOrange = "Πορτοκαλί";
+$langThemePumpkin = "Κολοκύθα";
+$langThemePomegranate = "Ρόδι";
+$langThemeClouds = "Σύννεφα";
+$langPleaseEnterName = "Παρακαλώ εισάγετε όνομα"; 
+$langMindMapSaved = "Η εννοιολογική χαρτογράφηση αποθηκεύθηκε";
 
 // Messages for WebConf
 $langWebConf = "Ρυθμίσεις \"Wowza\" του $siteName";
