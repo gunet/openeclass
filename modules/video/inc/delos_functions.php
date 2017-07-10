@@ -26,9 +26,12 @@ require_once 'include/log.class.php';
 
 $opendelosapp = ExtAppManager::getApp(strtolower(OpenDelosApp::NAME));
 
-function getDelosURL() {
-    global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::URL)->value();
+function base64url_encode($data) {
+    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+function base64url_decode($data) {
+    return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
 }
 
 function getDelosExtEnabled() {
@@ -36,12 +39,46 @@ function getDelosExtEnabled() {
     return $opendelosapp->isEnabled();
 }
 
-function isDelosEnabled() {
-    // DEBUG
-    //return true;
-    // END DEBUG
+function getDelosPublicURL() {
     global $opendelosapp;
-    if ($opendelosapp && getDelosExtEnabled() && getDelosURL()) {
+    return $opendelosapp->getParam(OpenDelosApp::URL)->value();
+}
+
+function getDelosPrivateURL() {
+    global $opendelosapp;
+    return $opendelosapp->getParam(OpenDelosApp::PRIVATE_URL)->value();
+}
+
+function getDelosCheckAuthURL() {
+    global $opendelosapp;
+    return $opendelosapp->getParam(OpenDelosApp::CHECKAUTH_URL)->value();
+}
+
+function getDelosRLoginURL() {
+    global $opendelosapp;
+    return $opendelosapp->getParam(OpenDelosApp::RLOGIN_URL)->value();
+}
+
+function getDelosRLoginCASURL() {
+    global $opendelosapp;
+    return $opendelosapp->getParam(OpenDelosApp::RLOGINCAS_URL)->value();
+}
+
+function getDelosLmsURL() {
+    global $opendelosapp;
+    return $opendelosapp->getParam(OpenDelosApp::LMS_URL)->value();
+}
+
+function getDelosSecret() {
+    global $opendelosapp;
+    return $opendelosapp->getParam(OpenDelosApp::SECRET)->value();
+}
+
+function isDelosEnabled() {
+    global $opendelosapp;
+    if ($opendelosapp && getDelosExtEnabled() && getDelosPublicURL() && getDelosPrivateURL()
+        && getDelosCheckAuthURL() && getDelosRLoginURL() && getDelosRLoginCASURL()
+        && getDelosLmsURL() && getDelosSecret()) {
         return true;
     }
     return false;
@@ -67,38 +104,100 @@ hContent;
     return $head;
 }
 
-function requestDelosJSON() {
-    // DEBUG
-    //$json = '{"playerBasePath" : "http://opendelos.org/playerBasePath", "resources":[{"resourceID" : "1", "videoLecture" : {"title" : "title1", "description" : "description1", "date" : "2016-07-14 12:00:00", "rights" : {"creator" : {"name" : "crname1"}}, "organization" : {"name" : "orgname1"}}}, {"resourceID" : "2", "videoLecture" : {"title" : "title2", "description" : "description2", "date" : "2016-07-15 12:00:00", "rights" : {"creator" : {"name" : "crname2"}}, "organization" : {"name" : "orgname2"}}} ]}';
-    //return json_decode($json);
-    // END DEBUG
+function getDelosSignedToken() {
     global $course_code;
-    $jsonObj = null;
-    if (isDelosEnabled()) {
-        $jsonbaseurl = getDelosURL();
-        $jsonbaseurl .= (stringEndsWith($jsonbaseurl, "/")) ? '' : '/';
-        $jsonurl = $jsonbaseurl . $course_code;
-        // request json from opendelos
-        $json = httpGetRequest($jsonurl);
-        $jsonObj = ($json) ? json_decode($json) : null;
-    }
-    return $jsonObj;
+
+    // encrypt token header
+    $header = array(
+        "alg" => "HS256",
+        "typ" => "JWT"
+    );
+    $stringifiedHeader = json_encode($header);
+    $encodedHeader = base64url_encode($stringifiedHeader);
+
+    // encrypt token data
+    $data = array(
+        "url" => getDelosLmsURL(),
+        "rid" => $course_code,
+    );
+    $stringifiedData = json_encode($data);
+    $encodedData = base64url_encode($stringifiedData);
+
+    // encrypt token and encode token
+    $token = $encodedHeader . "." . $encodedData;
+    $signature = base64url_encode(hash_hmac('sha256', $token, getDelosSecret(), true));
+    $signedToken = $token . "." . $signature;
+
+    return $signedToken;
 }
 
-function httpGetRequest($url) {
+function requestDelosJSON() {
+    global $course_code;
+    $jsonPublicObj = null;
+    $jsonPrivateObj = null;
+    $checkAuth = false;
+
+    if (isDelosEnabled()) {
+        // construct proper url for public resources
+        $delospublicurl = getDelosPublicURL();
+        $delospublicurl .= (stringEndsWith($delospublicurl, "/")) ? '' : '/';
+        $jsonpublicurl = $delospublicurl . $course_code;
+
+        // construct http headers
+        $headers = array(
+            'Accept: application/json',
+            'Content-Type: application/json',
+            'X-CustomToken: ' . getDelosSignedToken(),
+            'Referer: http://' . getDelosLmsURL()
+        );
+
+        // request public json from opendelos
+        $jsonpublic = httpGetRequest($jsonpublicurl, $headers);
+        $jsonPublicObj = ($jsonpublic) ? json_decode($jsonpublic) : null;
+
+        // request check for auth from opendelos
+//        $authresp = httpGetRequest(getDelosCheckAuthURL(), $headers);
+//        error_log("delos check auth response:");
+//        error_log($authresp);
+//        if (strpos($authresp, "Valid") !== false) {
+//            $checkAuth = true;
+//        }
+
+        // private resources
+//        if ($checkAuth) {
+            // construct proper url for private resources
+//            $delosprivateurl = getDelosPrivateURL();
+//            $delosprivateurl .= (stringEndsWith($delosprivateurl, "/")) ? '' : '/';
+//            $jsonprivateurl = $delosprivateurl . $course_code;
+
+            // request private json from opendelos
+//            $jsonprivate = httpGetRequest($jsonprivateurl, $headers);
+//            error_log("delos private response:");
+//            error_log($jsonprivate);
+//            $jsonPrivateObj = ($jsonprivate) ? json_decode($jsonprivate) : null;
+
+//        }
+    }
+
+    return array($jsonPublicObj, $jsonPrivateObj, $checkAuth);
+}
+
+function httpGetRequest($url, $headers = array()) {
     $response = null;
     if (!extension_loaded('curl')) {
-        $response = file_get_contents($url);
-    } else {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        curl_close($ch);
+        return $response;
     }
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
     return $response;
 }
 
-function storeDelosResources($jsonObj) {
+function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
     global $course_id;
     $submittedResources = $_POST['delosResources'];
     $submittedCategory = $_POST['selectcategory'];
@@ -109,10 +208,10 @@ function storeDelosResources($jsonObj) {
             WHERE course_id = ?d 
             AND category = ?d 
             AND url LIKE '%rid=" . $rid . "'", $course_id, $submittedCategory);
-        foreach ($jsonObj->resources as $resource) {
+        foreach ($jsonPublicObj->resources as $resource) {
             if ($resource->resourceID === $rid) {
                 $vL = $resource->videoLecture;
-                $url = $jsonObj->playerBasePath . '?rid=' . $rid;
+                $url = $jsonPublicObj->playerBasePath . '?rid=' . $rid;
                 $title = $vL->title;
                 $description = $vL->description;
                 $creator = $vL->rights->creator->name;

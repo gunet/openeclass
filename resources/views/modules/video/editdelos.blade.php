@@ -11,7 +11,7 @@
     )
     !!}
     
-    @if ($jsonObj !== null && property_exists($jsonObj, "resources"))
+    @if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources"))
         <form method='POST' action='{!! $urlAppend . "modules/video/edit.php?course=" . $course_code !!}'>
             <div class="table-responsive">
                 <table class="table-default">
@@ -24,9 +24,12 @@
                             <th>{{ trans('langDate') }}</th>
                             <th>{{ trans('langSelect') }}</th>
                         </tr>
-                        @foreach ($jsonObj->resources as $resource)
+                        <tr class="list-header">
+                            <th colspan="6">$langOpenDelosPublicVideos</th>
+                        </tr>
+                        @foreach ($jsonPublicObj->resources as $resource)
                             <?php 
-                                $url = $jsonObj->playerBasePath . '?rid=' . $resource->resourceID;
+                                $url = $jsonPublicObj->playerBasePath . '?rid=' . $resource->resourceID;
                                 $alreadyAdded = '';
                                 if (isset($currentVideoLinks[$url])) {
                                     $alreadyAdded = '<span style="color:red">*';

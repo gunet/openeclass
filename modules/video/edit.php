@@ -201,8 +201,8 @@ if (isset($_POST['add_submit'])) { // add
 // handle OpenDelos submitted data
 if (isset($_POST['add_submit_delos'])) {
     if (isset($_POST['delosResources'])) {
-        $jsonObj = requestDelosJSON();
-        storeDelosResources($jsonObj);
+        list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
+        storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth);
     }
     Session::Messages($langLinksAdded, "alert-success");
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
@@ -247,7 +247,10 @@ hContent;
 
 
 if ($form_input === 'opendelos') {
-    $data['jsonObj'] = requestDelosJSON();
+    list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
+    $data['jsonPublicObj'] = $jsonPublicObj;
+    $data['jsonPrivateObj'] = $jsonPrivateObj;
+    $data['checkAuth'] = $checkAuth;
     $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
     $head_content .= getDelosJavaScript();
     view('modules.video.editdelos', $data);

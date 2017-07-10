@@ -25,11 +25,23 @@ require_once 'genericrequiredparam.php';
 class OpenDelosApp extends ExtApp {
 
     const URL = "url";
+    const PRIVATE_URL = "private_url";
+    const CHECKAUTH_URL = "checkauth_url";
+    const RLOGIN_URL = "rlogin_url";
+    const RLOGINCAS_URL = "rlogincas_url";
+    const LMS_URL = "lms_url";
+    CONST SECRET = "secret";
     const NAME = "OpenDelos";
 
     public function __construct() {
         parent::__construct();
-        $this->registerParam(new GenericRequiredParam($this->getName(), "OpenDelos URL", OpenDelosApp::URL));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "OpenDelos URL", OpenDelosApp::URL, "http://HOST/api/lms/public/"));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "OpenDelos Private URL", OpenDelosApp::PRIVATE_URL, "http://HOST/api/dataservices/private/lms/"));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "OpenDelos CheckAuth URL", OpenDelosApp::CHECKAUTH_URL, "http://HOST/api/dataservices/private/check_auth"));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "OpenDelos RLogin URL", OpenDelosApp::RLOGIN_URL, "http://HOST/rlogin"));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "OpenDelos RLogin CAS URL", OpenDelosApp::RLOGINCAS_URL, "http://HOST/admin/cauth/cas"));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "OpenDelos LMS URL", OpenDelosApp::LMS_URL));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "OpenDelos Secret", OpenDelosApp::SECRET));
     }
 
     public function getDisplayName() {
