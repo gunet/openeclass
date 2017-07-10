@@ -1614,8 +1614,7 @@ function display_settings($element, $element_id) {
  * @global type $course_id
  * @global type $langTitle
  * @global type $langSave
- * @global type $langInsert
- * @global type $langActivate
+ * @global type $langInsert 
  * @global type $langDescription
  * @global type $langpublisher
  * @global type $langMessage
@@ -1627,7 +1626,7 @@ function certificate_settings($element, $element_id = 0) {
 
     global $tool_content, $course_code, $langTemplate, $course_id, 
            $langTitle, $langSave, $langInsert, $langMessage,
-           $langActivate, $langDescription, $langpublisher, $langIcon;
+           $langDescription, $langpublisher, $langIcon;
                
     if ($element_id > 0) {      // edit
         $field = ($element == 'certificate')? 'template' : 'icon';
@@ -1837,7 +1836,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
     global $tool_content, $langNoUserActivity, $langAttendanceActivity, $langpublisher,
            $langInstallEnd, $langTotalPercentCompleteness, $langTitle, $langDescription;
 
-	$element_title = get_title($element, $element_id);
+	$element_title = get_cert_title($element, $element_id);
 
     $resource_data = array();
 

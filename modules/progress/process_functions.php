@@ -373,7 +373,7 @@ function add_blogcomment_to_certificate($element, $element_id) {
  * @param type $id
  * @return type
  */
-function get_title($table, $id) {
+function get_cert_title($table, $id) {
 
     $cert_title = Database::get()->querySingle("SELECT title FROM $table WHERE id = ?d", $id)->title;
 
@@ -473,24 +473,24 @@ function check_user_details($uid) {
     }
 }
 
-
 /**
- * @brief check if we are trying to access other user certificate
+ * @brief check if user has completed certificate / badge
  * @param type $uid
- * @param type $certificate_id
- * @return type
+ * @param type $element
+ * @param type $element_id
+ * @return boolean
  */
-function check_cert_details($uid, $element, $element_id) {
+function has_certificate_completed($uid, $element, $element_id) {
         
     $sql = Database::get()->querySingle("SELECT completed FROM user_${element} WHERE $element = ?d AND user = ?d", $element_id, $uid);
     if ($sql) {
         if (!$sql->completed) {
-            redirect_to_home_page();
+            return false;
         }
     } else {
-        redirect_to_home_page();
+        return false;
     }
-    return;    
+    return true;
 }
 
 
@@ -832,7 +832,7 @@ function cert_output_to_pdf($certificate_id, $user_id) {
     
     $html_certificate = file_get_contents($webDir . CERT_TEMPLATE_PATH . $cert_file);
 
-    $certificate_title = get_title('certificate', $certificate_id);
+    $certificate_title = get_cert_title('certificate', $certificate_id);
     $certificate_issuer = get_certificate_issuer($certificate_id);
     $sql = Database::get()->querySingle("SELECT message FROM certificate WHERE id = ?d", $certificate_id);
     if ($sql) {

@@ -43,7 +43,7 @@ if (isset($_GET['enc']) and $_GET['enc'] == 'UTF-8') {
 }
 $csv->filename = $course_code . "_users_progress_results.csv";
 
-$cert_title = get_title($element, $element_id);
+$cert_title = get_cert_title($element, $element_id);
 
 $csv->outputRecord($cert_title)
         ->outputRecord($langSurname, $langName, $langAm, $langUsername, $langEmail, $langProgress);

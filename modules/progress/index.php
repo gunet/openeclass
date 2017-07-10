@@ -146,7 +146,7 @@ if (isset($_REQUEST['certificate_id'])) {
     $param_name = 'certificate_id';
     $element_id = $_REQUEST['certificate_id'];
     $element = 'certificate';
-    $element_title = get_title($element, $element_id);
+    $element_title = get_cert_title($element, $element_id);
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
 }
 
@@ -154,7 +154,7 @@ if (isset($_REQUEST['badge_id'])) {
     $param_name = 'badge_id';
     $element_id = $_REQUEST['badge_id'];
     $element = 'badge';
-    $element_title = get_title($element, $element_id);
+    $element_title = get_cert_title($element, $element_id);
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
 }
 
@@ -385,12 +385,12 @@ if ($is_editor) {
 	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
 	              'icon' => 'fa-print',
 	              'level' => 'primary-label',
-	              'show' => true),
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label')
-	        ));
+	              'show' => has_certificate_completed($_GET['u'], $element, $element_id)),
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')
+                    ));
 }
 
 if (isset($display) and $display == TRUE) {
@@ -407,7 +407,9 @@ if (isset($display) and $display == TRUE) {
         check_user_details($uid); // security check
         if (isset($element_id)) {            
             if (isset($_GET['p']) and $_GET['p']) {
-                check_cert_details($uid, $element, $element_id); // security check
+                if (!has_certificate_completed($uid, $element, $element_id)) { // security check
+                    redirect_to_home_page();                    
+                }                 
                 cert_output_to_pdf($element_id, $uid);
             } else {
                 $pageName = $element_title;
