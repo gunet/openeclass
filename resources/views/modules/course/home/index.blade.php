@@ -1,6 +1,27 @@
 @extends('layouts.default')
 
 @section('content')
+<style>
+    .course_completion_panel_percentage
+        {                
+            bottom:15px;
+            right:15px;
+            font-size:20px;
+            padding: 10px 10px;
+            width: 72px; /* original was width: 40px; */
+            height: 72px; /* original was height: 40px;*/
+            border: 6px solid #AAAAAA;
+            border-radius: 40px;
+            background: #FFFFFF;
+            color: #AAAAAA;
+            line-height: 38px;
+            font-weight: 600;                
+        }
+        .state_success
+        {                
+            color: #11D888;
+        }
+</style>
     {!! isset($action_bar) ?  $action_bar : '' !!}
     <div class='row margin-top-thin margin-bottom-fat'>
         <div class='col-md-12'>
@@ -254,15 +275,35 @@
 
         <div class='col-md-{{ $cunits_sidebar_columns }}'>
             <div class='row'>
-                @if (isset($level) && !empty($level)) {
+                @if (isset($course_completion_id) and $course_completion_id > 0)
+                    <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
+                        <div class='content-title h3'>{{ trans('langCourseCompletion') }}</div>
+                        <div class='panel'>
+                            <div class='panel-body'>
+                                <div class='text-center'>
+                                    <div class='col-sm-12'>
+                                        @if ($percentage == '100%')
+                                            <i class='fa fa-check-circle fa-5x state_success'></i>
+                                        @else
+                                            <div class='course_completion_panel_percentage'>
+                                                {{ $percentage }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                @if (isset($level) && !empty($level))
                     <div class='col-md-{{ $cunits_sidebar_subcolumns }}'>
                         <div class='content-title h3'>{{ trans('langOpenCourseShort') }}</div>
                         <div class='panel'>
                             <div class='panel-body'>
-                                $opencourses_level
+                                {!! $opencourses_level !!}
                             </div>
                             <div class='panel-footer'>
-                                $opencourses_level_footer
+                                {!! $opencourses_level_footer !!}
                             </div>
                         </div>
                     </div>

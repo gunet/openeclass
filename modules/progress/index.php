@@ -225,17 +225,21 @@ if ($is_editor) {
     } elseif (isset($_GET['preview'])) { // certificate preview
         cert_output_to_pdf($element_id, $uid);
     } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])))) {
-        $tool_content .= action_bar(
-            array(
-                array('title' => "$langBack",
-                      'url' => "{$urlServer}courses/$course_code/index.php",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
+        $tool_content .= action_bar(array(
+            array('title' => $langCourseCompletion,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcc=1",
+                  'icon' => 'fa-navicon',
+                  'level' => 'primary-label',
+                  'show' => !has_course_completion()),
+            array('title' => $langBack,
+                  'url' => "{$urlServer}courses/$course_code/index.php",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label')));
     }
     $tool_content .= "</div></div>";
     //end of the top menu
         
-    if (isset($_GET['vis'])) { // activate or deactivate certificate
+    if (isset($_GET['vis'])) { // activate or deactivate certificate / badge
         if (has_activity($element, $element_id) > 0) {
             update_visibility($element, $element_id, $_GET['vis']);        
             Session::Messages($langGlossaryUpdated, 'alert-success');
@@ -244,7 +248,7 @@ if ($is_editor) {
         }
         redirect_to_home_page("modules/progress/index.php?course=$course_code");
     }        
-    if (isset($_POST['newCertificate']) or isset($_POST['newBadge'])) {  //add a new certificate / badge
+    if (isset($_POST['newCertificate']) or isset($_POST['newBadge'])) {  // add a new certificate / badge
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('title'));                        
         $v->labels(array(
@@ -253,7 +257,7 @@ if ($is_editor) {
         if($v->validate()) {
             $table = (isset($_POST['newCertificate'])) ? 'certificate' : 'badge';
             $icon  = $_POST['template'];
-            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0);
+            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0);
             Session::Messages("$langNewCertificateSuc", 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
@@ -350,18 +354,23 @@ if ($is_editor) {
         } else {
             Session::Messages("$langUsedCertRes", "alert-warning");
         }
-    } elseif (isset($_GET['del_badge'])) {  //  badge
+    } elseif (isset($_GET['del_badge'])) {  //  delete badge
         if (delete_certificate('badge', $_GET['del_badge'])) {
             Session::Messages("$langGlossaryDeleted", "alert-success");
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {
             Session::Messages("$langUsedCertRes", "alert-warning");
         }        
-    } elseif (isset($_GET['newcert'])) {
-        certificate_settings('certificate'); // create new certificate
+    } elseif (isset($_GET['newcert'])) {  // create new certificate
+        certificate_settings('certificate');
         $display = FALSE;
-    }  elseif (isset($_GET['newbadge'])) {
-        certificate_settings('badge'); // create new badge
+    }  elseif (isset($_GET['newbadge'])) {  // create new badge
+        certificate_settings('badge');
+        $display = FALSE;
+    } elseif (isset($_GET['newcc'])) { // create course completion (special type of badge)          
+        add_certificate('badge', $langCourseCompletion, '', $langCourseCompletionMessage, '', q(get_config('institution')), 0, -1);
+        Session::Messages("$langCourseCompletionCreated", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code");
         $display = FALSE;
     } elseif (isset($_GET['edit'])) { // edit certificate /badge settings
         certificate_settings($element, $element_id);
@@ -399,7 +408,8 @@ if (isset($display) and $display == TRUE) {
             $pageName = $element_title;
             // display certificate settings and resources
             display_activities($element, $element_id);
-        } else { // display all certificates         
+        } else { // display all certificate
+                display_course_completion();
 	        display_badges();
 	        display_certificates();
         }

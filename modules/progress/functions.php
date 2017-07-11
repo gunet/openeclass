@@ -32,7 +32,7 @@
  * @global type $langCreateDuplicate
  * @global type $langNoCertificates
  * @global type $langEditChange
- * @global type $langAvailCert
+ * @global type $langCertificates
  * @global type $langViewHide
  * @global type $langViewShow
  * @global type $langEditChange
@@ -44,7 +44,7 @@ function display_certificates() {
     global $course_id, $tool_content, $course_code, $urlServer,
            $langDelete, $langConfirmDelete, /*$langCreateDuplicate,*/
            $langNoCertificates, $langActive, $langInactive, $langNewCertificate, $langEditChange, 
-           $langNewCertificate, $langAvailCert, $langActivate, $langDeactivate, $langSee, $langHere;
+           $langNewCertificate, $langCertificates, $langActivate, $langDeactivate, $langSee, $langHere;
 
     // Fetch the certificate list
     $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d", $course_id);
@@ -61,7 +61,7 @@ function display_certificates() {
                             <div class='inner-heading'>
                                 <div class='row'>
                                     <div class='col-sm-7'>
-                                        <strong>$langAvailCert</strong>
+                                        <strong>$langCertificates</strong>
                                     </div>
                                     <div class='col-sm-5 text-right'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langNewCertificate</a>
@@ -124,7 +124,7 @@ function display_certificates() {
 
 
 /**
- * * @brief display all badges -- initial screen
+ * @brief display all badges -- initial screen
  * @global type $course_id
  * @global type $tool_content
  * @global type $course_code
@@ -135,7 +135,7 @@ function display_certificates() {
  * @global type $langCreateDuplicate
  * @global type $langNoBadges
  * @global type $langEditChange
- * @global type $langAvailBadge
+ * @global type $langBadges
  * @global type $langViewHide
  * @global type $langViewShow
  * @global type $langEditChange
@@ -146,14 +146,14 @@ function display_badges() {
 
     global $course_id, $tool_content, $course_code, $is_editor,
            $langDelete, $langConfirmDelete, /*$langCreateDuplicate,*/
-           $langNoBadges, $langEditChange, $langAvailBadge, $langHere,
+           $langNoBadges, $langEditChange, $langBadges, $langHere,
            $langActivate, $langDeactivate, $langNewBadge, 
            $langSee, $langActive, $langInactive, $urlServer;
 
     if ($is_editor) {
-        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d", $course_id);
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND bundle >= 0", $course_id);
     } else {
-        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1", $course_id);
+        $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1 AND bundle >= 0 ", $course_id);
     }
     
     if (count($sql_cer) == 0) { // no badges
@@ -168,7 +168,7 @@ function display_badges() {
                             <div class='inner-heading'>
                                 <div class='row'>
                                     <div class='col-sm-7'>
-                                        <strong>$langAvailBadge</strong>
+                                        <strong>$langBadges</strong>
                                     </div>
                                     <div class='col-sm-5 text-right'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn btn-success btn-sm'><span class='fa fa-plus'></span> &nbsp;&nbsp;&nbsp;$langNewBadge</a>
@@ -216,6 +216,84 @@ function display_badges() {
                                 </div>";
 
         }
+
+        $tool_content .= "
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ";
+    }
+}
+
+/**
+ * @brief display course completion (special type of badge)
+ * @global type $course_id
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $langDelete
+ * @global type $langConfirmDelete
+ * @global type $langCourseCompletion
+ * @global type $langEditChange
+ * @global type $langActivate
+ * @global type $langDeactivate
+ * @global type $langSee
+ * @global type $langActive
+ * @global type $langInactive
+ */
+function display_course_completion() {
+    global $course_id, $tool_content, $course_code,
+           $langDelete, $langConfirmDelete, $langCourseCompletion,
+           $langEditChange, $langActivate, $langDeactivate, 
+           $langSee, $langActive, $langInactive;
+    
+    $data = Database::get()->querySingle("SELECT id, title, description, active, icon FROM badge "
+                                    . "WHERE course_id = ?d AND bundle = -1", $course_id);        
+    if ($data) {
+        $tool_content .= "
+            <div class='row'>
+                <div class='col-xs-12'>
+                    <div class='panel panel-default'>
+                        <div class='panel-body'>
+                            <div class='inner-heading'>
+                                <div class='row'>
+                                    <div class='col-sm-7'>
+                                        <strong>$langCourseCompletion</strong>
+                                    </div>                                    
+                                </div>
+                            </div>
+                            <div class='res-table-wrapper'>";
+       
+            $vis_status = $data->active ? "text-success" : "text-danger";
+            $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
+            $status_msg = $data->active ? $langActive : $langInactive;            
+            $tool_content .= "
+                        <div class='row res-table-row'>
+                            <div class='col-sm-2'>
+                                <i class='fa fa-circle-o-notch fa-3x' aria-hidden='true'></i>
+                            </div>
+                            <div class='col-sm-9'>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
+                                <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
+                            </div>
+                            <div class='col-sm-1 text-left'>".
+                action_button(array(                    
+                    array('title' => $data->active ? $langDeactivate : $langActivate,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
+                            ($data->active ? '0' : '1'),
+                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
+                    array('title' => $langDelete,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
+                        'icon' => 'fa-times',
+                        'class' => 'delete',
+                        'confirm' => $langConfirmDelete),
+                    array('title' => $langSee,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;preview=1",
+                        'icon' => 'fa-search')
+                ))
+                ."</div>
+                </div>";
 
         $tool_content .= "
                             </div>
@@ -1541,68 +1619,87 @@ function display_available_participation($element, $element_id) {
  * @global type $langpublisher
  * @global type $langCertificateDetails
  * @global type $langBadgeDetails
+ * @global type $langCourseCompletion
  * @param type $element
  * @param type $element_id
  */
 function display_settings($element, $element_id) {
     
     global $tool_content, $course_id, $course_code, $urlServer, $langTitle, 
-           $langDescription, $langMessage, $langProgressBasicInfo,
+           $langDescription, $langMessage, $langProgressBasicInfo, $langCourseCompletion,
            $langpublisher, $langCertificateDetails, $langBadgeDetails, $langEditChange;
 
     $field = ($element == 'certificate')? 'template' : 'icon';
     $header = ($element == 'certificate')? "$langCertificateDetails" : "$langBadgeDetails";
     $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle 
                             FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
-    $issuer = $data->issuer;    
+    $bundle = $data->bundle;
+    $issuer = $data->issuer;
     $title = $data->title;
     $description = $data->description;
     $message = $data->message;
-    $icon_link = '';    
-    if ($element == 'badge') {
-        $badge_details = get_badge_icon($data->icon);
-        $badge_name = key($badge_details);
-        $badge_icon = $badge_details[$badge_name];
-        $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";        
-    }
+    $icon_link = '';
+    if ($bundle != -1) {
+        if ($element == 'badge') {
+            $badge_details = get_badge_icon($data->icon);
+            $badge_name = key($badge_details);
+            $badge_icon = $badge_details[$badge_name];
+            $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_icon";        
+        }
 
-    $icon_link = $urlServer . "/modules/tc/test.pdf";
-    //$tool_content .= "<h:graphicImage value='$icon_link' width='100' height='100'>";
-    $tool_content .= "
-        <div class='row'>
-            <div class='col-xs-12'>
-                <div class='panel panel-default'>
-                    <div class='panel-body'>
-                        <div class='inner-heading'>
+        //$icon_link = $urlServer . "/modules/tc/test.pdf";
+        //$tool_content .= "<h:graphicImage value='$icon_link' width='100' height='100'>";
+        $tool_content .= "
+            <div class='row'>
+                <div class='col-xs-12'>
+                    <div class='panel panel-default'>
+                        <div class='panel-body'>
+                            <div class='inner-heading'>
+                                <div class='row'>
+                                    <div class='col-sm-7'>
+                                        <strong>$langProgressBasicInfo</strong>
+                                    </div>
+                                    <div class='col-sm-5 text-right'>
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'><span class='fa fa-pencil'></span> &nbsp;&nbsp;$langEditChange</a>
+                                    </div>
+                                </div>
+                            </div>
                             <div class='row'>
+                                <div class='col-sm-5'>
+                                    <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block' src='$icon_link'>
+                                </div>
                                 <div class='col-sm-7'>
-                                    <strong>$langProgressBasicInfo</strong>
+                                    <div class='pn-info-title-sct'>$langTitle</div>
+                                    <div class='pn-info-text-sct'>$title</div>
+                                    <div class='pn-info-title-sct'>$langDescription</div>
+                                    <div class='pn-info-text-sct'>$description</div>
+                                    <div class='pn-info-title-sct'>$langMessage</div>
+                                    <div class='pn-info-text-sct'>$message</div>
+                                    <div class='pn-info-title-sct'>$langpublisher</div>
+                                    <div class='pn-info-text-sct'>$issuer</div>
                                 </div>
-                                <div class='col-sm-5 text-right'>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'><span class='fa fa-pencil'></span> &nbsp;&nbsp;$langEditChange</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='row'>
-                            <div class='col-sm-5'>
-                                <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block' src='$icon_link'>
-                            </div>
-                            <div class='col-sm-7'>
-                                <div class='pn-info-title-sct'>$langTitle</div>
-                                <div class='pn-info-text-sct'>$title</div>
-                                <div class='pn-info-title-sct'>$langDescription</div>
-                                <div class='pn-info-text-sct'>$description</div>
-                                <div class='pn-info-title-sct'>$langMessage</div>
-                                <div class='pn-info-text-sct'>$message</div>
-                                <div class='pn-info-title-sct'>$langpublisher</div>
-                                <div class='pn-info-text-sct'>$issuer</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    ";
+        ";
+    } else { // course completion
+        $tool_content .= "
+        <div class='row'>
+            <div class='col-xs-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        <div class='row'>
+                            <div class='col-sm-7'>
+                                <h4><strong>$langCourseCompletion</strong></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>";
+    }
 }
 
 
@@ -1726,11 +1823,11 @@ function student_view_progress() {
 
     // populate with data
     foreach ($iter as $key) {
-        $gameQ = "select a.*, b.title,"
+        $gameQ = "SELECT a.*, b.title,"
                 . " b.description, b.active, b.created, b.id"
-                . " from user_{$key} a "
-                . " join {$key} b on (a.{$key} = b.id) "
-                . " where a.user = ?d and b.course_id = ?d and b.active = 1";
+                . " FROM user_{$key} a "
+                . " JOIN {$key} b ON (a.{$key} = b.id) "
+                . " WHERE a.user = ?d AND b.course_id = ?d AND b.active = 1 AND b.bundle != -1";
         Database::get()->queryFunc($gameQ, function($game) use ($key, &$data) {            
             if ($key == 'badge') { // get badge icon                
                 $game->filename = Database::get()->querySingle("SELECT filename FROM badge_icon WHERE id = 

@@ -504,9 +504,10 @@ function has_certificate_completed($uid, $element, $element_id) {
  * @param type $icon
  * @param type $issuer
  * @param type $active
+ * @param type $bundle
  * @return type
  */
-function add_certificate($table, $title, $description, $message, $icon, $issuer, $active) {
+function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle) {
     
     global $course_id;
     if ($table == 'certificate') {
@@ -517,7 +518,8 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
                                 message = ?s,
                                 template = ?d,
                                 issuer = ?s,
-                                active = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active)->lastInsertID;
+                                active = ?d,
+                                bundle = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle)->lastInsertID;
     } else {
         $new_id = Database::get()->query("INSERT INTO badge 
                                 SET course_id = ?d,
@@ -526,7 +528,8 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
                                 message = ?s,
                                 icon = ?d,
                                 issuer = ?s,
-                                active = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active)->lastInsertID;    
+                                active = ?d,
+                                bundle = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle)->lastInsertID;
     }
     return $new_id;
 }
@@ -600,6 +603,40 @@ function update_visibility($element, $element_id, $visibility) {
     
     Database::get()->query("UPDATE $element SET active = ?d WHERE id = ?d AND course_id = ?d", $visibility, $element_id, $course_id);
     
+}
+
+/**
+ * @brief check if we have created course completion badge
+ * @global type $course_id
+ * @return boolean
+ */
+function has_course_completion() {
+    
+    global $course_id;
+    
+    $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND bundle = -1", $course_id);
+    if ($sql) {
+        return $sql->id;
+    } else {
+        return 0;
+    }
+}
+
+/**
+ * @brief get certificate / badge percentage completion
+ * @global type $uid
+ * @param type $element
+ * @param type $element_id
+ * @return type
+ */
+function get_cert_percentage_completion($element, $element_id) {
+    
+    global $uid;
+    
+    $data = Database::get()->querySingle("SELECT completed_criteria, total_criteria "
+            . "FROM user_{$element} WHERE user = ?d AND $element = ?d", $uid, $element_id);
+    
+    return round($data->completed_criteria / $data->total_criteria * 100, 2);
 }
 
 /**

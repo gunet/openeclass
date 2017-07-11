@@ -137,7 +137,7 @@
     </style>
 
     <div class="badge-container">
-        <h3>{{  trans('langBadges') }}</h3>
+        <h4>{{  trans('langBadges') }}</h4>
         <hr>
         @if (count($game_badge) > 0)
             <div class="clearfix">
@@ -181,7 +181,7 @@
     </div>
 
     <div class="badge-container">
-        <h3>{{  trans('langCertificates') }}</h3>
+        <h4>{{  trans('langCertificates') }}</h4>
         <hr>
         @if (count($game_certificate) > 0)
             <div class="clearfix">

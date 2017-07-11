@@ -44,6 +44,7 @@ require_once 'modules/weeks/functions.php';
 require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
 require_once 'modules/course_metadata/CourseXML.php';
+require_once 'modules/progress/process_functions.php';
 
 doc_init();
 $data['course_info'] = $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
@@ -416,6 +417,14 @@ switch ($visible) {
     }
 }
 
+if (!$is_editor) { 
+    $data['course_completion_id'] = $course_completion_id = has_course_completion(); // is course completion enabled?
+    if ($course_completion_id) {
+        $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);        
+        $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";         
+    }
+}
+    
 // display opencourses level in bar
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 if (isset($level) && !empty($level)) {
@@ -442,7 +451,7 @@ if (isset($level) && !empty($level)) {
     });
 
 /* ]]> */
-</script>";
+</script>";                        
     $data['opencourses_level'] = "
         <div class='row'>
             <div class='col-xs-4'>
