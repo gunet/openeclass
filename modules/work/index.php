@@ -3191,10 +3191,10 @@ function assignment_password_bootbox() {
  * @global type $langGradebookGrade
  */
 function show_student_assignments() {
-    global $tool_content, $m, $uid, $course_id, $course_code,
-            $urlServer, $langHasExpiredS, $langDaysLeft,
-            $langNoAssign, $course_code, $langTitle,
-            $langAddResePortfolio, $langAddGroupWorkSubePortfolio, $langGradebookGrade;
+    global $tool_content, $m, $uid, $course_id, $course_code, $urlServer,
+        $langHasExpiredS, $langDaysLeft, $langNoAssign, $course_code,
+        $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio,
+        $langGradebookGrade, $langPasswordUnlock, $langIPUnlock;
 
     $add_eportfolio_res_td = "";
 
@@ -3230,12 +3230,22 @@ function show_student_assignments() {
                                   </tr>";
         $k = 0;
         foreach ($result as $row) {
-            if ($row->password_lock !== '') {
-                assignment_password_bootbox();
-                $class = ' class="password_protected"';
-            } else {
-                $class = '';
+            $exclamation_icon = '';
+            $class = '';
+            if (isset($row->password_lock) or isset($row->ip_lock)) {
+                $lock_description = "<ul>";
+                if ($row->password_lock) {
+                    $lock_description .= "<li>$langPasswordUnlock</li>";
+                    assignment_password_bootbox();
+                    $class = ' class="password_protected"';
+                }
+                if ($row->ip_lock) {
+                    $lock_description .= "<li>$langIPUnlock</li>";
+                }
+                $lock_description .= "</ul>";
+                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
             }
+
             $title_temp = q($row->title);
             if ($row->deadline) {
                 $deadline = nice_format($row->deadline, true);
@@ -3244,7 +3254,8 @@ function show_student_assignments() {
             }
             $tool_content .= "
                                 <tr>
-                                    <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'$class>$title_temp</a></td>
+                                    <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'$class>$title_temp</a>
+                                        $exclamation_icon</td>
                                     <td class='text-center'>" . $deadline ;
             if ($row->time > 0) {
                 $tool_content .= "<br>(<small>$langDaysLeft " . format_time_duration($row->time) . "</small>)";
@@ -3321,9 +3332,11 @@ function show_student_assignments() {
  * @global type $langTitle
  */
 function show_assignments() {
-    global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign, $langNewAssign,
-           $course_code, $course_id, $langWorksDelConfirm, $langDaysLeft, $m, $langHasExpiredS,
-           $langWarnForSubmissions, $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics;
+    global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign,
+        $langNewAssign, $course_code, $course_id, $langWorksDelConfirm,
+        $langDaysLeft, $m, $langHasExpiredS, $langWarnForSubmissions,
+        $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics,
+        $langPasswordUnlock, $langIPUnlock;
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
               FROM assignment WHERE course_id = ?d ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id);
@@ -3356,6 +3369,19 @@ function show_assignments() {
                     </tr>";
         $index = 0;
         foreach ($result as $row) {
+            $exclamation_icon = '';
+            if (isset($row->password_lock) or isset($row->ip_lock)) {
+                $lock_description = "<ul>";
+                if ($row->password_lock) {
+                    $lock_description .= "<li>$langPasswordUnlock</li>";
+                }
+                if ($row->ip_lock) {
+                    $lock_description .= "<li>$langIPUnlock</li>";
+                }
+                $lock_description .= "</ul>";
+                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
+            }
+
             // Check if assignement contains submissions
             $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;
             $num_ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d AND grade IS NULL", $row->id)->count;
@@ -3371,6 +3397,7 @@ function show_assignments() {
             $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
             $tool_content .= "<td>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
+                                $exclamation_icon
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                             </td>
                             <td class='text-center'>$num_submitted</td>
