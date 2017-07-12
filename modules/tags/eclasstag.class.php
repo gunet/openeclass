@@ -41,24 +41,27 @@ class eClassTag {
         global $langTags, $head_content, $course_code;
 
         // initialize the tags
-        $answer = '';
-        if (isset($id)) {
+        if ($id) {
             require_once 'modules/tags/moduleElement.class.php';
             $moduleTag = new ModuleElement($id);
 
             $tags_init = $moduleTag->getTags();
-            foreach ($tags_init as $key => $tag) {
-                $arrayTemp = "{id:\"" . js_escape($tag) . "\" , text:\"" . js_escape($tag) . "\"},";
-                $answer = $answer . $arrayTemp;
-            }
+            $answer = implode(',', array_map(function ($tag) {
+                return '{id:"' . js_escape($tag) . '", text:"' . js_escape($tag) . '", selected: true}';
+            }, $tags_init));
+        } else {
+            $answer = '';
         }
         $head_content .= "
             <script>
                 $(function () {
                     $('#tags').select2({
+                            data: [".$answer."],
                             minimumInputLength: 2,
                             tags: true,
-                            tokenSeparators: [', '],
+                            tokenSeparators: [','],
+                            width: '100%',
+                            selectOnClose: true,
                             createSearchChoice: function(term, data) {
                               if ($(data).filter(function() {
                                 return this.text.localeCompare(term) === 0;
@@ -83,7 +86,6 @@ class eClassTag {
                                 }
                             }
                     });
-                    $('#tags').select2('data', [".$answer."]);
                 });
             </script>";
         $input_field = "
