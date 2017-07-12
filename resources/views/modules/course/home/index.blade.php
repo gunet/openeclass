@@ -282,13 +282,15 @@
                             <div class='panel-body'>
                                 <div class='text-center'>
                                     <div class='col-sm-12'>
+                                        <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
                                         @if ($percentage == '100%')
                                             <i class='fa fa-check-circle fa-5x state_success'></i>
                                         @else
                                             <div class='course_completion_panel_percentage'>
                                                 {{ $percentage }}
-                                            </div>
+                                            </div>                                            
                                         @endif
+                                        </a>
                                     </div>
                                 </div>
                             </div>

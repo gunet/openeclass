@@ -417,7 +417,7 @@ switch ($visible) {
     }
 }
 
-if (!$is_editor) { 
+if (!$is_editor) {
     $data['course_completion_id'] = $course_completion_id = has_course_completion(); // is course completion enabled?
     if ($course_completion_id) {
         $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);        

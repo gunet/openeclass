@@ -415,17 +415,20 @@ if (isset($display) and $display == TRUE) {
         }
     } else {
         check_user_details($uid); // security check
-        if (isset($element_id)) {            
-            if (isset($_GET['p']) and $_GET['p']) {
+        if (isset($element_id)) {
+            if (isset($_GET['p']) and $_GET['p']) { // printable view
                 if (!has_certificate_completed($uid, $element, $element_id)) { // security check
-                    redirect_to_home_page();                    
-                }                 
+                    redirect_to_home_page();
+                }
                 cert_output_to_pdf($element_id, $uid);
             } else {
+                if (!is_cert_visible($element, $element_id)) { // security check
+                    redirect_to_home_page();
+                }
                 $pageName = $element_title;
                 // display detailed user progress
-                display_user_progress_details($element, $element_id, $uid);
-            }
+                display_user_progress_details($element, $element_id, $uid);                
+            }            
         } else {
             // display certificate (student view)
             student_view_progress();

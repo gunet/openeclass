@@ -474,6 +474,25 @@ function check_user_details($uid) {
 }
 
 /**
+ * @brief check if certificate / badge is active
+ * @param type $element
+ * @param type $element_id
+ * @return boolean
+ */
+function is_cert_visible($element, $element_id) {
+        
+    $sql = Database::get()->querySingle("SELECT active FROM $element WHERE id = ?d", $element_id);
+    if ($sql) {
+        if (!$sql->active) {
+            return false;
+        }
+    } else {
+        return false;
+    }
+    return true;
+}
+
+/**
  * @brief check if user has completed certificate / badge
  * @param type $uid
  * @param type $element
