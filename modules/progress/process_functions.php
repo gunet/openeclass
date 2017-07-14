@@ -399,7 +399,7 @@ function get_cert_desc($element, $id) {
  * @param type $certificate_id
  * @return type
  */
-function get_certificate_issuer($certificate_id) {
+function get_cert_issuer($certificate_id) {
 
     $cert_issuer =  Database::get()->querySingle("SELECT issuer FROM certificate WHERE id = ?d", $certificate_id)->issuer;
     
@@ -876,7 +876,7 @@ function get_resource_details($element, $resource_id) {
  * @global type $webDir;
  * @param type $user_id
  */
-function cert_output_to_pdf($certificate_id, $user_id) {
+function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $certificate_issuer = null) {
     
     global $webDir;
            
@@ -888,13 +888,23 @@ function cert_output_to_pdf($certificate_id, $user_id) {
     
     $html_certificate = file_get_contents($webDir . CERT_TEMPLATE_PATH . $cert_file);
 
-    $certificate_title = get_cert_title('certificate', $certificate_id);
-    $certificate_issuer = get_certificate_issuer($certificate_id);
+    if (is_null($certificate_title)) {
+        $certificate_title = get_cert_title('certificate', $certificate_id);
+    }
+    if (is_null($certificate_issuer)) {
+        $certificate_issuer = get_cert_issuer($certificate_id);
+    }    
+    
     $sql = Database::get()->querySingle("SELECT message FROM certificate WHERE id = ?d", $certificate_id);
     if ($sql) {
         $certificate_message = $sql->message;
     }
-    $student_name = uid_to_name($user_id);
+    
+    if (intval($user) > 0) {
+        $student_name = uid_to_name($user);
+    } else {
+        $student_name = $user;
+    }    
 
     $html_certificate = preg_replace('(%certificate_title%)', $certificate_title, $html_certificate);
     $html_certificate = preg_replace('(%student_name%)', $student_name, $html_certificate);
@@ -904,4 +914,67 @@ function cert_output_to_pdf($certificate_id, $user_id) {
     $mpdf->WriteHTML($html_certificate);
 
     $mpdf->Output();
+}
+
+/**
+ * @brief register user as certified
+ * @global type $course_id
+ * @param type $table
+ * @param type $certificate_id
+ * @param type $user_id
+ */
+function register_certified_user($table, $element_id, $element_title, $user_id) {
+    
+    global $course_id;
+    
+    $title = course_id_to_title($course_id);    
+    $user_fullname = uid_to_name($user_id);
+    $issuer = get_cert_issuer($element_id);
+    Database::get()->query("INSERT INTO certified_users SET course_title = ?s, "
+                                                                . "cert_title = ?s, "
+                                                                . "cert_id = ?d, "
+                                                                . "cert_issuer = ?s, "
+                                                                . "user_fullname = ?s,"
+                                                                . "assigned = " . DBHelper::timeAfter() . ","
+                                                                . "identifier = '" . uniqid(rand()) . "'", 
+                                                    $title, $element_title, $element_id, $issuer, $user_fullname);
+    
+}
+
+
+/**
+ * @brief get certification identifier
+ * @param type $certificate_id
+ * @param type $user_id
+ * @return type
+ */
+function get_cert_identifier($certificate_id, $user_id) {
+    
+    $user_fullname = uid_to_name($user_id);
+    $sql = Database::get()->querySingle("SELECT identifier FROM certified_users WHERE "
+                                                        . "cert_id = ?d "
+                                                        . "AND user_fullname = ?s", 
+                                                    $certificate_id, $user_fullname);
+    if ($sql) {    
+        return $sql->identifier;
+    } else {    
+        return null;
+    }
+}
+
+
+/**
+ * @brief get public certificate link
+ * @global type $urlServer
+ * @param type $element_id
+ * @param type $user_id
+ * @return type
+ */
+function certificate_link($element_id, $user_id) {
+    
+    global $urlServer;
+    
+    $link = $urlServer . "modules/progress/out.php?i=".get_cert_identifier($element_id, $user_id);
+    return "<a href='$link' target=_blank>$link</a>";
+    
 }

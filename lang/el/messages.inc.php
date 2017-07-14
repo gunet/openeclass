@@ -1355,6 +1355,7 @@ $langProgressBasicInfo = "Βασικά Στοιχεία";
 $langCourseCompletion = "Ολοκλήρωση $langsOfCourse";
 $langCourseCompletionCreated = "Η ολοκλήρωση $langsOfCourse δημιουργήθηκε";
 $langCourseCompletionMessage = "Το $langsCourse ολοκληρώθηκε με επιτυχία";
+$langCertAddress = "Δημόσια διεύθυνση πιστοποιητικού";
 //------------------------------------
 
 

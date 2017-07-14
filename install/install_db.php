@@ -1859,6 +1859,17 @@ $db->query("CREATE TABLE `user_badge_criterion` (
   foreign key (`badge_criterion`) references `badge_criterion`(`id`)
 )");
 
+$db->query("CREATE TABLE `certified_users` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `course_title` varchar(255) NOT NULL DEFAULT '',
+  `cert_title` varchar(255) NOT NULL DEFAULT '',
+  `cert_id` int(11) NOT NULL,
+  `cert_issuer` varchar(256) DEFAULT NULL,
+  `user_fullname` varchar(255) NOT NULL DEFAULT '',
+  `assigned` datetime NOT NULL,
+  `identifier` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)) $tbl_options");
+
 $_SESSION['theme'] = 'default';
 $webDir = '..';
 importThemes();

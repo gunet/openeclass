@@ -1924,6 +1924,7 @@ function display_users_progress($element, $element_id) {
  * @global type $langAttendanceActivity
  * @global type $langInstallEnd
  * @global type $langTotalPercentCompleteness
+ * @global type $langCertAddress
  * @param type $element
  * @param type $element_id
  * @param type $user_id
@@ -1931,12 +1932,18 @@ function display_users_progress($element, $element_id) {
 function display_user_progress_details($element, $element_id, $user_id) {
     
     global $tool_content, $langNoUserActivity, $langAttendanceActivity, $langpublisher,
-           $langInstallEnd, $langTotalPercentCompleteness, $langTitle, $langDescription;
+           $langInstallEnd, $langTotalPercentCompleteness, $langTitle, $langDescription, 
+           $langCertAddress;
 
-	$element_title = get_cert_title($element, $element_id);
+    $element_title = get_cert_title($element, $element_id);
 
     $resource_data = array();
 
+    // create certification identifier if user has completed certificate
+    if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) == null) {        
+        register_certified_user($element, $element_id, $element_title, $user_id);
+    }
+    
     // certificate
     if ($element == 'certificate') { // completed user resources
         $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion 
@@ -1987,7 +1994,9 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                 <div class='pn-info-title-sct'>$langDescription</div>
                                 <div class='pn-info-text-sct'>" . get_cert_desc($element, $element_id) . "</div>
                                 <div class='pn-info-title-sct'>$langpublisher</div>
-                                <div class='pn-info-text-sct'>" . get_certificate_issuer($element_id) . "</div>
+                                <div class='pn-info-text-sct'>" . get_cert_issuer($element_id) . "</div>
+                                <div class='pn-info-title-sct'>$langCertAddress</div>
+                                <div class='pn-info-text-sct'>" . certificate_link($element_id, $user_id) . "</div>
                             </div>
                         </div>
                     </div>
