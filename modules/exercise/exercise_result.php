@@ -263,8 +263,6 @@ if (count($exercise_question_ids)>0){
         $choice = $objQuestionTmp->get_answers_record($eurid);
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
-        $questionDescription_temp = nl2br(make_clickable($questionDescription));
-        $questionDescription_temp = mathfilter($questionDescription_temp, 12, "../../courses/mathimg/");
         $questionWeighting = $objQuestionTmp->selectWeighting();
         $answerType = $objQuestionTmp->selectType();
 
@@ -293,7 +291,7 @@ if (count($exercise_question_ids)>0){
             $tool_content .= "
                 <b>" . q_math($questionName) . "</b>
                 <br>" .
-                standard_text_escape($questionDescription_temp)
+                standard_text_escape($questionDescription)
                 . "<br><br>";
         } else {
             $tool_content .= "<div class='alert alert-warning'>$langQuestionAlreadyDeleted</div>";
