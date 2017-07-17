@@ -200,7 +200,7 @@ if (@$_POST['questionNum']) {
     $QUERY_STRING = "questionNum=$questionNum";
 }
 
-$exerciseDescription_temp = standard_text_escape($exerciseDescription);
+$exerciseDescription_temp = standard_text_escape($exerciseDescription, '../../../courses/mathimg/');
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w3.org/TR/html4/frameset.dtd">'
  . "\n<html>\n"
@@ -315,12 +315,11 @@ function showQuestion($questionId, $onlyAnswers = false) {
     }
     $answerType = $objQuestionTmp->selectType();
 
-    if (!$onlyAnswers) {
+    if (!$onlyAnswers) {        
         $questionName = $objQuestionTmp->selectTitle();
-        $questionDescription = $objQuestionTmp->selectDescription();
-        $questionDescription_temp = standard_text_escape($questionDescription);
+        $questionDescription = $objQuestionTmp->selectDescription();        
         echo "<b>" . q($questionName) . "</b><br />
-                    $questionDescription_temp";
+                    ". standard_text_escape($questionDescription, '../../../courses/mathimg/') ."";
         if (file_exists($picturePath . '/quiz-' . $questionId)) {
             echo "<img src='$urlServer/$picturePath/quiz-$questionId' />";
         }
@@ -351,7 +350,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
             // replaces [blank] by an input field
-            $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape($answer));
+            $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape($answer, '../../../courses/mathimg/'));
         }
         // unique answer
         if ($answerType == UNIQUE_ANSWER) {
@@ -359,7 +358,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                       <div class='radio'>
                           <label>
                             <input type='radio' name='choice[${questionId}]' value='${answerId}'>
-                            " . standard_text_escape($answer) . "
+                            " . $answer . "
                           </label>
                         </div>";
                           
@@ -370,7 +369,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                       <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1'>
-                            " . standard_text_escape($answer) . "
+                            " . $answer . "
                           </label>
                         </div>");
         }
@@ -384,13 +383,13 @@ function showQuestion($questionId, $onlyAnswers = false) {
                 // options (A, B, C, ...) that will be put into the list-box
                 $select[$answerId]['Lettre'] = $cpt1++;
                 // answers that will be shown at the right side
-                $select[$answerId]['Reponse'] = standard_text_escape($answer);
+                $select[$answerId]['Reponse'] = $answer;
             } else {
                 echo "<tr class='even'>
-                                    <td width='200'><b>${cpt2}.</b> " . standard_text_escape($answer) . "</td>
-                                    <td width='130'><div align='center'>
-                                     <select name='choice[${questionId}][${answerId}]'>
-                                       <option value='0'>--</option>";
+                    <td width='200'><b>${cpt2}.</b> " . $answer . "</td>
+                    <td width='130'><div align='center'>
+                     <select name='choice[${questionId}][${answerId}]'>
+                       <option value='0'>--</option>";
 
                 // fills the list-box
                 foreach ($select as $key => $val) {
@@ -429,7 +428,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
             echo "<div class='radio'>
                           <label>
                             <input type='radio' name='choice[${questionId}]' value='${answerId}'>
-                            " . standard_text_escape($answer) . "
+                            " . $answer . "
                           </label>
                         </div>";
         }

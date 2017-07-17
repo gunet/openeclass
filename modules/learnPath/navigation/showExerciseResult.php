@@ -77,8 +77,6 @@ if (!is_array($_SESSION['exerciseResult'][$exerciseId]) || !is_array($_SESSION['
 
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
-$exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
-$exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "$webDir/courses/mathimg/");
 $displayResults = $objExercise->selectResults();
 $displayScore = $objExercise->selectScore();
 
@@ -86,9 +84,9 @@ echo "<div class='panel panel-primary'>
         <div class='panel-heading'>
             <b>" . q(stripslashes($exerciseTitle)) . "</b>
         </div>";
-if ($exerciseDescription_temp) {
+if ($exerciseDescription) {
    echo "<div class='panel-body'>
-        " . standard_text_escape(stripslashes($exerciseDescription_temp)) . "
+        " . standard_text_escape($exerciseDescription, '../../../courses/mathimg/') . "
         </div>";
   }
 echo "</div>";
@@ -102,7 +100,6 @@ echo "<form method='GET' action='backFromExercise.php'><input type='hidden' name
 $i = $totalScore = $totalWeighting = 0;
 
 // for each question
-
 foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     // gets the student choice for this question
     $choice = @$_SESSION['exerciseResult'][$exerciseId][$questionId];
@@ -112,8 +109,6 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
 
     $questionName = $objQuestionTmp->selectTitle();
     $questionDescription = $objQuestionTmp->selectDescription();
-    $questionDescription_temp = nl2br(make_clickable($questionDescription));
-    $questionDescription_temp = mathfilter($questionDescription_temp, 12, "$webDir/courses/mathimg/");
     $questionWeighting = $objQuestionTmp->selectWeighting();
     $answerType = $objQuestionTmp->selectType();
 
@@ -128,7 +123,6 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         $colspan = 1;
     }
     $iplus = $i + 1;
-
     echo "<br/>
         <table class='table-default graded'>
         <tr class='odd list-header'>
@@ -138,8 +132,8 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         <td class='even' colspan='${colspan}'>
         <b>" . q($questionName) . "</b>
         <br />" .
-    standard_text_escape($questionDescription_temp)
-    . "<br/><br/>
+        standard_text_escape($questionDescription, '../../../courses/mathimg/')
+        . "<br/><br/>
         </td>
         </tr>";
 
@@ -301,25 +295,25 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                     }
                     echo (".png\" /></div>");
                     echo ("</td>
-                                              <td>" . standard_text_escape($answer) . "</td>
-                                              <td>");
+                            <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
+                            <td>");
                     if ($studentChoice) {
-                        echo standard_text_escape(nl2br(make_clickable($answerComment)));
+                        echo standard_text_escape(nl2br(make_clickable($answerComment)), '../../../courses/mathimg/');
                     } else {
                         echo ('&nbsp;');
                     }
                     echo ("</td></tr>");
                 } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                     echo ("
-                                        <tr class='even'>
-                                          <td>" . standard_text_escape(nl2br($answer)) . "</td>
-                                        </tr>");
+                        <tr class='even'>
+                          <td>" . standard_text_escape(nl2br($answer), '../../../courses/mathimg/') . "</td>
+                        </tr>");
                 } else {
                     echo ("
-                                        <tr class='even'>
-                                          <td>" . standard_text_escape($answer) . "</td>
-                                          <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
-                                        </tr>");
+                        <tr class='even'>
+                          <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
+                          <td>${choice[$answerId]} / <font color='green'><b>${matching[$answerCorrect]}</b></font></td>
+                        </tr>");
                 }
             }
         } // end of if
