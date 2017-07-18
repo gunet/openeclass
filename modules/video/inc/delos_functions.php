@@ -298,67 +298,71 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
             AND url LIKE '%rid=" . $rid . "'", $course_id, $submittedCategory);
 
         // public
-        foreach ($jsonPublicObj->resources as $resource) {
-            if ($resource->resourceID === $rid) {
-                $vL = $resource->videoLecture;
-                $url = $jsonPublicObj->playerBasePath . '?rid=' . $rid;
-                $title = $vL->title;
-                $description = $vL->description;
-                $creator = $vL->rights->creator->name;
-                $publisher = $vL->organization->name;
-                $date = $vL->date;
+        if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources")) {
+            foreach ($jsonPublicObj->resources as $resource) {
+                if ($resource->resourceID === $rid) {
+                    $vL = $resource->videoLecture;
+                    $url = $jsonPublicObj->playerBasePath . '?rid=' . $rid;
+                    $title = $vL->title;
+                    $description = $vL->description;
+                    $creator = $vL->rights->creator->name;
+                    $publisher = $vL->organization->name;
+                    $date = $vL->date;
 
-                if ($stored) {
-                    $id = $stored->id;
-                    Database::get()->query("UPDATE videolink SET 
+                    if ($stored) {
+                        $id = $stored->id;
+                        Database::get()->query("UPDATE videolink SET 
                         url = ?s, title = ?s, description = ?s, creator = ?s, publisher = ?s, date = ?t 
                         WHERE course_id = ?d 
                         AND category = ?d 
                         AND id = ?d", canonicalize_url($url), $title, $description, $creator, $publisher, $date, $course_id, $submittedCategory, $id);
-                } else {
-                    $id = Database::get()->query('INSERT INTO videolink 
+                    } else {
+                        $id = Database::get()->query('INSERT INTO videolink 
                         (course_id, url, title, description, category, creator, publisher, date)
-                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', 
-                        $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date)->lastInsertID;
+                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)',
+                            $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date)->lastInsertID;
+                    }
+
+                    // index and log
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
+                    Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
+                        'url' => canonicalize_url($url),
+                        'title' => $title,
+                        'description' => ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+')));
                 }
-                
-                // index and log
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
-                Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
-                    'url' => canonicalize_url($url),
-                    'title' => $title,
-                    'description' => ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+')));
             }
         }
 
         // private
-        foreach ($jsonPrivateObj->resources as $resource) {
-            if ($resource->resourceID === $rid) {
-                $vL = $resource->videoLecture;
-                $url = $jsonPrivateObj->playerBasePath . '?rid=' . $rid;
-                $title = $vL->title;
-                $description = $vL->description;
-                $creator = $vL->rights->creator->name;
-                $publisher = $vL->organization->name;
-                $date = $vL->date;
+        if ($jsonPrivateObj !== null && property_exists($jsonPrivateObj, "resources")) {
+            foreach ($jsonPrivateObj->resources as $resource) {
+                if ($resource->resourceID === $rid) {
+                    $vL = $resource->videoLecture;
+                    $url = $jsonPrivateObj->playerBasePath . '?rid=' . $rid;
+                    $title = $vL->title;
+                    $description = $vL->description;
+                    $creator = $vL->rights->creator->name;
+                    $publisher = $vL->organization->name;
+                    $date = $vL->date;
 
-                if ($stored) {
-                    $id = $stored->id;
-                    Database::get()->query("UPDATE videolink SET 
+                    if ($stored) {
+                        $id = $stored->id;
+                        Database::get()->query("UPDATE videolink SET 
                         url = ?s, title = ?s, description = ?s, creator = ?s, publisher = ?s, date = ?t 
                         WHERE course_id = ?d 
                         AND category = ?d 
                         AND id = ?d", canonicalize_url($url), $title, $description, $creator, $publisher, $date, $course_id, $submittedCategory, $id);
-                } else {
-                    $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)
+                    } else {
+                        $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)
                         VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
-                    $id = $q->lastInsertID;
+                        $id = $q->lastInsertID;
+                    }
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
+                    Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
+                        'url' => canonicalize_url($url),
+                        'title' => $title,
+                        'description' => ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+')));
                 }
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
-                Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
-                    'url' => canonicalize_url($url),
-                    'title' => $title,
-                    'description' => ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+')));
             }
         }
     }
