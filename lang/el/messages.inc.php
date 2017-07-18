@@ -3799,6 +3799,10 @@ $langCatVideoDirectoryCreated = "Η κατηγορία προστέθηκε";
 $langOpenDelosReplaceInfo = "<p>Αν κάποιος επιλεγμένος σύνδεσμος ήδη υπάρχει στα πολυμέσα, θα ανανεωθεί με τα τρέχοντα στοιχεία.</p><p><span style='color:red'>*</span> Ο σύνδεσμος έχει ήδη προστεθεί στα πολυμέσα του $langsOfCourse.</p><p><span style='color:red'>**</span> Ο σύνδεσμος έχει ήδη προστεθεί στα πολυμέσα, αλλά η πλατφόρμα OpenDelos διαθέτει νεότερη έκδοσή του.</p>";
 $langOpenDelosPublicVideos = "Ανοικτά πολυμεσικά αρχεία";
 $langOpenDelosPrivateVideos = "Κλειστά πολυμεσικά αρχεία";
+$langOpenDelosRequireAuth = "Απαιτείται ξεχωριστή αυθεντικοποίηση με το OpenDelos, παρακαλώ πατήστε";
+$langOpenDelosRequireAuthHere = "εδώ";
+$langOpenDelosAuth = "Αυθεντικοποίηση OpenDelos";
+
 
 /* * ***********************************************************
  * wiki.php
