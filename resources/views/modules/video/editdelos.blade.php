@@ -26,7 +26,7 @@
                     <tr class="list-header">
                         <th colspan="6">{{ trans('langOpenDelosPublicVideos') }}</th>
                     </tr>
-                    @if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources"))
+                    @if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources") && count($jsonPublicObj->resources) > 0)
                         @foreach ($jsonPublicObj->resources as $resource)
                             <?php
                                 $url = $jsonPublicObj->playerBasePath . '?rid=' . $resource->resourceID;
@@ -66,7 +66,7 @@
                             {{ trans('langOpenDelosRequireAuth') }}&nbsp;<a href='{{ $authUrl }}' class='fileModal' target='_blank' title='{{ trans('langOpenDelosAuth') }}'>{{ trans('langOpenDelosRequireAuthHere') }}</a>
                         </div></td></tr>
                     @else
-                        @if ($jsonPrivateObj !== null && property_exists($jsonPrivateObj, "resources"))
+                        @if ($jsonPrivateObj !== null && property_exists($jsonPrivateObj, "resources") && count($jsonPrivateObj->resources) > 0)
                             @foreach ($jsonPrivateObj->resources as $resource)
                                 <?php
                                     $url = $jsonPrivateObj->playerBasePath . '?rid=' . $resource->resourceID;
@@ -95,6 +95,7 @@
                             <tr><td colspan='6'><div class='alert alert-warning' role='alert'>{{ trans('langNoVideo') }}</div></td></tr>
                         @endif
                     @endif
+                    <tr><td colspan='6'><div class='alert alert-warning' role='alert'>{{ trans('langOpenDelosPrivateNote') }}</div></td></tr>
                     <tr>
                         <th colspan="4">
                             <div class='form-group'>
