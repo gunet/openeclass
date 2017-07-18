@@ -1852,6 +1852,12 @@ function show_edit_assignment($id) {
                             $langGradeScales
                           </label>
                         </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='grading_type' value='2'". ($grading_type ? " checked" : "") .">
+                            $langGradeRubric
+                          </label>
+                        </div>
                     </div>
                 </div>
                 <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>

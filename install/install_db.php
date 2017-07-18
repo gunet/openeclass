@@ -1005,52 +1005,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
 $db->query("CREATE TABLE IF NOT EXISTS `rubric` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(200) NOT NULL,
-    `title` varchar(255) NOT NULL,
     `scales` text NOT NULL,
     `description` text,
     `preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
-    `rubric_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
-    `rubric_to_graded` tinyint(1) NOT NULL DEFAULT '0',
-    `points_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
     `points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
     `course_id` int(11) NOT NULL,
     KEY `course_id` (`course_id`)) $tbl_options");
-	
 
-$db->query("CREATE TABLE IF NOT EXISTS `rubric_rel` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `rubric_id` INT(11) NOT NULL,
-    `course_id` INT(11) NOT NULL,
-    `module_id` INT(11) NOT NULL,
-    `resource_id` INT(11) NOT NULL,
-    PRIMARY KEY (`id`)
-    ) $tbl_options");
-
-$db->query("CREATE TABLE IF NOT EXISTS `rubric_criteria` (
-    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-    `rubric_id` int(11) NOT NULL,
-    `sortorder` varchar(30) NOT NULL,
-    `description` text,
-    PRIMARY KEY (`id`)
-    ) $tbl_options");
-
-$db->query("CREATE TABLE IF NOT EXISTS `rubric_levels` (
-    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-    `rubric_id` int(11) NOT NULL,
-    `criterionid` int(10) unsigned NOT NULL,
-    `score` decimal(5,0) NOT NULL,
-    `definition` text NOT NULL,
-    PRIMARY KEY (`id`)
-    ) $tbl_options");
-
-$db->query("CREATE TABLE IF NOT EXISTS `rubric_assesment` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `as_sub_id` int(11) NOT NULL,
-    `uid` int(11) NOT NULL,
-    `level_chosen_id` int(11) NOT NULL,
-    `level_feedback` varchar(60) NOT NULL,
-    PRIMARY KEY (`id`)
-    ) $tbl_options ");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
     `user_id` int(11) NOT NULL,
