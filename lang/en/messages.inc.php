@@ -3929,6 +3929,9 @@ $langLoginConfiguration = "Login Screen Configuration";
 $langTag = 'Tag';
 $langOpenDelosDescription = "<p>OpenDelos is the open-source platform designed by GUnet for the administration, recording and play-back of videolectures.</p>
 <p>The platform supports the <a href='http://ocw-project.gunet.gr/'>Open Academic $langCourses</a> project along with the <a href='http://openeclass.org/'>Open eClass platform</a> and the national $langsCourse seach portal also developed by GUnet.</p>";
+$langOpenDelosRequireAuth = "Authentication with the OpenDelos system is required, please click";
+$langOpenDelosRequireAuthHere = "here";
+$langOpenDelosAuth = "OpenDelos Authentication";
 $langBBBDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href='http://www.bigbluebutton.org/' target='_blank'>BigBlueButton</a> platform which is a complete system of direct web-based communication and collaboration between $langsTeachers and $langsStudents.</p> <p>BigBlueButton does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a BigBlueButton installation plase select <a href='bbbmoduleconf.php'>Settings</a>.</p>";
 $langFtpShortDescription = "Link to FTP service";
 $langFtpLongDescription = "Enter the FTP link";

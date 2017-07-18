@@ -20,6 +20,7 @@
  * ======================================================================== */
 
 require_once 'include/lib/mediaresource.class.php';
+require_once 'modules/video/delos_functions.php';
 
 class MediaResourceFactory {
 
@@ -42,6 +43,15 @@ class MediaResourceFactory {
         $url = $queryItem->url;
         if ($url == 'http://' || empty($url) || !filter_var($url, FILTER_VALIDATE_URL) || preg_match('/^javascript/i', preg_replace('/\s+/', '', $url))) {
             $url = '#';
+        }
+        if (isDelosEnabled()) {
+            if (stringStartsWith($url, getDelosURL())) {
+                $matches = null;
+                if (preg_match('/\?rid=([^&]+)/i', $url, $matches)) {
+                    $rid = $matches[1];
+                    $url .= '&token=' . getDelosSignedTokenForVideo($rid);
+                }
+            }
         }
         return new MediaResource(
                 $queryItem->id, $queryItem->course_id, $queryItem->title, $url, // Override because path is url in db for videolinks
