@@ -254,8 +254,7 @@ if ($form_input === 'opendelos') {
     $data['currentVideoLinks'] = getCurrentVideoLinks($course_id);
     $head_content .= getDelosJavaScript();
     view('modules.video.editdelos', $data);
-}
- else {    
+} else {
     view('modules.video.edit', $data);
 }
 

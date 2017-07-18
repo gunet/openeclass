@@ -24,6 +24,10 @@ require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
 require_once 'include/log.class.php';
 
+define('DELOSTOKEN', 'DELOSTOKEN');
+define('DELOSTOKENTIMESTAMP', 'DELOSTOKENTIMESTAMP');
+define('DELOSTOKENEXPIRE', 60);
+
 $opendelosapp = ExtAppManager::getApp(strtolower(OpenDelosApp::NAME));
 
 function base64url_encode($data) {
@@ -39,29 +43,29 @@ function getDelosExtEnabled() {
     return $opendelosapp->isEnabled();
 }
 
-function getDelosPublicURL() {
+function getDelosURL() {
     global $opendelosapp;
     return $opendelosapp->getParam(OpenDelosApp::URL)->value();
 }
 
-function getDelosPrivateURL() {
+function getDelosPublicAPI() {
     global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::PRIVATE_URL)->value();
+    return $opendelosapp->getParam(OpenDelosApp::PUBLIC_API)->value();
 }
 
-function getDelosCheckAuthURL() {
+function getDelosPrivateAPI() {
     global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::CHECKAUTH_URL)->value();
+    return $opendelosapp->getParam(OpenDelosApp::PRIVATE_API)->value();
 }
 
-function getDelosRLoginURL() {
+function getDelosRLoginAPI() {
     global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::RLOGIN_URL)->value();
+    return $opendelosapp->getParam(OpenDelosApp::RLOGIN_API)->value();
 }
 
-function getDelosRLoginCASURL() {
+function getDelosRLoginCASAPI() {
     global $opendelosapp;
-    return $opendelosapp->getParam(OpenDelosApp::RLOGINCAS_URL)->value();
+    return $opendelosapp->getParam(OpenDelosApp::RLOGINCAS_API)->value();
 }
 
 function getDelosLmsURL() {
@@ -76,8 +80,8 @@ function getDelosSecret() {
 
 function isDelosEnabled() {
     global $opendelosapp;
-    if ($opendelosapp && getDelosExtEnabled() && getDelosPublicURL() && getDelosPrivateURL()
-        && getDelosCheckAuthURL() && getDelosRLoginURL() && getDelosRLoginCASURL()
+    if ($opendelosapp && getDelosExtEnabled() && getDelosURL() && getDelosPublicAPI()
+        && getDelosPrivateAPI() && getDelosRLoginAPI() && getDelosRLoginCASAPI()
         && getDelosLmsURL() && getDelosSecret()) {
         return true;
     }
@@ -85,6 +89,7 @@ function isDelosEnabled() {
 }
 
 function getDelosJavaScript() {
+    global $langOk;
     $head = '';
     if (isset($_GET['form_input']) && $_GET['form_input'] === 'opendelos') {
         $head .= <<<hContent
@@ -95,6 +100,32 @@ $(document).ready(function() {
         if (event.target.type !== 'checkbox') {
             $(':checkbox', this).trigger('click');
         }
+    });
+    
+    $('.fileModal').click(function (e) {
+        e.preventDefault();
+
+        var fileURL = $(this).attr('href');
+        var fileTitle = $(this).attr('title');
+
+        bootbox.dialog({
+            size: 'large',
+            title: fileTitle,
+            message: '<div class=\"row\">'+
+                        '<div class=\"col-sm-12\">'+
+                            '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                        '</div>'+
+                    '</div>',
+            buttons: {
+                ok: {
+                    label: '$langOk',
+                    className: 'btn-default',
+                    callback: function (d) {
+                        window.location.reload(true);
+                    }
+                }
+            }
+        });
     });
 
 });
@@ -107,6 +138,23 @@ hContent;
 function getDelosSignedToken() {
     global $course_code;
 
+    $reuse = false;
+    if (isset($_SESSION[DELOSTOKENTIMESTAMP][$course_code]) && isset($_SESSION[DELOSTOKEN][$course_code])) {
+        if (time() < $_SESSION[DELOSTOKENTIMESTAMP][$course_code]) {
+            $reuse = true;
+        }
+    }
+
+    if ($reuse) {
+        return $_SESSION[DELOSTOKEN][$course_code];
+    } else {
+        return generateDelosSignedToken();
+    }
+}
+
+function generateDelosSignedToken() {
+    global $course_code;
+
     // encrypt token header
     $header = array(
         "alg" => "HS256",
@@ -115,10 +163,46 @@ function getDelosSignedToken() {
     $stringifiedHeader = json_encode($header);
     $encodedHeader = base64url_encode($stringifiedHeader);
 
+    // Set token expiration time to X minutes from now
+    $exp_time_in_seconds = time() + DELOSTOKENEXPIRE * 60;
+
     // encrypt token data
     $data = array(
         "url" => getDelosLmsURL(),
         "rid" => $course_code,
+        "exp" => $exp_time_in_seconds,
+    );
+    $stringifiedData = json_encode($data);
+    $encodedData = base64url_encode($stringifiedData);
+
+    // encrypt token and encode token
+    $token = $encodedHeader . "." . $encodedData;
+    $signature = base64url_encode(hash_hmac('sha256', $token, getDelosSecret(), true));
+    $signedToken = $token . "." . $signature;
+
+    $_SESSION[DELOSTOKEN][$course_code] = $signedToken;
+    $_SESSION[DELOSTOKENTIMESTAMP][$course_code] = $exp_time_in_seconds;
+
+    return $signedToken;
+}
+
+function getDelosSignedTokenForVideo($rid) {
+    // encrypt token header
+    $header = array(
+        "alg" => "HS256",
+        "typ" => "JWT"
+    );
+    $stringifiedHeader = json_encode($header);
+    $encodedHeader = base64url_encode($stringifiedHeader);
+
+    // Set token expiration time to X minutes from now
+    $exp_time_in_seconds = time() + DELOSTOKENEXPIRE * 60;
+
+    // encrypt token data
+    $data = array(
+        "url" => getDelosLmsURL(),
+        "rid" => $rid,
+        "exp" => $exp_time_in_seconds,
     );
     $stringifiedData = json_encode($data);
     $encodedData = base64url_encode($stringifiedData);
@@ -131,6 +215,16 @@ function getDelosSignedToken() {
     return $signedToken;
 }
 
+function isCASUser() {
+    global $uid;
+    $ret = false;
+    $q = Database::get()->querySingle("SELECT password FROM user WHERE id = ?d", $uid);
+    if ($q && $q->password == 'cas') {
+        $ret = true;
+    }
+    return $ret;
+}
+
 function requestDelosJSON() {
     global $course_code;
     $jsonPublicObj = null;
@@ -139,7 +233,7 @@ function requestDelosJSON() {
 
     if (isDelosEnabled()) {
         // construct proper url for public resources
-        $delospublicurl = getDelosPublicURL();
+        $delospublicurl = getDelosURL() . getDelosPublicAPI();
         $delospublicurl .= (stringEndsWith($delospublicurl, "/")) ? '' : '/';
         $jsonpublicurl = $delospublicurl . $course_code;
 
@@ -152,31 +246,21 @@ function requestDelosJSON() {
         );
 
         // request public json from opendelos
-        $jsonpublic = httpGetRequest($jsonpublicurl, $headers);
-        $jsonPublicObj = ($jsonpublic) ? json_decode($jsonpublic) : null;
-
-        // request check for auth from opendelos
-//        $authresp = httpGetRequest(getDelosCheckAuthURL(), $headers);
-//        error_log("delos check auth response:");
-//        error_log($authresp);
-//        if (strpos($authresp, "Valid") !== false) {
-//            $checkAuth = true;
-//        }
+        list($jsonpublic, $codepublic) = httpGetRequest($jsonpublicurl, $headers);
+        $jsonPublicObj = ($jsonpublic && $codepublic == 200) ? json_decode($jsonpublic) : null;
 
         // private resources
-//        if ($checkAuth) {
-            // construct proper url for private resources
-//            $delosprivateurl = getDelosPrivateURL();
-//            $delosprivateurl .= (stringEndsWith($delosprivateurl, "/")) ? '' : '/';
-//            $jsonprivateurl = $delosprivateurl . $course_code;
+        // construct proper url for private resources
+        $delosprivateurl = getDelosURL() . getDelosPrivateAPI();
+        $delosprivateurl .= (stringEndsWith($delosprivateurl, "/")) ? '' : '/';
+        $jsonprivateurl = $delosprivateurl . $course_code;
 
-            // request private json from opendelos
-//            $jsonprivate = httpGetRequest($jsonprivateurl, $headers);
-//            error_log("delos private response:");
-//            error_log($jsonprivate);
-//            $jsonPrivateObj = ($jsonprivate) ? json_decode($jsonprivate) : null;
-
-//        }
+        // request private json from opendelos
+        list($jsonprivate, $codeprivate) = httpGetRequest($jsonprivateurl, $headers);
+        if ($codeprivate == 200) {
+            $checkAuth = true;
+            $jsonPrivateObj = json_decode($jsonprivate);
+        }
     }
 
     return array($jsonPublicObj, $jsonPrivateObj, $checkAuth);
@@ -184,17 +268,21 @@ function requestDelosJSON() {
 
 function httpGetRequest($url, $headers = array()) {
     $response = null;
+    $http_code = null;
     if (!extension_loaded('curl')) {
-        return $response;
+        return array($response, $http_code);
     }
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     $response = curl_exec($ch);
+    if(!curl_errno($ch)) {
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    }
     curl_close($ch);
 
-    return $response;
+    return array($response, $http_code);
 }
 
 function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
@@ -208,6 +296,8 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
             WHERE course_id = ?d 
             AND category = ?d 
             AND url LIKE '%rid=" . $rid . "'", $course_id, $submittedCategory);
+
+        // public
         foreach ($jsonPublicObj->resources as $resource) {
             if ($resource->resourceID === $rid) {
                 $vL = $resource->videoLecture;
@@ -233,6 +323,37 @@ function storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth) {
                 }
                 
                 // index and log
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
+                Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
+                    'url' => canonicalize_url($url),
+                    'title' => $title,
+                    'description' => ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+')));
+            }
+        }
+
+        // private
+        foreach ($jsonPrivateObj->resources as $resource) {
+            if ($resource->resourceID === $rid) {
+                $vL = $resource->videoLecture;
+                $url = $jsonPrivateObj->playerBasePath . '?rid=' . $rid;
+                $title = $vL->title;
+                $description = $vL->description;
+                $creator = $vL->rights->creator->name;
+                $publisher = $vL->organization->name;
+                $date = $vL->date;
+
+                if ($stored) {
+                    $id = $stored->id;
+                    Database::get()->query("UPDATE videolink SET 
+                        url = ?s, title = ?s, description = ?s, creator = ?s, publisher = ?s, date = ?t 
+                        WHERE course_id = ?d 
+                        AND category = ?d 
+                        AND id = ?d", canonicalize_url($url), $title, $description, $creator, $publisher, $date, $course_id, $submittedCategory, $id);
+                } else {
+                    $q = Database::get()->query('INSERT INTO videolink (course_id, url, title, description, category, creator, publisher, date)
+                        VALUES (?d, ?s, ?s, ?s, ?d, ?s, ?s, ?t)', $course_id, canonicalize_url($url), $title, $description, $submittedCategory, $creator, $publisher, $date);
+                    $id = $q->lastInsertID;
+                }
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
                 Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, array('id' => $id,
                     'url' => canonicalize_url($url),
