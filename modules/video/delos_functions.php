@@ -320,7 +320,6 @@ function displayDelosForm($jsonPublicObj, $jsonPrivateObj, $checkAuth, $currentV
 delosform;
 
     if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources") && count($jsonPublicObj->resources) > 0) {
-        error_log(print_r($jsonPublicObj, true));
         $i = 1;
         foreach ($jsonPublicObj->resources as $resource) {
             $trclass = (($i % 2) === 0) ? 'even' : 'odd';
