@@ -3932,6 +3932,7 @@ $langOpenDelosDescription = "<p>OpenDelos is the open-source platform designed b
 $langOpenDelosRequireAuth = "Authentication with the OpenDelos system is required, please click";
 $langOpenDelosRequireAuthHere = "here";
 $langOpenDelosAuth = "OpenDelos Authentication";
+$langOpenDelosPrivateNote = "Note: if your course utilizes open access and you add private multimedia files in the multimedia section, these files will be visible to anonymous users.";
 $langBBBDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href='http://www.bigbluebutton.org/' target='_blank'>BigBlueButton</a> platform which is a complete system of direct web-based communication and collaboration between $langsTeachers and $langsStudents.</p> <p>BigBlueButton does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a BigBlueButton installation plase select <a href='bbbmoduleconf.php'>Settings</a>.</p>";
 $langFtpShortDescription = "Link to FTP service";
 $langFtpLongDescription = "Enter the FTP link";
