@@ -298,7 +298,7 @@ function displayDelosForm($jsonPublicObj, $jsonPrivateObj, $checkAuth, $currentV
     global $course_id, $course_code, $langTitle, $langDescription, $langcreator, $langpublisher, $langDate,
            $langSelect, $langAddModulesButton, $langOpenDelosReplaceInfo, $langCategory, $langNoVideo,
            $langOpenDelosPublicVideos, $langOpenDelosPrivateVideos, $urlServer, $langOpenDelosAuth,
-           $langOpenDelosRequireAuth, $langOpenDelosRequireAuthHere;
+           $langOpenDelosRequireAuth, $langOpenDelosRequireAuthHere, $langOpenDelosPrivateNote;
 
     $html = '';
     $html .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
@@ -319,7 +319,8 @@ function displayDelosForm($jsonPublicObj, $jsonPrivateObj, $checkAuth, $currentV
             </tr>
 delosform;
 
-    if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources")) {
+    if ($jsonPublicObj !== null && property_exists($jsonPublicObj, "resources") && count($jsonPublicObj->resources) > 0) {
+        error_log(print_r($jsonPublicObj, true));
         $i = 1;
         foreach ($jsonPublicObj->resources as $resource) {
             $trclass = (($i % 2) === 0) ? 'even' : 'odd';
@@ -373,7 +374,7 @@ delosform;
         $authHref = "<a href='$authUrl' class='fileModal' target='_blank' title='$langOpenDelosAuth'>$langOpenDelosRequireAuthHere</a>";
         $html .= "<tr><td colspan='6'><div class='alert alert-warning' role='alert'>" . $langOpenDelosRequireAuth . " " .  $authHref . "</div></td></tr>";
     } else {
-        if ($jsonPrivateObj !== null && property_exists($jsonPrivateObj, "resources")) {
+        if ($jsonPrivateObj !== null && property_exists($jsonPrivateObj, "resources") && count($jsonPrivateObj->resources) > 0) {
             $i = 1;
             foreach ($jsonPrivateObj->resources as $resource) {
                 $trclass = (($i % 2) === 0) ? 'even' : 'odd';
@@ -417,6 +418,7 @@ delosform;
     }
 
     $html .= <<<delosform
+            <tr><td colspan='6'><div class='alert alert-warning' role='alert'>$langOpenDelosPrivateNote</div></td></tr>
             <tr>
                 <th colspan="4">
                     <div class='form-group'>
