@@ -230,7 +230,7 @@ function move_dir($src, $dest) {
 }
 
 /*
- * Move a directory and its content to an other area
+ * Copy a directory and its content to an other area
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
  * @param  - $origDirPath (String) - the path of the directory to move
@@ -253,7 +253,6 @@ function copyDirTo($origDirPath, $destination) {
             continue; // skip the current and parent directories
         } elseif (is_file($element)) {
             copy($element, $destinationTrail . "/" . $element);
-            unlink($element);
         } elseif (is_dir($element)) {
             $dirToCopy[] = $origDirPath . "/" . $element;
         }
@@ -267,7 +266,6 @@ function copyDirTo($origDirPath, $destination) {
         }
     }
 
-    rmdir($origDirPath);
     chdir($cwd);
 }
 

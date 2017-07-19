@@ -687,12 +687,15 @@ $action_bar
                 <div id='course-title-wrapper' class='course-info-title clearfix'>
                     <div class='pull-left h4'>$langDescription</div> $edit_link
                     <ul class='course-title-actions clearfix pull-right list-inline'>" .
+
                         ($courseDescriptionVisible? "<li class='access pull-right'><a href='javascript:void(0);' style='color: #23527C;''><span id='lalou' class='fa fa-info-circle fa-fw' data-container='#course-title-wrapper' data-toggle='popover' data-placement='bottom' data-html='true' data-content='".q($course_info_popover)."'></span><span class='hidden'>.</span></a></li>": '') . "
                         <li class='access pull-right'><a href='javascript:void(0);'>$lessonStatus</a></li>
                         <li class='access pull-right'><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'><span class='fa fa-paperclip fa-fw' data-toggle='tooltip' data-placement='top' title='$langCitation'></span><span class='hidden'>.</span></a></li>" .
+
                         ($uid? ("<li class='access pull-right'><a href='{$urlAppend}modules/user/" .
                                 ($is_course_admin? '': 'userslist.php') .
                                 "?course=$course_code'><span class='fa fa-users fa-fw' data-toggle='tooltip' data-placement='top' title='$numUsers $langRegistered'></span><span class='hidden'>.</span></a></li>"): '') . "
+                        <li class='access pull-right'><a href='{$urlAppend}modules/offline/index.php?course={$course_code}'><span class='fa fa-fw' data-toggle='tooltip' data-placement='top' title='Offline'></span><span>D</span></a></li>
                     </ul>
                 </div>
                 $left_column

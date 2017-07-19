@@ -14,7 +14,8 @@
         "guzzlehttp/guzzle": "^6.2",
         "guzzlehttp/oauth-subscriber": "^0.3.0",
         "hybridauth/hybridauth": "^2.9",
-        "mpdf/mpdf": "^6.1"
+        "mpdf/mpdf": "^6.1",
+        "philo/laravel-blade": "3.*"
     },
     "autoload": {
         "psr-0": {
