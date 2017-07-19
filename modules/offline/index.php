@@ -22,6 +22,7 @@
 
 // Allow unlimited time for creating the archive
 set_time_limit(0);
+ini_set('display_errors', '0');
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';

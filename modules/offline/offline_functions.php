@@ -35,7 +35,9 @@ function offline_documents($curDirPath, $curDirName, $bladeData) {
 
     // doc init
     $basedir = $webDir . '/courses/' . $course_code . '/document';
-    mkdir($downloadDir . '/modules/document' . $curDirName);
+    if (!file_exists($downloadDir . '/modules/document' . $curDirName)) {
+        mkdir($downloadDir . '/modules/document' . $curDirName);
+    }
 
     $files = $dirs = array();
     $result = Database::get()->queryArray("SELECT id, path, filename, format,
