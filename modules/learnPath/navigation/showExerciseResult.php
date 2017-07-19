@@ -164,12 +164,12 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
-        $answerComment = $objAnswerTmp->selectComment($answerId);
+        $answerComment = $objAnswerTmp->selectComment($answerId);       
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
         $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
         // support for math symbols
         $answer = mathfilter($answer, 12, "$webDir/courses/mathimg/");
-        $answerComment = mathfilter($answerComment, 12, "$webDir/courses/mathimg/");
+        //$answerComment = mathfilter($answerComment, 12, "$webDir/courses/mathimg/");
 
         switch ($answerType) {
             // for unique answer
@@ -265,10 +265,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         if ($displayResults == 1) {
             if ($answerType != MATCHING || $answerCorrect) {
                 if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                    echo ("
-                                            <tr class='even'>
-                                              <td>
-                                              <div align='center'><img src='$themeimg/");
+                    echo ("<tr class='even'><td><div align='center'><img src='$themeimg/");
                     if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
                         echo ("radio");
                     } else {
@@ -279,10 +276,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                     } else {
                         echo ("_off");
                     }
-                    echo (".png' /></div>
-                                              </td>
-                                              <td><div align='center'>");
-
+                    echo (".png' /></div></td><td><div align='center'>");
                     if ($answerType == UNIQUE_ANSWER || $answerType == TRUE_FALSE) {
                         echo ("<img src=\"$themeimg/radio");
                     } else {
@@ -298,7 +292,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                             <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
                             <td>");
                     if ($studentChoice) {
-                        echo standard_text_escape(nl2br(make_clickable($answerComment)), '../../../courses/mathimg/');
+                        echo standard_text_escape($answerComment, '../../../courses/mathimg/');
                     } else {
                         echo ('&nbsp;');
                     }
@@ -306,7 +300,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                 } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                     echo ("
                         <tr class='even'>
-                          <td>" . standard_text_escape(nl2br($answer), '../../../courses/mathimg/') . "</td>
+                          <td>" . standard_text_escape($answer, '../../../courses/mathimg/') . "</td>
                         </tr>");
                 } else {
                     echo ("
