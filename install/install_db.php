@@ -1868,6 +1868,7 @@ $db->query("CREATE TABLE `certified_users` (
   `user_fullname` varchar(255) NOT NULL DEFAULT '',
   `assigned` datetime NOT NULL,
   `identifier` varchar(255) NOT NULL DEFAULT '',
+  `expires` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)) $tbl_options");
 
 $_SESSION['theme'] = 'default';

@@ -44,6 +44,7 @@ $toolName = $langCertificates;
 
 load_js('tools.js');
 load_js('jquery');
+
 //load_js('datatables');
 //load_js('datatables_filtering_delay');
 
@@ -257,7 +258,11 @@ if ($is_editor) {
         if($v->validate()) {
             $table = (isset($_POST['newCertificate'])) ? 'certificate' : 'badge';
             $icon  = $_POST['template'];
-            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0);
+            $expires = null;
+            if (isset($_POST['enablecertdeadline'])) {             
+                $expires = date_format(date_create_from_format('d-m-Y H:i', $_POST['enddatepicker']), 'Y-m-d H:i');
+            }
+            add_certificate($table, $_POST['title'], $_POST['description'], $_POST['message'], $icon, $_POST['issuer'], 0, 0, $expires);
             Session::Messages("$langNewCertificateSuc", 'alert-success');
             redirect_to_home_page("modules/progress/index.php?course=$course_code");
         } else {

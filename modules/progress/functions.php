@@ -50,7 +50,7 @@ function display_certificates() {
     $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, template FROM certificate WHERE course_id = ?d", $course_id);
     
     if (count($sql_cer) == 0) { // If no certificates
-        $tool_content .= "<div class='alert alert-warning'>$langNoCertificates <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1'>$langHere</a>.</div>";
+        $tool_content .= "<div class='alert alert-info'>$langNoCertificates <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1'>$langHere</a>.</div>";
     } else { // If there are certificates
 
         $tool_content .= "
@@ -157,7 +157,7 @@ function display_badges() {
     }
     
     if (count($sql_cer) == 0) { // no badges
-        $tool_content .= "<div class='alert alert-warning'>$langNoBadges <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1'>$langHere</a>.</div>";
+        $tool_content .= "<div class='alert alert-info'>$langNoBadges <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1'>$langHere</a>.</div>";
     } else {
 
         $tool_content .= "
@@ -1707,6 +1707,7 @@ function display_settings($element, $element_id) {
 /**
  * @brief add / edit certificate / badge settings
  * @global string $tool_content
+ * @global string type $head_content
  * @global type $course_code
  * @global type $course_id
  * @global type $langTitle
@@ -1716,18 +1717,45 @@ function display_settings($element, $element_id) {
  * @global type $langpublisher
  * @global type $langMessage
  * @global type $langTemplate
+ * @global type $langCertificateDeadline
+ * @global type $langCertDeadlineHelp
+ * @global type $language
  * @param type $element
  * @param type $element_id
  */
 function certificate_settings($element, $element_id = 0) {
 
-    global $tool_content, $course_code, $langTemplate, $course_id, 
-           $langTitle, $langSave, $langInsert, $langMessage,
-           $langDescription, $langpublisher, $langIcon;
+    global $tool_content, $head_content, $course_code, 
+           $langTemplate, $course_id, $language, $langMessage,
+           $langTitle, $langSave, $langInsert, $langCertDeadlineHelp,
+           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline;
                
+    load_js('bootstrap-datetimepicker');
+    
+    $head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#enddatepicker').datetimepicker({
+                    format: 'dd-mm-yyyy hh:ii',
+                    pickerPosition: 'bottom-right',
+                    language: '".$language."',
+                    autoclose: true
+                });
+            $('#enablecertdeadline').change(function() {
+                var dateType = $(this).prop('id').replace('enable', '');
+                if($(this).prop('checked')) {
+                    $('input#'+dateType).prop('disabled', false);
+                    $('#late_sub_row').removeClass('hide');
+                } else {
+                    $('input#'+dateType).prop('disabled', true);
+                    $('#late_sub_row').addClass('hide');
+                }
+            });
+        });
+        </script>";
+    
     if ($element_id > 0) {      // edit
         $field = ($element == 'certificate')? 'template' : 'icon';
-        $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle 
+        $data = Database::get()->querySingle("SELECT issuer, $field, title, description, message, active, bundle, expires
                                 FROM $element WHERE id = ?d AND course_id = ?d", $element_id, $course_id);
         $issuer = $data->issuer;
         $template = $data->$field;
@@ -1736,6 +1764,16 @@ function certificate_settings($element, $element_id = 0) {
         $message = $data->message;        
         $cert_id = ($element == 'certificate')? "<input type='hidden' name='certificate_id' value='$element_id'>" : "<input type='hidden' name='badge_id' value='$element_id'>";
         $name = 'edit_element';
+        if ($data->expires != null) {
+            $certdeadline = date_format(date_create_from_format('Y-m-d H:i:s', $data->expires), 'd-m-Y H:i');            
+            $check_certdeadline = " checked";
+            $statuscertdeadline = '';            
+        } else {
+            $certdeadline = '';
+            $check_certdeadline = '';
+            //$statuscertdeadline = " disabled";
+            $statuscertdeadline = "";
+        }        
     } else {        // add
         $issuer = q(get_config('institution'));
         $template = '';        
@@ -1744,8 +1782,12 @@ function certificate_settings($element, $element_id = 0) {
         $message = '';        
         $cert_id = '';
         $name = ($element == 'certificate')? 'newCertificate' : 'newBadge';
-    }
-    
+        $certdeadline = '';
+        //$certdeadline = (new DateTime('NOW'))->format('d-m-Y H:i');
+        $check_certdeadline = '';
+        $statuscertdeadline = '';
+        //$statuscertdeadline = 'disabled';
+    }    
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group'>
@@ -1779,7 +1821,19 @@ function certificate_settings($element, $element_id = 0) {
                     <div class='col-sm-10'>
                         <input class='form-control' type='text' name='issuer' value='$issuer'>
                     </div>
-                </div>                
+                </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langCertificateDeadline:</label>
+                    <div class='col-sm-10'>
+                       <div class='input-group'>
+                           <span class='input-group-addon'>
+                             <input style='cursor:pointer;' type='checkbox' id='enablecertdeadline' name='enablecertdeadline' value='1' $check_certdeadline>
+                           </span>
+                           <input class='form-control' name='enddatepicker' id='enddatepicker' type='text' value='$certdeadline' $statuscertdeadline>
+                       </div>
+                       <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langCertDeadlineHelp</span>
+                    </div>
+                </div>
                 $cert_id";                                 
                 $tool_content .= "<div class='form-group'>
                     <div class='col-xs-10 col-xs-offset-2'>".form_buttons(array(

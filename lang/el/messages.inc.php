@@ -1356,6 +1356,8 @@ $langCourseCompletion = "Ολοκλήρωση $langsOfCourse";
 $langCourseCompletionCreated = "Η ολοκλήρωση $langsOfCourse δημιουργήθηκε";
 $langCourseCompletionMessage = "Το $langsCourse ολοκληρώθηκε με επιτυχία";
 $langCertAddress = "Δημόσια διεύθυνση πιστοποιητικού";
+$langCertificateDeadline = "Λήξη πιστοποιητικού";
+$langCertDeadlineHelp = "κάντε κλικ για να ορίσετε (προαιρετικά) ημερομηνία λήξης πιστοποιητικού";
 //------------------------------------
 
 

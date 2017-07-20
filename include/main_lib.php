@@ -330,7 +330,7 @@ function load_js($file, $init='') {
             $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
             $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
         } elseif ($file == 'bootstrap-datepicker') {
-            $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.min.css') .
+            //$head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.min.css') .
                 js_link('bootstrap-datepicker/js/bootstrap-datepicker.min.js');
                 $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
         } elseif ($file == 'bootstrap-validator') {

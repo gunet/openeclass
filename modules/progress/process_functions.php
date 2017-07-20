@@ -381,8 +381,8 @@ function get_cert_title($table, $id) {
 }
 
 /**
- * 
- * @param type $table
+ * @brief get certificate description
+ * @param type $element
  * @param type $id
  * @return type
  */
@@ -391,6 +391,18 @@ function get_cert_desc($element, $id) {
     $cert_desc = Database::get()->querySingle("SELECT description FROM $element WHERE id = ?d", $id)->description;
 
     return $cert_desc;
+}
+
+/**
+ * @brief get certificate expiration date
+ * @param type $element
+ * @param type $id
+ * @return type
+ */
+function get_cert_expiration_day($element, $id) {
+    $cert_expires = Database::get()->querySingle("SELECT expires FROM $element WHERE id = ?d", $id)->expires;
+    
+    return $cert_expires;
 }
 
 
@@ -524,9 +536,10 @@ function has_certificate_completed($uid, $element, $element_id) {
  * @param type $issuer
  * @param type $active
  * @param type $bundle
+ * @param type $expiration_day
  * @return type
  */
-function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle) {
+function add_certificate($table, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day) {
     
     global $course_id;
     if ($table == 'certificate') {
@@ -538,7 +551,8 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
                                 template = ?d,
                                 issuer = ?s,
                                 active = ?d,
-                                bundle = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle)->lastInsertID;
+                                bundle = ?d,
+                                expires = ?t", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day)->lastInsertID;
     } else {
         $new_id = Database::get()->query("INSERT INTO badge 
                                 SET course_id = ?d,
@@ -548,7 +562,8 @@ function add_certificate($table, $title, $description, $message, $icon, $issuer,
                                 icon = ?d,
                                 issuer = ?s,
                                 active = ?d,
-                                bundle = ?d", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle)->lastInsertID;
+                                bundle = ?d,
+                                expires = ?t", $course_id, $title, $description, $message, $icon, $issuer, $active, $bundle, $expiration_day)->lastInsertID;
     }
     return $new_id;
 }
@@ -920,7 +935,8 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
  * @brief register user as certified
  * @global type $course_id
  * @param type $table
- * @param type $certificate_id
+ * @param type $element_id
+ * @param type $element_title
  * @param type $user_id
  */
 function register_certified_user($table, $element_id, $element_title, $user_id) {
@@ -930,14 +946,16 @@ function register_certified_user($table, $element_id, $element_title, $user_id) 
     $title = course_id_to_title($course_id);    
     $user_fullname = uid_to_name($user_id);
     $issuer = get_cert_issuer($element_id);
+    $expiration_date = get_cert_expiration_day($table, $element_id);
     Database::get()->query("INSERT INTO certified_users SET course_title = ?s, "
                                                                 . "cert_title = ?s, "
                                                                 . "cert_id = ?d, "
                                                                 . "cert_issuer = ?s, "
-                                                                . "user_fullname = ?s,"
+                                                                . "user_fullname = ?s, "
                                                                 . "assigned = " . DBHelper::timeAfter() . ","
+                                                                . "expires = ?s, "
                                                                 . "identifier = '" . uniqid(rand()) . "'", 
-                                                    $title, $element_title, $element_id, $issuer, $user_fullname);
+                                                    $title, $element_title, $element_id, $issuer, $user_fullname, $expiration_date);
     
 }
 
