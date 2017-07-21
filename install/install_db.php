@@ -971,7 +971,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
     `auto_judge` TINYINT(1) NOT NULL DEFAULT 0,
     `auto_judge_scenarios` TEXT,
     `lang` VARCHAR(10) NOT NULL DEFAULT '',
-    `notification` TINYINT(4) DEFAULT 0) $tbl_options");
+    `notification` TINYINT(4) DEFAULT 0,
+    `ip_lock` TEXT,
+    `password_lock` VARCHAR(255) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

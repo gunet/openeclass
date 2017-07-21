@@ -3413,8 +3413,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (version_compare($oldversion, '3.6', '<')) {
         if (!DBHelper::fieldExists('password', 'assignment')) {
             Database::get()->query("ALTER TABLE `assignment`
-                ADD `ip_lock` TEXT NOT NULL,
-                ADD `password_lock` VARCHAR(255) NOT NULL DEFAULT ''");
+                ADD `ip_lock` TEXT,
+                ADD `password_lock` VARCHAR(255)");
         }
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
