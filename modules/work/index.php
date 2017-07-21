@@ -637,7 +637,11 @@ function add_assignment() {
         $lang                 = isset($_POST['lang']) ? filter_input(INPUT_POST, 'lang') : '';
         $secret = uniqid('');
         $password_lock = $_POST['assignmentPasswordLock'];
-        $ip_lock = implode(',', $_POST['assignmentIPLock']);
+        if (isset($_POST['assignmentIPLock'])) {
+            $ip_lock = implode(',', $_POST['assignmentIPLock']);
+        } else {
+            $ip_lock = '';
+        }
 
         if ($assign_to_specific == 1 && empty($assigned_to)) {
             $assign_to_specific = 0;
@@ -3238,7 +3242,7 @@ function show_student_assignments() {
         foreach ($result as $row) {
             $exclamation_icon = '';
             $class = '';
-            if (isset($row->password_lock) or isset($row->ip_lock)) {
+            if ($row->password_lock or $row->ip_lock) {
                 $lock_description = "<ul>";
                 if ($row->password_lock) {
                     $lock_description .= "<li>$langPasswordUnlock</li>";
@@ -3376,7 +3380,7 @@ function show_assignments() {
         $index = 0;
         foreach ($result as $row) {
             $exclamation_icon = '';
-            if (isset($row->password_lock) or isset($row->ip_lock)) {
+            if ($row->password_lock or $row->ip_lock) {
                 $lock_description = "<ul>";
                 if ($row->password_lock) {
                     $lock_description .= "<li>$langPasswordUnlock</li>";
