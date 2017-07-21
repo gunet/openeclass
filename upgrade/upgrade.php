@@ -3504,7 +3504,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
     
     if (version_compare($oldversion, '3.6', '<')) {
-        updateInfo(-1, sprintf($langUpgForVersion, '3.6'));
+
+        updateInfo(-1, sprintf($langUpgForVersion, '3.6'));                
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `activity_heading` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `order` INT(11) NOT NULL DEFAULT 0,
@@ -3628,14 +3630,22 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
             Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
                                 AFTER grade_comments");
-        }        
+        }
+        
+        if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filename')) {
+            Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filename VARCHAR(200) NOT NULL DEFAULT ''
+                                AFTER grade_comments");
+        }
+        
         if (!DBHelper::fieldExists('assignment', 'notification')) {
             Database::get()->query("ALTER TABLE assignment ADD notification tinyint(4) DEFAULT 0");
         }
-        if (!DBHelper::fieldExists('assignment_submit', 'grade_comments_filepath')) {
-            Database::get()->query("ALTER TABLE assignment_submit ADD grade_comments_filepath VARCHAR(200) NOT NULL DEFAULT ''
-                                AFTER grade_comments");
-        }        
+        
+        if (!DBHelper::fieldExists('assignment', 'password')) {
+            Database::get()->query("ALTER TABLE `assignment`
+                ADD `ip_lock` TEXT,
+                ADD `password_lock` VARCHAR(255)");
+        }
         
         // Course Category tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `category` (
